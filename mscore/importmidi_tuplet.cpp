@@ -433,8 +433,7 @@ class TupletErrorResult
                        const TupletErrorResult &er) const
             {
                         // error is more important than length of rests
-            const double errorImportance = 2.0;
-            if (errorDiv * errorImportance < restsDiv.numerator() * 1.0 / restsDiv.denominator())
+            if (errorDiv < restsDiv.numerator() * 0.8 / restsDiv.denominator())
                   return sumLengthOfRests < er.sumLengthOfRests;
             else
                   return tupletAverageError < er.tupletAverageError;
