@@ -4148,7 +4148,7 @@ void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPoin
       {
       qreal imag = 1.0 / mag;
       painter->scale(mag, mag);
-      painter->setFont(_font);
+      painter->setFont(font());
       painter->drawText(pos * imag, s);
       painter->scale(imag, imag);
       }
@@ -4180,10 +4180,10 @@ QString ScoreFont::symToHtml(SymId s, int leftMargin, const TextStyle* ts, qreal
             size = ts->font(_spatium).pointSizeF();
             }
       else {
-            size = _font.pixelSize();
+            size = _font->pixelSize();
             }
 
-      QString family = _font.family();
+      QString family = _font->family();
       return QString(
       "<data>"
         "<html>"
@@ -4205,8 +4205,8 @@ QString ScoreFont::symToHtml(SymId s, int leftMargin, const TextStyle* ts, qreal
 
 QString ScoreFont::symToHtml(SymId s1, SymId s2, int leftMargin)
       {
-      qreal size = _font.pixelSize();
-      QString family = _font.family();
+      qreal size = _font->pixelSize();
+      QString family = _font->family();
 
       return QString(
       "<data>"
@@ -4282,17 +4282,18 @@ void ScoreFont::load()
                   exit(-1);
             }
 #endif
-      _font.setWeight(QFont::Normal);  // if not set we get system default
-      _font.setItalic(false);
-      _font.setFamily(_family);
-      _font.setStyleStrategy(QFont::NoFontMerging);
+      _font = new QFont();
+      _font->setWeight(QFont::Normal);  // if not set we get system default
+      _font->setItalic(false);
+      _font->setFamily(_family);
+      _font->setStyleStrategy(QFont::NoFontMerging);
 
       // horizontal hinting is bad as note hooks do not attach to stems
       // properly at some magnifications
-      _font.setHintingPreference(QFont::PreferVerticalHinting);
+      _font->setHintingPreference(QFont::PreferVerticalHinting);
 
       qreal size = 20.0 * MScore::DPI / PPI;
-      _font.setPixelSize(lrint(size));
+      _font->setPixelSize(lrint(size));
 
       QFile fi(_fontPath + "glyphnames.json");
       if (!fi.open(QIODevice::ReadOnly))
@@ -4303,7 +4304,7 @@ void ScoreFont::load()
             qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
                error.offset, qPrintable(error.errorString()));
 
-      _fm = new QFontMetricsF(_font);
+      _fm = new QFontMetricsF(font());
       for (auto i : o.keys()) {
             bool ok;
             int code = o.value(i).toObject().value("codepoint").toString().mid(2).toInt(&ok, 16);
