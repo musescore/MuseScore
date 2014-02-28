@@ -54,7 +54,6 @@
 #include "repeat.h"
 #include "bracket.h"
 #include "ottava.h"
-#include "mscore/globals.h"
 
 namespace Ms {
 
