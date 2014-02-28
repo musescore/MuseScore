@@ -361,7 +361,7 @@ void selectNoteMessage()
             QMessageBox::information(0,
                QMessageBox::tr("MuseScore:"),
                QMessageBox::tr("No note selected:\n"
-                               "Please select a single note and retry operation\n"),
+                               "please select a single note and retry operation\n"),
                QMessageBox::Ok, QMessageBox::NoButton);
       }
 
@@ -371,7 +371,7 @@ void selectNoteRestMessage()
             QMessageBox::information(0,
                QMessageBox::tr("MuseScore:"),
                QMessageBox::tr("No note or rest selected:\n"
-                               "Please select a single note or rest and retry operation\n"),
+                               "please select a single note or rest and retry operation\n"),
                QMessageBox::Ok, QMessageBox::NoButton);
       }
 
