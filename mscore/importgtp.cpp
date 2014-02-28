@@ -2683,7 +2683,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             gp->read(&fp);
             }
       catch(GuitarPro::GuitarProError errNo) {
-            if (!noGui) {
+            if (!MScore::noGui) {
                   QMessageBox::warning(0,
                      QWidget::tr("MuseScore: Import Guitar Pro"),
                      QString("Load failed: ") + gp->error(errNo),

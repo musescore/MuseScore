@@ -1925,7 +1925,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
 
       QString ext = fi.suffix();
       if (ext.isEmpty()) {
-            if(!noGui) QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("cannot determine file type"));
+            if(!MScore::noGui) QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("cannot determine file type"));
             return false;
             }
       return saveAs(cs, saveCopy, fn, ext);
@@ -1939,7 +1939,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
 bool MuseScore::saveSelection(Score* cs)
       {
       if (cs->selection().state() != SEL_RANGE) {
-            if(!noGui) QMessageBox::warning(mscore, tr("MuseScore: Save Selection"), tr("Please select one or more measures"));
+            if(!MScore::noGui) QMessageBox::warning(mscore, tr("MuseScore: Save Selection"), tr("Please select one or more measures"));
             return false;
             }
       QStringList fl;

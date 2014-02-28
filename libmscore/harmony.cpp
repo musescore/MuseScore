@@ -561,7 +561,6 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
       if (!textList.isEmpty()) {
             QString s(harmonyName());
             setText(s);
-            Text::createLayout(); // create TextBlocks from text
             }
       Text::startEdit(view, p);
       }
@@ -846,18 +845,17 @@ void Harmony::layout()
 
       qreal yy = 0.0;
       if (parent()->type() == SEGMENT) {
-            if (!editMode()) {
-                  // done in TextBlock
-                  Measure* m = static_cast<Measure*>(parent()->parent());
-                  yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
-                  }
-            yy += score()->styleP(ST_harmonyY);
+            Measure* m = static_cast<Measure*>(parent()->parent());
+            yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
+            yy -= score()->styleP(ST_harmonyY);
             Segment* s = static_cast<Segment*>(parent());
-                  for (Element* e : s->annotations()) {
+            qreal _spatium  = spatium();
+            for (Element* e : s->annotations()) {
                   if (e != this && e->type() == FRET_DIAGRAM && e->track() == track()) {
-                        yy = score()->styleP(ST_fretY);
+                        yy += score()->styleP(ST_harmonyY);
+                        yy -= score()->styleP(ST_fretY);
+                        yy -= _spatium * 2;
                         yy -= score()->styleP(ST_harmonyFretDist);
-                        yy -= e->bbox().height();
                         break;
                         }
                   }

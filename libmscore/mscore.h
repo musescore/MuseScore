@@ -387,6 +387,7 @@ class MScore : public QObject {
       static qreal DPMM;
       static bool debugMode;
       static bool testMode;
+      static bool noGui;
       };
 
 //---------------------------------------------------------

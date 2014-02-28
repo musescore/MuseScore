@@ -2364,7 +2364,7 @@ Score::FileError importCapella(Score* score, const QString& name)
             cf.read(&fp);
             }
       catch (Capella::CapellaError errNo) {
-            if (!noGui) {
+            if (!MScore::noGui) {
                   QMessageBox::warning(0,
                      QWidget::tr("MuseScore: Import Capella"),
                      QString("Load failed: ") + cf.error(errNo),

@@ -88,7 +88,7 @@ QPointF BarLine::pagePos() const
             int staffIdx1 = staffIdx();
             Staff* staff1 = score()->staff(staffIdx1);
             SysStaff* sysStaff1 = system->staff(staffIdx1);
-            while ( !(sysStaff1->show() && staff1->show()) ) {
+            while ( staff1 && sysStaff1 && !(sysStaff1->show() && staff1->show()) ) {
                   staffIdx1++;
                   staff1 = score()->staff(staffIdx1);
                   sysStaff1 = system->staff(staffIdx1);
