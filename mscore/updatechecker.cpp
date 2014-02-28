@@ -78,7 +78,7 @@ void UpdateChecker::onRequestFinished(QNetworkReply* reply)
         }
     }
 
-    if (reader.error())
+    if (reader.error() != QXmlStreamReader::NoError)
         qDebug() << reader.error() << reader.errorString();
 
     QString message = QString(tr("An update for MuseScore is available: <a href=\"%1\">MuseScore %2 r.%3</a>")).arg(downloadUrl).arg(version).arg(upgradeRevision);

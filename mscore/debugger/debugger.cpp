@@ -545,6 +545,8 @@ void Debugger::updateElement(Element* el)
       {
       if (el == 0 || !isVisible())
             return;
+      if (cs != el->score())
+            updateList(el->score());
       for (int i = 0;; ++i) {
             QTreeWidgetItem* item = list->topLevelItem(i);
             if (item == 0) {
@@ -1700,6 +1702,8 @@ ShowElementBase::ShowElementBase()
       connect(eb.selected,       SIGNAL(clicked(bool)), SLOT(selectedClicked(bool)));
       connect(eb.visible,        SIGNAL(clicked(bool)), SLOT(visibleClicked(bool)));
       connect(eb.link1,          SIGNAL(clicked()), SLOT(linkClicked()));
+      connect(eb.link2,          SIGNAL(clicked()), SLOT(link2Clicked()));
+      connect(eb.link3,          SIGNAL(clicked()), SLOT(link3Clicked()));
       }
 
 //---------------------------------------------------------
@@ -1782,6 +1786,8 @@ void ShowElementBase::setElement(Element* e)
       eb.color->setColor(e->color());
       eb.parentButton->setEnabled(e->parent());
       eb.link1->setEnabled(e->links());
+      eb.link2->setEnabled(e->links()->size() > 1);
+      eb.link3->setEnabled(e->links()->size() > 2);
       eb.mag->setValue(e->mag());
       eb.systemFlag->setChecked(e->systemFlag());
       }
@@ -1826,14 +1832,25 @@ void ShowElementBase::parentClicked()
 
 void ShowElementBase::linkClicked()
       {
-      qDebug("linkClicked");
-      foreach(Element* e, *el->links()) {
-            qDebug("  element <%p> <%p>", e->score(), e);
-            if (e != el) {
-                  emit elementChanged(e);
-                  break;
-                  }
-            }
+      emit elementChanged(el->links()->at(0));
+      }
+
+//---------------------------------------------------------
+//   link2Clicked
+//---------------------------------------------------------
+
+void ShowElementBase::link2Clicked()
+      {
+      emit elementChanged(el->links()->at(1));
+      }
+
+//---------------------------------------------------------
+//   link3Clicked
+//---------------------------------------------------------
+
+void ShowElementBase::link3Clicked()
+      {
+      emit elementChanged(el->links()->at(2));
       }
 
 //---------------------------------------------------------

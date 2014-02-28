@@ -1329,7 +1329,6 @@ void Score::cmdDeleteSelectedMeasures()
             return;
 
       MeasureBase* is   = selection().startSegment()->measure();
-      int startIdx      = measureIdx(is);
       Segment* seg      = selection().endSegment();
       MeasureBase* ie;
       // choose the correct last measure based on the end segment
@@ -1338,10 +1337,6 @@ void Score::cmdDeleteSelectedMeasures()
             ie = seg->prev() ? seg->measure() : seg->measure()->prev();
       else
             ie = lastMeasure();
-      int endIdx        = measureIdx(ie);
-      Measure *m = static_cast<Measure *>(ie);
-      if(m->isMMRest())
-            endIdx += m->mmRestCount() - 1;
       Measure* mBeforeSel = is->prevMeasure();
 
       // createEndBar if last measure is deleted
@@ -1368,7 +1363,11 @@ void Score::cmdDeleteSelectedMeasures()
             }
 
       QList<Score*> scores = scoreList();
-      int startTick = measure(startIdx)->tick();
+      int startTick        = is->tick();
+      int endIdx           = measureIdx(ie);
+      Measure* m = static_cast<Measure *>(ie);
+      if (m->isMMRest())
+            endIdx += m->mmRestCount() - 1;
       int endTick   = measure(endIdx)->tick();
       foreach (Score* score, scores) {
             Measure* is = score->tick2measure(startTick);
@@ -1883,8 +1882,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
 //    If measure is zero, append new MeasureBase.
 //---------------------------------------------------------
 
-MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measure,
-   bool createEmptyMeasures)
+MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measure, bool createEmptyMeasures)
       {
       int tick;
       int idx;
@@ -1907,13 +1905,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
             }
 
       MeasureBase* omb = 0;
-      QList<Score*> scorelist;
-      if (type == Element::MEASURE)
-            scorelist = scoreList();
-      else
-            scorelist.append(this);
-
-      foreach(Score* score, scorelist) {
+      foreach (Score* score, scoreList()) {
             MeasureBase* mb = static_cast<MeasureBase*>(Element::create(type, score));
             MeasureBase* im = idx != -1 ? score->measure(idx) : 0;
             // insert before im, append if im = 0

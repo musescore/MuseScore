@@ -2037,9 +2037,9 @@ void setMscoreLocale(QString localeName)
             }
       }
 
-      qDebug() << userFi.exists();
-      qDebug() << userFi.lastModified() << defaultFi.lastModified();
-      if(userFi.exists() && userFi.lastModified() > defaultFi.lastModified())
+//      qDebug() << userFi.exists();
+//      qDebug() << userFi.lastModified() << defaultFi.lastModified();
+      if (userFi.exists() && userFi.lastModified() > defaultFi.lastModified())
             lp = userlp;
 
       if (MScore::debugMode) qDebug("load translator <%s>", qPrintable(lp));
@@ -2269,6 +2269,8 @@ void StartDialog::loadScoreClicked()
 static void mscoreMessageHandler(QtMsgType type, const char *msg)
      {
      QTextStream cout(stdout);
+
+      abort();
 
      switch (type) {
      case QtDebugMsg:

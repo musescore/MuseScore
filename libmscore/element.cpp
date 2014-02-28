@@ -335,24 +335,41 @@ Element::Element(const Element& e)
 
 void Element::linkTo(Element* element)
       {
+      Q_ASSERT(element != this);
       Q_ASSERT(!_links || !element->links() | (_links == element->links()));
       if (!_links) {
             if (element->links()) {
-                  _links = element->links();
+                  _links = element->_links;
                   Q_ASSERT(_links->contains(element));
                   }
             else {
                   _links = new LinkedElements(score());
                   _links->append(element);
-                  element->setLinks(_links);
+                  element->_links = _links;
                   }
+            Q_ASSERT(!_links->contains(this));
             _links->append(this);
             }
       else {
             Q_ASSERT(_links->contains(this));
+            Q_ASSERT(!_links->contains(element));
             _links->append(element);
-            element->setLinks(_links);
+            element->_links = _links;
             }
+      printf("%p links %d\n", this, _links->size());
+      if (_links->size() > 2)
+            abort();
+      }
+
+//---------------------------------------------------------
+//   unlink
+//---------------------------------------------------------
+
+void Element::unlink(Element* element)
+      {
+      Q_ASSERT(_links);
+      Q_ASSERT(_links->contains(element));
+      _links->removeOne(element);
       }
 
 //---------------------------------------------------------
@@ -719,6 +736,7 @@ bool Element::readProperties(XmlReader& e)
                         }
                   }
 #endif
+            Q_ASSERT(!_links->contains(this));
             _links->append(this);
             }
       else if (tag == "tick") {
