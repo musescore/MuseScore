@@ -356,8 +356,9 @@ bool Score::saveFile()
       QString backupName = QString(".") + info.fileName() + QString(",");
       if (dir.exists(backupName)) {
             if (!dir.remove(backupName)) {
-//                  QMessageBox::critical(mscore, tr("MuseScore: Save File"),
-//                     tr("removing old backup file ") + backupName + tr(" failed"));
+//                  if (!MScore::noGui)
+//                        QMessageBox::critical(0, tr("MuseScore: Save File"),
+//                           tr("removing old backup file ") + backupName + tr(" failed"));
                   }
             }
 
@@ -368,9 +369,10 @@ bool Score::saveFile()
       QString name(info.filePath());
       if (dir.exists(name)) {
             if (!dir.rename(name, backupName)) {
-//                  QMessageBox::critical(mscore, tr("MuseScore: Save File"),
-//                     tr("renaming old file <")
-//                      + name + tr("> to backup <") + backupName + tr("> failed"));
+//                  if (!MScore::noGui)
+//                        QMessageBox::critical(0, tr("MuseScore: Save File"),
+//                           tr("renaming old file <")
+//                            + name + tr("> to backup <") + backupName + tr("> failed"));
                   }
             }
 #ifdef Q_OS_WIN
