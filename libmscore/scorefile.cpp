@@ -358,7 +358,7 @@ bool Score::saveFile()
             if (!dir.remove(backupName)) {
 //                  if (!MScore::noGui)
 //                        QMessageBox::critical(0, tr("MuseScore: Save File"),
-//                           tr("removing old backup file ") + backupName + tr(" failed"));
+//                           tr("Removing old backup file ") + backupName + tr(" failed"));
                   }
             }
 
@@ -371,7 +371,7 @@ bool Score::saveFile()
             if (!dir.rename(name, backupName)) {
 //                  if (!MScore::noGui)
 //                        QMessageBox::critical(0, tr("MuseScore: Save File"),
-//                           tr("renaming old file <")
+//                           tr("Renaming old file <")
 //                            + name + tr("> to backup <") + backupName + tr("> failed"));
                   }
             }
