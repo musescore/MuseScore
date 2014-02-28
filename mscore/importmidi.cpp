@@ -984,7 +984,7 @@ Score::FileError importMidi(Score *score, const QString &name)
                   mf.read(&fp);
                   }
             catch (QString errorText) {
-                  if (!noGui) {
+                  if (!MScore::noGui) {
                         QMessageBox::warning(0,
                            QWidget::tr("MuseScore: load midi"),
                            QWidget::tr("Load failed: ") + errorText,
