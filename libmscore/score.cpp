@@ -1328,6 +1328,7 @@ void Score::addElement(Element* element)
          || et == Element::TBOX
          || et == Element::FBOX
          ) {
+            setLayoutAll(true);
             add(element);
             addLayoutFlags(LAYOUT_FIX_TICKS);
             return;

@@ -405,7 +405,7 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc, int line/*, int fret
 
       Q_ASSERT(noteIndex >= 0);
 
-      LinkedElements* l = chord->links();
+      const LinkedElements* l = chord->links();
       if (l) {
             foreach(Element* e, *l) {
                   Chord* c = static_cast<Chord*>(e);
@@ -868,7 +868,7 @@ void Score::undoAddElement(Element* element)
          || (et == Element::CHORD && static_cast<Chord*>(element)->isGrace())
             ) {
             Element* parent       = element->parent();
-            LinkedElements* links = parent->links();
+            const LinkedElements* links = parent->links();
             if (links == 0) {
                   undo(new AddElement(element));
                   if (element->type() == Element::FINGERING)
@@ -1191,7 +1191,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                               nt->setScore(score);
                               }
                         else {
-                              LinkedElements* le = t->links();
+                              const LinkedElements* le = t->links();
                               // search the linked tuplet
                               foreach(Element* e, *le) {
                                     if (e->score() == score && e->track() == ntrack) {
@@ -1426,8 +1426,6 @@ void RemoveElement::undo()
                   }
             undoAddTuplet(static_cast<ChordRest*>(element));
             }
-      if (element->type() == Element::MEASURE)
-            element->score()->setLayoutAll(true);    //DEBUG
       if (element->type() == Element::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(element);
             if (!ks->generated())
@@ -1739,10 +1737,10 @@ void ChangeElement::flip()
 //         oldElement->name(), oldElement, newElement->name(), newElement,
 //         oldElement->links() ? oldElement->links()->size() : -1);
 
-      LinkedElements* links = oldElement->links();
+      const LinkedElements* links = oldElement->links();
       if (links) {
-            links->removeOne(oldElement);
-            links->append(newElement);
+            oldElement->unlink(oldElement);
+            oldElement->linkTo(newElement);
             }
 
       Score* score = oldElement->score();

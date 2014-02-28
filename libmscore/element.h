@@ -329,10 +329,10 @@ class Element : public QObject {
       QList<Element*> linkList() const;
 
       void linkTo(Element*);
+      void unlink(Element*);
       int lid() const                         { return _links ? _links->lid() : 0; }
-      LinkedElements* links() const           { return _links;      }
+      const LinkedElements* links() const     { return _links;      }
       void setLinks(LinkedElements* le)       { _links = le;        }
-
       Score* score() const                    { return _score;      }
       virtual void setScore(Score* s)         { _score = s;         }
       Element* parent() const                 { return _parent;     }

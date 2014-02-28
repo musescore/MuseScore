@@ -140,6 +140,8 @@ class ShowElementBase : public QWidget {
    private slots:
       void parentClicked();
       void linkClicked();
+      void link2Clicked();
+      void link3Clicked();
       void offsetxChanged(double);
       void offsetyChanged(double);
       void selectedClicked(bool);

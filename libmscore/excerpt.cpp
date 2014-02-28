@@ -169,7 +169,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
       TieMap  tieMap;
 
       MeasureBaseList* nmbl = score->measures();
-       for (MeasureBase* mb = oscore->measures()->first(); mb; mb = mb->next()) {
+      for (MeasureBase* mb = oscore->measures()->first(); mb; mb = mb->next()) {
             MeasureBase* nmb = 0;
             if (mb->type() == Element::HBOX)
                   nmb = new HBox(score);
@@ -298,7 +298,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               }
                         }
                   }
-            foreach(Element* e, *mb->el()) {
+            nmb->linkTo(mb);
+            foreach (Element* e, *mb->el()) {
                   if (e->type() == Element::LAYOUT_BREAK) {
                         LayoutBreak::LayoutBreakType st = static_cast<LayoutBreak*>(e)->layoutBreakType();
                         if (st == LayoutBreak::PAGE || st == LayoutBreak::LINE)

@@ -73,11 +73,25 @@
         </item>
         <item>
          <widget class="QPushButton" name="link1">
+          <property name="text">
+           <string>Link1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="link2">
           <property name="toolTip">
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true">Link1</string>
+           <string notr="true">Link2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="link3">
+          <property name="text">
+           <string>Link3</string>
           </property>
          </widget>
         </item>
