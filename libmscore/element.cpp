@@ -357,8 +357,8 @@ void Element::linkTo(Element* element)
             element->_links = _links;
             }
       printf("%p links %d\n", this, _links->size());
-      if (_links->size() > 2)
-            abort();
+      //if (_links->size() > 2)
+      //      abort();
       }
 
 //---------------------------------------------------------
