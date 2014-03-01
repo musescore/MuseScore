@@ -85,7 +85,7 @@
           <durationType>half</durationType>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -201,7 +201,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="3">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
