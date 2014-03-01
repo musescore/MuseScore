@@ -224,6 +224,38 @@ Segment* enlargeSegToPrev(Segment *s, int strack, int counterLimit, int lPitch, 
       return s;
       }
 
+
+#ifdef QT_DEBUG
+
+bool doesClefBreakTie(const Staff *staff)
+      {
+      const int strack = staff->idx() * VOICES;
+
+      for (int voice = 0; voice < VOICES; ++voice) {
+            int tieCounter = 0;
+            for (Segment *seg = staff->score()->firstSegment(); seg; seg = seg->next1()) {
+                  if (seg->segmentType() == Segment::SegChordRest) {
+                        if (isTiedFor(seg, strack, voice))
+                              ++tieCounter;
+                        if (isTiedBack(seg, strack, voice))
+                              --tieCounter;
+                        }
+                  else if (seg->segmentType() == Segment::SegClef && seg->element(strack)) {
+                        if (tieCounter) {
+                              qDebug() << "Clef breaks tie; measure number (from 1):"
+                                       << seg->measure()->no() + 1
+                                       << ", staff index (from 0):" << staff->idx();
+                              return true;
+                              }
+                        }
+                  }
+            }
+      return false;
+      }
+
+#endif
+
+
 void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       {
       ClefType currentClef = staff->clefTypeList(0)._concertClef;
@@ -325,6 +357,8 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
                   prevSeg = nullptr;
                   }
             }
+
+      Q_ASSERT_X(!doesClefBreakTie(staff), "MidiClef::createClefs", "Clef breaks the tie");
       }
 
 } // namespace MidiClef
