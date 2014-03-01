@@ -20,6 +20,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/slur.h"
+#include "importmidi_tie.h"
 #include "preferences.h"
 
 #include <set>
@@ -31,37 +32,6 @@ extern Preferences preferences;
 
 namespace MidiClef {
 
-
-int midPitch()
-      {
-      static const int clefMidPitch = 60;
-      return clefMidPitch;
-      }
-
-bool isTied(const Segment *seg, int strack, int voice,
-            Ms::Tie*(Note::*tieFunc)() const)
-      {
-      ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
-      if (cr && cr->type() == Element::CHORD) {
-            Chord *chord = static_cast<Chord *>(cr);
-            const auto &notes = chord->notes();
-            for (const Note *note: notes) {
-                  if ((note->*tieFunc)())
-                        return true;
-                  }
-            }
-      return false;
-      }
-
-bool isTiedFor(const Segment *seg, int strack, int voice)
-      {
-      return isTied(seg, strack, voice, &Note::tieFor);
-      }
-
-bool isTiedBack(const Segment *seg, int strack, int voice)
-      {
-      return isTied(seg, strack, voice, &Note::tieBack);
-      }
 
 class AveragePitch
       {
@@ -93,57 +63,12 @@ class AveragePitch
       int count_;
       };
 
-class TieStateMachine
+
+int midPitch()
       {
-   public:
-      enum class State
-            {
-            UNTIED, TIED_FOR, TIED_BOTH, TIED_BACK
-            };
-
-      void addSeg(const Segment *seg, int strack)
-            {
-            bool isChord = false;
-            for (int voice = 0; voice < VOICES; ++voice) {
-                  ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
-                  if (!cr || cr->type() != Element::CHORD)
-                        continue;
-                  if (!isChord)
-                        isChord = true;
-
-                  bool tiedFor = isTiedFor(seg, strack, voice);
-                  bool tiedBack = isTiedBack(seg, strack, voice);
-
-                  if (tiedFor && !tiedBack)
-                        tiedVoices.insert(voice);
-                  else if (!tiedFor && tiedBack)
-                        tiedVoices.erase(voice);
-                  }
-            if (!isChord)
-                  return;
-
-            if (tiedVoices.empty() && (state_ == State::TIED_FOR
-                                       || state_ == State::TIED_BOTH)) {
-                  state_ = State::TIED_BACK;
-                  }
-            else if (tiedVoices.empty() && state_ == State::TIED_BACK) {
-                  state_ = State::UNTIED;
-                  }
-            else if (!tiedVoices.empty() && (state_ == State::TIED_BACK
-                                             || state_ == State::UNTIED)) {
-                  state_ = State::TIED_FOR;
-                  }
-            else if (!tiedVoices.empty() && state_ == State::TIED_FOR) {
-                  state_ = State::TIED_BOTH;
-                  }
-            }
-      State state() const { return state_; }
-
-   private:
-      std::set<int> tiedVoices;
-      State state_ = State::UNTIED;
-      };
-
+      static const int clefMidPitch = 60;
+      return clefMidPitch;
+      }
 
 ClefType clefTypeFromAveragePitch(int averagePitch)
       {
@@ -235,9 +160,9 @@ bool doesClefBreakTie(const Staff *staff)
             int tieCounter = 0;
             for (Segment *seg = staff->score()->firstSegment(); seg; seg = seg->next1()) {
                   if (seg->segmentType() == Segment::SegChordRest) {
-                        if (isTiedFor(seg, strack, voice))
+                        if (MidiTie::isTiedFor(seg, strack, voice))
                               ++tieCounter;
-                        if (isTiedBack(seg, strack, voice))
+                        if (MidiTie::isTiedBack(seg, strack, voice))
                               --tieCounter;
                         }
                   else if (seg->segmentType() == Segment::SegClef && seg->element(strack)) {
@@ -274,7 +199,7 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       Segment *tiedSeg = nullptr;
       const int strack = staff->idx() * VOICES;
       AveragePitch avgGroupPitch;
-      TieStateMachine tieTracker;
+      MidiTie::TieStateMachine tieTracker;
 
       for (Segment *seg = staff->score()->firstSegment(Segment::SegChordRest); seg;
                         seg = seg->next1(Segment::SegChordRest)) {
@@ -284,11 +209,11 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
             tieTracker.addSeg(seg, strack);
             const auto tieState = tieTracker.state();
 
-            if (tieState != TieStateMachine::State::UNTIED)
+            if (tieState != MidiTie::TieStateMachine::State::UNTIED)
                   avgGroupPitch += avgPitch;
-            if (tieState == TieStateMachine::State::TIED_FOR)
+            if (tieState == MidiTie::TieStateMachine::State::TIED_FOR)
                   tiedSeg = seg;
-            else if (tieState == TieStateMachine::State::TIED_BACK) {
+            else if (tieState == MidiTie::TieStateMachine::State::TIED_BACK) {
                   ClefType clef = clefTypeFromAveragePitch(avgGroupPitch.pitch());
                   if (clef != currentClef) {
                         currentClef = clef;
@@ -304,8 +229,8 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
                   }
 
             int oldCounter = counter;
-            if (tieState != TieStateMachine::State::TIED_BOTH
-                        && tieState != TieStateMachine::State::TIED_BACK) {
+            if (tieState != MidiTie::TieStateMachine::State::TIED_BOTH
+                        && tieState != MidiTie::TieStateMachine::State::TIED_BACK) {
 
                   if (avgPitch.pitch() < lowPitch) {
                         if (currentClef == ClefType::G) {
