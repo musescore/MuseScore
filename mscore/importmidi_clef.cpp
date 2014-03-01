@@ -157,16 +157,16 @@ bool doesClefBreakTie(const Staff *staff)
       const int strack = staff->idx() * VOICES;
 
       for (int voice = 0; voice < VOICES; ++voice) {
-            int tieCounter = 0;
+            bool currentTie = false;
             for (Segment *seg = staff->score()->firstSegment(); seg; seg = seg->next1()) {
                   if (seg->segmentType() == Segment::SegChordRest) {
-                        if (MidiTie::isTiedFor(seg, strack, voice))
-                              ++tieCounter;
                         if (MidiTie::isTiedBack(seg, strack, voice))
-                              --tieCounter;
+                              currentTie = false;
+                        if (MidiTie::isTiedFor(seg, strack, voice))
+                              currentTie = true;
                         }
                   else if (seg->segmentType() == Segment::SegClef && seg->element(strack)) {
-                        if (tieCounter) {
+                        if (currentTie) {
                               qDebug() << "Clef breaks tie; measure number (from 1):"
                                        << seg->measure()->no() + 1
                                        << ", staff index (from 0):" << staff->idx();
