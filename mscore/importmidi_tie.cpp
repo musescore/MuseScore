@@ -94,11 +94,11 @@ void TieStateMachine::addSeg(const Segment *seg, int strack)
 
 #ifdef QT_DEBUG
 
-void printInconsistentTies(const Segment *seg)
+void printInconsistentTieLocation(int measureIndex, int staffIndex)
       {
       qDebug() << "Ties are inconsistent; measure number (from 1):"
-               << seg->measure()->no() + 1
-               << ", staff index (from 0):" << seg->staff()->idx();
+               << measureIndex + 1
+               << ", staff index (from 0):" << staffIndex;
       }
 
 bool areTiesConsistent(const Staff *staff)
@@ -109,22 +109,30 @@ bool areTiesConsistent(const Staff *staff)
             bool isTie = false;
             for (Segment *seg = staff->score()->firstSegment(); seg; seg = seg->next1()) {
                   if (seg->segmentType() == Segment::SegChordRest) {
+                        ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
+
+                        if (cr && cr->type() == Element::REST && isTie) {
+                              printInconsistentTieLocation(seg->measure()->no(), staff->idx());
+                              return false;
+                              }
                         if (isTiedBack(seg, strack, voice)) {
                               if (!isTie) {
-                                    printInconsistentTies(seg);
+                                    printInconsistentTieLocation(seg->measure()->no(), staff->idx());
                                     return false;
                                     }
                               isTie = false;
                               }
                         if (isTiedFor(seg, strack, voice)) {
                               if (isTie) {
-                                    printInconsistentTies(seg);
+                                    printInconsistentTieLocation(seg->measure()->no(), staff->idx());
                                     return false;
                                     }
                               isTie = true;
                               }
                         }
                   }
+            if (isTie)
+                  return false;
             }
       return true;
       }
