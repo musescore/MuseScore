@@ -23,7 +23,7 @@
 //=============================================================================
 
 #ifndef __ALSA_H__
-#define __ALSA_H
+#define __ALSA_H__
 
 #include <alsa/asoundlib.h>
 #include <poll.h>
