@@ -682,6 +682,7 @@ void createMeasures(ReducedFraction &lastTick, Score *score)
             Measure* measure  = new Measure(score);
             const int tick = score->sigmap()->bar2tick(i, 0);
             measure->setTick(tick);
+            measure->setNo(i);
             const Fraction ts = score->sigmap()->timesig(tick).timesig();
             Fraction nominalTs = ts;
 
