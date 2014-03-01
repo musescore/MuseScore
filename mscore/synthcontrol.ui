@@ -19,7 +19,7 @@
      <item row="0" column="3">
       <widget class="QPushButton" name="storeButton">
        <property name="text">
-        <string>Store</string>
+        <string>Set as Default</string>
        </property>
       </widget>
      </item>
@@ -29,7 +29,7 @@
         <string>Save to Score</string>
        </property>
        <property name="text">
-        <string>Save</string>
+        <string>Save to Score</string>
        </property>
       </widget>
      </item>
@@ -52,14 +52,14 @@
         <string>Load from Score</string>
        </property>
        <property name="text">
-        <string>Load</string>
+        <string>Load from Score</string>
        </property>
       </widget>
      </item>
      <item row="0" column="4">
       <widget class="QPushButton" name="recallButton">
        <property name="text">
-        <string>Recall</string>
+        <string>Load Default</string>
        </property>
       </widget>
      </item>
@@ -255,8 +255,6 @@
    <header>awl/mslider.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
