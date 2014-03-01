@@ -2269,7 +2269,7 @@ static void mscoreMessageHandler(QtMsgType type, const char *msg)
      {
      QTextStream cout(stdout);
 
-      abort();
+      //abort();
 
      switch (type) {
      case QtDebugMsg:
