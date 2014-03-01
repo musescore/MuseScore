@@ -52,6 +52,7 @@
 #include "importmidi_clef.h"
 #include "importmidi_lrhand.h"
 #include "importmidi_lyrics.h"
+#include "importmidi_tie.h"
 
 #include <set>
 
@@ -492,6 +493,8 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
 
       const auto swingType = preferences.midiImportOperations.trackOperations(indexOfOperation).swing;
       Swing::detectSwing(staff, swingType);
+
+      Q_ASSERT_X(MidiTie::areTiesConsistent(staff), "MTrack::convertTrack", "Ties are inconsistent");
 
       MidiClef::createClefs(staff, indexOfOperation, mtrack->drumTrack());
       }
