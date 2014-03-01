@@ -67,7 +67,7 @@
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Rest>
           <durationType>16th</durationType>
           </Rest>
