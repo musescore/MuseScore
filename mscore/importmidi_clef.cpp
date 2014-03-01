@@ -250,7 +250,7 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
             if (avgPitch.count() == 0)    // no chords
                   continue;
             tieTracker.addSeg(seg, strack);
-            auto tieState = tieTracker.state();
+            const auto tieState = tieTracker.state();
 
             if (tieState != TieStateMachine::State::UNTIED)
                   avgGroupPitch += avgPitch;
