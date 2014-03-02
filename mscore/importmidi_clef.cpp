@@ -39,7 +39,7 @@ class AveragePitch
       AveragePitch() : sumPitch_(0), count_(0) {}
       AveragePitch(int sumPitch, int count) : sumPitch_(sumPitch), count_(count) {}
 
-      int pitch() const { return sumPitch_ / count_; }
+      int pitch() const { return qRound(sumPitch_ * 1.0 / count_); }
       int sumPitch() const { return sumPitch_; }
       int count() const { return count_; }
       void addPitch(int pitch)
