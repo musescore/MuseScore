@@ -246,13 +246,13 @@
           <duration z="2" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Rest>
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="3">
         <Chord>
           <durationType>16th</durationType>
           <StemDirection>up</StemDirection>
@@ -468,7 +468,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="4">
         <Chord>
           <durationType>16th</durationType>
           <StemDirection>up</StemDirection>

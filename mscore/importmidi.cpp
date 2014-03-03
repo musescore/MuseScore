@@ -52,6 +52,7 @@
 #include "importmidi_clef.h"
 #include "importmidi_lrhand.h"
 #include "importmidi_lyrics.h"
+#include "importmidi_tie.h"
 
 #include <set>
 
@@ -493,6 +494,8 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
       const auto swingType = preferences.midiImportOperations.trackOperations(indexOfOperation).swing;
       Swing::detectSwing(staff, swingType);
 
+      Q_ASSERT_X(MidiTie::areTiesConsistent(staff), "MTrack::convertTrack", "Ties are inconsistent");
+
       MidiClef::createClefs(staff, indexOfOperation, mtrack->drumTrack());
       }
 
@@ -682,6 +685,7 @@ void createMeasures(ReducedFraction &lastTick, Score *score)
             Measure* measure  = new Measure(score);
             const int tick = score->sigmap()->bar2tick(i, 0);
             measure->setTick(tick);
+            measure->setNo(i);
             const Fraction ts = score->sigmap()->timesig(tick).timesig();
             Fraction nominalTs = ts;
 
@@ -882,6 +886,20 @@ bool doNotesOverlap(const std::multimap<int, MTrack> &tracks)
       return false;
       }
 
+bool noTooShortNotes(const std::multimap<int, MTrack> &tracks)
+      {
+      for (const auto &track: tracks) {
+            const auto &chords = track.second.chords;
+            for (const auto &chord: chords) {
+                  for (const auto &note: chord.second.notes) {
+                        if (note.len < MChord::minAllowedDuration())
+                              return false;
+                        }
+                  }
+            }
+      return true;
+      }
+
 #endif
 
 
@@ -902,6 +920,8 @@ void convertMidi(Score *score, const MidiFile *mf)
 
       Q_ASSERT_X(!doNotesOverlap(tracks),
                  "convertMidi:", "There are overlapping notes of the same voice that is incorrect");
+      Q_ASSERT_X(noTooShortNotes(tracks),
+                 "convertMidi:", "There are notes of length < min allowed duration");
 
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
       LRHand::splitIntoLeftRightHands(tracks);

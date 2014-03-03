@@ -389,11 +389,61 @@ validateAndFindExcludedChords(std::list<int> &indexes,
       return excludedChords;
 }
 
-// result: <average quant error,
-//          sum length of rests inside all tuplets,
-//          negative total tuplet note count>
+class TupletErrorResult
+      {
+   public:
+      TupletErrorResult(double t = 0.0, const ReducedFraction &r = ReducedFraction(0, 1))
+            : tupletAverageError(t)
+            , sumLengthOfRests(r)
+            {}
 
-std::tuple<double, ReducedFraction, int>
+      bool operator<(const TupletErrorResult &er) const
+            {
+            if (tupletAverageError < er.tupletAverageError) {
+                  if (sumLengthOfRests <= er.sumLengthOfRests) {
+                        return true;
+                        }
+                  else {
+                        const double errorDiv = (er.tupletAverageError - tupletAverageError)
+                                                / er.tupletAverageError;
+                        const auto restsDiv = (sumLengthOfRests - er.sumLengthOfRests)
+                                                / sumLengthOfRests;
+                        return compareDivs(errorDiv, restsDiv, er);
+                        }
+                  }
+            else if (tupletAverageError > er.tupletAverageError) {
+                  if (sumLengthOfRests >= er.sumLengthOfRests) {
+                        return false;
+                        }
+                  else {
+                        const double errorDiv = (tupletAverageError - er.tupletAverageError)
+                                                / tupletAverageError;
+                        const auto restsDiv = (er.sumLengthOfRests - sumLengthOfRests)
+                                                / er.sumLengthOfRests;
+                        return compareDivs(errorDiv, restsDiv, er);
+                        }
+                  }
+            else
+                  return sumLengthOfRests < er.sumLengthOfRests;
+            }
+
+   private:
+      bool compareDivs(double errorDiv,
+                       const ReducedFraction &restsDiv,
+                       const TupletErrorResult &er) const
+            {
+                        // error is more important than length of rests
+            if (errorDiv < restsDiv.numerator() * 0.8 / restsDiv.denominator())
+                  return sumLengthOfRests < er.sumLengthOfRests;
+            else
+                  return tupletAverageError < er.tupletAverageError;
+            }
+
+      double tupletAverageError;
+      ReducedFraction sumLengthOfRests;
+      };
+
+TupletErrorResult
 findTupletError(
             const std::list<int> &indexes,
             const std::vector<TupletInfo> &tuplets,
@@ -413,16 +463,15 @@ findTupletError(
       for (const auto &chordIt: excludedChords)
             sumError += findQuantizationError(chordIt->first, regularRaster);
 
-      return std::make_tuple(sumError.ticks() * 1.0 / sumNoteCount,
-                             sumLengthOfRests, sumNoteCount);
+      return TupletErrorResult{sumError.ticks() * 1.0 / sumNoteCount, sumLengthOfRests};
       }
 
-std::tuple<double, ReducedFraction, int>
+TupletErrorResult
 validateTuplets(std::list<int> &indexes,
                 const std::vector<TupletInfo> &tuplets)
       {
       if (tuplets.empty())
-            return std::make_tuple(0.0, ReducedFraction(0, 1), 0);
+            return TupletErrorResult();
 
       const auto excludedChords = validateAndFindExcludedChords(indexes, tuplets);
       return findTupletError(indexes, tuplets, excludedChords);
@@ -482,7 +531,7 @@ std::list<int>
 minimizeQuantError(std::vector<std::vector<int>> &indexGroups,
                    const std::vector<TupletInfo> &tuplets)
       {
-      std::tuple<double, ReducedFraction, int> minResult;
+      TupletErrorResult minResult;
       std::vector<int> iIndexGroups;  // indexes of elements in indexGroups
       for (int i = 0; i != (int)indexGroups.size(); ++i)
             iIndexGroups.push_back(i);
@@ -596,6 +645,48 @@ std::vector<int> findTupletsWithNoCommonChords(std::list<int> &commonTuplets,
       return uncommonTuplets;
       }
 
+// remove overlapping tuplets with the same number
+// when tuplet with more length differs only by additional rests
+
+void removeUselessTuplets(std::vector<TupletInfo> &tuplets)
+      {
+      struct {
+            bool operator()(const TupletInfo &t1, const TupletInfo &t2) {
+                  if (t1.tupletNumber < t2.tupletNumber)
+                        return true;
+                  if (t1.tupletNumber == t2.tupletNumber)
+                        return t1.len < t2.len;
+                  return false;
+                  }
+            } comparator;
+      std::sort(tuplets.begin(), tuplets.end(), comparator);
+
+      size_t beg = 0;
+      while (beg < tuplets.size()) {
+            size_t end = beg + 1;
+            while (tuplets.size() > end && tuplets[end].tupletNumber == tuplets[beg].tupletNumber)
+                  ++end;
+            for (size_t i = beg; i < end - 1; ++i) {
+                  const auto &t1 = tuplets[i];
+                  for (size_t j = i + 1; j < end; ++j) {
+                        const auto &t2 = tuplets[j];
+                        if (t1.onTime >= t2.onTime && t1.onTime + t1.len <= t2.onTime + t2.len) {
+                                    // check onTimes
+                              if (t2.chords.rbegin()->first < t1.onTime + t1.len
+                                          && t2.chords.begin()->first >= t1.onTime)
+                                    {
+                                          // remove larger tuplet
+                                    tuplets.erase(tuplets.begin() + j);
+                                    --j;
+                                    --end;
+                                    }
+                              }
+                        }
+                  }
+            beg = end;
+            }
+      }
+
 // first chord in tuplet may belong to other tuplet at the same time
 // in the case if there are enough notes in this first chord
 // to be splitted into different voices
@@ -604,6 +695,8 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
       {
       if (tuplets.empty())
             return;
+      removeUselessTuplets(tuplets);
+
       std::list<int> bestTuplets;
       std::list<int> restTuplets;
       for (int i = 0; i != (int)tuplets.size(); ++i)

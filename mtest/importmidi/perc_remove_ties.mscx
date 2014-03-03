@@ -443,7 +443,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Chord>
           <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
@@ -646,7 +646,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="3">
         <Chord>
           <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
@@ -849,7 +849,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="4">
         <Chord>
           <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
