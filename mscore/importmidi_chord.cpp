@@ -144,9 +144,9 @@ void collectChords(std::multimap<int, MTrack> &tracks)
             if (chords.empty())
                   continue;
 
-            ReducedFraction threshTime = minAllowedDuration() / 2;
-            ReducedFraction fudgeTime = threshTime / 4;
-            ReducedFraction threshExtTime = threshTime / 2;
+            const ReducedFraction threshTime = minAllowedDuration() / 2;
+            const ReducedFraction fudgeTime = threshTime / 4;
+            const ReducedFraction threshExtTime = threshTime / 2;
 
             ReducedFraction currentChordStart(-1, 1);    // invalid
             ReducedFraction curThreshTime(-1, 1);
@@ -188,8 +188,7 @@ void collectChords(std::multimap<int, MTrack> &tracks)
                         }
                   currentChordStart = it->first;
                   maxOffTime = currentChordStart + note.len;
-                  if (curThreshTime != threshTime)
-                        curThreshTime = threshTime;
+                  curThreshTime = threshTime;
                   ++it;
                   }
 
@@ -251,8 +250,8 @@ void splitUnequalChords(std::multimap<int, MTrack> &tracks)
                         else {
                               ReducedFraction newLen = it->len;
                               if (newLen != len) {
-                                    MidiChord newChord;
-                                    newChord.voice = chord.voice;
+                                    MidiChord newChord(chord);
+                                    newChord.notes.clear();
                                     for (int j = it - notes.begin(); j > 0; --j)
                                           newChord.notes.push_back(notes[j - 1]);
                                     newChordEvents.push_back({chordEvent.first, newChord});

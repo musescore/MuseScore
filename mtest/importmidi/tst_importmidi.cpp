@@ -114,7 +114,6 @@ class TestImportMidi : public QObject, public MTest
             {
                         // requires 1/32 quantization
             const int defaultQuant = preferences.shortestNote;
-            preferences.shortestNote = MScore::division / 8; // midi quantization: 1/32
             mf("tuplet_2_voices_3_5_tuplets");
             preferences.shortestNote = defaultQuant;
             }
@@ -135,7 +134,6 @@ class TestImportMidi : public QObject, public MTest
             {
                         // requires 1/64 quantization
             const int defaultQuant = preferences.shortestNote;
-            preferences.shortestNote = MScore::division / 16; // midi quantization: 1/64
             mf("tuplet_nonuplet_3-4");
             preferences.shortestNote = defaultQuant;
             }
@@ -143,7 +141,6 @@ class TestImportMidi : public QObject, public MTest
             {
                         // requires 1/64 quantization
             const int defaultQuant = preferences.shortestNote;
-            preferences.shortestNote = MScore::division / 16; // midi quantization: 1/64
             mf("tuplet_nonuplet_4-4");
             preferences.shortestNote = defaultQuant;
             }
@@ -158,7 +155,6 @@ class TestImportMidi : public QObject, public MTest
             {
                         // requires 1/32 quantization
             const int defaultQuant = preferences.shortestNote;
-            preferences.shortestNote = MScore::division / 8; // midi quantization: 1/32
             mf("tuplet_tied_3_5_tuplets");
             preferences.shortestNote = defaultQuant;
             }
@@ -166,7 +162,6 @@ class TestImportMidi : public QObject, public MTest
             {
             // requires 1/32 quantization
             const int defaultQuant = preferences.shortestNote;
-            preferences.shortestNote = MScore::division / 8; // midi quantization: 1/32
             mf("tuplet_tied_3_5_tuplets2");
             preferences.shortestNote = defaultQuant;
             }

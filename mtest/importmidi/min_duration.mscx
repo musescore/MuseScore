@@ -67,12 +67,12 @@
           <duration z="3" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Rest>
           <durationType>16th</durationType>
           </Rest>
         <Chord>
-          <durationType>64th</durationType>
+          <durationType>128th</durationType>
           <Note>
             <Events>
               <Event>
@@ -87,6 +87,9 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <durationType>128th</durationType>
+          </Rest>
         <Rest>
           <durationType>64th</durationType>
           </Rest>

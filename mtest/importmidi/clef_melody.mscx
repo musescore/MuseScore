@@ -162,7 +162,7 @@
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Clef>
           <concertClefType>F</concertClefType>
           <transposingClefType>F</transposingClefType>

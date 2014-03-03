@@ -102,7 +102,7 @@
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Chord>
           <dots>1</dots>
           <durationType>quarter</durationType>
@@ -127,7 +127,7 @@
           <durationType>half</durationType>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="3">
         <Rest>
           <durationType>half</durationType>
           </Rest>
@@ -153,7 +153,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="4">
         <Chord>
           <durationType>eighth</durationType>
           <Note>
