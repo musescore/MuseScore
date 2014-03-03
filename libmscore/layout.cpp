@@ -954,7 +954,7 @@ static bool validMMRestMeasure(Measure* m)
             }
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
-                  if (e->systemFlag() || m->score()->staff(e->staffIdx())->show())
+                  if(e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT && e->type() != Element::STAFF_TEXT)
                         return false;
                   }
             }
@@ -984,7 +984,7 @@ static bool breakMultiMeasureRest(Measure* m)
             for (Element* e : s->annotations()) {
                   if (e->type() == Element::REHEARSAL_MARK ||
                       e->type() == Element::TEMPO_TEXT ||
-                      e->type() == Element::STAFF_TEXT)
+                      (e->type() == Element::STAFF_TEXT && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
                         return true;
                   }
             }
