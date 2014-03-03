@@ -485,6 +485,7 @@ void Segment::add(Element* el)
                         qDebug("%p Segment %s add(%s) there is already an %s at %s(%d) track %d. score %p",
                            this, subTypeName(), el->name(), _elist[track]->name(),
                            score()->sigmap()->pos(tick()), tick(), track, score());
+// abort();
                         return;
                         }
                   if (track % VOICES)
