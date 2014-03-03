@@ -1535,6 +1535,7 @@ void Chord::layoutPitched()
 
       qreal _spatium  = spatium();
       qreal minNoteDistance = score()->styleS(ST_dotNoteDistance).val() * _spatium;
+      qreal minTieLength = score()->styleS(ST_MinTieLength).val() * _spatium;
 
       while (_ledgerLines) {
             LedgerLine* l = _ledgerLines->next();
@@ -1586,6 +1587,56 @@ void Chord::layoutPitched()
                   qreal x = accidental->x() + note->x();
                   x -= score()->styleS(ST_accidentalDistance).val() * _spatium;
                   lll = qMax(lll, -x);
+                  }
+
+            // allow extra space for shortened ties
+            // this code must be kept synchronized
+            // with the tie positioning code in Tie::slurPos()
+            // but the allocation of space needs to be performed here
+            Tie* tie;
+            tie = note->tieBack();
+            if (tie) {
+                  tie->calculateDirection();
+                  qreal overlap = 0.0;
+                  bool shortStart = false;
+                  Note* sn = tie->startNote();
+                  Chord* sc = sn->chord();
+                  if (sc && sc->measure() == measure() && sc == prevChordRest(this)) {
+                        if (sc->notes().size() > 1 || (sc->stem() && sc->up() == tie->up())) {
+                              shortStart = true;
+                              if (sc->width() > sn->width()) {
+                                    // chord with second?
+                                    // account for noteheads further to right
+                                    qreal snEnd = sn->x() + sn->headWidth();
+                                    qreal scEnd = snEnd;
+                                    for (int i = 0; i < sc->notes().size(); ++i)
+                                          scEnd = qMax(scEnd, sc->notes().at(i)->x() + sc->notes().at(i)->headWidth());
+                                    overlap += scEnd - snEnd;
+                                    }
+                              else
+                                    overlap -= sn->headWidth() * 0.12;
+                              }
+                        else
+                              overlap += sn->headWidth() * 0.35;
+                        if (notes().size() > 1 || (stem() && !up() && !tie->up())) {
+                              // for positive offset:
+                              //    use available space
+                              // for negative x offset:
+                              //    space is allocated elsewhere, so don't re-allocate here
+                              if (note->ipos().x() != 0.0)
+                                    overlap += qAbs(note->ipos().x());
+                              else
+                                    overlap -= note->headWidth() * 0.12;
+                              }
+                        else {
+                              if (shortStart)
+                                    overlap += note->headWidth() * 0.15;
+                              else
+                                    overlap += note->headWidth() * 0.35;
+                              }
+                        qreal d = qMax(minTieLength - overlap, 0.0);
+                        lll = qMax(lll, d);
+                        }
                   }
             }
 
