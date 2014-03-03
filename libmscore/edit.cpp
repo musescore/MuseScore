@@ -1363,11 +1363,13 @@ void Score::cmdDeleteSelectedMeasures()
 
       QList<Score*> scores = scoreList();
       int startTick        = is->tick();
-      int endIdx           = measureIdx(ie);
-      Measure* m = static_cast<Measure *>(ie);
-      if (m->isMMRest())
-            endIdx += m->mmRestCount() - 1;
-      int endTick   = measure(endIdx)->tick();
+//      int endIdx           = measureIdx(ie);
+//      Measure* m = static_cast<Measure *>(ie);
+//      if (m->isMMRest())
+//            endIdx += m->mmRestCount() - 1;
+//      int endTick   = measure(endIdx)->tick();
+      int endTick   = ie->tick();
+
       foreach (Score* score, scores) {
             Measure* is = score->tick2measure(startTick);
             Measure* ie = score->tick2measure(endTick);
@@ -1549,7 +1551,6 @@ void Score::cmdDeleteSelection()
             }
       _layoutAll = true;
       }
-
 
 //---------------------------------------------------------
 //   cmdFullMeasureRest
@@ -1873,6 +1874,35 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
       }
 
 //---------------------------------------------------------
+//   searchMeasureBase
+//    search corresponding measure in linked score
+//---------------------------------------------------------
+
+static MeasureBase* searchMeasureBase(Score* score, MeasureBase* mb)
+      {
+      if (mb == 0)
+            return nullptr;
+      if (mb->type() == Element::MEASURE) {
+            for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+                  if (m->tick() == mb->tick())
+                        return m;
+                  }
+            }
+      else {
+            if (!mb->links())
+                  qDebug("searchMeasureBase: no links");
+            else {
+                  for (Element* m : *mb->links()) {
+                        if (m->score() == score)
+                              return static_cast<MeasureBase*>(m);
+                        }
+                  }
+            }
+      qDebug("searchMeasureBase: measure not found");
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   insertMeasure
 //    Create a new MeasureBase of type type and insert
 //    before measure.
@@ -1882,7 +1912,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
 MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measure, bool createEmptyMeasures)
       {
       int tick;
-      int idx;
+      int ticks = 0;
       if (measure) {
             if (measure->type() == Element::MEASURE && static_cast<Measure*>(measure)->isMMRest()) {
                   measure = static_cast<Measure*>(measure)->prev();
@@ -1890,31 +1920,30 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                   deselectAll();
                   }
             tick = measure->tick();
-            idx  = measureIdx(measure);
             }
-      else {
-            measure = last();
-            if (measure)
-                  tick = measure->endTick();
-            else
-                  tick = 0;
-            idx  = -1;
-            }
+      else
+            tick = last() ? last()->endTick() : 0;
 
-      MeasureBase* omb = 0;
-      foreach (Score* score, scoreList()) {
+      // use nominal time signature of previous measure
+      Fraction f = sigmap()->timesig(tick - 1).nominal();
+
+      QList<pair<Score*, MeasureBase*>> ml;
+      for (Score* score : scoreList())
+            ml.append(pair<Score*,MeasureBase*>(score,searchMeasureBase(score, measure)));
+
+      Measure* omb = nullptr;
+      for (pair<Score*, MeasureBase*> p : ml) {
+            Score* score    = p.first;
+            MeasureBase* im = p.second;
             MeasureBase* mb = static_cast<MeasureBase*>(Element::create(type, score));
-            MeasureBase* im = idx != -1 ? score->measure(idx) : 0;
-            // insert before im, append if im = 0
-            measure = mb;
             mb->setTick(tick);
-            if (score == this)
-                  omb = mb;
 
             if (type == Element::MEASURE) {
+                  if (score == rootScore())
+                        omb = static_cast<Measure*>(mb);
                   bool createEndBar    = false;
                   bool endBarGenerated = false;
-                  if (idx == -1) {
+                  if (!measure) {
                         Measure* lm = score->lastMeasure();
                         if (lm && lm->endBarLineType() == END_BAR) {
                               createEndBar = true;
@@ -1926,16 +1955,14 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                                     lm->setEndBarLineType(NORMAL_BAR, true);
                                     }
                               }
-                        else if (lm == 0)
+                        else if (lm == nullptr)
                               createEndBar = true;
                         }
-
-                  // use nominal time signature of previous measure
-                  Fraction f = score->sigmap()->timesig(tick - 1).nominal();
 
                   Measure* m = static_cast<Measure*>(mb);
                   m->setTimesig(f);
                   m->setLen(f);
+                  ticks = m->ticks();
 
                   QList<TimeSig*> tsl;
                   QList<KeySig*>  ksl;
@@ -1948,7 +1975,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                         for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                               for (Segment* s = score->firstSegment(); s && s->tick() == 0; s = s->next()) {
                                     Element* e = s->element(staffIdx * VOICES);
-                                    if (e == 0)
+                                    if (e == nullptr)
                                           continue;
                                     if (e->type() == Element::KEYSIG) {
                                           KeySig* ks = static_cast<KeySig*>(e);
@@ -2011,27 +2038,28 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                   undo(new InsertMeasure(mb, im));
                   }
             }
-      undoInsertTime(tick, measure->ticks());
+      undoInsertTime(tick, ticks);
 
-      if (type == Element::MEASURE && !createEmptyMeasures) {
+      if (omb && !createEmptyMeasures) {
             //
             // fill measure with rest
             //
-            Score*   root = rootScore();
-            Measure* m = static_cast<Measure*>(omb);
-            for (int staffIdx = 0; staffIdx < root->nstaves(); ++staffIdx) {
+            Score* _root = rootScore();
+            for (int staffIdx = 0; staffIdx < _root->nstaves(); ++staffIdx) {
                   int track = staffIdx * VOICES;
-                  Segment* s = m->findSegment(Segment::SegChordRest, m->tick());
+                  int tick = omb->tick();
+                  Segment* s = omb->findSegment(Segment::SegChordRest, tick);
                   if (s == 0 || s->element(track) == 0) {
                         // add rest to this staff and to all the staves linked to it
-                        Rest* rest = new Rest(root, TDuration(TDuration::V_MEASURE));
-                        Fraction timeStretch(root->staff(staffIdx)->timeStretch(m->tick()));
-                        rest->setDuration(m->len() / timeStretch);
+                        Rest* rest = new Rest(_root, TDuration(TDuration::V_MEASURE));
+                        Fraction timeStretch(_root->staff(staffIdx)->timeStretch(tick));
+                        rest->setDuration(omb->len() / timeStretch);
                         rest->setTrack(track);
-                        undoAddCR(rest, m, m->tick());
+                        undoAddCR(rest, omb, tick);
                         }
                   }
             }
+
       return omb;
       }
 

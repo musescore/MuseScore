@@ -109,7 +109,7 @@ Score* createExcerpt(const QList<Part*>& parts)
             }
       score->setCurrentLayer(oscore->currentLayer());
       score->layer().clear();
-      foreach(const Layer& l, oscore->layer())
+      foreach (const Layer& l, oscore->layer())
             score->layer().append(l);
 
       score->setPageNumberOffset(oscore->pageNumberOffset());

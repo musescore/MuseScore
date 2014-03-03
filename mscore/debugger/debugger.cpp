@@ -1786,8 +1786,8 @@ void ShowElementBase::setElement(Element* e)
       eb.color->setColor(e->color());
       eb.parentButton->setEnabled(e->parent());
       eb.link1->setEnabled(e->links());
-      eb.link2->setEnabled(e->links()->size() > 1);
-      eb.link3->setEnabled(e->links()->size() > 2);
+      eb.link2->setEnabled(e->links() && e->links()->size() > 1);
+      eb.link3->setEnabled(e->links() && e->links()->size() > 2);
       eb.mag->setValue(e->mag());
       eb.systemFlag->setChecked(e->systemFlag());
       }
