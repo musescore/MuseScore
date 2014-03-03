@@ -286,6 +286,7 @@ enum StyleIdx {
       ST_SlurEndWidth,
       ST_SlurMidWidth,
       ST_SlurDottedWidth,
+      ST_MinTieLength,
 
       ST_SectionPause,
       ST_MusicalSymbolFont,

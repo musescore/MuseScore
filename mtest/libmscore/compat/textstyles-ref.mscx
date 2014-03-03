@@ -30,6 +30,7 @@
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>cchords_muse.xml</chordDescriptionFile>
       <concertPitch>1</concertPitch>
+      <minTieLength>0</minTieLength>
       <voltaY>-2</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <TextStyle>
