@@ -336,7 +336,6 @@ Element::Element(const Element& e)
 void Element::linkTo(Element* element)
       {
       Q_ASSERT(element != this);
-      Q_ASSERT(!_links || !element->links() | (_links == element->links()));
       if (!_links) {
             if (element->links()) {
                   _links = element->_links;
@@ -351,8 +350,6 @@ void Element::linkTo(Element* element)
             _links->append(this);
             }
       else {
-            Q_ASSERT(_links->contains(this));
-            Q_ASSERT(!_links->contains(element));
             _links->append(element);
             element->_links = _links;
             }
