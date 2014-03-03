@@ -937,7 +937,7 @@ void PreferenceDialog::updateValues()
       //
       // score settings
       //
-      scale->setValue(prefs.mag);
+      scale->setValue(prefs.mag*100.0);
 
       defaultPlayDuration->setValue(MScore::defaultPlayDuration);
       importStyleFile->setText(prefs.importStyleFile);
@@ -1397,7 +1397,7 @@ void PreferenceDialog::apply()
       int t = updatePeriods[periodIndex].time;
       prefs.checkUpdateStartup = t;
 
-      prefs.mag         = scale->value();
+      prefs.mag         = scale->value()/100.0;
 
       MScore::defaultPlayDuration = defaultPlayDuration->value();
 

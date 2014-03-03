@@ -865,7 +865,7 @@
              </sizepolicy>
             </property>
             <property name="suffix">
-             <string>%</string>
+             <string notr="true">%</string>
             </property>
             <property name="decimals">
              <number>0</number>
@@ -2685,7 +2685,7 @@ p, li { white-space: pre-wrap; }
             <item row="4" column="1">
              <widget class="QSpinBox" name="dotMag">
               <property name="suffix">
-               <string>%</string>
+               <string notr="true">%</string>
               </property>
               <property name="minimum">
                <number>50</number>
@@ -2910,7 +2910,7 @@ p, li { white-space: pre-wrap; }
           <item row="1" column="1">
            <widget class="QDoubleSpinBox" name="beamDistance">
             <property name="suffix">
-             <string>%</string>
+             <string notr="true">%</string>
             </property>
             <property name="singleStep">
              <double>0.100000000000000</double>
@@ -3126,7 +3126,7 @@ p, li { white-space: pre-wrap; }
              </sizepolicy>
             </property>
             <property name="suffix">
-             <string>%</string>
+             <string notr="true">%</string>
             </property>
             <property name="decimals">
              <number>1</number>
@@ -3164,7 +3164,7 @@ p, li { white-space: pre-wrap; }
              </sizepolicy>
             </property>
             <property name="suffix">
-             <string>%</string>
+             <string notr="true">%</string>
             </property>
             <property name="decimals">
              <number>1</number>
@@ -3199,7 +3199,7 @@ p, li { white-space: pre-wrap; }
              </sizepolicy>
             </property>
             <property name="suffix">
-             <string>%</string>
+             <string notr="true">%</string>
             </property>
             <property name="decimals">
              <number>1</number>
@@ -3237,7 +3237,7 @@ p, li { white-space: pre-wrap; }
              </sizepolicy>
             </property>
             <property name="suffix">
-             <string>%</string>
+             <string notr="true">%</string>
             </property>
             <property name="decimals">
              <number>1</number>
@@ -4504,7 +4504,7 @@ p, li { white-space: pre-wrap; }
           <item row="1" column="1">
            <widget class="QDoubleSpinBox" name="fretNumMag">
             <property name="suffix">
-             <string>%</string>
+             <string notr="true">%</string>
             </property>
             <property name="decimals">
              <number>0</number>
@@ -4593,7 +4593,7 @@ p, li { white-space: pre-wrap; }
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                 <property name="suffix">
-                 <string>%</string>
+                 <string notr="true">%</string>
                 </property>
                 <property name="minimum">
                  <number>1</number>
@@ -4884,7 +4884,7 @@ p, li { white-space: pre-wrap; }
             <item row="0" column="3">
              <widget class="QSpinBox" name="articulationMag">
               <property name="suffix">
-               <string>%</string>
+               <string notr="true">%</string>
               </property>
               <property name="maximum">
                <number>300</number>
