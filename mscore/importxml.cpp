@@ -4625,7 +4625,6 @@ static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration d
 
  \a Staff is the number of first staff of the part this note belongs to.
  */
-
 Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, 
                         QString& currentVoice, QDomElement e, QList<Chord*>& graceNotes, int* pAlt)
       {
