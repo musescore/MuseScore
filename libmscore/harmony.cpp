@@ -561,6 +561,7 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
       if (!textList.isEmpty()) {
             QString s(harmonyName());
             setText(s);
+            Text::createLayout(); // create TextBlocks from text
             }
       Text::startEdit(view, p);
       }
