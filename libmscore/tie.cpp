@@ -164,14 +164,21 @@ void Tie::slurPos(SlurPos* sp)
 
       qreal xo;
       qreal yo;
+      bool shortStart = false;
+
+      // determine attachment points
+      // similar code is used in Chord::layoutPitched()
+      // to allocate extra space to enforce minTieLength
+      // so keep these in sync
 
       //------p1
       if ((sc->notes().size() > 1) || (sc->stem() && (sc->up() == _up))) {
             xo = startNote()->x() + hw * 1.12;
             yo = startNote()->pos().y() + hw * .3 * __up;
+            shortStart = true;
             }
       else {
-            xo = startNote()->x() + hw * 0.85;
+            xo = startNote()->x() + hw * 0.65;
             yo = startNote()->pos().y() + _spatium * .75 * __up;
             }
       sp->p1 = sc->pagePos() - sp->system1->pagePos() + QPointF(xo, yo);
@@ -186,8 +193,10 @@ void Tie::slurPos(SlurPos* sp)
       sp->system2 = ec->measure()->system();
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up))
             xo = endNote()->x() - hw * 0.12;
-      else
+      else if (shortStart)
             xo = endNote()->x() + hw * 0.15;
+      else
+            xo = endNote()->x() + hw * 0.35;
       sp->p2 = ec->pagePos() - sp->system2->pagePos() + QPointF(xo, yo);
       }
 
@@ -238,42 +247,11 @@ void Tie::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   layout
+//   calculateDirection
 //---------------------------------------------------------
 
-void Tie::layout()
+void Tie::calculateDirection()
       {
-      qreal _spatium = spatium();
-
-      //
-      //    show short bow
-      //
-      if (startNote() == 0 || endNote() == 0) {
-            if (startNote() == 0) {
-                  qDebug("Tie::layout(): no start note");
-                  return;
-                  }
-            Chord* c1 = startNote()->chord();
-            if (_slurDirection == MScore::AUTO) {
-                  if (c1->measure()->mstaff(c1->staffIdx())->hasVoices) {
-                        // in polyphonic passage, ties go on the stem side
-                        _up = c1->up();
-                        }
-                  else
-                        _up = !c1->up();
-                  }
-            else
-                  _up = _slurDirection == MScore::UP ? true : false;
-            fixupSegments(1);
-            SlurSegment* segment = segmentAt(0);
-            segment->setSpannerSegmentType(SEGMENT_SINGLE);
-            segment->setSystem(startNote()->chord()->segment()->measure()->system());
-            SlurPos sPos;
-            slurPos(&sPos);
-            segment->layout(sPos.p1, sPos.p2);
-            return;
-            }
-
       Chord* c1   = startNote()->chord();
       Chord* c2   = endNote()->chord();
       Measure* m1 = c1->measure();
@@ -324,6 +302,46 @@ void Tie::layout()
             }
       else
             _up = _slurDirection == MScore::UP ? true : false;
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Tie::layout()
+      {
+      qreal _spatium = spatium();
+
+      //
+      //    show short bow
+      //
+      if (startNote() == 0 || endNote() == 0) {
+            if (startNote() == 0) {
+                  qDebug("Tie::layout(): no start note");
+                  return;
+                  }
+            Chord* c1 = startNote()->chord();
+            if (_slurDirection == MScore::AUTO) {
+                  if (c1->measure()->mstaff(c1->staffIdx())->hasVoices) {
+                        // in polyphonic passage, ties go on the stem side
+                        _up = c1->up();
+                        }
+                  else
+                        _up = !c1->up();
+                  }
+            else
+                  _up = _slurDirection == MScore::UP ? true : false;
+            fixupSegments(1);
+            SlurSegment* segment = segmentAt(0);
+            segment->setSpannerSegmentType(SEGMENT_SINGLE);
+            segment->setSystem(startNote()->chord()->segment()->measure()->system());
+            SlurPos sPos;
+            slurPos(&sPos);
+            segment->layout(sPos.p1, sPos.p2);
+            return;
+            }
+
+      calculateDirection();
 
       qreal w   = startNote()->headWidth();
       qreal xo1 = w * 1.12;

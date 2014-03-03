@@ -94,6 +94,7 @@ static const StyleVal2 style114[] = {
       { ST_propertyDistance,             QVariant(1.0) },
       { ST_articulationMag,              QVariant(qreal(1.0)) },
       { ST_lastSystemFillLimit,          QVariant(0.3) },
+      { ST_MinTieLength,                 QVariant(0.0) },
       { ST_hairpinHeight,                QVariant(1.2) },
       { ST_hairpinContHeight,            QVariant(0.5) },
       { ST_hairpinLineWidth,             QVariant(0.13) },

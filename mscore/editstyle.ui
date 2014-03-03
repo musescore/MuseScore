@@ -2986,6 +2986,32 @@ p, li { white-space: pre-wrap; }
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="1">
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>260</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>247</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item row="0" column="0">
            <layout class="QFormLayout" name="formLayout_9">
             <property name="fieldGrowthPolicy">
@@ -3060,33 +3086,24 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="minTieLengthLabel">
+              <property name="text">
+               <string>Minimum tie length:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QDoubleSpinBox" name="minTieLength">
+              <property name="suffix">
+               <string>sp</string>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
            </layout>
-          </item>
-          <item row="0" column="1">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>247</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="1">
-           <spacer name="verticalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>260</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </widget>
@@ -5376,7 +5393,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>slurEndLineWidth</tabstop>
   <tabstop>slurMidLineWidth</tabstop>
   <tabstop>slurDottedLineWidth</tabstop>
-  <tabstop>smallStaffSize</tabstop>
+  <tabstop>minTieLength</tabstop>
   <tabstop>smallNoteSize</tabstop>
   <tabstop>graceNoteSize</tabstop>
   <tabstop>smallClefSize</tabstop>
@@ -5422,6 +5439,41 @@ p, li { white-space: pre-wrap; }
   <tabstop>radioKeySigNatBefore</tabstop>
   <tabstop>radioKeySigNatAfter</tabstop>
   <tabstop>buttonBox</tabstop>
+  <tabstop>showIntervalMeasureNumber</tabstop>
+  <tabstop>intervalMeasureNumber</tabstop>
+  <tabstop>barAccidentalDistance</tabstop>
+  <tabstop>multiMeasureRestMargin</tabstop>
+  <tabstop>dotMag</tabstop>
+  <tabstop>beamNoSlope</tabstop>
+  <tabstop>resetHairpinY</tabstop>
+  <tabstop>resetHairpinLineWidth</tabstop>
+  <tabstop>resetHairpinHeight</tabstop>
+  <tabstop>resetHairpinContinueHeight</tabstop>
+  <tabstop>voltaLineStyle</tabstop>
+  <tabstop>resetVoltaY</tabstop>
+  <tabstop>resetVoltaHook</tabstop>
+  <tabstop>resetVoltaLineWidth</tabstop>
+  <tabstop>resetVoltaLineStyle</tabstop>
+  <tabstop>resetOttavaY</tabstop>
+  <tabstop>ottavaLineStyle</tabstop>
+  <tabstop>resetOttavaHook</tabstop>
+  <tabstop>resetOttavaLineWidth</tabstop>
+  <tabstop>resetOttavaLineStyle</tabstop>
+  <tabstop>ottavaNumbersOnly</tabstop>
+  <tabstop>resetOttavaNumbersOnly</tabstop>
+  <tabstop>pedalLineWidth</tabstop>
+  <tabstop>pedalLineStyle</tabstop>
+  <tabstop>capoPosition</tabstop>
+  <tabstop>articulationMag</tabstop>
+  <tabstop>tupletOutOfStaff</tabstop>
+  <tabstop>tupletVStemDistance</tabstop>
+  <tabstop>tupletVHeadDistance</tabstop>
+  <tabstop>tupletMaxSlope</tabstop>
+  <tabstop>tupletStemLeftDistance</tabstop>
+  <tabstop>tupletNoteLeftDistance</tabstop>
+  <tabstop>tupletStemRightDistance</tabstop>
+  <tabstop>tupletNoteRightDistance</tabstop>
+  <tabstop>smallStaffSize</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>

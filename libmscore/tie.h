@@ -44,6 +44,7 @@ class Tie : public SlurTie {
       void setEndNote(Note* note)         { setEndElement((Element*)note);      }
       Note* startNote() const             { return (Note*) startElement();      }
       Note* endNote() const               { return (Note*) endElement();        }
+      void calculateDirection();
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
