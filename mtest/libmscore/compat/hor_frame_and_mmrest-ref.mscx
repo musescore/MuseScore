@@ -23,6 +23,7 @@
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
       <createMultiMeasureRests>1</createMultiMeasureRests>
+      <minTieLength>0</minTieLength>
       <voltaY>-2</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
