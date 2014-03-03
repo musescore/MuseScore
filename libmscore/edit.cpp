@@ -439,7 +439,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
 
 static void warnTupletCrossing()
       {
-      if(!MScore::noGui)
+      if (!MScore::noGui)
             QMessageBox::warning(0,
                QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore"),
                QT_TRANSLATE_NOOP("addRemoveTimeSig", "cannot rewrite measures:\n"
