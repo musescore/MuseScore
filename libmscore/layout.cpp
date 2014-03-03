@@ -954,9 +954,7 @@ static bool validMMRestMeasure(Measure* m)
             }
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
-                  if (e->type() != Element::REHEARSAL_MARK &&
-                     e->type() != Element::TEMPO_TEXT &&
-                     e->type() != Element::STAFF_TEXT)
+                  if (e->systemFlag() || m->score()->staff(e->staffIdx())->show())
                         return false;
                   }
             }

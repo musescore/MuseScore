@@ -3515,18 +3515,12 @@ void Measure::layoutStage1()
                         setBreakMMRest(true);
                   else if (!breakMultiMeasureRest()) {
                         for (Segment* s = first(); s; s = s->next()) {
-                              if (!s->annotations().empty()) {                  // break on any annotation
-                                    setBreakMMRest(true);
-                                    break;
-                                    }
-#if 0
                               for (Element* e : s->annotations()) {
-                                    if (e->type() == REHEARSAL_MARK || e->type() == TEMPO_TEXT) {
+                                    if (score()->staff(e->staffIdx())->show() || e->systemFlag()) {
                                           setBreakMMRest(true);
                                           break;
                                           }
                                     }
-#endif
                               if (breakMultiMeasureRest())      // optimize
                                     break;
                               }
@@ -3536,21 +3530,22 @@ void Measure::layoutStage1()
             int track = staffIdx * VOICES;
 
             for (Segment* segment = first(); segment; segment = segment->next()) {
-                  Element* e = segment->element(track);
-
-                  if (e && !e->generated()) {
-                        if (segment->segmentType() & (Segment::SegStartRepeatBarLine))
-                              setBreakMMRest(true);
-                        if (segment->segmentType() & (Segment::SegKeySig | Segment::SegTimeSig) && tick())
-                              setBreakMMRest(true);
-                        else if (segment->segmentType() == Segment::SegClef) {
-                              if (segment->tick() == endTick()) {
-                                    Measure* m = nextMeasure();
-                                    if (m)
-                                          m->setBreakMMRest(true);
-                                    }
-                              else if (tick())
+                  if (score()->staff(staffIdx)->show()) {
+                        Element* e = segment->element(track);
+                        if (e && !e->generated()) {
+                              if (segment->segmentType() & (Segment::SegStartRepeatBarLine))
                                     setBreakMMRest(true);
+                              if (segment->segmentType() & (Segment::SegKeySig | Segment::SegTimeSig) && tick())
+                                    setBreakMMRest(true);
+                              else if (segment->segmentType() == Segment::SegClef) {
+                                    if (segment->tick() == endTick()) {
+                                          Measure* m = nextMeasure();
+                                          if (m)
+                                                m->setBreakMMRest(true);
+                                          }
+                                    else if (tick())
+                                          setBreakMMRest(true);
+                                    }
                               }
                         }
 
