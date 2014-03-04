@@ -40,7 +40,7 @@ ProgressBarData::ProgressBarData( QObject* parent, QWidget* target, int duration
 
       // make sure target is a progressbar and store relevant values
       QProgressBar* progress = qobject_cast<QProgressBar*>( target );
-      assert( progress );
+      Q_ASSERT( progress );
       setStartValue( progress->value() );
       setEndValue( progress->value() );
 
