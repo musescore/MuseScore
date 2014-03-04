@@ -16,20 +16,14 @@ inline void checkAdditionOverflow(int a, int b)           // a + b
       {
       if ((b > 0 && a > (std::numeric_limits<int>::max() - b))
                   || (b < 0 && a < std::numeric_limits<int>::min() - b))
-            {
-            qDebug("ReducedFraction: addition overflow");
-            abort();
-            }
+            qFatal("ReducedFraction: addition overflow");
       }
 
 inline void checkSubtractionOverflow(int a, int b)        // a - b
       {
       if ((b > 0 && a < std::numeric_limits<int>::min() + b)
                   || (b < 0 && a > std::numeric_limits<int>::max() + b))
-            {
-            qDebug("ReducedFraction: subtraction overflow");
-            abort();
-            }
+            qFatal("ReducedFraction: subtraction overflow");
       }
 
 inline void checkMultiplicationOverflow(int a, int b)     // a * b
@@ -57,34 +51,26 @@ inline void checkMultiplicationOverflow(int a, int b)     // a * b
                   }
             }
 
-      if (flag) {
-            qDebug("ReducedFraction: multiplication overflow");
-            abort();
-            }
+      if (flag)
+            qFatal("ReducedFraction: multiplication overflow");
       }
 
 inline void checkDivisionOverflow(int a, int b)           // a / b
       {
-      if ((b == 0) || ((a == std::numeric_limits<int>::min()) && (b == -1))) {
-            qDebug("ReducedFraction: division overflow");
-            abort();
-            }
+      if ((b == 0) || ((a == std::numeric_limits<int>::min()) && (b == -1)))
+            qFatal("ReducedFraction: division overflow");
       }
 
 inline void checkRemainderOverflow(int a, int b)          // a % b
       {
-      if ((b == 0) || ((a == std::numeric_limits<int>::min()) && (b == -1))) {
-            qDebug("ReducedFraction: remainder overflow");
-            abort();
-            }
+      if ((b == 0) || ((a == std::numeric_limits<int>::min()) && (b == -1)))
+            qFatal("ReducedFraction: remainder overflow");
       }
 
 inline void checkUnaryNegationOverflow(int a)             // -a
       {
-      if (a == std::numeric_limits<int>::min()) {
-            qDebug("ReducedFraction: unary nagation overflow");
-            abort();
-            }
+      if (a == std::numeric_limits<int>::min())
+            qFatal("ReducedFraction: unary nagation overflow");
       }
 
 //-----------------------------------------------------------------------------

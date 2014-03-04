@@ -65,9 +65,8 @@ void SegmentList::check()
             qFatal("SegmentList::check: bad last");
             }
       if (n != _size) {
-            qDebug("SegmentList::check: counted %d but _size is %d", n, _size);
+            qFatal("SegmentList::check: counted %d but _size is %d", n, _size);
             _size = n;
-            abort();
             }
       }
 #endif

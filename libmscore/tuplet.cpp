@@ -678,8 +678,7 @@ void Tuplet::add(Element* e)
 #ifndef NDEBUG
       foreach(DurationElement* el, _elements) {
             if (el == e) {
-                  qDebug("Tuplet::add: %p %s already there", e, e->name());
-                  abort();
+                  qFatal("Tuplet::add: %p %s already there", e, e->name());
                   }
             }
 #endif

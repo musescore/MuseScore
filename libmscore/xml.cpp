@@ -174,10 +174,9 @@ void XmlReader::unknown() const
       {
       if (QXmlStreamReader::error())
             qDebug("StreamReaderError: %s", qPrintable(errorString()));
-      qDebug("%s: xml read error at line %lld col %lld: %s",
+      qFatal("%s: xml read error at line %lld col %lld: %s",
          qPrintable(docName), lineNumber(), columnNumber(),
          name().toUtf8().data());
-      abort();
       // skipCurrentElement();
       }
 
@@ -492,7 +491,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   tag(name, Sym::id2name(SymId(data.toInt())));
                   break;
             default:
-                  abort();
+                  Q_ASSERT(false);
             }
       }
 

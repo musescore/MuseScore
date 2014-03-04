@@ -593,10 +593,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         {
                         CapMeter* o = static_cast<CapMeter*>(no);
                         qDebug("     <Meter> tick %d %d/%d", tick, o->numerator, 1 << o->log2Denom);
-                        if (o->log2Denom > 7 || o->log2Denom < 0) {
-                              qDebug("illegal fraction");
-                              abort();
-                              }
+                        if (o->log2Denom > 7 || o->log2Denom < 0)
+                              qFatal("illegal fraction");
                         SigEvent se = score->sigmap()->timesig(tick);
                         Fraction f(o->numerator, 1 << o->log2Denom);
                         SigEvent ne(f);
@@ -1403,8 +1401,7 @@ QList<BasicDrawObj*> Capella::readDrawObjectArray()
                         }
                         break;
                   default:
-                        qDebug("readDrawObjectArray unsupported type %d", type);
-                        abort();
+                        qFatal("readDrawObjectArray unsupported type %d", type);
                         break;
                   }
             }
@@ -1456,8 +1453,7 @@ void BasicDurationalObj::read()
       bSmall     = b & 0x10;
       invisible  = b & 0x20;
       notBlack   = b & 0x40;
-      if (b & 0x80)
-            abort();
+      Q_ASSERT(!(b & 0x80));
 
       color = notBlack ? cap->readColor() : Qt::black;
 
@@ -1478,8 +1474,7 @@ void BasicDurationalObj::read()
       if (c & 0x40) {
             objects = cap->readDrawObjectArray();
             }
-      if (c & 0x80)
-            abort();
+      Q_ASSERT(!(c & 0x80));
       qDebug("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d cnt %d trp %d ispro %d",
              nDots, noDuration, postGrace, bSmall, invisible, notBlack, t, horizontalShift, count, tripartite, isProlonging
              );
@@ -1508,10 +1503,8 @@ void RestObj::read()
       bool bMultiMeasures    = b & 1;
       bVerticalCentered      = b & 2;
       bool bAddVerticalShift = b & 4;
-      if (b & 0xf8) {
-            qDebug("RestObj: res. bits 0x%02x", b);
-            abort();
-            }
+      if (b & 0xf8)
+            qFatal("RestObj: res. bits 0x%02x", b);
       fullMeasures = bMultiMeasures ? cap->readUnsigned() : 0;
       vertShift    = bAddVerticalShift ? cap->readInt() : 0;
       }
@@ -2158,8 +2151,7 @@ void Capella::readVoice(CapStaff* cs, int idx)
                         }
                         break;
                   default:
-                        qDebug("bad voice type %d", type);
-                        abort();
+                        qFatal("bad voice type %d", type);
                   }
             }
       cs->voices.append(v);

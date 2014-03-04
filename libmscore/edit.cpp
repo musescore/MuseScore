@@ -417,8 +417,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
                   nfm = m;
             }
       if (!range.write(0, nfm)) {
-            qDebug("cannot write measures\n");
-            abort();
+            qFatal("Cannot write measures\n");
             }
       nlm->setEndBarLineType(lm->endBarLineType(), lm->endBarLineGenerated(),
          lm->endBarLineVisible(), lm->endBarLineColor());

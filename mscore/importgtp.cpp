@@ -104,10 +104,7 @@ void GuitarPro::read(void* p, qint64 len)
       if (len == 0)
             return;
       qint64 rv = f->read((char*)p, len);
-      if (rv != len) {
-            abort();
-            throw GP_EOF;
-            }
+      Q_ASSERT(rv == len);
       curPos += len;
       }
 
@@ -190,10 +187,8 @@ QString GuitarPro::readDelphiString()
       {
       int maxl = readInt();
       uchar l = readUChar();
-      if (maxl != l + 1) {
-            qDebug("readDelphiString: first word doesn't match second byte");
-            abort();
-            }
+      if (maxl != l + 1)
+            qFatal("readDelphiString: first word doesn't match second byte");
       char c[l + 1];
       read(c, l);
       c[l] = 0;
@@ -256,8 +251,7 @@ void GuitarPro::setTuplet(Tuplet* tuplet, int tuple)
                   tuplet->setRatio(Fraction(13,8));
                   break;
             default:
-                  qDebug("unsupported tuplet %d\n", tuple);
-                  abort();
+                  qFatal("unsupported tuplet %d\n", tuple);
             }
       }
 
@@ -345,8 +339,7 @@ Fraction GuitarPro::len2fraction(int len)
             //case  7: l.set(1, 1024);  break;
             //case  8: l.set(1, 2048);  break;
             default:
-                  qDebug("unknown beat len: %d\n", len);
-                  abort();
+                  qFatal("unknown beat len: %d\n", len);
             }
       return l;
       }
@@ -1369,8 +1362,7 @@ qDebug("BeginRepeat=============================================\n");
                               //case  7: l.set(1, 1024);  break;
                               //case  8: l.set(1, 2048);  break;
                               default:
-                                    qDebug("unknown beat len: %d\n", len);
-                                    abort();
+                                    qFatal("unknown beat len: %d\n", len);
                               }
 
                         ChordRest* cr;

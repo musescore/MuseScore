@@ -148,8 +148,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
                   if (de->tuplet()) {
                         Tuplet* tuplet = de->tuplet();
                         if (tuplet->elements().front() != de) {
-                              qDebug("TrackList::read: cannot start in middle of tuplet");
-                              abort();
+                              qFatal("TrackList::read: cannot start in middle of tuplet");
                               }
                         de = tuplet;
 
@@ -412,7 +411,7 @@ bool TrackList::write(int track, Measure* measure) const
                                                 }
                                           rest     = Fraction();
                                           duration = Fraction();
-                                          abort();
+                                          Q_ASSERT(false);
                                           }
                                     }
                               }
