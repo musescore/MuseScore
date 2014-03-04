@@ -785,10 +785,14 @@ void Note::read(XmlReader& e)
                   add(s);
                   }
             else if (tag == "Image") {
-                  Image* image = new Image(score());
-                  image->setTrack(track());
-                  image->read(e);
-                  add(image);
+                  if (MScore::noImages)
+                        e.skipCurrentElement();
+                  else {
+                        Image* image = new Image(score());
+                        image->setTrack(track());
+                        image->read(e);
+                        add(image);
+                        }
                   }
             else if (tag == "userAccidental") {
                   QString val(e.readElementText());

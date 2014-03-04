@@ -64,6 +64,9 @@ int     MScore::division    = 480;   // pulses per quarter note (PPQ) // ticks p
 int     MScore::sampleRate  = 44100;
 int     MScore::mtcType;
 
+bool    MScore::noExcerpts = false;
+bool    MScore::noImages = false;
+
 Sequencer* MScore::seq = 0;
 
 extern void initStaffTypes();

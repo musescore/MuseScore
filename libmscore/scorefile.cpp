@@ -661,9 +661,11 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       //
       // load images
       //
-      foreach(const QString& s, sl) {
-            QByteArray dbuf = uz.fileData(s);
-            imageStore.add(s, dbuf);
+      if (!MScore::noImages) {
+            foreach(const QString& s, sl) {
+                  QByteArray dbuf = uz.fileData(s);
+                  imageStore.add(s, dbuf);
+                  }
             }
 
       QByteArray dbuf = uz.fileData(rootfile);
@@ -1006,9 +1008,13 @@ bool Score::read(XmlReader& e)
                   addSpanner(s);
                   }
             else if (tag == "Excerpt") {
-                  Excerpt* ex = new Excerpt(this);
-                  ex->read(e);
-                  _excerpts.append(ex);
+                  if (MScore::noExcerpts)
+                        e.skipCurrentElement();
+                  else {
+                        Excerpt* ex = new Excerpt(this);
+                        ex->read(e);
+                        _excerpts.append(ex);
+                        }
                   }
             else if (tag == "Beam") {
                   Beam* beam = new Beam(this);
@@ -1017,10 +1023,14 @@ bool Score::read(XmlReader& e)
                   // _beams.append(beam);
                   }
             else if (tag == "Score") {          // recursion
-                  Score* s = new Score(MScore::baseStyle());
-                  s->setParentScore(this);
-                  s->read(e);
-                  addExcerpt(s);
+                   if (MScore::noExcerpts)
+                        e.skipCurrentElement();
+                  else {
+                        Score* s = new Score(MScore::baseStyle());
+                        s->setParentScore(this);
+                        s->read(e);
+                        addExcerpt(s);
+                        }
                   }
             else if (tag == "PageList") {
                   while (e.readNextStartElement()) {

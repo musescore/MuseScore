@@ -232,10 +232,14 @@ void Box::read(XmlReader& e)
                   add(s);
                   }
             else if (tag == "Image") {
-                  Image* image = new Image(score());
-                  image->setTrack(e.track());
-                  image->read(e);
-                  add(image);
+                  if (MScore::noImages)
+                        e.skipCurrentElement();
+                  else {
+                        Image* image = new Image(score());
+                        image->setTrack(e.track());
+                        image->read(e);
+                        add(image);
+                        }
                   }
             else if (tag == "FretDiagram") {
                   FretDiagram* f = new FretDiagram(score());

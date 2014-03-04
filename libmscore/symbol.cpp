@@ -144,10 +144,13 @@ void Symbol::read(XmlReader& e)
                   add(s);
                   }
             else if (tag == "Image") {
-                  Image* image = new Image(score());
-//                  QString path;
-                  image->read(e);
-                  add(image);
+                  if (MScore::noImages)
+                        e.skipCurrentElement();
+                  else {
+                        Image* image = new Image(score());
+                        image->read(e);
+                        add(image);
+                        }
                   }
             else if (tag == "small" || tag == "subtype")    // obsolete
                   e.skipCurrentElement();

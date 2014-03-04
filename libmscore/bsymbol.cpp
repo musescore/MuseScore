@@ -64,10 +64,19 @@ bool BSymbol::readProperties(XmlReader& e)
             return true;
       else if (tag == "systemFlag")
             _systemFlag = e.readInt();
-      else if (tag == "Symbol" || tag == "Image" || tag == "FSymbol") {
+      else if (tag == "Symbol" || tag == "FSymbol") {
             Element* element = name2Element(tag, score());
             element->read(e);
             add(element);
+            }
+      else if ( tag == "Image") {
+            if (MScore::noImages)
+                  e.skipCurrentElement();
+            else {
+                  Element* element = name2Element(tag, score());
+                  element->read(e);
+                  add(element);
+                  }
             }
       else
             return false;

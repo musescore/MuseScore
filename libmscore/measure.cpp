@@ -2142,13 +2142,23 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "Jump"
                || tag == "StaffState"
                || tag == "FiguredBass"
-               || tag == "Image"
                ) {
                   Element* el = Element::name2Element(tag, score());
                   el->setTrack(e.track());
                   el->read(e);
                   segment = getSegment(Segment::SegChordRest, e.tick());
                   segment->add(el);
+                  }
+            else if (tag == "Image") {
+                  if (MScore::noImages)
+                        e.skipCurrentElement();
+                  else {
+                        Element* el = Element::name2Element(tag, score());
+                        el->setTrack(e.track());
+                        el->read(e);
+                        segment = getSegment(Segment::SegChordRest, e.tick());
+                        segment->add(el);
+                        }
                   }
             //----------------------------------------------------
             else if (tag == "stretch")
