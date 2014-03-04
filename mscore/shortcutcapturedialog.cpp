@@ -114,7 +114,7 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
             case 2: key = QKeySequence(key[0], key[1], k); break;
             case 3: key = QKeySequence(key[0], key[1], key[2], k); break;
             default:
-                  qDebug("internal error: bad key count\n");
+                  qDebug("Internal error: bad key count\n");
                   break;
             }
 

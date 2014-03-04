@@ -2102,7 +2102,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment       = getSegment(Segment::SegChordRest, e.tick());
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(e.track()));
                   if (!cr)
-                        qDebug("Internal Error: no Chord/Rest for lyrics");
+                        qDebug("Internal error: no chord/rest for lyrics");
                   else
                         cr->add(element);
                   }
