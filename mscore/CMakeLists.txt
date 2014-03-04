@@ -500,6 +500,7 @@ if (APPLE)
       ../fonts/mscore/mscore.ttf
       ../fonts/MuseJazz.ttf
       ../fonts/FreeSerif.ttf
+      ../fonts/FreeSerifBold.ttf
       ../fonts/FreeSans.ttf
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
