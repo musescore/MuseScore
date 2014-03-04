@@ -1055,7 +1055,7 @@ static void writeFailed(const QString& path)
       {
       QString s = qApp->translate("Palette", "Open Palette File\n") + path
          + qApp->translate("Palette", "\nfailed: ");
-      QMessageBox::critical(mscore, qApp->translate("Palette", "MuseScore: Writing Palette file"), s);
+      QMessageBox::critical(mscore, qApp->translate("Palette", "MuseScore: Writing Palette File"), s);
       }
 
 //---------------------------------------------------------

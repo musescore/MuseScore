@@ -78,13 +78,13 @@ int main(int argc, char* argv[])
             case 2:
                   out = new QFile(argv[1 + optind]);
                   if (!out->open(QIODevice::WriteOnly)) {
-                        qDebug("cannot open output file <%s>: %s\n", argv[2], strerror(errno));
+                        qDebug("Cannot open output file <%s>: %s\n", argv[2], strerror(errno));
                         return -3;
                         }
             case 1:
                   in = new QFile(argv[0 + optind]);
                   if (!in->open(QIODevice::ReadOnly)) {
-                        qDebug("cannot open input file <%s>: %s\n", argv[1], strerror(errno));
+                        qDebug("Cannot open input file <%s>: %s\n", argv[1], strerror(errno));
                         return -4;
                         }
                   break;
