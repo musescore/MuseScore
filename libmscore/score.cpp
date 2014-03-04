@@ -1044,7 +1044,7 @@ static Segment* getNextValidInputSegment(Segment* s, int track, int voice)
       {
       if (s == 0)
             return 0;
-      assert(s->segmentType() == Segment::SegChordRest);
+      Q_ASSERT(s->segmentType() == Segment::SegChordRest);
       // Segment* s1 = s;
       ChordRest* cr1;
       for (Segment* s1 = s; s1; s1 = s1->prev(Segment::SegChordRest)) {
@@ -2335,8 +2335,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         if (note->pitch() >= splitPoint)
                               continue;
                         Chord* chord = static_cast<Chord*>(s->element(dtrack + voice));
-                        if (chord && (chord->type() != Element::CHORD))
-                              abort();
+                        Q_ASSERT(!chord || (chord->type() == Element::CHORD));
                         if (chord == 0) {
                               chord = new Chord(*c);
                               foreach(Note* note, chord->notes())

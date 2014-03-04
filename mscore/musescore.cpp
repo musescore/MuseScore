@@ -2265,27 +2265,23 @@ void StartDialog::loadScoreClicked()
 //---------------------------------------------------------
 
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
-static void mscoreMessageHandler(QtMsgType type, const char *msg)
+static void mscoreMessageHandler(QtMsgType type, const QMessageLogContext &context,const QString &msg)
      {
-     QTextStream cout(stdout);
-
-      //abort();
+     QTextStream cerr(stderr);
+     QByteArray localMsg = msg.toLocal8Bit();
 
      switch (type) {
      case QtDebugMsg:
-         cout << "Debug: " << msg << endl;
+         cerr << "Debug: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          break;
      case QtWarningMsg:
-         cout << "Warning: " << msg << endl;
+         cerr << "Warning: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          break;
      case QtCriticalMsg:
-         cout << "Critical: " << msg << endl;
+         cerr << "Critical: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          break;
-     case QtFatalMsg:
-         //
-         // set your breakpoint here, if you want to catch the abort
-         //
-         cout << "Fatal: " << msg << endl;
+     case QtFatalMsg: // set your breakpoint here, if you want to catch the abort
+         cerr << "Fatal: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          abort();
          }
      }
@@ -4545,7 +4541,7 @@ int main(int argc, char* av[])
 //      return 0;
 
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
-      qInstallMsgHandler(mscoreMessageHandler);
+      qInstallMessageHandler(mscoreMessageHandler);
 #endif
 
       QFile f(":/revision.h");

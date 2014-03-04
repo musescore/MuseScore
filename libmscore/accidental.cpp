@@ -353,8 +353,7 @@ Accidental::AccidentalType Accidental::value2subtype(AccidentalVal v)
             case FLAT:    return ACC_FLAT;
             case FLAT2:   return ACC_FLAT2;
             default:
-                  qDebug("value2subtype: illegal accidental val %d\n", v);
-                  abort();
+                  qFatal("value2subtype: illegal accidental val %d\n", v);
             }
       return ACC_NONE;
       }

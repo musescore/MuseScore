@@ -371,8 +371,7 @@ void Seq::stopWait()
             sleep.wait(&mutex, 100);
             mutex.unlock();
             ++idx;
-            if (idx > 10)
-                  abort();
+            Q_ASSERT(idx <= 10);
             }
       }
 

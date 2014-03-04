@@ -243,11 +243,8 @@ void TextTools::blockAllSignals(bool val)
 
 void TextTools::updateTools()
       {
-      if (!_textElement->editMode()) {
-            qDebug("TextTools::updateTools(): not in edit mode");
-            abort();
-            return;
-            }
+      if (!_textElement->editMode())
+            qFatal("TextTools::updateTools(): not in edit mode");
       blockAllSignals(true);
       TextCursor* cursor = _textElement->cursor();
       CharFormat* format = cursor->format();

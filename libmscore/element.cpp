@@ -531,7 +531,7 @@ QPointF Element::pagePos() const
             else if (parent()->type() == SYSTEM)
                   system = static_cast<System*>(parent());
             else
-                  abort();
+                  Q_ASSERT(false);
             if (system) {
                   int si = staffIdx();
                   if (type() == CHORD || type() == REST)
@@ -556,6 +556,7 @@ QPointF Element::canvasPos() const
       QPointF p(pos());
       if (parent() == 0)
             return p;
+
       if (_flags & ELEMENT_ON_STAFF) {
             System* system;
             if (parent()->type() == SEGMENT)
@@ -565,7 +566,7 @@ QPointF Element::canvasPos() const
             else if (parent()->type() == SYSTEM)
                   system = static_cast<System*>(parent());
             else
-                  abort();
+                  Q_ASSERT(false);
             if (system) {
                   int si = staffIdx();
                   if (type() == CHORD || type() == REST)
@@ -1277,8 +1278,7 @@ void Element::add(Element* e)
 
 void Element::remove(Element* e)
       {
-      qDebug("Element: cannot remove %s from %s\n", e->name(), name());
-      abort();
+      qFatal("Element: cannot remove %s from %s\n", e->name(), name());
       }
 
 //---------------------------------------------------------
@@ -1520,9 +1520,8 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   _placement = Placement(v.toInt());
                   break;
             default:
-                  qDebug("Element::setProperty: unknown <%s>(%d), data <%s>",
+                  qFatal("Element::setProperty: unknown <%s>(%d), data <%s>",
                      propertyName(propertyId), propertyId, qPrintable(v.toString()));
-                  abort();
                   return false;
             }
       setGenerated(false);

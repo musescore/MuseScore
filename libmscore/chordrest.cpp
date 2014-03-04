@@ -922,8 +922,7 @@ void ChordRest::add(Element* e)
                   }
                   break;
             default:
-                  qDebug("ChordRest::add: unknown element %s", e->name());
-                  abort();
+                  qFatal("ChordRest::add: unknown element %s", e->name());
                   break;
             }
       }
@@ -958,8 +957,7 @@ void ChordRest::remove(Element* e)
                   qDebug("ChordRest::remove: %s %p not found", e->name(), e);
                   break;
             default:
-                  qDebug("ChordRest::remove: unknown element <%s>", e->name());
-                  abort();
+                  qFatal("ChordRest::remove: unknown element <%s>", e->name());
             }
       }
 

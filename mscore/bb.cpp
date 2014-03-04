@@ -674,10 +674,8 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                   int restLen = e.ontime() - ctick;
 // qDebug("ctick %d  rest %d ontick %d size %d", ctick, restLen, e.ontime(), notes.size());
 
-                  if (restLen <= 0) {
-                        qDebug("bad restlen ontime %d - ctick %d", e.ontime(), ctick);
-                        abort();
-                        }
+                  if (restLen <= 0)
+                        qFatal("bad restlen ontime %d - ctick %d", e.ontime(), ctick);
 
                   while (!notes.isEmpty()) {
                         int len = processPendingNotes(score, &notes, restLen, track);

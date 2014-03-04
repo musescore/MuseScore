@@ -187,8 +187,7 @@ int tpc2pitch(int tpc)
             7,  2,  9,  4, 11,  6, 13      // ##
             };
       if (tpc < 0 || tpc >= int(sizeof(pitches)/sizeof(*pitches))) {
-            qDebug("tpc %d >= %d\n", tpc, int(sizeof(pitches)/sizeof(*pitches)));
-            abort();
+            qFatal("tpc %d >= %d\n", tpc, int(sizeof(pitches)/sizeof(*pitches)));
             }
       return pitches[tpc];
       }
@@ -467,14 +466,10 @@ static const int enharmonicSpelling[15][34] = {
 
 static int penalty(int lof1, int lof2, int k)
       {
-      if (k < 0 || k >= 15) {
-            qDebug("illegal key %d >= 15\n", k);
-            abort();
-            }
-      if (lof1 < 0 || lof1 >= 34)
-            abort();
-      if (lof2 < 0 || lof2 >= 34)
-            abort();
+      if (k < 0 || k >= 15)
+            qFatal("Illegal key %d >= 15\n", k);
+      Q_ASSERT(lof1 >= 0 && lof1 < 34);
+      Q_ASSERT(lof2 >= 0 && lof2 < 34);
       int penalty  = enharmonicSpelling[k][lof1] * 4 + enharmonicSpelling[k][lof2] * 4;
       int distance = lof2 > lof1 ? lof2 - lof1 : lof1 - lof2;
       if (distance > 12)
@@ -498,8 +493,7 @@ static int computeWindow(const QList<Event>& notes, int start, int end, int keyI
       int idx = -1;
       int pitch[10];
 
-      if ((end-start) >= 10 || start == end)
-            abort();
+      Q_ASSERT((end-start) < 10 && start != end);
 
       int i = start;
       int k = 0;
@@ -513,15 +507,13 @@ static int computeWindow(const QList<Event>& notes, int start, int end, int keyI
             int pa    = 0;
             int pb    = 0;
             int l     = pitch[0] * 2 + (i & 1);
-            if ((l < 0) || (l >= int(sizeof(tab1)/sizeof(*tab1))))
-                  abort();
+            Q_ASSERT((l >= 0) && (l < int(sizeof(tab1)/sizeof(*tab1))));
             int lof1a = tab1[l];
             int lof1b = tab2[l];
 
             for (int k = 1; k < 10; ++k) {
                   int l = pitch[k] * 2 + ((i & (1 << k)) >> k);
-                  if ((l < 0) || (l >= int(sizeof(tab1)/sizeof(*tab1))))
-                        abort();
+                  Q_ASSERT((l >= 0) && (l < int(sizeof(tab1)/sizeof(*tab1))));
                   int lof2a = tab1[l];
                   int lof2b = tab2[l];
                   pa += penalty(lof1a, lof2a, keyIdx);
@@ -559,8 +551,7 @@ int tpc(int idx, int pitch, int opt)
       else
             tab = tab1;
       int i = (pitch % 12) * 2 + ((opt & (1 << idx)) >> idx);
-      if (i < 0 || i >= 24)
-            abort();
+      Q_ASSERT(i >= 0 && i < 24);
       return tab[i];
       }
 
@@ -600,15 +591,13 @@ int computeWindow(const QList<Note*>& notes, int start, int end)
             int pa    = 0;
             int pb    = 0;
             int l     = pitch[0] * 2 + (i & 1);
-            if (l < 0 || l > (int)(sizeof(tab1)/sizeof(*tab1)))
-                  abort();
+            Q_ASSERT(l >= 0 && l <= (int)(sizeof(tab1)/sizeof(*tab1)));
             int lof1a = tab1[l];
             int lof1b = tab2[l];
 
             for (int k = 1; k < 10; ++k) {
                   int l = pitch[k] * 2 + ((i & (1 << k)) >> k);
-                  if (l < 0 || l > (int)(sizeof(tab1)/sizeof(*tab1)))
-                        abort();
+                  Q_ASSERT(l >= 0 && l <= (int)(sizeof(tab1)/sizeof(*tab1)));
                   int lof2a = tab1[l];
                   int lof2b = tab2[l];
                   pa += penalty(lof1a, lof2a, key[k]);

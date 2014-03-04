@@ -1674,8 +1674,7 @@ void SortStaves::undo()
 ChangePitch::ChangePitch(Note* _note, int _pitch, int _tpc, int l/*, int f, int s*/)
       {
       note  = _note;
-      if (_note == 0)
-            abort();
+      Q_ASSERT(_note != 0);
       pitch  = _pitch;
       tpc    = _tpc;
       line   = l;
