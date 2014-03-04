@@ -2335,8 +2335,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         if (note->pitch() >= splitPoint)
                               continue;
                         Chord* chord = static_cast<Chord*>(s->element(dtrack + voice));
-                        if (chord && (chord->type() != Element::CHORD))
-                              abort();
+                        Q_ASSERT(!chord || (chord->type() == Element::CHORD));
                         if (chord == 0) {
                               chord = new Chord(*c);
                               foreach(Note* note, chord->notes())

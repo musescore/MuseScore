@@ -23,8 +23,7 @@ static int ticks_beat(int n)
       {
       int m = (MScore::division * 4) / n;
       if ((MScore::division * 4) % n) {
-            qDebug("Mscore: ticks_beat(): bad divisor %d", n);
-            abort();
+            qFatal("Mscore: ticks_beat(): bad divisor %d", n);
             }
       return m;
       }
@@ -140,8 +139,7 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
             }
       auto e = upper_bound(t);
       if (empty() || e == begin()) {
-            qDebug("tickValue(0x%x) not found", t);
-            abort();
+            qFatal("tickValue(0x%x) not found", t);
             }
       --e;
       int delta  = t - e->first;

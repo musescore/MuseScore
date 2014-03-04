@@ -50,8 +50,7 @@ class VoiceFifo {
             ++n;
             }
       Voice* pop()  {
-            if (n == 0)
-                  abort();
+            Q_ASSERT(n != 0);
             --n;
             Voice* v = buffer[readIdx++];
             readIdx %= MAX_VOICES;

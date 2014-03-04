@@ -106,8 +106,7 @@ static void parseClass(const QString& name, const QString& in)
       QRegExp re4 ("class +(\\w+) *: *public +(\\w+) *\\{");
       QRegExp re4b("class +(\\w+) *: *public +(\\w+), *public");
 
-      if (!re1.isValid() || !re2.isValid() || !re3.isValid())
-            abort();
+      Q_ASSERT(re1.isValid() && re2.isValid() && re3.isValid());
 
       bool parseClassDescription = true;
 
