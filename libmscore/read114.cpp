@@ -435,9 +435,13 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
             else if (tag == "Excerpt") {
-                  Excerpt* ex = new Excerpt(this);
-                  ex->read(e);
-                  _excerpts.append(ex);
+                  if (MScore::noExcerpts)
+                        e.skipCurrentElement();
+                  else {
+                        Excerpt* ex = new Excerpt(this);
+                        ex->read(e);
+                        _excerpts.append(ex);
+                        }
                   }
             else if (tag == "Beam") {
                   Beam* beam = new Beam(this);
