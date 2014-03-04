@@ -1152,7 +1152,7 @@ void TransposableObj::read()
       variants = cap->readDrawObjectArray();
       if (variants.size() != b)
             qDebug("variants.size %d, expected %d", variants.size(), b);
-      assert(variants.size() == b);
+      Q_ASSERT(variants.size() == b);
       /*int nRefNote =*/ cap->readInt();
       }
 
@@ -1228,7 +1228,7 @@ void NotelinesObj::read()
             case 1: break; // Einlinienzeile
             case 2: break; // Standard (5 Linien)
             default: {
-                  assert(b == 0);
+                  Q_ASSERT(b == 0);
                   char lines[11];
                   cap->read(lines, 11);
                   break;
@@ -1540,7 +1540,7 @@ void ChordObj::read()
       unsigned char flags = cap->readByte();
       beamMode      = (flags & 0x01) ? (BEAM_MODE)(cap->readByte()) : AUTO_BEAM;
       notationStave = (flags & 0x02) ? cap->readChar() : 0;
-      assert(notationStave >= -1 && notationStave <= 1);
+      Q_ASSERT(notationStave >= -1 && notationStave <= 1);
 
       if (flags & 0x04) {
             stemDir     = cap->readChar();
@@ -1772,7 +1772,7 @@ QColor Capella::readColor()
       QColor c;
       unsigned char b = readByte();
       if (b >= 16) {
-            assert(b == 255);
+            Q_ASSERT(b == 255);
             int r = readByte();
             int g = readByte();
             int b = readByte();
@@ -1877,7 +1877,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
             uchar iMin = readByte();
             Q_UNUSED(iMin);
             uchar n    = readByte();
-            assert (n > 0 and iMin + n <= 128);
+            Q_ASSERT (n > 0 and iMin + n <= 128);
             f->read(sl->soundMapIn, n);
             curPos += n;
             }
@@ -1885,7 +1885,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
             unsigned char iMin = readByte();
             Q_UNUSED(iMin);
             unsigned char n    = readByte();
-            assert (n > 0 and iMin + n <= 128);
+            Q_ASSERT (n > 0 and iMin + n <= 128);
             f->read(sl->soundMapOut, n);
             curPos += n;
             }
@@ -1924,7 +1924,7 @@ void Capella::readLayout()
       unsigned char b          = readByte();
       redundantKeys    = b & 1;
       modernDoubleNote = b & 2;
-      assert ((b & 0xFC) == 0); // bits 2...7 reserviert
+      Q_ASSERT((b & 0xFC) == 0); // bits 2...7 reserviert
 
       bSystemSeparators = readByte();
       nUnnamed           = readInt();
@@ -2070,8 +2070,8 @@ void CapExplicitBarline::read()
       unsigned char b = cap->readByte();
       _type = b & 0x0f;
       _barMode = b >> 4;         // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
-      assert (_type <= BAR_REPENDSTART);
-      assert (_barMode <= 2);
+      Q_ASSERT(_type <= BAR_REPENDSTART);
+      Q_ASSERT(_barMode <= 2);
 
       qDebug("         Expl.Barline type %d mode %d", _type, _barMode);
       }

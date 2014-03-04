@@ -518,7 +518,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool /*behind*/, i
 Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd,
    MScore::Direction stemDirection)
       {
-      assert(segment->segmentType() == Segment::SegChordRest);
+      Q_ASSERT(segment->segmentType() == Segment::SegChordRest);
 
       int tick      = segment->tick();
       Element* nr   = 0;
@@ -634,7 +634,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
 Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
       {
-      assert(_sd.numerator());
+      Q_ASSERT(_sd.numerator());
 
       Measure* measure = segment->measure();
       setLayoutAll(true);
