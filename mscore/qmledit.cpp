@@ -593,7 +593,7 @@ void QmlEdit::delWord()
 
 void QmlEdit::downLine()
       {
-      printf("down line\n");
+      qDebug("Down line");
       move(QTextCursor::Down);
       }
 

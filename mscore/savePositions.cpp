@@ -48,7 +48,7 @@ bool savePositions(Score* score, const QString& name)
       segs.clear();
       QFile fp(name);
       if (!fp.open(QIODevice::WriteOnly)) {
-            printf("open <%s> failed\n", qPrintable(name));
+            qDebug("Open <%s> failed", qPrintable(name));
             return false;
             }
       Xml xml(&fp);

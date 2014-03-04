@@ -884,7 +884,7 @@ void EditStyle::setPage(int row)
 void EditStyle::resetStyleValue(int i)
       {
       StyleIdx id = (StyleIdx)i;
-      printf("reset %d dirty: %d\n", i, lstyle.value(id) != MScore::defaultStyle()->value(id));
+      qDebug("Reset %d dirty: %d", i, lstyle.value(id) != MScore::defaultStyle()->value(id));
 //      if (lstyle.value(id) != MScore::defaultStyle()->value(id)) {
             lstyle.set(id, MScore::defaultStyle()->value(id));
 //            }
