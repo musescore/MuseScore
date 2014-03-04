@@ -818,14 +818,14 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
             uchar iMin = readByte();
             Q_UNUSED(iMin);
             uchar n    = readByte();
-            assert (n > 0 and iMin + n <= 128);
+            Q_ASSERT(n > 0 and iMin + n <= 128);
             f->read(sl->soundMapIn, n);
             curPos += n;
             }
       if (sl->bSoundMapOut) {     // Umleitungstabelle fr das Vorspielen
             unsigned char iMin = readByte();
             unsigned char n    = readByte();
-            assert (n > 0 and iMin + n <= 128);
+            Q_ASSERT(n > 0 and iMin + n <= 128);
             f->read(sl->soundMapOut, n);
             curPos += n;
             }
@@ -1002,7 +1002,7 @@ void Capella::initCapxLayout()
       unsigned char b          = 0;
       redundantKeys    = b & 1;
       modernDoubleNote = b & 2;
-      assert ((b & 0xFC) == 0); // bits 2...7 reserviert
+      Q_ASSERT((b & 0xFC) == 0); // bits 2...7 reserviert
 
       bSystemSeparators = 0;
       nUnnamed           = 0;

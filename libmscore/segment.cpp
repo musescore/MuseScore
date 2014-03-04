@@ -156,8 +156,7 @@ Segment::Segment(const Segment& s)
 
 void Segment::setSegmentType(SegmentType t)
       {
-      if (_segmentType == SegClef && t == SegChordRest)
-            abort();
+      Q_ASSERT(_segmentType != SegClef || t != SegChordRest);
       _segmentType = t;
       }
 
@@ -517,8 +516,7 @@ void Segment::add(Element* el)
                   break;
 
             default:
-                  qDebug("Segment::add() unknown %s", el->name());
-                  abort();
+                  qFatal("Segment::add() unknown %s", el->name());
             }
       }
 
@@ -602,8 +600,7 @@ void Segment::remove(Element* el)
                   break;
 
             default:
-                  qDebug("Segment::remove() unknown %s", el->name());
-                  abort();
+                  qFatal("Segment::remove() unknown %s", el->name());
 
             }
       checkEmpty();

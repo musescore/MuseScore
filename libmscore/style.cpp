@@ -1134,8 +1134,7 @@ const TextStyle& StyleData::textStyle(const QString& name) const
             if (s.name() == name)
                   return s;
             }
-      qDebug("TextStyle <%s> not found", qPrintable(name));
-      abort();
+      qFatal("TextStyle <%s> not found", qPrintable(name));
       return _textStyles[0];
       }
 

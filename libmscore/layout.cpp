@@ -1875,8 +1875,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
             //
 
             if (system->measures().isEmpty()) {
-                  qDebug("system %p is empty\n", system);
-                  abort();
+                  qFatal("System %p is empty\n", system);
                   }
             Measure* m = system->lastMeasure();
             bool hasCourtesyKeysig = false;
