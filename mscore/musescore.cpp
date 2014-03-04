@@ -1385,8 +1385,8 @@ void MuseScore::updateTabNames()
 static void usage()
       {
       printVersion("MuseScore");
-      fprintf(stderr, "usage: mscore flags scorefile\n   Flags:\n");
-      fprintf(stderr,
+      fprintf(stderr, "Usage: mscore flags scorefile\n"
+        "   Flags:\n"
         "   -v        print version\n"
         "   -d        debug mode\n"
         "   -L        layout debug\n"
@@ -4501,7 +4501,7 @@ void MuseScore::showSearchDialog()
             searchDialogLayout->addStretch(10);
             searchDialog->hide();
 
-            printf("line edit %p\n", searchCombo->lineEdit());
+            qDebug("Line edit %p", searchCombo->lineEdit());
 
             // does not work: connect(searchCombo->lineEdit(), SIGNAL(returnPressed()), SLOT(endSearch()));
             connect(searchCombo->lineEdit(), SIGNAL(editingFinished()), SLOT(endSearch()));

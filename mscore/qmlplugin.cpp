@@ -116,7 +116,7 @@ void QmlPlugin::cmd(const QString& s)
       if (sc)
             msc->cmd(sc->action());
       else
-            printf("QmlPlugin:cmd: not found <%s>\n", qPrintable(s));
+            qDebug("QmlPlugin:cmd: not found <%s>", qPrintable(s));
       }
 
 //---------------------------------------------------------

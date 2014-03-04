@@ -131,8 +131,6 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             if (MScore::debugMode)
                   qDebug("ScoreView::dragEnterEvent Symbol: <%s>", a.data());
 
-// printf("dragEnter: <%s>\n", a.data());
-
             XmlReader e(a);
             dragOffset = QPoint();
             Fraction duration;  // dummy
