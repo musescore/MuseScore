@@ -790,13 +790,12 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         if (bytes < 0) {
                               if (MScore::noGui)
                                     printf("exportmp3: error from encoder: %ld\n", bytes);
-                              else {
+                              else
                                     QMessageBox::warning(0,
                                        tr("Encoding Error"),
                                        tr("Error %1 returned from MP3 encoder").arg(bytes),
                                        QString::null, QString::null);
-                                    break;
-                                    }
+                              break;
                               }
                         else
                               file.write((char*)bufferOut, bytes);
