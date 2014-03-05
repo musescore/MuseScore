@@ -66,7 +66,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>tick</string>
+           <string notr="true">tick</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -89,7 +89,7 @@
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>tick2</string>
+           <string notr="true">tick2</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -186,14 +186,14 @@
         <item>
          <widget class="QPushButton" name="startElement">
           <property name="text">
-           <string>startElement</string>
+           <string notr="true">startElement</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="endElement">
           <property name="text">
-           <string>endElement</string>
+           <string notr="true">endElement</string>
           </property>
          </widget>
         </item>
