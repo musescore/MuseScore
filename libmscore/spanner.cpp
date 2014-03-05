@@ -342,11 +342,23 @@ QVariant Spanner::propertyDefault(P_ID propertyId) const
 
 //---------------------------------------------------------
 //   findCR
+//    find chord/rest <= tick in track
 //---------------------------------------------------------
 
 ChordRest* Score::findCR(int tick, int track) const
       {
-      Segment* s = tick2segment(tick, false, Segment::SegChordRest);
+      Measure* m = tick2measure(tick);
+      if (m == 0) {
+            qDebug("findCR: no measure for tick %d\n", tick);
+            return 0;
+            }
+      Segment* s = m->first(Segment::SegChordRest);
+      for (;;) {
+            Segment* ns = s->next(Segment::SegChordRest);
+            if (ns == 0 || ns->tick() >= tick)
+                  break;
+            s = ns;
+            }
       if (s)
             return static_cast<ChordRest*>(s->element(track));
       return nullptr;
@@ -381,7 +393,12 @@ void Spanner::computeEndElement()
       {
       switch (_anchor) {
             case ANCHOR_SEGMENT:
-                  _endElement = score()->findCR(tick2(), track2());
+                  if (type() == SLUR) {
+                        Segment* s = score()->tick2segment(tick2(), false, Segment::SegChordRest);
+                        _endElement = s ? static_cast<ChordRest*>(s->element(track())) : nullptr;
+                        }
+                  else
+                        _endElement = score()->findCR(tick2() - 1, track2());
                   break;
 
             case ANCHOR_MEASURE:

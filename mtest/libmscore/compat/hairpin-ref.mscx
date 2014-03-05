@@ -170,7 +170,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -178,6 +177,7 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>

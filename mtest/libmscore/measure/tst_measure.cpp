@@ -167,6 +167,7 @@ void TestMeasure::insertBfKeyChange()
 //---------------------------------------------------------
 //   minWidth
 //---------------------------------------------------------
+
 void TestMeasure::minWidth()
       {
       Score* score = readScore(DIR + "measure-2.mscx");
