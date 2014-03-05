@@ -840,7 +840,8 @@ class Score : public QObject {
       Page* getEmptyPage();
 
       void layoutChords1(Segment* segment, int staffIdx);
-      void layoutChords1(QList<Note*>& notes, int voices, Staff*, Segment*);
+      void layoutChords2(QList<Note*>& notes, bool up);
+      void layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment);
 
       SynthesizerState& synthesizerState()     { return _synthesizerState; }
       void setSynthesizerState(const SynthesizerState& s);
