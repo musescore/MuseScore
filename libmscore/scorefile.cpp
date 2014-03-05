@@ -326,8 +326,9 @@ bool Score::saveFile()
       QString tempName = info.filePath() + QString(".temp");
       QFile temp(tempName);
       if (!temp.open(QIODevice::WriteOnly)) {
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "Open Temp File\n")
-               + tempName + QT_TRANSLATE_NOOP("file", "\nfailed: ") + QString(strerror(errno));
+            QString s = QT_TRANSLATE_NOOP("file", "Open Temp File\n%1\nfailed: ")
+               + QString(strerror(errno));
+            MScore::lastError = s.arg(tempName);
             return false;
             }
       try {
@@ -385,10 +386,9 @@ bool Score::saveFile()
       // rename temp name into file name
       //
       if (!QFile::rename(tempName, name)) {
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "Renaming temp. file <")
-               + tempName + QT_TRANSLATE_NOOP("file", "> to <") + name
-               + QT_TRANSLATE_NOOP("file", "> failed:\n")
+            QString s = QT_TRANSLATE_NOOP("file", "Renaming temp. file <%1> to <%2> failed:\n")
                + QString(strerror(errno));
+            MScore::lastError = s.arg(tempName).arg(name);
             return false;
             }
       // make file readable by all
@@ -409,9 +409,9 @@ void Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
       {
       QFile fp(info.filePath());
       if (!fp.open(QIODevice::WriteOnly)) {
-            QString s = QString("Open File\n") + info.filePath() + QString("\nfailed: ")
+            QString s = QT_TRANSLATE_NOOP("file", "Open File\n%1\nfailed: ")
                + QString(strerror(errno));
-            throw(s);
+            throw(s.arg(info.filePath()));
             }
       saveCompressedFile(&fp, info, onlySelection);
       fp.close();
@@ -499,8 +499,9 @@ bool Score::saveFile(QFileInfo& info)
             info.setFile(info.filePath() + ".mscx");
       QFile fp(info.filePath());
       if (!fp.open(QIODevice::WriteOnly)) {
-            QString s = QString("Open File\n") + info.filePath() + QString("\nfailed: ")
+            QString s = QT_TRANSLATE_NOOP("file", "Open File\n%1\nfailed: ")
                + QString(strerror(errno));
+            MScore::lastError = s.arg(info.filePath());
             return false;
             }
       saveFile(&fp, false);
@@ -543,9 +544,9 @@ bool Score::saveStyle(const QString& name)
             info.setFile(info.filePath() + ext);
       QFile f(info.filePath());
       if (!f.open(QIODevice::WriteOnly)) {
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "Open Style File\n")
-               + f.fileName() + QT_TRANSLATE_NOOP("file", "\nfailed: ")
+            QString s = QT_TRANSLATE_NOOP("file", "Open Style File\n%1\nfailed: ")
                + QString(strerror(errno));
+            MScore::lastError = s.arg(f.fileName());
             return false;
             }
 

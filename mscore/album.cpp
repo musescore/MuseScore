@@ -296,9 +296,9 @@ void Album::write()
             _path += ".album";
       QFile f(_path);
       if (!f.open(QIODevice::WriteOnly)) {
-            QString s = QWidget::tr("Open Album File\n") + _path + QWidget::tr("\nfailed: ")
+            QString s = QWidget::tr("Open Album File\n%1\nfailed: ")
                + QString(strerror(errno));
-            QMessageBox::critical(mscore, QWidget::tr("MuseScore: Open Album file"), s);
+            QMessageBox::critical(mscore, QWidget::tr("MuseScore: Open Album File"), s.arg(_path));
             return;
             }
 
