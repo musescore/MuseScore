@@ -1233,9 +1233,9 @@ void InstrumentsDialog::on_saveButton_clicked()
             info.setFile(info.filePath() + ext);
       QFile f(info.filePath());
       if (!f.open(QIODevice::WriteOnly)) {
-            QString s = tr("Open Instruments File\n") + f.fileName() + tr("\nfailed: ")
+            QString s = tr("Open Instruments File\n%1\nfailed: ")
                + QString(strerror(errno));
-            QMessageBox::critical(mscore, tr("MuseScore: Open Instruments File"), s);
+            QMessageBox::critical(mscore, tr("MuseScore: Open Instruments File"), s.arg(f.fileName()));
             return;
             }
 
