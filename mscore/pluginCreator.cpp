@@ -227,8 +227,8 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
       {
       if (state == S_DIRTY) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
-               tr("Plugin \"%1\" has changes\n"
-               "save before closing?").arg(path),
+               tr("Plugin \"%1\" has changes.\n"
+               "Save before closing?").arg(path),
                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                QMessageBox::Save);
             if (n == QMessageBox::Save)
@@ -370,8 +370,8 @@ void PluginCreator::loadPlugin()
       {
       if (state == S_DIRTY) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
-               tr("Plugin \"%1\" has changes\n"
-               "save before closing?").arg(path),
+               tr("Plugin \"%1\" has changes.\n"
+               "Save before closing?").arg(path),
                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                QMessageBox::Save);
             if (n == QMessageBox::Save)
@@ -435,8 +435,8 @@ void PluginCreator::newPlugin()
       {
       if (state == S_DIRTY) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
-               tr("Plugin \"%1\" has changes\n"
-               "save before closing?").arg(path),
+               tr("Plugin \"%1\" has changes.\n"
+               "Save before closing?").arg(path),
                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                QMessageBox::Save);
             if (n == QMessageBox::Save)

@@ -1963,7 +1963,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL,
          0,
          "join-measure",
-         QT_TRANSLATE_NOOP("action","Join Measure")
+         QT_TRANSLATE_NOOP("action","Join Measures")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_FOTO,
@@ -2042,7 +2042,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "omr",
-         QT_TRANSLATE_NOOP("action","OmrPanel"),
+         QT_TRANSLATE_NOOP("action","OMR Panel"),
          QT_TRANSLATE_NOOP("action","Show OMR Panel")
          ),
       Shortcut(
