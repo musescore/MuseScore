@@ -427,8 +427,7 @@ Score::FileError Score::read114(XmlReader& e)
                         s->setTrack2(s->track());
                   if (s->tick2() == -1) {
                         delete s;
-                        qDebug("invalid spanner %s tick2: %d\n",
-                           s->name(), s->tick2());
+                        qDebug("invalid spanner %s tick2: %d\n", s->name(), s->tick2());
                         }
                   else {
                         addSpanner(s);
@@ -529,6 +528,7 @@ Score::FileError Score::read114(XmlReader& e)
 
       for (std::pair<int,Spanner*> p : spanner()) {
             Spanner* s = p.second;
+#if 0
             if (s->anchor() == Spanner::ANCHOR_SEGMENT && s->type() != Element::SLUR) {
                   Segment* segment = tick2segment(s->tick2(), true, Segment::SegChordRest);
                   if (segment) {
@@ -553,6 +553,7 @@ Score::FileError Score::read114(XmlReader& e)
                               }
                         }
                   }
+#endif
             if (s->type() == Element::OTTAVA
                || (s->type() == Element::TEXTLINE)
                || (s->type() == Element::VOLTA)

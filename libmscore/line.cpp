@@ -456,16 +456,12 @@ QPointF SLine::linePos(int grip, System** sys)
                   {
                   Measure* m;
                   int t;
-                  if (grip == GRIP_LINE_START) {
+                  if (grip == GRIP_LINE_START)
                         t = tick();
-                        m = score()->tick2measure(t);
-                        x = m->tick2pos(t);
-                        }
-                  else {
-                        t = tick2();
-                        m = score()->tick2measure(t);
-                        x = m->tick2pos(t) + 2.0 * _spatium;
-                        }
+                  else
+                        t = tick2() - 1;
+                  m    = score()->tick2measure(t);
+                  x   += m->tick2pos(t);
                   *sys = m->system();
                   }
                   break;
