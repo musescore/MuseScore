@@ -189,7 +189,7 @@ void ChordRest::writeProperties(Xml& xml) const
       if (_beam && (MScore::testMode || !_beam->generated()))
             xml.tag("Beam", _beam->id());
 #else
-      if (!xml.clipboardmode && _beam && !_beam->generated())
+      if (_beam && !_beam->generated())
             xml.tag("Beam", _beam->id());
 #endif
       foreach(Lyrics* lyrics, _lyricsList) {
