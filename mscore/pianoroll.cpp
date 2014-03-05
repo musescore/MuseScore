@@ -49,7 +49,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
       QWidget* mainWidget = new QWidget;
 
-      QToolBar* tb = addToolBar(tr("toolbar1"));
+      QToolBar* tb = addToolBar(tr("toolbar 1"));
       tb->addAction(getAction("undo"));
       tb->addAction(getAction("redo"));
       tb->addSeparator();
@@ -77,7 +77,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addAction(showWave);
 
       //-------------
-      tb = addToolBar(tr("toolbar2"));
+      tb = addToolBar(tr("toolbar 2"));
       static const char* sl3[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
       QActionGroup* voiceGroup = new QActionGroup(this);
       for (const char* s : sl3) {
