@@ -175,7 +175,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_39">
          <property name="text">
-          <string>Master tuning</string>
+          <string>Master tuning:</string>
          </property>
         </widget>
        </item>

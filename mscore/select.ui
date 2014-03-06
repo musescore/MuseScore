@@ -74,7 +74,7 @@
         <item row="1" column="0">
          <widget class="QCheckBox" name="sameSubtype">
           <property name="text">
-           <string>same subtype</string>
+           <string>same subtype:</string>
           </property>
          </widget>
         </item>
