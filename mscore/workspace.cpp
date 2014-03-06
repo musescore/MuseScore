@@ -79,7 +79,7 @@ void MuseScore::showWorkspaceMenu()
             }
 
       menuWorkspaces->addSeparator();
-      QAction* a = new QAction(tr("New"), this);
+      QAction* a = new QAction(tr("New..."), this);
       connect(a, SIGNAL(triggered()), SLOT(createNewWorkspace()));
       menuWorkspaces->addAction(a);
 
@@ -212,9 +212,8 @@ void Workspace::initWorkspace()
 
 static void writeFailed(const QString& _path)
       {
-      QString s = qApp->translate("Workspace", "Open Workspace File\n") + _path
-         + qApp->translate("Workspace", "\nfailed: ");
-      QMessageBox::critical(mscore, qApp->translate("Workspace", "MuseScore: Writing Workspace File"), s);
+      QString s = qApp->translate("Workspace", "Writing Workspace File\n%1\nfailed: ");
+      QMessageBox::critical(mscore, qApp->translate("Workspace", "MuseScore: Writing Workspace File"), s.arg(_path));
       }
 
 //---------------------------------------------------------

@@ -45,14 +45,14 @@
       <item row="0" column="1">
        <widget class="QPushButton" name="endNote">
         <property name="text">
-         <string>EndNote</string>
+         <string notr="true">EndNote</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QPushButton" name="startNote">
         <property name="text">
-         <string>StartNote</string>
+         <string notr="true">StartNote</string>
         </property>
        </widget>
       </item>

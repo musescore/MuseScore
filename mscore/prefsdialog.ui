@@ -239,7 +239,7 @@
           <item>
            <widget class="QLabel" name="label_25">
             <property name="text">
-             <string>Save every</string>
+             <string>Save every:</string>
             </property>
            </widget>
           </item>
@@ -342,7 +342,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Port Number:</string>
+             <string>TCP/IP Port Number:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -868,7 +868,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_24">
             <property name="text">
-             <string>Proximity for selecting elements</string>
+             <string>Proximity for selecting elements:</string>
             </property>
            </widget>
           </item>
@@ -1622,7 +1622,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_48">
             <property name="text">
-             <string>Default zoom</string>
+             <string>Default zoom:</string>
             </property>
            </widget>
           </item>
@@ -1804,7 +1804,7 @@
             <item row="0" column="0">
              <widget class="QLabel" name="label_22">
               <property name="text">
-               <string>Ports</string>
+               <string>Ports:</string>
               </property>
              </widget>
             </item>
@@ -2534,7 +2534,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Resolution DPI</string>
+             <string>Resolution DPI:</string>
             </property>
            </widget>
           </item>
@@ -2848,7 +2848,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>Check for new versions of MuseScore on startup</string>
+             <string>Check for new versions of MuseScore on startup:</string>
             </property>
            </widget>
           </item>

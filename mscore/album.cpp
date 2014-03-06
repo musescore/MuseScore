@@ -180,7 +180,7 @@ bool Album::read(const QString& p)
       QFile f(_path);
       if (!f.open(QIODevice::ReadOnly)) {
             QMessageBox::warning(0,
-               QWidget::tr("MuseScore: Open Album failed:"),
+               QWidget::tr("MuseScore: Open Album failed"),
                QString(strerror(errno)),
                QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
             return false;
@@ -296,9 +296,9 @@ void Album::write()
             _path += ".album";
       QFile f(_path);
       if (!f.open(QIODevice::WriteOnly)) {
-            QString s = QWidget::tr("Open Album File\n") + _path + QWidget::tr("\nfailed: ")
+            QString s = QWidget::tr("Open Album File\n%1\nfailed: ")
                + QString(strerror(errno));
-            QMessageBox::critical(mscore, QWidget::tr("MuseScore: Open Album file"), s);
+            QMessageBox::critical(mscore, QWidget::tr("MuseScore: Open Album File"), s.arg(_path));
             return;
             }
 
