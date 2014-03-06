@@ -113,7 +113,7 @@
       <item row="2" column="2">
        <widget class="QLabel" name="label_30">
         <property name="text">
-         <string>Shortcut</string>
+         <string>Shortcut:</string>
         </property>
        </widget>
       </item>
