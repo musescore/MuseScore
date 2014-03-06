@@ -67,6 +67,7 @@ install(FILES
       mscore_uz@Latn.qm
       mscore_vi.qm
       mscore_zh_CN.qm
+      mscore_zh_HK.qm
       mscore_zh_TW.qm
       languages.xml
       qt_ar.qm
