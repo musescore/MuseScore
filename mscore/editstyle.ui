@@ -1520,7 +1520,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QRadioButton" name="showIntervalMeasureNumber">
               <property name="text">
-               <string>Interval</string>
+               <string>Interval:</string>
               </property>
               <property name="checked">
                <bool>true</bool>

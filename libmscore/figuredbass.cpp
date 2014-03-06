@@ -1696,7 +1696,7 @@ FiguredBass* Score::addFiguredBass()
       if (el == 0 || (el->type() != Element::NOTE && el->type() != Element::FIGURED_BASS)) {
             if (!MScore::noGui)
                   QMessageBox::information(0,
-                     QMessageBox::tr("MuseScore:"),
+                     QMessageBox::tr("MuseScore"),
                      QMessageBox::tr("No note or figured bass selected:\n"
                         "please select a single note or figured bass and retry.\n"),
                      QMessageBox::Ok, QMessageBox::NoButton);
