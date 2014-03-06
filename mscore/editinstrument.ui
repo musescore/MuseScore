@@ -23,7 +23,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Name</string>
+         <string>Name:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -43,7 +43,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Short Name</string>
+         <string>Short Name:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -63,7 +63,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Pitch</string>
+         <string>Pitch:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -86,7 +86,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Transpose</string>
+         <string>Transpose:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -109,7 +109,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>MIDI Program</string>
+         <string>MIDI Program:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
@@ -132,7 +132,7 @@
       <item row="5" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Staves</string>
+         <string>Staves:</string>
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>

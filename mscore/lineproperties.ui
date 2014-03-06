@@ -43,7 +43,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Text</string>
+           <string>Text:</string>
           </property>
           <property name="autoExclusive">
            <bool>false</bool>
@@ -95,7 +95,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Symbol</string>
+           <string>Symbol:</string>
           </property>
           <property name="autoExclusive">
            <bool>false</bool>
@@ -184,7 +184,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Hook</string>
+           <string>Hook:</string>
           </property>
          </widget>
         </item>
@@ -262,7 +262,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Text</string>
+           <string>Text:</string>
           </property>
           <property name="autoExclusive">
            <bool>false</bool>
@@ -314,7 +314,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Symbol</string>
+           <string>Symbol:</string>
           </property>
           <property name="autoExclusive">
            <bool>false</bool>
@@ -425,7 +425,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Symbol</string>
+           <string>Symbol:</string>
           </property>
          </widget>
         </item>
@@ -511,7 +511,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Hook</string>
+           <string>Hook:</string>
           </property>
          </widget>
         </item>
