@@ -180,7 +180,7 @@ bool Album::read(const QString& p)
       QFile f(_path);
       if (!f.open(QIODevice::ReadOnly)) {
             QMessageBox::warning(0,
-               QWidget::tr("MuseScore: Open Album failed:"),
+               QWidget::tr("MuseScore: Open Album failed"),
                QString(strerror(errno)),
                QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
             return false;

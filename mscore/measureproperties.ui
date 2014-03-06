@@ -139,7 +139,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Nominal</string>
+             <string>Nominal:</string>
             </property>
            </widget>
           </item>
@@ -162,7 +162,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Actual</string>
+             <string>Actual:</string>
             </property>
            </widget>
           </item>
@@ -397,7 +397,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Add to Measure number</string>
+             <string>Add to Measure number:</string>
             </property>
            </widget>
           </item>
