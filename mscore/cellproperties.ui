@@ -53,7 +53,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Content scale</string>
+         <string>Content scale:</string>
         </property>
        </widget>
       </item>
@@ -135,9 +135,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
