@@ -429,16 +429,11 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "l-props") {
             TextLineSegment* vs = static_cast<TextLineSegment*>(e);
-            TextLine* nTl  = vs->textLine()->clone();
-            LineProperties lp(nTl);
+            LineProperties lp(vs->textLine());
             if (lp.exec()) {
-                  score()->undoChangeElement(vs->textLine(), nTl);
-                  // force new text
-                  foreach(SpannerSegment* l, nTl->spannerSegments())
+                  foreach(SpannerSegment* l, vs->textLine()->spannerSegments())
                         static_cast<TextLineSegment*>(l)->clearText();
                   }
-            else
-                  delete nTl;
             }
       else if (cmd == "tr-props") {
             TremoloBar* tb = static_cast<TremoloBar*>(e);

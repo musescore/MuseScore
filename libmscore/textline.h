@@ -63,25 +63,21 @@ enum HookType { HOOK_90, HOOK_45 };
 class TextLine : public SLine {
       Q_OBJECT
 
-      PlaceText _beginTextPlace, _continueTextPlace;
+      PlaceText _beginTextPlace, _continueTextPlace, _endTextPlace;
 
       bool _beginHook, _endHook;
       HookType _beginHookType, _endHookType;
       Spatium _beginHookHeight, _endHookHeight;
 
-      SymId _beginSymbol, _continueSymbol, _endSymbol;
-
-      QPointF _beginSymbolOffset, _continueSymbolOffset, _endSymbolOffset;  // spatium units
-
    protected:
-      Text* _beginText;
-      Text* _continueText;
+      Text *_beginText, *_continueText, *_endText;
+
       friend class TextLineSegment;
 
    public:
       TextLine(Score* s);
       TextLine(const TextLine&);
-      ~TextLine() {}
+      ~TextLine();
 
       virtual TextLine* clone() const           { return new TextLine(*this); }
       virtual ElementType type() const          { return TEXTLINE; }
@@ -101,36 +97,33 @@ class TextLine : public SLine {
       HookType endHookType() const            { return _endHookType;          }
       void setBeginHookType(HookType val)     { _beginHookType = val;         }
       void setEndHookType(HookType val)       { _endHookType = val;           }
-
-      void setBeginText(const QString& s, const TextStyle& textStyle);
-      void setContinueText(const QString& s, const TextStyle& textStyle);
-      Text* beginText() const                { return _beginText;            }
-      void setBeginText(Text* v);
-      Text* continueText() const             { return _continueText;         }
-      void setContinueText(Text* v);
-      PlaceText beginTextPlace() const        { return _beginTextPlace;       }
-      void setBeginTextPlace(PlaceText p)     { _beginTextPlace = p;          }
-      PlaceText continueTextPlace() const     { return _continueTextPlace;    }
-      void setContinueTextPlace(PlaceText p)  { _continueTextPlace = p;       }
-
-      void setBeginSymbol(SymId v)            { _beginSymbol = v;             }
-      void setContinueSymbol(SymId v)         { _continueSymbol = v;          }
-      void setEndSymbol(SymId v)              { _endSymbol = v;               }
-
       void setBeginHookHeight(Spatium v)      { _beginHookHeight = v;         }
       void setEndHookHeight(Spatium v)        { _endHookHeight = v;           }
       Spatium beginHookHeight() const         { return _beginHookHeight;      }
       Spatium endHookHeight() const           { return _endHookHeight;        }
 
-      SymId beginSymbol() const               { return _beginSymbol;          }
-      SymId continueSymbol() const            { return _continueSymbol;       }
-      SymId endSymbol() const                 { return _endSymbol;            }
-      QPointF beginSymbolOffset() const       { return _beginSymbolOffset;    }
-      QPointF continueSymbolOffset() const    { return _continueSymbolOffset; }
-      QPointF endSymbolOffset() const         { return _endSymbolOffset;      }
-      void setBeginSymbolOffset(QPointF v)    { _beginSymbolOffset = v;       }
-      void setContinueSymbolOffset(QPointF v) { _continueSymbolOffset = v;    }
-      void setEndSymbolOffset(QPointF v)      { _endSymbolOffset = v;         }
+      Text* beginTextElement() const          { return _beginText; }
+      Text* continueTextElement() const       { return _continueText; }
+      Text* endTextElement() const            { return _endText; }
+
+      void setBeginText(const QString& s, int style);
+      void setContinueText(const QString& s, int style);
+      void setEndText(const QString& s, int style);
+
+      void setBeginText(const QString&);
+      void setContinueText(const QString&);
+      void setEndText(const QString&);
+      QString beginText() const;
+      QString continueText() const;
+      QString endText() const;
+
+      PlaceText beginTextPlace() const        { return _beginTextPlace;       }
+      void setBeginTextPlace(PlaceText p)     { _beginTextPlace = p;          }
+      PlaceText continueTextPlace() const     { return _continueTextPlace;    }
+      void setContinueTextPlace(PlaceText p)  { _continueTextPlace = p;       }
+      PlaceText endTextPlace() const          { return _endTextPlace;    }
+      void setEndTextPlace(PlaceText p)       { _endTextPlace = p;       }
+
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
 
       virtual QVariant getProperty(P_ID id) const;

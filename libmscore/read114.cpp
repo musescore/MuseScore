@@ -151,6 +151,7 @@ static const StyleVal2 style114[] = {
 //   resolveSymCompatibility
 //---------------------------------------------------------
 
+#if 0
 static SymId resolveSymCompatibility(SymId i, QString programVersion)
       {
       if (!programVersion.isEmpty() && programVersion < "1.1")
@@ -164,6 +165,7 @@ static SymId resolveSymCompatibility(SymId i, QString programVersion)
             default:    return SymId::noSym;
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   Staff::read114
@@ -528,41 +530,15 @@ Score::FileError Score::read114(XmlReader& e)
 
       for (std::pair<int,Spanner*> p : spanner()) {
             Spanner* s = p.second;
-#if 0
-            if (s->anchor() == Spanner::ANCHOR_SEGMENT && s->type() != Element::SLUR) {
-                  Segment* segment = tick2segment(s->tick2(), true, Segment::SegChordRest);
-                  if (segment) {
-                        segment = segment->prev1(Segment::SegChordRest);
-                        if (segment)
-                              s->setTick2(segment->tick());
-                        else
-                              qDebug("1:no segment for tick %d", s->tick2());
-                        }
-                  else {
-                        Measure* m = lastMeasure();
-                        segment = m->last();
-                        if (!segment)
-                              qDebug("2:no segment for tick %d", s->tick2());
-                        else {
-                              if (segment->segmentType() != Segment::SegChordRest)
-                                    segment = segment->prev1(Segment::SegChordRest);
-                              if (segment)
-                                    s->setTick2(segment->tick());
-                              else
-                                    qDebug("3:no segment for tick %d", s->tick2());
-                              }
-                        }
-                  }
-#endif
             if (s->type() == Element::OTTAVA
                || (s->type() == Element::TEXTLINE)
                || (s->type() == Element::VOLTA)
                || (s->type() == Element::PEDAL))
                   {
-                  TextLine* tl = static_cast<TextLine*>(s);
-                  tl->setBeginSymbol(resolveSymCompatibility(tl->beginSymbol(), mscoreVersion()));
-                  tl->setContinueSymbol(resolveSymCompatibility(tl->continueSymbol(), mscoreVersion()));
-                  tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
+//                  TextLine* tl = static_cast<TextLine*>(s);
+//TODO                  tl->setBeginSymbol(resolveSymCompatibility(tl->beginSymbol(), mscoreVersion()));
+//                  tl->setContinueSymbol(resolveSymCompatibility(tl->continueSymbol(), mscoreVersion()));
+//                  tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
                   }
 
             if (s->type() != Element::SLUR) {

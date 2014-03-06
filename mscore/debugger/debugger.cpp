@@ -1349,13 +1349,13 @@ void TextView::setElement(Element* e)
       for (int i = 0; i < TEXT_STYLES; ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
-      const TextStyle& ts = te->textStyle();
+      TextStyle ts = te->textStyle();
       ShowElementBase::setElement(e);
       tb.text->setPlainText(te->text());
       tb.xoffset->setValue(ts.offset().x());
       tb.yoffset->setValue(ts.offset().y());
       tb.offsetType->setCurrentIndex(int(ts.offsetType()));
-//TODO      tb.textStyle->setCurrentIndex(ts.textStyleType());
+      tb.textStyle->setCurrentIndex(te->textStyleType());
       tb.styled->setChecked(te->styled());
       tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());
       }
@@ -1965,7 +1965,7 @@ void VoltaView::segmentClicked(QTreeWidgetItem* item)
 
 void VoltaView::beginTextClicked()
       {
-      emit elementChanged(static_cast<Volta*>(element())->beginText());
+      emit elementChanged(static_cast<Volta*>(element())->beginTextElement());
       }
 
 //---------------------------------------------------------
@@ -1974,7 +1974,16 @@ void VoltaView::beginTextClicked()
 
 void VoltaView::continueTextClicked()
       {
-      emit elementChanged(static_cast<Volta*>(element())->continueText());
+      emit elementChanged(static_cast<Volta*>(element())->continueTextElement());
+      }
+
+//---------------------------------------------------------
+//   endTextClicked
+//---------------------------------------------------------
+
+void VoltaView::endTextClicked()
+      {
+      emit elementChanged(static_cast<Volta*>(element())->endTextElement());
       }
 
 //---------------------------------------------------------
@@ -1994,6 +2003,7 @@ VoltaView::VoltaView()
 
       connect(tlb.beginText,    SIGNAL(clicked()), SLOT(beginTextClicked()));
       connect(tlb.continueText, SIGNAL(clicked()), SLOT(continueTextClicked()));
+      connect(tlb.endText,      SIGNAL(clicked()), SLOT(endTextClicked()));
       connect(sp.segments,      SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       }
 
@@ -2028,8 +2038,9 @@ void VoltaView::setElement(Element* e)
       sp.endElement->setEnabled(volta->endElement() != 0);
       sp.anchor->setCurrentIndex(int(volta->anchor()));
 
-      tlb.beginText->setEnabled(volta->beginText());
-      tlb.continueText->setEnabled(volta->continueText());
+      tlb.beginText->setEnabled(volta->beginTextElement());
+      tlb.continueText->setEnabled(volta->continueTextElement());
+      tlb.endText->setEnabled(volta->endTextElement());
       }
 
 //---------------------------------------------------------
@@ -2528,8 +2539,9 @@ void TextLineView::setElement(Element* e)
       tlb.lineWidth->setValue(volta->lineWidth().val());
       lb.diagonal->setChecked(volta->diagonal());
 
-      tlb.beginText->setEnabled(volta->beginText());
-      tlb.continueText->setEnabled(volta->continueText());
+      tlb.beginText->setEnabled(volta->beginTextElement());
+      tlb.continueText->setEnabled(volta->continueTextElement());
+      tlb.endText->setEnabled(volta->endTextElement());
       }
 
 //---------------------------------------------------------
@@ -2539,7 +2551,7 @@ void TextLineView::setElement(Element* e)
 void TextLineView::beginTextClicked()
       {
       Volta* volta = (Volta*)element();
-      emit elementChanged(volta->beginText());
+      emit elementChanged(volta->beginTextElement());
       }
 
 //---------------------------------------------------------
@@ -2549,7 +2561,17 @@ void TextLineView::beginTextClicked()
 void TextLineView::continueTextClicked()
       {
       Volta* volta = (Volta*)element();
-      emit elementChanged(volta->continueText());
+      emit elementChanged(volta->continueTextElement());
+      }
+
+//---------------------------------------------------------
+//   endTextClicked
+//---------------------------------------------------------
+
+void TextLineView::endTextClicked()
+      {
+      Volta* volta = (Volta*)element();
+      emit elementChanged(volta->endTextElement());
       }
 
 

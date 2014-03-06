@@ -181,7 +181,7 @@ class Text : public Element {
       const TextBlock& curLine() const;
       TextBlock& curLine();
       void drawSelection(QPainter*, const QRectF&) const;
-      
+
       void insert(TextCursor*, QChar);
       void insert(TextCursor*, SymId);
       void updateCursorFormat(TextCursor*);
@@ -193,7 +193,7 @@ class Text : public Element {
       QColor textColor() const;
       void layoutFrame();
       void layoutEdit();
-      
+
       void createLayout();
 
    public:
@@ -215,6 +215,10 @@ class Text : public Element {
       void setTextStyle(const TextStyle& st)  { _textStyle = st;   }
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
+      void setUnstyled()                  { _styleIndex = TEXT_STYLE_UNSTYLED; }
+      bool styled() const                 { return _styleIndex != TEXT_STYLE_UNSTYLED; }
+      int textStyleType() const           { return _styleIndex; }
+
 
       void setPlainText(const QString&);
       void setText(const QString&);
@@ -252,10 +256,6 @@ class Text : public Element {
 
       void insertSym(SymId);
       void selectAll();
-
-      void setUnstyled()                  { _styleIndex = TEXT_STYLE_UNSTYLED; }
-      bool styled() const                 { return _styleIndex != TEXT_STYLE_UNSTYLED; }
-      int textStyleType() const           { return _styleIndex; }
 
       virtual bool systemFlag() const     { return textStyle().systemFlag(); }
 

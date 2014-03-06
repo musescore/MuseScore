@@ -37,21 +37,18 @@ class Text;
 class LineProperties : public QDialog, public Ui::LinePropertiesDialog {
       Q_OBJECT
 
-      TextLine* tl;
-      Text* _beginText;
-      Text* _continueText;
+      TextLine* otl;    // original text line
+      TextLine* tl;     // cloned original text line to record changes in Text elements
 
    private slots:
       virtual void accept();
-      void beginTextToggled(bool);
-      void beginSymbolToggled(bool);
-      void continueTextToggled(bool);
-      void continueSymbolToggled(bool);
       void beginTextProperties();
       void continueTextProperties();
+      void endTextProperties();
 
    public:
       LineProperties(TextLine*, QWidget* parent = 0);
+      ~LineProperties();
       };
 
 

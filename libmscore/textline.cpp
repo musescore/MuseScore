@@ -49,10 +49,10 @@ void TextLineSegment::setSelected(bool f)
       Element::setSelected(f);
       if (_text) {
             if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
-                  if (textLine()->beginText())
+                  if (textLine()->_beginText)
                         _text->setSelected(f);
                   }
-            else if (textLine()->continueText())
+            else if (textLine()->_continueText)
                   _text->setSelected(f);
             }
       }
@@ -96,29 +96,19 @@ void TextLineSegment::draw(QPainter* painter) const
             _text->draw(painter);
             painter->translate(-_text->pos());
             }
-      else {
-            SymId sym = (spannerSegmentType() == SEGMENT_MIDDLE || spannerSegmentType() == SEGMENT_END)
-               ? tl->continueSymbol() : tl->beginSymbol();
-            if (sym != SymId::noSym) {
-                  const QRectF& bb = symBbox(sym);
-                  qreal h = bb.height() * .5;
-                  QPointF o = tl->beginSymbolOffset() * _spatium;
-                  painter->setPen(color);
-                  drawSymbol(sym, painter, QPointF(o.x(), h + o.y()));
-                  l = bb.width() + textlineTextDistance;
-                  }
-            }
 
       QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth, tl->lineStyle());
       painter->setPen(pen);
       if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END) {
-            if (tl->endSymbol() != SymId::noSym) {
+            if (tl->_endText) {
+#if 0 // TODO
                   SymId sym = tl->endSymbol();
                   const QRectF& bb = symBbox(sym);
                   qreal h = bb.height() * .5;
                   QPointF o = tl->endSymbolOffset() * _spatium;
                   pp2.setX(pp2.x() - bb.width() + textlineTextDistance);
                   drawSymbol(sym, painter, QPointF(pp2.x() + textlineTextDistance + o.x(), h + o.y()));
+#endif
                   }
             }
 
@@ -173,14 +163,14 @@ void TextLineSegment::layout1()
       switch (spannerSegmentType()) {
             case SEGMENT_SINGLE:
             case SEGMENT_BEGIN:
-                  if (tl->beginText()) {
+                  if (tl->_beginText) {
                         if (_text == 0) {
-                              _text = new Text(*tl->beginText());
+                              _text = new Text(*tl->_beginText);
                               _text->setFlag(ELEMENT_MOVABLE, false);
                               _text->setParent(this);
                               }
                         else
-                              _text->setText(tl->beginText()->text());
+                              _text->setText(tl->_beginText->text());
                         }
                   else {
                         delete _text;
@@ -189,14 +179,14 @@ void TextLineSegment::layout1()
                   break;
             case SEGMENT_MIDDLE:
             case SEGMENT_END:
-                  if (tl->continueText()) {
+                  if (tl->_continueText) {
                         if (_text == 0) {
-                              _text = new Text(*tl->continueText());
+                              _text = new Text(*tl->_continueText);
                               _text->setFlag(ELEMENT_MOVABLE, false);
                               _text->setParent(this);
                               }
                         else
-                              _text->setText(tl->continueText()->text());
+                              _text->setText(tl->_continueText->text());
                         }
                   else {
                         delete _text;
@@ -217,7 +207,6 @@ void TextLineSegment::layout1()
       qreal y1 = point(-textLine()->lineWidth());
       qreal y2 = -y1;
 
-      SymId sym = textLine()->beginSymbol();
       if (_text) {
             qreal h = _text->height();
             if (textLine()->beginTextPlace() == PLACE_ABOVE)
@@ -228,11 +217,6 @@ void TextLineSegment::layout1()
                   y1 = -h * .5;
                   y2 = h * .5;
                   }
-            }
-      else if (sym != SymId::noSym) {
-            qreal hh = symHeight(sym) * .5;
-            y1 = -hh;
-            y2 = hh;
             }
       if (textLine()->endHook()) {
             qreal h = point(textLine()->endHookHeight());
@@ -270,18 +254,13 @@ QVariant TextLineSegment::getProperty(P_ID id) const
       switch (id) {
             case P_BEGIN_TEXT_PLACE:
             case P_CONTINUE_TEXT_PLACE:
+            case P_END_TEXT_PLACE:
             case P_BEGIN_HOOK:
             case P_END_HOOK:
             case P_BEGIN_HOOK_HEIGHT:
             case P_END_HOOK_HEIGHT:
             case P_BEGIN_HOOK_TYPE:
             case P_END_HOOK_TYPE:
-            case P_BEGIN_SYMBOL:
-            case P_CONTINUE_SYMBOL:
-            case P_END_SYMBOL:
-            case P_BEGIN_SYMBOL_OFFSET:
-            case P_CONTINUE_SYMBOL_OFFSET:
-            case P_END_SYMBOL_OFFSET:
             case P_LINE_COLOR:
             case P_LINE_WIDTH:
                   return textLine()->getProperty(id);
@@ -299,18 +278,13 @@ bool TextLineSegment::setProperty(P_ID id, const QVariant& v)
       switch (id) {
             case P_BEGIN_TEXT_PLACE:
             case P_CONTINUE_TEXT_PLACE:
+            case P_END_TEXT_PLACE:
             case P_BEGIN_HOOK:
             case P_END_HOOK:
             case P_BEGIN_HOOK_HEIGHT:
             case P_END_HOOK_HEIGHT:
             case P_BEGIN_HOOK_TYPE:
             case P_END_HOOK_TYPE:
-            case P_BEGIN_SYMBOL:
-            case P_CONTINUE_SYMBOL:
-            case P_END_SYMBOL:
-            case P_BEGIN_SYMBOL_OFFSET:
-            case P_CONTINUE_SYMBOL_OFFSET:
-            case P_END_SYMBOL_OFFSET:
             case P_LINE_COLOR:
             case P_LINE_WIDTH:
                   return textLine()->setProperty(id, v);
@@ -328,18 +302,13 @@ QVariant TextLineSegment::propertyDefault(P_ID id) const
       switch (id) {
             case P_BEGIN_TEXT_PLACE:
             case P_CONTINUE_TEXT_PLACE:
+            case P_END_TEXT_PLACE:
             case P_BEGIN_HOOK:
             case P_END_HOOK:
             case P_BEGIN_HOOK_HEIGHT:
             case P_END_HOOK_HEIGHT:
             case P_BEGIN_HOOK_TYPE:
             case P_END_HOOK_TYPE:
-            case P_BEGIN_SYMBOL:
-            case P_CONTINUE_SYMBOL:
-            case P_END_SYMBOL:
-            case P_BEGIN_SYMBOL_OFFSET:
-            case P_CONTINUE_SYMBOL_OFFSET:
-            case P_END_SYMBOL_OFFSET:
             case P_LINE_COLOR:
             case P_LINE_WIDTH:
                   return textLine()->propertyDefault(id);
@@ -357,6 +326,7 @@ TextLine::TextLine(Score* s)
       {
       _beginText         = 0;
       _continueText      = 0;
+      _endText           = 0;
 
       _beginHookHeight   = Spatium(1.5);
       _endHookHeight     = Spatium(1.5);
@@ -367,9 +337,7 @@ TextLine::TextLine(Score* s)
 
       _beginTextPlace    = PLACE_LEFT;
       _continueTextPlace = PLACE_LEFT;
-      _beginSymbol       = SymId::noSym;
-      _continueSymbol    = SymId::noSym;
-      _endSymbol         = SymId::noSym;
+      _endTextPlace      = PLACE_LEFT;
       }
 
 TextLine::TextLine(const TextLine& e)
@@ -377,6 +345,7 @@ TextLine::TextLine(const TextLine& e)
       {
       _beginTextPlace       = e._beginTextPlace;
       _continueTextPlace    = e._continueTextPlace;
+      _endTextPlace         = e._endTextPlace;
 
       _beginHook            = e._beginHook;
       _endHook              = e._endHook;
@@ -385,14 +354,10 @@ TextLine::TextLine(const TextLine& e)
       _beginHookHeight      = e._beginHookHeight;
       _endHookHeight        = e._endHookHeight;
 
-      _beginSymbol          = e._beginSymbol;
-      _continueSymbol       = e._continueSymbol;
-      _endSymbol            = e._endSymbol;
-      _beginSymbolOffset    = e._beginSymbolOffset;
-      _continueSymbolOffset = e._continueSymbolOffset;
-      _endSymbolOffset      = e._endSymbolOffset;
       _beginText            = 0;
       _continueText         = 0;
+      _endText              = 0;
+
       if (e._beginText) {
             _beginText = e._beginText->clone(); // deep copy
             _beginText->setParent(this);
@@ -401,19 +366,44 @@ TextLine::TextLine(const TextLine& e)
             _continueText = e._continueText->clone();
             _continueText->setParent(this);
             }
+      if (e._endText) {
+            _endText = e._endText->clone();
+            _endText->setParent(this);
+            }
+      }
+
+//---------------------------------------------------------
+//   TextLine
+//---------------------------------------------------------
+
+TextLine::~TextLine()
+      {
+      delete _beginText;
+      delete _continueText;
+      delete _endText;
       }
 
 //---------------------------------------------------------
 //   setBeginText
 //---------------------------------------------------------
 
-void TextLine::setBeginText(const QString& s, const TextStyle& textStyle)
+void TextLine::setBeginText(const QString& s, int textStyle)
       {
       if (!_beginText) {
             _beginText = new Text(score());
             _beginText->setParent(this);
             }
-      _beginText->setTextStyle(textStyle);
+      _beginText->setTextStyleType(textStyle);
+      _beginText->setText(s);
+      }
+
+void TextLine::setBeginText(const QString& s)
+      {
+      if (!_beginText) {
+            _beginText = new Text(score());
+            _beginText->setParent(this);
+            _beginText->setTextStyleType(TEXT_STYLE_TEXTLINE);
+            }
       _beginText->setText(s);
       }
 
@@ -421,34 +411,48 @@ void TextLine::setBeginText(const QString& s, const TextStyle& textStyle)
 //   setContinueText
 //---------------------------------------------------------
 
-void TextLine::setContinueText(const QString& s, const TextStyle& textStyle)
+void TextLine::setContinueText(const QString& s, int textStyle)
       {
       if (!_continueText) {
             _continueText = new Text(score());
             _continueText->setParent(this);
             }
-      _continueText->setTextStyle(textStyle);
+      _continueText->setTextStyleType(textStyle);
+      _continueText->setText(s);
+      }
+
+void TextLine::setContinueText(const QString& s)
+      {
+      if (!_continueText) {
+            _continueText = new Text(score());
+            _continueText->setParent(this);
+            _continueText->setTextStyleType(TEXT_STYLE_TEXTLINE);
+            }
       _continueText->setText(s);
       }
 
 //---------------------------------------------------------
-//   setBeginText
+//   setEndText
 //---------------------------------------------------------
 
-void TextLine::setBeginText(Text* v)
+void TextLine::setEndText(const QString& s, int textStyle)
       {
-      delete _beginText;
-      _beginText = v;
+      if (!_endText) {
+            _endText = new Text(score());
+            _endText->setParent(this);
+            }
+      _endText->setTextStyleType(textStyle);
+      _endText->setText(s);
       }
 
-//---------------------------------------------------------
-//   setContinueText
-//---------------------------------------------------------
-
-void TextLine::setContinueText(Text* v)
+void TextLine::setEndText(const QString& s)
       {
-      delete _continueText;
-      _continueText = v;
+      if (!_endText) {
+            _endText = new Text(score());
+            _endText->setParent(this);
+            _endText->setTextStyleType(TEXT_STYLE_TEXTLINE);
+            }
+      _endText->setText(s);
       }
 
 //---------------------------------------------------------
@@ -479,111 +483,6 @@ void TextLine::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   writeProperties
-//    write properties different from prototype
-//---------------------------------------------------------
-
-void TextLine::writeProperties(Xml& xml) const
-      {
-      if (_beginHook) {
-            writeProperty(xml, P_BEGIN_HOOK_HEIGHT);
-            writeProperty(xml, P_BEGIN_HOOK_TYPE);
-            }
-      if (_endHook) {
-            writeProperty(xml, P_END_HOOK_HEIGHT);
-            writeProperty(xml, P_END_HOOK_TYPE);
-            }
-
-      writeProperty(xml, P_BEGIN_TEXT_PLACE);
-      writeProperty(xml, P_CONTINUE_TEXT_PLACE);
-
-      SLine::writeProperties(xml);
-      if (_beginText) {
-            xml.stag("beginText");
-            _beginText->writeProperties(xml);
-            xml.etag();
-            }
-      if (_continueText) {
-            xml.stag("continueText");
-            _continueText->writeProperties(xml);
-            xml.etag();
-            }
-      if (QVariant(int(_beginSymbol)) != propertyDefault(P_BEGIN_SYMBOL)) {
-            writeProperty(xml, P_BEGIN_SYMBOL);
-            writeProperty(xml, P_BEGIN_SYMBOL_OFFSET);
-            }
-      if (QVariant(int(_continueSymbol)) != propertyDefault(P_CONTINUE_SYMBOL)) {
-            writeProperty(xml, P_CONTINUE_SYMBOL);
-            writeProperty(xml, P_CONTINUE_SYMBOL_OFFSET);
-            }
-      if (QVariant(int(_endSymbol)) != propertyDefault(P_END_SYMBOL)) {
-            writeProperty(xml, P_END_SYMBOL);
-            writeProperty(xml, P_END_SYMBOL_OFFSET);
-            }
-      }
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool TextLine::readProperties(XmlReader& e)
-      {
-      const QStringRef& tag(e.name());
-
-      if (tag == "beginHookHeight") {
-            _beginHookHeight = Spatium(e.readDouble());
-            _beginHook = true;
-            }
-      else if (tag == "beginHookType")
-            _beginHookType = HookType(e.readInt());
-      else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
-            _endHookHeight = Spatium(e.readDouble());
-            _endHook = true;
-            }
-      else if (tag == "endHookType")
-            _endHookType = HookType(e.readInt());
-      else if (tag == "hookUp")           // obsolete
-            _endHookHeight *= qreal(-1.0);
-      else if (tag == "beginSymbol" || tag == "symbol") {     // "symbol" is obsolete
-            QString text(e.readElementText());
-            _beginSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
-            }
-      else if (tag == "continueSymbol") {
-            QString text(e.readElementText());
-            _continueSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
-            }
-      else if (tag == "endSymbol") {
-            QString text(e.readElementText());
-            _endSymbol = text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text);
-            }
-      else if (tag == "beginSymbolOffset")
-            _beginSymbolOffset = e.readPoint();
-      else if (tag == "continueSymbolOffset")
-            _continueSymbolOffset = e.readPoint();
-      else if (tag == "endSymbolOffset")
-            _endSymbolOffset = e.readPoint();
-      else if (tag == "beginTextPlace")
-            _beginTextPlace = readPlacement(e);
-      else if (tag == "continueTextPlace")
-            _continueTextPlace = readPlacement(e);
-      else if (tag == "beginText") {
-            _beginText = new Text(score());
-            _beginText->setParent(this);
-            _beginText->read(e);
-            }
-      else if (tag == "continueText") {
-            _continueText = new Text(score());
-            _continueText->setParent(this);
-            _continueText->read(e);
-            }
-      else if (!SLine::readProperties(e)) {
-            qDebug(" ==readSLineProps: failed");
-            return false;
-            }
-      return true;
-      }
-
-//---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
 
@@ -603,6 +502,8 @@ void TextLine::layout()
             _beginText->layout();
       if (_continueText)
             _continueText->layout();
+      if (_endText)
+            _endText->layout();
       SLine::layout();
       }
 
@@ -630,6 +531,140 @@ void TextLine::spatiumChanged(qreal ov, qreal nv)
       }
 
 //---------------------------------------------------------
+//   beginText
+//---------------------------------------------------------
+
+QString TextLine::beginText() const
+      {
+      return _beginText ? _beginText->text() : "";
+      }
+
+//---------------------------------------------------------
+//   continueText
+//---------------------------------------------------------
+
+QString TextLine::continueText() const
+      {
+      return _continueText ? _continueText->text() : "";
+      }
+
+//---------------------------------------------------------
+//   endText
+//---------------------------------------------------------
+
+QString TextLine::endText() const
+      {
+      return _endText ? _endText->text() : "";
+      }
+
+//---------------------------------------------------------
+//   writeProperties
+//    write properties different from prototype
+//---------------------------------------------------------
+
+void TextLine::writeProperties(Xml& xml) const
+      {
+      if (_beginHook) {
+            writeProperty(xml, P_BEGIN_HOOK_HEIGHT);
+            writeProperty(xml, P_BEGIN_HOOK_TYPE);
+            }
+      if (_endHook) {
+            writeProperty(xml, P_END_HOOK_HEIGHT);
+            writeProperty(xml, P_END_HOOK_TYPE);
+            }
+
+      writeProperty(xml, P_BEGIN_TEXT_PLACE);
+      writeProperty(xml, P_CONTINUE_TEXT_PLACE);
+      writeProperty(xml, P_END_TEXT_PLACE);
+
+      SLine::writeProperties(xml);
+
+      if (_beginText) {
+            xml.stag("beginText");
+            _beginText->writeProperties(xml);
+            xml.etag();
+            }
+      if (_continueText) {
+            xml.stag("continueText");
+            _continueText->writeProperties(xml);
+            xml.etag();
+            }
+      if (_endText) {
+            xml.stag("endText");
+            _endText->writeProperties(xml);
+            xml.etag();
+            }
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool TextLine::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "beginHookHeight") {
+            _beginHookHeight = Spatium(e.readDouble());
+            _beginHook = true;
+            }
+      else if (tag == "beginHookType")
+            _beginHookType = HookType(e.readInt());
+      else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
+            _endHookHeight = Spatium(e.readDouble());
+            _endHook = true;
+            }
+      else if (tag == "endHookType")
+            _endHookType = HookType(e.readInt());
+      else if (tag == "hookUp")                       // obsolete
+            _endHookHeight *= qreal(-1.0);
+      else if (tag == "beginSymbol" || tag == "symbol") {     // "symbol" is obsolete
+            QString text(e.readElementText());
+            setBeginText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? Sym::id2name(SymId(text.toInt())) : text));
+            }
+      else if (tag == "continueSymbol") {
+            QString text(e.readElementText());
+            setContinueText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? Sym::id2name(SymId(text.toInt())) : text));
+            }
+      else if (tag == "endSymbol") {
+            QString text(e.readElementText());
+            setEndText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? Sym::id2name(SymId(text.toInt())) : text));
+            }
+      else if (tag == "beginSymbolOffset")            // obsolete
+            e.readPoint();
+      else if (tag == "continueSymbolOffset")         // obsolete
+            e.readPoint();
+      else if (tag == "endSymbolOffset")              // obsolete
+            e.readPoint();
+      else if (tag == "beginTextPlace")
+            _beginTextPlace = readPlacement(e);
+      else if (tag == "continueTextPlace")
+            _continueTextPlace = readPlacement(e);
+      else if (tag == "endTextPlace")
+            _endTextPlace = readPlacement(e);
+      else if (tag == "beginText") {
+            _beginText = new Text(score());
+            _beginText->setParent(this);
+            _beginText->read(e);
+            }
+      else if (tag == "continueText") {
+            _continueText = new Text(score());
+            _continueText->setParent(this);
+            _continueText->read(e);
+            }
+      else if (tag == "endText") {
+            _endText = new Text(score());
+            _endText->setParent(this);
+            _endText->read(e);
+            }
+      else if (!SLine::readProperties(e)) {
+            qDebug(" ==readSLineProps: failed");
+            return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -640,6 +675,8 @@ QVariant TextLine::getProperty(P_ID id) const
                   return _beginTextPlace;
             case P_CONTINUE_TEXT_PLACE:
                   return _continueTextPlace;
+            case P_END_TEXT_PLACE:
+                  return _endTextPlace;
             case P_BEGIN_HOOK:
                   return _beginHook;
             case P_END_HOOK:
@@ -652,18 +689,12 @@ QVariant TextLine::getProperty(P_ID id) const
                   return _beginHookType;
             case P_END_HOOK_TYPE:
                   return _endHookType;
-            case P_BEGIN_SYMBOL:
-                  return int(_beginSymbol);
-            case P_CONTINUE_SYMBOL:
-                  return int(_continueSymbol);
-            case P_END_SYMBOL:
-                  return int(_endSymbol);
-            case P_BEGIN_SYMBOL_OFFSET:
-                  return _beginSymbolOffset;
-            case P_CONTINUE_SYMBOL_OFFSET:
-                  return _continueSymbolOffset;
-            case P_END_SYMBOL_OFFSET:
-                  return _endSymbolOffset;
+            case P_BEGIN_TEXT:
+                  return beginText();
+            case P_CONTINUE_TEXT:
+                  return continueText();
+            case P_END_TEXT:
+                  return endText();
             default:
                   return SLine::getProperty(id);
             }
@@ -681,6 +712,9 @@ bool TextLine::setProperty(P_ID id, const QVariant& v)
                   break;
             case P_CONTINUE_TEXT_PLACE:
                   _continueTextPlace = PlaceText(v.toInt());
+                  break;
+            case P_END_TEXT_PLACE:
+                  _endTextPlace = PlaceText(v.toInt());
                   break;
             case P_BEGIN_HOOK:
                   _beginHook = v.toBool();
@@ -700,23 +734,14 @@ bool TextLine::setProperty(P_ID id, const QVariant& v)
             case P_END_HOOK_TYPE:
                   _endHookType = HookType(v.toInt());
                   break;
-            case P_BEGIN_SYMBOL:
-                  _beginSymbol = SymId(v.toInt());
+            case P_BEGIN_TEXT:
+                  setBeginText(v.toString());
                   break;
-            case P_CONTINUE_SYMBOL:
-                  _continueSymbol = SymId(v.toInt());
+            case P_CONTINUE_TEXT:
+                  setContinueText(v.toString());
                   break;
-            case P_END_SYMBOL:
-                  _endSymbol = SymId(v.toInt());
-                  break;
-            case P_BEGIN_SYMBOL_OFFSET:
-                  _beginSymbolOffset = v.toPointF();
-                  break;
-            case P_CONTINUE_SYMBOL_OFFSET:
-                  _continueSymbolOffset = v.toPointF();
-                  break;
-            case P_END_SYMBOL_OFFSET:
-                  _endSymbolOffset = v.toPointF();
+            case P_END_TEXT:
+                  setEndText(v.toString());
                   break;
             default:
                   return SLine::setProperty(id, v);
@@ -733,6 +758,7 @@ QVariant TextLine::propertyDefault(P_ID id) const
       switch (id) {
             case P_BEGIN_TEXT_PLACE:
             case P_CONTINUE_TEXT_PLACE:
+            case P_END_TEXT_PLACE:
                   return PLACE_LEFT;
             case P_BEGIN_HOOK:
             case P_END_HOOK:
@@ -743,14 +769,11 @@ QVariant TextLine::propertyDefault(P_ID id) const
             case P_BEGIN_HOOK_TYPE:
             case P_END_HOOK_TYPE:
                   return HOOK_90;
-            case P_BEGIN_SYMBOL:
-            case P_CONTINUE_SYMBOL:
-            case P_END_SYMBOL:
-                  return int(SymId::noSym);
-            case P_BEGIN_SYMBOL_OFFSET:
-            case P_CONTINUE_SYMBOL_OFFSET:
-            case P_END_SYMBOL_OFFSET:
-                  return QPointF();
+            case P_BEGIN_TEXT:
+            case P_CONTINUE_TEXT:
+            case P_END_TEXT:
+                  return QString("");
+
             default:
                   return SLine::propertyDefault(id);
             }

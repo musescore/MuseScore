@@ -33,30 +33,20 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   populateLineSymbolComboBox
+//   setTextPlace
 //---------------------------------------------------------
 
-static void populateLineSymbolComboBox(QComboBox* cb)
+static void setTextPlace(PlaceText place, QComboBox* cb)
       {
-      cb->clear();
-      cb->addItem(cb->tr("no symbol"), int(SymId::noSym));
-      for (int i = 0; i < int(SymId::lastSym); ++i)
-            cb->addItem(Sym::id2userName(SymId(i)), i);
-      }
-
-//---------------------------------------------------------
-//   setLineSymbolComboBox
-//---------------------------------------------------------
-
-static void setLineSymbolComboBox(QComboBox* cb, int sym)
-      {
-      for (int i = 0; i < cb->count(); ++i) {
-            if (cb->itemData(i).toInt() == sym) {
-                  cb->setCurrentIndex(i);
-                  return;
-                  }
+      int idx = 0;
+      switch (place) {
+            case PLACE_ABOVE: idx = 0; break;
+            case PLACE_BELOW: idx = 1; break;
+            case PLACE_LEFT:  idx = 2; break;
+            default:
+                  qDebug("illegal text placement\n");
             }
-      qDebug("setLineSymbol: not found %d\n", sym);
+      cb->setCurrentIndex(idx);
       }
 
 //---------------------------------------------------------
@@ -68,94 +58,52 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      tl = l;
+      otl = l;
+      tl  = l->clone();
 
-      populateLineSymbolComboBox(beginSymbol);
-      populateLineSymbolComboBox(continueSymbol);
-      populateLineSymbolComboBox(endSymbol);
+      beginText->setText(otl->beginText());
+      continueText->setText(otl->continueText());
+      endText->setText(otl->endText());
 
-      if (tl->beginText())
-            _beginText = new Text(*tl->beginText());
-      else
-            _beginText = 0;
-      if (tl->continueText())
-            _continueText = new Text(*tl->continueText());
-      else
-            _continueText = 0;
+      setTextPlace(otl->beginTextPlace(),    beginTextPlace);
+      setTextPlace(otl->continueTextPlace(), continueTextPlace);
+      setTextPlace(otl->endTextPlace(),      endTextPlace);
 
-      beginTextRb->setChecked(tl->beginText());
-      continueTextRb->setChecked(tl->continueText());
-      beginSymbolRb->setChecked(tl->beginSymbol() != SymId::noSym);
-      continueSymbolRb->setChecked(tl->continueSymbol() != SymId::noSym);
-      endSymbolRb->setChecked(tl->endSymbol() != SymId::noSym);
+      beginHook->setChecked(otl->beginHook());
+      endHook->setChecked(otl->endHook());
+      beginHookHeight->setValue(otl->beginHookHeight().val());
+      endHookHeight->setValue(otl->endHookHeight().val());
+      beginHookType90->setChecked(otl->beginHookType() == HOOK_90);
+      beginHookType45->setChecked(otl->beginHookType() == HOOK_45);
+      endHookType90->setChecked(otl->endHookType() == HOOK_90);
+      endHookType45->setChecked(otl->endHookType() == HOOK_45);
 
-      bool bt = beginTextRb->isChecked();
-      beginText->setEnabled(bt);
-      beginTextTb->setEnabled(bt);
-      beginTextPlace->setEnabled(bt);
-      bt = beginSymbolRb->isChecked();
-      beginSymbol->setEnabled(bt);
-      beginSymbolX->setEnabled(bt);
-      beginSymbolY->setEnabled(bt);
-
-      bt = continueTextRb->isChecked();
-      continueText->setEnabled(bt);
-      continueTextTb->setEnabled(bt);
-      continueTextPlace->setEnabled(bt);
-      bt = continueSymbolRb->isChecked();
-      continueSymbol->setEnabled(bt);
-      continueSymbolX->setEnabled(bt);
-      continueSymbolY->setEnabled(bt);
-
-      beginText->setText(tl->beginText() ? tl->beginText()->text() : "");
-      continueText->setText(tl->continueText() ? tl->continueText()->text() : "");
-
-      setLineSymbolComboBox(beginSymbol, int(tl->beginSymbol()));
-      setLineSymbolComboBox(continueSymbol, int(tl->continueSymbol()));
-      setLineSymbolComboBox(endSymbol, int(tl->endSymbol()));
-
-      beginSymbolX->setValue(tl->beginSymbolOffset().x());
-      beginSymbolY->setValue(tl->beginSymbolOffset().y());
-      continueSymbolX->setValue(tl->continueSymbolOffset().x());
-      continueSymbolY->setValue(tl->continueSymbolOffset().y());
-      endSymbolX->setValue(tl->endSymbolOffset().x());
-      endSymbolY->setValue(tl->endSymbolOffset().y());
-
-      int idx = 0;
-      switch(tl->beginTextPlace()) {
-            case PLACE_ABOVE: idx = 0; break;
-            case PLACE_BELOW: idx = 1; break;
-            case PLACE_LEFT:  idx = 2; break;
-            default:
-                  qDebug("illegal text placement\n");
-            }
-      beginTextPlace->setCurrentIndex(idx);
-
-      idx = 0;
-      switch(tl->continueTextPlace()) {
-            case PLACE_ABOVE: idx = 0; break;
-            case PLACE_BELOW: idx = 1; break;
-            case PLACE_LEFT:  idx = 2; break;
-            default:
-                  qDebug("illegal text placement\n");
-            }
-      continueTextPlace->setCurrentIndex(idx);
-
-      beginHook->setChecked(tl->beginHook());
-      endHook->setChecked(tl->endHook());
-      beginHookHeight->setValue(tl->beginHookHeight().val());
-      endHookHeight->setValue(tl->endHookHeight().val());
-      beginHookType90->setChecked(tl->beginHookType() == HOOK_90);
-      beginHookType45->setChecked(tl->beginHookType() == HOOK_45);
-      endHookType90->setChecked(tl->endHookType() == HOOK_90);
-      endHookType45->setChecked(tl->endHookType() == HOOK_45);
-
-      connect(beginTextRb, SIGNAL(toggled(bool)), SLOT(beginTextToggled(bool)));
-      connect(beginSymbolRb, SIGNAL(toggled(bool)), SLOT(beginSymbolToggled(bool)));
-      connect(continueTextRb, SIGNAL(toggled(bool)), SLOT(continueTextToggled(bool)));
-      connect(continueSymbolRb, SIGNAL(toggled(bool)), SLOT(continueSymbolToggled(bool)));
-      connect(beginTextTb, SIGNAL(clicked()), SLOT(beginTextProperties()));
+      connect(beginTextTb, SIGNAL(clicked()),    SLOT(beginTextProperties()));
       connect(continueTextTb, SIGNAL(clicked()), SLOT(continueTextProperties()));
+      connect(endTextTb, SIGNAL(clicked()),      SLOT(endTextProperties()));
+      }
+//---------------------------------------------------------
+//   LineProperties
+//---------------------------------------------------------
+
+LineProperties::~LineProperties()
+      {
+      delete tl;
+      }
+
+//---------------------------------------------------------
+//   getPlaceText
+//---------------------------------------------------------
+
+static PlaceText getPlaceText(QComboBox* cb)
+      {
+      PlaceText p = PLACE_ABOVE;
+      switch(cb->currentIndex()) {
+            case 0: p = PLACE_ABOVE; break;
+            case 1: p = PLACE_BELOW; break;
+            case 2: p = PLACE_LEFT; break;
+            }
+      return p;
       }
 
 //---------------------------------------------------------
@@ -164,118 +112,51 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
 
 void LineProperties::accept()
       {
-      tl->setBeginHookHeight(Spatium(beginHookHeight->value()));
-      tl->setBeginHook(beginHook->isChecked());
-      tl->setEndHookHeight(Spatium(endHookHeight->value()));
-      tl->setEndHook(endHook->isChecked());
-      tl->setBeginHookType(beginHookType90->isChecked() ? HOOK_90 : HOOK_45);
-      tl->setEndHookType(endHookType90->isChecked() ? HOOK_90 : HOOK_45);
+      if (beginHook->isChecked() != otl->beginHook())
+            otl->undoChangeProperty(P_BEGIN_HOOK, beginHook->isChecked());
+      if (endHook->isChecked() != otl->endHook())
+            otl->undoChangeProperty(P_END_HOOK, endHook->isChecked());
 
-      if (beginTextRb->isChecked()) {
-            if (_beginText) {
-                  _beginText->setText(beginText->text());
-                  tl->setBeginText(_beginText);
-                  }
-            else
-                  tl->setBeginText(beginText->text(), tl->score()->textStyle(TEXT_STYLE_TEXTLINE));
+      HookType ht = beginHookType90->isChecked() ? HOOK_90 : HOOK_45;
+      if (ht != otl->beginHookType())
+            otl->undoChangeProperty(P_BEGIN_HOOK_TYPE, ht);
+      ht = endHookType90->isChecked() ? HOOK_90 : HOOK_45;
+      if (ht != otl->endHookType())
+            otl->undoChangeProperty(P_END_HOOK_TYPE, ht);
+
+      Spatium val = Spatium(beginHookHeight->value());
+      if (val != otl->beginHookHeight())
+            otl->undoChangeProperty(P_BEGIN_HOOK_HEIGHT, QVariant(double(val.val())));
+      val = Spatium(endHookHeight->value());
+      if (val != otl->endHookHeight())
+            otl->undoChangeProperty(P_END_HOOK_HEIGHT, QVariant(double(val.val())));
+
+      PlaceText pt = getPlaceText(beginTextPlace);
+      if (pt != otl->beginTextPlace()) {
+            printf("change ottava, links %p\n", otl->links());
+            otl->undoChangeProperty(P_BEGIN_TEXT_PLACE, pt);
             }
-      else
-            tl->setBeginText(0);
+      pt = getPlaceText(continueTextPlace);
+      if (pt != otl->continueTextPlace())
+            otl->undoChangeProperty(P_CONTINUE_TEXT_PLACE, pt);
+      pt = getPlaceText(endTextPlace);
+      if (pt != otl->endTextPlace())
+            otl->undoChangeProperty(P_END_TEXT_PLACE, pt);
 
-      if (continueTextRb->isChecked()) {
-            if (_continueText) {
-                  _continueText->setText(continueText->text());
-                  tl->setContinueText(_continueText);
-                  }
-            else {
-                  tl->setContinueText(continueText->text(), tl->score()->textStyle(TEXT_STYLE_TEXTLINE));
-                  }
-            }
-      else
-            tl->setContinueText(0);
+      if (beginText->text() != otl->beginText())
+            otl->undoChangeProperty(P_BEGIN_TEXT, beginText->text());
+      if (continueText->text() != otl->continueText())
+            otl->undoChangeProperty(P_CONTINUE_TEXT, continueText->text());
+      if (endText->text() != otl->endText())
+            otl->undoChangeProperty(P_END_TEXT, endText->text());
 
-      SymId sym = SymId(beginSymbol->itemData(beginSymbol->currentIndex()).toInt());
-      tl->setBeginSymbol(beginSymbolRb->isChecked() ? sym : SymId::noSym);
-
-      sym = SymId(continueSymbol->itemData(continueSymbol->currentIndex()).toInt());
-      tl->setContinueSymbol(continueSymbolRb->isChecked() ? sym : SymId::noSym);
-
-      sym = SymId(endSymbol->itemData(endSymbol->currentIndex()).toInt());
-      tl->setEndSymbol(endSymbolRb->isChecked() ? sym : SymId::noSym);
-
-      PlaceText p = PLACE_ABOVE;
-      switch(beginTextPlace->currentIndex()) {
-            case 0: p = PLACE_ABOVE; break;
-            case 1: p = PLACE_BELOW; break;
-            case 2: p = PLACE_LEFT; break;
-            }
-      tl->setBeginTextPlace(p);
-
-      p = PLACE_ABOVE;
-      switch(continueTextPlace->currentIndex()) {
-            case 0: p = PLACE_ABOVE; break;
-            case 1: p = PLACE_BELOW; break;
-            case 2: p = PLACE_LEFT; break;
-            }
-      tl->setContinueTextPlace(p);
-
-      tl->setBeginSymbolOffset(QPointF(beginSymbolX->value(), beginSymbolY->value()));
-      tl->setContinueSymbolOffset(QPointF(continueSymbolX->value(), continueSymbolY->value()));
-      tl->setEndSymbolOffset(QPointF(endSymbolX->value(), endSymbolY->value()));
+      // TODO: apply text style changes
+//      Text* t = tl->beginTextElement();
+//      if (t && t->styled() && t->textStyleType() != otl->beginTextElement()->textStyleType()) {
+//
+//            }
 
       QDialog::accept();
-      }
-
-//---------------------------------------------------------
-//   beginTextToggled
-//---------------------------------------------------------
-
-void LineProperties::beginTextToggled(bool val)
-      {
-      if (val)
-            beginSymbolRb->setChecked(false);
-      beginText->setEnabled(val);
-      beginTextPlace->setEnabled(val);
-      beginTextTb->setEnabled(val);
-      }
-
-//---------------------------------------------------------
-//   beginSymbolToggled
-//---------------------------------------------------------
-
-void LineProperties::beginSymbolToggled(bool val)
-      {
-      if (val)
-            beginTextRb->setChecked(false);
-      beginSymbol->setEnabled(val);
-      beginSymbolX->setEnabled(val);
-      beginSymbolY->setEnabled(val);
-      }
-
-//---------------------------------------------------------
-//   continueTextToggled
-//---------------------------------------------------------
-
-void LineProperties::continueTextToggled(bool val)
-      {
-      if (val)
-            continueSymbolRb->setChecked(false);
-      continueText->setEnabled(val);
-      continueTextPlace->setEnabled(val);
-      continueTextTb->setEnabled(val);
-      }
-
-//---------------------------------------------------------
-//   continueSymbolToggled
-//---------------------------------------------------------
-
-void LineProperties::continueSymbolToggled(bool val)
-      {
-      if (val)
-            continueTextRb->setChecked(false);
-      continueSymbol->setEnabled(val);
-      continueSymbolX->setEnabled(val);
-      continueSymbolY->setEnabled(val);
       }
 
 //---------------------------------------------------------
@@ -284,24 +165,11 @@ void LineProperties::continueSymbolToggled(bool val)
 
 void LineProperties::beginTextProperties()
       {
-      if (!_beginText) {
-            _beginText = new Text(tl->score());
-            _beginText->setTextStyleType(TEXT_STYLE_TEXTLINE);
-            }
-      _beginText->setText(beginText->text());
-      TextProperties t(_beginText, this);
-      if (t.exec()) {
-            // TODO: delay to ok
-            foreach(SpannerSegment* ls, tl->spannerSegments()) {
-                  if (ls->spannerSegmentType() != SEGMENT_SINGLE && ls->spannerSegmentType() != SEGMENT_BEGIN)
-                        continue;
-                  TextLineSegment* tls = static_cast<TextLineSegment*>(ls);
-                  if (!tls->text())
-                        continue;
-                  Text* t = tls->text();
-                  t->setColor(tl->beginText()->color());
-                  }
-            }
+//      tl->setBeginText(beginText->text(), TEXT_STYLE_TEXTLINE);
+      if (!tl->beginTextElement())
+            tl->setBeginText("");         // create text element
+      TextProperties t(tl->beginTextElement(), this);
+      t.exec();
       }
 
 //---------------------------------------------------------
@@ -310,24 +178,24 @@ void LineProperties::beginTextProperties()
 
 void LineProperties::continueTextProperties()
       {
-      if (!_continueText) {
-            _continueText = new Text(tl->score());
-            _continueText->setTextStyleType(TEXT_STYLE_TEXTLINE);
-            }
-      _continueText->setText(continueText->text());
-      TextProperties t(_continueText, this);
-      if (t.exec()) {
-            // TODO: delay to ok
-            foreach(SpannerSegment* ls, tl->spannerSegments()) {
-                  if (ls->spannerSegmentType() != SEGMENT_MIDDLE)
-                        continue;
-                  TextLineSegment* tls = static_cast<TextLineSegment*>(ls);
-                  if (!tls->text())
-                        continue;
-                  Text* t = tls->text();
-                  t->setColor(tl->continueText()->color());
-                  }
-            }
+//      tl->setContinueText(continueText->text(), TEXT_STYLE_TEXTLINE);
+      if (!tl->continueTextElement())
+            tl->setContinueText("");      // create Text element
+      TextProperties t(tl->continueTextElement(), this);
+      t.exec();
+      }
+
+//---------------------------------------------------------
+//   endTextProperties
+//---------------------------------------------------------
+
+void LineProperties::endTextProperties()
+      {
+//      tl->setEndText(endText->text(), TEXT_STYLE_TEXTLINE);
+      if (!tl->endTextElement())
+            tl->setEndText("");     // create Text element
+      TextProperties t(tl->endTextElement(), this);
+      t.exec();
       }
 }
 
