@@ -128,7 +128,7 @@ Volta::Volta(Score* s)
    : TextLine(s)
       {
       _voltaType = VoltaType::OPEN;
-      setBeginText("1.", s->textStyle(TEXT_STYLE_VOLTA));
+      setBeginText("1.", TEXT_STYLE_VOLTA);
 
       setBeginTextPlace(PLACE_BELOW);
       setContinueTextPlace(PLACE_BELOW);
@@ -175,7 +175,7 @@ void Volta::layout()
 
 void Volta::setText(const QString& s)
       {
-      setBeginText(s, score()->textStyle(TEXT_STYLE_VOLTA));
+      setBeginText(s, TEXT_STYLE_VOLTA);
       foreach(SpannerSegment* seg, spannerSegments())
             static_cast<VoltaSegment*>(seg)->clearText();
       }
@@ -186,7 +186,7 @@ void Volta::setText(const QString& s)
 
 QString Volta::text() const
       {
-      return beginText()->text();
+      return _beginText->text();
       }
 
 //---------------------------------------------------------

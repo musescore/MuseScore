@@ -815,7 +815,6 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginSymbol(SymId::noSym);
       pedal->setBeginHook(true);
       pedal->setBeginHookType(HOOK_45);
       pedal->setEndHookType(HOOK_45);
@@ -823,7 +822,6 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginSymbol(SymId::noSym);
       pedal->setBeginHook(true);
       pedal->setBeginHookType(HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
@@ -854,7 +852,7 @@ Palette* MuseScore::newLinesPalette()
 
       TextLine* textLine = new TextLine(gscore);
       textLine->setLen(w);
-      textLine->setBeginText("VII", gscore->textStyle(TEXT_STYLE_TEXTLINE));
+      textLine->setBeginText("VII");
       textLine->setEndHook(true);
       sp->append(textLine, QT_TRANSLATE_NOOP("Palette", "Text line"));
 

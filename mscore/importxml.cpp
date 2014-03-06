@@ -2294,14 +2294,14 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
 
 // SLine placement is modified by changing the first segments user offset
 // As the SLine has just been created, it does not have any segment yet
-      
+
 static void setSLinePlacement(SLine* sli, float spatium, const QString placement, bool /*hasYoff*/, qreal /*yoff*/)
       {
       /*
       qDebug("setSLinePlacement sli %p type %d s=%g pl='%s' hasy=%d yoff=%g",
              sli, sli->type(), spatium, qPrintable(placement), hasYoff, yoff);
        */
-            
+
       // calc y offset assuming five line staff and default style
       // note that required y offset is element type dependent
       const qreal stafflines = 5; // assume five line staff, but works OK-ish for other sizes too
@@ -2321,7 +2321,7 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
       else
             qDebug("setSLinePlacement sli %p unsupported type %d",
                    sli, sli->type());
-            
+
       // move to correct position
       qreal y = 0;
       if (placement == "above") y += offsAbove;
@@ -2333,11 +2333,11 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
       tls->setUserOff(QPointF(0, y));
       sli->add(tls);
       }
-      
+
 //---------------------------------------------------------
 //   addElem
 //---------------------------------------------------------
-      
+
 static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Score* score, QString& placement,
                     qreal /*rx*/, qreal /*ry*/, int /* offset */, Measure* measure, int tick)
       {
@@ -2345,7 +2345,7 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
       qDebug("addElem el %p hasYoff %d staff %d rstaff %d placement %s rx %g ry %g tick %d",
              el, hasYoffset, staff, rstaff, qPrintable(placement), rx, ry, tick);
        */
-            
+
       // calc y offset assuming five line staff and default style
       // note that required y offset is element type dependent
       const qreal stafflines = 5; // assume five line staff, but works OK-ish for other sizes too
@@ -2370,7 +2370,7 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
       else
             qDebug("addElem el %p unsupported type %d",
                    el, el->type());
-            
+
       // move to correct position
       // TODO: handle rx, ry
       qreal y = 0;
@@ -2910,7 +2910,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
 
                         // hack: assume there was a words element before the bracket
                         if (!txt.isEmpty()) {
-                              b->setBeginText(txt, score->textStyle(TEXT_STYLE_TEXTLINE));
+                              b->setBeginText(txt, TEXT_STYLE_TEXTLINE);
                               }
 
                         if (lineType == "solid")
@@ -2958,7 +2958,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
 
                         // hack: assume there was a words element before the dashes
                         if (!txt.isEmpty()) {
-                              b->setBeginText(txt, score->textStyle(TEXT_STYLE_TEXTLINE));
+                              b->setBeginText(txt, TEXT_STYLE_TEXTLINE);
                               }
 
                         b->setBeginHook(false);
@@ -4470,15 +4470,15 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
             }
       return 0;
       }
-      
+
 //---------------------------------------------------------
 //   graceNoteType
 //---------------------------------------------------------
-      
+
 /**
  * convert duration and slash to grace note type
  */
-      
+
 NoteType graceNoteType(TDuration duration, QString graceSlash)
       {
             NoteType nt = NOTE_APPOGGIATURA;
@@ -4849,13 +4849,13 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
 
       if (rest) {
             cr = new Rest(score);
-            
+
             // Verify the rest fits exactly in the measure, as some programs
             // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
             // the type for all rests.
             bool wholeMeasure = (tick == measure->tick() && ticks == measure->ticks());
             setDuration(cr, rest, wholeMeasure, duration, ticks);
-            
+
             if (beam) {
                   if (beam->track() == track) {
                         cr->setBeamMode(BeamMode::MID);
@@ -4905,7 +4905,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
                         cr = new Chord(score);
                         cr->setBeamMode(bm);
                         cr->setTrack(track);
-                              
+
                         setDuration(cr, false, false, duration, ticks);
                         Segment* s = measure->getSegment(cr, loc_tick);
                         s->add(cr);

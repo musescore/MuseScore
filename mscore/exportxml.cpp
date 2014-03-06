@@ -2527,7 +2527,7 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
             else
                   qDebug("directionTag() element %p tp=%d (%s) not suported",
                          el, el->type(), el->name());
-            
+
             /*
              if (pel) {
              qDebug("directionTag()  prnt tp=%d (%s) x=%g y=%g w=%g h=%g userOff.y=%g",
@@ -2538,7 +2538,7 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                     pel->userOff().y());
                   }
              */
-            
+
             if (pel && pel->type() == Element::SYSTEM) {
                   const System* sys = static_cast<const System*>(pel);
                   QRectF bb = sys->staff(el->staffIdx())->bbox();
@@ -2554,7 +2554,7 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                   // element is above the staff if center of bbox is above center of staff
                   qDebug("directionTag()  center diff=%g", el->y() + el->height() / 2 - bb.y() - bb.height() / 2);
                    */
-                  
+
                   if (el->type() == Element::HAIRPIN || el->type() == Element::OTTAVA
                       || el->type() == Element::PEDAL || el->type() == Element::TEXTLINE) {
                         // for the line type elements the reference point is vertically centered
@@ -3035,9 +3035,9 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
             rest += QString(" default-y=\"%1\"").arg(p.y() * -10 / tl->spatium());
 
       directionTag(xml, attr, tl);
-      if (tl->beginText() && tl->tick() == tick) {
+      if (!tl->beginText().isEmpty() && tl->tick() == tick) {
             xml.stag("direction-type");
-            xml.tag("words", tl->beginText()->text());
+            xml.tag("words", tl->beginText());
             xml.etag();
             }
       xml.stag("direction-type");

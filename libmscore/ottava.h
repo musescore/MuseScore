@@ -74,28 +74,24 @@ enum class OttavaType {
 class Ottava : public TextLine {
       Q_OBJECT
       Q_ENUMS(OttavaType)
-
-   public:
-
-   private:
       Q_PROPERTY(OttavaType ottavaType READ ottavaType WRITE undoSetOttavaType)
+
       OttavaType _ottavaType;
       bool _numbersOnly;
       PropertyStyle numbersOnlyStyle;
       PropertyStyle lineWidthStyle;
       PropertyStyle lineStyleStyle;
-      PropertyStyle beginSymbolStyle;
-      PropertyStyle continueSymbolStyle;
+      PropertyStyle beginTextStyle;
+      PropertyStyle continueTextStyle;
+
+      int _pitchShift;
 
    protected:
-      QString text;
-      int _pitchShift;
-      mutable qreal textHeight;     ///< cached value
-
       friend class OttavaSegment;
 
    public:
       Ottava(Score* s);
+      Ottava(const Ottava&);
       virtual Ottava* clone() const override { return new Ottava(*this); }
       virtual ElementType type() const override { return OTTAVA; }
 

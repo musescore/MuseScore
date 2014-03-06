@@ -496,6 +496,7 @@ class VoltaView : public ShowElementBase {
       void segmentClicked(QTreeWidgetItem* item);
       void beginTextClicked();
       void continueTextClicked();
+      void endTextClicked();
       void leftElementClicked();
       void rightElementClicked();
       void startClicked();
@@ -533,6 +534,7 @@ class TextLineView : public SpannerView {
    private slots:
       void beginTextClicked();
       void continueTextClicked();
+      void endTextClicked();
 
    public:
       TextLineView();

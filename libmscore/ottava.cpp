@@ -168,13 +168,21 @@ Ottava::Ottava(Score* s)
       {
       _numbersOnly        = score()->styleB(ST_ottavaNumbersOnly);
       numbersOnlyStyle    = PropertyStyle::STYLED;
-      beginSymbolStyle    = PropertyStyle::STYLED;
-      continueSymbolStyle = PropertyStyle::STYLED;
+      beginTextStyle    = PropertyStyle::STYLED;
+      continueTextStyle = PropertyStyle::STYLED;
       setOttavaType(OttavaType::OTTAVA_8VA);
       setLineWidth(score()->styleS(ST_ottavaLineWidth));
       lineWidthStyle = PropertyStyle::STYLED;
       setLineStyle(Qt::PenStyle(score()->styleI(ST_ottavaLineStyle)));
       lineStyleStyle = PropertyStyle::STYLED;
+      }
+
+Ottava::Ottava(const Ottava& o)
+   : TextLine(o)
+      {
+      _numbersOnly = o._numbersOnly;
+      _pitchShift  = o._pitchShift;
+      setOttavaType(o._ottavaType);
       }
 
 //---------------------------------------------------------
@@ -190,34 +198,20 @@ void Ottava::setOttavaType(OttavaType val)
       Spatium hook(score()->styleS(ST_ottavaHook));
 
       SymId id = _numbersOnly ? def->numbersOnlyId : def->id;
+      QString bt, ct;
       if (symIsValid(id)) {
-            if (beginSymbolStyle == PropertyStyle::STYLED)
-                  setBeginSymbol(id);
-            if (continueSymbolStyle == PropertyStyle::STYLED)
-                  setContinueSymbol(id);
-
-            setBeginSymbolOffset(def->offset);
-            setContinueSymbolOffset(def->offset);
-
-            foreach(SpannerSegment* s, spannerSegments()) {
-                  OttavaSegment* os = static_cast<OttavaSegment*>(s);
-                  os->clearText();
-                  }
-            delete _beginText;
-            _beginText = 0;
-            delete _continueText;
-            _continueText = 0;
+            if (beginTextStyle == PropertyStyle::STYLED)
+                  bt = QString("<sym>%1</sym>").arg(Sym::id2name(id));
+            if (continueTextStyle == PropertyStyle::STYLED)
+                  ct = QString("<sym>%1</sym>").arg(Sym::id2name(id));
             }
       else {
-            const TextStyle& ts = score()->textStyle(TEXT_STYLE_OTTAVA);
-
             // if music font does not contain ottava symbols, use text
-            const char* s = _numbersOnly ? def->numbersOnlyName : def->name;
-            setBeginText(s, ts);
-            setContinueText(s, ts);
-            setBeginSymbol(SymId::noSym);
-            setContinueSymbol(SymId::noSym);
+            bt = ct = _numbersOnly ? def->numbersOnlyName : def->name;
             }
+      setBeginText(bt,    TEXT_STYLE_OTTAVA);
+      setContinueText(ct, TEXT_STYLE_OTTAVA);
+
       setEndHookHeight(hook * def->hookDirection);
       setPlacement(def->place);
       _pitchShift = def->shift;
@@ -303,14 +297,14 @@ void Ottava::read(XmlReader& e)
                   lineStyleStyle = PropertyStyle::UNSTYLED;
                   }
             else if (tag == "beginSymbol") {
-                  beginSymbolStyle = PropertyStyle::UNSTYLED;
+                  beginTextStyle = PropertyStyle::UNSTYLED;
                   QString text(e.readElementText());
-                  setBeginSymbol(text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text));
+                  setBeginText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? Sym::id2name(SymId(text.toInt())) : text));
                   }
             else if (tag == "continueSymbol") {
-                  continueSymbolStyle = PropertyStyle::UNSTYLED;
+                  continueTextStyle = PropertyStyle::UNSTYLED;
                   QString text(e.readElementText());
-                  setContinueSymbol(text[0].isNumber() ? SymId(text.toInt()) : Sym::name2id(text));
+                  setContinueText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? Sym::id2name(SymId(text.toInt())) : text));
                   }
             else if (!TextLine::readProperties(e))
                   e.unknown();
@@ -404,25 +398,6 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_END_HOOK_HEIGHT:
                   return score()->styleS(ST_ottavaHook).val() * ottavaDefault[int(_ottavaType)].hookDirection;
 
-            case P_BEGIN_SYMBOL:
-            case P_CONTINUE_SYMBOL:
-                  {
-                  SymId id;
-                  if (_numbersOnly)
-                        id = ottavaDefault[int(_ottavaType)].numbersOnlyId;
-                  else
-                        id = ottavaDefault[int(_ottavaType)].id;
-
-                  if (symIsValid(id))
-                        return int(id);
-                  else
-                        return int(SymId::noSym);
-                  }
-
-            case P_BEGIN_SYMBOL_OFFSET:
-            case P_CONTINUE_SYMBOL_OFFSET:
-                  return ottavaDefault[int(_ottavaType)].offset;
-
             case P_NUMBERS_ONLY:
                   return score()->styleB(ST_ottavaNumbersOnly);
 
@@ -504,16 +479,6 @@ void Ottava::resetProperty(P_ID id)
                   setOttavaType(_ottavaType);
                   break;
 
-            case P_BEGIN_SYMBOL:
-                  setBeginSymbol(SymId(getProperty(P_BEGIN_SYMBOL).toInt()));
-                  beginSymbolStyle = PropertyStyle::STYLED;
-                  break;
-
-            case P_CONTINUE_SYMBOL:
-                  setContinueSymbol(SymId(getProperty(P_CONTINUE_SYMBOL).toInt()));
-                  continueSymbolStyle = PropertyStyle::STYLED;
-                  break;
-
             default:
                   return TextLine::resetProperty(id);
             }
@@ -547,10 +512,12 @@ void Ottava::reset()
             score()->undoChangeProperty(this, P_LINE_STYLE, propertyDefault(P_LINE_STYLE), PropertyStyle::STYLED);
       if (numbersOnlyStyle == PropertyStyle::UNSTYLED)
             score()->undoChangeProperty(this, P_NUMBERS_ONLY, propertyDefault(P_NUMBERS_ONLY), PropertyStyle::STYLED);
-      if (beginSymbolStyle == PropertyStyle::UNSTYLED)
-            score()->undoChangeProperty(this, P_BEGIN_SYMBOL, propertyDefault(P_BEGIN_SYMBOL), PropertyStyle::STYLED);
-      if (continueSymbolStyle == PropertyStyle::UNSTYLED)
-            score()->undoChangeProperty(this, P_CONTINUE_SYMBOL, propertyDefault(P_CONTINUE_SYMBOL), PropertyStyle::STYLED);
+      if (beginTextStyle == PropertyStyle::UNSTYLED) {
+            ; // TODO score()->undoChangeProperty(this, P_BEGIN_SYMBOL, propertyDefault(P_BEGIN_SYMBOL), PropertyStyle::STYLED);
+            }
+      if (continueTextStyle == PropertyStyle::UNSTYLED) {
+            ; // TODO score()->undoChangeProperty(this, P_CONTINUE_SYMBOL, propertyDefault(P_CONTINUE_SYMBOL), PropertyStyle::STYLED);
+            }
 
       setOttavaType(_ottavaType);
 
