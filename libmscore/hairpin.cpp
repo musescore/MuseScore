@@ -121,6 +121,8 @@ void HairpinSegment::updateGrips(int* grips, QRectF* grip) const
       doRotation.rotateRadians( asin(y/len) );
       qreal lineApertureX;
       qreal offsetX = 10;                               // Horizontal offset for x Grip
+      if(len < offsetX * 3 )                            // For small hairpin, offset = 30% of len
+          offsetX = len/3;                              // else offset is fixed to 10
 
       if( hairpin()->hairpinType() == 0 )
             lineApertureX = len - offsetX;              // End of CRESCENDO - Offset
