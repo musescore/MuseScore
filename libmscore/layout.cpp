@@ -109,6 +109,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       if (staff->isTabStaff())
             return;
 
+      int upVoices = 0, downVoices = 0;
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
       QList<Note*> upStemNotes, downStemNotes;
@@ -123,10 +124,14 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         // layout grace note chords
                         layoutChords3(c->notes(), staff, 0);
                         }
-                  if (chord->up())
+                  if (chord->up()) {
+                        ++upVoices;
                         upStemNotes.append(chord->notes());
-                  else
+                        }
+                  else {
+                        ++downVoices;
                         downStemNotes.append(chord->notes());
+                        }
                   }
             }
 
@@ -138,7 +143,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       // in some corner cases
 
       // layout upstem noteheads
-      if (upStemNotes.size() > 1) {
+      if (upVoices > 1) {
             qSort(upStemNotes.begin(), upStemNotes.end(),
                [](Note* n1, const Note* n2) ->bool {return n1->line() > n2->line(); } );
             }
@@ -146,7 +151,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             layoutChords2(upStemNotes, true);
 
       // layout downstem noteheads
-      if (downStemNotes.size() > 1) {
+      if (downVoices > 1) {
             qSort(downStemNotes.begin(), downStemNotes.end(),
                [](Note* n1, const Note* n2) ->bool {return n1->line() > n2->line(); } );
             }
@@ -217,7 +222,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   bool shareHeads = true;       // can all overlapping notes share heads?
                   bool matchPending = false;    // looking for a unison match
                   bool conflictUnison = false;  // unison found
-                  bool conflictSecond = false;  // second found
+                  bool conflictSecondUpHigher = false;      // second found
+                  bool conflictSecondDownHigher = false;    // second found
                   int lastLine = 1000;
                   Note* p = overlapNotes[0];
                   for (int i = 0, count = overlapNotes.size(); i < count; ++i) {
@@ -242,9 +248,13 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                           shareHeads = false;
                                     break;
                               case 1:
-                                    // second - trust that this won't be a problem for single unison
+                                    // second
+                                    // trust that this won't be a problem for single unison
                                     if (separation < 0) {
-                                          conflictSecond = true;
+                                          if (n->chord()->up())
+                                                conflictSecondUpHigher = true;
+                                          else
+                                                conflictSecondDownHigher = true;
                                           shareHeads = false;
                                           }
                                     break;
@@ -291,10 +301,20 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         downOffset = maxUpWidth + 0.3 * sp;
                   else if (conflictUnison)
                         upOffset = maxDownWidth + 0.3 * sp;
-                  else if (conflictSecond)
+                  else if (conflictSecondUpHigher)
                         upOffset = maxDownWidth + 0.2 * sp;
-                  else
-                        upOffset = topDownNote->chord()->stem()->width() + 0.3 * sp;
+                  else if (conflictSecondDownHigher)
+                        upOffset = maxDownWidth - 0.2 * sp;
+                  else {
+                        // no direct conflict, so parts can overlap (downstem on left)
+                        // just be sure that stems clear opposing noteheads
+                        qreal clearLeft = 0.0, clearRight = 0.0;
+                        if (topDownNote->chord()->stem())
+                              clearLeft = topDownNote->chord()->stem()->width() + 0.3 * sp;
+                        if (bottomUpNote->chord()->stem())
+                              clearRight = qMax(maxDownWidth - maxUpWidth, 0.0) + 0.3 * sp;
+                        upOffset = qMax(clearLeft, clearRight);
+                        }
                   }
 
             // apply offsets
