@@ -521,6 +521,45 @@ bool validateSelectedTuplets(const std::list<int> &bestIndexes,
 #endif
 
 
+void TupletCommonIndexes::add(const std::vector<size_t> &commonIndexes)
+      {
+      indexes.push_back(commonIndexes);
+      maxCount *= commonIndexes.size();
+      current.resize(indexes.size());
+      if (counter) {
+            for (auto &index: current)
+                  index = 0;
+            counter = 0;
+            }
+      }
+
+std::pair<std::vector<size_t>, bool> TupletCommonIndexes::getNewIndexes()
+      {
+      std::vector<size_t> newIndexes(current.size());
+      if (current.empty() || counter == 0)
+            return {newIndexes, counter == maxCount - 1};
+
+      ++counter;
+      if (counter == maxCount)
+            counter = 0;
+
+      for (size_t i = 0; i != current.size(); ++i) {
+            ++current[i];
+            if (current[i] < indexes[i].size())
+                  break;
+            current[i] = 0;
+            if (i == current.size() - 1) {
+                  for (size_t j = 0; j != i; ++j)
+                        current[j] = 0;
+                  }
+            }
+
+      for (size_t i = 0; i != current.size(); ++i)
+            newIndexes[i] = indexes[i][current[i]];
+
+      return {newIndexes, counter == maxCount - 1};   // result: {indexes, is last combination}
+      }
+
 // Try different permutations of tuplets (as indexes) to minimize quantization error.
 // Because one tuplet can use the same chord as another tuplet -
 // the tuplet order is important: once we choose the tuplet,
