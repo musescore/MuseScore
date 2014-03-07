@@ -4,6 +4,10 @@
 #include "importmidi_fraction.h"
 #include "importmidi_tuplet.h"
 
+#include <vector>
+#include <cstddef>
+#include <utility>
+
 
 // ---------------------------------------------------------------------------------------
 // These inner classes definitions are used in cpp files only
@@ -95,6 +99,19 @@ struct TupletInfo
       ReducedFraction regularSumError;
       ReducedFraction sumLengthOfRests;
       int firstChordIndex = -1;
+      };
+
+class TupletCommonIndexes
+      {
+   public:
+      void add(const std::vector<size_t> &commonIndexes);
+      std::pair<std::vector<size_t>, bool> getNewIndexes();
+
+   private:
+      std::vector<std::vector<size_t>> indexes;
+      std::vector<size_t> current;        // indexes of tuplet indexes
+      size_t counter = 0;
+      size_t maxCount = 1;
       };
 
 } // namespace MidiTuplet
