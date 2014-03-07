@@ -364,9 +364,9 @@ void EditDrumset::save()
 
       QFile f(name);
       if (!f.open(QIODevice::WriteOnly)) {
-            QString s = tr("Open File\n") + f.fileName() + tr("\nfailed: ")
+            QString s = tr("Open File\n%1\nfailed: ")
                + QString(strerror(errno));
-            QMessageBox::critical(mscore, tr("MuseScore: Open File"), s);
+            QMessageBox::critical(mscore, tr("MuseScore: Open File"), s.arg(f.fileName()));
             return;
             }
       valueChanged();  //save last changes in name

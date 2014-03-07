@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
+    <width>319</width>
     <height>154</height>
    </rect>
   </property>
@@ -50,6 +50,13 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>vertical  Raster:</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="1" rowspan="2">
            <widget class="QLabel" name="label_2">
             <property name="text">
@@ -59,32 +66,14 @@
           </item>
           <item row="0" column="2" rowspan="2">
            <widget class="QSpinBox" name="hraster">
+            <property name="suffix">
+             <string>sp</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
             <property name="maximum">
              <number>20</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>spatium</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3" rowspan="2">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>spatium</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>vertical  Raster:</string>
             </property>
            </widget>
           </item>
@@ -97,6 +86,9 @@
           </item>
           <item row="2" column="2">
            <widget class="QSpinBox" name="vraster">
+            <property name="suffix">
+             <string>sp</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>

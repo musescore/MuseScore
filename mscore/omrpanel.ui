@@ -30,7 +30,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Spatium</string>
+      <string>Spatium:</string>
      </property>
     </widget>
    </item>

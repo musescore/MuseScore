@@ -17,7 +17,7 @@
    <item row="0" column="1">
     <widget class="QGroupBox" name="editGroup">
      <property name="title">
-      <string>Edit Part:</string>
+      <string>Edit Part</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -49,7 +49,7 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Select Part:</string>
+      <string>Select Part</string>
      </property>
      <property name="flat">
       <bool>false</bool>
