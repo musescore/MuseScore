@@ -171,6 +171,7 @@ QPointF LineSegment::gripAnchor(int grip) const
                         break;
                   default:
                   case GRIP_LINE_MIDDLE:
+                  case GRIP_LINE_APERTURE:
                         x = 0; // No Anchor
                         y = 0;
                         break;
@@ -178,7 +179,7 @@ QPointF LineSegment::gripAnchor(int grip) const
             return QPointF(x, y);
             }
       else {
-            if (grip == GRIP_LINE_MIDDLE) // center grip
+            if (grip == GRIP_LINE_MIDDLE || grip == GRIP_LINE_APERTURE) // center grip or aperture grip
                   return QPointF(0, 0);
             else {
                   System* s;

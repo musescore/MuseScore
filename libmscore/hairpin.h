@@ -24,6 +24,7 @@ namespace Ms {
 class Score;
 class Hairpin;
 
+
 //---------------------------------------------------------
 //   @@ HairpinSegment
 //---------------------------------------------------------
@@ -44,6 +45,7 @@ class HairpinSegment : public LineSegment {
       virtual ElementType type() const override { return HAIRPIN_SEGMENT; }
       virtual void draw(QPainter*) const override;
       virtual void updateGrips(int*, QRectF*) const override;
+      virtual void editDrag(const EditData&) override;
       virtual void layout() override;
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID id, const QVariant& v) override;
