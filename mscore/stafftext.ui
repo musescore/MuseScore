@@ -823,14 +823,14 @@
          <item row="0" column="0" colspan="2">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Voice</string>
+            <string>Voice:</string>
            </property>
           </widget>
          </item>
          <item row="0" column="4">
           <widget class="QLabel" name="label_8">
            <property name="text">
-            <string>Channel</string>
+            <string>Channel:</string>
            </property>
           </widget>
          </item>

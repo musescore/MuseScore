@@ -373,7 +373,7 @@
         <item>
          <widget class="QComboBox" name="patch" >
           <property name="toolTip" >
-           <string>midi sound for part</string>
+           <string>MIDI sound for part</string>
           </property>
          </widget>
         </item>
