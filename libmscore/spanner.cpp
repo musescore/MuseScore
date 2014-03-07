@@ -355,9 +355,11 @@ ChordRest* Score::findCR(int tick, int track) const
       Segment* s = m->first(Segment::SegChordRest);
       for (;;) {
             Segment* ns = s->next(Segment::SegChordRest);
-            if (ns == 0 || ns->tick() >= tick)
+            if (ns == 0 || ns->tick() > tick)
                   break;
             s = ns;
+            if (ns->tick() == tick)
+                  break;
             }
       if (s)
             return static_cast<ChordRest*>(s->element(track));
