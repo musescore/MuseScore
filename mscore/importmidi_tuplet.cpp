@@ -536,8 +536,9 @@ void TupletCommonIndexes::add(const std::vector<size_t> &commonIndexes)
 std::pair<std::vector<size_t>, bool> TupletCommonIndexes::getNewIndexes()
       {
       std::vector<size_t> newIndexes(current.size());
-      if (current.empty() || counter == 0)
-            return {newIndexes, counter == maxCount - 1};
+      for (size_t i = 0; i != current.size(); ++i)
+            newIndexes[i] = indexes[i][current[i]];
+      const bool isLastCombination = (counter == maxCount - 1);
 
       ++counter;
       if (counter == maxCount)
@@ -554,10 +555,7 @@ std::pair<std::vector<size_t>, bool> TupletCommonIndexes::getNewIndexes()
                   }
             }
 
-      for (size_t i = 0; i != current.size(); ++i)
-            newIndexes[i] = indexes[i][current[i]];
-
-      return {newIndexes, counter == maxCount - 1};   // result: {indexes, is last combination}
+      return {newIndexes, isLastCombination};
       }
 
 // Try different permutations of tuplets (as indexes) to minimize quantization error.

@@ -82,6 +82,7 @@ class TestImportMidi : public QObject, public MTest
       void findTupletApproximation();
       void separateTupletVoices();
       void findTupletsWithCommonChords();
+      void tupletCommonIndexes();
 
       // metric bar analysis
       void metricDivisionsOfTuplet();
@@ -565,6 +566,56 @@ void TestImportMidi::findTupletApproximation()
       QCOMPARE(tupletApprox.chords.find(ReducedFraction::fromTicks(1480))->second,
                chords.find(ReducedFraction::fromTicks(1480)));
       }
+      }
+
+void TestImportMidi::tupletCommonIndexes()
+      {
+      MidiTuplet::TupletCommonIndexes commonIndexes;
+      commonIndexes.add({5, 4});
+      commonIndexes.add({3, 1, 8});
+      commonIndexes.add({11});
+
+      std::pair<std::vector<size_t>, bool> result;
+
+      result = commonIndexes.getNewIndexes();
+      QCOMPARE(result.first, std::vector<size_t>({5, 3, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.getNewIndexes();
+      QCOMPARE(result.first, std::vector<size_t>({4, 3, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.getNewIndexes();
+      QCOMPARE(result.first, std::vector<size_t>({5, 1, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.getNewIndexes();
+      QCOMPARE(result.first, std::vector<size_t>({4, 1, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.getNewIndexes();
+      QCOMPARE(result.first, std::vector<size_t>({5, 8, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.getNewIndexes();
+      QCOMPARE(result.first, std::vector<size_t>({4, 8, 11}));
+      QCOMPARE(result.second, true);
+
+      // new cycle
+      result = commonIndexes.getNewIndexes();
+      QCOMPARE(result.first, std::vector<size_t>({5, 3, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.getNewIndexes();
+      QCOMPARE(result.first, std::vector<size_t>({4, 3, 11}));
+      QCOMPARE(result.second, false);
+
+      // add new indexes -> reset the cycle
+      commonIndexes.add({2, 0});
+
+      result = commonIndexes.getNewIndexes();
+      QCOMPARE(result.first, std::vector<size_t>({5, 3, 11, 2}));
+      QCOMPARE(result.second, false);
       }
 
 //--------------------------------------------------------------------------
