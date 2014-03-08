@@ -104,17 +104,17 @@ struct TupletInfo
 class TupletCommonIndexes
       {
    public:
-      void add(const std::vector<size_t> &commonIndexes);
-      std::pair<std::vector<size_t>, bool> generateNext();
+      void add(const std::vector<int> &commonIndexes);
+      std::pair<std::vector<int>, bool> generateNext();
 
    private:
-      std::vector<std::vector<size_t>> indexes;
-      std::vector<size_t> current;        // indexes of tuplet indexes
-      size_t counter = 0;
-      size_t maxCount = 1;
+      std::vector<std::vector<int>> indexes;
+      std::vector<int> current;        // indexes of tuplet indexes
+      int counter = 0;
+      int maxCount = 1;
       };
 
-std::vector<size_t> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets);
+std::vector<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets);
 
 } // namespace MidiTuplet
 
