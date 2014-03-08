@@ -576,46 +576,46 @@ void TestImportMidi::tupletCommonIndexes()
       commonIndexes.add({3, 1, 8});
       commonIndexes.add({11});
 
-      std::pair<std::vector<size_t>, bool> result;
+      std::pair<std::vector<int>, bool> result;
 
       result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<size_t>({5, 3, 11}));
+      QCOMPARE(result.first, std::vector<int>({5, 3, 11}));
       QCOMPARE(result.second, false);
 
       result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<size_t>({4, 3, 11}));
+      QCOMPARE(result.first, std::vector<int>({4, 3, 11}));
       QCOMPARE(result.second, false);
 
       result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<size_t>({5, 1, 11}));
+      QCOMPARE(result.first, std::vector<int>({5, 1, 11}));
       QCOMPARE(result.second, false);
 
       result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<size_t>({4, 1, 11}));
+      QCOMPARE(result.first, std::vector<int>({4, 1, 11}));
       QCOMPARE(result.second, false);
 
       result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<size_t>({5, 8, 11}));
+      QCOMPARE(result.first, std::vector<int>({5, 8, 11}));
       QCOMPARE(result.second, false);
 
       result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<size_t>({4, 8, 11}));
+      QCOMPARE(result.first, std::vector<int>({4, 8, 11}));
       QCOMPARE(result.second, true);
 
       // new cycle
       result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<size_t>({5, 3, 11}));
+      QCOMPARE(result.first, std::vector<int>({5, 3, 11}));
       QCOMPARE(result.second, false);
 
       result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<size_t>({4, 3, 11}));
+      QCOMPARE(result.first, std::vector<int>({4, 3, 11}));
       QCOMPARE(result.second, false);
 
       // add new indexes -> reset the cycle
       commonIndexes.add({2, 0});
 
       result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<size_t>({5, 3, 11, 2}));
+      QCOMPARE(result.first, std::vector<int>({5, 3, 11, 2}));
       QCOMPARE(result.second, false);
       }
 
@@ -652,11 +652,11 @@ void TestImportMidi::findLongestUncommonGroup()
       info.len = {1, 1};
       tuplets.push_back(info);
 
-      std::vector<size_t> result = MidiTuplet::findLongestUncommonGroup(tuplets);
+      std::vector<int> result = MidiTuplet::findLongestUncommonGroup(tuplets);
       std::sort(result.begin(), result.end());
       QVERIFY(result.size() == 3);
-      QVERIFY(result == std::vector<size_t>({0, 1, 2})
-              || result == std::vector<size_t>({1, 2, 3}));
+      QVERIFY(result == std::vector<int>({0, 1, 2})
+              || result == std::vector<int>({1, 2, 3}));
 
       // test unsuccessful case
       tuplets.clear();
