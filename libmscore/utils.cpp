@@ -47,7 +47,9 @@ Measure* Score::tick2measure(int tick) const
       Measure* lm = 0;
 
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            if (tick < m->tick())
+          if( m->score()->styleB(ST_createMultiMeasureRests) && m->hasMMRest() )
+              m = m->mmRest();
+          if (tick < m->tick())
                   return lm;
             lm = m;
             }
@@ -103,6 +105,9 @@ MeasureBase* Score::tick2measureBase(int tick) const
 Segment* Score::tick2segment(int tick, bool first, Segment::SegmentTypes st) const
       {
       Measure* m = tick2measure(tick);
+// When mmRest force tick to the first segment of mmRest.
+      if( m->isMMRest())
+          tick = m->tick();
       if (m == 0) {
             qDebug("   no segment for tick %d\n", tick);
             return 0;
