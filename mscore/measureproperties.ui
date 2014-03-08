@@ -397,7 +397,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Add to Measure number:</string>
+             <string>Add to measure number:</string>
             </property>
            </widget>
           </item>
