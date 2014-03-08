@@ -533,7 +533,7 @@ void TupletCommonIndexes::add(const std::vector<size_t> &commonIndexes)
             }
       }
 
-std::pair<std::vector<size_t>, bool> TupletCommonIndexes::getNewIndexes()
+std::pair<std::vector<size_t>, bool> TupletCommonIndexes::generateNext()
       {
       std::vector<size_t> newIndexes(current.size());
       for (size_t i = 0; i != current.size(); ++i)

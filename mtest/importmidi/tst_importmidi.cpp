@@ -577,43 +577,43 @@ void TestImportMidi::tupletCommonIndexes()
 
       std::pair<std::vector<size_t>, bool> result;
 
-      result = commonIndexes.getNewIndexes();
+      result = commonIndexes.generateNext();
       QCOMPARE(result.first, std::vector<size_t>({5, 3, 11}));
       QCOMPARE(result.second, false);
 
-      result = commonIndexes.getNewIndexes();
+      result = commonIndexes.generateNext();
       QCOMPARE(result.first, std::vector<size_t>({4, 3, 11}));
       QCOMPARE(result.second, false);
 
-      result = commonIndexes.getNewIndexes();
+      result = commonIndexes.generateNext();
       QCOMPARE(result.first, std::vector<size_t>({5, 1, 11}));
       QCOMPARE(result.second, false);
 
-      result = commonIndexes.getNewIndexes();
+      result = commonIndexes.generateNext();
       QCOMPARE(result.first, std::vector<size_t>({4, 1, 11}));
       QCOMPARE(result.second, false);
 
-      result = commonIndexes.getNewIndexes();
+      result = commonIndexes.generateNext();
       QCOMPARE(result.first, std::vector<size_t>({5, 8, 11}));
       QCOMPARE(result.second, false);
 
-      result = commonIndexes.getNewIndexes();
+      result = commonIndexes.generateNext();
       QCOMPARE(result.first, std::vector<size_t>({4, 8, 11}));
       QCOMPARE(result.second, true);
 
       // new cycle
-      result = commonIndexes.getNewIndexes();
+      result = commonIndexes.generateNext();
       QCOMPARE(result.first, std::vector<size_t>({5, 3, 11}));
       QCOMPARE(result.second, false);
 
-      result = commonIndexes.getNewIndexes();
+      result = commonIndexes.generateNext();
       QCOMPARE(result.first, std::vector<size_t>({4, 3, 11}));
       QCOMPARE(result.second, false);
 
       // add new indexes -> reset the cycle
       commonIndexes.add({2, 0});
 
-      result = commonIndexes.getNewIndexes();
+      result = commonIndexes.generateNext();
       QCOMPARE(result.first, std::vector<size_t>({5, 3, 11, 2}));
       QCOMPARE(result.second, false);
       }
