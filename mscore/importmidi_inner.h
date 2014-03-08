@@ -114,6 +114,8 @@ class TupletCommonIndexes
       size_t maxCount = 1;
       };
 
+std::vector<size_t> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets);
+
 } // namespace MidiTuplet
 
 namespace MidiCharset {

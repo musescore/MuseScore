@@ -83,6 +83,7 @@ class TestImportMidi : public QObject, public MTest
       void separateTupletVoices();
       void findTupletsWithCommonChords();
       void tupletCommonIndexes();
+      void findLongestUncommonGroup();
 
       // metric bar analysis
       void metricDivisionsOfTuplet();
@@ -616,6 +617,64 @@ void TestImportMidi::tupletCommonIndexes()
       result = commonIndexes.generateNext();
       QCOMPARE(result.first, std::vector<size_t>({5, 3, 11, 2}));
       QCOMPARE(result.second, false);
+      }
+
+void TestImportMidi::findLongestUncommonGroup()
+      {
+      std::vector<MidiTuplet::TupletInfo> tuplets;
+      MidiTuplet::TupletInfo info;
+                  // 0
+      info.onTime = {5, 8};
+      info.len = {1, 8};
+      tuplets.push_back(info);
+                  // 1
+      info.onTime = {3, 4};
+      info.len = {1, 8};
+      tuplets.push_back(info);
+                  // 2
+      info.onTime = {7, 8};
+      info.len = {1, 8};
+      tuplets.push_back(info);
+                  // 3
+      info.onTime = {1, 2};
+      info.len = {1, 4};
+      tuplets.push_back(info);
+                  // 4
+      info.onTime = {3, 4};
+      info.len = {1, 4};
+      tuplets.push_back(info);
+                  // 5
+      info.onTime = {1, 2};
+      info.len = {1, 2};
+      tuplets.push_back(info);
+                  // 6
+      info.onTime = {0, 1};
+      info.len = {1, 1};
+      tuplets.push_back(info);
+
+      std::vector<size_t> result = MidiTuplet::findLongestUncommonGroup(tuplets);
+      std::sort(result.begin(), result.end());
+      QVERIFY(result.size() == 3);
+      QVERIFY(result == std::vector<size_t>({0, 1, 2})
+              || result == std::vector<size_t>({1, 2, 3}));
+
+      // test unsuccessful case
+      tuplets.clear();
+                  // 0
+      info.onTime = {5, 8};
+      info.len = {1, 8};
+      tuplets.push_back(info);
+                  // 1
+      info.onTime = {1, 2};
+      info.len = {1, 2};
+      tuplets.push_back(info);
+                  // 2
+      info.onTime = {0, 1};
+      info.len = {1, 1};
+      tuplets.push_back(info);
+
+      result = MidiTuplet::findLongestUncommonGroup(tuplets);
+      QVERIFY(result.size() == 1);
       }
 
 //--------------------------------------------------------------------------
