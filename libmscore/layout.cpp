@@ -114,6 +114,11 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       int endTrack   = startTrack + VOICES;
       QList<Note*> upStemNotes, downStemNotes;
 
+      // dots can affect layout of notes as well as vice versa
+      int upDots = 0;
+      int downDots = 0;
+      qreal dotAdjust = 0.0;  // additional chord offset to account for dots
+
       for (int track = startTrack; track < endTrack; ++track) {
             Element* e = segment->element(track);
             if (e && (e->type() == Element::CHORD)) {
@@ -127,10 +132,12 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   if (chord->up()) {
                         ++upVoices;
                         upStemNotes.append(chord->notes());
+                        upDots = qMax(upDots, chord->dots());
                         }
                   else {
                         ++downVoices;
                         downStemNotes.append(chord->notes());
+                        downDots = qMax(downDots, chord->dots());
                         }
                   }
             }
@@ -165,8 +172,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             Note* topDownNote = downStemNotes.last();
             int separation = topDownNote->line() - bottomUpNote->line();
             qreal sp = staff->spatium();
-            qreal downOffset = 0.0;
             qreal upOffset = 0.0;
+            qreal downOffset = 0.0;
 
             // whole note and larger values are centered later on
             // this throws off the chord offsets
@@ -303,8 +310,12 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         upOffset = maxDownWidth + 0.3 * sp;
                   else if (conflictSecondUpHigher)
                         upOffset = maxDownWidth + 0.2 * sp;
-                  else if (conflictSecondDownHigher)
-                        upOffset = maxDownWidth - 0.2 * sp;
+                  else if (conflictSecondDownHigher) {
+                        if (downDots && !upDots)
+                              downOffset = maxUpWidth + 0.3 * sp;
+                        else
+                              upOffset = maxDownWidth - 0.2 * sp;
+                        }
                   else {
                         // no direct conflict, so parts can overlap (downstem on left)
                         // just be sure that stems clear opposing noteheads
@@ -313,11 +324,27 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                               clearLeft = topDownNote->chord()->stem()->width() + 0.3 * sp;
                         if (bottomUpNote->chord()->stem())
                               clearRight = qMax(maxDownWidth - maxUpWidth, 0.0) + 0.3 * sp;
+                        else
+                              downDots = 0;     // no need to adjust for dots
                         upOffset = qMax(clearLeft, clearRight);
                         }
+
                   }
 
-            // apply offsets
+            // adjust for dots
+            if ((upDots && !downDots) || (downDots && !upDots)) {
+                  // only one sets of dots
+                  // place between chords
+                  int dots = qMax(upDots, downDots);
+                  qreal dotWidth = segment->symWidth(SymId::augmentationDot);
+                  // first dot
+                  dotAdjust = point(styleS(ST_dotNoteDistance)) + dotWidth;
+                  // additional dots
+                  for (int i = 1; i < dots; ++i)
+                        dotAdjust += point(styleS(ST_dotDotDistance)) + dotWidth;
+                  }
+
+            // apply chord offset
             for (int track = startTrack; track < endTrack; ++track) {
                   Element* e = segment->element(track);
                   if (e && (e->type() == Element::CHORD)) {
@@ -326,11 +353,15 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                               chord->rxpos() += upOffset;
                               if (chord->durationType() >= TDuration::V_WHOLE)
                                     chord->rxpos() += wholeNoteAdjust;
+                              if (downDots && !upDots)
+                                    chord->rxpos() += dotAdjust;
                               }
                         else if (!chord->up() && downOffset != 0.0) {
                               chord->rxpos() += downOffset;
                               if (chord->durationType() >= TDuration::V_WHOLE)
                                     chord->rxpos() += wholeNoteAdjust + 0.1 * sp;   // a little extra to separate more from previous stem
+                              if (upDots && !downDots)
+                                    chord->rxpos() += dotAdjust;
                               }
                         }
                   }
@@ -484,8 +515,10 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       qreal stepDistance = staff->spatium() * .5;
       int stepOffset     = staff->staffType()->stepOffset();
 
-      qreal lx       = 10000.0;     // leftmost note head position
-      qreal dotPosX  = 0.0;
+      qreal lx                = 10000.0;  // leftmost note head position
+      qreal dotPosX           = 0.0;
+      qreal offsetDotPosX     = 0.0;
+      bool offsetDots         = false;
 
       int nNotes = notes.size();
       for (int i = nNotes-1; i >= 0; --i) {
@@ -548,12 +581,20 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             //      chord->stem()->rxpos() = _up ? x + hw - stemWidth5 : x + stemWidth5;
 
             qreal xx = x + hw + note->chord()->pos().x();
-            if (xx > dotPosX)
-                  dotPosX = xx;
+            if (note->chord()->rxpos() == 0.0)
+                  dotPosX = qMax(dotPosX, xx);
+            else {
+                  offsetDotPosX = qMax(offsetDotPosX, xx);
+                  if (note->chord()->dots())
+                        offsetDots = true;
+                  }
             }
 
-      if (segment)
+      if (segment) {
+            if (offsetDots)
+                  dotPosX = qMax(dotPosX, offsetDotPosX);
             segment->setDotPosX(staff->idx(), dotPosX);
+            }
 
       int nAcc = aclist.size();
       if (nAcc == 0)
