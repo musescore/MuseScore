@@ -39,6 +39,8 @@ std::list<int> findTupletsWithCommonChords(std::list<int> &restTuplets,
 std::vector<int> findTupletsWithNoCommonChords(std::list<int> &commonTuplets,
                                                const std::vector<TupletInfo> &tuplets);
 
+std::vector<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets);
+
 } // namespace MidiTuplet
 
 namespace Meter {
