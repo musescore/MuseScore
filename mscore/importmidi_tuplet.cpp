@@ -682,6 +682,63 @@ std::vector<int> findTupletsWithNoCommonChords(std::list<int> &commonTuplets,
       return uncommonTuplets;
       }
 
+std::vector<size_t> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets)
+      {
+      struct TInfo
+            {
+            bool operator<(const TInfo &other) const
+                  {
+                  if (offTime < other.offTime)
+                        return true;
+                  else if (offTime > other.offTime)
+                        return false;
+                  else
+                        return onTime >= other.onTime;
+                  }
+            bool operator==(const TInfo &other) const
+                  {
+                  return offTime == other.offTime;
+                  }
+
+            ReducedFraction onTime;
+            ReducedFraction offTime;
+            size_t index;
+            };
+
+      std::vector<TInfo> info;
+      for (size_t i = 0; i != tuplets.size(); ++i) {
+            const auto &tuplet = tuplets[i];
+            info.push_back({tuplet.onTime, tuplet.onTime + tuplet.len, i});
+            }
+
+      std::sort(info.begin(), info.end());
+      info.erase(std::unique(info.begin(), info.end()), info.end());
+
+     std::vector<size_t> indexes;
+      size_t lastSelected = 0;
+      for (size_t i = 0; i != info.size(); ++i) {
+            if (i > 0 && info[i].onTime < info[lastSelected].offTime)
+                  continue;
+            lastSelected = i;
+            indexes.push_back(info[i].index);
+            }
+                  // check: maybe tuplets intersect each other but still don't have common chords
+      if (indexes.size() == 1) {
+            for (size_t i = 0; i != tuplets.size() - 1; ++i) {
+                  for (size_t j = i + 1; j != tuplets.size(); ++j) {
+                        if (!haveCommonChords(i, j, tuplets)) {
+                              indexes.resize(2);
+                              indexes[0] = i;
+                              indexes[1] = j;
+                              return indexes;
+                              }
+                        }
+                  }
+            }
+
+      return indexes;
+      }
+
 // remove overlapping tuplets with the same number
 // when tuplet with more length differs only by additional rests
 
