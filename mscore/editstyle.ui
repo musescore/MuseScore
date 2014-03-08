@@ -4937,6 +4937,9 @@ p, li { white-space: pre-wrap; }
             <property name="columnCount">
              <number>2</number>
             </property>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
             <row/>
             <row/>
             <row/>
@@ -4987,13 +4990,13 @@ p, li { white-space: pre-wrap; }
         <number>0</number>
        </property>
        <item>
-        <widget class="QGroupBox" name="groupBox_19">
+        <widget class="QGroupBox" name="accidentalsGroup">
          <property name="title">
           <string>Accidentals</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_31">
           <item>
-           <widget class="QTableWidget" name="tableWidget">
+           <widget class="QTableWidget" name="accidentalTable">
             <attribute name="horizontalHeaderDefaultSectionSize">
              <number>150</number>
             </attribute>
@@ -5046,6 +5049,19 @@ p, li { white-space: pre-wrap; }
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -5434,7 +5450,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>propertyDistanceStem</tabstop>
   <tabstop>propertyDistance</tabstop>
   <tabstop>articulationTable</tabstop>
-  <tabstop>tableWidget</tabstop>
+  <tabstop>accidentalTable</tabstop>
   <tabstop>radioKeySigNatNone</tabstop>
   <tabstop>radioKeySigNatBefore</tabstop>
   <tabstop>radioKeySigNatAfter</tabstop>
