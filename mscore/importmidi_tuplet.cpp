@@ -726,6 +726,24 @@ std::vector<size_t> findLongestUncommonGroup(const std::vector<TupletInfo> &tupl
       return indexes;
       }
 
+// check: maybe tuplets intersect each other but still don't have common chords
+
+std::vector<size_t> forceFindUncommonTupletPair(const std::vector<TupletInfo> &tuplets)
+      {
+      std::vector<size_t> indexes;
+
+      for (size_t i = 0; i != tuplets.size() - 1; ++i) {
+            for (size_t j = i + 1; j != tuplets.size(); ++j) {
+                  if (!haveCommonChords(i, j, tuplets)) {
+                        indexes = {i, j};
+                        return indexes;
+                        }
+                  }
+            }
+
+      return indexes;
+      }
+
 // remove overlapping tuplets with the same number
 // when tuplet with more length differs only by additional rests
 
