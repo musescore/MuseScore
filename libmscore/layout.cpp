@@ -325,7 +325,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         if (bottomUpNote->chord()->stem())
                               clearRight = qMax(maxDownWidth - maxUpWidth, 0.0) + 0.3 * sp;
                         else
-                              downDots = 0;     // no need to adjust for dots
+                              downDots = 0; // no need to adjust for dots in this case
                         upOffset = qMax(clearLeft, clearRight);
                         }
 
@@ -340,9 +340,11 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   // first dot
                   dotAdjust = point(styleS(ST_dotNoteDistance)) + dotWidth;
                   // additional dots
-                  for (int i = 1; i < dots; ++i)
-                        dotAdjust += point(styleS(ST_dotDotDistance)) + dotWidth;
+                  if (dots > 1)
+                        dotAdjust += point(styleS(ST_dotDotDistance)) * (dots - 1);
                   }
+            if (separation == 1)
+                  dotAdjust += 0.1 * sp;
 
             // apply chord offset
             for (int track = startTrack; track < endTrack; ++track) {
