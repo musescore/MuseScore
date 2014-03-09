@@ -221,21 +221,24 @@ findTupletContainsTime(int voice,
       return findTupletForTimeRange(voice, time, ReducedFraction(0, 1), tupletEvents);
       }
 
+// find sum length of gaps between successive chords
+// less is better
+
 ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo)
       {
       auto beg = tupletInfo.onTime;
-      const auto tupletEndTime = (tupletInfo.onTime + tupletInfo.len);
+      const auto tupletEndTime = tupletInfo.onTime + tupletInfo.len;
       ReducedFraction sumLen = {0, 1};
 
       for (const auto &chord: tupletInfo.chords) {
             const MidiChord &midiChord = chord.second->second;
-            const auto &chordOnTime = chord.second->first;
-                        // approximate length of gaps between successive chords,
-                        // quantization is not taken into account
+            const auto &chordOnTime = Quantize::quantizeValue(chord.second->first,
+                                                              tupletInfo.tupletQuant);
             if (beg < chordOnTime)
                   sumLen += (chordOnTime - beg);
-            beg = chordOnTime + MChord::maxNoteLen(midiChord.notes);
-            if (beg >= tupletInfo.onTime + tupletInfo.len)
+            beg = chordOnTime + Quantize::quantizeValue(MChord::maxNoteLen(midiChord.notes),
+                                                        tupletInfo.tupletQuant);
+            if (beg >= tupletEndTime)
                   break;
             }
       if (beg < tupletEndTime)
@@ -243,12 +246,13 @@ ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo)
       return sumLen;
       }
 
-TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
-                                   int tupletNumber,
-                                   const ReducedFraction &regularRaster,
-                                   const ReducedFraction &startTupletTime,
-                                   const std::multimap<ReducedFraction, MidiChord>::iterator &startChordIt,
-                                   const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt)
+TupletInfo findTupletApproximation(
+            const ReducedFraction &tupletLen,
+            int tupletNumber,
+            const ReducedFraction &regularRaster,
+            const ReducedFraction &startTupletTime,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &startChordIt,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt)
       {
       TupletInfo tupletInfo;
       tupletInfo.tupletNumber = tupletNumber;
@@ -406,8 +410,9 @@ class TupletErrorResult
                   else {
                         const double errorDiv = (er.tupletAverageError - tupletAverageError)
                                                 / er.tupletAverageError;
-                        const auto restsDiv = (sumLengthOfRests - er.sumLengthOfRests)
+                        const auto temp = (sumLengthOfRests - er.sumLengthOfRests)
                                                 / sumLengthOfRests;
+                        const double restsDiv = temp.numerator() * 1.0 / temp.denominator();
                         return compareDivs(errorDiv, restsDiv, er);
                         }
                   }
@@ -418,8 +423,9 @@ class TupletErrorResult
                   else {
                         const double errorDiv = (tupletAverageError - er.tupletAverageError)
                                                 / tupletAverageError;
-                        const auto restsDiv = (er.sumLengthOfRests - sumLengthOfRests)
+                        const auto temp = (er.sumLengthOfRests - sumLengthOfRests)
                                                 / er.sumLengthOfRests;
+                        const double restsDiv = temp.numerator() * 1.0 / temp.denominator();
                         return compareDivs(errorDiv, restsDiv, er);
                         }
                   }
@@ -428,12 +434,9 @@ class TupletErrorResult
             }
 
    private:
-      bool compareDivs(double errorDiv,
-                       const ReducedFraction &restsDiv,
-                       const TupletErrorResult &er) const
+      bool compareDivs(double errorDiv, double restsDiv, const TupletErrorResult &er) const
             {
-                        // error is more important than length of rests
-            if (errorDiv < restsDiv.numerator() * 0.8 / restsDiv.denominator())
+            if (errorDiv < restsDiv)
                   return sumLengthOfRests < er.sumLengthOfRests;
             else
                   return tupletAverageError < er.tupletAverageError;
