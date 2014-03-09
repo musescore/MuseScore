@@ -1750,13 +1750,13 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                   domError(e);
             }
 
-      // qDebug("wedge list:");
+      //qDebug("spanner list:");
       auto i = spanners.constBegin();
       while (i != spanners.constEnd()) {
             Spanner* sp = i.key();
             int tick1 = i.value().first;
             int tick2 = i.value().second;
-            // qDebug("wedge %p tick1 %d tick2 %d", sp, tick1, tick2);
+            //qDebug("spanner %p tp %d tick1 %d tick2 %d", sp, sp->type(), tick1, tick2);
             sp->setTick(tick1);
             sp->setTick2(tick2);
             sp->score()->addElement(sp);

@@ -729,12 +729,16 @@ static void findTrillAnchors(const Trill* trill, Chord*& startChord, Chord*& sto
 
 static void findTrills(Measure* measure, int strack, int etrack, TrillHash& trillStart, TrillHash& trillStop)
       {
-      // loop over all segments in this measure
-      for (auto it : measure->score()->spanner()) {
-            Spanner* e = it.second;
+      // loop over all spanners in this measure
+      int stick = measure->tick();
+      int etick = measure->tick() + measure->ticks();
+      for (auto it = measure->score()->spanner().lower_bound(stick); it != measure->score()->spanner().upper_bound(etick); ++it) {
+            Spanner* e = it->second;
+            //qDebug("findTrills 1 trill %p type %d track %d tick %d", e, e->type(), e->track(), e->tick());
             if (e->type() == Element::TRILL && strack <= e->track() && e->track() < etrack
-               && e->tick() >= measure->tick() && e->tick() < measure->tick())
+               && e->tick() >= measure->tick() && e->tick() < (measure->tick() + measure->ticks()))
                   {
+                  //qDebug("findTrills 2 trill %p", e);
                   // a trill is found starting in this segment, trill end time is known
                   // determine notes to write trill start and stop
                   const Trill* tr = static_cast<const Trill*>(e);
@@ -742,6 +746,7 @@ static void findTrills(Measure* measure, int strack, int etrack, TrillHash& tril
                   Chord* stopChord = 0;   // chord where trill stops
 
                   findTrillAnchors(tr, startChord, stopChord);
+                  //qDebug("findTrills 3 startChord %p stopChord %p", startChord, stopChord);
 
                   if (startChord && stopChord) {
                         trillStart.insert(startChord, tr);
