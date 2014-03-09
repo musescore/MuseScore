@@ -47,7 +47,7 @@ Measure* Score::tick2measure(int tick) const
       Measure* lm = 0;
 
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-          if (tick < m->tick())
+            if (tick < m->tick())
                   return lm;
             lm = m;
             }
