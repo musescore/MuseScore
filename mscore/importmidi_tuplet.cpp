@@ -624,68 +624,6 @@ bool haveCommonChords(int i, int j, const std::vector<TupletInfo> &tuplets)
       return false;
       }
 
-std::list<int> findTupletsWithCommonChords(std::list<int> &restTuplets,
-                                           const std::vector<TupletInfo> &tuplets)
-      {
-      std::list<int> tupletGroup;
-      if (restTuplets.empty())
-            return tupletGroup;
-
-      QQueue<int> q;
-      {
-      auto it = restTuplets.begin();
-      tupletGroup.push_back(*it);
-      q.enqueue(*it);
-      restTuplets.erase(it);
-      }
-
-      while (!q.isEmpty() && !restTuplets.empty()) {
-            const int index = q.dequeue();
-            auto it = restTuplets.begin();
-            while (it != restTuplets.end()) {
-                  if (haveCommonChords(index, *it, tuplets)) {
-                        tupletGroup.push_back(*it);
-                        q.enqueue(*it);
-                        it = restTuplets.erase(it);
-                        continue;
-                        }
-                  ++it;
-                  }
-            }
-
-      return tupletGroup;
-      }
-
-std::vector<int> findTupletsWithNoCommonChords(std::list<int> &commonTuplets,
-                                               const std::vector<TupletInfo> &tuplets)
-      {
-      std::vector<int> uncommonTuplets;
-      if (commonTuplets.empty())
-            return uncommonTuplets;
-                  // add first tuplet, no need to check
-      auto it = commonTuplets.begin();
-      uncommonTuplets.push_back(*it);
-      it = commonTuplets.erase(it);
-
-      while (it != commonTuplets.end()) {
-            bool haveCommon = false;
-            for (const auto &i: uncommonTuplets) {
-                  if (haveCommonChords(i, *it, tuplets)) {
-                        haveCommon = true;
-                        break;
-                        }
-                  }
-            if (!haveCommon) {
-                  uncommonTuplets.push_back(*it);
-                  it = commonTuplets.erase(it);
-                  continue;
-                  }
-            ++it;
-            }
-
-      return uncommonTuplets;
-      }
-
 std::vector<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets)
       {
       struct TInfo

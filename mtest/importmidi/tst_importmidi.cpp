@@ -81,7 +81,6 @@ class TestImportMidi : public QObject, public MTest
       void findOnTimeRegularError();
       void findTupletApproximation();
       void separateTupletVoices();
-      void findTupletsWithCommonChords();
       void tupletCommonIndexes();
       void findLongestUncommonGroup();
       void findCommonIndexes();
@@ -917,74 +916,6 @@ void TestImportMidi::separateTupletVoices()
       septupletIt = septupletInfo.chords.find(firstChordTime);
       QCOMPARE(septupletIt->second->second.notes.size(), 1);
       QCOMPARE(septupletIt->second->second.notes[0].pitch, 67);
-      }
-
-void TestImportMidi::findTupletsWithCommonChords()
-      {
-      std::vector<MidiTuplet::TupletInfo> tuplets;
-
-      std::multimap<ReducedFraction, MidiChord> chords;
-      chords.insert({ReducedFraction(0, 1), MidiChord()});
-      chords.insert({ReducedFraction(1, 12), MidiChord()});
-      chords.insert({ReducedFraction(1, 6), MidiChord()});
-      chords.insert({ReducedFraction(3, 10), MidiChord()});
-      chords.insert({ReducedFraction(7, 20), MidiChord()});
-      chords.insert({ReducedFraction(2, 5), MidiChord()});
-      chords.insert({ReducedFraction(9, 20), MidiChord()});
-
-      MidiTuplet::TupletInfo tupletData;
-                  // triplet, total len = 1/8
-      tupletData.chords.clear();
-      tupletData.chords.insert({ReducedFraction(0, 1), chords.find(ReducedFraction(0, 1))});
-      tupletData.chords.insert({ReducedFraction(1, 12), chords.find(ReducedFraction(1, 12))});
-      tuplets.push_back(tupletData);
-                  // second triplet, total len = 1/8
-      tupletData.chords.clear();
-      tupletData.chords.insert({ReducedFraction(1, 6), chords.find(ReducedFraction(1, 6))});
-      tuplets.push_back(tupletData);
-                  // third triplet, total len = 1/4
-      tupletData.chords.clear();
-      tupletData.chords.insert({ReducedFraction(0, 1), chords.find(ReducedFraction(0, 1))});
-      tupletData.chords.insert({ReducedFraction(1, 12), chords.find(ReducedFraction(1, 12))});
-      tupletData.chords.insert({ReducedFraction(1, 6), chords.find(ReducedFraction(1, 6))});
-      tuplets.push_back(tupletData);
-                  // quintuplet, total len = 1/4
-      tupletData.chords.clear();
-      tupletData.chords.insert({ReducedFraction(3, 10), chords.find(ReducedFraction(3, 10))});
-      tupletData.chords.insert({ReducedFraction(7, 20), chords.find(ReducedFraction(7, 20))});
-      tupletData.chords.insert({ReducedFraction(2, 5), chords.find(ReducedFraction(2, 5))});
-      tupletData.chords.insert({ReducedFraction(9, 20), chords.find(ReducedFraction(9, 20))});
-      tuplets.push_back(tupletData);
-                  // second quintuplet, total len = 1/2
-      tupletData.chords.clear();
-      tupletData.chords.insert({ReducedFraction(0, 1), chords.find(ReducedFraction(0, 1))});
-      tupletData.chords.insert({ReducedFraction(1, 12), chords.find(ReducedFraction(1, 12))});
-      tupletData.chords.insert({ReducedFraction(3, 10), chords.find(ReducedFraction(3, 10))});
-      tupletData.chords.insert({ReducedFraction(2, 5), chords.find(ReducedFraction(2, 5))});
-      tuplets.push_back(tupletData);
-
-      QVERIFY(tuplets.size() == 5);
-      std::list<int> restTupletIndexes = {0, 1, 2, 3, 4};
-
-      std::list<int> commonTuplets = MidiTuplet::findTupletsWithCommonChords(restTupletIndexes, tuplets);
-      commonTuplets.sort();
-      QVERIFY(restTupletIndexes.empty());
-      QVERIFY(commonTuplets == std::list<int>({0, 1, 2, 3, 4}));
-
-      std::vector<int> uncommonTuplets = MidiTuplet::findTupletsWithNoCommonChords(commonTuplets, tuplets);
-      std::sort(uncommonTuplets.begin(), uncommonTuplets.end());
-      QVERIFY(uncommonTuplets == std::vector<int>({0, 1, 3}));
-      QVERIFY(commonTuplets == std::list<int>({2, 4}));
-                  // process the rest tuplets with common chords
-      uncommonTuplets = MidiTuplet::findTupletsWithNoCommonChords(commonTuplets, tuplets);
-      std::sort(uncommonTuplets.begin(), uncommonTuplets.end());
-      QVERIFY(uncommonTuplets == std::vector<int>({2}));
-      QVERIFY(commonTuplets == std::list<int>({4}));
-                  // process the rest tuplets with common chords
-      uncommonTuplets = MidiTuplet::findTupletsWithNoCommonChords(commonTuplets, tuplets);
-      std::sort(uncommonTuplets.begin(), uncommonTuplets.end());
-      QVERIFY(uncommonTuplets == std::vector<int>({4}));
-      QVERIFY(commonTuplets.empty());
       }
 
 
