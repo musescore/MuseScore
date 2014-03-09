@@ -170,6 +170,7 @@ class TestImportMidi : public QObject, public MTest
             }
       void tupletOffTimeOtherBar() { mf("tuplet_off_time_other_bar"); }
       void tupletOffTimeOtherBar2() { mf("tuplet_off_time_other_bar2"); }
+      void tuplet16th8th() { mf("tuplet_16th_8th"); }
       void minDuration() { mf("min_duration"); }
       void minDurationNoReduce()
             {
