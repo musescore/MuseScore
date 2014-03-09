@@ -33,12 +33,6 @@ TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
 void splitFirstTupletChords(std::vector<TupletInfo> &tuplets,
                             std::multimap<ReducedFraction, MidiChord> &chords);
 
-std::list<int> findTupletsWithCommonChords(std::list<int> &restTuplets,
-                                           const std::vector<TupletInfo> &tuplets);
-
-std::vector<int> findTupletsWithNoCommonChords(std::list<int> &commonTuplets,
-                                               const std::vector<TupletInfo> &tuplets);
-
 std::vector<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets);
 
 class TupletCommonIndexes;
