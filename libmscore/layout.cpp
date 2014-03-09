@@ -373,7 +373,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       QList<Note*> notes;
       notes.append(upStemNotes);
       notes.append(downStemNotes);
-      if (notes.size() > 1)
+      if (upVoices + downVoices > 1)
             qSort(notes.begin(), notes.end(),
                [](Note* n1, const Note* n2) ->bool {return n1->line() > n2->line(); } );
       layoutChords3(notes, staff, segment);
@@ -382,7 +382,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
 //---------------------------------------------------------
 //   layoutChords2
-//    - determined which notes need mirroring
+//    - determine which notes need mirroring
 //---------------------------------------------------------
 
 void Score::layoutChords2(QList<Note*>& notes, bool up)
@@ -675,7 +675,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
 
       for (const AcEl& e : aclist) {
             Note* note = e.note;
-            qreal x    = e.x + lx - note->x();
+            qreal x    = e.x + lx - (note->x() + note->chord()->x());
             note->accidental()->setPos(x, 0);
             note->accidental()->adjustReadPos();
             }
