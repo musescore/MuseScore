@@ -797,6 +797,27 @@ bool haveValidFirstCommonChord(const TupletInfo &t1, const TupletInfo &t2)
               && t1.chords.begin()->second->second.notes.size() > 1);
       }
 
+bool canBeTogether(int i, int j, const std::vector<TupletInfo> &tuplets)
+      {
+      if (tuplets.empty())
+            return false;
+      std::set<std::pair<const ReducedFraction, MidiChord> *> chordSet;
+      auto start1 = tuplets[i].chords.begin();
+      auto start2 = tuplets[j].chords.begin();
+      if (haveValidFirstCommonChord(tuplets[i], tuplets[j])) {
+            ++start1;
+            ++start2;
+            }
+      for (; start1 != tuplets[i].chords.end(); ++start1) {
+            chordSet.insert(&*start1->second);
+            }
+      for (; start2 != tuplets[j].chords.end(); ++start2) {
+            if (chordSet.find(&*start2->second) != chordSet.end())
+                  return false;
+            }
+      return true;
+      }
+
 TupletCommonIndexes findCommonIndexes(
             std::vector<int> &indexes,
             const std::vector<TupletInfo> &tuplets)
@@ -804,9 +825,7 @@ TupletCommonIndexes findCommonIndexes(
       TupletCommonIndexes commonIndexes;
       for (int i = 0; i < (int)indexes.size(); ++i) {       // not till size() - 1
             for (int j = i + 1; j < (int)indexes.size(); ++j) {
-                  if (haveCommonChords(indexes[i], indexes[j], tuplets)) {
-                        if (haveValidFirstCommonChord(tuplets[indexes[i]], tuplets[indexes[j]]))
-                              continue;
+                  if (!canBeTogether(indexes[i], indexes[j], tuplets)) {
                         commonIndexes.add(std::vector<int>({indexes[i], indexes[j]}));
                         if (i + 1 != j)
                               std::swap(indexes[i + 1], indexes[j]);
