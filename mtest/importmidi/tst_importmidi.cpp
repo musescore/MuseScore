@@ -84,6 +84,7 @@ class TestImportMidi : public QObject, public MTest
       void findTupletsWithCommonChords();
       void tupletCommonIndexes();
       void findLongestUncommonGroup();
+      void findCommonIndexes();
 
       // metric bar analysis
       void metricDivisionsOfTuplet();
@@ -675,6 +676,109 @@ void TestImportMidi::findLongestUncommonGroup()
 
       result = MidiTuplet::findLongestUncommonGroup(tuplets);
       QVERIFY(result.size() == 1);
+      }
+
+void TestImportMidi::findCommonIndexes()
+      {
+      std::multimap<ReducedFraction, MidiChord> chords;
+      {
+      MidiChord ch;
+      ch.notes.push_back(MidiNote());
+      ch.notes.push_back(MidiNote());
+      ch.notes.push_back(MidiNote());
+      chords.insert({{1, 1}, ch});
+      }
+      for (int i = 2; i <= 14; ++i) {
+            MidiChord ch;
+            ch.notes.push_back(MidiNote());
+            chords.insert({{i, 1}, ch});
+            }
+
+      std::vector<MidiTuplet::TupletInfo> tuplets;
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{2, 1}, chords.find({2, 1})},
+                  {{3, 1}, chords.find({3, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{3, 1}, chords.find({3, 1})},
+                  {{4, 1}, chords.find({4, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{2, 1}, chords.find({2, 1})},
+                  {{5, 1}, chords.find({5, 1})},
+                  {{6, 1}, chords.find({6, 1})},
+                  {{7, 1}, chords.find({7, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{8, 1}, chords.find({8, 1})},
+                  {{9, 1}, chords.find({9, 1})},
+                  {{10, 1}, chords.find({10, 1})},
+                  {{11, 1}, chords.find({11, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{5, 1}, chords.find({5, 1})},
+                  {{7, 1}, chords.find({7, 1})},
+                  {{8, 1}, chords.find({8, 1})},
+                  {{10, 1}, chords.find({10, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{2, 1}, chords.find({2, 1})},
+                  {{5, 1}, chords.find({5, 1})},
+                  {{6, 1}, chords.find({6, 1})},
+                  {{12, 1}, chords.find({12, 1})},
+                  {{13, 1}, chords.find({13, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{14, 1}, chords.find({14, 1})},
+                  {{4, 1}, chords.find({4, 1})},
+                  {{9, 1}, chords.find({9, 1})},
+                  {{10, 1}, chords.find({10, 1})},
+                  {{11, 1}, chords.find({11, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{2, 1}, chords.find({2, 1})},
+                  {{6, 1}, chords.find({6, 1})},
+                  {{13, 1}, chords.find({13, 1})},
+                  {{14, 1}, chords.find({14, 1})},
+                  {{9, 1}, chords.find({9, 1})},
+                  {{11, 1}, chords.find({11, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+
+      std::vector<int> indexes = {0, 1, 2, 3, 4, 5, 6, 7};
+
+      const auto result = MidiTuplet::findCommonIndexes(indexes, tuplets);
+      const auto &allIndexes = result.allIndexes();
+      QCOMPARE(allIndexes, std::vector<std::vector<int>>({{0, 1}, {2, 4}, {3, 6}, {5, 7}}));
       }
 
 //--------------------------------------------------------------------------

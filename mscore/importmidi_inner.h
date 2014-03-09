@@ -107,6 +107,8 @@ class TupletCommonIndexes
       void add(const std::vector<int> &commonIndexes);
       std::pair<std::vector<int>, bool> generateNext();
 
+      const std::vector<std::vector<int>>& allIndexes() const { return indexes; } // for testing
+
    private:
       std::vector<std::vector<int>> indexes;
       std::vector<int> current;        // indexes of tuplet indexes
