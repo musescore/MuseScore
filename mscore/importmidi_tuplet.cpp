@@ -808,13 +808,10 @@ TupletCommonIndexes findCommonIndexes(
                         if (haveValidFirstCommonChord(tuplets[indexes[i]], tuplets[indexes[j]]))
                               continue;
                         commonIndexes.add(std::vector<int>({indexes[i], indexes[j]}));
-                        if (i + 1 != j) {
+                        if (i + 1 != j)
                               std::swap(indexes[i + 1], indexes[j]);
-                              i = j;
-                              }
-                        else {
-                              i = ++j;
-                              }
+                        i += 2;
+                        j = i;
                         }
                   }
             if (i < (int)indexes.size())        // check because we can set i == j == size()
