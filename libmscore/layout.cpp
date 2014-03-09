@@ -1191,6 +1191,9 @@ void Score::createMMRests()
                   undo(new ChangeMMRest(m, 0));
                   }
             }
+/* Update Notes After creating mmRest Because on load, mmRest->next() was not set
+on first pass in updateNotes() and break occur */
+            updateNotes();
       }
 
 //---------------------------------------------------------
