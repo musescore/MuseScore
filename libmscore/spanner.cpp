@@ -347,7 +347,7 @@ QVariant Spanner::propertyDefault(P_ID propertyId) const
 
 ChordRest* Score::findCR(int tick, int track) const
       {
-      Measure* m = tick2measure(tick);
+      Measure* m = tick2measureMM(tick);
       // attach to first rest all spanner when mmRest
       if(m->isMMRest())
             tick = m->tick();
@@ -397,7 +397,7 @@ void Spanner::computeEndElement()
       switch (_anchor) {
             case ANCHOR_SEGMENT:
                   if (type() == SLUR) {
-                        Segment* s = score()->tick2segment(tick2(), false, Segment::SegChordRest);
+                        Segment* s = score()->tick2segmentMM(tick2(), false, Segment::SegChordRest);
                         _endElement = s ? static_cast<ChordRest*>(s->element(track())) : nullptr;
                         }
                   else

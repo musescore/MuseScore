@@ -47,8 +47,8 @@ Measure* Score::tick2measure(int tick) const
       Measure* lm = 0;
 
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-          if( m->score()->styleB(ST_createMultiMeasureRests) && m->hasMMRest() )
-              m = m->mmRest();
+//          if( m->score()->styleB(ST_createMultiMeasureRests) && m->hasMMRest() )
+//              m = m->mmRest();
           if (tick < m->tick())
                   return lm;
             lm = m;
@@ -102,12 +102,23 @@ MeasureBase* Score::tick2measureBase(int tick) const
 //   tick2segment
 //---------------------------------------------------------
 
-Segment* Score::tick2segment(int tick, bool first, Segment::SegmentTypes st) const
+Segment* Score::tick2segmentMM(int tick, bool first, Segment::SegmentTypes st) const
+    {
+        return tick2segment(tick,first,st,true);
+    }
+Segment* Score::tick2segment(int tick, bool first, Segment::SegmentTypes st, bool useMMrest ) const
       {
-      Measure* m = tick2measure(tick);
-// When mmRest force tick to the first segment of mmRest.
-      if( m->isMMRest())
-          tick = m->tick();
+
+    Measure* m;
+    if( useMMrest ){
+          m = tick2measureMM(tick);
+          // When mmRest force tick to the first segment of mmRest.
+          if( m->isMMRest())
+                tick = m->tick();
+        }
+    else
+          m = tick2measure(tick);
+
       if (m == 0) {
             qDebug("   no segment for tick %d\n", tick);
             return 0;
