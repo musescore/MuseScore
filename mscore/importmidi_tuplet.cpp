@@ -398,9 +398,11 @@ class TupletErrorResult
    public:
       TupletErrorResult(double t = 0.0,
                         const ReducedFraction &r = ReducedFraction(0, 1),
+                        size_t vc = 0,
                         size_t tc = 0)
             : tupletAverageError(t)
             , sumLengthOfRests(r)
+            , voiceCount(vc)
             , tupletCount(tc)
             {}
 
@@ -439,9 +441,12 @@ class TupletErrorResult
    private:
       bool compareDivs(double errorDiv, double restsDiv, const TupletErrorResult &er) const
             {
-            if (qAbs(errorDiv - restsDiv) <= 0.01 && tupletCount != er.tupletCount)
-                  return tupletCount < er.tupletCount;
-
+            if (qAbs(errorDiv - restsDiv) <= 0.01) {
+                  if (voiceCount != er.voiceCount)
+                        return voiceCount < er.voiceCount;
+                  else if (tupletCount != er.tupletCount)
+                        return tupletCount < er.tupletCount;
+                  }
             if (errorDiv < restsDiv)
                   return sumLengthOfRests < er.sumLengthOfRests;
             else
@@ -450,8 +455,57 @@ class TupletErrorResult
 
       double tupletAverageError;
       ReducedFraction sumLengthOfRests;
+      size_t voiceCount;
       size_t tupletCount;
       };
+
+std::pair<ReducedFraction, ReducedFraction>
+tupletInterval(const TupletInfo &tuplet,
+               const ReducedFraction &regularRaster)
+      {
+      ReducedFraction tupletEnd = tuplet.onTime + tuplet.len;
+
+      for (const auto &chord: tuplet.chords) {
+            auto offTime = chord.first + MChord::maxNoteLen(chord.second->second.notes);
+            offTime = Quantize::quantizeValue(offTime, regularRaster);
+            if (offTime > tupletEnd)
+                  tupletEnd = offTime;
+            }
+      return std::make_pair(tuplet.onTime, tupletEnd);
+      }
+
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval1,
+                      const std::pair<ReducedFraction, ReducedFraction> &interval2)
+      {
+      return interval1.second > interval2.first && interval1.first < interval2.second;
+      }
+
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval,
+                      const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals)
+      {
+      for (const auto &i: intervals) {
+            if (haveIntersection(i, interval))
+                  return true;
+            }
+      return false;
+      }
+
+size_t findVoiceCount(const std::list<int> &indexes,
+                      const std::vector<TupletInfo> &tuplets)
+      {
+      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> tupletIntervals;
+      int limit = tupletVoiceLimit();
+      for (int i: indexes) {
+            for (int voice = 0; voice < limit; ++voice) {
+                  const auto interval = tupletInterval(tuplets[i], tuplets[i].regularQuant);
+                  if (!haveIntersection(interval, tupletIntervals[voice])) {
+                        tupletIntervals[voice].push_back(interval);
+                        break;
+                        }
+                  }
+            }
+      return tupletIntervals.size();
+      }
 
 TupletErrorResult
 findTupletError(
@@ -476,6 +530,7 @@ findTupletError(
       return TupletErrorResult{
                   sumError.ticks() * 1.0 / sumNoteCount,
                   sumLengthOfRests,
+                  findVoiceCount(indexes, tuplets),
                   indexes.size()
                   };
       }
@@ -1025,22 +1080,6 @@ void splitFirstTupletChords(std::vector<TupletInfo> &tuplets,
             }
       }
 
-bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval1,
-                      const std::pair<ReducedFraction, ReducedFraction> &interval2)
-      {
-      return interval1.second > interval2.first && interval1.first < interval2.second;
-      }
-
-bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval,
-                      const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals)
-      {
-      for (const auto &i: intervals) {
-            if (haveIntersection(i, interval))
-                  return true;
-            }
-      return false;
-      }
-
 bool canTupletBeTied(const TupletInfo &tuplet,
                      const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt)
       {
@@ -1222,21 +1261,6 @@ void addChordsBetweenTupletNotes(
                   ++it;
                   }
             }
-      }
-
-std::pair<ReducedFraction, ReducedFraction>
-tupletInterval(const TupletInfo &tuplet,
-               const ReducedFraction &regularRaster)
-      {
-      ReducedFraction tupletEnd = tuplet.onTime + tuplet.len;
-
-      for (const auto &chord: tuplet.chords) {
-            auto offTime = chord.first + MChord::maxNoteLen(chord.second->second.notes);
-            offTime = Quantize::quantizeValue(offTime, regularRaster);
-            if (offTime > tupletEnd)
-                  tupletEnd = offTime;
-            }
-      return std::make_pair(tuplet.onTime, tupletEnd);
       }
 
 std::pair<ReducedFraction, ReducedFraction>
