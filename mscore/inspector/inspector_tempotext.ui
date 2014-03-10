@@ -140,6 +140,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>followText</tabstop>
+  <tabstop>resetFollowText</tabstop>
+  <tabstop>tempo</tabstop>
+  <tabstop>resetTempo</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

@@ -162,6 +162,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>type</tabstop>
+  <tabstop>resetType</tabstop>
+  <tabstop>text</tabstop>
+  <tabstop>resetText</tabstop>
+  <tabstop>showText</tabstop>
+  <tabstop>resetShowText</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

@@ -251,6 +251,18 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>autoscale</tabstop>
+  <tabstop>resetAutoscale</tabstop>
+  <tabstop>sizeWidth</tabstop>
+  <tabstop>sizeHeight</tabstop>
+  <tabstop>scaleWidth</tabstop>
+  <tabstop>scaleHeight</tabstop>
+  <tabstop>lockAspectRatio</tabstop>
+  <tabstop>resetLockAspectRatio</tabstop>
+  <tabstop>sizeIsSpatium</tabstop>
+  <tabstop>resetSizeIsSpatium</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

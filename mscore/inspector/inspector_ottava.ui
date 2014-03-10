@@ -196,6 +196,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>ottavaType</tabstop>
+  <tabstop>resetOttavaType</tabstop>
+  <tabstop>placement</tabstop>
+  <tabstop>resetPlacement</tabstop>
+  <tabstop>numbersOnly</tabstop>
+  <tabstop>resetNumbersOnly</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

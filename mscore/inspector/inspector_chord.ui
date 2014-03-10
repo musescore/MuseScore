@@ -295,6 +295,18 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>offsetX</tabstop>
+  <tabstop>resetX</tabstop>
+  <tabstop>offsetY</tabstop>
+  <tabstop>resetY</tabstop>
+  <tabstop>small</tabstop>
+  <tabstop>resetSmall</tabstop>
+  <tabstop>stemless</tabstop>
+  <tabstop>resetStemless</tabstop>
+  <tabstop>stemDirection</tabstop>
+  <tabstop>resetStemDirection</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

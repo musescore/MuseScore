@@ -106,6 +106,10 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>showCourtesy</tabstop>
+  <tabstop>resetShowCourtesy</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>
