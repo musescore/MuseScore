@@ -95,7 +95,8 @@ static const PropertyData propertyList[] = {
       { P_SCALE,               false, 0,                 T_SCALE  },
       { P_LOCK_ASPECT_RATIO,   false, "lockAspectRatio", T_BOOL },
       { P_SIZE_IS_SPATIUM,     false, "sizeIsSpatium",   T_BOOL },
-      { P_TEXT_STYLE,          false, "textStyle",       T_INT  },
+      { P_TEXT_STYLE,          false, "textStyle",       T_TEXT_STYLE  },
+      { P_TEXT_STYLE_TYPE,     false, "textStyleType", T_INT  },
       { P_TEXT,                false, 0,               T_STRING },
       { P_HTML_TEXT,           false, 0,               T_STRING },
 
@@ -180,6 +181,9 @@ static const PropertyData propertyList[] = {
       { P_BEGIN_TEXT,          true,  "beginText",       T_STRING  },
       { P_CONTINUE_TEXT,       true,  "continueText",    T_STRING  },
       { P_END_TEXT,            true,  "endText",         T_STRING  },
+      { P_BEGIN_TEXT_STYLE,    false, "beginTextStyle",    T_TEXT_STYLE },
+      { P_CONTINUE_TEXT_STYLE, false, "continueTextStyle", T_TEXT_STYLE },
+      { P_END_TEXT_STYLE,      false, "endTextStyle",      T_TEXT_STYLE },
 
       { P_END,                 false, "",              T_INT      }
       };
@@ -300,6 +304,7 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case T_POINT_MM:
             case T_SIZE_MM:
             case T_SYMID:
+            case T_TEXT_STYLE:
                   return QVariant();
             }
       return QVariant();

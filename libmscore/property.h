@@ -88,6 +88,7 @@ enum P_ID {
       P_LOCK_ASPECT_RATIO,
       P_SIZE_IS_SPATIUM,
       P_TEXT_STYLE,
+      P_TEXT_STYLE_TYPE,
       P_TEXT,
       P_HTML_TEXT,
 
@@ -172,6 +173,9 @@ enum P_ID {
       P_BEGIN_TEXT,
       P_CONTINUE_TEXT,
       P_END_TEXT,
+      P_BEGIN_TEXT_STYLE,
+      P_CONTINUE_TEXT_STYLE,
+      P_END_TEXT_STYLE,
 
       P_END
       };
@@ -200,6 +204,7 @@ enum P_TYPE {
       T_TEMPO,
       T_GROUPS,
       T_SYMID,
+      T_TEXT_STYLE,
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);

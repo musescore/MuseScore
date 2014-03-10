@@ -1709,7 +1709,7 @@ void Text::deleteSelectedText()
 void Text::write(Xml& xml) const
       {
       xml.stag(name());
-      writeProperties(xml, true);
+      writeProperties(xml, true, true);
       xml.etag();
       }
 
@@ -1729,12 +1729,12 @@ void Text::read(XmlReader& e)
 //   writeProperties
 //---------------------------------------------------------
 
-void Text::writeProperties(Xml& xml, bool writeText) const
+void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
       {
       Element::writeProperties(xml);
       if (xml.clipboardmode || styled())
             xml.tag("style", textStyle().name());
-      if (xml.clipboardmode || !styled())
+      if ((xml.clipboardmode || !styled()) && writeStyle)
             _textStyle.writeProperties(xml);
       if (writeText)
             xml.writeXml("text", text());
@@ -1954,12 +1954,13 @@ void Text::dragTo(const QPointF& p)
 
 QVariant Text::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_TEXT_STYLE:
+                  return QVariant::fromValue(_textStyle);
+            case P_TEXT_STYLE_TYPE:
                   return QVariant(_styleIndex);
             case P_TEXT:
                   return text();
-
             default:
                   return Element::getProperty(propertyId);
             }
@@ -1973,8 +1974,11 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
       bool rv = true;
-      switch(propertyId) {
+      switch (propertyId) {
             case P_TEXT_STYLE:
+                  setTextStyle(v.value<TextStyle>());
+                  break;
+            case P_TEXT_STYLE_TYPE:
                   setTextStyleType(v.toInt());
                   setGenerated(false);
                   break;

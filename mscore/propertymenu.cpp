@@ -430,10 +430,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "l-props") {
             TextLineSegment* vs = static_cast<TextLineSegment*>(e);
             LineProperties lp(vs->textLine());
+            lp.exec();
+#if 0
             if (lp.exec()) {
                   foreach(SpannerSegment* l, vs->textLine()->spannerSegments())
                         static_cast<TextLineSegment*>(l)->clearText();
                   }
+#endif
             }
       else if (cmd == "tr-props") {
             TremoloBar* tb = static_cast<TremoloBar*>(e);
