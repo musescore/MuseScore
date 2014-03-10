@@ -602,13 +602,16 @@ void Page::doRebuildBspTree()
 
 //---------------------------------------------------------
 //   replaceTextMacros
-//    $p          - page number
-//    $$          - $
+//    $p          - page number, except on first page
+//    $P          - page number, on all pages
 //    $n          - number of pages
 //    $f          - file name
 //    $F          - file path+name
 //    $d          - current date
 //    $D          - creation date
+//    $C          - copyright, on first page only
+//    $c          - copyright, on all pages
+//    $$          - the $ sign itself
 //    $:tag:      - meta data tag
 //       already defined tags:
 //       movementNumber
@@ -621,19 +624,19 @@ void Page::doRebuildBspTree()
 
 QString Page::replaceTextMacros(const QString& s) const
       {
-      int pageno = no() + 1 + _score->pageNumberOffset();
       QString d;
-      int n = s.size();
-      for (int i = 0; i < n; ++i) {
+      for (int i = 0, n = s.size(); i < n; ++i) {
             QChar c = s[i];
             if (c == '$' && (i < (n-1))) {
                   QChar c = s[i+1];
                   switch(c.toLatin1()) {
-                        case 'p':
-                              d += QString("%1").arg(pageno);
+                        case 'p': // not on first page 1
+                              if (_no) // FALLTHROUGH
+                        case 'P': // on all pages
+                              d += QString("%1").arg(_no + 1 + _score->pageNumberOffset());
                               break;
                         case 'n':
-                              d += QString("%1").arg(_score->pages().size() + _score->pageNumberOffset());
+                              d += QString("%1").arg(_score->npages() + _score->pageNumberOffset());
                               break;
                         case 'f':
                               d += _score->name();
@@ -646,11 +649,15 @@ QString Page::replaceTextMacros(const QString& s) const
                               break;
                         case 'D':
                               {
-                              QString creationDate = score()->metaTag("creationDate");
-                              if(!creationDate.isNull()) {
+                              QString creationDate = _score->metaTag("creationDate");
+                              if (!creationDate.isNull())
                                     d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
-                                    }
                               }
+                              break;
+                        case 'C': // only on first page
+                              if (!_no) // FALLTHROUGH
+                        case 'c':
+                              d += _score->metaTag("copyright");
                               break;
                         case '$':
                               d += '$';
@@ -665,7 +672,7 @@ QString Page::replaceTextMacros(const QString& s) const
                                     tag += s[k];
                                     }
                               if (k != n) {       // found ':' ?
-                                    d += score()->metaTag(tag);
+                                    d += _score->metaTag(tag);
                                     i = k-1;
                                     }
                               }
@@ -689,7 +696,7 @@ QString Page::replaceTextMacros(const QString& s) const
 
 bool Page::isOdd() const
       {
-      return (_no + 1 + score()->pageNumberOffset()) & 1;
+      return (_no + 1 + _score->pageNumberOffset()) & 1;
       }
 
 //---------------------------------------------------------
