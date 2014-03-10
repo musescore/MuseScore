@@ -241,6 +241,15 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>diagonal</tabstop>
+  <tabstop>resetDiagonal</tabstop>
+  <tabstop>resetLineColor</tabstop>
+  <tabstop>lineWidth</tabstop>
+  <tabstop>resetLineWidth</tabstop>
+  <tabstop>lineStyle</tabstop>
+  <tabstop>resetLineStyle</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

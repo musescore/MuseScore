@@ -148,6 +148,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>posX</tabstop>
+  <tabstop>posY</tabstop>
+  <tabstop>sizeWidth</tabstop>
+  <tabstop>sizeHeight</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

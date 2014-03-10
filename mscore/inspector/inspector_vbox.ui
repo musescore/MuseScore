@@ -382,6 +382,21 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>topGap</tabstop>
+  <tabstop>resetTopGap</tabstop>
+  <tabstop>bottomGap</tabstop>
+  <tabstop>resetBottomGap</tabstop>
+  <tabstop>height</tabstop>
+  <tabstop>leftMargin</tabstop>
+  <tabstop>resetLeftMargin</tabstop>
+  <tabstop>rightMargin</tabstop>
+  <tabstop>resetRightMargin</tabstop>
+  <tabstop>topMargin</tabstop>
+  <tabstop>resetTopMargin</tabstop>
+  <tabstop>bottomMargin</tabstop>
+  <tabstop>resetBottomMargin</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

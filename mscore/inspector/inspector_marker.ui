@@ -162,6 +162,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>markerType</tabstop>
+  <tabstop>resetMarkerType</tabstop>
+  <tabstop>jumpLabel</tabstop>
+  <tabstop>resetJumpLabel</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

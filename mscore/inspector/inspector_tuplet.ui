@@ -202,6 +202,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>direction</tabstop>
+  <tabstop>resetDirection</tabstop>
+  <tabstop>numberType</tabstop>
+  <tabstop>resetNumberType</tabstop>
+  <tabstop>bracketType</tabstop>
+  <tabstop>resetBracketType</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>
