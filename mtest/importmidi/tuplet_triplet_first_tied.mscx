@@ -62,8 +62,11 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Rest>
+          <durationType>eighth</durationType>
+          </Rest>
         <Chord>
-          <durationType>quarter</durationType>
+          <durationType>eighth</durationType>
           <Note>
             <Tie id="2">
               </Tie>
