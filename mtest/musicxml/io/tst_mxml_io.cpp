@@ -88,7 +88,7 @@ private slots:
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
-//      void lines1() { mxmlIoTestRef("testLines1"); }
+      void lines1() { mxmlIoTestRef("testLines1"); }
       void lines2() { mxmlIoTestRef("testLines2"); }
       void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
       void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
