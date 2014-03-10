@@ -342,7 +342,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>TCP/IP Port Number:</string>
+             <string>Port number:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
