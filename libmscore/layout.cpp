@@ -142,7 +142,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   }
             }
 
-      if (upStemNotes.isEmpty() && downStemNotes.isEmpty())
+      if (upVoices + downVoices == 0)
             return;
 
       // TODO: use track as secondary sort criteria?
@@ -154,7 +154,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             qSort(upStemNotes.begin(), upStemNotes.end(),
                [](Note* n1, const Note* n2) ->bool {return n1->line() > n2->line(); } );
             }
-      if (!upStemNotes.isEmpty())
+      if (upVoices)
             layoutChords2(upStemNotes, true);
 
       // layout downstem noteheads
@@ -162,12 +162,12 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             qSort(downStemNotes.begin(), downStemNotes.end(),
                [](Note* n1, const Note* n2) ->bool {return n1->line() > n2->line(); } );
             }
-      if (!downStemNotes.isEmpty())
+      if (downVoices)
             layoutChords2(downStemNotes, false);
 
       // handle conflict between upstem and downstem chords
 
-      if (!upStemNotes.isEmpty() && !downStemNotes.isEmpty()) {
+      if (upVoices && downVoices) {
             Note* bottomUpNote = upStemNotes.first();
             Note* topDownNote = downStemNotes.last();
             int separation = topDownNote->line() - bottomUpNote->line();
@@ -371,8 +371,10 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
       // layout chords
       QList<Note*> notes;
-      notes.append(upStemNotes);
-      notes.append(downStemNotes);
+      if (upVoices)
+            notes.append(upStemNotes);
+      if (downVoices)
+            notes.append(downStemNotes);
       if (upVoices + downVoices > 1)
             qSort(notes.begin(), notes.end(),
                [](Note* n1, const Note* n2) ->bool {return n1->line() > n2->line(); } );
@@ -676,6 +678,10 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       for (const AcEl& e : aclist) {
             Note* note = e.note;
             qreal x    = e.x + lx - (note->x() + note->chord()->x());
+            if (note->chord()->x() != 0.0) {
+                  qDebug("accidental placement: measure %d beat %d note %s", note->chord()->measure()->no(), note->chord()->segment()->tick() / MScore::division, qPrintable(tpc2name(note->tpc(), NoteSpellingType::STANDARD, false)));
+                  qDebug("ne.x = %f, lx = %f, note x = %f, chord x = %f", e.x, lx, note->x(), note->chord()->x());
+                  }
             note->accidental()->setPos(x, 0);
             note->accidental()->adjustReadPos();
             }
