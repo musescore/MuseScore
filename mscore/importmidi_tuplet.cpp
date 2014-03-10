@@ -397,10 +397,12 @@ class TupletErrorResult
       {
    public:
       TupletErrorResult(double t = 0.0,
+                        double relPlaces = 0.0,
                         const ReducedFraction &r = ReducedFraction(0, 1),
                         size_t vc = 0,
                         size_t tc = 0)
             : tupletAverageError(t)
+            , relativeUsedChordPlaces(relPlaces)
             , sumLengthOfRests(r)
             , voiceCount(vc)
             , tupletCount(tc)
@@ -408,52 +410,27 @@ class TupletErrorResult
 
       bool operator<(const TupletErrorResult &er) const
             {
-            if (tupletAverageError < er.tupletAverageError) {
-                  if (sumLengthOfRests <= er.sumLengthOfRests) {
-                        return true;
-                        }
-                  else {
-                        const double errorDiv = (er.tupletAverageError - tupletAverageError)
-                                                / er.tupletAverageError;
-                        const auto temp = (sumLengthOfRests - er.sumLengthOfRests)
-                                                / sumLengthOfRests;
-                        const double restsDiv = temp.numerator() * 1.0 / temp.denominator();
-                        return compareDivs(errorDiv, restsDiv, er);
-                        }
+            double value = div(tupletAverageError, er.tupletAverageError)
+                         - div(relativeUsedChordPlaces, er.relativeUsedChordPlaces)
+                         + div(sumLengthOfRests.numerator() * 1.0 / sumLengthOfRests.denominator(),
+                               er.sumLengthOfRests.numerator() * 1.0 / er.sumLengthOfRests.denominator());
+            if (value == 0) {
+                   value = div(voiceCount, er.voiceCount)
+                         + div(tupletCount, er.tupletCount);
                   }
-            else if (tupletAverageError > er.tupletAverageError) {
-                  if (sumLengthOfRests >= er.sumLengthOfRests) {
-                        return false;
-                        }
-                  else {
-                        const double errorDiv = (tupletAverageError - er.tupletAverageError)
-                                                / tupletAverageError;
-                        const auto temp = (er.sumLengthOfRests - sumLengthOfRests)
-                                                / er.sumLengthOfRests;
-                        const double restsDiv = temp.numerator() * 1.0 / temp.denominator();
-                        return compareDivs(errorDiv, restsDiv, er);
-                        }
-                  }
-            else
-                  return sumLengthOfRests < er.sumLengthOfRests;
+            return value < 0;
             }
 
    private:
-      bool compareDivs(double errorDiv, double restsDiv, const TupletErrorResult &er) const
+      static double div(double val1, double val2)
             {
-            if (qAbs(errorDiv - restsDiv) <= 0.01) {
-                  if (voiceCount != er.voiceCount)
-                        return voiceCount < er.voiceCount;
-                  else if (tupletCount != er.tupletCount)
-                        return tupletCount < er.tupletCount;
-                  }
-            if (errorDiv < restsDiv)
-                  return sumLengthOfRests < er.sumLengthOfRests;
-            else
-                  return tupletAverageError < er.tupletAverageError;
+            if (val1 == val2)
+                  return 0;
+            return (val1 - val2) / qMax(val1, val2);
             }
 
       double tupletAverageError;
+      double relativeUsedChordPlaces;
       ReducedFraction sumLengthOfRests;
       size_t voiceCount;
       size_t tupletCount;
@@ -515,12 +492,14 @@ findTupletError(
       {
       ReducedFraction sumError;
       ReducedFraction sumLengthOfRests;
-      int sumNoteCount = 0;
+      int sumChordCount = 0;
+      int sumChordPlaces = 0;
 
       for (int i: indexes) {
             sumError += tuplets[i].tupletSumError;
             sumLengthOfRests += tuplets[i].sumLengthOfRests;
-            sumNoteCount += tuplets[i].chords.size();
+            sumChordCount += tuplets[i].chords.size();
+            sumChordPlaces += tuplets[i].tupletNumber;
             }
                   // add quant error of all chords excluded from tuplets
       const ReducedFraction &regularRaster = tuplets.front().regularQuant;
@@ -528,7 +507,8 @@ findTupletError(
             sumError += findQuantizationError(chordIt->first, regularRaster);
 
       return TupletErrorResult{
-                  sumError.ticks() * 1.0 / sumNoteCount,
+                  sumError.ticks() * 1.0 / sumChordCount,
+                  sumChordCount * 1.0 / sumChordPlaces,
                   sumLengthOfRests,
                   findVoiceCount(indexes, tuplets),
                   indexes.size()
@@ -874,8 +854,7 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
       auto commonIndexes = findCommonIndexes(unusedIndexes, tuplets);
 
       std::vector<int> bestIndexes;
-      TupletErrorResult minError(std::numeric_limits<double>::max(),
-                                 ReducedFraction(std::numeric_limits<int>::max(), 1));
+      TupletErrorResult minError;
       int counter = 0;
       while (true) {
             const auto result = commonIndexes.generateNext();
@@ -886,7 +865,11 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
                   tupletGroupsToTest.push_back(uncommonGroup);
 
             const auto indexesAndError = minimizeQuantError(tupletGroupsToTest, tuplets);
-            if (counter == 0 || indexesAndError.second < minError) {
+            if (counter == 0) {
+                  minError = indexesAndError.second;
+                  bestIndexes = indexesAndError.first;
+                  }
+            else if (indexesAndError.second < minError) {
                   minError = indexesAndError.second;
                   bestIndexes = indexesAndError.first;
                   }
