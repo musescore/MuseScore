@@ -35,6 +35,8 @@ class TextLineSegment : public LineSegment {
    public:
       TextLineSegment(Score* s);
       TextLineSegment(const TextLineSegment&);
+      ~TextLineSegment();
+
       virtual TextLineSegment* clone() const { return new TextLineSegment(*this); }
       virtual ElementType type() const       { return TEXTLINE_SEGMENT; }
       TextLine* textLine() const             { return (TextLine*)spanner(); }

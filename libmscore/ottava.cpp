@@ -168,8 +168,8 @@ Ottava::Ottava(Score* s)
       {
       _numbersOnly        = score()->styleB(ST_ottavaNumbersOnly);
       numbersOnlyStyle    = PropertyStyle::STYLED;
-      beginTextStyle    = PropertyStyle::STYLED;
-      continueTextStyle = PropertyStyle::STYLED;
+      beginTextStyle      = PropertyStyle::STYLED;
+      continueTextStyle   = PropertyStyle::STYLED;
       setOttavaType(OttavaType::OTTAVA_8VA);
       setLineWidth(score()->styleS(ST_ottavaLineWidth));
       lineWidthStyle = PropertyStyle::STYLED;
@@ -193,26 +193,14 @@ void Ottava::setOttavaType(OttavaType val)
       {
       setEndHook(true);
       _ottavaType = val;
-      const OttavaDefault* def = &ottavaDefault[int(val)];
 
-      Spatium hook(score()->styleS(ST_ottavaHook));
+      const OttavaDefault* def = &ottavaDefault[int(_ottavaType)];
+      if (beginTextStyle == PropertyStyle::STYLED)
+            setBeginText(propertyDefault(P_BEGIN_TEXT).toString(), TEXT_STYLE_OTTAVA);
+      if (continueTextStyle == PropertyStyle::STYLED)
+            setContinueText(propertyDefault(P_CONTINUE_TEXT).toString(), TEXT_STYLE_OTTAVA);
 
-      SymId id = _numbersOnly ? def->numbersOnlyId : def->id;
-      QString bt, ct;
-      if (symIsValid(id)) {
-            if (beginTextStyle == PropertyStyle::STYLED)
-                  bt = QString("<sym>%1</sym>").arg(Sym::id2name(id));
-            if (continueTextStyle == PropertyStyle::STYLED)
-                  ct = QString("<sym>%1</sym>").arg(Sym::id2name(id));
-            }
-      else {
-            // if music font does not contain ottava symbols, use text
-            bt = ct = _numbersOnly ? def->numbersOnlyName : def->name;
-            }
-      setBeginText(bt,    TEXT_STYLE_OTTAVA);
-      setContinueText(ct, TEXT_STYLE_OTTAVA);
-
-      setEndHookHeight(hook * def->hookDirection);
+      setEndHookHeight(score()->styleS(ST_ottavaHook) * def->hookDirection);
       setPlacement(def->place);
       _pitchShift = def->shift;
       }
@@ -400,6 +388,27 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
 
             case P_NUMBERS_ONLY:
                   return score()->styleB(ST_ottavaNumbersOnly);
+
+            case P_BEGIN_TEXT:
+            case P_CONTINUE_TEXT:
+                  {
+                  const OttavaDefault* def = &ottavaDefault[int(_ottavaType)];
+                  SymId id = _numbersOnly ? def->numbersOnlyId : def->id;
+                  QString s;
+                  if (symIsValid(id))
+                        s = QString("<sym>%1</sym>").arg(Sym::id2name(id));
+                  else
+                        s = _numbersOnly ? def->numbersOnlyName : def->name;
+                  return s;
+                  }
+
+            case P_END_TEXT:
+                  return QString("");
+
+            case P_BEGIN_TEXT_STYLE:
+            case P_CONTINUE_TEXT_STYLE:
+            case P_END_TEXT_STYLE:
+                  return QVariant::fromValue(score()->textStyle(TEXT_STYLE_OTTAVA));
 
             default:
                   return TextLine::propertyDefault(propertyId);
