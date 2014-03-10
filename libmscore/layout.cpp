@@ -463,6 +463,8 @@ void Score::layoutStage2()
       bool crossMeasure = styleB(ST_crossMeasureValues);
 
       for (int track = 0; track < tracks; ++track) {
+            if (!staff(track2staff(track))->show())
+                  continue;
             ChordRest* a1    = 0;      // start of (potential) beam
             Beam* beam       = 0;      // current beam
             Measure* measure = 0;
@@ -579,6 +581,8 @@ void Score::layoutStage3()
       {
       Segment::SegmentTypes st = Segment::SegChordRest;
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+            if (!staff(staffIdx)->show())
+                  continue;
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   layoutChords1(segment, staffIdx);
                   }
@@ -690,6 +694,8 @@ void Score::doLayout()
                   if (!e)
                         continue;
                   if (e->isChordRest()) {
+                        if (!staff(track2staff(track))->show())
+                              continue;
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         if (cr->beam() && cr->beam()->elements().front() == cr)
                               cr->beam()->layout();
