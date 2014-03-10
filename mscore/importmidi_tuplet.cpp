@@ -396,9 +396,12 @@ validateAndFindExcludedChords(std::list<int> &indexes,
 class TupletErrorResult
       {
    public:
-      TupletErrorResult(double t = 0.0, const ReducedFraction &r = ReducedFraction(0, 1))
+      TupletErrorResult(double t = 0.0,
+                        const ReducedFraction &r = ReducedFraction(0, 1),
+                        size_t tc = 0)
             : tupletAverageError(t)
             , sumLengthOfRests(r)
+            , tupletCount(tc)
             {}
 
       bool operator<(const TupletErrorResult &er) const
@@ -436,6 +439,9 @@ class TupletErrorResult
    private:
       bool compareDivs(double errorDiv, double restsDiv, const TupletErrorResult &er) const
             {
+            if (qAbs(errorDiv - restsDiv) <= 0.01)
+                  return tupletCount < er.tupletCount;
+
             if (errorDiv < restsDiv)
                   return sumLengthOfRests < er.sumLengthOfRests;
             else
@@ -444,6 +450,7 @@ class TupletErrorResult
 
       double tupletAverageError;
       ReducedFraction sumLengthOfRests;
+      size_t tupletCount;
       };
 
 TupletErrorResult
@@ -466,7 +473,11 @@ findTupletError(
       for (const auto &chordIt: excludedChords)
             sumError += findQuantizationError(chordIt->first, regularRaster);
 
-      return TupletErrorResult{sumError.ticks() * 1.0 / sumNoteCount, sumLengthOfRests};
+      return TupletErrorResult{
+                  sumError.ticks() * 1.0 / sumNoteCount,
+                  sumLengthOfRests,
+                  indexes.size()
+                  };
       }
 
 TupletErrorResult
