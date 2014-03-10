@@ -187,7 +187,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   downOffset = bottomUpNote->headWidth();
                   // align stem if present, leave extra room if not
                   if (topDownNote->chord()->stem())
-                        downOffset -= topDownNote->chord()->stem()->width();
+                        downOffset -= topDownNote->chord()->stem()->lineWidth();
                   else
                         downOffset += 0.1 * sp;
                   }
@@ -321,7 +321,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         // just be sure that stems clear opposing noteheads
                         qreal clearLeft = 0.0, clearRight = 0.0;
                         if (topDownNote->chord()->stem())
-                              clearLeft = topDownNote->chord()->stem()->width() + 0.3 * sp;
+                              clearLeft = topDownNote->chord()->stem()->lineWidth() + 0.3 * sp;
                         if (bottomUpNote->chord()->stem())
                               clearRight = qMax(maxDownWidth - maxUpWidth, 0.0) + 0.3 * sp;
                         else
@@ -678,10 +678,12 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       for (const AcEl& e : aclist) {
             Note* note = e.note;
             qreal x    = e.x + lx - (note->x() + note->chord()->x());
+#ifndef NDEBUG
             if (note->chord()->x() != 0.0) {
                   qDebug("accidental placement: measure %d beat %d note %s", note->chord()->measure()->no(), note->chord()->segment()->tick() / MScore::division, qPrintable(tpc2name(note->tpc(), NoteSpellingType::STANDARD, false)));
                   qDebug("ne.x = %f, lx = %f, note x = %f, chord x = %f", e.x, lx, note->x(), note->chord()->x());
                   }
+#endif
             note->accidental()->setPos(x, 0);
             note->accidental()->adjustReadPos();
             }
