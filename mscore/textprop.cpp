@@ -77,7 +77,7 @@ void TextProp::setScore(bool onlyStyle, Score* score)
             unstyledGroup->setTitle(tr("Text Style"));
             }
       else {
-            textGroup->setVisible(false);
+            // textGroup->setVisible(false);
             styles->clear();
 
             const QList<TextStyle>& scoreStyles = score->style()->textStyles();

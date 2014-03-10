@@ -81,7 +81,9 @@ class TestImportMidi : public QObject, public MTest
       void findOnTimeRegularError();
       void findTupletApproximation();
       void separateTupletVoices();
-      void findTupletsWithCommonChords();
+      void tupletCommonIndexes();
+      void findLongestUncommonGroup();
+      void findCommonIndexes();
 
       // metric bar analysis
       void metricDivisionsOfTuplet();
@@ -167,6 +169,7 @@ class TestImportMidi : public QObject, public MTest
             }
       void tupletOffTimeOtherBar() { mf("tuplet_off_time_other_bar"); }
       void tupletOffTimeOtherBar2() { mf("tuplet_off_time_other_bar2"); }
+      void tuplet16th8th() { mf("tuplet_16th_8th"); }
       void minDuration() { mf("min_duration"); }
       void minDurationNoReduce()
             {
@@ -567,6 +570,217 @@ void TestImportMidi::findTupletApproximation()
       }
       }
 
+void TestImportMidi::tupletCommonIndexes()
+      {
+      MidiTuplet::TupletCommonIndexes commonIndexes;
+      commonIndexes.add({5, 4});
+      commonIndexes.add({3, 1, 8});
+      commonIndexes.add({11});
+
+      std::pair<std::vector<int>, bool> result;
+
+      result = commonIndexes.generateNext();
+      QCOMPARE(result.first, std::vector<int>({5, 3, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.generateNext();
+      QCOMPARE(result.first, std::vector<int>({4, 3, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.generateNext();
+      QCOMPARE(result.first, std::vector<int>({5, 1, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.generateNext();
+      QCOMPARE(result.first, std::vector<int>({4, 1, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.generateNext();
+      QCOMPARE(result.first, std::vector<int>({5, 8, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.generateNext();
+      QCOMPARE(result.first, std::vector<int>({4, 8, 11}));
+      QCOMPARE(result.second, true);
+
+      // new cycle
+      result = commonIndexes.generateNext();
+      QCOMPARE(result.first, std::vector<int>({5, 3, 11}));
+      QCOMPARE(result.second, false);
+
+      result = commonIndexes.generateNext();
+      QCOMPARE(result.first, std::vector<int>({4, 3, 11}));
+      QCOMPARE(result.second, false);
+
+      // add new indexes -> reset the cycle
+      commonIndexes.add({2, 0});
+
+      result = commonIndexes.generateNext();
+      QCOMPARE(result.first, std::vector<int>({5, 3, 11, 2}));
+      QCOMPARE(result.second, false);
+      }
+
+void TestImportMidi::findLongestUncommonGroup()
+      {
+      std::vector<MidiTuplet::TupletInfo> tuplets;
+      MidiTuplet::TupletInfo info;
+                  // 0
+      info.onTime = {5, 8};
+      info.len = {1, 8};
+      tuplets.push_back(info);
+                  // 1
+      info.onTime = {3, 4};
+      info.len = {1, 8};
+      tuplets.push_back(info);
+                  // 2
+      info.onTime = {7, 8};
+      info.len = {1, 8};
+      tuplets.push_back(info);
+                  // 3
+      info.onTime = {1, 2};
+      info.len = {1, 4};
+      tuplets.push_back(info);
+                  // 4
+      info.onTime = {3, 4};
+      info.len = {1, 4};
+      tuplets.push_back(info);
+                  // 5
+      info.onTime = {1, 2};
+      info.len = {1, 2};
+      tuplets.push_back(info);
+                  // 6
+      info.onTime = {0, 1};
+      info.len = {1, 1};
+      tuplets.push_back(info);
+
+      std::vector<int> result = MidiTuplet::findLongestUncommonGroup(tuplets);
+      std::sort(result.begin(), result.end());
+      QVERIFY(result.size() == 3);
+      QVERIFY(result == std::vector<int>({0, 1, 2})
+              || result == std::vector<int>({1, 2, 3}));
+
+      // test unsuccessful case
+      tuplets.clear();
+                  // 0
+      info.onTime = {5, 8};
+      info.len = {1, 8};
+      tuplets.push_back(info);
+                  // 1
+      info.onTime = {1, 2};
+      info.len = {1, 2};
+      tuplets.push_back(info);
+                  // 2
+      info.onTime = {0, 1};
+      info.len = {1, 1};
+      tuplets.push_back(info);
+
+      result = MidiTuplet::findLongestUncommonGroup(tuplets);
+      QVERIFY(result.size() == 1);
+      }
+
+void TestImportMidi::findCommonIndexes()
+      {
+      std::multimap<ReducedFraction, MidiChord> chords;
+      {
+      MidiChord ch;
+      ch.notes.push_back(MidiNote());
+      ch.notes.push_back(MidiNote());
+      ch.notes.push_back(MidiNote());
+      chords.insert({{1, 1}, ch});
+      }
+      for (int i = 2; i <= 14; ++i) {
+            MidiChord ch;
+            ch.notes.push_back(MidiNote());
+            chords.insert({{i, 1}, ch});
+            }
+
+      std::vector<MidiTuplet::TupletInfo> tuplets;
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{2, 1}, chords.find({2, 1})},
+                  {{3, 1}, chords.find({3, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{3, 1}, chords.find({3, 1})},
+                  {{4, 1}, chords.find({4, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{2, 1}, chords.find({2, 1})},
+                  {{5, 1}, chords.find({5, 1})},
+                  {{6, 1}, chords.find({6, 1})},
+                  {{7, 1}, chords.find({7, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{8, 1}, chords.find({8, 1})},
+                  {{9, 1}, chords.find({9, 1})},
+                  {{10, 1}, chords.find({10, 1})},
+                  {{11, 1}, chords.find({11, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{5, 1}, chords.find({5, 1})},
+                  {{7, 1}, chords.find({7, 1})},
+                  {{8, 1}, chords.find({8, 1})},
+                  {{10, 1}, chords.find({10, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{2, 1}, chords.find({2, 1})},
+                  {{5, 1}, chords.find({5, 1})},
+                  {{6, 1}, chords.find({6, 1})},
+                  {{12, 1}, chords.find({12, 1})},
+                  {{13, 1}, chords.find({13, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{14, 1}, chords.find({14, 1})},
+                  {{4, 1}, chords.find({4, 1})},
+                  {{9, 1}, chords.find({9, 1})},
+                  {{10, 1}, chords.find({10, 1})},
+                  {{11, 1}, chords.find({11, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+      {
+      MidiTuplet::TupletInfo t;
+      t.chords = {{{1, 1}, chords.find({1, 1})},
+                  {{2, 1}, chords.find({2, 1})},
+                  {{6, 1}, chords.find({6, 1})},
+                  {{13, 1}, chords.find({13, 1})},
+                  {{14, 1}, chords.find({14, 1})},
+                  {{9, 1}, chords.find({9, 1})},
+                  {{11, 1}, chords.find({11, 1})}};
+      t.firstChordIndex = 0;
+      tuplets.push_back(t);
+      }
+
+      std::vector<int> indexes = {0, 1, 2, 3, 4, 5, 6, 7};
+
+      const auto result = MidiTuplet::findCommonIndexes(indexes, tuplets);
+      const auto &allIndexes = result.allIndexes();
+      QCOMPARE(allIndexes, std::vector<std::vector<int>>({{0, 1}, {2, 4}, {3, 6}, {5, 7}}));
+      }
+
 //--------------------------------------------------------------------------
       // tuplet voice separation
 
@@ -702,74 +916,6 @@ void TestImportMidi::separateTupletVoices()
       septupletIt = septupletInfo.chords.find(firstChordTime);
       QCOMPARE(septupletIt->second->second.notes.size(), 1);
       QCOMPARE(septupletIt->second->second.notes[0].pitch, 67);
-      }
-
-void TestImportMidi::findTupletsWithCommonChords()
-      {
-      std::vector<MidiTuplet::TupletInfo> tuplets;
-
-      std::multimap<ReducedFraction, MidiChord> chords;
-      chords.insert({ReducedFraction(0, 1), MidiChord()});
-      chords.insert({ReducedFraction(1, 12), MidiChord()});
-      chords.insert({ReducedFraction(1, 6), MidiChord()});
-      chords.insert({ReducedFraction(3, 10), MidiChord()});
-      chords.insert({ReducedFraction(7, 20), MidiChord()});
-      chords.insert({ReducedFraction(2, 5), MidiChord()});
-      chords.insert({ReducedFraction(9, 20), MidiChord()});
-
-      MidiTuplet::TupletInfo tupletData;
-                  // triplet, total len = 1/8
-      tupletData.chords.clear();
-      tupletData.chords.insert({ReducedFraction(0, 1), chords.find(ReducedFraction(0, 1))});
-      tupletData.chords.insert({ReducedFraction(1, 12), chords.find(ReducedFraction(1, 12))});
-      tuplets.push_back(tupletData);
-                  // second triplet, total len = 1/8
-      tupletData.chords.clear();
-      tupletData.chords.insert({ReducedFraction(1, 6), chords.find(ReducedFraction(1, 6))});
-      tuplets.push_back(tupletData);
-                  // third triplet, total len = 1/4
-      tupletData.chords.clear();
-      tupletData.chords.insert({ReducedFraction(0, 1), chords.find(ReducedFraction(0, 1))});
-      tupletData.chords.insert({ReducedFraction(1, 12), chords.find(ReducedFraction(1, 12))});
-      tupletData.chords.insert({ReducedFraction(1, 6), chords.find(ReducedFraction(1, 6))});
-      tuplets.push_back(tupletData);
-                  // quintuplet, total len = 1/4
-      tupletData.chords.clear();
-      tupletData.chords.insert({ReducedFraction(3, 10), chords.find(ReducedFraction(3, 10))});
-      tupletData.chords.insert({ReducedFraction(7, 20), chords.find(ReducedFraction(7, 20))});
-      tupletData.chords.insert({ReducedFraction(2, 5), chords.find(ReducedFraction(2, 5))});
-      tupletData.chords.insert({ReducedFraction(9, 20), chords.find(ReducedFraction(9, 20))});
-      tuplets.push_back(tupletData);
-                  // second quintuplet, total len = 1/2
-      tupletData.chords.clear();
-      tupletData.chords.insert({ReducedFraction(0, 1), chords.find(ReducedFraction(0, 1))});
-      tupletData.chords.insert({ReducedFraction(1, 12), chords.find(ReducedFraction(1, 12))});
-      tupletData.chords.insert({ReducedFraction(3, 10), chords.find(ReducedFraction(3, 10))});
-      tupletData.chords.insert({ReducedFraction(2, 5), chords.find(ReducedFraction(2, 5))});
-      tuplets.push_back(tupletData);
-
-      QVERIFY(tuplets.size() == 5);
-      std::list<int> restTupletIndexes = {0, 1, 2, 3, 4};
-
-      std::list<int> commonTuplets = MidiTuplet::findTupletsWithCommonChords(restTupletIndexes, tuplets);
-      commonTuplets.sort();
-      QVERIFY(restTupletIndexes.empty());
-      QVERIFY(commonTuplets == std::list<int>({0, 1, 2, 3, 4}));
-
-      std::vector<int> uncommonTuplets = MidiTuplet::findTupletsWithNoCommonChords(commonTuplets, tuplets);
-      std::sort(uncommonTuplets.begin(), uncommonTuplets.end());
-      QVERIFY(uncommonTuplets == std::vector<int>({0, 1, 3}));
-      QVERIFY(commonTuplets == std::list<int>({2, 4}));
-                  // process the rest tuplets with common chords
-      uncommonTuplets = MidiTuplet::findTupletsWithNoCommonChords(commonTuplets, tuplets);
-      std::sort(uncommonTuplets.begin(), uncommonTuplets.end());
-      QVERIFY(uncommonTuplets == std::vector<int>({2}));
-      QVERIFY(commonTuplets == std::list<int>({4}));
-                  // process the rest tuplets with common chords
-      uncommonTuplets = MidiTuplet::findTupletsWithNoCommonChords(commonTuplets, tuplets);
-      std::sort(uncommonTuplets.begin(), uncommonTuplets.end());
-      QVERIFY(uncommonTuplets == std::vector<int>({4}));
-      QVERIFY(commonTuplets.empty());
       }
 
 

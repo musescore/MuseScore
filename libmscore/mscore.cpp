@@ -101,6 +101,7 @@ void MScore::init()
       qRegisterMetaType<MarkerType>("MarkerType");
       qRegisterMetaType<BeamMode>("BeamMode");
       qRegisterMetaType<LayoutBreak::LayoutBreakType>("LayoutBreakType");
+//      qRegisterMetaType<TextStyle>("TextStyle");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm

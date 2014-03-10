@@ -400,6 +400,8 @@ extern const TextStyle defaultTextStyleArray[];
 
 extern void initStyle(MStyle*);
 
-
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::TextStyle)
+
 #endif

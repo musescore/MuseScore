@@ -37,7 +37,12 @@ TextLineSegment::TextLineSegment(const TextLineSegment& seg)
    : LineSegment(seg)
       {
       _text = 0;
-      layout();    // set right _text
+      layout();    // set the right _text
+      }
+
+TextLineSegment::~TextLineSegment()
+      {
+      delete _text;
       }
 
 //---------------------------------------------------------
@@ -169,8 +174,13 @@ void TextLineSegment::layout1()
                               _text->setFlag(ELEMENT_MOVABLE, false);
                               _text->setParent(this);
                               }
-                        else
+                        else {
+                              if (tl->_beginText->styled())
+                                    _text->setTextStyleType(tl->_beginText->textStyleType());
+                              else
+                                    _text->setTextStyle(tl->_beginText->textStyle());
                               _text->setText(tl->_beginText->text());
+                              }
                         }
                   else {
                         delete _text;
@@ -185,8 +195,13 @@ void TextLineSegment::layout1()
                               _text->setFlag(ELEMENT_MOVABLE, false);
                               _text->setParent(this);
                               }
-                        else
+                        else {
+                              if (tl->_beginText->styled())
+                                    _text->setTextStyleType(tl->_beginText->textStyleType());
+                              else
+                                    _text->setTextStyle(tl->_beginText->textStyle());
                               _text->setText(tl->_continueText->text());
+                              }
                         }
                   else {
                         delete _text;
@@ -261,6 +276,9 @@ QVariant TextLineSegment::getProperty(P_ID id) const
             case P_END_HOOK_HEIGHT:
             case P_BEGIN_HOOK_TYPE:
             case P_END_HOOK_TYPE:
+            case P_BEGIN_TEXT:
+            case P_CONTINUE_TEXT:
+            case P_END_TEXT:
             case P_LINE_COLOR:
             case P_LINE_WIDTH:
                   return textLine()->getProperty(id);
@@ -285,6 +303,9 @@ bool TextLineSegment::setProperty(P_ID id, const QVariant& v)
             case P_END_HOOK_HEIGHT:
             case P_BEGIN_HOOK_TYPE:
             case P_END_HOOK_TYPE:
+            case P_BEGIN_TEXT:
+            case P_CONTINUE_TEXT:
+            case P_END_TEXT:
             case P_LINE_COLOR:
             case P_LINE_WIDTH:
                   return textLine()->setProperty(id, v);
@@ -309,6 +330,9 @@ QVariant TextLineSegment::propertyDefault(P_ID id) const
             case P_END_HOOK_HEIGHT:
             case P_BEGIN_HOOK_TYPE:
             case P_END_HOOK_TYPE:
+            case P_BEGIN_TEXT:
+            case P_CONTINUE_TEXT:
+            case P_END_TEXT:
             case P_LINE_COLOR:
             case P_LINE_WIDTH:
                   return textLine()->propertyDefault(id);
@@ -498,12 +522,6 @@ LineSegment* TextLine::createLineSegment()
 
 void TextLine::layout()
       {
-      if (_beginText)
-            _beginText->layout();
-      if (_continueText)
-            _continueText->layout();
-      if (_endText)
-            _endText->layout();
       SLine::layout();
       }
 
@@ -580,19 +598,31 @@ void TextLine::writeProperties(Xml& xml) const
       SLine::writeProperties(xml);
 
       if (_beginText) {
-            xml.stag("beginText");
-            _beginText->writeProperties(xml);
-            xml.etag();
+            bool textDiff  = _beginText->text() != propertyDefault(P_BEGIN_TEXT).toString();
+            bool styleDiff = _beginText->textStyle() != propertyDefault(P_BEGIN_TEXT_STYLE).value<TextStyle>();
+            if (textDiff || styleDiff) {
+                  xml.stag("beginText");
+                  _beginText->writeProperties(xml, textDiff, styleDiff);
+                  xml.etag();
+                  }
             }
       if (_continueText) {
-            xml.stag("continueText");
-            _continueText->writeProperties(xml);
-            xml.etag();
+            bool textDiff  = _continueText->text() != propertyDefault(P_CONTINUE_TEXT).toString();
+            bool styleDiff = _continueText->textStyle() != propertyDefault(P_CONTINUE_TEXT_STYLE).value<TextStyle>();
+            if (textDiff || styleDiff) {
+                  xml.stag("continueText");
+                  _continueText->writeProperties(xml, textDiff, styleDiff);
+                  xml.etag();
+                  }
             }
       if (_endText) {
-            xml.stag("endText");
-            _endText->writeProperties(xml);
-            xml.etag();
+            bool textDiff  = _endText->text() != propertyDefault(P_END_TEXT).toString();
+            bool styleDiff = _endText->textStyle() != propertyDefault(P_END_TEXT_STYLE).value<TextStyle>();
+            if (textDiff || styleDiff) {
+                  xml.stag("endText");
+                  _endText->writeProperties(xml, textDiff, styleDiff);
+                  xml.etag();
+                  }
             }
       }
 
@@ -643,18 +673,24 @@ bool TextLine::readProperties(XmlReader& e)
       else if (tag == "endTextPlace")
             _endTextPlace = readPlacement(e);
       else if (tag == "beginText") {
-            _beginText = new Text(score());
-            _beginText->setParent(this);
+            if (!_beginText) {
+                  _beginText = new Text(score());
+                  _beginText->setParent(this);
+                  }
             _beginText->read(e);
             }
       else if (tag == "continueText") {
-            _continueText = new Text(score());
-            _continueText->setParent(this);
+            if (!_continueText) {
+                  _continueText = new Text(score());
+                  _continueText->setParent(this);
+                  }
             _continueText->read(e);
             }
       else if (tag == "endText") {
-            _endText = new Text(score());
-            _endText->setParent(this);
+            if (!_endText) {
+                  _endText = new Text(score());
+                  _endText->setParent(this);
+                  }
             _endText->read(e);
             }
       else if (!SLine::readProperties(e)) {

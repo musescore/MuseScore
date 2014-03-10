@@ -1,20 +1,13 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
+//  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer and others
+//  Copyright (C) 2002-2014 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 #include "lineproperties.h"
@@ -143,18 +136,28 @@ void LineProperties::accept()
       if (pt != otl->endTextPlace())
             otl->undoChangeProperty(P_END_TEXT_PLACE, pt);
 
-      if (beginText->text() != otl->beginText())
+      if ((tl->beginTextElement() && !tl->beginTextElement()) || (beginText->text() != otl->beginText()))
             otl->undoChangeProperty(P_BEGIN_TEXT, beginText->text());
-      if (continueText->text() != otl->continueText())
+      if ((tl->continueTextElement() && !tl->continueTextElement()) || (continueText->text() != otl->continueText()))
             otl->undoChangeProperty(P_CONTINUE_TEXT, continueText->text());
-      if (endText->text() != otl->endText())
+      if ((tl->endTextElement() && !tl->endTextElement()) || (endText->text() != otl->endText()))
             otl->undoChangeProperty(P_END_TEXT, endText->text());
 
       // TODO: apply text style changes
-//      Text* t = tl->beginTextElement();
-//      if (t && t->styled() && t->textStyleType() != otl->beginTextElement()->textStyleType()) {
-//
-//            }
+
+      Text* t = tl->beginTextElement();
+      if (t) {
+            Text* ot = otl->beginTextElement();
+            if (t->styled() && t->textStyleType() != ot->textStyleType())
+                  ot->undoChangeProperty(P_TEXT_STYLE_TYPE, t->textStyleType());
+            else {
+                  ot->undoChangeProperty(P_TEXT_STYLE_TYPE, TEXT_STYLE_UNSTYLED);
+                  if (t->textStyle() != ot->textStyle())
+                        ot->undoChangeProperty(P_TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+                  }
+            }
+
+      // ...
 
       QDialog::accept();
       }
@@ -165,7 +168,6 @@ void LineProperties::accept()
 
 void LineProperties::beginTextProperties()
       {
-//      tl->setBeginText(beginText->text(), TEXT_STYLE_TEXTLINE);
       if (!tl->beginTextElement())
             tl->setBeginText("");         // create text element
       TextProperties t(tl->beginTextElement(), this);
@@ -178,7 +180,6 @@ void LineProperties::beginTextProperties()
 
 void LineProperties::continueTextProperties()
       {
-//      tl->setContinueText(continueText->text(), TEXT_STYLE_TEXTLINE);
       if (!tl->continueTextElement())
             tl->setContinueText("");      // create Text element
       TextProperties t(tl->continueTextElement(), this);
@@ -191,7 +192,6 @@ void LineProperties::continueTextProperties()
 
 void LineProperties::endTextProperties()
       {
-//      tl->setEndText(endText->text(), TEXT_STYLE_TEXTLINE);
       if (!tl->endTextElement())
             tl->setEndText("");     // create Text element
       TextProperties t(tl->endTextElement(), this);

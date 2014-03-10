@@ -211,7 +211,7 @@ void Lyrics::layout()
 
 void Lyrics::layout1()
       {
-      setPos(_textStyle.offset(spatium()));
+      setPos(textStyle().offset(spatium()));
       Text::layout1();
       if (!parent()) // palette & clone trick
           return;

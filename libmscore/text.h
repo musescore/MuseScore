@@ -174,6 +174,7 @@ class Text : public Element {
 
       bool _layoutToParentWidth;
       bool _editMode;
+      TextStyle _textStyle;
 
       static TextCursor _cursor;       // used during editing
 
@@ -188,12 +189,9 @@ class Text : public Element {
       void genText();
 
    protected:
-      TextStyle _textStyle;
-
       QColor textColor() const;
       void layoutFrame();
       void layoutEdit();
-
       void createLayout();
 
    public:
@@ -218,7 +216,7 @@ class Text : public Element {
       void setUnstyled()                  { _styleIndex = TEXT_STYLE_UNSTYLED; }
       bool styled() const                 { return _styleIndex != TEXT_STYLE_UNSTYLED; }
       int textStyleType() const           { return _styleIndex; }
-
+      void setTextStyleType(int);
 
       void setPlainText(const QString&);
       void setText(const QString&);
@@ -261,10 +259,9 @@ class Text : public Element {
 
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
-      void writeProperties(Xml&, bool = true) const;
+      void writeProperties(Xml&, bool = true, bool = true) const;
       bool readProperties(XmlReader&);
 
-      void setTextStyleType(int);
 
       void spellCheckUnderline(bool) {}
       virtual void textStyleChanged();
