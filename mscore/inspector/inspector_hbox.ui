@@ -194,6 +194,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>leftGap</tabstop>
+  <tabstop>resetLeftGap</tabstop>
+  <tabstop>rightGap</tabstop>
+  <tabstop>resetRightGap</tabstop>
+  <tabstop>width</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

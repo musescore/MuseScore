@@ -143,6 +143,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>dynRange</tabstop>
+  <tabstop>resetDynRange</tabstop>
+  <tabstop>velocity</tabstop>
+  <tabstop>resetVelocity</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

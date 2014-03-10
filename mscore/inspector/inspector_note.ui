@@ -647,6 +647,26 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>small</tabstop>
+  <tabstop>resetSmall</tabstop>
+  <tabstop>noteHeadGroup</tabstop>
+  <tabstop>resetNoteHeadGroup</tabstop>
+  <tabstop>noteHeadType</tabstop>
+  <tabstop>resetNoteHeadType</tabstop>
+  <tabstop>mirrorHead</tabstop>
+  <tabstop>resetMirrorHead</tabstop>
+  <tabstop>dotPosition</tabstop>
+  <tabstop>resetDotPosition</tabstop>
+  <tabstop>tuning</tabstop>
+  <tabstop>resetTuning</tabstop>
+  <tabstop>play</tabstop>
+  <tabstop>resetPlay</tabstop>
+  <tabstop>velocityType</tabstop>
+  <tabstop>resetVelocityType</tabstop>
+  <tabstop>velocity</tabstop>
+  <tabstop>resetVelocity</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

@@ -180,6 +180,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>leadingSpace</tabstop>
+  <tabstop>resetLeadingSpace</tabstop>
+  <tabstop>trailingSpace</tabstop>
+  <tabstop>resetTrailingSpace</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>
