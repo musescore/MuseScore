@@ -52,7 +52,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       pageList->setCurrentRow(0);
 
-      articulationTable->verticalHeader()->setVisible(false);
+      //articulationTable->verticalHeader()->setVisible(false); // can get disabled in ui file
       articulationTable->setSelectionBehavior(QAbstractItemView::SelectRows);
       QStringList headers;
       headers << tr("Symbol") << tr("Anchor");
@@ -60,6 +60,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       articulationTable->setColumnWidth(0, 200);
       articulationTable->setColumnWidth(1, 180);
       articulationTable->setRowCount(ARTICULATIONS);
+
+      accidentalsGroup->setVisible(false); // disable, not yet implemented
 
       musicalSymbolFont->clear();
       int idx = 0;
