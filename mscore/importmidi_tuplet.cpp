@@ -439,7 +439,7 @@ class TupletErrorResult
    private:
       bool compareDivs(double errorDiv, double restsDiv, const TupletErrorResult &er) const
             {
-            if (qAbs(errorDiv - restsDiv) <= 0.01)
+            if (qAbs(errorDiv - restsDiv) <= 0.01 && tupletCount != er.tupletCount)
                   return tupletCount < er.tupletCount;
 
             if (errorDiv < restsDiv)
