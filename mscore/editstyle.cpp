@@ -35,6 +35,43 @@
 
 namespace Ms {
 
+// keep in sync with implementation in Page::replaceTextMacros (page.cpp)
+// jumping thru hoops here to make the job of translators easier, yet have a nice display
+static QString toolTipHeaderFooter
+        = QString("<html><head></head><body><p><b>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "Special symbols in header/footer")
+        + QString("</b></p>")
+        + QString("<table><tr><td>$p</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "page number, except on first page")
+        + QString("</i></td></tr><tr><td>$P</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "page number, on all pages")
+        + QString("</i></td></tr><tr><td>$n</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "number of pages")
+        + QString("</i></td></tr><tr><td>$f</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "file name")
+        + QString("</i></td></tr><tr><td>$F</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "file path+name")
+        + QString("</i></td></tr><tr><td>$d</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "current date")
+        + QString("</i></td></tr><tr><td>$D</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "creation date")
+        + QString("</i></td></tr><tr><td>$C</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "copyright, on first page only")
+        + QString("</i></td></tr><tr><td>$c</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "copyright, on all pages")
+        + QString("</i></td></tr><tr><td>$$</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "the $ sign itself")
+        + QString("</i></td></tr><tr><td>$:tag:</td><td>-</td><td><i>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "meta data tag")
+        + QString("</i></td></tr></table><p>")
+        + QT_TRANSLATE_NOOP("toolTipHeaderFooter", "already defined tags:")
+        + QString("</p><table><tr><td>movementNumber</td></tr>")
+        + QString("<tr><td>movementTitle</td></tr>")
+        + QString("<tr><td>workNumber</td></tr>")
+        + QString("<tr><td>workTitle</td></tr>")
+        + QString("<tr><td>source</td></tr>")
+        + QString("<tr><td>copyright</td></tr></table></body></html>");
+
 //---------------------------------------------------------
 //   EditStyle
 //---------------------------------------------------------
@@ -111,6 +148,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(comboFBFont, SIGNAL(currentIndexChanged(int)), SLOT(on_comboFBFont_currentIndexChanged(int)));
 
       setValues();
+      showHeader->setToolTip(toolTipHeaderFooter);
+      showFooter->setToolTip(toolTipHeaderFooter);
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
       connect(chordDescriptionFileButton, SIGNAL(clicked()), SLOT(selectChordDescriptionFile()));
       connect(chordsStandard, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
