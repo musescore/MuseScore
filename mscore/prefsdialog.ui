@@ -342,7 +342,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Port number:</string>
+             <string extracomment="The UDP port number on which the MuseScore OSC server will listen on">Port number:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
