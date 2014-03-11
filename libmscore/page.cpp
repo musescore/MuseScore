@@ -223,7 +223,7 @@ void Page::draw(QPainter* painter) const
             TextStyle ts = score()->textStyle(TEXT_STYLE_HEADER);
             QPointF o(ts.offset(spatium()));
 
-            bool odd = (n & 1) && _score->styleB(ST_headerOddEven);
+            bool odd = (n & 1) || !_score->styleB(ST_headerOddEven);
             if (odd) {
                   o.setX(-o.x());
                   s1 = _score->styleSt(ST_oddHeaderL);
@@ -272,8 +272,7 @@ void Page::draw(QPainter* painter) const
 
             QPointF o(ts.offset(spatium()));
 
-            bool odd = (n & 1) && _score->styleB(ST_footerOddEven);
-
+            bool odd = (n & 1) || !_score->styleB(ST_footerOddEven);
             if (odd) {
                   o.setX(-o.x());
                   s1 = _score->styleSt(ST_oddFooterL);
