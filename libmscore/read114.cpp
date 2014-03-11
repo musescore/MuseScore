@@ -639,10 +639,14 @@ Score::FileError Score::read114(XmlReader& e)
             style()->set(ST_lyricsDistance, 2.0f);
       if (style(ST_voltaY) == MScore::baseStyle()->value(ST_voltaY))
             style()->set(ST_voltaY, -2.0f);
-      if (style(ST_hideEmptyStaves).toBool() == true) // http://musescore.org/en/node/16228
+      if (style(ST_hideEmptyStaves).toBool()) // http://musescore.org/en/node/16228
             style()->set(ST_dontHideStavesInFirstSystem, false);
       if (style(ST_useGermanNoteNames).toBool())
             style()->set(ST_useStandardNoteNames, false);
+      if (style(ST_showPageNumberOne).toBool()) { // http://musescore.org/en/node/21207
+            style()->set(ST_evenFooterL, QString("$P"));
+            style()->set(ST_oddFooterR, QString("$P"));
+            }
 
       _showOmr = false;
 
