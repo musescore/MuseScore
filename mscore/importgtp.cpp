@@ -42,6 +42,7 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/segment.h"
 #include "libmscore/rehearsalmark.h"
+#include "libmscore/dynamic.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -260,16 +261,13 @@ void GuitarPro::setTuplet(Tuplet* tuplet, int tuple)
 //   addDynamic
 //---------------------------------------------------------
 
-void GuitarPro::addDynamic(Note* /*note*/, int d)
+void GuitarPro::addDynamic(Note* note, int d)
       {
-      if (d == 8) {
-            // Articulation* a = new Articulation(note->score());
-            // a->setSubtype(SforzatoaccentSym);
-            // note->chord()->add(a);
-            }
-      else {
-            // qDebug("dynamic %d\n", d);
-            }
+      Dynamic* dyn = new Dynamic(score);
+      QString map_dyn[] = {"f","ppp","pp","p","mp","mf","f","ff","fff"};
+      dyn->setDynamicType(map_dyn[d]);
+      dyn->setTrack(note->track());
+      note->chord()-> segment()-> add(dyn);
       }
 
 //---------------------------------------------------------

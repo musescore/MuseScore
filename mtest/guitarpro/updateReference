@@ -8,3 +8,4 @@ cp   $MSCORE/sforzato.gp4.mscx sforzato.gp4-ref.mscx
 cp   $MSCORE/heavy-accent.gp4.mscx heavy-accent.gp4-ref.mscx
 cp   $MSCORE/tremolos.gp4.mscx tremolos.gp4-ref.mscx
 cp   $MSCORE/trill.gp4.mscx trill.gp4-ref.mscx
+cp   $MSCORE/dynamic.gp5.mscx dynamic.gp5-ref.mscx

@@ -38,6 +38,7 @@ private slots:
       void gpHeavyAccent() { gpReadTest("heavy-accent", "gp5"); }
       void gpTremolos() { gpReadTest("tremolos", "gp5"); }
       void gpTrill() { gpReadTest("trill", "gp4"); }
+      void gpDynamic() { gpReadTest("dynamic", "gp5"); }
       };
 
 //---------------------------------------------------------
