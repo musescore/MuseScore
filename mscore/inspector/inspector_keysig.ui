@@ -121,6 +121,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>showCourtesy</tabstop>
+  <tabstop>resetShowCourtesy</tabstop>
+  <tabstop>showNaturals</tabstop>
+  <tabstop>resetShowNaturals</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

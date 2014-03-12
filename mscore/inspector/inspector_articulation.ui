@@ -230,6 +230,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>direction</tabstop>
+  <tabstop>resetDirection</tabstop>
+  <tabstop>anchor</tabstop>
+  <tabstop>resetAnchor</tabstop>
+  <tabstop>timeStretch</tabstop>
+  <tabstop>resetTimeStretch</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>
