@@ -20,6 +20,7 @@
 #include "libmscore/part.h"
 #include "libmscore/measure.h"
 #include "libmscore/timesig.h"
+#include "libmscore/tremolo.h"
 #include "libmscore/rest.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
@@ -1573,8 +1574,25 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                   }
             if (modMask2 & 0x2) {   // palm mute - mute the whole column
                   }
-            if (modMask2 & 0x4)     // tremolo picking length
-                  readUChar();
+            if (modMask2 & 0x4) {    // tremolo picking length
+                  int tremoloDivision = readUChar();
+                  Chord* chord = note->chord();
+                  Tremolo* t = new Tremolo(chord->score());
+                  if (tremoloDivision == 1) {
+                        t->setTremoloType(TREMOLO_R8);
+                        chord->add(t);
+                        }
+                  else if (tremoloDivision == 2) {
+                        t->setTremoloType(TREMOLO_R16);
+                        chord->add(t);
+                        }
+                  else if (tremoloDivision == 3) {
+                        t->setTremoloType(TREMOLO_R32);
+                        chord->add(t);
+                        }
+                  else
+                        qDebug("Unknown tremolo value");
+                  }
             if (modMask2 & 0x8)
                   readUChar();      // slide kind
             if (modMask2 & 0x10)
@@ -2005,8 +2023,25 @@ void GuitarPro5::readNoteEffects(Note* note)
             }
       if (modMask2 & 0x2) {   // palm mute - mute the whole column
             }
-      if (modMask2 & 0x4)     // tremolo picking length
-            readUChar();
+      if (modMask2 & 0x4) {    // tremolo picking length
+            int tremoloDivision = readUChar();
+            Chord* chord = note->chord();
+            Tremolo* t = new Tremolo(chord->score());
+            if (tremoloDivision == 1) {
+                  t->setTremoloType(TREMOLO_R8);
+                  chord->add(t);
+                  }
+            else if (tremoloDivision == 2) {
+                  t->setTremoloType(TREMOLO_R16);
+                  chord->add(t);
+                  }
+            else if (tremoloDivision == 3) {
+                  t->setTremoloType(TREMOLO_R32);
+                  chord->add(t);
+                  }
+            else
+                  qDebug("Unknown tremolo value");
+      }
       if (modMask2 & 0x8)
             readUChar();      // slide kind
       if (modMask2 & 0x10)
