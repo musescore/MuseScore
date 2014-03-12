@@ -1539,6 +1539,14 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       if (noteBits & 0x20)
             fretNumber = readUChar();
 
+      // check if a note is supposed to be accented, and give it the sforzato type
+      if (noteBits & 0x40) {
+            Articulation* art = new Articulation(note->score());
+            art->setArticulationType(Articulation_Sforzatoaccent);
+            if (!note->score()->addArticulation(note, art))
+                  delete art;
+            }
+
       if (noteBits & 0x80) {              // fingering
             int a = readUChar();
             int b = readUChar();
@@ -2067,6 +2075,14 @@ void GuitarPro5::readNote(int string, Note* note)
             }
       if (noteBits & 0x1)
             skip(8);
+
+      // check if a note is supposed to be accented, and give it the sforzato type
+      if (noteBits & 0x40) {
+            Articulation* art = new Articulation(note->score());
+            art->setArticulationType(Articulation_Sforzatoaccent);
+            if (!note->score()->addArticulation(note, art))
+                  delete art;
+            }
 
       /*int aa =*/ readUChar();
       if (noteBits & 0x8) {
