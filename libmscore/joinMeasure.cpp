@@ -25,7 +25,9 @@ namespace Ms {
 void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       {
       startCmd();
-
+      
+      deselectAll();
+      
       ScoreRange range;
       range.read(m1->first(), m2->last(), 0, nstaves() * VOICES);
 
