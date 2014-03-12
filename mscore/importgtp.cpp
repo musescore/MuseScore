@@ -2076,6 +2076,14 @@ void GuitarPro5::readNote(int string, Note* note)
       if (noteBits & 0x1)
             skip(8);
 
+      // check if a note is supposed to be accented, and give it the marcato type
+      if (noteBits & 0x02) {
+            Articulation* art = new Articulation(note->score());
+            art->setArticulationType(Articulation_Marcato);
+            if (!note->score()->addArticulation(note, art))
+                  delete art;
+      }
+
       // check if a note is supposed to be accented, and give it the sforzato type
       if (noteBits & 0x40) {
             Articulation* art = new Articulation(note->score());
