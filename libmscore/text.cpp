@@ -1062,7 +1062,7 @@ void Text::layout1()
       else if (textStyle().align() & ALIGN_VCENTER)
             yoff +=  (h - (bb.top() + bb.bottom())) * .5;
       else if (textStyle().align() & ALIGN_BASELINE)
-            yoff = h * .5 - _layout.front().lineSpacing();
+            yoff += h * .5 - _layout.front().lineSpacing();
       else
             yoff += -bb.top();
 
