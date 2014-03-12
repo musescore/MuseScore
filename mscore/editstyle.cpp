@@ -151,6 +151,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       showHeader->setToolTip(toolTipHeaderFooter);
       showFooter->setToolTip(toolTipHeaderFooter);
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
+      connect(headerOddEven, SIGNAL(toggled(bool)), SLOT(toggleHeaderOddEven(bool)));
+      connect(footerOddEven, SIGNAL(toggled(bool)), SLOT(toggleFooterOddEven(bool)));
       connect(chordDescriptionFileButton, SIGNAL(clicked()), SLOT(selectChordDescriptionFile()));
       connect(chordsStandard, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
       connect(chordsJazz, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
@@ -661,6 +663,7 @@ void EditStyle::setValues()
       headerStyled->setChecked(lstyle.value(ST_headerStyled).toBool());
       showHeaderFirstPage->setChecked(lstyle.value(ST_headerFirstPage).toBool());
       headerOddEven->setChecked(lstyle.value(ST_headerOddEven).toBool());
+      toggleHeaderOddEven(lstyle.value(ST_headerOddEven).toBool());
       if (headerStyled->isChecked()) {
             evenHeaderL->setPlainText(lstyle.value(ST_evenHeaderL).toString());
             evenHeaderC->setPlainText(lstyle.value(ST_evenHeaderC).toString());
@@ -682,6 +685,7 @@ void EditStyle::setValues()
       footerStyled->setChecked(lstyle.value(ST_footerStyled).toBool());
       showFooterFirstPage->setChecked(lstyle.value(ST_footerFirstPage).toBool());
       footerOddEven->setChecked(lstyle.value(ST_footerOddEven).toBool());
+      toggleFooterOddEven(lstyle.value(ST_footerOddEven).toBool());
       if (footerStyled->isChecked()) {
             evenFooterL->setPlainText(lstyle.value(ST_evenFooterL).toString());
             evenFooterC->setPlainText(lstyle.value(ST_evenFooterC).toString());
@@ -780,6 +784,47 @@ void EditStyle::setChordStyle(bool checked)
             lstyle.set(ST_chordStyle, QString("custom"));
             chordDescriptionGroup->setEnabled(true);
             }
+      }
+
+//---------------------------------------------------------
+//   toggleHeaderOddEven
+//---------------------------------------------------------
+
+void EditStyle::toggleHeaderOddEven(bool checked)
+      {
+      label_67->setEnabled(checked); // "Even"
+      if (checked)
+          label_66->setText(tr("Odd"));
+      else
+          label_66->setText(tr("Even/Odd"));
+      evenHeaderL->setEnabled(checked);
+      editEvenHeaderL->setEnabled(checked);
+      evenHeaderC->setEnabled(checked);
+      editEvenHeaderC->setEnabled(checked);
+      evenHeaderR->setEnabled(checked);
+      editEvenHeaderR->setEnabled(checked);
+      return;
+      }
+
+//---------------------------------------------------------
+//   toggleFooterOddEven
+//---------------------------------------------------------
+
+void EditStyle::toggleFooterOddEven(bool checked)
+      {
+      label_80->setEnabled(checked); // "Even"
+      if (checked)
+          label_65->setText(tr("Odd"));
+      else
+          label_65->setText(tr("Even/Odd"));
+
+      evenFooterL->setEnabled(checked);
+      editEvenFooterL->setEnabled(checked);
+      evenFooterC->setEnabled(checked);
+      editEvenFooterC->setEnabled(checked);
+      evenFooterR->setEnabled(checked);
+      editEvenFooterR->setEnabled(checked);
+      return;
       }
 
 //---------------------------------------------------------
