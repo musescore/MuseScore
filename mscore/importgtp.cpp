@@ -1606,6 +1606,11 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
             if (modMask2 & 0x20) {
                   readUChar();      // trill fret
                   readUChar();      // trill length
+
+                  Articulation* art = new Articulation(note->score());
+                  art->setArticulationType(Articulation_Trill);
+                  note->score()->addArticulation(note, art);
+
                   }
             }
       if (fretNumber == -1) {
@@ -2055,6 +2060,11 @@ void GuitarPro5::readNoteEffects(Note* note)
       if (modMask2 & 0x20) {
             readUChar();      // trill fret
             int period = readUChar();      // trill length
+
+            Articulation* art = new Articulation(note->score());
+            art->setArticulationType(Articulation_Trill);
+            note->score()->addArticulation(note, art);
+
             switch(period) {
                   case 1:           // 16
                         break;
