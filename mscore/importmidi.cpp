@@ -45,6 +45,7 @@
 #include "importmidi_quant.h"
 #include "importmidi_tuplet.h"
 #include "libmscore/tuplet.h"
+#include "libmscore/articulation.h"
 #include "importmidi_swing.h"
 #include "importmidi_fraction.h"
 #include "importmidi_drum.h"
@@ -401,6 +402,13 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
             chord->setTrack(track);
             chord->setDurationType(d);
             chord->setDuration(d.fraction());
+            if (startChordTick == startChordTickFrac   // first chord in tied chord sequence
+                        && midiChords.begin()->isStaccato()) {
+                  Articulation* a = new Articulation(chord->score());
+                  a->setArticulationType(Articulation_Staccato);
+                  chord->add(a);
+                  }
+
             Segment* s = measure->getSegment(chord, tick.ticks());
             s->add(chord);
             chord->setUserPlayEvents(true);
