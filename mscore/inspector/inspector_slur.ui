@@ -131,6 +131,10 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineType</tabstop>
+  <tabstop>resetLineType</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

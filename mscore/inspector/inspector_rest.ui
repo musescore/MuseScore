@@ -94,6 +94,10 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>small</tabstop>
+  <tabstop>resetSmall</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

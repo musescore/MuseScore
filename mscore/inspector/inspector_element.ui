@@ -361,6 +361,17 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>visible</tabstop>
+  <tabstop>resetVisible</tabstop>
+  <tabstop>resetColor</tabstop>
+  <tabstop>offsetX</tabstop>
+  <tabstop>vRaster</tabstop>
+  <tabstop>resetX</tabstop>
+  <tabstop>offsetY</tabstop>
+  <tabstop>hRaster</tabstop>
+  <tabstop>resetY</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

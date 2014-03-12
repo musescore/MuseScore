@@ -376,6 +376,22 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>distribute</tabstop>
+  <tabstop>resetDistribute</tabstop>
+  <tabstop>direction</tabstop>
+  <tabstop>resetDirection</tabstop>
+  <tabstop>growLeft</tabstop>
+  <tabstop>resetGrowLeft</tabstop>
+  <tabstop>growRight</tabstop>
+  <tabstop>resetGrowRight</tabstop>
+  <tabstop>noSlope</tabstop>
+  <tabstop>resetNoSlope</tabstop>
+  <tabstop>userPosition</tabstop>
+  <tabstop>resetUserPosition</tabstop>
+  <tabstop>y1</tabstop>
+  <tabstop>y2</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

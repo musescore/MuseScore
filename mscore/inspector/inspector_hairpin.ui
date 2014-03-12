@@ -285,6 +285,20 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>hairpinCircledTip</tabstop>
+  <tabstop>resetHairpinCircledTip</tabstop>
+  <tabstop>hairpinType</tabstop>
+  <tabstop>resetHairpinType</tabstop>
+  <tabstop>dynRange</tabstop>
+  <tabstop>resetDynRange</tabstop>
+  <tabstop>veloChange</tabstop>
+  <tabstop>resetVeloChange</tabstop>
+  <tabstop>hairpinHeight</tabstop>
+  <tabstop>resetHairpinHeight</tabstop>
+  <tabstop>hairpinContHeight</tabstop>
+  <tabstop>resetHairpinContHeight</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

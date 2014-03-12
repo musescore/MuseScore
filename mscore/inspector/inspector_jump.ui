@@ -133,6 +133,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>jumpTo</tabstop>
+  <tabstop>resetJumpTo</tabstop>
+  <tabstop>playUntil</tabstop>
+  <tabstop>resetPlayUntil</tabstop>
+  <tabstop>continueAt</tabstop>
+  <tabstop>resetContinueAt</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>
