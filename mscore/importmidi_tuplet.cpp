@@ -47,11 +47,12 @@ int tupletVoiceLimit()
 
 bool isTupletAllowed(const TupletInfo &tupletInfo)
       {
+        {
                   // special check for duplets and triplets
       const std::vector<int> nums = {2, 3};
                   // for duplet: if note first and single - only 1/2*tupletLen duration is allowed
                   // for triplet: if note first and single - only 1/3*tupletLen duration is allowed
-      for (auto num: nums) {
+      for (int num: nums) {
             if (tupletInfo.tupletNumber == num
                         && tupletInfo.chords.size() == 1
                         && tupletInfo.firstChordIndex == 0) {
@@ -62,6 +63,7 @@ bool isTupletAllowed(const TupletInfo &tupletInfo)
                         }
                   }
             }
+      }
                   // for all tuplets
       const int minAllowedNoteCount = tupletInfo.tupletNumber / 2 + tupletInfo.tupletNumber / 4;
       if ((int)tupletInfo.chords.size() < minAllowedNoteCount)
@@ -355,33 +357,104 @@ bool areTupletChordsInUse(
       return false;
       }
 
+
+std::pair<ReducedFraction, ReducedFraction>
+tupletInterval(const TupletInfo &tuplet,
+               const ReducedFraction &regularRaster)
+      {
+      ReducedFraction tupletEnd = tuplet.onTime + tuplet.len;
+
+      for (const auto &chord: tuplet.chords) {
+            auto offTime = chord.first + MChord::maxNoteLen(chord.second->second.notes);
+            offTime = Quantize::quantizeValue(offTime, regularRaster);
+            if (offTime > tupletEnd)
+                  tupletEnd = offTime;
+            }
+      return std::make_pair(tuplet.onTime, tupletEnd);
+      }
+
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval1,
+                      const std::pair<ReducedFraction, ReducedFraction> &interval2)
+      {
+      return interval1.second > interval2.first && interval1.first < interval2.second;
+      }
+
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval,
+                      const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals)
+      {
+      for (const auto &i: intervals) {
+            if (haveIntersection(i, interval))
+                  return true;
+            }
+      return false;
+      }
+
+size_t findVoiceCount(const std::list<int> &indexes,
+                      const std::vector<TupletInfo> &tuplets)
+      {
+      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> tupletIntervals;
+      const int limit = tupletVoiceLimit();
+      for (int i: indexes) {
+            for (int voice = 0; voice < limit; ++voice) {
+                  const auto interval = tupletInterval(tuplets[i], tuplets[i].regularQuant);
+                  if (!haveIntersection(interval, tupletIntervals[voice])) {
+                        tupletIntervals[voice].push_back(interval);
+                        break;
+                        }
+                  }
+            }
+      return tupletIntervals.size();
+      }
+
+const std::map<int, int>& minAllowedExtraVoiceNoteCount()
+      {
+      static const std::map<int, int> noteCountForTuplets = {
+                  {2, 2}, {3, 3}, {4, 4}, {5, 4}, {7, 6}
+            };
+      return noteCountForTuplets;
+      }
+
 std::set<std::pair<const ReducedFraction, MidiChord> *>
 validateAndFindExcludedChords(std::list<int> &indexes,
                               const std::vector<TupletInfo> &tuplets)
-{
+      {
       std::set<std::pair<const ReducedFraction, MidiChord> *> excludedChords;
-
                   // structure of map: <chord address, count of use of first tuplet chord with this tick>
       std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedFirstTupletNotes;
                   // already used chords: <chord address, has chord index 0 in tuplet>
       std::map<std::pair<const ReducedFraction, MidiChord> *, bool> usedChords;
+                  // <voice, intervals>
+      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> tupletIntervals;
+      const int voiceLimit = tupletVoiceLimit();
 
                   // select tuplets with min average error
       for (auto it = indexes.begin(); it != indexes.end(); ) {
+            const auto &tuplet = tuplets[*it];
 
-            Q_ASSERT_X(!tuplets[*it].chords.empty(),
+            Q_ASSERT_X(!tuplet.chords.empty(),
                        "MIDI tuplets: validateTuplets", "Tuplet has no chords but it should");
 
-            // check for chord notes that are already in use in another tuplets
-            if (areTupletChordsInUse(usedFirstTupletNotes, usedChords, tuplets[*it])) {
-                  for (const auto &chord: tuplets[*it].chords) {
-                        excludedChords.insert(&*chord.second);
+            int voice = 0;
+            for ( ; voice < voiceLimit; ++voice) {
+                  const auto interval = tupletInterval(tuplet, tuplet.regularQuant);
+                  if (!haveIntersection(interval, tupletIntervals[voice])) {
+                        tupletIntervals[voice].push_back(interval);
+                        break;
                         }
+                  }
+                        // check for chord notes that are already in use in another tuplets
+            if (areTupletChordsInUse(usedFirstTupletNotes, usedChords, tuplet)
+                        || (voice == voiceLimit)
+                        || (voice > 0 && (int)tuplet.chords.size()
+                            < minAllowedExtraVoiceNoteCount().find(tuplet.tupletNumber)->second))
+                  {
+                  for (const auto &chord: tuplet.chords)
+                        excludedChords.insert(&*chord.second);
                   it = indexes.erase(it);
                   continue;
                   }
                         // we can use this tuplet
-            markChordsAsUsed(usedFirstTupletNotes, usedChords, tuplets[*it]);
+            markChordsAsUsed(usedFirstTupletNotes, usedChords, tuplet);
             ++it;
             }
 
@@ -391,7 +464,7 @@ validateAndFindExcludedChords(std::list<int> &indexes,
             }
 
       return excludedChords;
-}
+      }
 
 class TupletErrorResult
       {
@@ -435,54 +508,6 @@ class TupletErrorResult
       size_t voiceCount;
       size_t tupletCount;
       };
-
-std::pair<ReducedFraction, ReducedFraction>
-tupletInterval(const TupletInfo &tuplet,
-               const ReducedFraction &regularRaster)
-      {
-      ReducedFraction tupletEnd = tuplet.onTime + tuplet.len;
-
-      for (const auto &chord: tuplet.chords) {
-            auto offTime = chord.first + MChord::maxNoteLen(chord.second->second.notes);
-            offTime = Quantize::quantizeValue(offTime, regularRaster);
-            if (offTime > tupletEnd)
-                  tupletEnd = offTime;
-            }
-      return std::make_pair(tuplet.onTime, tupletEnd);
-      }
-
-bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval1,
-                      const std::pair<ReducedFraction, ReducedFraction> &interval2)
-      {
-      return interval1.second > interval2.first && interval1.first < interval2.second;
-      }
-
-bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval,
-                      const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals)
-      {
-      for (const auto &i: intervals) {
-            if (haveIntersection(i, interval))
-                  return true;
-            }
-      return false;
-      }
-
-size_t findVoiceCount(const std::list<int> &indexes,
-                      const std::vector<TupletInfo> &tuplets)
-      {
-      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> tupletIntervals;
-      int limit = tupletVoiceLimit();
-      for (int i: indexes) {
-            for (int voice = 0; voice < limit; ++voice) {
-                  const auto interval = tupletInterval(tuplets[i], tuplets[i].regularQuant);
-                  if (!haveIntersection(interval, tupletIntervals[voice])) {
-                        tupletIntervals[voice].push_back(interval);
-                        break;
-                        }
-                  }
-            }
-      return tupletIntervals.size();
-      }
 
 TupletErrorResult
 findTupletError(
