@@ -358,13 +358,8 @@ ReducedFraction findTupletRatio(const ReducedFraction &startPos,
       {
       ReducedFraction tupletRatio = {2, 2};
       int tupletNumber = tupletNumberForDuration(startPos, endPos, tupletsInBar);
-      if (tupletNumber != -1) {
-            const auto it = MidiTuplet::tupletRatios().find(tupletNumber);
-            if (it != MidiTuplet::tupletRatios().end())
-                  tupletRatio = it->second;
-            else
-                  qDebug("Tuplet ratio not found for tuplet number: %d", tupletNumber);
-            }
+      if (tupletNumber != -1)
+            tupletRatio = MidiTuplet::tupletLimits(tupletNumber).ratio;
 
       return tupletRatio;
       }

@@ -26,10 +26,17 @@ struct TupletData
       std::vector<DurationElement *> elements;
       };
 
-// conversion ratios from tuplet durations to regular durations
-// for example, 8th note in triplet * 3/2 = regular 8th note
+struct TupletLimits
+      {
+            // ratio - for conversion from tuplet durations to regular durations
+            // for example, 8th note in triplet * 3/2 = regular 8th note
+      ReducedFraction ratio;
+      int minNoteCount;
+      int minNoteCountAddVoice;
+      int minNoteCountStaccato;
+      };
 
-const std::map<int, ReducedFraction> &tupletRatios();
+const TupletLimits& tupletLimits(int tupletNumber);
 
 std::vector<TupletData>
 findTupletsInBarForDuration(int voice,

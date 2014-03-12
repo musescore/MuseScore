@@ -19,17 +19,26 @@
 namespace Ms {
 namespace MidiTuplet {
 
-const std::map<int, ReducedFraction>& tupletRatios()
+const std::map<int, TupletLimits>& tupletsLimits()
       {
-      const static std::map<int, ReducedFraction> ratios = {
-            {2, {2, 3}},
-            {3, {3, 2}},
-            {4, {4, 3}},
-            {5, {5, 4}},
-            {7, {7, 8}},
-            {9, {9, 8}}
+      const static std::map<int, TupletLimits> values = {
+            {2, {{2, 3}, 1, 2, 2}},
+            {3, {{3, 2}, 1, 3, 3}},
+            {4, {{4, 3}, 3, 4, 3}},
+            {5, {{5, 4}, 3, 4, 4}},
+            {7, {{7, 8}, 4, 6, 5}},
+            {9, {{9, 8}, 6, 7, 7}}
             };
-      return ratios;
+      return values;
+      }
+
+const TupletLimits& tupletLimits(int tupletNumber)
+      {
+      auto it = tupletsLimits().find(tupletNumber);
+
+      Q_ASSERT_X(it != tupletsLimits().end(), "MidiTuplet::tupletValue", "Unknown tuplet");
+
+      return it->second;
       }
 
 int voiceLimit()
@@ -47,7 +56,7 @@ int tupletVoiceLimit()
 
 bool isTupletAllowed(const TupletInfo &tupletInfo)
       {
-        {
+      {
                   // special check for duplets and triplets
       const std::vector<int> nums = {2, 3};
                   // for duplet: if note first and single - only 1/2*tupletLen duration is allowed
@@ -65,7 +74,7 @@ bool isTupletAllowed(const TupletInfo &tupletInfo)
             }
       }
                   // for all tuplets
-      const int minAllowedNoteCount = tupletInfo.tupletNumber / 2 + tupletInfo.tupletNumber / 4;
+      const int minAllowedNoteCount = tupletLimits(tupletInfo.tupletNumber).minNoteCount;
       if ((int)tupletInfo.chords.size() < minAllowedNoteCount)
             return false;
                   // allow duplets and quadruplets with the zero error == regular error
@@ -113,6 +122,7 @@ std::vector<int> findTupletNumbers(const ReducedFraction &divLen,
             if (operations.tuplets.nonuplets)
                   tupletNumbers.push_back(9);
             }
+
       return tupletNumbers;
       }
 
@@ -230,6 +240,7 @@ ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo)
       {
       auto beg = tupletInfo.onTime;
       const auto tupletEndTime = tupletInfo.onTime + tupletInfo.len;
+      const auto tupletNoteLen = tupletInfo.len / tupletInfo.tupletNumber;
       ReducedFraction sumLen = {0, 1};
 
       for (const auto &chord: tupletInfo.chords) {
@@ -238,8 +249,13 @@ ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo)
                                                               tupletInfo.tupletQuant);
             if (beg < chordOnTime)
                   sumLen += (chordOnTime - beg);
-            beg = chordOnTime + Quantize::quantizeValue(MChord::maxNoteLen(midiChord.notes),
-                                                        tupletInfo.tupletQuant);
+            ReducedFraction maxLen(0, 1);
+            for (const auto &note: midiChord.notes) {
+                  const auto noteLen = (note.staccato) ? tupletNoteLen : note.len;
+                  if (noteLen > maxLen)
+                        maxLen = noteLen;
+                  }
+            beg = chordOnTime + Quantize::quantizeValue(maxLen, tupletInfo.tupletQuant);
             if (beg >= tupletEndTime)
                   break;
             }
@@ -406,14 +422,6 @@ size_t findVoiceCount(const std::list<int> &indexes,
       return tupletIntervals.size();
       }
 
-const std::map<int, int>& minAllowedExtraVoiceNoteCount()
-      {
-      static const std::map<int, int> noteCountForTuplets = {
-                  {2, 2}, {3, 3}, {4, 4}, {5, 4}, {7, 6}
-            };
-      return noteCountForTuplets;
-      }
-
 std::set<std::pair<const ReducedFraction, MidiChord> *>
 validateAndFindExcludedChords(std::list<int> &indexes,
                               const std::vector<TupletInfo> &tuplets)
@@ -444,10 +452,9 @@ validateAndFindExcludedChords(std::list<int> &indexes,
                   }
                         // check for chord notes that are already in use in another tuplets
             if (areTupletChordsInUse(usedFirstTupletNotes, usedChords, tuplet)
-                        || (voice == voiceLimit)
-                        || (voice > 0 && (int)tuplet.chords.size()
-                            < minAllowedExtraVoiceNoteCount().find(tuplet.tupletNumber)->second))
-                  {
+                     || voice == voiceLimit
+                     || (voice > 0 && (int)tuplet.chords.size()
+                         < tupletLimits(tuplet.tupletNumber).minNoteCountAddVoice)) {
                   for (const auto &chord: tuplet.chords)
                         excludedChords.insert(&*chord.second);
                   it = indexes.erase(it);
@@ -1692,6 +1699,66 @@ void resetTupletVoices(std::vector<TupletInfo> &tuplets)
             }
       }
 
+// detect staccato notes; later sum length of rests of this notes
+// will be reduced by enlarging the length of notes to the tuplet note length
+
+void detectStaccato(TupletInfo &tuplet)
+      {
+      if ((int)tuplet.chords.size() >= tupletLimits(tuplet.tupletNumber).minNoteCountStaccato) {
+            const auto tupletNoteLen = tuplet.len / tuplet.tupletNumber;
+            for (auto &chord: tuplet.chords) {
+                  MidiChord &midiChord = chord.second->second;
+                  for (auto &note: midiChord.notes) {
+                        if (note.len < tupletNoteLen / 2) {
+                                    // later if chord have one or more notes
+                                    // with staccato -> entire chord is staccato
+                              note.staccato = true;
+                              }
+                        }
+                  }
+            }
+      }
+
+// this function is needed because if there are additional chords
+// that can be in the middle between tuplet chords,
+// and tuplet chords are staccato, i.e. have short length,
+// then such a long tuplet with lots of short chords
+// would be not pretty-looked converted to notation
+
+template <typename Iter>
+bool haveChordsInTheMiddleBetweenTupletChords(
+            const Iter &startDivChordIt,
+            const Iter &endDivChordIt,
+            const TupletInfo &tuplet)
+      {
+      const auto tupletNoteLen = tuplet.len / tuplet.tupletNumber;
+      for (auto it = startDivChordIt; it != endDivChordIt; ++it) {
+            for (int i = 0; i != tuplet.tupletNumber; ++i) {
+                  const auto pos = tuplet.onTime + tupletNoteLen * i + tupletNoteLen / 2;
+                  if ((pos - it->first).absValue() < tuplet.regularQuant)
+                        return true;
+                  }
+            }
+      return false;
+      }
+
+// decrease tuplet error by enlarging staccato notes:
+// make note.len = tuplet note length
+
+void applyStaccato(std::vector<TupletInfo> &tuplets)
+      {
+      for (auto &tuplet: tuplets) {
+            const auto tupletNoteLen = tuplet.len / tuplet.tupletNumber;
+            for (auto &chord: tuplet.chords) {
+                  MidiChord &midiChord = chord.second->second;
+                  for (auto &note: midiChord.notes) {
+                        if (note.staccato)
+                              note.len = tupletNoteLen;
+                        }
+                  }
+            }
+      }
+
 std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                                     const ReducedFraction &endBarTick,
                                     const ReducedFraction &barFraction,
@@ -1706,7 +1773,7 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
       auto startBarChordIt = MChord::findFirstChordInRange(startBarTick - tol, endBarTick,
                                                            chords.begin(), chords.end());
       startBarChordIt = findTupletFreeChord(startBarChordIt, chords.end(), startBarTick);
-      if (startBarChordIt == chords.end()) // no chords in this bar
+      if (startBarChordIt == chords.end())      // no chords in this bar
             return std::vector<TupletData>();
 
       const auto endBarChordIt = MChord::findEndChordInRange(endBarTick,
@@ -1745,6 +1812,11 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                               continue;
                         auto tupletInfo = findTupletApproximation(divLen, tupletNumber,
                                              regularRaster, startDivTime, startDivChordIt, endDivChordIt);
+
+                        if (!haveChordsInTheMiddleBetweenTupletChords(
+                                          startDivChordIt, endDivChordIt, tupletInfo)) {
+                              detectStaccato(tupletInfo);
+                              }
                         tupletInfo.sumLengthOfRests = findSumLengthOfRests(tupletInfo);
 
                         if (!isTupletAllowed(tupletInfo))
@@ -1755,6 +1827,7 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
             }
 
       filterTuplets(tuplets);
+      applyStaccato(tuplets);
 
       auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
       if (tupletVoiceLimit() == 1)
@@ -1872,11 +1945,7 @@ void createTuplets(Staff *staff,
                   continue;
 
             Tuplet* tuplet = new Tuplet(score);
-            const auto ratioIt = tupletRatios().find(tupletData.tupletNumber);
-            const auto tupletRatio = (ratioIt != tupletRatios().end())
-                                   ? ratioIt->second : ReducedFraction(2, 2);
-            if (ratioIt == tupletRatios().end())
-                  qDebug("Tuplet ratio not found for tuplet number: %d", tupletData.tupletNumber);
+            const auto &tupletRatio = tupletLimits(tupletData.tupletNumber).ratio;
             tuplet->setRatio(tupletRatio.fraction());
 
             tuplet->setDuration(tupletData.len.fraction());
