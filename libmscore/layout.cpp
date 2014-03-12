@@ -87,15 +87,6 @@ ChordRest* Score::searchNote(int tick, int track) const
       }
 
 //---------------------------------------------------------
-//   AcEl
-//---------------------------------------------------------
-
-struct AcEl {
-      Note* note;
-      qreal x;
-      };
-
-//---------------------------------------------------------
 //   layoutChords1
 //    - layout upstem and downstem chords
 //    - offset as necessary to avoid conflict
@@ -502,6 +493,66 @@ void Score::layoutChords2(QList<Note*>& notes, bool up)
       }
 
 //---------------------------------------------------------
+//   AcEl
+//---------------------------------------------------------
+
+struct AcEl {
+      Note* note;
+      qreal x;          // actual x position of this accidental relative to origin
+      qreal lx;         // rightmost possible position for this accidental
+      qreal top;        // top of accidental bbox relative to staff
+      qreal bottom;     // bottom of accidental bbox relative to staff
+      int line;         // line of note
+      qreal width;      // width
+      // TODO: the following could all be read from a static table to save time
+      qreal overlap;          // number of lines below which this accidental can overlap something
+      qreal undercut;         // number of lines above which this accidental can undercut something
+      qreal overOffset;       // amount this accidental can overlap something
+      qreal underOffset;      // amount this accidental can undercut something
+      };
+
+//---------------------------------------------------------
+//   resolveAccidentals
+//---------------------------------------------------------
+
+static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx)
+      {
+      AcEl* upper;
+      AcEl* lower;
+      if (left->line >= right->line) {
+            upper = right;
+            lower = left;
+            }
+      else {
+            upper = left;
+            lower = right;
+            }
+
+      // no conflict if accidentals do not overlap at all
+      if (lower->top > upper->bottom)
+            return false;
+
+      // sevenths in either direction need only a slight offset
+      // the following code lets the calling code add the offset (pnd)
+      if (lower->line - upper->line == 6) {
+            qreal offset = qMin(left->width, right->width);
+            lx = qMin(lx, right->x + offset);
+            return false;
+            }
+
+      // left accidental may be able to undercut right
+      else if (left == lower && lower->line - upper->line > qRound(upper->undercut + lower->overlap)) {
+            qreal offset = qMin(upper->overOffset, lower->underOffset);
+            lx = qMin(lx, right->x + offset);
+            return false;
+            }
+
+      // otherwise, there is conflict
+      lx = qMin(lx, right->x);
+      return true;
+      }
+
+//---------------------------------------------------------
 //   layoutChords3
 //    - calculate positions of notes, accidentals, dots
 //---------------------------------------------------------
@@ -515,8 +566,10 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       //---------------------------------------------------
 
       std::vector<AcEl> aclist;
+      QList<Note*> leftNotes;             // notes to left of origin
 
-      qreal stepDistance = staff->spatium() * .5;
+      qreal sp           = staff->spatium();
+      qreal stepDistance = sp * .5;
       int stepOffset     = staff->staffType()->stepOffset();
 
       qreal lx                = 10000.0;  // leftmost note head position
@@ -531,8 +584,53 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             if (ac) {
                   ac->layout();
                   AcEl acel;
-                  acel.note = note;
-                  acel.x    = 0.0;
+                  acel.note   = note;
+                  acel.line   = note->line();
+                  acel.x      = 0.0;
+                  // extra space for ledger lines
+                  if (acel.line < -1 || acel.line > staff->lines() * 2 + 1)
+                        acel.lx = -0.2 * sp;
+                  else
+                        acel.lx = 0.0;
+                  acel.top    = acel.line * 0.5 * sp + ac->bbox().top();
+                  acel.bottom = acel.line * 0.5 * sp + ac->bbox().bottom();
+                  qreal width = ac->width();
+                  acel.width = width;
+                  switch (ac->accidentalType()) {
+                        case Accidental::ACC_FLAT:
+                              acel.overlap = 1;
+                              acel.undercut = 1;
+                              acel.overOffset = width;
+                              acel.underOffset = width * 0.5;
+                              break;
+                        case Accidental::ACC_FLAT2:
+                              acel.overlap = 1;
+                              acel.undercut = 1;
+                              acel.overOffset = width;
+                              acel.underOffset = width * 0.25;
+                              break;
+                        case Accidental::ACC_NATURAL:
+                              acel.overlap = 1.6;
+                              acel.undercut = 1.6;
+                              acel.overOffset = width * 0.5;
+                              acel.underOffset = acel.overOffset;
+                              break;
+                        case Accidental::ACC_SHARP2:
+                              acel.overlap = 1;
+                              acel.undercut = 1;
+                              acel.overOffset = width;
+                              acel.underOffset = width;
+                        case SHARP:
+                              acel.overlap = 2;
+                              acel.undercut = 2;
+                              acel.overOffset = width;
+                              acel.underOffset = width;
+                        default:
+                              acel.overlap = 4;
+                              acel.undercut = 4;
+                              acel.overOffset = width;
+                              acel.underOffset = width;
+                        }
                   aclist.push_back(acel);
                   }
             qreal hw = note->headWidth();
@@ -578,7 +676,14 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   }
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
-            if (x < lx)
+
+            // accidental x position calculated from leftmost notehead
+            // not counting mirrored noteheads on non-offset downstem chords
+            // the latter are recorded for use later
+            // to displace accidentals as necessary
+            if (note->mirror() && !chord->up() && chord->rxpos() == 0.0)
+                  leftNotes.append(note);
+            else if (x < lx)
                   lx = x;
 
             //if (chord->stem())
@@ -606,36 +711,49 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       qreal pd  = point(styleS(ST_accidentalDistance));
       qreal pnd = point(styleS(ST_accidentalNoteDistance));
 
+      // determine which accidentals
+      // need to clear notes left of origin
+      int lns = leftNotes.size();
+      for (int i = 0, j = 0; i < lns; ++i) {
+            Note* ln = leftNotes[i];
+            int lnLine = ln->line();
+            qreal lnTop = lnLine * 0.5 * sp - 0.5;
+            qreal lnBottom = lnTop + sp;
+            qreal lnX = ln->x();
+            for (; j < nAcc; ++j) {
+                  AcEl* acc = &aclist[j];
+                  if (lnTop < acc->bottom && lnBottom > acc->top) {
+                        // undercut note above
+                        if (acc->line - lnLine > qRound(acc->undercut) + 1)
+                              lnX += acc->underOffset;
+                        acc->lx = qMin(acc->lx, lnX);
+                        }
+                  else if (acc->top >= lnLine + 1)
+                        break;
+                  }
+            }
+
       //
       // layout top accidental
       //
       Note* note      = aclist[0].note;
       Accidental* acc = note->accidental();
-      qreal x         = -pnd * acc->mag() - acc->width() - acc->bbox().x();
-      aclist[0].x     = x;
+      aclist[0].x     = aclist[0].lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
 
       //
       // layout bottom accidental
       //
       if (nAcc > 1) {
-            note   = aclist[nAcc-1].note;         // last note
-            acc    = note->accidental();
-            int l1 = aclist[0].note->line();
-            int l2 = note->line();
+            AcEl* acn = &aclist[nAcc-1];
+            AcEl* ac0 = &aclist[0];
+            Accidental* acc = acn->note->accidental();
+            qreal lx = acn->lx;
 
-            int st1   = aclist[0].note->accidental()->accidentalType();
-            int ldiff = st1 == Accidental::ACC_FLAT ? 4 : 5;
-
-            if (qAbs(l1-l2) > ldiff) {
-                  aclist[nAcc-1].x = -pnd * acc->mag() - acc->width() - acc->bbox().x();
-                  }
-            else {
-                  int st2   = acc->accidentalType();
-                  if ((st1 == Accidental::ACC_FLAT) && (st2 == Accidental::ACC_FLAT) && (qAbs(l1-l2) > 2))
-                        aclist[nAcc-1].x = aclist[0].x - acc->width() * .5;
-                  else
-                        aclist[nAcc-1].x = aclist[0].x - acc->width() - pd;
-                  }
+            bool conflict = resolveAccidentals(acn, ac0, lx);
+            if (conflict)
+                  acn->x = lx - acc->width() - pd * acc->mag();
+            else
+                  acn->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
             }
 
       //
@@ -644,46 +762,31 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       if (nAcc > 2) {
             int n = nAcc - 1;
             for (int i = 1; i < n; ++i) {
-                  note = aclist[i].note;
-                  acc  = note->accidental();
-                  int l1 = aclist[i-1].note->line();
-                  int l2 = note->line();
-                  int l3 = aclist[n].note->line();
-                  qreal x = 0.0;
+                  AcEl* ac1 = &aclist[i-1];
+                  AcEl* ac2 = &aclist[i];
+                  AcEl* ac3 = &aclist[n];
+                  Accidental* acc = ac2->note->accidental();
+                  qreal lx = ac2->lx;
+                  bool conflictAbove = false;
+                  bool conflictBelow = false;
 
-                  int st1 = aclist[i-1].note->accidental()->accidentalType();
-                  int st2 = acc->accidentalType();
+                  // clear accidental above
+                  conflictAbove = resolveAccidentals(ac2, ac1, lx);
 
-                  int ldiff = st1 == Accidental::ACC_FLAT ? 4 : 5;
-                  if (qAbs(l1-l2) <= ldiff) {   // overlap accidental above
-                        if ((st1 == Accidental::ACC_FLAT) && (st2 == Accidental::ACC_FLAT) && (qAbs(l1-l2) > 2))
-                              x = aclist[i-1].x + acc->width() * .5;    // undercut flats
-                        else
-                              x = aclist[i-1].x;
-                        }
+                  // clear accidental below
+                  conflictBelow = resolveAccidentals(ac2, ac3, lx);
 
-                  ldiff = acc->accidentalType() == Accidental::ACC_FLAT ? 4 : 5;
-                  if (qAbs(l2-l3) <= ldiff) {       // overlap accidental below
-                        if (aclist[n].x < x)
-                              x = aclist[n].x;
-                        }
-                  if (x == 0.0 || x > acc->width())
-                        x = -pnd * acc->mag() - acc->bbox().x();
+                  // calculate position
+                  if (conflictAbove || conflictBelow)
+                        ac2->x = lx - pd * acc->mag() - acc->width();
                   else
-                        x -= pd * acc->mag();   // accidental distance
-                  aclist[i].x = x - acc->width() - acc->bbox().x();
+                        ac2->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
                   }
             }
 
       for (const AcEl& e : aclist) {
             Note* note = e.note;
             qreal x    = e.x + lx - (note->x() + note->chord()->x());
-#ifndef NDEBUG
-            if (note->chord()->x() != 0.0) {
-                  qDebug("accidental placement: measure %d beat %d note %s", note->chord()->measure()->no(), note->chord()->segment()->tick() / MScore::division, qPrintable(tpc2name(note->tpc(), NoteSpellingType::STANDARD, false)));
-                  qDebug("ne.x = %f, lx = %f, note x = %f, chord x = %f", e.x, lx, note->x(), note->chord()->x());
-                  }
-#endif
             note->accidental()->setPos(x, 0);
             note->accidental()->adjustReadPos();
             }
