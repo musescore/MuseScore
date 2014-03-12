@@ -629,7 +629,8 @@ class Score : public QObject {
       Measure* tick2measure(int tick) const;
       Measure* tick2measureMM(int tick) const;
       MeasureBase* tick2measureBase(int tick) const;
-      Segment* tick2segment(int tick, bool first = false, Segment::SegmentTypes st = Segment::SegAll) const;
+      Segment* tick2segment(int tick, bool first = false, Segment::SegmentTypes st = Segment::SegAll,bool useMMrest = false ) const;
+      Segment* tick2segmentMM(int tick, bool first = false, Segment::SegmentTypes st = Segment::SegAll) const;
       Segment* tick2segmentEnd(int track, int tick) const;
       Segment* tick2leftSegment(int tick) const;
       Segment* tick2rightSegment(int tick) const;
