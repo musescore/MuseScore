@@ -77,7 +77,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       presetTablatureCombo->addItem(tr("Custom"), -1);
 
       // tab page configuration
-      tabDetails->hide();                       // start tabulature page in simple mode
+//      tabDetails->hide();                       // start tabulature page in simple mode
       QList<QString> fontNames = StaffTypeTablature::fontNames(false);
       foreach(const QString& name, fontNames)   // fill fret font name combo
             fretFontName->addItem(name);
@@ -478,7 +478,7 @@ void EditStaffType::blockPercPreviewSignals(bool block)
 //---------------------------------------------------------
 //   Tabulature FullConfig/QuickConfig clicked
 //---------------------------------------------------------
-
+/*
 void EditStaffType::on_pushFullConfig_clicked()
       {
       tabPresets->hide();
@@ -490,7 +490,7 @@ void EditStaffType::on_pushQuickConfig_clicked()
       tabDetails->hide();
       tabPresets->show();
       }
-
+*/
 //---------------------------------------------------------
 //   Tabulature preset clicked
 //---------------------------------------------------------
