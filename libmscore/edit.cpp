@@ -988,6 +988,7 @@ void Score::cmdAddOttava(OttavaType type)
       ottava->setOttavaType(type);
 
       ottava->setTrack(cr1->track());
+      ottava->setTrack2(cr2->track());
       ottava->setTick(cr1->tick());
       ottava->setTick2(cr2->tick());
       undoAddElement(ottava);

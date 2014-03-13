@@ -127,7 +127,7 @@ class Spanner : public Element {
       int tickLen() const      { return _tick2 - _tick; }
       int tick2() const        { return _tick2;         }
       void setTick2(int v)     { _tick2 = v;            }
-      int track2() const       { return _track2;        }
+      int track2() const       { return _track2; }
       void setTrack2(int v)    { _track2 = v;           }
 
       int id() const           { return _id; }
