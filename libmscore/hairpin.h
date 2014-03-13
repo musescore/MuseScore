@@ -70,19 +70,21 @@ class Hairpin : public SLine {
       enum HairpinType { CRESCENDO, DECRESCENDO };
 
    private:
-      Q_PROPERTY(HairpinType hairpinType READ hairpinType WRITE undoSetHairpinType)
-      Q_PROPERTY(int         veloChange  READ veloChange  WRITE undoSetVeloChange)
-      Q_PROPERTY(Ms::Element::DynamicRange   dynRange READ dynRange WRITE undoSetDynRange)
+      Q_PROPERTY(HairpinType                 hairpinType READ hairpinType WRITE undoSetHairpinType)
+      Q_PROPERTY(int                         veloChange  READ veloChange  WRITE undoSetVeloChange)
+      Q_PROPERTY(Ms::Element::DynamicRange   dynRange    READ dynRange    WRITE undoSetDynRange)
 
       bool  _hairpinCircledTip;
       HairpinType _hairpinType;
       int _veloChange;
       DynamicRange _dynRange;
       PropertyStyle lineWidthStyle;
+
       Spatium _hairpinHeight;
       PropertyStyle hairpinHeightStyle;
       Spatium _hairpinContHeight;
       PropertyStyle hairpinContHeightStyle;
+
 
    public:
       Hairpin(Score* s);
@@ -93,7 +95,7 @@ class Hairpin : public SLine {
       void setHairpinType(HairpinType val) { _hairpinType = val;  }
       void undoSetHairpinType(HairpinType);
 
-      Segment* segment() const         { return (Segment*)parent(); }
+      Segment* segment() const             { return (Segment*)parent(); }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
 
