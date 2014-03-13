@@ -20,6 +20,7 @@
 #include "libmscore/part.h"
 #include "libmscore/measure.h"
 #include "libmscore/timesig.h"
+#include "libmscore/tremolo.h"
 #include "libmscore/rest.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
@@ -1539,6 +1540,14 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       if (noteBits & 0x20)
             fretNumber = readUChar();
 
+      // check if a note is supposed to be accented, and give it the sforzato type
+      if (noteBits & 0x40) {
+            Articulation* art = new Articulation(note->score());
+            art->setArticulationType(Articulation_Sforzatoaccent);
+            if (!note->score()->addArticulation(note, art))
+                  delete art;
+            }
+
       if (noteBits & 0x80) {              // fingering
             int a = readUChar();
             int b = readUChar();
@@ -1565,8 +1574,25 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                   }
             if (modMask2 & 0x2) {   // palm mute - mute the whole column
                   }
-            if (modMask2 & 0x4)     // tremolo picking length
-                  readUChar();
+            if (modMask2 & 0x4) {    // tremolo picking length
+                  int tremoloDivision = readUChar();
+                  Chord* chord = note->chord();
+                  Tremolo* t = new Tremolo(chord->score());
+                  if (tremoloDivision == 1) {
+                        t->setTremoloType(TREMOLO_R8);
+                        chord->add(t);
+                        }
+                  else if (tremoloDivision == 2) {
+                        t->setTremoloType(TREMOLO_R16);
+                        chord->add(t);
+                        }
+                  else if (tremoloDivision == 3) {
+                        t->setTremoloType(TREMOLO_R32);
+                        chord->add(t);
+                        }
+                  else
+                        qDebug("Unknown tremolo value");
+                  }
             if (modMask2 & 0x8)
                   readUChar();      // slide kind
             if (modMask2 & 0x10)
@@ -1574,6 +1600,13 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
             if (modMask2 & 0x20) {
                   readUChar();      // trill fret
                   readUChar();      // trill length
+
+                  // add the trill articulation to the note
+                  Articulation* art = new Articulation(note->score());
+                  art->setArticulationType(Articulation_Trill);
+                  if (!note->score()->addArticulation(note, art))
+                        delete art;
+
                   }
             }
       if (fretNumber == -1) {
@@ -1997,8 +2030,25 @@ void GuitarPro5::readNoteEffects(Note* note)
             }
       if (modMask2 & 0x2) {   // palm mute - mute the whole column
             }
-      if (modMask2 & 0x4)     // tremolo picking length
-            readUChar();
+      if (modMask2 & 0x4) {    // tremolo picking length
+            int tremoloDivision = readUChar();
+            Chord* chord = note->chord();
+            Tremolo* t = new Tremolo(chord->score());
+            if (tremoloDivision == 1) {
+                  t->setTremoloType(TREMOLO_R8);
+                  chord->add(t);
+                  }
+            else if (tremoloDivision == 2) {
+                  t->setTremoloType(TREMOLO_R16);
+                  chord->add(t);
+                  }
+            else if (tremoloDivision == 3) {
+                  t->setTremoloType(TREMOLO_R32);
+                  chord->add(t);
+                  }
+            else
+                  qDebug("Unknown tremolo value");
+      }
       if (modMask2 & 0x8)
             readUChar();      // slide kind
       if (modMask2 & 0x10)
@@ -2006,6 +2056,13 @@ void GuitarPro5::readNoteEffects(Note* note)
       if (modMask2 & 0x20) {
             readUChar();      // trill fret
             int period = readUChar();      // trill length
+
+            // add the trill articulation to the note
+            Articulation* art = new Articulation(note->score());
+            art->setArticulationType(Articulation_Trill);
+            if (!note->score()->addArticulation(note, art))
+                  delete art;
+
             switch(period) {
                   case 1:           // 16
                         break;
@@ -2067,6 +2124,22 @@ void GuitarPro5::readNote(int string, Note* note)
             }
       if (noteBits & 0x1)
             skip(8);
+
+      // check if a note is supposed to be accented, and give it the marcato type
+      if (noteBits & 0x02) {
+            Articulation* art = new Articulation(note->score());
+            art->setArticulationType(Articulation_Marcato);
+            if (!note->score()->addArticulation(note, art))
+                  delete art;
+      }
+
+      // check if a note is supposed to be accented, and give it the sforzato type
+      if (noteBits & 0x40) {
+            Articulation* art = new Articulation(note->score());
+            art->setArticulationType(Articulation_Sforzatoaccent);
+            if (!note->score()->addArticulation(note, art))
+                  delete art;
+            }
 
       /*int aa =*/ readUChar();
       if (noteBits & 0x8) {

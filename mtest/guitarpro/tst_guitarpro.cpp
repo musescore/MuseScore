@@ -34,6 +34,10 @@ private slots:
       void initTestCase();
       void gpTestIrrTuplet() { gpReadTest("testIrrTuplet", "gp4"); }
       void gpSlur() { gpReadTest("slur", "gp4"); }
+      void gpSforzato() { gpReadTest("sforzato", "gp4"); }
+      void gpHeavyAccent() { gpReadTest("heavy-accent", "gp5"); }
+      void gpTremolos() { gpReadTest("tremolos", "gp5"); }
+      void gpTrill() { gpReadTest("trill", "gp4"); }
       };
 
 //---------------------------------------------------------
