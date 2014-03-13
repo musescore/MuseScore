@@ -56,14 +56,6 @@ typedef QFlags<ElementFlag> ElementFlags;
 Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags)
 
 //---------------------------------------------------------
-//   PropertyStyle
-//---------------------------------------------------------
-
-enum class PropertyStyle : char {
-      NOSTYLE, UNSTYLED, STYLED
-      };
-
-//---------------------------------------------------------
 ///   \brief Unit of horizontal measure
 //---------------------------------------------------------
 

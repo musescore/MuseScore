@@ -17,6 +17,14 @@ namespace Ms {
 
 class XmlReader;
 
+//---------------------------------------------------------
+//   PropertyStyle
+//---------------------------------------------------------
+
+enum class PropertyStyle : char {
+      NOSTYLE, UNSTYLED, STYLED
+      };
+
 //------------------------------------------------------------------------
 //   Element Properties
 //    accessible through
@@ -211,7 +219,6 @@ extern QVariant getProperty(P_ID type, XmlReader& e);
 extern P_TYPE propertyType(P_ID);
 extern const char* propertyName(P_ID);
 extern bool propertyLink(P_ID id);
-
 
 }     // namespace Ms
 #endif
