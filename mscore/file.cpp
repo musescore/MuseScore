@@ -731,8 +731,12 @@ void MuseScore::newFile()
             seg->add(tt);
             score->setTempo(0, tempo);
             }
-      if (!copyright.isEmpty())
-            score->setMetaTag("copyright", copyright);
+      if (!copyright.isEmpty()) {
+            if (preferences.replaceCopyrightSymbol)
+                  score->setMetaTag("copyright", copyright.replace("(c)", "\u00A9"));
+            else
+                  score->setMetaTag("copyright", copyright);
+      }
 
       score->rebuildMidiMapping();
       score->doLayout();
