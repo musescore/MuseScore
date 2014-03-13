@@ -616,8 +616,8 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                               acel.underOffset = acel.overOffset;
                               break;
                         case Accidental::ACC_SHARP:
-                              acel.overlap = 3;
-                              acel.undercut = 3;
+                              acel.overlap = 2.6;
+                              acel.undercut = 2.6;
                               acel.overOffset = width;
                               acel.underOffset = width;
                               break;
