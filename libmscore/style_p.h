@@ -54,7 +54,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
       bool circle;
       bool systemFlag;
       QColor foregroundColor;
-      QColor backgroundColor;
+      QColor backgroundColor;             // only for frame
 
    public:
       TextStyleData(QString _name, QString _family, qreal _size,
