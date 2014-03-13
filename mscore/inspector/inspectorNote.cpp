@@ -30,10 +30,10 @@ InspectorNote::InspectorNote(QWidget* parent)
    : InspectorBase(parent)
       {
       b.setupUi(addWidget());
-      n.setupUi(addWidget());
-      c.setupUi(addWidget());
       s.setupUi(addWidget());
-
+      c.setupUi(addWidget());
+      n.setupUi(addWidget());
+            
       static const NoteHeadGroup heads[] = {
             NoteHeadGroup::HEAD_NORMAL,
             NoteHeadGroup::HEAD_CROSS,
