@@ -968,7 +968,7 @@
           <item>
            <layout class="QGridLayout" name="gridLayout_5">
             <item row="0" column="1">
-             <widget class="QLabel" name="label_5">
+             <widget class="QLabel" name="labelLeftHeader">
               <property name="text">
                <string>Left</string>
               </property>
@@ -978,7 +978,7 @@
              </widget>
             </item>
             <item row="0" column="3">
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="labelMiddleHeader">
               <property name="text">
                <string>Middle</string>
               </property>
@@ -988,7 +988,7 @@
              </widget>
             </item>
             <item row="0" column="5">
-             <widget class="QLabel" name="label_7">
+             <widget class="QLabel" name="labelRightHeader">
               <property name="text">
                <string>Right</string>
               </property>
@@ -998,7 +998,7 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_67">
+             <widget class="QLabel" name="labelEvenHeader">
               <property name="text">
                <string>Even</string>
               </property>
@@ -1101,7 +1101,7 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_66">
+             <widget class="QLabel" name="labelOddHeader">
               <property name="text">
                <string>Odd</string>
               </property>
@@ -1186,7 +1186,7 @@
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QLabel" name="label_93">
+             <widget class="QLabel" name="labelPageHeader">
               <property name="text">
                <string>Page</string>
               </property>
@@ -1275,7 +1275,7 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_80">
+             <widget class="QLabel" name="labelEvenFooter">
               <property name="text">
                <string>Even</string>
               </property>
@@ -1292,7 +1292,7 @@
              </widget>
             </item>
             <item row="0" column="3">
-             <widget class="QLabel" name="label_3">
+             <widget class="QLabel" name="labelMiddleFooter">
               <property name="text">
                <string>Middle</string>
               </property>
@@ -1342,7 +1342,7 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_65">
+             <widget class="QLabel" name="labelOddFooter">
               <property name="text">
                <string>Odd</string>
               </property>
@@ -1359,7 +1359,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="labelLeftFooter">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1425,7 +1425,7 @@
              </widget>
             </item>
             <item row="0" column="5">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="labelRightFooter">
               <property name="text">
                <string>Right</string>
               </property>
@@ -1435,7 +1435,7 @@
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QLabel" name="label_94">
+             <widget class="QLabel" name="labelPageFooter">
               <property name="text">
                <string>Page</string>
               </property>
