@@ -759,29 +759,45 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
 
       //
       // layout middle accidentals
+      // use zig zag approach
+      // layout in pairs: right to left, high then low
+      //
       //
       if (nAcc > 2) {
             int n = nAcc - 1;
-            for (int i = 1; i < n; ++i) {
-                  AcEl* ac1 = &aclist[i-1];
-                  AcEl* ac2 = &aclist[i];
-                  AcEl* ac3 = &aclist[n];
-                  Accidental* acc = ac2->note->accidental();
-                  qreal lx = ac2->lx;
-                  bool conflictAbove = false;
-                  bool conflictBelow = false;
-
-                  // clear accidental above
-                  conflictAbove = resolveAccidentals(ac2, ac1, lx);
-
-                  // clear accidental below
-                  conflictBelow = resolveAccidentals(ac2, ac3, lx);
-
-                  // calculate position
+            AcEl* me = &aclist[n];
+            AcEl* above = &aclist[0];
+            AcEl* below;
+            Accidental* acc;
+            qreal lx;
+            bool conflictAbove, conflictBelow;
+            for (int i = 1; i < n; ++i, --n) {
+                  // next highest
+                  below = me;
+                  me = &aclist[i];
+                  acc = me->note->accidental();
+                  lx = me->lx;
+                  conflictAbove = resolveAccidentals(me, above, lx);
+                  conflictBelow = resolveAccidentals(me, below, lx);
                   if (conflictAbove || conflictBelow)
-                        ac2->x = lx - pd * acc->mag() - acc->width();
+                        me->x = lx - pd * acc->mag() - acc->width();
                   else
-                        ac2->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
+                        me->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
+
+                  if (i == n - 1)
+                        break;
+
+                  // next lowest
+                  above = me;
+                  me = &aclist[n-1];
+                  acc = me->note->accidental();
+                  lx = me->lx;
+                  conflictAbove = resolveAccidentals(me, above, lx);
+                  conflictBelow = resolveAccidentals(me, below, lx);
+                  if (conflictAbove || conflictBelow)
+                        me->x = lx - pd * acc->mag() - acc->width();
+                  else
+                        me->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
                   }
             }
 
