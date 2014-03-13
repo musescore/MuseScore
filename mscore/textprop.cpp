@@ -224,6 +224,7 @@ TextStyle TextProp::textStyle() const
       s.setXoff(xOffset->value() / ((s.offsetType() == OFFSET_ABS) ? INCH : 1.0));
       s.setYoff(yOffset->value() / ((s.offsetType() == OFFSET_ABS) ? INCH : 1.0));
       s.setFrameColor(frameColor->color());
+      s.setForegroundColor(color->color());
       s.setBackgroundColor(bgColor->color());
       s.setFrameWidth(Spatium(frameWidth->value()));
       s.setPaddingWidth(Spatium(paddingWidth->value()));
@@ -231,7 +232,6 @@ TextStyle TextProp::textStyle() const
       s.setFrameRound(frameRound->value());
       s.setHasFrame(frame->isChecked());
       s.setSystemFlag(systemFlag->isChecked());
-      s.setForegroundColor(color->color());
       s.setSizeIsSpatiumDependent(sizeIsSpatiumDependent->isChecked());
 
       Align a = 0;
