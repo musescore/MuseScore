@@ -4421,6 +4421,7 @@ void ScoreFont::load()
                   for (SymId id : c.rids)
                         s += _symbols[int(id)].string();
                   sym->setString(s);
+                   sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
                   }
             }
 
