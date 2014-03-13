@@ -72,8 +72,8 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void presetPercChanged(int idx);
       void durFontNameChanged(int idx);
       void fretFontNameChanged(int idx);
-      void on_pushFullConfig_clicked();
-      void on_pushQuickConfig_clicked();
+//      void on_pushFullConfig_clicked();
+//      void on_pushQuickConfig_clicked();
       void tabStemThroughToggled(bool checked);
       void tabMinimShortToggled(bool checked);
       void tabStemsToggled(bool checked);
