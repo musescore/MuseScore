@@ -64,15 +64,15 @@ class AveragePitch
       };
 
 
-int midPitch()
+int clefMidPitch()
       {
-      static const int clefMidPitch = 60;
-      return clefMidPitch;
+      static const int midPitch = 60;
+      return midPitch;
       }
 
 ClefType clefTypeFromAveragePitch(int averagePitch)
       {
-      return averagePitch < midPitch() ? ClefType::F : ClefType::G;
+      return averagePitch < clefMidPitch() ? ClefType::F : ClefType::G;
       }
 
 void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
@@ -125,30 +125,6 @@ AveragePitch findAverageSegPitch(const Segment *seg, int strack)
       return avgPitch;
       }
 
-Segment* enlargeSegToPrev(Segment *s, int strack, int counterLimit, int lPitch, int hPitch)
-      {
-      int count = 0;
-      auto newSeg = s;
-      for (Segment *segPrev = s->prev1(Segment::SegChordRest); segPrev;
-                              segPrev = segPrev->prev1(Segment::SegChordRest)) {
-            auto pitch = findAverageSegPitch(segPrev, strack);
-            if (pitch.count() > 0) {
-                  if (pitch.pitch() >= lPitch && pitch.pitch() < hPitch)
-                        newSeg = segPrev;
-                  else
-                        break;
-                  }
-            else {                  // it's a rest - should be at the end
-                  s = newSeg;
-                  break;
-                  }
-            ++count;
-            if (count == counterLimit)
-                  break;
-            }
-      return s;
-      }
-
 
 #ifdef QT_DEBUG
 
@@ -180,107 +156,181 @@ bool doesClefBreakTie(const Staff *staff)
 
 #endif
 
+// clef: 0 - treble, 1 - bass
+
+size_t findPitchPenaltyForClef(int pitch, int clefIndex)
+      {
+      static const size_t farPitchPenalty = 10000;
+      static const size_t approxPitchPenalty = 1;
+      static const int dx = 5;
+
+      static const int midPitch = clefMidPitch();    // all notes equal or upper - better in G clef
+      static const int highPitch = midPitch + dx;    // all notes equal or upper - in G clef
+      static const int lowPitch = midPitch - dx;     // all notes lower - in F clef
+
+      switch (clefIndex) {
+      case 0:
+            if (pitch < lowPitch)
+                  return farPitchPenalty;
+            else if (pitch < midPitch)
+                  return approxPitchPenalty;
+            break;
+      case 1:
+            if (pitch >= highPitch)
+                  return farPitchPenalty;
+            else if (pitch >= midPitch)
+                  return approxPitchPenalty;
+            break;
+      default:
+            Q_ASSERT_X(false, "MidiClef::pitchPenalty", "Unknown clef type");
+            break;
+            }
+      return 0;
+      }
+
+size_t findClefPenalty(int pos,
+                       int clefIndex,
+                       const std::vector<std::vector<int>> &trebleBassPath)
+      {
+      static const size_t clefChangePenalty = 1000;
+      static const int notesBetweenClefs = 5;       // should be >= 2
+
+      if (pos == 0)
+            return 0;
+      if (pos - 1 == 0)
+            return clefChangePenalty;
+
+      for (int j = pos - 1; j != pos - notesBetweenClefs; --j) {
+            if (j == 0 || trebleBassPath[clefIndex][j] != clefIndex)
+                  return clefChangePenalty;
+            }
+      return 0;
+      }
+
+ClefType clefFromIndex(int index)
+      {
+      return (index == 0) ? ClefType::G : ClefType::F;
+      }
+
+size_t findTiePenalty(MidiTie::TieStateMachine::State tieState)
+      {
+      static const size_t tieBreakagePenalty = 10000000;
+      return (tieState == MidiTie::TieStateMachine::State::TIED_BACK
+              || tieState == MidiTie::TieStateMachine::State::TIED_BOTH)
+             ? tieBreakagePenalty : 0;
+      }
+
+void makeDynamicProgrammingStep(std::vector<std::vector<size_t>> &penalties,
+                                std::vector<std::vector<int>> &optimalPaths,
+                                int pos,
+                                MidiTie::TieStateMachine::State tieState,
+                                int averagePitch)
+      {
+      for (int clefIndex = 0; clefIndex != 2; ++clefIndex) {
+            penalties[clefIndex].resize(pos + 1);
+            optimalPaths[clefIndex].resize(pos + 1);
+            }
+      const size_t tiePenalty = findTiePenalty(tieState);
+
+      for (int clefIndex = 0; clefIndex != 2; ++clefIndex) {
+            const size_t pitchPenalty = findPitchPenaltyForClef(averagePitch, clefIndex);
+
+            const size_t prevSameClefPenalty = (pos == 0)
+                    ? 0 : penalties[clefIndex][pos - 1];
+            const size_t sumPenaltySameClef = pitchPenalty + prevSameClefPenalty;
+
+            const size_t prevDiffClefPenalty = (pos == 0)
+                    ? 0 : penalties[1 - clefIndex][pos - 1];
+            const size_t clefPenalty = findClefPenalty(pos, 1 - clefIndex, optimalPaths);
+            const size_t sumPenaltyDiffClef
+                    = tiePenalty + pitchPenalty + prevDiffClefPenalty + clefPenalty;
+
+            if (sumPenaltySameClef <= sumPenaltyDiffClef) {
+                  penalties[clefIndex][pos] = sumPenaltySameClef;
+                  if (pos > 0)
+                        optimalPaths[clefIndex][pos] = clefIndex;
+                  }
+            else {
+                  penalties[clefIndex][pos] = sumPenaltyDiffClef;
+                  if (pos > 0)
+                        optimalPaths[clefIndex][pos] = 1 - clefIndex;
+                  }
+            }
+      }
+
+void createClefs(Staff *staff,
+                 const std::vector<std::vector<size_t>> &penalties,
+                 const std::vector<std::vector<int>> &optimalPaths,
+                 std::vector<Segment *> segments,
+                 ClefType *mainClef)
+      {
+      const size_t chordCount = penalties[0].size();
+      if (chordCount != 0) {
+                     // create clefs
+            int currentClef = 0;
+            if (penalties[1][chordCount - 1] < penalties[0][chordCount - 1])
+                  currentClef = 1;
+            for (size_t i = chordCount - 1; i; --i) {
+                  const int prevClef = optimalPaths[currentClef][i];
+                  if (prevClef != currentClef) {
+                        createSmallClef(clefFromIndex(currentClef), segments[i], staff);
+                        currentClef = prevClef;
+                        }
+                  if (i == 1)
+                        *mainClef = clefFromIndex(prevClef);
+                  }
+            }
+      }
 
 void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       {
-      ClefType currentClef = staff->clefTypeList(0)._concertClef;
-      createClef(currentClef, staff, 0);
-
-      const auto trackOpers = preferences.midiImportOperations.trackOperations(indexOfOperation);
-      if (!trackOpers.changeClef || isDrumTrack)
+      if (isDrumTrack) {
+            createClef(ClefType::PERC, staff, 0);
             return;
-
-      const int highPitch = 65;          // all notes equal or upper - in treble clef
-      const int midPitch = 60;
-      const int lowPitch = 55;           // all notes lower - in bass clef
-      const int counterLimit = 3;
-      int counter = 0;
-      Segment *prevSeg = nullptr;
-      Segment *tiedSeg = nullptr;
-      const int strack = staff->idx() * VOICES;
-      AveragePitch avgGroupPitch;
-      MidiTie::TieStateMachine tieTracker;
-
-      for (Segment *seg = staff->score()->firstSegment(Segment::SegChordRest); seg;
-                        seg = seg->next1(Segment::SegChordRest)) {
-            const auto avgPitch = findAverageSegPitch(seg, strack);
-            if (avgPitch.count() == 0)    // no chords
-                  continue;
-            tieTracker.addSeg(seg, strack);
-            const auto tieState = tieTracker.state();
-
-            if (tieState != MidiTie::TieStateMachine::State::UNTIED)
-                  avgGroupPitch += avgPitch;
-            if (tieState == MidiTie::TieStateMachine::State::TIED_FOR)
-                  tiedSeg = seg;
-            else if (tieState == MidiTie::TieStateMachine::State::TIED_BACK) {
-                  ClefType clef = clefTypeFromAveragePitch(avgGroupPitch.pitch());
-                  if (clef != currentClef) {
-                        currentClef = clef;
-                        
-                        Q_ASSERT_X(tiedSeg, "MidiClef::createClefs", "Empty tied segment");
-                        
-                        if (tiedSeg)
-                              createSmallClef(currentClef, tiedSeg, staff);
-                        }
-                  avgGroupPitch.reset();
-                  tiedSeg = nullptr;
-                  }
-
-            int oldCounter = counter;
-            if (tieState != MidiTie::TieStateMachine::State::TIED_BOTH
-                        && tieState != MidiTie::TieStateMachine::State::TIED_BACK) {
-
-                  if (avgPitch.pitch() < lowPitch) {
-                        if (currentClef == ClefType::G) {
-                              Segment *s = (counter > 0) ? prevSeg : seg;
-                              currentClef = ClefType::F;
-                              s = enlargeSegToPrev(s, strack, counterLimit, midPitch, highPitch);
-                              createSmallClef(currentClef, s, staff);
-                              }
-                        }
-                  else if (avgPitch.pitch() >= lowPitch && avgPitch.pitch() < midPitch) {
-                        if (currentClef == ClefType::G) {
-                              if (counter < counterLimit) {
-                                    if (counter == 0)
-                                          prevSeg = seg;
-                                    ++counter;
-                                    }
-                              else {
-                                    currentClef = ClefType::F;
-                                    auto s = enlargeSegToPrev(prevSeg, strack, counterLimit, midPitch, highPitch);
-                                    createSmallClef(currentClef, s, staff);
-                                    }
-                              }
-                        }
-                  else if (avgPitch.pitch() >= midPitch && avgPitch.pitch() < highPitch) {
-                        if (currentClef == ClefType::F) {
-                              if (counter < counterLimit){
-                                    if (counter == 0)
-                                          prevSeg = seg;
-                                    ++counter;
-                                    }
-                              else {
-                                    currentClef = ClefType::G;
-                                    auto s = enlargeSegToPrev(prevSeg, strack, counterLimit, lowPitch, midPitch);
-                                    createSmallClef(currentClef, s, staff);
-                                    }
-                              }
-                        }
-                  else if (avgPitch.pitch() >= highPitch) {
-                        if (currentClef == ClefType::F) {
-                              Segment *s = (counter > 0) ? prevSeg : seg;
-                              currentClef = ClefType::G;
-                              s = enlargeSegToPrev(s, strack, counterLimit, lowPitch, midPitch);
-                              createSmallClef(currentClef, s, staff);
-                              }
-                        }
-                  }
-            if (counter > 0 && counter == oldCounter) {
-                  counter = 0;
-                  prevSeg = nullptr;
-                  }
             }
+
+      ClefType mainClef = staff->clefTypeList(0)._concertClef;
+      const int strack = staff->idx() * VOICES;
+      const auto trackOpers = preferences.midiImportOperations.trackOperations(indexOfOperation);
+
+      if (trackOpers.changeClef) {
+            MidiTie::TieStateMachine tieTracker;
+            AveragePitch allAveragePitch;
+
+                        // find optimal clef changes by dynamic programming
+            std::vector<std::vector<size_t>> penalties(2);          // 0 - treble, 1 - bass
+            std::vector<std::vector<int>> optimalPaths(2);          // first col is unused
+            std::vector<Segment *> segments;
+
+            int pos = 0;
+            for (Segment *seg = staff->score()->firstSegment(Segment::SegChordRest); seg;
+                              seg = seg->next1(Segment::SegChordRest)) {
+
+                  const auto averagePitch = findAverageSegPitch(seg, strack);
+                  if (averagePitch.count() == 0)                    // no chords
+                        continue;
+                  tieTracker.addSeg(seg, strack);
+                  segments.push_back(seg);
+
+                  makeDynamicProgrammingStep(penalties, optimalPaths, pos,
+                                             tieTracker.state(), averagePitch.pitch());
+                  allAveragePitch += averagePitch;
+                  ++pos;
+                  }
+                        // get the optimal clef changes found by dynamic programming
+            createClefs(staff, penalties, optimalPaths, segments, &mainClef);
+            }
+      else {
+            AveragePitch allAveragePitch;
+            for (Segment *seg = staff->score()->firstSegment(Segment::SegChordRest); seg;
+                          seg = seg->next1(Segment::SegChordRest)) {
+                  allAveragePitch += findAverageSegPitch(seg, strack);
+                  }
+            mainClef = MidiClef::clefTypeFromAveragePitch(allAveragePitch.pitch());
+            }
+
+      staff->setClef(0, mainClef);      // set main clef
+      createClef(mainClef, staff, 0);
 
       Q_ASSERT_X(!doesClefBreakTie(staff), "MidiClef::createClefs", "Clef breaks the tie");
       }

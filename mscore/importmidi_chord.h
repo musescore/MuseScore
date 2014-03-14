@@ -67,10 +67,7 @@ Iter findEndChordInRange(const ReducedFraction &endRangeTick,
       }
 
 ReducedFraction maxNoteLen(const QList<MidiNote> &notes);
-int findAveragePitch(const QList<MidiNote> &notes);
-int findAveragePitch(const std::map<ReducedFraction, MidiChord>::const_iterator &startChordIt,
-                     const std::map<ReducedFraction, MidiChord>::const_iterator &endChordIt);
-ReducedFraction minAllowedDuration();
+const ReducedFraction& minAllowedDuration();
 ReducedFraction findMinDuration(const QList<MidiChord> &midiChords,
                                 const ReducedFraction &length);
 void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord> &chords);
