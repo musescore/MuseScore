@@ -1754,8 +1754,7 @@ void Score::add(Element* el)
                   break;
 
             default:
-                  qDebug("Score::add() invalid element <%s>", el->name());
-                  // abort();
+                  qFatal("Score::add() invalid element <%s>", el->name());
                   break;
             }
       }
