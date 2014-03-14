@@ -43,6 +43,9 @@ class TextProp : public QWidget, public Ui::TextProperties {
       void mmToggled(bool);
       void doResetToTextStyle();
 
+   signals:
+      void resetToStyleClicked();
+
    public:
       TextProp(QWidget* parent = 0);
       void setScore(bool _onlyStyle, Score*);

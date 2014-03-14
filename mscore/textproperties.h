@@ -38,6 +38,7 @@ class TextProperties : public QDialog {
 
    private slots:
       virtual void accept();
+      void resetToStyle();
 
    public:
       TextProperties(Text*, QWidget* parent = 0);
