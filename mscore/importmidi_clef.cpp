@@ -217,12 +217,11 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
                   ClefType clef = clefTypeFromAveragePitch(avgGroupPitch.pitch());
                   if (clef != currentClef) {
                         currentClef = clef;
+                        
+                        Q_ASSERT_X(tiedSeg, "MidiClef::createClefs", "Empty tied segment");
+                        
                         if (tiedSeg)
                               createSmallClef(currentClef, tiedSeg, staff);
-                        else {
-                              qDebug("createClefs: empty tied segment, tick = %d, that should not occur",
-                                     seg->tick());
-                              }
                         }
                   avgGroupPitch.reset();
                   tiedSeg = nullptr;
