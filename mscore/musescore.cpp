@@ -4819,6 +4819,7 @@ int main(int argc, char* av[])
                   "   subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px;\n"
                   "   }");
             MgStyleConfigData::animationsEnabled = preferences.animations;
+            qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
 
             seq            = new Seq();
             MScore::seq    = seq;
