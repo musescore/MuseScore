@@ -194,6 +194,7 @@ void TextTools::layoutText()
 
 void TextTools::sizeChanged(double value)
       {
+      _textElement->setFormat(FormatId::FontSize, value);
       _textElement->cursor()->format()->setFontSize(value);
       updateText();
       }
@@ -204,7 +205,7 @@ void TextTools::sizeChanged(double value)
 
 void TextTools::fontChanged(const QFont& f)
       {
-      _textElement->cursor()->format()->setFontFamily(f.family());
+      _textElement->setFormat(FormatId::FontFamily, f.family());
       if (textPalette)
             textPalette->setFont(f.family());
       updateText();
@@ -216,7 +217,7 @@ void TextTools::fontChanged(const QFont& f)
 
 void TextTools::boldClicked(bool val)
       {
-      _textElement->cursor()->format()->setBold(val);
+      _textElement->setFormat(FormatId::Bold, val);
       updateText();
       }
 
@@ -256,7 +257,7 @@ void TextTools::toggleUnderline()
 
 void TextTools::underlineClicked(bool val)
       {
-      _textElement->cursor()->format()->setUnderline(val);
+      _textElement->setFormat(FormatId::Underline, val);
       updateText();
       }
 
@@ -266,7 +267,7 @@ void TextTools::underlineClicked(bool val)
 
 void TextTools::italicClicked(bool val)
       {
-      _textElement->cursor()->format()->setItalic(val);
+      _textElement->setFormat(FormatId::Italic, val);
       updateText();
       }
 
@@ -276,7 +277,7 @@ void TextTools::italicClicked(bool val)
 
 void TextTools::subscriptClicked(bool val)
       {
-      _textElement->cursor()->format()->setValign(val ? VerticalAlignment::AlignSubScript : VerticalAlignment::AlignNormal);
+      _textElement->setFormat(FormatId::Valign, int(val ? VerticalAlignment::AlignSubScript : VerticalAlignment::AlignNormal));
       typefaceSuperscript->blockSignals(true);
       typefaceSuperscript->setChecked(false);
       typefaceSuperscript->blockSignals(false);
@@ -289,7 +290,7 @@ void TextTools::subscriptClicked(bool val)
 
 void TextTools::superscriptClicked(bool val)
       {
-      _textElement->cursor()->format()->setValign(val ? VerticalAlignment::AlignSuperScript : VerticalAlignment::AlignNormal);
+      _textElement->setFormat(FormatId::Valign, int(val ? VerticalAlignment::AlignSuperScript : VerticalAlignment::AlignNormal));
       typefaceSubscript->blockSignals(true);
       typefaceSubscript->setChecked(false);
       typefaceSubscript->blockSignals(false);

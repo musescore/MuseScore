@@ -24,6 +24,7 @@ struct SymCode;
 
 enum class CharFormatType { TEXT, SYMBOL };
 enum class VerticalAlignment { AlignNormal, AlignSuperScript, AlignSubScript };
+enum class FormatId { Bold, Italic, Underline, Valign, FontSize, FontFamily };
 
 //---------------------------------------------------------
 //   CharFormat
@@ -56,6 +57,8 @@ class CharFormat {
       void setValign(VerticalAlignment val)  { _valign      = val;  }
       void setFontSize(qreal val)            { _fontSize    = val;  }
       void setFontFamily(const QString& val) { _fontFamily  = val;  }
+
+      void setFormat(FormatId, QVariant);
       };
 
 //---------------------------------------------------------
@@ -116,6 +119,8 @@ class TextFragment {
       TextFragment split(int column);
       void draw(QPainter*, const Text*) const;
       QFont font(const Text*) const;
+      int columns() const;
+      void changeFormat(FormatId id, QVariant data);
       };
 
 //---------------------------------------------------------
@@ -158,6 +163,7 @@ class TextBlock {
       QString text(int, int) const;
       bool eol() const      { return _eol; }
       void setEol(bool val) { _eol = val; }
+      void changeFormat(FormatId, QVariant val, int start, int n);
       };
 
 //---------------------------------------------------------
@@ -187,6 +193,7 @@ class Text : public Element {
       void insert(TextCursor*, SymId);
       void updateCursorFormat(TextCursor*);
       void genText();
+      void changeSelectionFormat(FormatId id, QVariant val);
 
    protected:
       QColor textColor() const;
@@ -236,6 +243,8 @@ class Text : public Element {
       void startEdit(MuseScoreView*, const QPointF&);
       void endEdit();
       bool edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers, const QString&);
+
+      void setFormat(FormatId, QVariant);
 
       bool deletePreviousChar();
       bool deleteChar();
