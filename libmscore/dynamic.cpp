@@ -208,7 +208,8 @@ void Dynamic::layout()
                   setUserXoffset(userOff().x() - spatium() * .6);
                   }
             }
-      Text::layout();
+      setPos(textStyle().offset(spatium()));
+      Text::layout1();
 
       Segment* s = segment();
       if (!s)
@@ -229,6 +230,7 @@ void Dynamic::layout()
                   rxpos() += c->width() * .5;
             break;
             }
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
