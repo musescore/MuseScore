@@ -54,7 +54,7 @@
       <trackName></trackName>
       <Instrument>
         <trackName></trackName>
-        <Channel name="normal">
+        <Channel>
           <program value="24"/>
           </Channel>
         </Instrument>

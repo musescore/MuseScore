@@ -190,7 +190,8 @@ void Dynamic::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      setTextStyleType(TEXT_STYLE_DYNAMICS);
+      if (textStyleType() == TEXT_STYLE_DEFAULT)
+            setTextStyleType(TEXT_STYLE_DYNAMICS);
       }
 
 //---------------------------------------------------------
@@ -387,10 +388,10 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_TEXT_STYLE:    return TEXT_STYLE_DYNAMICS;
-            case P_DYNAMIC_RANGE: return DYNAMIC_PART;
-            case P_VELOCITY:      return -1;
-            default:              return Text::propertyDefault(id);
+            case P_TEXT_STYLE_TYPE: return TEXT_STYLE_DYNAMICS;
+            case P_DYNAMIC_RANGE:   return DYNAMIC_PART;
+            case P_VELOCITY:        return -1;
+            default:                return Text::propertyDefault(id);
             }
       }
 

@@ -52,7 +52,7 @@
       <trackName>unnamed1</trackName>
       <Instrument>
         <trackName></trackName>
-        <Channel name="normal">
+        <Channel>
           <program value="1"/>
           </Channel>
         </Instrument>

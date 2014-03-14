@@ -144,7 +144,6 @@
           <subtype>pp</subtype>
           <velocity>33</velocity>
           <lid>4</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <lid>5</lid>
@@ -1023,7 +1022,6 @@
             <subtype>pp</subtype>
             <velocity>33</velocity>
             <lid>4</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Chord>
             <lid>5</lid>

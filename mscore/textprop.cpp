@@ -126,6 +126,7 @@ int TextProp::textStyleType() const
 
 void TextProp::setTextStyle(const TextStyle& s)
       {
+      ts = s;
       fontBold->setChecked(s.bold());
       fontItalic->setChecked(s.italic());
       fontUnderline->setChecked(s.underline());
@@ -186,29 +187,28 @@ void TextProp::setTextStyle(const TextStyle& s)
 
 TextStyle TextProp::textStyle() const
       {
-      TextStyle s;
       if (curUnit == 0)
-            s.setOffsetType(OFFSET_ABS);
+            ts.setOffsetType(OFFSET_ABS);
       else if (curUnit == 1)
-            s.setOffsetType(OFFSET_SPATIUM);
-      s.setBold(fontBold->isChecked());
-      s.setItalic(fontItalic->isChecked());
-      s.setUnderline(fontUnderline->isChecked());
-      s.setSize(fontSize->value());
+            ts.setOffsetType(OFFSET_SPATIUM);
+      ts.setBold(fontBold->isChecked());
+      ts.setItalic(fontItalic->isChecked());
+      ts.setUnderline(fontUnderline->isChecked());
+      ts.setSize(fontSize->value());
       QFont f = fontSelect->currentFont();
-      s.setFamily(f.family());
-      s.setXoff(xOffset->value() / ((s.offsetType() == OFFSET_ABS) ? INCH : 1.0));
-      s.setYoff(yOffset->value() / ((s.offsetType() == OFFSET_ABS) ? INCH : 1.0));
-      s.setFrameColor(frameColor->color());
-      s.setForegroundColor(color->color());
-      s.setBackgroundColor(bgColor->color());
-      s.setFrameWidth(Spatium(frameWidth->value()));
-      s.setPaddingWidth(Spatium(paddingWidth->value()));
-      s.setCircle(circleButton->isChecked());
-      s.setFrameRound(frameRound->value());
-      s.setHasFrame(frame->isChecked());
-      s.setSystemFlag(systemFlag->isChecked());
-      s.setSizeIsSpatiumDependent(sizeIsSpatiumDependent->isChecked());
+      ts.setFamily(f.family());
+      ts.setXoff(xOffset->value() / ((ts.offsetType() == OFFSET_ABS) ? INCH : 1.0));
+      ts.setYoff(yOffset->value() / ((ts.offsetType() == OFFSET_ABS) ? INCH : 1.0));
+      ts.setFrameColor(frameColor->color());
+      ts.setForegroundColor(color->color());
+      ts.setBackgroundColor(bgColor->color());
+      ts.setFrameWidth(Spatium(frameWidth->value()));
+      ts.setPaddingWidth(Spatium(paddingWidth->value()));
+      ts.setCircle(circleButton->isChecked());
+      ts.setFrameRound(frameRound->value());
+      ts.setHasFrame(frame->isChecked());
+      ts.setSystemFlag(systemFlag->isChecked());
+      ts.setSizeIsSpatiumDependent(sizeIsSpatiumDependent->isChecked());
 
       Align a = 0;
       if (alignHCenter->isChecked())
@@ -222,8 +222,8 @@ TextStyle TextProp::textStyle() const
             a |= ALIGN_BOTTOM;
       else if (alignBaseline->isChecked())
             a |= ALIGN_BASELINE;
-      s.setAlign(a);
-      return s;
+      ts.setAlign(a);
+      return ts;
       }
 
 //---------------------------------------------------------

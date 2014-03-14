@@ -1862,8 +1862,9 @@ void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
       {
       Element::writeProperties(xml);
       if (writeStyle) {
-            xml.tag("style", textStyle().name());
-            _textStyle.writeProperties(xml, textStyle());
+            if (getProperty(P_TEXT_STYLE_TYPE) != propertyDefault(P_TEXT_STYLE_TYPE))
+                  xml.tag("style", textStyle().name());
+            _textStyle.writeProperties(xml, score()->textStyle(_styleIndex));
             }
       if (writeText)
             xml.writeXml("text", text());

@@ -209,7 +209,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             else
                   popup->addAction(tr("Set Visible"))->setData("invisible");
             popup->addAction(tr("Text Style..."))->setData("text-style");
-            popup->addAction(tr("Text Properties..."))->setData("d-props");
+            popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
       else if (e->type() == Element::TEXTLINE_SEGMENT
                   || e->type() == Element::OTTAVA_SEGMENT
@@ -463,16 +463,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             bool show = !static_cast<Clef*>(e)->showCourtesy();
             score()->undoChangeProperty(e, P_SHOW_COURTESY, show);
             }
-      else if (cmd == "d-props") {
-            Dynamic* dynamic = static_cast<Dynamic*>(e);
-            Dynamic* nText = new Dynamic(*dynamic);
-            TextProperties tp(nText, 0);
-            int rv = tp.exec();
-            if (rv)
-                  score()->undoChangeElement(dynamic, nText);
-            else
-                  delete nText;
-            }
       else if (cmd == "st-props") {
             StaffTextProperties rp(static_cast<StaffText*>(e));
             rp.exec();
@@ -490,10 +480,11 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             TextProperties tp(nText);
             int rv = tp.exec();
             if (rv) {
-                  if (ot->textStyleType() != nText->textStyleType())
+                  printf("text-props %d %d\n", int(ot->textStyleType()), int(nText->textStyleType()));
+                  if (ot->textStyleType() != nText->textStyleType()) {
                         nText->restyle(ot->textStyleType());
-                  if (ot->textStyleType() != nText->textStyleType())
                         ot->undoChangeProperty(P_TEXT_STYLE_TYPE, nText->textStyleType());
+                        }
                   if (ot->textStyle() != nText->textStyle())
                         ot->undoChangeProperty(P_TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
                   if (ot->text() != nText->text())

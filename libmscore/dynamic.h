@@ -77,24 +77,24 @@ class Dynamic : public Text {
    public:
       Dynamic(Score*);
       Dynamic(const Dynamic&);
-      virtual Dynamic* clone() const   { return new Dynamic(*this); }
-      virtual ElementType type() const { return DYNAMIC; }
-      Segment* segment() const         { return (Segment*)parent(); }
-      Measure* measure() const         { return (Measure*)parent()->parent(); }
+      virtual Dynamic* clone() const override   { return new Dynamic(*this); }
+      virtual ElementType type() const override { return DYNAMIC; }
+      Segment* segment() const                  { return (Segment*)parent(); }
+      Measure* measure() const                  { return (Measure*)parent()->parent(); }
 
-      void setDynamicType(DynamicType val) { _dynamicType = val; }
+      void setDynamicType(DynamicType val)      { _dynamicType = val; }
       void setDynamicType(const QString&);
       QString dynamicTypeName() const;
-      DynamicType dynamicType() const      { return _dynamicType; }
+      DynamicType dynamicType() const           { return _dynamicType; }
 
-      virtual void layout();
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
+      virtual void layout() override;
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
 
-      virtual bool isEditable() const { return true; }
-      virtual void startEdit(MuseScoreView*, const QPointF&);
-      virtual void endEdit();
-      virtual void reset();
+      virtual bool isEditable() const override { return true; }
+      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual void endEdit() override;
+      virtual void reset() override;
 
       void setVelocity(int v);
       int velocity() const;
@@ -102,11 +102,11 @@ class Dynamic : public Text {
       void setDynRange(DynamicRange t) { _dynRange = t;    }
       void undoSetDynRange(DynamicRange t);
 
-      virtual QLineF dragAnchor() const;
+      virtual QLineF dragAnchor() const override;
 
-      QVariant getProperty(P_ID propertyId) const;
-      bool     setProperty(P_ID propertyId, const QVariant&);
-      QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool     setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 
