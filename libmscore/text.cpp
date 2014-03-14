@@ -816,8 +816,15 @@ QRectF Text::cursorRect() const
 
       qreal ascent;
       if (fragment) {
-            QFontMetricsF fm = QFontMetrics(fragment->font(this));
-            ascent = fm.ascent();
+            QFont font = fragment->font(this);
+            if (font.family() == score()->scoreFont()->font().family()) {
+                  QFontMetricsF fm = QFontMetricsF(_textStyle.fontPx(spatium()));
+                  ascent = fm.ascent();
+                  }
+            else {
+                  QFontMetricsF fm = QFontMetrics(font);
+                  ascent = fm.ascent();
+                  }
             }
       else {
             QFontMetricsF fm = QFontMetricsF(_textStyle.fontPx(spatium()));
