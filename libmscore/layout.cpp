@@ -499,11 +499,10 @@ void Score::layoutChords2(QList<Note*>& notes, bool up)
 struct AcEl {
       Note* note;
       qreal x;          // actual x position of this accidental relative to origin
-      qreal lx;         // rightmost possible position for this accidental
       qreal top;        // top of accidental bbox relative to staff
       qreal bottom;     // bottom of accidental bbox relative to staff
       int line;         // line of note
-      qreal width;      // width
+      qreal width;      // width of accidental
       // TODO: the following could all be read from a static table to save time
       qreal overlap;          // number of lines below which this accidental can overlap something
       qreal undercut;         // number of lines above which this accidental can undercut something
@@ -553,6 +552,53 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx)
       }
 
 //---------------------------------------------------------
+//   layoutAccidental
+//---------------------------------------------------------
+
+static void layoutAccidental(AcEl* me, AcEl* above, AcEl* below, QList<Note*>& leftNotes, qreal pnd, qreal pd, qreal sp)
+      {
+      qreal lx;
+
+      // extra space for ledger lines
+      if (me->line < -1 || me->line > me->note->staff()->lines() * 2 + 1)
+            lx = -0.2 * sp;
+      else
+            lx = 0.0;
+
+      // clear left notes
+      int lns = leftNotes.size();
+      for (int i = 0; i < lns; ++i) {
+            Note* ln = leftNotes[i];
+            int lnLine = ln->line();
+            qreal lnTop = lnLine * 0.5 * sp - 0.5;
+            qreal lnBottom = lnTop + sp;
+            if (lnBottom >= me->top && lnTop <= me->bottom) {
+                  // undercut note above if possible
+                  if (me->line - lnLine > qRound(me->undercut) + 1)
+                        lx = qMin(lx, ln->x() + me->underOffset);
+                  else
+                        lx = qMin(lx, ln->x());
+                  }
+            else if (lnTop > me->bottom)
+                  break;
+            }
+
+      // clear other accidentals
+      bool conflictAbove = false;
+      bool conflictBelow = false;
+      Accidental* acc = me->note->accidental();
+
+      if (above)
+            conflictAbove = resolveAccidentals(me, above, lx);
+      if (below)
+            conflictBelow = resolveAccidentals(me, below, lx);
+      if (conflictAbove || conflictBelow)
+            me->x = lx - pd * acc->mag() - acc->width();
+      else
+            me->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
+      }
+
+//---------------------------------------------------------
 //   layoutChords3
 //    - calculate positions of notes, accidentals, dots
 //---------------------------------------------------------
@@ -587,11 +633,6 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   acel.note   = note;
                   acel.line   = note->line();
                   acel.x      = 0.0;
-                  // extra space for ledger lines
-                  if (acel.line < -1 || acel.line > staff->lines() * 2 + 1)
-                        acel.lx = -0.2 * sp;
-                  else
-                        acel.lx = 0.0;
                   acel.top    = acel.line * 0.5 * sp + ac->bbox().top();
                   acel.bottom = acel.line * 0.5 * sp + ac->bbox().bottom();
                   qreal width = ac->width();
@@ -709,80 +750,33 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       int nAcc = aclist.size();
       if (nAcc == 0)
             return;
+
       qreal pd  = point(styleS(ST_accidentalDistance));
       qreal pnd = point(styleS(ST_accidentalNoteDistance));
 
-      // determine which accidentals
-      // need to clear notes left of origin
-      int lns = leftNotes.size();
-      for (int i = 0, j = 0; i < lns; ++i) {
-            Note* ln = leftNotes[i];
-            int lnLine = ln->line();
-            qreal lnTop = lnLine * 0.5 * sp - 0.5;
-            qreal lnBottom = lnTop + sp;
-            qreal lnX = ln->x();
-            for (; j < nAcc; ++j) {
-                  AcEl* acc = &aclist[j];
-                  if (lnTop < acc->bottom && lnBottom > acc->top) {
-                        // undercut note above
-                        if (acc->line - lnLine > qRound(acc->undercut) + 1)
-                              lnX += acc->underOffset;
-                        acc->lx = qMin(acc->lx, lnX);
-                        }
-                  else if (acc->top >= lnLine + 1)
-                        break;
-                  }
-            }
-
       //
-      // layout top accidental
-      //
-      Note* note      = aclist[0].note;
-      Accidental* acc = note->accidental();
-      aclist[0].x     = aclist[0].lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
-
-      //
-      // layout bottom accidental
-      //
-      if (nAcc > 1) {
-            AcEl* acn = &aclist[nAcc-1];
-            AcEl* ac0 = &aclist[0];
-            Accidental* acc = acn->note->accidental();
-            qreal lx = acn->lx;
-
-            bool conflict = resolveAccidentals(acn, ac0, lx);
-            if (conflict)
-                  acn->x = lx - acc->width() - pd * acc->mag();
-            else
-                  acn->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
-            }
-
-      //
-      // layout middle accidentals
       // use zig zag approach
       // layout in pairs: right to left, high then low
       //
-      //
+
+      // layout top accidental
+      layoutAccidental(&aclist[0], 0, 0, leftNotes, pnd, pd, sp);
+
+      // layout bottom accidental
+      if (nAcc > 1)
+            layoutAccidental(&aclist[nAcc-1], &aclist[0], 0, leftNotes, pnd, pd, sp);
+
+      // layout middle accidentals
       if (nAcc > 2) {
             int n = nAcc - 1;
             AcEl* me = &aclist[n];
             AcEl* above = &aclist[0];
             AcEl* below;
-            Accidental* acc;
-            qreal lx;
-            bool conflictAbove, conflictBelow;
             for (int i = 1; i < n; ++i, --n) {
                   // next highest
                   below = me;
                   me = &aclist[i];
-                  acc = me->note->accidental();
-                  lx = me->lx;
-                  conflictAbove = resolveAccidentals(me, above, lx);
-                  conflictBelow = resolveAccidentals(me, below, lx);
-                  if (conflictAbove || conflictBelow)
-                        me->x = lx - pd * acc->mag() - acc->width();
-                  else
-                        me->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
+                  layoutAccidental(me, above, below, leftNotes, pnd, pd, sp);
 
                   if (i == n - 1)
                         break;
@@ -790,14 +784,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   // next lowest
                   above = me;
                   me = &aclist[n-1];
-                  acc = me->note->accidental();
-                  lx = me->lx;
-                  conflictAbove = resolveAccidentals(me, above, lx);
-                  conflictBelow = resolveAccidentals(me, below, lx);
-                  if (conflictAbove || conflictBelow)
-                        me->x = lx - pd * acc->mag() - acc->width();
-                  else
-                        me->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
+                  layoutAccidental(me, above, below, leftNotes, pnd, pd, sp);
                   }
             }
 
