@@ -1930,12 +1930,15 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
       for (Score* score : scoreList())
             ml.append(pair<Score*,MeasureBase*>(score,searchMeasureBase(score, measure)));
 
-      Measure* omb = nullptr;
+      MeasureBase* omb = nullptr;
       for (pair<Score*, MeasureBase*> p : ml) {
             Score* score    = p.first;
             MeasureBase* im = p.second;
             MeasureBase* mb = static_cast<MeasureBase*>(Element::create(type, score));
             mb->setTick(tick);
+
+            if (score == this)
+                  omb = mb;
 
             if (type == Element::MEASURE) {
                   if (score == rootScore())
@@ -2039,7 +2042,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
             }
       undoInsertTime(tick, ticks);
 
-      if (omb && !createEmptyMeasures) {
+      if (omb && type == Element::MEASURE && !createEmptyMeasures) {
             //
             // fill measure with rest
             //
@@ -2047,14 +2050,14 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
             for (int staffIdx = 0; staffIdx < _root->nstaves(); ++staffIdx) {
                   int track = staffIdx * VOICES;
                   int tick = omb->tick();
-                  Segment* s = omb->findSegment(Segment::SegChordRest, tick);
+                  Segment* s = static_cast<Measure*>(omb)->findSegment(Segment::SegChordRest, tick);
                   if (s == 0 || s->element(track) == 0) {
                         // add rest to this staff and to all the staves linked to it
                         Rest* rest = new Rest(_root, TDuration(TDuration::V_MEASURE));
                         Fraction timeStretch(_root->staff(staffIdx)->timeStretch(tick));
-                        rest->setDuration(omb->len() / timeStretch);
+                        rest->setDuration(static_cast<Measure*>(omb)->len() / timeStretch);
                         rest->setTrack(track);
-                        undoAddCR(rest, omb, tick);
+                        undoAddCR(rest, static_cast<Measure*>(omb), tick);
                         }
                   }
             }
