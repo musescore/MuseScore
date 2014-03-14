@@ -69,6 +69,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
 
       void write(Xml&) const;
       void writeProperties(Xml& xml) const;
+      void writeProperties(Xml& xml, const TextStyleData&) const;
       void read(XmlReader&);
       bool readProperties(XmlReader& v);
 

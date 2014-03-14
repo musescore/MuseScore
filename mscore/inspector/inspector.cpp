@@ -600,7 +600,6 @@ void InspectorDynamic::setElement()
 
       t.style->blockSignals(true);
       t.style->clear();
-      t.style->addItem(tr("unstyled"), TEXT_STYLE_UNSTYLED);
       const QList<TextStyle>& ts = score->style()->textStyles();
       int n = ts.size();
       for (int i = 0; i < n; ++i) {

@@ -1006,8 +1006,7 @@ void ExportMusicXml::credits(Xml& xml)
                   if (element->type() == Element::TEXT) {
                         const Text* text = (const Text*)element;
                         bool mustPrint = true;
-                        if (mustPrint) qDebug("text styled %d style %d(%s) '%s' at %f,%f",
-                                              text->styled(),
+                        if (mustPrint) qDebug("text style %d(%s) '%s' at %f,%f",
                                               text->textStyleType(),
                                               qPrintable(text->textStyle().name()),
                                               qPrintable(text->text()),
@@ -1050,19 +1049,17 @@ void ExportMusicXml::credits(Xml& xml)
                         // MusicXML credit-words are untyped and simple list position and font info.
                         // TODO: these parameters should be extracted from text layout and style
                         //       instead of relying on the style name
-                        if (text->styled()) {
-                              QString styleName = text->textStyle().name();
-                              if (styleName == "Title")
-                                    creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
-                              else if (styleName == "Subtitle")
-                                    creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
-                              else if (styleName == "Composer")
-                                    creditWords(xml, w - rm, ty, fs, "right", "top", text->text());
-                              else if (styleName == "Lyricist")
-                                    creditWords(xml, lm, ty, fs, "left", "top", text->text());
-                              else
-                                    qDebug("credits: text style %s not supported", qPrintable(styleName));
-                              }
+                        QString styleName = text->textStyle().name();
+                        if (styleName == "Title")
+                              creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
+                        else if (styleName == "Subtitle")
+                              creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
+                        else if (styleName == "Composer")
+                              creditWords(xml, w - rm, ty, fs, "right", "top", text->text());
+                        else if (styleName == "Lyricist")
+                              creditWords(xml, lm, ty, fs, "left", "top", text->text());
+                        else
+                              qDebug("credits: text style %s not supported", qPrintable(styleName));
                         }
                   }
             }

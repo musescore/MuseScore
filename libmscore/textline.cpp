@@ -175,10 +175,7 @@ void TextLineSegment::layout1()
                               _text->setParent(this);
                               }
                         else {
-                              if (tl->_beginText->styled())
-                                    _text->setTextStyleType(tl->_beginText->textStyleType());
-                              else
-                                    _text->setTextStyle(tl->_beginText->textStyle());
+                              _text->setTextStyleType(tl->_beginText->textStyleType());
                               _text->setText(tl->_beginText->text());
                               }
                         }
@@ -196,10 +193,7 @@ void TextLineSegment::layout1()
                               _text->setParent(this);
                               }
                         else {
-                              if (tl->_beginText->styled())
-                                    _text->setTextStyleType(tl->_beginText->textStyleType());
-                              else
-                                    _text->setTextStyle(tl->_beginText->textStyle());
+                              _text->setTextStyleType(tl->_beginText->textStyleType());
                               _text->setText(tl->_continueText->text());
                               }
                         }

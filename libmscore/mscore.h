@@ -253,9 +253,6 @@ const int STAFF_GROUP_MAX = TAB_STAFF_GROUP + 1;      // out of enum to avoid co
 //---------------------------------------------------------
 
 enum {
-      TEXT_STYLE_UNSTYLED = -1,
-      TEXT_STYLE_UNKNOWN = -2,
-
       TEXT_STYLE_DEFAULT = 0,
       TEXT_STYLE_TITLE,
       TEXT_STYLE_SUBTITLE,

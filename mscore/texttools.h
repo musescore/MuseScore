@@ -32,21 +32,9 @@ class TextTools : public QDockWidget {
       QAction* typefaceBold;
       QAction* typefaceItalic;
       QAction* typefaceUnderline;
-//      QAction* leftAlign;
-//      QAction* hcenterAlign;
-//      QAction* topAlign;
-//      QAction* bottomAlign;
-//      QAction* vcenterAlign;
-//      QAction* baselineAlign;
-//      QAction* rightAlign;
       QAction* typefaceSubscript;
       QAction* typefaceSuperscript;
       QAction* showKeyboard;
-//      QAction* unorderedList;
-//      QAction* orderedList;
-//      QAction* indentMore;
-//      QAction* indentLess;
-      QComboBox* textStyles;
 
       void blockAllSignals(bool val);
       void updateText();
@@ -60,14 +48,7 @@ class TextTools : public QDockWidget {
       void underlineClicked(bool);
       void subscriptClicked(bool);
       void superscriptClicked(bool);
-//      void setHalign(QAction*);
-//      void setValign(QAction*);
       void showKeyboardClicked(bool);
-      void styleChanged(int);
-//      void unorderedListClicked();
-//      void orderedListClicked();
-//      void indentMoreClicked();
-//      void indentLessClicked();
 
    public:
       TextTools(QWidget* parent = 0);

@@ -61,8 +61,7 @@ TextProp::TextProp(QWidget* parent)
       g3->addButton(boxButton);
 
       connect(mmUnit, SIGNAL(toggled(bool)), SLOT(mmToggled(bool)));
-      connect(styledGroup, SIGNAL(toggled(bool)), SLOT(styledToggled(bool)));
-      connect(unstyledGroup, SIGNAL(toggled(bool)), SLOT(unstyledToggled(bool)));
+      connect(resetToStyle, SIGNAL(clicked()), SLOT(doResetToTextStyle()));
       }
 
 //---------------------------------------------------------
@@ -71,22 +70,18 @@ TextProp::TextProp(QWidget* parent)
 
 void TextProp::setScore(bool onlyStyle, Score* score)
       {
-      if (onlyStyle) {
-            styledGroup->setVisible(false);
-            unstyledGroup->setCheckable(false);
-            unstyledGroup->setTitle(tr("Text Style"));
-            }
-      else {
-            // textGroup->setVisible(false);
-            styles->clear();
+      _score = score;
+      resetToStyle->setVisible(!onlyStyle);
+      styles->setVisible(!onlyStyle);
+      styleLabel->setVisible(!onlyStyle);
+      styles->clear();
 
-            const QList<TextStyle>& scoreStyles = score->style()->textStyles();
-            int n = scoreStyles.size();
-            for (int i = 0; i < n; ++i) {
-                  // if style not hidden in this context, add to combo with index in score style list as userData
-                  if ( !(scoreStyles.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
-                        styles->addItem(scoreStyles.at(i).name(), i);
-                  }
+      const QList<TextStyle>& scoreStyles = score->style()->textStyles();
+      int n = scoreStyles.size();
+      for (int i = 0; i < n; ++i) {
+            // if style not hidden in this context, add to combo with index in score style list as userData
+            if ( !(scoreStyles.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+                  styles->addItem(scoreStyles.at(i).name(), i);
             }
       }
 
@@ -103,27 +98,16 @@ void TextProp::mmToggled(bool val)
       }
 
 //---------------------------------------------------------
-//   setStyled
+//   setStyle
 //---------------------------------------------------------
 
-void TextProp::setStyled(bool val)
+void TextProp::setStyle(int st, const TextStyle& ts)
       {
-      styledGroup->setChecked(val);
-      unstyledGroup->setChecked(!val);
-      }
-
-//---------------------------------------------------------
-//   setTextStyleType
-//---------------------------------------------------------
-
-void TextProp::setTextStyleType(int st)
-      {
-      if (st == TEXT_STYLE_UNKNOWN || st == TEXT_STYLE_UNSTYLED)
-            st = TEXT_STYLE_TITLE;
       st = styles->findData(st);          // find a combo item with that style idx
       if (st < 0)                         // if none found...
             st = 0;                       // ...=> first combo item
       styles->setCurrentIndex(st);        // set current combo item
+      setTextStyle(ts);
       }
 
 //---------------------------------------------------------
@@ -133,15 +117,6 @@ void TextProp::setTextStyleType(int st)
 int TextProp::textStyleType() const
       {
       return styles->itemData(styles->currentIndex()).toInt();
-      }
-
-//---------------------------------------------------------
-//   isStyled
-//---------------------------------------------------------
-
-bool TextProp::isStyled() const
-      {
-      return styledGroup->isChecked();
       }
 
 //---------------------------------------------------------
@@ -251,21 +226,13 @@ TextStyle TextProp::textStyle() const
       }
 
 //---------------------------------------------------------
-//   styledToggled
+//   doResetToTextStyle
 //---------------------------------------------------------
 
-void TextProp::styledToggled(bool val)
+void TextProp::doResetToTextStyle()
       {
-      unstyledGroup->setChecked(!val);
+      setTextStyle(_score->textStyle(textStyleType()));
       }
 
-//---------------------------------------------------------
-//   unstyledToggled
-//---------------------------------------------------------
-
-void TextProp::unstyledToggled(bool val)
-      {
-      styledGroup->setChecked(!val);
-      }
 }
 

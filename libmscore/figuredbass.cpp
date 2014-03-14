@@ -937,7 +937,7 @@ void FiguredBass::write(Xml& xml) const
             xml.tag("ticks", ticks());
       // if unparseable items or non-standard style, write full text data
       if (items.size() < 1 || textStyleType() != TEXT_STYLE_FIGURED_BASS) {
-            if (items.size() < 1 || textStyleType() == TEXT_STYLE_UNSTYLED)
+            if (items.size() < 1)
                   Text::writeProperties(xml, true);
             else
                   // if all items parsed and not unstled, we simnply have a special style: write it
@@ -945,8 +945,7 @@ void FiguredBass::write(Xml& xml) const
             }
       foreach(FiguredBassItem item, items)
             item.write(xml);
-      if (textStyleType() != TEXT_STYLE_UNSTYLED)
-            Element::writeProperties(xml);
+      Element::writeProperties(xml);
       xml.etag();
       }
 
@@ -980,9 +979,8 @@ void FiguredBass::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      // if items could be parsed and text is styled, set normalized text
-      if(items.size() > 0 && textStyleType() != TEXT_STYLE_UNSTYLED)
-            setText(normalizedText);            // this is the text to show while editing
+      // if items could be parsed set normalized text
+      setText(normalizedText);            // this is the text to show while editing
       }
 
 //---------------------------------------------------------
@@ -1197,7 +1195,7 @@ void FiguredBass::endEdit()
             normalizedText.append(pItem->normalizedText());
             }
       // if all items parsed and text is styled, replaced entered text with normalized text
-      if(items.size() > 0 && textStyleType() != TEXT_STYLE_UNSTYLED) {
+      if (items.size()) {
             setText(normalizedText);
             layout();
             }

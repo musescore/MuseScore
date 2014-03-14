@@ -242,34 +242,12 @@ bool compareProperty(void* val, void* defaultVal)
 Xml::Xml()
       {
       setCodec("UTF-8");
-      stack.clear();
-      curTick       = 0;
-      curTrack      = -1;
-      tickDiff      = 0;
-      trackDiff     = 0;
-      clipboardmode = false;
-      excerptmode   = false;
-      tupletId      = 1;
-      beamId        = 1;
-      spannerId     = 1;
-      writeOmr      = true;
       }
 
 Xml::Xml(QIODevice* device)
    : QTextStream(device)
       {
       setCodec("UTF-8");
-      stack.clear();
-      curTick       = 0;
-      curTrack      = -1;
-      tickDiff      = 0;
-      trackDiff     = 0;
-      clipboardmode = false;
-      excerptmode   = false;
-      tupletId      = 1;
-      beamId        = 1;
-      spannerId     = 1;
-      writeOmr      = true;
       }
 
 //---------------------------------------------------------
