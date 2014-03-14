@@ -801,10 +801,12 @@ void EditStyle::toggleHeaderOddEven(bool checked)
       editEvenHeaderC->setEnabled(checked);
       evenHeaderR->setEnabled(checked);
       editEvenHeaderR->setEnabled(checked);
+      static QString odd  = labelOddHeader->text();  // save on 1st round
+      static QString even = labelEvenHeader->text(); // save on 1st round
       if (checked)
-          labelOddHeader->setText(tr("Odd"));
+            labelOddHeader->setText(odd); // restore
       else
-          labelOddHeader->setText(tr("Even/Odd"));
+            labelOddHeader->setText(even + "\n" + odd); // replace
       return;
       }
 
@@ -823,10 +825,12 @@ void EditStyle::toggleFooterOddEven(bool checked)
       editEvenFooterC->setEnabled(checked);
       evenFooterR->setEnabled(checked);
       editEvenFooterR->setEnabled(checked);
+      static QString odd  = labelOddFooter->text();  // save on 1st round
+      static QString even = labelEvenFooter->text(); // save on 1st round
       if (checked)
-          labelOddFooter->setText(tr("Odd"));
+            labelOddFooter->setText(odd); // restore
       else
-          labelOddFooter->setText(tr("Even/Odd"));
+            labelOddFooter->setText(even + "\n" + odd); // replace
       return;
       }
 
