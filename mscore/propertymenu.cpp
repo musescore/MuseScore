@@ -494,12 +494,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   if (!sl.contains(ot))
                         sl.append(ot);
                   QList<Element*> selectedElements;
+                  if (ot->textStyleType() != nText->textStyleType())
+                        nText->restyle(ot->textStyleType());
                   for (auto e : sl) {
                         if (e->type() != ot->type())
                               continue;
                         Text* t = static_cast<Text*>(e);
                         if (t->textStyleType() != nText->textStyleType()) {
-                              printf("change text style type\n");
                               t->undoChangeProperty(P_TEXT_STYLE_TYPE, nText->textStyleType());
                               }
                         if (t->textStyle() != nText->textStyle())

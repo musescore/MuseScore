@@ -229,6 +229,21 @@ bool ElementLayout::readProperties(XmlReader& e)
       return true;
       }
 
+//---------------------------------------------------------
+//   restyle
+//---------------------------------------------------------
+
+void ElementLayout::restyle(const ElementLayout& ol, const ElementLayout& nl)
+      {
+      if ((ol._align & ALIGN_HMASK) == (_align & ALIGN_HMASK))
+            _align |= nl._align & ALIGN_HMASK;
+      if ((ol._align & ALIGN_VMASK) == (_align & ALIGN_VMASK))
+            _align |= nl._align & ALIGN_VMASK;
+      if (ol._offset == _offset)
+            _offset = nl._offset;
+      if (_offsetType == ol._offsetType)
+            _offsetType = nl._offsetType;
+      }
 
 }
 

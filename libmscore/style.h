@@ -118,6 +118,7 @@ class TextStyle {
       QFontMetricsF fontMetrics(qreal spatium) const;
       bool operator!=(const TextStyle& s) const;
       void layout(Element*) const;
+      void restyle(const TextStyle& os, const TextStyle& ns);
       };
 
 //---------------------------------------------------------

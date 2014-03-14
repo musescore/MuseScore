@@ -51,6 +51,7 @@ class ElementLayout {
       void writeProperties(Xml& xml) const;
       void writeProperties(Xml& xml, const ElementLayout&) const;
       bool readProperties(XmlReader& e);
+      void restyle(const ElementLayout& ol, const ElementLayout& nl);
       };
 
 
