@@ -271,7 +271,6 @@
         <Dynamic>
           <subtype>p</subtype>
           <velocity>49</velocity>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <durationType>half</durationType>

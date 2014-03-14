@@ -38,6 +38,7 @@ class TextProp : public QWidget, public Ui::TextProperties {
 
       Score* _score;
       int curUnit;
+      mutable TextStyle ts;
 
    private slots:
       void mmToggled(bool);

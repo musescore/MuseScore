@@ -1,4 +1,5 @@
 #!/bin/bash
 
 cp ../../../build.debug/mtest/libmscore/timesig/timesig01.mscx timesig01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig-03.mscx timesig-03-ref.mscx
 

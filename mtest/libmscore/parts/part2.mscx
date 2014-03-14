@@ -139,7 +139,6 @@
         <Dynamic>
           <subtype>pp</subtype>
           <velocity>33</velocity>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <durationType>quarter</durationType>
