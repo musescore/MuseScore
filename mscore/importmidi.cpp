@@ -636,6 +636,8 @@ bool isSameChannel(const MTrack &t1, const MTrack &t2)
 //   for drum track, if any, set percussion clef
 //   for piano 2 tracks, if any, set G and F clefs
 //   for other track types set G or F clef
+//
+//  note: after set, clefs also should be created later
 //---------------------------------------------------------
 
 void createInstruments(Score *score, QList<MTrack> &tracks)
@@ -650,15 +652,12 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
             track.staff = s;
 
             if (track.mtrack->drumTrack()) {
-                              // drum track
                   s->setClef(0, ClefType::PERC);
                   part->instr()->setDrumset(smDrumset);
                   part->instr()->setUseDrumset(true);
                   }
             else {
-                  const int avgPitch = MChord::findAveragePitch(track.chords.begin(),
-                                                                track.chords.end());
-                  s->setClef(0, MidiClef::clefTypeFromAveragePitch(avgPitch));
+                  s->setClef(0, ClefType::G);           // can be reset later
                   if (idx < (tracks.size() - 1) && idx >= 0
                               && isGrandStaff(tracks[idx], tracks[idx + 1])) {
                                     // assume that the current track and the next track
@@ -670,9 +669,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                         part->insertStaff(ss);
                         score->staves().push_back(ss);
                         ++idx;
-                        const int avgPitch = MChord::findAveragePitch(tracks[idx].chords.begin(),
-                                                                      tracks[idx].chords.end());
-                        ss->setClef(0, MidiClef::clefTypeFromAveragePitch(avgPitch));
+                        ss->setClef(0, ClefType::F);    // can be reset later
                         tracks[idx].staff = ss;
                         }
                   }
