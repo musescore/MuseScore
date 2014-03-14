@@ -136,6 +136,22 @@ TextFragment TextFragment::split(int column)
       return f;
       }
 
+
+//---------------------------------------------------------
+//   columns
+//---------------------------------------------------------
+
+int TextFragment::columns() const
+      {
+      int col = 0;
+      for (const QChar& c : text) {
+            if (c.isHighSurrogate())
+                  continue;
+            ++col;
+            }
+      return col;
+      }
+
 //---------------------------------------------------------
 //   operator ==
 //---------------------------------------------------------
@@ -596,6 +612,81 @@ void TextBlock::remove(int start, int n)
             if (inc)
                   ++i;
             }
+      }
+
+//---------------------------------------------------------
+//   changeFormat
+//---------------------------------------------------------
+
+void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
+      {
+      int col = 0;
+      for (auto i = _text.begin(); i != _text.end(); ++i) {
+            int columns = i->columns();
+            if (start + n <= col)
+                  break;
+            if (start > col + columns) {
+                  col += i->columns();
+                  continue;
+                  }
+            if ((start <= col) && ((start+n) < (col + columns))) {
+                  TextFragment f = i->split(start + n - col);
+                  i->changeFormat(id, data);
+                  i = _text.insert(i+1, f);
+                  }
+            else if (start > col && ((start+n) < (col + columns))) {
+                  TextFragment lf = i->split(start+n - col);
+                  TextFragment mf = i->split(start - col);
+                  mf.changeFormat(id, data);
+                  i = _text.insert(i+1, mf);
+                  i = _text.insert(i+1, lf);
+                  }
+            else if (start > col) {
+                  TextFragment f = i->split(start - col);
+                  f.changeFormat(id, data);
+                  i = _text.insert(i+1, f);
+                  }
+            else
+                  i->changeFormat(id, data);
+            col += i->columns();
+            }
+      }
+
+//---------------------------------------------------------
+//   changeFormat
+//---------------------------------------------------------
+
+void CharFormat::setFormat(FormatId id, QVariant data)
+      {
+      switch(id) {
+            case FormatId::Bold:
+                  _bold = data.toBool();
+                  break;
+            case FormatId::Italic:
+                  _italic = data.toBool();
+                  break;
+            case FormatId::Underline:
+                  _underline = data.toBool();
+                  break;
+            case FormatId::Valign:
+                  _valign = static_cast<VerticalAlignment>(data.toInt());
+                  break;
+            case FormatId::FontSize:
+                  _fontSize = data.toDouble();
+                  break;
+            case FormatId::FontFamily:
+                  _fontFamily = data.toString();
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
+//   changeFormat
+//---------------------------------------------------------
+
+void TextFragment::changeFormat(FormatId id, QVariant data)
+      {
+      format.setFormat(id, data);
       }
 
 //---------------------------------------------------------
@@ -2110,6 +2201,58 @@ void Text::setText(const QString& s)
       {
       _text = s;
       textChanged();
+      }
+
+//---------------------------------------------------------
+//   changeSelectionFormat
+//---------------------------------------------------------
+
+void Text::changeSelectionFormat(FormatId id, QVariant val)
+      {
+      if (!_cursor.hasSelection())
+            return;
+      int r1 = _cursor.selectLine();
+      int r2 = _cursor.line();
+      int c1 = _cursor.selectColumn();
+      int c2 = _cursor.column();
+
+      if (r1 > r2) {
+            qSwap(r1, r2);
+            qSwap(c1, c2);
+            }
+      else if (r1 == r2) {
+            if (c1 > c2)
+                  qSwap(c1, c2);
+            }
+      int rows = _layout.size();
+      QList<TextBlock> toDelete;
+      for (int row = 0; row < rows; ++row) {
+            TextBlock& t = _layout[row];
+            if (row < r1)
+                  continue;
+            if (row > r2)
+                  break;
+            if (row == r1 && r1 == r2)
+                  t.changeFormat(id, val, c1, c2 - c1);
+            else if (row == r1)
+                  t.changeFormat(id, val, c1, t.columns() - c1);
+            else if (row == r2)
+                  t.changeFormat(id, val, 0, c2);
+            else
+                  t.changeFormat(id, val, 0, t.columns());
+            }
+      layout1();
+      score()->addRefresh(canvasBoundingRect());
+      }
+
+//---------------------------------------------------------
+//   setUnderline
+//---------------------------------------------------------
+
+void Text::setFormat(FormatId id, QVariant val)
+      {
+      changeSelectionFormat(id, val);
+      _cursor.format()->setFormat(id, val);
       }
 }
 

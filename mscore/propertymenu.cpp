@@ -498,8 +498,10 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         if (e->type() != ot->type())
                               continue;
                         Text* t = static_cast<Text*>(e);
-                        if (t->textStyleType() != nText->textStyleType())
+                        if (t->textStyleType() != nText->textStyleType()) {
+                              printf("change text style type\n");
                               t->undoChangeProperty(P_TEXT_STYLE_TYPE, nText->textStyleType());
+                              }
                         if (t->textStyle() != nText->textStyle())
                               t->undoChangeProperty(P_TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
                         }
