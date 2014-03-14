@@ -824,6 +824,47 @@ void TextStyleData::writeProperties(Xml& xml, const TextStyleData& r) const
       }
 
 //---------------------------------------------------------
+//   restyle
+//---------------------------------------------------------
+
+void TextStyleData::restyle(const TextStyleData& os, const TextStyleData& ns)
+      {
+      ElementLayout::restyle(os, ns);
+      if (name == os.name)
+            name = ns.name;
+      if (family == os.family)
+            family = ns.family;
+      if (size == os.size)
+            size = ns.size;
+      if (bold == os.bold)
+            bold = ns.bold;
+      if (italic == os.italic)
+            italic = ns.italic;
+      if (underline == os.underline)
+            underline = ns.underline;
+      if (sizeIsSpatiumDependent == os.sizeIsSpatiumDependent)
+            sizeIsSpatiumDependent = ns.sizeIsSpatiumDependent;
+      if (foregroundColor == os.foregroundColor)
+            foregroundColor = ns.foregroundColor;
+      if (backgroundColor == os.backgroundColor)
+            backgroundColor = ns.backgroundColor;
+      if (hasFrame == os.hasFrame)
+            hasFrame = ns.hasFrame;
+      if (frameWidth.val() == os.frameWidth.val())
+            frameWidth = ns.frameWidth;
+      if (paddingWidth.val() == os.paddingWidth.val())
+            paddingWidth = ns.paddingWidth;
+      if (frameRound == os.frameRound)
+            frameRound = ns.frameRound;
+      if (frameColor == os.frameColor)
+            frameColor = ns.frameColor;
+      if (circle == os.circle)
+            circle = ns.circle;
+      if (systemFlag == os.systemFlag)
+            systemFlag = ns.systemFlag;
+      }
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -1271,6 +1312,7 @@ bool TextStyle::operator!=(const TextStyle& s) const     { return d->operator!=(
 void TextStyle::layout(Element* e) const                 { d->layout(e); }
 void TextStyle::writeProperties(Xml& xml) const          { d->writeProperties(xml); }
 void TextStyle::writeProperties(Xml& xml, const TextStyle& r) const { d->writeProperties(xml, *r.d); }
+void TextStyle::restyle(const TextStyle& os, const TextStyle& ns) { d->restyle(*os.d, *ns.d); }
 bool TextStyle::readProperties(XmlReader& v)     { return d->readProperties(v); }
 
 //---------------------------------------------------------

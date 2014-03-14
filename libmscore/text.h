@@ -222,6 +222,7 @@ class Text : public Element {
       TextStyle& textStyle()                  { return _textStyle; }
       int textStyleType() const               { return _styleIndex; }
       void setTextStyleType(int);
+      void restyle(int);
 
       void setPlainText(const QString&);
       void setText(const QString&);

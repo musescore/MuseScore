@@ -2254,5 +2254,18 @@ void Text::setFormat(FormatId id, QVariant val)
       changeSelectionFormat(id, val);
       _cursor.format()->setFormat(id, val);
       }
+
+//---------------------------------------------------------
+//   restyle
+//    restyle from old style type s
+//---------------------------------------------------------
+
+void Text::restyle(int oldType)
+      {
+      const TextStyle& os = score()->textStyle(oldType);
+      const TextStyle& ns = score()->textStyle(textStyleType());
+      _textStyle.restyle(os, ns);
+      }
+
 }
 
