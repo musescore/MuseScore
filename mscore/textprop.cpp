@@ -62,6 +62,7 @@ TextProp::TextProp(QWidget* parent)
 
       connect(mmUnit, SIGNAL(toggled(bool)), SLOT(mmToggled(bool)));
       connect(resetToStyle, SIGNAL(clicked()), SLOT(doResetToTextStyle()));
+      connect(resetToStyle, SIGNAL(clicked()), SIGNAL(resetToStyleClicked()));
       }
 
 //---------------------------------------------------------

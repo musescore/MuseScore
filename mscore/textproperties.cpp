@@ -74,6 +74,16 @@ TextProperties::TextProperties(Text* t, QWidget* parent)
 
       connect(bb, SIGNAL(accepted()), SLOT(accept()));
       connect(bb, SIGNAL(rejected()), SLOT(reject()));
+      connect(tp, SIGNAL(resetToStyleClicked()), SLOT(resetToStyle()));
+      }
+
+//---------------------------------------------------------
+//   resetToStyle
+//---------------------------------------------------------
+
+void TextProperties::resetToStyle()
+      {
+      text->setText(text->plainText());
       }
 
 //---------------------------------------------------------

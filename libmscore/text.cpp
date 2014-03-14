@@ -776,7 +776,7 @@ Text::Text(const Text& st)
    : Element(st)
       {
       _text                = st._text;
-      _layout.clear();
+      _layout              = st._layout;
       frame                = st.frame;
       _styleIndex          = st._styleIndex;
       _layoutToParentWidth = st._layoutToParentWidth;
@@ -1384,6 +1384,32 @@ void Text::genText()
             }
       while (!xmlNesting.isEmpty())
             xmlNesting.popToken();
+      }
+
+//---------------------------------------------------------
+//   plainText
+//    return plain text with symbols
+//---------------------------------------------------------
+
+QString Text::plainText() const
+      {
+      QString s;
+
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  const CharFormat& format = f.format;
+                  if (format.type() == CharFormatType::TEXT) {
+                        s += f.text;
+                        }
+                  else {
+                        for (SymId id : f.ids)
+                              s += QString("<sym>%1</sym>").arg(Sym::id2name(id));
+                        }
+                  }
+            if (block.eol())
+                  s += QChar::LineFeed;
+            }
+      return s;
       }
 
 //---------------------------------------------------------
