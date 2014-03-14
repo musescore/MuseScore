@@ -792,17 +792,21 @@ void EditStyle::setChordStyle(bool checked)
 
 void EditStyle::toggleHeaderOddEven(bool checked)
       {
-      label_67->setEnabled(checked); // "Even"
-      if (checked)
-          label_66->setText(tr("Odd"));
-      else
-          label_66->setText(tr("Even/Odd"));
+      if (!showHeader->isChecked())
+            return;
+      labelEvenHeader->setEnabled(checked);
       evenHeaderL->setEnabled(checked);
       editEvenHeaderL->setEnabled(checked);
       evenHeaderC->setEnabled(checked);
       editEvenHeaderC->setEnabled(checked);
       evenHeaderR->setEnabled(checked);
       editEvenHeaderR->setEnabled(checked);
+      static QString odd  = labelOddHeader->text();  // save on 1st round
+      static QString even = labelEvenHeader->text(); // save on 1st round
+      if (checked)
+            labelOddHeader->setText(odd); // restore
+      else
+            labelOddHeader->setText(even + "\n" + odd); // replace
       return;
       }
 
@@ -812,18 +816,21 @@ void EditStyle::toggleHeaderOddEven(bool checked)
 
 void EditStyle::toggleFooterOddEven(bool checked)
       {
-      label_80->setEnabled(checked); // "Even"
-      if (checked)
-          label_65->setText(tr("Odd"));
-      else
-          label_65->setText(tr("Even/Odd"));
-
+      if (!showFooter->isChecked())
+            return;
+      labelEvenFooter->setEnabled(checked);
       evenFooterL->setEnabled(checked);
       editEvenFooterL->setEnabled(checked);
       evenFooterC->setEnabled(checked);
       editEvenFooterC->setEnabled(checked);
       evenFooterR->setEnabled(checked);
       editEvenFooterR->setEnabled(checked);
+      static QString odd  = labelOddFooter->text();  // save on 1st round
+      static QString even = labelEvenFooter->text(); // save on 1st round
+      if (checked)
+            labelOddFooter->setText(odd); // restore
+      else
+            labelOddFooter->setText(even + "\n" + odd); // replace
       return;
       }
 
