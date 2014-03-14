@@ -309,9 +309,8 @@ void createClefs(Staff *staff,
                         createSmallClef(clefFromIndex(currentClef), segments[i], staff);
                         currentClef = prevClef;
                         }
-                  if (i == 1)
-                        *mainClef = clefFromIndex(prevClef);
                   }
+            *mainClef = clefFromIndex(currentClef);
             }
       }
 
