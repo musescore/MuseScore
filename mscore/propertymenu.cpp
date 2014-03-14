@@ -117,8 +117,7 @@ void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
                   }
             popup->addMenu(menuLayer);
             }
-      if (static_cast<Text*>(e)->styled())
-            popup->addAction(tr("Text Style..."))->setData("text-style");
+      popup->addAction(tr("Text Style..."))->setData("text-style");
       popup->addAction(tr("Text Properties..."))->setData("text-props");
       }
 
@@ -209,8 +208,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
             else
                   popup->addAction(tr("Set Visible"))->setData("invisible");
-            if (static_cast<Text*>(e)->styled())
-                  popup->addAction(tr("Text Style..."))->setData("text-style");
+            popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Text Properties..."))->setData("d-props");
             }
       else if (e->type() == Element::TEXTLINE_SEGMENT
@@ -239,14 +237,11 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::HARMONY) {
             genPropertyMenu1(e, popup);
-            // chord symbols always use text style
-            // even though they are marked unstyled
             popup->addAction(tr("Text Style..."))->setData("text-style");
             }
       else if (e->type() == Element::TEMPO_TEXT) {
             genPropertyMenu1(e, popup);
-            if (static_cast<Text*>(e)->styled())
-                  popup->addAction(tr("Text Style..."))->setData("text-style");
+            popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
       else if (e->type() == Element::KEYSIG) {
@@ -264,8 +259,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   }
             }
       else if (e->type() == Element::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == STAFF_STATE_INSTRUMENT) {
-            if (static_cast<Text*>(e)->styled())
-                  popup->addAction(tr("Text Style..."))->setData("text-style");
+            popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
             }
       else if (e->type() == Element::SLUR_SEGMENT) {
@@ -300,8 +294,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::INSTRUMENT_CHANGE) {
             genPropertyMenu1(e, popup);
-            if (static_cast<Text*>(e)->styled())
-                  popup->addAction(tr("Text Style..."))->setData("text-style");
+            popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Change Instrument..."))->setData("ch-instr");
             }
       else if (e->type() == Element::FRET_DIAGRAM) {
@@ -317,8 +310,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("Glissando Properties..."))->setData("gliss-props");
             }
       else if (e->type() == Element::INSTRUMENT_NAME) {
-            if (static_cast<Text*>(e)->styled())
-                  popup->addAction(tr("Text Style..."))->setData("text-style");
+            popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
             }
       else
@@ -431,12 +423,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             TextLineSegment* vs = static_cast<TextLineSegment*>(e);
             LineProperties lp(vs->textLine());
             lp.exec();
-#if 0
-            if (lp.exec()) {
-                  foreach(SpannerSegment* l, vs->textLine()->spannerSegments())
-                        static_cast<TextLineSegment*>(l)->clearText();
-                  }
-#endif
             }
       else if (cmd == "tr-props") {
             TremoloBar* tb = static_cast<TremoloBar*>(e);
@@ -508,34 +494,15 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   if (!sl.contains(ot))
                         sl.append(ot);
                   QList<Element*> selectedElements;
-                  foreach(Element* e, sl) {
+                  for (auto e : sl) {
                         if (e->type() != ot->type())
                               continue;
-
-                        Text* t  = static_cast<Text*>(e);
-                        Text* tt = t->clone();
-
-
-                        if (nText->styled() != ot->styled() || nText->styled()) {
-                              if (nText->styled())
-                                    tt->setTextStyleType(nText->textStyleType());
-                              else {
-                                    tt->setUnstyled();
-                                    }
-                              }
-
-                        if (!nText->styled() && (nText->textStyle() != ot->textStyle())) {
-                              tt->setTextStyle(nText->textStyle());
-                              tt->textStyleChanged();
-                              }
-
-                        if (t->selected())
-                              selectedElements.append(tt);
-                        score()->undoChangeElement(t, tt);
+                        Text* t = static_cast<Text*>(e);
+                        if (t->textStyleType() != nText->textStyleType())
+                              t->undoChangeProperty(P_TEXT_STYLE_TYPE, nText->textStyleType());
+                        if (t->textStyle() != nText->textStyle())
+                              t->undoChangeProperty(P_TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
                         }
-                  score()->select(0, SELECT_SINGLE, 0);
-                  foreach(Element* e, selectedElements)
-                        score()->select(e, SELECT_ADD, 0);
                   }
             delete nText;
             }

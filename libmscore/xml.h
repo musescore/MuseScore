@@ -115,18 +115,18 @@ class Xml : public QTextStream {
       QList<Spanner*> _spanner;
 
    public:
-      int curTick;            // used to optimize output
-      int curTrack;
-      int tickDiff;
-      int trackDiff;          // saved track is curTrack-trackDiff
+      int curTick   =  0;           // used to optimize output
+      int curTrack  = -1;
+      int tickDiff  =  0;
+      int trackDiff =  0;           // saved track is curTrack-trackDiff
 
-      bool clipboardmode;     // used to modify write() behaviour
-      bool excerptmode;       // true when writing a part
-      bool writeOmr;          // false if writing into *.msc file
+      bool clipboardmode = false;   // used to modify write() behaviour
+      bool excerptmode   = false;   // true when writing a part
+      bool writeOmr      = true;    // false if writing into *.msc file
 
-      int tupletId;
-      int beamId;
-      int spannerId;
+      int tupletId  = 1;
+      int beamId    = 1;
+      int spannerId = 1;
       QList<Spanner*>& spanner() { return _spanner; }
       void addSpanner(Spanner* s) { _spanner.append(s); }
 

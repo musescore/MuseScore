@@ -148,13 +148,11 @@ void LineProperties::accept()
       Text* t = tl->beginTextElement();
       if (t) {
             Text* ot = otl->beginTextElement();
-            if (t->styled() && t->textStyleType() != ot->textStyleType())
+            if (t->textStyleType() != ot->textStyleType())
                   ot->undoChangeProperty(P_TEXT_STYLE_TYPE, t->textStyleType());
-            else {
-                  ot->undoChangeProperty(P_TEXT_STYLE_TYPE, TEXT_STYLE_UNSTYLED);
-                  if (t->textStyle() != ot->textStyle())
-                        ot->undoChangeProperty(P_TEXT_STYLE, QVariant::fromValue(t->textStyle()));
-                  }
+            // TODO: only save style difference
+            if (t->textStyle() != ot->textStyle())
+                  ot->undoChangeProperty(P_TEXT_STYLE, QVariant::fromValue(t->textStyle()));
             }
 
       // ...

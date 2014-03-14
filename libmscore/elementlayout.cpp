@@ -77,6 +77,55 @@ void ElementLayout::layout(Element* e) const
 
 //---------------------------------------------------------
 //   writeProperties
+//    writout only differences to l
+//---------------------------------------------------------
+
+void ElementLayout::writeProperties(Xml& xml, const ElementLayout& l) const
+      {
+      if ((l._align & ALIGN_HMASK) != (_align & ALIGN_HMASK)) {
+            const char* p;
+            if (_align & ALIGN_HCENTER)
+                  p = "center";
+            else if (_align & ALIGN_RIGHT)
+                  p = "right";
+            else
+                  p = "left";
+            xml.tag("halign", p);
+            }
+
+      if ((l._align & ALIGN_VMASK) != (_align & ALIGN_VMASK)) {
+            const char* p;
+            if (_align & ALIGN_BOTTOM)
+                  p = "bottom";
+            else if (_align & ALIGN_VCENTER)
+                  p = "center";
+            else if (_align & ALIGN_BASELINE)
+                  p = "baseline";
+            else
+                  p = "top";
+            xml.tag("valign", p);
+            }
+
+      if (l._offset != _offset) {
+            QPointF pt(_offset);
+            if (offsetType() == OFFSET_ABS)
+                  pt *= INCH;
+            xml.tag("xoffset", pt.x());         // save in spatium or metric mm
+            xml.tag("yoffset", pt.y());
+            }
+
+      if (_offsetType != l._offsetType) {
+            const char* p = 0;
+            switch(_offsetType) {
+                  case OFFSET_SPATIUM: p = "spatium"; break;
+                  case OFFSET_ABS:     p = "absolute"; break;
+                  }
+            xml.tag("offsetType", p);
+            }
+      }
+
+//---------------------------------------------------------
+//   writeProperties
 //---------------------------------------------------------
 
 void ElementLayout::writeProperties(Xml& xml) const

@@ -70,12 +70,7 @@ TextProperties::TextProperties(Text* t, QWidget* parent)
 
       text = t;
 
-      tp->setTextStyle(t->textStyle());
-      tp->setStyled(t->styled());
-      if (t->styled())
-            tp->setTextStyleType(t->textStyleType());
-      else
-            tp->setTextStyleType(0);
+      tp->setStyle(t->textStyleType(), t->textStyle());
 
       connect(bb, SIGNAL(accepted()), SLOT(accept()));
       connect(bb, SIGNAL(rejected()), SLOT(reject()));
@@ -87,17 +82,8 @@ TextProperties::TextProperties(Text* t, QWidget* parent)
 
 void TextProperties::accept()
       {
-      if (tp->isStyled()) {
-            if (!text->styled() || (text->textStyleType() != tp->textStyleType())) {
-                  text->setTextStyleType(tp->textStyleType());
-                  text->textStyleChanged();
-                  }
-            }
-      else {
-            text->setUnstyled();
-            text->setTextStyle(tp->textStyle());
-            }
-
+      text->setTextStyleType(tp->textStyleType());
+      text->setTextStyle(tp->textStyle());
       QDialog::accept();
       }
 }

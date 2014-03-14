@@ -170,7 +170,7 @@ class Text : public Element {
       QString _text;
       QList<TextBlock> _layout;
       QRectF frame;           // calculated in layout()
-      int _styleIndex;        // set to TEXT_STYLE_UNTEXT if not styled
+      int _styleIndex;
 
       bool _layoutToParentWidth;
       bool _editMode;
@@ -207,20 +207,18 @@ class Text : public Element {
 
       virtual void draw(QPainter*) const override;
 
-      bool editMode() const               { return _editMode; }
-      void setEditMode(bool val)          { _editMode = val;  }
+      bool editMode() const                   { return _editMode; }
+      void setEditMode(bool val)              { _editMode = val;  }
 
       void setTextStyle(const TextStyle& st)  { _textStyle = st;   }
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
-      void setUnstyled()                  { _styleIndex = TEXT_STYLE_UNSTYLED; }
-      bool styled() const                 { return _styleIndex != TEXT_STYLE_UNSTYLED; }
-      int textStyleType() const           { return _styleIndex; }
+      int textStyleType() const               { return _styleIndex; }
       void setTextStyleType(int);
 
       void setPlainText(const QString&);
       void setText(const QString&);
-      QString text() const                  { return _text; }
+      QString text() const                    { return _text; }
       void insertText(const QString&);
 
       virtual void layout() override;
@@ -261,7 +259,6 @@ class Text : public Element {
       virtual void read(XmlReader&) override;
       void writeProperties(Xml&, bool = true, bool = true) const;
       bool readProperties(XmlReader&);
-
 
       void spellCheckUnderline(bool) {}
       virtual void textStyleChanged();

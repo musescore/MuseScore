@@ -780,6 +780,50 @@ void TextStyleData::writeProperties(Xml& xml) const
       }
 
 //---------------------------------------------------------
+//   writeProperties
+//    write only changes to the reference r
+//---------------------------------------------------------
+
+void TextStyleData::writeProperties(Xml& xml, const TextStyleData& r) const
+      {
+      ElementLayout::writeProperties(xml, r);
+      if (!name.isEmpty() && name != r.name)
+            xml.tag("name", name);
+      if (family != r.family)
+            xml.tag("family", family);
+      if (size != r.size)
+            xml.tag("size", size);
+      if (bold != r.bold)
+            xml.tag("bold", bold);
+      if (italic != r.italic)
+            xml.tag("italic", italic);
+      if (underline != r.underline)
+            xml.tag("underline", underline);
+      if (sizeIsSpatiumDependent != r.sizeIsSpatiumDependent)
+            xml.tag("sizeIsSpatiumDependent", sizeIsSpatiumDependent);
+      if (foregroundColor != r.foregroundColor)
+            xml.tag("foregroundColor", foregroundColor);
+      if (backgroundColor != r.backgroundColor)
+            xml.tag("backgroundColor", backgroundColor);
+      if (hasFrame != r.hasFrame)
+            xml.tag("frame", hasFrame);
+      if (hasFrame) {
+            if (frameWidth.val() != r.frameWidth.val())
+                  xml.tag("frameWidthS",   frameWidth.val());
+            if (paddingWidth.val() != r.paddingWidth.val())
+                  xml.tag("paddingWidthS", paddingWidth.val());
+            if (frameRound != r.frameRound)
+                  xml.tag("frameRound",   frameRound);
+            if (frameColor != r.frameColor)
+                  xml.tag("frameColor",   frameColor);
+            if (circle != r.circle)
+                  xml.tag("circle", circle);
+            }
+      if (systemFlag != r.systemFlag)
+            xml.tag("systemFlag", systemFlag);
+      }
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -830,7 +874,7 @@ bool TextStyleData::readProperties(XmlReader& e)
             hasFrame = true;
             frameWidth = Spatium(e.readDouble());
             }
-      else if (tag == "frame")      // obsolete
+      else if (tag == "frame")
             hasFrame = e.readInt();
       else if (tag == "paddingWidth")          // obsolete
             paddingWidthMM = e.readDouble();
@@ -1151,7 +1195,7 @@ int StyleData::textStyleType(const QString& name) const
       if (name == "Dynamics2")
             return TEXT_STYLE_DYNAMICS;
       qDebug("TextStyleType <%s> not found", qPrintable(name));
-      return TEXT_STYLE_UNKNOWN;
+      return TEXT_STYLE_DEFAULT;
       }
 
 //---------------------------------------------------------
@@ -1226,6 +1270,7 @@ QFontMetricsF TextStyle::fontMetrics(qreal space) const  { return d->fontMetrics
 bool TextStyle::operator!=(const TextStyle& s) const     { return d->operator!=(*s.d); }
 void TextStyle::layout(Element* e) const                 { d->layout(e); }
 void TextStyle::writeProperties(Xml& xml) const          { d->writeProperties(xml); }
+void TextStyle::writeProperties(Xml& xml, const TextStyle& r) const { d->writeProperties(xml, *r.d); }
 bool TextStyle::readProperties(XmlReader& v)     { return d->readProperties(v); }
 
 //---------------------------------------------------------

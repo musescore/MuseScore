@@ -717,8 +717,7 @@ Element* ChordRest::drop(const DropData& data)
                   TempoText* tt = static_cast<TempoText*>(e);
                   tt->setParent(segment());
                   int st = tt->textStyleType();
-                  if (st != TEXT_STYLE_UNKNOWN)
-                        tt->setTextStyleType(st);
+                  tt->setTextStyleType(st);
                   score()->undoAddElement(tt);
                   }
                   return e;

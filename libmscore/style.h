@@ -109,6 +109,7 @@ class TextStyle {
       Hidden hidden() const   { return _hidden; }
       void write(Xml& xml) const;
       void writeProperties(Xml& xml) const;
+      void writeProperties(Xml& xml, const TextStyle&) const;
       void read(XmlReader& v);
       bool readProperties(XmlReader& v);
       QFont font(qreal spatium) const;

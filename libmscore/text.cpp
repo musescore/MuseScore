@@ -1737,10 +1737,10 @@ void Text::read(XmlReader& e)
 void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
       {
       Element::writeProperties(xml);
-      if (xml.clipboardmode || styled())
+      if (writeStyle) {
             xml.tag("style", textStyle().name());
-      if ((xml.clipboardmode || !styled()) && writeStyle)
-            _textStyle.writeProperties(xml);
+            _textStyle.writeProperties(xml, textStyle());
+            }
       if (writeText)
             xml.writeXml("text", text());
       }
@@ -1761,7 +1761,6 @@ bool Text::readProperties(XmlReader& e)
             if (ok) {
                   // obsolete old text styles
                   switch (i) {
-                        case 1:  i = TEXT_STYLE_UNSTYLED;  break;
                         case 2:  i = TEXT_STYLE_TITLE;     break;
                         case 3:  i = TEXT_STYLE_SUBTITLE;  break;
                         case 4:  i = TEXT_STYLE_COMPOSER;  break;
@@ -1802,20 +1801,14 @@ bool Text::readProperties(XmlReader& e)
                         case 0:
                         default:
                               qDebug("Text:readProperties: style %d<%s> invalid", i, qPrintable(val));
-                              i = TEXT_STYLE_UNSTYLED;
+                              i = TEXT_STYLE_DEFAULT;
                               break;
                         }
                   st = i;
                   }
             else
                   st = score()->style()->textStyleType(val);
-
-            if (st == TEXT_STYLE_UNSTYLED)
-                  setUnstyled();
-            else if (st == TEXT_STYLE_UNKNOWN)
-                  _styleIndex = st;
-            else
-                  setTextStyleType(st);
+            setTextStyleType(st);
             }
       else if (tag == "styleName")          // obsolete, unstyled text
             e.skipCurrentElement(); // _styleName = val;
@@ -1869,8 +1862,7 @@ bool Text::readProperties(XmlReader& e)
 
 void Text::textStyleChanged()
       {
-      if (_styleIndex != TEXT_STYLE_UNKNOWN && _styleIndex != TEXT_STYLE_UNSTYLED)
-            setTextStyle(score()->textStyle(_styleIndex));
+      setTextStyle(score()->textStyle(_styleIndex));
       score()->setLayoutAll(true);
       }
 
@@ -1881,8 +1873,7 @@ void Text::textStyleChanged()
 void Text::setTextStyleType(int st)
       {
       _styleIndex = st;
-      if (st != TEXT_STYLE_UNKNOWN && st != TEXT_STYLE_UNSTYLED)
-            setTextStyle(score()->textStyle(st));
+      setTextStyle(score()->textStyle(st));
       }
 
 //---------------------------------------------------------

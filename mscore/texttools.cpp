@@ -60,9 +60,6 @@ TextTools::TextTools(QWidget* parent)
       QToolBar* tb = new QToolBar(tr("Text Edit"));
       tb->setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
 
-      textStyles = new QComboBox;
-      tb->addWidget(textStyles);
-
       showKeyboard = getAction("show-keys");
       showKeyboard->setCheckable(true);
       tb->addAction(showKeyboard);
@@ -81,44 +78,6 @@ TextTools::TextTools(QWidget* parent)
 
       tb->addSeparator();
 
-#if 0
-      QActionGroup* ha = new QActionGroup(tb);
-      leftAlign   = new QAction(*icons[textLeft_ICON],   "", ha);
-      leftAlign->setToolTip(tr("align left"));
-      leftAlign->setCheckable(true);
-      leftAlign->setData(ALIGN_LEFT);
-      hcenterAlign = new QAction(*icons[textCenter_ICON], "", ha);
-      hcenterAlign->setToolTip(tr("align horizontal center"));
-      hcenterAlign->setCheckable(true);
-      hcenterAlign->setData(ALIGN_HCENTER);
-      rightAlign  = new QAction(*icons[textRight_ICON],  "", ha);
-      rightAlign->setToolTip(tr("align right"));
-      rightAlign->setCheckable(true);
-      rightAlign->setData(ALIGN_RIGHT);
-      tb->addActions(ha->actions());
-
-      QActionGroup* va = new QActionGroup(tb);
-      topAlign  = new QAction(*icons[textTop_ICON],  "", va);
-      topAlign->setToolTip(tr("align top"));
-      topAlign->setCheckable(true);
-      topAlign->setData(ALIGN_TOP);
-
-      bottomAlign  = new QAction(*icons[textBottom_ICON],  "", va);
-      bottomAlign->setToolTip(tr("align bottom"));
-      bottomAlign->setCheckable(true);
-      bottomAlign->setData(ALIGN_BOTTOM);
-
-      baselineAlign  = new QAction(*icons[textBaseline_ICON],  "", va);
-      baselineAlign->setToolTip(tr("align vertical baseline"));
-      baselineAlign->setCheckable(true);
-      baselineAlign->setData(ALIGN_BASELINE);
-
-      vcenterAlign  = new QAction(*icons[textVCenter_ICON],  "", va);
-      vcenterAlign->setToolTip(tr("align vertical center"));
-      vcenterAlign->setCheckable(true);
-      vcenterAlign->setData(ALIGN_VCENTER);
-      tb->addActions(va->actions());
-#endif
       typefaceSubscript   = tb->addAction(*icons[textSub_ICON], "");
       typefaceSubscript->setToolTip(tr("subscript"));
       typefaceSubscript->setCheckable(true);
@@ -126,18 +85,6 @@ TextTools::TextTools(QWidget* parent)
       typefaceSuperscript = tb->addAction(*icons[textSuper_ICON], "");
       typefaceSuperscript->setToolTip(tr("superscript"));
       typefaceSuperscript->setCheckable(true);
-
-//      unorderedList = tb->addAction(*icons[formatListUnordered_ICON], "");
-//      unorderedList->setToolTip(tr("unordered list"));
-
-//      orderedList = tb->addAction(*icons[formatListOrdered_ICON], "");
-//      orderedList->setToolTip(tr("ordered list"));
-
-//      indentMore = tb->addAction(*icons[formatIndentMore_ICON], "");
-//      indentMore->setToolTip(tr("indent more"));
-
-//      indentLess = tb->addAction(*icons[formatIndentLess_ICON], "");
-//      indentLess->setToolTip(tr("indent less"));
 
       tb->addSeparator();
 
@@ -161,14 +108,7 @@ TextTools::TextTools(QWidget* parent)
       connect(typefaceSubscript,   SIGNAL(triggered(bool)), SLOT(subscriptClicked(bool)));
       connect(typefaceSuperscript, SIGNAL(triggered(bool)), SLOT(superscriptClicked(bool)));
       connect(typefaceFamily,      SIGNAL(currentFontChanged(const QFont&)), SLOT(fontChanged(const QFont&)));
-//      connect(ha,                  SIGNAL(triggered(QAction*)), SLOT(setHalign(QAction*)));
-//      connect(va,                  SIGNAL(triggered(QAction*)), SLOT(setValign(QAction*)));
       connect(showKeyboard,        SIGNAL(triggered(bool)), SLOT(showKeyboardClicked(bool)));
-      connect(textStyles,          SIGNAL(currentIndexChanged(int)), SLOT(styleChanged(int)));
-//      connect(unorderedList,       SIGNAL(triggered()),     SLOT(unorderedListClicked()));
-//      connect(orderedList,         SIGNAL(triggered()),     SLOT(orderedListClicked()));
-//      connect(indentLess,          SIGNAL(triggered()),     SLOT(indentLessClicked()));
-//      connect(indentMore,          SIGNAL(triggered()),     SLOT(indentMoreClicked()));
       }
 
 //---------------------------------------------------------
@@ -177,46 +117,7 @@ TextTools::TextTools(QWidget* parent)
 
 void TextTools::setText(Text* te)
       {
-      textStyles->blockSignals(true);
       _textElement = te;
-      textStyles->clear();
-      textStyles->addItem(tr("unstyled"), TEXT_STYLE_UNSTYLED);
-
-      const QList<TextStyle>& ts = te->score()->style()->textStyles();
-
-      int n = ts.size();
-      for (int i = 0; i < n; ++i) {
-            if ( !(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
-                  textStyles->addItem(ts.at(i).name(), i);
-            }
-      int comboIdx = 0;
-      if (te->styled()) {
-            int styleIdx = te->textStyleType();
-            comboIdx = textStyles->findData(styleIdx);
-            if (comboIdx < 0)
-                  comboIdx = 0;
-            }
-      textStyles->setCurrentIndex(comboIdx);
-      styleChanged(comboIdx);
-#if 0
-      Align align = _textElement->textStyle().align();
-      if (align & ALIGN_HCENTER)
-            hcenterAlign->setChecked(true);
-      else if (align & ALIGN_RIGHT)
-            rightAlign->setChecked(true);
-      else
-            leftAlign->setChecked(true);
-
-      if (align & ALIGN_BOTTOM)
-            bottomAlign->setChecked(true);
-      else if (align & ALIGN_BASELINE)
-            baselineAlign->setChecked(true);
-      else if (align & ALIGN_VCENTER)
-            vcenterAlign->setChecked(true);
-      else
-            topAlign->setChecked(true);
-#endif
-      textStyles->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -234,7 +135,6 @@ void TextTools::blockAllSignals(bool val)
       typefaceSuperscript->blockSignals(val);
       typefaceFamily->blockSignals(val);
       showKeyboard->blockSignals(val);
-      textStyles->blockSignals(val);
       }
 
 //---------------------------------------------------------
@@ -284,9 +184,7 @@ void TextTools::updateText()
 void TextTools::layoutText()
       {
       QRectF r(_textElement->canvasBoundingRect());
-//      _textElement->layout();
       _textElement->score()->setLayoutAll(true);
-//      _textElement->score()->addRefresh(_textElement->canvasBoundingRect() | r);
       _textElement->score()->end();
       }
 
@@ -372,30 +270,6 @@ void TextTools::italicClicked(bool val)
       updateText();
       }
 
-#if 0
-//---------------------------------------------------------
-//   setHalign
-//---------------------------------------------------------
-
-void TextTools::setHalign(QAction* /*a*/)
-      {
-//TODO      _textElement->setCurHalign(a->data().toInt());
-      updateTools();
-      layoutText();
-      }
-
-//---------------------------------------------------------
-//   setValign
-//---------------------------------------------------------
-
-void TextTools::setValign(QAction* /*a*/)
-      {
-//TODO      _textElement->setAlign((_textElement->align() & ~ALIGN_VMASK) | Align(a->data().toInt()));
-      updateTools();
-      layoutText();
-      }
-#endif
-
 //---------------------------------------------------------
 //   subscriptClicked
 //---------------------------------------------------------
@@ -419,43 +293,6 @@ void TextTools::superscriptClicked(bool val)
       typefaceSubscript->blockSignals(true);
       typefaceSubscript->setChecked(false);
       typefaceSubscript->blockSignals(false);
-      updateText();
-      }
-
-//---------------------------------------------------------
-//   styleChanged
-//---------------------------------------------------------
-
-void TextTools::styleChanged(int comboIdx)
-      {
-      blockAllSignals(true);
-      int styleIdx = textStyles->itemData(comboIdx).toInt();
-      if (styleIdx < 0)
-            styleIdx = TEXT_STYLE_UNSTYLED;
-      bool unstyled = (styleIdx == TEXT_STYLE_UNSTYLED);
-
-      if (unstyled)
-            _textElement->setUnstyled();
-      else
-            _textElement->setTextStyleType(styleIdx);
-#if 0
-      typefaceSize->setEnabled(unstyled);
-      typefaceFamily->setEnabled(unstyled);
-//      typefaceBold->setEnabled(unstyled);
-      typefaceItalic->setEnabled(unstyled);
-      typefaceUnderline->setEnabled(unstyled);
-      typefaceSubscript->setEnabled(unstyled);
-      typefaceSuperscript->setEnabled(unstyled);
-      typefaceFamily->setEnabled(unstyled);
-      leftAlign->setEnabled(unstyled);
-      rightAlign->setEnabled(unstyled);
-//      hcenterAlign->setEnabled(unstyled);
-//      topAlign->setEnabled(unstyled);
-//      bottomAlign->setEnabled(unstyled);
-//      baselineAlign->setEnabled(unstyled);
-//      vcenterAlign->setEnabled(unstyled);
-#endif
-      blockAllSignals(false);
       updateText();
       }
 

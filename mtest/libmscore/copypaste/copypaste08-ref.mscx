@@ -117,11 +117,9 @@
           <lineWidth>0.1</lineWidth>
           <lineStyle>1</lineStyle>
           <beginText>
-            <style>Ottava</style>
             <text>8va</text>
             </beginText>
           <continueText>
-            <style>Ottava</style>
             <text>(8va)</text>
             </continueText>
           </Ottava>

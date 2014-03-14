@@ -49,6 +49,7 @@ class ElementLayout {
       void setOffsetType(OffsetType val)  { _offsetType = val;    }
       void layout(Element*) const;
       void writeProperties(Xml& xml) const;
+      void writeProperties(Xml& xml, const ElementLayout&) const;
       bool readProperties(XmlReader& e);
       };
 

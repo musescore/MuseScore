@@ -36,21 +36,21 @@ class Score;
 class TextProp : public QWidget, public Ui::TextProperties {
       Q_OBJECT
 
+      Score* _score;
       int curUnit;
 
    private slots:
       void mmToggled(bool);
-      void styledToggled(bool);
-      void unstyledToggled(bool);
+      void doResetToTextStyle();
 
    public:
       TextProp(QWidget* parent = 0);
       void setScore(bool _onlyStyle, Score*);
+
       void setTextStyle(const TextStyle&);
+      void setStyle(int styleType, const TextStyle&);
+
       TextStyle textStyle() const;
-      bool isStyled() const;
-      void setStyled(bool val);
-      void setTextStyleType(int);
       int textStyleType() const;
       };
 }

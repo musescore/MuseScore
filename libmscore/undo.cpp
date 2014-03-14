@@ -802,14 +802,7 @@ void Score::undoChangeInvisible(Element* e, bool v)
 
 void Score::undoAddElement(Element* element)
       {
-      if (element->isText()) {
-            Text* text = static_cast<Text*>(element);
-            if (text->textStyleType() == TEXT_STYLE_UNKNOWN) {
-                  style()->addTextStyle(text->textStyle());
-                  text->setTextStyleType(style()->textStyleType(text->textStyle().name()));
-                  }
-            }
-      QList<Staff*> staffList;
+      QList<Staff* > staffList;
       Staff* ostaff = element->staff();
 
       Element::ElementType et = element->type();
@@ -2262,17 +2255,9 @@ void EditText::redo()
 
 void EditText::undoRedo()
       {
-      if (text->styled()) {
-            QString s = text->text();
-            text->setText(oldText);
-            oldText = s;
-            }
-      else {
-            if (text->type() == Element::TEMPO_TEXT) {
-                  TempoText* tt = static_cast<TempoText*>(text);
-                  tt->score()->setTempo(tt->segment(), tt->tempo());
-                  }
-            }
+      QString s = text->text();
+      text->setText(oldText);
+      oldText = s;
       text->score()->setLayoutAll(true);
       }
 
@@ -2461,7 +2446,7 @@ static void updateTextStyle(void* a, Element* e)
       QString s = *(QString*)a;
       if (e->isText()) {
             Text* text = static_cast<Text*>(e);
-            if ((text->styled() || text->type() == Element::HARMONY) && text->textStyle().name() == s) {
+            if (text->textStyle().name() == s) {
                   text->setTextStyle(text->score()->textStyle(s));
                   text->textStyleChanged();
                   }
