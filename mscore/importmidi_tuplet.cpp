@@ -1759,6 +1759,19 @@ void applyStaccato(std::vector<TupletInfo> &tuplets)
             }
       }
 
+// if notes with staccato were in tuplets previously - remove staccato
+
+void cleanStaccatoOfNonTuplets(
+            std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets)
+      {
+      for (auto &nonTuplet: nonTuplets) {
+            for (auto &note: nonTuplet->second.notes) {
+                  if (note.staccato)
+                        note.staccato = false;
+                  }
+            }
+      }
+
 std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                                     const ReducedFraction &endBarTick,
                                     const ReducedFraction &barFraction,
@@ -1827,7 +1840,6 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
             }
 
       filterTuplets(tuplets);
-      applyStaccato(tuplets);
 
       auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
       if (tupletVoiceLimit() == 1)
@@ -1842,6 +1854,8 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
             splitFirstTupletChords(tuplets, chords);
             minimizeOffTimeError(tuplets, chords, nonTuplets);
             }
+      cleanStaccatoOfNonTuplets(nonTuplets);
+      applyStaccato(tuplets);
 
       Q_ASSERT_X(!doTupletsHaveCommonChords(tuplets),
                  "MIDI tuplets: findTuplets", "Tuplets have common chords but they shouldn't");
