@@ -40,27 +40,41 @@ class AveragePitch
       AveragePitch(int sumPitch, int count) : sumPitch_(sumPitch), count_(count) {}
 
       int pitch() const { return qRound(sumPitch_ * 1.0 / count_); }
-      int sumPitch() const { return sumPitch_; }
-      int count() const { return count_; }
       void addPitch(int pitch)
             {
             sumPitch_ += pitch;
             ++count_;
             }
-      void reset()
-            {
-            sumPitch_ = 0;
-            count_ = 0;
-            }
       AveragePitch& operator+=(const AveragePitch &other)
             {
-            sumPitch_ += other.sumPitch();
-            count_ += other.count();
+            sumPitch_ += other.sumPitch_;
+            count_ += other.count_;
             return *this;
             }
    private:
       int sumPitch_;
       int count_;
+      };
+
+class MinMaxPitch
+      {
+   public:
+      MinMaxPitch() : minPitch_(std::numeric_limits<int>::max()), maxPitch_(-1) {}
+      MinMaxPitch(int minPitch, int maxPitch) : minPitch_(minPitch), maxPitch_(maxPitch) {}
+
+      int minPitch() const { return minPitch_; }
+      int maxPitch() const { return maxPitch_; }
+      int empty() const { return minPitch_ == std::numeric_limits<int>::max() || maxPitch_ == -1; }
+      void addPitch(int pitch)
+            {
+            if (pitch < minPitch_)
+                  minPitch_ = pitch;
+            if (pitch > maxPitch_)
+                  maxPitch_ = pitch;
+            }
+   private:
+      int minPitch_;
+      int maxPitch_;
       };
 
 
@@ -112,17 +126,32 @@ void createSmallClef(ClefType clefType, Segment *chordRestSeg, Staff *staff)
 
 AveragePitch findAverageSegPitch(const Segment *seg, int strack)
       {
-      AveragePitch avgPitch;
+      AveragePitch averagePitch;
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
             if (cr && cr->type() == Element::CHORD) {
                   Chord *chord = static_cast<Chord *>(cr);
                   const auto &notes = chord->notes();
                   for (const Note *note: notes)
-                        avgPitch.addPitch(note->pitch());
+                        averagePitch.addPitch(note->pitch());
                   }
             }
-      return avgPitch;
+      return averagePitch;
+      }
+
+MinMaxPitch findMinMaxSegPitch(const Segment *seg, int strack)
+      {
+      MinMaxPitch minMaxPitch;
+      for (int voice = 0; voice < VOICES; ++voice) {
+            ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
+            if (cr && cr->type() == Element::CHORD) {
+                  Chord *chord = static_cast<Chord *>(cr);
+                  const auto &notes = chord->notes();
+                  for (const Note *note: notes)
+                        minMaxPitch.addPitch(note->pitch());
+                  }
+            }
+      return minMaxPitch;
       }
 
 
@@ -156,7 +185,8 @@ bool doesClefBreakTie(const Staff *staff)
 
 #endif
 
-// clef: 0 - treble, 1 - bass
+
+// clef index: 0 - treble, 1 - bass
 
 size_t findPitchPenaltyForClef(int pitch, int clefIndex)
       {
@@ -188,9 +218,10 @@ size_t findPitchPenaltyForClef(int pitch, int clefIndex)
       return 0;
       }
 
-size_t findClefPenalty(int pos,
-                       int clefIndex,
-                       const std::vector<std::vector<int>> &trebleBassPath)
+size_t findClefChangePenalty(
+            int pos,
+            int clefIndex,
+            const std::vector<std::vector<int>> &trebleBassPath)
       {
       static const size_t clefChangePenalty = 1000;
       static const int notesBetweenClefs = 5;       // should be >= 2
@@ -224,7 +255,7 @@ void makeDynamicProgrammingStep(std::vector<std::vector<size_t>> &penalties,
                                 std::vector<std::vector<int>> &optimalPaths,
                                 int pos,
                                 MidiTie::TieStateMachine::State tieState,
-                                int averagePitch)
+                                const MinMaxPitch &minMaxPitch)
       {
       for (int clefIndex = 0; clefIndex != 2; ++clefIndex) {
             penalties[clefIndex].resize(pos + 1);
@@ -233,7 +264,9 @@ void makeDynamicProgrammingStep(std::vector<std::vector<size_t>> &penalties,
       const size_t tiePenalty = findTiePenalty(tieState);
 
       for (int clefIndex = 0; clefIndex != 2; ++clefIndex) {
-            const size_t pitchPenalty = findPitchPenaltyForClef(averagePitch, clefIndex);
+            int significantPitch = (clefIndex == 0)
+                                 ? minMaxPitch.minPitch() : minMaxPitch.maxPitch();
+            const size_t pitchPenalty = findPitchPenaltyForClef(significantPitch, clefIndex);
 
             const size_t prevSameClefPenalty = (pos == 0)
                     ? 0 : penalties[clefIndex][pos - 1];
@@ -241,7 +274,7 @@ void makeDynamicProgrammingStep(std::vector<std::vector<size_t>> &penalties,
 
             const size_t prevDiffClefPenalty = (pos == 0)
                     ? 0 : penalties[1 - clefIndex][pos - 1];
-            const size_t clefPenalty = findClefPenalty(pos, 1 - clefIndex, optimalPaths);
+            const size_t clefPenalty = findClefChangePenalty(pos, 1 - clefIndex, optimalPaths);
             const size_t sumPenaltyDiffClef
                     = tiePenalty + pitchPenalty + prevDiffClefPenalty + clefPenalty;
 
@@ -295,7 +328,6 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
 
       if (trackOpers.changeClef) {
             MidiTie::TieStateMachine tieTracker;
-            AveragePitch allAveragePitch;
 
                         // find optimal clef changes by dynamic programming
             std::vector<std::vector<size_t>> penalties(2);          // 0 - treble, 1 - bass
@@ -306,15 +338,14 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
             for (Segment *seg = staff->score()->firstSegment(Segment::SegChordRest); seg;
                               seg = seg->next1(Segment::SegChordRest)) {
 
-                  const auto averagePitch = findAverageSegPitch(seg, strack);
-                  if (averagePitch.count() == 0)                    // no chords
+                  const auto minMaxPitch = findMinMaxSegPitch(seg, strack);
+                  if (minMaxPitch.empty())                    // no chords
                         continue;
                   tieTracker.addSeg(seg, strack);
                   segments.push_back(seg);
 
                   makeDynamicProgrammingStep(penalties, optimalPaths, pos,
-                                             tieTracker.state(), averagePitch.pitch());
-                  allAveragePitch += averagePitch;
+                                             tieTracker.state(), minMaxPitch);
                   ++pos;
                   }
                         // get the optimal clef changes found by dynamic programming
