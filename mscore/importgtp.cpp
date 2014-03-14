@@ -43,7 +43,6 @@
 #include "libmscore/segment.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/dynamic.h"
-#include "libmscore/arpeggio.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -1365,22 +1364,12 @@ qDebug("BeginRepeat=============================================\n");
                                     qFatal("unknown beat len: %d\n", len);
                               }
 
-                        // Some beat effects could add a Chord before this
-                        ChordRest* cr = segment->cr(staffIdx * VOICES);
+                        ChordRest* cr;
                         // if (!pause || strings)
-                        if (strings) {
-                              if(!segment->cr(staffIdx * VOICES))
-                                    cr = new Chord(score);
-                              }
+                        if (strings)
+                              cr = new Chord(score);
                         else
-                              {
-                              if(segment->cr(staffIdx * VOICES)){
-                                    segment->remove(segment->cr(staffIdx * VOICES));
-                                    delete cr;
-                                    cr = 0;
-                                    }
                               cr = new Rest(score);
-                              }
                         cr->setTrack(staffIdx * VOICES);
                         if (lyrics)
                               cr->add(lyrics);
@@ -1406,10 +1395,7 @@ qDebug("BeginRepeat=============================================\n");
                               l = l + (l/2);
                         cr->setDuration(l);
                         cr->setDurationType(d);
-
-                        if(!segment->cr(staffIdx * VOICES))
-                              segment->add(cr);
-
+                        segment->add(cr);
                         Staff* staff = cr->staff();
                         int numStrings = staff->part()->instr()->stringData()->strings();
                         for (int i = 6; i >= 0; --i) {
@@ -1479,7 +1465,7 @@ void GuitarPro4::readMixChange()
 //   readBeatEffects
 //---------------------------------------------------------
 
-int GuitarPro4::readBeatEffects(int track, Segment* segment)
+int GuitarPro4::readBeatEffects(int, Segment*)
       {
       int effects = 0;
       uchar fxBits1 = readUChar();
@@ -1490,27 +1476,8 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
       if (fxBits2 & 0x04)
             readBend();
       if (fxBits1 & 0x40) {
-            int strokeup = readUChar();            // up stroke length
-            int strokedown = readUChar();            // down stroke length
-
-            Arpeggio* a = new Arpeggio(score);
-            if( strokeup > 0 ) {
-                  a->setArpeggioType(ArpeggioType::UP);
-                  }
-            else if( strokedown > 0 ) {
-                  a->setArpeggioType(ArpeggioType::DOWN);
-                  }
-            else {
-                  delete a;
-                  a = 0;
-                  }
-
-            if(a) {
-                  ChordRest* cr = new Chord(score);
-                  cr->setTrack(track);
-                  cr->add(a);
-                  segment->add(cr);
-                  }
+            readUChar();            // down stroke length
+            readUChar();            // up stroke length
             }
       if (fxBits2 & 0x02)
             readUChar();            // stroke pick direction
@@ -1931,22 +1898,11 @@ void GuitarPro4::read(QFile* fp)
                         int strings = readUChar();   // used strings mask
                         Fraction l  = len2fraction(len);
 
-                        // Some beat effects could add a Chord before this
-                        ChordRest* cr = segment->cr(staffIdx * VOICES);
-
-                        if (strings == 0) {
-                              if(segment->cr(staffIdx * VOICES)){
-                                    segment->remove(segment->cr(staffIdx * VOICES));
-                                    delete cr;
-                                    cr = 0;
-                                    }
+                        ChordRest* cr;
+                        if (strings == 0)
                               cr = new Rest(score);
-                              }
-                        else {
-                              if(!segment->cr(staffIdx * VOICES))
-                                    cr = new Chord(score);
-                              }
-
+                        else
+                              cr = new Chord(score);
                         cr->setTrack(staffIdx * VOICES);
                         if (lyrics)
                               cr->add(lyrics);
@@ -1975,8 +1931,8 @@ void GuitarPro4::read(QFile* fp)
                               cr->setDurationType(TDuration::V_MEASURE);
                         else
                               cr->setDurationType(d);
-                        if(!segment->cr(staffIdx * VOICES))
-                              segment->add(cr);
+
+                        segment->add(cr);
                         Staff* staff = cr->staff();
                         int numStrings = staff->part()->instr()->stringData()->strings();
                         bool hasSlur = false;
@@ -2326,28 +2282,10 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
       if (fxBits2 & 0x04)
             readTremoloBar(track, segment);       // readBend();
       if (fxBits1 & 0x40) {
-                  int strokeup = readUChar();            // up stroke length
-                  int strokedown = readUChar();            // down stroke length
-
-                  Arpeggio* a = new Arpeggio(score);
-                  if( strokeup > 0 ) {
-                        a->setArpeggioType(ArpeggioType::UP);
-                        }
-                  else if( strokedown > 0 ) {
-                        a->setArpeggioType(ArpeggioType::DOWN);
-                        }
-                  else {
-                        delete a;
-                        a = 0;
-                        }
-
-                  if(a) {
-                        ChordRest* cr = new Chord(score);
-                        cr->setTrack(track);
-                        cr->add(a);
-                        segment->add(cr);
-                        }
-                  }
+            int a = readChar();     // down stroke length
+            int b = readChar();     // up stroke length
+            qDebug("  0x40: 0x%02x 0x%02x\n", a, b);
+            }
       if (fxBits2 & 0x02) {
             int a = readChar();            // stroke pick direction
             qDebug("  0x02: 0x%02x\n", a);
@@ -2405,24 +2343,14 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       int strings = readUChar();   // used strings mask
 
       Fraction l    = len2fraction(len);
-
-      // Some beat effects could add a Chord before this
-      ChordRest* cr = segment->cr(staffIdx * VOICES + voice);
+      ChordRest* cr;
       if (voice != 0 && pause == 0 && strings == 0)
             cr = 0;
       else {
-            if (strings == 0) {
-                  if (cr) {
-                        segment->remove(cr);
-                        delete cr;
-                        cr = 0;
-                        }
+            if (strings == 0)
                   cr = new Rest(score);
-                  }
-            else {
-                  if (!cr)
-                        cr = new Chord(score);
-                  }
+            else
+                  cr = new Chord(score);
             cr->setTrack(staffIdx * VOICES + voice);
             if (tuple) {
                   Tuplet* tuplet = tuplets[staffIdx * 2 + voice];
@@ -2450,9 +2378,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   cr->setDurationType(TDuration::V_MEASURE);
             else
                   cr->setDurationType(d);
-
-            if(!segment->cr(staffIdx * VOICES + voice))
-                  segment->add(cr);
+            segment->add(cr);
 
             Staff* staff = cr->staff();
             int numStrings = staff->part()->instr()->stringData()->strings();
