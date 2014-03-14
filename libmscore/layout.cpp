@@ -560,7 +560,7 @@ static void layoutAccidental(AcEl* me, AcEl* above, AcEl* below, QList<Note*>& l
       qreal lx;
 
       // extra space for ledger lines
-      if (me->line < -1 || me->line > me->note->staff()->lines() * 2 + 1)
+      if (me->line <= -2 || me->line >= me->note->staff()->lines() * 2)
             lx = -0.2 * sp;
       else
             lx = 0.0;
