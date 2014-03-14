@@ -149,6 +149,7 @@ class GuitarPro2 : public GuitarPro1 {
 
 class GuitarPro3 : public GuitarPro1 {
 
+      virtual int readBeatEffects(int track, Segment* segment);
    public:
       GuitarPro3(Score* s, int v) : GuitarPro1(s, v) {}
       virtual void read(QFile*);
@@ -163,7 +164,7 @@ class GuitarPro4 : public GuitarPro {
       void readInfo();
       void readNote(int string, Note* note, GpNote*);
       virtual void readChord(Segment*, int track);
-      virtual int readBeatEffects(int track, Segment*);
+      virtual int readBeatEffects(int track, Segment* segment);
       virtual void readMixChange();
       virtual void readBend();
 
@@ -180,7 +181,7 @@ class GuitarPro5 : public GuitarPro {
 
       void readInfo();
       void readPageSetup();
-      virtual int readBeatEffects(int track, Segment*);
+      virtual int readBeatEffects(int track, Segment* segment);
       virtual void readBend(Note*);
       void readNote(int string, Note* note);
       virtual void readMixChange();
