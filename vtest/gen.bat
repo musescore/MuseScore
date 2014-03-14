@@ -8,7 +8,9 @@ set SRC=mmrest-1,bravura-mmrest,mmrest-2,mmrest-4,mmrest-5,mmrest-6,mmrest-7,mmr
  noteheadposition-1,valign-1,emmentaler-1,bravura-1,emmentaler-2,bravura-2, ^
  emmentaler-3,bravura-3,emmentaler-4,bravura-4,emmentaler-5,bravura-5, ^
  emmentaler-6,bravura-6,emmentaler-7,bravura-7, ^
- emmentaler-8,bravura-8,emmentaler-9,bravura-9,emmentaler-10,bravura-10
+ emmentaler-8,bravura-8,emmentaler-9,bravura-9,emmentaler-10,bravura-10, ^
+ chord-layout-1,chord-layout-2,chord-layout-3,chord-layout-4,chord-layout-5, ^
+ accidental-1,accidental-2,accidental-3
 
 set MSCORE=..\win32install\bin\mscore.exe
 set DPI=130
