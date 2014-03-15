@@ -426,8 +426,10 @@ size_t findVoiceCount(const std::list<int> &indexes,
       }
 
 std::set<std::pair<const ReducedFraction, MidiChord> *>
-validateAndFindExcludedChords(std::list<int> &indexes,
-                              const std::vector<TupletInfo> &tuplets)
+validateAndFindExcludedChords(
+            std::list<int> &indexes,
+            const std::vector<TupletInfo> &tuplets,
+            const std::vector<std::pair<ReducedFraction, ReducedFraction>> &tupletIntevals)
       {
       std::set<std::pair<const ReducedFraction, MidiChord> *> excludedChords;
                   // structure of map: <chord address, count of use of first tuplet chord with this tick>
@@ -435,7 +437,7 @@ validateAndFindExcludedChords(std::list<int> &indexes,
                   // already used chords: <chord address, has chord index 0 in tuplet>
       std::map<std::pair<const ReducedFraction, MidiChord> *, bool> usedChords;
                   // <voice, intervals>
-      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> tupletIntervals;
+      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> voiceIntervals;
       const int voiceLimit = tupletVoiceLimit();
 
                   // select tuplets with min average error
@@ -445,11 +447,10 @@ validateAndFindExcludedChords(std::list<int> &indexes,
             Q_ASSERT_X(!tuplet.chords.empty(),
                        "MIDI tuplets: validateTuplets", "Tuplet has no chords but it should");
 
-            const auto interval = tupletInterval(tuplet, tuplet.regularQuant);
             int voice = 0;
             for ( ; voice < voiceLimit; ++voice) {
-                  if (!haveIntersection(interval, tupletIntervals[voice])) {
-                        tupletIntervals[voice].push_back(interval);
+                  if (!haveIntersection(tupletIntevals[*it], voiceIntervals[voice])) {
+                        voiceIntervals[voice].push_back(tupletIntevals[*it]);
                         break;
                         }
                   }
@@ -552,12 +553,13 @@ findTupletError(
 
 TupletErrorResult
 validateTuplets(std::list<int> &indexes,
-                const std::vector<TupletInfo> &tuplets)
+                const std::vector<TupletInfo> &tuplets,
+                const std::vector<std::pair<ReducedFraction, ReducedFraction>> &tupletIntevals)
       {
       if (tuplets.empty())
             return TupletErrorResult();
 
-      const auto excludedChords = validateAndFindExcludedChords(indexes, tuplets);
+      const auto excludedChords = validateAndFindExcludedChords(indexes, tuplets, tupletIntevals);
       return findTupletError(indexes, tuplets, excludedChords);
       }
 
@@ -650,7 +652,8 @@ std::pair<std::vector<int>, bool> TupletCommonIndexes::generateNext()
 
 std::pair<std::vector<int>, TupletErrorResult>
 minimizeQuantError(const std::vector<std::vector<int>> &indexGroups,
-                   const std::vector<TupletInfo> &tuplets)
+                   const std::vector<TupletInfo> &tuplets,
+                   const std::vector<std::pair<ReducedFraction, ReducedFraction>> &tupletIntevals)
       {
       TupletErrorResult minResult;
       std::vector<int> iIndexGroups;  // indexes of elements in indexGroups
@@ -672,7 +675,7 @@ minimizeQuantError(const std::vector<std::vector<int>> &indexGroups,
                         indexesToValidate.push_back(ii);
                   }
                         // note: redundant indexes of indexesToValidate are erased here!
-            const auto result = validateTuplets(indexesToValidate, tuplets);
+            const auto result = validateTuplets(indexesToValidate, tuplets, tupletIntevals);
             if (counter == 0) {
                   minResult = result;
                   bestIndexes = indexesToValidate;
@@ -887,6 +890,10 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
                   unusedIndexes.push_back(i);
             }
       auto commonIndexes = findCommonIndexes(unusedIndexes, tuplets);
+                  // calculate here once for optimization purposes
+      std::vector<std::pair<ReducedFraction, ReducedFraction>> tupletIntervals;
+      for (const auto &tuplet: tuplets)
+            tupletIntervals.push_back(tupletInterval(tuplet, tuplet.regularQuant));
 
       std::vector<int> bestIndexes;
       TupletErrorResult minError;
@@ -899,7 +906,8 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
             if (!uncommonGroup.empty())
                   tupletGroupsToTest.push_back(uncommonGroup);
 
-            const auto indexesAndError = minimizeQuantError(tupletGroupsToTest, tuplets);
+            const auto indexesAndError = minimizeQuantError(tupletGroupsToTest, tuplets,
+                                                            tupletIntervals);
             if (first) {
                   first = false;
                   minError = indexesAndError.second;
