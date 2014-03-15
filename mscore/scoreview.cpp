@@ -3859,7 +3859,7 @@ ScoreState ScoreView::mscoreState() const
                         return STATE_NOTE_ENTRY_DRUM;
                   }
             }
-      if (sm->configuration().contains(states[EDIT])) {
+      if (sm->configuration().contains(states[EDIT]) || sm->configuration().contains(states[DRAG_EDIT])) {
             if (editObject && (editObject->type() == Element::LYRICS))
                   return STATE_LYRICS_EDIT;
             else if (editObject &&
