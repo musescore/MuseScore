@@ -890,7 +890,7 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
 
       std::vector<int> bestIndexes;
       TupletErrorResult minError;
-      int counter = 0;
+      bool first = true;
       while (true) {
             const auto result = commonIndexes.generateNext();
             std::vector<std::vector<int>> tupletGroupsToTest;
@@ -900,7 +900,8 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
                   tupletGroupsToTest.push_back(uncommonGroup);
 
             const auto indexesAndError = minimizeQuantError(tupletGroupsToTest, tuplets);
-            if (counter == 0) {
+            if (first) {
+                  first = false;
                   minError = indexesAndError.second;
                   bestIndexes = indexesAndError.first;
                   }
@@ -911,7 +912,6 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
 
             if (result.second)
                   break;
-            ++counter;
             }
 
       std::vector<TupletInfo> newTuplets;
