@@ -133,12 +133,12 @@ void ChordStyleEditor::loadChordDescriptionFile(const QString& s)
 void ChordStyleEditor::setChordList(ChordList* cl)
       {
       harmonyList->clear();
-      foreach (ChordDescription* d, *cl) {
+      foreach (const ChordDescription& d, *cl) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(d));
-            item->setText(0, QString("%1").arg(d->id));
-            if (!d->names.isEmpty())
-                  item->setText(1, QString("%1").arg(d->names.front()));
+            item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)&d));
+            item->setText(0, QString("%1").arg(d.id));
+            if (!d.names.isEmpty())
+                  item->setText(1, QString("%1").arg(d.names.front()));
             harmonyList->addTopLevelItem(item);
             }
       delete chordList;

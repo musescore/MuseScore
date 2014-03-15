@@ -1428,10 +1428,11 @@ void ParsedChord::addToken(QString s, ChordTokenClass tc)
 //    a private id is assigned for id = 0
 //---------------------------------------------------------
 
-ChordDescription::ChordDescription(int i, ChordList* cl)
+ChordDescription::ChordDescription(int i)
       {
       if (!i)
-            i = --(cl->privateID);
+//            i = --(cl->privateID);
+            i = -- ChordList::privateID;
       id = i;
       generated = false;
       renderListGenerated = false;
@@ -1444,9 +1445,9 @@ ChordDescription::ChordDescription(int i, ChordList* cl)
 //    a private id is always assigned
 //---------------------------------------------------------
 
-ChordDescription::ChordDescription(const QString& name, ChordList* cl)
+ChordDescription::ChordDescription(const QString& name)
       {
-      id = --(cl->privateID);
+      id = -- ChordList::privateID;
       generated = true;
       names.append(name);
       renderListGenerated = false;
@@ -1548,25 +1549,6 @@ void ChordDescription::write(Xml& xml) const
 
 int ChordList::privateID = -1000;
 
-ChordList::ChordList()
-      {
-      }
-
-//---------------------------------------------------------
-//   ~ChordList
-//---------------------------------------------------------
-
-ChordList::~ChordList()
-      {
-      if (isDetached()) {
-            QMapIterator<int, ChordDescription*> i(*this);
-            while(i.hasNext()) {
-                  i.next();
-                  delete i.value();
-                  }
-            }
-      }
-
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
@@ -1620,21 +1602,18 @@ void ChordList::read(XmlReader& e)
                   // if no id attribute (id == 0), then assign it a private id
                   // user chords that match these ChordDescriptions will be treated as normal recognized chords
                   // except that the id will not be written to the score file
-                  ChordDescription* cd = 0;
-                  if (id)
-                        cd = take(id);
-                  if (!cd)
-                        cd = new ChordDescription(id, this);
+                  ChordDescription cd = (id && contains(id)) ? take(id) : ChordDescription(id);
+
                   // record updated id
-                  id = cd->id;
+                  id = cd.id;
                   // read rest of description
-                  cd->read(e);
+                  cd.read(e);
                   // restore updated id
-                  cd->id = id;
+                  cd.id = id;
                   // throw away previously parsed chords
-                  cd->parsedChords.clear();
+                  cd.parsedChords.clear();
                   // generate any missing info (including new parsed chords)
-                  cd->complete(0,this);
+                  cd.complete(0,this);
                   // add to list
                   insert(id, cd);
                   }
@@ -1674,8 +1653,8 @@ void ChordList::write(Xml& xml) const
             writeRenderList(xml, &renderListRoot, "renderRoot");
       if (!renderListBase.isEmpty())
             writeRenderList(xml, &renderListBase, "renderBase");
-      foreach(ChordDescription* d, *this)
-            d->write(xml);
+      foreach(const ChordDescription& d, *this)
+            d.write(xml);
       }
 
 //---------------------------------------------------------

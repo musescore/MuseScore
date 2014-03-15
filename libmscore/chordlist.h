@@ -188,8 +188,9 @@ struct ChordDescription {
       QString _quality;
 
    public:
-      ChordDescription(int, ChordList*);
-      ChordDescription(const QString&, ChordList*);
+      ChordDescription() {}
+      ChordDescription(int);
+      ChordDescription(const QString&);
       QString quality() const       { return _quality; }
       void complete(ParsedChord* pc, const ChordList*);
       void read(XmlReader&);
@@ -223,7 +224,7 @@ struct ChordFont {
 //   ChordList
 //---------------------------------------------------------
 
-class ChordList : public QMap<int, ChordDescription*> {
+class ChordList : public QMap<int, ChordDescription> {
       QHash<QString, ChordSymbol> symbols;
 
    public:
@@ -233,9 +234,6 @@ class ChordList : public QMap<int, ChordDescription*> {
       QList<ChordToken> chordTokenList;
       static int privateID;
 
-      ChordList();
-
-      virtual ~ChordList();
       void write(Xml& xml) const;
       void read(XmlReader&);
       bool read(const QString&);
