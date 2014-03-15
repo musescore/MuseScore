@@ -130,7 +130,7 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       void setScale(qreal v)          { mag = v;           }
       };
 
-class PluginDescription;
+struct PluginDescription;
 extern void collectPluginMetaInformation(PluginDescription*);
 
 #endif
