@@ -165,10 +165,6 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
         <Chord>
           <durationType>eighth</durationType>
           <Note>
