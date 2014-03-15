@@ -844,6 +844,22 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
             le->setLid(this, id++);
       _elinks.clear();
 
+      // check all spanners for missing end (tick2 == -1)
+      QList<Spanner*> sl;
+      for (auto i = _spanner.cbegin(); i != _spanner.cend(); ++i) {
+            if (i->second->tick2() == -1)
+                  sl.append(i->second);
+            }
+      if (!sl.isEmpty()) {
+            int lastTick = lastMeasure()->endTick();
+            for (Spanner* s : sl) {
+                  s->setTick2(lastTick);
+                  _spanner.removeSpanner(s);
+                  _spanner.addSpanner(s);
+                  }
+            }
+
+
 // _mscVersion is needed used during layout
 //      _mscVersion = MSCVERSION;     // for later drag & drop usage
 
