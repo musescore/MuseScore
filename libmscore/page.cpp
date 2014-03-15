@@ -601,6 +601,7 @@ void Page::doRebuildBspTree()
 
 //---------------------------------------------------------
 //   replaceTextMacros
+//   (keep in sync with toolTipHeaderFooter in EditStyle::EditStyle())
 //    $p          - page number, except on first page
 //    $P          - page number, on all pages
 //    $n          - number of pages
@@ -612,13 +613,17 @@ void Page::doRebuildBspTree()
 //    $c          - copyright, on all pages
 //    $$          - the $ sign itself
 //    $:tag:      - meta data tag
-//       already defined tags:
+//
+//       tags already defined:
+//       (see Score::init()))
+//       copyright
+//       creationDate
 //       movementNumber
 //       movementTitle
+//       platform
+//       source
 //       workNumber
 //       workTitle
-//       source
-//       copyright
 //---------------------------------------------------------
 
 QString Page::replaceTextMacros(const QString& s) const
