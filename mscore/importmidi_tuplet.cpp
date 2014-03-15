@@ -445,9 +445,9 @@ validateAndFindExcludedChords(std::list<int> &indexes,
             Q_ASSERT_X(!tuplet.chords.empty(),
                        "MIDI tuplets: validateTuplets", "Tuplet has no chords but it should");
 
+            const auto interval = tupletInterval(tuplet, tuplet.regularQuant);
             int voice = 0;
             for ( ; voice < voiceLimit; ++voice) {
-                  const auto interval = tupletInterval(tuplet, tuplet.regularQuant);
                   if (!haveIntersection(interval, tupletIntervals[voice])) {
                         tupletIntervals[voice].push_back(interval);
                         break;
