@@ -119,27 +119,27 @@ void Rest::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   setUserOffset
+//   setUserOff, overriden from Element
 //    - raster vertical position in spatium units
 //    - half rests and whole rests outside the staff are
 //      replaced by special symbols with ledger lines
 //---------------------------------------------------------
 
-void Rest::setUserOffset(qreal x, qreal y)
+void Rest::setUserOff(const QPointF& o)
       {
       qreal _spatium = spatium();
-      int line = lrint(y/_spatium);
-#if 0
-      if (_sym == wholerestSym && (line <= -2 || line >= 3))
-            _sym = outsidewholerestSym;
-      else if (_sym == outsidewholerestSym && (line > -2 && line < 4))
-            _sym = wholerestSym;
-      else if (_sym == halfrestSym && (line <= -3 || line >= 3))
-            _sym = outsidehalfrestSym;
-      else if (_sym == outsidehalfrestSym && (line > -3 && line < 3))
-            _sym = halfrestSym;
-#endif
-      setUserOff(QPointF(x, qreal(line) * _spatium));
+      int line = lrint(o.y()/_spatium);
+
+      if (_sym == SymId::restWhole && (line <= -2 || line >= 3))
+            _sym = SymId::restWholeLegerLine;
+      else if (_sym == SymId::restWholeLegerLine && (line > -2 && line < 4))
+            _sym = SymId::restWhole;
+      else if (_sym == SymId::restHalf && (line <= -3 || line >= 3))
+            _sym = SymId::restHalfLegerLine;
+      else if (_sym == SymId::restHalfLegerLine && (line > -3 && line < 3))
+            _sym = SymId::restHalf;
+
+      Element::setUserOff(QPointF(o.x(), qreal(line) * _spatium));
       }
 
 //---------------------------------------------------------
@@ -155,7 +155,7 @@ QRectF Rest::drag(EditData* data)
       static const qreal xDragRange = spatium() * 5;
       if (fabs(s.x()) > xDragRange)
             s.rx() = xDragRange * (s.x() < 0 ? -1.0 : 1.0);
-      setUserOffset(s.x(), s.y());
+      setUserOff(QPointF(s.x(), s.y()));
       layout();
       score()->rebuildBspTree();
       return abbox() | r;
@@ -268,9 +268,9 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
                   // fall trough
             case TDuration::V_WHOLE:
                   *yoffset = 1;
-                  return (line <= -2 || line >= (lines - 1)) ? SymId::restWhole : SymId::restWhole;
+                  return (line <= -2 || line >= (lines - 1)) ? SymId::restWholeLegerLine : SymId::restWhole;
             case TDuration::V_HALF:
-                  return (line <= -3 || line >= (lines - 2)) ? SymId::restHalf : SymId::restHalf;
+                  return (line <= -3 || line >= (lines - 2)) ? SymId::restHalfLegerLine : SymId::restHalf;
             case TDuration::V_QUARTER:
                   return SymId::restQuarter;
             case TDuration::V_EIGHT:

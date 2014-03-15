@@ -37,7 +37,7 @@ class Rest : public ChordRest {
       virtual qreal upPos()   const override;
       virtual qreal downPos() const override;
       virtual qreal centerX() const override;
-      void setUserOffset(qreal x, qreal y);
+      virtual void setUserOff(const QPointF& o) override;
 
    public:
       Rest(Score* s = 0);
