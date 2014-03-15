@@ -4152,10 +4152,19 @@ void ExportMusicXml::write(QIODevice* dev)
                                     xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)) );
                                     xml.etag();
 
-                                    if (currentSystem == NewPage || currentSystem == TopSystem)
-                                          xml.tag("top-system-distance", QString("%1").arg(QString::number(getTenthsFromDots(m->pagePos().y()) - tm,'f',2)) );
-                                    if (currentSystem == NewSystem)
-                                          xml.tag("system-distance", QString("%1").arg(QString::number(getTenthsFromDots(m->pagePos().y() - previousMeasure->pagePos().y() - previousMeasure->bbox().height()),'f',2)));
+                                    if (currentSystem == NewPage || currentSystem == TopSystem) {
+                                          const double topSysDist = getTenthsFromDots(m->pagePos().y()) - tm;
+                                          xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
+                                          }
+                                    if (currentSystem == NewSystem) {
+                                          const double sysDist = getTenthsFromDots(m->pagePos().y()
+                                                                                   - previousMeasure->pagePos().y()
+                                                                                   - previousMeasure->bbox().height()
+                                                                                   + 2 * score()->spatium()
+                                                                                   );
+                                          xml.tag("system-distance",
+                                                  QString("%1").arg(QString::number(sysDist,'f',2)));
+                                          }
 
                                     xml.etag();
                                     }
@@ -4163,7 +4172,9 @@ void ExportMusicXml::write(QIODevice* dev)
                               // Staff layout elements.
                               for (int staffIdx = (staffCount == 0) ? 1 : 0; staffIdx < staves; staffIdx++) {
                                     xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
-                                    xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(mb->system()->staff(staffCount + staffIdx - 1)->distanceDown()),'f',2)));
+                                    const double staffDist =
+                                          getTenthsFromDots(mb->system()->staff(staffCount + staffIdx - 1)->distanceDown());
+                                    xml.tag("staff-distance", QString("%1").arg(QString::number(staffDist,'f',2)));
                                     xml.etag();
                                     }
 
