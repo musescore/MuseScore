@@ -190,10 +190,10 @@ bool doesClefBreakTie(const Staff *staff)
 
 // clef index: 0 - treble, 1 - bass
 
-size_t findPitchPenaltyForClef(int pitch, int clefIndex)
+int findPitchPenaltyForClef(int pitch, int clefIndex)
       {
-      static const size_t farPitchPenalty = 10000;
-      static const size_t approxPitchPenalty = 1;
+      static const int farPitchPenalty = 10000;
+      static const int approxPitchPenalty = 1;
       static const int dx = 5;
 
       static const int midPitch = clefMidPitch();    // all notes equal or upper - better in G clef
@@ -220,14 +220,14 @@ size_t findPitchPenaltyForClef(int pitch, int clefIndex)
       return 0;
       }
 
-size_t findClefChangePenalty(
+int findClefChangePenalty(
             int pos,
             int clefIndex,
             const std::vector<std::vector<int>> &trebleBassPath,
             const Segment *segment,
             const Staff *staff)
       {
-      static const size_t clefChangePenalty = 1000;
+      static const int clefChangePenalty = 1000;
       static const int notesBetweenClefs = 5;       // should be >= 2
 
       if (pos == 0)
@@ -235,7 +235,7 @@ size_t findClefChangePenalty(
 
       int j = pos;
       ReducedFraction totalRestLen(0, 1);
-      size_t penalty = 0;
+      int penalty = 0;
       const int strack = staff->idx() * VOICES;
       const auto barFraction = ReducedFraction(
                         staff->score()->sigmap()->timesig(segment->tick()).timesig());
@@ -308,15 +308,15 @@ ClefType clefFromIndex(int index)
       return (index == 0) ? ClefType::G : ClefType::F;
       }
 
-size_t findTiePenalty(MidiTie::TieStateMachine::State tieState)
+int findTiePenalty(MidiTie::TieStateMachine::State tieState)
       {
-      static const size_t tieBreakagePenalty = 10000000;
+      static const int tieBreakagePenalty = 10000000;
       return (tieState == MidiTie::TieStateMachine::State::TIED_BACK
               || tieState == MidiTie::TieStateMachine::State::TIED_BOTH)
              ? tieBreakagePenalty : 0;
       }
 
-void makeDynamicProgrammingStep(std::vector<std::vector<size_t>> &penalties,
+void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
                                 std::vector<std::vector<int>> &optimalPaths,
                                 int pos,
                                 MidiTie::TieStateMachine::State tieState,
@@ -328,22 +328,22 @@ void makeDynamicProgrammingStep(std::vector<std::vector<size_t>> &penalties,
             penalties[clefIndex].resize(pos + 1);
             optimalPaths[clefIndex].resize(pos + 1);
             }
-      const size_t tiePenalty = findTiePenalty(tieState);
+      const int tiePenalty = findTiePenalty(tieState);
 
       for (int clefIndex = 0; clefIndex != 2; ++clefIndex) {
             int significantPitch = (clefIndex == 0)
                                  ? minMaxPitch.minPitch() : minMaxPitch.maxPitch();
-            const size_t pitchPenalty = findPitchPenaltyForClef(significantPitch, clefIndex);
+            const int pitchPenalty = findPitchPenaltyForClef(significantPitch, clefIndex);
 
-            const size_t prevSameClefPenalty = (pos == 0)
+            const int prevSameClefPenalty = (pos == 0)
                     ? 0 : penalties[clefIndex][pos - 1];
-            const size_t sumPenaltySameClef = pitchPenalty + prevSameClefPenalty;
+            const int sumPenaltySameClef = pitchPenalty + prevSameClefPenalty;
 
-            const size_t prevDiffClefPenalty = (pos == 0)
+            const int prevDiffClefPenalty = (pos == 0)
                     ? 0 : penalties[1 - clefIndex][pos - 1];
-            const size_t clefPenalty = findClefChangePenalty(pos, 1 - clefIndex,
+            const int clefPenalty = findClefChangePenalty(pos, 1 - clefIndex,
                                                              optimalPaths, seg, staff);
-            const size_t sumPenaltyDiffClef
+            const int sumPenaltyDiffClef
                     = tiePenalty + pitchPenalty + prevDiffClefPenalty + clefPenalty;
 
             if (sumPenaltySameClef <= sumPenaltyDiffClef) {
@@ -360,7 +360,7 @@ void makeDynamicProgrammingStep(std::vector<std::vector<size_t>> &penalties,
       }
 
 void createClefs(Staff *staff,
-                 const std::vector<std::vector<size_t>> &penalties,
+                 const std::vector<std::vector<int>> &penalties,
                  const std::vector<std::vector<int>> &optimalPaths,
                  std::vector<Segment *> segments,
                  ClefType *mainClef)
@@ -397,8 +397,8 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
             MidiTie::TieStateMachine tieTracker;
 
                         // find optimal clef changes by dynamic programming
-            std::vector<std::vector<size_t>> penalties(2);          // 0 - treble, 1 - bass
-            std::vector<std::vector<int>> optimalPaths(2);          // first col is unused
+            std::vector<std::vector<int>> penalties(2);         // 0 - treble, 1 - bass
+            std::vector<std::vector<int>> optimalPaths(2);      // first col is unused
             std::vector<Segment *> segments;
 
             int pos = 0;
@@ -406,7 +406,7 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
                               seg = seg->next1(Segment::SegChordRest)) {
 
                   const auto minMaxPitch = findMinMaxSegPitch(seg, strack);
-                  if (minMaxPitch.empty())                    // no chords
+                  if (minMaxPitch.empty())                      // no chords
                         continue;
                   tieTracker.addSeg(seg, strack);
                   segments.push_back(seg);
