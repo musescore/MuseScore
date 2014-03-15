@@ -101,14 +101,19 @@
           <lid>5</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <Chord>
+        <Dynamic>
+          <subtype>f</subtype>
+          <velocity>96</velocity>
           <lid>6</lid>
+          </Dynamic>
+        <Chord>
+          <lid>7</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>trill</subtype>
             </Articulation>
           <Note>
-            <lid>7</lid>
+            <lid>8</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -116,7 +121,7 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>8</lid>
+          <lid>9</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -232,14 +237,19 @@
             <lid>5</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
             <lid>6</lid>
+            </Dynamic>
+          <Chord>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>trill</subtype>
               </Articulation>
             <Note>
-              <lid>7</lid>
+              <lid>8</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -247,7 +257,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>8</lid>
+            <lid>9</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -275,13 +285,13 @@
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <lid>6</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>trill</subtype>
               </Articulation>
             <Note>
-              <lid>7</lid>
+              <lid>8</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -289,7 +299,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>8</lid>
+            <lid>9</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>

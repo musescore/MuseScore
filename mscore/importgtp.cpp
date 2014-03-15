@@ -924,15 +924,23 @@ void GuitarPro1::readNote(int string, Note* note)
       {
       uchar noteBits = readUChar();
 
+      if (noteBits & 0x04) {
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setGhost(true);
+            }
+
       bool tieNote = false;
       uchar variant = 1;
       if (noteBits & 0x20) {
             variant = readUChar();
             if (variant == 1) {     // normal note
                   }
-            else if (variant == 2)
+            else if (variant == 2) {
                   tieNote = true;
+                  }
             else if (variant == 3) {                 // dead notes
+                  note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  note->setGhost(true);
                   qDebug("DeathNote tick %d pitch %d\n", note->chord()->segment()->tick(), note->pitch());
                   }
             else
@@ -1348,22 +1356,7 @@ qDebug("BeginRepeat=============================================\n");
                               readMixChange();
                         int strings = readUChar();   // used strings mask
 
-                        Fraction l;
-                        switch(len) {
-                              case -2: l.set(1, 1);    break;
-                              case -1: l.set(1, 2);    break;
-                              case  0: l.set(1, 4);    break;
-                              case  1: l.set(1, 8);    break;
-                              case  2: l.set(1, 16);   break;
-                              case  3: l.set(1, 32);   break;
-                              case  4: l.set(1, 64);   break;
-                              case  5: l.set(1, 128);  break;
-                              //case  6: l.set(1, 512);  break;
-                              //case  7: l.set(1, 1024);  break;
-                              //case  8: l.set(1, 2048);  break;
-                              default:
-                                    qFatal("unknown beat len: %d\n", len);
-                              }
+                        Fraction l = len2fraction(len);
 
                         // Some beat effects could add a Chord before this
                         ChordRest* cr = segment->cr(staffIdx * VOICES);
@@ -1459,12 +1452,12 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
                   segment->add(cr);
                   }
             }
-      if (fxBits & 0x04)  // natural harmonic
-            readBend();
-      if (fxBits & 0x08)  // artificial harmonic
-            readBend();
-      if (fxBits & 0x10) //fade in
-            readUChar();
+      if (fxBits & 0x04) { // natural harmonic
+            }
+      if (fxBits & 0x08) {  // artificial harmonic
+            }
+      if (fxBits & 0x10) { //fade in
+            }
       if (fxBits & 0x01) {         // GP3 column-wide vibrato
             }
       if (fxBits & 0x2) {          // GP3 column-wide wide vibrato (="tremolo" in GP3)
@@ -1586,16 +1579,23 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       //    1 - Dotted note;  ?
       //    0 - Time-independent duration
 
+      if (noteBits & 0x04) {
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setGhost(true);
+            }
+
       bool tieNote = false;
       uchar variant = 1;
       if (noteBits & 0x20) {
             variant = readUChar();
             if (variant == 1) {     // normal note
                   }
-            else if (variant == 2)
+            else if (variant == 2) {
                   tieNote = true;
-            else if (variant == 3) {                 // dead notes
-                  //qDebug("DeathNote tick %d pitch %d\n", note->chord()->segment()->tick(), note->pitch());
+                  }
+            else if (variant == 3) {                 // dead notes = ghost note
+                  note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  note->setGhost(true);
                   }
             else
                   qDebug("unknown note variant: %d\n", variant);
@@ -2183,15 +2183,22 @@ void GuitarPro5::readNote(int string, Note* note)
       //    1 - Dotted note;  ?
       //    0 - Time-independent duration
 
+      if (noteBits & 0x04) {
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setGhost(true);
+            }
+
       bool tieNote = false;
       if (noteBits & 0x20) {
             uchar noteType = readUChar();
-            if (noteType == 1) {     // normal note
+            if (noteType == 1) {
                   }
-            else if (noteType == 2)
+            if (noteType == 2) {
                   tieNote = true;
+                  }
             else if (noteType == 3) {                 // dead notes
-                  //qDebug("DeathNote tick %d pitch %d\n", note->chord()->segment()->tick(), note->pitch());
+                  note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  note->setGhost(true);
                   }
             else
                   qDebug("unknown note type: %d\n", noteType);

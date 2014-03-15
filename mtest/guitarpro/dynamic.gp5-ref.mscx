@@ -91,7 +91,6 @@
           <subtype>ppp</subtype>
           <velocity>16</velocity>
           <lid>3</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
@@ -114,7 +113,6 @@
           <subtype>pp</subtype>
           <velocity>33</velocity>
           <lid>7</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <lid>8</lid>
@@ -131,7 +129,6 @@
           <subtype>p</subtype>
           <velocity>49</velocity>
           <lid>10</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <lid>11</lid>
@@ -148,7 +145,6 @@
           <subtype>mp</subtype>
           <velocity>64</velocity>
           <lid>13</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <lid>14</lid>
@@ -167,7 +163,6 @@
           <subtype>mf</subtype>
           <velocity>80</velocity>
           <lid>17</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <lid>18</lid>
@@ -184,7 +179,6 @@
           <subtype>f</subtype>
           <velocity>96</velocity>
           <lid>20</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <lid>21</lid>
@@ -201,7 +195,6 @@
           <subtype>ff</subtype>
           <velocity>112</velocity>
           <lid>23</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <lid>24</lid>
@@ -218,7 +211,6 @@
           <subtype>fff</subtype>
           <velocity>126</velocity>
           <lid>26</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <lid>27</lid>
@@ -334,7 +326,6 @@
             <subtype>ppp</subtype>
             <velocity>16</velocity>
             <lid>3</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
@@ -357,7 +348,6 @@
             <subtype>pp</subtype>
             <velocity>33</velocity>
             <lid>7</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Chord>
             <lid>8</lid>
@@ -374,7 +364,6 @@
             <subtype>p</subtype>
             <velocity>49</velocity>
             <lid>10</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Chord>
             <lid>11</lid>
@@ -391,7 +380,6 @@
             <subtype>mp</subtype>
             <velocity>64</velocity>
             <lid>13</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Chord>
             <lid>14</lid>
@@ -410,7 +398,6 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             <lid>17</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Chord>
             <lid>18</lid>
@@ -427,7 +414,6 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             <lid>20</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Chord>
             <lid>21</lid>
@@ -444,7 +430,6 @@
             <subtype>ff</subtype>
             <velocity>112</velocity>
             <lid>23</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Chord>
             <lid>24</lid>
@@ -461,7 +446,6 @@
             <subtype>fff</subtype>
             <velocity>126</velocity>
             <lid>26</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Chord>
             <lid>27</lid>
