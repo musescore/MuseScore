@@ -528,7 +528,7 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx)
             }
 
       // no conflict if accidentals do not overlap at all
-      if (lower->top > upper->bottom)
+      if (lower->top - upper->bottom > 0.001)
             return false;
 
       // sevenths in either direction need only a slight offset
@@ -758,6 +758,10 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       // use zig zag approach
       // layout in pairs: right to left, high then low
       //
+      // TODO: we really need special handling
+      // for large chords with lots of accidentals
+      // to avoid the "wedge effect"
+      // (accidentals forming a wedge with empty space within)
 
       // layout top accidental
       layoutAccidental(&aclist[0], 0, 0, leftNotes, pnd, pd, sp);
