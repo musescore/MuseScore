@@ -276,7 +276,7 @@ int findClefChangePenalty(
             else if (elType == Element::REST) {
                   totalRestLen += newRestLen;
                   if (totalRestLen >= beatLen) {
-                        if (j == pos - 1)
+                        if (j != pos)
                               penalty += orphanChordPenalty;
                         break;
                         }
@@ -289,18 +289,33 @@ int findClefChangePenalty(
                   penalty += clefChangePenalty;
                   break;
                   }
-            bool isChord = false;
+            Element::ElementType elType = Element::INVALID;
+            ReducedFraction newRestLen(0, 1);
             for (int voice = 0; voice < VOICES; ++voice) {
                   ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
-                  if (cr && cr->type() == Element::CHORD) {
-                        isChord = true;
+                  if (!cr)
+                        continue;
+                  if (cr->type() == Element::CHORD) {
+                        elType = Element::CHORD;
                         break;
                         }
+                  else if (cr->type() == Element::REST) {
+                        elType = Element::REST;
+                        newRestLen = qMax(newRestLen, ReducedFraction(cr->globalDuration()));
+                        }
                   }
-            if (isChord) {
+            if (elType == Element::CHORD) {
                   ++chordCounter;
                   if (chordCounter == notesBetweenClefs)
                         break;
+                  totalRestLen = {0, 1};
+                  }
+            else if (elType == Element::REST) {
+                  totalRestLen += newRestLen;
+                  if (totalRestLen >= beatLen) {
+                        penalty += orphanChordPenalty;
+                        break;
+                        }
                   }
             }
 
