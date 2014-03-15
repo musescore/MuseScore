@@ -20,7 +20,9 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/slur.h"
+#include "libmscore/element.h"
 #include "importmidi_tie.h"
+#include "importmidi_meter.h"
 #include "preferences.h"
 
 #include <set>
@@ -221,21 +223,84 @@ size_t findPitchPenaltyForClef(int pitch, int clefIndex)
 size_t findClefChangePenalty(
             int pos,
             int clefIndex,
-            const std::vector<std::vector<int>> &trebleBassPath)
+            const std::vector<std::vector<int>> &trebleBassPath,
+            const Segment *segment,
+            const Staff *staff)
       {
       static const size_t clefChangePenalty = 1000;
       static const int notesBetweenClefs = 5;       // should be >= 2
 
       if (pos == 0)
             return 0;
-      if (pos - 1 == 0)
-            return clefChangePenalty;
 
-      for (int j = pos - 1; j != pos - notesBetweenClefs; --j) {
-            if (j == 0 || trebleBassPath[clefIndex][j] != clefIndex)
-                  return clefChangePenalty;
+      int j = pos;
+      ReducedFraction totalRestLen(0, 1);
+      size_t penalty = 0;
+      const int strack = staff->idx() * VOICES;
+      const auto barFraction = ReducedFraction(
+                        staff->score()->sigmap()->timesig(segment->tick()).timesig());
+      const ReducedFraction beatLen = Meter::beatLength(barFraction);
+
+      for (const Segment *segPrev = segment->prev1(Segment::SegChordRest); ;
+                    segPrev = segPrev->prev1(Segment::SegChordRest)) {
+            if (!segPrev) {
+                  penalty += clefChangePenalty;
+                  break;
+                  }
+            Element::ElementType elType = Element::INVALID;
+            ReducedFraction newRestLen(0, 1);
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  ChordRest *cr = static_cast<ChordRest *>(segPrev->element(strack + voice));
+                  if (!cr)
+                        continue;
+                  if (cr->type() == Element::CHORD) {
+                        elType = Element::CHORD;
+                        break;
+                        }
+                  else if (cr->type() == Element::REST) {
+                        elType = Element::REST;
+                        newRestLen = qMax(newRestLen, ReducedFraction(cr->globalDuration()));
+                        }
+                  }
+            if (elType == Element::CHORD) {
+                  --j;
+                  if (j == pos - notesBetweenClefs)
+                        break;
+                  if (j == 0 || trebleBassPath[clefIndex][j] != clefIndex) {
+                        penalty += clefChangePenalty;
+                        break;
+                        }
+                  totalRestLen = {0, 1};
+                  }
+            else if (elType == Element::REST) {
+                  totalRestLen += newRestLen;
+                  if (totalRestLen >= beatLen)
+                        break;
+                  }
             }
-      return 0;
+
+      int chordCounter = 0;
+      for (const Segment *seg = segment; ; seg = seg->next1(Segment::SegChordRest)) {
+            if (!seg) {
+                  penalty += clefChangePenalty;
+                  break;
+                  }
+            bool isChord = false;
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
+                  if (cr && cr->type() == Element::CHORD) {
+                        isChord = true;
+                        break;
+                        }
+                  }
+            if (isChord) {
+                  ++chordCounter;
+                  if (chordCounter == notesBetweenClefs)
+                        break;
+                  }
+            }
+
+      return penalty;
       }
 
 ClefType clefFromIndex(int index)
@@ -255,7 +320,9 @@ void makeDynamicProgrammingStep(std::vector<std::vector<size_t>> &penalties,
                                 std::vector<std::vector<int>> &optimalPaths,
                                 int pos,
                                 MidiTie::TieStateMachine::State tieState,
-                                const MinMaxPitch &minMaxPitch)
+                                const MinMaxPitch &minMaxPitch,
+                                const Segment *seg,
+                                const Staff *staff)
       {
       for (int clefIndex = 0; clefIndex != 2; ++clefIndex) {
             penalties[clefIndex].resize(pos + 1);
@@ -274,7 +341,8 @@ void makeDynamicProgrammingStep(std::vector<std::vector<size_t>> &penalties,
 
             const size_t prevDiffClefPenalty = (pos == 0)
                     ? 0 : penalties[1 - clefIndex][pos - 1];
-            const size_t clefPenalty = findClefChangePenalty(pos, 1 - clefIndex, optimalPaths);
+            const size_t clefPenalty = findClefChangePenalty(pos, 1 - clefIndex,
+                                                             optimalPaths, seg, staff);
             const size_t sumPenaltyDiffClef
                     = tiePenalty + pitchPenalty + prevDiffClefPenalty + clefPenalty;
 
@@ -344,7 +412,7 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
                   segments.push_back(seg);
 
                   makeDynamicProgrammingStep(penalties, optimalPaths, pos,
-                                             tieTracker.state(), minMaxPitch);
+                                             tieTracker.state(), minMaxPitch, seg, staff);
                   ++pos;
                   }
                         // get the optimal clef changes found by dynamic programming
