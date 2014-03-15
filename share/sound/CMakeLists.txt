@@ -20,6 +20,8 @@
 
 install(FILES
       FluidR3_GM2-2.sf3
+      FluidR3Mono GM2-6beta.sf2
+      FluidR3MonoLicence.txt
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
       )
 
