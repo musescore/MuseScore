@@ -407,30 +407,13 @@ bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interva
       return false;
       }
 
-size_t findVoiceCount(const std::list<int> &indexes,
-                      const std::vector<TupletInfo> &tuplets)
-      {
-      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> tupletIntervals;
-      const int limit = tupletVoiceLimit();
-      for (int i: indexes) {
-            for (int voice = 0; voice < limit; ++voice) {
-                  const auto interval = tupletInterval(tuplets[i]);
-                  if (!haveIntersection(interval, tupletIntervals[voice])) {
-                        tupletIntervals[voice].push_back(interval);
-                        break;
-                        }
-                  }
-            }
-      return tupletIntervals.size();
-      }
-
-std::set<std::pair<const ReducedFraction, MidiChord> *>
-validateAndFindExcludedChords(
+void validateAndFindExcludedChords(
             std::list<int> &indexes,
+            std::set<std::pair<const ReducedFraction, MidiChord> *> &excludedChords,
+            size_t &voiceCount,
             const std::vector<TupletInfo> &tuplets,
             const std::vector<std::pair<ReducedFraction, ReducedFraction>> &tupletIntevals)
       {
-      std::set<std::pair<const ReducedFraction, MidiChord> *> excludedChords;
                   // structure of map: <chord address, count of use of first tuplet chord with this tick>
       std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedFirstTupletNotes;
                   // already used chords: <chord address, has chord index 0 in tuplet>
@@ -472,7 +455,7 @@ validateAndFindExcludedChords(
                   excludedChords.erase(&*chord.second);
             }
 
-      return excludedChords;
+      voiceCount = voiceIntervals.size();
       }
 
 class TupletErrorResult
@@ -522,7 +505,8 @@ TupletErrorResult
 findTupletError(
             const std::list<int> &indexes,
             const std::vector<TupletInfo> &tuplets,
-            const std::set<std::pair<const ReducedFraction, MidiChord> *> &excludedChords)
+            const std::set<std::pair<const ReducedFraction, MidiChord> *> &excludedChords,
+            size_t voiceCount)
       {
       ReducedFraction sumError;
       ReducedFraction sumLengthOfRests;
@@ -544,7 +528,7 @@ findTupletError(
                   sumError.ticks() * 1.0 / sumChordCount,
                   sumChordCount * 1.0 / sumChordPlaces,
                   sumLengthOfRests,
-                  findVoiceCount(indexes, tuplets),
+                  voiceCount,
                   indexes.size()
                   };
       }
@@ -557,8 +541,10 @@ validateTuplets(std::list<int> &indexes,
       if (tuplets.empty())
             return TupletErrorResult();
 
-      const auto excludedChords = validateAndFindExcludedChords(indexes, tuplets, tupletIntevals);
-      return findTupletError(indexes, tuplets, excludedChords);
+      std::set<std::pair<const ReducedFraction, MidiChord> *> excludedChords;
+      size_t voiceCount = 0;
+      validateAndFindExcludedChords(indexes, excludedChords, voiceCount, tuplets, tupletIntevals);
+      return findTupletError(indexes, tuplets, excludedChords, voiceCount);
       }
 
 
