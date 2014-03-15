@@ -1132,7 +1132,9 @@ void StyleData::save(Xml& xml, bool optimize) const
 
 const ChordDescription* StyleData::chordDescription(int id) const
       {
-      return _chordList.value(id);
+      if (!_chordList.contains(id))
+            return 0;
+      return &*_chordList.find(id);
       }
 
 //---------------------------------------------------------
