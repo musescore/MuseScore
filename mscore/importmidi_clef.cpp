@@ -228,6 +228,7 @@ int findClefChangePenalty(
             const Staff *staff)
       {
       static const int clefChangePenalty = 1000;
+      static const int orphanChordPenalty = 2;
       static const int notesBetweenClefs = 5;       // should be >= 2
 
       if (pos == 0)
@@ -274,8 +275,11 @@ int findClefChangePenalty(
                   }
             else if (elType == Element::REST) {
                   totalRestLen += newRestLen;
-                  if (totalRestLen >= beatLen)
+                  if (totalRestLen >= beatLen) {
+                        if (j == pos - 1)
+                              penalty += orphanChordPenalty;
                         break;
+                        }
                   }
             }
 
