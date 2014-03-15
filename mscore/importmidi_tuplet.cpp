@@ -1745,7 +1745,7 @@ bool haveChordsInTheMiddleBetweenTupletChords(
 // decrease tuplet error by enlarging staccato notes:
 // make note.len = tuplet note length
 
-void applyStaccato(std::vector<TupletInfo> &tuplets)
+void applyStaccatoForTuplets(std::vector<TupletInfo> &tuplets)
       {
       for (auto &tuplet: tuplets) {
             const auto tupletNoteLen = tuplet.len / tuplet.tupletNumber;
@@ -1855,7 +1855,7 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
             minimizeOffTimeError(tuplets, chords, nonTuplets);
             }
       cleanStaccatoOfNonTuplets(nonTuplets);
-      applyStaccato(tuplets);
+      applyStaccatoForTuplets(tuplets);
 
       Q_ASSERT_X(!doTupletsHaveCommonChords(tuplets),
                  "MIDI tuplets: findTuplets", "Tuplets have common chords but they shouldn't");
