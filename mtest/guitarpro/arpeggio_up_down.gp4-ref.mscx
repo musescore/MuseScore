@@ -91,19 +91,16 @@
           <subtype>f</subtype>
           <velocity>96</velocity>
           <lid>3</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
           <lid>4</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
           <lid>5</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
@@ -145,19 +142,16 @@
           <subtype>f</subtype>
           <velocity>96</velocity>
           <lid>12</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
           <lid>13</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
           <lid>14</lid>
-          <style>Dynamics</style>
           </Dynamic>
         <Chord>
           <lid>15</lid>
@@ -290,19 +284,16 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             <lid>3</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
             <lid>4</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
             <lid>5</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
@@ -344,19 +335,16 @@
             <subtype>f</subtype>
             <velocity>96</velocity>
             <lid>12</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
             <lid>13</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
             <lid>14</lid>
-            <style>Dynamics</style>
             </Dynamic>
           <Chord>
             <lid>15</lid>

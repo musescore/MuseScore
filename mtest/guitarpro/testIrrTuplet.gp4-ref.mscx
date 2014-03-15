@@ -115,17 +115,22 @@
           <Tuplet>1</Tuplet>
           <durationType>16th</durationType>
           </Rest>
+        <Dynamic>
+          <subtype>f</subtype>
+          <velocity>96</velocity>
+          <lid>7</lid>
+          </Dynamic>
         <Beam id="1">
           <l1>11</l1>
           <l2>11</l2>
           </Beam>
         <Chord>
-          <lid>7</lid>
+          <lid>8</lid>
           <Tuplet>1</Tuplet>
           <durationType>16th</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>8</lid>
+            <lid>9</lid>
             <Tie id="2">
               </Tie>
             <pitch>67</pitch>
@@ -134,20 +139,11 @@
             <string>1</string>
             </Note>
           </Chord>
-        <Chord>
-          <lid>9</lid>
-          <Tuplet>1</Tuplet>
-          <durationType>eighth</durationType>
-          <Beam>1</Beam>
-          <Note>
-            <lid>10</lid>
-            <endSpanner id="2"/>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            <fret>8</fret>
-            <string>1</string>
-            </Note>
-          </Chord>
+        <Dynamic>
+          <subtype>f</subtype>
+          <velocity>96</velocity>
+          <lid>10</lid>
+          </Dynamic>
         <Chord>
           <lid>11</lid>
           <Tuplet>1</Tuplet>
@@ -155,6 +151,25 @@
           <Beam>1</Beam>
           <Note>
             <lid>12</lid>
+            <endSpanner id="2"/>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>8</fret>
+            <string>1</string>
+            </Note>
+          </Chord>
+        <Dynamic>
+          <subtype>f</subtype>
+          <velocity>96</velocity>
+          <lid>13</lid>
+          </Dynamic>
+        <Chord>
+          <lid>14</lid>
+          <Tuplet>1</Tuplet>
+          <durationType>eighth</durationType>
+          <Beam>1</Beam>
+          <Note>
+            <lid>15</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -288,17 +303,22 @@
             <Tuplet>2</Tuplet>
             <durationType>16th</durationType>
             </Rest>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <lid>7</lid>
+            </Dynamic>
           <Beam id="2">
             <l1>11</l1>
             <l2>11</l2>
             </Beam>
           <Chord>
-            <lid>7</lid>
+            <lid>8</lid>
             <Tuplet>2</Tuplet>
             <durationType>16th</durationType>
             <Beam>2</Beam>
             <Note>
-              <lid>8</lid>
+              <lid>9</lid>
               <Tie id="3">
                 </Tie>
               <pitch>67</pitch>
@@ -307,20 +327,11 @@
               <string>1</string>
               </Note>
             </Chord>
-          <Chord>
-            <lid>9</lid>
-            <Tuplet>2</Tuplet>
-            <durationType>eighth</durationType>
-            <Beam>2</Beam>
-            <Note>
-              <lid>10</lid>
-              <endSpanner id="3"/>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>8</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <lid>10</lid>
+            </Dynamic>
           <Chord>
             <lid>11</lid>
             <Tuplet>2</Tuplet>
@@ -328,6 +339,25 @@
             <Beam>2</Beam>
             <Note>
               <lid>12</lid>
+              <endSpanner id="3"/>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <fret>8</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <lid>13</lid>
+            </Dynamic>
+          <Chord>
+            <lid>14</lid>
+            <Tuplet>2</Tuplet>
+            <durationType>eighth</durationType>
+            <Beam>2</Beam>
+            <Note>
+              <lid>15</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -376,28 +406,14 @@
             <l2>46</l2>
             </Beam>
           <Chord>
-            <lid>7</lid>
+            <lid>8</lid>
             <Tuplet>3</Tuplet>
             <durationType>16th</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>8</lid>
+              <lid>9</lid>
               <Tie id="4">
                 </Tie>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>8</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>9</lid>
-            <Tuplet>3</Tuplet>
-            <durationType>eighth</durationType>
-            <Beam>3</Beam>
-            <Note>
-              <lid>10</lid>
-              <endSpanner id="4"/>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -411,6 +427,20 @@
             <Beam>3</Beam>
             <Note>
               <lid>12</lid>
+              <endSpanner id="4"/>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <fret>8</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>14</lid>
+            <Tuplet>3</Tuplet>
+            <durationType>eighth</durationType>
+            <Beam>3</Beam>
+            <Note>
+              <lid>15</lid>
               <pitch>75</pitch>
               <tpc>11</tpc>
               <fret>16</fret>

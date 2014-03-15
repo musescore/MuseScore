@@ -40,6 +40,7 @@ private slots:
       void gpTrill() { gpReadTest("trill", "gp4"); }
       void gpDynamic() { gpReadTest("dynamic", "gp5"); }
       void gpArpeggio() { gpReadTest("arpeggio_up_down", "gp4"); }
+      void gpGhostNote() { gpReadTest("ghost_note", "gp3"); }
       };
 
 //---------------------------------------------------------
