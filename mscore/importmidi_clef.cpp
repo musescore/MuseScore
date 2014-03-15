@@ -342,7 +342,7 @@ void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
             const int prevDiffClefPenalty = (pos == 0)
                     ? 0 : penalties[1 - clefIndex][pos - 1];
             const int clefPenalty = findClefChangePenalty(pos, 1 - clefIndex,
-                                                             optimalPaths, seg, staff);
+                                                          optimalPaths, seg, staff);
             const int sumPenaltyDiffClef
                     = tiePenalty + pitchPenalty + prevDiffClefPenalty + clefPenalty;
 
