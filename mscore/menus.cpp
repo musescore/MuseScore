@@ -244,7 +244,10 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
             for (int i = Accidental::ACC_SHARP; i < Accidental::ACC_END; ++i) {
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(Accidental::AccidentalType(i));
-                  sp->append(s, s->subtypeUserName());
+                  if (s->symbol() != SymId::noSym)
+                        sp->append(s, s->subtypeUserName());
+                  else
+                        delete s;
                   }
             }
       AccidentalBracket* ab = new AccidentalBracket(gscore);
