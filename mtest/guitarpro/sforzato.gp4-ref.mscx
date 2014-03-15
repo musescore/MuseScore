@@ -101,14 +101,19 @@
           <lid>5</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <Chord>
+        <Dynamic>
+          <subtype>f</subtype>
+          <velocity>96</velocity>
           <lid>6</lid>
+          </Dynamic>
+        <Chord>
+          <lid>7</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>sforzato</subtype>
             </Articulation>
           <Note>
-            <lid>7</lid>
+            <lid>8</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -116,13 +121,13 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>8</lid>
+          <lid>9</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>10</lid>
+          <lid>11</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
@@ -239,14 +244,19 @@
             <lid>5</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
             <lid>6</lid>
+            </Dynamic>
+          <Chord>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>sforzato</subtype>
               </Articulation>
             <Note>
-              <lid>7</lid>
+              <lid>8</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -254,13 +264,13 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>8</lid>
+            <lid>9</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>10</lid>
+            <lid>11</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -289,13 +299,13 @@
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <lid>6</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>sforzato</subtype>
               </Articulation>
             <Note>
-              <lid>7</lid>
+              <lid>8</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -303,13 +313,13 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>8</lid>
+            <lid>9</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>10</lid>
+            <lid>11</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>

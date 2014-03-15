@@ -42,6 +42,8 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/segment.h"
 #include "libmscore/rehearsalmark.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/arpeggio.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -260,16 +262,13 @@ void GuitarPro::setTuplet(Tuplet* tuplet, int tuple)
 //   addDynamic
 //---------------------------------------------------------
 
-void GuitarPro::addDynamic(Note* /*note*/, int d)
+void GuitarPro::addDynamic(Note* note, int d)
       {
-      if (d == 8) {
-            // Articulation* a = new Articulation(note->score());
-            // a->setSubtype(SforzatoaccentSym);
-            // note->chord()->add(a);
-            }
-      else {
-            // qDebug("dynamic %d\n", d);
-            }
+      Dynamic* dyn = new Dynamic(score);
+      QString map_dyn[] = {"f","ppp","pp","p","mp","mf","f","ff","fff"};
+      dyn->setDynamicType(map_dyn[d]);
+      dyn->setTrack(note->track());
+      note->chord()-> segment()-> add(dyn);
       }
 
 //---------------------------------------------------------
@@ -925,15 +924,23 @@ void GuitarPro1::readNote(int string, Note* note)
       {
       uchar noteBits = readUChar();
 
+      if (noteBits & 0x04) {
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setGhost(true);
+            }
+
       bool tieNote = false;
       uchar variant = 1;
       if (noteBits & 0x20) {
             variant = readUChar();
             if (variant == 1) {     // normal note
                   }
-            else if (variant == 2)
+            else if (variant == 2) {
                   tieNote = true;
+                  }
             else if (variant == 3) {                 // dead notes
+                  note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  note->setGhost(true);
                   qDebug("DeathNote tick %d pitch %d\n", note->chord()->segment()->tick(), note->pitch());
                   }
             else
@@ -1349,29 +1356,24 @@ qDebug("BeginRepeat=============================================\n");
                               readMixChange();
                         int strings = readUChar();   // used strings mask
 
-                        Fraction l;
-                        switch(len) {
-                              case -2: l.set(1, 1);    break;
-                              case -1: l.set(1, 2);    break;
-                              case  0: l.set(1, 4);    break;
-                              case  1: l.set(1, 8);    break;
-                              case  2: l.set(1, 16);   break;
-                              case  3: l.set(1, 32);   break;
-                              case  4: l.set(1, 64);   break;
-                              case  5: l.set(1, 128);  break;
-                              //case  6: l.set(1, 512);  break;
-                              //case  7: l.set(1, 1024);  break;
-                              //case  8: l.set(1, 2048);  break;
-                              default:
-                                    qFatal("unknown beat len: %d\n", len);
-                              }
+                        Fraction l = len2fraction(len);
 
-                        ChordRest* cr;
+                        // Some beat effects could add a Chord before this
+                        ChordRest* cr = segment->cr(staffIdx * VOICES);
                         // if (!pause || strings)
-                        if (strings)
-                              cr = new Chord(score);
+                        if (strings) {
+                              if(!segment->cr(staffIdx * VOICES))
+                                    cr = new Chord(score);
+                              }
                         else
+                              {
+                              if(segment->cr(staffIdx * VOICES)){
+                                    segment->remove(segment->cr(staffIdx * VOICES));
+                                    delete cr;
+                                    cr = 0;
+                                    }
                               cr = new Rest(score);
+                              }
                         cr->setTrack(staffIdx * VOICES);
                         if (lyrics)
                               cr->add(lyrics);
@@ -1397,7 +1399,10 @@ qDebug("BeginRepeat=============================================\n");
                               l = l + (l/2);
                         cr->setDuration(l);
                         cr->setDurationType(d);
-                        segment->add(cr);
+
+                        if(!segment->cr(staffIdx * VOICES))
+                              segment->add(cr);
+
                         Staff* staff = cr->staff();
                         int numStrings = staff->part()->instr()->stringData()->strings();
                         for (int i = 6; i >= 0; --i) {
@@ -1414,6 +1419,52 @@ qDebug("BeginRepeat=============================================\n");
             }
       setTempo(tempo);
       }
+
+int GuitarPro3::readBeatEffects(int track, Segment* segment)
+      {
+      int effects = 0;
+      uchar fxBits = readUChar();
+
+      if (fxBits & 0x20) {
+            effects = readUChar();      // effect 1-tapping, 2-slapping, 3-popping
+            }
+
+      if (fxBits & 0x40) {
+            int strokeup = readUChar();            // up stroke length
+            int strokedown = readUChar();            // down stroke length
+
+            Arpeggio* a = new Arpeggio(score);
+            if( strokeup > 0 ) {
+                  a->setArpeggioType(ArpeggioType::UP);
+                  }
+            else if( strokedown > 0 ) {
+                  a->setArpeggioType(ArpeggioType::DOWN);
+                  }
+            else {
+                  delete a;
+                  a = 0;
+                  }
+
+            if(a) {
+                  ChordRest* cr = new Chord(score);
+                  cr->setTrack(track);
+                  cr->add(a);
+                  segment->add(cr);
+                  }
+            }
+      if (fxBits & 0x04) { // natural harmonic
+            }
+      if (fxBits & 0x08) {  // artificial harmonic
+            }
+      if (fxBits & 0x10) { //fade in
+            }
+      if (fxBits & 0x01) {         // GP3 column-wide vibrato
+            }
+      if (fxBits & 0x2) {          // GP3 column-wide wide vibrato (="tremolo" in GP3)
+            }
+      return effects;
+      }
+
 
 //---------------------------------------------------------
 //   readBend
@@ -1467,7 +1518,7 @@ void GuitarPro4::readMixChange()
 //   readBeatEffects
 //---------------------------------------------------------
 
-int GuitarPro4::readBeatEffects(int, Segment*)
+int GuitarPro4::readBeatEffects(int track, Segment* segment)
       {
       int effects = 0;
       uchar fxBits1 = readUChar();
@@ -1478,8 +1529,27 @@ int GuitarPro4::readBeatEffects(int, Segment*)
       if (fxBits2 & 0x04)
             readBend();
       if (fxBits1 & 0x40) {
-            readUChar();            // down stroke length
-            readUChar();            // up stroke length
+            int strokeup = readUChar();            // up stroke length
+            int strokedown = readUChar();            // down stroke length
+
+            Arpeggio* a = new Arpeggio(score);
+            if( strokeup > 0 ) {
+                  a->setArpeggioType(ArpeggioType::UP);
+                  }
+            else if( strokedown > 0 ) {
+                  a->setArpeggioType(ArpeggioType::DOWN);
+                  }
+            else {
+                  delete a;
+                  a = 0;
+                  }
+
+            if(a) {
+                  ChordRest* cr = new Chord(score);
+                  cr->setTrack(track);
+                  cr->add(a);
+                  segment->add(cr);
+                  }
             }
       if (fxBits2 & 0x02)
             readUChar();            // stroke pick direction
@@ -1509,16 +1579,23 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       //    1 - Dotted note;  ?
       //    0 - Time-independent duration
 
+      if (noteBits & 0x04) {
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setGhost(true);
+            }
+
       bool tieNote = false;
       uchar variant = 1;
       if (noteBits & 0x20) {
             variant = readUChar();
             if (variant == 1) {     // normal note
                   }
-            else if (variant == 2)
+            else if (variant == 2) {
                   tieNote = true;
-            else if (variant == 3) {                 // dead notes
-                  //qDebug("DeathNote tick %d pitch %d\n", note->chord()->segment()->tick(), note->pitch());
+                  }
+            else if (variant == 3) {                 // dead notes = ghost note
+                  note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  note->setGhost(true);
                   }
             else
                   qDebug("unknown note variant: %d\n", variant);
@@ -1900,11 +1977,22 @@ void GuitarPro4::read(QFile* fp)
                         int strings = readUChar();   // used strings mask
                         Fraction l  = len2fraction(len);
 
-                        ChordRest* cr;
-                        if (strings == 0)
+                        // Some beat effects could add a Chord before this
+                        ChordRest* cr = segment->cr(staffIdx * VOICES);
+
+                        if (strings == 0) {
+                              if(segment->cr(staffIdx * VOICES)){
+                                    segment->remove(segment->cr(staffIdx * VOICES));
+                                    delete cr;
+                                    cr = 0;
+                                    }
                               cr = new Rest(score);
-                        else
-                              cr = new Chord(score);
+                              }
+                        else {
+                              if(!segment->cr(staffIdx * VOICES))
+                                    cr = new Chord(score);
+                              }
+
                         cr->setTrack(staffIdx * VOICES);
                         if (lyrics)
                               cr->add(lyrics);
@@ -1933,8 +2021,8 @@ void GuitarPro4::read(QFile* fp)
                               cr->setDurationType(TDuration::V_MEASURE);
                         else
                               cr->setDurationType(d);
-
-                        segment->add(cr);
+                        if(!segment->cr(staffIdx * VOICES))
+                              segment->add(cr);
                         Staff* staff = cr->staff();
                         int numStrings = staff->part()->instr()->stringData()->strings();
                         bool hasSlur = false;
@@ -2095,15 +2183,22 @@ void GuitarPro5::readNote(int string, Note* note)
       //    1 - Dotted note;  ?
       //    0 - Time-independent duration
 
+      if (noteBits & 0x04) {
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setGhost(true);
+            }
+
       bool tieNote = false;
       if (noteBits & 0x20) {
             uchar noteType = readUChar();
-            if (noteType == 1) {     // normal note
+            if (noteType == 1) {
                   }
-            else if (noteType == 2)
+            if (noteType == 2) {
                   tieNote = true;
+                  }
             else if (noteType == 3) {                 // dead notes
-                  //qDebug("DeathNote tick %d pitch %d\n", note->chord()->segment()->tick(), note->pitch());
+                  note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  note->setGhost(true);
                   }
             else
                   qDebug("unknown note type: %d\n", noteType);
@@ -2284,10 +2379,28 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
       if (fxBits2 & 0x04)
             readTremoloBar(track, segment);       // readBend();
       if (fxBits1 & 0x40) {
-            int a = readChar();     // down stroke length
-            int b = readChar();     // up stroke length
-            qDebug("  0x40: 0x%02x 0x%02x\n", a, b);
-            }
+                  int strokeup = readUChar();            // up stroke length
+                  int strokedown = readUChar();            // down stroke length
+
+                  Arpeggio* a = new Arpeggio(score);
+                  if( strokeup > 0 ) {
+                        a->setArpeggioType(ArpeggioType::UP);
+                        }
+                  else if( strokedown > 0 ) {
+                        a->setArpeggioType(ArpeggioType::DOWN);
+                        }
+                  else {
+                        delete a;
+                        a = 0;
+                        }
+
+                  if(a) {
+                        ChordRest* cr = new Chord(score);
+                        cr->setTrack(track);
+                        cr->add(a);
+                        segment->add(cr);
+                        }
+                  }
       if (fxBits2 & 0x02) {
             int a = readChar();            // stroke pick direction
             qDebug("  0x02: 0x%02x\n", a);
@@ -2345,14 +2458,24 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       int strings = readUChar();   // used strings mask
 
       Fraction l    = len2fraction(len);
-      ChordRest* cr;
+
+      // Some beat effects could add a Chord before this
+      ChordRest* cr = segment->cr(staffIdx * VOICES + voice);
       if (voice != 0 && pause == 0 && strings == 0)
             cr = 0;
       else {
-            if (strings == 0)
+            if (strings == 0) {
+                  if (cr) {
+                        segment->remove(cr);
+                        delete cr;
+                        cr = 0;
+                        }
                   cr = new Rest(score);
-            else
-                  cr = new Chord(score);
+                  }
+            else {
+                  if (!cr)
+                        cr = new Chord(score);
+                  }
             cr->setTrack(staffIdx * VOICES + voice);
             if (tuple) {
                   Tuplet* tuplet = tuplets[staffIdx * 2 + voice];
@@ -2380,7 +2503,9 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   cr->setDurationType(TDuration::V_MEASURE);
             else
                   cr->setDurationType(d);
-            segment->add(cr);
+
+            if(!segment->cr(staffIdx * VOICES + voice))
+                  segment->add(cr);
 
             Staff* staff = cr->staff();
             int numStrings = staff->part()->instr()->stringData()->strings();
