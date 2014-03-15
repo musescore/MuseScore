@@ -448,10 +448,8 @@ validateAndFindExcludedChords(
 
             int voice = 0;
             for ( ; voice < voiceLimit; ++voice) {
-                  if (!haveIntersection(tupletIntevals[*it], voiceIntervals[voice])) {
-                        voiceIntervals[voice].push_back(tupletIntevals[*it]);
+                  if (!haveIntersection(tupletIntevals[*it], voiceIntervals[voice]))
                         break;
-                        }
                   }
                         // check for chord notes that are already in use in another tuplets
             if (areTupletChordsInUse(usedFirstTupletNotes, usedChords, tuplet)
@@ -465,6 +463,7 @@ validateAndFindExcludedChords(
                   }
                         // we can use this tuplet
             markChordsAsUsed(usedFirstTupletNotes, usedChords, tuplet);
+            voiceIntervals[voice].push_back(tupletIntevals[*it]);
             ++it;
             }
 
