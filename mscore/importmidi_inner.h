@@ -99,6 +99,7 @@ struct TupletInfo
       ReducedFraction regularSumError;
       ReducedFraction sumLengthOfRests;
       int firstChordIndex = -1;
+      std::map<ReducedFraction, int> staccatoChords;      // <onTime, note index>
       };
 
 class TupletCommonIndexes

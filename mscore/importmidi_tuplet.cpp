@@ -244,14 +244,17 @@ ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo)
       ReducedFraction sumLen = {0, 1};
 
       for (const auto &chord: tupletInfo.chords) {
+            const auto staccatoIt = tupletInfo.staccatoChords.find(chord.first);
             const MidiChord &midiChord = chord.second->second;
             const auto &chordOnTime = Quantize::quantizeValue(chord.second->first,
                                                               tupletInfo.tupletQuant);
             if (beg < chordOnTime)
                   sumLen += (chordOnTime - beg);
             ReducedFraction maxLen(0, 1);
-            for (const auto &note: midiChord.notes) {
-                  const auto noteLen = (note.staccato) ? tupletNoteLen : note.len;
+            for (int i = 0; i != midiChord.notes.size(); ++i) {
+                  auto noteLen = midiChord.notes[i].len;
+                  if (staccatoIt != tupletInfo.staccatoChords.end() && i == staccatoIt->second)
+                        noteLen = tupletNoteLen;
                   if (noteLen > maxLen)
                         maxLen = noteLen;
                   }
@@ -1708,11 +1711,15 @@ void detectStaccato(TupletInfo &tuplet)
             const auto tupletNoteLen = tuplet.len / tuplet.tupletNumber;
             for (auto &chord: tuplet.chords) {
                   MidiChord &midiChord = chord.second->second;
-                  for (auto &note: midiChord.notes) {
-                        if (note.len < tupletNoteLen / 2) {
+                  for (int i = 0; i != midiChord.notes.size(); ++i) {
+                        if (midiChord.notes[i].len < tupletNoteLen / 2) {
                                     // later if chord have one or more notes
                                     // with staccato -> entire chord is staccato
-                              note.staccato = true;
+
+                                    // don't mark note as staccato here, only remember it
+                                    // because different tuplets may contain this note,
+                                    // it will be resolved after tuplet filtering
+                              tuplet.staccatoChords.insert({chord.first, i});
                               }
                         }
                   }
@@ -1756,6 +1763,20 @@ void applyStaccatoForTuplets(std::vector<TupletInfo> &tuplets)
                               note.len = tupletNoteLen;
                         }
                   }
+            }
+      }
+
+void markStaccatoTupletNotes(std::vector<TupletInfo> &tuplets)
+      {
+      for (auto &tuplet: tuplets) {
+            for (const auto &staccato: tuplet.staccatoChords) {
+                  const auto it = tuplet.chords.find(staccato.first);
+                  if (it != tuplet.chords.end()) {
+                        MidiChord &midiChord = it->second->second;
+                        midiChord.notes[staccato.second].staccato = true;
+                        }
+                  }
+            tuplet.staccatoChords.clear();
             }
       }
 
@@ -1840,6 +1861,9 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
             }
 
       filterTuplets(tuplets);
+            // later notes will be sorted and their indexes become invalid
+            // so assign staccato information to notes now
+      markStaccatoTupletNotes(tuplets);
 
       auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
       if (tupletVoiceLimit() == 1)
