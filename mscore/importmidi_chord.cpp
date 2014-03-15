@@ -11,7 +11,7 @@ namespace Ms {
 namespace MChord {
 
 
-ReducedFraction minAllowedDuration()
+const ReducedFraction& minAllowedDuration()
       {
       const static auto minDuration = ReducedFraction::fromTicks(MScore::division) / 32;
       return minDuration;
@@ -25,30 +25,6 @@ ReducedFraction maxNoteLen(const QList<MidiNote> &notes)
                   maxLen = note.len;
             }
       return maxLen;
-      }
-
-int findAveragePitch(const QList<MidiNote> &notes)
-      {
-      int avgPitch = 0;
-      for (const auto &note: notes)
-            avgPitch += note.pitch;
-      return notes.size() ? avgPitch / notes.size() : 0;
-      }
-
-int findAveragePitch(const std::map<ReducedFraction, MidiChord>::const_iterator &startChordIt,
-                     const std::map<ReducedFraction, MidiChord>::const_iterator &endChordIt)
-      {
-      int avgPitch = 0;
-      int counter = 0;
-      for (auto it = startChordIt; it != endChordIt; ++it) {
-            avgPitch += findAveragePitch(it->second.notes);
-            ++counter;
-            }
-      if (counter)
-            avgPitch /= counter;
-      if (avgPitch == 0)
-            avgPitch = MidiClef::midPitch();
-      return avgPitch;
       }
 
 // remove overlapping notes with the same pitch

@@ -14,6 +14,7 @@ class MidiNote {
       int velo;
       ReducedFraction len;
       Tie* tie = nullptr;
+      bool staccato = false;
       };
 
 class MidiChord {
@@ -21,6 +22,14 @@ class MidiChord {
       int voice = 0;
       bool isInTuplet = false;
       QList<MidiNote> notes;
+      
+      bool isStaccato() const
+            {
+            for (const auto &note: notes)
+                  if (note.staccato)
+                        return true;
+            return false;
+            }
       };
 
 class MTrack;
@@ -58,10 +67,7 @@ Iter findEndChordInRange(const ReducedFraction &endRangeTick,
       }
 
 ReducedFraction maxNoteLen(const QList<MidiNote> &notes);
-int findAveragePitch(const QList<MidiNote> &notes);
-int findAveragePitch(const std::map<ReducedFraction, MidiChord>::const_iterator &startChordIt,
-                     const std::map<ReducedFraction, MidiChord>::const_iterator &endChordIt);
-ReducedFraction minAllowedDuration();
+const ReducedFraction& minAllowedDuration();
 ReducedFraction findMinDuration(const QList<MidiChord> &midiChords,
                                 const ReducedFraction &length);
 void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord> &chords);
