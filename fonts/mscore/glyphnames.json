@@ -44,16 +44,16 @@
     "accidentalNatural": {
         "codepoint": "U+e113"
     },
-    "accidentalQuarterSharp4": {
+    "accidentalQuarterToneSharpStein": {
         "codepoint": "U+e10f"
     },
-    "accidentalQuarterFlat4": {
+    "accidentalQuarterToneFlatStein": {
         "codepoint": "U+E118"
     },
-    "accidentalThreeQuartersFlat2": {
+    "accidentalThreeQuarterTonesFlatZimmermann": {
         "codepoint": "U+E117"
     },
-    "accidentalThreeQuartersSharp2": {
+    "accidentalThreeQuarterTonesSharpStein": {
         "codepoint": "U+E112"
     },
     "accidentalSharp": {
@@ -65,22 +65,22 @@
     "accidentalKucukMucennebSharp": {
         "codepoint": "U+e111"
     },
-    "accidentalThreeQuartersSharpArrowUp": {
+    "accidentalThreeQuarterTonesSharpArrowUp": {
         "codepoint": "U+e1c1"
     },
-    "accidentalQuarterSharpArrowDown": {
+    "accidentalQuarterToneSharpArrowDown": {
         "codepoint": "U+e1c2"
     },
-    "accidentalQuarterFlatArrowUp": {
+    "accidentalQuarterToneFlatArrowUp": {
         "codepoint": "U+e1bb"
     },
-    "accidentalThreeQuartersFlatArrowDown": {
+    "accidentalThreeQuarterTonesFlatArrowDown": {
         "codepoint": "U+e1bc"
     },
-    "accidentalQuarterSharpNaturalArrowUp": {
+    "accidentalQuarterToneSharpNaturalArrowUp": {
         "codepoint": "U+e1be"
     },
-    "accidentalQuarterFlatNaturalArrowDown": {
+    "accidentalQuarterToneFlatNaturalArrowDown": {
         "codepoint": "U+e1bf"
     },                    
     "arrowheadBlackDown": {
@@ -107,7 +107,10 @@
     "arrowheadWhiteUp": {
         "codepoint": "U+E121"
     },
-    "articAccent": {
+    "articAccentAbove": {
+        "codepoint": "U+e161"
+    },
+    "articAccentBelow": {
         "codepoint": "U+e161"
     },
     "articMarcatoAbove": {
@@ -122,10 +125,16 @@
     "articStaccatissimoBelow": {
         "codepoint": "U+e165"
     },
-    "articStaccato": {
+    "articStaccatoAbove": {
         "codepoint": "U+e163"
     },
-    "articTenuto": {
+    "articStaccatoBelow": {
+        "codepoint": "U+e163"
+    },
+    "articTenutoAbove": {
+        "codepoint": "U+e166"
+    },
+    "articTenutoBelow": {
         "codepoint": "U+e166"
     },
     "articTenutoSlurAbove": {
@@ -515,6 +524,9 @@
     "restHalf": {
         "codepoint": "U+e101"
     },
+    "restHalfLegerLine": {
+        "codepoint": "U+e103"
+    },
     "restLonga": {
         "codepoint": "U+e105"
     },
@@ -526,6 +538,9 @@
     },
     "restWhole": {
         "codepoint": "U+e100"
+    },
+    "restWholeLegerLine": {
+        "codepoint": "U+e102"
     },
     "reversedBracketBottom": {
         "codepoint": "U+e1b6"
