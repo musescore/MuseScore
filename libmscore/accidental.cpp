@@ -45,24 +45,24 @@ static Acc accList[] = {
 
       Acc("flat-slash",          TRA("flat-slash"),          NATURAL, -50,  SymId::accidentalBakiyeFlat),
       Acc("flat-slash2",         TRA("flat-slash2"),         NATURAL, 0,    SymId::accidentalBuyukMucennebFlat),
-      Acc("mirrored-flat2",      TRA("mirrored-flat2"),      NATURAL, -150, SymId::accidentalThreeQuartersFlat2),
-      Acc("mirrored-flat",       TRA("mirrored-flat"),       NATURAL, -50,  SymId::accidentalQuarterFlat4),
+      Acc("mirrored-flat2",      TRA("mirrored-flat2"),      NATURAL, -150, SymId::accidentalThreeQuarterTonesFlatZimmermann),
+      Acc("mirrored-flat",       TRA("mirrored-flat"),       NATURAL, -50,  SymId::accidentalQuarterToneFlatStein),
       Acc("mirrored-flat-slash", TRA("mirrored-flat-slash"), NATURAL, 0,    SymId::noSym), //TODO-smufl
       Acc("flat-flat-slash",     TRA("flat-flat-slash"),     NATURAL, -150, SymId::noSym), //TODO-smufl
 
-      Acc("sharp-slash",         TRA("sharp-slash"),         NATURAL, 50,   SymId::accidentalQuarterSharp4),
+      Acc("sharp-slash",         TRA("sharp-slash"),         NATURAL, 50,   SymId::accidentalQuarterToneSharpStein),
       Acc("sharp-slash2",        TRA("sharp-slash2"),        NATURAL, 0,    SymId::accidentalBuyukMucennebSharp),
       Acc("sharp-slash3",        TRA("sharp-slash3"),        NATURAL, 0,    SymId::accidentalKucukMucennebSharp),
-      Acc("sharp-slash4",        TRA("sharp-slash4"),        NATURAL, 150,  SymId::accidentalThreeQuartersSharp2),
+      Acc("sharp-slash4",        TRA("sharp-slash4"),        NATURAL, 150,  SymId::accidentalThreeQuarterTonesSharpStein),
 
-      Acc("sharp arrow up",      TRA("sharp arrow up"),      NATURAL, 150,  SymId::accidentalThreeQuartersSharpArrowUp),
-      Acc("sharp arrow down",    TRA("sharp arrow down"),    NATURAL, 50,   SymId::accidentalQuarterSharpArrowDown),
+      Acc("sharp arrow up",      TRA("sharp arrow up"),      NATURAL, 150,  SymId::accidentalThreeQuarterTonesSharpArrowUp),
+      Acc("sharp arrow down",    TRA("sharp arrow down"),    NATURAL, 50,   SymId::accidentalQuarterToneSharpArrowDown),
       Acc("sharp arrow both",    TRA("sharp arrow both"),    NATURAL, 0,    SymId::noSym), //TODO-smufl
-      Acc("flat arrow up",       TRA("flat arrow up"),       NATURAL, -50,  SymId::accidentalQuarterFlatArrowUp),
-      Acc("flat arrow down",     TRA("flat arrow down"),     NATURAL, -150, SymId::accidentalThreeQuartersFlatArrowDown),
+      Acc("flat arrow up",       TRA("flat arrow up"),       NATURAL, -50,  SymId::accidentalQuarterToneFlatArrowUp),
+      Acc("flat arrow down",     TRA("flat arrow down"),     NATURAL, -150, SymId::accidentalThreeQuarterTonesFlatArrowDown),
       Acc("flat arrow both",     TRA("flat arrow both"),     NATURAL, 0,    SymId::noSym), //TODO-smufl
-      Acc("natural arrow up",    TRA("natural arrow up"),    NATURAL, 50,   SymId::accidentalQuarterSharpNaturalArrowUp),
-      Acc("natural arrow down",  TRA("natural arrow down"),  NATURAL, -50,  SymId::accidentalQuarterFlatNaturalArrowDown),
+      Acc("natural arrow up",    TRA("natural arrow up"),    NATURAL, 50,   SymId::accidentalQuarterToneSharpNaturalArrowUp),
+      Acc("natural arrow down",  TRA("natural arrow down"),  NATURAL, -50,  SymId::accidentalQuarterToneFlatNaturalArrowDown),
       Acc("natural arrow both",  TRA("natural arrow both"),  NATURAL, 0,    SymId::noSym), //TODO-smufl
 
       Acc("sori",                TRA("sori"),                NATURAL, 50,   SymId::accidentalSori),

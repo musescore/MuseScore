@@ -49,7 +49,7 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             "thumb", QT_TRANSLATE_NOOP("articulation", "thumb"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-      { SymId::articAccent,   SymId::articAccent,
+      { SymId::articAccentAbove,   SymId::articAccentBelow,
             "sforzato", QT_TRANSLATE_NOOP("articulation", "sforzato"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
@@ -58,7 +58,7 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
 //            "espressivo", QT_TRANSLATE_NOOP("articulation", "espressivo"),
 //            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
 //            },
-      { SymId::articStaccato, SymId::articStaccato,
+      { SymId::articStaccatoAbove, SymId::articStaccatoBelow,
             "staccato", QT_TRANSLATE_NOOP("articulation", "staccato"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
@@ -66,7 +66,7 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             "staccatissimo", QT_TRANSLATE_NOOP("articulation", "staccatissimo"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-      { SymId::articTenuto, SymId::articTenuto,
+      { SymId::articTenutoAbove, SymId::articTenutoBelow,
             "tenuto", QT_TRANSLATE_NOOP("articulation", "tenuto"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },

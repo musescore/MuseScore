@@ -3,11 +3,12 @@ FONTLOG for the Bravura font
 
 This file provides detailed information on the Bravura Font Software. This information should be distributed along with the Bravura fonts and any derivative works.
 
-Basic Font Information
+
+Basic font information
 ----------------------
 Bravura is a Unicode typeface designed by Steinberg for its in-development music notation and scoring application.
 
-It is compliant with version 0.7 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
+It is compliant with version 0.8 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 
 More information about Steinberg's scoring application can be found at:
 
@@ -16,6 +17,12 @@ http://www.steinberg.net/
 More information about SMuFL can be found at:
 
 http://www.smufl.org/
+
+
+Note for developers
+-------------------
+If you are intending to use Bravura as part of your own software application, please refer to the 'Notes for implementers' section in the SMuFL specification for useful information about Bravura's metrics and how glyphs are registered.
+
 
 Changelog
 ---------
@@ -149,3 +156,19 @@ Changelog
 – Added 'sfzp' (sforzato-piano) dynamic and ligature.
 – Added Penderecki's quarter-flat and Busotti's three-quarter sharp accidentals.
 – Added six further accordion coupler diagrams for right-hand 3 rank accordions, and accordion ricochet glyphs.
+
+9 March 2014 (Daniel Spreadbury) Bravura version 0.85
+– Updated glyph registration for articulations, such that articulations above the note are positioned sitting on the baseline, and articulations below the note are positioned hanging from the baseline.
+– Added whole and half rests with leger lines, i.e. as if displayed outside the staff.
+– Added clef for diatonic accordion.
+– Added recommended stylistic alternates for C and F clef forms used in 18th century French music, and for an F clef form used in 19th century music across Europe.
+– Added half-brackets for keyboard notation to show notes that should be played by the other hand.
+– Many code point changes, including moving the staff divide arrows, percussion swish arrow, and quite a few of the microtonal accidentals; refer to the SMuFL documentation for further details.
+– Further revisions to the plainchant ranges, including adding reversed virga, smaller version of punctum inclinatum, moving the punctum mora to the plainchant articulations range, and eliminating the precomposed podatus and clivis glyphs in favour of individual components that provide the means to construct these easily for any interval.
+– Added new range for Kievian square notation, as used for liturgical chant in the Russian Orthodox Church.
+– Added new glyphs for tabling one handbell and tabling a pair of handbells.
+– Added alternative pedal heel glyph and pedal heel or toe glyph.
+– Added recommended stylistic alternates for braces designed for use across different sizes of gaps, designed to be scaled uniformly rather than simply stretched vertically.
+– Added many new electronic music pictograms, including speaker configurations, more transport controls, additional hardware devices, and so on.
+– Added guitar fade in, fade out and swell glyphs.
+– Added the glyphs used by the Corpus Monodicum project for modern transcription of plainchant.
