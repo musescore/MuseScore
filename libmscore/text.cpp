@@ -1457,6 +1457,7 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
       QString s = _s;
       QTextCursor::MoveMode mm = (modifiers & Qt::ShiftModifier)
          ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+      bool ctrlPressed = modifiers & Qt::ControlModifier;
 
       switch (key) {
             case Qt::Key_Return:
@@ -1488,13 +1489,13 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
                   break;
 
             case Qt::Key_Left:
-                  if (!movePosition(QTextCursor::Left, mm) && (type() == LYRICS || type() == FIGURED_BASS))
+                  if (!movePosition(ctrlPressed ? QTextCursor::StartOfLine : QTextCursor::Left, mm) && (type() == LYRICS || type() == FIGURED_BASS))
                         return false;
                   s.clear();
                   break;
 
             case Qt::Key_Right:
-                  if (!movePosition(QTextCursor::Right, mm) && (type() == LYRICS || type() == FIGURED_BASS))
+                  if (!movePosition(ctrlPressed ? QTextCursor::EndOfLine : QTextCursor::Right, mm) && (type() == LYRICS || type() == FIGURED_BASS))
                         return false;
                   s.clear();
                   break;
@@ -1535,8 +1536,10 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
                   break;
 
             case Qt::Key_A:
-                  if (modifiers & Qt::ControlModifier)
+                  if (modifiers & Qt::ControlModifier) {
                         selectAll();
+                        s.clear();
+                  }
                   break;
             default:
                   break;
@@ -1701,7 +1704,14 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
                   _cursor.setLine(_layout.size() - 1);
                   _cursor.setColumn(curLine().columns());
                   break;
-
+                  
+            case QTextCursor::StartOfLine:
+                  _cursor.setColumn(0);
+                  break;
+            
+            case QTextCursor::EndOfLine:
+                  _cursor.setColumn(curLine().columns());
+                  break;
             default:
                   qDebug("Text::movePosition: not implemented");
                   return false;
