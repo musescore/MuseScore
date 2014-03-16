@@ -339,10 +339,8 @@ void markChordsAsUsed(std::map<std::pair<const ReducedFraction, MidiChord> *, in
             else
                   ++(ii->second);         // increase chord note counter
             }
-      for (auto it = tuplet.chords.begin(); it != tuplet.chords.end(); ++it) {
-            usedChords.insert({&*(it->second),
-                               isFirstTupletChord(tuplet, it)}); // mark the chord as used
-            }
+      for (auto it = tuplet.chords.begin(); it != tuplet.chords.end(); ++it)
+            usedChords.insert({&*(it->second), isFirstTupletChord(tuplet, it)});
       }
 
 bool areTupletChordsInUse(
