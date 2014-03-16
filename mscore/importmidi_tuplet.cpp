@@ -164,9 +164,7 @@ findBestChordForTupletNote(const ReducedFraction &tupletNotePos,
       return bestChord;
       }
 
-
 // find tuplets over which duration lies
-//
 
 std::vector<TupletData>
 findTupletsInBarForDuration(int voice,
