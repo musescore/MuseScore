@@ -21,6 +21,8 @@ class MidiNote;
 class Note;
 class Event;
 
+const int   INVALID_PITCH      = -1;
+
 // a list of tpc's, with legal ranges
 enum {
       INVALID_TPC = -2,

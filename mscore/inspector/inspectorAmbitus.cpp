@@ -72,10 +72,18 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       // noteHeadType starts at -1
       for (int i = 0; i < 5; ++i)
             r.noteHeadType->setItemData(i, i-1);
+      // set proper itemdata for TPC combos
       for (int i = 0; i < TPC_MAX-TPC_MIN+2; ++i) {
             r.topTpc->   setItemData(i, tpcs[i]);
             r.bottomTpc->setItemData(i, tpcs[i]);
             }
+      // make first item of each TPC combo ("[undefined]") unselectable
+      const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(r.topTpc->model());
+      QStandardItem* item = model->item(0);
+      item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+      model = qobject_cast<const QStandardItemModel*>(r.bottomTpc->model());
+      item = model->item(0);
+      item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 
       iList = {
             { P_COLOR,          0, 0, b.color,         b.resetColor         },
@@ -134,7 +142,7 @@ void InspectorAmbitus::valueChanged(int idx)
 }
 
 //---------------------------------------------------------
-//   on updateRage clicked
+//   on updateRange clicked
 //---------------------------------------------------------
 
 void Ms::InspectorAmbitus::updateRange()
