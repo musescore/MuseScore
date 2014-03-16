@@ -1287,7 +1287,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
 
                               if (s->track() == track) {
                                     int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
-                                    if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
+                                    if (s->tick() == segment->tick() && (!clip || s->tick2() <= endTick)) {
                                           if (needTick) {
                                                 xml.tag("tick", segment->tick() - xml.tickDiff);
                                                 xml.curTick = segment->tick();
@@ -1347,6 +1347,22 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         }
                   e->write(xml);
                   segment->write(xml);    // write only once
+                  }
+            
+            //cope with spanner that may end on the next segment
+            if (ls) {
+                  for (auto i : _spanner.map()) {     // TODO: don't search whole list
+                        Spanner* s = i.second;
+                        if (s->generated())
+                              continue;
+                        if (s->tick2() == ls->tick()
+                            && (s->track2() == track || s->track2() == -1)
+                            && (!clip || s->tick() >= fs->tick())) {
+                              if (s->id() == -1)
+                                    s->setId(++xml.spannerId);
+                              xml.tagE(QString("endSpanner id=\"%1\"").arg(s->id()));
+                              }
+                        }
                   }
             }
       }

@@ -492,6 +492,8 @@ Segment* Spanner::startSegment() const
 
 Segment* Spanner::endSegment() const
       {
+      if (_anchor == ANCHOR_SEGMENT && type() != SLUR)
+            return score()->tick2leftSegment(tick2() - 1);
       return score()->tick2leftSegment(tick2());
       }
 }
