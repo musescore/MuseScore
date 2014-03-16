@@ -134,7 +134,7 @@ void InspectorAmbitus::valueChanged(int idx)
 }
 
 //---------------------------------------------------------
-//   on updateRage clicked
+//   on updateRange clicked
 //---------------------------------------------------------
 
 void Ms::InspectorAmbitus::updateRange()
