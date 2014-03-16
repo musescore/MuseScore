@@ -435,10 +435,10 @@ void validateAndFindExcludedChords(
                         break;
                   }
                         // check for chord notes that are already in use in another tuplets
-            if (areTupletChordsInUse(usedFirstTupletNotes, usedChords, tuplet)
-                     || voice == voiceLimit
-                     || (voice > 0 && (int)tuplet.chords.size()
-                         < tupletLimits(tuplet.tupletNumber).minNoteCountAddVoice)) {
+            if (voice == voiceLimit
+                        || (voice > 0 && (int)tuplet.chords.size()
+                            < tupletLimits(tuplet.tupletNumber).minNoteCountAddVoice)
+                        || areTupletChordsInUse(usedFirstTupletNotes, usedChords, tuplet)) {
                   for (const auto &chord: tuplet.chords)
                         excludedChords.insert(&*chord.second);
                   it = indexes.erase(it);
