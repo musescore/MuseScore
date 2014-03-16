@@ -54,7 +54,6 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
             NoteHeadGroup::HEAD_BREVIS_ALT
             };
       static const int tpcs[] = {
-            INVALID_TPC,
             TPC_C_BB, TPC_C_B, TPC_C, TPC_C_S, TPC_C_SS,
             TPC_D_BB, TPC_D_B, TPC_D, TPC_D_S, TPC_D_SS,
             TPC_E_BB, TPC_E_B, TPC_E, TPC_E_S, TPC_E_SS,

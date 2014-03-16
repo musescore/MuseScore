@@ -238,11 +238,6 @@
          </property>
          <item>
           <property name="text">
-           <string>[undefined]</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
            <string>C♭♭</string>
           </property>
          </item>
@@ -509,11 +504,6 @@
          <property name="maxCount">
           <number>40</number>
          </property>
-         <item>
-          <property name="text">
-           <string>[undefined]</string>
-          </property>
-         </item>
          <item>
           <property name="text">
            <string>C♭♭</string>
