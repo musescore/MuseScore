@@ -2563,6 +2563,8 @@ void ChangeStyle::flip()
             score->setScoreFont(ScoreFont::fontFactory(style.value(ST_MusicalSymbolFont).toString()));
             score->scanElements(0, updateTimeSigs);
             }
+      if (score->style()->spatium() != style.spatium())
+            score->spatiumChanged(score->style()->spatium(), style.spatium());
 
       score->setStyle(style);
       score->scanElements(0, updateTextStyle2);
