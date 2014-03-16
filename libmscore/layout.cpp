@@ -554,6 +554,7 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pnd, qr
       // acceptable if one accidental can subsume overlap
       if (left == lower && -gap <= allowableOverlap) {
             qreal offset = qMax(left->rightClear, right->leftClear);
+            offset = qMin(offset, left->width - pd);
             lx = qMin(lx, right->x + offset);
             return false;
             }
