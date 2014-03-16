@@ -6,27 +6,28 @@
 
 namespace Ms {
 
-//-----------------------------------------------------------------------------
+
+#ifdef QT_DEBUG
+
+//---------------------------------------------------------------------------------------
 // https://www.securecoding.cert.org/confluence/display/seccode/
 // INT32-C.+Ensure+that+operations+on+signed+integers+do+not+result+in+overflow?showComments=false
 //
 // Access date: 2013.11.28
 
-inline void checkAdditionOverflow(int a, int b)           // a + b
+bool isAdditionOverflow(int a, int b)           // a + b
       {
-      if ((b > 0 && a > (std::numeric_limits<int>::max() - b))
-                  || (b < 0 && a < std::numeric_limits<int>::min() - b))
-            qFatal("ReducedFraction: addition overflow");
+      return ((b > 0 && a > (std::numeric_limits<int>::max() - b))
+                || (b < 0 && a < std::numeric_limits<int>::min() - b));
       }
 
-inline void checkSubtractionOverflow(int a, int b)        // a - b
+bool isSubtractionOverflow(int a, int b)        // a - b
       {
-      if ((b > 0 && a < std::numeric_limits<int>::min() + b)
-                  || (b < 0 && a > std::numeric_limits<int>::max() + b))
-            qFatal("ReducedFraction: subtraction overflow");
+      return ((b > 0 && a < std::numeric_limits<int>::min() + b)
+                  || (b < 0 && a > std::numeric_limits<int>::max() + b));
       }
 
-inline void checkMultiplicationOverflow(int a, int b)     // a * b
+bool isMultiplicationOverflow(int a, int b)     // a * b
       {
       bool flag = false;
 
@@ -51,29 +52,28 @@ inline void checkMultiplicationOverflow(int a, int b)     // a * b
                   }
             }
 
-      if (flag)
-            qFatal("ReducedFraction: multiplication overflow");
+      return flag;
       }
 
-inline void checkDivisionOverflow(int a, int b)           // a / b
+bool isDivisionOverflow(int a, int b)           // a / b
       {
-      if ((b == 0) || ((a == std::numeric_limits<int>::min()) && (b == -1)))
-            qFatal("ReducedFraction: division overflow");
+      return ((b == 0) || ((a == std::numeric_limits<int>::min()) && (b == -1)));
       }
 
-inline void checkRemainderOverflow(int a, int b)          // a % b
+bool isRemainderOverflow(int a, int b)          // a % b
       {
-      if ((b == 0) || ((a == std::numeric_limits<int>::min()) && (b == -1)))
-            qFatal("ReducedFraction: remainder overflow");
+      return ((b == 0) || ((a == std::numeric_limits<int>::min()) && (b == -1)));
       }
 
-inline void checkUnaryNegationOverflow(int a)             // -a
+bool isUnaryNegationOverflow(int a)             // -a
       {
-      if (a == std::numeric_limits<int>::min())
-            qFatal("ReducedFraction: unary nagation overflow");
+      return (a == std::numeric_limits<int>::min());
       }
 
-//-----------------------------------------------------------------------------
+#endif
+
+//---------------------------------------------------------------------------------------
+
 
 namespace {
 
@@ -81,10 +81,16 @@ namespace {
 
 int gcd(int a, int b)
       {
-      checkUnaryNegationOverflow(a);
+
+      Q_ASSERT_X(!isUnaryNegationOverflow(a),
+                 "ReducedFraction, gcd", "Unary negation overflow");
+
       if (b == 0)
             return a < 0 ? -a : a;
-      checkRemainderOverflow(a, b);
+
+      Q_ASSERT_X(!isRemainderOverflow(a, b),
+                 "ReducedFraction, gcd", "Remainder overflow");
+
       return gcd(b, a % b);
       }
 
@@ -93,8 +99,12 @@ int gcd(int a, int b)
 unsigned lcm(int a, int b)
       {
       const int tmp = gcd(a, b);
-      checkMultiplicationOverflow(a, b);
-      checkDivisionOverflow(a * b, tmp);
+
+      Q_ASSERT_X(!isMultiplicationOverflow(a, b),
+                 "ReducedFraction, lcm", "Multiplication overflow");
+      Q_ASSERT_X(!isDivisionOverflow(a * b, tmp),
+                 "ReducedFraction, lcm", "Division overflow");
+
       return a * b / tmp;
       }
 
@@ -129,8 +139,12 @@ ReducedFraction ReducedFraction::fromTicks(int ticks)
 ReducedFraction ReducedFraction::reduced() const
       {
       const int tmp = gcd(numerator_, denominator_);
-      checkDivisionOverflow(numerator_, tmp);
-      checkDivisionOverflow(denominator_, tmp);
+
+      Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
+                 "ReducedFraction::reduced", "Division overflow");
+      Q_ASSERT_X(!isDivisionOverflow(denominator_, tmp),
+                 "ReducedFraction::reduced", "Division overflow");
+
       return ReducedFraction(numerator_ / tmp, denominator_ / tmp);
       }
 
@@ -145,21 +159,32 @@ int ReducedFraction::ticks() const
       int newNumerator = numerator_ % denominator_;
       int division = MScore::division * 4;
 
-      checkMultiplicationOverflow(newNumerator, division);
-      checkAdditionOverflow(newNumerator * division, denominator_ / 2);
+      Q_ASSERT_X(!isMultiplicationOverflow(newNumerator, division),
+                 "ReducedFraction::ticks", "Multiplication overflow");
+      Q_ASSERT_X(!isAdditionOverflow(newNumerator * division, denominator_ / 2),
+                 "ReducedFraction::ticks", "Addition overflow");
+
       const int tmp = newNumerator * division + denominator_ / 2;
 
-      checkDivisionOverflow(tmp, denominator_);
-      checkMultiplicationOverflow(integral, denominator_);
-      checkAdditionOverflow(tmp / denominator_, integral * division);
+      Q_ASSERT_X(!isDivisionOverflow(tmp, denominator_),
+                 "ReducedFraction::ticks", "Division overflow");
+      Q_ASSERT_X(!isMultiplicationOverflow(integral, denominator_),
+                 "ReducedFraction::ticks", "Multiplication overflow");
+      Q_ASSERT_X(!isAdditionOverflow(tmp / denominator_, integral * division),
+                 "ReducedFraction::ticks", "Addition overflow");
+
       return tmp / denominator_ + integral * division;
       }
 
 void ReducedFraction::reduce()
       {
       const int tmp = gcd(numerator_, denominator_);
-      checkDivisionOverflow(numerator_, tmp);
-      checkDivisionOverflow(denominator_, tmp);
+
+      Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
+                 "ReducedFraction::reduce", "Division overflow");
+      Q_ASSERT_X(!isDivisionOverflow(denominator_, tmp),
+                 "ReducedFraction::reduce", "Division overflow");
+
       numerator_ /= tmp;
       denominator_ /= tmp;
       }
@@ -175,9 +200,15 @@ void ReducedFraction::preventOverflow()
 
 int fractionPart(int lcmPart, int numerator, int denominator)
       {
-      checkDivisionOverflow(lcmPart, denominator);
+
+      Q_ASSERT_X(!isDivisionOverflow(lcmPart, denominator),
+                 "ReducedFraction::fractionPart", "Division overflow");
+
       const int part = lcmPart / denominator;
-      checkMultiplicationOverflow(numerator, part);
+
+      Q_ASSERT_X(!isMultiplicationOverflow(numerator, part),
+                 "ReducedFraction::fractionPart", "Multiplication overflow");
+
       return numerator * part;
       }
 
@@ -213,8 +244,11 @@ ReducedFraction& ReducedFraction::operator*=(const ReducedFraction& val)
       ReducedFraction value = val;
       value.preventOverflow();
 
-      checkMultiplicationOverflow(numerator_, val.numerator_);
-      checkMultiplicationOverflow(denominator_, val.denominator_);
+      Q_ASSERT_X(!isMultiplicationOverflow(numerator_, val.numerator_),
+                 "ReducedFraction::operator*=", "Multiplication overflow");
+      Q_ASSERT_X(!isMultiplicationOverflow(denominator_, val.denominator_),
+                 "ReducedFraction::operator*=", "Multiplication overflow");
+
       numerator_ *= val.numerator_;
       denominator_ *= val.denominator_;
       return *this;
@@ -223,7 +257,10 @@ ReducedFraction& ReducedFraction::operator*=(const ReducedFraction& val)
 ReducedFraction& ReducedFraction::operator*=(int val)
       {
       preventOverflow();
-      checkMultiplicationOverflow(numerator_, val);
+
+      Q_ASSERT_X(!isMultiplicationOverflow(numerator_, val),
+                 "ReducedFraction::operator*=", "Multiplication overflow");
+
       numerator_ *= val;
       return *this;
       }
@@ -234,8 +271,11 @@ ReducedFraction& ReducedFraction::operator/=(const ReducedFraction& val)
       ReducedFraction value = val;
       value.preventOverflow();
 
-      checkMultiplicationOverflow(numerator_, val.denominator_);
-      checkMultiplicationOverflow(denominator_, val.numerator_);
+      Q_ASSERT_X(!isMultiplicationOverflow(numerator_, val.denominator_),
+                 "ReducedFraction::operator/=", "Multiplication overflow");
+      Q_ASSERT_X(!isMultiplicationOverflow(denominator_, val.numerator_),
+                 "ReducedFraction::operator/=", "Multiplication overflow");
+
       numerator_ *= val.denominator_;
       denominator_  *= val.numerator_;
       return *this;
@@ -244,7 +284,10 @@ ReducedFraction& ReducedFraction::operator/=(const ReducedFraction& val)
 ReducedFraction& ReducedFraction::operator/=(int val)
       {
       preventOverflow();
-      checkMultiplicationOverflow(denominator_, val);
+
+      Q_ASSERT_X(!isMultiplicationOverflow(denominator_, val),
+                 "ReducedFraction::operator/=", "Multiplication overflow");
+
       denominator_ *= val;
       return *this;
       }
@@ -296,10 +339,16 @@ bool ReducedFraction::operator!=(const ReducedFraction& val) const
 
 ReducedFraction toMuseScoreTicks(int tick, int oldDivision)
       {
-      checkMultiplicationOverflow(tick, MScore::division);
-      checkAdditionOverflow(tick * MScore::division, oldDivision / 2);
+
+      Q_ASSERT_X(!isMultiplicationOverflow(tick, MScore::division),
+                 "ReducedFraction::toMuseScoreTicks", "Multiplication overflow");
+      Q_ASSERT_X(!isAdditionOverflow(tick * MScore::division, oldDivision / 2),
+                 "ReducedFraction::toMuseScoreTicks", "Addition overflow");
+
       const int tmp = tick * MScore::division + oldDivision / 2;
-      checkDivisionOverflow(tmp, oldDivision);
+
+      Q_ASSERT_X(!isDivisionOverflow(tmp, oldDivision),
+                 "ReducedFraction::toMuseScoreTicks", "Division overflow");
 
       return ReducedFraction::fromTicks(tmp / oldDivision);
       }
