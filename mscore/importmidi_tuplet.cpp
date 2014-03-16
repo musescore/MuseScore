@@ -518,41 +518,26 @@ validateTuplets(std::list<int> &indexes,
 bool validateSelectedTuplets(const std::list<int> &bestIndexes,
                              const std::vector<TupletInfo> &tuplets)
       {
-      {           // <chord address of already used chords, has this chord index 0 in tuplet>
-      std::map<std::pair<const ReducedFraction, MidiChord> *, bool> usedChords;
+                  // <chord address, used voices>
+      std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedChords;
       for (int i: bestIndexes) {
             const auto &chords = tuplets[i].chords;
             for (auto it = chords.begin(); it != chords.end(); ++it) {
                   bool isFirstChord = (tuplets[i].firstChordIndex == 0
                                        && it == tuplets[i].chords.begin());
                   const auto fit = usedChords.find(&*(it->second));
-                  if (fit == usedChords.end())
-                        usedChords.insert({&*(it->second), isFirstChord});
-                  else if (!isFirstChord || !fit->second)
-                        return false;
+                  if (fit == usedChords.end()) {
+                        usedChords.insert({&*(it->second), isFirstChord ? 1 : VOICES});
+                        }
+                  else {
+                        if (!isFirstChord)
+                              return false;
+                        if (!isMoreTupletVoicesAllowed(fit->second, it->second->second.notes.size()))
+                              return false;
+                        ++(fit->second);
+                        }
                   }
             }
-      }
-      {           // structure of map:
-                  // <chord address, count of use of first tuplet chord with this tick>
-      std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedFirstTupletNotes;
-      for (int i: bestIndexes) {
-            if (tuplets[i].firstChordIndex != 0)
-                  continue;
-            const auto &tupletChord = *tuplets[i].chords.begin();
-            const auto ii = usedFirstTupletNotes.find(&*tupletChord.second);
-            if (ii == usedFirstTupletNotes.end()) {
-                  usedFirstTupletNotes.insert({&*tupletChord.second, 1});
-                  }
-            else {
-                  if (!isMoreTupletVoicesAllowed(
-                                    ii->second, tupletChord.second->second.notes.size()))
-                        return false;
-                  else
-                        ++(ii->second);      // increase chord note counter
-                  }
-            }
-      }
       return true;
       }
 
