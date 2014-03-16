@@ -2782,7 +2782,6 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
                   break;
             }
       undoInsertTime(m1->tick(), -ticks);
-      fixTicks();
       }
 
 //---------------------------------------------------------
@@ -2815,6 +2814,8 @@ void RemoveMeasures::undo()
 void RemoveMeasures::redo()
       {
       fm->score()->measures()->remove(fm, lm);
+      fm->score()->fixTicks();
+      fm->score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
