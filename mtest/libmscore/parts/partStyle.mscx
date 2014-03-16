@@ -12,7 +12,6 @@
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>
-        <rxoffset>50</rxoffset>
         <offsetType>absolute</offsetType>
         <name>Title</name>
         <family>Arial</family>
@@ -40,10 +39,15 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Style Score</metaTag>
     <PageList>
