@@ -386,13 +386,6 @@ void findValidTuplets(
                   // <voice, intervals>
       std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> voiceIntervals;
       const int voiceLimit = tupletVoiceLimit();
-
-      for (int i: indexes) {
-            for (auto &chord: tuplets[i].chords) {
-                  MidiChord &midiChord = chord.second->second;
-                  midiChord.usedVoices = 0;
-                  }
-            }
                   // select tuplets with min average error
       for (auto it = indexes.begin(); it != indexes.end(); ) {
             const auto &tuplet = tuplets[*it];
@@ -507,6 +500,12 @@ validateTuplets(std::list<int> &indexes,
       if (tuplets.empty())
             return TupletErrorResult();
 
+      for (auto &tuplet: tuplets) {
+            for (auto &chord: tuplet.chords) {
+                  MidiChord &midiChord = chord.second->second;
+                  midiChord.usedVoices = 0;
+                  }
+            }
       size_t voiceCount = 0;
       findValidTuplets(indexes, voiceCount, tuplets, tupletIntevals);
       return findTupletError(indexes, tuplets, voiceCount);
