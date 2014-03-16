@@ -312,9 +312,7 @@ TupletInfo findTupletApproximation(
 
 bool isMoreTupletVoicesAllowed(int voicesInUse, int availableVoices)
       {
-      if (voicesInUse >= availableVoices || voicesInUse >= tupletVoiceLimit())
-            return false;
-      return true;
+      return !(voicesInUse >= availableVoices || voicesInUse >= tupletVoiceLimit());
       }
 
 bool isFirstTupletChord(
