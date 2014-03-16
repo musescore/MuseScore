@@ -252,14 +252,14 @@ void Score::init()
       _layerTags[0]   = "default";
 
       if (!_parentScore) {
-#ifdef Q_OS_WIN
-            _metaTags.insert("platform", "WIN");
-#endif
-#ifdef Q_OS_MAC
-            _metaTags.insert("platform", "MAC");
-#endif
-#ifdef Q_OS_LINUX
-            _metaTags.insert("platform", "X11");
+#if defined(Q_OS_WIN)
+            _metaTags.insert("platform", "Microsoft Windows");
+#elif defined(Q_OS_MAC)
+            _metaTags.insert("platform", "Apple Macintosh");
+#elif defined(Q_OS_LINUX)
+            _metaTags.insert("platform", "Linux");
+#else
+            _metaTags.insert("platform", "Unknown");
 #endif
             _metaTags.insert("movementNumber", "");
             _metaTags.insert("movementTitle", "");
