@@ -376,6 +376,9 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 //---------------------------------------------------------
 //   layoutChords2
 //    - determine which notes need mirroring
+//    - this is called once for each stem direction
+//      eg, once for voices 1&3, once for 2&4
+//      with all notes combined and sorted to resemble one chord
 //---------------------------------------------------------
 
 void Score::layoutChords2(QList<Note*>& notes, bool up)
@@ -430,11 +433,11 @@ void Score::layoutChords2(QList<Note*>& notes, bool up)
             // previously we also skipped the mirror
             // if it shared a note head with previous note
             // but it's been suggested that it would be better
-            // to show the unison more clearly in a single voice chord
+            // to show the unison more clearly by default
             bool nmirror  = (chord->up() != isLeft);
 
             // two notes can *possibly* share a notehead if on same line and have same group and type
-            // however, we will only actually do this if user mirror
+            // however, we will only actually do this if user mirrors
             bool sameHead = (ll == line) && (nmirror == mirror);
 
             // we will potentially hide note and dots
@@ -503,18 +506,17 @@ struct AcEl {
       qreal bottom;     // bottom of accidental bbox relative to staff
       int line;         // line of note
       qreal width;      // width of accidental
-      // TODO: the following could all be read from a static table to save time
-      qreal overlap;          // number of lines below which this accidental can overlap something
-      qreal undercut;         // number of lines above which this accidental can undercut something
-      qreal overOffset;       // amount this accidental can overlap something
-      qreal underOffset;      // amount this accidental can undercut something
+      qreal ascent;     // amount (in sp) vertical strokes extend above body
+      qreal descent;    // amount (in sp) vertical strokes extend below body
+      qreal rightClear; // amount (in sp) to right of last vertical stroke above body
+      qreal leftClear;  // amount (in sp) to left of last vertical stroke below body
       };
 
 //---------------------------------------------------------
 //   resolveAccidentals
 //---------------------------------------------------------
 
-static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx)
+static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pnd, qreal pd, qreal sp)
       {
       AcEl* upper;
       AcEl* lower;
@@ -527,26 +529,46 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx)
             lower = right;
             }
 
-      // no conflict if accidentals do not overlap at all
-      if (lower->top - upper->bottom > 0.001)
+      qreal gap = lower->top - upper->bottom;
+
+      // no conflict at all if there is sufficient vertical gap between accidentals
+      if (gap >= pd)
             return false;
 
-      // sevenths in either direction need only a slight offset
-      // the following code lets the calling code add the offset (pnd)
-      if (lower->line - upper->line == 6) {
-            qreal offset = qMin(left->width, right->width);
+      qreal allowableOverlap = qMax(upper->descent, lower->ascent);
+
+      // accidentals that are "close" (small gap or even slight overlap)
+      if (qAbs(gap) <= 0.25 * sp) {
+            // acceptable with slight offset
+            // if one of the accidentals can subsume the overlap
+            // and both accidentals allow it
+            if (-gap <= allowableOverlap && qMin(upper->descent, lower->ascent) > 0.0) {
+                  // offset by pd (caller will subtract pnd back)
+                  qreal align = qMin(left->width, right->width) + pnd;
+                  lx = qMin(lx, right->x + align - pd);
+                  return false;
+                  }
+            }
+
+      // accidentals with more significant overlap
+      // acceptable if one accidental can subsume overlap
+      if (left == lower && -gap <= allowableOverlap) {
+            qreal offset = qMax(left->rightClear, right->leftClear);
             lx = qMin(lx, right->x + offset);
             return false;
             }
 
-      // left accidental may be able to undercut right
-      else if (left == lower && lower->line - upper->line > qRound(upper->undercut + lower->overlap)) {
-            qreal offset = qMin(upper->overOffset, lower->underOffset);
-            lx = qMin(lx, right->x + offset);
-            return false;
+      // accidentals with even more overlap
+      // can work if both accidentals can subsume overlap
+      if (left == lower && -gap <= upper->descent + lower->ascent) {
+            qreal offset = qMin(left->rightClear, right->leftClear);
+            if (offset > 0.0) {
+                  lx = qMin(lx, right->x + offset);
+                  return false;
+                  }
             }
 
-      // otherwise, there is conflict
+      // otherwise, there is real conflict
       lx = qMin(lx, right->x);
       return true;
       }
@@ -570,12 +592,12 @@ static void layoutAccidental(AcEl* me, AcEl* above, AcEl* below, QList<Note*>& l
       for (int i = 0; i < lns; ++i) {
             Note* ln = leftNotes[i];
             int lnLine = ln->line();
-            qreal lnTop = lnLine * 0.5 * sp - 0.5;
+            qreal lnTop = (lnLine - 1) * 0.5 * sp;
             qreal lnBottom = lnTop + sp;
-            if (lnBottom >= me->top && lnTop <= me->bottom) {
+            if (me->top - lnBottom <= pnd && lnTop - me->bottom <= pnd) {
                   // undercut note above if possible
-                  if (me->line - lnLine > qRound(me->undercut) + 1)
-                        lx = qMin(lx, ln->x() + me->underOffset);
+                  if (lnBottom - me->top <= me->ascent)
+                        lx = qMin(lx, ln->x() + me->rightClear);
                   else
                         lx = qMin(lx, ln->x());
                   }
@@ -589,9 +611,9 @@ static void layoutAccidental(AcEl* me, AcEl* above, AcEl* below, QList<Note*>& l
       Accidental* acc = me->note->accidental();
 
       if (above)
-            conflictAbove = resolveAccidentals(me, above, lx);
+            conflictAbove = resolveAccidentals(me, above, lx, pnd, pd, sp);
       if (below)
-            conflictBelow = resolveAccidentals(me, below, lx);
+            conflictBelow = resolveAccidentals(me, below, lx, pnd, pd, sp);
       if (conflictAbove || conflictBelow)
             me->x = lx - pd * acc->mag() - acc->width();
       else
@@ -635,43 +657,38 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   acel.x      = 0.0;
                   acel.top    = acel.line * 0.5 * sp + ac->bbox().top();
                   acel.bottom = acel.line * 0.5 * sp + ac->bbox().bottom();
-                  qreal width = ac->width();
-                  acel.width = width;
+                  acel.width  = ac->width();
+                  qreal scale = sp * ac->mag();
                   switch (ac->accidentalType()) {
                         case Accidental::ACC_FLAT:
-                              acel.overlap = 1;
-                              acel.undercut = 1;
-                              acel.overOffset = width;
-                              acel.underOffset = width * 0.5;
+                              acel.ascent = 1.2 * scale;
+                              acel.descent = 0;
+                              acel.rightClear = 0.5 * scale;
+                              acel.leftClear = 0;
                               break;
                         case Accidental::ACC_FLAT2:
-                              acel.overlap = 1;
-                              acel.undercut = 1;
-                              acel.overOffset = width;
-                              acel.underOffset = width * 0.25;
+                              acel.ascent = 1.2 * scale;
+                              acel.descent = 0;
+                              acel.rightClear = 0.25 * scale;
+                              acel.leftClear = 0;
                               break;
                         case Accidental::ACC_NATURAL:
-                              acel.overlap = 1.6;
-                              acel.undercut = 1.6;
-                              acel.overOffset = width * 0.5;
-                              acel.underOffset = acel.overOffset;
+                              acel.ascent = 0.5 * scale;
+                              acel.descent = 0.7 * scale;
+                              acel.rightClear = 0.5 * scale;
+                              acel.leftClear = 0.5 * scale;
                               break;
                         case Accidental::ACC_SHARP:
-                              acel.overlap = 2.6;
-                              acel.undercut = 2.6;
-                              acel.overOffset = width;
-                              acel.underOffset = width;
+                              acel.ascent = 0.25 * scale;
+                              acel.descent = 0.25 * scale;
+                              acel.rightClear = 0;
+                              acel.leftClear = 0;
                               break;
-                        case Accidental::ACC_SHARP2:
-                              acel.overlap = 1;
-                              acel.undercut = 1;
-                              acel.overOffset = width;
-                              acel.underOffset = width;
                         default:
-                              acel.overlap = 4;
-                              acel.undercut = 4;
-                              acel.overOffset = width;
-                              acel.underOffset = width;
+                              acel.ascent = 0;
+                              acel.descent = 0;
+                              acel.rightClear = 0;
+                              acel.leftClear = 0;
                         }
                   aclist.push_back(acel);
                   }
