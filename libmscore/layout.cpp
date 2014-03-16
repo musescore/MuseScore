@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <fenv.h>
+// #include <fenv.h>
 #include "page.h"
 #include "sig.h"
 #include "key.h"
