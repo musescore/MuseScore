@@ -468,18 +468,26 @@ TupletErrorResult findTupletError(const std::list<int> &indexes,
       int sumChordCount = 0;
       int sumChordPlaces = 0;
 
+      std::vector<char> usedIndexes(tuplets.size(), 0);
       for (int i: indexes) {
             sumError += tuplets[i].tupletSumError;
             sumLengthOfRests += tuplets[i].sumLengthOfRests;
             sumChordCount += tuplets[i].chords.size();
             sumChordPlaces += tuplets[i].tupletNumber;
+            usedIndexes[i] = 1;
             }
-                  // add quant error of all chords excluded from tuplets
-      for (const auto &tuplet: tuplets) {
+
+      for (size_t i = 0; i != usedIndexes.size(); ++i) {
+            if (usedIndexes[i])
+                  continue;
+            const auto &tuplet = tuplets[i];
+                        // add quant error of all chords excluded from tuplets
             for (const auto &chord: tuplet.chords) {
-                  const MidiChord &midiChord = chord.second->second;
-                  if (midiChord.usedVoices == 0)   // in tuplet chord would have usedVoices >= 1
+                                    // in tuplet chord would have usedVoices >= 1
+                  if (chord.second->second.usedVoices == 0) {
                         sumError += findQuantizationError(chord.first, tuplet.regularQuant);
+                        chord.second->second.usedVoices = 1;  // just to mark as checked
+                        }
                   }
             }
 
