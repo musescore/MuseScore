@@ -255,10 +255,11 @@ void ChordLine::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void ChordLine::updateGrips(int* grips, QRectF* grip) const
+void ChordLine::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       int n = path.elementCount();
       *grips = n;
+      *defaultGrip = n - 1;
       QPointF cp(pagePos());
       qreal sp = spatium();
       for (int i = 0; i < n; ++i)

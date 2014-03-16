@@ -56,7 +56,7 @@ class ChordLine : public Element {
       virtual void draw(QPainter*) const;
 
       virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, QRectF*) const;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
       };
 
 

@@ -87,7 +87,7 @@ class SlurSegment : public SpannerSegment {
       virtual bool isEditable() const { return true; }
       virtual void editDrag(const EditData&);
       virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);
-      virtual void updateGrips(int*, QRectF*) const;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
       virtual QPointF gripAnchor(int grip) const;
       virtual QPointF getGrip(int) const;
       virtual void setGrip(int, const QPointF&);

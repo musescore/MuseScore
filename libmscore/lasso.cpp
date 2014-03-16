@@ -89,9 +89,10 @@ void Lasso::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Lasso::updateGrips(int* n, QRectF* r) const
+void Lasso::updateGrips(int* n, int* defaultGrip, QRectF* r) const
       {
       *n = 8;
+      *defaultGrip = 7;
       r[0].translate(_rect.topLeft());
       r[1].translate(_rect.topRight());
       r[2].translate(_rect.bottomRight());

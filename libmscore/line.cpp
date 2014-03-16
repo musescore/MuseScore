@@ -83,9 +83,10 @@ void LineSegment::read(XmlReader& e)
 //   updateGrips
 //---------------------------------------------------------
 
-void LineSegment::updateGrips(int* grips, QRectF* grip) const
+void LineSegment::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       *grips = 3;
+      *defaultGrip = 2;
       QPointF pp(pagePos());
       grip[GRIP_LINE_START].translate(pp);
       grip[GRIP_LINE_END].translate(pos2() + pp);

@@ -47,7 +47,7 @@ class Image : public BSymbol {
 
       virtual bool isEditable() const { return true; }
       virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, QRectF*) const;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
       virtual QPointF gripAnchor(int /*grip*/) const { return QPointF(); }
 
    public:

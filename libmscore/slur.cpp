@@ -100,9 +100,10 @@ void SlurSegment::draw(QPainter* painter) const
 //    return grip rectangles in page coordinates
 //---------------------------------------------------------
 
-void SlurSegment::updateGrips(int* n, QRectF* r) const
+void SlurSegment::updateGrips(int* n, int* defaultGrip, QRectF* r) const
       {
       *n = SLUR_GRIPS;
+      *defaultGrip = GRIP_END;
       QPointF p(pagePos());
       for (int i = 0; i < SLUR_GRIPS; ++i)
             r[i].translate(ups[i].p + ups[i].off * spatium() + p);

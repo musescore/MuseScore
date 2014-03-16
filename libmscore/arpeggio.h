@@ -61,7 +61,7 @@ class Arpeggio : public Element {
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const { return true; }
       virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, QRectF*) const;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
       virtual bool edit(MuseScoreView*, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&);
 
       void read(XmlReader& e);

@@ -581,9 +581,10 @@ Element* BarLine::drop(const DropData& data)
 //   updateGrips
 //---------------------------------------------------------
 
-void BarLine::updateGrips(int* grips, QRectF* grip) const
+void BarLine::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       *grips   = 2;
+      *defaultGrip = 1;
       qreal lw = point(score()->styleS(ST_barWidth));
       qreal y1, y2;
       getY(&y1, &y2);

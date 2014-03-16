@@ -243,9 +243,10 @@ void Arpeggio::draw(QPainter* p) const
 //   updateGrips
 //---------------------------------------------------------
 
-void Arpeggio::updateGrips(int* grips, QRectF* grip) const
+void Arpeggio::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       *grips   = 2;
+      *defaultGrip = 1;
       QPointF p1(0.0, -_userLen1);
       QPointF p2(0.0, _height + _userLen2);
       grip[0].translate(pagePos() + p1);

@@ -75,7 +75,7 @@ class Bracket : public Element {
       virtual void endEdit();
       virtual void editDrag(const EditData&);
       virtual void endEditDrag();
-      virtual void updateGrips(int*, QRectF*) const;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
       virtual QPointF gripAnchor(int grip) const;
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;

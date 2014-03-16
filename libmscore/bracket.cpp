@@ -252,9 +252,10 @@ void Bracket::startEdit(MuseScoreView*, const QPointF&)
 //   updateGrips
 //---------------------------------------------------------
 
-void Bracket::updateGrips(int* grips, QRectF* grip) const
+void Bracket::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       *grips = 1;
+      *defaultGrip = 0;
       grip[0].translate(QPointF(0.0, h2 * 2) + pagePos());
       }
 

@@ -54,7 +54,7 @@ class Box : public MeasureBase {
       virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s) override;
       virtual void editDrag(const EditData&) override;
       virtual void endEdit() override;
-      virtual void updateGrips(int* grips, QRectF*) const override;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
       virtual void layout() override;
       virtual void write(Xml&) const override;
       virtual void write(Xml& xml, int, bool) const override { write(xml); }

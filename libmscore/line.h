@@ -24,7 +24,7 @@ class SLine;
 class System;
 class MuseScoreView;
 
-enum { GRIP_LINE_START, GRIP_LINE_END, GRIP_LINE_MIDDLE, GRIP_LINE_APERTURE };
+enum { GRIP_LINE_START, GRIP_LINE_MIDDLE, GRIP_LINE_END, GRIP_LINE_APERTURE };
 
 //---------------------------------------------------------
 //   LineStyle
@@ -55,7 +55,7 @@ class LineSegment : public SpannerSegment {
       virtual bool isEditable() const override { return true; }
       virtual void editDrag(const EditData&) override;
       virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s) override;
-      virtual void updateGrips(int*, QRectF*) const override;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
       virtual void setGrip(int grip, const QPointF& p) override;
       virtual QPointF getGrip(int) const override;
       virtual QPointF gripAnchor(int) const override;

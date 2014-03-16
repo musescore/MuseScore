@@ -1907,9 +1907,10 @@ void Beam::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Beam::updateGrips(int* grips, QRectF* grip) const
+void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       *grips = 2;
+      *defaultGrip = 1;
       int idx = (_direction == MScore::AUTO || _direction == MScore::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 

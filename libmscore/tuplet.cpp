@@ -771,9 +771,10 @@ void Tuplet::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Tuplet::updateGrips(int* grips, QRectF*grip) const
+void Tuplet::updateGrips(int* grips, int* defaultGrip, QRectF*grip) const
       {
       *grips = 2;
+      *defaultGrip = 1;
       grip[0].translate(pagePos() + p1);
       grip[1].translate(pagePos() + p2);
       }
