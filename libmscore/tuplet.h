@@ -75,7 +75,7 @@ class Tuplet : public DurationElement {
 
       virtual bool isEditable() const;
       virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, QRectF*) const;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
 
       virtual void setSelected(bool f);
 

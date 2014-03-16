@@ -80,7 +80,7 @@ class Beam : public Element {
       virtual bool isEditable() const override { return true; }
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void editDrag(const EditData&) override;
-      virtual void updateGrips(int*, QRectF*) const override;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
 
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;

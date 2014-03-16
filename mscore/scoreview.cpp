@@ -1180,7 +1180,7 @@ void ScoreView::updateGrips()
       for (int i = 0; i < MAX_GRIPS; ++i)
             grip[i] = r;
 
-      editObject->updateGrips(&grips, grip);
+      editObject->updateGrips(&grips, &defaultGrip, grip);
 
       // updateGrips returns grips in page coordinates,
       // transform to view coordinates:
@@ -1195,7 +1195,7 @@ void ScoreView::updateGrips()
             }
 
       if (curGrip == -1)
-            curGrip = grips-1;
+            curGrip = defaultGrip;
 
       QPointF anchor = editObject->gripAnchor(curGrip);
       if (!anchor.isNull())

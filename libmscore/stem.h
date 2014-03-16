@@ -47,7 +47,7 @@ class Stem : public Element {
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
 
       virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, QRectF*) const;
+      virtual void updateGrips(int*, int*, QRectF*) const;
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader& e);
       virtual void reset();

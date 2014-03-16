@@ -155,9 +155,10 @@ class ScoreView : public QWidget, public MuseScoreView {
       QPointF dragOffset;
 
       // editing mode
-      int curGrip;
       QRectF grip[MAX_GRIPS];       // edit "grips"
+      int curGrip;
       int grips;                    // number of used grips
+      int defaultGrip;              // grip to start editing
       Element* editObject;          ///< Valid in edit mode
 
       //--input state:

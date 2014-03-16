@@ -36,7 +36,7 @@ class Lasso : public Element {
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const     { return true; }
       virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, QRectF*) const;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
       QRectF rect() const                 { return _rect; }
       void setRect(const QRectF& r)       { _rect = r;    }
       void setSize(qreal w, qreal h)      { _rect.setWidth(w), _rect.setHeight(h); }

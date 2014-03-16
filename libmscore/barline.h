@@ -95,7 +95,7 @@ class BarLine : public Element {
       virtual void endEdit();
       virtual void editDrag(const EditData&);
       virtual void endEditDrag();
-      virtual void updateGrips(int*, QRectF*) const;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
       int tick() const;
 
       ElementList* el()                  { return &_el; }

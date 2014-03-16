@@ -492,9 +492,10 @@ void Image::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Image::updateGrips(int* grips, QRectF* grip) const
+void Image::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       *grips = 2;
+      *defaultGrip = 1;
       QRectF r(pageBoundingRect());
       grip[0].translate(QPointF(r.x() + r.width(), r.y() + r.height() * .5));
       grip[1].translate(QPointF(r.x() + r.width() * .5, r.y() + r.height()));

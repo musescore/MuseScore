@@ -52,7 +52,7 @@ void ScoreView::startEdit(Element* element, int startGrip)
       editObject = element;
       startEdit();
       if (startGrip == -1)
-            curGrip = grips-1;
+            curGrip = defaultGrip;
       else if (startGrip >= 0)
             curGrip = startGrip;
       }

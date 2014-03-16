@@ -44,7 +44,7 @@ class HairpinSegment : public LineSegment {
       virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
       virtual ElementType type() const override { return HAIRPIN_SEGMENT; }
       virtual void draw(QPainter*) const override;
-      virtual void updateGrips(int*, QRectF*) const override;
+      virtual void updateGrips(int*, int*, QRectF*) const override;
       virtual void editDrag(const EditData&) override;
       virtual void layout() override;
       virtual QVariant getProperty(P_ID id) const override;

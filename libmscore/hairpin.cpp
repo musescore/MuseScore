@@ -102,9 +102,11 @@ void HairpinSegment::layout()
 //   updateGrips
 //---------------------------------------------------------
 
-void HairpinSegment::updateGrips(int* grips, QRectF* grip) const
+void HairpinSegment::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       *grips = 4;
+      *defaultGrip = 2;
+
       QPointF pp(pagePos());
       qreal _spatium = spatium();
       qreal x = pos2().x();
