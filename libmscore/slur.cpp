@@ -320,9 +320,9 @@ void SlurSegment::editDrag(const EditData& ed)
       if (ed.curGrip == GRIP_START || ed.curGrip == GRIP_END) {
             slurTie()->computeBezier(this);
             //
-            // move anchor for slurs
+            // move anchor for slurs/ties
             //
-            Spanner* spanner = static_cast<Spanner*>(slurTie());
+            Spanner* spanner = slurTie();
             SpannerSegmentType st = spannerSegmentType();
             Qt::KeyboardModifiers km = qApp->keyboardModifiers();
             if (
@@ -341,7 +341,7 @@ void SlurSegment::editDrag(const EditData& ed)
                                     }
                               }
                         }
-                  else if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+                  else if (spanner->type() != TIE && km != (Qt::ShiftModifier | Qt::ControlModifier)) {
                         int staffIdx, pitch;
                         Segment* s = 0;
                         QPointF offset;
