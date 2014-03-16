@@ -164,6 +164,13 @@ void ReducedFraction::reduce()
       denominator_ /= tmp;
       }
 
+void ReducedFraction::preventOverflow()
+      {
+      static const int reduceLimit = 10000;
+      if (numerator_ >= reduceLimit || denominator_ >= reduceLimit)
+            reduce();
+      }
+
 // helper function
 
 int fractionPart(int lcmPart, int numerator, int denominator)
@@ -176,9 +183,9 @@ int fractionPart(int lcmPart, int numerator, int denominator)
 
 ReducedFraction& ReducedFraction::operator+=(const ReducedFraction& val)
       {
-      reduce();
+      preventOverflow();
       ReducedFraction value = val;
-      value.reduce();
+      value.preventOverflow();
 
       const int tmp = lcm(denominator_, val.denominator_);
       numerator_ = fractionPart(tmp, numerator_, denominator_)
@@ -189,9 +196,9 @@ ReducedFraction& ReducedFraction::operator+=(const ReducedFraction& val)
 
 ReducedFraction& ReducedFraction::operator-=(const ReducedFraction& val)
       {
-      reduce();
+      preventOverflow();
       ReducedFraction value = val;
-      value.reduce();
+      value.preventOverflow();
 
       const int tmp = lcm(denominator_, val.denominator_);
       numerator_ = fractionPart(tmp, numerator_, denominator_)
@@ -202,9 +209,9 @@ ReducedFraction& ReducedFraction::operator-=(const ReducedFraction& val)
 
 ReducedFraction& ReducedFraction::operator*=(const ReducedFraction& val)
       {
-      reduce();
+      preventOverflow();
       ReducedFraction value = val;
-      value.reduce();
+      value.preventOverflow();
 
       checkMultiplicationOverflow(numerator_, val.numerator_);
       checkMultiplicationOverflow(denominator_, val.denominator_);
@@ -215,7 +222,7 @@ ReducedFraction& ReducedFraction::operator*=(const ReducedFraction& val)
 
 ReducedFraction& ReducedFraction::operator*=(int val)
       {
-      reduce();
+      preventOverflow();
       checkMultiplicationOverflow(numerator_, val);
       numerator_ *= val;
       return *this;
@@ -223,9 +230,9 @@ ReducedFraction& ReducedFraction::operator*=(int val)
 
 ReducedFraction& ReducedFraction::operator/=(const ReducedFraction& val)
       {
-      reduce();
+      preventOverflow();
       ReducedFraction value = val;
-      value.reduce();
+      value.preventOverflow();
 
       checkMultiplicationOverflow(numerator_, val.denominator_);
       checkMultiplicationOverflow(denominator_, val.numerator_);
@@ -236,7 +243,7 @@ ReducedFraction& ReducedFraction::operator/=(const ReducedFraction& val)
 
 ReducedFraction& ReducedFraction::operator/=(int val)
       {
-      reduce();
+      preventOverflow();
       checkMultiplicationOverflow(denominator_, val);
       denominator_ *= val;
       return *this;
