@@ -721,8 +721,8 @@ std::vector<int> forceFindUncommonTupletPair(const std::vector<TupletInfo> &tupl
       return indexes;
       }
 
-// remove overlapping tuplets with the same number
-// when tuplet with more length differs only by additional rests
+// remove overlapping tuplets with the same tuplet number
+// when tuplet with bigger length contains the same notes
 
 void removeUselessTuplets(std::vector<TupletInfo> &tuplets)
       {
