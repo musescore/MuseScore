@@ -33,32 +33,31 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
       {
       for (auto &track: tracks) {
             auto &chords = track.second.chords;
-            for (auto it = chords.begin(); it != chords.end(); ++it) {
-                  auto &firstChord = it->second;
-                  const auto &firstOnTime = it->first;
-                  for (auto &note1: firstChord.notes) {
-                        auto ii = std::next(it);
-                        for (; ii != chords.end(); ++ii) {
-                              auto &secondChord = ii->second;
-                              if (firstChord.voice != secondChord.voice)
+            for (auto i1 = chords.begin(); i1 != chords.end(); ++i1) {
+                  auto &chord1 = i1->second;
+                  const auto &onTime1 = i1->first;
+                  for (auto &note1: chord1.notes) {
+                        for (auto i2 = std::next(i1); i2 != chords.end(); ++i2) {
+                              const auto &onTime2 = i2->first;
+                              if (onTime2 >= onTime1 + note1.len)
+                                    break;
+                              auto &chord2 = i2->second;
+                              if (chord1.voice != chord2.voice)
                                     continue;
-                              const auto &secondOnTime = ii->first;
-                              for (auto &note2: secondChord.notes) {
+                              for (auto &note2: chord2.notes) {
                                     if (note2.pitch != note1.pitch)
                                           continue;
-                                    if (secondOnTime >= (firstOnTime + note1.len))
-                                          continue;
                                     qDebug("Midi import: overlapping events: %d+%d %d+%d",
-                                           firstOnTime.ticks(), note1.len.ticks(),
-                                           secondOnTime.ticks(), note2.len.ticks());
-                                    note1.len = secondOnTime - firstOnTime;
-                                    ii = std::prev(chords.end());
+                                           onTime1.ticks(), note1.len.ticks(),
+                                           onTime2.ticks(), note2.len.ticks());
+                                    note1.len = onTime2 - onTime1;
+                                    i2 = std::prev(chords.end());
                                     break;
                                     }
                               }
                         if (note1.len <= ReducedFraction(0, 1)) {
-                              qDebug("Midi import: duration <= 0: drop note at %d",
-                                     firstOnTime.ticks());
+                              qDebug("removeOverlappingNotes: duration <= 0: drop note at %d",
+                                     onTime1.ticks());
                               continue;
                               }
                         }
