@@ -553,6 +553,9 @@ bool validateSelectedTuplets(const std::list<int> &bestIndexes,
 
 void TupletCommonIndexes::add(const std::vector<int> &commonIndexes)
       {
+
+      Q_ASSERT_X(!commonIndexes.empty(), "TupletCommonIndexes::add", "Added indexes are empty");
+
       indexes.push_back(commonIndexes);
       maxCount *= commonIndexes.size();
       current.resize(indexes.size());
@@ -757,6 +760,43 @@ void removeUselessTuplets(std::vector<TupletInfo> &tuplets)
             }
       }
 
+// result can be empty
+
+std::vector<int> findLongestCommonGroup(
+            const std::vector<char> &usedIndexes,
+            const std::vector<TupletInfo> &tuplets)
+      {
+                  // <chord address, vector of tuplet indexes>
+      std::map<std::pair<const ReducedFraction, MidiChord> *, std::vector<int>> usedChords;
+      for (size_t i = 0; i != usedIndexes.size(); ++i) {
+            if (usedIndexes[i])
+                  continue;
+            const auto &tuplet = tuplets[i];
+            auto it = tuplet.chords.begin();
+            if (tuplet.firstChordIndex == 0
+                        && it->second->second.notes.size() > 1
+                        && usedChords.find(&*it->second) != usedChords.end())
+                  {
+                        ++it;
+                  }
+            for ( ; it != tuplet.chords.end(); ++it)
+                  usedChords[&*it->second].push_back(i);
+            }
+      struct {
+            bool operator()(const std::pair<std::pair<const ReducedFraction, MidiChord> *,
+                                            std::vector<int>> &p1,
+                            const std::pair<std::pair<const ReducedFraction, MidiChord> *,
+                                            std::vector<int>> &p2)
+                  {
+                  return p1.second.size() < p2.second.size();
+                  }
+            } comparator;
+
+      if (!usedChords.empty())
+            return std::max_element(usedChords.begin(), usedChords.end(), comparator)->second;
+      return std::vector<int>();
+      }
+
 bool haveValidFirstCommonChord(const TupletInfo &t1, const TupletInfo &t2)
       {
       const auto opers = preferences.midiImportOperations.currentTrackOperations();
@@ -787,11 +827,17 @@ bool canBeTogether(int i, int j, const std::vector<TupletInfo> &tuplets)
       return true;
       }
 
-TupletCommonIndexes findCommonIndexes(
-            std::vector<int> &indexes,
-            const std::vector<TupletInfo> &tuplets)
+void collectRemainingCommonIndexes(
+            const std::vector<char> &usedIndexes,
+            const std::vector<TupletInfo> &tuplets,
+            TupletCommonIndexes &commonIndexes)
       {
-      TupletCommonIndexes commonIndexes;
+      std::vector<int> indexes;
+      for (size_t i = 0; i != usedIndexes.size(); ++i) {
+            if (usedIndexes[i] == 0)
+                  indexes.push_back(i);
+            }
+
       for (int i = 0; i < (int)indexes.size(); ++i) {       // not till size() - 1
             for (int j = i + 1; j < (int)indexes.size(); ++j) {
                   if (!canBeTogether(indexes[i], indexes[j], tuplets)) {
@@ -805,7 +851,16 @@ TupletCommonIndexes findCommonIndexes(
             if (i < (int)indexes.size())        // check because we can set i == j == size()
                   commonIndexes.add(std::vector<int>({indexes[i]}));
             }
-      return commonIndexes;
+      }
+
+std::vector<int> findUncommonGroup(const std::vector<TupletInfo> &tuplets)
+      {
+      auto uncommonGroup = findLongestUncommonGroup(tuplets);
+            // check: maybe tuplets intersect each other but still don't have common chords
+      if (uncommonGroup.size() == 1)
+            uncommonGroup = forceFindUncommonTupletPair(tuplets);   // empty if not succeed
+
+      return uncommonGroup;
       }
 
 // first chord in tuplet may belong to other tuplet at the same time
@@ -818,22 +873,24 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
             return;
 
       removeUselessTuplets(tuplets);
-      auto uncommonGroup = findLongestUncommonGroup(tuplets);
+      auto uncommonGroup = findUncommonGroup(tuplets);
 
-                  // check: maybe tuplets intersect each other but still don't have common chords
-      if (uncommonGroup.size() == 1)
-            uncommonGroup = forceFindUncommonTupletPair(tuplets);       // empty if not succeed
+      std::vector<char> usedIndexes(tuplets.size(), 0);
+      for (int i: uncommonGroup)
+            usedIndexes[i] = 1;
 
-      std::set<int> usedTuplets;
-      for (const auto &i: uncommonGroup)
-            usedTuplets.insert(i);
-
-      std::vector<int> unusedIndexes;
-      for (int i = 0; i != (int)tuplets.size(); ++i) {
-            if (usedTuplets.find(i) == usedTuplets.end())
-                  unusedIndexes.push_back(i);
+      TupletCommonIndexes commonIndexes;
+      while (true) {
+                        // empty if not succeed
+            auto commonGroup = findLongestCommonGroup(usedIndexes, tuplets);
+            if (commonGroup.size() <= 2)
+                  break;
+            commonIndexes.add(commonGroup);
+            for (int i: commonGroup)
+                  usedIndexes[i] = 1;
             }
-      auto commonIndexes = findCommonIndexes(unusedIndexes, tuplets);
+      collectRemainingCommonIndexes(usedIndexes, tuplets, commonIndexes);
+
                   // calculate here once for optimization purposes
       std::vector<std::pair<ReducedFraction, ReducedFraction>> tupletIntervals;
       for (const auto &tuplet: tuplets)
