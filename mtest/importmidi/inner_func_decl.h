@@ -36,7 +36,12 @@ void splitFirstTupletChords(std::vector<TupletInfo> &tuplets,
 std::vector<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets);
 
 class TupletCommonIndexes;
-TupletCommonIndexes findCommonIndexes(std::vector<int> &indexes, const std::vector<TupletInfo> &tuplets);
+void collectRemainingCommonIndexes(const std::vector<char> &usedIndexes,
+                                   const std::vector<TupletInfo> &tuplets,
+                                   TupletCommonIndexes &commonIndexes);
+
+std::vector<int> findLongestCommonGroup(const std::vector<char> &usedIndexes,
+                                        const std::vector<TupletInfo> &tuplets);
 
 } // namespace MidiTuplet
 
