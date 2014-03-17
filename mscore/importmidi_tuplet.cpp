@@ -610,7 +610,7 @@ minimizeQuantError(const std::vector<std::vector<int>> &indexGroups,
                   // number of permutations grows as n!
                   // 8! = 40320 - quite many; 9! = 362880 - many
                   // so set reasonable max limit to prevent the hang of our program
-      const int PERMUTATION_LIMIT = 50000;
+      const int PERMUTATION_LIMIT = 40320;
       int counter = 0;
       do {
                         // create a list of all tuplet indexes,
