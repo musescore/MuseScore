@@ -635,6 +635,9 @@ minimizeQuantError(const std::vector<std::vector<int>> &indexGroups,
             } while (counter < PERMUTATION_LIMIT &&
                      std::next_permutation(iIndexGroups.begin(), iIndexGroups.end()));
 
+      if (counter >= PERMUTATION_LIMIT)
+            qDebug() << "MidiTuplet, minimizeQuantError: permutation limit was exceeded";
+
       Q_ASSERT_X(validateSelectedTuplets(bestIndexes, tuplets),
                  "MIDI tuplets: minimizeQuantError", "Tuplets have common chords but they shouldn't");
 
