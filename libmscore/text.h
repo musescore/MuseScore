@@ -253,7 +253,7 @@ class Text : public Element {
       void deleteSelectedText();
 
       bool movePosition(QTextCursor::MoveOperation op,
-         QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
+         QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int count = 1);
       bool setCursor(const QPointF& p,
          QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       void moveCursorToEnd()   { movePosition(QTextCursor::End); }
