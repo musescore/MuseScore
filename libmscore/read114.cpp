@@ -147,25 +147,6 @@ static const StyleVal2 style114[] = {
       { ST_tupletNoteRightDistance,      QVariant(0.0) }
       };
 
-//---------------------------------------------------------
-//   resolveSymCompatibility
-//---------------------------------------------------------
-
-#if 0
-static SymId resolveSymCompatibility(SymId i, QString programVersion)
-      {
-      if (!programVersion.isEmpty() && programVersion < "1.1")
-            i = SymId(int(i) + 5);
-      switch(int(i)) {
-            case 197:   return SymId::keyboardPedalPed;
-//TODO::smufl            case 191:   return SymId(pedalasteriskSym);
-//            case 193:   return SymId(pedaldotSym);
-//            case 192:   return SymId(pedaldashSym);
-            case 139:   return SymId::ornamentTrill;
-            default:    return SymId::noSym;
-            }
-      }
-#endif
 
 //---------------------------------------------------------
 //   Staff::read114
@@ -530,17 +511,6 @@ Score::FileError Score::read114(XmlReader& e)
 
       for (std::pair<int,Spanner*> p : spanner()) {
             Spanner* s = p.second;
-            if (s->type() == Element::OTTAVA
-               || (s->type() == Element::TEXTLINE)
-               || (s->type() == Element::VOLTA)
-               || (s->type() == Element::PEDAL))
-                  {
-//                  TextLine* tl = static_cast<TextLine*>(s);
-//TODO                  tl->setBeginSymbol(resolveSymCompatibility(tl->beginSymbol(), mscoreVersion()));
-//                  tl->setContinueSymbol(resolveSymCompatibility(tl->continueSymbol(), mscoreVersion()));
-//                  tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
-                  }
-
             if (s->type() != Element::SLUR) {
                   if (s->type() == Element::VOLTA) {
                         Volta* volta = static_cast<Volta*>(s);
