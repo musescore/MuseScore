@@ -1444,9 +1444,9 @@ void Note::layout10(AccidentalState* as)
                         KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
                         int ntpc = pitch2tpc(_pitch, key.accidentalType(), acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
                         if (ntpc != _tpc) {
-                              qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
+//not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), _tpc, ntpc, acci);
 //                              setColor(QColor(255, 0, 0));
-                              _tpc = ntpc;
+//                              _tpc = ntpc;
                               _line = absStep(_tpc, _pitch);
                               }
                         }

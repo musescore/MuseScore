@@ -26,6 +26,7 @@
 #include "jump.h"
 #include "marker.h"
 #include "layoutbreak.h"
+#include "page.h"
 
 namespace Ms {
 
@@ -134,7 +135,6 @@ void MScore::init()
       replaceFractions    = true;
       playRepeats         = true;
       panPlayback         = true;
-//      partStyle           = "";
 
       lastError           = "";
 
@@ -146,6 +146,14 @@ void MScore::init()
       Ms::initStyle(_defaultStyle);
       _defaultStyleForParts = 0;
       _baseStyle            = new MStyle(*_defaultStyle);
+      void setPageFormat(const PageFormat& pf);
+
+      // QPrinter::PaperSize ps = QPrinter().paperSize();      // get default paper size
+      QSizeF psf = QPrinter().paperSize(QPrinter::Millimeter);
+      PaperSize ps("system", psf.width(), psf.height());
+      PageFormat pf;
+      pf.setSize(&ps);
+      _defaultStyle->setPageFormat(pf);
 
       //
       //  load internal fonts
