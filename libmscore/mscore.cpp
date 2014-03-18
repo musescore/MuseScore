@@ -149,7 +149,7 @@ void MScore::init()
       void setPageFormat(const PageFormat& pf);
 
       // QPrinter::PaperSize ps = QPrinter().paperSize();      // get default paper size
-      QSizeF psf = QPrinter().paperSize(QPrinter::Millimeter);
+      QSizeF psf = QPrinter().paperSize(QPrinter::Inch);
       PaperSize ps("system", psf.width(), psf.height());
       PageFormat pf;
       pf.setSize(&ps);
