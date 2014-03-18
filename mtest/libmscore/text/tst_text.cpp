@@ -31,6 +31,8 @@ class TestText : public QObject, public MTest
    private slots:
       void initTestCase();
       void testText();
+      void testSpecialSymbols();
+      void testTextProperties();
       };
 
 //---------------------------------------------------------
@@ -44,7 +46,6 @@ void TestText::initTestCase()
 
 //---------------------------------------------------------
 ///   testText
-///   read/write test of note
 //---------------------------------------------------------
 
 void TestText::testText()
@@ -115,6 +116,126 @@ void TestText::testText()
       text->insertText("#");
       text->endEdit();
       QCOMPARE(text->text(), QString("0123abcde#<sym>segno</sym>"));
+      }
+
+//---------------------------------------------------------
+///   testSpecialSymbols
+//---------------------------------------------------------
+
+void TestText::testSpecialSymbols()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TEXT_STYLE_DYNAMICS));
+
+      text->setEditMode(true);
+      text->layout();
+
+      text->moveCursorToEnd();
+      text->insertText("<");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("&lt;"));
+
+      text->selectAll();
+      text->deleteSelectedText();
+      text->insertText("&");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("&amp;"));
+
+      text->selectAll();
+      text->deleteSelectedText();
+      text->insertText(">");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("&gt;"));
+
+      text->selectAll();
+      text->deleteSelectedText();
+      text->insertText("\"");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("&quot;"));
+
+      text->selectAll();
+      text->deleteSelectedText();
+      text->insertText("&gt;");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("&amp;gt;"));
+      }
+
+//---------------------------------------------------------
+///   testTextProperties
+//---------------------------------------------------------
+
+void TestText::testTextProperties()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TEXT_STYLE_DYNAMICS));
+
+      text->setEditMode(true);
+      text->layout();
+
+      text->moveCursorToEnd();
+      text->insertText("ILoveMuseScore");
+      text->endEdit();
+      QCOMPARE(text->text(), QString("ILoveMuseScore"));
+
+      //select Love and make it bold
+      text->setEditMode(true);
+      text->moveCursorToStart();
+      text->movePosition(QTextCursor::Right);
+      text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
+
+      text->setFormat(FormatId::Bold , true);
+      text->endEdit();
+      QCOMPARE(text->text(), QString("I<b>Love</b>MuseScore"));
+
+      //select Love and unbold it
+      text->setEditMode(true);
+      text->moveCursorToStart();
+      text->movePosition(QTextCursor::Right);
+      text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
+
+      text->setFormat(FormatId::Bold , false);
+      text->endEdit();
+      QCOMPARE(text->text(), QString("ILoveMuseScore"));
+
+      //select Love and make it bold again
+      text->setEditMode(true);
+      text->moveCursorToStart();
+      text->movePosition(QTextCursor::Right);
+      text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
+
+      text->setFormat(FormatId::Bold , true);
+      text->endEdit();
+      QCOMPARE(text->text(), QString("I<b>Love</b>MuseScore"));
+
+      //select veMu and make it bold
+      text->setEditMode(true);
+      text->moveCursorToStart();
+      text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 3);
+      text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
+
+      text->setFormat(FormatId::Bold , true);
+      text->endEdit();
+      QCOMPARE(text->text(), QString("I<b>LoveMu</b>seScore"));
+
+      //select Mu and make it nonbold
+      text->setEditMode(true);
+      text->moveCursorToStart();
+      text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 5);
+      text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 2);
+
+      text->setFormat(FormatId::Bold , false);
+      text->endEdit();
+      QCOMPARE(text->text(), QString("I<b>Love</b>MuseScore"));
+
+      //make veMuse italic
+      //text->moveCursorToStart();
+      //text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 3);
+      //text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 6);
+
+      //text->setFormat(FormatId::Italic , true);
+      //text->endEdit();
+      //QCOMPARE(text->text(), QString("I<b>Lo<i>ve</i></b><i>Muse</i>Score"));
+
       }
 
 QTEST_MAIN(TestText)

@@ -625,7 +625,7 @@ void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
             int columns = i->columns();
             if (start + n <= col)
                   break;
-            if (start > col + columns) {
+            if (start >= col + columns) {
                   col += i->columns();
                   continue;
                   }
@@ -645,6 +645,7 @@ void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
                   TextFragment f = i->split(start - col);
                   f.changeFormat(id, data);
                   i = _text.insert(i+1, f);
+                  start -= (start - col);
                   }
             else
                   i->changeFormat(id, data);
@@ -1654,71 +1655,73 @@ bool Text::deleteChar()
 //   movePosition
 //---------------------------------------------------------
 
-bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode)
+bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode, int count)
       {
-      switch(op) {
-            case QTextCursor::Left:
-                  if (_cursor.column() == 0) {
+      for (int i=0; i < count; i++) {
+            switch(op) {
+                  case QTextCursor::Left:
+                        if (_cursor.column() == 0) {
+                              if (_cursor.line() == 0)
+                                    return false;
+                              _cursor.setLine(_cursor.line()-1);
+                              _cursor.setColumn(curLine().columns());
+                              }
+                        else
+                              _cursor.setColumn(_cursor.column()-1);
+                        break;
+
+                  case QTextCursor::Right:
+                        if (_cursor.column() >= curLine().columns()) {
+                              if (_cursor.line() >= _layout.size()-1)
+                                    return false;
+                              _cursor.setLine(_cursor.line()+1);
+                              _cursor.setColumn(0);
+                              }
+                        else
+                              _cursor.setColumn(_cursor.column()+1);
+                        break;
+
+                  case QTextCursor::Up:
                         if (_cursor.line() == 0)
                               return false;
                         _cursor.setLine(_cursor.line()-1);
-                        _cursor.setColumn(curLine().columns());
-                        }
-                  else
-                        _cursor.setColumn(_cursor.column()-1);
-                  break;
+                        if (_cursor.column() > curLine().columns())
+                              _cursor.setColumn(curLine().columns());
+                        break;
 
-            case QTextCursor::Right:
-                  if (_cursor.column() >= curLine().columns()) {
+                  case QTextCursor::Down:
                         if (_cursor.line() >= _layout.size()-1)
                               return false;
                         _cursor.setLine(_cursor.line()+1);
+                        if (_cursor.column() > curLine().columns())
+                              _cursor.setColumn(curLine().columns());
+                        break;
+
+                  case QTextCursor::Start:
+                        _cursor.setLine(0);
                         _cursor.setColumn(0);
-                        }
-                  else
-                        _cursor.setColumn(_cursor.column()+1);
-                  break;
+                        break;
 
-            case QTextCursor::Up:
-                  if (_cursor.line() == 0)
-                        return false;
-                  _cursor.setLine(_cursor.line()-1);
-                  if (_cursor.column() > curLine().columns())
+                  case QTextCursor::End:
+                        _cursor.setLine(_layout.size() - 1);
                         _cursor.setColumn(curLine().columns());
-                  break;
+                        break;
 
-            case QTextCursor::Down:
-                  if (_cursor.line() >= _layout.size()-1)
-                        return false;
-                  _cursor.setLine(_cursor.line()+1);
-                  if (_cursor.column() > curLine().columns())
+                  case QTextCursor::StartOfLine:
+                        _cursor.setColumn(0);
+                        break;
+
+                  case QTextCursor::EndOfLine:
                         _cursor.setColumn(curLine().columns());
-                  break;
-
-            case QTextCursor::Start:
-                  _cursor.setLine(0);
-                  _cursor.setColumn(0);
-                  break;
-
-            case QTextCursor::End:
-                  _cursor.setLine(_layout.size() - 1);
-                  _cursor.setColumn(curLine().columns());
-                  break;
-                  
-            case QTextCursor::StartOfLine:
-                  _cursor.setColumn(0);
-                  break;
-            
-            case QTextCursor::EndOfLine:
-                  _cursor.setColumn(curLine().columns());
-                  break;
-            default:
-                  qDebug("Text::movePosition: not implemented");
-                  return false;
+                        break;
+                  default:
+                        qDebug("Text::movePosition: not implemented");
+                        return false;
+                  }
+            if (mode == QTextCursor::MoveAnchor)
+                  _cursor.clearSelection();
+            updateCursorFormat(&_cursor);
             }
-      if (mode == QTextCursor::MoveAnchor)
-            _cursor.clearSelection();
-      updateCursorFormat(&_cursor);
       return true;
       }
 
