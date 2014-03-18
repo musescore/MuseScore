@@ -492,7 +492,7 @@ TupletErrorResult findTupletError(const std::list<int> &indexes,
             }
 
       return TupletErrorResult{
-                  sumError.ticks() * 1.0 / sumChordCount,
+                  sumError.numerator() * 1.0 / (sumError.denominator() * sumChordCount),
                   sumChordCount * 1.0 / sumChordPlaces,
                   sumLengthOfRests,
                   voiceCount,
