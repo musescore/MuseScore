@@ -43,7 +43,7 @@ Ambitus::Ambitus(Score* s)
       _dir              = DIR_DEFAULT;
       _hasLine          = HASLINE_DEFAULT;
       _lineWidth        = LINEWIDTH_DEFAULT;
-      _topPitch = _bottomPitch = -1;
+      _topPitch = _bottomPitch = INVALID_PITCH;
       _topTpc = _bottomTpc = INVALID_TPC;
       _topAccid.setParent(this);
       _bottomAccid.setParent(this);
@@ -68,14 +68,16 @@ void Ambitus::setTrack(int t)
       // if not initialized and there is a segment and a staff,
       // initialize pitches and tpc's to first and last staff line
       // (for use in palettes)
-      if (_topTpc == INVALID_TPC || _bottomTpc == INVALID_TPC) {
+      if (_topPitch == INVALID_PITCH || _topTpc == INVALID_TPC
+            || _bottomPitch == INVALID_PITCH ||_bottomTpc == INVALID_TPC) {
             if (segm && stf) {
                   updateRange();
                   _topAccid.setTrack(t);
                   _bottomAccid.setTrack(t);
                   }
-            else
-                  _topPitch   = _bottomPitch = _topTpc = _bottomTpc = -1;
+//            else {
+//                  _topPitch = _bottomPitch = INVALID_PITCH;
+//                  _topTpc   = _bottomTpc   = INVALID_TPC;
             }
       }
 
@@ -260,7 +262,10 @@ void Ambitus::layout()
             }
 
       //
-      // NOTE HEADS Y POS (if pitch == -1, set to some default - for use in palettes)
+      // NOTE HEADS Y POS
+      //
+      // if pitch == INVALID_PITCH oor tpc == INALID_TPC, set to some default:
+      // for use in palettes and when actual range cannot be calculated (new ambitus or no notes in staff)
       //
       qreal xAccidOffTop    = 0;
       qreal xAccidOffBottom = 0;
@@ -270,7 +275,7 @@ void Ambitus::layout()
             key = KEY_C;
 
       // top note head
-      if (_topPitch == -1)
+      if (_topPitch == INVALID_PITCH || _topTpc == INVALID_TPC)
             _topPos.setY(0);                          // if uninitialized, set to top staff line
       else {
             topLine  = absStep(_topTpc, _topPitch);
@@ -296,7 +301,7 @@ void Ambitus::layout()
             }
 
       // bottom note head
-      if (_bottomPitch == -1)
+      if (_bottomPitch == INVALID_PITCH || _bottomTpc == INVALID_TPC)
             _bottomPos.setY( (numOfLines-1) * lineDist);          // if uninitialized, set to last staff line
       else {
             bottomLine  = absStep(_bottomTpc, _bottomPitch);
