@@ -623,11 +623,7 @@ minimizeQuantError(const std::vector<std::vector<int>> &indexGroups,
                   }
                         // note: redundant indexes of indexesToValidate are erased here!
             const auto result = validateTuplets(indexesToValidate, tuplets, tupletIntevals);
-            if (counter == 0) {
-                  minResult = result;
-                  bestIndexes = indexesToValidate;
-                  }
-            else if (result < minResult) {
+            if (counter == 0 || result < minResult) {
                   minResult = result;
                   bestIndexes = indexesToValidate;
                   }
