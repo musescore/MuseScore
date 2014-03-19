@@ -505,6 +505,7 @@ struct AcEl {
       qreal top;        // top of accidental bbox relative to staff
       qreal bottom;     // bottom of accidental bbox relative to staff
       int line;         // line of note
+      int next;         // index of next accidental of same pitch class (ascending list)
       qreal width;      // width of accidental
       qreal ascent;     // amount (in sp) vertical strokes extend above body
       qreal descent;    // amount (in sp) vertical strokes extend below body
@@ -578,15 +579,13 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pnd, qr
 //   layoutAccidental
 //---------------------------------------------------------
 
-static void layoutAccidental(AcEl* me, AcEl* above, AcEl* below, QList<Note*>& leftNotes, qreal pnd, qreal pd, qreal sp)
+static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffset, QList<Note*>& leftNotes, qreal pnd, qreal pd, qreal sp)
       {
-      qreal lx;
+      qreal lx = colOffset;
 
       // extra space for ledger lines
       if (me->line <= -2 || me->line >= me->note->staff()->lines() * 2)
-            lx = -0.2 * sp;
-      else
-            lx = 0.0;
+            lx = qMin(lx, -0.2 * sp);
 
       // clear left notes
       int lns = leftNotes.size();
@@ -615,10 +614,13 @@ static void layoutAccidental(AcEl* me, AcEl* above, AcEl* below, QList<Note*>& l
             conflictAbove = resolveAccidentals(me, above, lx, pnd, pd, sp);
       if (below)
             conflictBelow = resolveAccidentals(me, below, lx, pnd, pd, sp);
-      if (conflictAbove || conflictBelow)
+      if (conflictAbove || conflictBelow || colOffset != 0.0)
             me->x = lx - pd * acc->mag() - acc->width();
       else
             me->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
+
+      return me->x;
+
       }
 
 //---------------------------------------------------------
@@ -634,8 +636,10 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       //    find column for dots
       //---------------------------------------------------
 
-      std::vector<AcEl> aclist;
-      QList<Note*> leftNotes;             // notes to left of origin
+      QList<Note*> leftNotes; // notes to left of origin
+      QList<AcEl> aclist;     // accidentals
+      // track columns of octave-separated accidentals
+      int columnBottom[7] = { -1, -1, -1, -1, -1, -1, -1 };
 
       qreal sp           = staff->spatium();
       qreal stepDistance = sp * .5;
@@ -647,6 +651,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       bool offsetDots         = false;
 
       int nNotes = notes.size();
+      int nAcc = 0;
       for (int i = nNotes-1; i >= 0; --i) {
             Note* note     = notes[i];
             Accidental* ac = note->accidental();
@@ -654,10 +659,11 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   ac->layout();
                   AcEl acel;
                   acel.note   = note;
-                  acel.line   = note->line();
+                  int line    = note->line();
+                  acel.line   = line;
                   acel.x      = 0.0;
-                  acel.top    = acel.line * 0.5 * sp + ac->bbox().top();
-                  acel.bottom = acel.line * 0.5 * sp + ac->bbox().bottom();
+                  acel.top    = line * 0.5 * sp + ac->bbox().top();
+                  acel.bottom = line * 0.5 * sp + ac->bbox().bottom();
                   acel.width  = ac->width();
                   qreal scale = sp * ac->mag();
                   switch (ac->accidentalType()) {
@@ -691,7 +697,11 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                               acel.rightClear = 0;
                               acel.leftClear = 0;
                         }
-                  aclist.push_back(acel);
+                  int pitchClass = (line + 700) % 7;
+                  acel.next = columnBottom[pitchClass];
+                  columnBottom[pitchClass] = nAcc;
+                  aclist.append(acel);
+                  ++nAcc;
                   }
             qreal hw = note->headWidth();
 
@@ -765,49 +775,142 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             segment->setDotPosX(staff->idx(), dotPosX);
             }
 
-      int nAcc = aclist.size();
       if (nAcc == 0)
             return;
 
+      QList<int> umi;
       qreal pd  = point(styleS(ST_accidentalDistance));
       qreal pnd = point(styleS(ST_accidentalNoteDistance));
+      qreal colOffset = 0.0;
 
-      //
-      // use zig zag approach
-      // layout in pairs: right to left, high then low
-      //
-      // TODO: we really need special handling
-      // for large chords with lots of accidentals
-      // to avoid the "wedge effect"
-      // (accidentals forming a wedge with empty space within)
+      if (nAcc >= 2 && aclist[nAcc-1].line - aclist[0].line >= 7) {
 
-      // layout top accidental
-      layoutAccidental(&aclist[0], 0, 0, leftNotes, pnd, pd, sp);
+            // accidentals spread over an octave or more
+            // set up columns for accidentals with octave matches
+            // these will start at right and work to the left
+            // unmatched accidentals will use zig zag approach (see below)
+            // starting to the left of the octave columns
 
-      // layout bottom accidental
-      if (nAcc > 1)
-            layoutAccidental(&aclist[nAcc-1], &aclist[0], 0, leftNotes, pnd, pd, sp);
+            qreal minX = 0.0;
+            int columnTop[7] = { -1, -1, -1, -1, -1, -1, -1 };
 
-      // layout middle accidentals
-      if (nAcc > 2) {
-            int n = nAcc - 1;
-            AcEl* me = &aclist[n];
-            AcEl* above = &aclist[0];
-            AcEl* below;
-            for (int i = 1; i < n; ++i, --n) {
-                  // next highest
-                  below = me;
-                  me = &aclist[i];
-                  layoutAccidental(me, above, below, leftNotes, pnd, pd, sp);
-
-                  if (i == n - 1)
-                        break;
-
-                  // next lowest
-                  above = me;
-                  me = &aclist[n-1];
-                  layoutAccidental(me, above, below, leftNotes, pnd, pd, sp);
+            // find columns of octaves
+            for (int pc = 0; pc < 7; ++pc) {
+                  if (columnBottom[pc] == -1)
+                        continue;
+                  int lastLine = aclist[columnBottom[pc]].line;
+                  int firstLine = lastLine;
+                  // calculate column height
+                  for (int j = columnBottom[pc]; j != -1; j = aclist[j].next) {
+                        firstLine = aclist[j].line;
+                        columnTop[pc] = j;
+                        }
+                  if (firstLine == lastLine) {
+                        columnTop[pc] = -1;
+                        continue;
+                        }
                   }
+
+            // compute reasonable column order
+            // use zig zag
+            QList<int> column;\
+            int n = nAcc - 1;
+            for (int i = 0; i <= n; ++i, --n) {
+                  int pc = (aclist[i].line + 700) % 7;
+                  if (columnTop[pc] != -1) {
+                        column.append(pc);
+                        columnTop[pc] = -1;
+                        }
+                  if (i == n)
+                        break;
+                  pc = (aclist[n].line + 700) % 7;
+                  if (columnTop[pc] != -1) {
+                        column.append(pc);
+                        columnTop[pc] = -1;
+                        }
+                  }
+
+            // lay out columns
+            int nColumns = column.size();
+            for (int i = 0; i < nColumns; ++i) {
+                  int pc = column[i];
+                  AcEl* below = 0;
+                  // lay out accidentals
+                  for (int j = columnBottom[pc]; j != -1; j = aclist[j].next) {
+                        qreal x = layoutAccidental(&aclist[j], 0, below, colOffset, leftNotes, pnd, pd, sp);
+                        minX = qMin(minX, x);
+                        below = &aclist[j];
+                        }
+                  // align within column
+                  int next = -1;
+                  for (int j = columnBottom[pc]; j != -1; j = next) {
+                        next = aclist[j].next;
+                        if (next != -1 && aclist[j].line == aclist[next].line)
+                              continue;
+                        aclist[j].x = minX;
+                        }
+                  // move to next column
+                  colOffset = minX;
+                  // mark as done
+                  columnBottom[pc] = -1;
+                  }
+
+            // build list of unmatched accidentals
+            int nUnmatched = 0;
+            for (int i = 0; i < nAcc; ++i) {
+            int pc = (aclist[i].line + 700) % 7;
+                  if (columnBottom[pc] == -1)
+                        continue;
+                  else {
+                        umi.append(i);
+                        ++nUnmatched;
+                        }
+                  }
+            nAcc = nUnmatched;
+
+            }
+
+      else {
+            for (int i = 0; i < nAcc; ++i)
+                  umi.append(i);
+            }
+
+      if (nAcc) {
+
+            // for accidentals with no octave matches, use zig zag approach
+            // layout right to left in pairs, (next) highest then lowest
+
+            AcEl* me = &aclist[umi[0]];
+            AcEl* above = 0;
+            AcEl* below = 0;
+
+            // layout top accidental
+            layoutAccidental(me, above, below, colOffset, leftNotes, pnd, pd, sp);
+
+            // layout bottom accidental
+            int n = nAcc - 1;
+            if (n > 0) {
+                  above = me;
+                  me = &aclist[umi[n]];
+                  layoutAccidental(me, above, below, colOffset, leftNotes, pnd, pd, sp);
+                  }
+
+            // layout middle accidentals
+            if (n > 1) {
+                  for (int i = 1; i < n; ++i, --n) {
+                        // next highest
+                        below = me;
+                        me = &aclist[umi[i]];
+                        layoutAccidental(me, above, below, colOffset, leftNotes, pnd, pd, sp);
+                        if (i == n - 1)
+                              break;
+                        // next lowest
+                        above = me;
+                        me = &aclist[umi[n-1]];
+                        layoutAccidental(me, above, below, colOffset, leftNotes, pnd, pd, sp);
+                        }
+                  }
+
             }
 
       for (const AcEl& e : aclist) {
