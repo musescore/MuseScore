@@ -44,7 +44,7 @@ void MuseScore::showNavigator(bool visible)
 NScrollArea::NScrollArea(QWidget* w)
    : QScrollArea(w)
       {
-      setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+      setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
       setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
       setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
