@@ -647,19 +647,20 @@ void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
                   i = _text.insert(i+1, f);
                   start -= (start - col);
                   }
-            else
+            else {
                   i->changeFormat(id, data);
+                  }
             col += i->columns();
             }
       }
 
 //---------------------------------------------------------
-//   changeFormat
+//   setFormat
 //---------------------------------------------------------
 
 void CharFormat::setFormat(FormatId id, QVariant data)
       {
-      switch(id) {
+      switch (id) {
             case FormatId::Bold:
                   _bold = data.toBool();
                   break;
@@ -792,7 +793,8 @@ Text::Text(const Text& st)
 void Text::updateCursorFormat(TextCursor* cursor)
       {
       TextBlock* block = &_layout[cursor->line()];
-      const CharFormat* format = block->formatAt(cursor->column());
+      int column = cursor->hasSelection() ? cursor->selectColumn() : cursor->column();
+      const CharFormat* format = block->formatAt(column);
       if (format)
             cursor->setFormat(*format);
       else
@@ -1279,15 +1281,15 @@ class XmlNesting : public QStack<QString> {
             return s;
             }
       void popB() {
-            while (popToken() != "b")
+            while (!isEmpty() && popToken() != "b")
                   ;
             }
       void popI() {
-            while (popToken() != "i")
+            while (!isEmpty() && popToken() != "i")
                   ;
             }
       void popU() {
-            while (popToken() != "u")
+            while (!isEmpty() && popToken() != "u")
                   ;
             }
       };
@@ -2286,7 +2288,7 @@ void Text::changeSelectionFormat(FormatId id, QVariant val)
       }
 
 //---------------------------------------------------------
-//   setUnderline
+//   setFormat
 //---------------------------------------------------------
 
 void Text::setFormat(FormatId id, QVariant val)
