@@ -1263,7 +1263,7 @@ class XmlNesting : public QStack<QString> {
 
    public:
       XmlNesting(QString* s) { _s = s; }
-      void pushToken(const char* t) {
+      void pushToken(const QString& t) {
             *_s += "<";
             *_s += t;
             *_s += ">";
@@ -1280,18 +1280,20 @@ class XmlNesting : public QStack<QString> {
             *_s += ">";
             return s;
             }
-      void popB() {
-            while (!isEmpty() && popToken() != "b")
-                  ;
+      void popToken(const char* t) {
+            QString ps;
+            for (;;) {
+                  QString s = popToken();
+                  if (s == t)
+                        break;
+                  ps += s;
+                  }
+            for (const QChar& c : ps)
+                  pushToken(c);
             }
-      void popI() {
-            while (!isEmpty() && popToken() != "i")
-                  ;
-            }
-      void popU() {
-            while (!isEmpty() && popToken() != "u")
-                  ;
-            }
+      void popB() { popToken("b"); }
+      void popI() { popToken("i"); }
+      void popU() { popToken("u"); }
       };
 
 //---------------------------------------------------------
@@ -1318,7 +1320,8 @@ void Text::genText()
       TextCursor cursor;
       cursor.initFromStyle(textStyle());
       XmlNesting xmlNesting(&_text);
-      if (bold && textStyle().bold())
+//      if (bold && textStyle().bold())
+      if (bold)
             xmlNesting.pushB();
       if (italic)
             xmlNesting.pushI();
@@ -1720,10 +1723,10 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
                         qDebug("Text::movePosition: not implemented");
                         return false;
                   }
-            if (mode == QTextCursor::MoveAnchor)
-                  _cursor.clearSelection();
-            updateCursorFormat(&_cursor);
             }
+      if (mode == QTextCursor::MoveAnchor)
+            _cursor.clearSelection();
+      updateCursorFormat(&_cursor);
       return true;
       }
 

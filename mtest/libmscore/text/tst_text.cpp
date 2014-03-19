@@ -228,13 +228,14 @@ void TestText::testTextProperties()
       QCOMPARE(text->text(), QString("I<b>Love</b>MuseScore"));
 
       //make veMuse italic
-      //text->moveCursorToStart();
-      //text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 3);
-      //text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 6);
+      text->setEditMode(true);
+      text->moveCursorToStart();
+      QVERIFY(text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 3));
+      QVERIFY(text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 6));
 
-      //text->setFormat(FormatId::Italic , true);
-      //text->endEdit();
-      //QCOMPARE(text->text(), QString("I<b>Lo<i>ve</i></b><i>Muse</i>Score"));
+      text->setFormat(FormatId::Italic , true);
+      text->endEdit();
+      QCOMPARE(text->text(), QString("I<b>Lo<i>ve</i></b><i>Muse</i>Score"));
 
       }
 
