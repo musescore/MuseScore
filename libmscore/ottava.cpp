@@ -268,7 +268,13 @@ void Ottava::read(XmlReader& e)
                                     break;
                                     }
                               }
-
+                        }
+                  else if (score()->mscVersion() <= 114) {
+                        //subtype are now in a different order...
+                        if (idx == 1)
+                              idx = 2;
+                        else if (idx == 2)
+                              idx = 1;
                         }
                   setOttavaType(OttavaType(idx));
                   }
