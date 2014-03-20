@@ -960,7 +960,8 @@ class Score : public QObject {
 
       ScoreFont* scoreFont() const    { return _scoreFont; }
       void setScoreFont(ScoreFont* f) { _scoreFont = f;    }
-      qreal noteHeadWidth() const            { return _noteHeadWidth; }
+      qreal noteHeadWidth() const     { return _noteHeadWidth; }
+      void setNoteHeadWidth( qreal n) { _noteHeadWidth = n; }
 
       friend class ChangeSynthesizerState;
       friend class Chord;
