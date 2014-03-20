@@ -1320,7 +1320,6 @@ void Text::genText()
       TextCursor cursor;
       cursor.initFromStyle(textStyle());
       XmlNesting xmlNesting(&_text);
-//      if (bold && textStyle().bold())
       if (bold)
             xmlNesting.pushB();
       if (italic)
@@ -1356,18 +1355,11 @@ void Text::genText()
                         if (format.fontFamily() != cursor.format()->fontFamily())
                               _text += QString("<font face=\"%1\"/>").arg(format.fontFamily());
 
-                        if (cursor.format()->valign() != format.valign()) {
-                              switch (format.valign()) {
+                        VerticalAlignment va = format.valign();
+                        if (cursor.format()->valign() != va) {
+                              switch (va) {
                                     case VerticalAlignment::AlignNormal:
-                                          {
-                                          QString token;
-                                          if (format.valign() == VerticalAlignment::AlignSuperScript)
-                                                token = "sup";
-                                          else
-                                                token = "sub";
-                                          while (xmlNesting.popToken() != token)
-                                                ;
-                                          }
+                                          xmlNesting.popToken(va == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
                                           break;
                                     case VerticalAlignment::AlignSuperScript:
                                           xmlNesting.pushToken("sup");
