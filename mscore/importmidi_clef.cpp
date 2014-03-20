@@ -321,14 +321,6 @@ ClefType clefFromIndex(int index)
       return (index == 0) ? ClefType::G : ClefType::F;
       }
 
-int findTiePenalty(MidiTie::TieStateMachine::State tieState)
-      {
-      static const int tieBreakagePenalty = 10000000;
-      return (tieState == MidiTie::TieStateMachine::State::TIED_BACK
-              || tieState == MidiTie::TieStateMachine::State::TIED_BOTH)
-             ? tieBreakagePenalty : 0;
-      }
-
 void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
                                 std::vector<std::vector<int>> &optimalPaths,
                                 int pos,
@@ -341,34 +333,33 @@ void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
             penalties[clefIndex].resize(pos + 1);
             optimalPaths[clefIndex].resize(pos + 1);
             }
-      const int tiePenalty = findTiePenalty(tieState);
 
-      for (int clefIndex = 0; clefIndex != 2; ++clefIndex) {
-            int significantPitch = (clefIndex == 0)
-                                 ? minMaxPitch.minPitch() : minMaxPitch.maxPitch();
-            const int pitchPenalty = findPitchPenaltyForClef(significantPitch, clefIndex);
-
-            const int prevSameClefPenalty = (pos == 0)
-                    ? 0 : penalties[clefIndex][pos - 1];
-            const int sumPenaltySameClef = pitchPenalty + prevSameClefPenalty;
-
-            const int prevDiffClefPenalty = (pos == 0)
-                    ? 0 : penalties[1 - clefIndex][pos - 1];
-            const int clefPenalty = findClefChangePenalty(pos, 1 - clefIndex,
-                                                          optimalPaths, seg, staff);
-            const int sumPenaltyDiffClef
-                    = tiePenalty + pitchPenalty + prevDiffClefPenalty + clefPenalty;
-
-            if (sumPenaltySameClef <= sumPenaltyDiffClef) {
-                  penalties[clefIndex][pos] = sumPenaltySameClef;
-                  if (pos > 0)
-                        optimalPaths[clefIndex][pos] = clefIndex;
+      for (int curClef = 0; curClef != 2; ++curClef) {
+            const int significantPitch = (curClef == 0)
+                                       ? minMaxPitch.minPitch() : minMaxPitch.maxPitch();
+            const int pitchPenalty = findPitchPenaltyForClef(significantPitch, curClef);
+            int minPenalty = std::numeric_limits<int>::max();
+            int minIndex;
+            for (int prevClef = 0; prevClef != 2; ++prevClef) {
+                  int penalty = pitchPenalty;
+                  if (prevClef != curClef) {
+                        if (tieState == MidiTie::TieStateMachine::State::TIED_BACK
+                                || tieState == MidiTie::TieStateMachine::State::TIED_BOTH) {
+                              continue;   // there is a tie breakage that is incorrect
+                              }
+                        penalty += findClefChangePenalty(pos, prevClef, optimalPaths, seg, staff);
+                        }
+                  penalty += (pos > 0) ? penalties[prevClef][pos - 1] : 0;
+                  if ((prevClef != curClef && penalty < minPenalty)
+                              || (prevClef == curClef && penalty <= minPenalty)) {
+                        minPenalty = penalty;
+                        minIndex = prevClef;
+                        }
                   }
-            else {
-                  penalties[clefIndex][pos] = sumPenaltyDiffClef;
-                  if (pos > 0)
-                        optimalPaths[clefIndex][pos] = 1 - clefIndex;
-                  }
+
+            penalties[curClef][pos] = minPenalty;
+            if (pos > 0)
+                  optimalPaths[curClef][pos] = minIndex;
             }
       }
 
