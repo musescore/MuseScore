@@ -306,6 +306,7 @@ void EditDrumset::updateExample()
       chord->setDurationType(TDuration::V_QUARTER);
       chord->setStemDirection(dir);
       chord->setTrack(voice);
+      chord->setUp(up);
       Note* note = new Note(gscore);
       note->setParent(chord);
       note->setTrack(voice);

@@ -4871,7 +4871,9 @@ int main(int argc, char* av[])
       mscore = new MuseScore();
       mscoreCore = mscore;
       gscore = new Score(MScore::defaultStyle());
-      gscore->setScoreFont(ScoreFont::fontFactory("Bravura"));
+      ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
+      gscore->setScoreFont(scoreFont);
+      gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / (MScore::DPI * SPATIUM20));
 
       if (!noSeq) {
             if (!seq->init()) {
