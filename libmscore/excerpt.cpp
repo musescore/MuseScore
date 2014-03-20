@@ -36,6 +36,7 @@
 #include "tiemap.h"
 #include "layoutbreak.h"
 #include "harmony.h"
+#include "beam.h"
 
 namespace Ms {
 
@@ -212,8 +213,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     }
                               ++st;
                               }
-                        if (((srcTrack % VOICES) == 0) && track != -1) {
-                              }
+//                        if (((srcTrack % VOICES) == 0) && track != -1) {
+//                              }
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                               Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
 
@@ -256,6 +257,16 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               if (oe->isChordRest()) {
                                     ChordRest* ocr = static_cast<ChordRest*>(oe);
                                     ChordRest* ncr = static_cast<ChordRest*>(ne);
+
+                                    if (ocr->beam() && !ocr->beam()->isEmpty() && ocr->beam()->elements().front() == ocr) {
+                                          Beam* nb = ocr->beam()->clone();
+                                          nb->clear();
+                                          nb->setTrack(track);
+                                          nb->setScore(score);
+                                          nb->add(ncr);
+                                          ncr->setBeam(nb);
+                                          }
+
                                     Tuplet* ot     = ocr->tuplet();
                                     if (ot) {
                                           Tuplet* nt = tupletMap.findNew(ot);
@@ -273,6 +284,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     if (oe->type() == Element::CHORD) {
                                           Chord* och = static_cast<Chord*>(ocr);
                                           Chord* nch = static_cast<Chord*>(ncr);
+
                                           int n      = och->notes().size();
                                           for (int i = 0; i < n; ++i) {
                                                 Note* on = och->notes().at(i);
