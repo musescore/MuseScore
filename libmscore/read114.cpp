@@ -518,15 +518,23 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
 
-            if (s->type() == Element::OTTAVA) {
-                  // fix ottava position
-                  Ottava* ottava = static_cast<Ottava*>(s);
-                  ottava->staff()->updateOttava(ottava);
-
-                  qreal yo(styleS(ST_ottavaY).val() * spatium());
-                  if (ottava->placement() == Element::BELOW)
-                        yo = -yo + ottava->staff()->height();
-                  for (SpannerSegment* seg : ottava->spannerSegments()) {
+            if (s->type() == Element::OTTAVA || s->type() == Element::PEDAL || s->type() == Element::TRILL) {
+                  qreal yo = 0;
+                  if (s->type() == Element::OTTAVA) {
+                      // fix ottava position
+                      Ottava* ottava = static_cast<Ottava*>(s);
+                      ottava->staff()->updateOttava(ottava);
+                      yo = styleS(ST_ottavaY).val() * spatium();
+                      if (s->placement() == Element::BELOW)
+                            yo = -yo + s->staff()->height();
+                      }
+                  else if (s->type() == Element::PEDAL) {
+                        yo = styleS(ST_pedalY).val() * spatium();
+                        }
+                  else if (s->type() == Element::TRILL) {
+                        yo = styleS(ST_trillY).val() * spatium();
+                        }
+                  for (SpannerSegment* seg : s->spannerSegments()) {
                         if (!seg->userOff().isNull())
                               seg->setUserYoffset(seg->userOff().y() - yo);
                         }
@@ -645,34 +653,6 @@ Score::FileError Score::read114(XmlReader& e)
       updateChannel();
       updateNotes();    // only for parts needed?
 
-      doLayout();
-
-      //
-      // move some elements
-      //
-      for (std::pair<int,Spanner*> p : spanner()) {
-            Spanner* s = p.second;
-            if (s->type() == Element::OTTAVA) {
-                  qreal dx = 0.0;
-                  Segment* s1 = tick2segment(s->tick2(), true, Segment::SegChordRest);
-                  if (s1) {
-                        qreal x1 = s1->pagePos().x();
-                        qreal x2;
-                        Segment* s2 = s1->next1(Segment::SegChordRest);
-                        if (s2)
-                              x2 = s2->pagePos().x();
-                        else
-                              x2 = lastMeasure()->pagePos().x() + lastMeasure()->width();
-
-                        dx =  x2 - x1 - s->spatium() * 2.0;
-                        }
-
-                  Ottava* o = static_cast<Ottava*>(s);
-                  for (SpannerSegment* seg : o->spannerSegments()) {
-                        seg->setUserOff2(QPointF(seg->userOff2().x() + dx, seg->userOff2().y()));
-                        }
-                  }
-            }
       return FILE_NO_ERROR;
       }
 
