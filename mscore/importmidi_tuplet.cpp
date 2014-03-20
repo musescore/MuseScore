@@ -315,9 +315,6 @@ bool isMoreTupletVoicesAllowed(int voicesInUse, int availableVoices)
 
 void markChordsAsUsed(const TupletInfo &tuplet)
       {
-      if (tuplet.chords.empty())
-            return;
-
       auto it = tuplet.chords.begin();
       if (tuplet.firstChordIndex == 0) {
             ++(it->second->second.usedVoices);
@@ -329,9 +326,6 @@ void markChordsAsUsed(const TupletInfo &tuplet)
 
 bool areTupletChordsInUse(const TupletInfo &tuplet)
       {
-      if (tuplet.chords.empty())
-            return false;
-
       auto it = tuplet.chords.begin();
       if (tuplet.firstChordIndex == 0) {
             const MidiChord &chord = it->second->second;
@@ -807,8 +801,6 @@ bool haveValidFirstCommonChord(const TupletInfo &t1, const TupletInfo &t2)
 
 bool canBeTogether(int i, int j, const std::vector<TupletInfo> &tuplets)
       {
-      if (tuplets.empty())
-            return false;
       std::set<std::pair<const ReducedFraction, MidiChord> *> chordSet;
       auto start1 = tuplets[i].chords.begin();
       auto start2 = tuplets[j].chords.begin();
@@ -1262,8 +1254,6 @@ void addChordsBetweenTupletNotes(
                   std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets)
       {
       for (TupletInfo &tuplet: tuplets) {
-            if (tuplet.chords.empty())
-                  continue;
             for (auto it = nonTuplets.begin(); it != nonTuplets.end(); ) {
                   const auto &chordIt = *it;
                   const auto &onTime = chordIt->first;
