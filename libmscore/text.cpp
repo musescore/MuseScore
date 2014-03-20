@@ -629,12 +629,16 @@ void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
                   col += i->columns();
                   continue;
                   }
-            if ((start <= col) && ((start+n) < (col + columns))) {
+            int endCol = col + columns;
+
+            if ((start <= col) && (start < endCol) && ((start+n) < endCol)) {
+                  // left
                   TextFragment f = i->split(start + n - col);
                   i->changeFormat(id, data);
                   i = _text.insert(i+1, f);
                   }
-            else if (start > col && ((start+n) < (col + columns))) {
+            else if (start > col && ((start+n) < endCol)) {
+                  // middle
                   TextFragment lf = i->split(start+n - col);
                   TextFragment mf = i->split(start - col);
                   mf.changeFormat(id, data);
@@ -642,15 +646,16 @@ void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
                   i = _text.insert(i+1, lf);
                   }
             else if (start > col) {
+                  // right
                   TextFragment f = i->split(start - col);
                   f.changeFormat(id, data);
                   i = _text.insert(i+1, f);
-                  start -= (start - col);
                   }
             else {
+                  // complete fragment
                   i->changeFormat(id, data);
                   }
-            col += i->columns();
+            col = endCol;
             }
       }
 
@@ -1281,15 +1286,15 @@ class XmlNesting : public QStack<QString> {
             return s;
             }
       void popToken(const char* t) {
-            QString ps;
+            QStringList ps;
             for (;;) {
                   QString s = popToken();
                   if (s == t)
                         break;
                   ps += s;
                   }
-            for (const QChar& c : ps)
-                  pushToken(c);
+            for (const QString& s : ps)
+                  pushToken(s);
             }
       void popB() { popToken("b"); }
       void popI() { popToken("i"); }
@@ -1356,10 +1361,11 @@ void Text::genText()
                               _text += QString("<font face=\"%1\"/>").arg(format.fontFamily());
 
                         VerticalAlignment va = format.valign();
-                        if (cursor.format()->valign() != va) {
+                        VerticalAlignment cva = cursor.format()->valign();
+                        if (cva != va) {
                               switch (va) {
                                     case VerticalAlignment::AlignNormal:
-                                          xmlNesting.popToken(va == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
+                                          xmlNesting.popToken(cva == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
                                           break;
                                     case VerticalAlignment::AlignSuperScript:
                                           xmlNesting.pushToken("sup");
