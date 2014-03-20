@@ -798,40 +798,84 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             for (int pc = 0; pc < 7; ++pc) {
                   if (columnBottom[pc] == -1)
                         continue;
-                  int lastLine = aclist[columnBottom[pc]].line;
-                  int firstLine = lastLine;
                   // calculate column height
-                  for (int j = columnBottom[pc]; j != -1; j = aclist[j].next) {
-                        firstLine = aclist[j].line;
+                  for (int j = columnBottom[pc]; j != -1; j = aclist[j].next)
                         columnTop[pc] = j;
-                        }
-                  if (firstLine == lastLine) {
-                        columnTop[pc] = -1;
-                        continue;
-                        }
                   }
 
             // compute reasonable column order
             // use zig zag
-            QList<int> column;\
+            QList<int> column;
+            QList<int> unmatched;
             int n = nAcc - 1;
             for (int i = 0; i <= n; ++i, --n) {
                   int pc = (aclist[i].line + 700) % 7;
-                  if (columnTop[pc] != -1) {
-                        column.append(pc);
-                        columnTop[pc] = -1;
+                  if (aclist[columnTop[pc]].line != aclist[columnBottom[pc]].line) {
+                        if (!column.contains(pc))
+                              column.append(pc);
                         }
+                  else
+                        unmatched.append(i);
                   if (i == n)
                         break;
                   pc = (aclist[n].line + 700) % 7;
-                  if (columnTop[pc] != -1) {
-                        column.append(pc);
-                        columnTop[pc] = -1;
+                  if (aclist[columnTop[pc]].line != aclist[columnBottom[pc]].line) {
+                        if (!column.contains(pc))
+                              column.append(pc);
                         }
+                  else
+                        unmatched.append(n);
                   }
+            int nColumns = column.size();
+            int nUnmatched = unmatched.size();
+
+            // handle unmatched accidentals
+            for (int i = 0; i < nUnmatched; ++i) {
+                  // first try to slot it into an existing column
+                  AcEl* me = &aclist[unmatched[i]];
+                  // find column
+                  bool found = false;
+                  for (int j = 0; j < nColumns; ++j) {
+                        int pc = column[j];
+                        int above = -1;
+                        int below = -1;
+                        // find slot within column
+                        for (int k = columnBottom[pc]; k != -1; k = aclist[k].next) {
+                              if (aclist[k].line < me->line) {
+                                    above = k;
+                                    break;
+                                    }
+                              below = k;
+                              }
+                        // check to see if accidental can fit in slot
+                        qreal myPd = pd * me->note->mag();
+                        bool conflict = false;
+                        if (above != -1 && me->top - aclist[above].bottom < myPd)
+                              conflict = true;
+                        else if (below != -1 && aclist[below].top - me->bottom < myPd)
+                              conflict = true;
+                        if (!conflict) {
+                              // insert into column
+                              found = true;
+                              me->next = above;
+                              if (above == -1)
+                                    columnTop[pc] = unmatched[i];
+                              if (below != -1)
+                                    aclist[below].next = unmatched[i];
+                              else
+                                    columnBottom[pc] = unmatched[i];
+                              break;
+                              }
+                        }
+                  // if no slot found, then add to list of unmatched accidental indices
+                  if (!found)
+                        umi.append(unmatched[i]);
+                  }
+            nAcc = umi.size();
+            if (nAcc > 1)
+                  qSort(umi);
 
             // lay out columns
-            int nColumns = column.size();
             for (int i = 0; i < nColumns; ++i) {
                   int pc = column[i];
                   AcEl* below = 0;
@@ -851,22 +895,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                         }
                   // move to next column
                   colOffset = minX;
-                  // mark as done
-                  columnBottom[pc] = -1;
                   }
-
-            // build list of unmatched accidentals
-            int nUnmatched = 0;
-            for (int i = 0; i < nAcc; ++i) {
-            int pc = (aclist[i].line + 700) % 7;
-                  if (columnBottom[pc] == -1)
-                        continue;
-                  else {
-                        umi.append(i);
-                        ++nUnmatched;
-                        }
-                  }
-            nAcc = nUnmatched;
 
             }
 
