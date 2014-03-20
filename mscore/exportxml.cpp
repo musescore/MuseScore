@@ -4157,6 +4157,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                           xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
                                           }
                                     if (currentSystem == NewSystem) {
+                                          // see System::layout2() for the factor 2 * score()->spatium()
                                           const double sysDist = getTenthsFromDots(m->pagePos().y()
                                                                                    - previousMeasure->pagePos().y()
                                                                                    - previousMeasure->bbox().height()
