@@ -1922,10 +1922,10 @@ void Beam::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void Beam::updateGrips(AlignGrip& aGrip) const
       {
-      *grips = 2;
-      *defaultGrip = 1;
+      aGrip.grips = 2;
+      aGrip.defaultGrip = 1;
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 
@@ -1945,8 +1945,22 @@ void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
                   }
             }
       int y = pagePos().y();
-      grip[0].translate(QPointF(c1->stemPosX()+c1->pageX(), f->py1[idx] + y));
-      grip[1].translate(QPointF(c2->stemPosX()+c2->pageX(), f->py2[idx] + y));
+
+      aGrip.aLines = 0;
+
+      if( aGrip.curGrip == 0 ){
+            aGrip.vert[aGrip.aLines] = false;
+            aGrip.aLine[aGrip.aLines] = QPointF(c1->stemPosX()+c1->pageX(), f->py1[idx] + y);
+            aGrip.aLines++;
+            }
+      if( aGrip.curGrip == 1 ){
+            aGrip.vert[aGrip.aLines] = false;
+            aGrip.aLine[aGrip.aLines] = QPointF(c2->stemPosX()+c2->pageX(), f->py2[idx] + y);
+            aGrip.aLines++;
+            }
+
+      aGrip.grip[0].translate(QPointF(c1->stemPosX()+c1->pageX(), f->py1[idx] + y));
+      aGrip.grip[1].translate(QPointF(c2->stemPosX()+c2->pageX(), f->py2[idx] + y));
       }
 
 //---------------------------------------------------------

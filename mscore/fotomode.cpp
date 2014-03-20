@@ -352,8 +352,8 @@ void ScoreView::startFotomode()
             _foto->setRect(QRectF(w * .3, h * .3, w * .4, h * .4));
             }
       for (int i = 0; i < MAX_GRIPS; ++i)
-            grip[i] = r;
-      curGrip = 0;
+            aGrip.grip[i] = r;
+      aGrip.curGrip = 0;
       updateGrips();
       _score->addRefresh(_foto->abbox());
       _score->end();
@@ -370,7 +370,7 @@ void ScoreView::stopFotomode()
       a->setChecked(false);
 
       editObject = 0;
-      grips      = 0;
+      aGrip.grips      = 0;
 
       _foto->endEdit();
       update();
@@ -384,7 +384,7 @@ void ScoreView::startFotoDrag()
       {
       _score->addRefresh(_foto->abbox());
       _score->end();
-      grips = 0;
+      aGrip.grips = 0;
       }
 
 //---------------------------------------------------------
@@ -418,7 +418,7 @@ void ScoreView::endFotoDrag()
       qreal h = 8.0 / _matrix.m22();
       QRectF r(-w*.5, -h*.5, w, h);
       for (int i = 0; i < 8; ++i)
-            grip[i] = r;
+            aGrip.grip[i] = r;
       editObject = _foto;
       updateGrips();
       _score->setUpdateAll();
@@ -436,7 +436,7 @@ void ScoreView::doFotoDragEdit(QMouseEvent* ev)
       _score->setLayoutAll(false);
       score()->addRefresh(_foto->abbox());
       EditData ed;
-      ed.curGrip = curGrip;
+      ed.curGrip = aGrip.curGrip;
       ed.delta   = delta;
       ed.view    = this;
       _foto->editDrag(ed);
@@ -463,10 +463,10 @@ bool ScoreView::fotoEditElementDragTransition(QMouseEvent* ev)
       {
       data.startMove = imatrix.map(QPointF(ev->pos()));
       int i;
-      for (i = 0; i < grips; ++i) {
-            if (grip[i].contains(data.startMove)) {
-                  curGrip = i;
-                  switch(curGrip) {
+      for (i = 0; i < aGrip.grips; ++i) {
+            if (aGrip.grip[i].contains(data.startMove)) {
+                  aGrip.curGrip = i;
+                  switch(aGrip.curGrip) {
                         case 0:
                         case 2:
                               setCursor(Qt::SizeFDiagCursor);
@@ -489,7 +489,7 @@ bool ScoreView::fotoEditElementDragTransition(QMouseEvent* ev)
                   break;
                   }
             }
-      return i != grips;
+      return i != aGrip.grips;
       }
 
 //---------------------------------------------------------
@@ -501,8 +501,8 @@ bool ScoreView::fotoScoreViewDragTest(QMouseEvent* me)
       QPointF p(imatrix.map(QPointF(me->pos())));
       if (_foto->rect().contains(p))
             return false;
-      for (int i = 0; i < grips; ++i) {
-            if (grip[i].contains(p))
+      for (int i = 0; i < aGrip.grips; ++i) {
+            if (aGrip.grip[i].contains(p))
                   return false;
             }
       data.startMove = p;
@@ -518,8 +518,8 @@ bool ScoreView::fotoScoreViewDragRectTest(QMouseEvent* me)
       QPointF p(toLogical(me->pos()));
       if (!_foto->rect().contains(p))
             return false;
-      for (int i = 0; i < grips; ++i) {
-            if (grip[i].contains(p))
+      for (int i = 0; i < aGrip.grips; ++i) {
+            if (aGrip.grip[i].contains(p))
                   return false;
             }
       data.startMove = p;
@@ -687,8 +687,8 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
 bool ScoreView::fotoRectHit(const QPoint& pos)
       {
       QPointF p = toLogical(pos);
-      for (int i = 0; i < grips; ++i) {
-            if (grip[i].contains(p))
+      for (int i = 0; i < aGrip.grips; ++i) {
+            if (aGrip.grip[i].contains(p))
                   return false;
             }
       data.startMove = p;

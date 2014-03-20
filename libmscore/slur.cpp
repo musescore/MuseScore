@@ -106,13 +106,14 @@ void SlurSegment::draw(QPainter* painter) const
 //    return grip rectangles in page coordinates
 //---------------------------------------------------------
 
-void SlurSegment::updateGrips(int* n, int* defaultGrip, QRectF* r) const
+//void SlurSegment::updateGrips(int* n, QRectF* r) const
+void SlurSegment::updateGrips(AlignGrip& aGrip) const
       {
-      *n = int(GripSlurSegment::GRIPS);
-      *defaultGrip = int(GripSlurSegment::END);
+      aGrip.grips =  int(GripSlurSegment::GRIPS);
+      aGrip.defaultGrip = int(GripSlurSegment::END);
       QPointF p(pagePos());
       for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i)
-            r[i].translate(ups[i].p + ups[i].off * spatium() + p);
+            aGrip.grip[i].translate(ups[i].p + ups[i].off * spatium() + p);
       }
 
 //---------------------------------------------------------

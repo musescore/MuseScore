@@ -365,9 +365,11 @@ void ChordLine::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void ChordLine::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void ChordLine::updateGrips(int* grips, QRectF* grip) const
       {
       int n = path.elementCount();
+      aGrip.grips = n;
+      aGrip.defaultGrip = n - 1;
       QPointF cp(pagePos());
       qreal sp = spatium();
       if (_straight) {
@@ -394,7 +396,7 @@ void ChordLine::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
             *grips = n;
             *defaultGrip = n - 1;
             for (int i = 0; i < n; ++i)
-                  grip[i].translate(cp + QPointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp));
+            aGrip.grip[i].translate(cp + QPointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp));
 
             }
       }

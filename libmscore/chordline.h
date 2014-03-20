@@ -63,7 +63,7 @@ class ChordLine : public Element {
       virtual void draw(QPainter*) const;
 
       virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, int*, QRectF*) const override;
+      virtual void updateGrips(AlignGrip& ) const;
 
       virtual QString accessibleInfo() override;
       };
