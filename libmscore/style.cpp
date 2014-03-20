@@ -260,7 +260,7 @@ void initStyle(MStyle* s)
       AS("Fingering", ff,  8, false, false, false, ALIGN_CENTER, QPointF(), OA, true);
       AS("Instrument Name (Long)",   ff, 12, false, false, false, ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, true);
       AS("Instrument Name (Short)",   ff, 12, false, false, false, ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, true);
-      AS("Instrument Name (Part)", ff, 18, false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(), OA);
+      AS("Instrument Name (Part)", ff, 18, false, false, false, ALIGN_LEFT | ALIGN_BOTTOM, QPointF(), OA);
       AS("Dynamics", ff, 20, false,false,false,ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, true);
       AS("Technique", ff, 12, false, true, false,ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, -2.0), OS);
 
