@@ -14,6 +14,7 @@
 #define __ARPEGGIO_H__
 
 #include "element.h"
+#include "mscore.h"
 
 class QPainter;
 
@@ -61,7 +62,7 @@ class Arpeggio : public Element {
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const { return true; }
       virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, QRectF*) const;
+      virtual void updateGrips(AlignGrip&) const;
       virtual bool edit(MuseScoreView*, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&);
 
       void read(XmlReader& e);

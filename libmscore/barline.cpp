@@ -581,14 +581,14 @@ Element* BarLine::drop(const DropData& data)
 //   updateGrips
 //---------------------------------------------------------
 
-void BarLine::updateGrips(int* grips, QRectF* grip) const
+void BarLine::updateGrips(AlignGrip& aGrip) const
       {
-      *grips   = 2;
+      aGrip.grips   = 2;
       qreal lw = point(score()->styleS(ST_barWidth));
       qreal y1, y2;
       getY(&y1, &y2);
-      grip[0].translate(QPointF(lw * .5, y1) + pagePos());
-      grip[1].translate(QPointF(lw * .5, y2) + pagePos());
+      aGrip.grip[0].translate(QPointF(lw * .5, y1) + pagePos());
+      aGrip.grip[1].translate(QPointF(lw * .5, y2) + pagePos());
       }
 
 //---------------------------------------------------------

@@ -231,10 +231,16 @@ void Stem::read(XmlReader& e)
 //   updateGrips
 //---------------------------------------------------------
 
-void Stem::updateGrips(int* grips, QRectF* grip) const
+void Stem::updateGrips(AlignGrip& aGrip) const
       {
-      *grips   = 1;
-      grip[0].translate(pagePos() + line.p2());
+      aGrip.grips   = 1;
+
+      aGrip.aLines = 0;
+      aGrip.vert[aGrip.aLines] = false;
+      aGrip.aLine[aGrip.aLines] = pagePos() + line.p2();
+      aGrip.aLines++;
+
+      aGrip.grip[0].translate(pagePos() + line.p2());
       }
 
 //---------------------------------------------------------

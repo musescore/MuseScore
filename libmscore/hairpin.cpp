@@ -92,7 +92,7 @@ void HairpinSegment::layout()
 
       QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
       qreal w = point(score()->styleS(ST_hairpinLineWidth));
-      setbbox(r.adjusted(-w*.5, -w*.5, w, w));
+      setbbox(r.adjusted(-(w*.5 + circledTipRadius*2), -w*.5, w , w ));
       if (parent())
             rypos() += score()->styleS(ST_hairpinY).val() * _spatium;
       adjustReadPos();
@@ -102,9 +102,9 @@ void HairpinSegment::layout()
 //   updateGrips
 //---------------------------------------------------------
 
-void HairpinSegment::updateGrips(int* grips, QRectF* grip) const
+void HairpinSegment::updateGrips(AlignGrip& aGrip) const
       {
-      *grips = 4;
+      aGrip.grips = 4;
       QPointF pp(pagePos());
       qreal _spatium = spatium();
       qreal x = pos2().x();
@@ -133,11 +133,40 @@ void HairpinSegment::updateGrips(int* grips, QRectF* grip) const
       gripLineAperturePoint.setY( lineApertureH );
       gripLineAperturePoint = doRotation.map( gripLineAperturePoint );
 // End calc position grip aperture
+      aGrip.aLines = 0;
 
-      grip[GRIP_LINE_START].translate( pp );
-      grip[GRIP_LINE_END].translate( p + pp );
-      grip[GRIP_LINE_MIDDLE].translate( p * .5 + pp );
-      grip[GRIP_LINE_APERTURE].translate( gripLineAperturePoint + pp );
+      if( aGrip.curGrip == GRIP_LINE_START ){
+            aGrip.vert[aGrip.aLines] = true;
+            aGrip.aLine[aGrip.aLines] += pp;
+            aGrip.aLines++;
+            if( hairpin()->diagonal()){
+                  aGrip.vert[aGrip.aLines] = false;
+                  aGrip.aLine[aGrip.aLines] = aGrip.aLine[aGrip.aLines] + pp;
+                  aGrip.aLines++;
+                  }
+            }
+      if( aGrip.curGrip == GRIP_LINE_MIDDLE ){
+            aGrip.vert[aGrip.aLines] = true;
+            aGrip.aLine[aGrip.aLines] = aGrip.aLine[aGrip.aLines] + p * .5 + pp;
+            aGrip.aLines++;
+            aGrip.vert[aGrip.aLines] = false;
+            aGrip.aLine[aGrip.aLines] = aGrip.aLine[aGrip.aLines] + p * .5 + pp;
+            aGrip.aLines++;
+            }
+      if( aGrip.curGrip == GRIP_LINE_END ){
+            aGrip.vert[aGrip.aLines] = true;
+            aGrip.aLine[aGrip.aLines] = aGrip.aLine[0] + p + pp;
+            aGrip.aLines++;
+            if( hairpin()->diagonal()){
+                  aGrip.vert[aGrip.aLines] = false;
+                  aGrip.aLine[aGrip.aLines] = aGrip.aLine[aGrip.aLines] + p + pp;
+                  aGrip.aLines++;
+                  }
+            }
+      aGrip.grip[GRIP_LINE_START].translate( pp );
+      aGrip.grip[GRIP_LINE_END].translate( p + pp );
+      aGrip.grip[GRIP_LINE_MIDDLE].translate( p * .5 + pp );
+      aGrip.grip[GRIP_LINE_APERTURE].translate( gripLineAperturePoint + pp );
       }
 //---------------------------------------------------------
 //   editDrag

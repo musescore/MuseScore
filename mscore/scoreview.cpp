@@ -658,7 +658,7 @@ ScoreView::ScoreView(QWidget* parent)
       _cursor->setType(CursorType::POS);
 
       shadowNote  = 0;
-      grips       = 0;
+      aGrip.grips       = 0;
       editObject  = 0;
       addSelect   = false;
 
@@ -1158,6 +1158,37 @@ void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
       }
 
 //---------------------------------------------------------
+//   Update Refresh for align Line
+//---------------------------------------------------------
+void ScoreView::updateRefreshAlines()
+      {
+      Element* page = editObject;
+      while (page->parent())
+            page = page->parent();
+      QPointF pageOffset(page->pos());
+
+      for (int i = 0; i < aGrip.aLines; ++i) {
+            if( aGrip.vert[i] ){
+                  QRectF vline (
+                                aGrip.aLine[i].x() + pageOffset.x() - aGrip.grip[0].width()/2,
+                                0,
+                                aGrip.grip[0].width(),
+                                page->height());
+                  score()->addRefresh(vline);
+
+                  }
+            else{
+                  QRectF hline (
+                                pageOffset.x(),
+                                aGrip.aLine[i].y() - aGrip.grip[0].height()/2,
+                                page->width(),
+                                aGrip.grip[0].height()
+                                );
+                  score()->addRefresh(hline);
+                  }
+            }
+      }
+//---------------------------------------------------------
 //   updateGrips
 //    if (curGrip == -1) then initialize to element
 //    default grip
@@ -1171,16 +1202,21 @@ void ScoreView::updateGrips()
       double dx = 1.5 / _matrix.m11();
       double dy = 1.5 / _matrix.m22();
 
-      for (int i = 0; i < grips; ++i)
-            score()->addRefresh(grip[i].adjusted(-dx, -dy, dx, dy));
+      for (int i = 0; i < aGrip.grips; ++i)
+            score()->addRefresh(aGrip.grip[i].adjusted(-dx, -dy, dx, dy));
+
+      updateRefreshAlines();
 
       qreal w   = 8.0 / _matrix.m11();
       qreal h   = 8.0 / _matrix.m22();
       QRectF r(-w*.5, -h*.5, w, h);
       for (int i = 0; i < MAX_GRIPS; ++i)
-            grip[i] = r;
+            aGrip.grip[i] = r;
+      for (int i = 0; i < MAX_GRIPS; ++i)
+            aGrip.aLine[i] = QPointF(0.0,0.0);
+      aGrip.aLines = 0;
 
-      editObject->updateGrips(&grips, grip);
+      editObject->updateGrips( aGrip );
 
       // updateGrips returns grips in page coordinates,
       // transform to view coordinates:
@@ -1189,17 +1225,21 @@ void ScoreView::updateGrips()
       while (page->parent())
             page = page->parent();
       QPointF pageOffset(page->pos());
-      for (int i = 0; i < grips; ++i) {
-            grip[i].translate(pageOffset);
-            score()->addRefresh(grip[i].adjusted(-dx, -dy, dx, dy));
+
+
+      for (int i = 0; i < aGrip.grips; ++i) {
+            aGrip.grip[i].translate(pageOffset);
+            score()->addRefresh(aGrip.grip[i].adjusted(-dx, -dy, dx, dy));
             }
 
-      if (curGrip == -1)
-            curGrip = grips-1;
+      updateRefreshAlines();
 
-      QPointF anchor = editObject->gripAnchor(curGrip);
+      if (aGrip.curGrip == -1)
+            aGrip.curGrip = aGrip.grips-1;
+
+      QPointF anchor = editObject->gripAnchor(aGrip.curGrip);
       if (!anchor.isNull())
-            setDropAnchor(QLineF(anchor + pageOffset, grip[curGrip].center()));
+            setDropAnchor(QLineF(anchor + pageOffset, aGrip.grip[aGrip.curGrip].center()));
       else
             setDropTarget(0); // this also resets dropAnchor
       score()->addRefresh(editObject->canvasBoundingRect());
@@ -1211,7 +1251,7 @@ void ScoreView::updateGrips()
 
 void ScoreView::setEditPos(const QPointF& pt)
       {
-      editObject->setGrip(curGrip, pt);
+      editObject->setGrip(aGrip.curGrip, pt);
       updateGrips();
       _score->end();
       }
@@ -1620,28 +1660,48 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             vp.drawEllipse(r);
             }
 
-      if (grips) {
-            if (grips == 6) {       // HACK: this are grips of a slur
-                  QPolygonF polygon(grips+1);
-                  polygon[0] = QPointF(grip[GRIP_START].center());
-                  polygon[1] = QPointF(grip[GRIP_BEZIER1].center());
-                  polygon[2] = QPointF(grip[GRIP_SHOULDER].center());
-                  polygon[3] = QPointF(grip[GRIP_BEZIER2].center());
-                  polygon[4] = QPointF(grip[GRIP_END].center());
-                  polygon[5] = QPointF(grip[GRIP_DRAG].center());
-                  polygon[6] = QPointF(grip[GRIP_START].center());
+      if (aGrip.grips) {
+            if (aGrip.grips == 6) {       // HACK: this are grips of a slur
+                  QPolygonF polygon(aGrip.grips+1);
+                  polygon[0] = QPointF(aGrip.grip[GRIP_START].center());
+                  polygon[1] = QPointF(aGrip.grip[GRIP_BEZIER1].center());
+                  polygon[2] = QPointF(aGrip.grip[GRIP_SHOULDER].center());
+                  polygon[3] = QPointF(aGrip.grip[GRIP_BEZIER2].center());
+                  polygon[4] = QPointF(aGrip.grip[GRIP_END].center());
+                  polygon[5] = QPointF(aGrip.grip[GRIP_DRAG].center());
+                  polygon[6] = QPointF(aGrip.grip[GRIP_START].center());
                   QPen pen(MScore::frameMarginColor, 0.0);
                   vp.setPen(pen);
                   vp.drawPolyline(polygon);
                   }
+
+            Element* page = editObject;
+            while (page->parent())
+                  page = page->parent();
+            QPointF pageOffset(page->pos());
+
             QPen pen(MScore::defaultColor, 0.0);
-            vp.setPen(pen);
-            for (int i = 0; i < grips; ++i) {
-                  if (i == curGrip && hasFocus())
+            for (int i = 0; i < aGrip.grips; ++i) {
+                  if (i == aGrip.curGrip && hasFocus()){
                         vp.setBrush(MScore::selectColor[0]);
+                        vp.setPen(QPen(Qt::red, 0.0));
+                        if( drawAlignLines){
+                              for (int j = 0; j < aGrip.aLines; ++j) {
+                                    if( aGrip.vert[j] ){
+                                          QLineF vline(aGrip.aLine[j].x() + pageOffset.x(),0,aGrip.aLine[j].x() + pageOffset.x(),page->width() );
+                                          vp.drawLine(vline);
+                                          }
+                                    else{
+                                          QLineF hline(pageOffset.x(),aGrip.aLine[j].y(),pageOffset.x()+ page->width(),aGrip.aLine[j].y() );
+                                          vp.drawLine(hline);
+                                          }
+                                    }
+                              }
+                       }
                   else
                         vp.setBrush(Qt::NoBrush);
-                  vp.drawRect(grip[i]);
+                  vp.setPen(pen);
+                  vp.drawRect(aGrip.grip[i]);
                   }
             if (editObject)      // if object is moved, it may not be covered by bsp
                   paintElement(&vp, editObject);
@@ -2236,13 +2296,13 @@ void ScoreView::setMag(qreal nmag)
          nmag, _matrix.m23(), _matrix.dx()*deltamag, _matrix.dy()*deltamag, _matrix.m33());
       imatrix = _matrix.inverted();
       emit scaleChanged(nmag * score()->spatium());
-      if (grips) {
+      if (aGrip.grips) {
             qreal w = 8.0 / nmag;
             qreal h = 8.0 / nmag;
             QRectF r(-w*.5, -h*.5, w, h);
-            for (int i = 0; i < grips; ++i) {
-                  QPointF p(grip[i].center());
-                  grip[i] = r.translated(p);
+            for (int i = 0; i < aGrip.grips; ++i) {
+                  QPointF p(aGrip.grip[i].center());
+                  aGrip.grip[i] = r.translated(p);
                   }
             }
       }
@@ -3274,6 +3334,12 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* event)
       {
       if (seq)
             seq->stopNoteTimer();
+      qDebug( "Released");
+      if (editObject){
+            drawAlignLines = false; // remove align line
+            updateGrips();
+            }
+
       QWidget::mouseReleaseEvent(event);
       }
 
@@ -3293,16 +3359,17 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
             return true;
             }
       int i;
-      qreal a = grip[0].width() * 1.0;
-      for (i = 0; i < grips; ++i) {
-            if (grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
-                  curGrip = i;
+      qreal a = aGrip.grip[0].width() * 1.0;
+      for (i = 0; i < aGrip.grips; ++i) {
+            if (aGrip.grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
+                  drawAlignLines = true;
+                  aGrip.curGrip = i;
                   updateGrips();
                   score()->end();
                   break;
                   }
             }
-      return i != grips;
+      return i != aGrip.grips;
       }
 
 //---------------------------------------------------------
@@ -3434,7 +3501,7 @@ bool ScoreView::fotoMode() const
 
 void ScoreView::editInputTransition(QInputMethodEvent* ie)
       {
-      if (editObject->edit(this, curGrip, 0, 0, ie->commitString())) {
+      if (editObject->edit(this, aGrip.curGrip, 0, 0, ie->commitString())) {
             if (editObject->isText())
                   mscore->textTools()->updateTools();
             updateGrips();
@@ -3913,20 +3980,20 @@ bool ScoreView::event(QEvent* event)
                         }
                   bool rv = true;
                   if (ke->key() == Qt::Key_Tab) {
-                        curGrip += 1;
-                        if (curGrip >= grips) {
-                              curGrip = 0;
+                        aGrip.curGrip += 1;
+                        if (aGrip.curGrip >= aGrip.grips) {
+                              aGrip.curGrip = 0;
                               rv = false;
                               }
                         updateGrips();
                         _score->end();
-                        if (curGrip)
+                        if (aGrip.curGrip)
                               return true;
                         }
                   else if (ke->key() == Qt::Key_Backtab) {
-                        curGrip -= 1;
-                        if (curGrip < 0) {
-                              curGrip = grips -1;
+                        aGrip.curGrip -= 1;
+                        if (aGrip.curGrip < 0) {
+                              aGrip.curGrip = aGrip.grips -1;
                               rv = false;
                               }
                         }
@@ -4248,7 +4315,7 @@ void ScoreView::cloneElement(Element* e)
 
 void ScoreView::changeEditElement(Element* e)
       {
-      int grip = curGrip;
+      int grip = aGrip.curGrip;
       endEdit();
       startEdit(e, grip);
       }

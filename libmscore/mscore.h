@@ -319,6 +319,20 @@ enum {
       };
 
 //---------------------------------------------------------
+//   AlignGrip
+//---------------------------------------------------------
+
+class AlignGrip
+      {
+   public:
+      int curGrip;
+      QPointF aLine[8];       // Align line
+      bool vert[8];       // Vertical Line = true
+      int aLines;            // number of Line
+      QRectF grip[8];       // edit "grips"
+      int grips;            // number of used grips
+      };
+//---------------------------------------------------------
 //   MScore
 //    MuseScore application object
 //---------------------------------------------------------

@@ -89,17 +89,18 @@ void Lasso::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Lasso::updateGrips(int* n, QRectF* r) const
+//void Lasso::updateGrips(int* n, QRectF* r) const
+void Lasso::updateGrips(AlignGrip& aGrip) const
       {
-      *n = 8;
-      r[0].translate(_rect.topLeft());
-      r[1].translate(_rect.topRight());
-      r[2].translate(_rect.bottomRight());
-      r[3].translate(_rect.bottomLeft());
-      r[4].translate(_rect.x() + _rect.width() * .5, _rect.top());
-      r[5].translate(_rect.right(), _rect.y() + _rect.height() * .5);
-      r[6].translate(_rect.x() + _rect.width()*.5, _rect.bottom());
-      r[7].translate(_rect.left(), _rect.y() + _rect.height() * .5);
+      aGrip.grips = 8;
+      aGrip.grip[0].translate(_rect.topLeft());
+      aGrip.grip[1].translate(_rect.topRight());
+      aGrip.grip[2].translate(_rect.bottomRight());
+      aGrip.grip[3].translate(_rect.bottomLeft());
+      aGrip.grip[4].translate(_rect.x() + _rect.width() * .5, _rect.top());
+      aGrip.grip[5].translate(_rect.right(), _rect.y() + _rect.height() * .5);
+      aGrip.grip[6].translate(_rect.x() + _rect.width()*.5, _rect.bottom());
+      aGrip.grip[7].translate(_rect.left(), _rect.y() + _rect.height() * .5);
       }
 
 //---------------------------------------------------------

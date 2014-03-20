@@ -128,16 +128,16 @@ void Spacer::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Spacer::updateGrips(int* grips, QRectF* grip) const
+void Spacer::updateGrips(AlignGrip& aGrip) const
       {
-      *grips         = 1;
+      aGrip.grips         = 1;
       qreal _spatium = spatium();
       QPointF p;
       if (spacerType() == SPACER_DOWN)
             p = QPointF(_spatium * .5, _gap);
       else if (spacerType() == SPACER_UP)
             p = QPointF(_spatium * .5, 0.0);
-      grip[0].translate(pagePos() + p);
+      aGrip.grip[0].translate(pagePos() + p);
       }
 
 //---------------------------------------------------------

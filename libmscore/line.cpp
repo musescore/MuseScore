@@ -83,13 +83,36 @@ void LineSegment::read(XmlReader& e)
 //   updateGrips
 //---------------------------------------------------------
 
-void LineSegment::updateGrips(int* grips, QRectF* grip) const
+void LineSegment::updateGrips(AlignGrip& aGrip) const
       {
-      *grips = 3;
+
+      aGrip.grips = 3;
       QPointF pp(pagePos());
-      grip[GRIP_LINE_START].translate(pp);
-      grip[GRIP_LINE_END].translate(pos2() + pp);
-      grip[GRIP_LINE_MIDDLE].translate(pos2() * .5 + pp);
+
+      aGrip.aLines = 0;
+
+      if( aGrip.curGrip == GRIP_LINE_START ){
+            aGrip.vert[aGrip.aLines] = true;
+            aGrip.aLine[aGrip.aLines] += pp;
+            aGrip.aLines++;
+            }
+      if( aGrip.curGrip == GRIP_LINE_MIDDLE ){
+            aGrip.vert[aGrip.aLines] = true;
+            aGrip.aLine[aGrip.aLines] = aGrip.aLine[aGrip.aLines] + pos2() * .5 + pp;
+            aGrip.aLines++;
+            aGrip.vert[aGrip.aLines] = false;
+            aGrip.aLine[aGrip.aLines] = aGrip.aLine[aGrip.aLines] + pos2() * .5 + pp;
+            aGrip.aLines++;
+            }
+      if( aGrip.curGrip == GRIP_LINE_END ){
+            aGrip.vert[aGrip.aLines] = true;
+            aGrip.aLine[aGrip.aLines] = aGrip.aLine[0] + pos2() + pp;
+            aGrip.aLines++;
+            }
+
+      aGrip.grip[GRIP_LINE_START].translate(pp);
+      aGrip.grip[GRIP_LINE_END].translate(pos2() + pp);
+      aGrip.grip[GRIP_LINE_MIDDLE].translate(pos2() * .5 + pp);
       }
 
 //---------------------------------------------------------

@@ -153,14 +153,14 @@ void Box::endEdit()
 //   updateGrips
 //---------------------------------------------------------
 
-void Box::updateGrips(int* grips, QRectF* grip) const
+void Box::updateGrips(AlignGrip& aGrip) const
       {
-      *grips = 1;
+      aGrip.grips = 1;
       QRectF r(abbox());
       if (type() == HBOX)
-            grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
+            aGrip.grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
       else if (type() == VBOX)
-            grip[0].translate(QPointF(r.x() + r.width() * .5, r.bottom()));
+            aGrip.grip[0].translate(QPointF(r.x() + r.width() * .5, r.bottom()));
       }
 
 //---------------------------------------------------------

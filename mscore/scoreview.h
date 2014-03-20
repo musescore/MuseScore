@@ -79,6 +79,7 @@ class CommandTransition : public QAbstractTransition
             }
       };
 
+
 //---------------------------------------------------------
 //   ScoreViewDragTransition
 //---------------------------------------------------------
@@ -155,10 +156,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       QPointF dragOffset;
 
       // editing mode
-      int curGrip;
-      QRectF grip[MAX_GRIPS];       // edit "grips"
-      int grips;                    // number of used grips
+      AlignGrip aGrip;
       Element* editObject;          ///< Valid in edit mode
+      bool drawAlignLines = true;
 
       //--input state:
       PositionCursor* _cursor;
@@ -207,6 +207,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void dragSymbol(const QPointF& pos);
       bool dragMeasureAnchorElement(const QPointF& pos);
       void updateGrips();
+      void updateRefreshAlines();
       void lyricsTab(bool back, bool end, bool moveOnly);
       void lyricsReturn();
       void lyricsEndEdit();
@@ -388,8 +389,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paintRect(bool printMode, QPainter& p, const QRectF& r, double mag);
       bool saveFotoAs(bool printMode, const QRectF&);
       void fotoDragDrop(QMouseEvent*);
-      const QRectF& getGrip(int n) const { return grip[n]; }
-      int gripCount() const { return grips; }              // number of used grips
+      const QRectF& getGrip(int n) const { return aGrip.grip[n]; }
+      int gripCount() const { return aGrip.grips; }              // number of used grips
       void changeEditElement(Element*);
 
       void cmdAppendMeasures(int, Element::ElementType);

@@ -89,7 +89,7 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
                   break;
 
             case Qt::Key_Left:
-                  if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
+                  if (!ctrl && editObject->edit(this, aGrip.curGrip, key, modifiers, s)) {
                         mscore->textTools()->updateTools();
                         _score->update();
                         mscore->endCmd();
@@ -98,7 +98,7 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
                         lyricsTab(true, true, true);      // go to previous lyrics
                   break;
             case Qt::Key_Right:
-                  if (!ctrl && editObject->edit(this, curGrip, key, modifiers, s)) {
+                  if (!ctrl && editObject->edit(this, aGrip.curGrip, key, modifiers, s)) {
                         mscore->textTools()->updateTools();
                         _score->update();
                         mscore->endCmd();
@@ -202,7 +202,7 @@ void ScoreView::editKey(QKeyEvent* ev)
             }
 
       if (!((modifiers & Qt::ShiftModifier) && (key == Qt::Key_Backtab))) {
-            if (editObject->edit(this, curGrip, key, modifiers, s)) {
+            if (editObject->edit(this, aGrip.curGrip, key, modifiers, s)) {
                   if (editObject->isText())
                         mscore->textTools()->updateTools();
                   updateGrips();
@@ -268,13 +268,13 @@ void ScoreView::editKey(QKeyEvent* ev)
                   return;
             }
       EditData ed;
-      ed.curGrip = curGrip;
+      ed.curGrip = aGrip.curGrip;
       ed.delta   = delta;
       ed.view    = this;
       ed.hRaster = mscore->hRaster();
       ed.vRaster = mscore->vRaster();
-      if (curGrip >= 0)
-            ed.pos = grip[curGrip].center() + delta;
+      if (aGrip.curGrip >= 0)
+            ed.pos = aGrip.grip[aGrip.curGrip].center() + delta;
       editObject->editDrag(ed);
       updateGrips();
       _score->update();

@@ -52,9 +52,9 @@ void ScoreView::startEdit(Element* element, int startGrip)
       editObject = element;
       startEdit();
       if (startGrip == -1)
-            curGrip = grips-1;
+            aGrip.curGrip = aGrip.grips-1;
       else if (startGrip >= 0)
-            curGrip = startGrip;
+            aGrip.curGrip = startGrip;
       }
 
 //---------------------------------------------------------
@@ -69,7 +69,7 @@ void ScoreView::startEdit()
       if (!_score->undo()->active())
             _score->startCmd();
       editObject->startEdit(this, data.startMove);
-      curGrip = -1;
+      aGrip.curGrip = -1;
       updateGrips();
       _score->end();
       }
@@ -83,11 +83,40 @@ void ScoreView::endEdit()
       setDropTarget(0);
       if (!editObject)
             return;
+/*
+      Element* page = editObject;
+      while (page->parent())
+            page = page->parent();
+      QPointF pageOffset(page->pos());
+*/
 
       _score->addRefresh(editObject->canvasBoundingRect());
-      for (int i = 0; i < grips; ++i)
-            score()->addRefresh(grip[i]);
+      for (int i = 0; i < aGrip.grips; ++i)
+            score()->addRefresh(aGrip.grip[i]);
 
+      updateRefreshAlines();
+/*
+      for (int i = 0; i < aGrip.aLines; ++i) {
+            if( aGrip.vert[i] ){
+                  QRectF vline (
+                                aGrip.aLine[i].x() + pageOffset.x() - aGrip.grip[0].width()/2,
+                                0,
+                                aGrip.grip[0].width(),
+                                page->height());
+                  score()->addRefresh(vline);
+                  }
+            else{
+                  QRectF hline (
+                                pageOffset.x(),
+                                aGrip.aLine[i].y() - aGrip.grip[0].height()/2,
+                                page->width(),
+                                aGrip.grip[0].height()
+                                );
+                  score()->addRefresh(hline);
+                  }
+            }
+
+*/
       editObject->endEdit();
       if (mscore->getInspector())
             mscore->getInspector()->setElement(0);
@@ -110,7 +139,7 @@ void ScoreView::endEdit()
             _score->end();
             }
       editObject     = 0;
-      grips          = 0;
+      aGrip.grips          = 0;
       }
 
 //---------------------------------------------------------
@@ -144,7 +173,7 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
       else {
             EditData ed;
             ed.view    = this;
-            ed.curGrip = curGrip;
+            ed.curGrip = aGrip.curGrip;
             ed.delta   = delta;
             ed.pos     = p;
             ed.hRaster = false;
