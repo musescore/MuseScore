@@ -362,6 +362,8 @@ void System::layout2()
       for (int i = 0; i < n; ++i) {
             MeasureBase* m = ml.at(i);
             if (m->type() == MEASURE) {
+                  // note that the factor 2 * _spatium must be corrected for when exporting
+                  // system distance in MusicXML (issue #24733)
                   m->bbox().setRect(0.0, -_spatium, m->width(), systemHeight + 2 * _spatium);
                   }
             else if (m->type() == HBOX) {
