@@ -24,7 +24,7 @@ FOR /D %%a IN (%SRC%) DO (
       echo process %%a
       xcopy ..\%%a-ref.png .
       ..\%MSCORE% ..\%%a.mscz -r %DPI% -o %%a.png
-      compare -metric AE -fuzz 50% %%a-1.png %%a-ref.png %%a-diff.png
+      compare -metric AE -fuzz 50%% %%a-1.png %%a-ref.png %%a-diff.png
 )
 
 xcopy ..\style.css .
