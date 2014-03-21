@@ -1729,7 +1729,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
                         if( drawAlignLines){
                               for (int j = 0; j < aGrip.aLines; ++j) {
                                     if( aGrip.vert[j] ){
-                                          QLineF vline(aGrip.aLine[j].x() + pageOffset.x(),0,aGrip.aLine[j].x() + pageOffset.x(),page->width() );
+                                          QLineF vline(aGrip.aLine[j].x() + pageOffset.x(),0,aGrip.aLine[j].x() + pageOffset.x(),page->height() );
                                           vp.drawLine(vline);
                                           }
                                     else{
