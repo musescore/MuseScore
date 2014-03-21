@@ -231,9 +231,9 @@ void Groups::addStop(int pos, TDuration::DurationType d, BeamMode bm)
 
 void Groups::dump(const char* m) const
       {
-      printf("%s\n", m);
+      qDebug("%s", m);
       for (const GroupNode& n : *this) {
-            printf("  group tick %d action 0x%02x\n", n.pos * 60, n.action);
+            qDebug("  group tick %d action 0x%02x", n.pos * 60, n.action);
             }
       }
 

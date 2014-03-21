@@ -847,9 +847,9 @@ class Score : public QObject {
       SynthesizerState& synthesizerState()     { return _synthesizerState; }
       void setSynthesizerState(const SynthesizerState& s);
 
-      const QList<StaffType**>& staffTypes() const { return _staffTypes; }
+      const QList<StaffType**>& staffTypes() const;
       void replaceStaffTypes(const QList<StaffType*>&);
-      StaffType* staffType(int idx);
+      StaffType* staffType(int idx) const;
       int staffTypeIdx(StaffType*) const;
       void addStaffType(StaffType*);
       void addStaffType(int idx, StaffType*);

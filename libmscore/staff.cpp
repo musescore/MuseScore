@@ -425,6 +425,8 @@ void Staff::read(XmlReader& e)
                         _barLineFrom = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
                         _barLineTo   = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines() - 1) * 2);
                         }
+                  else
+                        qDebug("Staff::read: unknown staff type");
                   }
             else if (tag == "small")
                   setSmall(e.readInt());

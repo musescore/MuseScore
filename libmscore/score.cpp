@@ -1960,6 +1960,15 @@ Q_INVOKABLE void Score::setMetaTag(const QString& tag, const QString& val)
       }
 
 //---------------------------------------------------------
+//   staffTypes
+//---------------------------------------------------------
+
+const QList<StaffType**>& Score::staffTypes() const
+      {
+      return rootScore()->_staffTypes;
+      }
+
+//---------------------------------------------------------
 //   addStaffType
 //    ownership of st move to score except if the buildin
 //    flag is set
@@ -1972,22 +1981,23 @@ void Score::addStaffType(StaffType* st)
 
 void Score::addStaffType(int idx, StaffType* st)
       {
+      Score* s = rootScore();
       // if the modified staff type is NOT replacing an existing type
-      if (idx < 0 || idx >= _staffTypes.size()) {
+      if (idx < 0 || idx >= s->_staffTypes.size()) {
             // store new pointer to pointer to type data
             StaffType** stp = new StaffType*;
             *stp = st;
-            _staffTypes.append(stp);
+            s->_staffTypes.append(stp);
             }
       // if the modified staff type IS replacing an existing type
       else {
             StaffType* oldStaffType = *(_staffTypes[idx]);
             // update the type of each score staff which uses the old type
-            for(int staffIdx = 0; staffIdx < staves().size(); staffIdx++)
-                  if(staff(staffIdx)->staffType() == oldStaffType)
+            for (int staffIdx = 0; staffIdx < staves().size(); staffIdx++)
+                  if (staff(staffIdx)->staffType() == oldStaffType)
                         staff(staffIdx)->setStaffType(st);
             // store the updated staff type
-            *(_staffTypes[idx]) = st;
+            *(s->_staffTypes[idx]) = st;
             // delete old staff type if not built-in
             if (!oldStaffType->builtin())
                   delete oldStaffType;
@@ -2000,8 +2010,9 @@ void Score::addStaffType(int idx, StaffType* st)
 
 int Score::staffTypeIdx(StaffType* st) const
       {
+      const Score* s = rootScore();
       for (int i = 0; i < _staffTypes.size(); ++i) {
-            if ((*_staffTypes[i]) == st)
+            if ((*s->_staffTypes[i]) == st)
                   return i;
             }
       return -1;
@@ -2011,11 +2022,12 @@ int Score::staffTypeIdx(StaffType* st) const
 //   staffType
 //---------------------------------------------------------
 
-StaffType* Score::staffType(int idx)
+StaffType* Score::staffType(int idx) const
       {
-      if (idx < 0 || idx >= _staffTypes.size())
+      const Score* s = rootScore();
+      if (idx < 0 || idx >= s->_staffTypes.size())
             return 0;
-      return *(_staffTypes[idx]);
+      return *(s->_staffTypes[idx]);
       }
 
 //---------------------------------------------------------
