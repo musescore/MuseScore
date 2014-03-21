@@ -231,7 +231,6 @@ void EditStaff::apply()
       int staffIdx      = staffType->itemData(staffType->currentIndex()).toInt();
       StaffType* st     = score->staffType(staffIdx);
 
-
       // before changing instrument, check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another
 

@@ -2360,6 +2360,17 @@ ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, qreal _use
       }
 
 //---------------------------------------------------------
+//   notifyTimeSigs
+//    mark timesigs for layout
+//---------------------------------------------------------
+
+static void notifyTimeSigs(void*, Element* e)
+      {
+      if (e->type() == Element::TIMESIG)
+            static_cast<TimeSig*>(e)->setNeedLayout(true);
+      }
+
+//---------------------------------------------------------
 //   flip
 //---------------------------------------------------------
 
@@ -2397,6 +2408,8 @@ void ChangeStaff::flip()
       staff->score()->setLayoutAll(true);
       staff->score()->rebuildMidiMapping();
       staff->score()->setPlaylistDirty(true);
+
+      score->scanElements(0, notifyTimeSigs);
       }
 
 //---------------------------------------------------------
