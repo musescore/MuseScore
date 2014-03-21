@@ -82,7 +82,7 @@ void LineSegment::updateGrips(AlignGrip& aGrip) const
       {
 
       aGrip.grips = 3;
-      aGrip.defaultGrip = 3;
+      aGrip.defaultGrip = 2;
       QPointF pp(pagePos());
 
       aGrip.aLines = 0;

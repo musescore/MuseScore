@@ -1247,7 +1247,7 @@ void ScoreView::updateGrips()
       updateRefreshAlines();
 
       if (aGrip.curGrip == -1)
-            aGrip.curGrip = aGrip.grips-1;
+            aGrip.curGrip = aGrip.defaultGrip;
 
       QPointF anchor = editObject->gripAnchor(aGrip.curGrip);
       if (!anchor.isNull())

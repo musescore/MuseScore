@@ -330,6 +330,7 @@ class AlignGrip
       {
    public:
       int curGrip;
+      int defaultGrip;
       QPointF aLine[8];       // Align line
       bool vert[8];       // Vertical Line = true
       int aLines;            // number of Line

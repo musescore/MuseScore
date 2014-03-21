@@ -93,6 +93,7 @@ void Lasso::editDrag(const EditData& ed)
 void Lasso::updateGrips(AlignGrip& aGrip) const
       {
       aGrip.grips = 8;
+      aGrip.defaultGrip = 7;
       aGrip.grip[0].translate(_rect.topLeft());
       aGrip.grip[1].translate(_rect.topRight());
       aGrip.grip[2].translate(_rect.bottomRight());

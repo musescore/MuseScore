@@ -132,7 +132,7 @@ void Spacer::editDrag(const EditData& ed)
 void Spacer::updateGrips(AlignGrip& aGrip) const
       {
       aGrip.grips         = 1;
-      aGrip.defaultGrip   = 0;
+      aGrip.defaultGrip = 0;
       qreal _spatium = spatium();
       QPointF p;
       if (spacerType() == SpacerType::DOWN)
