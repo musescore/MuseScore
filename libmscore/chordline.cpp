@@ -365,7 +365,7 @@ void ChordLine::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void ChordLine::updateGrips(int* grips, QRectF* grip) const
+void ChordLine::updateGrips(AlignGrip& aGrip) const
       {
       int n = path.elementCount();
       aGrip.grips = n;
