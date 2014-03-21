@@ -5,9 +5,9 @@ MSCORE=../../build.debug/mtest/guitarpro
 cp   $MSCORE/testIrrTuplet.gp4.mscx testIrrTuplet.gp4-ref.mscx
 cp   $MSCORE/slur.gp4.mscx slur.gp4-ref.mscx
 cp   $MSCORE/sforzato.gp4.mscx sforzato.gp4-ref.mscx
-cp   $MSCORE/heavy-accent.gp4.mscx heavy-accent.gp4-ref.mscx
-cp   $MSCORE/tremolos.gp4.mscx tremolos.gp4-ref.mscx
+cp   $MSCORE/heavy-accent.gp5.mscx heavy-accent.gp5-ref.mscx
+cp   $MSCORE/tremolos.gp5.mscx tremolos.gp5-ref.mscx
 cp   $MSCORE/trill.gp4.mscx trill.gp4-ref.mscx
 cp   $MSCORE/dynamic.gp5.mscx dynamic.gp5-ref.mscx
-cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx 
-cp   $MSCORE/ghost_note.gp3.mscx ghost_note.gp3-ref.mscx 
+cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx
+cp   $MSCORE/ghost_note.gp3.mscx ghost_note.gp3-ref.mscx

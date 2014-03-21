@@ -423,12 +423,11 @@ Score::~Score()
       delete _tempomap;
       delete _sigmap;
       delete _repeatList;
-      foreach(StaffType** st, _staffTypes) {
+      for (StaffType** st : staffTypes()) {
             if (!(*st)->builtin())
                   delete *st;
             delete st;
             }
-
       }
 
 //---------------------------------------------------------
@@ -1991,7 +1990,7 @@ void Score::addStaffType(int idx, StaffType* st)
             }
       // if the modified staff type IS replacing an existing type
       else {
-            StaffType* oldStaffType = *(_staffTypes[idx]);
+            StaffType* oldStaffType = *(s->_staffTypes[idx]);
             // update the type of each score staff which uses the old type
             for (int staffIdx = 0; staffIdx < staves().size(); staffIdx++)
                   if (staff(staffIdx)->staffType() == oldStaffType)
@@ -2011,7 +2010,7 @@ void Score::addStaffType(int idx, StaffType* st)
 int Score::staffTypeIdx(StaffType* st) const
       {
       const Score* s = rootScore();
-      for (int i = 0; i < _staffTypes.size(); ++i) {
+      for (int i = 0; i < s->_staffTypes.size(); ++i) {
             if ((*s->_staffTypes[i]) == st)
                   return i;
             }
