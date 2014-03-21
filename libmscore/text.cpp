@@ -1961,24 +1961,24 @@ bool Text::readProperties(XmlReader& e)
             _text = e.readXml();
       else if (tag == "html-data") {
             QString s = e.readXml();
+            s = QTextDocumentFragment::fromHtml(s).toPlainText();
             if (score()->mscVersion() <= 114) {
-                  s.replace("MScore1", "FreeSerif");
-                  s.replace(QChar(0xe10e), QChar(0x266e));    //natural
-                  s.replace(QChar(0xe10c), QChar(0x266f));    // sharp
-                  s.replace(QChar(0xe10d), QChar(0x266d));    // flat
-                  s.replace(QChar(0xe104), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5e))),    // note2_Sym
-                  s.replace(QChar(0xe105), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5f)));    // note4_Sym
-                  s.replace(QChar(0xe106), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd60)));    // note8_Sym
-                  s.replace(QChar(0xe107), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd61)));    // note16_Sym
-                  s.replace(QChar(0xe108), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd62)));    // note32_Sym
-                  s.replace(QChar(0xe109), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd63)));    // note64_Sym
-                  s.replace(QChar(0xe10a), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd6d)));    // dot
-                  s.replace(QChar(0xe10b), QString("%1%2%3%4").arg(QChar(0xd834)).arg(QChar(0xdd6d)).arg(QChar(0xd834)).arg(QChar(0xdd6d)));    // dotdot
-                  s.replace(QChar(0xe167), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0b)));    // coda
-                  s.replace(QChar(0xe168), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // varcoda
-                  s.replace(QChar(0xe169), QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd0c)));    // segno
+                  s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));    //natural
+                  s.replace(QChar(0xe10c), QString("<sym>accidentalSharp</sym>"));    // sharp
+                  s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));    // flat
+                  s.replace(QChar(0xe104), QString("<sym>noteHalfUp</sym>")),    // note2_Sym
+                  s.replace(QChar(0xe105), QString("<sym>noteQuarterUp</sym>"));    // note4_Sym
+                  s.replace(QChar(0xe106), QString("<sym>note8thUp</sym>"));    // note8_Sym
+                  s.replace(QChar(0xe107), QString("<sym>note16thUp</sym>"));    // note16_Sym
+                  s.replace(QChar(0xe108), QString("<sym>note32ndUp</sym>"));    // note32_Sym
+                  s.replace(QChar(0xe109), QString("<sym>note64thUp</sym>"));    // note64_Sym
+                  s.replace(QChar(0xe10a), QString("<sym>textAugmentationDot</sym>"));    // dot
+                  s.replace(QChar(0xe10b), QString("<sym>textAugmentationDot</sym> <sym>textAugmentationDot</sym>"));    // dotdot
+                  s.replace(QChar(0xe167), QString("<sym>segno</sym>"));    // segno
+                  s.replace(QChar(0xe168), QString("<sym>coda</sym>"));    // coda
+                  s.replace(QChar(0xe169), QString("<sym>codaSquare</sym>"));    // varcoda
                   }
-            setPlainText(QTextDocumentFragment::fromHtml(s).toPlainText());
+            setText(s);
             }
       else if (tag == "subtype")          // obsolete
             e.skipCurrentElement();
