@@ -1728,7 +1728,7 @@ void Chord::layoutPitched()
                   continue;
             e->layout();
             if (e->type() == CHORDLINE) {
-                  int x = bbox().translated(e->pos()).right();
+                  int x = e->bbox().translated(e->pos()).right();
                   if (x > _space.rw())
                         _space.setRw(x);
                   }
@@ -1910,7 +1910,7 @@ void Chord::layoutTablature()
       for (Element* e : _el) {
             e->layout();
             if (e->type() == CHORDLINE) {
-                  int x = bbox().translated(e->pos()).right();
+                  int x = e->bbox().translated(e->pos()).right();
                   if (x > _space.rw())
                         _space.setRw(x);
                   }
