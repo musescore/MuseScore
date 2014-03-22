@@ -872,6 +872,16 @@ TupletCommonIndexes findCommonIndexes(std::vector<char> &usedIndexes,
       return commonIndexes;
       }
 
+std::vector<std::pair<ReducedFraction, ReducedFraction> >
+findTupletIntervals(const std::vector<TupletInfo> &tuplets)
+      {
+      std::vector<std::pair<ReducedFraction, ReducedFraction>> tupletIntervals;
+      for (const auto &tuplet: tuplets)
+            tupletIntervals.push_back(tupletInterval(tuplet));
+
+      return tupletIntervals;
+      }
+
 // first chord in tuplet may belong to other tuplet at the same time
 // in the case if there are enough notes in this first chord
 // to be splitted into different voices
@@ -889,11 +899,7 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
             usedIndexes[i] = 1;
 
       TupletCommonIndexes commonIndexes = findCommonIndexes(usedIndexes, tuplets);
-
-                  // calculate here once for optimization purposes
-      std::vector<std::pair<ReducedFraction, ReducedFraction>> tupletIntervals;
-      for (const auto &tuplet: tuplets)
-            tupletIntervals.push_back(tupletInterval(tuplet));
+      const auto tupletIntervals = findTupletIntervals(tuplets);
 
       std::vector<int> bestIndexes;
       TupletErrorResult minError;
