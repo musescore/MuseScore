@@ -208,12 +208,12 @@ class ScoreView : public QWidget, public MuseScoreView {
       void dragSymbol(const QPointF& pos);
       bool dragMeasureAnchorElement(const QPointF& pos);
       void updateGrips();
-      void lyricsTab(bool back, bool end, bool moveOnly);
-      void lyricsReturn();
-      void lyricsEndEdit();
-      void lyricsUpDown(bool up, bool end);
-      void lyricsMinus();
-      void lyricsUnderscore();
+      virtual void lyricsTab(bool back, bool end, bool moveOnly) override;
+      virtual void lyricsReturn() override;
+      virtual void lyricsEndEdit() override;
+      virtual void lyricsUpDown(bool up, bool end) override;
+      virtual void lyricsMinus() override;
+      virtual void lyricsUnderscore() override;
       void harmonyEndEdit();
       void harmonyTab(bool back);
       void harmonyBeatsTab(bool noterest, bool back);

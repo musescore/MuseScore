@@ -241,7 +241,7 @@ void Lyrics::layout1()
 //   paste
 //---------------------------------------------------------
 
-void Lyrics::paste()
+void Lyrics::paste(MuseScoreView* scoreview)
       {
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       QClipboard::Mode mode = QClipboard::Clipboard;
@@ -252,15 +252,36 @@ void Lyrics::paste()
       QStringList sl = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
       if (sl.isEmpty())
             return;
+      
+      QStringList hyph = sl[0].split("-");
+      bool minus = false;
+      if(hyph.length() > 1) {
+            insertText(hyph[0]);
+            hyph.removeFirst();
+            sl[0] =  hyph.join("-");
+            minus = true;
+            }
+      else if (sl.length() > 1 && sl[1] == "-") {
+            insertText(sl[0]);
+            sl.removeFirst();
+            sl.removeFirst();
+            minus = true;
+            }
+      else {
+            insertText(sl[0]);
+            sl.removeFirst();
+            }
 
-      insertText(sl[0]);
       layout();
       score()->setLayoutAll(true);
       score()->end();
-      sl.removeFirst();
       txt = sl.join(" ");
 
       QApplication::clipboard()->setText(txt, mode);
+      if (minus)
+            scoreview->lyricsMinus();
+      else
+            scoreview->lyricsTab(false, false, true);
       }
 
 //---------------------------------------------------------
