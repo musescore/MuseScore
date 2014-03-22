@@ -329,10 +329,8 @@ void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
                                 const Segment *seg,
                                 const Staff *staff)
       {
-      for (int clefIndex = 0; clefIndex != 2; ++clefIndex) {
-            penalties[clefIndex].resize(pos + 1);
+      for (int clefIndex = 0; clefIndex != 2; ++clefIndex)
             optimalPaths[clefIndex].resize(pos + 1);
-            }
 
       for (int curClef = 0; curClef != 2; ++curClef) {
             const int significantPitch = (curClef == 0)
@@ -349,7 +347,7 @@ void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
                               }
                         penalty += findClefChangePenalty(pos, prevClef, optimalPaths, seg, staff);
                         }
-                  penalty += (pos > 0) ? penalties[prevClef][pos - 1] : 0;
+                  penalty += (pos > 0) ? penalties[prevClef][(pos + 1) % 2] : 0;
                   if ((prevClef != curClef && penalty < minPenalty)
                               || (prevClef == curClef && penalty <= minPenalty)) {
                         minPenalty = penalty;
@@ -357,7 +355,7 @@ void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
                         }
                   }
 
-            penalties[curClef][pos] = minPenalty;
+            penalties[curClef][pos % 2] = minPenalty;
             if (pos > 0)
                   optimalPaths[curClef][pos] = minIndex;
             }
@@ -396,6 +394,8 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
 
                         // find optimal clef changes via dynamic programming
             std::vector<std::vector<int>> penalties(2);         // 0 - treble, 1 - bass
+            for (size_t i = 0; i != penalties.size(); ++i)
+                  penalties[i].resize(2);                       // 2 = current + prev
             std::vector<std::vector<int>> optimalPaths(2);      // first col is unused
             std::vector<Segment *> segments;
 
@@ -415,8 +415,7 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
                   }
 
             if (!optimalPaths[0].empty()) {
-                  const size_t chordCount = optimalPaths[0].size();
-                  int lastClef = (penalties[1][chordCount - 1] < penalties[0][chordCount - 1])
+                  int lastClef = (penalties[1][(pos - 1) % 2] < penalties[0][(pos - 1) % 2])
                               ? 1 : 0;
                         // get the optimal clef changes found via dynamic programming
                   createClefs(staff, optimalPaths, lastClef, segments, &mainClef);
