@@ -176,6 +176,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* ottav
       int tpc  = step2tpc(table1[istep], AccidentalVal(alter));
       // alternativ: tpc = step2tpc((istep + 5) % 7, alter);      // rotate istep 5 steps
       n->setTpc(tpc);
+      n->setLine(absStep(tpc, pitch));
       }
 
 //---------------------------------------------------------

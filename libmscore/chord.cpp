@@ -359,9 +359,15 @@ void Chord::add(Element* e)
                   {
                   Note* note = static_cast<Note*>(e);
                   bool found = false;
+                  // _notes should be sorted by line position,
+                  // but it's often not yet possible since line is unknown
+                  // use pitch instead, and line as a second sort critera.
                   for (int idx = 0; idx < _notes.size(); ++idx) {
-                        if (note->pitch() < _notes[idx]->pitch()) {
-                              _notes.insert(idx, note);
+                        if (note->pitch() <= _notes[idx]->pitch()) {
+                              if (note->pitch() == _notes[idx]->pitch() && note->line() > _notes[idx]->line())
+                                    _notes.insert(idx+1, note);
+                              else
+                                    _notes.insert(idx, note);
                               found = true;
                               break;
                               }
