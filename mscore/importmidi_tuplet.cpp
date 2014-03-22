@@ -755,14 +755,12 @@ void removeUselessTuplets(std::vector<TupletInfo> &tuplets)
 // result can be empty
 
 std::vector<int> findLongestCommonGroup(
-            const std::vector<char> &usedIndexes,
+            const std::vector<int> &availableIndexes,
             const std::vector<TupletInfo> &tuplets)
       {
                   // <chord address, vector of tuplet indexes>
       std::map<std::pair<const ReducedFraction, MidiChord> *, std::vector<int>> usedChords;
-      for (size_t i = 0; i != usedIndexes.size(); ++i) {
-            if (usedIndexes[i])
-                  continue;
+      for (int i: availableIndexes) {
             const auto &tuplet = tuplets[i];
             auto it = tuplet.chords.begin();
             if (tuplet.firstChordIndex == 0
@@ -818,15 +816,11 @@ bool canBeTogether(int i, int j, const std::vector<TupletInfo> &tuplets)
       }
 
 void collectRemainingCommonIndexes(
-            const std::vector<char> &usedIndexes,
+            const std::vector<int> &availableIndexes,
             const std::vector<TupletInfo> &tuplets,
             TupletCommonIndexes &commonIndexes)
       {
-      std::vector<int> indexes;
-      for (size_t i = 0; i != usedIndexes.size(); ++i) {
-            if (usedIndexes[i] == 0)
-                  indexes.push_back(i);
-            }
+      auto indexes = availableIndexes;
 
       for (int i = 0; i < (int)indexes.size(); ++i) {       // not till size() - 1
             for (int j = i + 1; j < (int)indexes.size(); ++j) {
@@ -853,20 +847,36 @@ std::vector<int> findUncommonGroup(const std::vector<TupletInfo> &tuplets)
       return uncommonGroup;
       }
 
-TupletCommonIndexes findCommonIndexes(std::vector<char> &usedIndexes,
+void removeIndexes(std::vector<int> &from, const std::vector<int> &what)
+      {
+      int k = (int)from.size() - 1;
+      for (int i: what) {
+            for (int j = 0; j <= k; ++j) {
+                  if (from[j] == i) {
+                        if (j < k)
+                              from[j] = from[k];
+                        --k;
+                        break;
+                        }
+                  }
+            }
+      from.resize(k + 1);
+      }
+
+TupletCommonIndexes findCommonIndexes(const std::vector<int> &availableIndexes,
                                       const std::vector<TupletInfo> &tuplets)
       {
+      auto indexes = availableIndexes;
       TupletCommonIndexes commonIndexes;
       while (true) {
                         // empty if not succeed
-            auto commonGroup = findLongestCommonGroup(usedIndexes, tuplets);
+            const auto commonGroup = findLongestCommonGroup(indexes, tuplets);
             if (commonGroup.size() <= 2)
                   break;
             commonIndexes.add(commonGroup);
-            for (int i: commonGroup)
-                  usedIndexes[i] = 1;
+            removeIndexes(indexes, commonGroup);
             }
-      collectRemainingCommonIndexes(usedIndexes, tuplets, commonIndexes);
+      collectRemainingCommonIndexes(indexes, tuplets, commonIndexes);
 
       return commonIndexes;
       }
@@ -883,11 +893,11 @@ findTupletIntervals(const std::vector<TupletInfo> &tuplets)
 
 std::vector<int> findBestTuplets(
             const std::vector<TupletInfo> &tuplets,
+            const std::vector<int> &availableIndexes,
             const std::vector<int> &uncommonGroup,
-            const std::vector<std::pair<ReducedFraction, ReducedFraction> > &tupletIntervals,
-            std::vector<char> &usedIndexes)
+            const std::vector<std::pair<ReducedFraction, ReducedFraction> > &tupletIntervals)
       {
-      TupletCommonIndexes commonIndexes = findCommonIndexes(usedIndexes, tuplets);
+      TupletCommonIndexes commonIndexes = findCommonIndexes(availableIndexes, tuplets);
 
       std::vector<int> bestIndexes;
       TupletErrorResult minError;
@@ -924,14 +934,16 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
 
       removeUselessTuplets(tuplets);
 
-      const auto uncommonGroup = findUncommonGroup(tuplets);
-      std::vector<char> usedIndexes(tuplets.size(), 0);
-      for (int i: uncommonGroup)
-            usedIndexes[i] = 1;
       const auto tupletIntervals = findTupletIntervals(tuplets);
+      const std::vector<int> uncommonGroup = findUncommonGroup(tuplets);
 
-      std::vector<int> bestIndexes = findBestTuplets(tuplets, uncommonGroup,
-                                                     tupletIntervals, usedIndexes);
+      std::vector<int> availableIndexes(tuplets.size());
+      for (size_t i = 0; i != availableIndexes.size(); ++i)
+            availableIndexes[i] = i;
+      removeIndexes(availableIndexes, uncommonGroup);
+
+      std::vector<int> bestIndexes = findBestTuplets(tuplets, availableIndexes,
+                                                     uncommonGroup, tupletIntervals);
       std::vector<TupletInfo> newTuplets;
       for (int i: bestIndexes)
             newTuplets.push_back(tuplets[i]);

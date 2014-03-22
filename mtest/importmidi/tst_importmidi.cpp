@@ -775,18 +775,17 @@ void TestImportMidi::findCommonIndexes()
       tuplets.push_back(t);
       }
 
-      {
       MidiTuplet::TupletCommonIndexes commonIndexes;
-      MidiTuplet::collectRemainingCommonIndexes(
-                        std::vector<char>(tuplets.size(), 0), tuplets, commonIndexes);
+      std::vector<int> availableIndexes(tuplets.size());
+      for (size_t i = 0; i != availableIndexes.size(); ++i)
+            availableIndexes[i] = i;
+
+      MidiTuplet::collectRemainingCommonIndexes(availableIndexes, tuplets, commonIndexes);
       const auto &allIndexes = commonIndexes.allIndexes();
       QCOMPARE(allIndexes, std::vector<std::vector<int>>({{0, 1}, {2, 4}, {3, 6}, {5, 7}}));
-      }
-      {
-      std::vector<int> commonGroup = MidiTuplet::findLongestCommonGroup(
-                        std::vector<char>(tuplets.size(), 0), tuplets);
+
+      std::vector<int> commonGroup = MidiTuplet::findLongestCommonGroup(availableIndexes, tuplets);
       QCOMPARE(commonGroup, std::vector<int>({0, 2, 5, 7}));
-      }
       }
 
 //--------------------------------------------------------------------------
