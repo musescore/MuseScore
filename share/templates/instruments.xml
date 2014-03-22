@@ -1829,7 +1829,7 @@
                   <shortName>Cbsn.</shortName>
                   <description>Contrabassoon</description>
                   <musicXMLid>wind.reed.contrabassoon</musicXMLid>
-                  <clef>F8vb</clef>
+                  <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>22-57</aPitchRange>
                   <pPitchRange>22-60</pPitchRange>
@@ -1846,7 +1846,7 @@
                   <shortName>Rd. Cbs.</shortName>
                   <description>ReeContrabass</description>
                   <musicXMLid>wind.reed.contrabass</musicXMLid>
-                  <clef>F8vb</clef>
+                  <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>22-57</aPitchRange>
                   <pPitchRange>22-60</pPitchRange>
