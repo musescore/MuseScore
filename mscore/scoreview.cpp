@@ -2379,12 +2379,10 @@ void ScoreView::normalCut()
 void ScoreView::editPaste()
       {
       if (editObject->isText()) {
-            static_cast<Text*>(editObject)->paste();
-            QClipboard::Mode mode = QClipboard::Clipboard;
-//            QClipboard::Mode mode = QClipboard::Selection;
-            QString txt = QApplication::clipboard()->text(mode);
-            if (editObject->type() == Element::LYRICS && !txt.isEmpty())
-                  lyricsTab(false, false, true);
+            if (editObject->type() == Element::LYRICS)
+                  static_cast<Lyrics*>(editObject)->paste(this);
+            else
+                  static_cast<Text*>(editObject)->paste();
             }
       }
 
