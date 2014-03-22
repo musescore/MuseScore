@@ -854,6 +854,24 @@ std::vector<int> findUncommonGroup(const std::vector<TupletInfo> &tuplets)
       return uncommonGroup;
       }
 
+TupletCommonIndexes findCommonIndexes(std::vector<char> &usedIndexes,
+                                      const std::vector<TupletInfo> &tuplets)
+      {
+      TupletCommonIndexes commonIndexes;
+      while (true) {
+                        // empty if not succeed
+            auto commonGroup = findLongestCommonGroup(usedIndexes, tuplets);
+            if (commonGroup.size() <= 2)
+                  break;
+            commonIndexes.add(commonGroup);
+            for (int i: commonGroup)
+                  usedIndexes[i] = 1;
+            }
+      collectRemainingCommonIndexes(usedIndexes, tuplets, commonIndexes);
+
+      return commonIndexes;
+      }
+
 // first chord in tuplet may belong to other tuplet at the same time
 // in the case if there are enough notes in this first chord
 // to be splitted into different voices
@@ -870,17 +888,7 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
       for (int i: uncommonGroup)
             usedIndexes[i] = 1;
 
-      TupletCommonIndexes commonIndexes;
-      while (true) {
-                        // empty if not succeed
-            auto commonGroup = findLongestCommonGroup(usedIndexes, tuplets);
-            if (commonGroup.size() <= 2)
-                  break;
-            commonIndexes.add(commonGroup);
-            for (int i: commonGroup)
-                  usedIndexes[i] = 1;
-            }
-      collectRemainingCommonIndexes(usedIndexes, tuplets, commonIndexes);
+      TupletCommonIndexes commonIndexes = findCommonIndexes(usedIndexes, tuplets);
 
                   // calculate here once for optimization purposes
       std::vector<std::pair<ReducedFraction, ReducedFraction>> tupletIntervals;
