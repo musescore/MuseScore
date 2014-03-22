@@ -881,24 +881,13 @@ findTupletIntervals(const std::vector<TupletInfo> &tuplets)
       return tupletIntervals;
       }
 
-// first chord in tuplet may belong to other tuplet at the same time
-// in the case if there are enough notes in this first chord
-// to be splitted into different voices
-
-void filterTuplets(std::vector<TupletInfo> &tuplets)
+std::vector<int> findBestTuplets(
+            const std::vector<TupletInfo> &tuplets,
+            const std::vector<int> &uncommonGroup,
+            const std::vector<std::pair<ReducedFraction, ReducedFraction> > &tupletIntervals,
+            std::vector<char> &usedIndexes)
       {
-      if (tuplets.empty())
-            return;
-
-      removeUselessTuplets(tuplets);
-      auto uncommonGroup = findUncommonGroup(tuplets);
-
-      std::vector<char> usedIndexes(tuplets.size(), 0);
-      for (int i: uncommonGroup)
-            usedIndexes[i] = 1;
-
       TupletCommonIndexes commonIndexes = findCommonIndexes(usedIndexes, tuplets);
-      const auto tupletIntervals = findTupletIntervals(tuplets);
 
       std::vector<int> bestIndexes;
       TupletErrorResult minError;
@@ -921,6 +910,28 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
                   break;
             }
 
+      return bestIndexes;
+      }
+
+// first chord in tuplet may belong to other tuplet at the same time
+// in the case if there are enough notes in this first chord
+// to be splitted into different voices
+
+void filterTuplets(std::vector<TupletInfo> &tuplets)
+      {
+      if (tuplets.empty())
+            return;
+
+      removeUselessTuplets(tuplets);
+
+      const auto uncommonGroup = findUncommonGroup(tuplets);
+      std::vector<char> usedIndexes(tuplets.size(), 0);
+      for (int i: uncommonGroup)
+            usedIndexes[i] = 1;
+      const auto tupletIntervals = findTupletIntervals(tuplets);
+
+      std::vector<int> bestIndexes = findBestTuplets(tuplets, uncommonGroup,
+                                                     tupletIntervals, usedIndexes);
       std::vector<TupletInfo> newTuplets;
       for (int i: bestIndexes)
             newTuplets.push_back(tuplets[i]);
