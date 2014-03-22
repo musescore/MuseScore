@@ -891,36 +891,41 @@ findTupletIntervals(const std::vector<TupletInfo> &tuplets)
       return tupletIntervals;
       }
 
-std::vector<int> findBestTuplets(
-            const std::vector<TupletInfo> &tuplets,
+void findBestTuplets(
+            std::vector<int> &bestIndexes,
+            TupletErrorResult &minError,
             const std::vector<int> &availableIndexes,
             const std::vector<int> &uncommonGroup,
+            const std::vector<TupletInfo> &tuplets,
             const std::vector<std::pair<ReducedFraction, ReducedFraction> > &tupletIntervals)
       {
       TupletCommonIndexes commonIndexes = findCommonIndexes(availableIndexes, tuplets);
 
-      std::vector<int> bestIndexes;
-      TupletErrorResult minError;
       while (true) {
             const auto indexes = commonIndexes.generateNext();
-            std::vector<std::vector<int>> tupletGroupsToTest;
-            for (int i: indexes.first)
-                  tupletGroupsToTest.push_back(std::vector<int>({i}));
-            if (!uncommonGroup.empty())
-                  tupletGroupsToTest.push_back(uncommonGroup);
 
-            const auto indexesAndError = minimizeQuantError(tupletGroupsToTest, tuplets,
-                                                            tupletIntervals);
-            if (minError.isEmpty() || indexesAndError.second < minError) {
-                  minError = indexesAndError.second;
-                  bestIndexes = indexesAndError.first;
+            if (indexes.first.size() < availableIndexes.size()) {
+                  findBestTuplets(bestIndexes, minError, indexes.first, uncommonGroup,
+                                  tuplets, tupletIntervals);
+                  }
+            else {
+                  std::vector<std::vector<int>> tupletGroupsToTest;
+                  for (int i: indexes.first)
+                        tupletGroupsToTest.push_back(std::vector<int>({i}));
+                  if (!uncommonGroup.empty())
+                        tupletGroupsToTest.push_back(uncommonGroup);
+
+                  const auto indexesAndError = minimizeQuantError(tupletGroupsToTest, tuplets,
+                                                                  tupletIntervals);
+                  if (minError.isEmpty() || indexesAndError.second < minError) {
+                        minError = indexesAndError.second;
+                        bestIndexes = indexesAndError.first;
+                        }
                   }
 
             if (indexes.second)
                   break;
             }
-
-      return bestIndexes;
       }
 
 // first chord in tuplet may belong to other tuplet at the same time
@@ -942,8 +947,10 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
             availableIndexes[i] = i;
       removeIndexes(availableIndexes, uncommonGroup);
 
-      std::vector<int> bestIndexes = findBestTuplets(tuplets, availableIndexes,
-                                                     uncommonGroup, tupletIntervals);
+      std::vector<int> bestIndexes;
+      TupletErrorResult minError;
+      findBestTuplets(bestIndexes, minError, availableIndexes, uncommonGroup,
+                      tuplets, tupletIntervals);
       std::vector<TupletInfo> newTuplets;
       for (int i: bestIndexes)
             newTuplets.push_back(tuplets[i]);
