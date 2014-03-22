@@ -499,9 +499,6 @@ validateTuplets(std::list<int> &indexes,
                 const std::vector<TupletInfo> &tuplets,
                 const std::vector<std::pair<ReducedFraction, ReducedFraction>> &tupletIntevals)
       {
-      if (tuplets.empty())
-            return TupletErrorResult();
-
       for (auto &tuplet: tuplets) {
             for (auto &chord: tuplet.chords) {
                   MidiChord &midiChord = chord.second->second;
