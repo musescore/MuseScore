@@ -867,20 +867,19 @@ bool doNotesOverlap(const std::multimap<int, MTrack> &tracks)
       {
       for (const auto &track: tracks) {
             const auto &chords = track.second.chords;
-            for (auto it = chords.begin(); it != chords.end(); ++it) {
-                  const auto &firstChord = it->second;
-                  const auto &firstOnTime = it->first;
-                  for (const auto &note1: firstChord.notes) {
-                        auto ii = std::next(it);
-                        for (; ii != chords.end(); ++ii) {
-                              const auto &secondChord = ii->second;
-                              if (firstChord.voice != secondChord.voice)
+            for (auto i1 = chords.begin(); i1 != chords.end(); ++i1) {
+                  const auto &chord1 = i1->second;
+                  const auto &onTime1 = i1->first;
+                  for (const auto &note1: chord1.notes) {
+                        for (auto i2 = std::next(i1); i2 != chords.end(); ++i2) {
+                              const auto &onTime2 = i2->first;
+                              if (onTime2 >= onTime1 + note1.len)
+                                    break;
+                              const auto &chord2 = i2->second;
+                              if (chord1.voice != chord2.voice)
                                     continue;
-                              const auto &secondOnTime = ii->first;
-                              for (const auto &note2: secondChord.notes) {
+                              for (const auto &note2: chord2.notes) {
                                     if (note2.pitch != note1.pitch)
-                                          continue;
-                                    if (secondOnTime >= (firstOnTime + note1.len))
                                           continue;
                                     return true;
                                     }
