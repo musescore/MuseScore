@@ -425,6 +425,8 @@ class TupletErrorResult
             , tupletCount(tc)
             {}
 
+      bool isEmpty() const { return tupletCount == 0; }
+
       bool operator<(const TupletErrorResult &er) const
             {
             double value = div(tupletAverageError, er.tupletAverageError)
@@ -614,7 +616,7 @@ minimizeQuantError(const std::vector<std::vector<int>> &indexGroups,
                   }
                         // note: redundant indexes of indexesToValidate are erased here!
             const auto result = validateTuplets(indexesToValidate, tuplets, tupletIntevals);
-            if (counter == 0 || result < minResult) {
+            if (minResult.isEmpty() || result < minResult) {
                   minResult = result;
                   bestIndexes = indexesToValidate;
                   }
@@ -900,28 +902,22 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
 
       std::vector<int> bestIndexes;
       TupletErrorResult minError;
-      bool first = true;
       while (true) {
-            const auto result = commonIndexes.generateNext();
+            const auto indexes = commonIndexes.generateNext();
             std::vector<std::vector<int>> tupletGroupsToTest;
-            for (int i: result.first)
+            for (int i: indexes.first)
                   tupletGroupsToTest.push_back(std::vector<int>({i}));
             if (!uncommonGroup.empty())
                   tupletGroupsToTest.push_back(uncommonGroup);
 
             const auto indexesAndError = minimizeQuantError(tupletGroupsToTest, tuplets,
                                                             tupletIntervals);
-            if (first) {
-                  first = false;
-                  minError = indexesAndError.second;
-                  bestIndexes = indexesAndError.first;
-                  }
-            else if (indexesAndError.second < minError) {
+            if (minError.isEmpty() || indexesAndError.second < minError) {
                   minError = indexesAndError.second;
                   bestIndexes = indexesAndError.first;
                   }
 
-            if (result.second)
+            if (indexes.second)
                   break;
             }
 
