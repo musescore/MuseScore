@@ -88,8 +88,8 @@ private slots:
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
-      void lines1() { mxmlIoTestRef("testLines1"); }
-      void lines2() { mxmlIoTestRef("testLines2"); }
+      void lines1() { mxmlIoTest("testLines1"); }
+      void lines2() { mxmlIoTest("testLines2"); }
       void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
       void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
       void manualBreaks() { mxmlIoTest("testManualBreaks"); }
@@ -132,7 +132,7 @@ private slots:
       void voicePiano1() { mxmlIoTest("testVoicePiano1"); }
       void volta1() { mxmlIoTest("testVolta1"); }
       void wedge1() { mxmlIoTest("testWedge1"); }
-//      void wedge2() { mxmlIoTestRef("testWedge2"); }
+      void wedge2() { mxmlIoTest("testWedge2"); }
       void words1() { mxmlIoTest("testWords1"); }
       };
 

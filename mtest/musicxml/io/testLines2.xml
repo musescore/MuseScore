@@ -12,12 +12,6 @@
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
       </encoding>
-    <miscellaneous>
-      <miscellaneous-field name="description">Expected iotest differences:
-        - part P1 measure 1 bracket stop moved to measure 2 start
-        - part P1 measure 3 bracket stop moved to measure 4 start
-        </miscellaneous-field>
-      </miscellaneous>
     </identification>
   <part-list>
     <score-part id="P1">
