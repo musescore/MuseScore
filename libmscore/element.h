@@ -421,7 +421,7 @@ class Element : public QObject {
       virtual void editDrag(const EditData&);
       virtual void endEditDrag()                               {}
       virtual void endEdit()                                   {}
-      virtual void updateGrips(AlignGrip& aGrip ) const      { aGrip.grips = 0;       }
+      virtual void updateGrips(AlignGrip& aGrip ) const      { aGrip.grips = 0;aGrip.aLines = 0; }
       virtual QPointF gripAnchor(int) const   { return QPointF(); }
       virtual void setGrip(int, const QPointF&);
       virtual QPointF getGrip(int) const;
