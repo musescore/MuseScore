@@ -3723,7 +3723,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                                     break;
                               }
                         }
-                  } // foreach
+                  } // for
             }
       }
 
@@ -3731,21 +3731,21 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 //  spannerStop
 //---------------------------------------------------------
 
-// see spanner start
+// called after writing each chord or rest to check if a spanner must be stopped
+// loop over all spanners and find spanners in strack ending at tick2
+// note that more than one voice may contains notes ending at tick2,
+// remember which spanners have already been stopped (the "stopped" set)
 
-static void spannerStop(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
+static void spannerStop(ExportMusicXml* exp, int strack, int tick2, int sstaff, QSet<const Spanner*>& stopped)
       {
-       for (auto it : exp->score()->spanner()) {
+      for (auto it : exp->score()->spanner()) {
             Spanner* e = it.second;
-            if (e->tick2() != seg->tick())
+
+            if (e->tick2() != tick2 || e->track() != strack)
                   continue;
 
-            int wtrack = -1; // track to write spanner
-
-            if (strack <= e->track() && e->track() < etrack)
-                  wtrack = findTrackForAnnotations(e->track(), seg);
-
-            if (track == wtrack) {
+            if (!stopped.contains(e)) {
+                  stopped.insert(e);
                   switch (e->type()) {
                         case Element::HAIRPIN:
                               exp->hairpin(static_cast<const Hairpin*>(e), sstaff, -1);
@@ -3763,12 +3763,12 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, int track, 
                               // ignore (written as <note><notations><ornaments><wavy-line>
                               break;
                         default:
-                              qDebug("spannerStop: direction type %s at tick %d not implemented",
-                                     Element::name(e->type()), seg->tick());
+                              qDebug("spannerStop: direction type %s at tick2 %d not implemented",
+                                     Element::name(e->type()), tick2);
                               break;
                         }
                   }
-            } // foreach
+            } // for
       }
 
 //---------------------------------------------------------
@@ -4305,6 +4305,10 @@ void ExportMusicXml::write(QIODevice* dev)
                   // output attribute at start of measure: measure-style
                   measureStyle(xml, attr, m);
 
+                  // set of spanners already stopped in this measure
+                  // required to prevent multiple spanner stops for the same spanner
+                  QSet<const Spanner*> spannersStopped;
+
                   // MuseScore limitation: repeats are always in the first part
                   // and are implicitly placed at either measure start or stop
                   if (idx == 0)
@@ -4353,7 +4357,6 @@ void ExportMusicXml::write(QIODevice* dev)
                                                 }
                                           }
                                     figuredBass(xml, strack, etrack, st, static_cast<const ChordRest*>(el), fbMap);
-                                    spannerStop(this, strack, etrack, st, sstaff, seg);
                                     spannerStart(this, strack, etrack, st, sstaff, seg);
                                     }
 
@@ -4422,6 +4425,13 @@ void ExportMusicXml::write(QIODevice* dev)
                                           qDebug("ExportMusicXml::write unknown segment type %s", el->name());
                                           break;
                                     }
+                              
+                              // handle annotations and spanners (directions attached to this note or rest)
+                              if (el->isChordRest()) {
+                                    int spannerStaff = (st / VOICES) * VOICES;
+                                    spannerStop(this, spannerStaff, tick, sstaff, spannersStopped);
+                                    }
+
                               } // for (Segment* seg = ...
                         attr.stop(xml);
                         } // for (int st = ...
