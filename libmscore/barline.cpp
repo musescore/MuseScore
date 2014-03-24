@@ -457,7 +457,11 @@ void BarLine::read(XmlReader& e)
                               }
                         setBarLineType(ct);
                         }
-                  _customSubtype = BarLineType(propertyDefault(P_SUBTYPE).toInt()) != barLineType();
+                  if (parent() && parent()->type() == SEGMENT) {
+                        Measure* m = static_cast<Segment*>(parent())->measure();
+                        if (barLineType() != m->endBarLineType())
+                              _customSubtype = true;
+                        }
                   }
             else if (tag == "customSubtype")
                   _customSubtype = e.readInt();

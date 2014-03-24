@@ -1144,10 +1144,10 @@ void Text::layout1()
             t->setY(y);
             bb |= r->translated(0.0, y);
             }
-
       qreal yoff = 0;
       qreal h    = 0;
       if (parent()) {
+#if 0
             if (parent()->type() == SEGMENT) {
                   Segment* s = static_cast<Segment*>(parent());
                   System* system = s->measure()->system();
@@ -1156,6 +1156,7 @@ void Text::layout1()
                         yoff = sstaff->y();
                         }
                   }
+#endif
             if (layoutToParentWidth()) {
                   if (parent()->type() == HBOX || parent()->type() == VBOX || parent()->type() == TBOX) {
                         // consider inner margins of frame

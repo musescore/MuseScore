@@ -124,7 +124,7 @@ static Dyn dynList[] = {
 Dynamic::Dynamic(Score* s)
    : Text(s)
       {
-      // setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
+//      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       _velocity = -1;
       _dynRange = DYNAMIC_PART;
@@ -302,6 +302,7 @@ QLineF Dynamic::dragAnchor() const
             xp += e->x();
       qreal yp = measure()->system()->staffYpage(staffIdx());
       QPointF p(xp, yp);
+
       return QLineF(p, canvasPos());
       }
 
@@ -322,11 +323,11 @@ QRectF Dynamic::drag(EditData* ed)
             Segment* seg = 0;
             _score->pos2measure(ed->pos, &si, 0, &seg, 0);
             if (seg && (seg != segment() || staffIdx() != si)) {
-                  QPointF pos1(pagePos());
+                  QPointF pos1(canvasPos());
                   score()->undo(new ChangeParent(this, seg, si));
                   setUserOff(QPointF());
                   layout();
-                  QPointF pos2(pagePos());
+                  QPointF pos2(canvasPos());
                   setUserOff(pos1 - pos2);
                   ed->startMove = pos2;
                   }
