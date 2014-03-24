@@ -264,7 +264,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::SLUR_SEGMENT) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Edit Mode"))->setData("edit");
+            //popup->addAction(tr("Edit Mode"))->setData("edit");
             }
       else if (e->type() == Element::REST) {
             genPropertyMenu1(e, popup);
