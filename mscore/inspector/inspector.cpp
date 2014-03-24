@@ -704,7 +704,7 @@ void InspectorBarLine::setElement()
 //   spanTypeActivated
 //---------------------------------------------------------
 
-void InspectorBarLine::spanTypeActivated(int idx)
+void InspectorBarLine::spanTypeActivated(int /*idx*/)
       {
       }
 
