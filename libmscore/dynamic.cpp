@@ -124,8 +124,7 @@ static Dyn dynList[] = {
 Dynamic::Dynamic(Score* s)
    : Text(s)
       {
-//      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _velocity = -1;
       _dynRange = DYNAMIC_PART;
       setTextStyleType(TEXT_STYLE_DYNAMICS);
