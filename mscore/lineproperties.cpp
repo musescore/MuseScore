@@ -126,7 +126,7 @@ void LineProperties::accept()
 
       PlaceText pt = getPlaceText(beginTextPlace);
       if (pt != otl->beginTextPlace()) {
-            printf("change ottava, links %p\n", otl->links());
+            qDebug("change ottava, links %p", otl->links());
             otl->undoChangeProperty(P_BEGIN_TEXT_PLACE, pt);
             }
       pt = getPlaceText(continueTextPlace);
