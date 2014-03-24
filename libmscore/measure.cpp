@@ -3426,7 +3426,8 @@ void Measure::layoutX(qreal stretch)
                               Segment* ss = first();
                               for (; ss->segmentType() != Segment::SegChordRest; ss = ss->next())
                                     ;
-                              if (s != first()) {
+                              // if (s != first()) {
+                              if (ss != first()) {
                                     ss = ss->prev();
                                     for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                                           int track = staffIdx * VOICES;
