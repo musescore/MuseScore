@@ -294,6 +294,7 @@ class Text : public Element {
       friend class TextBlock;
       friend class TextFragment;
       virtual void textChanged() {}
+      QString convertFromHtml(const QString& ss) const;
       };
 
 
