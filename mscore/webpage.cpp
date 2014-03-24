@@ -316,8 +316,8 @@ bool WebPageDockWidget::saveCurrentScoreOnline(QString action, QVariantMap param
             part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(QString("form-data; name=\"%1\"").arg(i.key())));
             part.setBody(i.value().toString().toLatin1());
             multiPart->append(part);
-            //printf("%s \n", qPrintable(i.key()));
-            //printf("%s \n", qPrintable(i.value().toString()));
+            //qDebug("%s ", qPrintable(i.key()));
+            //qDebug("%s ", qPrintable(i.value().toString()));
             ++i;
             }
 

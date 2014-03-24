@@ -316,7 +316,7 @@ void Seq::start()
                   vorbisData.data = cs->audio()->data();
                   int n = ov_open_callbacks(&vorbisData, &vf, 0, 0, ovCallbacks);
                   if (n < 0) {
-                        printf("ogg open failed: %d\n", n);
+                        qDebug("ogg open failed: %d", n);
                         }
                   oggInit = true;
                   }
@@ -366,7 +366,7 @@ void Seq::stopWait()
       QWaitCondition sleep;
       int idx = 0;
       while (state != TRANSPORT_STOP) {
-            printf("state %d\n", state);
+            qDebug("State %d", state);
             mutex.lock();
             sleep.wait(&mutex, 100);
             mutex.unlock();
@@ -1405,7 +1405,7 @@ void Seq::setLoopOut()
 
 void Seq::setPos(POS, unsigned tick)
       {
-      printf("seq: setPos %d\n", tick);
+      qDebug("seq: setPos %d", tick);
       }
 
 //---------------------------------------------------------
