@@ -611,26 +611,6 @@ void InspectorDynamic::setElement()
       }
 
 //---------------------------------------------------------
-//   InspectorBarLine
-//---------------------------------------------------------
-
-InspectorBarLine::InspectorBarLine(QWidget* parent)
-   : InspectorBase(parent)
-      {
-      e.setupUi(addWidget());
-      b.setupUi(addWidget());
-
-      iList = {
-            { P_COLOR,    0, 0, e.color,    e.resetColor    },
-            { P_VISIBLE,  0, 0, e.visible,  e.resetVisible  },
-            { P_USER_OFF, 0, 0, e.offsetX,  e.resetX        },
-            { P_USER_OFF, 1, 0, e.offsetY,  e.resetY        },
-            { P_SUBTYPE,  0, 0, b.type,     b.resetType     }
-            };
-      mapSignals();
-      }
-
-//---------------------------------------------------------
 //   InspectorSlur
 //---------------------------------------------------------
 
@@ -660,14 +640,86 @@ InspectorEmpty::InspectorEmpty(QWidget* parent)
       setToolTip(tr("Select an element to display its properties"));
       }
 
+//---------------------------------------------------------
+//   InspectorBarLine
+//---------------------------------------------------------
+
+InspectorBarLine::InspectorBarLine(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      static const char* buildinSpanNames[BARLINE_BUILTIN_SPANS] = {
+            QT_TRANSLATE_NOOP("inspector", "Staff default"),
+            QT_TRANSLATE_NOOP("inspector", "Tick"),
+            QT_TRANSLATE_NOOP("inspector", "Tick alt."),
+            QT_TRANSLATE_NOOP("inspector", "Short"),
+            QT_TRANSLATE_NOOP("inspector", "Short alt.")
+            };
+
+      BarLineType types[8] = {
+            NORMAL_BAR,
+            DOUBLE_BAR,
+            START_REPEAT,
+            END_REPEAT,
+            BROKEN_BAR,
+            END_BAR,
+            END_START_REPEAT,
+            DOTTED_BAR
+            };
+
+      e.setupUi(addWidget());
+      b.setupUi(addWidget());
+
+      for (const char* name : buildinSpanNames)
+            b.spanType->addItem(tr(name));
+      for (BarLineType t : types)
+            b.type->addItem(BarLine::userTypeName(t), int(t));
+
+      iList = {
+            { P_COLOR,             0, 0, e.color,    e.resetColor    },
+            { P_VISIBLE,           0, 0, e.visible,  e.resetVisible  },
+            { P_USER_OFF,          0, 0, e.offsetX,  e.resetX        },
+            { P_USER_OFF,          1, 0, e.offsetY,  e.resetY        },
+            { P_SUBTYPE,           0, 0, b.type,     b.resetType     },
+            { P_BARLINE_SPAN,      0, 0, b.span,     b.resetSpan     },
+            { P_BARLINE_SPAN_FROM, 0, 0, b.spanFrom, b.resetSpanFrom },
+            { P_BARLINE_SPAN_TO,   0, 0, b.spanTo,   b.resetSpanTo   },
+            };
+      mapSignals();
+      connect(b.spanType, SIGNAL(activated(int)), SLOT(spanTypeActivated(int)));
+      connect(b.resetSpanType, SIGNAL(clicked()), SLOT(resetSpanType()));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorBarLine::setElement()
+      {
+      InspectorBase::setElement();
+//      BarLine* bl = static_cast<BarLine*>(inspector->element());
+//      Measure* m  = static_cast<Segment*>(bl->parent())->measure();
+      }
+
+//---------------------------------------------------------
+//   spanTypeActivated
+//---------------------------------------------------------
+
+void InspectorBarLine::spanTypeActivated(int idx)
+      {
+      }
+
+//---------------------------------------------------------
+//   resetSpanType
+//---------------------------------------------------------
+
+void InspectorBarLine::resetSpanType()
+      {
+      }
+
 #if 0
 
 #define BARLINE_TYPE_DEFAULT  -1
 
-QString InspectorBarLine::builtinSpanNames[BARLINE_BUILTIN_SPANS] =
-{
-      tr("Staff default"), tr("Tick"), tr("Tick alt."), tr("Short"), tr("Short alt.")
-};
 
 int InspectorBarLine::builtinSpans[BARLINE_BUILTIN_SPANS][3] =
 {//   span From To

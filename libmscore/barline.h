@@ -101,14 +101,15 @@ class BarLine : public Element {
       ElementList* el()                  { return &_el; }
       const ElementList* el() const      { return &_el; }
 
+      static QString userTypeName(BarLineType);
       QString barLineTypeName() const;
       void setBarLineType(const QString& s);
       void setBarLineType(BarLineType i) { _barLineType = i;      }
       BarLineType barLineType() const    { return _barLineType;  }
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID propertyId) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID propertyId) const override;
 
       virtual qreal mag() const;
 
