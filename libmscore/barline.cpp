@@ -38,9 +38,24 @@ int  BarLine::_origSpan, BarLine::_origSpanFrom, BarLine::_origSpanTo;
 //---------------------------------------------------------
 
 static const char* barLineNames[] = {
-      "normal", "double", "start-repeat", "end-repeat", "dashed", "end",
-      "end-start-repeat", "dotted"
+      QT_TRANSLATE_NOOP("barline", "normal"),
+      QT_TRANSLATE_NOOP("barline", "double"),
+      QT_TRANSLATE_NOOP("barline", "start-repeat"),
+      QT_TRANSLATE_NOOP("barline", "end-repeat"),
+      QT_TRANSLATE_NOOP("barline", "dashed"),
+      QT_TRANSLATE_NOOP("barline", "end"),
+      QT_TRANSLATE_NOOP("barline", "end-start-repeat"),
+      QT_TRANSLATE_NOOP("barline", "dotted")
       };
+
+//---------------------------------------------------------
+//   userTypeName
+//---------------------------------------------------------
+
+QString BarLine::userTypeName(BarLineType t)
+      {
+      return qApp->translate("barline", barLineNames[int(t)]);
+      }
 
 //---------------------------------------------------------
 //   BarLine
@@ -442,11 +457,7 @@ void BarLine::read(XmlReader& e)
                               }
                         setBarLineType(ct);
                         }
-                  if (parent() && parent()->type() == SEGMENT) {
-                        Measure* m = static_cast<Segment*>(parent())->measure();
-                        if (barLineType() != m->endBarLineType())
-                              _customSubtype = true;
-                        }
+                  _customSubtype = BarLineType(propertyDefault(P_SUBTYPE).toInt()) != barLineType();
                   }
             else if (tag == "customSubtype")
                   _customSubtype = e.readInt();
@@ -1046,7 +1057,7 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
       switch(id) {
             case P_SUBTYPE:
                   _barLineType = BarLineType(v.toInt());
-                  _customSubtype = parent() && (static_cast<Segment*>(parent())->measure())->endBarLineType() != v.toInt();
+                  _customSubtype = parent() && (static_cast<Segment*>(parent())->measure())->endBarLineType() != _barLineType;
                   break;
             case P_BARLINE_SPAN:
                   setSpan(v.toInt());

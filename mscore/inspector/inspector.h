@@ -45,14 +45,14 @@ class Segment;
 class Chord;
 
 
+//---------------------------------------------------------
+//   InspectorElement
+//---------------------------------------------------------
+
 class UiInspectorElement: public Ui::InspectorElement {
    public:
       void setupUi(QWidget *InspectorElement);
       };
-
-//---------------------------------------------------------
-//   InspectorElement
-//---------------------------------------------------------
 
 class InspectorElement : public InspectorBase {
       Q_OBJECT
@@ -145,7 +145,7 @@ class InspectorClef : public InspectorBase {
 
    public:
       InspectorClef(QWidget* parent);
-      virtual void setElement();
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -234,7 +234,7 @@ class InspectorDynamic : public InspectorBase {
 
    public:
       InspectorDynamic(QWidget* parent);
-      virtual void setElement();
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -252,8 +252,13 @@ class InspectorBarLine : public InspectorBase {
       static QString builtinSpanNames[BARLINE_BUILTIN_SPANS];
       static int     builtinSpans[BARLINE_BUILTIN_SPANS][3];
 
+   private slots:
+      void spanTypeActivated(int);
+      void resetSpanType();
+
    public:
       InspectorBarLine(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
