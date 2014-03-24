@@ -150,7 +150,7 @@ void Marker::read(XmlReader& e)
                   QString s(e.readElementText());
                   setLabel(s);
                   mt = markerType(s);
-                  printf("Marker::read type %d <%s>\n", int(mt), qPrintable(s));
+                  qDebug("Marker::read type %d <%s>", int(mt), qPrintable(s));
                   }
             else if (!Text::readProperties(e))
                   e.unknown();

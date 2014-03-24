@@ -98,7 +98,7 @@ bool NoteList::anyStaffOverlaps() const
 
 VoiceOverlapDetector::VoiceOverlapDetector()
       {
-      // printf("VoiceOverlapDetector::VoiceOverlapDetector(staves %d)\n", MAX_STAVES);
+      // qDebug("VoiceOverlapDetector::VoiceOverlapDetector(staves %d)", MAX_STAVES);
       }
 
 void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const QString& voice, const int staff)
@@ -111,7 +111,7 @@ void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const
 
 void VoiceOverlapDetector::dump() const
       {
-      // printf("VoiceOverlapDetector::dump()\n");
+      // qDebug("VoiceOverlapDetector::dump()");
       QMapIterator<QString, NoteList> i(_noteLists);
       while (i.hasNext()) {
             i.next();
@@ -121,7 +121,7 @@ void VoiceOverlapDetector::dump() const
 
 void VoiceOverlapDetector::newMeasure()
       {
-      // printf("VoiceOverlapDetector::newMeasure()\n");
+      // qDebug("VoiceOverlapDetector::newMeasure()");
       _noteLists.clear();
       }
 

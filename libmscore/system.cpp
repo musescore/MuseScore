@@ -885,7 +885,7 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
                         if (nl && nl->measure()->system() == s1) {
                               qreal x2  = nl->bbox().left() + nl->pagePos().x();
                               qreal lx2 = line->pagePos().x() + len;
-// printf("line %f  text %f\n", lx2, x2);
+                              //qDebug("Line %f  text %f", lx2, x2);
                               if (lx2 > x2)
                                     len -= (lx2 - x2);
                               }

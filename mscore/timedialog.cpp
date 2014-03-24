@@ -107,7 +107,7 @@ void TimeDialog::save()
       QDir dir;
       dir.mkpath(dataPath);
       sp->write(dataPath + "/" + "timesigs");
-      printf("TimeDialog::save(): %s\n", qPrintable(dataPath+"/" + "timesigs"));
+      qDebug("TimeDialog::save(): %s", qPrintable(dataPath+"/" + "timesigs"));
       }
 
 //---------------------------------------------------------

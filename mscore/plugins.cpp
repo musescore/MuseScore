@@ -606,7 +606,7 @@ const QTransform& MsScoreView::matrix() const
 
 void collectPluginMetaInformation(PluginDescription* d)
       {
-      printf("collect meta for <%s>\n", qPrintable(d->path));
+      qDebug("Collect meta for <%s>", qPrintable(d->path));
 
       QQmlComponent component(mscore->qml(), QUrl::fromLocalFile(d->path));
       QObject* obj = component.create();
