@@ -2320,12 +2320,12 @@ QString Text::convertFromHtml(const QString& ss) const
                         if (font.underline())
                               s += "<u>";
                         s += f.text();
-                        if (font.bold())
-                              s += "</b>";
-                        if (font.italic())
-                              s += "</i>";
                         if (font.underline())
                               s += "</u>";
+                        if (font.italic())
+                              s += "</i>";
+                        if (font.bold())
+                              s += "</b>";
                         }
                   }
             }
