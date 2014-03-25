@@ -41,6 +41,7 @@ private slots:
       void gpDynamic() { gpReadTest("dynamic", "gp5"); }
       void gpArpeggio() { gpReadTest("arpeggio_up_down", "gp4"); }
       void gpGhostNote() { gpReadTest("ghost_note", "gp3"); }
+      void gpGraceNote() { gpReadTest("grace", "gp5"); }
       };
 
 //---------------------------------------------------------

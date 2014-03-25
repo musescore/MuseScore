@@ -986,16 +986,92 @@ void GuitarPro1::readNote(int string, Note* note)
                   modMask2 = readUChar();
             if (modMask1 & 0x1)
                   readBend();
+            if (modMask1 & 0x10) {
+                  // GP3 grace note
+                  int fret = readUChar();            // grace fret
+                  int dynamic = readUChar();            // grace dynamic
+                  int transition = readUChar();            // grace transition
+                  int duration = readUChar();            // grace duration
+
+                  int grace_len = MScore::division/8;
+                  if (duration == 1)
+                        grace_len = MScore::division/8; //32th
+                  else if (duration == 2)
+                        grace_len = MScore::division/6; //24th
+                  else if (duration == 3)
+                        grace_len = MScore::division/4; //16th
+
+                  Note* gn = new Note(score);
+
+                  if (fret == 255) {
+                        gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                        gn->setGhost(true);
+                        }
+                  gn->setFret((fret != 255)?fret:0);
+                  gn->setString(string);
+                  int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret);
+                  gn->setPitch(grace_pitch);
+                  gn->setTpcFromPitch();
+
+                  Chord* gc = new Chord(score);
+                  gc->setTrack(note->chord()->track());
+                  gc->add(gn);
+                  gc->setParent(note->chord());
+                  note->chord()->add(gc);
+
+                  // TODO: Add dynamic. Dynamic now can be added only to a segment, not directly to a grace note
+                  addDynamic(gn, dynamic);
+
+                  TDuration d;
+                  d.setVal(grace_len);
+                  if(grace_len == MScore::division/6)
+                        d.setDots(1);
+                  gc->setDurationType(d);
+                  gc->setDuration(d.fraction());
+                  gc->setNoteType(NOTE_ACCIACCATURA);
+                  gc->setMag(note->chord()->staff()->mag() * score->styleD(ST_graceNoteMag));
+
+                  if (transition == 0) {
+                        // no transition
+                        }
+                  else if(transition == 1){
+                        //TODO: Add a 'slide' guitar effect when implemented
+                        }
+                  else if (transition == 2 && fretNumber>=0 && fretNumber<=255 && fretNumber!=gn->fret()) {
+                        QList<PitchValue> points;
+                        points.append(PitchValue(0,0, false));
+                        points.append(PitchValue(60,(fretNumber-gn->fret())*100, false));
+
+                        Bend* b = new Bend(note->score());
+                        b->setPoints(points);
+                        b->setTrack(gn->track());
+                        gn->add(b);
+                        }
+                   else if (transition == 3) {
+                         // TODO:
+                         //     major: replace with a 'hammer-on' guitar effect when implemented
+                         //     minor: make slurs for parts
+
+                         ChordRest* cr1 = static_cast<Chord*>(gc);
+                         ChordRest* cr2 = static_cast<Chord*>(note->chord());
+
+                         Slur* slur = new Slur(score);
+                         slur->setAnchor(Spanner::ANCHOR_CHORD);
+                         slur->setStartChord(static_cast<Chord*>(cr1));
+                         slur->setEndChord(static_cast<Chord*>(cr2));
+                         slur->setTick(cr1->tick());
+                         slur->setTick2(cr2->tick());
+                         slur->setTrack(cr1->track());
+                         slur->setTrack2(cr2->track());
+                         slur->setParent(cr1);
+                         score->undoAddElement(slur);
+                         }
+                  }
             if (modMask1 & 0x2) {         // hammer on / pull off
                   }
             if (modMask1 & 0x8) {         // let ring
                   }
-            if (modMask1 & 0x10) {
-                  readUChar();            // grace fret
-                  readUChar();            // grace dynamic
-                  readUChar();            // grace transition
-                  readUChar();            // grace length
-                  }
+
             if (version >= 400) {
                   if (modMask2 & 0x1) {   // staccato - palm mute
                         }
@@ -1642,10 +1718,84 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
             if (modMask1 & 0x8) {         // let ring
                   }
             if (modMask1 & 0x10) {
-                  readUChar();            // grace fret
-                  readUChar();            // grace dynamic
-                  readUChar();            // grace transition
-                  readUChar();            // grace length
+                  int fret = readUChar();            // grace fret
+                  int dynamic = readUChar();            // grace dynamic
+                  int transition = readUChar();            // grace transition
+                  int duration = readUChar();            // grace duration
+
+                  int grace_len = MScore::division/8;
+                  if (duration == 1)
+                        grace_len = MScore::division/8; //32th
+                  else if (duration == 2)
+                        grace_len = MScore::division/6; //24th
+                  else if (duration == 3)
+                        grace_len = MScore::division/4; //16th
+
+                  Note* gn = new Note(score);
+
+                  if (fret == 255) {
+                        gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                        gn->setGhost(true);
+                        }
+                  gn->setFret((fret != 255)?fret:0);
+                  gn->setString(string);
+                  int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret);
+                  gn->setPitch(grace_pitch);
+                  gn->setTpcFromPitch();
+
+                  Chord* gc = new Chord(score);
+                  gc->setTrack(note->chord()->track());
+                  gc->add(gn);
+                  gc->setParent(note->chord());
+                  note->chord()->add(gc);
+
+                  // TODO: Add dynamic. Dynamic now can be added only to a segment, not directly to a grace note
+                  addDynamic(gn, dynamic);
+
+                  TDuration d;
+                  d.setVal(grace_len);
+                  if(grace_len == MScore::division/6)
+                        d.setDots(1);
+                  gc->setDurationType(d);
+                  gc->setDuration(d.fraction());
+                  gc->setNoteType(NOTE_ACCIACCATURA);
+                  gc->setMag(note->chord()->staff()->mag() * score->styleD(ST_graceNoteMag));
+
+                  if (transition == 0) {
+                        // no transition
+                        }
+                  else if(transition == 1){
+                        //TODO: Add a 'slide' guitar effect when implemented
+                        }
+                  else if (transition == 2 && fretNumber>=0 && fretNumber<=255 && fretNumber!=gn->fret()) {
+                        QList<PitchValue> points;
+                        points.append(PitchValue(0,0, false));
+                        points.append(PitchValue(60,(fretNumber-gn->fret())*100, false));
+
+                        Bend* b = new Bend(note->score());
+                        b->setPoints(points);
+                        b->setTrack(gn->track());
+                        gn->add(b);
+                        }
+                   else if (transition == 3) {
+                         // TODO:
+                         //     major: replace with a 'hammer-on' guitar effect when implemented
+                         //     minor: make slurs for parts
+
+                         ChordRest* cr1 = static_cast<Chord*>(gc);
+                         ChordRest* cr2 = static_cast<Chord*>(note->chord());
+
+                         Slur* slur = new Slur(score);
+                         slur->setAnchor(Spanner::ANCHOR_CHORD);
+                         slur->setStartChord(static_cast<Chord*>(cr1));
+                         slur->setEndChord(static_cast<Chord*>(cr2));
+                         slur->setTick(cr1->tick());
+                         slur->setTick2(cr2->tick());
+                         slur->setTrack(cr1->track());
+                         slur->setTrack2(cr2->track());
+                         slur->setParent(cr1);
+                         score->undoAddElement(slur);
+                         }
                   }
             if (modMask2 & 0x1) {   // staccato
                   }
@@ -2102,13 +2252,89 @@ void GuitarPro5::readNoteEffects(Note* note)
       if (modMask1 & 0x8) {         // let ring
             }
       if (modMask1 & 0x10) {
-            readUChar();            // grace fret
-            readUChar();            // grace dynamic
-            readUChar();            // grace transition
-            readUChar();            // grace length
-            /*int flags =*/ readUChar();
-                  // 1  -  dead
-                  // 2  - on beat
+            int fret = readUChar();            // grace fret
+            int dynamic = readUChar();            // grace dynamic
+            int transition = readUChar();            // grace transition
+            int duration = readUChar();            // grace duration
+            int gflags = readUChar();
+
+            int grace_len = MScore::division/8;
+            NoteType note_type =  NOTE_ACCIACCATURA;
+
+            if(gflags & 0x02) //on beat
+                  note_type = NOTE_APPOGGIATURA;
+
+            if (duration == 1)
+                  grace_len = MScore::division/8; //32th
+            else if (duration == 2)
+                  grace_len = MScore::division/6; //24th
+            else if (duration == 3)
+                  grace_len = MScore::division/4; //16th
+
+            Note* gn = new Note(score);
+
+            if (gflags & 0x01) {
+                  gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  gn->setGhost(true);
+                  }
+            gn->setFret(fret);
+            gn->setString(note->string());
+            int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(note->string(), fret);
+            gn->setPitch(grace_pitch);
+            gn->setTpcFromPitch();
+
+            Chord* gc = new Chord(score);
+            gc->setTrack(note->chord()->track());
+            gc->add(gn);
+            gc->setParent(note->chord());
+            note->chord()->add(gc);
+
+            // TODO: Add dynamic. Dynamic now can be added only to a segment, not directly to a grace note
+            addDynamic(gn, dynamic);
+
+            TDuration d;
+            d.setVal(grace_len);
+            if(grace_len == MScore::division/6)
+                  d.setDots(1);
+            gc->setDurationType(d);
+            gc->setDuration(d.fraction());
+            gc->setNoteType(note_type);
+            gc->setMag(note->chord()->staff()->mag() * score->styleD(ST_graceNoteMag));
+            if (transition == 0) {
+                  // no transition
+                  }
+            else if(transition == 1){
+                  //TODO: Add a 'slide' guitar effect when implemented
+                  }
+            else if (transition == 2 && note->fret()>=0 && note->fret()<=255 && note->fret()!=gn->fret()) {
+                  QList<PitchValue> points;
+                  points.append(PitchValue(0,0, false));
+                  points.append(PitchValue(60,(note->fret()-gn->fret())*100, false));
+
+                  Bend* b = new Bend(note->score());
+                  b->setPoints(points);
+                  b->setTrack(gn->track());
+                  gn->add(b);
+                  }
+             else if (transition == 3) {
+                   // TODO:
+                   //     major: replace with a 'hammer-on' guitar effect when implemented
+                   //     minor: make slurs for parts
+
+                   ChordRest* cr1 = static_cast<Chord*>(gc);
+                   ChordRest* cr2 = static_cast<Chord*>(note->chord());
+
+                   Slur* slur = new Slur(score);
+                   slur->setAnchor(Spanner::ANCHOR_CHORD);
+                   slur->setStartChord(static_cast<Chord*>(cr1));
+                   slur->setEndChord(static_cast<Chord*>(cr2));
+                   slur->setTick(cr1->tick());
+                   slur->setTick2(cr2->tick());
+                   slur->setTrack(cr1->track());
+                   slur->setTrack2(cr2->track());
+                   slur->setParent(cr1);
+                   score->undoAddElement(slur);
+                   }
             }
       if (modMask2 & 0x1) {   // staccato - palm mute
             Chord* chord = note->chord();
@@ -2236,10 +2462,8 @@ void GuitarPro5::readNote(int string, Note* note)
                   delete art;
             }
 
-      /*int aa =*/ readUChar();
-      if (noteBits & 0x8) {
-            readNoteEffects(note);
-            }
+      readUChar(); //skip
+
       Staff* staff = note->staff();
       if (fretNumber == 255) {
             fretNumber = 0;
@@ -2251,6 +2475,10 @@ void GuitarPro5::readNote(int string, Note* note)
       note->setString(string);
       note->setPitch(pitch);
 
+      // This function uses string and fret number, so it should be set before this
+      if (noteBits & 0x8) {
+            readNoteEffects(note);
+            }
       if (tieNote) {
             bool found = false;
             Chord* chord     = note->chord();
