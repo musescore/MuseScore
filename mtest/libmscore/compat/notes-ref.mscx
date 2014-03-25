@@ -83,8 +83,8 @@
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
-        <longName pos="0">Voice</longName>
-        <shortName pos="0">Vo.</shortName>
+        <longName pos="0">&lt;font face=&quot;Times New Roman&quot;/&gt;Voice</longName>
+        <shortName pos="0">&lt;font face=&quot;Times New Roman&quot;/&gt;Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
@@ -103,7 +103,7 @@
         <bottomGap>58.337</bottomGap>
         <Text>
           <style>Title</style>
-          <text>notes</text>
+          <text><font face="Times New Roman"/>notes</text>
           </Text>
         </VBox>
       <Measure number="1">
