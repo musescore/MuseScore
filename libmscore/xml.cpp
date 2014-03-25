@@ -689,8 +689,9 @@ QString XmlReader::readXml()
 //   writeXml
 //---------------------------------------------------------
 
-void Xml::writeXml(const char* name, QString s)
+void Xml::writeXml(const QString& name, QString s)
       {
+      QString ename(name.split(' ')[0]);
       putLevel();
       for (int i = 0; i < s.size(); ++i) {
             ushort c = s.at(i).unicode();
@@ -699,7 +700,7 @@ void Xml::writeXml(const char* name, QString s)
             }
       *this << "<" << name << ">";
       *this << s;
-      *this << "</" << name << ">\n";
+      *this << "</" << ename << ">\n";
       }
 
 //---------------------------------------------------------

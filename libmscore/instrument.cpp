@@ -143,7 +143,7 @@ StringData *InstrumentData::stringData() const
 void StaffName::write(Xml& xml, const char* tag) const
       {
       if (!name.isEmpty())
-            xml.tag(QString("%1 pos=\"%2\"").arg(tag).arg(pos), name);
+            xml.writeXml(QString("%1 pos=\"%2\"").arg(tag).arg(pos), name);
       }
 
 //---------------------------------------------------------
