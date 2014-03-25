@@ -99,6 +99,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
 
       for (Element* e : _score->selection().elements()) {
             QRectF r = e->drag(&data);
+
             _score->addRefresh(r);
             }
 

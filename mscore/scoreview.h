@@ -154,12 +154,21 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       QPointF dragOffset;
 
+// refresh rect for align element
+      AlignLine aLines;
+
+      bool allowRefreshAlign = false;
+      bool doRefreshAlign = false;
+      QRectF rVline;
+      QRectF rHline;
+
       // editing mode
       QRectF grip[MAX_GRIPS];       // edit "grips"
       int curGrip;
       int grips;                    // number of used grips
       int defaultGrip;              // grip to start editing
       Element* editObject;          ///< Valid in edit mode
+
 
       //--input state:
       PositionCursor* _cursor;

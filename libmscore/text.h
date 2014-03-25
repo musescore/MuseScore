@@ -212,6 +212,7 @@ class Text : public Element {
 
       Text &operator=(const Text&);
 
+      virtual void updateAlignLines( AlignLine& ) const override;
       virtual void draw(QPainter*) const override;
 
       bool editMode() const                   { return _editMode; }

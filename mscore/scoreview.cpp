@@ -2205,6 +2205,13 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
 
 void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
       {
+      qDebug("DrawElem");
+      if( doRefreshAlign ){
+            doRefreshAlign = false;
+            for( int i = 0 ; i < aLines.aLines; i++){
+                  _score->addRefresh(aLines.rLine[i]);
+                  }
+            }
       foreach(const Element* e, el) {
             e->itemDiscovered = 0;
             if (!e->visible()) {
@@ -2212,8 +2219,39 @@ void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
                         continue;
                   }
             QPointF pos(e->pagePos());
+            if( allowRefreshAlign && e->selected() ){
+                  e->updateAlignLines( aLines );
+                  if( aLines.aLines ){
+                        const Element* page = e;
+                        while (page->parent())
+                              page = page->parent();
+
+                        doRefreshAlign = true;
+                        for( int i = 0 ; i < aLines.aLines; i++){
+                              QLineF dLine;
+                              if( aLines.vert[i] ){   // Vertical
+//                                    aLines.rLine[i] = QRectF(aLines.aLine[i].x() + page->pos().x(),0,1,page->height());
+//                                    dLine = QLineF(aLines.aLine[i].x() + pos.x(),0,aLines.aLine[i].x() + pos.x(),page->height());
+                                    aLines.rLine[i] = QRectF(aLines.aLine[i].x() + page->pos().x(),0,1,page->height());
+                                    dLine = QLineF(aLines.aLine[i].x(),0,aLines.aLine[i].x(),page->height());
+                                    }
+                               else{                  // Horizontal
+                                    aLines.rLine[i] = QRectF(0 + page->pos().x() ,aLines.aLine[i].y() + page->pos().y(),page->width(),1);
+                                    dLine = QLineF(0,aLines.aLine[i].y(),page->width(),aLines.aLine[i].y());
+                                    }
+                              _score->addRefresh(aLines.rLine[i]);
+                              QPen pen(Qt::red);
+                              pen.setWidth(0);
+                              painter.setPen(pen);
+                              painter.drawLine(dLine);
+                              }
+                        }
+                  }
             painter.translate(pos);
-            e->draw(&painter);
+            if( e->type() == Element::DYNAMIC )
+                  e->draw(&painter);
+            else
+                  e->draw(&painter);
             painter.translate(-pos);
             if (MScore::debugMode && e->selected())
                   drawDebugInfo(painter, e);
@@ -3251,6 +3289,11 @@ void ScoreView::select(QMouseEvent* ev)
 
 bool ScoreView::mousePress(QMouseEvent* ev)
       {
+      qDebug("mouseDown");
+
+      allowRefreshAlign = true;
+
+
       startMoveI = ev->pos();
       data.startMove  = imatrix.map(QPointF(startMoveI));
       curElement = elementNear(data.startMove);
@@ -3270,8 +3313,13 @@ bool ScoreView::mousePress(QMouseEvent* ev)
 
 void ScoreView::mouseReleaseEvent(QMouseEvent* event)
       {
+      qDebug("mouseRelease");
+
       if (seq)
             seq->stopNoteTimer();
+
+      allowRefreshAlign = false;
+
       QWidget::mouseReleaseEvent(event);
       }
 
