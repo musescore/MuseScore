@@ -82,7 +82,7 @@ static void xmlSetPitch(Ms::Note* n, char step, int alter, int octave)
       //                       a  b   c  d  e  f  g
       static int table[7]  = { 9, 11, 0, 2, 4, 5, 7 };
       if (istep < 0 || istep > 6) {
-            qDebug("xmlSetPitch: illegal pitch %d, <%c>\n", istep, step);
+            qDebug("xmlSetPitch: illegal pitch %d, <%c>", istep, step);
             return;
             }
       int pitch = table[istep] + alter + (octave+1) * 12;
@@ -301,7 +301,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
 
       if (mef.endingEnd) {
             if (lastVolta) {
-                  qDebug("adding volta\n");
+                  qDebug("adding volta");
                   if (ending == 1)
                         lastVolta->setVoltaType(Ms::VoltaType::CLOSED);
                   else
@@ -311,7 +311,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
                   lastVolta = 0;
                   }
             else {
-                  qDebug("lastVolta == 0 on stop\n");
+                  qDebug("lastVolta == 0 on stop");
                   }
             }
 
@@ -511,18 +511,18 @@ void MsScWriter::doTriplet(Ms::Chord* cr, StartStop triplet)
                   tuplet = 0;
                   }
             else
-                  qDebug("BWW::import: triplet stop without triplet start\n");
+                  qDebug("BWW::import: triplet stop without triplet start");
             }
       else if (triplet == ST_CONTINUE) {
             if (!tuplet)
-                  qDebug("BWW::import: triplet continue without triplet start\n");
+                  qDebug("BWW::import: triplet continue without triplet start");
             }
       else if (triplet == ST_NONE) {
             if (tuplet)
-                  qDebug("BWW::import: triplet none inside triplet\n");
+                  qDebug("BWW::import: triplet none inside triplet");
             }
       else
-            qDebug("unknown triplet type %d\n", triplet);
+            qDebug("unknown triplet type %d", triplet);
       if (tuplet) {
             cr->setTuplet(tuplet);
             tuplet->add(cr);
@@ -540,7 +540,7 @@ namespace Ms {
 
 Score::FileError importBww(Score* score, const QString& path)
       {
-      qDebug("Score::importBww(%s)\n", qPrintable(path));
+      qDebug("Score::importBww(%s)", qPrintable(path));
 
       QFile fp(path);
       if(!fp.exists())
@@ -565,7 +565,7 @@ Score::FileError importBww(Score* score, const QString& path)
       score->setSaved(false);
       score->setCreated(true);
       score->connectTies();
-      qDebug("Score::importBww() done\n");
+      qDebug("Score::importBww() done");
       return Score::FILE_NO_ERROR;      // OK
       }
 

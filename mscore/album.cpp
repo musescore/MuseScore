@@ -154,13 +154,13 @@ void Album::createScore()
             if (item->score == 0 || item->score == firstScore)
                   continue;
             if (!score->appendScore(item->score)) {
-                  qDebug("cannot append score\n");
+                  qDebug("cannot append score");
                   delete score;
                   return;
                   }
             }
       score->fileInfo()->setFile(fn);
-      qDebug("Album::createScore: save file\n");
+      qDebug("Album::createScore: save file");
       try {
             score->saveCompressedFile(*score->fileInfo(), false);
             }

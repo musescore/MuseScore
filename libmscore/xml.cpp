@@ -277,7 +277,7 @@ PlaceText readPlacement(XmlReader& e)
             return PLACE_BELOW;
       if (s == "left" || s == "3")
             return PLACE_LEFT;
-      qDebug("unknown placement value <%s>\n", qPrintable(s));
+      qDebug("unknown placement value <%s>", qPrintable(s));
       return PLACE_AUTO;
       }
 
@@ -540,7 +540,7 @@ void Xml::tag(const QString& name, QVariant data)
                   }
                   break;
             default:
-                  qDebug("Xml::tag: unsupported type %d\n", data.type());
+                  qDebug("Xml::tag: unsupported type %d", data.type());
                   // abort();
                   break;
             }

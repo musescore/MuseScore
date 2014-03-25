@@ -363,10 +363,10 @@ void PosLen::dump(int n) const
       qDebug("  Len(");
       switch(type()) {
             case FRAMES:
-                  qDebug("samples=%d)\n", _lenFrame);
+                  qDebug("samples=%d)", _lenFrame);
                   break;
             case TICKS:
-                  qDebug("ticks=%d)\n", _lenTick);
+                  qDebug("ticks=%d)", _lenTick);
                   break;
             }
       }

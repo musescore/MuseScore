@@ -570,7 +570,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                               }
                         }
                   else
-                        qDebug("Chord::renderTremolo: cannot find 2. chord\n");
+                        qDebug("Chord::renderTremolo: cannot find 2. chord");
                   }
             else if (chord->tremoloChordType() == TremoloSecondNote) {
                   for (int k = 0; k < notes; ++k) {

@@ -63,7 +63,7 @@ static Interval keydiff2Interval(int oKey, int nKey, TransposeDirection dir)
             if (chromatic == -12)
                   chromatic = 0;
             }
-qDebug("TransposeByKey %d -> %d   chromatic %d diatonic %d\n", oKey, nKey, chromatic, diatonic);
+qDebug("TransposeByKey %d -> %d   chromatic %d diatonic %d", oKey, nKey, chromatic, diatonic);
       return Interval(diatonic, chromatic);
       }
 
@@ -132,7 +132,7 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
       int steps     = interval.diatonic;
       int semitones = interval.chromatic;
 
-// qDebug("transposeTpc tpc %d steps %d semitones %d\n", tpc, steps, semitones);
+// qDebug("transposeTpc tpc %d steps %d semitones %d", tpc, steps, semitones);
       if (semitones == 0 && steps == 0)
             return tpc;
 
@@ -161,9 +161,9 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
                   --steps;
             else
                   break;
-//            qDebug("  again alter %d steps %d, step %d\n", alter, steps, step);
+//            qDebug("  again alter %d steps %d, step %d", alter, steps, step);
             }
-//      qDebug("  = step %d alter %d  tpc %d\n", step, alter, step2tpc(step, alter));
+//      qDebug("  = step %d alter %d  tpc %d", step, alter, step2tpc(step, alter));
       return step2tpc(step, AccidentalVal(alter));
       }
 

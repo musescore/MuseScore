@@ -18,7 +18,7 @@ bool Sample::decompressOggVorbis(char* src, int size)
       start = 0;
       end   = 0;
       if (!af.open(ba)) {
-            qDebug("Sample::decompressOggVorbis: open failed: %s\n", af.error());
+            qDebug("Sample::decompressOggVorbis: open failed: %s", af.error());
             return false;
             }
       int frames = af.frames();

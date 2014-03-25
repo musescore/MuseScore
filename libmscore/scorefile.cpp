@@ -254,7 +254,7 @@ void Score::readStaff(XmlReader& e)
                                     }
                               }
                         if (measure == 0) {
-                              qDebug("Score::readStaff(): missing measure!\n");
+                              qDebug("Score::readStaff(): missing measure!");
                               measure = new Measure(this);
                               measure->setTick(e.tick());
                               add(measure);
@@ -649,7 +649,7 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       {
       MQZipReader uz(name);
       if (!uz.exists()) {
-            qDebug("loadCompressedMsc: <%s> not found\n", qPrintable(name));
+            qDebug("loadCompressedMsc: <%s> not found", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "file not found");
             return FILE_NOT_FOUND;
             }
@@ -761,7 +761,7 @@ void Score::parseVersion(const QString& val)
                               int currentVersion = v1 * 10000 + v2 * 100 + v3;
                               int readVersion = rv1 * 10000 + rv2 * 100 + rv3;
                               if (readVersion > currentVersion) {
-                                    qDebug("read future version\n");
+                                    qDebug("read future version");
                                     }
                               }
                         }
@@ -776,17 +776,17 @@ void Score::parseVersion(const QString& val)
                                     int currentVersion = v1 * 10000 + v2 * 100 + v3;
                                     int readVersion = rv1 * 10000 + rv2 * 100;
                                     if (readVersion > currentVersion) {
-                                          qDebug("read future version\n");
+                                          qDebug("read future version");
                                           }
                                     }
                               }
                         else
-                              qDebug("1cannot parse <%s>\n", qPrintable(val));
+                              qDebug("1cannot parse <%s>", qPrintable(val));
                         }
                   }
             }
       else
-            qDebug("2cannot parse <%s>\n", VERSION);
+            qDebug("2cannot parse <%s>", VERSION);
       }
 
 //---------------------------------------------------------
@@ -1096,7 +1096,7 @@ bool Score::read(XmlReader& e)
             int idx = staffIdx(st);
             int n = nstaves();
             if (idx + barLineSpan > n) {
-                  qDebug("bad span: idx %d  span %d staves %d\n", idx, barLineSpan, n);
+                  qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
                   st->setBarLineSpan(n - idx);
                   }
             // check spanFrom
@@ -1178,7 +1178,7 @@ QByteArray Score::readCompressedToBuffer()
             }
 
       if (rootfile.isEmpty()) {
-            qDebug("=can't find rootfile in: %s\n", qPrintable(filePath()));
+            qDebug("=can't find rootfile in: %s", qPrintable(filePath()));
             return QByteArray();
             }
       return uz.fileData(rootfile);
@@ -1213,7 +1213,7 @@ QByteArray Score::readToBuffer()
 void Score::createRevision()
       {
 #if 0
-qDebug("createRevision\n");
+qDebug("createRevision");
       QBuffer dbuf;
       dbuf.open(QIODevice::ReadWrite);
       saveFile(&dbuf, false, false);
@@ -1230,7 +1230,7 @@ qDebug("createRevision\n");
       r->setId("1");
       _revisions->add(r);
 
-//      qDebug("patch:\n%s\n==========\n", qPrintable(patch));
+//      qDebug("patch:\n%s\n==========", qPrintable(patch));
       //
 #endif
       }

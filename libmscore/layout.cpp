@@ -2728,7 +2728,7 @@ void Score::layoutSystems()
                         startWithLongNames = firstSystem && lm->sectionBreak()->startWithLongNames();
                         }
                   else
-                        qDebug("empty system!\n");
+                        qDebug("empty system!");
                   }
             }
       // TODO: make undoable:

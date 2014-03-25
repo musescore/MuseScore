@@ -128,7 +128,7 @@ void Part::setStaves(int n)
       {
       int ns = _staves.size();
       if (n < ns) {
-            qDebug("Part::setStaves(): remove staves not implemented!\n");
+            qDebug("Part::setStaves(): remove staves not implemented!");
             return;
             }
       int staffIdx = _score->staffIdx(this) + ns;
@@ -169,7 +169,7 @@ void Part::insertStaff(Staff* staff)
 void Part::removeStaff(Staff* staff)
       {
       if (!_staves.removeOne(staff)) {
-            qDebug("Part::removeStaff: not found %p\n", staff);
+            qDebug("Part::removeStaff: not found %p", staff);
             return;
             }
       int idx = 0;
