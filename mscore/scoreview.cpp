@@ -2274,8 +2274,6 @@ for (const Element* e : el) {
                         for( int i = 0 ; i < aLines.aLines; i++){
                               QLineF dLine;
                               if( aLines.vert[i] ){   // Vertical
-//                                    aLines.rLine[i] = QRectF(aLines.aLine[i].x() + page->pos().x(),0,1,page->height());
-//                                    dLine = QLineF(aLines.aLine[i].x() + pos.x(),0,aLines.aLine[i].x() + pos.x(),page->height());
                                     aLines.rLine[i] = QRectF(aLines.aLine[i].x() + page->pos().x(),0,1,page->height());
                                     dLine = QLineF(aLines.aLine[i].x(),0,aLines.aLine[i].x(),page->height());
                                     }
@@ -2292,10 +2290,7 @@ for (const Element* e : el) {
                         }
                   }
             painter.translate(pos);
-            if( e->type() == Element::DYNAMIC )
-                  e->draw(&painter);
-            else
-                  e->draw(&painter);
+            e->draw(&painter);
             painter.translate(-pos);
             if (MScore::debugMode && e->selected())
                   drawDebugInfo(painter, e);
@@ -3332,7 +3327,7 @@ void ScoreView::select(QMouseEvent* ev)
 
 bool ScoreView::mousePress(QMouseEvent* ev)
       {
-      qDebug("mouseDown");
+//      qDebug("mouseDown");
 
       allowRefreshAlign = true;
 
@@ -3356,12 +3351,15 @@ bool ScoreView::mousePress(QMouseEvent* ev)
 
 void ScoreView::mouseReleaseEvent(QMouseEvent* event)
       {
-      qDebug("mouseRelease");
+//      qDebug("mouseRelease");
 
       if (seq)
             seq->stopNoteTimer();
-
-      allowRefreshAlign = false;
+      if(allowRefreshAlign){
+            allowRefreshAlign = false;
+            _score->setLayoutAll(true);
+            _score->update();
+      }
 
       QWidget::mouseReleaseEvent(event);
       }
