@@ -252,40 +252,40 @@ void TestText::testCompatibility() {
 "p, li { white-space: pre-wrap; }"
 "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">bold</span></p></body></html>");
-      QCOMPARE(text->convertFromHtml(sb), QString("<b>bold</b>"));
+      QCOMPARE(text->convertFromHtml(sb), QString("<font face=\"Times New Roman\"/><b>bold</b>"));
 
       //italic
       const QString si("<html><head><meta name=\"qrichtext\" content=\"1\" /><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><style type=\"text/css\">"
 "p, li { white-space: pre-wrap; }"
 "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">italic</span></p></body></html>");
-      QCOMPARE(text->convertFromHtml(si), QString("<i>italic</i>"));
+      QCOMPARE(text->convertFromHtml(si), QString("<font face=\"Times New Roman\"/><i>italic</i>"));
 
       //underline
       const QString su("<html><head><meta name=\"qrichtext\" content=\"1\" /><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><style type=\"text/css\">"
 "p, li { white-space: pre-wrap; }"
 "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">underline</span></p></body></html>");
-      QCOMPARE(text->convertFromHtml(su), QString("<u>underline</u>"));
+      QCOMPARE(text->convertFromHtml(su), QString("<font face=\"Times New Roman\"/><u>underline</u>"));
 
       //bold italic underline
       const QString sbiu("<html><head><meta name=\"qrichtext\" content=\"1\" /><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><style type=\"text/css\">"
 "p, li { white-space: pre-wrap; }"
 "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; font-style:italic; text-decoration: underline;\">bolditalicunderline</span></p></body></html>");
-      QCOMPARE(text->convertFromHtml(sbiu), QString("<b><i><u>bolditalicunderline</u></i></b>"));
+      QCOMPARE(text->convertFromHtml(sbiu), QString("<font face=\"Times New Roman\"/><b><i><u>bolditalicunderline</u></i></b>"));
 
       const QString sbiu2("<html><head><meta name=\"qrichtext\" content=\"1\" /><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><style type=\"text/css\">"
 "p, li { white-space: pre-wrap; }"
 "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">bold</span><span style=\" font-style:italic;\">italic</span><span style=\" text-decoration: underline;\">underline</span></p></body></html>");
-      QCOMPARE(text->convertFromHtml(sbiu2), QString("<b>bold</b><i>italic</i><u>underline</u>"));
+      QCOMPARE(text->convertFromHtml(sbiu2), QString("<font face=\"Times New Roman\"/><b>bold</b><i>italic</i><u>underline</u>"));
 
       const QString sbi("<html><head><meta name=\"qrichtext\" content=\"1\" /><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><style type=\"text/css\">"
 "p, li { white-space: pre-wrap; }"
 "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">bo</span><span style=\" font-weight:600; font-style:italic; text-decoration: underline;\">ldit</span>alic</p></body></html>");
-      QCOMPARE(text->convertFromHtml(sbi), QString("<b>bo</b><b><i><u>ldit</u></i></b>alic"));
+      QCOMPARE(text->convertFromHtml(sbi), QString("<font face=\"Times New Roman\"/><b>bo</b><b><i><u>ldit</u></i></b>alic"));
 }
 
 
