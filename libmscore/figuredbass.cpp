@@ -1078,7 +1078,7 @@ NoLen:
                   lastCR = nextSegm->prev1()->nextChordRest(track(), true);
             }
       if (m == 0 || nextSegm == 0) {
-            qDebug("FiguredBass layout: no segment found for tick %d\n", nextTick);
+            qDebug("FiguredBass layout: no segment found for tick %d", nextTick);
             goto NoLen;
             }
 
@@ -1514,7 +1514,7 @@ bool FiguredBass::readConfigFile(const QString& fileName)
       if (!f.open(QIODevice::ReadOnly)) {
             QString s = QT_TRANSLATE_NOOP("file", "Cannot open figured bass description:\n%1\n%2");
             MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
-qDebug("FiguredBass::read failed: <%s>\n", qPrintable(path));
+qDebug("FiguredBass::read failed: <%s>", qPrintable(path));
             return false;
             }
       XmlReader e(&f);

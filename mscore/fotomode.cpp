@@ -784,7 +784,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             printer.save(fn, "png");
             }
       else
-            qDebug("unknown extension <%s>\n", qPrintable(ext));
+            qDebug("unknown extension <%s>", qPrintable(ext));
       return true;
       }
 
@@ -832,7 +832,7 @@ void ScoreView::fotoDragDrop(QMouseEvent*)
       tf.setAutoRemove(false);
       tf.open();
       tf.close();
-      qDebug("Temp File <%s>\n", qPrintable(tf.fileName()));
+      qDebug("Temp File <%s>", qPrintable(tf.fileName()));
 
 //      QString fn = "/home/ws/mops.eps";
       QString fn = tf.fileName();

@@ -242,7 +242,7 @@ void Event::write(Xml& xml) const
                                     };
                               int key = (char)(_edata[0]) + 7;
                               if (key < 0 || key > 14) {
-                                    qDebug("bad key signature %d\n", key);
+                                    qDebug("bad key signature %d", key);
                                     key = 0;
                                     }
                               QString sex(_edata[1] ? "Minor" : "Major");

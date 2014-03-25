@@ -67,7 +67,7 @@ void KeySigEvent::enforceLimits()
             msg = "naturalType > 7";
             }
       if (msg)
-            qDebug("KeySigEvent: %s\n", msg);
+            qDebug("KeySigEvent: %s", msg);
       }
 
 //---------------------------------------------------------

@@ -67,7 +67,7 @@ void Glissando::layout()
             s = s->prev1();
             }
       if (s == 0) {
-            qDebug("no segment for first note of glissando found\n");
+            qDebug("no segment for first note of glissando found");
             return;
             }
       ChordRest* cr = static_cast<ChordRest*>(s->element(track()));

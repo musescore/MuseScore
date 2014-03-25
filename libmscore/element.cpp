@@ -717,7 +717,7 @@ bool Element::readProperties(XmlReader& e)
             _links = score()->links().value(id);
             if (!_links) {
                   if (score()->parentScore())   // DEBUG
-                        qDebug("---link %d not found (%d)\n", id, score()->links().size());
+                        qDebug("---link %d not found (%d)", id, score()->links().size());
                   _links = new LinkedElements(score(), id);
                   score()->links().insert(id, _links);
                   }
@@ -827,7 +827,7 @@ void ElementList::replace(Element* o, Element* n)
       {
       auto i = find(begin(), end(), o);
       if (i == end()) {
-            qDebug("ElementList::replace: element not found\n");
+            qDebug("ElementList::replace: element not found");
             return;
             }
       *i = n;
@@ -901,7 +901,7 @@ void StaffLines::layout()
             lines = 5;
             }
 
-//      qDebug("StaffLines::layout:: dist %f st %p\n", dist, st);
+//      qDebug("StaffLines::layout:: dist %f st %p", dist, st);
 
       setColor(staff() ? staff()->color() : MScore::defaultColor);
 
@@ -980,7 +980,7 @@ Line::Line(Score* s, bool v)
 
 void Line::dump() const
       {
-      qDebug("  width:%g height:%g vert:%d\n", point(_width), point(_len), vertical);
+      qDebug("  width:%g height:%g vert:%d", point(_width), point(_len), vertical);
       }
 
 //---------------------------------------------------------
@@ -1166,10 +1166,10 @@ void Compound::clear()
 
 void Element::dump() const
       {
-      qDebug("---Element: %s, pos(%4.2f,%4.2f)\n"
-         "   bbox(%g,%g,%g,%g)\n"
-         "   abox(%g,%g,%g,%g)\n"
-         "  parent: %p\n",
+      qDebug("---Element: %s, pos(%4.2f,%4.2f)"
+         "\n   bbox(%g,%g,%g,%g)"
+         "\n   abox(%g,%g,%g,%g)"
+         "\n  parent: %p",
          name(), ipos().x(), ipos().y(),
          _bbox.x(), _bbox.y(), _bbox.width(), _bbox.height(),
          abbox().x(), abbox().y(), abbox().width(), abbox().height(),
@@ -1269,7 +1269,7 @@ bool Element::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers, const QS
 
 void Element::add(Element* e)
       {
-      qDebug("Element: cannot add %s to %s\n", e->name(), name());
+      qDebug("Element: cannot add %s to %s", e->name(), name());
       }
 
 //---------------------------------------------------------
@@ -1278,7 +1278,7 @@ void Element::add(Element* e)
 
 void Element::remove(Element* e)
       {
-      qFatal("Element: cannot remove %s from %s\n", e->name(), name());
+      qFatal("Element: cannot remove %s from %s", e->name(), name());
       }
 
 //---------------------------------------------------------
@@ -1382,7 +1382,7 @@ Element* Element::create(ElementType type, Score* score)
             case MAXTYPE:
             case INVALID:  break;
             }
-      qDebug("cannot create type %d <%s>\n", int(type), Element::name(type));
+      qDebug("cannot create type %d <%s>", int(type), Element::name(type));
       return 0;
       }
 
@@ -1405,7 +1405,7 @@ Element::ElementType Element::name2type(const QStringRef& s)
             if (s == elementNames[i].name)
                   return ElementType(i);
             }
-qDebug("name2type: invalid type <%s>\n", s.toUtf8().data());
+qDebug("name2type: invalid type <%s>", s.toUtf8().data());
       return INVALID;
       }
 

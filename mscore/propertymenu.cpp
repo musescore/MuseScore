@@ -514,7 +514,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         score()->setLayoutAll(true);
                         }
                   else
-                        qDebug("no template selected?\n");
+                        qDebug("no template selected?");
                   }
             }
       else if (cmd == "articulation") {
@@ -552,7 +552,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         score()->undo(new ChangeInstrument(ic, ic->instrument()));
                         }
                   else
-                        qDebug("no template selected?\n");
+                        qDebug("no template selected?");
                   }
            }
       else if (cmd == "fret-props") {

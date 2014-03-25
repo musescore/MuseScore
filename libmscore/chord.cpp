@@ -467,7 +467,7 @@ void Chord::remove(Element* e)
                               }
                         }
                   else
-                        qDebug("Chord::remove() note %p not found!\n", e);
+                        qDebug("Chord::remove() note %p not found!", e);
                   }
                   break;
 
@@ -2085,7 +2085,7 @@ Element* Chord::drop(const DropData& data)
                               s = s->next();
                               }
                         if (s == 0) {
-                              qDebug("no segment for second note of tremolo found\n");
+                              qDebug("no segment for second note of tremolo found");
                               delete e;
                               return 0;
                               }

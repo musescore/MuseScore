@@ -321,7 +321,7 @@ bool TrackList::write(int track, Measure* measure) const
 
                   if (duration > rest && e->type() == Element::TUPLET) {
                         // cannot split tuplet
-                        qDebug("TrackList::write: cannot split tuplet\n");
+                        qDebug("TrackList::write: cannot split tuplet");
                         return false;
                         }
                   //

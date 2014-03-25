@@ -211,7 +211,7 @@ Shortcut* Shortcut::getShortcut(const char* id)
       {
       Shortcut* s = _shortcuts.value(id);
       if (s == 0) {
-            qDebug("Internal error: shortcut <%s> not found\n", id);
+            qDebug("Internal error: shortcut <%s> not found", id);
             return 0;
             }
       return s;

@@ -212,9 +212,9 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
             }
       else {
             if (MScore::debugMode) {
-                  qDebug("KeyCanvas::dragEnterEvent: formats:\n");
+                  qDebug("KeyCanvas::dragEnterEvent: formats:");
                   foreach(const QString& s, event->mimeData()->formats())
-                        qDebug("   %s\n", qPrintable(s));
+                        qDebug("   %s", qPrintable(s));
                   }
             }
       }

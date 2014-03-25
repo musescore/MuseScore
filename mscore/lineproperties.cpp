@@ -37,7 +37,7 @@ static void setTextPlace(PlaceText place, QComboBox* cb)
             case PLACE_BELOW: idx = 1; break;
             case PLACE_LEFT:  idx = 2; break;
             default:
-                  qDebug("illegal text placement\n");
+                  qDebug("illegal text placement");
             }
       cb->setCurrentIndex(idx);
       }

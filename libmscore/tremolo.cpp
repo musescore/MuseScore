@@ -209,7 +209,7 @@ void Tremolo::layout()
             s = s->next();
             }
       if (s == 0) {
-            qDebug("no second note of tremolo found\n");
+            qDebug("no second note of tremolo found");
             return;
             }
 

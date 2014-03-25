@@ -633,7 +633,7 @@ void FBox::add(Element* e)
 //            fd->setFlag(ELEMENT_MOVABLE, false);
             }
       else {
-            qDebug("FBox::add: element not allowed\n");
+            qDebug("FBox::add: element not allowed");
             return;
             }
       _el.push_back(e);

@@ -191,7 +191,7 @@ void EditDrumset::bboxClicked(QAbstractButton* button)
                   break;
 
             default:
-                  qDebug("EditDrumSet: unknown button\n");
+                  qDebug("EditDrumSet: unknown button");
                   break;
             }
       }
