@@ -1158,7 +1158,7 @@ void MuseScore::editInstrList()
       for(Staff* staff : dst) {
             int idx = rootScore->staves().indexOf(staff);
             if (idx == -1)
-                  qDebug("staff in dialog(%p) not found in score\n", staff);
+                  qDebug("staff in dialog(%p) not found in score", staff);
             else
                   dl.push_back(idx);
             }

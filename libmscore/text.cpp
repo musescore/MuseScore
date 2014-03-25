@@ -1083,7 +1083,7 @@ void Text::createLayout()
                               else if (token.startsWith("face=\""))
                                     cursor.format()->setFontFamily(parseStringProperty(token.mid(6)));
                               else
-                                    qDebug("cannot parse html property <%s>\n", qPrintable(token));
+                                    qDebug("cannot parse html property <%s>", qPrintable(token));
                               }
                         }
                   else
@@ -2120,7 +2120,7 @@ void Text::paste()
       {
       QString txt = QApplication::clipboard()->text(QClipboard::Clipboard);
       if (MScore::debugMode)
-            qDebug("Text::paste() <%s>\n", qPrintable(txt));
+            qDebug("Text::paste() <%s>", qPrintable(txt));
       insertText(txt);
       layoutEdit();
       bool lo = type() == INSTRUMENT_NAME;

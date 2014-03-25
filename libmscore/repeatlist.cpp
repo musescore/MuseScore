@@ -36,7 +36,7 @@ Volta* Score::searchVolta(int tick) const
             int tick1 = volta->tick();
             Measure* m = tick2measure(volta->tick2());
             int tick2 = m->endTick();
-// qDebug("spanner %s %d - %d %d\n", s->name(), tick, tick1, tick2);
+// qDebug("spanner %s %d - %d %d", s->name(), tick, tick1, tick2);
             if (tick >= tick1 && tick < tick2)
                   return volta;
             }
@@ -49,13 +49,13 @@ Volta* Score::searchVolta(int tick) const
 
 Measure* Score::searchLabel(const QString& s)
       {
-// qDebug("searchLabel<%s>\n", qPrintable(s));
+// qDebug("searchLabel<%s>", qPrintable(s));
       if (s == "start") {
-// qDebug("   found %p\n", firstMeasure());
+// qDebug("   found %p", firstMeasure());
             return firstMeasure();
             }
       else if (s == "end") {
-// qDebug("   found %p\n", firstMeasure());
+// qDebug("   found %p", firstMeasure());
             return lastMeasure();
             }
       for (Segment* segment = firstMeasure()->first(); segment; segment = segment->next1()) {
@@ -63,13 +63,13 @@ Measure* Score::searchLabel(const QString& s)
                   if (e->type() == Element::MARKER) {
                         const Marker* marker = static_cast<const Marker*>(e);
                         if (marker->label() == s) {
-// qDebug("   found %p\n", segment->measure());
+// qDebug("   found %p", segment->measure());
                               return segment->measure();
                               }
                         }
                   }
             }
-// qDebug("   found %p\n", 0);
+// qDebug("   found %p", 0);
       return 0;
       }
 
@@ -239,9 +239,9 @@ int RepeatList::utime2utick(qreal t) const
 void RepeatList::dump() const
       {
 return;
-      qDebug("==Dump Repeat List:==\n");
+      qDebug("==Dump Repeat List:==");
       foreach(const RepeatSegment* s, *this) {
-            qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f\n", s,
+            qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f", s,
                s->utick / 480,
                s->utick / 480 / 4,
                s->tick / 480,
@@ -332,7 +332,7 @@ void RepeatList::unwind()
                                     }
                               }
                         else
-                              qDebug("Jump not found\n");
+                              qDebug("Jump not found");
                         }
                   }
 

@@ -570,7 +570,7 @@ bool saveInstrumentTemplates(const QString& instrTemplates)
       {
       QFile qf(instrTemplates);
       if (!qf.open(QIODevice::WriteOnly)) {
-            qDebug("cannot save instrument templates at <%s>\n", qPrintable(instrTemplates));
+            qDebug("cannot save instrument templates at <%s>", qPrintable(instrTemplates));
             return false;
             }
       Xml xml(&qf);
@@ -607,7 +607,7 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
       {
       QFile qf(instrTemplates);
       if (!qf.open(QIODevice::WriteOnly)) {
-            qDebug("cannot save instrument templates at <%s>\n", qPrintable(instrTemplates));
+            qDebug("cannot save instrument templates at <%s>", qPrintable(instrTemplates));
             return false;
             }
       Xml xml(&qf);
@@ -638,7 +638,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
       {
       QFile qf(instrTemplates);
       if (!qf.open(QIODevice::ReadOnly)) {
-            qDebug("cannot load instrument templates at <%s>\n", qPrintable(instrTemplates));
+            qDebug("cannot load instrument templates at <%s>", qPrintable(instrTemplates));
             return false;
             }
 

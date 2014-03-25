@@ -108,20 +108,20 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
 
       // First try loading it from a previously located path
       if (!mLibPath.isEmpty()) {
-            qDebug("Attempting to load LAME from previously defined path\n");
+            qDebug("Attempting to load LAME from previously defined path");
             mLibraryLoaded = initLibrary(mLibPath);
             }
 
       // If not successful, try loading using system search paths
       if (!validLibraryLoaded()) {
-            qDebug("Attempting to load LAME from system search paths\n");
+            qDebug("Attempting to load LAME from system search paths");
             mLibPath = getLibraryName();
             mLibraryLoaded = initLibrary(mLibPath);
             }
 
       // If not successful, try loading using compiled in path
       if (!validLibraryLoaded()) {
-            qDebug("Attempting to load LAME from builtin path\n");
+            qDebug("Attempting to load LAME from builtin path");
             QFileInfo fn(QDir(getLibraryPath()), getLibraryName());
             mLibPath = fn.absoluteFilePath();
             mLibraryLoaded = initLibrary(mLibPath);
@@ -129,7 +129,7 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
 
       // If not successful, must ask the user
       if (!validLibraryLoaded()) {
-            qDebug("(Maybe) ask user for library\n");
+            qDebug("(Maybe) ask user for library");
             int ret = QMessageBox::question(0, qApp->translate("MP3Exporter", "Save as MP3"),
                   qApp->translate("MP3Exporter", "MuseScore does not export MP3 files directly, but instead uses \n"
                    "the freely available LAME library.  You must obtain %1 \n"
@@ -144,11 +144,11 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
 
       // Oh well, just give up
       if (!validLibraryLoaded()) {
-            qDebug("Failed to locate LAME library\n");
+            qDebug("Failed to locate LAME library");
             return false;
             }
 
-      qDebug("LAME library successfully loaded\n");
+      qDebug("LAME library successfully loaded");
       return true;
       }
 
@@ -184,14 +184,14 @@ void MP3Exporter::setChannel(int mode)
 
 bool MP3Exporter::initLibrary(QString libpath)
       {
-      qDebug("Loading LAME from %s\n", qPrintable(libpath));
+      qDebug("Loading LAME from %s", qPrintable(libpath));
       lame_lib = new QLibrary(libpath, 0);
       if (!lame_lib->load()) {
-            qDebug("load failed <%s>\n", qPrintable(lame_lib->errorString()));
+            qDebug("load failed <%s>", qPrintable(lame_lib->errorString()));
             return false;
             }
 
-      /*qDebug("Actual LAME path %s\n",
+      /*qDebug("Actual LAME path %s",
                 FileNames::PathFromAddr(lame_lib->resolve("lame_init")));*/
 
       lame_init = (lame_init_t *)
@@ -267,7 +267,7 @@ bool MP3Exporter::initLibrary(QString libpath)
         !lame_set_disable_reservoir ||
         !lame_set_padding_type ||
         !lame_set_bWriteVbrTag) {
-            qDebug("Failed to find a required symbol in the LAME library\n");
+            qDebug("Failed to find a required symbol in the LAME library");
 #if defined(Q_OS_WIN)
             if (beVersion) {
                   be_version v;
@@ -624,7 +624,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                                tr("Error Opening LAME library"),
                                tr("Could not open MP3 encoding library!"),
                                QString::null, QString::null);
-            qDebug("Could not open MP3 encoding library!\n");
+            qDebug("Could not open MP3 encoding library!");
             return false;
             }
 
@@ -636,7 +636,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                                tr("Error Opening LAME library"),
                                tr("Not a valid or supported MP3 encoding library!"),
                                QString::null, QString::null);
-            qDebug("Not a valid or supported MP3 encoding library!\n");
+            qDebug("Not a valid or supported MP3 encoding library!");
             return false;
             }
 
@@ -665,7 +665,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                      tr("Unable to initialize MP3 stream"),
                      QString::null, QString::null);
                   }
-            qDebug("Unable to initialize MP3 stream\n");
+            qDebug("Unable to initialize MP3 stream");
             MScore::sampleRate = oldSampleRate;
             return false;
             }

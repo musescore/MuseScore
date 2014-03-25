@@ -1188,7 +1188,7 @@ void MuseScore::helpBrowser(QString tag) const
       QString path(mscoreGlobalShare + "manual/reference-" + lang + ".pdf");
       if (!QFile::exists(path))
             path = mscoreGlobalShare + "manual/reference-en" + ".pdf";
-      qDebug("helpBrowser::load <%s>\n", qPrintable(path));
+      qDebug("helpBrowser::load <%s>", qPrintable(path));
       QUrl url(QUrl::fromLocalFile(path));
       if (!tag.isEmpty())
             url.setFragment(tag);

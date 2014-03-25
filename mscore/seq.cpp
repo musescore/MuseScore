@@ -249,7 +249,7 @@ void Seq::exit()
       {
       if (_driver) {
             if (MScore::debugMode)
-                  qDebug("Stop I/O\n");
+                  qDebug("Stop I/O");
             stopWait();
             delete _driver;
             _driver = 0;
@@ -284,7 +284,7 @@ void Seq::rewindStart()
 void Seq::loopStart()
       {
       start();
-//      qDebug("LoopStart. playPos = %d\n", playPos);
+//      qDebug("LoopStart. playPos = %d", playPos);
       }
 
 //---------------------------------------------------------
@@ -478,7 +478,7 @@ void Seq::seqMessage(int msg)
                   break;
 
             default:
-                  qDebug("MScore::Seq:: unknown seq msg %d\n", msg);
+                  qDebug("MScore::Seq:: unknown seq msg %d", msg);
                   break;
             }
       }
@@ -694,7 +694,7 @@ void Seq::process(unsigned n, float* buffer)
                      }
                   }
             else if (state != driverState)
-                  qDebug("Seq: state transition %d -> %d ?\n",
+                  qDebug("Seq: state transition %d -> %d ?",
                      state, driverState);
             }
 
@@ -738,7 +738,7 @@ void Seq::process(unsigned n, float* buffer)
                               break;
                         n = f - *pPlayTime;
                         if (n < 0) {
-                              qDebug("Count-in: %d:  %d - %d\n", (*pPlayPos)->first, f, *pPlayTime);
+                              qDebug("Count-in: %d:  %d - %d", (*pPlayPos)->first, f, *pPlayTime);
                               n = 0;
                               }
                         }
@@ -748,7 +748,7 @@ void Seq::process(unsigned n, float* buffer)
                               break;
                         n = f - *pPlayTime;
                         if (n < 0) {
-                              qDebug("%d:  %d - %d\n", (*pPlayPos)->first, f, *pPlayTime);
+                              qDebug("%d:  %d - %d", (*pPlayPos)->first, f, *pPlayTime);
                               n = 0;
                               }
                         if (mscore->loop()) {
@@ -1158,7 +1158,7 @@ void Seq::prevChord()
 
 void Seq::seekEnd()
       {
-      qDebug("seek to end\n");
+      qDebug("seek to end");
       }
 
 //---------------------------------------------------------
@@ -1220,7 +1220,7 @@ void SeqMsgFifo::enqueue(const SeqMsg& msg)
             }
       mutex.unlock();
       if (i == n) {
-            qDebug("===SeqMsgFifo: overflow\n");
+            qDebug("===SeqMsgFifo: overflow");
             return;
             }
       messages[widx] = msg;

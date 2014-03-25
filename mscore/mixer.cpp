@@ -204,7 +204,7 @@ void PartEdit::patchChanged(int n)
             return;
       const MidiPatch* p = (MidiPatch*)patch->itemData(n, Qt::UserRole).value<void*>();
       if (p == 0) {
-            qDebug("PartEdit::patchChanged: no patch\n");
+            qDebug("PartEdit::patchChanged: no patch");
             return;
             }
       Score* score = part->score();

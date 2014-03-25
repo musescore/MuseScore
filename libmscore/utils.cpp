@@ -92,7 +92,7 @@ MeasureBase* Score::tick2measureBase(int tick) const
             if (tick >= st && tick < (st+l))
                   return mb;
             }
-//      qDebug("tick2measureBase %d not found\n", tick);
+//      qDebug("tick2measureBase %d not found", tick);
       return 0;
       }
 
@@ -118,7 +118,7 @@ Segment* Score::tick2segment(int tick, bool first, Segment::SegmentTypes st, boo
           m = tick2measure(tick);
 
       if (m == 0) {
-            qDebug("   no segment for tick %d\n", tick);
+            qDebug("   no segment for tick %d", tick);
             return 0;
             }
       for (Segment* segment = m->first(st); segment;) {
@@ -145,7 +145,7 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
       {
       Measure* m = tick2measure(tick);
       if (m == 0) {
-            qDebug("tick2segment(): not found tick %d\n", tick);
+            qDebug("tick2segment(): not found tick %d", tick);
             return 0;
             }
       // loop over all segments
@@ -179,7 +179,7 @@ Segment* Score::tick2leftSegment(int tick) const
       {
       Measure* m = tick2measure(tick);
       if (m == 0) {
-            qDebug("tick2leftSegment(): not found tick %d\n", tick);
+            qDebug("tick2leftSegment(): not found tick %d", tick);
             return 0;
             }
       // loop over all segments
@@ -204,7 +204,7 @@ Segment* Score::tick2rightSegment(int tick) const
       {
       Measure* m = tick2measure(tick);
       if (m == 0) {
-            qDebug("tick2nearestSegment(): not found tick %d\n", tick);
+            qDebug("tick2nearestSegment(): not found tick %d", tick);
             return 0;
             }
       // loop over all segments

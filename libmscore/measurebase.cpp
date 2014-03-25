@@ -116,7 +116,7 @@ void MeasureBase::add(Element* e)
             foreach (Element* ee, _el) {
                   if (ee->type() == LAYOUT_BREAK && static_cast<LayoutBreak*>(ee)->layoutBreakType() == b->layoutBreakType()) {
                         if (MScore::debugMode)
-                              qDebug("warning: layout break already set\n");
+                              qDebug("warning: layout break already set");
                         return;
                         }
                   }
@@ -164,7 +164,7 @@ void MeasureBase::remove(Element* el)
                   }
             }
       if (!_el.remove(el))
-            qDebug("MeasureBase(%p)::remove(%s,%p) not found\n", this, el->name(), el);
+            qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->name(), el);
       }
 
 //---------------------------------------------------------

@@ -352,7 +352,7 @@ ChordRest* Score::findCR(int tick, int track) const
       if (m->isMMRest())
             tick = m->tick();
       if (m == 0) {
-            qDebug("findCR: no measure for tick %d\n", tick);
+            qDebug("findCR: no measure for tick %d", tick);
             return 0;
             }
       Segment* s = m->first(Segment::SegChordRest);

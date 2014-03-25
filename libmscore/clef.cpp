@@ -466,7 +466,7 @@ void Clef::setClefType(const QString& s)
       {
       ClefType ct = clefType(s);
       if (ct == ClefType::INVALID) {
-            qDebug("Clef::setSubtype: unknown: <%s>\n", qPrintable(s));
+            qDebug("Clef::setSubtype: unknown: <%s>", qPrintable(s));
             ct = ClefType::G;
             }
       setClefType(ct);

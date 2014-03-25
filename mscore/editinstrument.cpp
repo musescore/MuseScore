@@ -70,7 +70,7 @@ EditInstrument::~EditInstrument()
 
 void EditInstrument::on_buttonCancel_pressed()
       {
-//      qDebug("cancel\n");
+//      qDebug("cancel");
       }
 
 //---------------------------------------------------------

@@ -269,7 +269,7 @@ void Selection::updateSelectedElements()
       int staves = _score->nstaves();
       if (_staffStart < 0 || _staffStart >= staves || _staffEnd < 0 || _staffEnd > staves
          || _staffStart >= _staffEnd) {
-            qDebug("updateSelectedElements: bad staff selection %d - %d, staves %d\n", _staffStart, _staffEnd, staves);
+            qDebug("updateSelectedElements: bad staff selection %d - %d, staves %d", _staffStart, _staffEnd, staves);
             _staffStart = 0;
             _staffEnd   = 0;
             }
@@ -306,7 +306,7 @@ void Selection::updateSelectedElements()
                                     _el.append(sp);
                               }
                         else {
-                              qDebug("1spanner element type %s\n", sp->endElement()->name());
+                              qDebug("1spanner element type %s", sp->endElement()->name());
                               }
                         }
 #endif
@@ -333,7 +333,7 @@ void Selection::updateSelectedElements()
                                     _el.append(sp);
                               }
                         else {
-                              qDebug("2spanner element type %s\n", sp->endElement()->name());
+                              qDebug("2spanner element type %s", sp->endElement()->name());
                               }
                         }
 #endif
@@ -378,12 +378,12 @@ void Selection::dump()
       {
       qDebug("Selection dump: ");
       switch(_state) {
-            case SEL_NONE:   qDebug("NONE\n"); return;
-            case SEL_RANGE:  qDebug("RANGE\n"); break;
-            case SEL_LIST:   qDebug("LIST\n"); break;
+            case SEL_NONE:   qDebug("NONE"); return;
+            case SEL_RANGE:  qDebug("RANGE"); break;
+            case SEL_LIST:   qDebug("LIST"); break;
             }
       foreach(const Element* e, _el)
-            qDebug("  %p %s\n", e, e->name());
+            qDebug("  %p %s", e, e->name());
       }
 
 //---------------------------------------------------------

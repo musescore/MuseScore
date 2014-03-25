@@ -91,7 +91,7 @@ QSplitter* ScoreTab::viewSplitter(int n) const
       {
       TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(n).value<void*>());
       if (tsv == 0) {
-            // qDebug("ScoreTab::viewSplitter %d is zero\n", n);
+            // qDebug("ScoreTab::viewSplitter %d is zero", n);
             return 0;
             }
       Score* score = tsv->score;
