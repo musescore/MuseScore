@@ -33,16 +33,6 @@ TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
 void splitFirstTupletChords(std::vector<TupletInfo> &tuplets,
                             std::multimap<ReducedFraction, MidiChord> &chords);
 
-std::vector<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets);
-
-class TupletCommonIndexes;
-void collectRemainingCommonIndexes(const std::vector<int> &availableIndexes,
-                                   const std::vector<TupletInfo> &tuplets,
-                                   TupletCommonIndexes &commonIndexes);
-
-std::vector<int> findLongestCommonGroup(const std::vector<int> &availableIndexes,
-                                        const std::vector<TupletInfo> &tuplets);
-
 } // namespace MidiTuplet
 
 namespace Meter {
