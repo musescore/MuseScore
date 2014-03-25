@@ -158,6 +158,7 @@ class TextBlock {
       const TextFragment* fragment(int col) const;
       QList<TextFragment>::iterator fragment(int col, int* rcol);
       qreal y() const      { return _y; }
+      QPointF posLine1() const      { return _text[0].pos; }
       void setY(qreal val) { _y = val; }
       qreal lineSpacing() const { return _lineSpacing; }
       QString text(int, int) const;

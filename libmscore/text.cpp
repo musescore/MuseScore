@@ -824,7 +824,7 @@ void Text::drawSelection(QPainter* p, const QRectF& r) const
 void Text::updateAlignLines( AlignLine& aLines ) const{
 
       QPointF pp = pagePos();
-      QPointF p = QPointF(0,_layout[0].y());
+      QPointF p = QPointF(_layout[0].posLine1().x(),_layout[0].y() ) ;
       aLines.aLines = 0;
       aLines.vert[aLines.aLines] = true;
       aLines.aLine[aLines.aLines] = QPointF( pp + p );
