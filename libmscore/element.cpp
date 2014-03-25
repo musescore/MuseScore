@@ -514,6 +514,7 @@ QColor Element::curColor(const Element* proxy) const
 
 QRectF Element::drag(EditData* data)
       {
+
       QRectF r(canvasBoundingRect());
 
       qreal x = data->delta.x();
@@ -531,6 +532,7 @@ QRectF Element::drag(EditData* data)
             y = vRaster * n;
             }
       setUserOff(QPointF(x, y));
+
       setGenerated(false);
       return canvasBoundingRect() | r;
       }
@@ -580,7 +582,6 @@ QPointF Element::canvasPos() const
       QPointF p(pos());
       if (parent() == 0)
             return p;
-
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = nullptr;
             if (parent()->type() == Element::Type::SEGMENT)

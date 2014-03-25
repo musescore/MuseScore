@@ -219,6 +219,7 @@ class Text : public Element {
 
       Text &operator=(const Text&) = delete;
 
+      virtual void updateAlignLines( AlignLine& ) const override;
       virtual void draw(QPainter*) const override;
 
       virtual void setTextStyle(const TextStyle& st);

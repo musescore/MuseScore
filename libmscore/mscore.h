@@ -321,6 +321,18 @@ enum class IconType : signed char {
       VFRAME, HFRAME, TFRAME, FFRAME, MEASURE,
       BRACKETS
       };
+//---------------------------------------------------------
+//   AlignLines
+//---------------------------------------------------------
+
+class AlignLine
+      {
+   public:
+      QRectF rLine[8];        // Refresh rect
+      QPointF aLine[8];       // Align line
+      bool vert[8];           // Vertical Line = true
+      int aLines;             // number of Line
+      };
 
 //---------------------------------------------------------
 //   MScore
