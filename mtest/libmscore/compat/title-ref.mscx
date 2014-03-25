@@ -85,8 +85,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName pos="0">&lt;font face=&quot;Times New Roman&quot;/&gt;Piano</longName>
+        <shortName pos="0">&lt;font face=&quot;Times New Roman&quot;/&gt;Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -105,19 +105,19 @@
         <bottomGap>58.3334</bottomGap>
         <Text>
           <style>Title</style>
-          <text>title</text>
+          <text><font face="Times New Roman"/>title</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>subtitle</text>
+          <text><font face="Times New Roman"/>subtitle</text>
           </Text>
         <Text>
           <style>Composer</style>
-          <text>Composer</text>
+          <text><font face="Times New Roman"/>Composer</text>
           </Text>
         <Text>
           <style>Lyricist</style>
-          <text>Lyrics</text>
+          <text><font face="Times New Roman"/>Lyrics</text>
           </Text>
         </VBox>
       <Measure number="1">

@@ -68,6 +68,8 @@
       <Page>
         <System>
           </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -77,8 +79,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName pos="0">&lt;font face=&quot;Times New Roman&quot;/&gt;Flute</longName>
+        <shortName pos="0">&lt;font face=&quot;Times New Roman&quot;/&gt;Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -183,11 +185,11 @@
         </Measure>
       <Measure number="7">
         <Harmony>
-          <name>Bo</name>
+          <name>&lt;font face=&quot;Times New Roman&quot;/&gt;Bo</name>
           </Harmony>
         <StaffText>
           <style>Staff</style>
-          <text>unrecognized</text>
+          <text><font face="Times New Roman"/>unrecognized</text>
           </StaffText>
         <Rest>
           <durationType>measure</durationType>

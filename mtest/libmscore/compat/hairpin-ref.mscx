@@ -87,8 +87,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName pos="0">&lt;font face=&quot;Times New Roman&quot;/&gt;Piano</longName>
+        <shortName pos="0">&lt;font face=&quot;Times New Roman&quot;/&gt;Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -107,7 +107,7 @@
         <bottomGap>58.3334</bottomGap>
         <Text>
           <style>Title</style>
-          <text>Hairpin</text>
+          <text><font face="Times New Roman"/>Hairpin</text>
           </Text>
         </VBox>
       <Measure number="1">
