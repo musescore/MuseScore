@@ -2326,7 +2326,7 @@ QString Text::convertFromHtml(const QString& ss) const
                               s += "<i>";
                         if (font.underline())
                               s += "<u>";
-                        s += f.text();
+                        s += f.text().toHtmlEscaped();
                         if (font.underline())
                               s += "</u>";
                         if (font.italic())
