@@ -162,7 +162,7 @@ void EditStaff::setInterval(const Interval& iv)
 
       int interval = searchInterval(diatonic, chromatic);
       if (interval == -1) {
-            qDebug("EditStaff: unknown interval %d %d\n", diatonic, chromatic);
+            qDebug("EditStaff: unknown interval %d %d", diatonic, chromatic);
             interval = 0;
             }
       iList->setCurrentIndex(interval);
@@ -192,7 +192,7 @@ void EditStaff::bboxClicked(QAbstractButton* button)
                   break;
 
             default:
-                  qDebug("EditStaff: unknown button %d\n", int(br));
+                  qDebug("EditStaff: unknown button %d", int(br));
                   break;
             }
       }

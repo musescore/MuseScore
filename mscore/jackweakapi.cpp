@@ -72,7 +72,7 @@ void *load_jack_function(const char *fn_name)
 {
     void *fn = 0;
     if (!libjack_handle) {
-        qDebug("libjack not found, so do not try to load  %s ffs  !\n", fn_name);
+        qDebug("libjack not found, so do not try to load  %s ffs  !", fn_name);
         return 0;
     }
 #ifdef WIN32
@@ -84,9 +84,9 @@ void *load_jack_function(const char *fn_name)
 #ifdef WIN32
         char* lpMsgBuf;
         FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,NULL,GetLastError(),MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),(LPTSTR) &lpMsgBuf,0,NULL );
-        qDebug("could not GetProcAddress( %s ), %s \n", fn_name, lpMsgBuf) ;
+        qDebug("could not GetProcAddress( %s ), %s ", fn_name, lpMsgBuf) ;
 #else
-        qDebug ("could not dlsym( %s ), %s \n", fn_name, dlerror()) ;
+        qDebug ("could not dlsym( %s ), %s ", fn_name, dlerror()) ;
 #endif
     }
     return fn;

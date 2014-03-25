@@ -185,7 +185,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
                   }
                   break;
             default:
-                  qDebug("XmlWriter::tag: unsupported type %d\n", data.type());
+                  qDebug("XmlWriter::tag: unsupported type %d", data.type());
                   // abort();
                   break;
             }

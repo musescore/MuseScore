@@ -407,7 +407,7 @@ bool MuseScore::saveFile(Score* score)
       if (!tmp.isEmpty()) {
             QFile f(tmp);
             if (!f.remove())
-                  qDebug("cannot remove temporary file <%s>\n", qPrintable(f.fileName()));
+                  qDebug("cannot remove temporary file <%s>", qPrintable(f.fileName()));
             score->setTmpName("");
             }
       writeSessionFile(false);
@@ -1693,7 +1693,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             rv = savePositions(cs, fn);
             }
       else {
-            qDebug("Internal error: unsupported extension <%s>\n",
+            qDebug("Internal error: unsupported extension <%s>",
                qPrintable(ext));
             return false;
             }
@@ -1836,7 +1836,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                         }
                   }
             if (i == n) {
-                  qDebug("unknown file suffix <%s>, name <%s>\n", qPrintable(cs), qPrintable(name));
+                  qDebug("unknown file suffix <%s>, name <%s>", qPrintable(cs), qPrintable(name));
                   return Score::FILE_UNKNOWN_TYPE;
                   }
             score->connectTies();
@@ -2150,7 +2150,7 @@ void WallpaperPreview::paintEvent(QPaintEvent* ev)
 
 void WallpaperPreview::setImage(const QString& path)
       {
-      qDebug("setImage <%s>\n", qPrintable(path));
+      qDebug("setImage <%s>", qPrintable(path));
       delete _pixmap;
       _pixmap = new QPixmap(path);
       update();
@@ -2189,7 +2189,7 @@ QString MuseScore::getWallpaper(const QString& caption)
 
             QSplitter* splitter = loadBackgroundDialog->findChild<QSplitter*>("splitter");
             if (splitter) {
-                  qDebug("splitter found\n");
+                  qDebug("splitter found");
                   WallpaperPreview* preview = new WallpaperPreview;
                   splitter->addWidget(preview);
                   connect(loadBackgroundDialog, SIGNAL(currentChanged(const QString&)),

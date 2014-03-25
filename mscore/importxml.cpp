@@ -1322,7 +1322,7 @@ typedef std::map<int,MusicXmlPartGroup*> MusicXmlPartGroupMap;
 
 static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, bool barlineSpan)
       {
-      // qDebug("partGroupStart number=%d part=%d symbol=%s\n", n, p, s.toLatin1().data());
+      // qDebug("partGroupStart number=%d part=%d symbol=%s", n, p, s.toLatin1().data());
 
       if (pgs.count(n) > 0) {
             qDebug("part-group number=%d already active", n);
@@ -4046,7 +4046,7 @@ static void xmlFermata(ChordRest* cr, QDomElement e)
       else if (fermata == "square")
             addFermata(cr, fermataType, Articulation_Longfermata);
       else
-            qDebug("unknown fermata '%s'\n", qPrintable(fermata));
+            qDebug("unknown fermata '%s'", qPrintable(fermata));
       }
 
 //---------------------------------------------------------
@@ -4646,7 +4646,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
 
       // Musicxml voices are unique within a part, but not across parts.
 
-      // qDebug("voice mapper before: relStaff=%d voice=%d staff=%d\n", relStaff, voice, staff);
+      // qDebug("voice mapper before: relStaff=%d voice=%d staff=%d", relStaff, voice, staff);
       int s; // staff mapped by voice mapper
       int v; // voice mapped by voice mapper
       if (voicelist.value(strVoice).overlaps()) {

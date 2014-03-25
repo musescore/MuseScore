@@ -480,7 +480,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             TextProperties tp(nText);
             int rv = tp.exec();
             if (rv) {
-                  printf("text-props %d %d\n", int(ot->textStyleType()), int(nText->textStyleType()));
+                  qDebug("text-props %d %d", int(ot->textStyleType()), int(nText->textStyleType()));
                   if (ot->textStyleType() != nText->textStyleType()) {
                         nText->restyle(ot->textStyleType());
                         ot->undoChangeProperty(P_TEXT_STYLE_TYPE, nText->textStyleType());
@@ -514,7 +514,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         score()->setLayoutAll(true);
                         }
                   else
-                        qDebug("no template selected?\n");
+                        qDebug("no template selected?");
                   }
             }
       else if (cmd == "articulation") {
@@ -552,7 +552,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         score()->undo(new ChangeInstrument(ic, ic->instrument()));
                         }
                   else
-                        qDebug("no template selected?\n");
+                        qDebug("no template selected?");
                   }
            }
       else if (cmd == "fret-props") {

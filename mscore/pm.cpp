@@ -139,7 +139,7 @@ bool PortMidiDriver::init()
          (void*)TIME_INFO);
       if (error != pmNoError) {
             const char* p = Pm_GetErrorText(error);
-            qDebug("PortMidi: open input (id=%d) failed: %s\n", int(inputId), p);
+            qDebug("PortMidi: open input (id=%d) failed: %s", int(inputId), p);
             Pt_Stop();
             return false;
             }

@@ -114,7 +114,7 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
             case 2: key = QKeySequence(key[0], key[1], k); break;
             case 3: key = QKeySequence(key[0], key[1], key[2], k); break;
             default:
-                  qDebug("Internal error: bad key count\n");
+                  qDebug("Internal error: bad key count");
                   break;
             }
 
@@ -147,7 +147,7 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
 //      QString A = key.toString(QKeySequence::NativeText);
       QString A = keyStr;
       QString B = Shortcut::keySeqToString(key, QKeySequence::PortableText);
-qDebug("capture key 0x%x  modifiers 0x%x virt 0x%x scan 0x%x <%s><%s>\n",
+qDebug("capture key 0x%x  modifiers 0x%x virt 0x%x scan 0x%x <%s><%s>",
       k,
       int(e->modifiers()),
       int(e->nativeVirtualKey()),

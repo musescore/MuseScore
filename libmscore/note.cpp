@@ -300,7 +300,7 @@ void Note::setTpcFromPitch()
       {
       KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
       _tpc    = pitch2tpc(_pitch, key.accidentalType(), PREFER_NEAREST);
-// qDebug("setTpcFromPitch pitch %d tick %d key %d tpc %d\n", pitch(), chord()->tick(), key.accidentalType(), _tpc);
+// qDebug("setTpcFromPitch pitch %d tick %d key %d tpc %d", pitch(), chord()->tick(), key.accidentalType(), _tpc);
       }
 
 //---------------------------------------------------------
@@ -498,7 +498,7 @@ void Note::add(Element* e)
                   addSpanner(static_cast<Spanner*>(e));
                   break;
             default:
-                  qDebug("Note::add() not impl. %s\n", e->name());
+                  qDebug("Note::add() not impl. %s", e->name());
                   break;
             }
       }
@@ -525,7 +525,7 @@ void Note::remove(Element* e)
             case FINGERING:
             case BEND:
                   if (!_el.remove(e))
-                        qDebug("Note::remove(): cannot find %s\n", e->name());
+                        qDebug("Note::remove(): cannot find %s", e->name());
                   break;
               case TIE:
                   {
@@ -557,7 +557,7 @@ void Note::remove(Element* e)
                   break;
 
             default:
-                  qDebug("Note::remove() not impl. %s\n", e->name());
+                  qDebug("Note::remove() not impl. %s", e->name());
                   break;
             }
       }
@@ -886,7 +886,7 @@ void Note::read(XmlReader& e)
                               }
                         }
                   if (dot) {
-                        qDebug("Note: too many dots\n");
+                        qDebug("Note: too many dots");
                         delete dot;
                         }
                   }
@@ -1129,7 +1129,7 @@ Element* Note::drop(const DropData& data)
                   NoteHead* s = static_cast<NoteHead*>(e);
                   NoteHeadGroup group = s->headGroup();
                   if (group == NoteHeadGroup::HEAD_INVALID) {
-                        qDebug("unknown note head\n");
+                        qDebug("unknown note head");
                         group = NoteHeadGroup::HEAD_NORMAL;
                         }
                   delete s;
@@ -1235,13 +1235,13 @@ Element* Note::drop(const DropData& data)
                         s = s->next1();
                         }
                   if (s == 0) {
-                        qDebug("no segment for second note of glissando found\n");
+                        qDebug("no segment for second note of glissando found");
                         delete e;
                         return 0;
                         }
                   ChordRest* cr1 = static_cast<ChordRest*>(s->element(track()));
                   if (cr1 == 0 || cr1->type() != CHORD) {
-                        qDebug("no second note for glissando found, track %d\n", track());
+                        qDebug("no second note for glissando found, track %d", track());
                         delete e;
                         return 0;
                         }

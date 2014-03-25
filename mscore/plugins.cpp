@@ -371,7 +371,7 @@ void MuseScore::pluginTriggered(int idx)
       QObject* obj = component.create();
       if (obj == 0) {
             foreach(QQmlError e, component.errors())
-                  qDebug("   line %d: %s\n", e.line(), qPrintable(e.description()));
+                  qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
             return;
             }
 

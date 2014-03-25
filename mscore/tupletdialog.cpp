@@ -106,7 +106,7 @@ Tuplet* MuseScore::tupletDialog()
       Fraction f = f1 * tuplet->ratio();
       f.reduce();
 
-      qDebug("len %s  ratio %s  base %s\n",
+      qDebug("len %s  ratio %s  base %s",
          qPrintable(f1.print()),
          qPrintable(tuplet->ratio().print()),
          qPrintable(f.print()));

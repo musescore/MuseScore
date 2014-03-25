@@ -139,7 +139,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       QString s                       = ev->text();
 
       if (MScore::debugMode)
-            qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s>\n",
+            qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s>",
                key, key, int(modifiers), qPrintable(s));
 
       if (!editObject)
