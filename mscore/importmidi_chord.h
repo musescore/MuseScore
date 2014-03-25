@@ -22,9 +22,6 @@ class MidiChord {
       int voice = 0;
       bool isInTuplet = false;
       QList<MidiNote> notes;
-                  // for tuplet filtering
-      int usedVoices = 0;
-                  //
       bool isStaccato() const
             {
             for (const auto &note: notes)
