@@ -630,7 +630,6 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
 
 void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       {
-
       //---------------------------------------------------
       //    layout accidentals
       //    find column for dots
