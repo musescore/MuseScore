@@ -1590,7 +1590,8 @@ void Chord::layoutPitched()
 
             Accidental* accidental = note->accidental();
             if (accidental) {
-                  qreal x = accidental->x() + note->x();
+                  // convert x position of accidental to segment coordinate system
+                  qreal x = accidental->x() + note->x() + note->chord()->x();
                   x -= score()->styleS(ST_accidentalDistance).val() * _spatium;
                   lll = qMax(lll, -x);
                   }

@@ -3109,19 +3109,20 @@ void Measure::layoutX(qreal stretch)
                   bool found = false;
                   bool hFound = false;
                   bool eFound = false;
+
                   if (segType & (Segment::SegChordRest)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
                         Lyrics* lyrics = 0;
                         bool accidentalStaff = false;
-                        for (int voice = 0; voice < VOICES; ++voice) {
-                              ChordRest* cr = static_cast<ChordRest*>(s->element(track+voice));
-                              if (!cr)
-                                    continue;
-                              found = true;
-                              if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine) && !accidentalStaff) {
+
+                        bool accidental = false;
+                        if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine) && !accidentalStaff) {
+                              for (int voice = 0; voice < VOICES; ++voice) {
+                                    ChordRest* cr = static_cast<ChordRest*>(s->element(track+voice));
+                                    if (!cr)
+                                          continue;
                                     // check for accidentals in chord
-                                    bool accidental = false;
                                     if (cr->type() == Element::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
                                           if (!c->graceNotes().empty())
@@ -3135,6 +3136,14 @@ void Measure::layoutX(qreal stretch)
                                                       }
                                                 }
                                           }
+                                    }
+                              }
+                        for (int voice = 0; voice < VOICES; ++voice) {
+                              ChordRest* cr = static_cast<ChordRest*>(s->element(track+voice));
+                              if (!cr)
+                                    continue;
+                              found = true;
+                              if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine) && !accidentalStaff) {
                                     // no distance to full measure rest
                                     if (!(cr->type() == REST && static_cast<Rest*>(cr)->durationType() == TDuration::V_MEASURE)) {
                                           accidentalStaff = true;
