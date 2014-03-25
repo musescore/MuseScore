@@ -2303,8 +2303,11 @@ QString Text::convertFromHtml(const QString& ss) const
 
       QString s;
       qreal size = textStyle().size();
-      for (QTextBlock b = doc.firstBlock(); b.isValid() ; b = b.next()) {
-            for (QTextBlock::iterator it = b.begin(); !it.atEnd(); ++it) {
+      QString family = textStyle().family();
+      for (auto b = doc.firstBlock(); b.isValid() ; b = b.next()) {
+            if (!s.isEmpty())
+                  s += "\n";
+            for (auto it = b.begin(); !it.atEnd(); ++it) {
                   QTextFragment f = it.fragment();
                   if (f.isValid()) {
                         QTextCharFormat tf = f.charFormat();
@@ -2312,6 +2315,10 @@ QString Text::convertFromHtml(const QString& ss) const
                         if (fabs(size - font.pointSizeF()) > 0.1) {
                               size = font.pointSizeF();
                               s += QString("<font size=\"%1\"/>").arg(size);
+                              }
+                        if (family != font.family()) {
+                              family = font.family();
+                              s += QString("<font face=\"%1\"/>").arg(family);
                               }
                         if (font.bold())
                               s += "<b>";
