@@ -5222,6 +5222,19 @@ void ScoreView::search(const QString& s)
                   if (ok && n >= 0)
                         searchPage(n);
                   }
+            else {
+                  //search rehearsal marks
+                  for (Segment* seg = score()->firstSegment(); seg; seg = seg->next1(Segment::SegChordRest)) {
+                        for (Element* e : seg->annotations()){
+                              if (e->type() == Element::REHEARSAL_MARK) {
+                                    RehearsalMark* rm = static_cast<RehearsalMark*>(e);
+                                    QString rms = rm->text();
+                                    if (rms.contains(s))
+                                          gotoMeasure(seg->measure());
+                                    }
+                              }
+                        }
+                  }
             }
       }
 
