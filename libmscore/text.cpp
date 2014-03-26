@@ -1465,6 +1465,7 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
       bool ctrlPressed = modifiers & Qt::ControlModifier;
 
       switch (key) {
+            case Qt::Key_Enter:
             case Qt::Key_Return:
                   if (_cursor.hasSelection())
                         deleteSelectedText();
