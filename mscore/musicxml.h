@@ -208,7 +208,7 @@ class MusicXml {
                     QMap<int, Lyrics*>& defyLyrics,
                     QList<Lyrics*>& unNumbrdLyrics);
       void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement node);
-      Note* xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement node, QList<Chord*>& graceNotes, int* pAlt);
+      Note* xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement node, QList<Chord*>& graceNotes, int& alt);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       int xmlClef(QDomElement, int staffIdx, Measure*);
       void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion);
