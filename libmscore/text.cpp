@@ -821,6 +821,20 @@ void Text::drawSelection(QPainter* p, const QRectF& r) const
       p->setPen(textColor());
       }
 
+void Text::updateAlignLines( AlignLine& aLines ) const{
+
+      QPointF pp = pagePos();
+      QPointF p = QPointF(_layout[0].posLine1().x(),_layout[0].y() ) ;
+      aLines.aLines = 0;
+      aLines.vert[aLines.aLines] = true;
+      aLines.aLine[aLines.aLines] = QPointF( pp + p );
+      aLines.aLines++;
+      aLines.vert[aLines.aLines] = false;
+      aLines.aLine[aLines.aLines] = QPointF( pp + p );
+      aLines.aLines++;
+
+      }
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------

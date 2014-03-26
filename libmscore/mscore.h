@@ -314,6 +314,18 @@ enum {
       ICON_VFRAME, ICON_HFRAME, ICON_TFRAME, ICON_FFRAME, ICON_MEASURE,
       ICON_BRACKETS
       };
+//---------------------------------------------------------
+//   AlignLines
+//---------------------------------------------------------
+
+class AlignLine
+      {
+   public:
+      QRectF rLine[8];        // Refresh rect
+      QPointF aLine[8];       // Align line
+      bool vert[8];           // Vertical Line = true
+      int aLines;             // number of Line
+      };
 
 //---------------------------------------------------------
 //   MScore

@@ -301,6 +301,7 @@ class Element : public QObject {
                                   ///< user dragged object this amount.
       QPointF _readPos;
 
+
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
@@ -424,6 +425,7 @@ class Element : public QObject {
       virtual void editDrag(const EditData&);
       virtual void endEditDrag()                               {}
       virtual void endEdit()                                   {}
+      virtual void updateAlignLines( AlignLine& alignLines ) const      { alignLines.aLines = 0;      }
       virtual void updateGrips(int* grips, int*, QRectF*) const      { *grips = 0;      }
       virtual QPointF gripAnchor(int) const   { return QPointF(); }
       virtual void setGrip(int, const QPointF&);
