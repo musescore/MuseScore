@@ -1077,8 +1077,12 @@ void Score::cmdFlip()
                   MScore::Direction d = tuplet->isUp() ? MScore::DOWN : MScore::UP;
                   undoChangeProperty(tuplet, P_DIRECTION, d);
                   }
-            else if (e->type() == Element::NOTEDOT)
-                  undo(new FlipNoteDotDirection(static_cast<Note*>(e->parent())));
+            else if (e->type() == Element::NOTEDOT) {
+                  Note* note = static_cast<Note*>(e->parent());
+                  MScore::Direction d = note->dotIsUp() ? MScore::DOWN : MScore::UP;
+                  undoChangeProperty(note, P_DOT_POSITION, d);
+                  // undo(new FlipNoteDotDirection(static_cast<Note*>(e->parent())));
+                  }
             else if (
                  (e->type() == Element::TEMPO_TEXT)
                | (e->type() == Element::DYNAMIC)

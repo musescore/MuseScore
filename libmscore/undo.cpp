@@ -1705,15 +1705,6 @@ void ChangePitch::flip()
       }
 
 //---------------------------------------------------------
-//   FlipNoteDotDirection
-//---------------------------------------------------------
-
-void FlipNoteDotDirection::flip()
-      {
-      note->setDotPosition(note->dotIsUp() ? MScore::DOWN : MScore::UP);
-      }
-
-//---------------------------------------------------------
 //   ChangeElement
 //---------------------------------------------------------
 
