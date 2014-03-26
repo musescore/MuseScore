@@ -773,14 +773,16 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                         // resolve dot conflicts
                         int line = note->line();
                         Note* above = (i < nNotes - 1) ? notes[i+1] : 0;
+                        int intervalAbove = above ? line - above->line() : 1000;
                         Note* below = (i > 0) ? notes[i-1] : 0;
+                        int intervalBelow = below ? below->line() - line : 1000;
                         if ((line & 1) == 0) {
                               // line
-                              if (above && line - above->line() == 1)
+                              if (intervalAbove == 1 && intervalBelow != 1)
                                     note->setDotPosition(MScore::DOWN);
-                              else if (below && below->line() - line == 1)
+                              else if (intervalBelow ==1 && intervalAbove != 1)
                                     note->setDotPosition(MScore::UP);
-                              else if (above && line == above->line() && above->chord()->dots()) {
+                              else if (intervalAbove == 0 && above->chord()->dots()) {
                                     // unison
                                     if (((above->voice() & 1) == (note->voice() & 1))) {
                                           above->setDotPosition(MScore::UP);
@@ -790,7 +792,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                               }
                         else {
                               // space
-                              if (above && line == above->line() && above->chord()->dots()) {
+                              if (intervalAbove == 0 && above->chord()->dots()) {
                                     // unison
                                     if (!(note->voice() & 1))
                                           note->setDotPosition(MScore::UP);
@@ -801,7 +803,6 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                                                 note->setDotPosition(MScore::DOWN);
                                           }
                                     }
-                              // TODO: handle clusters with multiple seconds
                               }
                         }
                   else
