@@ -70,7 +70,7 @@ void MuseScore::initOsc()
       else
             port = preferences.oscPort;
       QOscServer* osc = new QOscServer(port, qApp);
-      PathObject* oo = new PathObject( "/mscore", QVariant::Int, osc);
+      PathObject* oo = new PathObject( "/addpitch", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscIntMessage(int)));
       oo = new PathObject( "/play",QVariant::Invalid, osc);
       QObject::connect(oo, SIGNAL(data()), SLOT(oscPlay()));
@@ -110,6 +110,37 @@ void MuseScore::initOsc()
       oo = new PathObject( "/color-note", QVariant::List, osc);
       QObject::connect(oo, SIGNAL(data(QVariantList)), SLOT(oscColorNote(QVariantList)));
 
+      oo = new PathObject( "/note-c",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/note-d",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/note-e",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/note-f",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/note-g",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/note-a",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/note-b",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+            
+      oo = new PathObject( "/pad-note-1",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/pad-note-2",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/pad-note-4",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/pad-note-8",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/pad-note-16",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/pad-note-32",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/pad-note-64",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/pad-note-128",QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
       }
 
 //---------------------------------------------------------
@@ -118,10 +149,20 @@ void MuseScore::initOsc()
 
 void MuseScore::oscIntMessage(int val)
       {
-      if (val < 128)
-            midiNoteReceived(0, val, false);
+      if (val < 128) {
+            midiNoteReceived(0, val, 60);
+            midiNoteReceived(0, val, 0);
+            }
       else
             midiCtrlReceived(val-128, 22);
+      }
+
+void MuseScore::oscAction()
+      {
+      PathObject* pathObject = qobject_cast<PathObject*>(sender());
+      QString path = pathObject->path().mid(1);
+      QAction* a = getAction(path.toLocal8Bit().data());
+      a->trigger();
       }
 
 void MuseScore::oscPlay()
