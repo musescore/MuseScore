@@ -462,7 +462,7 @@ void Chord::remove(Element* e)
                                     // update accidentals for endNote
                                     Chord* chord = note->tieFor()->endNote()->chord();
                                     Measure* m = chord->segment()->measure();
-                                    note->score()->updateAccidentals(m,chord->staffIdx());
+                                    m->updateAccidentals(chord->staffIdx());
                                     }
                               }
                         }
@@ -1499,8 +1499,7 @@ void Chord::layout10(AccidentalState* as)
       Drumset* drumset = 0;
       if (staff()->part()->instr()->useDrumset())
             drumset = staff()->part()->instr()->drumset();
-      for (int i = 0; i < notes().size(); ++i) {
-            Note* note = notes().at(i);
+      for (Note* note : notes()) {
             if (drumset) {
                   int pitch = note->pitch();
                   if (!drumset->isValid(pitch)) {

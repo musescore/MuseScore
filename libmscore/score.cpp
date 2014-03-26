@@ -1414,7 +1414,7 @@ void Score::addElement(Element* element)
 
             case Element::NOTE: {
                   Note* note = static_cast<Note*>(element);
-                  updateAccidentals(note->chord()->segment()->measure(), element->staffIdx());
+                  note->chord()->segment()->measure()->updateAccidentals(element->staffIdx());
                   }
                   // fall through
 
@@ -2090,16 +2090,8 @@ void Score::removeExcerpt(Score* score)
 void Score::updateNotes()
       {
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
-            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-                  AccidentalState tversatz;      // state of already set accidentals for this measure
-                  tversatz.init(staff(staffIdx)->keymap()->key(m->tick()));
-
-                  for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                        if (!(segment->segmentType() & (Segment::SegChordRest)))
-                              continue;
-                        m->layoutChords10(segment, staffIdx * VOICES, &tversatz);
-                        }
-                  }
+            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
+                  m->layout10(staffIdx);
             }
       }
 
@@ -2112,7 +2104,7 @@ void Score::cmdUpdateNotes()
       {
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
-                  updateAccidentals(m, staffIdx);
+                  m->updateAccidentals(staffIdx);
             }
       }
 
@@ -2123,45 +2115,15 @@ void Score::cmdUpdateNotes()
 
 void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
       {
-//      qDebug("cmdUpdateAccidentals m=%d for staff=%d",
-//            beginMeasure->no(), staffIdx);
-      Staff* st = staff(staffIdx);
       for (Measure* m = beginMeasure; m; m = m->nextMeasureMM()) {
-            AccidentalState as;
-            as.init(st->keymap()->key(m->tick()));
-
-            for (Segment* s = m->first(); s; s = s->next()) {
-                  if ((m != beginMeasure) &&
-                        (s->segmentType() & (Segment::SegKeySig))) {
-                        KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
-                        if (ks && (!ks->generated())) {
-                              // found new key signature
-                              qDebug("leaving cmdUpdateAccidentals at m=%d",
-                                    m->no());
-                              return;
-                              }
-                        }
-                  if (s->segmentType() & (Segment::SegChordRest))
-                        m->updateAccidentals(s, staffIdx, &as);
+            m->updateAccidentals(staffIdx);
+            if (m == beginMeasure)
+                  continue;
+            for (Segment* s = m->first(Segment::SegKeySig); s; s = s->next(Segment::SegKeySig)) {
+                  KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
+                  if (ks && (!ks->generated()))
+                        return;
                   }
-            }
-//      qDebug("leaving cmdUpdateAccidentals at end of score");
-      }
-
-//---------------------------------------------------------
-//   updateAccidentals
-//---------------------------------------------------------
-
-void Score::updateAccidentals(Measure* m, int staffIdx)
-      {
-// qDebug("updateAccidentals measure %d staff %d", m->no(), staffIdx);
-      Staff* st = staff(staffIdx);
-      AccidentalState as;      // list of already set accidentals for this measure
-      as.init(st->keymap()->key(m->tick()));
-
-      for (Segment* segment = m->first(); segment; segment = segment->next()) {
-            if (segment->segmentType() & (Segment::SegChordRest))
-                  m->updateAccidentals(segment, staffIdx, &as);
             }
       }
 

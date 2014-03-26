@@ -1199,7 +1199,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                         }
                   }
             undo(new AddElement(newcr));
-            score->updateAccidentals(m, staffIdx);
+            m->updateAccidentals(staffIdx);
             }
       }
 
@@ -1302,13 +1302,13 @@ void AddElement::undo()
                   m2 = tie->endNote()->chord()->measure();
 
             if (m1 != m2) {
-                  tie->score()->updateAccidentals(m1, tie->staffIdx());
+                  m1->updateAccidentals(tie->staffIdx());
                   if (m2)
-                        tie->score()->updateAccidentals(m2, tie->staffIdx());
+                        m2->updateAccidentals(tie->staffIdx());
                   // tie->score()->cmdUpdateNotes();
                   }
             else
-                  tie->score()->updateAccidentals(m1, tie->staffIdx());
+                  m1->updateAccidentals(tie->staffIdx());
             }
       else if (element->isChordRest()) {
             undoRemoveTuplet(static_cast<ChordRest*>(element));
@@ -1336,13 +1336,13 @@ void AddElement::redo()
             Measure* m2 = tie->endNote() ? tie->endNote()->chord()->measure() : 0;
 
             if (m2 && (m1 != m2)) {
-                  tie->score()->updateAccidentals(m1, tie->staffIdx());
+                  m1->updateAccidentals(tie->staffIdx());
                   if (m2)
-                        tie->score()->updateAccidentals(m2, tie->staffIdx());
+                        m2->updateAccidentals(tie->staffIdx());
                   // tie->score()->cmdUpdateNotes();
                   }
             else
-                  tie->score()->updateAccidentals(m1, tie->staffIdx());
+                  m1->updateAccidentals(tie->staffIdx());
             }
       else if (element->isChordRest()) {
             undoAddTuplet(static_cast<ChordRest*>(element));
@@ -1448,7 +1448,7 @@ void RemoveElement::redo()
                         // update accidentals in endNotes's measure
                         Chord* eChord = endNote->chord();
                         Measure* m = eChord->segment()->measure();
-                        endNote->score()->updateAccidentals(m,eChord->staffIdx());
+                        m->updateAccidentals(eChord->staffIdx());
                         }
                   }
             }
@@ -1699,7 +1699,7 @@ void ChangePitch::flip()
       if (updateAccid) {
             Chord* chord = note->chord();
             Measure* measure = chord->segment()->measure();
-            score->updateAccidentals(measure, chord->staffIdx());
+            measure->updateAccidentals(chord->staffIdx());
             }
       score->setLayoutAll(true);
       }
@@ -2611,7 +2611,7 @@ void ChangeChordStaffMove::flip()
       {
       int v = chord->staffMove();
       chord->setStaffMove(staffMove);
-      chord->score()->updateAccidentals(chord->measure(), chord->staffIdx());
+      chord->measure()->updateAccidentals(chord->staffIdx());
       chord->score()->setLayoutAll(true);
       staffMove = v;
       }

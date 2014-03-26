@@ -535,8 +535,8 @@ void Note::remove(Element* e)
                         tie->endNote()->setTieBack(0);
                         // update accidentals for endNote
                         Chord* chord = tie->endNote()->chord();
-                        Measure *m = chord->segment()->measure();
-                        score()->updateAccidentals(m,chord->staffIdx());
+                        Measure* m = chord->segment()->measure();
+                        m->updateAccidentals(chord->staffIdx());
                         }
                   int n = tie->spannerSegments().size();
                   for (int i = 0; i < n; ++i) {
@@ -1487,7 +1487,6 @@ void Note::layout10(AccidentalState* as)
             Staff* s = score()->staff(staffIdx() + chord()->staffMove());
             int tick = chord()->tick();
             _line    = relStep(_line, s->clef(tick));
-
             }
       }
 
@@ -1838,9 +1837,13 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_PITCH:
                   setPitch(v.toInt());
+                  if (chord()->measure())
+                        chord()->measure()->updateAccidentals(chord()->staffIdx());
                   break;
             case P_TPC:
                   setTpc(v.toInt());
+                  if (chord()->measure())
+                        chord()->measure()->updateAccidentals(chord()->staffIdx());
                   break;
             case P_SMALL:
                   setSmall(v.toBool());

@@ -1067,22 +1067,20 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
 void Score::upDown(bool up, UpDownMode mode)
       {
       QList<Note*> el;
-      int tick = -1;
-      foreach (Note* note, selection().noteList()) {
+      for (Note* note : selection().noteList()) {
             while (note->tieBack())
                   note = note->tieBack()->startNote();
             for (; note; note = note->tieFor() ? note->tieFor()->endNote() : 0) {
-                  if (!el.contains(note)) {
+                  if (!el.contains(note))
                         el.append(note);
-                        if (tick == -1)
-                              tick = note->chord()->tick();
-                        }
                   }
             }
+
       if (el.empty())
             return;
 
-      foreach(Note* oNote, el) {
+      foreach (Note* oNote, el) {
+            int tick     = oNote->chord()->tick();
             Part* part   = oNote->staff()->part();
             int key      = oNote->staff()->key(tick).accidentalType();
             int tpc      = oNote->tpc();
@@ -1091,32 +1089,31 @@ void Score::upDown(bool up, UpDownMode mode)
             int newPitch = pitch;    // default to unchanged
             int string   = oNote->string();
             int fret     = oNote->fret();
-            StringData* stringData;
 
-            switch(oNote->staff()->staffType()->group()) {
+            switch (oNote->staff()->staffType()->group()) {
                   case PERCUSSION_STAFF_GROUP:
                         {
                         Drumset* ds = part->instr()->drumset();
-                        if(ds) {
-                              newPitch    = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
-                              newTpc      = oNote->tpc();
+                        if (ds) {
+                              newPitch = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
+                              newTpc   = oNote->tpc();
                               }
                         }
                         break;
                   case TAB_STAFF_GROUP:
                         {
-                        stringData = part->instr()->stringData();
+                        StringData* stringData = part->instr()->stringData();
                         switch(mode) {
                               case UP_DOWN_OCTAVE:          // move same note to next string, if possible
                                     {
-                                    StaffTypeTablature * stt = static_cast<StaffTypeTablature*>(oNote->staff()->staffType());
+                                    StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(oNote->staff()->staffType());
                                     string = stt->physStringToVisual(string);
                                     string += (up ? -1 : 1);
-                                    if(string < 0 || string >= stringData->strings())
+                                    if (string < 0 || string >= stringData->strings())
                                           return;           // no next string to move to
                                     string = stt->VisualStringToPhys(string);
                                     fret = stringData->fret(pitch, string);
-                                    if(fret == -1)          // can't have that note on that string
+                                    if (fret == -1)          // can't have that note on that string
                                           return;
                                     // newPitch and newTpc remain unchanged
                                     }
@@ -1163,6 +1160,7 @@ void Score::upDown(bool up, UpDownMode mode)
                               }
                         }
                         break;
+
                   case STANDARD_STAFF_GROUP:
                         switch(mode) {
                               case UP_DOWN_OCTAVE:
@@ -1239,17 +1237,14 @@ void Score::upDown(bool up, UpDownMode mode)
                   // user added accidentals are removed here.
                   if (oNote->accidental())
                         undoRemoveElement(oNote->accidental());
-
-                  Staff* s = oNote->score()->staff(oNote->staffIdx() + oNote->chord()->staffMove());
-                  int tick = oNote->chord()->tick();
-                  ClefType clef = s->clef(tick);
-                  int newLine   = relStep(absStep(newTpc, newPitch), clef);
-
-                  undoChangePitch(oNote, newPitch, newTpc, newLine);
+                  if (oNote->pitch() != newPitch)
+                        undoChangeProperty(oNote, P_PITCH, newPitch);
+                  if (oNote->tpc() != newTpc)
+                        undoChangeProperty(oNote, P_TPC, newTpc);
                   }
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
-            else if( oNote->staff()->staffType()->group() == TAB_STAFF_GROUP) {
+            else if (oNote->staff()->staffType()->group() == TAB_STAFF_GROUP) {
                   bool refret = false;
                   if (oNote->string() != string) {
                         undoChangeProperty(oNote, P_STRING, string);
@@ -1259,8 +1254,10 @@ void Score::upDown(bool up, UpDownMode mode)
                         undoChangeProperty(oNote, P_FRET, fret);
                         refret = true;
                         }
-                  if (refret)
+                  if (refret) {
+                        StringData* stringData = part->instr()->stringData();
                         stringData->fretChords(oNote->chord());
+                        }
                   }
 
             // play new note with velocity 80 for 0.3 sec:
@@ -1349,7 +1346,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
       // recalculate needed accidentals for
       // whole measure
       //
-      score->updateAccidentals(chord->measure(), staffIdx);
+      chord->measure()->updateAccidentals(staffIdx);
       }
 
 //---------------------------------------------------------
