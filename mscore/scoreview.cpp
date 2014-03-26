@@ -5229,8 +5229,10 @@ void ScoreView::search(const QString& s)
                               if (e->type() == Element::REHEARSAL_MARK) {
                                     RehearsalMark* rm = static_cast<RehearsalMark*>(e);
                                     QString rms = rm->text();
-                                    if (rms.contains(s))
+                                    if (rms.contains(s)) {
                                           gotoMeasure(seg->measure());
+                                          break;
+                                          }
                                     }
                               }
                         }
