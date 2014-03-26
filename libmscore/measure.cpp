@@ -1190,7 +1190,6 @@ void Measure::removeMStaff(MStaff* /*staff*/, int idx)
 
 void Measure::insertStaff(Staff* staff, int staffIdx)
       {
-qDebug("Measure::insertStaff: %d", staffIdx);
       for (Segment* s = first(); s; s = s->next())
             s->insertStaff(staffIdx);
 

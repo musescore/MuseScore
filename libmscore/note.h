@@ -201,7 +201,7 @@ class Note : public Element {
       Tie* _tieFor;
       Tie* _tieBack;
 
-      NoteDot* _dots[3];
+      NoteDot* _dots[MAX_DOTS];
 
       NoteEventList _playEvents;
 

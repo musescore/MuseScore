@@ -19,6 +19,8 @@ namespace Ms {
 
 enum class NoteHeadType;
 
+static const int MAX_DOTS = 3;
+
 //---------------------------------------------------------
 //   TDuration
 //---------------------------------------------------------
@@ -65,7 +67,7 @@ class TDuration {
       bool hasStem() const;
       TDuration shift(int val) const;
       int dots() const    { return _dots; }
-      void setDots(int v) { _dots = v; }
+      void setDots(int v);
       Fraction fraction() const;
       void print() const;
       };
