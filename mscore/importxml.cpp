@@ -1985,10 +1985,10 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
       // collect candidates for courtesy accidentals to work out at measure end
       QList<Note*> courtAccNotes;
       QList<int> alterList;
-      int alt = -10;
+      int alt = -10;                    // any number outside range of xml-tag "alter"
       QList<bool> accTmp;
       int i = 0;
-      while(i < 74){
+      while(i < 74){                    // number of lines per stave rsp. length of array AccidentalState (no constant found)
           accTmp.append(false);
           i++;
       }
@@ -2050,7 +2050,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
             if (e.tagName() == "attributes")
                   xmlAttributes(measure, staff, e.firstChildElement(), currKeySig);     
             else if (e.tagName() == "note") {
-                  note = xmlNote(measure, staff, part->id(), beam, cv, e, graceNotes, &alt);
+                  note = xmlNote(measure, staff, part->id(), beam, cv, e, graceNotes, alt);
                   if(note) {
                         if(note->accidental()){
                               if(note->accidental()->accidentalType() != Accidental::ACC_NONE){
@@ -4626,7 +4626,7 @@ static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration d
  \a Staff is the number of first staff of the part this note belongs to.
  */
 Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, 
-                        QString& currentVoice, QDomElement e, QList<Chord*>& graceNotes, int* pAlt)
+                        QString& currentVoice, QDomElement e, QList<Chord*>& graceNotes, int& alt)
       {
       int ticks = 0;
 #ifdef DEBUG_TICK
@@ -5030,7 +5030,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                           a->setRole(Accidental::ACC_USER);
                           }
                     else {
-                          *pAlt = alter;
+                          alt = alter;
                           }
                    note->add(a);
                    }
