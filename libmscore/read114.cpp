@@ -625,6 +625,8 @@ Score::FileError Score::read114(XmlReader& e)
             style()->set(ST_evenFooterL, QString("$P"));
             style()->set(ST_oddFooterR, QString("$P"));
             }
+      if (style(ST_minEmptyMeasures).toInt() == 0)
+            style()->set(ST_minEmptyMeasures, 1);
 
       _showOmr = false;
 
