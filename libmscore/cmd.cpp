@@ -1490,11 +1490,20 @@ void Score::resetUserStretch()
 
 void Score::moveUp(Chord* chord)
       {
-      int rstaff    = chord->staff()->rstaff();
+      Staff* staff  = chord->staff();
+      int rstaff    = staff->rstaff();
       int staffMove = chord->staffMove();
 
       if ((staffMove == -1) || (rstaff + staffMove <= 0))
             return;
+
+      // check whether the chord is currently on a tab staff, don't move if it is.
+      if (staff->staffType()->group() == TAB_STAFF_GROUP) {
+            qDebug("User attempted to move tab to standard notation staff - ignoring.");
+            return;
+            }
+
+      // move the chord up a staff
       undo(new ChangeChordStaffMove(chord, staffMove - 1));
       }
 
@@ -1511,11 +1520,20 @@ void Score::moveDown(Chord* chord)
       int staffMove = chord->staffMove();
 
       if ((staffMove == 1) || (rstaff + staffMove >= rstaves - 1)) {
-qDebug("moveDown staffMove==%d  rstaff %d rstaves %d", staffMove, rstaff, rstaves);
+            qDebug("moveDown staffMove==%d  rstaff %d rstaves %d", staffMove, rstaff, rstaves);
             return;
             }
-      undo(new ChangeChordStaffMove(chord, staffMove + 1));
-      _layoutAll = true;
+
+      QList<Staff*>* staves = part->staves();
+      // we know that this staff index exists due to the previous condition.
+      if (staves->at(staffMove+rstaff+1)->staffType()->group() == TAB_STAFF_GROUP) {
+            qDebug("User attempted to move standard notation to tab staff - ignoring.");
+            }
+      else  {
+            // move the chord down a staff
+            undo(new ChangeChordStaffMove(chord, staffMove + 1));
+            _layoutAll = true;
+            }
       }
 
 //---------------------------------------------------------
