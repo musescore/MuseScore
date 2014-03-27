@@ -31,7 +31,20 @@ static int getDots(int base, int rest, int* dots)
             *dots = *dots + 1;
             rest -= base / 4;
             }
+      if (*dots > MAX_DOTS)
+            *dots = MAX_DOTS;
       return rest;
+      }
+
+//---------------------------------------------------------
+//   setDots
+//---------------------------------------------------------
+
+void TDuration::setDots(int v)
+      {
+      if (v > MAX_DOTS)
+            v = MAX_DOTS;
+      _dots = v;
       }
 
 //---------------------------------------------------------

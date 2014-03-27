@@ -106,12 +106,12 @@
        </item>
        <item>
         <property name="text">
-         <string>15ma</string>
+         <string>8vb</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>8vb</string>
+         <string>15ma</string>
         </property>
        </item>
        <item>

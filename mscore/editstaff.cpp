@@ -83,13 +83,13 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
 void EditStaff::fillStaffTypeCombo()
       {
       Score* score   = staff->score();
-      int curIdx     = 0;
-      int n          = score->staffTypes().size();
+      int curIdx     = -1;
       // can this instrument accept tabs or drum set?
       bool canUseTabs = instrument.stringData() && instrument.stringData()->strings() > 0;
       bool canUsePerc = instrument.useDrumset();
       staffType->clear();
-      for (int idx = 0; idx < n; ++idx) {
+
+      for (int idx = 0; idx < score->staffTypes().size(); ++idx) {
             StaffType* st = score->staffType(idx);
             if ( (canUseTabs && st->group() == TAB_STAFF_GROUP)
                         || ( canUsePerc && st->group() == PERCUSSION_STAFF_GROUP)
@@ -99,7 +99,9 @@ void EditStaff::fillStaffTypeCombo()
                         curIdx = staffType->count() - 1;
                   }
             }
-      staffType->setCurrentIndex(curIdx);
+      if (curIdx == -1)
+            qDebug("EditStaff::fillStaffTypeCombo: staff type not found");
+      staffType->setCurrentIndex(curIdx == -1 ? 0 : curIdx);
       }
 
 //---------------------------------------------------------
@@ -160,7 +162,7 @@ void EditStaff::setInterval(const Interval& iv)
 
       int interval = searchInterval(diatonic, chromatic);
       if (interval == -1) {
-            qDebug("EditStaff: unknown interval %d %d\n", diatonic, chromatic);
+            qDebug("EditStaff: unknown interval %d %d", diatonic, chromatic);
             interval = 0;
             }
       iList->setCurrentIndex(interval);
@@ -190,7 +192,7 @@ void EditStaff::bboxClicked(QAbstractButton* button)
                   break;
 
             default:
-                  qDebug("EditStaff: unknown button %d\n", int(br));
+                  qDebug("EditStaff: unknown button %d", int(br));
                   break;
             }
       }
@@ -228,7 +230,6 @@ void EditStaff::apply()
       QColor col        = color->color();
       int staffIdx      = staffType->itemData(staffType->currentIndex()).toInt();
       StaffType* st     = score->staffType(staffIdx);
-
 
       // before changing instrument, check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another

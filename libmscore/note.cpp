@@ -300,7 +300,7 @@ void Note::setTpcFromPitch()
       {
       KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
       _tpc    = pitch2tpc(_pitch, key.accidentalType(), PREFER_NEAREST);
-// qDebug("setTpcFromPitch pitch %d tick %d key %d tpc %d\n", pitch(), chord()->tick(), key.accidentalType(), _tpc);
+// qDebug("setTpcFromPitch pitch %d tick %d key %d tpc %d", pitch(), chord()->tick(), key.accidentalType(), _tpc);
       }
 
 //---------------------------------------------------------
@@ -498,7 +498,7 @@ void Note::add(Element* e)
                   addSpanner(static_cast<Spanner*>(e));
                   break;
             default:
-                  qDebug("Note::add() not impl. %s\n", e->name());
+                  qDebug("Note::add() not impl. %s", e->name());
                   break;
             }
       }
@@ -525,7 +525,7 @@ void Note::remove(Element* e)
             case FINGERING:
             case BEND:
                   if (!_el.remove(e))
-                        qDebug("Note::remove(): cannot find %s\n", e->name());
+                        qDebug("Note::remove(): cannot find %s", e->name());
                   break;
               case TIE:
                   {
@@ -535,8 +535,8 @@ void Note::remove(Element* e)
                         tie->endNote()->setTieBack(0);
                         // update accidentals for endNote
                         Chord* chord = tie->endNote()->chord();
-                        Measure *m = chord->segment()->measure();
-                        score()->updateAccidentals(m,chord->staffIdx());
+                        Measure* m = chord->segment()->measure();
+                        m->updateAccidentals(chord->staffIdx());
                         }
                   int n = tie->spannerSegments().size();
                   for (int i = 0; i < n; ++i) {
@@ -557,7 +557,7 @@ void Note::remove(Element* e)
                   break;
 
             default:
-                  qDebug("Note::remove() not impl. %s\n", e->name());
+                  qDebug("Note::remove() not impl. %s", e->name());
                   break;
             }
       }
@@ -886,7 +886,7 @@ void Note::read(XmlReader& e)
                               }
                         }
                   if (dot) {
-                        qDebug("Note: too many dots\n");
+                        qDebug("Note: too many dots");
                         delete dot;
                         }
                   }
@@ -1129,7 +1129,7 @@ Element* Note::drop(const DropData& data)
                   NoteHead* s = static_cast<NoteHead*>(e);
                   NoteHeadGroup group = s->headGroup();
                   if (group == NoteHeadGroup::HEAD_INVALID) {
-                        qDebug("unknown note head\n");
+                        qDebug("unknown note head");
                         group = NoteHeadGroup::HEAD_NORMAL;
                         }
                   delete s;
@@ -1235,13 +1235,13 @@ Element* Note::drop(const DropData& data)
                         s = s->next1();
                         }
                   if (s == 0) {
-                        qDebug("no segment for second note of glissando found\n");
+                        qDebug("no segment for second note of glissando found");
                         delete e;
                         return 0;
                         }
                   ChordRest* cr1 = static_cast<ChordRest*>(s->element(track()));
                   if (cr1 == 0 || cr1->type() != CHORD) {
-                        qDebug("no second note for glissando found, track %d\n", track());
+                        qDebug("no second note for glissando found, track %d", track());
                         delete e;
                         return 0;
                         }
@@ -1444,9 +1444,9 @@ void Note::layout10(AccidentalState* as)
                         KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
                         int ntpc = pitch2tpc(_pitch, key.accidentalType(), acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
                         if (ntpc != _tpc) {
-                              qDebug("note has wrong tpc: %d, expected %d", _tpc, ntpc);
+//not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), _tpc, ntpc, acci);
 //                              setColor(QColor(255, 0, 0));
-                              _tpc = ntpc;
+//                              _tpc = ntpc;
                               _line = absStep(_tpc, _pitch);
                               }
                         }
@@ -1487,7 +1487,6 @@ void Note::layout10(AccidentalState* as)
             Staff* s = score()->staff(staffIdx() + chord()->staffMove());
             int tick = chord()->tick();
             _line    = relStep(_line, s->clef(tick));
-
             }
       }
 
@@ -1838,9 +1837,13 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_PITCH:
                   setPitch(v.toInt());
+                  if (chord()->measure())
+                        chord()->measure()->updateAccidentals(chord()->staffIdx());
                   break;
             case P_TPC:
                   setTpc(v.toInt());
+                  if (chord()->measure())
+                        chord()->measure()->updateAccidentals(chord()->staffIdx());
                   break;
             case P_SMALL:
                   setSmall(v.toBool());

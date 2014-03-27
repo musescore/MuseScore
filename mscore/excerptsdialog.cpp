@@ -27,6 +27,8 @@
 
 namespace Ms {
 
+extern bool useFactorySettings;
+
 //---------------------------------------------------------
 //   ExcerptItem
 //---------------------------------------------------------
@@ -101,7 +103,19 @@ void MuseScore::startExcerptsDialog()
       if (cs == 0)
             return;
       ExcerptsDialog ed(cs, 0);
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup("PartEditor");
+            ed.resize(settings.value("size", QSize(484, 184)).toSize());
+            ed.move(settings.value("pos", QPoint(10, 10)).toPoint());
+            settings.endGroup();
+            }
       ed.exec();
+      QSettings settings;
+      settings.beginGroup("PartEditor");
+      settings.setValue("size", ed.size());
+      settings.setValue("pos", ed.pos());
+      settings.endGroup();
       cs->setLayoutAll(true);
       cs->end();
       }

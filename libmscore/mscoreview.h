@@ -60,6 +60,13 @@ class MuseScoreView {
       virtual void startEdit(Element*, int startGrip) = 0;
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
       virtual void setDropTarget(const Element*) {}
+      
+      virtual void lyricsTab(bool /*back*/, bool /*end*/, bool /*moveOnly*/) {}
+      virtual void lyricsReturn() {}
+      virtual void lyricsEndEdit() {}
+      virtual void lyricsUpDown(bool /*up*/, bool /*end*/)  {}
+      virtual void lyricsMinus()  {}
+      virtual void lyricsUnderscore()  {}
       };
 
 

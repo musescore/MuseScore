@@ -179,7 +179,7 @@ bool ElementLayout::readProperties(XmlReader& e)
             else if (val == "left")
                   ;
             else
-                  qDebug("Text::readProperties: unknown alignment: <%s>\n", qPrintable(val));
+                  qDebug("Text::readProperties: unknown alignment: <%s>", qPrintable(val));
             }
       else if (tag == "valign") {
             const QString& val(e.readElementText());
@@ -193,7 +193,7 @@ bool ElementLayout::readProperties(XmlReader& e)
             else if (val == "top")
                   ;
             else
-                  qDebug("Text::readProperties: unknown alignment: <%s>\n", qPrintable(val));
+                  qDebug("Text::readProperties: unknown alignment: <%s>", qPrintable(val));
             }
       else if (tag == "xoffset") {
             qreal xo = e.readDouble();

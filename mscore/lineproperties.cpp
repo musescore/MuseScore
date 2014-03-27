@@ -37,7 +37,7 @@ static void setTextPlace(PlaceText place, QComboBox* cb)
             case PLACE_BELOW: idx = 1; break;
             case PLACE_LEFT:  idx = 2; break;
             default:
-                  qDebug("illegal text placement\n");
+                  qDebug("illegal text placement");
             }
       cb->setCurrentIndex(idx);
       }
@@ -126,7 +126,7 @@ void LineProperties::accept()
 
       PlaceText pt = getPlaceText(beginTextPlace);
       if (pt != otl->beginTextPlace()) {
-            printf("change ottava, links %p\n", otl->links());
+            qDebug("change ottava, links %p", otl->links());
             otl->undoChangeProperty(P_BEGIN_TEXT_PLACE, pt);
             }
       pt = getPlaceText(continueTextPlace);

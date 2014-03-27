@@ -123,7 +123,7 @@ void StaffState::layout()
                   break;
 
             default:
-                  qDebug("unknown layout break symbol\n");
+                  qDebug("unknown layout break symbol");
                   break;
             }
       QRectF bb(0, 0, w, h);

@@ -33,6 +33,7 @@
 #include "libmscore/undo.h"
 #include "libmscore/stem.h"
 #include "musescore.h"
+#include "scoreview.h"
 
 namespace Ms {
 
@@ -77,7 +78,14 @@ Tuplet* MuseScore::tupletDialog()
       {
       if (!cs)
             return 0;
-      ChordRest* cr = cs->getSelectedChordRest();
+      ChordRest* cr = 0;
+      if (cv->noteEntryMode()) {
+            cs->expandVoice();
+            cs->changeCRlen(cs->inputState().cr(), cs->inputState().duration());
+            cr = cs->inputState().cr();
+            }
+      else
+            cr = cs->getSelectedChordRest();
       if (cr == 0)
             return 0;
       if (cr->durationType() < TDuration(TDuration::V_128TH) && cr->durationType() != TDuration(TDuration::V_MEASURE)) {
@@ -98,7 +106,7 @@ Tuplet* MuseScore::tupletDialog()
       Fraction f = f1 * tuplet->ratio();
       f.reduce();
 
-      qDebug("len %s  ratio %s  base %s\n",
+      qDebug("len %s  ratio %s  base %s",
          qPrintable(f1.print()),
          qPrintable(tuplet->ratio().print()),
          qPrintable(f.print()));

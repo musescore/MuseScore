@@ -621,6 +621,23 @@ void TextLine::writeProperties(Xml& xml) const
       }
 
 //---------------------------------------------------------
+//   resolveSymCompatibility
+//---------------------------------------------------------
+static QString resolveSymCompatibility(SymId i, QString programVersion)
+      {
+      if (!programVersion.isEmpty() && programVersion < "1.1")
+            i = SymId(int(i) + 5);
+      switch(int(i)) {
+            case 197:   return "keyboardPedalPed";
+            case 191:   return "keyboardPedalUp";
+            case 193:   return "noSym"; //SymId(pedaldotSym);
+            case 192:   return "noSym"; //SymId(pedaldashSym);
+            case 139:   return "ornamentTrill";
+            default:    return "noSym";
+            }
+      }
+
+//---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
 
@@ -644,15 +661,15 @@ bool TextLine::readProperties(XmlReader& e)
             _endHookHeight *= qreal(-1.0);
       else if (tag == "beginSymbol" || tag == "symbol") {     // "symbol" is obsolete
             QString text(e.readElementText());
-            setBeginText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? Sym::id2name(SymId(text.toInt())) : text));
+            setBeginText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? resolveSymCompatibility(SymId(text.toInt()), score()->mscoreVersion()) : text));
             }
       else if (tag == "continueSymbol") {
             QString text(e.readElementText());
-            setContinueText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? Sym::id2name(SymId(text.toInt())) : text));
+            setContinueText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? resolveSymCompatibility(SymId(text.toInt()), score()->mscoreVersion()) : text));
             }
       else if (tag == "endSymbol") {
             QString text(e.readElementText());
-            setEndText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? Sym::id2name(SymId(text.toInt())) : text));
+            setEndText(QString("<sym>%1</sym>").arg(text[0].isNumber() ? resolveSymCompatibility(SymId(text.toInt()), score()->mscoreVersion()) : text));
             }
       else if (tag == "beginSymbolOffset")            // obsolete
             e.readPoint();

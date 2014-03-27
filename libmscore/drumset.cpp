@@ -50,7 +50,7 @@ void Drumset::save(Xml& xml)
                               }
                               break;
                         default:
-                              qDebug("illegal drum shortcut\n");
+                              qDebug("illegal drum shortcut");
                               break;
                         }
                   }
@@ -66,7 +66,7 @@ void Drumset::load(XmlReader& e)
       {
       int pitch = e.intAttribute("pitch", -1);
       if (pitch < 0 || pitch > 127) {
-            qDebug("load drumset: invalid pitch %d\n", pitch);
+            qDebug("load drumset: invalid pitch %d", pitch);
             return;
             }
       while (e.readNextStartElement()) {

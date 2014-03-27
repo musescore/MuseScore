@@ -99,7 +99,7 @@ Driver* driverFactory(Seq* seq, QString driverName)
       if (driver == 0 && useAlsaFlag) {
             driver = new AlsaAudio(seq);
             if (!driver->init()) {
-                  qDebug("init ALSA driver failed\n");
+                  qDebug("init ALSA driver failed");
                   delete driver;
                   driver = 0;
                   }
@@ -116,7 +116,7 @@ Driver* driverFactory(Seq* seq, QString driverName)
             usePortaudioFlag = false;
             driver = new JackAudio(seq);
             if (!driver->init()) {
-                  qDebug("no JACK server found\n");
+                  qDebug("no JACK server found");
                   delete driver;
                   driver = 0;
                   }

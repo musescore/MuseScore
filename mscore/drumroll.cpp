@@ -41,6 +41,8 @@
 
 namespace Ms {
 
+extern bool useFactorySettings;
+
 //---------------------------------------------------------
 //   DrumrollEditor
 //---------------------------------------------------------
@@ -75,16 +77,18 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       tb->addSeparator();
 
       //-------------
-      tb = addToolBar(tr("toolbar 2"));
+      tb = addToolBar(tr("toolbar 3"));
       layout->addWidget(tb, 1, 0, 1, 2);
 
-      static const char* sl3[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
-      QActionGroup* voiceGroup = new QActionGroup(this);
-      for (const char* s : sl3) {
-            QAction* a = getAction(s);
-            a->setCheckable(true);
-            voiceGroup->addAction(a);
-            tb->addAction(getAction(s));
+      for (int i = 0; i < VOICES; ++i) {
+            QToolButton* b = new QToolButton(this);
+            b->setToolButtonStyle(Qt::ToolButtonTextOnly);
+            QPalette p(b->palette());
+            p.setColor(QPalette::Base, MScore::selectColor[i]);
+            b->setPalette(p);
+            QAction* a = getAction(voiceActions[i]);
+            b->setDefaultAction(a);
+            tb->addWidget(b);
             }
 
       tb->addSeparator();
@@ -157,6 +161,27 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       ag->addAction(a);
       addActions(ag->actions());
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
+
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup("Drumroll");
+            resize(settings.value("size", QSize(900, 500)).toSize());
+            move(settings.value("pos", QPoint(10, 10)).toPoint());
+            settings.endGroup();
+            }
+      }
+
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void DrumrollEditor::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup("Drumroll");
+      settings.setValue("size", size());
+      settings.setValue("pos", QWidget::pos());
+      settings.endGroup();
       }
 
 //---------------------------------------------------------

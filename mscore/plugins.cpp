@@ -371,7 +371,7 @@ void MuseScore::pluginTriggered(int idx)
       QObject* obj = component.create();
       if (obj == 0) {
             foreach(QQmlError e, component.errors())
-                  qDebug("   line %d: %s\n", e.line(), qPrintable(e.description()));
+                  qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
             return;
             }
 
@@ -606,7 +606,7 @@ const QTransform& MsScoreView::matrix() const
 
 void collectPluginMetaInformation(PluginDescription* d)
       {
-      printf("collect meta for <%s>\n", qPrintable(d->path));
+      qDebug("Collect meta for <%s>", qPrintable(d->path));
 
       QQmlComponent component(mscore->qml(), QUrl::fromLocalFile(d->path));
       QObject* obj = component.create();

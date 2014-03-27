@@ -147,25 +147,6 @@ static const StyleVal2 style114[] = {
       { ST_tupletNoteRightDistance,      QVariant(0.0) }
       };
 
-//---------------------------------------------------------
-//   resolveSymCompatibility
-//---------------------------------------------------------
-
-#if 0
-static SymId resolveSymCompatibility(SymId i, QString programVersion)
-      {
-      if (!programVersion.isEmpty() && programVersion < "1.1")
-            i = SymId(int(i) + 5);
-      switch(int(i)) {
-            case 197:   return SymId::keyboardPedalPed;
-//TODO::smufl            case 191:   return SymId(pedalasteriskSym);
-//            case 193:   return SymId(pedaldotSym);
-//            case 192:   return SymId(pedaldashSym);
-            case 139:   return SymId::ornamentTrill;
-            default:    return SymId::noSym;
-            }
-      }
-#endif
 
 //---------------------------------------------------------
 //   Staff::read114
@@ -382,7 +363,8 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
                   text->read(e);
-                  setMetaTag("copyright", text->text());
+                  text->layout();
+                  setMetaTag("copyright", text->plainText());
                   delete text;
                   }
             else if (tag == "movement-number")
@@ -429,7 +411,7 @@ Score::FileError Score::read114(XmlReader& e)
                         s->setTrack2(s->track());
                   if (s->tick2() == -1) {
                         delete s;
-                        qDebug("invalid spanner %s tick2: %d\n", s->name(), s->tick2());
+                        qDebug("invalid spanner %s tick2: %d", s->name(), s->tick2());
                         }
                   else {
                         addSpanner(s);
@@ -530,17 +512,6 @@ Score::FileError Score::read114(XmlReader& e)
 
       for (std::pair<int,Spanner*> p : spanner()) {
             Spanner* s = p.second;
-            if (s->type() == Element::OTTAVA
-               || (s->type() == Element::TEXTLINE)
-               || (s->type() == Element::VOLTA)
-               || (s->type() == Element::PEDAL))
-                  {
-//                  TextLine* tl = static_cast<TextLine*>(s);
-//TODO                  tl->setBeginSymbol(resolveSymCompatibility(tl->beginSymbol(), mscoreVersion()));
-//                  tl->setContinueSymbol(resolveSymCompatibility(tl->continueSymbol(), mscoreVersion()));
-//                  tl->setEndSymbol(resolveSymCompatibility(tl->endSymbol(), mscoreVersion()));
-                  }
-
             if (s->type() != Element::SLUR) {
                   if (s->type() == Element::VOLTA) {
                         Volta* volta = static_cast<Volta*>(s);
@@ -548,15 +519,23 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
 
-            if (s->type() == Element::OTTAVA) {
-                  // fix ottava position
-                  Ottava* ottava = static_cast<Ottava*>(s);
-                  ottava->staff()->updateOttava(ottava);
-
-                  qreal yo(styleS(ST_ottavaY).val() * spatium());
-                  if (ottava->placement() == Element::BELOW)
-                        yo = -yo + ottava->staff()->height();
-                  for (SpannerSegment* seg : ottava->spannerSegments()) {
+            if (s->type() == Element::OTTAVA || s->type() == Element::PEDAL || s->type() == Element::TRILL) {
+                  qreal yo = 0;
+                  if (s->type() == Element::OTTAVA) {
+                      // fix ottava position
+                      Ottava* ottava = static_cast<Ottava*>(s);
+                      ottava->staff()->updateOttava(ottava);
+                      yo = styleS(ST_ottavaY).val() * spatium();
+                      if (s->placement() == Element::BELOW)
+                            yo = -yo + s->staff()->height();
+                      }
+                  else if (s->type() == Element::PEDAL) {
+                        yo = styleS(ST_pedalY).val() * spatium();
+                        }
+                  else if (s->type() == Element::TRILL) {
+                        yo = styleS(ST_trillY).val() * spatium();
+                        }
+                  for (SpannerSegment* seg : s->spannerSegments()) {
                         if (!seg->userOff().isNull())
                               seg->setUserYoffset(seg->userOff().y() - yo);
                         }
@@ -647,6 +626,8 @@ Score::FileError Score::read114(XmlReader& e)
             style()->set(ST_evenFooterL, QString("$P"));
             style()->set(ST_oddFooterR, QString("$P"));
             }
+      if (style(ST_minEmptyMeasures).toInt() == 0)
+            style()->set(ST_minEmptyMeasures, 1);
 
       _showOmr = false;
 
@@ -675,34 +656,6 @@ Score::FileError Score::read114(XmlReader& e)
       updateChannel();
       updateNotes();    // only for parts needed?
 
-      doLayout();
-
-      //
-      // move some elements
-      //
-      for (std::pair<int,Spanner*> p : spanner()) {
-            Spanner* s = p.second;
-            if (s->type() == Element::OTTAVA) {
-                  qreal dx = 0.0;
-                  Segment* s1 = tick2segment(s->tick2(), true, Segment::SegChordRest);
-                  if (s1) {
-                        qreal x1 = s1->pagePos().x();
-                        qreal x2;
-                        Segment* s2 = s1->next1(Segment::SegChordRest);
-                        if (s2)
-                              x2 = s2->pagePos().x();
-                        else
-                              x2 = lastMeasure()->pagePos().x() + lastMeasure()->width();
-
-                        dx =  x2 - x1 - s->spatium() * 2.0;
-                        }
-
-                  Ottava* o = static_cast<Ottava*>(s);
-                  for (SpannerSegment* seg : o->spannerSegments()) {
-                        seg->setUserOff2(QPointF(seg->userOff2().x() + dx, seg->userOff2().y()));
-                        }
-                  }
-            }
       return FILE_NO_ERROR;
       }
 

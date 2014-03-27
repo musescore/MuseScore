@@ -47,7 +47,7 @@ JackAudio::~JackAudio()
       {
       if (client) {
             if (jack_client_close(client)) {
-                  qDebug("jack_client_close() failed: %s\n",
+                  qDebug("jack_client_close() failed: %s",
                      strerror(errno));
                   }
             }
@@ -64,7 +64,7 @@ void JackAudio::registerPort(const QString& name, bool input, bool midi)
 
       jack_port_t* port = jack_port_register(client, qPrintable(name), portType, portFlag, 0);
       if (port == 0) {
-            qDebug("JackAudio:registerPort(%s) failed\n", qPrintable(name));
+            qDebug("JackAudio:registerPort(%s) failed", qPrintable(name));
             return;
             }
       if (midi) {
@@ -119,11 +119,11 @@ void JackAudio::connect(void* src, void* dst)
       const char* dn = jack_port_name((jack_port_t*) dst);
 
       if (sn == 0 || dn == 0) {
-            qDebug("JackAudio::connect: unknown jack ports\n");
+            qDebug("JackAudio::connect: unknown jack ports");
             return;
             }
       if (jack_connect(client, sn, dn)) {
-            qDebug("jack connect <%s>%p - <%s>%p failed\n",
+            qDebug("jack connect <%s>%p - <%s>%p failed",
                sn, src, dn, dst);
             }
       }
@@ -137,11 +137,11 @@ void JackAudio::disconnect(void* src, void* dst)
       const char* sn = jack_port_name((jack_port_t*) src);
       const char* dn = jack_port_name((jack_port_t*) dst);
       if (sn == 0 || dn == 0) {
-            qDebug("JackAudio::disconnect: unknown jack ports\n");
+            qDebug("JackAudio::disconnect: unknown jack ports");
             return;
             }
       if (jack_disconnect(client, sn, dn)) {
-            qDebug("jack disconnect <%s> - <%s> failed\n", sn, dn);
+            qDebug("jack disconnect <%s> - <%s> failed", sn, dn);
             }
       }
 
@@ -153,7 +153,7 @@ void JackAudio::disconnect(void* src, void* dst)
 bool JackAudio::start()
       {
       if (jack_activate(client)) {
-            qDebug("JACK: cannot activate client\n");
+            qDebug("JACK: cannot activate client");
             return false;
             }
       if (preferences.useJackAudio) {
@@ -169,13 +169,13 @@ bool JackAudio::start()
             int rv;
             rv = jack_connect(client, src, qPrintable(lport));
             if (rv) {
-                  qDebug("jack connect <%s> - <%s> failed: %d\n",
+                  qDebug("jack connect <%s> - <%s> failed: %d",
                      src, qPrintable(lport), rv);
                   }
             src = jack_port_name(ports[1]);
             if (!rport.isEmpty()) {
                   if (jack_connect(client, src, qPrintable(rport))) {
-                        qDebug("jack connect <%s> - <%s> failed: %d\n",
+                        qDebug("jack connect <%s> - <%s> failed: %d",
                            src, qPrintable(rport), rv);
                         }
                   }
@@ -192,7 +192,7 @@ bool JackAudio::start()
                         if (!dst.isEmpty()) {
                               int rv = jack_connect(client, src, qPrintable(dst));
                               if (rv) {
-                                    qDebug("jack connect midi output <%s> - <%s> failed: %d\n",
+                                    qDebug("jack connect midi output <%s> - <%s> failed: %d",
                                        src, qPrintable(dst), rv);
                                     }
                               }
@@ -207,7 +207,7 @@ bool JackAudio::start()
                         if (!src.isEmpty()) {
                               int rv = jack_connect(client, qPrintable(src), dst);
                               if (rv) {
-                                    qDebug("jack connect midi input <%s> - <%s> failed: %d\n",
+                                    qDebug("jack connect midi input <%s> - <%s> failed: %d",
                                        qPrintable(src), dst, rv);
                                     }
                               }
@@ -282,7 +282,7 @@ int JackAudio::framePos() const
 
 static int bufsize_callback(jack_nframes_t /*n*/, void*)
       {
-//      qDebug("JACK: buffersize changed %d\n", n);
+//      qDebug("JACK: buffersize changed %d", n);
       return 0;
       }
 
@@ -296,18 +296,18 @@ static void freewheel_callback(int /*starting*/, void*)
 
 static int srate_callback(jack_nframes_t, void*)
       {
-//      qDebug("JACK: sample rate changed: %d\n", n);
+//      qDebug("JACK: sample rate changed: %d", n);
       return 0;
       }
 
 static void registration_callback(jack_port_id_t, int, void*)
       {
-//      qDebug("JACK: registration changed\n");
+//      qDebug("JACK: registration changed");
       }
 
 static int graph_callback(void*)
       {
-//      qDebug("JACK: graph changed\n");
+//      qDebug("JACK: graph changed");
       return 0;
       }
 
@@ -383,7 +383,7 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
 
 static void jackError(const char *s)
       {
-      qDebug("JACK ERROR: %s\n", s);
+      qDebug("JACK ERROR: %s", s);
       }
 
 //---------------------------------------------------------
@@ -410,7 +410,7 @@ bool JackAudio::init()
       jack_status_t status;
       client = jack_client_open(_jackName, options, &status);
       if (client == 0) {
-            qDebug("JackAudio()::init(): failed, status 0x%0x\n", status);
+            qDebug("JackAudio()::init(): failed, status 0x%0x", status);
             return false;
             }
 
@@ -441,7 +441,7 @@ bool JackAudio::init()
                         ++pi;
                         }
                   else {
-                        qDebug("no jack ports found\n");
+                        qDebug("no jack ports found");
                         jack_client_close(client);
                         client = 0;
                         return false;
@@ -452,7 +452,7 @@ bool JackAudio::init()
                         preferences.rPort = *pi;
                         }
                   else {
-                        qDebug("no jack port for right channel found!\n");
+                        qDebug("no jack port for right channel found!");
                         }
                   }
             }
@@ -512,10 +512,10 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
       int portIdx = e.channel() / 16;
       int chan    = e.channel() % 16;
 
-// qDebug("JackAudio::putEvent %d:%d  pos %d(%d)\n", portIdx, chan, framePos, _segmentSize);
+// qDebug("JackAudio::putEvent %d:%d  pos %d(%d)", portIdx, chan, framePos, _segmentSize);
 
       if (portIdx < 0 || portIdx >= midiOutputPorts.size()) {
-            qDebug("JackAudio::putEvent: invalid port %d\n", portIdx);
+            qDebug("JackAudio::putEvent: invalid port %d", portIdx);
             return;
             }
       jack_port_t* port = midiOutputPorts[portIdx];
@@ -527,7 +527,7 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
       void* pb = jack_port_get_buffer(port, _segmentSize);
 
       if (framePos >= _segmentSize) {
-            qDebug("JackAudio::putEvent: time out of range %d(seg=%d)\n", framePos, _segmentSize);
+            qDebug("JackAudio::putEvent: time out of range %d(seg=%d)", framePos, _segmentSize);
             if (framePos > _segmentSize)
                   framePos = _segmentSize - 1;
             }
@@ -541,7 +541,7 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
                   {
                   unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
                   if (p == 0) {
-                        qDebug("JackMidi: buffer overflow, event lost\n");
+                        qDebug("JackMidi: buffer overflow, event lost");
                         return;
                         }
                   p[0] = e.type() | chan;
@@ -555,7 +555,7 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
                   {
                   unsigned char* p = jack_midi_event_reserve(pb, framePos, 2);
                   if (p == 0) {
-                        qDebug("JackMidi: buffer overflow, event lost\n");
+                        qDebug("JackMidi: buffer overflow, event lost");
                         return;
                         }
                   p[0] = e.type() | chan;
@@ -568,7 +568,7 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
                   int len = e.len();
                   unsigned char* p = jack_midi_event_reserve(pb, framePos, len+2);
                   if (p == 0) {
-                        qDebug("JackMidi: buffer overflow, event lost\n");
+                        qDebug("JackMidi: buffer overflow, event lost");
                         return;
                         }
                   p[0]     = 0xf0;
@@ -581,7 +581,7 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
             case ME_START:
             case ME_CONTINUE:
             case ME_STOP:
-                  qDebug("JackMidi: event type %x not supported\n", e.type());
+                  qDebug("JackMidi: event type %x not supported", e.type());
                   break;
             }
       }

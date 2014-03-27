@@ -95,7 +95,7 @@ void BSymbol::add(Element* e)
             static_cast<BSymbol*>(e)->setZ(z() - 1);    // draw on top of parent
             }
       else
-            qDebug("BSymbol::add: unsupported type %s\n", e->name());
+            qDebug("BSymbol::add: unsupported type %s", e->name());
       }
 
 //---------------------------------------------------------
@@ -106,10 +106,10 @@ void BSymbol::remove(Element* e)
       {
       if (e->type() == SYMBOL || e->type() == IMAGE) {
             if (!_leafs.removeOne(e))
-                  qDebug("BSymbol::remove: element <%s> not found\n", e->name());
+                  qDebug("BSymbol::remove: element <%s> not found", e->name());
             }
       else
-            qDebug("BSymbol::remove: unsupported type %s\n", e->name());
+            qDebug("BSymbol::remove: unsupported type %s", e->name());
       }
 
 //---------------------------------------------------------

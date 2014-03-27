@@ -2379,12 +2379,10 @@ void ScoreView::normalCut()
 void ScoreView::editPaste()
       {
       if (editObject->isText()) {
-            static_cast<Text*>(editObject)->paste();
-            QClipboard::Mode mode = QClipboard::Clipboard;
-//            QClipboard::Mode mode = QClipboard::Selection;
-            QString txt = QApplication::clipboard()->text(mode);
-            if (editObject->type() == Element::LYRICS && !txt.isEmpty())
-                  lyricsTab(false, false, true);
+            if (editObject->type() == Element::LYRICS)
+                  static_cast<Lyrics*>(editObject)->paste(this);
+            else
+                  static_cast<Text*>(editObject)->paste();
             }
       }
 
@@ -5223,6 +5221,21 @@ void ScoreView::search(const QString& s)
                   n = s.mid(1).toInt(&ok);
                   if (ok && n >= 0)
                         searchPage(n);
+                  }
+            else {
+                  //search rehearsal marks
+                  for (Segment* seg = score()->firstSegment(); seg; seg = seg->next1(Segment::SegChordRest)) {
+                        for (Element* e : seg->annotations()){
+                              if (e->type() == Element::REHEARSAL_MARK) {
+                                    RehearsalMark* rm = static_cast<RehearsalMark*>(e);
+                                    QString rms = rm->text();
+                                    if (rms.contains(s)) {
+                                          gotoMeasure(seg->measure());
+                                          break;
+                                          }
+                                    }
+                              }
+                        }
                   }
             }
       }

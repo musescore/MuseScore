@@ -70,46 +70,46 @@ void MuseScore::initOsc()
       else
             port = preferences.oscPort;
       QOscServer* osc = new QOscServer(port, qApp);
-      PathObject* oo = new PathObject( "/mscore", QVariant::Int, osc);
+      
+      PathObject* oo = new PathObject( "/addpitch", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscIntMessage(int)));
-      oo = new PathObject( "/play",QVariant::Invalid, osc);
-      QObject::connect(oo, SIGNAL(data()), SLOT(oscPlay()));
-      oo = new PathObject( "/stop", QVariant::Invalid, osc);
-      QObject::connect(oo, SIGNAL(data()), SLOT(oscStop()));
+
       oo = new PathObject( "/tempo", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscTempo(int)));
       oo = new PathObject( "/volume", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscVolume(int)));
-      oo = new PathObject( "/next", QVariant::Invalid, osc);
-      QObject::connect(oo, SIGNAL(data()), SLOT(oscNext()));
-      oo = new PathObject( "/next-measure", QVariant::Invalid, osc);
-      QObject::connect(oo, SIGNAL(data()), SLOT(oscNextMeasure()));
       oo = new PathObject( "/goto", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscGoto(int)));
       oo = new PathObject( "/select-measure", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscSelectMeasure(int)));
-      for(int i=1; i <=12; i++ ) {
+      for (int i = 1; i <= 12; i++ ) {
             oo = new PathObject( QString("/vol%1").arg(i), QVariant::Double, osc);
             QObject::connect(oo, SIGNAL(data(double)), SLOT(oscVolChannel(double)));
             }
-      for(int i=1; i <=12; i++ ) {
+      for(int i = 1; i <= 12; i++ ) {
             oo = new PathObject( QString("/pan%1").arg(i), QVariant::Double, osc);
             QObject::connect(oo, SIGNAL(data(double)), SLOT(oscPanChannel(double)));
             }
-      for(int i=1; i <=12; i++ ) {
+      for(int i = 1; i <= 12; i++ ) {
             oo = new PathObject( QString("/mute%1").arg(i), QVariant::Double, osc);
             QObject::connect(oo, SIGNAL(data(double)), SLOT(oscMuteChannel(double)));
             }
+      
       oo = new PathObject( "/open", QVariant::String, osc);
       QObject::connect(oo, SIGNAL(data(QString)), SLOT(oscOpen(QString)));
       oo = new PathObject( "/close-all", QVariant::Invalid, osc);
       QObject::connect(oo, SIGNAL(data()), SLOT(oscCloseAll()));
+      
       oo = new PathObject( "/plugin", QVariant::String, osc);
       QObject::connect(oo, SIGNAL(data(QString)), SLOT(oscTriggerPlugin(QString)));
 
       oo = new PathObject( "/color-note", QVariant::List, osc);
       QObject::connect(oo, SIGNAL(data(QVariantList)), SLOT(oscColorNote(QVariantList)));
 
+      for (const Shortcut* s : Shortcut::shortcuts()) {
+            oo = new PathObject( QString("/actions/%1").arg(s->key()), QVariant::Invalid, osc);
+            QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+            }
       }
 
 //---------------------------------------------------------
@@ -118,36 +118,19 @@ void MuseScore::initOsc()
 
 void MuseScore::oscIntMessage(int val)
       {
-      if (val < 128)
-            midiNoteReceived(0, val, false);
+      if (val < 128) {
+            midiNoteReceived(0, val, 60);
+            midiNoteReceived(0, val, 0);
+            }
       else
             midiCtrlReceived(val-128, 22);
       }
 
-void MuseScore::oscPlay()
+void MuseScore::oscAction()
       {
-      QAction* a = getAction("play");
-      if (!a->isChecked())
-            a->trigger();
-      }
-
-void MuseScore::oscStop()
-      {
-      QAction* a = getAction("play");
-      if (a->isChecked())
-            a->trigger();
-      }
-
-void MuseScore::oscNext()
-      {
-      qDebug("next");
-      QAction* a = getAction("next-chord");
-      a->trigger();
-      }
-
-void MuseScore::oscNextMeasure()
-      {
-      QAction* a = getAction("next-measure");
+      PathObject* pathObject = qobject_cast<PathObject*>(sender());
+      QString path = pathObject->path().mid(9);
+      QAction* a = getAction(path.toLocal8Bit().data());
       a->trigger();
       }
 

@@ -64,7 +64,7 @@ QString PitchEdit::textFromValue(int v) const
 
 int PitchEdit::valueFromText(const QString& s) const
       {
-printf("AwlPitchEdit::valueFromText(%s): not impl.\n", qPrintable(s));
+      qDebug("AwlPitchEdit::valueFromText(%s): not impl.", qPrintable(s));
       return 0;
       }
 

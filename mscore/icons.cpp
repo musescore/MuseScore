@@ -150,7 +150,7 @@ void genIcons()
             icon->addFile(iconPath + iconNames[i]);
             icons[i] = icon;
             if (icons[i]->isNull() || icons[i]->pixmap(12).isNull()) {
-                  qDebug("cannot load Icon <%s>\n", qPrintable(iconPath + iconNames[i]));
+                  qDebug("cannot load Icon <%s>", qPrintable(iconPath + iconNames[i]));
                   }
             }
 

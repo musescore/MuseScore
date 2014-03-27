@@ -91,6 +91,7 @@ struct PluginDescription;
 
 extern QString mscoreGlobalShare;
 static const int PROJECT_LIST_LEN = 6;
+extern const char* voiceActions[];
 
 //---------------------------------------------------------
 //   IconActions
@@ -424,12 +425,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void saveScoreDialogFilterSelected(const QString&);
 #ifdef OSC
       void oscIntMessage(int);
-      void oscPlay();
-      void oscStop();
       void oscVolume(int val);
       void oscTempo(int val);
-      void oscNext();
-      void oscNextMeasure();
       void oscGoto(int m);
       void oscSelectMeasure(int m);
       void oscVolChannel(double val);
@@ -439,6 +436,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void oscCloseAll();
       void oscTriggerPlugin(QString list);
       void oscColorNote(QVariantList list);
+      void oscAction();
 #endif
       void createNewWorkspace();
       void deleteWorkspace();

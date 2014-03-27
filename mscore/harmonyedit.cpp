@@ -116,11 +116,11 @@ void ChordStyleEditor::loadChordDescriptionFile(const QString& s)
       {
       ChordList* cl = new ChordList;
       if (!cl->read("chords.xml")) {
-            qDebug("cannot read <chords.xml>\n");
+            qDebug("cannot read <chords.xml>");
             return;
             }
       if (!cl->read(s)) {
-            qDebug("cannot read <%s>\n", qPrintable(s));
+            qDebug("cannot read <%s>", qPrintable(s));
             return;
             }
       setChordList(cl);
@@ -349,7 +349,7 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
                         y = pt.y();
                         }
                   else
-                        qDebug("RenderAction::RENDER_POP: stack empty\n");
+                        qDebug("RenderAction::RENDER_POP: stack empty");
                   }
             else if (a.type == RenderAction::RENDER_NOTE) {
                   QString c;
@@ -472,7 +472,7 @@ void HarmonyCanvas::dropEvent(QDropEvent* event)
             QFont ff(st->fontPx(_spatium));
             ff.setFamily(sb->font().family());
 
-//            qDebug("drop %s\n", dragElement->name());
+//            qDebug("drop %s", dragElement->name());
 
             QString s;
             int code = sb->code();

@@ -841,14 +841,15 @@ class Score : public QObject {
       Page* getEmptyPage();
 
       void layoutChords1(Segment* segment, int staffIdx);
-      void layoutChords1(QList<Note*>& notes, int voices, Staff*, Segment*);
+      void layoutChords2(QList<Note*>& notes, bool up);
+      void layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment);
 
       SynthesizerState& synthesizerState()     { return _synthesizerState; }
       void setSynthesizerState(const SynthesizerState& s);
 
-      const QList<StaffType**>& staffTypes() const { return _staffTypes; }
+      const QList<StaffType**>& staffTypes() const;
       void replaceStaffTypes(const QList<StaffType*>&);
-      StaffType* staffType(int idx);
+      StaffType* staffType(int idx) const;
       int staffTypeIdx(StaffType*) const;
       void addStaffType(StaffType*);
       void addStaffType(int idx, StaffType*);
@@ -876,7 +877,6 @@ class Score : public QObject {
       void updateNotes();
       void cmdUpdateNotes();
       void cmdUpdateAccidentals(Measure* m, int staffIdx);
-      void updateAccidentals(Measure* m, int staffIdx);
       QMap<int, LinkedElements*>& links();
       bool concertPitch() const { return styleB(ST_concertPitch); }
       void layoutFingering(Fingering*);
@@ -959,7 +959,8 @@ class Score : public QObject {
 
       ScoreFont* scoreFont() const    { return _scoreFont; }
       void setScoreFont(ScoreFont* f) { _scoreFont = f;    }
-      qreal noteHeadWidth() const            { return _noteHeadWidth; }
+      qreal noteHeadWidth() const     { return _noteHeadWidth; }
+      void setNoteHeadWidth( qreal n) { _noteHeadWidth = n; }
 
       friend class ChangeSynthesizerState;
       friend class Chord;

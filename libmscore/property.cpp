@@ -40,9 +40,9 @@ static const PropertyData propertyList[] = {
       { P_SMALL,               false, "small",         T_BOOL  },
       { P_SHOW_COURTESY,       false, "",              T_INT   },
       { P_LINE_TYPE,           false, "",              T_INT   },
-      { P_PITCH,               false, "pitch",         T_INT },
-      { P_TPC,                 false, "tpc",           T_INT },
-      { P_HEAD_TYPE,           false, "headType",      T_INT },
+      { P_PITCH,               true,  "pitch",         T_INT   },
+      { P_TPC,                 true,  "tpc",           T_INT   },
+      { P_HEAD_TYPE,           false, "headType",      T_INT   },
 
       { P_HEAD_GROUP,          false, "head",          T_INT },
       { P_VELO_TYPE,           false, "veloType",      T_VALUE_TYPE },

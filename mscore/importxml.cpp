@@ -176,6 +176,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* ottav
       int tpc  = step2tpc(table1[istep], AccidentalVal(alter));
       // alternativ: tpc = step2tpc((istep + 5) % 7, alter);      // rotate istep 5 steps
       n->setTpc(tpc);
+      n->setLine(absStep(tpc, pitch));
       }
 
 //---------------------------------------------------------
@@ -1321,7 +1322,7 @@ typedef std::map<int,MusicXmlPartGroup*> MusicXmlPartGroupMap;
 
 static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, bool barlineSpan)
       {
-      // qDebug("partGroupStart number=%d part=%d symbol=%s\n", n, p, s.toLatin1().data());
+      // qDebug("partGroupStart number=%d part=%d symbol=%s", n, p, s.toLatin1().data());
 
       if (pgs.count(n) > 0) {
             qDebug("part-group number=%d already active", n);
@@ -3296,9 +3297,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e)
             int btp = 0; // beat-type as integer
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
                   fractionTSig = Fraction(bts, btp);
-                  // add timesig to all staves
-                  //ws score->sigmap()->add(tick, TimeSig::getSig(st));
-                  Part* part = score->staff(staff)->part();
+                  score->sigmap()->add(tick, fractionTSig);
+		  Part* part = score->staff(staff)->part();
                   int staves = part->nstaves();
                   for (int i = 0; i < staves; ++i) {
                         TimeSig* timesig = new TimeSig(score);
@@ -4046,7 +4046,7 @@ static void xmlFermata(ChordRest* cr, QDomElement e)
       else if (fermata == "square")
             addFermata(cr, fermataType, Articulation_Longfermata);
       else
-            qDebug("unknown fermata '%s'\n", qPrintable(fermata));
+            qDebug("unknown fermata '%s'", qPrintable(fermata));
       }
 
 //---------------------------------------------------------
@@ -4646,7 +4646,7 @@ void MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*
 
       // Musicxml voices are unique within a part, but not across parts.
 
-      // qDebug("voice mapper before: relStaff=%d voice=%d staff=%d\n", relStaff, voice, staff);
+      // qDebug("voice mapper before: relStaff=%d voice=%d staff=%d", relStaff, voice, staff);
       int s; // staff mapped by voice mapper
       int v; // voice mapped by voice mapper
       if (voicelist.value(strVoice).overlaps()) {

@@ -131,6 +131,7 @@ bool useFactorySettings = false;
 QString styleName;
 QString revision;
 QErrorMessage* errorMessage;
+const char* voiceActions[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
 
 extern void initStaffTypes();
 extern bool savePositions(Score*, const QString& name);
@@ -289,6 +290,10 @@ void MuseScore::closeEvent(QCloseEvent* ev)
             }
       if (instrList)
             instrList->writeSettings();
+      if (pianorollEditor)
+            pianorollEditor->writeSettings();
+      if (drumrollEditor)
+            drumrollEditor->writeSettings();
 
       ev->accept();
       if (preferences.dirty)
@@ -732,14 +737,13 @@ MuseScore::MuseScore()
       entryTools->addAction(a);
       entryTools->addSeparator();
 
-      static const char* sl3[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
-      for (int i = 0; i < 4; ++i) {
+      for (int i = 0; i < VOICES; ++i) {
             QToolButton* tb = new QToolButton(this);
             tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
             QPalette p(tb->palette());
             p.setColor(QPalette::Base, MScore::selectColor[i]);
             tb->setPalette(p);
-            QAction* a = getAction(sl3[i]);
+            QAction* a = getAction(voiceActions[i]);
             a->setCheckable(true);
             tb->setDefaultAction(a);
             entryTools->addWidget(tb);
@@ -1188,7 +1192,7 @@ void MuseScore::helpBrowser(QString tag) const
       QString path(mscoreGlobalShare + "manual/reference-" + lang + ".pdf");
       if (!QFile::exists(path))
             path = mscoreGlobalShare + "manual/reference-en" + ".pdf";
-      qDebug("helpBrowser::load <%s>\n", qPrintable(path));
+      qDebug("helpBrowser::load <%s>", qPrintable(path));
       QUrl url(QUrl::fromLocalFile(path));
       if (!tag.isEmpty())
             url.setFragment(tag);
@@ -1385,8 +1389,8 @@ void MuseScore::updateTabNames()
 static void usage()
       {
       printVersion("MuseScore");
-      fprintf(stderr, "usage: mscore flags scorefile\n   Flags:\n");
-      fprintf(stderr,
+      fprintf(stderr, "Usage: mscore flags scorefile\n"
+        "   Flags:\n"
         "   -v        print version\n"
         "   -d        debug mode\n"
         "   -L        layout debug\n"
@@ -4501,7 +4505,7 @@ void MuseScore::showSearchDialog()
             searchDialogLayout->addStretch(10);
             searchDialog->hide();
 
-            printf("line edit %p\n", searchCombo->lineEdit());
+            qDebug("Line edit %p", searchCombo->lineEdit());
 
             // does not work: connect(searchCombo->lineEdit(), SIGNAL(returnPressed()), SLOT(endSearch()));
             connect(searchCombo->lineEdit(), SIGNAL(editingFinished()), SLOT(endSearch()));
@@ -4871,7 +4875,9 @@ int main(int argc, char* av[])
       mscore = new MuseScore();
       mscoreCore = mscore;
       gscore = new Score(MScore::defaultStyle());
-      gscore->setScoreFont(ScoreFont::fontFactory("Bravura"));
+      ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
+      gscore->setScoreFont(scoreFont);
+      gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / (MScore::DPI * SPATIUM20));
 
       if (!noSeq) {
             if (!seq->init()) {

@@ -46,6 +46,8 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       Staff* staff;
       Awl::PitchEdit* pitch;
       QSpinBox* velocity;
+      QSpinBox* onTime;
+      QSpinBox* tickLen;
       Pos locator[3];
       QComboBox* veloType;
       Awl::PosLabel* pos;
@@ -69,6 +71,8 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       void setXpos(int x);
       void showWaveView(bool);
       void posChanged(POS pos, unsigned tick);
+      void tickLenChanged(int);
+      void onTimeChanged(int val);
 
    public slots:
       void changeSelection(int);
@@ -100,6 +104,8 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual void drawBackground(QPainter* /*p*/, const QRectF& /*r*/) const {}
 
       void setLocator(POS pos, int tick) { locator[int(pos)].setTick(tick); }
+
+      void writeSettings();
       };
 
 

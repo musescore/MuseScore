@@ -34,7 +34,7 @@ bool debugMode = false;
 
 static void printVersion()
       {
-      qDebug("This is smf2xml version %s\n", versionString);
+      printf("This is smf2xml version %s\n", versionString);
       }
 
 //---------------------------------------------------------
@@ -44,8 +44,8 @@ static void printVersion()
 static void usage()
       {
       printVersion();
-      qDebug("Usage: smf2xml [args] [infile] [outfile]\n");
-      qDebug("   args:\n"
+      printf("Usage: smf2xml [args] [infile] [outfile]\n");
+      printf("   args:\n"
              "      -v      print version\n"
              "      -d      debug mode\n"
             );
@@ -78,13 +78,13 @@ int main(int argc, char* argv[])
             case 2:
                   out = new QFile(argv[1 + optind]);
                   if (!out->open(QIODevice::WriteOnly)) {
-                        qDebug("Cannot open output file <%s>: %s\n", argv[2], strerror(errno));
+                        fprintf(stderr, "Cannot open output file <%s>: %s\n", argv[2], strerror(errno));
                         return -3;
                         }
             case 1:
                   in = new QFile(argv[0 + optind]);
                   if (!in->open(QIODevice::ReadOnly)) {
-                        qDebug("Cannot open input file <%s>: %s\n", argv[1], strerror(errno));
+                        fprintf(stderr, "Cannot open input file <%s>: %s\n", argv[1], strerror(errno));
                         return -4;
                         }
                   break;

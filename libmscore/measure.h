@@ -279,8 +279,8 @@ class Measure : public MeasureBase {
       bool isOnlyRests(int track) const;
 
 //      void layoutChords0(Segment* segment, int startTrack);
-      void layoutChords10(Segment* segment, int startTrack, AccidentalState*);
-      void updateAccidentals(Segment* segment, int staffIdx, AccidentalState*);
+      void layout10(int staffIdx);
+      void updateAccidentals(int staffIdx);
       void layoutStage1();
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }

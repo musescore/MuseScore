@@ -347,7 +347,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   }
             }
       else
-            qDebug("unknown selection state\n");
+            qDebug("unknown selection state");
       if (viewer->mscoreState() != STATE_EDIT
          && viewer->mscoreState() != STATE_LYRICS_EDIT
          && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT
@@ -736,8 +736,8 @@ void Palette::dragEnterEvent(QDragEnterEvent* event)
             QList<QUrl>ul = event->mimeData()->urls();
             QUrl u = ul.front();
             if (MScore::debugMode) {
-                  qDebug("dragEnterEvent: Url: %s\n", qPrintable(u.toString()));
-                  qDebug("   scheme <%s> path <%s>\n", qPrintable(u.scheme()), qPrintable(u.path()));
+                  qDebug("dragEnterEvent: Url: %s", qPrintable(u.toString()));
+                  qDebug("   scheme <%s> path <%s>", qPrintable(u.scheme()), qPrintable(u.path()));
                   }
             if (u.scheme() == "file") {
                   QFileInfo fi(u.path());
@@ -755,9 +755,9 @@ void Palette::dragEnterEvent(QDragEnterEvent* event)
             event->acceptProposedAction();
       else {
             if (MScore::debugMode) {
-                  qDebug("dragEnterEvent: formats:\n");
+                  qDebug("dragEnterEvent: formats:");
                   foreach(const QString& s, event->mimeData()->formats())
-                        qDebug("   %s\n", s.toLatin1().data());
+                        qDebug("   %s", s.toLatin1().data());
                   }
             }
       }

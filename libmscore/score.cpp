@@ -74,7 +74,6 @@ Score* gscore;                 ///< system score, used for palettes etc.
 QPoint scorePos(0,0);
 QSize  scoreSize(950, 500);
 
-bool layoutDebug     = false;
 bool scriptDebug     = false;
 bool noSeq           = false;
 bool noMidi          = false;
@@ -423,12 +422,11 @@ Score::~Score()
       delete _tempomap;
       delete _sigmap;
       delete _repeatList;
-      foreach(StaffType** st, _staffTypes) {
+      for (StaffType** st : staffTypes()) {
             if (!(*st)->builtin())
                   delete *st;
             delete st;
             }
-
       }
 
 //---------------------------------------------------------
@@ -1416,7 +1414,7 @@ void Score::addElement(Element* element)
 
             case Element::NOTE: {
                   Note* note = static_cast<Note*>(element);
-                  updateAccidentals(note->chord()->segment()->measure(), element->staffIdx());
+                  note->chord()->segment()->measure()->updateAccidentals(element->staffIdx());
                   }
                   // fall through
 
@@ -1960,6 +1958,15 @@ Q_INVOKABLE void Score::setMetaTag(const QString& tag, const QString& val)
       }
 
 //---------------------------------------------------------
+//   staffTypes
+//---------------------------------------------------------
+
+const QList<StaffType**>& Score::staffTypes() const
+      {
+      return rootScore()->_staffTypes;
+      }
+
+//---------------------------------------------------------
 //   addStaffType
 //    ownership of st move to score except if the buildin
 //    flag is set
@@ -1972,22 +1979,23 @@ void Score::addStaffType(StaffType* st)
 
 void Score::addStaffType(int idx, StaffType* st)
       {
+      Score* s = rootScore();
       // if the modified staff type is NOT replacing an existing type
-      if (idx < 0 || idx >= _staffTypes.size()) {
+      if (idx < 0 || idx >= s->_staffTypes.size()) {
             // store new pointer to pointer to type data
             StaffType** stp = new StaffType*;
             *stp = st;
-            _staffTypes.append(stp);
+            s->_staffTypes.append(stp);
             }
       // if the modified staff type IS replacing an existing type
       else {
-            StaffType* oldStaffType = *(_staffTypes[idx]);
+            StaffType* oldStaffType = *(s->_staffTypes[idx]);
             // update the type of each score staff which uses the old type
-            for(int staffIdx = 0; staffIdx < staves().size(); staffIdx++)
-                  if(staff(staffIdx)->staffType() == oldStaffType)
+            for (int staffIdx = 0; staffIdx < staves().size(); staffIdx++)
+                  if (staff(staffIdx)->staffType() == oldStaffType)
                         staff(staffIdx)->setStaffType(st);
             // store the updated staff type
-            *(_staffTypes[idx]) = st;
+            *(s->_staffTypes[idx]) = st;
             // delete old staff type if not built-in
             if (!oldStaffType->builtin())
                   delete oldStaffType;
@@ -2000,8 +2008,9 @@ void Score::addStaffType(int idx, StaffType* st)
 
 int Score::staffTypeIdx(StaffType* st) const
       {
-      for (int i = 0; i < _staffTypes.size(); ++i) {
-            if ((*_staffTypes[i]) == st)
+      const Score* s = rootScore();
+      for (int i = 0; i < s->_staffTypes.size(); ++i) {
+            if ((*s->_staffTypes[i]) == st)
                   return i;
             }
       return -1;
@@ -2011,11 +2020,12 @@ int Score::staffTypeIdx(StaffType* st) const
 //   staffType
 //---------------------------------------------------------
 
-StaffType* Score::staffType(int idx)
+StaffType* Score::staffType(int idx) const
       {
-      if (idx < 0 || idx >= _staffTypes.size())
+      const Score* s = rootScore();
+      if (idx < 0 || idx >= s->_staffTypes.size())
             return 0;
-      return *(_staffTypes[idx]);
+      return *(s->_staffTypes[idx]);
       }
 
 //---------------------------------------------------------
@@ -2080,16 +2090,8 @@ void Score::removeExcerpt(Score* score)
 void Score::updateNotes()
       {
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
-            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-                  AccidentalState tversatz;      // state of already set accidentals for this measure
-                  tversatz.init(staff(staffIdx)->keymap()->key(m->tick()));
-
-                  for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                        if (!(segment->segmentType() & (Segment::SegChordRest)))
-                              continue;
-                        m->layoutChords10(segment, staffIdx * VOICES, &tversatz);
-                        }
-                  }
+            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
+                  m->layout10(staffIdx);
             }
       }
 
@@ -2102,7 +2104,7 @@ void Score::cmdUpdateNotes()
       {
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
-                  updateAccidentals(m, staffIdx);
+                  m->updateAccidentals(staffIdx);
             }
       }
 
@@ -2113,45 +2115,15 @@ void Score::cmdUpdateNotes()
 
 void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
       {
-//      qDebug("cmdUpdateAccidentals m=%d for staff=%d",
-//            beginMeasure->no(), staffIdx);
-      Staff* st = staff(staffIdx);
       for (Measure* m = beginMeasure; m; m = m->nextMeasureMM()) {
-            AccidentalState as;
-            as.init(st->keymap()->key(m->tick()));
-
-            for (Segment* s = m->first(); s; s = s->next()) {
-                  if ((m != beginMeasure) &&
-                        (s->segmentType() & (Segment::SegKeySig))) {
-                        KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
-                        if (ks && (!ks->generated())) {
-                              // found new key signature
-                              qDebug("leaving cmdUpdateAccidentals at m=%d",
-                                    m->no());
-                              return;
-                              }
-                        }
-                  if (s->segmentType() & (Segment::SegChordRest))
-                        m->updateAccidentals(s, staffIdx, &as);
+            m->updateAccidentals(staffIdx);
+            if (m == beginMeasure)
+                  continue;
+            for (Segment* s = m->first(Segment::SegKeySig); s; s = s->next(Segment::SegKeySig)) {
+                  KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
+                  if (ks && (!ks->generated()))
+                        return;
                   }
-            }
-//      qDebug("leaving cmdUpdateAccidentals at end of score");
-      }
-
-//---------------------------------------------------------
-//   updateAccidentals
-//---------------------------------------------------------
-
-void Score::updateAccidentals(Measure* m, int staffIdx)
-      {
-// qDebug("updateAccidentals measure %d staff %d", m->no(), staffIdx);
-      Staff* st = staff(staffIdx);
-      AccidentalState as;      // list of already set accidentals for this measure
-      as.init(st->keymap()->key(m->tick()));
-
-      for (Segment* segment = m->first(); segment; segment = segment->next()) {
-            if (segment->segmentType() & (Segment::SegChordRest))
-                  m->updateAccidentals(segment, staffIdx, &as);
             }
       }
 

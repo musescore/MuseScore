@@ -116,7 +116,7 @@ void WaveView::setAudio(Audio* audio)
       vorbisData.data = audio->data();
       int rv = ov_open_callbacks(&vorbisData, &vf, 0, 0, ovCallbacks);
       if (rv < 0) {
-            printf("ogg open failed: %d\n", rv);
+            qDebug("ogg open failed: %d", rv);
             return;
             }
       int rn = 0;

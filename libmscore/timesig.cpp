@@ -307,6 +307,7 @@ void TimeSig::layout1()
             // position numerator and denominator; vertical displacement:
             // number of lines is odd: 0.0 (strings are directly above and below the middle line)
             // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
+
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
             // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
@@ -360,7 +361,7 @@ void TimeSig::setFrom(const TimeSig* ts)
       _sig               = ts->_sig;
       _stretch           = ts->_stretch;
       customText         = ts->customText;
-      layout1();
+      _needLayout        = true;
       }
 
 //---------------------------------------------------------

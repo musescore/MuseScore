@@ -139,7 +139,7 @@ void MeasureProperties::bboxClicked(QAbstractButton* button)
                   break;
 
             default:
-                  qDebug("EditStaff: unknown button %d\n", int(br));
+                  qDebug("EditStaff: unknown button %d", int(br));
                   break;
             }
       }

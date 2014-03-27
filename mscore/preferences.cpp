@@ -1311,7 +1311,7 @@ void PreferenceDialog::apply()
             if (seq) {
                   seq->setDriver(driver);
                   if (!seq->init()) {
-                        qDebug("sequencer init failed\n");
+                        qDebug("sequencer init failed");
                         }
                   }
             }
@@ -1666,7 +1666,7 @@ bool Preferences::readPluginList()
       if (!f.exists())
             return false;
       if (!f.open(QIODevice::ReadOnly)) {
-            qDebug("Cannot open plugins file <%s>\n", qPrintable(f.fileName()));
+            qDebug("Cannot open plugins file <%s>", qPrintable(f.fileName()));
             return false;
             }
       XmlReader e(&f);
@@ -1715,7 +1715,7 @@ void Preferences::writePluginList()
       dir.mkpath(dataPath);
       QFile f(dataPath + "/plugins.xml");
       if (!f.open(QIODevice::WriteOnly)) {
-            qDebug("cannot create plugin file <%s>\n", qPrintable(f.fileName()));
+            qDebug("cannot create plugin file <%s>", qPrintable(f.fileName()));
             return;
             }
       Xml xml(&f);

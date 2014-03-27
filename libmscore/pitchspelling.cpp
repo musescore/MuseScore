@@ -251,7 +251,7 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QS
             case  1: acc = (spelling != GERMAN) ? "#" : "is"; break;
             case  2: acc = "##"; break;
             default:
-                  qDebug("tpc2name(%d): acc %d\n", tpc, n);
+                  qDebug("tpc2name(%d): acc %d", tpc, n);
                   acc = "";
                   break;
             }
@@ -573,7 +573,7 @@ int computeWindow(const QList<Note*>& notes, int start, int end)
             int tick = notes[i]->chord()->tick();
             key[k]   = notes[i]->staff()->keymap()->key(tick).accidentalType() + 7;
             if (key[k] < 0 || key[k] > 14) {
-                  qDebug("illegal key at tick %d: %d, window %d-%d\n",
+                  qDebug("illegal key at tick %d: %d, window %d-%d",
                      tick, key[k] - 7, start, end);
                   return 0;
                   // abort();
@@ -627,7 +627,6 @@ int computeWindow(const QList<Note*>& notes, int start, int end)
       qDebug("\n   ");
       for (int i = 0; i < 10; ++i)
             qDebug("%2d ", tpc(i, pitch[i], idx));
-      qDebug("\n");
 */
       return idx;
       }

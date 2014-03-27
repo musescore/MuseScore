@@ -85,7 +85,7 @@ QObject* MyWebPage::createPlugin(
                   sv->setScore(paramValues[idx]);
                   }
             else {
-                  qDebug("create WebScoreView: property score not found(%d)\n",
+                  qDebug("create WebScoreView: property score not found(%d)",
                      paramNames.size());
                   }
             return sv;
@@ -316,8 +316,8 @@ bool WebPageDockWidget::saveCurrentScoreOnline(QString action, QVariantMap param
             part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(QString("form-data; name=\"%1\"").arg(i.key())));
             part.setBody(i.value().toString().toLatin1());
             multiPart->append(part);
-            //printf("%s \n", qPrintable(i.key()));
-            //printf("%s \n", qPrintable(i.value().toString()));
+            //qDebug("%s ", qPrintable(i.key()));
+            //qDebug("%s ", qPrintable(i.value().toString()));
             ++i;
             }
 
@@ -509,7 +509,7 @@ void WebScoreView::networkFinished(QNetworkReply* reply)
       {
       if (reply->error() != QNetworkReply::NoError) {
             if (MScore::debugMode)
-                  qDebug("Error while checking update [%s]\n", qPrintable(reply->errorString()));
+                  qDebug("Error while checking update [%s]", qPrintable(reply->errorString()));
             return;
             }
       QByteArray ha = reply->rawHeader("Content-Disposition");
@@ -530,7 +530,7 @@ void WebScoreView::networkFinished(QNetworkReply* reply)
 
       Score* score = mscore->readScore(tmpName);
       if (!score) {
-            qDebug("readScore failed\n");
+            qDebug("readScore failed");
             return;
             }
       ScoreView::setScore(score);

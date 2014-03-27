@@ -23,6 +23,309 @@
         </page-layout>
       <Spatium>1.76389</Spatium>
       </Style>
+    <StaffType idx="5" group="tablature">
+      <name>Tab. 6-str common</name>
+      <lines>6</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>1</clef>
+      <slashStyle>1</slashStyle>
+      <barlines>1</barlines>
+      <timesig>0</timesig>
+      <durations>0</durations>
+      <durationFontName>MuseScore Tab Modern</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Serif</fretFontName>
+      <fretFontSize>9</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>0</linesThrough>
+      <minimStyle>1</minimStyle>
+      <onLines>1</onLines>
+      <showRests>0</showRests>
+      <stemsDown>1</stemsDown>
+      <stemsThrough>0</stemsThrough>
+      <upsideDown>0</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="14" group="pitched">
+      <name>Standard</name>
+      <lines>5</lines>
+      <lineDistance>1</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>1</timesig>
+      </StaffType>
+    <StaffType idx="15" group="percussion">
+      <name>Perc. 1 line</name>
+      <lines>1</lines>
+      <lineDistance>1</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>1</timesig>
+      <keysig>0</keysig>
+      </StaffType>
+    <StaffType idx="16" group="percussion">
+      <name>Perc. 3 lines</name>
+      <lines>3</lines>
+      <lineDistance>1</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>1</timesig>
+      <keysig>0</keysig>
+      </StaffType>
+    <StaffType idx="17" group="percussion">
+      <name>Perc. 5 lines</name>
+      <lines>5</lines>
+      <lineDistance>1</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>1</timesig>
+      <keysig>0</keysig>
+      </StaffType>
+    <StaffType idx="18" group="tablature">
+      <name>Tab. 6-str simple</name>
+      <lines>6</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>1</clef>
+      <slashStyle>1</slashStyle>
+      <barlines>1</barlines>
+      <timesig>0</timesig>
+      <durations>0</durations>
+      <durationFontName>MuseScore Tab Modern</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Sans</fretFontName>
+      <fretFontSize>9</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>0</linesThrough>
+      <minimStyle>0</minimStyle>
+      <onLines>1</onLines>
+      <showRests>0</showRests>
+      <stemsDown>1</stemsDown>
+      <stemsThrough>0</stemsThrough>
+      <upsideDown>0</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="19" group="tablature">
+      <name>Tab. 6-str common</name>
+      <lines>6</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>0</timesig>
+      <durations>0</durations>
+      <durationFontName>MuseScore Tab Modern</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Serif</fretFontName>
+      <fretFontSize>9</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>0</linesThrough>
+      <minimStyle>1</minimStyle>
+      <onLines>1</onLines>
+      <showRests>0</showRests>
+      <stemsDown>1</stemsDown>
+      <stemsThrough>0</stemsThrough>
+      <upsideDown>0</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="20" group="tablature">
+      <name>Tab. 6-str full</name>
+      <lines>6</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>1</timesig>
+      <durations>0</durations>
+      <durationFontName>MuseScore Tab Modern</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Serif</fretFontName>
+      <fretFontSize>9</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>0</linesThrough>
+      <minimStyle>2</minimStyle>
+      <onLines>1</onLines>
+      <showRests>1</showRests>
+      <stemsDown>1</stemsDown>
+      <stemsThrough>1</stemsThrough>
+      <upsideDown>0</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="21" group="tablature">
+      <name>Tab. 4-str simple</name>
+      <lines>4</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>1</clef>
+      <slashStyle>1</slashStyle>
+      <barlines>1</barlines>
+      <timesig>0</timesig>
+      <durations>0</durations>
+      <durationFontName>MuseScore Tab Modern</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Sans</fretFontName>
+      <fretFontSize>9</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>0</linesThrough>
+      <minimStyle>0</minimStyle>
+      <onLines>1</onLines>
+      <showRests>0</showRests>
+      <stemsDown>1</stemsDown>
+      <stemsThrough>0</stemsThrough>
+      <upsideDown>0</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="22" group="tablature">
+      <name>Tab. 4-str common</name>
+      <lines>4</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>0</timesig>
+      <durations>0</durations>
+      <durationFontName>MuseScore Tab Modern</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Serif</fretFontName>
+      <fretFontSize>9</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>0</linesThrough>
+      <minimStyle>1</minimStyle>
+      <onLines>1</onLines>
+      <showRests>0</showRests>
+      <stemsDown>1</stemsDown>
+      <stemsThrough>0</stemsThrough>
+      <upsideDown>0</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="23" group="tablature">
+      <name>Tab. 4-str full</name>
+      <lines>4</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>0</timesig>
+      <durations>0</durations>
+      <durationFontName>MuseScore Tab Modern</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Serif</fretFontName>
+      <fretFontSize>9</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>0</linesThrough>
+      <minimStyle>2</minimStyle>
+      <onLines>1</onLines>
+      <showRests>1</showRests>
+      <stemsDown>1</stemsDown>
+      <stemsThrough>1</stemsThrough>
+      <upsideDown>0</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="24" group="tablature">
+      <name>Tab. ukulele</name>
+      <lines>4</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>0</timesig>
+      <durations>0</durations>
+      <durationFontName>MuseScore Tab Modern</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Serif</fretFontName>
+      <fretFontSize>9</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>0</linesThrough>
+      <minimStyle>1</minimStyle>
+      <onLines>1</onLines>
+      <showRests>1</showRests>
+      <stemsDown>1</stemsDown>
+      <stemsThrough>0</stemsThrough>
+      <upsideDown>0</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="25" group="tablature">
+      <name>Tab. balalajka</name>
+      <lines>3</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>0</timesig>
+      <durations>0</durations>
+      <durationFontName>MuseScore Tab Modern</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Serif</fretFontName>
+      <fretFontSize>9</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>0</linesThrough>
+      <minimStyle>1</minimStyle>
+      <onLines>1</onLines>
+      <showRests>1</showRests>
+      <stemsDown>1</stemsDown>
+      <stemsThrough>0</stemsThrough>
+      <upsideDown>0</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="26" group="tablature">
+      <name>Tab. 6-str Italian</name>
+      <lines>6</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>0</clef>
+      <slashStyle>1</slashStyle>
+      <barlines>1</barlines>
+      <timesig>1</timesig>
+      <durations>1</durations>
+      <durationFontName>MuseScore Tab Italian</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Renaiss</fretFontName>
+      <fretFontSize>10</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>1</linesThrough>
+      <minimStyle>0</minimStyle>
+      <onLines>1</onLines>
+      <showRests>1</showRests>
+      <stemsDown>0</stemsDown>
+      <stemsThrough>0</stemsThrough>
+      <upsideDown>1</upsideDown>
+      <useNumbers>1</useNumbers>
+      </StaffType>
+    <StaffType idx="27" group="tablature">
+      <name>Tab. 6-str French</name>
+      <lines>6</lines>
+      <lineDistance>1.5</lineDistance>
+      <clef>0</clef>
+      <slashStyle>1</slashStyle>
+      <barlines>1</barlines>
+      <timesig>1</timesig>
+      <durations>1</durations>
+      <durationFontName>MuseScore Tab French</durationFontName>
+      <durationFontSize>15</durationFontSize>
+      <durationFontY>0</durationFontY>
+      <fretFontName>MuseScore Tab Renaiss</fretFontName>
+      <fretFontSize>10</fretFontSize>
+      <fretFontY>0</fretFontY>
+      <linesThrough>1</linesThrough>
+      <minimStyle>0</minimStyle>
+      <onLines>0</onLines>
+      <showRests>0</showRests>
+      <stemsDown>0</stemsDown>
+      <stemsThrough>0</stemsThrough>
+      <upsideDown>0</upsideDown>
+      <useNumbers>0</useNumbers>
+      </StaffType>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -224,7 +527,7 @@
       <Part>
         <Staff id="1">
           <linkedTo>1</linkedTo>
-          <type>14</type>
+          <type>0</type>
           <bracket type="0" span="2"/>
           </Staff>
         <Staff id="2">

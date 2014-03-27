@@ -81,7 +81,10 @@ class Lyrics : public Text {
 
       void clearSeparator()            { _separator.clear(); } // TODO: memory leak
       QList<Line*>* separatorList()    { return &_separator; }
-      virtual void paste() override;
+      
+      using Text::paste;
+      void paste(MuseScoreView * scoreview);
+      
       Text* verseNumber() const        { return _verseNumber; }
       void setVerseNumber(Text* t)     { _verseNumber = t;    }
 

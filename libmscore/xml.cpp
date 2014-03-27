@@ -277,7 +277,7 @@ PlaceText readPlacement(XmlReader& e)
             return PLACE_BELOW;
       if (s == "left" || s == "3")
             return PLACE_LEFT;
-      qDebug("unknown placement value <%s>\n", qPrintable(s));
+      qDebug("unknown placement value <%s>", qPrintable(s));
       return PLACE_AUTO;
       }
 
@@ -540,7 +540,7 @@ void Xml::tag(const QString& name, QVariant data)
                   }
                   break;
             default:
-                  qDebug("Xml::tag: unsupported type %d\n", data.type());
+                  qDebug("Xml::tag: unsupported type %d", data.type());
                   // abort();
                   break;
             }
@@ -689,8 +689,9 @@ QString XmlReader::readXml()
 //   writeXml
 //---------------------------------------------------------
 
-void Xml::writeXml(const char* name, QString s)
+void Xml::writeXml(const QString& name, QString s)
       {
+      QString ename(name.split(' ')[0]);
       putLevel();
       for (int i = 0; i < s.size(); ++i) {
             ushort c = s.at(i).unicode();
@@ -699,7 +700,7 @@ void Xml::writeXml(const char* name, QString s)
             }
       *this << "<" << name << ">";
       *this << s;
-      *this << "</" << name << ">\n";
+      *this << "</" << ename << ">\n";
       }
 
 //---------------------------------------------------------

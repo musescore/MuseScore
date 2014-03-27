@@ -176,7 +176,7 @@ qreal StaffType::doty1() const
             case 6:
                   return _lineDistance.val() * 1.5;
             default:
-                  qDebug("StaffType::doty1(): lines %d unsupported\n", _lines);
+                  qDebug("StaffType::doty1(): lines %d unsupported", _lines);
                   break;
             }
       return 0.0;
@@ -203,7 +203,7 @@ qreal StaffType::doty2() const
             case 6:
                   return _lineDistance.val() * 3.5;
             default:
-                  qDebug("StaffType::doty2(): lines %d unsupported\n", _lines);
+                  qDebug("StaffType::doty2(): lines %d unsupported", _lines);
                   break;
             }
       return 0.0;
@@ -996,7 +996,7 @@ bool StaffTypeTablature::readConfigFile(const QString& fileName)
       if (!fi.exists() || !f.open(QIODevice::ReadOnly)) {
             QString s = QT_TRANSLATE_NOOP("file", "Cannot open tablature font description:\n%1\n%2");
             MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
-qDebug("StaffTypeTablature::readConfigFile failed: <%s>\n", qPrintable(path));
+qDebug("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
             return false;
             }
 

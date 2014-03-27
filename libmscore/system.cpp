@@ -362,6 +362,8 @@ void System::layout2()
       for (int i = 0; i < n; ++i) {
             MeasureBase* m = ml.at(i);
             if (m->type() == MEASURE) {
+                  // note that the factor 2 * _spatium must be corrected for when exporting
+                  // system distance in MusicXML (issue #24733)
                   m->bbox().setRect(0.0, -_spatium, m->width(), systemHeight + 2 * _spatium);
                   }
             else if (m->type() == HBOX) {
@@ -883,7 +885,7 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
                         if (nl && nl->measure()->system() == s1) {
                               qreal x2  = nl->bbox().left() + nl->pagePos().x();
                               qreal lx2 = line->pagePos().x() + len;
-// printf("line %f  text %f\n", lx2, x2);
+                              //qDebug("Line %f  text %f", lx2, x2);
                               if (lx2 > x2)
                                     len -= (lx2 - x2);
                               }

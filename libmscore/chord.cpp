@@ -359,9 +359,15 @@ void Chord::add(Element* e)
                   {
                   Note* note = static_cast<Note*>(e);
                   bool found = false;
+                  // _notes should be sorted by line position,
+                  // but it's often not yet possible since line is unknown
+                  // use pitch instead, and line as a second sort critera.
                   for (int idx = 0; idx < _notes.size(); ++idx) {
-                        if (note->pitch() < _notes[idx]->pitch()) {
-                              _notes.insert(idx, note);
+                        if (note->pitch() <= _notes[idx]->pitch()) {
+                              if (note->pitch() == _notes[idx]->pitch() && note->line() > _notes[idx]->line())
+                                    _notes.insert(idx+1, note);
+                              else
+                                    _notes.insert(idx, note);
                               found = true;
                               break;
                               }
@@ -456,12 +462,12 @@ void Chord::remove(Element* e)
                                     // update accidentals for endNote
                                     Chord* chord = note->tieFor()->endNote()->chord();
                                     Measure* m = chord->segment()->measure();
-                                    note->score()->updateAccidentals(m,chord->staffIdx());
+                                    m->updateAccidentals(chord->staffIdx());
                                     }
                               }
                         }
                   else
-                        qDebug("Chord::remove() note %p not found!\n", e);
+                        qDebug("Chord::remove() note %p not found!", e);
                   }
                   break;
 
@@ -1493,8 +1499,7 @@ void Chord::layout10(AccidentalState* as)
       Drumset* drumset = 0;
       if (staff()->part()->instr()->useDrumset())
             drumset = staff()->part()->instr()->drumset();
-      for (int i = 0; i < notes().size(); ++i) {
-            Note* note = notes().at(i);
+      for (Note* note : notes()) {
             if (drumset) {
                   int pitch = note->pitch();
                   if (!drumset->isValid(pitch)) {
@@ -1584,7 +1589,8 @@ void Chord::layoutPitched()
 
             Accidental* accidental = note->accidental();
             if (accidental) {
-                  qreal x = accidental->x() + note->x();
+                  // convert x position of accidental to segment coordinate system
+                  qreal x = accidental->x() + note->x() + note->chord()->x();
                   x -= score()->styleS(ST_accidentalDistance).val() * _spatium;
                   lll = qMax(lll, -x);
                   }
@@ -1728,7 +1734,7 @@ void Chord::layoutPitched()
                   continue;
             e->layout();
             if (e->type() == CHORDLINE) {
-                  int x = bbox().translated(e->pos()).right();
+                  int x = e->bbox().translated(e->pos()).right();
                   if (x > _space.rw())
                         _space.setRw(x);
                   }
@@ -1910,7 +1916,7 @@ void Chord::layoutTablature()
       for (Element* e : _el) {
             e->layout();
             if (e->type() == CHORDLINE) {
-                  int x = bbox().translated(e->pos()).right();
+                  int x = e->bbox().translated(e->pos()).right();
                   if (x > _space.rw())
                         _space.setRw(x);
                   }
@@ -2079,7 +2085,7 @@ Element* Chord::drop(const DropData& data)
                               s = s->next();
                               }
                         if (s == 0) {
-                              qDebug("no segment for second note of tremolo found\n");
+                              qDebug("no segment for second note of tremolo found");
                               delete e;
                               return 0;
                               }

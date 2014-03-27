@@ -5219,8 +5219,8 @@ QHash<QString, SymId> Sym::lonhash;
 QVector<oldName> oldNames = {
       {"rests.0",                               SymId::restWhole },
       {"rests.1",                               SymId::restHalf },
-      {"rests.0o",                              SymId::restWhole },    // whole rest outside staff missing in SMuFL
-      {"rests.1o",                              SymId::restHalf },     // half rest outside staff missing in SMuFL
+      {"rests.0o",                              SymId::restWholeLegerLine },
+      {"rests.1o",                              SymId::restHalfLegerLine },
 //    {"rests.M3",                              SymId::noSym },        // double longa rest missing in SMuFL
       {"rests.M1",                              SymId::restDoubleWhole },
       {"rests.M2",                              SymId::restLonga },
@@ -5414,7 +5414,7 @@ QVector<oldName> oldNames = {
       {"pedal.*",                               SymId::keyboardPedalUp },
 //    {"pedal.M",                               SymId::noSym },         // "Ped." components missing in SMuFL
 //    {"pedal..",                               SymId::noSym },         //    "
-//    {"pedal.P",                               SymId::noSym },         //    "
+      {"pedal.P",                               SymId::keyboardPedalP },
 //    {"pedal.d",                               SymId::noSym },         //    "
 //    {"pedal.e",                               SymId::noSym },         //    "
       {"pedal.Ped",                             SymId::keyboardPedalPed },
