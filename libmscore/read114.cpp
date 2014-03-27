@@ -363,7 +363,8 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
                   text->read(e);
-                  setMetaTag("copyright", text->text());
+                  text->layout();
+                  setMetaTag("copyright", text->plainText());
                   delete text;
                   }
             else if (tag == "movement-number")
