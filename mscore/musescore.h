@@ -431,6 +431,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void oscTempo(int val);
       void oscNext();
       void oscNextMeasure();
+      void oscPrev();
+      void oscPrevMeasure();
+      void oscBackspace();
       void oscGoto(int m);
       void oscSelectMeasure(int m);
       void oscVolChannel(double val);
