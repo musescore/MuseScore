@@ -456,31 +456,12 @@ findTupletIntervals(const std::vector<TupletInfo> &tuplets)
 
 struct TupletCommon
       {
-      int tupletIndex;
             // indexes of tuplets that have common chords with the tuplet with tupletIndex
       std::set<int> commonIndexes;
       std::set<int> uncommonIndexes;
       std::set<int> *levelIndexes = nullptr;   // selected indexes for some level of the recursion
       };
 
-
-// initially common indexes are tuplet indexes
-// but they need to be converted to indexes of commons
-// the full array of commons is known - so do the conversion now
-
-void convertToCommonIndexes(std::vector<TupletCommon> &tupletCommons)
-      {
-      std::vector<int> commonIndexes(tupletCommons.size());
-      for (size_t i = 0; i != tupletCommons.size(); ++i)
-            commonIndexes[tupletCommons[i].tupletIndex] = i;
-
-      for (size_t i = 0; i != tupletCommons.size(); ++i) {
-            std::set<int> newIndexes;
-            for (int commonIndex: tupletCommons[i].commonIndexes)
-                  newIndexes.insert(commonIndexes[commonIndex]);
-            std::swap(tupletCommons[i].commonIndexes, newIndexes);
-            }
-      }
 
 void findUncommonIndexes(std::vector<TupletCommon> &tupletCommons)
       {
@@ -497,7 +478,6 @@ std::vector<TupletCommon> findTupletCommons(const std::vector<TupletInfo> &tuple
                  // <chord address, tuplet indexes>
       std::map<std::pair<const ReducedFraction, MidiChord> *, std::set<int>> usedChords;
       const int voiceLimit = tupletVoiceLimit();
-      std::vector<TupletCommon> tupletCommons;
 
       for (size_t i = 0; i != tuplets.size(); ++i) {
             const auto &tuplet = tuplets[i];
@@ -512,20 +492,16 @@ std::vector<TupletCommon> findTupletCommons(const std::vector<TupletInfo> &tuple
                   usedChords[&*it->second].insert(i);
             }
 
-      for (size_t i = 0; i != tuplets.size(); ++i) {
-            TupletCommon tupletCommon;
-            tupletCommon.tupletIndex = i;
+      std::vector<TupletCommon> tupletCommons(tuplets.size());
 
-            const auto &tuplet = tuplets[tupletCommon.tupletIndex];
-            for (const auto &chord: tuplet.chords) {
+      for (size_t i = 0; i != tuplets.size(); ++i) {
+            for (const auto &chord: tuplets[i].chords) {
                   auto &indexes = usedChords[&*chord.second];
-                  indexes.erase(tupletCommon.tupletIndex);
-                  tupletCommon.commonIndexes.insert(indexes.begin(), indexes.end());
+                  indexes.erase(i);
+                  tupletCommons[i].commonIndexes.insert(indexes.begin(), indexes.end());
                   }
-            tupletCommons.push_back(tupletCommon);
             }
 
-      convertToCommonIndexes(tupletCommons);
       findUncommonIndexes(tupletCommons);
 
       return tupletCommons;
@@ -533,13 +509,13 @@ std::vector<TupletCommon> findTupletCommons(const std::vector<TupletInfo> &tuple
 
 bool isInCommonIndexes(
             int indexToCheck,
-            const std::vector<int> &selectedCommons,
+            const std::vector<int> &selectedTuplets,
             const std::vector<TupletCommon> &tupletCommons,
             size_t endCommonShift,
             size_t endAllShift)
       {
-      for (size_t i = 0; i != selectedCommons.size() - endCommonShift - endAllShift; ++i) {
-            const auto &indexes = tupletCommons[selectedCommons[i]].commonIndexes;
+      for (size_t i = 0; i != selectedTuplets.size() - endCommonShift - endAllShift; ++i) {
+            const auto &indexes = tupletCommons[selectedTuplets[i]].commonIndexes;
             if (indexes.find(indexToCheck) != indexes.end())
                   return true;
             }
@@ -548,13 +524,11 @@ bool isInCommonIndexes(
 
 bool isFirstChordOccupied(
             int indexToCheck,
-            const std::vector<int> &selectedCommons,
-            const std::vector<TupletCommon> &tupletCommons,
+            const std::vector<int> &selectedTuplets,
             const std::vector<TupletInfo> &tuplets,
             size_t endAllShift)
       {
-      const int tupletIndex = tupletCommons[indexToCheck].tupletIndex;
-      const auto &tuplet = tuplets[tupletIndex];
+      const auto &tuplet = tuplets[indexToCheck];
       if (tuplet.firstChordIndex != 0)
             return false;
                   // need to check for first common chords
@@ -562,9 +536,8 @@ bool isFirstChordOccupied(
       auto *usedChordAddress = &*(tuplet.chords.begin()->second);
       const auto usedChordIt = usedFirstChords.insert({usedChordAddress, 1}).first;
 
-      for (size_t i = 0; i != selectedCommons.size() - endAllShift; ++i) {
-            const int tupletIndex2 = tupletCommons[i].tupletIndex;
-            const auto &tuplet2 = tuplets[tupletIndex2];
+      for (size_t i = 0; i != selectedTuplets.size() - endAllShift; ++i) {
+            const auto &tuplet2 = tuplets[i];
             if (tuplet2.firstChordIndex == 0
                         && (&*(tuplet2.chords.begin()->second)) == usedChordAddress) {
                   if (!isMoreTupletVoicesAllowed(usedChordIt->second,
@@ -599,24 +572,19 @@ int estimateVoiceCount(
 
 bool areAllVoicesOccupied(
             int indexToCheck,
-            const std::vector<int> &selectedCommons,
-            const std::vector<TupletCommon> &tupletCommons,
+            const std::vector<int> &selectedTuplets,
             const std::vector<std::pair<ReducedFraction, ReducedFraction> > &tupletIntervals,
             const std::vector<TupletInfo> &tuplets,
             size_t endAllShift)
       {
       std::vector<int> tupletIndexes;
-      const int tupletIndexToCheck = tupletCommons[indexToCheck].tupletIndex;
-      tupletIndexes.push_back(tupletIndexToCheck);
-      for (size_t i = 0; i != selectedCommons.size() - endAllShift; ++i) {
-            int commonIndex = selectedCommons[i];
-            tupletIndexes.push_back(tupletCommons[commonIndex].tupletIndex);
-            }
+      tupletIndexes.push_back(indexToCheck);
+      tupletIndexes.insert(tupletIndexes.end(), selectedTuplets.begin(),
+                           selectedTuplets.end() - endAllShift);
       const int voiceCount = estimateVoiceCount(tupletIndexes, tupletIntervals);
-      const auto &tuplet = tuplets[tupletIndexToCheck];
+      const auto &tuplet = tuplets[indexToCheck];
 
-      return (voiceCount > tupletVoiceLimit()
-                  || (voiceCount > 1 && (int)tuplet.chords.size()
+      return (voiceCount > tupletVoiceLimit() || (voiceCount > 1 && (int)tuplet.chords.size()
                         < tupletLimits(tuplet.tupletNumber).minNoteCountAddVoice));
       }
 
@@ -716,18 +684,17 @@ bool isCompatibleWithCurrent(
 
 bool isCompatibleWithPrevious(
             int indexToCheck,
-            const std::vector<int> &selectedCommons,
+            const std::vector<int> &selectedTuplets,
             const std::vector<TupletCommon> &tupletCommons,
             const std::vector<TupletInfo> &tuplets,
             const std::vector<std::pair<ReducedFraction, ReducedFraction> > &tupletIntervals,
             size_t endCommonShift,
             size_t endAllShift)
       {
-      return !(isInCommonIndexes(indexToCheck, selectedCommons, tupletCommons,
+      return !(isInCommonIndexes(indexToCheck, selectedTuplets, tupletCommons,
                                  endCommonShift, endAllShift)
-                  || isFirstChordOccupied(indexToCheck, selectedCommons, tupletCommons,
-                                          tuplets, endAllShift)
-                  || areAllVoicesOccupied(indexToCheck, selectedCommons, tupletCommons,
+                  || isFirstChordOccupied(indexToCheck, selectedTuplets, tuplets, endAllShift)
+                  || areAllVoicesOccupied(indexToCheck, selectedTuplets,
                                           tupletIntervals, tuplets, endAllShift));
       }
 
@@ -753,7 +720,7 @@ void addIndexToUpperLevels(
       }
 
 void findNextTuplet(
-            std::vector<int> &selectedCommons,
+            std::vector<int> &selectedTuplets,
             std::vector<int> &bestTupletIndexes,
             TupletErrorResult &minCurrentError,
             std::vector<TupletCommon> &tupletCommons,
@@ -762,16 +729,16 @@ void findNextTuplet(
       {
       std::set<int> currentLevelIndexes;
 
-      if (selectedCommons.empty())
+      if (selectedTuplets.empty())
             currentLevelIndexes.insert(0);
       else {
-            for (int indexToCheck: tupletCommons[selectedCommons.back()].uncommonIndexes) {
+            for (int indexToCheck: tupletCommons[selectedTuplets.back()].uncommonIndexes) {
                         // endCommonShift == 1 because the indexToCheck cannot have common indexes
                         // with selectedCommons.back() due to indexToCheck is
                         // in uncommonIndexes of selectedCommons.back()
-                  if (!isCompatibleWithPrevious(indexToCheck, selectedCommons, tupletCommons,
+                  if (!isCompatibleWithPrevious(indexToCheck, selectedTuplets, tupletCommons,
                                                 tuplets, tupletIntervals, 1, 0)) {
-                        addIndexToUpperLevels(indexToCheck, selectedCommons, tupletCommons,
+                        addIndexToUpperLevels(indexToCheck, selectedTuplets, tupletCommons,
                                               tuplets, tupletIntervals);
                         continue;
                         }
@@ -781,17 +748,11 @@ void findNextTuplet(
             }
 
       if (currentLevelIndexes.empty()) {
-            std::vector<int> tupletIndexes;
-            for (int i: selectedCommons)
-                  tupletIndexes.push_back(tupletCommons[i].tupletIndex);
-            const int voiceCount = estimateVoiceCount(tupletIndexes, tupletIntervals);
-
-            const auto error = findTupletError(tupletIndexes, tuplets, voiceCount);
+            const int voiceCount = estimateVoiceCount(selectedTuplets, tupletIntervals);
+            const auto error = findTupletError(selectedTuplets, tuplets, voiceCount);
             if (!minCurrentError.isInitialized() || error < minCurrentError) {
                   minCurrentError = error;
-                  bestTupletIndexes.clear();
-                  for (int i: selectedCommons)
-                        bestTupletIndexes.push_back(tupletCommons[i].tupletIndex);
+                  bestTupletIndexes = selectedTuplets;
                   }
             return;
             }
@@ -800,7 +761,7 @@ void findNextTuplet(
       for (int indexToCheck: firstIndexes) {
             if (isCompatibleWithCurrent(indexToCheck, tupletCommons, currentLevelIndexes))
                   continue;
-            if (!isCompatibleWithPrevious(indexToCheck, selectedCommons, tupletCommons,
+            if (!isCompatibleWithPrevious(indexToCheck, selectedTuplets, tupletCommons,
                                           tuplets, tupletIntervals, 0, 0)) {
                   continue;
                   }
@@ -811,16 +772,16 @@ void findNextTuplet(
                         // save pointer to indexes to be able to add elements to them
                         // deeper in the recursion
             tupletCommons[i].levelIndexes = &currentLevelIndexes;
-            selectedCommons.push_back(i);
+            selectedTuplets.push_back(i);
 
-            Q_ASSERT_X(areCommonsDifferent(selectedCommons), "MidiTuplet::findNextTuplet",
+            Q_ASSERT_X(areCommonsDifferent(selectedTuplets), "MidiTuplet::findNextTuplet",
                        "There are duplicates in selected commons");
-            Q_ASSERT_X(areCommonsUncommon(selectedCommons, tupletCommons),
+            Q_ASSERT_X(areCommonsUncommon(selectedTuplets, tupletCommons),
                        "MidiTuplet::findNextTuplet", "Incompatible selected commons");
 
-            findNextTuplet(selectedCommons, bestTupletIndexes, minCurrentError,
+            findNextTuplet(selectedTuplets, bestTupletIndexes, minCurrentError,
                            tupletCommons, tuplets, tupletIntervals);
-            selectedCommons.pop_back();
+            selectedTuplets.pop_back();
             tupletCommons[i].levelIndexes = nullptr;
             }
       }
@@ -828,12 +789,12 @@ void findNextTuplet(
 std::vector<int> findBestTuplets(const std::vector<TupletInfo> &tuplets)
       {
       std::vector<int> bestTupletIndexes;
-      std::vector<int> selectedCommons;
+      std::vector<int> selectedTuplets;
       TupletErrorResult minCurrentError;
       auto tupletCommons = findTupletCommons(tuplets);
       const auto tupletIntervals = findTupletIntervals(tuplets);
 
-      findNextTuplet(selectedCommons, bestTupletIndexes, minCurrentError,
+      findNextTuplet(selectedTuplets, bestTupletIndexes, minCurrentError,
                      tupletCommons, tuplets, tupletIntervals);
 
       return bestTupletIndexes;
