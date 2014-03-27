@@ -1384,10 +1384,27 @@ class InsertTime : public UndoCommand {
       void undo();
 
    public:
-      InsertTime(Score* _score, int _tick, int _len) :
-            score(_score), tick(_tick), len(_len) {}
+      InsertTime(Score* _score, int _tick, int _len)
+         : score(_score), tick(_tick), len(_len) {}
       UNDO_NAME("InsertTime");
       };
+
+//---------------------------------------------------------
+//   ChangeNoteEvent
+//---------------------------------------------------------
+
+class ChangeNoteEvent : public UndoCommand {
+      Note* note;
+      NoteEvent oldEvent;
+      NoteEvent newEvent;
+
+      void flip();
+
+   public:
+      ChangeNoteEvent(Note* n, const NoteEvent& oe, const NoteEvent& ne)
+         : note(n), oldEvent(oe), newEvent(ne) {}
+      };
+
 
 }     // namespace Ms
 #endif

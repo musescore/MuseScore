@@ -3379,5 +3379,19 @@ void InsertTime::undo()
       score->insertTime(tick, -len);
       }
 
+//---------------------------------------------------------
+//   ChangeNoteEvent::flip
+//---------------------------------------------------------
+
+void ChangeNoteEvent::flip()
+      {
+      for (NoteEvent& ne : note->playEvents()) {
+            if (ne == oldEvent) {
+                  ne = newEvent;
+                  break;
+                  }
+            }
+      qSwap(oldEvent, newEvent);
+      }
 }
 

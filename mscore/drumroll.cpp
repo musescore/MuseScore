@@ -41,6 +41,8 @@
 
 namespace Ms {
 
+extern bool useFactorySettings;
+
 //---------------------------------------------------------
 //   DrumrollEditor
 //---------------------------------------------------------
@@ -159,6 +161,27 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       ag->addAction(a);
       addActions(ag->actions());
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
+
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup("Drumroll");
+            resize(settings.value("size", QSize(900, 500)).toSize());
+            move(settings.value("pos", QPoint(10, 10)).toPoint());
+            settings.endGroup();
+            }
+      }
+
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void DrumrollEditor::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup("Drumroll");
+      settings.setValue("size", size());
+      settings.setValue("pos", QWidget::pos());
+      settings.endGroup();
       }
 
 //---------------------------------------------------------
