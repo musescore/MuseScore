@@ -34,6 +34,8 @@
 
 namespace Ms {
 
+extern bool useFactorySettings;
+
 //---------------------------------------------------------
 //   PianorollEditor
 //---------------------------------------------------------
@@ -117,6 +119,14 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       pitch->setReadOnly(true);
       tb->addWidget(pitch);
 
+      tb->addWidget(new QLabel(tr("OnTime:")));
+      tb->addWidget((onTime = new QSpinBox));
+      onTime->setRange(-2000, 2000);
+
+      tb->addWidget(new QLabel(tr("Len:")));
+      tb->addWidget((tickLen = new QSpinBox));
+      tickLen->setRange(-2000, 2000);
+
       //-------------
       qreal xmag = .1;
       ruler = new Ruler;
@@ -181,10 +191,19 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(ruler,       SIGNAL(locatorMoved(int, const Pos&)), SLOT(moveLocator(int, const Pos&)));
       connect(veloType,    SIGNAL(activated(int)),     SLOT(veloTypeChanged(int)));
       connect(velocity,    SIGNAL(valueChanged(int)),  SLOT(velocityChanged(int)));
+      connect(onTime,      SIGNAL(valueChanged(int)),  SLOT(onTimeChanged(int)));
+      connect(tickLen,     SIGNAL(valueChanged(int)),  SLOT(tickLenChanged(int)));
       connect(gv->scene(), SIGNAL(selectionChanged()), SLOT(selectionChanged()));
       connect(piano,       SIGNAL(keyPressed(int)),    SLOT(keyPressed(int)));
       connect(piano,       SIGNAL(keyReleased(int)),   SLOT(keyReleased(int)));
-      resize(800, 400);
+
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup("Pianoroll");
+            resize(settings.value("size", QSize(900, 500)).toSize());
+            move(settings.value("pos", QPoint(10, 10)).toPoint());
+            settings.endGroup();
+            }
 
       QActionGroup* ag = new QActionGroup(this);
       QAction* a = new QAction(this);
@@ -194,6 +213,19 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       addActions(ag->actions());
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
       setXpos(0);
+      }
+
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void PianorollEditor::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup("Pianoroll");
+      settings.setValue("size", size());
+      settings.setValue("pos", QWidget::pos());
+      settings.endGroup();
       }
 
 //---------------------------------------------------------
@@ -261,31 +293,20 @@ void PianorollEditor::updateSelection()
             PianoItem* item = static_cast<PianoItem*>(items[0]);
             if (item->type() == PianoItemType) {
                   Note* note = item->note();
+                  NoteEvent* event = item->event();
                   pitch->setEnabled(true);
                   pitch->setValue(note->pitch());
-                  veloType->setEnabled(true);
-                  velocity->setEnabled(true);
+                  onTime->setValue(event->ontime());
+                  tickLen->setValue(event->len());
                   updateVelocity(note);
                   }
             }
-      else if (items.size() == 0) {
-            velocity->setValue(0);
-            velocity->setEnabled(false);
-            pitch->setValue(0);
-            pitch->setEnabled(false);
-            veloType->setEnabled(false);
-            veloType->setCurrentIndex(int(MScore::USER_VAL));
-            }
-      else {
-            velocity->setEnabled(true);
-            velocity->setValue(0);
-            velocity->setReadOnly(false);
-            pitch->setEnabled(true);
-            pitch->setDeltaMode(true);
-            pitch->setValue(0);
-            veloType->setEnabled(true);
-            veloType->setCurrentIndex(int(MScore::OFFSET_VAL));
-            }
+      bool b = items.size() != 0;
+      velocity->setEnabled(b);
+      pitch->setEnabled(b);
+      veloType->setEnabled(b);
+      onTime->setEnabled(b);
+      tickLen->setEnabled(b);
       }
 
 //---------------------------------------------------------
@@ -663,6 +684,61 @@ void PianorollEditor::posChanged(POS pos, unsigned tick)
       if (waveView)
             waveView->moveLocator(int(pos));
       ruler->update();
+      }
+
+//---------------------------------------------------------
+//   onTimeChanged
+//---------------------------------------------------------
+
+void PianorollEditor::onTimeChanged(int val)
+      {
+      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
+      if (items.size() != 1)
+            return;
+      QGraphicsItem* item = items[0];
+      if (item->type() != PianoItemType)
+            return;
+      PianoItem* pi = static_cast<PianoItem*>(item);
+      Note* note       = pi->note();
+      NoteEvent* event = pi->event();
+      if (event->ontime() == val)
+            return;
+
+      NoteEvent ne = *event;
+      ne.setOntime(val);
+      _score->undo()->beginMacro();
+      _score->undo(new ChangeNoteEvent(note, *event, ne));
+      _score->undo()->endMacro(_score->undo()->current()->childCount() == 0);
+      gv->scene()->update(pi->updateValues());
+      }
+
+//---------------------------------------------------------
+//   tickLenChanged
+//---------------------------------------------------------
+
+void PianorollEditor::tickLenChanged(int val)
+      {
+      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
+      if (items.size() != 1)
+            return;
+      QGraphicsItem* item = items[0];
+      if (item->type() != PianoItemType)
+            return;
+      PianoItem* pi = static_cast<PianoItem*>(item);
+      Note* note       = pi->note();
+      NoteEvent* event = pi->event();
+      if (event->len() == val)
+            return;
+
+      NoteEvent ne = *event;
+      ne.setLen(val);
+//      _score->undo()->beginMacro();
+      _score->startCmd();
+      _score->undo(new ChangeNoteEvent(note, *event, ne));
+      _score->endCmd();
+//      _score->undo()->endMacro(_score->undo()->current()->childCount() == 0);
+      gv->scene()->update(pi->updateValues());
+      mscore->endCmd();
       }
 
 }

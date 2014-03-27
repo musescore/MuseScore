@@ -30,14 +30,16 @@ enum { PianoItemType = QGraphicsItem::UserType + 1 };
 
 class PianoItem : public QGraphicsRectItem {
       Note*      _note;
-      NoteEvent* event;
+      NoteEvent* _event;
       virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
    public:
       PianoItem(Note*, NoteEvent*);
       virtual ~PianoItem() {}
       virtual int type() const { return PianoItemType; }
-      Note* note() { return _note; }
+      Note* note()       { return _note; }
+      NoteEvent* event() { return _event; }
+      QRectF updateValues();
       };
 
 //---------------------------------------------------------
@@ -85,7 +87,6 @@ class PianoView : public QGraphicsView {
       void ensureVisible(int tick);
       QList<QGraphicsItem*> items() { return scene()->selectedItems(); }
       };
-
 
 
 } // namespace Ms

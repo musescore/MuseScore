@@ -290,6 +290,10 @@ void MuseScore::closeEvent(QCloseEvent* ev)
             }
       if (instrList)
             instrList->writeSettings();
+      if (pianorollEditor)
+            pianorollEditor->writeSettings();
+      if (drumrollEditor)
+            drumrollEditor->writeSettings();
 
       ev->accept();
       if (preferences.dirty)

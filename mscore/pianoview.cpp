@@ -46,24 +46,33 @@ static int pitch2y(int pitch)
 //---------------------------------------------------------
 
 PianoItem::PianoItem(Note* n, NoteEvent* e)
-   : QGraphicsRectItem(0), _note(n), event(e)
+   : QGraphicsRectItem(0), _note(n), _event(e)
       {
-      Chord* chord = n->chord();
-      int tieLen, ticks;
-      ticks  = chord->duration().ticks();
-      tieLen = n->playTicks() - ticks;
-
       setFlags(flags() | QGraphicsItem::ItemIsSelectable);
+      setBrush(QBrush());
+      updateValues();
+      }
 
-      int pitch = n->pitch() + e->pitch();
-      int len   = ticks * e->len() / 1000 + tieLen;
+//---------------------------------------------------------
+//   updateValues
+//---------------------------------------------------------
+
+QRectF PianoItem::updateValues()
+      {
+      QRectF r(rect().translated(pos()));
+      Chord* chord = _note->chord();
+      int ticks    = chord->duration().ticks();
+      int tieLen   = _note->playTicks() - ticks;
+      int pitch    = _note->pitch() + _event->pitch();
+      int len      = ticks * _event->len() / 1000 + tieLen;
 
       setRect(0, 0, len, keyHeight/2);
-      setBrush(QBrush());
       setSelected(_note->selected());
 
-      setPos(_note->chord()->tick() + e->ontime() * ticks / 1000 + MAP_OFFSET,
+      setPos(_note->chord()->tick() + _event->ontime() * ticks / 1000 + MAP_OFFSET,
          pitch2y(pitch) + keyHeight / 4);
+
+      return r | rect().translated(pos());
       }
 
 //---------------------------------------------------------
@@ -173,11 +182,11 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             if (magStep > 0) {
                   double x = double(pos2pix(stick));
                   if (x > 0) {
-                        p->setPen(Qt::lightGray);
+                        p->setPen(QPen(Qt::lightGray, 0.0));
                         p->drawLine(x, y1, x, y2);
                         }
                   else {
-                        p->setPen(Qt::black);
+                        p->setPen(QPen(Qt::black, 0.0));
                         p->drawLine(x, y1, x, y1);
                         }
                   }
@@ -190,11 +199,11 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
                               if (xp < 0)
                                     continue;
                               if (xp > 0) {
-                                    p->setPen(beat == 0 ? Qt::lightGray : Qt::gray);
+                                    p->setPen(QPen(beat == 0 ? Qt::lightGray : Qt::gray, 0.0));
                                     p->drawLine(xp, y1, xp, y2);
                                     }
                               else {
-                                    p->setPen(Qt::black);
+                                    p->setPen(QPen(Qt::black, 0.0));
                                     p->drawLine(xp, y1, xp, y2);
                                     }
                               }
@@ -218,11 +227,11 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
                                     if (xp < 0)
                                           continue;
                                     if (xp > 0) {
-                                          p->setPen(i == 0 && beat == 0 ? Qt::lightGray : Qt::gray);
+                                          p->setPen(QPen(i == 0 && beat == 0 ? Qt::lightGray : Qt::gray, 0.0));
                                           p->drawLine(xp, y1, xp, y2);
                                           }
                                     else {
-                                          p->setPen(Qt::black);
+                                          p->setPen(QPen(Qt::black, 0.0));
                                           p->drawLine(xp, y1, xp, y2);
                                           }
                                     }
