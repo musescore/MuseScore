@@ -78,13 +78,15 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
       //-------------
       tb = addToolBar(tr("toolbar 2"));
-      static const char* sl3[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
-      QActionGroup* voiceGroup = new QActionGroup(this);
-      for (const char* s : sl3) {
-            QAction* a = getAction(s);
-            a->setCheckable(true);
-            voiceGroup->addAction(a);
-            tb->addAction(getAction(s));
+      for (int i = 0; i < VOICES; ++i) {
+            QToolButton* b = new QToolButton(this);
+            b->setToolButtonStyle(Qt::ToolButtonTextOnly);
+            QPalette p(b->palette());
+            p.setColor(QPalette::Base, MScore::selectColor[i]);
+            b->setPalette(p);
+            QAction* a = getAction(voiceActions[i]);
+            b->setDefaultAction(a);
+            tb->addWidget(b);
             }
 
       tb->addSeparator();

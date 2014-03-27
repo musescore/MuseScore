@@ -91,6 +91,7 @@ struct PluginDescription;
 
 extern QString mscoreGlobalShare;
 static const int PROJECT_LIST_LEN = 6;
+extern const char* voiceActions[];
 
 //---------------------------------------------------------
 //   IconActions
