@@ -453,20 +453,6 @@ findTupletIntervals(const std::vector<TupletInfo> &tuplets)
       return tupletIntervals;
       }
 
-size_t commonTupletCount(
-            const std::map<ReducedFraction,
-                           std::multimap<ReducedFraction, MidiChord>::iterator> &tupletChords,
-            const std::map<std::pair<const ReducedFraction, MidiChord> *,
-                           std::set<int>> &usedChords)
-      {
-      std::set<int> tupletIndexes;
-      for (const auto &chord: tupletChords) {
-            const auto &indexes = usedChords.find(&*chord.second)->second;
-            for (int i: indexes)
-                  tupletIndexes.insert(i);
-            }
-      return tupletIndexes.size();
-      }
 
 struct TupletCommon
       {
@@ -477,24 +463,6 @@ struct TupletCommon
       std::set<int> *levelIndexes = nullptr;   // selected indexes for some level of the recursion
       };
 
-std::set<int>::iterator findMinTupletCountIter(
-            const std::set<int> &tupletIndexes,
-            const std::vector<TupletInfo> &tuplets,
-            const std::map<std::pair<const ReducedFraction, MidiChord> *, std::set<int>> &usedChords)
-      {
-      auto it = tupletIndexes.begin();
-      auto minIt = it;
-      size_t minTupletCount = commonTupletCount(tuplets[*it].chords, usedChords);
-
-      for (++it; it != tupletIndexes.end(); ++it) {
-            size_t tupletCount = commonTupletCount(tuplets[*it].chords, usedChords);
-            if (tupletCount < minTupletCount) {
-                  tupletCount = minTupletCount;
-                  minIt = it;
-                  }
-            }
-      return minIt;
-      }
 
 // initially common indexes are tuplet indexes
 // but they need to be converted to indexes of commons
@@ -530,7 +498,6 @@ std::vector<TupletCommon> findTupletCommons(const std::vector<TupletInfo> &tuple
       std::map<std::pair<const ReducedFraction, MidiChord> *, std::set<int>> usedChords;
       const int voiceLimit = tupletVoiceLimit();
       std::vector<TupletCommon> tupletCommons;
-      std::set<int> tupletIndexes;
 
       for (size_t i = 0; i != tuplets.size(); ++i) {
             const auto &tuplet = tuplets[i];
@@ -543,13 +510,11 @@ std::vector<TupletCommon> findTupletCommons(const std::vector<TupletInfo> &tuple
                   }
             for ( ; it != tuplet.chords.end(); ++it)
                   usedChords[&*it->second].insert(i);
-            tupletIndexes.insert(i);
             }
 
-      while (!tupletIndexes.empty()) {
-            const auto minIt = findMinTupletCountIter(tupletIndexes, tuplets, usedChords);
+      for (size_t i = 0; i != tuplets.size(); ++i) {
             TupletCommon tupletCommon;
-            tupletCommon.tupletIndex = *minIt;
+            tupletCommon.tupletIndex = i;
 
             const auto &tuplet = tuplets[tupletCommon.tupletIndex];
             for (const auto &chord: tuplet.chords) {
@@ -558,7 +523,6 @@ std::vector<TupletCommon> findTupletCommons(const std::vector<TupletInfo> &tuple
                   tupletCommon.commonIndexes.insert(indexes.begin(), indexes.end());
                   }
             tupletCommons.push_back(tupletCommon);
-            tupletIndexes.erase(minIt);
             }
 
       convertToCommonIndexes(tupletCommons);
