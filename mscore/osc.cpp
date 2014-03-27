@@ -84,6 +84,12 @@ void MuseScore::initOsc()
       QObject::connect(oo, SIGNAL(data()), SLOT(oscNext()));
       oo = new PathObject( "/next-measure", QVariant::Invalid, osc);
       QObject::connect(oo, SIGNAL(data()), SLOT(oscNextMeasure()));
+      oo = new PathObject( "/prev", QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/prev-measure", QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/backspace", QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
       oo = new PathObject( "/goto", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscGoto(int)));
       oo = new PathObject( "/select-measure", QVariant::Int, osc);
