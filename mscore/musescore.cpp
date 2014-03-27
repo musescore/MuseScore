@@ -131,6 +131,7 @@ bool useFactorySettings = false;
 QString styleName;
 QString revision;
 QErrorMessage* errorMessage;
+const char* voiceActions[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
 
 extern void initStaffTypes();
 extern bool savePositions(Score*, const QString& name);
@@ -732,14 +733,13 @@ MuseScore::MuseScore()
       entryTools->addAction(a);
       entryTools->addSeparator();
 
-      static const char* sl3[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
-      for (int i = 0; i < 4; ++i) {
+      for (int i = 0; i < VOICES; ++i) {
             QToolButton* tb = new QToolButton(this);
             tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
             QPalette p(tb->palette());
             p.setColor(QPalette::Base, MScore::selectColor[i]);
             tb->setPalette(p);
-            QAction* a = getAction(sl3[i]);
+            QAction* a = getAction(voiceActions[i]);
             a->setCheckable(true);
             tb->setDefaultAction(a);
             entryTools->addWidget(tb);
