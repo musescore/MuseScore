@@ -2034,13 +2034,14 @@ static void writeBeam(Xml& xml, ChordRest* cr, Beam* b)
 
 void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset)
       {
+      /*
+      qDebug("chord() %p parent %p isgrace %d #gracenotes %d graceidx %d",
+             chord, chord->parent(), chord->isGrace(), chord->graceNotes().size(), chord->graceIndex());
+      foreach(Element* e, chord->el())
+            qDebug("chord %p el %p", chord, e);
+       */
       QList<Note*> nl = chord->notes();
-      NoteType gracen = nl.front()->noteType();
-      bool grace = (gracen == NOTE_ACCIACCATURA
-                    || gracen == NOTE_APPOGGIATURA
-                    || gracen == NOTE_GRACE4
-                    || gracen == NOTE_GRACE16
-                    || gracen == NOTE_GRACE32);
+      bool grace = chord->isGrace();
       int tremCorr = 1; // duration correction for two note tremolo
       if (isTwoNoteTremolo(chord)) tremCorr = 2;
       if (!grace) tick += chord->actualTicks();
@@ -2309,8 +2310,11 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
 
             if (note == nl.front()) {
                   tupletStartStop(chord, notations, xml);
-                  sh.doSlurStop(chord, notations, xml);
-                  sh.doSlurStart(chord, notations, xml);
+                  if (!grace) {
+                        // handle slurs between normal (non-grace) notes
+                        sh.doSlurStop(chord, notations, xml);
+                        sh.doSlurStart(chord, notations, xml);
+                        }
                   chordAttributes(chord, notations, technical, xml, trillStart, trillStop);
                   }
             foreach (const Element* e, note->el()) {
@@ -3715,7 +3719,10 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                                     exp->textLine(static_cast<const TextLine*>(e), sstaff, seg->tick());
                                     break;
                               case Element::TRILL:
-                                    // ignore (written as <note><notations><ornaments><wavy-line>
+                                    // ignore (written as <note><notations><ornaments><wavy-line>)
+                                    break;
+                              case Element::SLUR:
+                                    // ignore (written as <note><notations><slur>)
                                     break;
                               default:
                                     qDebug("spannerStart: direction type %s at tick %d not implemented",
@@ -3761,6 +3768,9 @@ static void spannerStop(ExportMusicXml* exp, int strack, int tick2, int sstaff, 
                               break;
                         case Element::TRILL:
                               // ignore (written as <note><notations><ornaments><wavy-line>
+                              break;
+                        case Element::SLUR:
+                              // ignore (written as <note><notations><slur>)
                               break;
                         default:
                               qDebug("spannerStop: direction type %s at tick2 %d not implemented",
