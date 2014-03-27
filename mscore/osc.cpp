@@ -80,10 +80,16 @@ void MuseScore::initOsc()
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscTempo(int)));
       oo = new PathObject( "/volume", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscVolume(int)));
-      oo = new PathObject( "/next", QVariant::Invalid, osc);
-      QObject::connect(oo, SIGNAL(data()), SLOT(oscNext()));
+      oo = new PathObject( "/next-chord", QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
       oo = new PathObject( "/next-measure", QVariant::Invalid, osc);
-      QObject::connect(oo, SIGNAL(data()), SLOT(oscNextMeasure()));
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/prev-chord", QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/prev-measure", QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
+      oo = new PathObject( "/backspace", QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
       oo = new PathObject( "/goto", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscGoto(int)));
       oo = new PathObject( "/select-measure", QVariant::Int, osc);
@@ -177,19 +183,6 @@ void MuseScore::oscStop()
       QAction* a = getAction("play");
       if (a->isChecked())
             a->trigger();
-      }
-
-void MuseScore::oscNext()
-      {
-      qDebug("next");
-      QAction* a = getAction("next-chord");
-      a->trigger();
-      }
-
-void MuseScore::oscNextMeasure()
-      {
-      QAction* a = getAction("next-measure");
-      a->trigger();
       }
 
 void MuseScore::oscGoto(int m)
