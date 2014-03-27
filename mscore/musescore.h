@@ -425,12 +425,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void saveScoreDialogFilterSelected(const QString&);
 #ifdef OSC
       void oscIntMessage(int);
-      void oscPlay();
-      void oscStop();
       void oscVolume(int val);
       void oscTempo(int val);
-      void oscNext();
-      void oscNextMeasure();
       void oscGoto(int m);
       void oscSelectMeasure(int m);
       void oscVolChannel(double val);
