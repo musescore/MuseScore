@@ -1121,7 +1121,7 @@ void Seq::prevChord()
       {
       int tick  = playPos->first;
       //find the chord just before playpos
-      EventMap::const_iterator i = events.upper_bound(cs->repeatList()->tick2utick(cs->playPos()));
+      EventMap::const_iterator i = events.upper_bound(cs->repeatList()->tick2utick(tick));
       for (;;) {
             if (i->second.type() == ME_NOTEON) {
                   const NPlayEvent& n = i->second;
