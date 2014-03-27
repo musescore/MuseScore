@@ -287,6 +287,8 @@ bool MP3Exporter::initLibrary(QString libpath)
 
       mGF = lame_init();
       if (mGF == NULL) {
+            lame_lib->unload();
+            delete lame_lib;
             return false;
             }
 
@@ -302,9 +304,9 @@ void MP3Exporter::freeLibrary()
       if (mGF) {
             lame_close(mGF);
             mGF = NULL;
+            lame_lib->unload();
+            delete lame_lib;
             }
-      lame_lib->unload();
-      delete lame_lib;
       return;
       }
 
