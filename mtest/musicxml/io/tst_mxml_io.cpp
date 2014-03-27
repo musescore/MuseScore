@@ -109,7 +109,7 @@ private slots:
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
-//      void slurs() { mxmlIoTest("testSlurs"); }
+      void slurs() { mxmlIoTest("testSlurs"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
       void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }
