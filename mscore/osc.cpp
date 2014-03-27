@@ -84,6 +84,12 @@ void MuseScore::initOsc()
       QObject::connect(oo, SIGNAL(data()), SLOT(oscNext()));
       oo = new PathObject( "/next-measure", QVariant::Invalid, osc);
       QObject::connect(oo, SIGNAL(data()), SLOT(oscNextMeasure()));
+      oo = new PathObject( "/prev", QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscPrev()));
+      oo = new PathObject( "/prev-measure", QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscPrevMeasure()));
+      oo = new PathObject( "/backspace", QVariant::Invalid, osc);
+      QObject::connect(oo, SIGNAL(data()), SLOT(oscBackspace()));
       oo = new PathObject( "/goto", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscGoto(int)));
       oo = new PathObject( "/select-measure", QVariant::Int, osc);
@@ -189,6 +195,25 @@ void MuseScore::oscNext()
 void MuseScore::oscNextMeasure()
       {
       QAction* a = getAction("next-measure");
+      a->trigger();
+      }
+
+void MuseScore::oscPrev()
+      {
+      qDebug("next");
+      QAction* a = getAction("prev-chord");
+      a->trigger();
+      }
+
+void MuseScore::oscPrevMeasure()
+      {
+      QAction* a = getAction("prev-measure");
+      a->trigger();
+      }
+
+void MuseScore::oscBackspace()
+      {
+      QAction* a = getAction("backspace");
       a->trigger();
       }
 
