@@ -193,7 +193,6 @@ class Note : public Element {
       qreal _tuning;         ///< pitch offset in cent, playable only by internal synthesizer
 
       MScore::DirectionH _userMirror;     ///< user override of mirror
-      MScore::Direction _dotPosition;     ///< dot position: above or below current staff line
       MScore::Direction _userDotPosition; ///< user override of dot position
 
       Accidental* _accidental;
@@ -321,8 +320,6 @@ class Note : public Element {
       MScore::DirectionH userMirror() const     { return _userMirror; }
       void setUserMirror(MScore::DirectionH d)  { _userMirror = d; }
 
-      MScore::Direction dotPosition() const     { return _dotPosition; }
-      void setDotPosition(MScore::Direction d)  { _dotPosition = d;    }
       MScore::Direction userDotPosition() const       { return _userDotPosition; }
       void setUserDotPosition(MScore::Direction d)    { _userDotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
@@ -380,6 +377,7 @@ class Note : public Element {
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
       virtual void setScore(Score* s);
+      void setDotY(MScore::Direction);
 
       static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
       };

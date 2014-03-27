@@ -768,8 +768,9 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   }
 
             if (note->chord()->dots()) {
-                  if (note->userDotPosition() == MScore::AUTO && nNotes > 1) {
-                        note->setDotPosition(MScore::AUTO);
+                  MScore::Direction dotPosition = note->userDotPosition();
+
+                  if (dotPosition == MScore::AUTO && nNotes > 1) {
                         // resolve dot conflicts
                         int line = note->line();
                         Note* above = (i < nNotes - 1) ? notes[i+1] : 0;
@@ -779,14 +780,14 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                         if ((line & 1) == 0) {
                               // line
                               if (intervalAbove == 1 && intervalBelow != 1)
-                                    note->setDotPosition(MScore::DOWN);
+                                    dotPosition = MScore::DOWN;
                               else if (intervalBelow ==1 && intervalAbove != 1)
-                                    note->setDotPosition(MScore::UP);
+                                    dotPosition = MScore::UP;
                               else if (intervalAbove == 0 && above->chord()->dots()) {
                                     // unison
                                     if (((above->voice() & 1) == (note->voice() & 1))) {
-                                          above->setDotPosition(MScore::UP);
-                                          note->setDotPosition(MScore::DOWN);
+                                          above->setDotY(MScore::UP);
+                                          dotPosition = MScore::DOWN;
                                           }
                                     }
                               }
@@ -795,18 +796,17 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                               if (intervalAbove == 0 && above->chord()->dots()) {
                                     // unison
                                     if (!(note->voice() & 1))
-                                          note->setDotPosition(MScore::UP);
+                                          dotPosition = MScore::UP;
                                     else {
                                           if (!(above->voice() & 1))
-                                                above->setDotPosition(MScore::UP);
+                                                above->setDotY(MScore::UP);
                                           else
-                                                note->setDotPosition(MScore::DOWN);
+                                                dotPosition = MScore::DOWN;
                                           }
                                     }
                               }
                         }
-                  else
-                        note->setDotPosition(note->userDotPosition());
+                  note->setDotY(dotPosition);
                   }
             }
 
