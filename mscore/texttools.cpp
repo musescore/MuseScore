@@ -107,7 +107,6 @@ TextTools::TextTools(QWidget* parent)
       connect(typefaceUnderline,   SIGNAL(triggered(bool)), SLOT(underlineClicked(bool)));
       connect(typefaceSubscript,   SIGNAL(triggered(bool)), SLOT(subscriptClicked(bool)));
       connect(typefaceSuperscript, SIGNAL(triggered(bool)), SLOT(superscriptClicked(bool)));
-      connect(typefaceFamily,      SIGNAL(currentFontChanged(const QFont&)), SLOT(fontChanged(const QFont&)));
       connect(showKeyboard,        SIGNAL(triggered(bool)), SLOT(showKeyboardClicked(bool)));
       }
 
@@ -169,6 +168,8 @@ void TextTools::updateTools()
 
 void TextTools::updateText()
       {
+      if (!_textElement)
+            return;
       if (_textElement->type() == Element::LYRICS) {
             _textElement->score()->setLayoutAll(true);
             _textElement->score()->end();
@@ -183,7 +184,6 @@ void TextTools::updateText()
 
 void TextTools::layoutText()
       {
-      QRectF r(_textElement->canvasBoundingRect());
       _textElement->score()->setLayoutAll(true);
       _textElement->score()->end();
       }
