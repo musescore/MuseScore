@@ -638,6 +638,7 @@ Element* PianorollEditor::elementNear(QPointF)
 
 void PianorollEditor::updateAll()
       {
+//      gv->updateNotes();
       gv->update();
       }
 
@@ -704,7 +705,7 @@ void PianorollEditor::onTimeChanged(int val)
       ne.setOntime(val);
       _score->blockSignals(true);
       _score->startCmd();
-      _score->undo(new ChangeNoteEvent(note, *event, ne));
+      _score->undo(new ChangeNoteEvent(note, event, ne));
       _score->endCmd();
       _score->blockSignals(false);
       gv->scene()->update(pi->updateValues());
@@ -733,7 +734,7 @@ void PianorollEditor::tickLenChanged(int val)
       ne.setLen(val);
       _score->blockSignals(true);
       _score->startCmd();
-      _score->undo(new ChangeNoteEvent(note, *event, ne));
+      _score->undo(new ChangeNoteEvent(note, event, ne));
       _score->endCmd();
       _score->blockSignals(false);
       gv->scene()->update(pi->updateValues());

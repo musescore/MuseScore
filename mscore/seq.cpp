@@ -727,10 +727,10 @@ void Seq::process(unsigned n, float* buffer)
             for ( ; *pPlayPos != pEvents->cend(); ) {
                   int n;
                   if (inCountIn) {
-                        
+
                         qreal bps = curTempo() * cs->tempomap()->relTempo();
                         // relTempo needed here to ensure that bps changes as we slide the tempo bar
-                        
+
                         qreal tickssec = bps * MScore::division;
                         qreal secs = (*pPlayPos)->first / tickssec;
                         int f = secs * MScore::sampleRate;

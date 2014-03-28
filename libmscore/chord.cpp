@@ -159,12 +159,12 @@ Chord::Chord(Score* s)
       _stemDirection    = MScore::AUTO;
       _arpeggio         = 0;
       _tremolo          = 0;
-      _tremoloChordType = TremoloSingle;
+      _tremoloChordType = TremoloChordType::TremoloSingle;
       _glissando        = 0;
       _noteType         = NOTE_NORMAL;
       _stemSlash        = 0;
       _noStem           = false;
-      _userPlayEvents   = false;
+      _playEventType    = PlayEventType::Auto;
       _crossMeasure     = CROSSMEASURE_UNKNOWN;
       _graceIndex   = 0;
       setFlags(ELEMENT_MOVABLE | ELEMENT_ON_STAFF);
@@ -190,7 +190,7 @@ Chord::Chord(const Chord& c)
 
       _graceIndex     = c._graceIndex;
       _noStem         = c._noStem;
-      _userPlayEvents = c._userPlayEvents;
+      _playEventType  = c._playEventType;
 
       if (c._stem)
             add(new Stem(*(c._stem)));
@@ -203,7 +203,7 @@ Chord::Chord(const Chord& c)
       if (c._stemSlash)
             add(new StemSlash(*(c._stemSlash)));
       _stemDirection    = c._stemDirection;
-      _tremoloChordType = TremoloSingle;
+      _tremoloChordType = TremoloChordType::TremoloSingle;
       _tremolo          = 0;
       _noteType         = c._noteType;
       _crossMeasure     = CROSSMEASURE_UNKNOWN;
@@ -397,12 +397,12 @@ void Chord::add(Element* e)
                               if (tr->chord2())
                                     tr->chord2()->setDurationType(d);
                               }
-                        _tremoloChordType = TremoloFirstNote;
+                        _tremoloChordType = TremoloChordType::TremoloFirstNote;
                         tr->chord2()->setTremolo(tr);
-                        tr->chord2()->setTremoloChordType(TremoloSecondNote);
+                        tr->chord2()->setTremoloChordType(TremoloChordType::TremoloSecondNote);
                         }
                   else
-                        _tremoloChordType = TremoloSingle;
+                        _tremoloChordType = TremoloChordType::TremoloSingle;
                   _tremolo = tr;
                   }
                   break;
@@ -490,7 +490,7 @@ void Chord::remove(Element* e)
                         if (tremolo->chord2())
                               tremolo->chord2()->setDurationType(d);
                         tremolo->chord2()->setTremolo(0);
-                        tremolo->chord2()->setTremoloChordType(TremoloSingle);
+                        tremolo->chord2()->setTremoloChordType(TremoloChordType::TremoloSingle);
                         }
                   _tremolo = 0;
                   }
@@ -1101,7 +1101,7 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
             func(data, _stemSlash);
       if (_arpeggio)
             func(data, _arpeggio);
-      if (_tremolo && (_tremoloChordType != TremoloSecondNote))
+      if (_tremolo && (_tremoloChordType != TremoloChordType::TremoloSecondNote))
             func(data, _tremolo);
       if (_glissando)
             func(data, _glissando);

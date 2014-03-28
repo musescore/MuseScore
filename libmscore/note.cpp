@@ -676,13 +676,11 @@ void Note::write(Xml& xml) const
             }
       if (_tieBack)
             xml.tagE(QString("endSpanner id=\"%1\"").arg(_tieBack->id()));
-      if (chord() == 0 || chord()->userPlayEvents()) {
-            if (!_playEvents.isEmpty()) {
-                  xml.stag("Events");
-                  foreach(const NoteEvent& e, _playEvents)
-                        e.write(xml);
-                  xml.etag();
-                  }
+      if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.isEmpty()) {
+            xml.stag("Events");
+            foreach(const NoteEvent& e, _playEvents)
+                  e.write(xml);
+            xml.etag();
             }
       writeProperty(xml, P_PITCH);
       writeProperty(xml, P_TPC);
@@ -891,6 +889,7 @@ void Note::read(XmlReader& e)
                         }
                   }
             else if (tag == "Events") {
+                  _playEvents.clear();    // remove default event
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "Event") {
@@ -902,7 +901,7 @@ void Note::read(XmlReader& e)
                               e.unknown();
                         }
                   if (chord())
-                        chord()->setUserPlayEvents(true);
+                        chord()->setPlayEventType(PlayEventType::User);
                   }
             else if (tag == "endSpanner") {
                   int id = e.intAttribute("id");
