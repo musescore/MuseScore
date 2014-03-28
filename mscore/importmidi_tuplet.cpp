@@ -510,10 +510,9 @@ bool isInCommonIndexes(
             int indexToCheck,
             const std::vector<int> &selectedTuplets,
             const std::vector<TupletCommon> &tupletCommons,
-            size_t endCommonShift,
             size_t endAllShift)
       {
-      for (size_t i = 0; i != selectedTuplets.size() - endCommonShift - endAllShift; ++i) {
+      for (size_t i = 0; i != selectedTuplets.size() - 1 - endAllShift; ++i) {
             const auto &indexes = tupletCommons[selectedTuplets[i]].commonIndexes;
             if (indexes.find(indexToCheck) != indexes.end())
                   return true;
@@ -672,11 +671,9 @@ bool isCompatibleWithPrevious(
             const std::vector<TupletCommon> &tupletCommons,
             const std::vector<TupletInfo> &tuplets,
             const std::vector<std::pair<ReducedFraction, ReducedFraction> > &tupletIntervals,
-            size_t endCommonShift,
             size_t endAllShift)
       {
-      return !(isInCommonIndexes(indexToCheck, selectedTuplets, tupletCommons,
-                                 endCommonShift, endAllShift)
+      return !(isInCommonIndexes(indexToCheck, selectedTuplets, tupletCommons, endAllShift)
                   || isFirstChordOccupied(indexToCheck, selectedTuplets, tuplets, endAllShift)
                   || areAllVoicesOccupied(indexToCheck, selectedTuplets,
                                           tupletIntervals, tuplets, endAllShift));
@@ -699,7 +696,7 @@ void findNextTuplet(
       else {
             for (int indexToCheck: tupletCommons[selectedTuplets.back()].uncommonIndexes) {
                   if (!isCompatibleWithPrevious(indexToCheck, selectedTuplets, tupletCommons,
-                                                tuplets, tupletIntervals, 1, 0)) {
+                                                tuplets, tupletIntervals, 0)) {
                         continue;
                         }
                   currentLevelIndexes.insert(indexToCheck);
