@@ -1638,19 +1638,39 @@ void Measure::adjustToLen(Fraction nf)
                               }
                         }
                   }
+            // if just a single rest
             if (rests == 1 && chords == 0) {
-                  if (rest->durationType().type() == TDuration::V_MEASURE) {
-                        if (_timesig == nf) {
-                              score()->undo(new ChangeChordRestDuration(rest, nf));
-                              continue;
-                              }
-                        else {
-                              score()->undo(new ChangeChordRestLen(rest, _timesig));
-                              // DON'T continue here because we want the rest broken up below
-                              }
-                        }
-                  else if (_timesig == nf) {
+//                  if (rest->durationType().type() == TDuration::V_MEASURE) {
+//                        if (_timesig == nf) {
+//                              score()->undo(new ChangeChordRestDuration(rest, nf));
+//                              continue;
+//                              }
+//                        else {
+//                              score()->undo(new ChangeChordRestLen(rest, _timesig));
+//                              // DON'T continue here because we want the rest broken up below
+//                              }
+//                        }
+                  // if measure value didn't change, stick to whole measure rest
+                  if (_timesig == nf) {
                         score()->undo(new ChangeChordRestLen(rest, TDuration(TDuration::V_MEASURE)));
+                        continue;
+                        }
+                  // if measure value did change, represent with rests actual measure value
+                  else {
+                        // convert the measure duration in a list of values (no dots for rests)
+                        QList<TDuration> durList = toDurationList(nf, false, 0);
+                        // set the existing rest to the first value of the duration list
+                        score()->undo(new ChangeChordRestLen(rest, durList[0]));
+                        // add rests for any other duration list value
+                        int tickOffset = durList[0].ticks();
+                        for (int i = 1; i < durList.count(); i++) {
+                              Rest* newRest = new Rest(score());
+                              newRest->setDurationType(durList.at(i));
+                              newRest->setDuration(durList.at(i).fraction());
+                              newRest->setTrack(rest->track());
+                              score()->undoAddCR(newRest, this, tickOffset);
+                              tickOffset += durList.at(i).ticks();
+                              }
                         continue;
                         }
                   }
