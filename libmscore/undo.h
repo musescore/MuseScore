@@ -344,19 +344,6 @@ class ChangeKeySig : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   FlipNoteDotDirection
-//---------------------------------------------------------
-
-class FlipNoteDotDirection : public UndoCommand {
-      Note* note;
-      void flip();
-
-   public:
-      FlipNoteDotDirection(Note* n) : note(n) {}
-      UNDO_NAME("FlipNoteDotDirection");
-      };
-
-//---------------------------------------------------------
 //   ChangeMeasureLen
 //---------------------------------------------------------
 
