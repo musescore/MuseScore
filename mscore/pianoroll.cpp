@@ -265,7 +265,7 @@ PianorollEditor::~PianorollEditor()
 
 void PianorollEditor::setStaff(Staff* st)
       {
-      staff = st;
+      staff  = st;
       _score = staff->score();
       setWindowTitle(QString(tr("MuseScore: <%1> Staff: %2")).arg(_score->name()).arg(st->idx()));
       TempoMap* tl = _score->tempomap();
@@ -311,6 +311,7 @@ void PianorollEditor::updateSelection()
 
 //---------------------------------------------------------
 //   selectionChanged
+//    called if selection in PianoView changed
 //---------------------------------------------------------
 
 void PianorollEditor::selectionChanged()
@@ -349,7 +350,7 @@ void PianorollEditor::changeSelection(int)
       gv->scene()->blockSignals(true);
       gv->scene()->clearSelection();
       QList<QGraphicsItem*> il = gv->scene()->items();
-      foreach(QGraphicsItem* item, il) {
+      for(QGraphicsItem* item : il) {
             if (item->type() == PianoItemType) {
                   Note* note = static_cast<PianoItem*>(item)->note();
                   item->setSelected(note->selected());
@@ -706,10 +707,13 @@ void PianorollEditor::onTimeChanged(int val)
 
       NoteEvent ne = *event;
       ne.setOntime(val);
-      _score->undo()->beginMacro();
+      _score->blockSignals(true);
+      _score->startCmd();
       _score->undo(new ChangeNoteEvent(note, *event, ne));
-      _score->undo()->endMacro(_score->undo()->current()->childCount() == 0);
+      _score->endCmd();
+      _score->blockSignals(false);
       gv->scene()->update(pi->updateValues());
+      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -732,11 +736,11 @@ void PianorollEditor::tickLenChanged(int val)
 
       NoteEvent ne = *event;
       ne.setLen(val);
-//      _score->undo()->beginMacro();
+      _score->blockSignals(true);
       _score->startCmd();
       _score->undo(new ChangeNoteEvent(note, *event, ne));
       _score->endCmd();
-//      _score->undo()->endMacro(_score->undo()->current()->childCount() == 0);
+      _score->blockSignals(false);
       gv->scene()->update(pi->updateValues());
       mscore->endCmd();
       }

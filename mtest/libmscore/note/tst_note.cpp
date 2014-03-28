@@ -90,19 +90,19 @@ void TestNote::note()
       delete n;
 
    // dot position
-      note->setDotPosition(MScore::UP);
+      note->setUserDotPosition(MScore::UP);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->dotPosition(), MScore::UP);
+      QCOMPARE(n->userDotPosition(), MScore::UP);
       delete n;
 
-      note->setDotPosition(MScore::DOWN);
+      note->setUserDotPosition(MScore::DOWN);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->dotPosition(), MScore::DOWN);
+      QCOMPARE(n->userDotPosition(), MScore::DOWN);
       delete n;
 
-      note->setDotPosition(MScore::AUTO);
+      note->setUserDotPosition(MScore::AUTO);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->dotPosition(), MScore::AUTO);
+      QCOMPARE(n->userDotPosition(), MScore::AUTO);
       delete n;
   // headGroup
       for (int i = 0; i < int (NoteHeadGroup::HEAD_GROUPS); ++i) {
@@ -207,17 +207,17 @@ void TestNote::note()
    // dot position
       note->setProperty(P_DOT_POSITION, MScore::UP);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->dotPosition(), MScore::UP);
+      QCOMPARE(n->userDotPosition(), MScore::UP);
       delete n;
 
       note->setProperty(P_DOT_POSITION, MScore::DOWN);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->dotPosition(), MScore::DOWN);
+      QCOMPARE(n->userDotPosition(), MScore::DOWN);
       delete n;
 
       note->setProperty(P_DOT_POSITION, MScore::AUTO);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->dotPosition(), MScore::AUTO);
+      QCOMPARE(n->userDotPosition(), MScore::AUTO);
       delete n;
 
   // headGroup
