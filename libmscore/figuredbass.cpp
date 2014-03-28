@@ -902,6 +902,7 @@ bool FiguredBassItem::startsWithParenthesis() const
 FiguredBass::FiguredBass(Score* s)
    : Text(s)
       {
+      setFlag(ELEMENT_ON_STAFF, true);
       setOnNote(true);
       setTextStyleType(TEXT_STYLE_FIGURED_BASS);
       TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
@@ -1009,15 +1010,6 @@ void FiguredBass::layout()
 
       // VERTICAL POSITION:
       yOff *= _sp;                                    // convert spatium value to raster units
-      // if any staff, add staff y-offset
-      if (parent() && parent()->type() == SEGMENT) {
-            Segment* s = static_cast<Segment*>(parent());
-            System* system = s->measure()->system();
-            if (system) {
-                  SysStaff* sstaff = system->staff(staffIdx());
-                  yOff += sstaff->y();
-                  }
-            }
       setPos(QPointF(0.0, yOff));
 
       // BOUNDING BOX and individual item layout (if requried)
@@ -1126,8 +1118,8 @@ qDebug("FiguredBass: duration indicator end line not implemented");
 
 void FiguredBass::draw(QPainter* painter) const
       {
-      // if neither edit mode or printing, draw duration line(s)
-      if( !editMode() && !score()->printing() ) {
+      // if not printing, draw duration line(s)
+      if( !score()->printing() ) {
             foreach(qreal len, _lineLenghts)
                   if(len > 0) {
                         painter->setPen(QPen(Qt::lightGray, 1));
