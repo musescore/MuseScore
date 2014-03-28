@@ -473,13 +473,20 @@ void PianoView::setStaff(Staff* s, Pos* l)
       {
       staff    = s;
       _locator = l;
-      pos.setContext(s->score()->tempomap(), s->score()->sigmap());
+      setEnabled(staff != nullptr);
+      if (!staff) {
+            scene()->blockSignals(true);  // block changeSelection()
+            scene()->clear();
+            scene()->blockSignals(false);
+            return;
+            }
 
-      updateNotes();
-
+      pos.setContext(staff->score()->tempomap(), staff->score()->sigmap());
       Measure* lm = staff->score()->lastMeasure();
       ticks       = lm->tick() + lm->ticks();
       scene()->setSceneRect(0.0, 0.0, double(ticks + 960), keyHeight * 75);
+
+      updateNotes();
 
       //
       // move to something interesting
@@ -516,9 +523,8 @@ void PianoView::addChord(Chord* chord)
 
 void PianoView::updateNotes()
       {
-      scene()->clear();
-
       scene()->blockSignals(true);  // block changeSelection()
+      scene()->clear();
       createLocators();
 
       int staffIdx   = staff->idx();
