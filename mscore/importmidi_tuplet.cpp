@@ -459,7 +459,6 @@ struct TupletCommon
             // indexes of tuplets that have common chords with the tuplet with tupletIndex
       std::set<int> commonIndexes;
       std::set<int> uncommonIndexes;
-      std::set<int> *levelIndexes = nullptr;   // selected indexes for some level of the recursion
       };
 
 
@@ -664,21 +663,6 @@ bool areCommonsUncommon(const std::vector<int> &selectedCommons,
 #endif
 
 
-// is index compatible with current level indexes
-
-bool isCompatibleWithCurrent(
-            int indexToCheck,
-            const std::vector<TupletCommon> &tupletCommons,
-            const std::set<int> &currentLevelIndexes)
-      {
-      for (int i: currentLevelIndexes) {
-            const auto &nextIndexes = tupletCommons[i].commonIndexes;
-            if (nextIndexes.find(indexToCheck) == nextIndexes.end())
-                  return true;
-            }
-      return false;
-      }
-
 // is index compatible with previous level indexes;
 // endCommonShift is for optimization
 
@@ -698,27 +682,6 @@ bool isCompatibleWithPrevious(
                                           tupletIntervals, tuplets, endAllShift));
       }
 
-void addIndexToUpperLevels(
-            int indexToAdd,
-            const std::vector<int> &selectedCommons,
-            const std::vector<TupletCommon> &tupletCommons,
-            const std::vector<TupletInfo> &tuplets,
-            const std::vector<std::pair<ReducedFraction, ReducedFraction> > &tupletIntervals)
-      {
-      for (size_t i = selectedCommons.size(); i; --i) {
-            auto &commmon = tupletCommons[selectedCommons[i - 1]];
-            auto &levelIndexes = *commmon.levelIndexes;
-            if (levelIndexes.find(indexToAdd) != levelIndexes.end())
-                  continue;
-            const size_t endAllShift = selectedCommons.size() - i + 1;
-            if (!isCompatibleWithPrevious(indexToAdd, selectedCommons, tupletCommons, tuplets,
-                                          tupletIntervals, 0, endAllShift)) {
-                  continue;
-                  }
-            levelIndexes.insert(indexToAdd);
-            }
-      }
-
 void findNextTuplet(
             std::vector<int> &selectedTuplets,
             std::vector<int> &bestTupletIndexes,
@@ -729,21 +692,17 @@ void findNextTuplet(
       {
       std::set<int> currentLevelIndexes;
 
-      if (selectedTuplets.empty())
-            currentLevelIndexes.insert(0);
+      if (selectedTuplets.empty()) {
+            for (size_t i = 0; i != tuplets.size(); ++i)
+                  currentLevelIndexes.insert(i);
+            }
       else {
             for (int indexToCheck: tupletCommons[selectedTuplets.back()].uncommonIndexes) {
-                        // endCommonShift == 1 because the indexToCheck cannot have common indexes
-                        // with selectedCommons.back() due to indexToCheck is
-                        // in uncommonIndexes of selectedCommons.back()
                   if (!isCompatibleWithPrevious(indexToCheck, selectedTuplets, tupletCommons,
                                                 tuplets, tupletIntervals, 1, 0)) {
-                        addIndexToUpperLevels(indexToCheck, selectedTuplets, tupletCommons,
-                                              tuplets, tupletIntervals);
                         continue;
                         }
                   currentLevelIndexes.insert(indexToCheck);
-                  break;
                   }
             }
 
@@ -757,21 +716,7 @@ void findNextTuplet(
             return;
             }
 
-      const auto &firstIndexes = tupletCommons[*currentLevelIndexes.begin()].commonIndexes;
-      for (int indexToCheck: firstIndexes) {
-            if (isCompatibleWithCurrent(indexToCheck, tupletCommons, currentLevelIndexes))
-                  continue;
-            if (!isCompatibleWithPrevious(indexToCheck, selectedTuplets, tupletCommons,
-                                          tuplets, tupletIntervals, 0, 0)) {
-                  continue;
-                  }
-            currentLevelIndexes.insert(indexToCheck);
-            }
-
       for (int i: currentLevelIndexes) {
-                        // save pointer to indexes to be able to add elements to them
-                        // deeper in the recursion
-            tupletCommons[i].levelIndexes = &currentLevelIndexes;
             selectedTuplets.push_back(i);
 
             Q_ASSERT_X(areCommonsDifferent(selectedTuplets), "MidiTuplet::findNextTuplet",
@@ -782,7 +727,6 @@ void findNextTuplet(
             findNextTuplet(selectedTuplets, bestTupletIndexes, minCurrentError,
                            tupletCommons, tuplets, tupletIntervals);
             selectedTuplets.pop_back();
-            tupletCommons[i].levelIndexes = nullptr;
             }
       }
 
