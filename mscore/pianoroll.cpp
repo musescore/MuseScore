@@ -260,29 +260,6 @@ PianorollEditor::~PianorollEditor()
       }
 
 //---------------------------------------------------------
-//   setStaff
-//---------------------------------------------------------
-
-void PianorollEditor::setStaff(Staff* st)
-      {
-      staff  = st;
-      _score = staff->score();
-      setWindowTitle(QString(tr("MuseScore: <%1> Staff: %2")).arg(_score->name()).arg(st->idx()));
-      TempoMap* tl = _score->tempomap();
-      TimeSigMap*  sl = _score->sigmap();
-      for (int i = 0; i < 3; ++i)
-            locator[i].setContext(tl, sl);
-
-      gv->setStaff(staff, locator);
-      ruler->setScore(_score, locator);
-      if (waveView)
-            waveView->setScore(_score, locator);
-      pos->setContext(tl, sl);
-      updateSelection();
-      showWave->setEnabled(_score->audio() != 0);
-      }
-
-//---------------------------------------------------------
 //   updateSelection
 //---------------------------------------------------------
 
@@ -516,30 +493,48 @@ void PianorollEditor::adjustCanvasPosition(const Element*, bool)
       }
 
 //---------------------------------------------------------
-//   setScore
-//---------------------------------------------------------
-
-void PianorollEditor::setScore(Score* s)
-      {
-      if (_score) {
-            _score->removeViewer(this);
-            disconnect(s, SIGNAL(posChanged(POS,unsigned)), this, SLOT(posChanged(POS,unsigned)));
-            }
-      _score = s;
-      _score->addViewer(this);
-      setLocator(POS::CURRENT, _score->pos(POS::CURRENT));
-      setLocator(POS::LEFT,    _score->pos(POS::LEFT));
-      setLocator(POS::RIGHT,   _score->pos(POS::RIGHT));
-      connect(s, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
-      }
-
-//---------------------------------------------------------
 //   removeScore
 //---------------------------------------------------------
 
 void PianorollEditor::removeScore()
       {
-      _score = 0;
+      setStaff(0);
+      }
+
+//---------------------------------------------------------
+//   setStaff
+//---------------------------------------------------------
+
+void PianorollEditor::setStaff(Staff* st)
+      {
+      if ((st && st->score() != _score) || (!st && _score)) {
+            if (_score) {
+                  _score->removeViewer(this);
+                  disconnect(_score, SIGNAL(posChanged(POS,unsigned)), this, SLOT(posChanged(POS,unsigned)));
+                  }
+            _score = st ? st->score() : nullptr;
+            if (_score) {
+                  _score->addViewer(this);
+                  setLocator(POS::CURRENT, _score->pos(POS::CURRENT));
+                  setLocator(POS::LEFT,    _score->pos(POS::LEFT));
+                  setLocator(POS::RIGHT,   _score->pos(POS::RIGHT));
+                  connect(_score, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
+                  }
+            }
+      staff = st;
+      if (staff) {
+            setWindowTitle(QString(tr("MuseScore: <%1> Staff: %2")).arg(_score->name()).arg(st->idx()));
+            TempoMap* tl = _score->tempomap();
+            TimeSigMap*  sl = _score->sigmap();
+            for (int i = 0; i < 3; ++i)
+                  locator[i].setContext(tl, sl);
+            pos->setContext(tl, sl);
+            showWave->setEnabled(_score->audio() != 0);
+            }
+      ruler->setScore(_score, locator);
+      gv->setStaff(staff, locator);
+      updateSelection();
+      setEnabled(st != nullptr);
       }
 
 //---------------------------------------------------------

@@ -125,7 +125,9 @@ void Ruler::setScore(Score* s, Pos* lc)
       {
       _score = s;
       _locator = lc;
-      _cursor.setContext(s->tempomap(), s->sigmap());
+      if (_score)
+            _cursor.setContext(_score->tempomap(), _score->sigmap());
+      setEnabled(_score != 0);
       }
 
 //---------------------------------------------------------
@@ -214,6 +216,9 @@ void Ruler::paintEvent(QPaintEvent* e)
 
       if (x < (-_xpos))
             x = -_xpos;
+
+      if (!_score)
+            return;
 
       Pos pos1 = pix2pos(x);
       Pos pos2 = pix2pos(x+w);
