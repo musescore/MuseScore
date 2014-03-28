@@ -1500,7 +1500,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
             int st = tr->tremoloType();
             QString type = "";
 
-            if (chord->tremoloChordType() == TremoloSingle) {
+            if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
                   type = "single";
                   switch (st) {
                         case TREMOLO_R8:  count = 1; break;
@@ -1510,7 +1510,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
                         default: qDebug("unknown tremolo single %d", st); break;
                         }
                   }
-            else if (chord->tremoloChordType() == TremoloFirstNote) {
+            else if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
                   type = "start";
                   switch (st) {
                         case TREMOLO_C8:  count = 1; break;
@@ -1520,7 +1520,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
                         default: qDebug("unknown tremolo double %d", st); break;
                         }
                   }
-            else if (chord->tremoloChordType() == TremoloSecondNote) {
+            else if (chord->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
                   type = "stop";
                   switch (st) {
                         case TREMOLO_C8:  count = 1; break;
@@ -4425,7 +4425,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                           qDebug("ExportMusicXml::write unknown segment type %s", el->name());
                                           break;
                                     }
-                              
+
                               // handle annotations and spanners (directions attached to this note or rest)
                               if (el->isChordRest()) {
                                     int spannerStaff = (st / VOICES) * VOICES;

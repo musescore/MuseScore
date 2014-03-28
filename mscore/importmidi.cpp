@@ -411,7 +411,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
 
             Segment* s = measure->getSegment(chord, tick.ticks());
             s->add(chord);
-            chord->setUserPlayEvents(true);
+            chord->setPlayEventType(PlayEventType::User);
             MidiTuplet::addElementToTuplet(voice, tick, len, chord, tuplets);
 
             for (int k = 0; k < midiChords.size(); ++k) {

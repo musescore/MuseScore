@@ -1140,8 +1140,10 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             im.exec();
             }
       _score->setLayoutAll(true);
-      _score->endCmd();
-      mscore->endCmd();
+      if (_score->undo()->active()) {
+            _score->endCmd();
+            mscore->endCmd();
+            }
       }
 
 //---------------------------------------------------------

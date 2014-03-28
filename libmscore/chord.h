@@ -39,7 +39,13 @@ class StemSlash;
 class LedgerLine;
 class AccidentalState;
 
-enum TremoloChordType { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
+enum class TremoloChordType : char { TremoloSingle, TremoloFirstNote, TremoloSecondNote };
+enum class PlayEventType : char    {
+      Auto,       // Play events for all notes are calculated by MuseScore.
+      User,       // Some play events are modified by user. The events must be written into the mscx file.
+      InvalidUser // The user modified play events must be replaced by MuseScore generated ones on
+                  // next recalculation. The actual play events must be saved on the undo stack.
+      };
 
 //---------------------------------------------------------
 //   @@ Chord
@@ -83,12 +89,11 @@ class Chord : public ChordRest {
       TremoloChordType   _tremoloChordType;
       NoteType           _noteType;         ///< mark grace notes: acciaccatura and appoggiatura
       bool               _noStem;
-      bool               _userPlayEvents;   ///< play events were modified by user
+      PlayEventType      _playEventType;   ///< play events were modified by user
 
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
       virtual qreal centerX() const;
-//      void addLedgerLine(int staffIdx, int line, bool visible, qreal x, Spatium len);
       void createLedgerLines(int track, std::vector<LedgerLineData> &vecLines, bool visible);
       void addLedgerLines(int move);
       void processSiblings(std::function<void(Element*)> func);
@@ -123,11 +128,11 @@ class Chord : public ChordRest {
       void layoutStem();
       void layoutArpeggio2();
 
-      QQmlListProperty<Ms::Note> qmlNotes()    { return QQmlListProperty<Ms::Note>(this, _notes); }
-      QQmlListProperty<Ms::Lyrics> qmlLyrics() { return QQmlListProperty<Ms::Lyrics>(this, _lyricsList); }
-      QQmlListProperty<Ms::Chord> qmlGraceNotes() { return QQmlListProperty<Ms::Chord>(this, _graceNotes); }
-      QList<Note*>& notes()                  { return _notes; }
-      const QList<Note*>& notes() const      { return _notes; }
+      QQmlListProperty<Ms::Note> qmlNotes()       { return QQmlListProperty<Ms::Note>(this, _notes);        }
+      QQmlListProperty<Ms::Lyrics> qmlLyrics()    { return QQmlListProperty<Ms::Lyrics>(this, _lyricsList); }
+      QQmlListProperty<Ms::Chord> qmlGraceNotes() { return QQmlListProperty<Ms::Chord>(this, _graceNotes);  }
+      QList<Note*>& notes()                       { return _notes; }
+      const QList<Note*>& notes() const           { return _notes; }
 
       // Chord has at least one Note
       Note* upNote() const;
@@ -181,15 +186,15 @@ class Chord : public ChordRest {
 
       qreal dotPosX() const;
 
-      bool noStem() const             { return _noStem;  }
-      void setNoStem(bool val)        { _noStem = val;   }
+      bool noStem() const                           { return _noStem;  }
+      void setNoStem(bool val)                      { _noStem = val;   }
 
-      bool userPlayEvents() const     { return _userPlayEvents; }
-      void setUserPlayEvents(bool v)  { _userPlayEvents = v; }
+      PlayEventType playEventType() const           { return _playEventType; }
+      void setPlayEventType(PlayEventType v)        { _playEventType = v;    }
 
       void lineChanged();
-      TremoloChordType tremoloChordType() const      { return _tremoloChordType; }
-      void setTremoloChordType(TremoloChordType t)   { _tremoloChordType = t; }
+      TremoloChordType tremoloChordType() const     { return _tremoloChordType; }
+      void setTremoloChordType(TremoloChordType t)  { _tremoloChordType = t; }
 
       ElementList& el()               { return _el; }
       const ElementList& el() const   { return _el; }

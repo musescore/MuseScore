@@ -543,7 +543,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       if (tremolo) {
             //int n = 1 << tremolo->lines();
             //int l = 1000 / n;
-            if (chord->tremoloChordType() == TremoloFirstNote) {
+            if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
                   int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
                   Segment::SegmentTypes st = Segment::SegChordRest;
                   Segment* seg2 = seg->next(st);
@@ -572,13 +572,13 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                   else
                         qDebug("Chord::renderTremolo: cannot find 2. chord");
                   }
-            else if (chord->tremoloChordType() == TremoloSecondNote) {
+            else if (chord->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
                   for (int k = 0; k < notes; ++k) {
                         NoteEventList* events = &(ell)[k];
                         events->clear();
                         }
                   }
-            else if (chord->tremoloChordType() == TremoloSingle) {
+            else if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
                   int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
                   int n = chord->durationTicks() / t;
                   int l = 1000 / n;
@@ -672,7 +672,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       for (int i = 0; i < notes; ++i) {
             NoteEventList* el = &ell[i];
             int nn = el->size();
-            if (nn == 0 && chord->tremoloChordType() != TremoloSecondNote) {
+            if (nn == 0 && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
                   el->append(NoteEvent(0, ontime, 1000-ontime));
                   ++nn;
                   }
@@ -737,9 +737,9 @@ void Score::createPlayEvents(Chord* chord)
                         el.append(nel);
                         }
 
-                  if (gc->userPlayEvents())
-                        chord->score()->undo(new ChangeEventList(chord, el, false));
-                  else {
+                  if (gc->playEventType() == PlayEventType::InvalidUser)
+                        gc->score()->undo(new ChangeEventList(gc, el));
+                  else if (gc->playEventType() == PlayEventType::Auto) {
                         for (int ii = 0; ii < nn; ++ii)
                               gc->notes()[ii]->setPlayEvents(el[ii]);
                         }
@@ -750,13 +750,15 @@ void Score::createPlayEvents(Chord* chord)
       //    render normal (and articulated) chords
       //
       QList<NoteEventList> el = renderChord(chord, gateTime, ontime);
-      if (chord->userPlayEvents())
-            chord->score()->undo(new ChangeEventList(chord, el, false));
-      else {
+      if (chord->playEventType() == PlayEventType::InvalidUser) {
+            chord->score()->undo(new ChangeEventList(chord, el));
+            }
+      else if (chord->playEventType() == PlayEventType::Auto) {
             int n = chord->notes().size();
             for (int i = 0; i < n; ++i)
                   chord->notes()[i]->setPlayEvents(el[i]);
             }
+      // dont change event list if type is PlayEventType::User
       }
 
 void Score::createPlayEvents()

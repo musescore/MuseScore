@@ -195,7 +195,7 @@ void Tremolo::layout()
             int idx = _chord1->hook() ? 1 : (_chord1->beam() ? 2 : 0);
             y = (line + t[idx][up][_lines-1][line & 1]) * _spatium * .5;
             setPos(x, y);
-            _chord1->setTremoloChordType(TremoloSingle);
+            _chord1->setTremoloChordType(TremoloChordType::TremoloSingle);
             return;
             }
       y += (h - bbox().height()) * .5;
@@ -213,10 +213,10 @@ void Tremolo::layout()
             return;
             }
 
-      _chord1->setTremoloChordType(TremoloFirstNote);
+      _chord1->setTremoloChordType(TremoloChordType::TremoloFirstNote);
       _chord2 = static_cast<Chord*>(s->element(track()));
       _chord2->setTremolo(this);
-      _chord2->setTremoloChordType(TremoloSecondNote);
+      _chord2->setTremoloChordType(TremoloChordType::TremoloSecondNote);
 
       int x2  = _chord2->stemPosBeam().x();
       int x1  = _chord1->stemPosBeam().x();

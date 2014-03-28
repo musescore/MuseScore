@@ -3238,12 +3238,18 @@ void ChangeMetaText::flip()
       text = s;
       }
 
+      PlayEventType eventListType = PlayEventType::User;
+
+      void flip();
+
 //---------------------------------------------------------
 //   ChangeEventList
 //---------------------------------------------------------
 
-ChangeEventList::~ChangeEventList()
+ChangeEventList::ChangeEventList(Chord* c, const QList<NoteEventList> l)
+   : chord(c), events(l)
       {
+      eventListType = PlayEventType::User;
       }
 
 //---------------------------------------------------------
@@ -3257,9 +3263,9 @@ void ChangeEventList::flip()
             Note* note = chord->notes()[i];
             note->playEvents().swap(events[i]);
             }
-      bool um = chord->userPlayEvents();
-      chord->setUserPlayEvents(userModified);
-      userModified = um;
+      PlayEventType t = chord->playEventType();
+      chord->setPlayEventType(eventListType);
+      eventListType = t;
       }
 
 //---------------------------------------------------------
@@ -3385,13 +3391,13 @@ void InsertTime::undo()
 
 void ChangeNoteEvent::flip()
       {
-      for (NoteEvent& ne : note->playEvents()) {
-            if (ne == oldEvent) {
-                  ne = newEvent;
-                  break;
-                  }
-            }
-      qSwap(oldEvent, newEvent);
+      note->score()->setPlaylistDirty(true);
+      NoteEvent e = *oldEvent;
+      *oldEvent   = newEvent;
+      newEvent    = e;
+
+      // TODO:
+      note->chord()->setPlayEventType(PlayEventType::User);
       }
 }
 

@@ -76,6 +76,7 @@ class Accidental;
 class Spanner;
 class BarLine;
 enum class ClefType : signed char;
+enum class PlayEventType : char;
 
 // #define DEBUG_UNDO
 
@@ -1262,13 +1263,12 @@ class ChangeMetaText : public UndoCommand {
 class ChangeEventList : public UndoCommand {
       Chord* chord;
       QList<NoteEventList> events;
-      bool userModified;
+      PlayEventType eventListType;
 
       void flip();
 
    public:
-      ChangeEventList(Chord* c, const QList<NoteEventList> l, bool u) : chord(c), events(l), userModified(u) {}
-      ~ChangeEventList();
+      ChangeEventList(Chord* c, const QList<NoteEventList> l);
       UNDO_NAME("ChangeEventList");
       };
 
@@ -1395,13 +1395,13 @@ class InsertTime : public UndoCommand {
 
 class ChangeNoteEvent : public UndoCommand {
       Note* note;
-      NoteEvent oldEvent;
+      NoteEvent* oldEvent;
       NoteEvent newEvent;
 
       void flip();
 
    public:
-      ChangeNoteEvent(Note* n, const NoteEvent& oe, const NoteEvent& ne)
+      ChangeNoteEvent(Note* n, NoteEvent* oe, const NoteEvent& ne)
          : note(n), oldEvent(oe), newEvent(ne) {}
       };
 

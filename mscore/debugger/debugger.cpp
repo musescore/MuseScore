@@ -974,7 +974,7 @@ void ChordDebug::setElement(Element* e)
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)c));
             cb.elements->addItem(item);
             }
-      cb.userPlayEvents->setChecked(chord->userPlayEvents());
+      cb.userPlayEvents->setChecked(chord->playEventType() != PlayEventType::Auto);
       }
 
 //---------------------------------------------------------
@@ -1107,16 +1107,16 @@ void ShowNoteWidget::setElement(Element* e)
       nb.dot2->setEnabled(note->dot(1));
       nb.dot3->setEnabled(note->dot(2));
 
-      note->el().clear();     // ??
-      foreach(Element* text, note->el()) {
+      nb.fingering->clear();
+      for (Element* text : note->el()) {
             QString s;
             s.setNum(long(text), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)text));
             nb.fingering->addItem(item);
             }
-      note->playEvents().clear();
-      foreach(const NoteEvent& e, note->playEvents()) {
+      nb.noteEvents->clear();
+      for (const NoteEvent& e : note->playEvents()) {
             QString s = QString("%1 %2 %3").arg(e.pitch()).arg(e.ontime()).arg(e.len());
             QListWidgetItem* item = new QListWidgetItem(s);
             nb.noteEvents->addItem(item);
