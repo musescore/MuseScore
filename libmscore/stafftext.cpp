@@ -24,6 +24,7 @@ namespace Ms {
 StaffText::StaffText(Score* s)
    : Text(s)
       {
+      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       setTextStyleType(TEXT_STYLE_STAFF);
       _setAeolusStops = false;
       clearAeolusStops();
