@@ -902,6 +902,7 @@ bool FiguredBassItem::startsWithParenthesis() const
 FiguredBass::FiguredBass(Score* s)
    : Text(s)
       {
+      setFlag(ELEMENT_ON_STAFF, true);
       setOnNote(true);
       setTextStyleType(TEXT_STYLE_FIGURED_BASS);
       TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
@@ -989,70 +990,56 @@ void FiguredBass::read(XmlReader& e)
 
 void FiguredBass::layout()
       {
-//      qreal       y;
-
+      qreal yOff  = score()->styleD(ST_figuredBassYOffset);
+      qreal _sp   = spatium();
       // if 'our' style, force 'our' style data from FiguredBass parameters
       if(textStyleType() == TEXT_STYLE_FIGURED_BASS) {
             TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
-                        false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, score()->styleD(ST_figuredBassYOffset)),
+                        false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, yOff),
                         OFFSET_SPATIUM);
             st.setSizeIsSpatiumDependent(true);
             setTextStyle(st);
             }
-      Text::layout();                     // Text and/or SimpleText may expect some internal data to be setup
 
-      // if style has been changed (or text not styled), do nothing else, keeping default laying out and formatting
-      if(textStyleType() != TEXT_STYLE_FIGURED_BASS)
+      // if in edit mode or if style has been changed,
+      // do nothing else, keeping default laying out and formatting
+      if(editMode() || textStyleType() != TEXT_STYLE_FIGURED_BASS) {
+            Text::layout();
             return;
+      }
 
-      // bounding box
-      if(editMode()) {
-            qreal             h, w, w1;
-            QFontMetricsF     fm(textStyle().font(spatium()));
-            // box width
-            w = 0;
-            QStringList list = text().split('\n');
-            foreach(QString str, list) {
-                  w1 = fm.width(str);
-                  if(w1 > w)
-                        w = w1;
-                  }
-            // bbox height
-            h = fm.lineSpacing();
-            h *= score()->styleD(ST_figuredBassLineHeight);
-            h *= (list.size() > 1 ? list.size() : 1);      // at least 1 line
-            // ready to set position and bbox
-//            setPos(0, y);
-            bbox().setRect(0-2, 0-2, w+4, h+4);
-            }
-      else {
-            // if element could be parsed into items, layout each element
-            if(items.size() > 0) {
-                  layoutLines();
-                  bbox().setRect(0, 0, _lineLenghts.at(0), 0);
-                  // layout each item and enlarge bbox to include items bboxes
-                  for(int i=0; i < items.size(); i++) {
-                        items[i].layout();
-                        addbbox(items[i].bbox().translated(items[i].pos()));
-                        }
+      // VERTICAL POSITION:
+      yOff *= _sp;                                    // convert spatium value to raster units
+      setPos(QPointF(0.0, yOff));
+
+      // BOUNDING BOX and individual item layout (if requried)
+      createLayout();                                 // prepare structs and data expected by Text methods
+      // if element could be parsed into items, layout each element
+      if(items.size() > 0) {
+            layoutLines();
+            bbox().setRect(0, 0, _lineLenghts.at(0), 0);
+            // layout each item and enlarge bbox to include items bboxes
+            for(int i=0; i < items.size(); i++) {
+                  items[i].layout();
+                  addbbox(items[i].bbox().translated(items[i].pos()));
                   }
             }
-
-//      adjustReadPos();            // already taken into account by Text::layout()
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
 //   layoutLines
 //
 //    lays out the duration indicator line(s), filling the _lineLengths array
+//    and the length of printed lines (used by continuation lines)
 //---------------------------------------------------------
 
 void FiguredBass::layoutLines()
       {
       if(_ticks <= 0) {
 NoLen:
-            _lineLenghts.resize(1);
-            _lineLenghts[0] = 0;
+            _lineLenghts.resize(1);                         // be sure to always have
+            _lineLenghts[0] = 0;                            // at least 1 item in array
             return;
             }
 
@@ -1139,15 +1126,16 @@ void FiguredBass::draw(QPainter* painter) const
                         painter->drawLine(0.0, -2, len, -2);      // -2: 2 rast. un. above digits
                         }
             }
-      // if in edit mode or with custom style, use default drawing
+      // if in edit mode or with custom style, use standard text drawing
       if(editMode() || textStyleType() != TEXT_STYLE_FIGURED_BASS)
             Text::draw(painter);
+      // not edit mode:
       else {
-            if(items.size() < 1)
-                  Text::draw(painter);
+            if(items.size() < 1)                            // if not parseable into f.b. items
+                  Text::draw(painter);                      // draw as standard text
             else
-                  foreach(FiguredBassItem item, items) {
-                        painter->translate(item.pos());
+                  foreach(FiguredBassItem item, items) {    // if parseable into f.b. items
+                        painter->translate(item.pos());     // draw each item in its proper position
                         item.draw(painter);
                         painter->translate(-item.pos());
                         }
@@ -1160,16 +1148,25 @@ void FiguredBass::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   endEdit
+//   startEdit / edit / endEdit
 //---------------------------------------------------------
+
+void FiguredBass::startEdit(MuseScoreView * msv, const QPointF & pt)
+{
+      Text::layout();               // convert layout to standard Text conventions
+      Text::startEdit(msv, pt);
+}
 
 void FiguredBass::endEdit()
       {
       int         idx;
 
       Text::endEdit();
-      QString txt = text();
+      // as the standard text editor keeps inserting spurious HTML formatting and styles
+      // retrieve and work only on the plain text
+      QString txt = plainText();
       if(txt.isEmpty()) {                       // if no text, nothing to do
+            setText(txt);                       // clear the stored text: the empty f.b. element will be deleted
             return;
             }
 

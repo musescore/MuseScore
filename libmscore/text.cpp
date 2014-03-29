@@ -1335,6 +1335,8 @@ void Text::genText()
 
       for (const TextBlock& block : _layout) {
             for (const TextFragment& f : block.fragments()) {
+                  if (f.text.isEmpty())                     // skip empty fragments, not to
+                        continue;                           // insert extra HTML formatting
                   const CharFormat& format = f.format;
                   if (format.type() == CharFormatType::TEXT) {
                         if (cursor.format()->bold() != format.bold()) {
@@ -1467,16 +1469,20 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
       switch (key) {
             case Qt::Key_Enter:
             case Qt::Key_Return:
+            {
                   if (_cursor.hasSelection())
                         deleteSelectedText();
 
+                  CharFormat* charFmt = _cursor.format();         // take current format
                   _layout.insert(_cursor.line() + 1, curLine().split(_cursor.column()));
                   _layout[_cursor.line()].setEol(true);
                   _cursor.setLine(_cursor.line() + 1);
                   _cursor.setColumn(0);
+                  _cursor.setFormat(*charFmt);                    // restore orig. format at new line
                   s.clear();
                   _cursor.clearSelection();
                   break;
+            }
 
             case Qt::Key_Backspace:
                   if (_cursor.hasSelection())
@@ -1495,13 +1501,13 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
                   break;
 
             case Qt::Key_Left:
-                  if (!movePosition(ctrlPressed ? QTextCursor::StartOfLine : QTextCursor::Left, mm) && (type() == LYRICS || type() == FIGURED_BASS))
+                  if (!movePosition(ctrlPressed ? QTextCursor::StartOfLine : QTextCursor::Left, mm) && type() == LYRICS)
                         return false;
                   s.clear();
                   break;
 
             case Qt::Key_Right:
-                  if (!movePosition(ctrlPressed ? QTextCursor::EndOfLine : QTextCursor::Right, mm) && (type() == LYRICS || type() == FIGURED_BASS))
+                  if (!movePosition(ctrlPressed ? QTextCursor::EndOfLine : QTextCursor::Right, mm) && type() == LYRICS)
                         return false;
                   s.clear();
                   break;
