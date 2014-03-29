@@ -278,11 +278,13 @@ class FiguredBass : public Text {
       virtual FiguredBass*    clone() const     { return new FiguredBass(*this); }
       virtual ElementType     type() const      { return FIGURED_BASS; }
       virtual void      draw(QPainter* painter) const;
+//      virtual bool      edit(MuseScoreView*msv, int currGrip, int key, Qt::KeyboardModifiers modifiers, const QString& _s);
       virtual void      endEdit();
       virtual void      layout();
       virtual void      read(XmlReader&);
       virtual void      setSelected(bool f);
       virtual void      setVisible(bool f);
+      virtual void      startEdit(MuseScoreView *msv, const QPointF &pt);
       virtual void      write(Xml& xml) const;
 
       // read / write MusicXML
