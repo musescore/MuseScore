@@ -524,6 +524,7 @@ void PianoView::addChord(Chord* chord)
 void PianoView::updateNotes()
       {
       scene()->blockSignals(true);  // block changeSelection()
+      scene()->clearFocus();
       scene()->clear();
       createLocators();
 

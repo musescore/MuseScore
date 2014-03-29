@@ -302,19 +302,28 @@ void PianorollEditor::selectionChanged()
                   _score->select(note, SELECT_SINGLE, 0);
                   }
             }
-      else if (items.size() == 0) {
+      else if (items.size() == 0)
             _score->select(0, SELECT_SINGLE, 0);
-            }
       else {
             _score->deselectAll();
-            foreach(QGraphicsItem* item, items) {
+            for (QGraphicsItem* item : items) {
                   if (item->type() == PianoItemType) {
                         Note* note = static_cast<PianoItem*>(item)->note();
                         _score->select(note, SELECT_ADD, 0);
                         }
                   }
             }
-      _score->setUpdateAll();
+      startTimer(0);    // delayed update
+      }
+
+//---------------------------------------------------------
+//   timerEvent
+//---------------------------------------------------------
+
+void PianorollEditor::timerEvent(QTimerEvent* event)
+      {
+      killTimer(event->timerId());
+      _score->setUpdateAll(); // calls gv->updateNotes() ->crash ??
       _score->end();
       }
 
@@ -327,7 +336,7 @@ void PianorollEditor::changeSelection(int)
       gv->scene()->blockSignals(true);
       gv->scene()->clearSelection();
       QList<QGraphicsItem*> il = gv->scene()->items();
-      for(QGraphicsItem* item : il) {
+      for (QGraphicsItem* item : il) {
             if (item->type() == PianoItemType) {
                   Note* note = static_cast<PianoItem*>(item)->note();
                   item->setSelected(note->selected());
@@ -638,8 +647,8 @@ Element* PianorollEditor::elementNear(QPointF)
 
 void PianorollEditor::updateAll()
       {
-//      gv->updateNotes();
-      gv->update();
+      gv->updateNotes();
+//      gv->update();
       }
 
 //---------------------------------------------------------
