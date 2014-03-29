@@ -2194,7 +2194,6 @@ QPointF Chord::layoutArticulation(Articulation* a)
       qreal _spatium = spatium();
       qreal _spStaff = _spatium * staff()->lineDistance();      // scaled to staff line distance for vert. pos. within a staff
 
-      a->layout();
       ArticulationAnchor aa = a->anchor();
 
       qreal chordTopY = upPos();    // note position of highest note
@@ -2257,6 +2256,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         }
                   pos.ry() = line * _spStaff2;                          // convert staff position to sp distance
                   }
+            a->layout();
             a->setPos(pos);
             a->adjustReadPos();
             return QPointF(pos);
@@ -2358,6 +2358,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       else if (aa == A_TOP_STAFF || aa == A_BOTTOM_STAFF) {
             y = a->up() ? staffTopY - dist : staffBotY + dist;
             }
+      a->layout();
       a->setPos(x, y);
       a->adjustReadPos();
       return QPointF(x, y);
