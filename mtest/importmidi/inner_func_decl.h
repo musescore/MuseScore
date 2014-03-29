@@ -1,6 +1,8 @@
 #ifndef INNER_FUNC_DECL_H
 #define INNER_FUNC_DECL_H
 
+#include <set>
+
 
 namespace Ms {
 
@@ -32,6 +34,8 @@ TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
 
 void splitFirstTupletChords(std::vector<TupletInfo> &tuplets,
                             std::multimap<ReducedFraction, MidiChord> &chords);
+
+std::set<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets);
 
 } // namespace MidiTuplet
 
