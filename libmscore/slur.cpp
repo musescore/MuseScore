@@ -55,7 +55,7 @@ SlurSegment::SlurSegment(const SlurSegment& b)
 
 void SlurSegment::move(const QPointF& s)
       {
-      move(s);
+      Element::move(s);
       for (int k = 0; k < SLUR_GRIPS; ++k)
             ups[k].p += s;
       }
@@ -551,6 +551,35 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
       ups[GRIP_START].p = p1;
       ups[GRIP_END].p   = p2;
       slurTie()->computeBezier(this);
+      QRectF bbox = path.boundingRect();
+      qreal sp = spatium();
+      qreal ld = staff()->lineDistance();       // TODO: factor this in if not already incorporated in sp
+      qreal minDistance = 0.3;
+      if (bbox.height() < minDistance * 2 * sp) {
+            // path is fairly flat
+            // adjust position to avoid staff line if necessary
+            bool up = slurTie()->up();
+            qreal topY = bbox.top() / sp;
+            qreal bottomY = bbox.bottom() / sp;
+            int closestLine = up ? qRound(topY) : qRound(bottomY);
+            if (closestLine >= 0 && closestLine < staff()->lines()) {
+                  // on staff
+                  QPointF zeroP;
+                  if (qAbs(topY - closestLine) < minDistance && qAbs(bottomY - closestLine) < minDistance) {
+                        // too close to line
+                        if (userOff() == zeroP && userOff2() == zeroP
+                            && ups[GRIP_START].off == zeroP && ups[GRIP_END].off == zeroP
+                            && ups[GRIP_BEZIER1].off == zeroP && ups[GRIP_BEZIER2].off == zeroP
+                            && ups[GRIP_SHOULDER].off == zeroP) {
+                              // user has not edited
+                              qreal offset = (up ? -0.5 : 0.5) * sp;
+                              path.translate(0, offset);
+                              shapePath.translate(0, offset);
+                              bbox = path.boundingRect();
+                              }
+                        }
+                  }
+            }
       setbbox(path.boundingRect());
       adjustReadPos();
       }
