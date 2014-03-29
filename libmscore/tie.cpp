@@ -71,8 +71,7 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       double smallH = 0.38;
       qreal d   = p2.x() / _spatium;
       shoulderH = d * 0.4 * smallH;
-      if (shoulderH > 1.3)            // maximum tie shoulder height
-            shoulderH = 1.3;
+      shoulderH = qBound(0.4, shoulderH, 1.3);
       shoulderH *= _spatium;
       shoulderW = .6;
 
