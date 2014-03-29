@@ -544,7 +544,7 @@ StyleData::StyleData()
       _articulationAnchor[Articulation_PrallUp]         = A_TOP_STAFF;
       _articulationAnchor[Articulation_LinePrall]       = A_TOP_STAFF;
       _articulationAnchor[Articulation_Schleifer]       = A_TOP_STAFF;
-//      _articulationAnchor[Articulation_Snappizzicato]   = A_TOP_STAFF;
+      _articulationAnchor[Articulation_Snappizzicato]   = A_TOP_STAFF;
 //      _articulationAnchor[Articulation_Tapping]         = A_TOP_STAFF;
 //      _articulationAnchor[Articulation_Slapping]        = A_TOP_STAFF;
 //      _articulationAnchor[Articulation_Popping]         = A_TOP_STAFF;

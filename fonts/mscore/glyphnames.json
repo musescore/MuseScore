@@ -500,6 +500,9 @@
     "pluckedSnapPizzicatoAbove": {
         "codepoint": "U+e1b9"
     },
+    "pluckedSnapPizzicatoBelow": {
+        "codepoint": "U+e1b9"
+    }, 
     "repeatDot": {
         "codepoint": "U+e043"
     },

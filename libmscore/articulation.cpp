@@ -154,7 +154,7 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             "schleifer", QT_TRANSLATE_NOOP("articulation", "schleifer"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-      { SymId::pluckedSnapPizzicatoAbove, SymId::pluckedSnapPizzicatoAbove,
+      { SymId::pluckedSnapPizzicatoAbove, SymId::pluckedSnapPizzicatoBelow,
             "snappizzicato", QT_TRANSLATE_NOOP("articulation", "snap pizzicato"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
@@ -369,7 +369,7 @@ void Articulation::draw(QPainter* painter) const
                   }
             }
       painter->setPen(curColor());
-      drawSymbol(sym, painter, QPointF(-0.5 * width(), _up ? 0.0 : height()));
+      drawSymbol(sym, painter, QPointF(-0.5 * width(), 0.0));
       }
 
 //---------------------------------------------------------
@@ -402,7 +402,7 @@ void Articulation::layout()
       {
       SymId sym = _up ? articulationList[articulationType()].upSym : articulationList[articulationType()].downSym;
       QRectF b(symBbox(sym));
-      setbbox(b.translated(-0.5 * b.width(), _up ? 0.0 : b.height()));
+      setbbox(b.translated(-0.5 * b.width(), 0.0));
       }
 
 //---------------------------------------------------------
