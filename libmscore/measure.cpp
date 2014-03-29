@@ -1662,7 +1662,7 @@ void Measure::adjustToLen(Fraction nf)
                         // set the existing rest to the first value of the duration list
                         score()->undo(new ChangeChordRestLen(rest, durList[0]));
                         // add rests for any other duration list value
-                        int tickOffset = durList[0].ticks();
+                        int tickOffset = tick() + durList[0].ticks();
                         for (int i = 1; i < durList.count(); i++) {
                               Rest* newRest = new Rest(score());
                               newRest->setDurationType(durList.at(i));
