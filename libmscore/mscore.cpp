@@ -148,12 +148,14 @@ void MScore::init()
       _baseStyle            = new MStyle(*_defaultStyle);
       void setPageFormat(const PageFormat& pf);
 
-      // QPrinter::PaperSize ps = QPrinter().paperSize();      // get default paper size
-      QSizeF psf = QPrinter().paperSize(QPrinter::Inch);
-      PaperSize ps("system", psf.width(), psf.height());
-      PageFormat pf;
-      pf.setSize(&ps);
-      _defaultStyle->setPageFormat(pf);
+      if (!MScore::testMode) {
+            // QPrinter::PaperSize ps = QPrinter().paperSize();      // get default paper size
+            QSizeF psf = QPrinter().paperSize(QPrinter::Inch);
+            PaperSize ps("system", psf.width(), psf.height());
+            PageFormat pf;
+            pf.setSize(&ps);
+            _defaultStyle->setPageFormat(pf);
+            }
 
       //
       //  load internal fonts
