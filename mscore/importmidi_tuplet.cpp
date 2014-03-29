@@ -744,6 +744,20 @@ void tryUpdateBestIndexes(
             }
       }
 
+std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction> > >
+prepareVoiceIntervals(
+            const std::vector<int> &selectedTuplets,
+            const std::vector<std::pair<ReducedFraction, ReducedFraction> > &tupletIntervals)
+      {
+                  // <voice, intervals>
+      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> voiceIntervals;
+      for (int i: selectedTuplets) {
+            int voice = findAvailableVoice(i, tupletIntervals, voiceIntervals);
+            voiceIntervals[voice].push_back(tupletIntervals[i]);
+            }
+      return voiceIntervals;
+      }
+
 void findNextTuplet(
             std::vector<int> &selectedTuplets,
             std::vector<int> &bestTupletIndexes,
@@ -760,12 +774,7 @@ void findNextTuplet(
                   currentLevelIndexes.push_back(i);
             }
       else {
-                        // <voice, intervals>
-            std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> voiceIntervals;
-            for (int i: selectedTuplets) {
-                  int voice = findAvailableVoice(i, tupletIntervals, voiceIntervals);
-                  voiceIntervals[voice].push_back(tupletIntervals[i]);
-                  }
+            const auto voiceIntervals = prepareVoiceIntervals(selectedTuplets, tupletIntervals);
             const auto usedFirstChords = prepareUsedFirstChords(selectedTuplets, tuplets);
 
             for (int indexToCheck: tupletCommons[selectedTuplets.back()].uncommonIndexes) {
@@ -807,12 +816,8 @@ void findNextTuplet(
       if (selectedTuplets.empty() && commonsSize != tuplets.size()) {
             for (size_t i = commonsSize; i != tuplets.size(); ++i)
                   selectedTuplets.push_back(i);
-                        // <voice, intervals>
-            std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> voiceIntervals;
-            for (int i: selectedTuplets) {
-                  int voice = findAvailableVoice(i, tupletIntervals, voiceIntervals);
-                  voiceIntervals[voice].push_back(tupletIntervals[i]);
-                  }
+
+            const auto voiceIntervals = prepareVoiceIntervals(selectedTuplets, tupletIntervals);
             const auto usedFirstChords = prepareUsedFirstChords(selectedTuplets, tuplets);
 
             bool canAddMoreIndexes = false;
