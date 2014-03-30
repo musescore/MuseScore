@@ -234,7 +234,8 @@ findTupletContainsTime(int voice,
 // find sum length of gaps between successive chords
 // less is better
 
-ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo)
+ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo,
+                                     const ReducedFraction &startBarTick)
       {
       auto beg = tupletInfo.onTime;
       const auto tupletEndTime = tupletInfo.onTime + tupletInfo.len;
@@ -244,8 +245,10 @@ ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo)
       for (const auto &chord: tupletInfo.chords) {
             const auto staccatoIt = tupletInfo.staccatoChords.find(chord.first);
             const MidiChord &midiChord = chord.second->second;
-            const auto &chordOnTime = Quantize::quantizeValue(chord.second->first,
-                                                              tupletInfo.tupletQuant);
+            const auto &chordOnTime = (chord.second->first < startBarTick)
+                        ? startBarTick
+                        : startBarTick + Quantize::quantizeValue(chord.second->first - startBarTick,
+                                                                 tupletInfo.tupletQuant);
             if (beg < chordOnTime)
                   sumLen += (chordOnTime - beg);
             ReducedFraction maxLen(0, 1);
@@ -320,6 +323,8 @@ tupletInterval(const TupletInfo &tuplet)
 
       for (const auto &chord: tuplet.chords) {
             auto offTime = chord.first + MChord::maxNoteLen(chord.second->second.notes);
+                        // quantization with regular raster (not tuplet raster)
+                        // so we don't have to measure time values from bar start
             offTime = Quantize::quantizeValue(offTime, tuplet.regularQuant);
             if (offTime > tupletEnd)
                   tupletEnd = offTime;
@@ -950,16 +955,8 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
       std::swap(tuplets, newTuplets);
       }
 
-ReducedFraction noteLenQuantError(const ReducedFraction &noteOnTime,
-                                  const ReducedFraction &noteLen,
-                                  const ReducedFraction &raster)
-      {
-      const auto offTime = Quantize::quantizeValue(noteOnTime + noteLen, raster);
-      const auto quantizedLen = offTime - noteOnTime;
-      return (noteLen - quantizedLen).absValue();
-      }
-
-int averagePitch(const std::map<ReducedFraction, std::multimap<ReducedFraction, MidiChord>::iterator> &chords)
+int averagePitch(const std::map<ReducedFraction,
+                                std::multimap<ReducedFraction, MidiChord>::iterator> &chords)
       {
       if (chords.empty())
             return -1;
@@ -1069,6 +1066,8 @@ bool hasIntersectionWithChord(const ReducedFraction &startTick,
       {
       const auto onTimeRaster = Quantize::reduceRasterIfDottedNote(
                                   MChord::maxNoteLen(chord->second.notes), regularRaster);
+                  // don't need to measure time values from bar start
+                  // because of regular raster (not tuplet raster)
       const auto onTime = Quantize::quantizeValue(chord->first, onTimeRaster);
       auto testChord = chord->second;
       for (auto &note: testChord.notes) {
@@ -1129,7 +1128,8 @@ void splitFirstTupletChords(std::vector<TupletInfo> &tuplets,
       }
 
 bool canTupletBeTied(const TupletInfo &tuplet,
-                     const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt)
+                     const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
+                     const ReducedFraction &startBarTick)
       {
       const int firstChordIndex = tuplet.firstChordIndex;
       if (firstChordIndex <= 0)
@@ -1139,13 +1139,16 @@ bool canTupletBeTied(const TupletInfo &tuplet,
                   + tuplet.len / tuplet.tupletNumber * firstChordIndex;
       const auto maxLen = MChord::maxNoteLen(chordIt->second.notes);
       const auto chordOffTime = chordIt->first + maxLen;
+                  // if chord offTime is outside bar - discard chord
+      if (chordOffTime < startBarTick)
+            return false;
                   // if chord offTime is outside tuplet - discard chord
       if (chordIt->first + tuplet.tupletQuant >= tuplet.onTime
                   || chordOffTime <= tuplet.onTime
                   || chordOffTime >= tupletFreeEnd + tuplet.tupletQuant)
             return false;
       const auto chordError = findQuantizationError(chordOffTime, tuplet.regularQuant);
-      const auto tupletError = findQuantizationError(chordOffTime, tuplet.tupletQuant);
+      const auto tupletError = findQuantizationError(chordOffTime - startBarTick, tuplet.tupletQuant);
 
       if (tupletError < chordError)
             return true;
@@ -1171,7 +1174,8 @@ struct TiedTuplet
 std::vector<TiedTuplet>
 findBackTiedTuplets(const std::multimap<ReducedFraction, MidiChord> &chords,
                     const std::vector<TupletInfo> &tuplets,
-                    const ReducedFraction &prevBarStart)
+                    const ReducedFraction &prevBarStart,
+                    const ReducedFraction &startBarTick)
       {
       std::vector<TiedTuplet> tiedTuplets;
       std::set<int> usedVoices;
@@ -1196,7 +1200,7 @@ findBackTiedTuplets(const std::multimap<ReducedFraction, MidiChord> &chords,
                         if (endTime1 > onTime2 && onTime1 < endTime2) // tuplet intersection
                               continue;
                         }
-                  if (canTupletBeTied(tuplets[i], chordIt)) {
+                  if (canTupletBeTied(tuplets[i], chordIt, startBarTick)) {
                         tiedTuplets.push_back({i, voice, &*chordIt});
                         usedVoices.insert(voice);
                         break;
@@ -1220,7 +1224,8 @@ findBackTiedTuplets(const std::multimap<ReducedFraction, MidiChord> &chords,
 
 void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                           std::multimap<ReducedFraction, MidiChord> &chords,
-                          std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets)
+                          std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
+                          const ReducedFraction &startBarTick)
       {
       for (auto it = tuplets.begin(); it != tuplets.end(); ) {
             TupletInfo &tupletInfo = *it;
@@ -1229,7 +1234,10 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                   ++it;
                   continue;
                   }
-            const auto &onTime = firstChord->second->first;
+            auto onTime = firstChord->second->first;
+                        // because of tol onTime can be less than start bar tick
+            if (onTime < startBarTick)
+                  onTime = startBarTick;
             MidiChord &midiChord = firstChord->second->second;
             auto &notes = midiChord.notes;
 
@@ -1243,10 +1251,10 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
                                  || (tupletInfo.chords.size() > 1
                                     && notes.size() > (int)removedIndexes.size() + 1))
                               {
-                              auto tupletError = noteLenQuantError(
-                                                    onTime, note.len, tupletInfo.tupletQuant);
-                              auto regularError = noteLenQuantError(
-                                                    onTime, note.len, tupletInfo.regularQuant);
+                              auto tupletError = findQuantizationError(onTime + note.len - startBarTick,
+                                                                       tupletInfo.tupletQuant);
+                              auto regularError = findQuantizationError(onTime + note.len,
+                                                                        tupletInfo.regularQuant);
                               if (tupletError > regularError) {
                                     removedIndexes.push_back(i);
                                     continue;
@@ -1280,8 +1288,9 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
       }
 
 void addChordsBetweenTupletNotes(
-                  std::vector<TupletInfo> &tuplets,
-                  std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets)
+            std::vector<TupletInfo> &tuplets,
+            std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
+            const ReducedFraction &startBarTick)
       {
       for (TupletInfo &tuplet: tuplets) {
             for (auto it = nonTuplets.begin(); it != nonTuplets.end(); ) {
@@ -1291,12 +1300,12 @@ void addChordsBetweenTupletNotes(
                               && hasIntersectionWithChord(tuplet.onTime, tuplet.onTime + tuplet.len,
                                                           tuplet.regularQuant, chordIt)) {
                         auto regularError = findQuantizationError(onTime, tuplet.regularQuant);
-                        auto tupletError = findQuantizationError(onTime, tuplet.tupletQuant);
-                        const auto offTime = MChord::maxNoteLen(chordIt->second.notes);
+                        auto tupletError = findQuantizationError(onTime - startBarTick, tuplet.tupletQuant);
+                        const auto offTime = onTime + MChord::maxNoteLen(chordIt->second.notes);
 
                         if (offTime < tuplet.onTime + tuplet.len) {
                               regularError += findQuantizationError(offTime, tuplet.regularQuant);
-                              tupletError += findQuantizationError(offTime, tuplet.tupletQuant);
+                              tupletError += findQuantizationError(offTime - startBarTick, tuplet.tupletQuant);
                               }
                         if (tupletError < regularError) {
                               tuplet.chords.insert({onTime, chordIt});
@@ -1313,6 +1322,8 @@ std::pair<ReducedFraction, ReducedFraction>
 chordInterval(const std::pair<const ReducedFraction, MidiChord> *chord,
               const ReducedFraction &regularRaster)
       {
+                  // don't need to measure time values from bar start
+                  // because we use here regular raster, not tuplet raster
       auto onTime = Quantize::quantizeValue(chord->first, regularRaster);
       auto offTime = chord->first + MChord::maxNoteLen(chord->second.notes);
       offTime = Quantize::quantizeValue(offTime, regularRaster);
@@ -1521,8 +1532,9 @@ findForTiedTuplets(const std::vector<TupletInfo> &tuplets,
       std::vector<std::pair<int, int>> forTiedTuplets;  // <tuplet index, voice to assign>
 
       for (const TiedTuplet &tuplet: tiedTuplets) {
+                        // only for chords in the current bar (because of tol some can be outside)
             if (tuplet.chord->first < startBarTick)
-                  continue;               // only for chords in the current bar
+                  continue;
             if (pendingNonTuplets.find(tuplet.chord) == pendingNonTuplets.end()) {
                   const int i = findTupletWithChord(tuplet.chord->second, tuplets);
                   if (i != -1)
@@ -1635,9 +1647,9 @@ void assignVoices(std::multimap<ReducedFraction, MidiChord> &chords,
       auto pendingTuplets = findPendingTuplets(tuplets);
       auto pendingNonTuplets = findPendingNonTuplets(nonTuplets);
       const auto prevBarStart = findPrevBarStart(startBarTick, endBarTick - startBarTick);
-      const auto backTiedTuplets = findBackTiedTuplets(chords, tuplets, prevBarStart);
-      const auto forTiedTuplets = findForTiedTuplets(tuplets, backTiedTuplets, pendingNonTuplets,
-                                                     startBarTick);
+      const auto backTiedTuplets = findBackTiedTuplets(chords, tuplets, prevBarStart, startBarTick);
+      const auto forTiedTuplets = findForTiedTuplets(tuplets, backTiedTuplets,
+                                                     pendingNonTuplets, startBarTick);
       std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> tupletIntervals;
 
       for (const auto &t: forTiedTuplets) {
@@ -1656,8 +1668,10 @@ void assignVoices(std::multimap<ReducedFraction, MidiChord> &chords,
                               tupletInterval(tuplets[tuplet.tupletIndex]));
                         // set for-tied chords
                         // some chords can be the same as in forTiedTuplets
+
+                  // only for chords in the current bar (because of tol some can be outside)
             if (tuplet.chord->first < startBarTick)
-                  continue;               // only for chords in the current bar
+                  continue;
             tuplet.chord->second.voice = tuplet.voice;
                         // remove chords with already set voices
             pendingNonTuplets.erase(tuplet.chord);
@@ -1779,15 +1793,25 @@ bool haveChordsInTheMiddleBetweenTupletChords(
 // decrease tuplet error by enlarging staccato notes:
 // make note.len = tuplet note length
 
-void applyStaccatoForTuplets(std::vector<TupletInfo> &tuplets)
+void applyStaccatoForTuplets(std::vector<TupletInfo> &tuplets,
+                             const ReducedFraction &barStart)
       {
       for (auto &tuplet: tuplets) {
             const auto tupletNoteLen = tuplet.len / tuplet.tupletNumber;
-            for (auto &chord: tuplet.chords) {
-                  MidiChord &midiChord = chord.second->second;
+            for (auto it = tuplet.chords.begin(); it != tuplet.chords.end(); ++it) {
+                  MidiChord &midiChord = it->second->second;
                   for (auto &note: midiChord.notes) {
-                        if (note.staccato)
-                              note.len = tupletNoteLen;
+                        if (note.staccato) {
+                              auto offTime = barStart + Quantize::quantizeValue(
+                                                it->first + tupletNoteLen - barStart,
+                                                tuplet.tupletQuant);
+                              auto next = std::next(it);
+                              if (next != tuplet.chords.end()) {
+                                    if (next->first < offTime)
+                                          offTime = next->first;
+                                    }
+                              note.len = offTime - it->first;
+                              }
                         }
                   }
             }
@@ -1816,6 +1840,23 @@ void cleanStaccatoOfNonTuplets(
             for (auto &note: nonTuplet->second.notes) {
                   if (note.staccato)
                         note.staccato = false;
+                  }
+            }
+      }
+
+void correctChordOnTimeInTuplets(std::vector<TupletInfo> &tuplets,
+                                 std::multimap<ReducedFraction, MidiChord> &chords,
+                                 const ReducedFraction &startBarTick)
+      {
+      for (auto &tuplet: tuplets) {
+            if (tuplet.firstChordIndex == 0) {
+                  if (tuplet.chords.begin()->first < startBarTick) {
+                        const MidiChord midiChord = tuplet.chords.begin()->second->second;
+                        chords.erase(tuplet.chords.begin()->second);
+                        tuplet.chords.erase(tuplet.chords.begin());
+                        const auto newChordIt = chords.insert({startBarTick, midiChord});
+                        tuplet.chords.insert({startBarTick, newChordIt});
+                        }
                   }
             }
       }
@@ -1878,7 +1919,7 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                                           startDivChordIt, endDivChordIt, tupletInfo)) {
                               detectStaccato(tupletInfo);
                               }
-                        tupletInfo.sumLengthOfRests = findSumLengthOfRests(tupletInfo);
+                        tupletInfo.sumLengthOfRests = findSumLengthOfRests(tupletInfo, startBarTick);
 
                         if (!isTupletAllowed(tupletInfo))
                               continue;
@@ -1893,21 +1934,26 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
             // so assign staccato information to notes now
       markStaccatoTupletNotes(tuplets);
 
-      auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
+            // because of tol for non-tuplets we should use only chords with onTime >= bar start
+      auto startNonTupletChordIt = startBarChordIt;
+      while (startNonTupletChordIt->first < startBarTick)
+            ++startNonTupletChordIt;
+      auto nonTuplets = findNonTupletChords(tuplets, startNonTupletChordIt, endBarChordIt);
       if (tupletVoiceLimit() == 1)
             excludeExtraVoiceTuplets(tuplets, nonTuplets, regularRaster);
 
       resetTupletVoices(tuplets);  // because of tol some chords may have non-zero voices
-      addChordsBetweenTupletNotes(tuplets, nonTuplets);
+      addChordsBetweenTupletNotes(tuplets, nonTuplets, startBarTick);
       sortNotesByPitch(startBarChordIt, endBarChordIt);
       sortTupletsByAveragePitch(tuplets);
 
       if (operations.useMultipleVoices) {
             splitFirstTupletChords(tuplets, chords);
-            minimizeOffTimeError(tuplets, chords, nonTuplets);
+            minimizeOffTimeError(tuplets, chords, nonTuplets, startBarTick);
             }
+
       cleanStaccatoOfNonTuplets(nonTuplets);
-      applyStaccatoForTuplets(tuplets);
+      applyStaccatoForTuplets(tuplets, startBarTick);
 
       Q_ASSERT_X(!doTupletsHaveCommonChords(tuplets),
                  "MIDI tuplets: findTuplets", "Tuplets have common chords but they shouldn't");
@@ -1918,6 +1964,7 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                  "Overlapping tuplet and non-tuplet voices for the case !useMultipleVoices");
 
       assignVoices(chords, tuplets, nonTuplets, startBarTick, endBarTick, regularRaster);
+      correctChordOnTimeInTuplets(tuplets, chords, startBarTick);
 
       return convertToData(tuplets);
       }

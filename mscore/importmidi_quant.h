@@ -31,6 +31,8 @@ ReducedFraction findRegularQuantRaster(
             const std::multimap<ReducedFraction, MidiChord>::const_iterator &endChordIt,
             const ReducedFraction &endBarTick);
 
+ReducedFraction findBarStart(const ReducedFraction &time, const TimeSigMap *sigmap);
+
 } // namespace Quantize
 } // namespace Ms
 

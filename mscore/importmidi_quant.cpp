@@ -112,11 +112,20 @@ ReducedFraction reduceRasterIfDottedNote(const ReducedFraction &noteLen,
 ReducedFraction quantizeValue(const ReducedFraction &value,
                               const ReducedFraction &raster)
       {
-      int valNum = value.numerator() * raster.denominator();
-      const int rastNum = raster.numerator() * value.denominator();
-      const int commonDen = value.denominator() * raster.denominator();
+      const auto valueReduced = value.reduced();
+      const auto rasterReduced = raster.reduced();
+      int valNum = valueReduced.numerator() * rasterReduced.denominator();
+      const int rastNum = rasterReduced.numerator() * valueReduced.denominator();
+      const int commonDen = valueReduced.denominator() * rasterReduced.denominator();
       valNum = ((valNum + rastNum / 2) / rastNum) * rastNum;
       return ReducedFraction(valNum, commonDen).reduced();
+      }
+
+ReducedFraction findBarStart(const ReducedFraction &time, const TimeSigMap *sigmap)
+      {
+      int bar, beat, tick;
+      sigmap->tickValues(time.ticks(), &bar, &beat, &tick);
+      return ReducedFraction::fromTicks(sigmap->bar2tick(bar, 0));
       }
 
 ReducedFraction findQuantRaster(
@@ -133,9 +142,7 @@ ReducedFraction findQuantRaster(
             raster = tupletIt->second.tupletQuant;   // quantize onTime with tuplet quant
       else {
                         // quantize onTime with regular quant
-            int bar, beat, tick;
-            sigmap->tickValues(time.ticks(), &bar, &beat, &tick);
-            const auto startBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(bar, 0));
+            const auto startBarTick = findBarStart(time, sigmap);
             const auto endBarTick = startBarTick
                         + ReducedFraction(sigmap->timesig(startBarTick.ticks()).timesig());
             const auto startBarChordIt = MChord::findFirstChordInRange(
@@ -145,7 +152,7 @@ ReducedFraction findQuantRaster(
       return raster;
       }
 
-// input chords - sorted by onTime value, onTime values are not repeated
+// input chords - sorted by onTime value
 
 void quantizeChords(std::multimap<ReducedFraction, MidiChord> &chords,
                     const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents,
@@ -156,18 +163,18 @@ void quantizeChords(std::multimap<ReducedFraction, MidiChord> &chords,
             MidiChord chord = chordEvent.second;     // copy chord
             auto onTime = chordEvent.first;
             auto raster = findQuantRaster(onTime, chord.voice, tupletEvents, chords, sigmap);
-            onTime = Quantize::quantizeValue(onTime, raster);
+            const auto barStart = findBarStart(onTime, sigmap);
+            onTime = barStart + Quantize::quantizeValue(onTime - barStart, raster);
 
             for (auto it = chord.notes.begin(); it != chord.notes.end(); ) {
                   auto &note = *it;
                   auto offTime = chordEvent.first + note.len;
                   raster = findQuantRaster(offTime, chord.voice, tupletEvents, chords, sigmap);
-
                   if (Meter::isSimpleNoteDuration(raster))    // offTime is not inside tuplet
                         raster = reduceRasterIfDottedNote(note.len, raster);
-                  offTime = Quantize::quantizeValue(offTime, raster);
-                  note.len = offTime - onTime;
 
+                  offTime = barStart + Quantize::quantizeValue(offTime - barStart, raster);
+                  note.len = offTime - onTime;
                   if (note.len < MChord::minAllowedDuration()) {
                         it = chord.notes.erase(it);
                         qDebug() << "quantizeChords: note was removed due to its short length";
