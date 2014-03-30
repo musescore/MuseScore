@@ -39,6 +39,7 @@ namespace Ms {
 SlurSegment::SlurSegment(Score* score)
    : SpannerSegment(score)
       {
+      autoAdjustOffset = QPointF();
       }
 
 SlurSegment::SlurSegment(const SlurSegment& b)
@@ -47,6 +48,7 @@ SlurSegment::SlurSegment(const SlurSegment& b)
       for (int i = 0; i < SLUR_GRIPS; ++i)
             ups[i] = b.ups[i];
       path = b.path;
+      autoAdjustOffset = QPointF();
       }
 
 //---------------------------------------------------------
@@ -553,28 +555,29 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
       slurTie()->computeBezier(this);
       QRectF bbox = path.boundingRect();
       qreal sp = spatium();
-      qreal ld = staff()->lineDistance();       // TODO: factor this in if not already incorporated in sp
-      qreal minDistance = 0.3;
+      qreal ld = staff()->lineDistance() * sp;
+      qreal minDistance = 0.5;
+      setAutoAdjust(0.0, 0.0);
       if (bbox.height() < minDistance * 2 * sp) {
             // path is fairly flat
             // adjust position to avoid staff line if necessary
             bool up = slurTie()->up();
-            qreal topY = bbox.top() / sp;
-            qreal bottomY = bbox.bottom() / sp;
+            qreal topY = bbox.top() / ld;
+            qreal bottomY = bbox.bottom() / ld;
             int closestLine = up ? qRound(topY) : qRound(bottomY);
             if (closestLine >= 0 && closestLine < staff()->lines()) {
                   // on staff
-                  QPointF zeroP;
                   if (qAbs(topY - closestLine) < minDistance && qAbs(bottomY - closestLine) < minDistance) {
                         // too close to line
-                        if (userOff() == zeroP && userOff2() == zeroP
-                            && ups[GRIP_START].off == zeroP && ups[GRIP_END].off == zeroP
-                            && ups[GRIP_BEZIER1].off == zeroP && ups[GRIP_BEZIER2].off == zeroP
-                            && ups[GRIP_SHOULDER].off == zeroP) {
+                        if (userOff() == QPointF()) {
                               // user has not edited
-                              qreal offset = (up ? -0.5 : 0.5) * sp;
-                              path.translate(0, offset);
-                              shapePath.translate(0, offset);
+                              qreal offY;
+                              if (up)
+                                    offY = (closestLine - minDistance) - topY;
+                              else
+                                    offY = (closestLine + minDistance) - bottomY;
+                              //qreal offY = (up ? -0.5 : 0.5) * sp;
+                              setAutoAdjust(0.0, offY * sp);
                               bbox = path.boundingRect();
                               }
                         }
@@ -582,6 +585,19 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
             }
       setbbox(path.boundingRect());
       adjustReadPos();
+      }
+
+//---------------------------------------------------------
+//   setAutoAdjust
+//---------------------------------------------------------
+
+void SlurSegment::setAutoAdjust(const QPointF& offset)
+      {
+      QPointF diff = offset - autoAdjustOffset;
+      if (diff != QPointF()) {
+            move(diff);
+            autoAdjustOffset = offset;
+            }
       }
 
 //---------------------------------------------------------
@@ -1049,6 +1065,25 @@ QVariant SlurSegment::propertyDefault(P_ID id) const
             default:
                   return SpannerSegment::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void SlurSegment::startEdit(MuseScoreView* s, const QPointF& p)
+      {
+      QPointF zeroP;
+      QPointF offset = getAutoAdjust();
+      if (offset != zeroP) {
+            // this segment was automatically adjusted to avoid collision
+            // lock in position by resetting to default position
+            // and incorporating previous adjustment into user offset
+            setUserOff(userOff() + offset);
+            setAutoAdjust(zeroP);
+            parent()->layout();
+            }
+      SpannerSegment::startEdit(s, p);
       }
 
 //---------------------------------------------------------
