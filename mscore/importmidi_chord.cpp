@@ -168,8 +168,8 @@ void collectChords(std::multimap<int, MTrack> &tracks)
                   }
 
             Q_ASSERT_X(areOnTimeValuesDifferent(chords),
-                       "MChord: collectChords", "onTime values of chords are equal "
-                                                "but should be different");
+                       "MChord: collectChords",
+                       "onTime values of chords are equal but should be different");
             }
       }
 

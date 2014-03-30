@@ -93,6 +93,59 @@ void cleanUpMidiEvents(std::multimap<int, MTrack> &tracks)
             }
       }
 
+
+#ifdef QT_DEBUG
+
+bool doNotesOverlap(const MTrack &track)
+      {
+      const auto &chords = track.chords;
+      for (auto i1 = chords.begin(); i1 != chords.end(); ++i1) {
+            const auto &chord1 = i1->second;
+            const auto &onTime1 = i1->first;
+            for (const auto &note1: chord1.notes) {
+                  for (auto i2 = std::next(i1); i2 != chords.end(); ++i2) {
+                        const auto &onTime2 = i2->first;
+                        if (onTime2 >= onTime1 + note1.len)
+                              break;
+                        const auto &chord2 = i2->second;
+                        if (chord1.voice != chord2.voice)
+                              continue;
+                        for (const auto &note2: chord2.notes) {
+                              if (note2.pitch != note1.pitch)
+                                    continue;
+                              return true;
+                              }
+                        }
+                  }
+            }
+      return false;
+      }
+
+bool doNotesOverlap(const std::multimap<int, MTrack> &tracks)
+      {
+      bool result = false;
+      for (const auto &track: tracks)
+            result = doNotesOverlap(track.second);
+      return result;
+      }
+
+bool noTooShortNotes(const std::multimap<int, MTrack> &tracks)
+      {
+      for (const auto &track: tracks) {
+            const auto &chords = track.second.chords;
+            for (const auto &chord: chords) {
+                  for (const auto &note: chord.second.notes) {
+                        if (note.len < MChord::minAllowedDuration())
+                              return false;
+                        }
+                  }
+            }
+      return true;
+      }
+
+#endif
+
+
 void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                        TimeSigMap *sigmap,
                        const ReducedFraction &lastTick)
@@ -105,7 +158,16 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
             opers.setCurrentTrack(mtrack.indexOfOperation);
             opers.adaptForPercussion(mtrack.indexOfOperation, mtrack.mtrack->drumTrack());
             mtrack.tuplets = MidiTuplet::findAllTuplets(mtrack.chords, sigmap, lastTick);
+
+            Q_ASSERT_X(!doNotesOverlap(track.second),
+                       "quantizeAllTracks",
+                       "There are overlapping notes of the same voice that is incorrect");
+
             Quantize::quantizeChords(mtrack.chords, mtrack.tuplets, sigmap);
+
+            Q_ASSERT_X(!doNotesOverlap(track.second),
+                       "quantizeAllTracks",
+                       "There are overlapping notes of the same voice that is incorrect");
             }
       }
 
@@ -860,53 +922,6 @@ QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
       return tracksMeta;
       }
 
-
-#ifdef QT_DEBUG
-
-bool doNotesOverlap(const std::multimap<int, MTrack> &tracks)
-      {
-      for (const auto &track: tracks) {
-            const auto &chords = track.second.chords;
-            for (auto i1 = chords.begin(); i1 != chords.end(); ++i1) {
-                  const auto &chord1 = i1->second;
-                  const auto &onTime1 = i1->first;
-                  for (const auto &note1: chord1.notes) {
-                        for (auto i2 = std::next(i1); i2 != chords.end(); ++i2) {
-                              const auto &onTime2 = i2->first;
-                              if (onTime2 >= onTime1 + note1.len)
-                                    break;
-                              const auto &chord2 = i2->second;
-                              if (chord1.voice != chord2.voice)
-                                    continue;
-                              for (const auto &note2: chord2.notes) {
-                                    if (note2.pitch != note1.pitch)
-                                          continue;
-                                    return true;
-                                    }
-                              }
-                        }
-                  }
-            }
-      return false;
-      }
-
-bool noTooShortNotes(const std::multimap<int, MTrack> &tracks)
-      {
-      for (const auto &track: tracks) {
-            const auto &chords = track.second.chords;
-            for (const auto &chord: chords) {
-                  for (const auto &note: chord.second.notes) {
-                        if (note.len < MChord::minAllowedDuration())
-                              return false;
-                        }
-                  }
-            }
-      return true;
-      }
-
-#endif
-
-
 void convertMidi(Score *score, const MidiFile *mf)
       {
       ReducedFraction lastTick;
@@ -918,14 +933,12 @@ void convertMidi(Score *score, const MidiFile *mf)
       MChord::removeOverlappingNotes(tracks);
 
       Q_ASSERT_X(!doNotesOverlap(tracks),
-                 "convertMidi:", "There are overlapping notes of the same voice that is incorrect");
+                 "convertMidi", "There are overlapping notes of the same voice that is incorrect");
 
       quantizeAllTracks(tracks, sigmap, lastTick);
 
-      Q_ASSERT_X(!doNotesOverlap(tracks),
-                 "convertMidi:", "There are overlapping notes of the same voice that is incorrect");
       Q_ASSERT_X(noTooShortNotes(tracks),
-                 "convertMidi:", "There are notes of length < min allowed duration");
+                 "convertMidi", "There are notes of length < min allowed duration");
 
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
       LRHand::splitIntoLeftRightHands(tracks);
