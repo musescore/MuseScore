@@ -1490,14 +1490,25 @@ void Score::resetUserStretch()
 
 void Score::moveUp(Chord* chord)
       {
-      int rstaff    = chord->staff()->rstaff();
+      Staff* staff  = chord->staff();
+      Part* part    = staff->part();
+      int rstaff    = staff->rstaff();
       int staffMove = chord->staffMove();
 
       if ((staffMove == -1) || (rstaff + staffMove <= 0))
             return;
-      undo(new ChangeChordStaffMove(chord, staffMove - 1));
-      }
 
+      QList<Staff*>* staves = part->staves();
+      // we know that staffMove+rstaff-1 index exists due to the previous condition.
+      if (staff->staffType()->group() != STANDARD_STAFF_GROUP ||
+          staves->at(rstaff+staffMove-1)->staffType()->group() != STANDARD_STAFF_GROUP) {
+            qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
+            }
+      else  {
+            // move the chord up a staff
+            undo(new ChangeChordStaffMove(chord, staffMove - 1));
+            }
+      }
 //---------------------------------------------------------
 //   moveDown
 //---------------------------------------------------------
@@ -1507,15 +1518,25 @@ void Score::moveDown(Chord* chord)
       Staff* staff  = chord->staff();
       Part* part    = staff->part();
       int rstaff    = staff->rstaff();
-      int rstaves   = part->nstaves();
       int staffMove = chord->staffMove();
+      // calculate the number of staves available so that we know whether there is another staff to move down to
+      int rstaves   = part->nstaves();
 
       if ((staffMove == 1) || (rstaff + staffMove >= rstaves - 1)) {
-qDebug("moveDown staffMove==%d  rstaff %d rstaves %d", staffMove, rstaff, rstaves);
+            qDebug("moveDown staffMove==%d  rstaff %d rstaves %d", staffMove, rstaff, rstaves);
             return;
             }
-      undo(new ChangeChordStaffMove(chord, staffMove + 1));
-      _layoutAll = true;
+
+      QList<Staff*>* staves = part->staves();
+      // we know that staffMove+rstaff+1 index exists due to the previous condition.
+      if (staff->staffType()->group() != STANDARD_STAFF_GROUP ||
+          staves->at(staffMove+rstaff+1)->staffType()->group() != STANDARD_STAFF_GROUP) {
+            qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
+            }
+      else  {
+            // move the chord down a staff
+            undo(new ChangeChordStaffMove(chord, staffMove + 1));
+            }
       }
 
 //---------------------------------------------------------
