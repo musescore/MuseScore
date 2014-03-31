@@ -113,7 +113,7 @@ enum P_ID {
       P_NUMERATOR_STRING,
 
       P_DENOMINATOR_STRING,
-      P_SHOW_NATURALS,
+//      P_SHOW_NATURALS,
       P_BREAK_HINT,
       P_FBPREFIX,             // used for FiguredBassItem
       P_FBDIGIT,              //    "           "

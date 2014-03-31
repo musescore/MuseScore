@@ -1517,7 +1517,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
             else if (keysig && keysig->keySigEvent() != keyIdx)
-                  undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy(), keysig->showNaturals()));
+                  undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy() /*, keysig->showNaturals()*/));
 
             bool needClef = isFirstSystem || styleB(ST_genClef);
             if (needClef) {
@@ -2606,7 +2606,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                           }
                                     else if (ks->keySigEvent() != ksv) {
                                           undo(new ChangeKeySig(ks, ksv,
-                                             ks->showCourtesy(), ks->showNaturals()));
+                                             ks->showCourtesy() /*, ks->showNaturals()*/));
                                           }
                                     // change bar line to qreal bar line
                                     // m->setEndBarLineType(DOUBLE_BAR, true); // this caused issue #12918
