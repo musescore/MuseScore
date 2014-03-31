@@ -218,7 +218,7 @@ class Note : public Element {
    public:
       Note(Score* s = 0);
       Note(const Note&);
-      Note &operator=(const Note&);
+      Note& operator=(const Note&);
       ~Note();
       Note* clone() const      { return new Note(*this); }
       ElementType type() const { return NOTE; }
