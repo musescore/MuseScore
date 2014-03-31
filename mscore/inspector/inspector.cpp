@@ -423,7 +423,7 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
             { P_LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
             { P_TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace },
             { P_SHOW_COURTESY,  0, 0, k.showCourtesy,  k.resetShowCourtesy  },
-            { P_SHOW_NATURALS,  0, 0, k.showNaturals,  k.resetShowNaturals  }
+//            { P_SHOW_NATURALS,  0, 0, k.showNaturals,  k.resetShowNaturals  }
             };
       mapSignals();
       }

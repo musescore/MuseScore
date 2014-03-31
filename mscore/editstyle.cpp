@@ -733,10 +733,10 @@ void EditStyle::setValues()
       clefTab2->setChecked(lstyle.value(ST_tabClef).toInt() == int(ClefType::TAB2));
 
       crossMeasureValues->setChecked(lstyle.value(ST_crossMeasureValues).toBool());
-      // bool ??:
-      radioKeySigNatNone->setChecked  (lstyle.value(ST_keySigNaturals).toBool() == NAT_NONE);
-      radioKeySigNatBefore->setChecked(lstyle.value(ST_keySigNaturals).toBool() == NAT_BEFORE);
-      radioKeySigNatAfter->setChecked (lstyle.value(ST_keySigNaturals).toBool() == NAT_AFTER);
+
+      radioKeySigNatNone->setChecked  (lstyle.value(ST_keySigNaturals).toInt() == NAT_NONE);
+      radioKeySigNatBefore->setChecked(lstyle.value(ST_keySigNaturals).toInt() == NAT_BEFORE);
+      radioKeySigNatAfter->setChecked (lstyle.value(ST_keySigNaturals).toInt() == NAT_AFTER);
 
       tupletMaxSlope->setValue(lstyle.value(ST_tupletMaxSlope).toDouble());
       tupletOutOfStaff->setChecked(lstyle.value(ST_tupletOufOfStaff).toBool());
