@@ -1836,8 +1836,12 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_PITCH:
                   setPitch(v.toInt());
-                  if (chord()->measure())
+                  if (chord()->measure()) {
                         chord()->measure()->updateAccidentals(chord()->staffIdx());
+                        std::sort(chord()->notes().begin(), chord()->notes().end(),
+                           [](const Note* a,const Note* b)->bool { return b->line() < a->line(); }
+                           );
+                        }
                   break;
             case P_TPC:
                   setTpc(v.toInt());
