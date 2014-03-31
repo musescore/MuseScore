@@ -199,7 +199,10 @@ findTupletForTimeRange(int voice,
                        const ReducedFraction &len,
                        const std::multimap<ReducedFraction, TupletData> &tupletEvents)
       {
-      if (tupletEvents.empty() || len < ReducedFraction(0, 1))
+      Q_ASSERT_X(len >= ReducedFraction(0, 1),
+                 "MidiTuplet::findTupletForTimeRange", "Negative length of time range");
+
+      if (tupletEvents.empty())
             return tupletEvents.end();
 
       auto it = tupletEvents.upper_bound(onTime + len);
