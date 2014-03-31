@@ -1222,6 +1222,9 @@ void Chord::layoutHook1()
                   Hook* hook = new Hook(score());
                   hook->setParent(this);
                   hook->setGenerated(true);
+                  if (score()->mscVersion() <= 114 && _stem && !_stem->visible()) {
+                        hook->setVisible(false);
+                        }
                   score()->undoAddElement(hook);
                   }
             _hook->setHookType(up() ? hookIdx : -hookIdx);
