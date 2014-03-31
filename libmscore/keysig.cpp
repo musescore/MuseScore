@@ -14,6 +14,7 @@
 #include "staff.h"
 #include "clef.h"
 #include "keysig.h"
+#include "measure.h"
 #include "segment.h"
 #include "score.h"
 #include "undo.h"
@@ -48,15 +49,13 @@ KeySig::KeySig(Score* s)
       {
       setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _showCourtesy = true;
-	_showNaturals = true;
       }
 
 KeySig::KeySig(const KeySig& k)
    : Element(k)
       {
-	_showCourtesy = k._showCourtesy;
-	_showNaturals = k._showNaturals;
-	foreach(KeySym* ks, k.keySymbols)
+      _showCourtesy = k._showCourtesy;
+      foreach(KeySym* ks, k.keySymbols)
             keySymbols.append(new KeySym(*ks));
       _sig = k._sig;
       }
@@ -166,11 +165,12 @@ void KeySig::layout()
             naturals &= ~accidentals;
 
       // manage display of naturals:
-      // naturals are shown if there is some natural AND naturals are on for this key sig
+      // naturals are shown if there is some natural AND prev. measure has no section break
       // AND style says they are not off
       // OR key sig is CMaj/Amin (in which case they are always shown)
+      Measure* prevMeas = measure() != nullptr ? measure()->prevMeasure() : nullptr;
       bool naturalsOn =
-            t2 != 0 && (_showNaturals
+            t2 != 0 && ( prevMeas != nullptr && prevMeas->sectionBreak() == nullptr
             && (score()->styleI(ST_keySigNaturals) != NAT_NONE || t1 == 0) );
       // naturals shoud go BEFORE accidentals if style says so
       // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
@@ -347,9 +347,9 @@ void KeySig::write(Xml& xml) const
             }
       if (!_showCourtesy)
             xml.tag("showCourtesySig", _showCourtesy);
-      if (!_showNaturals)
-            xml.tag("showNaturals",    _showNaturals);
-	xml.etag();
+/*      if (!_showNaturals)
+            xml.tag("showNaturals",    _showNaturals); */
+      xml.etag();
       }
 
 //---------------------------------------------------------
@@ -377,9 +377,9 @@ void KeySig::read(XmlReader& e)
                   keySymbols.append(ks);
                   }
             else if (tag == "showCourtesySig")
-		      _showCourtesy = e.readInt();
-            else if (tag == "showNaturals")
-		      _showNaturals = e.readInt();
+                  _showCourtesy = e.readInt();
+            else if (tag == "showNaturals")           // obsolete
+                  e.readInt();
             else if (tag == "accidental")
                   _sig.setAccidentalType(e.readInt());
             else if (tag == "natural")
@@ -532,7 +532,6 @@ QVariant KeySig::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_SHOW_COURTESY: return int(showCourtesy());
-            case P_SHOW_NATURALS: return int(showNaturals());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -547,9 +546,6 @@ bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_SHOW_COURTESY:
                   setShowCourtesy(v.toBool());
-                  break;
-            case P_SHOW_NATURALS:
-                  setShowNaturals(v.toBool());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -569,7 +565,6 @@ QVariant KeySig::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_SHOW_COURTESY:      return true;
-            case P_SHOW_NATURALS:      return true;
             default:                   return Element::propertyDefault(id);
             }
       }

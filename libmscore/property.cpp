@@ -114,7 +114,7 @@ static const PropertyData propertyList[] = {
 
       { P_NUMERATOR_STRING,    false, "textN",         T_STRING },
       { P_DENOMINATOR_STRING,  false, "textD",         T_STRING },
-      { P_SHOW_NATURALS,       false, "showNaturals",  T_BOOL   },
+//      { P_SHOW_NATURALS,       false, "showNaturals",  T_BOOL   },
       { P_BREAK_HINT,          false, "",              T_BOOL   },
       { P_FBPREFIX,            false, "prefix",        T_INT    },
       { P_FBDIGIT,             false, "digit",         T_INT    },
