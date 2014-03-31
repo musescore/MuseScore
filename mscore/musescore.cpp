@@ -2624,7 +2624,7 @@ void MuseScore::changeState(ScoreState val)
             if (e->isText()) {
                   textTools()->setText(static_cast<Text*>(e));
                   textTools()->updateTools();
-                  if (e->type() != Element::FIGURED_BASS)   // do not show text tools for f.b.
+                  if (e->type() != Element::FIGURED_BASS && e->type() != Element::HARMONY)   // do not show text tools for f.b.
                         textTools()->show();
                   }
             if (inspector)
