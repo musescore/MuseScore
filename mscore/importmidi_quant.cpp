@@ -162,19 +162,32 @@ void quantizeChords(std::multimap<ReducedFraction, MidiChord> &chords,
       for (auto &chordEvent: chords) {
             MidiChord chord = chordEvent.second;     // copy chord
             auto onTime = chordEvent.first;
-            auto raster = findQuantRaster(onTime, chord.voice, tupletEvents, chords, sigmap);
             const auto barStart = findBarStart(onTime, sigmap);
-            onTime = barStart + Quantize::quantizeValue(onTime - barStart, raster);
+            if (chord.quantizedOnTime == ReducedFraction(-1, 1)) {
+                  const auto raster = findQuantRaster(onTime, chord.voice, tupletEvents, chords, sigmap);
+                  onTime = barStart + Quantize::quantizeValue(onTime - barStart, raster);
+                  }
+            else {
+                  onTime = chord.quantizedOnTime;
+                  }
+            chord.quantizedOnTime = {-1, 1};
 
             for (auto it = chord.notes.begin(); it != chord.notes.end(); ) {
-                  auto &note = *it;
-                  auto offTime = note.offTime;
-                  raster = findQuantRaster(offTime, chord.voice, tupletEvents, chords, sigmap);
-                  if (Meter::isSimpleNoteDuration(raster))    // offTime is not inside tuplet
-                        raster = reduceRasterIfDottedNote(note.offTime - chordEvent.first, raster);
+                  MidiNote &note = *it;
+                  if (note.quantizedOffTime == ReducedFraction(-1, 1)) {
+                        auto offTime = note.offTime;
+                        auto raster = findQuantRaster(offTime, chord.voice, tupletEvents, chords, sigmap);
+                        if (Meter::isSimpleNoteDuration(raster))    // offTime is not inside tuplet
+                              raster = reduceRasterIfDottedNote(note.offTime - chordEvent.first, raster);
 
-                  offTime = barStart + Quantize::quantizeValue(offTime - barStart, raster);
-                  note.offTime = offTime;
+                        offTime = barStart + Quantize::quantizeValue(offTime - barStart, raster);
+                        note.offTime = offTime;
+                        }
+                  else {
+                        note.offTime = note.quantizedOffTime;
+                        }
+                  note.quantizedOffTime = {-1, 1};
+
                   if (note.offTime - onTime < MChord::minAllowedDuration()) {
                         it = chord.notes.erase(it);
                         qDebug() << "quantizeChords: note was removed due to its short length";
