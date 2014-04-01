@@ -13,6 +13,7 @@ class MidiNote {
       int pitch;
       int velo;
       ReducedFraction offTime;
+      ReducedFraction quantizedOffTime = {-1, 1};     // invalid
       Tie* tie = nullptr;
       bool staccato = false;
       };
@@ -21,6 +22,7 @@ class MidiChord {
    public:
       int voice = 0;
       bool isInTuplet = false;
+      ReducedFraction quantizedOnTime = {-1, 1};      // invalid
       QList<MidiNote> notes;
       bool isStaccato() const
             {
