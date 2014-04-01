@@ -48,7 +48,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       nText->setText(timesig->denominatorString());
       // set validators for numerator and denominator strings
       // which only accept '+', '(', ')', digits and some time symb conventional representations
-      QRegExp rx("[0-9+CO()¢Ø]*");
+      QRegExp rx("[0-9+CO()\\x00A2\\x00D8]*");
       QValidator *validator = new QRegExpValidator(rx, this);
       zText->setValidator(validator);
       nText->setValidator(validator);
@@ -73,17 +73,17 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
 
       // set ID's of other symbols
       static const SymId prolatioSymbols[] = {
-            SymId::mensuralProlation1,
-            SymId::mensuralProlation2,
-            SymId::mensuralProlation3,
-            SymId::mensuralProlation4,
-            SymId::mensuralProlation5,
+            SymId::mensuralProlation1,          // tempus perfectum, prol. perfecta
+            SymId::mensuralProlation2,          // tempus perfectum, prol. imperfecta
+            SymId::mensuralProlation3,          // tempus perfectum, prol. imperfecta, dimin.
+            SymId::mensuralProlation4,          // tempus perfectum, prol. perfecta, dimin.
+            SymId::mensuralProlation5,          // tempus imperf. prol. perfecta
 //            SymId::mensuralProlation6,              // same shape as common time
-            SymId::mensuralProlation7,
-            SymId::mensuralProlation8,
+            SymId::mensuralProlation7,          // tempus imperf., prol. imperfecta, reversed
+            SymId::mensuralProlation8,          // tempus imperf., prol. perfecta, dimin.
 //            SymId::mensuralProlation9,              // same shape as alla breve
-            SymId::mensuralProlation10,
-            SymId::mensuralProlation11,
+            SymId::mensuralProlation10,         // tempus imperf., prol imperfecta, dimin., reversed
+            SymId::mensuralProlation11,         // tempus inperf., prol. perfecta, reversed
             };
 
       ScoreFont* scoreFont = t->score()->scoreFont();
