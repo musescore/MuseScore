@@ -948,7 +948,7 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
             }
       const auto tupletCommons = findTupletCommons(tuplets);
 
-      std::vector<int> bestIndexes = findBestTuplets(tupletCommons, tuplets, commonsSize);
+      const std::vector<int> bestIndexes = findBestTuplets(tupletCommons, tuplets, commonsSize);
 
       Q_ASSERT_X(validateSelectedTuplets(bestIndexes.begin(), bestIndexes.end(), tuplets),
                  "MIDI tuplets: filterTuplets", "Tuplets have common chords but they shouldn't");
