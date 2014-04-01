@@ -1864,8 +1864,18 @@ void findTupletQuantizedOnTime(std::vector<TupletInfo> &tuplets,
       {
       for (auto &tuplet: tuplets) {
             for (auto &chord: tuplet.chords) {
-                  chord.second->second.quantizedOnTime = startBarTick + Quantize::quantizeValue(
-                                    chord.first - startBarTick, tuplet.tupletQuant);
+                  if (chord.first < startBarTick) {
+                        chord.second->second.quantizedOnTime = startBarTick;
+                        }
+                  else {
+                        chord.second->second.quantizedOnTime = startBarTick + Quantize::quantizeValue(
+                                          chord.first - startBarTick, tuplet.tupletQuant);
+
+                        }
+
+                  Q_ASSERT_X(chord.second->second.quantizedOnTime >= tuplet.onTime,
+                             "MidiTuplet::findTupletQuantizedOnTime",
+                             "Chord onTime value is less than tuplet begin time");
                   }
             }
       }
@@ -1928,8 +1938,7 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
       if (!operations.tuplets.doSearch)
             return std::vector<TupletData>();
-      const auto tol = Quantize::fixedQuantRaster() / 2;
-      auto startBarChordIt = MChord::findFirstChordInRange(startBarTick - tol, endBarTick,
+      auto startBarChordIt = MChord::findFirstChordInRange(startBarTick, endBarTick,
                                                            chords.begin(), chords.end());
       startBarChordIt = findTupletFreeChord(startBarChordIt, chords.end(), startBarTick);
       if (startBarChordIt == chords.end())      // no chords in this bar
@@ -1939,6 +1948,10 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                                                              startBarChordIt, chords.end());
       const auto regularRaster = Quantize::findRegularQuantRaster(startBarChordIt, endBarChordIt,
                                                                   endBarTick);
+      const auto tol = regularRaster / 2;
+                  // update start chord: use chords with onTime >= (start bar tick - tol)
+      startBarChordIt = MChord::findFirstChordInRange(startBarTick - tol, endBarTick,
+                                                      chords.begin(), chords.end());
       const auto divLengths = Meter::divisionsOfBarForTuplets(barFraction);
 
       std::vector<TupletInfo> tuplets;
