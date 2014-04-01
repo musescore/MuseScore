@@ -462,10 +462,13 @@ void Preferences::read()
       useOsc                 = s.value("useOsc", useOsc).toBool();
       oscPort                = s.value("oscPort", oscPort).toInt();
       styleName              = s.value("style", styleName).toString();
-      if (styleName == "dark")
+      if (styleName == "dark") {
             globalStyle  = STYLE_DARK;
-      else
+      } else if (styleName == "light") {
             globalStyle  = STYLE_LIGHT;
+      } else {
+            globalStyle  = STYLE_NATIVE;
+      }
 
       animations       = s.value("animations",       animations).toBool();
       singlePalette    = s.value("singlePalette",    singlePalette).toBool();
@@ -1426,9 +1429,13 @@ void PreferenceDialog::apply()
             prefs.styleName = "dark";
             prefs.globalStyle = STYLE_DARK;
             }
-      else {
+      else if (styleName->currentIndex() == STYLE_LIGHT) {
             prefs.styleName = "light";
             prefs.globalStyle = STYLE_LIGHT;
+            }
+      else {
+            prefs.styleName = "native";
+            prefs.globalStyle = STYLE_NATIVE;
             }
 
       prefs.animations = animations->isChecked();

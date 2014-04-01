@@ -4815,7 +4815,7 @@ int main(int argc, char* av[])
                         QToolTip::setPalette(palette);
 
                         break;
-                  }
+                }
             qApp->setStyleSheet(
                   "*:disabled {\n"
                   "   color: gray\n"
