@@ -12,7 +12,7 @@ class MidiNote {
    public:
       int pitch;
       int velo;
-      ReducedFraction len;
+      ReducedFraction offTime;
       Tie* tie = nullptr;
       bool staccato = false;
       };
@@ -65,9 +65,10 @@ Iter findEndChordInRange(const ReducedFraction &endRangeTick,
       return it;
       }
 
-ReducedFraction maxNoteLen(const QList<MidiNote> &notes);
+ReducedFraction maxNoteOffTime(const QList<MidiNote> &notes);
 const ReducedFraction& minAllowedDuration();
-ReducedFraction findMinDuration(const QList<MidiChord> &midiChords,
+ReducedFraction findMinDuration(const ReducedFraction &onTime,
+                                const QList<MidiChord> &midiChords,
                                 const ReducedFraction &length);
 void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord> &chords);
 void collectChords(std::multimap<int, MTrack> &tracks);

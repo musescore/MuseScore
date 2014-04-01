@@ -28,8 +28,8 @@ ReducedFraction shortestQuantizedNoteInBar(
             if (it->first >= endBarTick)
                   break;
             for (const auto &note: it->second.notes) {
-                  if (note.len < minDuration)
-                        minDuration = note.len;
+                  if (note.offTime - it->first < minDuration)
+                        minDuration = note.offTime - it->first;
                   }
             }
                   // determine suitable quantization value based on shortest note in measure
@@ -168,14 +168,14 @@ void quantizeChords(std::multimap<ReducedFraction, MidiChord> &chords,
 
             for (auto it = chord.notes.begin(); it != chord.notes.end(); ) {
                   auto &note = *it;
-                  auto offTime = chordEvent.first + note.len;
+                  auto offTime = note.offTime;
                   raster = findQuantRaster(offTime, chord.voice, tupletEvents, chords, sigmap);
                   if (Meter::isSimpleNoteDuration(raster))    // offTime is not inside tuplet
-                        raster = reduceRasterIfDottedNote(note.len, raster);
+                        raster = reduceRasterIfDottedNote(note.offTime - chordEvent.first, raster);
 
                   offTime = barStart + Quantize::quantizeValue(offTime - barStart, raster);
-                  note.len = offTime - onTime;
-                  if (note.len < MChord::minAllowedDuration()) {
+                  note.offTime = offTime;
+                  if (note.offTime - onTime < MChord::minAllowedDuration()) {
                         it = chord.notes.erase(it);
                         qDebug() << "quantizeChords: note was removed due to its short length";
                         continue;
