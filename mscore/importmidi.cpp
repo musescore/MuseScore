@@ -77,8 +77,8 @@ void cleanUpMidiEvents(std::multimap<int, MTrack> &tracks)
             for (auto chordIt = mtrack.chords.begin(); chordIt != mtrack.chords.end(); ) {
                   MidiChord &ch = chordIt->second;
                   for (auto noteIt = ch.notes.begin(); noteIt != ch.notes.end(); ) {
-                        if ((noteIt->len < MChord::minAllowedDuration())
-                                    || (!reduce && noteIt->len < raster / 2)) {
+                        if ((noteIt->offTime - chordIt->first < MChord::minAllowedDuration())
+                                    || (!reduce && noteIt->offTime - chordIt->first < raster / 2)) {
                               noteIt = ch.notes.erase(noteIt);
                               continue;
                               }
@@ -101,11 +101,9 @@ bool doNotesOverlap(const MTrack &track)
       const auto &chords = track.chords;
       for (auto i1 = chords.begin(); i1 != chords.end(); ++i1) {
             const auto &chord1 = i1->second;
-            const auto &onTime1 = i1->first;
             for (const auto &note1: chord1.notes) {
                   for (auto i2 = std::next(i1); i2 != chords.end(); ++i2) {
-                        const auto &onTime2 = i2->first;
-                        if (onTime2 >= onTime1 + note1.len)
+                        if (i2->first >= note1.offTime)
                               break;
                         const auto &chord2 = i2->second;
                         if (chord1.voice != chord2.voice)
@@ -135,7 +133,7 @@ bool noTooShortNotes(const std::multimap<int, MTrack> &tracks)
             const auto &chords = track.second.chords;
             for (const auto &chord: chords) {
                   for (const auto &note: chord.second.notes) {
-                        if (note.len < MChord::minAllowedDuration())
+                        if (note.offTime - chord.first < MChord::minAllowedDuration())
                               return false;
                         }
                   }
@@ -449,7 +447,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
             ReducedFraction len = nextChordTick - tick;
             if (len <= ReducedFraction(0, 1))
                   break;
-            len = MChord::findMinDuration(midiChords, len);
+            len = MChord::findMinDuration(tick, midiChords, len);
             Measure* measure = score->tick2measure(tick.ticks());
             len = splitDurationOnBarBoundary(len, tick, measure);
 
@@ -480,14 +478,12 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
                   MidiChord& midiChord = midiChords[k];
                   setMusicNotesFromMidi(score, midiChord.notes, startChordTick,
                                         len, chord, tick, drumset, useDrumset);
-                  if (!midiChord.notes.empty() && midiChord.notes.first().len <= len) {
+                  if (!midiChord.notes.empty() && midiChord.notes.first().offTime - tick <= len) {
                         midiChords.removeAt(k);
                         --k;
                         continue;
                         }
                   setTies(chord, score, midiChord.notes);
-                  for (auto &midiNote: midiChord.notes)
-                        midiNote.len -= len;
                   }
             startChordTick += len;
             }
@@ -623,7 +619,7 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                         MidiNote  n;
                         n.pitch    = pitch;
                         n.velo     = e.velo();
-                        n.len      = len;
+                        n.offTime  = tick + len;
 
                         MidiChord c;
                         c.notes.push_back(n);

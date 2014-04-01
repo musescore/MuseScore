@@ -345,10 +345,10 @@ void isSingleNoteInTupletAllowed(int tupletNumber,
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
       MidiNote note;
-      note.len = ReducedFraction::fromTicks(std::round(tupletInfo.len.ticks()
-                                                       * noteLenInTupletLen));
-      chord.notes.push_back(note);
       const ReducedFraction onTime = ReducedFraction::fromTicks(10);
+      note.offTime = onTime + ReducedFraction::fromTicks(
+                        std::round(tupletInfo.len.ticks() * noteLenInTupletLen));
+      chord.notes.push_back(note);
       chords.insert({onTime, chord});
 
       tupletInfo.chords.insert({onTime, chords.begin()});
@@ -373,9 +373,9 @@ void isChordCountInTupletAllowed(int tupletNumber,
       for (int i = 0; i != chordCount; ++i) {
             MidiChord chord;
             MidiNote note;
-            note.len = tupletInfo.len / tupletNumber; // allowed
-            chord.notes.push_back(note);
             const ReducedFraction onTime = tupletInfo.len / tupletNumber * i;
+            note.offTime = onTime + tupletInfo.len / tupletNumber; // allowed
+            chord.notes.push_back(note);
             const auto lastChordIt = chords.insert({onTime, chord});
             tupletInfo.chords.insert({onTime, lastChordIt});
             }
@@ -398,9 +398,9 @@ void isTupletErrorAllowed(int tupletSumError,
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
       MidiNote note;
-      note.len = tupletInfo.len / tupletInfo.tupletNumber;  // allowed
-      chord.notes.push_back(note);
       const ReducedFraction onTime = ReducedFraction::fromTicks(10);
+      note.offTime = onTime + tupletInfo.len / tupletInfo.tupletNumber;  // allowed
+      chord.notes.push_back(note);
       chords.insert({onTime, chord});
 
       tupletInfo.chords.insert({onTime, chords.begin()});
@@ -629,19 +629,19 @@ void TestImportMidi::findLongestUncommonGroup()
 //--------------------------------------------------------------------------
       // tuplet voice separation
 
-MidiNote noteFactory(const ReducedFraction &len, int pitch)
+MidiNote noteFactory(const ReducedFraction &offTime, int pitch)
       {
       MidiNote note;
-      note.len = len;
+      note.offTime = offTime;
       note.pitch = pitch;
       return note;
       }
 
-MidiChord chordFactory(const ReducedFraction &len, const std::vector<int> &pitches)
+MidiChord chordFactory(const ReducedFraction &offTime, const std::vector<int> &pitches)
       {
       std::vector<MidiNote> notes;
       for (const auto &pitch: pitches)
-            notes.push_back(noteFactory(len, pitch));
+            notes.push_back(noteFactory(offTime, pitch));
       MidiChord chord;
       if (notes.empty())
             return chord;
@@ -668,7 +668,7 @@ void TestImportMidi::separateTupletVoices()
       std::vector<int> pitches = {74, 77};
       for (int i = 1; i != tripletNumber; ++i) {
             chords.insert({tripletNoteLen * i,
-                           chordFactory(tripletNoteLen, {pitches[i]})});
+                           chordFactory(tripletNoteLen * (i + 1), {pitches[i]})});
             }
                   // quintuplet
       const ReducedFraction quintupletLen = tupletLen;
@@ -677,7 +677,7 @@ void TestImportMidi::separateTupletVoices()
       pitches = {60, 62, 58, 60};
       for (int i = 1; i != quintupletNumber; ++i) {
             chords.insert({quintupletNoteLen * i,
-                           chordFactory(quintupletNoteLen, {pitches[i]})});
+                           chordFactory(quintupletNoteLen * (i + 1), {pitches[i]})});
             }
                   // septuplet
       const ReducedFraction septupletLen = tupletLen * 2;
@@ -686,7 +686,7 @@ void TestImportMidi::separateTupletVoices()
       pitches = {50, 52, 48, 51, 47, 47};
       for (int i = 1; i != septupletNumber; ++i) {
             chords.insert({septupletNoteLen * i,
-                           chordFactory(septupletNoteLen, {pitches[i]})});
+                           chordFactory(septupletNoteLen * (i + 1), {pitches[i]})});
             }
 
       MidiTuplet::TupletInfo tripletInfo;

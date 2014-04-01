@@ -67,7 +67,8 @@ bool isTupletAllowed(const TupletInfo &tupletInfo)
                         && tupletInfo.firstChordIndex == 0) {
                   const auto &chordEventIt = tupletInfo.chords.begin()->second;
                   for (const auto &note: chordEventIt->second.notes) {
-                        if ((note.len - tupletInfo.len / num).absValue() > tupletInfo.regularQuant)
+                        if ((note.offTime - chordEventIt->first
+                                    - tupletInfo.len / num).absValue() > tupletInfo.regularQuant)
                               return false;
                         }
                   }
@@ -93,7 +94,7 @@ bool isTupletAllowed(const TupletInfo &tupletInfo)
       const auto tupletNoteLen = tupletInfo.len / tupletInfo.tupletNumber;
       for (const auto &tupletChord: tupletInfo.chords) {
             for (const auto &note: tupletChord.second->second.notes) {
-                  if (note.len >= tupletNoteLen / 2)
+                  if (note.offTime - tupletChord.first >= tupletNoteLen / 2)
                         return true;
                   }
             }
@@ -254,15 +255,16 @@ ReducedFraction findSumLengthOfRests(const TupletInfo &tupletInfo,
                                                                  tupletInfo.tupletQuant);
             if (beg < chordOnTime)
                   sumLen += (chordOnTime - beg);
-            ReducedFraction maxLen(0, 1);
+            ReducedFraction maxOffTime(0, 1);
             for (int i = 0; i != midiChord.notes.size(); ++i) {
-                  auto noteLen = midiChord.notes[i].len;
+                  auto noteOffTime = midiChord.notes[i].offTime;
                   if (staccatoIt != tupletInfo.staccatoChords.end() && i == staccatoIt->second)
-                        noteLen = tupletNoteLen;
-                  if (noteLen > maxLen)
-                        maxLen = noteLen;
+                        noteOffTime = chordOnTime + tupletNoteLen;
+                  if (noteOffTime > maxOffTime)
+                        maxOffTime = noteOffTime;
                   }
-            beg = chordOnTime + Quantize::quantizeValue(maxLen, tupletInfo.tupletQuant);
+            beg = startBarTick + Quantize::quantizeValue(maxOffTime - startBarTick,
+                                                         tupletInfo.tupletQuant);
             if (beg >= tupletEndTime)
                   break;
             }
@@ -325,7 +327,7 @@ tupletInterval(const TupletInfo &tuplet)
       ReducedFraction tupletEnd = tuplet.onTime + tuplet.len;
 
       for (const auto &chord: tuplet.chords) {
-            auto offTime = chord.first + MChord::maxNoteLen(chord.second->second.notes);
+            auto offTime = MChord::maxNoteOffTime(chord.second->second.notes);
                         // quantization with regular raster (not tuplet raster)
                         // so we don't have to measure time values from bar start
             offTime = Quantize::quantizeValue(offTime, tuplet.regularQuant);
@@ -1068,16 +1070,17 @@ bool hasIntersectionWithChord(const ReducedFraction &startTick,
                               const std::multimap<ReducedFraction, MidiChord>::iterator &chord)
       {
       const auto onTimeRaster = Quantize::reduceRasterIfDottedNote(
-                                  MChord::maxNoteLen(chord->second.notes), regularRaster);
+                        MChord::maxNoteOffTime(chord->second.notes) - chord->first, regularRaster);
                   // don't need to measure time values from bar start
                   // because of regular raster (not tuplet raster)
       const auto onTime = Quantize::quantizeValue(chord->first, onTimeRaster);
-      auto testChord = chord->second;
+      MidiChord testChord = chord->second;      // copy chord
       for (auto &note: testChord.notes) {
-            auto offTimeRaster = Quantize::reduceRasterIfDottedNote(note.len, regularRaster);
-            note.len = Quantize::quantizeValue(note.len, offTimeRaster);
+            const auto offTimeRaster = Quantize::reduceRasterIfDottedNote(
+                                          note.offTime - chord->first, regularRaster);
+            note.offTime = Quantize::quantizeValue(note.offTime, offTimeRaster);
             }
-      return (endTick > onTime && startTick < onTime + MChord::maxNoteLen(testChord.notes));
+      return (endTick > onTime && startTick < MChord::maxNoteOffTime(testChord.notes));
       }
 
 // split first tuplet chord, that belong to 2 tuplets, into 2 chords
@@ -1140,7 +1143,7 @@ bool canTupletBeTied(const TupletInfo &tuplet,
 
       const auto tupletFreeEnd = tuplet.onTime
                   + tuplet.len / tuplet.tupletNumber * firstChordIndex;
-      const auto maxLen = MChord::maxNoteLen(chordIt->second.notes);
+      const auto maxLen = MChord::maxNoteOffTime(chordIt->second.notes) - chordIt->first;
       const auto chordOffTime = chordIt->first + maxLen;
                   // if chord offTime is outside bar - discard chord
       if (chordOffTime < startBarTick)
@@ -1248,16 +1251,16 @@ void minimizeOffTimeError(std::vector<TupletInfo> &tuplets,
             std::vector<int> leavedIndexes;
             for (int i = 0; i != notes.size(); ++i) {
                   const auto &note = notes[i];
-                  if (note.len <= tupletInfo.len) {
+                  if (note.offTime - onTime <= tupletInfo.len) {
                         if ((tupletInfo.chords.size() == 1
                                     && notes.size() > (int)removedIndexes.size())
                                  || (tupletInfo.chords.size() > 1
                                     && notes.size() > (int)removedIndexes.size() + 1))
                               {
-                              auto tupletError = findQuantizationError(onTime + note.len - startBarTick,
-                                                                       tupletInfo.tupletQuant);
-                              auto regularError = findQuantizationError(onTime + note.len,
-                                                                        tupletInfo.regularQuant);
+                              const auto tupletError = findQuantizationError(
+                                                note.offTime - startBarTick, tupletInfo.tupletQuant);
+                              const auto regularError = findQuantizationError(
+                                                note.offTime, tupletInfo.regularQuant);
                               if (tupletError > regularError) {
                                     removedIndexes.push_back(i);
                                     continue;
@@ -1304,7 +1307,7 @@ void addChordsBetweenTupletNotes(
                                                           tuplet.regularQuant, chordIt)) {
                         auto regularError = findQuantizationError(onTime, tuplet.regularQuant);
                         auto tupletError = findQuantizationError(onTime - startBarTick, tuplet.tupletQuant);
-                        const auto offTime = onTime + MChord::maxNoteLen(chordIt->second.notes);
+                        const auto offTime = MChord::maxNoteOffTime(chordIt->second.notes);
 
                         if (offTime < tuplet.onTime + tuplet.len) {
                               regularError += findQuantizationError(offTime, tuplet.regularQuant);
@@ -1328,7 +1331,7 @@ chordInterval(const std::pair<const ReducedFraction, MidiChord> *chord,
                   // don't need to measure time values from bar start
                   // because we use here regular raster, not tuplet raster
       auto onTime = Quantize::quantizeValue(chord->first, regularRaster);
-      auto offTime = chord->first + MChord::maxNoteLen(chord->second.notes);
+      auto offTime = MChord::maxNoteOffTime(chord->second.notes);
       offTime = Quantize::quantizeValue(offTime, regularRaster);
       return std::make_pair(onTime, offTime);
       }
@@ -1756,7 +1759,7 @@ void detectStaccato(TupletInfo &tuplet)
             for (auto &chord: tuplet.chords) {
                   MidiChord &midiChord = chord.second->second;
                   for (int i = 0; i != midiChord.notes.size(); ++i) {
-                        if (midiChord.notes[i].len < tupletNoteLen / 2) {
+                        if (midiChord.notes[i].offTime - chord.first < tupletNoteLen / 2) {
                                     // later if chord have one or more notes
                                     // with staccato -> entire chord is staccato
 
@@ -1813,7 +1816,7 @@ void applyStaccatoForTuplets(std::vector<TupletInfo> &tuplets,
                                     if (next->first < offTime)
                                           offTime = next->first;
                                     }
-                              note.len = offTime - it->first;
+                              note.offTime = offTime;
                               }
                         }
                   }
@@ -2016,7 +2019,7 @@ void removeEmptyTuplets(MTrack &track)
                                     // check now for notes with len == tupletData.len
                         if (onTime == tupletData.onTime) {
                               for (const auto &note: chord.second.notes) {
-                                    if (note.len < tupletData.len) {
+                                    if (note.offTime - onTime < tupletData.len) {
                                           ok = true;
                                           break;
                                           }
