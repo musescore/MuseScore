@@ -88,6 +88,7 @@ class SlurSegment : public SpannerSegment {
       virtual QPainterPath shape() const { return shapePath; }
       virtual void draw(QPainter*) const;
 
+      bool isEdited() const;
       virtual bool isEditable() const { return true; }
       virtual void editDrag(const EditData&);
       virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);

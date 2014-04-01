@@ -581,8 +581,8 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
                   // on staff
                   if (qAbs(topY - lineY) < minDistance && qAbs(bottomY - lineY) < minDistance) {
                         // too close to line
-                        if (!isNudged()) {
-                              // user has not edited
+                        if (!isNudged() && !isEdited()) {
+                              // user has not nudged or edited
                               qreal offY;
                               if (up)
                                     offY = (lineY - minDistance) - topY;
@@ -612,6 +612,19 @@ void SlurSegment::setAutoAdjust(const QPointF& offset)
                   ups[i].p += diff;
             autoAdjustOffset = offset;
             }
+      }
+
+//---------------------------------------------------------
+//   isEdited
+//---------------------------------------------------------
+
+bool SlurSegment::isEdited() const
+      {
+      for (int i = 0; i < SLUR_GRIPS; ++i) {
+            if (!ups[i].off.isNull())
+                  return true;
+            }
+      return false;
       }
 
 //---------------------------------------------------------
