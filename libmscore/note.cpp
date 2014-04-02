@@ -1428,7 +1428,10 @@ bool Note::dotIsUp() const
       {
       if (_dots[0] == 0)
             return true;
-      return _dots[0]->y() < spatium() * .1;
+      if (_userDotPosition == MScore::AUTO)
+            return _dots[0]->y() < spatium() * .1;
+      else
+            return (_userDotPosition == MScore::UP);
       }
 
 //---------------------------------------------------------
