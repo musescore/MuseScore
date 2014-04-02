@@ -230,6 +230,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   popup->addAction(tr("Staff Text Properties..."))->setData("st-props");
             }
       else if (e->type() == Element::TEXT
+               || e->type() == Element::REHEARSAL_MARK
+               || e->type() == Element::MARKER
+               || e->type() == Element::JUMP
                || e->type() == Element::FINGERING
                || e->type() == Element::LYRICS
                || e->type() == Element::FIGURED_BASS) {
