@@ -102,21 +102,6 @@ struct TupletInfo
       std::map<ReducedFraction, int> staccatoChords;      // <onTime, note index>
       };
 
-class TupletCommonIndexes
-      {
-   public:
-      void add(const std::vector<int> &commonIndexes);
-      std::pair<std::vector<int>, bool> generateNext();
-
-      const std::vector<std::vector<int>>& allIndexes() const { return indexes; } // for testing
-
-   private:
-      std::vector<std::vector<int>> indexes;
-      std::vector<int> current;        // indexes of tuplet indexes
-      int counter = 0;
-      int maxCount = 1;
-      };
-
 } // namespace MidiTuplet
 
 namespace MidiCharset {
