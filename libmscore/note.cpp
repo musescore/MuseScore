@@ -172,7 +172,7 @@ Note::Note(Score* s)
       _mirror            = false;
       _userMirror        = MScore::DH_AUTO;
       _small             = false;
-      _dotPosition       = MScore::AUTO;
+      _userDotPosition   = MScore::AUTO;
       _line              = 0;
       _fret              = -1;
       _string            = -1;
@@ -230,7 +230,7 @@ Note::Note(const Note& n)
       _mirror            = n._mirror;
       _userMirror        = n._userMirror;
       _small             = n._small;
-      _dotPosition       = n._dotPosition;
+      _userDotPosition   = n._userDotPosition;
       _accidental        = 0;
 
       if (n._accidental)
@@ -1281,6 +1281,72 @@ Element* Note::drop(const DropData& data)
       }
 
 //---------------------------------------------------------
+//   setDotPosition
+//---------------------------------------------------------
+
+void Note::setDotY(MScore::Direction pos)
+      {
+      bool onLine = false;
+      qreal y = 0;
+
+      if (staff()->isTabStaff()) {
+            // with TAB's, dotPosX is not set:
+            // get dot X from width of fret text and use TAB default spacing
+            StaffTypeTablature* tab = static_cast<StaffTypeTablature*>(staff()->staffType());
+            if (tab->stemThrough() ) {
+                  // if fret mark on lines, use standard processing
+                  if (tab->onLines())
+                        onLine = true;
+                  else
+                        // if fret marks above lines, raise the dots by half line distance
+                        y = -0.5;
+                  }
+            // if stems beside staff, do nothing
+            else
+                  return;
+            }
+      else
+            onLine = !(line() & 1);
+
+      bool oddVoice = voice() & 1;
+      if (onLine) {
+            // displace dots by half spatium up or down according to voice
+            if (pos == MScore::AUTO)
+                  y = oddVoice ? 0.5 : -0.5;
+            else if (pos == MScore::UP)
+                  y = -0.5;
+            else
+                  y = 0.5;
+            }
+      else {
+            if (pos == MScore::UP && !oddVoice)
+                  y -= 1.0;
+            else if (pos == MScore::DOWN && oddVoice)
+                  y += 1.0;
+            }
+      y *= spatium() * staff()->lineDistance();
+
+      // apply to dots
+
+      int dots = chord()->dots();
+      for (int i = 0; i < 3; ++i) {
+            if (i < dots) {
+                  if (_dots[i] == 0) {
+                        NoteDot* dot = new NoteDot(score());
+                        dot->setIdx(i);
+                        dot->setParent(this);
+                        dot->setTrack(track());  // needed to know the staff it belongs to (and detect tablature)
+                        score()->undoAddElement(dot); // move dot to _dots[i]
+                        }
+                  _dots[i]->layout();
+                  _dots[i]->rypos() = y;
+                  }
+            else if (_dots[i])
+                  score()->undoRemoveElement(_dots[i]);
+            }
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -1298,24 +1364,6 @@ void Note::layout()
             if (parent() == 0)
                   return;
             }
-      // if not TAB or TAB with stems through
-      if (!useTablature || ((StaffTypeTablature*)staff()->staffType())->stemThrough()) {
-            int dots = chord()->dots();
-            for (int i = 0; i < 3; ++i) {
-                  if (i < dots) {
-                        if (_dots[i] == 0) {
-                              NoteDot* dot = new NoteDot(score());
-                              dot->setIdx(i);
-                              dot->setParent(this);
-                              dot->setTrack(track());  // needed to know the staff it belongs to (and detect tablature)
-                              score()->undoAddElement(dot); // move dot to _dots[i]
-                              }
-                        _dots[i]->layout();
-                        }
-                  else if (_dots[i])
-                        score()->undoRemoveElement(_dots[i]);
-                  }
-            }
       }
 
 //---------------------------------------------------------
@@ -1331,51 +1379,25 @@ void Note::layout2()
       if (dots) {
             qreal d  = point(score()->styleS(ST_dotNoteDistance));
             qreal dd = point(score()->styleS(ST_dotDotDistance));
-            qreal y  = 0.0;
             qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
-            bool onLine = false;
-
-            // do not draw dots on staff line:
 
             // if TAB and stems through staff
             if (staff()->isTabStaff()) {
                   // with TAB's, dotPosX is not set:
                   // get dot X from width of fret text and use TAB default spacing
-                  StaffTypeTablature* tab = static_cast<StaffTypeTablature*>( staff()->staffType());
                   x = width();
                   dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
                   d = dd * 0.5;
-                  if(tab->stemThrough() ) {
-                        // if fret mark on lines, use standard processing
-                        if (tab->onLines())
-                              onLine = true;
-                        else
-                        // if fret marks above lines, raise the dots by half line distance
-                              y = -staff()->lineDistance() * 0.5;
-                        }
-                  // if stems beside staff, do nothing
-                  else
+                  StaffTypeTablature* tab = static_cast<StaffTypeTablature*>( staff()->staffType());
+                  if (!tab->stemThrough())
                         return;
                   }
-            // if not TAB, look at note line
-            else
-                  onLine = (_line & 1) == 0;
-            // if on line, displace dots by half spatium up or down according to voice
-            if (onLine) {
-                  if (_dotPosition == MScore::AUTO)
-                        y = (voice() & 1) == 0 ? -0.5 : 0.5;
-                  else if (_dotPosition == MScore::UP)
-                        y = -0.5;
-                  else
-                        y = 0.5;
-                  }
-            y *= spatium();
 
             // apply to dots
             for (int i = 0; i < dots; ++i) {
                   NoteDot* dot = _dots[i];
                   if (dot) {
-                        dot->setPos(x + d + dd * i, y);
+                        dot->rxpos() = x + d + dd * i;
                         _dots[i]->adjustReadPos();
                         }
                   }
@@ -1802,7 +1824,7 @@ QVariant Note::getProperty(P_ID propertyId) const
             case P_MIRROR_HEAD:
                   return userMirror();
             case P_DOT_POSITION:
-                  return dotPosition();
+                  return userDotPosition();
             case P_HEAD_GROUP:
                   return int(headGroup());
             case P_VELO_OFFSET:
@@ -1856,7 +1878,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   setUserMirror(MScore::DirectionH(v.toInt()));
                   break;
             case P_DOT_POSITION:
-                  setDotPosition(MScore::Direction(v.toInt()));
+                  setUserDotPosition(MScore::Direction(v.toInt()));
                   break;
             case P_HEAD_GROUP:
                   setHeadGroup(NoteHeadGroup(v.toInt()));
@@ -1989,10 +2011,10 @@ void Note::undoSetUserMirror(MScore::DirectionH val)
       }
 
 //---------------------------------------------------------
-//   undoSetDotPosition
+//   undoSetUserDotPosition
 //---------------------------------------------------------
 
-void Note::undoSetDotPosition(MScore::Direction val)
+void Note::undoSetUserDotPosition(MScore::Direction val)
       {
       undoChangeProperty(P_DOT_POSITION, val);
       }

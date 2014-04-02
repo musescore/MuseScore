@@ -130,7 +130,7 @@ class NoteHead : public Symbol {
 //   @P veloType          enum  OFFSET_VAL, USER_VAL
 //   @P veloOffset        int
 //   @P userMirror        enum DH_AUTO, DH_LEFT, DH_RIGHT
-//   @P dotPosition       enum AUTO, UP, DOWN
+//   @P userDotPosition   enum AUTO, UP, DOWN
 //   @P headGroup         enum HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT
 //   @P headType          enum HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS
 //   @P elements          array[Element] list of elements attached to note head
@@ -154,7 +154,7 @@ class Note : public Element {
       Q_PROPERTY(Ms::MScore::ValueType veloType    READ veloType      WRITE undoSetVeloType)
       Q_PROPERTY(int veloOffset                READ veloOffset        WRITE undoSetVeloOffset)
       Q_PROPERTY(Ms::MScore::DirectionH userMirror READ userMirror    WRITE undoSetUserMirror)
-      Q_PROPERTY(Ms::MScore::Direction dotPosition READ dotPosition   WRITE undoSetDotPosition)
+      Q_PROPERTY(Ms::MScore::Direction userDotPosition      READ userDotPosition   WRITE undoSetUserDotPosition)
       Q_PROPERTY(NoteHeadGroup     headGroup   READ headGroup         WRITE undoSetHeadGroup)
       Q_PROPERTY(NoteHeadType      headType    READ headType          WRITE undoSetHeadType)
       Q_PROPERTY(QQmlListProperty<Element> elements  READ qmlElements)
@@ -192,8 +192,8 @@ class Note : public Element {
 
       qreal _tuning;         ///< pitch offset in cent, playable only by internal synthesizer
 
-      MScore::DirectionH _userMirror; ///< user override of mirror
-      MScore::Direction _dotPosition; ///< dot position: above or below current staff line
+      MScore::DirectionH _userMirror;     ///< user override of mirror
+      MScore::Direction _userDotPosition; ///< user override of dot position
 
       Accidental* _accidental;
 
@@ -320,8 +320,8 @@ class Note : public Element {
       MScore::DirectionH userMirror() const     { return _userMirror; }
       void setUserMirror(MScore::DirectionH d)  { _userMirror = d; }
 
-      MScore::Direction dotPosition() const     { return _dotPosition; }
-      void setDotPosition(MScore::Direction d)  { _dotPosition = d;    }
+      MScore::Direction userDotPosition() const       { return _userDotPosition; }
+      void setUserDotPosition(MScore::Direction d)    { _userDotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
 
       void reset();
@@ -366,7 +366,7 @@ class Note : public Element {
       void undoSetOnTimeUserOffset(int);
       void undoSetOffTimeUserOffset(int);
       void undoSetUserMirror(MScore::DirectionH);
-      void undoSetDotPosition(MScore::Direction);
+      void undoSetUserDotPosition(MScore::Direction);
       void undoSetHeadGroup(NoteHeadGroup);
       void undoSetHeadType(NoteHeadType);
 
@@ -377,6 +377,7 @@ class Note : public Element {
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
       virtual void setScore(Score* s);
+      void setDotY(MScore::Direction);
 
       static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
       };
