@@ -15,7 +15,8 @@ else
        emmentaler-8 bravura-8 emmentaler-9 bravura-9 emmentaler-10 bravura-10\
        emmentaler-11 bravura-11 frametext ottava slurs-1\
        chord-layout-1 chord-layout-2 chord-layout-3 chord-layout-4 chord-layout-5\
-       accidental-1 accidental-2 accidental-3 accidental-4 accidental-5 accidental-6"
+       accidental-1 accidental-2 accidental-3 accidental-4 accidental-5 accidental-6\
+       tie-1"
 fi
 
 MSCORE=../build.debug/mscore/mscore
