@@ -169,8 +169,8 @@ void quantizeChords(std::multimap<ReducedFraction, MidiChord> &chords,
                   }
             else {
                   onTime = chord.quantizedOnTime;
+                  chord.quantizedOnTime = {-1, 1};
                   }
-            chord.quantizedOnTime = {-1, 1};
 
             for (auto it = chord.notes.begin(); it != chord.notes.end(); ) {
                   MidiNote &note = *it;
@@ -185,8 +185,8 @@ void quantizeChords(std::multimap<ReducedFraction, MidiChord> &chords,
                         }
                   else {
                         note.offTime = note.quantizedOffTime;
+                        note.quantizedOffTime = {-1, 1};
                         }
-                  note.quantizedOffTime = {-1, 1};
 
                   if (note.offTime - onTime < MChord::minAllowedDuration()) {
                         it = chord.notes.erase(it);
