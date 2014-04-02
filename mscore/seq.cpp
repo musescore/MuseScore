@@ -196,6 +196,8 @@ void Seq::setScoreView(ScoreView* v)
             stopWait();
             }
       cv = v;
+      if (cs)
+            disconnect(cs, SIGNAL(playlistChanged()), this, SLOT(setPlaylistChanged()));
       cs = cv ? cv->score() : 0;
 
       if (!heartBeatTimer->isActive())
@@ -203,28 +205,11 @@ void Seq::setScoreView(ScoreView* v)
 
       playlistChanged = true;
       _synti->reset();
-      if (cs)
+      if (cs) {
             initInstruments();
+            connect(cs, SIGNAL(playlistChanged()), this, SLOT(setPlaylistChanged()));
+            }
       }
-
-//---------------------------------------------------------
-//   selectionChanged
-//---------------------------------------------------------
-
-/*void Seq::selectionChanged(int mode)
-      {
-      if (cs == 0 || _driver == 0)
-            return;
-
-      int tick = cs->pos();
-      if (tick == -1)
-            return;
-
-      if ((mode != SEL_LIST) || (state == TRANSPORT_STOP))
-            cs->setPlayPos(tick);
-      else
-            seek(tick);
-      }*/
 
 //---------------------------------------------------------
 //   init
@@ -296,7 +281,7 @@ bool Seq::canStart()
       {
       if (!_driver)
             return false;
-      if (events.empty() || cs->playlistDirty() || playlistChanged)
+      if (playlistChanged)
             collectEvents();
       return (!events.empty() && endTick != 0);
       }
@@ -308,7 +293,7 @@ bool Seq::canStart()
 
 void Seq::start()
       {
-      if (events.empty() || cs->playlistDirty() || playlistChanged)
+      if (playlistChanged)
             collectEvents();
       if (cs->playMode() == PLAYMODE_AUDIO) {
             if (!oggInit) {
@@ -902,7 +887,6 @@ void Seq::collectEvents()
       mutex.unlock();
 
       playlistChanged = false;
-      cs->setPlaylistDirty(false);
       }
 
 //---------------------------------------------------------
@@ -960,7 +944,7 @@ void Seq::seek(int utick)
       if (cs == 0)
             return;
 
-      if (events.empty() || cs->playlistDirty() || playlistChanged)
+      if (playlistChanged)
             collectEvents();
       int tick     = cs->repeatList()->utick2tick(utick);
       Segment* seg = cs->tick2segment(tick);

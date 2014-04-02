@@ -1842,6 +1842,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                            [](const Note* a,const Note* b)->bool { return b->line() < a->line(); }
                            );
                         }
+                  score()->setPlaylistDirty(true);
                   break;
             case P_TPC:
                   setTpc(v.toInt());
@@ -1862,9 +1863,11 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_VELO_OFFSET:
                   setVeloOffset(v.toInt());
+                  score()->setPlaylistDirty(true);
                   break;
             case P_TUNING:
                   setTuning(v.toDouble());
+                  score()->setPlaylistDirty(true);
                   break;
             case P_FRET:
                   setFret(v.toInt());
@@ -1880,6 +1883,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_VELO_TYPE:
                   setVeloType(MScore::ValueType(v.toInt()));
+                  score()->setPlaylistDirty(true);
                   break;
             case P_VISIBLE: {                     // P_VISIBLE requires reflecting property on dots
                   setVisible(v.toBool());
@@ -1892,6 +1896,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   }
             case P_PLAY:
                   setPlay(v.toBool());
+                  score()->setPlaylistDirty(true);
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))

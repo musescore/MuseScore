@@ -123,6 +123,10 @@ void Score::endCmd()
             const InputState& is = s->inputState();
             if (is.noteEntryMode() && is.segment())
                   s->setPlayPos(is.segment()->tick());
+            if (_playlistDirty) {
+                  emit playlistChanged();
+                  _playlistDirty = false;
+                  }
             }
 
       bool noUndo = undo()->current()->childCount() <= 1;
@@ -198,7 +202,10 @@ void Score::endUndoRedo()
             const InputState& is = score->inputState();
             if (is.noteEntryMode() && is.segment())
                   score->setPlayPos(is.segment()->tick());
-            score->setPlaylistDirty(true);
+            if (_playlistDirty) {
+                  emit playlistChanged();
+                  _playlistDirty = false;
+                  }
             }
       end();
       }
