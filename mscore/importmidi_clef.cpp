@@ -321,14 +321,6 @@ ClefType clefFromIndex(int index)
       return (index == 0) ? ClefType::G : ClefType::F;
       }
 
-int findTiePenalty(MidiTie::TieStateMachine::State tieState)
-      {
-      static const int tieBreakagePenalty = 10000000;
-      return (tieState == MidiTie::TieStateMachine::State::TIED_BACK
-              || tieState == MidiTie::TieStateMachine::State::TIED_BOTH)
-             ? tieBreakagePenalty : 0;
-      }
-
 void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
                                 std::vector<std::vector<int>> &optimalPaths,
                                 int pos,
@@ -337,62 +329,53 @@ void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
                                 const Segment *seg,
                                 const Staff *staff)
       {
-      for (int clefIndex = 0; clefIndex != 2; ++clefIndex) {
-            penalties[clefIndex].resize(pos + 1);
+      for (int clefIndex = 0; clefIndex != 2; ++clefIndex)
             optimalPaths[clefIndex].resize(pos + 1);
-            }
-      const int tiePenalty = findTiePenalty(tieState);
 
-      for (int clefIndex = 0; clefIndex != 2; ++clefIndex) {
-            int significantPitch = (clefIndex == 0)
-                                 ? minMaxPitch.minPitch() : minMaxPitch.maxPitch();
-            const int pitchPenalty = findPitchPenaltyForClef(significantPitch, clefIndex);
-
-            const int prevSameClefPenalty = (pos == 0)
-                    ? 0 : penalties[clefIndex][pos - 1];
-            const int sumPenaltySameClef = pitchPenalty + prevSameClefPenalty;
-
-            const int prevDiffClefPenalty = (pos == 0)
-                    ? 0 : penalties[1 - clefIndex][pos - 1];
-            const int clefPenalty = findClefChangePenalty(pos, 1 - clefIndex,
-                                                          optimalPaths, seg, staff);
-            const int sumPenaltyDiffClef
-                    = tiePenalty + pitchPenalty + prevDiffClefPenalty + clefPenalty;
-
-            if (sumPenaltySameClef <= sumPenaltyDiffClef) {
-                  penalties[clefIndex][pos] = sumPenaltySameClef;
-                  if (pos > 0)
-                        optimalPaths[clefIndex][pos] = clefIndex;
+      for (int curClef = 0; curClef != 2; ++curClef) {
+            const int significantPitch = (curClef == 0)
+                                       ? minMaxPitch.minPitch() : minMaxPitch.maxPitch();
+            const int pitchPenalty = findPitchPenaltyForClef(significantPitch, curClef);
+            int minPenalty = std::numeric_limits<int>::max();
+            int minIndex;
+            for (int prevClef = 0; prevClef != 2; ++prevClef) {
+                  int penalty = pitchPenalty;
+                  if (prevClef != curClef) {
+                        if (tieState == MidiTie::TieStateMachine::State::TIED_BACK
+                                || tieState == MidiTie::TieStateMachine::State::TIED_BOTH) {
+                              continue;   // there is a tie breakage that is incorrect
+                              }
+                        penalty += findClefChangePenalty(pos, prevClef, optimalPaths, seg, staff);
+                        }
+                  penalty += (pos > 0) ? penalties[prevClef][(pos + 1) % 2] : 0;
+                  if ((prevClef != curClef && penalty < minPenalty)
+                              || (prevClef == curClef && penalty <= minPenalty)) {
+                        minPenalty = penalty;
+                        minIndex = prevClef;
+                        }
                   }
-            else {
-                  penalties[clefIndex][pos] = sumPenaltyDiffClef;
-                  if (pos > 0)
-                        optimalPaths[clefIndex][pos] = 1 - clefIndex;
-                  }
+
+            penalties[curClef][pos % 2] = minPenalty;
+            if (pos > 0)
+                  optimalPaths[curClef][pos] = minIndex;
             }
       }
 
 void createClefs(Staff *staff,
-                 const std::vector<std::vector<int>> &penalties,
                  const std::vector<std::vector<int>> &optimalPaths,
+                 int lastClef,
                  std::vector<Segment *> segments,
                  ClefType *mainClef)
       {
-      const size_t chordCount = penalties[0].size();
-      if (chordCount != 0) {
-                     // create clefs
-            int currentClef = 0;
-            if (penalties[1][chordCount - 1] < penalties[0][chordCount - 1])
-                  currentClef = 1;
-            for (size_t i = chordCount - 1; i; --i) {
-                  const int prevClef = optimalPaths[currentClef][i];
-                  if (prevClef != currentClef) {
-                        createSmallClef(clefFromIndex(currentClef), segments[i], staff);
-                        currentClef = prevClef;
-                        }
+      int currentClef = lastClef;
+      for (size_t i = optimalPaths[0].size() - 1; i; --i) {
+            const int prevClef = optimalPaths[currentClef][i];
+            if (prevClef != currentClef) {
+                  createSmallClef(clefFromIndex(currentClef), segments[i], staff);
+                  currentClef = prevClef;
                   }
-            *mainClef = clefFromIndex(currentClef);
             }
+      *mainClef = clefFromIndex(currentClef);
       }
 
 void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
@@ -409,8 +392,10 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       if (trackOpers.changeClef) {
             MidiTie::TieStateMachine tieTracker;
 
-                        // find optimal clef changes by dynamic programming
+                        // find optimal clef changes via dynamic programming
             std::vector<std::vector<int>> penalties(2);         // 0 - treble, 1 - bass
+            for (size_t i = 0; i != penalties.size(); ++i)
+                  penalties[i].resize(2);                       // 2 = current + prev
             std::vector<std::vector<int>> optimalPaths(2);      // first col is unused
             std::vector<Segment *> segments;
 
@@ -428,8 +413,13 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
                                              tieTracker.state(), minMaxPitch, seg, staff);
                   ++pos;
                   }
-                        // get the optimal clef changes found by dynamic programming
-            createClefs(staff, penalties, optimalPaths, segments, &mainClef);
+
+            if (!optimalPaths[0].empty()) {
+                  int lastClef = (penalties[1][(pos - 1) % 2] < penalties[0][(pos - 1) % 2])
+                              ? 1 : 0;
+                        // get the optimal clef changes found via dynamic programming
+                  createClefs(staff, optimalPaths, lastClef, segments, &mainClef);
+                  }
             }
       else {
             AveragePitch allAveragePitch;

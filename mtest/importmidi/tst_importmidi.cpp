@@ -81,9 +81,7 @@ class TestImportMidi : public QObject, public MTest
       void findOnTimeRegularError();
       void findTupletApproximation();
       void separateTupletVoices();
-      void tupletCommonIndexes();
       void findLongestUncommonGroup();
-      void findCommonIndexes();
 
       // metric bar analysis
       void metricDivisionsOfTuplet();
@@ -347,10 +345,10 @@ void isSingleNoteInTupletAllowed(int tupletNumber,
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
       MidiNote note;
-      note.len = ReducedFraction::fromTicks(std::round(tupletInfo.len.ticks()
-                                                       * noteLenInTupletLen));
-      chord.notes.push_back(note);
       const ReducedFraction onTime = ReducedFraction::fromTicks(10);
+      note.offTime = onTime + ReducedFraction::fromTicks(
+                        std::round(tupletInfo.len.ticks() * noteLenInTupletLen));
+      chord.notes.push_back(note);
       chords.insert({onTime, chord});
 
       tupletInfo.chords.insert({onTime, chords.begin()});
@@ -375,9 +373,9 @@ void isChordCountInTupletAllowed(int tupletNumber,
       for (int i = 0; i != chordCount; ++i) {
             MidiChord chord;
             MidiNote note;
-            note.len = tupletInfo.len / tupletNumber; // allowed
-            chord.notes.push_back(note);
             const ReducedFraction onTime = tupletInfo.len / tupletNumber * i;
+            note.offTime = onTime + tupletInfo.len / tupletNumber; // allowed
+            chord.notes.push_back(note);
             const auto lastChordIt = chords.insert({onTime, chord});
             tupletInfo.chords.insert({onTime, lastChordIt});
             }
@@ -400,9 +398,9 @@ void isTupletErrorAllowed(int tupletSumError,
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
       MidiNote note;
-      note.len = tupletInfo.len / tupletInfo.tupletNumber;  // allowed
-      chord.notes.push_back(note);
       const ReducedFraction onTime = ReducedFraction::fromTicks(10);
+      note.offTime = onTime + tupletInfo.len / tupletInfo.tupletNumber;  // allowed
+      chord.notes.push_back(note);
       chords.insert({onTime, chord});
 
       tupletInfo.chords.insert({onTime, chords.begin()});
@@ -571,56 +569,6 @@ void TestImportMidi::findTupletApproximation()
       }
       }
 
-void TestImportMidi::tupletCommonIndexes()
-      {
-      MidiTuplet::TupletCommonIndexes commonIndexes;
-      commonIndexes.add({5, 4});
-      commonIndexes.add({3, 1, 8});
-      commonIndexes.add({11});
-
-      std::pair<std::vector<int>, bool> result;
-
-      result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<int>({5, 3, 11}));
-      QCOMPARE(result.second, false);
-
-      result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<int>({4, 3, 11}));
-      QCOMPARE(result.second, false);
-
-      result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<int>({5, 1, 11}));
-      QCOMPARE(result.second, false);
-
-      result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<int>({4, 1, 11}));
-      QCOMPARE(result.second, false);
-
-      result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<int>({5, 8, 11}));
-      QCOMPARE(result.second, false);
-
-      result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<int>({4, 8, 11}));
-      QCOMPARE(result.second, true);
-
-      // new cycle
-      result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<int>({5, 3, 11}));
-      QCOMPARE(result.second, false);
-
-      result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<int>({4, 3, 11}));
-      QCOMPARE(result.second, false);
-
-      // add new indexes -> reset the cycle
-      commonIndexes.add({2, 0});
-
-      result = commonIndexes.generateNext();
-      QCOMPARE(result.first, std::vector<int>({5, 3, 11, 2}));
-      QCOMPARE(result.second, false);
-      }
-
 void TestImportMidi::findLongestUncommonGroup()
       {
       std::vector<MidiTuplet::TupletInfo> tuplets;
@@ -654,11 +602,10 @@ void TestImportMidi::findLongestUncommonGroup()
       info.len = {1, 1};
       tuplets.push_back(info);
 
-      std::vector<int> result = MidiTuplet::findLongestUncommonGroup(tuplets);
-      std::sort(result.begin(), result.end());
+      std::set<int> result = MidiTuplet::findLongestUncommonGroup(tuplets);
       QVERIFY(result.size() == 3);
-      QVERIFY(result == std::vector<int>({0, 1, 2})
-              || result == std::vector<int>({1, 2, 3}));
+      QVERIFY(result == std::set<int>({0, 1, 2})
+              || result == std::set<int>({1, 2, 3}));
 
       // test unsuccessful case
       tuplets.clear();
@@ -679,125 +626,22 @@ void TestImportMidi::findLongestUncommonGroup()
       QVERIFY(result.size() == 1);
       }
 
-void TestImportMidi::findCommonIndexes()
-      {
-      std::multimap<ReducedFraction, MidiChord> chords;
-      {
-      MidiChord ch;
-      ch.notes.push_back(MidiNote());
-      ch.notes.push_back(MidiNote());
-      ch.notes.push_back(MidiNote());
-      chords.insert({{1, 1}, ch});
-      }
-      for (int i = 2; i <= 14; ++i) {
-            MidiChord ch;
-            ch.notes.push_back(MidiNote());
-            chords.insert({{i, 1}, ch});
-            }
-
-      std::vector<MidiTuplet::TupletInfo> tuplets;
-      {
-      MidiTuplet::TupletInfo t;
-      t.chords = {{{1, 1}, chords.find({1, 1})},
-                  {{2, 1}, chords.find({2, 1})},
-                  {{3, 1}, chords.find({3, 1})}};
-      t.firstChordIndex = 0;
-      tuplets.push_back(t);
-      }
-      {
-      MidiTuplet::TupletInfo t;
-      t.chords = {{{1, 1}, chords.find({1, 1})},
-                  {{3, 1}, chords.find({3, 1})},
-                  {{4, 1}, chords.find({4, 1})}};
-      t.firstChordIndex = 0;
-      tuplets.push_back(t);
-      }
-      {
-      MidiTuplet::TupletInfo t;
-      t.chords = {{{1, 1}, chords.find({1, 1})},
-                  {{2, 1}, chords.find({2, 1})},
-                  {{5, 1}, chords.find({5, 1})},
-                  {{6, 1}, chords.find({6, 1})},
-                  {{7, 1}, chords.find({7, 1})}};
-      t.firstChordIndex = 0;
-      tuplets.push_back(t);
-      }
-      {
-      MidiTuplet::TupletInfo t;
-      t.chords = {{{8, 1}, chords.find({8, 1})},
-                  {{9, 1}, chords.find({9, 1})},
-                  {{10, 1}, chords.find({10, 1})},
-                  {{11, 1}, chords.find({11, 1})}};
-      t.firstChordIndex = 0;
-      tuplets.push_back(t);
-      }
-      {
-      MidiTuplet::TupletInfo t;
-      t.chords = {{{1, 1}, chords.find({1, 1})},
-                  {{5, 1}, chords.find({5, 1})},
-                  {{7, 1}, chords.find({7, 1})},
-                  {{8, 1}, chords.find({8, 1})},
-                  {{10, 1}, chords.find({10, 1})}};
-      t.firstChordIndex = 0;
-      tuplets.push_back(t);
-      }
-      {
-      MidiTuplet::TupletInfo t;
-      t.chords = {{{1, 1}, chords.find({1, 1})},
-                  {{2, 1}, chords.find({2, 1})},
-                  {{5, 1}, chords.find({5, 1})},
-                  {{6, 1}, chords.find({6, 1})},
-                  {{12, 1}, chords.find({12, 1})},
-                  {{13, 1}, chords.find({13, 1})}};
-      t.firstChordIndex = 0;
-      tuplets.push_back(t);
-      }
-      {
-      MidiTuplet::TupletInfo t;
-      t.chords = {{{14, 1}, chords.find({14, 1})},
-                  {{4, 1}, chords.find({4, 1})},
-                  {{9, 1}, chords.find({9, 1})},
-                  {{10, 1}, chords.find({10, 1})},
-                  {{11, 1}, chords.find({11, 1})}};
-      t.firstChordIndex = 0;
-      tuplets.push_back(t);
-      }
-      {
-      MidiTuplet::TupletInfo t;
-      t.chords = {{{1, 1}, chords.find({1, 1})},
-                  {{2, 1}, chords.find({2, 1})},
-                  {{6, 1}, chords.find({6, 1})},
-                  {{13, 1}, chords.find({13, 1})},
-                  {{14, 1}, chords.find({14, 1})},
-                  {{9, 1}, chords.find({9, 1})},
-                  {{11, 1}, chords.find({11, 1})}};
-      t.firstChordIndex = 0;
-      tuplets.push_back(t);
-      }
-
-      std::vector<int> indexes = {0, 1, 2, 3, 4, 5, 6, 7};
-
-      const auto result = MidiTuplet::findCommonIndexes(indexes, tuplets);
-      const auto &allIndexes = result.allIndexes();
-      QCOMPARE(allIndexes, std::vector<std::vector<int>>({{0, 1}, {2, 4}, {3, 6}, {5, 7}}));
-      }
-
 //--------------------------------------------------------------------------
       // tuplet voice separation
 
-MidiNote noteFactory(const ReducedFraction &len, int pitch)
+MidiNote noteFactory(const ReducedFraction &offTime, int pitch)
       {
       MidiNote note;
-      note.len = len;
+      note.offTime = offTime;
       note.pitch = pitch;
       return note;
       }
 
-MidiChord chordFactory(const ReducedFraction &len, const std::vector<int> &pitches)
+MidiChord chordFactory(const ReducedFraction &offTime, const std::vector<int> &pitches)
       {
       std::vector<MidiNote> notes;
       for (const auto &pitch: pitches)
-            notes.push_back(noteFactory(len, pitch));
+            notes.push_back(noteFactory(offTime, pitch));
       MidiChord chord;
       if (notes.empty())
             return chord;
@@ -824,7 +668,7 @@ void TestImportMidi::separateTupletVoices()
       std::vector<int> pitches = {74, 77};
       for (int i = 1; i != tripletNumber; ++i) {
             chords.insert({tripletNoteLen * i,
-                           chordFactory(tripletNoteLen, {pitches[i]})});
+                           chordFactory(tripletNoteLen * (i + 1), {pitches[i]})});
             }
                   // quintuplet
       const ReducedFraction quintupletLen = tupletLen;
@@ -833,7 +677,7 @@ void TestImportMidi::separateTupletVoices()
       pitches = {60, 62, 58, 60};
       for (int i = 1; i != quintupletNumber; ++i) {
             chords.insert({quintupletNoteLen * i,
-                           chordFactory(quintupletNoteLen, {pitches[i]})});
+                           chordFactory(quintupletNoteLen * (i + 1), {pitches[i]})});
             }
                   // septuplet
       const ReducedFraction septupletLen = tupletLen * 2;
@@ -842,7 +686,7 @@ void TestImportMidi::separateTupletVoices()
       pitches = {50, 52, 48, 51, 47, 47};
       for (int i = 1; i != septupletNumber; ++i) {
             chords.insert({septupletNoteLen * i,
-                           chordFactory(septupletNoteLen, {pitches[i]})});
+                           chordFactory(septupletNoteLen * (i + 1), {pitches[i]})});
             }
 
       MidiTuplet::TupletInfo tripletInfo;
