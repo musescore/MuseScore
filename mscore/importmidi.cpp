@@ -162,10 +162,6 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                        "There are overlapping notes of the same voice that is incorrect");
 
             Quantize::quantizeChords(mtrack.chords, mtrack.tuplets, sigmap);
-
-            Q_ASSERT_X(!doNotesOverlap(track.second),
-                       "quantizeAllTracks",
-                       "There are overlapping notes of the same voice that is incorrect");
             }
       }
 
@@ -932,6 +928,9 @@ void convertMidi(Score *score, const MidiFile *mf)
                  "convertMidi", "There are overlapping notes of the same voice that is incorrect");
 
       quantizeAllTracks(tracks, sigmap, lastTick);
+
+      Q_ASSERT_X(!doNotesOverlap(tracks),
+                 "convertMidi", "There are overlapping notes of the same voice that is incorrect");
 
       Q_ASSERT_X(noTooShortNotes(tracks),
                  "convertMidi", "There are notes of length < min allowed duration");
