@@ -1491,6 +1491,7 @@ void ChangeConcertPitch::flip()
       {
       int oval = int(score->styleB(ST_concertPitch));
       score->style()->set(ST_concertPitch, val);
+      score->setLayoutAll(true);
       val = oval;
       }
 

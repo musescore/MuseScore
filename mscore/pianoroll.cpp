@@ -46,8 +46,8 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       setWindowTitle(QString("MuseScore"));
 
       waveView = 0;
-      _score = 0;
-      staff  = 0;
+      _score   = 0;
+      staff    = 0;
 
       QWidget* mainWidget = new QWidget;
 
