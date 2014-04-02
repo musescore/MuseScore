@@ -1810,8 +1810,14 @@ void findTupletQuantizedOffTime(std::vector<TupletInfo> &tuplets,
                                                 tuplet.tupletQuant);
                               auto next = std::next(it);
                               if (next != tuplet.chords.end()) {
-                                    if (next->first < offTime)
-                                          offTime = next->first;
+                                    const auto nextOnTime = next->second->second.quantizedOnTime;
+
+                                    Q_ASSERT_X(nextOnTime != ReducedFraction(-1, 1),
+                                         "MidiTuplet::findTupletQuantizedOffTime",
+                                         "Tuplet onTime is not quantized but it should at this time");
+
+                                    if (offTime > nextOnTime)
+                                          offTime = nextOnTime;
                                     }
                               note.quantizedOffTime = offTime;
                               }
