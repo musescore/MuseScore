@@ -2651,25 +2651,46 @@ void Score::sortStaves(QList<int>& dst)
 
 void Score::cmdConcertPitchChanged(bool flag, bool useDoubleSharpsFlats)
       {
-      undo(new ChangeConcertPitch(this, flag));
+      undo(new ChangeConcertPitch(this, flag));       // change style flag
 
-      foreach(Staff* staff, _staves) {
+      for (Staff* staff : _staves) {
             if (staff->staffType()->group() == PERCUSSION_STAFF_GROUP)
                   continue;
-            Instrument* instr = staff->part()->instr();
-            Interval interval = instr->transpose();
+            Interval interval = staff->part()->instr()->transpose();
             if (interval.isZero())
                   continue;
             if (!flag)
                   interval.flip();
-            cmdTransposeStaff(staff->idx(), interval, useDoubleSharpsFlats);
-            }
-      for (Segment* s = firstMeasure()->first(Segment::SegClef); s; s = s->next1(Segment::SegClef)) {
-            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-                  Clef* clef = static_cast<Clef*>(s->element(staffIdx * VOICES));
-                  if (!clef)
-                        continue;
-                  clef->setClefType(flag ? clef->concertClef() : clef->transposingClef());
+
+            // cmdTransposeStaff(staff->idx(), interval, useDoubleSharpsFlats);
+            int staffIdx = staff->idx();
+
+            int startTrack = staffIdx * VOICES;
+            int endTrack   = startTrack + VOICES;
+
+            transposeKeys(staffIdx, staffIdx+1, 0, lastSegment()->tick(), interval);
+
+            for (Segment* segment = firstSegment(Segment::SegChordRest); segment; segment = segment->next1(Segment::SegChordRest)) {
+                  for (int st = startTrack; st < endTrack; ++st) {
+                        Chord* chord = static_cast<Chord*>(segment->element(st));
+                        if (!chord || chord->type() != Element::CHORD)
+                            continue;
+                        for (Note* n : chord->notes()) {
+                              // transpose(n, interval, useDoubleSharpsFlats);
+                              int npitch;
+                              int ntpc;
+                              transposeInterval(n->pitch(), n->tpc(), &npitch, &ntpc, interval, useDoubleSharpsFlats);
+                              undo(new ChangeProperty(n, P_TPC, ntpc));
+                              }
+                        }
+                  for (Element* e : segment->annotations()) {
+                        if ((e->type() != Element::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
+                              continue;
+                        Harmony* h  = static_cast<Harmony*>(e);
+                        int rootTpc = transposeTpc(h->rootTpc(), interval, false);
+                        int baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                        undoTransposeHarmony(h, rootTpc, baseTpc);
+                        }
                   }
             }
       }

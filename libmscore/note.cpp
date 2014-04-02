@@ -299,8 +299,9 @@ void Note::undoSetPitch(int p)
 void Note::setTpcFromPitch()
       {
       KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
-      _tpc    = pitch2tpc(_pitch, key.accidentalType(), PREFER_NEAREST);
-// qDebug("setTpcFromPitch pitch %d tick %d key %d tpc %d", pitch(), chord()->tick(), key.accidentalType(), _tpc);
+//      _tpc    = pitch2tpc(_pitch, key.accidentalType(), PREFER_NEAREST);
+      _tpc    = pitch2tpc(epitch(), key.accidentalType(), PREFER_NEAREST);
+// qDebug("setTpcFromPitch pitch %d tick %d key %d tpc %d", epitch(), chord()->tick(), key.accidentalType(), _tpc);
       }
 
 //---------------------------------------------------------
@@ -309,9 +310,8 @@ void Note::setTpcFromPitch()
 
 void Note::setTpc(int v)
       {
-      if (!tpcIsValid(v)) {
+      if (!tpcIsValid(v))
             qFatal("Note::setTpc: bad tpc %d\n", v);
-            }
       _tpc = v;
       }
 
@@ -321,7 +321,7 @@ void Note::setTpc(int v)
 
 void Note::undoSetTpc(int tpc)
       {
-      score()->undoChangeProperty(this, P_TPC, tpc);
+      undoChangeProperty(P_TPC, tpc);
       }
 
 //---------------------------------------------------------
@@ -1431,7 +1431,7 @@ void Note::layout10(AccidentalState* as)
                   }
             }
       else {
-            _line = absStep(_tpc, _pitch);
+            _line = absStep(_tpc, epitch());
 
             // calculate accidental
 
@@ -1441,12 +1441,12 @@ void Note::layout10(AccidentalState* as)
                   if (acci == Accidental::ACC_SHARP || acci == Accidental::ACC_FLAT) {
                         // TODO - what about double flat and double sharp?
                         KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
-                        int ntpc = pitch2tpc(_pitch, key.accidentalType(), acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
+                        int ntpc = pitch2tpc(epitch(), key.accidentalType(), acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
                         if (ntpc != _tpc) {
 //not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), _tpc, ntpc, acci);
 //                              setColor(QColor(255, 0, 0));
 //                              _tpc = ntpc;
-                              _line = absStep(_tpc, _pitch);
+                              _line = absStep(_tpc, epitch());
                               }
                         }
                   }
@@ -1644,9 +1644,18 @@ void Note::setHeadGroup(NoteHeadGroup val)
 
 int Note::ppitch() const
       {
-      int tick        = chord()->segment()->tick();
-      int pitchOffset = score()->styleB(ST_concertPitch) ? 0 : staff()->part()->instr()->transpose().chromatic;
-      return _pitch + staff()->pitchOffset(tick) + pitchOffset;
+      return epitch() + staff()->pitchOffset(chord()->segment()->tick());
+      }
+
+//---------------------------------------------------------
+//   epitch
+//    effective pitch
+//    honours transposing instruments
+//---------------------------------------------------------
+
+int Note::epitch() const
+      {
+      return _pitch - (!staff() || score()->styleB(ST_concertPitch) ? 0 : staff()->part()->instr()->transpose().chromatic);
       }
 
 //---------------------------------------------------------
@@ -1686,7 +1695,7 @@ void Note::endEdit()
 
 void Note::updateAccidental(AccidentalState* as)
       {
-      _line = absStep(_tpc, _pitch);
+      _line = absStep(_tpc, epitch());
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
@@ -1768,7 +1777,7 @@ void Note::updateLine()
       {
       Staff* s      = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
-      _line         = relStep(_pitch, _tpc, clef);
+      _line         = relStep(epitch(), _tpc, clef);
       }
 
 //---------------------------------------------------------

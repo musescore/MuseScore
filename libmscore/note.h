@@ -251,7 +251,8 @@ class Note : public Element {
       void setPitch(int val);
       void undoSetPitch(int val);
       void setPitch(int a, int b);
-      int ppitch() const;
+      int ppitch() const;     // playback pitch
+      int epitch() const;     // effective pitch
       qreal tuning() const                { return _tuning;   }
       void setTuning(qreal v)             { _tuning = v;      }
 
