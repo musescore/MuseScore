@@ -1091,7 +1091,14 @@ void Score::undoAddElement(Element* element)
                   int sm = 0;
                   if (cr1->staffIdx() != cr2->staffIdx())
                         sm = cr1->staffMove() + cr2->staffMove();
-                  Chord* c2      = ns2 ? static_cast<Chord*>(ns2->element((staffIdx + sm) * VOICES + cr2->voice())) : 0;
+                  
+                  Chord* c2      = 0;
+                  if (ns2) {
+                        Element* e = ns2->element((staffIdx + sm) * VOICES + cr2->voice());
+                        if (e->type() == Element::CHORD)
+                              c2 = static_cast<Chord*>(e);
+                        }
+                  
                   Note* nn1      = c1->findNote(n1->pitch());
                   Note* nn2      = c2 ? c2->findNote(n2->pitch()) : 0;
                   Tie* ntie      = static_cast<Tie*>(ne);
