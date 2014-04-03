@@ -5249,7 +5249,15 @@ void ScoreView::search(const QString& s)
 void ScoreView::searchPage(int n)
       {
       if (n >= _score->npages())
-            n = _score->npages() - 1;
+            n = _score->npages();
+
+      if(n != 0){
+          /* _score->pages() vector starts from 0
+           * so page N ( pN ) will actually be N-1.
+           */
+          n--;
+      }
+
       const Page* page = _score->pages()[n];
       foreach (System* s, *page->systems()) {
             if (s->firstMeasure()) {
