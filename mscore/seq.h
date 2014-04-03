@@ -143,8 +143,8 @@ class Seq : public QObject, public Sequencer {
    private slots:
       void seqMessage(int msg);
       void heartBeatTimeout();
-      //void selectionChanged(int);
       void midiInputReady();
+      void setPlaylistChanged() { playlistChanged = true; }
 
    public slots:
       void setRelTempo(double);

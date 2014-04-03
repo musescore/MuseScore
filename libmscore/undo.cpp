@@ -1491,6 +1491,7 @@ void ChangeConcertPitch::flip()
       {
       int oval = int(score->styleB(ST_concertPitch));
       score->style()->set(ST_concertPitch, val);
+      score->setLayoutAll(true);
       val = oval;
       }
 
@@ -1664,15 +1665,13 @@ void SortStaves::undo()
 //   ChangePitch
 //---------------------------------------------------------
 
-ChangePitch::ChangePitch(Note* _note, int _pitch, int _tpc, int l/*, int f, int s*/)
+ChangePitch::ChangePitch(Note* _note, int _pitch, int _tpc, int l)
       {
       note  = _note;
       Q_ASSERT(_note != 0);
       pitch  = _pitch;
       tpc    = _tpc;
       line   = l;
-//      fret   = f;
-//      string = s;
       }
 
 void ChangePitch::flip()
@@ -1702,15 +1701,7 @@ void ChangePitch::flip()
             measure->updateAccidentals(chord->staffIdx());
             }
       score->setLayoutAll(true);
-      }
-
-//---------------------------------------------------------
-//   FlipNoteDotDirection
-//---------------------------------------------------------
-
-void FlipNoteDotDirection::flip()
-      {
-      note->setDotPosition(note->dotIsUp() ? MScore::DOWN : MScore::UP);
+      score->setPlaylistDirty(true);
       }
 
 //---------------------------------------------------------
@@ -2539,27 +2530,6 @@ static void updateTimeSigs(void*, Element* e)
 static void updateTextStyle2(void*, Element* e)
       {
       e->styleChanged();
-#if 0
-      if (!e->isText())
-            e->styleChanged();
-      else {
-            Text* text = static_cast<Text*>(e);
-            if (text->styled()) {
-                  QString sn = text->styleName();
-                  int st = text->score()->style()->textStyleType(sn);
-                  if (st == TEXT_STYLE_INVALID) {
-                        //
-                        // this was probably a user defined text style
-                        // which is not part of the new style file
-                        //
-                        text->setStyled(false);
-                        }
-                  else {
-                        text->setText(text->getText());     // destroy formatting
-                        }
-                  }
-            }
-#endif
       }
 
 //---------------------------------------------------------

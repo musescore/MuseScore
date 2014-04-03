@@ -73,6 +73,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       void posChanged(POS pos, unsigned tick);
       void tickLenChanged(int);
       void onTimeChanged(int val);
+      void playlistChanged();
       virtual void timerEvent(QTimerEvent*) override;
 
    public slots:

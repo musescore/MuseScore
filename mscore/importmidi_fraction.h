@@ -45,6 +45,8 @@ class ReducedFraction
       bool operator!=(const ReducedFraction&) const;
 
    private:
+      void preventOverflow();
+
       int numerator_;
       int denominator_;
       };

@@ -435,6 +435,7 @@ class Score : public QObject {
 
    signals:
       void posChanged(POS, unsigned);
+      void playlistChanged();
 
    public:
       Score();
@@ -637,9 +638,6 @@ class Score : public QObject {
       void fixTicks();
       bool addArticulation(Element*, Articulation* atr);
 
-      bool playlistDirty();
-      void setPlaylistDirty(bool val) { _playlistDirty = val; }
-
       void cmd(const QAction*);
       int fileDivision(int t) const { return (t * MScore::division + _fileDivision/2) / _fileDivision; }
       bool saveFile();
@@ -661,6 +659,8 @@ class Score : public QObject {
       void setPrinting(bool val)     { _printing = val;      }
       void setAutosaveDirty(bool v)  { _autosaveDirty = v;    }
       bool autosaveDirty() const     { return _autosaveDirty; }
+      bool playlistDirty()            { return _playlistDirty; }
+      void setPlaylistDirty(bool val) { _playlistDirty = val; }
 
       void spell();
       void spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment);

@@ -1536,7 +1536,6 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
 
       selectionChanged(cs->selection().state());
 
-// printf("setCurrentScoreView\n");
       _sstate = STATE_DISABLED; // defeat optimization
       changeState(view->mscoreState());
 
@@ -3974,8 +3973,7 @@ void MuseScore::endCmd()
                   SelState ss = cs->selection().state();
                   selectionChanged(ss);
                   }
-            QAction* action = getAction("concert-pitch");
-            action->setChecked(cs->styleB(ST_concertPitch));
+            getAction("concert-pitch")->setChecked(cs->styleB(ST_concertPitch));
 
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();

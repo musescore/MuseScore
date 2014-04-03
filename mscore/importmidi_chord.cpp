@@ -17,14 +17,14 @@ const ReducedFraction& minAllowedDuration()
       return minDuration;
       }
 
-ReducedFraction maxNoteLen(const QList<MidiNote> &notes)
+ReducedFraction maxNoteOffTime(const QList<MidiNote> &notes)
       {
-      ReducedFraction maxLen(0, 1);
+      ReducedFraction maxOffTime(0, 1);
       for (const auto &note: notes) {
-            if (note.len > maxLen)
-                  maxLen = note.len;
+            if (note.offTime > maxOffTime)
+                  maxOffTime = note.offTime;
             }
-      return maxLen;
+      return maxOffTime;
       }
 
 // remove overlapping notes with the same pitch
@@ -33,32 +33,31 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
       {
       for (auto &track: tracks) {
             auto &chords = track.second.chords;
-            for (auto it = chords.begin(); it != chords.end(); ++it) {
-                  auto &firstChord = it->second;
-                  const auto &firstOnTime = it->first;
-                  for (auto &note1: firstChord.notes) {
-                        auto ii = std::next(it);
-                        for (; ii != chords.end(); ++ii) {
-                              auto &secondChord = ii->second;
-                              if (firstChord.voice != secondChord.voice)
+            for (auto i1 = chords.begin(); i1 != chords.end(); ++i1) {
+                  auto &chord1 = i1->second;
+                  const auto &onTime1 = i1->first;
+                  for (auto &note1: chord1.notes) {
+                        for (auto i2 = std::next(i1); i2 != chords.end(); ++i2) {
+                              const auto &onTime2 = i2->first;
+                              if (onTime2 >= note1.offTime)
+                                    break;
+                              auto &chord2 = i2->second;
+                              if (chord1.voice != chord2.voice)
                                     continue;
-                              const auto &secondOnTime = ii->first;
-                              for (auto &note2: secondChord.notes) {
+                              for (auto &note2: chord2.notes) {
                                     if (note2.pitch != note1.pitch)
                                           continue;
-                                    if (secondOnTime >= (firstOnTime + note1.len))
-                                          continue;
                                     qDebug("Midi import: overlapping events: %d+%d %d+%d",
-                                           firstOnTime.ticks(), note1.len.ticks(),
-                                           secondOnTime.ticks(), note2.len.ticks());
-                                    note1.len = secondOnTime - firstOnTime;
-                                    ii = std::prev(chords.end());
+                                           onTime1.ticks(), note1.offTime.ticks(),
+                                           onTime2.ticks(), note2.offTime.ticks());
+                                    note1.offTime = onTime2;
+                                    i2 = std::prev(chords.end());
                                     break;
                                     }
                               }
-                        if (note1.len <= ReducedFraction(0, 1)) {
-                              qDebug("Midi import: duration <= 0: drop note at %d",
-                                     firstOnTime.ticks());
+                        if (note1.offTime <= ReducedFraction(0, 1)) {
+                              qDebug("removeOverlappingNotes: duration <= 0: drop note at %d",
+                                     onTime1.ticks());
                               continue;
                               }
                         }
@@ -139,7 +138,7 @@ void collectChords(std::multimap<int, MTrack> &tracks)
                   const auto &note = it->second.notes[0];
 
                               // short events with len < minAllowedDuration must be cleaned up
-                  Q_ASSERT_X(note.len >= minAllowedDuration(),
+                  Q_ASSERT_X(note.offTime - it->first >= minAllowedDuration(),
                              "MChord: collectChords", "Note length is less than min allowed duration");
 
                   if (it->first <= currentChordStart + curThreshTime) {
@@ -156,21 +155,21 @@ void collectChords(std::multimap<int, MTrack> &tracks)
                                           && curThreshTime == threshTime) {
                                     curThreshTime += threshExtTime;
                                     }
-                              if (it->first + note.len > maxOffTime)
-                                    maxOffTime = it->first + note.len;
+                              if (note.offTime > maxOffTime)
+                                    maxOffTime = note.offTime;
                               it = chords.erase(it);
                               continue;
                               }
                         }
                   currentChordStart = it->first;
-                  maxOffTime = currentChordStart + note.len;
+                  maxOffTime = note.offTime;
                   curThreshTime = threshTime;
                   ++it;
                   }
 
             Q_ASSERT_X(areOnTimeValuesDifferent(chords),
-                       "MChord: collectChords", "onTime values of chords are equal "
-                                                "but should be different");
+                       "MChord: collectChords",
+                       "onTime values of chords are equal but should be different");
             }
       }
 
@@ -195,12 +194,12 @@ void sortNotesByLength(std::multimap<ReducedFraction, MidiChord> &chords)
       struct {
             bool operator()(const MidiNote &note1, const MidiNote &note2)
                   {
-                  return note1.len < note2.len;
+                  return note1.offTime < note2.offTime;
                   }
             } lenSort;
 
       for (auto &chordEvent: chords) {
-                        // in each chord sort notes by pitches
+                        // in each chord sort notes by lengths
             auto &notes = chordEvent.second.notes;
             qSort(notes.begin(), notes.end(), lenSort);
             }
@@ -219,13 +218,13 @@ void splitUnequalChords(std::multimap<int, MTrack> &tracks)
             for (auto &chordEvent: chords) {
                   auto &chord = chordEvent.second;
                   auto &notes = chord.notes;
-                  ReducedFraction len;
+                  ReducedFraction offTime;
                   for (auto it = notes.begin(); it != notes.end(); ) {
                         if (it == notes.begin())
-                              len = it->len;
+                              offTime = it->offTime;
                         else {
-                              ReducedFraction newLen = it->len;
-                              if (newLen != len) {
+                              ReducedFraction newOffTime = it->offTime;
+                              if (newOffTime != offTime) {
                                     MidiChord newChord(chord);
                                     newChord.notes.clear();
                                     for (int j = it - notes.begin(); j > 0; --j)
@@ -243,14 +242,16 @@ void splitUnequalChords(std::multimap<int, MTrack> &tracks)
             }
       }
 
-ReducedFraction findMinDuration(const QList<MidiChord> &midiChords,
+ReducedFraction findMinDuration(const ReducedFraction &onTime,
+                                const QList<MidiChord> &midiChords,
                                 const ReducedFraction &length)
       {
       ReducedFraction len = length;
       for (const auto &chord: midiChords) {
             for (const auto &note: chord.notes) {
-                  if ((note.len < len) && (note.len != ReducedFraction(0, 1)))
-                        len = note.len;
+                  if ((note.offTime - onTime < len)
+                              && (note.offTime - onTime != ReducedFraction(0, 1)))
+                        len = note.offTime - onTime;
                   }
             }
       return len;

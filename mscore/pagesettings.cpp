@@ -375,7 +375,7 @@ void PageSettings::olmChanged(double val)
             }
       PageFormat pf;
       pf.copy(*preview->score()->pageFormat());
-      pf.setPrintableWidth(pf.size().width() - pf.oddRightMargin() - val);
+      pf.setPrintableWidth(pf.width() - pf.oddRightMargin() - val);
       pf.setOddLeftMargin(val);
       preview->score()->setPageFormat(pf);
 
@@ -397,6 +397,7 @@ void PageSettings::ormChanged(double val)
       if (twosided->isChecked()) {
             evenPageLeftMargin->blockSignals(true);
             evenPageLeftMargin->setValue(val * (mmUnit ? INCH : 1.0));
+            pf.setEvenLeftMargin(val);
             evenPageLeftMargin->blockSignals(false);
             }
       else {
@@ -405,7 +406,8 @@ void PageSettings::ormChanged(double val)
             evenPageRightMargin->blockSignals(false);
             }
 
-      pf.setPrintableWidth(pf.size().width() - pf.oddLeftMargin() - val);
+      pf.setPrintableWidth(pf.width() - pf.oddLeftMargin() - val);
+      
       preview->score()->setPageFormat(pf);
       updatePreview(0);
       }
@@ -458,7 +460,7 @@ void PageSettings::elmChanged(double val)
             }
       PageFormat pf;
       pf.copy(*preview->score()->pageFormat());
-      pf.setPrintableWidth(pf.size().width() - pf.evenRightMargin() - val);
+      pf.setPrintableWidth(pf.width() - pf.evenRightMargin() - val);
       pf.setEvenLeftMargin(val);
       preview->score()->setPageFormat(pf);
 
@@ -482,7 +484,7 @@ void PageSettings::ermChanged(double val)
 
       PageFormat pf;
       pf.copy(*preview->score()->pageFormat());
-      pf.setPrintableWidth(pf.size().width() - pf.evenLeftMargin() - val);
+      pf.setPrintableWidth(pf.width() - pf.evenLeftMargin() - val);
       pf.setOddLeftMargin(val);
       preview->score()->setPageFormat(pf);
       updatePreview(0);

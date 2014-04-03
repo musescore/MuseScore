@@ -1766,8 +1766,12 @@ QString Element::toTimeSigString(const QString& s) const
                   case '7': d += f->toString(SymId::timeSig7); break;
                   case '8': d += f->toString(SymId::timeSig8); break;
                   case '9': d += f->toString(SymId::timeSig9); break;
+                  case 'C': d += f->toString(SymId::timeSigCommon); break;
+                  case 'O': d += f->toString(SymId::mensuralProlation2); break;
                   case '(': d += f->toString(SymId::timeSigParensLeftSmall); break;
                   case ')': d += f->toString(SymId::timeSigParensRightSmall); break;
+                  case '\xA2': d += f->toString(SymId::timeSigCutCommon); break;    // '¢'
+                  case '\xD8': d += f->toString(SymId::mensuralProlation3); break;  // 'Ø'
                   default:  d += s[i]; break;
                   }
             }
