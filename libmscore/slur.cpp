@@ -39,6 +39,7 @@ namespace Ms {
 SlurSegment::SlurSegment(Score* score)
    : SpannerSegment(score)
       {
+      autoAdjustOffset = QPointF();
       }
 
 SlurSegment::SlurSegment(const SlurSegment& b)
@@ -47,6 +48,7 @@ SlurSegment::SlurSegment(const SlurSegment& b)
       for (int i = 0; i < SLUR_GRIPS; ++i)
             ups[i] = b.ups[i];
       path = b.path;
+      autoAdjustOffset = QPointF();
       }
 
 //---------------------------------------------------------
@@ -55,7 +57,7 @@ SlurSegment::SlurSegment(const SlurSegment& b)
 
 void SlurSegment::move(const QPointF& s)
       {
-      move(s);
+      Element::move(s);
       for (int k = 0; k < SLUR_GRIPS; ++k)
             ups[k].p += s;
       }
@@ -372,6 +374,15 @@ void SlurSegment::editDrag(const EditData& ed)
             ups[GRIP_DRAG].off = QPointF();
             setUserOff(userOff() + ed.delta);
             }
+
+      // if this SlurSegment was automatically adjusted to avoid collision
+      // lock this edit by resetting SlurSegment to default position
+      // and incorporating previous adjustment into user offset
+      QPointF offset = getAutoAdjust();
+      if (!offset.isNull()) {
+            setAutoAdjust(0.0, 0.0);
+            setUserOff(userOff() + offset);
+            }
       }
 
 //---------------------------------------------------------
@@ -551,8 +562,69 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
       ups[GRIP_START].p = p1;
       ups[GRIP_END].p   = p2;
       slurTie()->computeBezier(this);
+      QRectF bbox = path.boundingRect();
+
+      // adjust position to avoid staff line if necessary
+      qreal sp = spatium();
+      qreal minDistance = 0.5;
+      Staff* st = staff();
+      autoAdjustOffset = QPointF();
+      if (bbox.height() < minDistance * 2 * sp && st) {
+            // slur/tie is fairly flat
+            bool up = slurTie()->up();
+            qreal staffY = system()->staff(staffIdx())->y();
+            qreal ld = st->lineDistance() * sp;
+            qreal topY = (bbox.top() - staffY) / ld;
+            qreal bottomY = (bbox.bottom() - staffY) / ld;
+            int lineY = up ? qRound(topY) : qRound(bottomY);
+            if (lineY >= 0 && lineY < st->lines() * st->lineDistance()) {
+                  // on staff
+                  if (qAbs(topY - lineY) < minDistance && qAbs(bottomY - lineY) < minDistance) {
+                        // too close to line
+                        if (!isNudged() && !isEdited()) {
+                              // user has not nudged or edited
+                              qreal offY;
+                              if (up)
+                                    offY = (lineY - minDistance) - topY;
+                              else
+                                    offY = (lineY + minDistance) - bottomY;
+                              setAutoAdjust(0.0, offY * sp);
+                              bbox = path.boundingRect();
+                              }
+                        }
+                  }
+            }
       setbbox(path.boundingRect());
       adjustReadPos();
+      }
+
+//---------------------------------------------------------
+//   setAutoAdjust
+//---------------------------------------------------------
+
+void SlurSegment::setAutoAdjust(const QPointF& offset)
+      {
+      QPointF diff = offset - autoAdjustOffset;
+      if (!diff.isNull()) {
+            path.translate(diff);
+            shapePath.translate(diff);
+            for (int i = 0; i < SLUR_GRIPS; ++i)
+                  ups[i].p += diff;
+            autoAdjustOffset = offset;
+            }
+      }
+
+//---------------------------------------------------------
+//   isEdited
+//---------------------------------------------------------
+
+bool SlurSegment::isEdited() const
+      {
+      for (int i = 0; i < SLUR_GRIPS; ++i) {
+            if (!ups[i].off.isNull())
+                  return true;
+            }
+      return false;
       }
 
 //---------------------------------------------------------
