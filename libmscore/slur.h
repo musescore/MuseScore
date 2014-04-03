@@ -70,9 +70,13 @@ class SlurSegment : public SpannerSegment {
       struct UP ups[SLUR_GRIPS];
       QPainterPath path;
       QPainterPath shapePath;
+      QPointF autoAdjustOffset;
 
       void computeBezier();
       void changeAnchor(MuseScoreView*, int curGrip, Element*);
+      void setAutoAdjust(const QPointF& offset);
+      void setAutoAdjust(qreal x, qreal y)      { setAutoAdjust(QPointF(x, y)); }
+      QPointF getAutoAdjust() const             { return autoAdjustOffset; }
 
    public:
       SlurSegment(Score*);
@@ -84,6 +88,7 @@ class SlurSegment : public SpannerSegment {
       virtual QPainterPath shape() const { return shapePath; }
       virtual void draw(QPainter*) const;
 
+      bool isEdited() const;
       virtual bool isEditable() const { return true; }
       virtual void editDrag(const EditData&);
       virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);

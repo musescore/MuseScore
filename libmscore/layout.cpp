@@ -270,30 +270,30 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
                   // calculate offsets
                   if (shareHeads) {
-#if 0
-                        // TODO: get accidentals right
-                        // TODO: make sure we hide the note that would have been underneath
-                        // otherwise nudge might not appear to work since you aren't moving the visible note
-                        // do we really even *need* to hide noteheads of overlap?
                         for (int i = overlapNotes.size() - 1; i >= 1; i -= 2) {
                               Note* p = overlapNotes[i-1];
                               Note* n = overlapNotes[i];
                               if (!(p->chord()->isNudged() || n->chord()->isNudged())) {
-                                    if (n->chord()->actualTicks() > p->chord()->actualTicks()) {
-                                          p->setHidden(true);
-                                          if (n->chord()->dots() == p->chord()->dots())
+                                    bool onLine = !(p->line() & 1);
+                                    if (onLine) {
+                                          // hide dots for lower voice
+                                          if (p->voice() & 1)
                                                 p->setDotsHidden(true);
-                                          // TODO: p->setAccidentalType(ACC_NONE);
+                                          else
+                                                n->setDotsHidden(true);
                                           }
                                     else {
-                                          n->setHidden(true);
-                                          if (n->chord()->dots() == p->chord()->dots())
+                                          // hide dots for upper voice
+                                          if (!(p->voice() & 1))
+                                                p->setDotsHidden(true);
+                                          else
                                                 n->setDotsHidden(true);
-                                          // TODO: n->setAccidentalType(ACC_NONE);
                                           }
+                                    // formerly we hid noteheads in an effort to fix playback
+                                    // but this doesn't work for cases where noteheads cannot be shared
+                                    // so better to solve the problem elsewhere
                                     }
                               }
-#endif
                         }
                   else if (conflictUnison && separation == 0)
                         downOffset = maxUpWidth + 0.3 * sp;
@@ -765,6 +765,48 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   offsetDotPosX = qMax(offsetDotPosX, xx);
                   if (note->chord()->dots())
                         offsetDots = true;
+                  }
+
+            if (note->chord()->dots()) {
+                  MScore::Direction dotPosition = note->userDotPosition();
+
+                  if (dotPosition == MScore::AUTO && nNotes > 1) {
+                        // resolve dot conflicts
+                        int line = note->line();
+                        Note* above = (i < nNotes - 1) ? notes[i+1] : 0;
+                        int intervalAbove = above ? line - above->line() : 1000;
+                        Note* below = (i > 0) ? notes[i-1] : 0;
+                        int intervalBelow = below ? below->line() - line : 1000;
+                        if ((line & 1) == 0) {
+                              // line
+                              if (intervalAbove == 1 && intervalBelow != 1)
+                                    dotPosition = MScore::DOWN;
+                              else if (intervalBelow ==1 && intervalAbove != 1)
+                                    dotPosition = MScore::UP;
+                              else if (intervalAbove == 0 && above->chord()->dots()) {
+                                    // unison
+                                    if (((above->voice() & 1) == (note->voice() & 1))) {
+                                          above->setDotY(MScore::UP);
+                                          dotPosition = MScore::DOWN;
+                                          }
+                                    }
+                              }
+                        else {
+                              // space
+                              if (intervalAbove == 0 && above->chord()->dots()) {
+                                    // unison
+                                    if (!(note->voice() & 1))
+                                          dotPosition = MScore::UP;
+                                    else {
+                                          if (!(above->voice() & 1))
+                                                above->setDotY(MScore::UP);
+                                          else
+                                                dotPosition = MScore::DOWN;
+                                          }
+                                    }
+                              }
+                        }
+                  note->setDotY(dotPosition);
                   }
             }
 
