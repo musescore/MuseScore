@@ -1403,7 +1403,8 @@ void Score::cmdDeleteSelectedMeasures()
             else {
                   focusOn = this->firstMeasure();
                   }
-            foreach(MuseScoreView* v, viewer)
+
+            foreach(MuseScoreView* v, score->viewer)
                   v->adjustCanvasPosition(focusOn, false);
 
             if (createEndBar) {
