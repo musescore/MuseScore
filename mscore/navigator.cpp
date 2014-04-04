@@ -325,7 +325,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
             if (page->score()->layoutMode() == LayoutPage) {
                   p.setFont(QFont("FreeSans", 400));  // !!
                   p.setPen(MScore::layoutBreakColor);
-                  p.drawText(page->bbox(), Qt::AlignCenter, QString("%1").arg(page->no()+1));
+                  p.drawText(page->bbox(), Qt::AlignCenter, QString("%1").arg(page->no() + 1 + _score->pageNumberOffset()));
                   }
             p.translate(-pos);
             }

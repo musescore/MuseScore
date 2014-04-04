@@ -5248,6 +5248,10 @@ void ScoreView::search(const QString& s)
 
 void ScoreView::searchPage(int n)
       {
+      n -= score()->pageNumberOffset();
+      if (n <= 0)
+            n = 1;
+      n--;
       if (n >= _score->npages())
             n = _score->npages() - 1;
       const Page* page = _score->pages()[n];
