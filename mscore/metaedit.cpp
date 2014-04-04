@@ -19,6 +19,7 @@
 //=============================================================================
 
 #include "metaedit.h"
+#include "preferences.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 
@@ -90,7 +91,10 @@ void MetaEditDialog::accept()
             QLayoutItem* dataItem  = grid->itemAtPosition(i, 1);
             QLabel* label = static_cast<QLabel*>(labelItem->widget());
             QLineEdit* le = static_cast<QLineEdit*>(dataItem->widget());
-            m.insert(label->text(), le->text());
+            if (label->text() == "copyright" && preferences.replaceCopyrightSymbol)
+                  m.insert(label->text(), le->text().replace("(c)", "\u00A9"));
+            else
+                  m.insert(label->text(), le->text());
             }
       QDialog::accept();
       }
