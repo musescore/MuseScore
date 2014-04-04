@@ -2010,8 +2010,7 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
       if (!operations.tuplets.doSearch)
             return std::vector<TupletData>();
-      auto startBarChordIt = MChord::findFirstChordInRange(startBarTick, endBarTick,
-                                                           chords.begin(), chords.end());
+      auto startBarChordIt = MChord::findFirstChordInRange(chords, startBarTick, endBarTick);
       startBarChordIt = findTupletFreeChord(startBarChordIt, chords.end(), startBarTick);
       if (startBarChordIt == chords.end())      // no chords in this bar
             return std::vector<TupletData>();
@@ -2022,8 +2021,7 @@ std::vector<TupletData> findTuplets(const ReducedFraction &startBarTick,
                                                                   endBarTick);
       const auto tol = regularRaster / 2;
                   // update start chord: use chords with onTime >= (start bar tick - tol)
-      startBarChordIt = MChord::findFirstChordInRange(startBarTick - tol, endBarTick,
-                                                      chords.begin(), chords.end());
+      startBarChordIt = MChord::findFirstChordInRange(chords, startBarTick - tol, endBarTick);
       const auto divLengths = Meter::divisionsOfBarForTuplets(barFraction);
 
       std::vector<TupletInfo> tuplets;
