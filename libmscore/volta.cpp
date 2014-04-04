@@ -221,6 +221,8 @@ void Volta::read(XmlReader& e)
             else if (!TextLine::readProperties(e))
                   e.unknown();
             }
+
+      setTrack(0);
       }
 
 //---------------------------------------------------------
