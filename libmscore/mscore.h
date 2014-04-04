@@ -364,7 +364,6 @@ class MScore : public QObject {
       static QColor bgColor;
       static bool warnPitchRange;
 
-      static bool replaceFractions;
       static bool playRepeats;
       static bool panPlayback;
       static qreal nudgeStep;

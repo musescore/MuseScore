@@ -165,8 +165,6 @@ void Preferences::init()
       pngTransparent           = true;
       language                 = "system";
 
-      replaceCopyrightSymbol  = true;
-
       mag                     = 1.0;
 
       checkUpdateStartup      = 0;
@@ -301,8 +299,6 @@ void Preferences::write()
       s.setValue("pngTransparent",     pngTransparent);
       s.setValue("language",           language);
 
-      s.setValue("replaceFractions", MScore::replaceFractions);
-      s.setValue("replaceCopyrightSymbol", replaceCopyrightSymbol);
       s.setValue("paperWidth",  MScore::defaultStyle()->pageFormat()->width());
       s.setValue("paperHeight", MScore::defaultStyle()->pageFormat()->height());
 
@@ -445,9 +441,6 @@ void Preferences::read()
             musicxmlExportBreaks = MANUAL_BREAKS;
       else if (br == "no")
             musicxmlExportBreaks = NO_BREAKS;
-
-      MScore::replaceFractions = s.value("replaceFractions", MScore::replaceFractions).toBool();
-      replaceCopyrightSymbol = s.value("replaceCopyrightSymbol", replaceCopyrightSymbol).toBool();
 
       mag                    = s.value("mag", mag).toDouble();
 
@@ -793,9 +786,6 @@ void PreferenceDialog::updateValues()
 
       iconWidth->setValue(prefs.iconWidth);
       iconHeight->setValue(prefs.iconHeight);
-
-      replaceFractions->setChecked(MScore::replaceFractions);
-      replaceCopyrightSymbol->setChecked(prefs.replaceCopyrightSymbol);
 
       enableMidiInput->setChecked(prefs.enableMidiInput);
       playNotes->setChecked(prefs.playNotes);
@@ -1388,9 +1378,6 @@ void PreferenceDialog::apply()
       QString l = lang == 0 ? "system" : mscore->languages().at(lang).key;
       bool languageChanged = l != prefs.language;
       prefs.language = l;
-
-      MScore::replaceFractions       = replaceFractions->isChecked();
-      prefs.replaceCopyrightSymbol = replaceCopyrightSymbol->isChecked();
 
       //update
       int periodIndex = checkUpdateStartup->currentIndex();

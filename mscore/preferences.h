@@ -137,7 +137,6 @@ struct Preferences {
       bool pngTransparent;
       QString language;
 
-      bool replaceCopyrightSymbol;
       double mag;
 
       //update
