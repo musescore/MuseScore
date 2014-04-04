@@ -789,7 +789,7 @@ class ValidTuplets
             int next = indexes_[index].second;
             indexes_[index].first = -1;
             indexes_[index].second = indexes_.size();
-            if (prev >= 0)
+            if (prev >= first_)
                   indexes_[prev].second = next;
             if (next < (int)indexes_.size())
                   indexes_[next].first = prev;
