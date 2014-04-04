@@ -285,6 +285,8 @@ void TestImportMidi::findChordInBar()
 
       auto endChordIt = MChord::findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.find(ReducedFraction::fromTicks(2000)));
+      endChordIt = chords.lower_bound(endBarTick);
+      QCOMPARE(endChordIt, chords.find(ReducedFraction::fromTicks(2000)));
 
       endBarTick = ReducedFraction(0, 1);
 
