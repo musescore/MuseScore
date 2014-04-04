@@ -248,7 +248,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   }
                   break;
             case META_COPYRIGHT:
-                  cs->setMetaTag("Copyright", QString((const char*)(mm.edata())));
+                  cs->setMetaTag("copyright", QString((const char*)(mm.edata())));
                   break;
             case META_TIME_SIGNATURE:
                   cs->sigmap()->add(tick, Fraction(data[0], 1 << data[1]));
