@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>880</width>
-    <height>560</height>
+    <height>573</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -86,7 +86,7 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
        <string/>
       </property>
@@ -628,7 +628,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab2">
+     <widget class="QWidget" name="tabCanvas">
       <property name="accessibleName">
        <string/>
       </property>
@@ -916,56 +916,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4">
-      <property name="accessibleName">
-       <string/>
-      </property>
-      <attribute name="title">
-       <string>Text</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <widget class="QGroupBox" name="groupBox_15">
-         <property name="title">
-          <string>Auto-correction</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
-           <widget class="QCheckBox" name="replaceFractions">
-            <property name="text">
-             <string>Replace 1/2 with fraction character ½</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="replaceCopyrightSymbol">
-            <property name="text">
-             <string>Replace (C) with copyright symbol © (Only applies to text in the copyright section)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="verticalSpacer_6">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab4">
+     <widget class="QWidget" name="tabNoteEntry">
       <property name="accessibleName">
        <string/>
       </property>
@@ -1577,7 +1528,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Seite">
+     <widget class="QWidget" name="tabScore">
       <property name="accessibleName">
        <string/>
       </property>
@@ -1767,7 +1718,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tabIO">
       <property name="accessibleName">
        <string/>
       </property>
@@ -2316,7 +2267,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Import">
+     <widget class="QWidget" name="tabImport">
       <property name="accessibleName">
        <string/>
       </property>
@@ -2514,7 +2465,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Export">
+     <widget class="QWidget" name="tabExport">
       <property name="accessibleName">
        <string/>
       </property>
@@ -2711,7 +2662,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="tabShortcuts">
       <property name="accessibleName">
        <string/>
       </property>
@@ -2828,7 +2779,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="update">
+     <widget class="QWidget" name="tabUpdate">
       <property name="accessibleName">
        <string/>
       </property>

@@ -51,7 +51,6 @@ QColor  MScore::bgColor;
 QColor  MScore::dropColor;
 bool    MScore::warnPitchRange;
 
-bool    MScore::replaceFractions;
 bool    MScore::playRepeats;
 bool    MScore::panPlayback;
 qreal   MScore::nudgeStep;
@@ -132,7 +131,6 @@ void MScore::init()
       dropColor           = Qt::red;
       defaultPlayDuration = 300;      // ms
       warnPitchRange      = true;
-      replaceFractions    = true;
       playRepeats         = true;
       panPlayback         = true;
 
