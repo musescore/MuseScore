@@ -798,6 +798,21 @@ class ValidTuplets
             return next;
             }
 
+      std::vector<std::pair<int, int>> save()
+            {
+            std::vector<std::pair<int, int>> indexes(indexes_.size() - first_);
+            for (int i = first_; i != (int)indexes_.size(); ++i)
+                  indexes[i - first_] = indexes_[i];
+            return indexes;
+            }
+
+      void restore(const std::vector<std::pair<int, int>> &indexes)
+            {
+            first_ = indexes_.size() - indexes.size();
+            for (int i = 0; i != (int)indexes.size(); ++i)
+                  indexes_[i + first_] = indexes[i];
+            }
+
    private:
       std::vector<std::pair<int, int>> indexes_;      // pair<prev, next>
       int first_;
@@ -851,7 +866,7 @@ void findNextTuplet(
                   }
 
             validTuplets.exclude(index);
-            ValidTuplets was = validTuplets;
+            const auto savedTuplets = validTuplets.save();
                         // check tuplets for compatibility
             if (!validTuplets.empty()) {
                   for (int i: tupletCommons[index].commonIndexes) {
@@ -890,7 +905,7 @@ void findNextTuplet(
                   }
 
             selectedTuplets.pop_back();
-            std::swap(validTuplets, was);
+            validTuplets.restore(savedTuplets);
             }
       }
 
