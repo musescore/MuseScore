@@ -750,9 +750,63 @@ prepareVoiceIntervals(
       return voiceIntervals;
       }
 
+class ValidTuplets
+      {
+   public:
+      ValidTuplets(int tupletsSize)
+            : indexes_(tupletsSize)
+            , first_(0)
+            {
+            for (int i = 0; i != (int)indexes_.size(); ++i)
+                  indexes_[i] = {i - 1, i + 1};
+            }
+
+      int first() const
+            {
+            return first_;
+            }
+
+      bool isValid(int index) const
+            {
+            return index >= first_ && index < (int)indexes_.size();
+            }
+
+      int next(int index) const
+            {
+            return indexes_[index].second;
+            }
+
+      bool empty() const
+            {
+            return first_ >= (int)indexes_.size();
+            }
+
+      int exclude(int index)
+            {
+            if (index < first_)
+                  return index;
+            int prev = indexes_[index].first;
+            int next = indexes_[index].second;
+            indexes_[index].first = -1;
+            indexes_[index].second = indexes_.size();
+            if (prev >= 0)
+                  indexes_[prev].second = next;
+            if (next < (int)indexes_.size())
+                  indexes_[next].first = prev;
+            if (index == first_)
+                  first_ = next;
+            return next;
+            }
+
+   private:
+      std::vector<std::pair<int, int>> indexes_;      // pair<prev, next>
+      int first_;
+      };
+
+
 void findNextTuplet(
             std::vector<int> &selectedTuplets,
-            std::set<int> &validTuplets,
+            ValidTuplets &validTuplets,
             std::vector<int> &bestTupletIndexes,
             TupletErrorResult &minCurrentError,
             const std::vector<TupletCommon> &tupletCommons,
@@ -761,7 +815,7 @@ void findNextTuplet(
             size_t commonsSize)
       {
       while (!validTuplets.empty()) {
-            size_t index = *validTuplets.begin();
+            size_t index = validTuplets.first();
 
             bool isCommonGroupBegins = (selectedTuplets.empty() && index == commonsSize);
             if (isCommonGroupBegins) {      // first level
@@ -796,24 +850,23 @@ void findNextTuplet(
                   return;
                   }
 
-            validTuplets.erase(validTuplets.begin());
-            std::set<int> was = validTuplets;
+            validTuplets.exclude(index);
+            ValidTuplets was = validTuplets;
                         // check tuplets for compatibility
             if (!validTuplets.empty()) {
                   for (int i: tupletCommons[index].commonIndexes) {
-                        validTuplets.erase(i);
+                        validTuplets.exclude(i);
                         if (validTuplets.empty())
                               break;
                         }
                   }
-
-            for (auto it = validTuplets.begin(); it != validTuplets.end(); ) {
-                  if (!canUseIndex(*it, tuplets, tupletIntervals,
+            for (int i = validTuplets.first(); validTuplets.isValid(i); ) {
+                  if (!canUseIndex(i, tuplets, tupletIntervals,
                                    voiceIntervals, usedFirstChords)) {
-                        it = validTuplets.erase(it);
+                        i = validTuplets.exclude(i);
                         continue;
                         }
-                  ++it;
+                  i = validTuplets.next(i);
                   }
             if (validTuplets.empty()) {
                   const auto unusedIndexes = findUnusedIndexes(selectedTuplets);
@@ -868,9 +921,7 @@ std::vector<int> findBestTuplets(const std::vector<TupletCommon> &tupletCommons,
       std::vector<int> selectedTuplets;
       TupletErrorResult minCurrentError;
 
-      std::set<int> validTuplets;
-      for (size_t i = 0; i != tuplets.size(); ++i)
-            validTuplets.insert(i);
+      ValidTuplets validTuplets(tuplets.size());
 
       findNextTuplet(selectedTuplets, validTuplets, bestTupletIndexes, minCurrentError,
                      tupletCommons, tuplets, tupletIntervals, commonsSize);
