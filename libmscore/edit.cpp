@@ -1399,6 +1399,18 @@ void Score::cmdDeleteSelectedMeasures()
 #endif
             undoRemoveMeasures(is, ie);
 
+            // adjust views
+            Measure* focusOn = is;
+            if (focusOn->prevMeasure()) {
+                  focusOn = focusOn->prevMeasure();
+                  }
+            else {
+                  focusOn = this->firstMeasure();
+                  }
+
+            foreach(MuseScoreView* v, score->viewer)
+                  v->adjustCanvasPosition(focusOn, false);
+
             if (createEndBar) {
                   Measure* lastMeasure = score->lastMeasure();
                   if (lastMeasure && lastMeasure->endBarLineType() == NORMAL_BAR)
