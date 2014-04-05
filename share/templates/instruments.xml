@@ -21,7 +21,7 @@
       </Articulation>
       <Articulation name="staccato">
             <velocity>100</velocity>
-            <gateTime>85</gateTime>
+            <gateTime>50</gateTime>
       </Articulation>
       <Articulation name="tenuto">
             <velocity>100</velocity>
@@ -61,6 +61,10 @@
                   <Channel>
                         <program value="73"/>
                   </Channel>
+                  <Articulation>
+                        <velocity>100</velocity>
+                        <gateTime>95</gateTime>
+                  </Articulation>
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
@@ -6625,11 +6629,7 @@
                   </Channel>
                   <Articulation>
                         <velocity>100</velocity>
-                        <gateTime>70</gateTime>
-                  </Articulation>
-                  <Articulation name="staccato">
-                        <velocity>100</velocity>
-                        <gateTime>40</gateTime>
+                        <gateTime>95</gateTime>
                   </Articulation>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -6653,15 +6653,7 @@
                   </Channel>
                   <Articulation>
                         <velocity>100</velocity>
-                        <gateTime>70</gateTime>
-                  </Articulation>
-                  <Articulation name="staccato">
-                        <velocity>100</velocity>
-                        <gateTime>40</gateTime>
-                  </Articulation>
-                  <Articulation name="tenuto">
-                        <velocity>100</velocity>
-                        <gateTime>100</gateTime>
+                        <gateTime>95</gateTime>
                   </Articulation>
                   <genre>orchestra</genre>
             </Instrument>
@@ -6683,11 +6675,7 @@
                   </Channel>
                   <Articulation>
                         <velocity>100</velocity>
-                        <gateTime>70</gateTime>
-                  </Articulation>
-                  <Articulation name="staccato">
-                        <velocity>100</velocity>
-                        <gateTime>40</gateTime>
+                        <gateTime>95</gateTime>
                   </Articulation>
             </Instrument>
             <Instrument id="honky-tonk-piano">
@@ -6708,11 +6696,7 @@
                   </Channel>
                   <Articulation>
                         <velocity>100</velocity>
-                        <gateTime>70</gateTime>
-                  </Articulation>
-                  <Articulation name="staccato">
-                        <velocity>100</velocity>
-                        <gateTime>40</gateTime>
+                        <gateTime>95</gateTime>
                   </Articulation>
                   <genre>jazz</genre>
             </Instrument>
@@ -6734,11 +6718,7 @@
                   </Channel>
                   <Articulation>
                         <velocity>100</velocity>
-                        <gateTime>70</gateTime>
-                  </Articulation>
-                  <Articulation name="staccato">
-                        <velocity>100</velocity>
-                        <gateTime>40</gateTime>
+                        <gateTime>95</gateTime>
                   </Articulation>
             </Instrument>
             <Instrument id="clavichord">
