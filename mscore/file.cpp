@@ -364,7 +364,7 @@ bool MuseScore::saveFile(Score* score)
             QString fn = score->fileInfo()->fileName();
             Text* t = score->getText(TEXT_STYLE_TITLE);
             if (t)
-                  fn = t->text();
+                  fn = t->plainText(true);
             QString name = createDefaultFileName(fn);
             QString f1 = tr("Compressed MuseScore File (*.mscz)");
             QString f2 = tr("MuseScore File (*.mscx)");

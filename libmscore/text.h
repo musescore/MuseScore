@@ -227,7 +227,7 @@ class Text : public Element {
       void setPlainText(const QString&);
       void setText(const QString&);
       QString text() const                    { return _text; }
-      QString plainText() const;
+      QString plainText(bool noSym = false) const;
       void insertText(const QString&);
 
       virtual void layout() override;

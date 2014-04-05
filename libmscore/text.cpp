@@ -1398,7 +1398,7 @@ void Text::genText()
 //    return plain text with symbols
 //---------------------------------------------------------
 
-QString Text::plainText() const
+QString Text::plainText(bool noSym) const
       {
       QString s;
 
@@ -1408,7 +1408,7 @@ QString Text::plainText() const
                   if (format.type() == CharFormatType::TEXT) {
                         s += f.text;
                         }
-                  else {
+                  else if (!noSym){
                         for (SymId id : f.ids)
                               s += QString("<sym>%1</sym>").arg(Sym::id2name(id));
                         }
