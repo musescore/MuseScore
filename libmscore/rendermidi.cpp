@@ -696,7 +696,7 @@ void Score::createPlayEvents(Chord* chord)
       int tick = chord->tick();
       Slur* slur = 0;
       for (auto sp : _spanner.map()) {
-            if (sp.second->type() != Element::SLUR || sp.second->track() != chord->track())
+            if (sp.second->type() != Element::SLUR || sp.second->staffIdx() != chord->staffIdx())
                   continue;
             Slur* s = static_cast<Slur*>(sp.second);
             if (tick >= s->tick() && tick < s->tick2()) {
