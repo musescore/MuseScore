@@ -233,7 +233,7 @@ class SlurHandler {
 
 public:
       SlurHandler();
-      void doSlurStart(Chord* chord, Notations& notations, Xml& xml);
+      void doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool grace = false); 
       void doSlurStop(Chord* chord, Notations& notations, Xml& xml);
       };
 
@@ -445,8 +445,28 @@ int SlurHandler::findSlur(const Slur* s) const
 //   doSlurStart
 //---------------------------------------------------------
 
-void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml)
+void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool grace)
       {
+      // slurs on grace notes are not in spanner list, therefore: 
+      if (grace){
+            foreach(Element* el, chord->el()){
+                  if (el->type() == Element::SLUR){
+                        const Slur* s = static_cast<const Slur*>(el);
+                        //define line type
+                        QString rest = slurTieLineStyle(s);
+                        int i = findSlur(0);
+                        if (i >= 0) {
+                              slur[i] = s;
+                              started[i] = true;
+                              notations.tag(xml);
+                              xml.tagE(QString("slur%1 type=\"start\" number=\"%2\"").arg(rest).arg(i + 1));
+                              }
+                        else
+                              qDebug("no free slur slot");
+                        }
+                  }
+             return;
+            }
       // search for slur(s) starting at this chord
       int tick = chord->tick();
       auto sl = chord->score()->spanner();
@@ -2309,9 +2329,11 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   }
 
             if (note == nl.front()) {
-                  tupletStartStop(chord, notations, xml);
-                  if (!grace) {
-                        // handle slurs between normal (non-grace) notes
+                  if (grace){
+                        sh.doSlurStart(chord, notations, xml, true);  
+                        }
+                  else {
+                        tupletStartStop(chord, notations, xml);
                         sh.doSlurStop(chord, notations, xml);
                         sh.doSlurStart(chord, notations, xml);
                         }
