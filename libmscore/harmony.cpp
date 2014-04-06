@@ -185,7 +185,7 @@ void Harmony::write(Xml& xml) const
       xml.stag("Harmony");
       if (_leftParen)
             xml.tagE("leftParen");
-      if (_rootTpc != INVALID_TPC) {
+      if (_rootTpc != INVALID_TPC || _baseTpc != INVALID_TPC) {
             int rRootTpc = _rootTpc;
             int rBaseTpc = _baseTpc;
             if (staff()) {
@@ -195,7 +195,8 @@ void Harmony::write(Xml& xml) const
                         rBaseTpc = transposeTpc(_baseTpc, interval, false);
                         }
                   }
-            xml.tag("root", rRootTpc);
+            if (rRootTpc != INVALID_TPC)
+                  xml.tag("root", rRootTpc);
             if (_id > 0)
                   xml.tag("extension", _id);
             if (_textName != "")
@@ -505,10 +506,14 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
       int idx;
       int r = convertRoot(s, _rootSpelling, idx);
       if (r == INVALID_TPC) {
-            qDebug("1:parseHarmony failed <%s>", qPrintable(ss));
-            _userName = s;
-            _textName = s;
-            return 0;
+            if (s[0] == '/')
+                  idx = 0;
+            else {
+                  qDebug("1:parseHarmony failed <%s>", qPrintable(ss));
+                  _userName = s;
+                  _textName = s;
+                  return 0;
+                  }
             }
       *root = r;
       bool preferMinor;
@@ -521,11 +526,15 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
       if (slash != -1) {
             QString bs = s.mid(slash+1);
             s = s.mid(idx, slash - idx).simplified();
-            int dummy;
-            *base = convertRoot(bs, _baseSpelling, dummy);
-            if (*base == INVALID_TPC)
-                  // if no TPC after slash, reassemble chord
+            int idx2;
+            *base = convertRoot(bs, _baseSpelling, idx2);
+            if (idx2 != bs.size())
+                  *base = INVALID_TPC;
+            if (*base == INVALID_TPC) {
+                  // if what follows after slash is not (just) a TPC
+                  // then reassemble chord and try to parse with the slash
                   s = s + "/" + bs;
+                  }
             }
       else
             s = s.mid(idx).simplified();
