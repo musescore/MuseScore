@@ -478,6 +478,24 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
       return true;
       }
 
+// determine a suitable measure duration value given the time signature
+// by setting the duration denominator to be greater than or equal
+// to the time signature denominator
+
+static Fraction measureDurationAsFraction(const Fraction length, const int tsigtype)
+      {
+            if (tsigtype <= 0)
+                  // invalid tsigtype
+                  return length;
+
+            Fraction res = length;
+            while (res.denominator() < tsigtype) {
+                  res.setNumerator(res.numerator() * 2);
+                  res.setDenominator(res.denominator() * 2);
+            }
+            return res;
+      }
+
 /**
  Setup the voice mapper for a MusicXML part.
  In: e is the "part" node
@@ -489,9 +507,8 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
       int loc_divisions = -1;
       Fraction loc_tick;
       Fraction loc_maxtick;
-      QString beats = "";
-      QString beatType = "";
-      int timeSigLen = -1; // measure length in ticks according to the last timesig read
+      int timeSigLen = -1;  // length in ticks of last timesig read
+      int timeSigType = -1; // type = beat-type = denominator of last timesig read
 
       // count number of chordrests on each MusicXML staff
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
@@ -513,6 +530,8 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
 #endif
                                           }
                                     else if (eee.tagName() == "time") {
+                                          QString beats = "";
+                                          QString beatType = "";
                                           for (QDomElement eeee = eee.firstChildElement(); !eeee.isNull(); eeee = eeee.nextSiblingElement()) {
                                                 if (eeee.tagName() == "beats")
                                                       beats = eeee.text();
@@ -535,6 +554,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                                 if (determineTimeSig(beats, beatType, "", st, bts, btp)) {
                                                       Fraction f(bts, btp);
                                                       timeSigLen = f.ticks();
+                                                      timeSigType = btp;
 #ifdef DEBUG_TICK
                                                       qDebug("measurelength fraction %s len %d",
                                                              qPrintable(f.print()), timeSigLen);
@@ -630,11 +650,13 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                   // to comply with MuseScores actual measure length constraints
                   // TODO: calculate in fraction
                   int length = fMeasureDuration.ticks();
+                  int correctedLength = length;
                   if ((length % (MScore::division/16)) != 0) {
-                        int correctedLength = ((length / (MScore::division/16)) + 1) * (MScore::division/16);
-                        fMeasureDuration = Fraction::fromTicks(correctedLength);
+                        correctedLength = ((length / (MScore::division/16)) + 1) * (MScore::division/16);
                         }
 
+                  // set measure duration to a suitable value given the time signature
+                  fMeasureDuration = measureDurationAsFraction(Fraction::fromTicks(correctedLength), timeSigType);
                   parts[partNr].addMeasureNumberAndDuration(measureNumber, fMeasureDuration);
 
                   } // e.tagName() == "measure"
@@ -666,9 +688,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
  Return false on error.
  */
 
-// TODO set measurelength in fraction
-
-bool MxmlReaderFirstPass::determineMeasureLength(QVector<int>& ml) const
+bool MxmlReaderFirstPass::determineMeasureLength(QVector<Fraction>& ml) const
       {
       ml.clear();
 
@@ -691,7 +711,7 @@ bool MxmlReaderFirstPass::determineMeasureLength(QVector<int>& ml) const
                         }
                   }
             // qDebug("determineMeasureLength() measure %d %s (%d)", i, qPrintable(maxMeasDur.print()), maxMeasDur.ticks());
-            ml.append(maxMeasDur.ticks());
+            ml.append(maxMeasDur);
             }
       return true;
       }
