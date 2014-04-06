@@ -4095,6 +4095,8 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
 
             slur->setStartChord(static_cast<Chord*>(cr1));
             slur->setEndChord(static_cast<Chord*>(cr2));
+            slur->setTick(cr1->tick());
+            slur->setTick2(cr2->tick());
             slur->setTrack(cr1->track());
             slur->setTrack2(cr2->track());
             slur->setParent(cr1);
