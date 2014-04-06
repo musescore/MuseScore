@@ -148,7 +148,7 @@ typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
 class MusicXml {
       Score* score;
       QMap<QString, VoiceDesc> voicelist;
-      QVector<int> measureLength;               ///< Length of each measure in ticks
+      QVector<Fraction> measureLength;          ///< Length of each measure as Fraction
       QVector<int> measureStart;                ///< Start tick of each measure
       Fraction fractionTSig;                    ///< Current timesig as fraction
 
@@ -201,7 +201,7 @@ class MusicXml {
       void xmlPartList(QDomElement);
       void xmlPart(QDomElement, QString id);
       void xmlScorePart(QDomElement node, QString id, int& parts);
-      Measure* xmlMeasure(Part*, QDomElement, int, int measureLen, KeySig*);  
+      Measure* xmlMeasure(Part*, QDomElement, int, Fraction measureLen, KeySig*);
       void xmlAttributes(Measure*, int stave, QDomElement node, KeySig*);   
       void xmlLyric(int trk, QDomElement e,
                     QMap<int, Lyrics*>& numbrdLyrics,

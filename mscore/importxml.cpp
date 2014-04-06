@@ -382,14 +382,14 @@ static void moveTick(const int mtick, int& tick, int& maxtick, Fraction& typFr, 
  or start tick measure equals start tick previous measure plus length previous measure
  */
 
-static void determineMeasureStart(const QVector<int>& ml, QVector<int>& ms)
+static void determineMeasureStart(const QVector<Fraction>& ml, QVector<int>& ms)
       {
       ms.resize(ml.size());
       // first measure starts at tick = 0
       ms[0] = 0;
       // all others start at start tick previous measure plus length previous measure
       for (int i = 1; i < ml.size(); i++)
-            ms[i] = ms.at(i - 1) + ml.at(i - 1);
+            ms[i] = ms.at(i - 1) + ml.at(i - 1).ticks();
 #ifdef DEBUG_TICK
       for (int i = 0; i < ms.size(); i++)
             qDebug("measurelength ms[%d] %d", i + 1, ms.at(i));
@@ -1975,7 +1975,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const MScore:
  Read the MusicXML measure element.
  */
 
-Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measureLen, KeySig* currKeySig)   
+Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction measureLen, KeySig* currKeySig)
       {
 #ifdef DEBUG_TICK
       qDebug("xmlMeasure %d begin", number);
@@ -2029,7 +2029,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
                   }
             measure  = new Measure(score);
             measure->setTick(tick);
-            measure->setLen(Fraction::fromTicks(measureLen));
+            measure->setLen(measureLen);
             measure->setNo(number);
             score->measures()->add(measure);
             } else {
@@ -2270,7 +2270,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
 
 #ifdef DEBUG_TICK
       qDebug("end_of_measure measure->tick()=%d maxtick=%d lastMeasureLen=%d measureLen=%d tsig=%d(%s)",
-             measure->tick(), maxtick, lastMeasureLen, measureLen,
+             measure->tick(), maxtick, lastMeasureLen, measureLen.ticks(),
              fractionTSig.ticks(), qPrintable(fractionTSig.print()));
 #endif
 
@@ -2285,7 +2285,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, int measure
             measure->setTimesig(fractionTSig);
 #if 1 // previous code
       // measure->setLen(Fraction::fromTicks(measureLen));
-      lastMeasureLen = measureLen;
+      lastMeasureLen = measureLen.ticks();
       tick = maxtick;
 #endif
 

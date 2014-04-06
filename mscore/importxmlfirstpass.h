@@ -40,7 +40,7 @@ private:
 class MxmlReaderFirstPass {
 public:
       MxmlReaderFirstPass();
-      bool determineMeasureLength(QVector<int>& ml) const;
+      bool determineMeasureLength(QVector<Fraction>& ml) const;
       void initVoiceMapperAndMapVoices(QDomElement e, int partNr);
       VoiceList getVoiceList(const int n) const;
       VoiceList getVoiceList(const QString id) const;
@@ -51,7 +51,6 @@ public:
       Score::FileError setContent(QIODevice* d);
 private:
       QDomDocument doc;
-      int partNr;           // the current part number, zero-based
       QList<MusicXmlPart> parts;
       };
 
