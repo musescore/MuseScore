@@ -1903,7 +1903,7 @@ static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, b
                   return false;
                   }
             }
-      fb->setText(normalizedText);                  // this is the text to show while editing
+      fb->setPlainText(normalizedText);                  // this is the text to show while editing
       bool res = !normalizedText.isEmpty();
       return res;
       }
@@ -2510,7 +2510,7 @@ static void metronome(QDomElement e, Text* t)
             } // for (e = e.firstChildElement(); ...
       if (parenth == "yes")
             tempoText += ")";
-      t->setText(tempoText);
+      t->setPlainText(tempoText);
       }
 
 //---------------------------------------------------------
@@ -2829,7 +2829,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   t->textStyle().setItalic(fontStyle == "italic");
                   t->textStyle().setBold(fontWeight == "bold");
                   }
-            t->setText(txt);
+            t->setPlainText(txt);
             if (metrEl.tagName() != "") metronome(metrEl, t);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             addElem(t, hasYoffset, staff, rstaff, score, placement,
@@ -2837,7 +2837,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             }
       else if (dirType == "rehearsal") {
             Text* t = new RehearsalMark(score);
-            t->setText(rehearsal);
+            t->setPlainText(rehearsal);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             else t->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
@@ -3474,13 +3474,13 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
                         qDebug("unknown syllabic %s", qPrintable(e.text()));
                   }
             else if (e.tagName() == "text")
-                  l->setText(l->text()+e.text());
+                  l->setPlainText(l->text()+e.text());
             else if (e.tagName() == "elision")
                   if (e.text().isEmpty()) {
-                        l->setText(l->text()+" ");
+                        l->setPlainText(l->text()+" ");
                         }
                   else {
-                        l->setText(l->text()+e.text());
+                        l->setPlainText(l->text()+e.text());
                         }
             else if (e.tagName() == "extend")
                   ;
@@ -4057,7 +4057,7 @@ static void addTextToNote(QString txt, int style, Score* score, Note* note)
       if (!txt.isEmpty()) {
             Text* t = new Fingering(score);
             t->setTextStyleType(style);
-            t->setText(txt);
+            t->setPlainText(txt);
             note->add(t);
             }
       }
