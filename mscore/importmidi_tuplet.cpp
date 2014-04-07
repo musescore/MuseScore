@@ -986,6 +986,37 @@ bool validateSelectedTuplets(Iter beginIt,
 
 #endif
 
+void removeExtraTuplets(std::vector<TupletInfo> &tuplets)
+      {
+      const size_t MAX_TUPLETS = 23;         // found empirically
+
+      if (tuplets.size() <= MAX_TUPLETS)
+            return;
+
+      std::map<TupletErrorResult, size_t> errors;
+      for (size_t i = 0; i != tuplets.size(); ++i) {
+            auto tupletError = TupletErrorResult{
+                        tuplets[i].tupletSumError.numerator() * 1.0
+                              / (tuplets[i].tupletSumError.denominator() * tuplets[i].chords.size()),
+                        tuplets[i].chords.size() * 1.0 / tuplets[i].tupletNumber,
+                        tuplets[i].sumLengthOfRests,
+                        1,
+                        1
+                  };
+            errors.insert({tupletError, i});
+            }
+      std::vector<TupletInfo> newTuplets;
+      size_t count = 0;
+      for (const auto &e: errors) {
+            ++count;
+            newTuplets.push_back(tuplets[e.second]);
+            if (count == MAX_TUPLETS)
+                  break;
+            }
+
+      std::swap(tuplets, newTuplets);
+      }
+
 
 // first chord in tuplet may belong to other tuplet at the same time
 // in the case if there are enough notes in this first chord
@@ -1000,6 +1031,7 @@ void filterTuplets(std::vector<TupletInfo> &tuplets)
                  "MIDI tuplets: filterTuplets", "Tuplet has no chords but it should");
 
       removeUselessTuplets(tuplets);
+      removeExtraTuplets(tuplets);
 
       std::set<int> uncommons = findLongestUncommonGroup(tuplets);
 
