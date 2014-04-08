@@ -90,6 +90,12 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks);
 void mergeChordsWithEqualOnTimeAndVoice(std::multimap<int, MTrack> &tracks);
 void splitUnequalChords(std::multimap<int, MTrack> &tracks);
 
+#ifdef QT_DEBUG
+
+bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords);
+
+#endif
+
 } // namespace MChord
 } // namespace Ms
 
