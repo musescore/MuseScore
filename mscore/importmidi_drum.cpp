@@ -16,24 +16,6 @@ extern Preferences preferences;
 
 namespace MidiDrum {
 
-
-#ifdef QT_DEBUG
-
-bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords)
-      {
-      std::set<ReducedFraction> onTimes;
-      for (const auto &chordEvent: chords) {
-            if (onTimes.find(chordEvent.first) == onTimes.end())
-                  onTimes.insert(chordEvent.first);
-            else
-                  return false;
-            }
-      return true;
-      }
-
-#endif
-
-
 void splitDrumVoices(std::multimap<int, MTrack> &tracks)
       {
       for (auto &trackItem: tracks) {
@@ -48,10 +30,10 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                               // because useMultipleVoices == false (see MidiImportOperations)
                               // also, all chords should have different onTime values
 
-            Q_ASSERT_X(areOnTimeValuesDifferent(chords),
+            Q_ASSERT_X(MChord::areOnTimeValuesDifferent(chords),
                        "MChord: splitDrumVoices", "onTime values of chords are equal "
                                               "but should be different");
-            Q_ASSERT_X(areOnTimeValuesDifferent(chords),
+            Q_ASSERT_X(MChord::areOnTimeValuesDifferent(chords),
                        "MChord: splitDrumVoices", "All voices of drum track should be zero here");
 
             for (auto &chordEvent: chords) {
