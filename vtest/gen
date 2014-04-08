@@ -1,5 +1,13 @@
 #!/bin/sh
 
+if [[ "`uname`" == 'Darwin' ]]; then
+      MSCORE=../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+      BROWSER=open
+else
+      MSCORE=../build.debug/mscore/mscore
+      BROWSER=konqueror
+fi
+
 #
 # "compare" - image magick compare program
 #
@@ -20,7 +28,6 @@ else
        tie-1"
 fi
 
-MSCORE=../build.debug/mscore/mscore
 DPI=130
 F=vtest.html
 
@@ -61,5 +68,5 @@ echo "  </body>" >> $F
 echo "</html>" >> $F
 
 
-konqueror $F
+$BROWSER $F
 
