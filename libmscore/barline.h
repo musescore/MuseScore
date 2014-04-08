@@ -45,13 +45,14 @@ class BarLine : public Element {
       BarLineType _barLineType;
       bool _customSpan;
       bool _customSubtype;
-      int _span;
-      int _spanFrom, _spanTo;
+      int _span;                    // number of staves spanned by the barline
+      int _spanFrom, _spanTo;       // line number on start and end staves
 
       // static variables used while dragging
       static int _origSpan, _origSpanFrom, _origSpanTo;     // original span value before editing
       static qreal yoff1, yoff2;          // used during drag edit to extend y1 and y2
       static bool  ctrlDrag;              // used to mark if [CTRL] has been used while dragging
+      static bool  shiftDrag;             // used to mark if [SHIFT] has been used while dragging
 
       void getY(qreal*, qreal*) const;
       ElementList _el;        ///< fermata or other articulations
@@ -114,6 +115,7 @@ class BarLine : public Element {
       virtual qreal mag() const;
 
       static void  setCtrlDrag(bool val)  { ctrlDrag = val; }
+      static void  setShiftDrag(bool val)  { shiftDrag = val; }
       static qreal layoutWidth(Score*, BarLineType, qreal mag);
       };
 
