@@ -3,6 +3,8 @@
 
 #include "importmidi_fraction.h"
 
+#include <map>
+
 
 namespace Ms {
 
@@ -36,6 +38,16 @@ class MidiChord {
 class MTrack;
 
 namespace MChord {
+
+std::multimap<ReducedFraction, MidiChord>::iterator
+findFirstChordInRange(std::multimap<ReducedFraction, MidiChord> &chords,
+                      const ReducedFraction &startRangeTick,
+                      const ReducedFraction &endRangeTick);
+
+std::multimap<ReducedFraction, MidiChord>::const_iterator
+findFirstChordInRange(const std::multimap<ReducedFraction, MidiChord> &chords,
+                      const ReducedFraction &startRangeTick,
+                      const ReducedFraction &endRangeTick);
 
 template <typename Iter>
 Iter findFirstChordInRange(const ReducedFraction &startRangeTick,
