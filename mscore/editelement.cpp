@@ -83,7 +83,7 @@ void ScoreView::endEdit()
       setDropTarget(0);
       if (!editObject)
             return;
-
+      editObject->endEditDrag();
       _score->addRefresh(editObject->canvasBoundingRect());
       for (int i = 0; i < grips; ++i)
             score()->addRefresh(grip[i]);
