@@ -11,6 +11,28 @@ namespace Ms {
 namespace MChord {
 
 
+std::multimap<ReducedFraction, MidiChord>::iterator
+findFirstChordInRange(std::multimap<ReducedFraction, MidiChord> &chords,
+                      const ReducedFraction &startRangeTick,
+                      const ReducedFraction &endRangeTick)
+      {
+      auto iter = chords.lower_bound(startRangeTick);
+      if (iter != chords.end() && iter->first >= endRangeTick)
+            iter = chords.end();
+      return iter;
+      }
+
+std::multimap<ReducedFraction, MidiChord>::const_iterator
+findFirstChordInRange(const std::multimap<ReducedFraction, MidiChord> &chords,
+                      const ReducedFraction &startRangeTick,
+                      const ReducedFraction &endRangeTick)
+      {
+      auto iter = chords.lower_bound(startRangeTick);
+      if (iter != chords.end() && iter->first >= endRangeTick)
+            iter = chords.end();
+      return iter;
+      }
+
 const ReducedFraction& minAllowedDuration()
       {
       const static auto minDuration = ReducedFraction::fromTicks(MScore::division) / 32;

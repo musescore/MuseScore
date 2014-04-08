@@ -280,7 +280,12 @@ void TestImportMidi::findChordInBar()
       auto firstChordIt = MChord::findFirstChordInRange(startBarTick, endBarTick,
                                                         chords.begin(), chords.end());
       QCOMPARE(firstChordIt, chords.begin());
+      firstChordIt = MChord::findFirstChordInRange(chords, startBarTick, endBarTick);
+      QCOMPARE(firstChordIt, chords.begin());
+
       auto endChordIt = MChord::findEndChordInRange(endBarTick, firstChordIt, chords.end());
+      QCOMPARE(endChordIt, chords.find(ReducedFraction::fromTicks(2000)));
+      endChordIt = chords.lower_bound(endBarTick);
       QCOMPARE(endChordIt, chords.find(ReducedFraction::fromTicks(2000)));
 
       endBarTick = ReducedFraction(0, 1);
@@ -288,6 +293,9 @@ void TestImportMidi::findChordInBar()
       firstChordIt = MChord::findFirstChordInRange(startBarTick, endBarTick,
                                                    chords.begin(), chords.end());
       QCOMPARE(firstChordIt, chords.end());
+      firstChordIt = MChord::findFirstChordInRange(chords, startBarTick, endBarTick);
+      QCOMPARE(firstChordIt, chords.end());
+
       endChordIt = MChord::findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.end());
 
@@ -297,6 +305,9 @@ void TestImportMidi::findChordInBar()
       firstChordIt = MChord::findFirstChordInRange(startBarTick, endBarTick,
                                                    chords.begin(), chords.end());
       QCOMPARE(firstChordIt, chords.end());
+      firstChordIt = MChord::findFirstChordInRange(chords, startBarTick, endBarTick);
+      QCOMPARE(firstChordIt, chords.end());
+
       endChordIt = MChord::findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.end());
       }
