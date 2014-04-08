@@ -31,15 +31,6 @@ bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &c
       return true;
       }
 
-bool areVoicesNonZero(const std::multimap<ReducedFraction, MidiChord> &chords)
-      {
-      for (const auto &chordEvent: chords) {
-            if (chordEvent.second.voice != 0)
-                  return false;
-            }
-      return true;
-      }
-
 #endif
 
 
