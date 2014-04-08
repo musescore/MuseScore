@@ -30,6 +30,7 @@ qreal BarLine::yoff1 = 0.0;
 qreal BarLine::yoff2 = 0.0;
 
 bool BarLine::ctrlDrag = false;
+bool BarLine::shiftDrag = false;
 int  BarLine::_origSpan, BarLine::_origSpanFrom, BarLine::_origSpanTo;
 
 //---------------------------------------------------------
@@ -762,7 +763,7 @@ void BarLine::endEditDrag()
 
       // determine new spanFrom value
       int newSpanFrom = _spanFrom;
-      if(yoff1 != 0.0) {
+      if(yoff1 != 0.0 && !shiftDrag) {
             // round bar line top coord to nearest line of 1st staff (in half line dist units)
             newSpanFrom = ((int)floor(y1 / (staff()->lineDistance() * spatium()) + 0.5 )) * 2;
             // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
@@ -774,7 +775,7 @@ void BarLine::endEditDrag()
 
       // determine new spanTo value
       int newSpanTo = _spanTo;
-      if(yoff2 != 0.0) {
+      if(yoff2 != 0.0 && shiftDrag) {
             // round bar line bottom coord to nearest line of 2nd staff (in half line dist units)
             Staff * staff2   = score()->staff(staffIdx2);
             qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
@@ -785,7 +786,13 @@ void BarLine::endEditDrag()
             if(newSpanTo > staff()->lines()*2)
                   newSpanTo = staff2->lines()*2;
             }
-
+      if (!shiftDrag) {
+            newSpanFrom = 0;
+            newSpanTo = 8;
+            }
+      else
+            shiftDrag = false;
+            
       // if any value changed, update
       if(newSpan != _span || newSpanFrom != _spanFrom || newSpanTo != _spanTo) {
             _span       = newSpan;

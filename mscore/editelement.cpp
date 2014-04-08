@@ -122,11 +122,16 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
       QPointF p     = toLogical(ev->pos());
       QPointF delta = p - data.startMove;
 
-      if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
-            p.setX(0.0);
-            delta.setX(0.0);
+      if (qApp->keyboardModifiers() & Qt::ShiftModifier) {
+            if(editObject->type() == Element::BAR_LINE)
+                  BarLine::setShiftDrag(true);
+            else {
+                  p.setX(0.0);
+                  delta.setX(0.0);
+                  }
             }
-      else if (qApp->keyboardModifiers() == Qt::ControlModifier) {
+            
+      if (qApp->keyboardModifiers() & Qt::ControlModifier) {
             if(editObject->type() == Element::BAR_LINE)
                   BarLine::setCtrlDrag(true);
             else {
