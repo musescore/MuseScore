@@ -331,96 +331,48 @@ void Ambitus::layout()
       // Note: manages colliding accidentals
       //
       qreal accNoteDist = point(score()->styleS(ST_accidentalNoteDistance));
-//      qreal accAccDist  = 0.25 * _spatium;
       xAccidOffTop      = _topAccid.width() + accNoteDist;
       xAccidOffBottom   = _bottomAccid.width() + accNoteDist;
-//      qreal xAccidOff   = max(xAccidOffTop, xAccidOffBottom);
+
       // if top accidental extends down more than bottom accidental extends up,
-      // bottom accidental needs to be displaced
-      // TO DO : ADD UNDERCUT FLATS!
-      bool collision = _topAccid.ipos().y() + _topAccid.bbox().y() + _topAccid.height()
-                  > _bottomAccid.ipos().y() + _bottomAccid.bbox().y();
+      // AND ambitus is not leaning right, bottom accidental needs to be displaced
+      bool collision =
+            (_topAccid.ipos().y() + _topAccid.bbox().y() + _topAccid.height()
+                   > _bottomAccid.ipos().y() + _bottomAccid.bbox().y() )
+            && _dir != MScore::DH_RIGHT;
       if (collision) {
-            // place bottom accid. at the left edge and top accid. right after it
-//            _bottomAccid.rxpos()    = 0.0;
-//            _topAccid.rxpos()       = xAccidOffBottom -accNoteDist + accAccDist;
-            // place top accid. 'hanging' at left margin and bottom accid. at left of it
-            qreal bottomDelta       =           // an attempt to 'undercut' flats
-                  (_bottomAccid.accidentalType() == Accidental::ACC_FLAT
-                        || _bottomAccid.accidentalType() == Accidental::ACC_FLAT2)
-                  ? _bottomAccid.width() * 0.5 : _bottomAccid.width();
-            _topAccid.rxpos()       = - xAccidOffTop;
-            _bottomAccid.rxpos()    = - xAccidOffTop - bottomDelta;
-            switch (_dir) {
-                  case MScore::DH_AUTO:               // note heads one above the other
-                        // place both note heads right after the top accidental
-//                        _topPos.setX(_topAccid.ipos().x() + xAccidOffTop);
-//                        _bottomPos.setX(_topPos.x());
-                        _topPos.setX(0.0);
-                        _bottomPos.setX(0.0);
-                        break;
-                  case MScore::DH_LEFT:               // top note head at the left of bottom note head
-                        // place the top head right after the top accid. and the bottom head right after the top head
-//                        _topPos.setX(_topAccid.ipos().x() + xAccidOffTop);
-//                        _bottomPos.setX(_topPos.x() + headWdt);
-                        _topPos.setX(0.0);
-                        _bottomPos.setX(headWdt);
-                        break;
-                  case MScore::DH_RIGHT:              // top note head at the right of bottom note head
-                        // place the bottom head right after the top accid. and the top head right after the bottom head
-//                        _bottomPos.setX(_topAccid.ipos().x() + xAccidOffTop);
-//                        _topPos.setX(_bottomPos.x() + headWdt);
-                        _bottomPos.setX(0.0);
-                        _topPos.setX(headWdt);
-                        _bottomAccid.rxpos() = - xAccidOffBottom;
-                        _topAccid.rxpos() = headWdt - xAccidOffTop;
-                        break;
-                  }
+            // displace bottom accidental (also attempting to 'undercut' flats)
+            xAccidOffBottom = xAccidOffTop +
+                  ((_bottomAccid.accidentalType() == Accidental::ACC_FLAT
+                        || _bottomAccid.accidentalType() == Accidental::ACC_FLAT2
+                        || _bottomAccid.accidentalType() == Accidental::ACC_NATURAL)
+                  ? _bottomAccid.width() * 0.5 : _bottomAccid.width());
             }
-      else {
-            switch (_dir) {
-                  case MScore::DH_AUTO:               // note heads one above the other
-                        // align accid.s to their right margin
-//                        _topAccid.rxpos()       = xAccidOff - xAccidOffTop;
-//                        _bottomAccid.rxpos()    = xAccidOff - xAccidOffBottom;
-                        // place note heads right after accid. right margin
-//                        _topPos.setX(xAccidOff);
-//                        _bottomPos.setX(xAccidOff);
-                        // left align note heads and right align accidentals 'haning' on the left
-                        _topPos.setX(0.0);
-                        _bottomPos.setX(0.0);
-                        _topAccid.rxpos()       = - xAccidOffTop;
-                        _bottomAccid.rxpos()    = - xAccidOffBottom;
-                        break;
-                  case MScore::DH_LEFT:               // top note head at the left of bottom note head
-                        // place top accid. at the left edge, top head after accid.,
-                        // bottom head after top head and bottom accid before bottom head
-//                        _topAccid.rxpos() = 0;
-//                        _topPos.setX(xAccidOffTop);
-//                        _bottomPos.setX(xAccidOffTop + headWdt);
-//                        _bottomAccid.rxpos() = xAccidOffTop + headWdt - xAccidOffBottom;
-                        // place top note head at left margin; bottom note head at right of top head;
-                        // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
-                        _topPos.setX(0.0);
-                        _bottomPos.setX(headWdt);
-                        _topAccid.rxpos() = - xAccidOffTop;
-                        _bottomAccid.rxpos() = headWdt - xAccidOffBottom;
-                        break;
-                  case MScore::DH_RIGHT:              // top note head at the right of bottom note head
-                        // place bottom accid. at the left edge, bottom head after accid.,
-                        // top head after bottom head and top accid before top head
-//                        _bottomAccid.rxpos() = 0;
-//                        _bottomPos.setX(xAccidOffBottom);
-//                        _topPos.setX(xAccidOff + headWdt);
-//                        _topAccid.rxpos() = xAccidOffBottom + headWdt - xAccidOffTop;
-                        // bottom note head at left margin; top note head at right of bottomnote head
-                        // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
-                        _bottomPos.setX(0.0);
-                        _topPos.setX(headWdt);
-                        _bottomAccid.rxpos() = - xAccidOffBottom;
-                        _topAccid.rxpos() = headWdt - xAccidOffTop;
-                        break;
-                  }
+
+      switch (_dir) {
+            case MScore::DH_AUTO:               // note heads one above the other
+                  // left align note heads and right align accidentals 'hanging' on the left
+                  _topPos.setX(0.0);
+                  _bottomPos.setX(0.0);
+                  _topAccid.rxpos()       = - xAccidOffTop;
+                  _bottomAccid.rxpos()    = - xAccidOffBottom;
+                  break;
+            case MScore::DH_LEFT:               // top note head at the left of bottom note head
+                  // place top note head at left margin; bottom note head at right of top head;
+                  // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
+                  _topPos.setX(0.0);
+                  _bottomPos.setX(headWdt);
+                  _topAccid.rxpos() = - xAccidOffTop;
+                  _bottomAccid.rxpos() = collision ? - xAccidOffBottom : headWdt - xAccidOffBottom;
+                  break;
+            case MScore::DH_RIGHT:              // top note head at the right of bottom note head
+                  // bottom note head at left margin; top note head at right of bottomnote head
+                  // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
+                  _bottomPos.setX(0.0);
+                  _topPos.setX(headWdt);
+                  _bottomAccid.rxpos() = - xAccidOffBottom;
+                  _topAccid.rxpos() = headWdt - xAccidOffTop;
+                  break;
             }
 
       // compute line from top note centre to bottom note centre
@@ -608,12 +560,13 @@ void Ambitus::updateRange()
                               && chord->type() == Element::CHORD) {
                         // update pitch range (with associated tpc's)
                         foreach (Note* n, chord->notes()) {
-                              if (n->pitch() > pitchTop) {
-                                    pitchTop = n->pitch();
+                              int pitch = n->ppitch();
+                              if (pitch > pitchTop) {
+                                    pitchTop = pitch;
                                     tpcTop   = n->tpc();
                                     }
-                              if (n->pitch() < pitchBottom) {
-                                    pitchBottom = n->pitch();
+                              if (pitch < pitchBottom) {
+                                    pitchBottom = pitch;
                                     tpcBottom   = n->tpc();
                                     }
                               }
