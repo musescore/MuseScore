@@ -8003,6 +8003,8 @@ QRect MgStyle::subElementRect(SubElement element, const QStyleOption* option, co
 //---------------------------------------------------------
 
 QRect MgStyle::subControlRect(ComplexControl element, const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget ) const {
+      if (!widget)
+           return QRect();
       switch (element) {
             case CC_GroupBox:
                   return groupBoxSubControlRect( option, subControl, widget );
