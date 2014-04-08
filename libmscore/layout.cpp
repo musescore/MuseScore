@@ -104,14 +104,15 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
       QList<Note*> upStemNotes, downStemNotes;
-      qreal nominalWidth = noteHeadWidth();
+      qreal nominalWidth = noteHeadWidth() * staff->mag();
       qreal maxUpWidth = 0.0;
       qreal maxDownWidth = 0.0;
+      qreal maxUpMag = 0.0;
+      qreal maxDownMag = 0.0;
 
       // dots can affect layout of notes as well as vice versa
       int upDots = 0;
       int downDots = 0;
-      qreal dotAdjust = 0.0;  // additional chord offset to account for dots
 
       for (int track = startTrack; track < endTrack; ++track) {
             Element* e = segment->element(track);
@@ -127,13 +128,13 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         ++upVoices;
                         upStemNotes.append(chord->notes());
                         upDots = qMax(upDots, chord->dots());
-                        maxUpWidth = qMax(maxUpWidth, nominalWidth * chord->mag());
+                        maxUpMag = qMax(maxUpMag, chord->mag());
                         }
                   else {
                         ++downVoices;
                         downStemNotes.append(chord->notes());
                         downDots = qMax(downDots, chord->dots());
-                        maxDownWidth = qMax(maxDownWidth, nominalWidth * chord->mag());
+                        maxDownMag = qMax(maxDownMag, chord->mag());
                         }
                   }
             }
@@ -144,6 +145,9 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       // TODO: use track as secondary sort criteria?
       // otherwise there might be issues with unisons between voices
       // in some corner cases
+
+      maxUpWidth = nominalWidth * maxUpMag;
+      maxDownWidth = nominalWidth * maxDownMag;
 
       // layout upstem noteheads
       if (upVoices > 1) {
@@ -168,8 +172,9 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       qreal sp = staff->spatium();
       qreal upOffset = 0.0;
       qreal downOffset = 0.0;
+      qreal dotAdjust = 0.0;  // additional chord offset to account for dots
 
-      // centering adjustments for whole note and breve
+      // centering adjustments for whole note, breve, and small chords
       qreal centerUp = 0.0;
       qreal oversizeUp = 0.0;
       qreal centerDown = 0.0;
@@ -177,15 +182,22 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       qreal centerThreshold = 0.1 * sp;
       headDiff = maxUpWidth - nominalWidth;
       if (headDiff > centerThreshold) {
+            // larger than nominal
             centerUp = headDiff * 0.5;
             oversizeUp = headDiff;
             maxUpWidth = nominalWidth + centerUp;
+            }
+      else if (-headDiff > centerThreshold) {
+            // smaller than nominal
+            centerUp = headDiff * 0.5;
             }
       headDiff = maxDownWidth - nominalWidth;
       if (headDiff > centerThreshold) {
             centerDown = headDiff * -0.5;
             maxDownWidth = nominalWidth - centerDown;
             }
+      else if (-headDiff > centerThreshold)
+            centerDown = headDiff * -0.5;
 
       // handle conflict between upstem and downstem chords
 
@@ -336,13 +348,23 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             if ((upDots && !downDots) || (downDots && !upDots)) {
                   // only one sets of dots
                   // place between chords
-                  int dots = qMax(upDots, downDots);
+                  int dots;
+                  qreal mag;
+                  if (upDots) {
+                        dots = upDots;
+                        mag = maxUpMag;
+                        }
+                  else {
+                        dots = downDots;
+                        mag = maxDownMag;
+                        }
                   qreal dotWidth = segment->symWidth(SymId::augmentationDot);
                   // first dot
                   dotAdjust = point(styleS(ST_dotNoteDistance)) + dotWidth;
                   // additional dots
                   if (dots > 1)
                         dotAdjust += point(styleS(ST_dotDotDistance)) * (dots - 1);
+                  dotAdjust *= mag;
                   }
             if (separation == 1)
                   dotAdjust += 0.1 * sp;
