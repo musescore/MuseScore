@@ -189,7 +189,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             }
       else if (-headDiff > centerThreshold) {
             // smaller than nominal
-            centerUp = headDiff * 0.5;
+            centerUp = headDiff * -0.5;
             }
       headDiff = maxDownWidth - nominalWidth;
       if (headDiff > centerThreshold) {
@@ -639,9 +639,9 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
             if (me->top - lnBottom <= pnd && lnTop - me->bottom <= pnd) {
                   // undercut note above if possible
                   if (lnBottom - me->top <= me->ascent)
-                        lx = qMin(lx, ln->x() + me->rightClear);
+                        lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear);
                   else
-                        lx = qMin(lx, ln->x());
+                        lx = qMin(lx, ln->x() + ln->chord()->x());
                   }
             else if (lnTop > me->bottom)
                   break;
