@@ -41,9 +41,10 @@ enum P_ID {
       P_SHOW_COURTESY,
       P_LINE_TYPE,
       P_PITCH,
-      P_TPC,
-      P_HEAD_TYPE,
+      P_TPC1,
+      P_TPC2,
 
+      P_HEAD_TYPE,
       P_HEAD_GROUP,
       P_VELO_TYPE,
       P_VELO_OFFSET,
@@ -53,9 +54,9 @@ enum P_ID {
       P_NO_STEM,
       P_SLUR_DIRECTION,
       P_LEADING_SPACE,
-      P_TRAILING_SPACE,
 
-/*20*/P_DISTRIBUTE,
+      P_TRAILING_SPACE,
+      P_DISTRIBUTE,
       P_MIRROR_HEAD,
       P_DOT_POSITION,
       P_TUNING,
@@ -77,7 +78,7 @@ enum P_ID {
       P_ACTUAL_NOTES,
       P_P1,
 
-/*40*/P_P2,
+      P_P2,
       P_GROW_LEFT,
       P_GROW_RIGHT,
       P_BOX_HEIGHT,

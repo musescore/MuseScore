@@ -447,7 +447,7 @@ Note* Score::addPitch(int pitch, bool addFlag)
 void Score::cmdAddInterval(int val, const QList<Note*>& nl)
       {
       startCmd();
-      foreach(Note* on, nl) {
+      for (Note* on : nl) {
             Note* note = new Note(*on);
             Chord* chord = on->chord();
             note->setParent(chord);
@@ -455,23 +455,22 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
 
             int npitch;
             int ntpc;
-            if( abs(valTmp) != 7 ) {
-                  int line = on->line() - valTmp;
-                  int tick   = chord->tick();
+            if (abs(valTmp) != 7) {
+                  int line      = on->line() - valTmp;
+                  int tick      = chord->tick();
                   Staff* estaff = staff(on->staffIdx() + chord->staffMove());
-                  ClefType clef   = estaff->clef(tick);
-                  int key    = estaff->key(tick).accidentalType();
-                  npitch = line2pitch(line, clef, key);
-                  ntpc   = pitch2tpc(npitch, key, PREFER_NEAREST);
+                  ClefType clef = estaff->clef(tick);
+                  int key       = estaff->key(tick).accidentalType();
+                  npitch        = line2pitch(line, clef, key);
+                  ntpc          = pitch2tpc(npitch, key, PREFER_NEAREST);
                   }
             else { //special case for octave
                   Interval interval(7, 12);
-                  if(val < 0) {
+                  if (val < 0)
                         interval.flip();
-                        }
                   transposeInterval(on->pitch(), on->tpc(), &npitch, &ntpc, interval, false);
                   }
-            note->setPitch(npitch, ntpc);
+            note->setPitch(npitch, ntpc, ntpc);
 
             undoAddElement(note);
             _playNote = true;
@@ -492,18 +491,16 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
 ///   \len is the visual duration of the grace note (1/16 or 1/32)
 //---------------------------------------------------------
 
-void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool /*behind*/, int len, int tpc)
+void Score::setGraceNote(Chord* ch, int pitch, NoteType type, bool /*behind*/, int len)
       {
       Note* note = new Note(this);
-      if(tpc ==  INVALID_TPC)
-            note->setPitch(pitch);
-      else
-            note->setPitch(pitch, tpc);
-
       Chord* chord = new Chord(this);
       chord->setTrack(ch->track());
-      chord->add(note);
       chord->setParent(ch);
+      chord->add(note);
+
+      note->setPitch(pitch);
+      note->setTpcFromPitch();
 
       TDuration d;
       d.setVal(len);
@@ -1246,8 +1243,8 @@ void Score::upDown(bool up, UpDownMode mode)
                         undoRemoveElement(oNote->accidental());
                   if (oNote->pitch() != newPitch)
                         undoChangeProperty(oNote, P_PITCH, newPitch);
-                  if (oNote->tpc() != newTpc)
-                        undoChangeProperty(oNote, P_TPC, newTpc);
+                  // TODO-TPC: check
+                  oNote->undoSetTpc(newTpc);
                   }
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary

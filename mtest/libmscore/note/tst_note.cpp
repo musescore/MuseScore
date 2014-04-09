@@ -62,9 +62,15 @@ void TestNote::note()
       delete n;
 
    // tpc
-      note->setTpc(22);
+      note->setTpc1(22);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->tpc(), 22);
+      QCOMPARE(n->tpc1(), 22);
+      delete n;
+
+      note->setTpc1(23);
+      note->setTpc2(23);
+      n = static_cast<Note*>(writeReadElement(note));
+      QCOMPARE(n->tpc2(), 23);
       delete n;
 
    // small
@@ -172,9 +178,15 @@ void TestNote::note()
       delete n;
 
    // tpc
-      note->setProperty(P_TPC, 21);
+      note->setProperty(P_TPC1, 21);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->tpc(), 21);
+      QCOMPARE(n->tpc1(), 21);
+      delete n;
+
+      note->setProperty(P_TPC1, 22);
+      note->setProperty(P_TPC2, 22);
+      n = static_cast<Note*>(writeReadElement(note));
+      QCOMPARE(n->tpc2(), 22);
       delete n;
 
    // small

@@ -205,7 +205,9 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
       foreach(Note* n, oc->notes()) {
             Note* nn = new Note(this);
             chord->add(nn);
-            nn->setPitch(n->pitch(), n->tpc());
+            nn->setPitch(n->pitch());
+            nn->setTpc1(n->tpc1());
+            nn->setTpc2(n->tpc2());
             }
       undoAddCR(chord, measure, tick);
 
@@ -754,13 +756,13 @@ void Score::putNote(const Position& p, bool replace)
                                                 qDebug("can't increase fret to %d", fret);
                                           }
                                     // set fret number (orignal or combined) in all linked notes
-                                    nval.tpc = pitch2tpc(nval.pitch, KEY_C, PREFER_NEAREST);
+                                    int tpc1 = pitch2tpc(nval.pitch, KEY_C, PREFER_NEAREST);
                                     foreach (Element* e, note->linkList()) {
                                           Note* linkedNote = static_cast<Note*>(e);
                                           Staff* staff = linkedNote->staff();
                                           if (staff->isTabStaff()) {
                                                 (static_cast<Note*>(linkedNote))->undoChangeProperty(P_PITCH, nval.pitch);
-                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_TPC,   nval.tpc);
+                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_TPC1,   tpc1);
                                                 (static_cast<Note*>(linkedNote))->undoChangeProperty(P_FRET,  nval.fret);
                                                 (static_cast<Note*>(linkedNote))->undoChangeProperty(P_STRING,nval.string);
                                                 }
@@ -1696,9 +1698,11 @@ qDebug("cmdCreateTuplet at %d <%s> track %d duration <%s> ratio <%s> baseLen <%s
       ChordRest* cr;
       if (ocr->type() == Element::CHORD) {
             cr = new Chord(this);
-            foreach(Note* oldNote, static_cast<Chord*>(ocr)->notes()) {
+            foreach (Note* oldNote, static_cast<Chord*>(ocr)->notes()) {
                   Note* note = new Note(this);
-                  note->setPitch(oldNote->pitch(), oldNote->tpc());
+                  note->setPitch(oldNote->pitch());
+                  note->setTpc1(oldNote->tpc1());
+                  note->setTpc2(oldNote->tpc2());
                   cr->add(note);
                   }
             }

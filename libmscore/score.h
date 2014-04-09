@@ -496,7 +496,7 @@ class Score : public QObject {
       void undoChangeVoltaText(Volta* volta, const QString& s);
       void undoChangeChordRestSize(ChordRest* cr, bool small);
       void undoChangeChordNoStem(Chord* cr, bool noStem);
-      void undoChangePitch(Note* note, int pitch, int tpc, int line/*, int fret, int string*/);
+      void undoChangePitch(Note* note, int pitch, int tpc1, int tpc2);
       void spellNotelist(QList<Note*>& notes);
       void undoChangeTpc(Note* note, int tpc);
       void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
@@ -528,7 +528,7 @@ class Score : public QObject {
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(int tick, int len);
 
-      void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len, int tpc = INVALID_TPC);
+      void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
 
       Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);

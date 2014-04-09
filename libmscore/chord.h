@@ -192,7 +192,6 @@ class Chord : public ChordRest {
       PlayEventType playEventType() const           { return _playEventType; }
       void setPlayEventType(PlayEventType v)        { _playEventType = v;    }
 
-      void lineChanged();
       TremoloChordType tremoloChordType() const     { return _tremoloChordType; }
       void setTremoloChordType(TremoloChordType t)  { _tremoloChordType = t; }
 
@@ -211,6 +210,8 @@ class Chord : public ChordRest {
 
       virtual Segment* segment() const;
       virtual Measure* measure() const;
+
+      void sortNotes();
       };
 
 

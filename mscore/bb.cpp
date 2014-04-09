@@ -588,7 +588,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
             for (int i = 0; i < nl.size(); ++i) {
                   const Event& mn = nl[i];
       		Note* note = new Note(score);
-                  note->setPitch(mn.pitch(), mn.tpc());
+                  note->setPitch(mn.pitch(), mn.tpc(), mn.tpc());
       		note->setTrack(track);
             	chord->add(note);
 

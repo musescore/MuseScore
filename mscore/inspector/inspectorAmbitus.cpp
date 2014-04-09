@@ -96,7 +96,7 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
             { P_MIRROR_HEAD,    0, 0, r.direction,     r.resetDirection     },
             { P_GHOST,          0, 0, r.hasLine,       r.resetHasLine       },      // recycled property
             { P_LINE_WIDTH,     0, 0, r.lineWidth,     r.resetLineWidth     },
-            { P_TPC,            0, 0, r.topTpc,        nullptr              },
+            { P_TPC1,           0, 0, r.topTpc,        nullptr              },
             { P_FBPARENTHESIS1, 0, 0, r.bottomTpc,     nullptr              },      // recycled property
             { P_FBPARENTHESIS3, 0, 0, r.topOctave,     nullptr              },      // recycled property
             { P_FBPARENTHESIS4, 0, 0, r.bottomOctave,  nullptr              },      // recycled property

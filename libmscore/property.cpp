@@ -41,9 +41,10 @@ static const PropertyData propertyList[] = {
       { P_SHOW_COURTESY,       false, "",              T_INT   },
       { P_LINE_TYPE,           false, "",              T_INT   },
       { P_PITCH,               true,  "pitch",         T_INT   },
-      { P_TPC,                 true,  "tpc",           T_INT   },
-      { P_HEAD_TYPE,           false, "headType",      T_INT   },
+      { P_TPC1,                false, "tpc",           T_INT   },
+      { P_TPC2,                false, "tpc2",          T_INT   },
 
+      { P_HEAD_TYPE,           false, "headType",      T_INT   },
       { P_HEAD_GROUP,          false, "head",          T_INT },
       { P_VELO_TYPE,           false, "veloType",      T_VALUE_TYPE },
       { P_VELO_OFFSET,         false, "velocity",      T_INT },
@@ -53,8 +54,8 @@ static const PropertyData propertyList[] = {
       { P_NO_STEM,             false, "",              T_INT },
       { P_SLUR_DIRECTION,      false, "",              T_INT },
       { P_LEADING_SPACE,       false, "",              T_SPATIUM },
-      { P_TRAILING_SPACE,      false, "",              T_SPATIUM },
 
+      { P_TRAILING_SPACE,      false, "",              T_SPATIUM },
       { P_DISTRIBUTE,          false, "distribute",    T_BOOL },
       { P_MIRROR_HEAD,         false, "mirror",        T_DIRECTION_H },
       { P_DOT_POSITION,        false, "dotPosition",   T_DIRECTION },
@@ -64,8 +65,8 @@ static const PropertyData propertyList[] = {
       { P_BARLINE_SPAN_FROM,   false, 0,               T_INT   },
       { P_BARLINE_SPAN_TO,     false, 0,               T_INT   },
       { P_USER_OFF,            false, "userOff",       T_POINT },
-      { P_FRET,                false, "fret",          T_INT   },
 
+      { P_FRET,                false, "fret",          T_INT   },
       { P_STRING,              false, "string",        T_INT   },
       { P_GHOST,               false, "ghost",         T_BOOL  },
       { P_PLAY,                false, "play",          T_BOOL  },
@@ -75,8 +76,8 @@ static const PropertyData propertyList[] = {
       { P_BRACKET_TYPE,        false, "bracketType",   T_INT   },
       { P_NORMAL_NOTES,        false, "normalNotes",   T_INT   },
       { P_ACTUAL_NOTES,        false, "actualNotes",   T_INT   },
-      { P_P1,                  false, "p1",            T_POINT },
 
+      { P_P1,                  false, "p1",            T_POINT },
       { P_P2,                  false, "p2",            T_POINT },
       { P_GROW_LEFT,           false, "growLeft",      T_REAL    },
       { P_GROW_RIGHT,          false, "growRight",     T_REAL    },
@@ -86,8 +87,8 @@ static const PropertyData propertyList[] = {
       { P_BOTTOM_GAP,          false, "bottomGap",     T_SP_REAL },
       { P_LEFT_MARGIN,         false, "leftMargin",    T_REAL    },
       { P_RIGHT_MARGIN,        false, "rightMargin",   T_REAL    },
-      { P_TOP_MARGIN,          false, "topMargin",     T_REAL    },
 
+      { P_TOP_MARGIN,          false, "topMargin",     T_REAL    },
       { P_BOTTOM_MARGIN,       false, "bottomMargin",  T_REAL    },
       { P_LAYOUT_BREAK,        false, "subtype",       T_LAYOUT_BREAK },
       { P_AUTOSCALE,           false, "autoScale",     T_BOOL   },
@@ -98,8 +99,8 @@ static const PropertyData propertyList[] = {
       { P_TEXT_STYLE,          false, "textStyle",       T_TEXT_STYLE  },
       { P_TEXT_STYLE_TYPE,     false, "textStyleType", T_INT  },
       { P_TEXT,                false, 0,               T_STRING },
-      { P_HTML_TEXT,           false, 0,               T_STRING },
 
+      { P_HTML_TEXT,           false, 0,               T_STRING },
       { P_USER_MODIFIED,       false, 0,               T_BOOL   },
       { P_BEAM_POS,            false, 0,               T_POINT  },
       { P_BEAM_MODE,           true, "BeamMode",       T_BEAM_MODE  },
@@ -109,8 +110,8 @@ static const PropertyData propertyList[] = {
       { P_TEMPO,               false, "tempo",         T_TEMPO  },
       { P_TEMPO_FOLLOW_TEXT,   false, "followText",    T_BOOL   },
       { P_ACCIDENTAL_BRACKET,  false, "bracket",       T_BOOL   },
-      { P_NUMERATOR_STRING,    false, "textN",         T_STRING },
 
+      { P_NUMERATOR_STRING,    false, "textN",         T_STRING },
       { P_DENOMINATOR_STRING,  false, "textD",         T_STRING },
       { P_SHOW_NATURALS,       false, "showNaturals",  T_BOOL   },
       { P_BREAK_HINT,          false, "",              T_BOOL   },
@@ -120,8 +121,8 @@ static const PropertyData propertyList[] = {
       { P_FBCONTINUATIONLINE,  false, "continuationLine", T_INT },
       { P_FBPARENTHESIS1,      false, "",              T_INT    },
       { P_FBPARENTHESIS2,      false, "",              T_INT    },
-      { P_FBPARENTHESIS3,      false, "",              T_INT    },
 
+      { P_FBPARENTHESIS3,      false, "",              T_INT    },
       { P_FBPARENTHESIS4,      false, "",              T_INT    },
       { P_FBPARENTHESIS5,      false, "",              T_INT    },
       { P_VOLTA_TYPE,          false, "",              T_INT    },
@@ -132,8 +133,8 @@ static const PropertyData propertyList[] = {
       { P_HAIRPIN_TYPE,        false, "",              T_INT     },
       { P_HAIRPIN_HEIGHT,      false, "hairpinHeight",     T_SPATIUM },
       { P_HAIRPIN_CONT_HEIGHT, false, "hairpinContHeight", T_SPATIUM },
-      { P_VELO_CHANGE,         false, "",              T_INT    },
 
+      { P_VELO_CHANGE,         false, "",              T_INT    },
       { P_DYNAMIC_RANGE,       false, "dynType",       T_INT    },
       { P_PLACEMENT,           false, "placement",     T_PLACEMENT    },
       { P_VELOCITY,            false, "velocity",      T_INT    },
@@ -143,8 +144,8 @@ static const PropertyData propertyList[] = {
       { P_LABEL,               false, "label",         T_STRING },
       { P_MARKER_TYPE,         false, 0,               T_INT    },
       { P_ARP_USER_LEN1,       false, 0,               T_REAL   },
-      { P_ARP_USER_LEN2,       false, 0,               T_REAL   },
 
+      { P_ARP_USER_LEN2,       false, 0,               T_REAL   },
       { P_REPEAT_FLAGS,        false, 0,               T_INT    },
       { P_END_BARLINE_TYPE,    false, 0,               T_INT    },
       { P_END_BARLINE_VISIBLE, false, 0,               T_BOOL   },
@@ -154,8 +155,8 @@ static const PropertyData propertyList[] = {
       { P_GLISS_TEXT,          false, 0,               T_STRING },
       { P_GLISS_SHOW_TEXT,     false, 0,               T_BOOL   },
       { P_DIAGONAL,            false, 0,               T_BOOL     },
-      { P_GROUPS,              false, 0,               T_GROUPS   },
 
+      { P_GROUPS,              false, 0,               T_GROUPS   },
       { P_LINE_STYLE,          false, "lineStyle",     T_INT      },
       { P_LINE_COLOR,          false, 0,               T_COLOR    },
       { P_LINE_WIDTH,          false, 0,               T_SPATIUM  },
@@ -166,8 +167,8 @@ static const PropertyData propertyList[] = {
       { P_TIMESIG_GLOBAL,      false, 0,               T_FRACTION },
       { P_SPANNER_TICK,        true,  "tick",          T_INT      },
       { P_SPANNER_TICK2,       true,  "tick2",         T_INT      },
-      { P_SPANNER_TRACK2,      true,  "track2",        T_INT      },
 
+      { P_SPANNER_TRACK2,      true,  "track2",        T_INT      },
       { P_USER_OFF2,           false, "userOff2",        T_POINT   },
       { P_BEGIN_TEXT_PLACE,    false, "beginTextPlace",  T_INT     },
       { P_CONTINUE_TEXT_PLACE, false, "beginTextPlace",  T_INT     },
@@ -177,6 +178,7 @@ static const PropertyData propertyList[] = {
       { P_BEGIN_HOOK_HEIGHT,   false, "beginHookHeight", T_SPATIUM },
       { P_END_HOOK_HEIGHT,     false, "endHookHeight",   T_SPATIUM },
       { P_BEGIN_HOOK_TYPE,     false, "beginHookType",   T_INT     },
+
       { P_END_HOOK_TYPE,       false, "endHookType",     T_INT     },
       { P_BEGIN_TEXT,          true,  "beginText",       T_STRING  },
       { P_CONTINUE_TEXT,       true,  "continueText",    T_STRING  },
