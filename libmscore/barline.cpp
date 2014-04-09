@@ -19,6 +19,7 @@
 #include "segment.h"
 #include "articulation.h"
 #include "stafftype.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -792,7 +793,7 @@ void BarLine::endEditDrag()
             }
       else
             shiftDrag = false;
-            
+
       // if any value changed, update
       if(newSpan != _span || newSpanFrom != _spanFrom || newSpanTo != _spanTo) {
             _span       = newSpan;

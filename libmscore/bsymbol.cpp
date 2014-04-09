@@ -12,6 +12,7 @@
 
 #include "score.h"
 #include "image.h"
+#include "xml.h"
 
 namespace Ms {
 

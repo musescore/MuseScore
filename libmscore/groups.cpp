@@ -15,6 +15,7 @@
 #include "chordrest.h"
 #include "staff.h"
 #include "tuplet.h"
+#include "xml.h"
 
 namespace Ms {
 

@@ -26,6 +26,7 @@
 #include "preferences.h"
 #include "icons.h"
 #include "libmscore/mscore.h"
+#include "libmscore/xml.h"
 
 namespace Ms {
 

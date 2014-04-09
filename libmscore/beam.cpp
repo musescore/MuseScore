@@ -30,6 +30,7 @@
 #include "icon.h"
 #include "stemslash.h"
 #include "groups.h"
+#include "xml.h"
 
 namespace Ms {
 

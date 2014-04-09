@@ -224,7 +224,7 @@ ClefTypeList Staff::clefTypeList(int tick) const
 ClefType Staff::clef(int tick) const
       {
       ClefTypeList c = clefs.clef(tick);
-      return score()->concertPitch() ? c._concertClef : c._transposingClef;
+      return score()->styleB(ST_concertPitch) ? c._concertClef : c._transposingClef;
       }
 
 ClefType Staff::clef(Segment* segment) const

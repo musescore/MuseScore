@@ -3649,6 +3649,7 @@ void Measure::updateAccidentals(int staffIdx)
                   for (Chord* ch : chord->graceNotes()) {
                         for (Note* note : ch->notes())
                               note->updateAccidental(&as);
+                        ch->sortNotes();
                         }
 
                   for (Note* note : chord->notes()) {
@@ -3683,6 +3684,7 @@ void Measure::updateAccidentals(int staffIdx)
                                     break;
                               }
                         }
+                  chord->sortNotes();
                   }
             }
       }

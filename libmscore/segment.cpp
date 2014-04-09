@@ -34,6 +34,7 @@
 #include "clef.h"
 #include "timesig.h"
 #include "system.h"
+#include "xml.h"
 
 namespace Ms {
 

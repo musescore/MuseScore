@@ -1505,16 +1505,13 @@ void Chord::layout10(AccidentalState* as)
       for (Note* note : notes()) {
             if (drumset) {
                   int pitch = note->pitch();
-                  if (!drumset->isValid(pitch)) {
-                        // qDebug("unmapped drum note %d", pitch);
-                        }
-                  else {
+                  if (drumset->isValid(pitch)) {
                         note->setHeadGroup(drumset->noteHead(pitch));
                         note->setLine(drumset->line(pitch));
-                        continue;
                         }
                   }
-            note->layout10(as);
+            else
+                  note->layout10(as);
             }
       sortNotes();
       }

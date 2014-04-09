@@ -15,6 +15,7 @@
 #include "score.h"
 #include "undo.h"
 #include "staff.h"
+#include "xml.h"
 
 namespace Ms {
 

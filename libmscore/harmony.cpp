@@ -23,6 +23,7 @@
 #include "part.h"
 #include "utils.h"
 #include "sym.h"
+#include "xml.h"
 
 namespace Ms {
 

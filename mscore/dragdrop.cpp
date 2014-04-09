@@ -24,6 +24,7 @@
 #include "libmscore/spanner.h"
 #include "libmscore/chord.h"
 #include "libmscore/icon.h"
+#include "libmscore/xml.h"
 #include "musescore.h"
 #include "scoreview.h"
 

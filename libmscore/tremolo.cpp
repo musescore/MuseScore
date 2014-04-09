@@ -18,6 +18,7 @@
 #include "measure.h"
 #include "segment.h"
 #include "stem.h"
+#include "xml.h"
 
 namespace Ms {
 

@@ -29,6 +29,7 @@
 #include "libmscore/symbol.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/mscore.h"
+#include "libmscore/xml.h"
 
 namespace Ms {
 

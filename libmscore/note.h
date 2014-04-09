@@ -215,8 +215,8 @@ class Note : public Element {
       void endEdit();
       void addSpanner(Spanner*);
       void removeSpanner(Spanner*);
-      bool concertPitch() const;
       int concertPitchIdx() const;
+      void updateRelLine();
 
    public:
       Note(Score* s = 0);
