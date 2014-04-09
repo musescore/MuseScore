@@ -1516,6 +1516,7 @@ void Chord::layout10(AccidentalState* as)
                   }
             note->layout10(as);
             }
+      sortNotes();
       }
 
 //---------------------------------------------------------
@@ -2035,16 +2036,6 @@ Note* Chord::findNote(int pitch) const
       }
 
 //---------------------------------------------------------
-//   pitchChanged
-//---------------------------------------------------------
-
-void Chord::lineChanged()
-      {
-      qSort(_notes.begin(), _notes.end(),
-         [](Note* n1, const Note* n2) ->bool {return n1->line() > n2->line(); } );
-      }
-
-//---------------------------------------------------------
 //   drop
 //---------------------------------------------------------
 
@@ -2427,5 +2418,17 @@ Measure* Chord::measure() const
       return static_cast<Measure*>(e);
       }
 
+//---------------------------------------------------------
+//   sortNotes
+//---------------------------------------------------------
+
+void Chord::sortNotes()
+      {
+      printf("Chord::sortNotes\n");
+      std::sort(notes().begin(), notes().end(),
+         [](const Note* a,const Note* b)->bool { return b->line() < a->line(); }
+         // [](const Note* a,const Note* b)->bool { return a->pitch() < b->pitch(); }
+         );
+      }
 }
 

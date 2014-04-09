@@ -95,6 +95,7 @@ Element* MTest::writeReadElement(Element* element)
 
 MTest::MTest()
       {
+      MScore::testMode = true;
       }
 
 //---------------------------------------------------------
@@ -115,7 +116,7 @@ Score* MTest::readCreatedScore(const QString& name)
       {
       Score* score = new Score(mscore->baseStyle());
       score->setName(name);
-      MScore::testMode = true;
+//      MScore::testMode = true;
       QString csl  = score->fileInfo()->suffix().toLower();
 
       Score::FileError rv;
@@ -155,7 +156,7 @@ Score* MTest::readCreatedScore(const QString& name)
 bool MTest::saveScore(Score* score, const QString& name)
       {
       QFileInfo fi(name);
-      MScore::testMode = true;
+//      MScore::testMode = true;
       return score->saveFile(fi);
       }
 

@@ -377,7 +377,9 @@ void setMusicNotesFromMidi(Score *score,
             Note* note = new Note(score);
 
             // TODO - does this need to be key-aware?
-            note->setPitch(mn.pitch, pitch2tpc(mn.pitch, KEY_C, PREFER_NEAREST));
+            note->setPitch(mn.pitch);
+            note->setTpcFromPitch();
+
             chord->add(note);
             note->setVeloType(MScore::USER_VAL);
             note->setVeloOffset(mn.velo);

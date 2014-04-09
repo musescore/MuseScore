@@ -4158,14 +4158,13 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
 void ScoreView::cmdChangeEnharmonic(bool up)
       {
       _score->startCmd();
-      QList<Note*> nl = _score->selection().noteList();
-      foreach(Note* n, nl) {
+      for (Note* n : _score->selection().noteList()) {
             Staff* staff = n->staff();
             if (staff->part()->instr()->useDrumset())
                   continue;
             if (staff->isTabStaff()) {
                   int string = n->line() + (up ? 1 : -1);
-                  int fret = staff->part()->instr()->stringData()->fret(n->pitch(), string);
+                  int fret   = staff->part()->instr()->stringData()->fret(n->pitch(), string);
                   if (fret != -1) {
                         score()->undoChangeProperty(n, P_FRET, fret);
                         score()->undoChangeProperty(n, P_STRING, string);
@@ -4214,9 +4213,8 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                         }
                   if (i == 36)
                         qDebug("tpc %d not found", tpc);
-                  else if (tpc != n->tpc()) {
-                        _score->undoChangePitch(n, n->pitch(), tpc, line/*, n->fret(), n->string()*/);
-                        }
+                  else
+                        n->undoSetTpc(tpc);
                   }
             }
       _score->endCmd();

@@ -318,12 +318,12 @@ class SortStaves : public UndoCommand {
 class ChangePitch : public UndoCommand {
       Note* note;
       int pitch;
-      int tpc;
-      int line;
+      int tpc1;
+      int tpc2;
       void flip();
 
    public:
-      ChangePitch(Note* note, int pitch, int tpc, int l/*, int f, int string*/);
+      ChangePitch(Note* note, int pitch, int tpc1, int tpc2);
       UNDO_NAME("ChangePitch");
       };
 

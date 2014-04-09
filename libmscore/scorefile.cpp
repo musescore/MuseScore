@@ -1129,7 +1129,7 @@ bool Score::read(XmlReader& e)
       fixTicks();
       rebuildMidiMapping();
       updateChannel();
-      updateNotes();          // only for parts needed?
+//      updateNotes();          // only for parts needed?
       createPlayEvents();
       setExcerptsChanged(false);
       return true;
