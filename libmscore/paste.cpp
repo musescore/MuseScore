@@ -352,15 +352,16 @@ void Score::pasteChordRest(ChordRest* cr, int tick)
             int nn     = (track / VOICES) + c->staffMove();
             if (nn < 0 || nn >= nstaves())
                   c->setStaffMove(0);
+
             if (!styleB(ST_concertPitch) && part->instr()->transpose().chromatic) {
                   Interval interval = part->instr()->transpose();
                   if (!interval.isZero()) {
                         interval.flip();
-                        foreach(Note* n, c->notes()) {
+                        for (Note* n : c->notes()) {
                               int npitch;
                               int ntpc;
-                              transposeInterval(n->pitch(), n->tpc(), &npitch, &ntpc, interval, true);
-                              n->setPitch(npitch, ntpc);
+                              transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc, interval, true);
+                              n->setTpc2(ntpc);
                               }
                         }
                   }

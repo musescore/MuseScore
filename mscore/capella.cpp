@@ -519,9 +519,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     pitch = 0;
 
                               note->setPitch(pitch);
-                              note->setTpc(pitch2tpc(pitch, key, PREFER_NEAREST));
                               // TODO: compute tpc from pitch & line
-                              // note->setTpc(tpc);
+                              note->setTpcFromPitch();
 
                               chord->add(note);
                               if (o->rightTie) {

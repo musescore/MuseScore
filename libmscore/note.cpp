@@ -181,7 +181,8 @@ Note::Note(Score* s)
       _lineOffset        = 0;
       _tieFor            = 0;
       _tieBack           = 0;
-      _tpc               = INVALID_TPC;
+      _tpc[0]            = INVALID_TPC;
+      _tpc[1]            = INVALID_TPC;
       _headGroup         = NoteHeadGroup::HEAD_NORMAL;
       _headType          = NoteHeadType::HEAD_AUTO;
 
@@ -219,7 +220,8 @@ Note::Note(const Note& n)
       _ghost             = n._ghost;
       dragMode           = n.dragMode;
       _pitch             = n._pitch;
-      _tpc               = n._tpc;
+      _tpc[0]            = n._tpc[0];
+      _tpc[1]            = n._tpc[1];
       _hidden            = n._hidden;
       _play              = n._play;
       _tuning            = n._tuning;
@@ -259,6 +261,25 @@ Note::Note(const Note& n)
       }
 
 //---------------------------------------------------------
+//   concertPitch
+//    return true if current note is in concert pitch mode
+//---------------------------------------------------------
+
+inline bool Note::concertPitch() const
+      {
+      return score()->styleB(ST_concertPitch);
+      }
+
+//---------------------------------------------------------
+//   concertPitchIdx
+//---------------------------------------------------------
+
+inline int Note::concertPitchIdx() const
+      {
+      return concertPitch() ? 0 : 1;
+      }
+
+//---------------------------------------------------------
 //   setPitch
 //---------------------------------------------------------
 
@@ -269,18 +290,21 @@ void Note::setPitch(int val)
       if (score()) {
             Part* part = staff() ? staff()->part() : 0;
             if (part)
-                  pitchOffset = score()->styleB(ST_concertPitch) ? 0 : part->instr()->transpose().chromatic;
+                  pitchOffset = concertPitch() ? 0 : transposition();
             }
       for (int i = 0; i < _playEvents.size(); ++i)
             _playEvents[i].setPitch(pitchOffset);
-      if (chord())
-            chord()->lineChanged();
+      if (chord()) {
+            if (chord()->measure())
+                  chord()->measure()->updateAccidentals(chord()->staffIdx());
+            }
       }
 
-void Note::setPitch(int a, int b)
+void Note::setPitch(int pitch, int tpc1, int tpc2)
       {
-      setPitch(a);
-      _tpc = b;
+      setPitch(pitch);
+      _tpc[0] = tpc1;
+      _tpc[1] = tpc2;
       }
 
 //---------------------------------------------------------
@@ -293,15 +317,23 @@ void Note::undoSetPitch(int p)
       }
 
 //---------------------------------------------------------
+//   tpcFromPitch
+//---------------------------------------------------------
+
+int Note::tpcFromPitch(int p) const
+      {
+      KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
+      return pitch2tpc(p, key.accidentalType(), PREFER_NEAREST);
+      }
+
+//---------------------------------------------------------
 //   setTpcFromPitch
 //---------------------------------------------------------
 
 void Note::setTpcFromPitch()
       {
-      KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
-//      _tpc    = pitch2tpc(_pitch, key.accidentalType(), PREFER_NEAREST);
-      _tpc    = pitch2tpc(epitch(), key.accidentalType(), PREFER_NEAREST);
-// qDebug("setTpcFromPitch pitch %d tick %d key %d tpc %d", epitch(), chord()->tick(), key.accidentalType(), _tpc);
+      _tpc[0] = tpcFromPitch(_pitch);
+      _tpc[1] = tpcFromPitch(_pitch - transposition());
       }
 
 //---------------------------------------------------------
@@ -312,16 +344,33 @@ void Note::setTpc(int v)
       {
       if (!tpcIsValid(v))
             qFatal("Note::setTpc: bad tpc %d\n", v);
-      _tpc = v;
+      _tpc[concertPitchIdx()] = v;
       }
 
 //---------------------------------------------------------
 //   undoSetTpc
+//    change the current tpc
 //---------------------------------------------------------
 
-void Note::undoSetTpc(int tpc)
+void Note::undoSetTpc(int v)
       {
-      undoChangeProperty(P_TPC, tpc);
+      if (concertPitch()) {
+            if (v != tpc1())
+                  undoChangeProperty(P_TPC1, v);
+            }
+      else {
+            if (v != tpc2())
+                  undoChangeProperty(P_TPC2, v);
+            }
+      }
+
+//---------------------------------------------------------
+//   tpc
+//---------------------------------------------------------
+
+int Note::tpc() const
+      {
+      return _tpc[concertPitchIdx()];
       }
 
 //---------------------------------------------------------
@@ -640,17 +689,6 @@ void Note::write(Xml& xml) const
       {
       xml.stag("Note");
       Element::writeProperties(xml);
-      //
-      // get real pitch for clipboard (copy/paste)
-      //
-      int rpitch = pitch();
-      int rtpc   = tpc();
-
-      if (staff()) {
-            const Interval& interval = staff()->part()->instr()->transpose();
-            if (xml.clipboardmode && !score()->styleB(ST_concertPitch) && interval.chromatic)
-                  transposeInterval(rpitch, rtpc, &_pitch, &_tpc, interval, true);
-            }
 
       if (_accidental)
             _accidental->write(xml);
@@ -683,7 +721,9 @@ void Note::write(Xml& xml) const
             xml.etag();
             }
       writeProperty(xml, P_PITCH);
-      writeProperty(xml, P_TPC);
+      writeProperty(xml, P_TPC1);
+      if (tpcIsValid(_tpc[1]) &&  transposition() && _tpc[1] != tpcFromPitch(_pitch - transposition()))
+            writeProperty(xml, P_TPC2);
       writeProperty(xml, P_SMALL);
       writeProperty(xml, P_MIRROR_HEAD);
       writeProperty(xml, P_DOT_POSITION);
@@ -704,8 +744,6 @@ void Note::write(Xml& xml) const
       foreach (Spanner* e, _spannerBack)
             xml.tagE(QString("endSpanner id=\"%1\"").arg(e->id()));
 
-      _pitch = rpitch;
-      _tpc   = rtpc;
       xml.etag();
       }
 
@@ -717,19 +755,22 @@ void Note::read(XmlReader& e)
       {
       bool hasAccidental = false;                     // used for userAccidental backward compatibility
 
-      _tpc = INVALID_TPC;
+      _tpc[0] = INVALID_TPC;
+      _tpc[1] = INVALID_TPC;
 
       if (e.hasAttribute("pitch"))                   // obsolete
             _pitch = e.intAttribute("pitch");
       if (e.hasAttribute("tpc"))                     // obsolete
-            _tpc = e.intAttribute("tpc");
+            _tpc[0] = e.intAttribute("tpc");
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "pitch")
                   _pitch = e.readInt();
             else if (tag == "tpc")
-                  _tpc = e.readInt();
+                  _tpc[0] = e.readInt();
+            else if (tag == "tpc2")
+                  _tpc[1] = e.readInt();
             else if (tag == "small")
                   setSmall(e.readInt());
             else if (tag == "mirror")
@@ -942,8 +983,18 @@ void Note::read(XmlReader& e)
             }
       // ensure sane values:
       _pitch = restrict(_pitch, 0, 127);
-      if (!tpcIsValid(_tpc))
-            setTpcFromPitch();
+
+      if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
+            KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
+            if (!tpcIsValid(_tpc[0]))
+                  _tpc[0] = pitch2tpc(_pitch, key.accidentalType(), PREFER_NEAREST);
+            if (!tpcIsValid(_tpc[1])) {
+                  if (transposition() == 0)
+                        _tpc[1] = _tpc[0];
+                  else
+                        _tpc[1] = pitch2tpc(_pitch - transposition(), key.accidentalType(), PREFER_NEAREST);
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -966,6 +1017,15 @@ QRectF Note::drag(EditData* data)
       }
 
 //---------------------------------------------------------
+//   transposition
+//---------------------------------------------------------
+
+int Note::transposition() const
+      {
+      return staff() ? staff()->part()->instr()->transpose().chromatic : 0;
+      }
+
+//---------------------------------------------------------
 //   endDrag
 //---------------------------------------------------------
 
@@ -974,22 +1034,17 @@ void Note::endDrag()
       dragMode     = false;
       if (_lineOffset == 0)
             return;
-      int nLine;
       int staffIdx = chord()->staffIdx() + chord()->staffMove();
       Staff* staff = score()->staff(staffIdx);
-      int nPitch;
-      int tpc;
-      int nString;
-      int nFret;
       if (staff->isTabStaff()) {
             // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
             // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
-            nString = _string + (static_cast<StaffTypeTablature*>(staff->staffType())->upsideDown() ?
+            int nString = _string + (static_cast<StaffTypeTablature*>(staff->staffType())->upsideDown() ?
                         -_lineOffset : _lineOffset);
             _lineOffset = 0;
             // get a fret number for same pitch on new string
             StringData* strData = staff->part()->instr()->stringData();
-            nFret       = strData->fret(_pitch, nString);
+            int nFret       = strData->fret(_pitch, nString);
             if (nFret < 0)                      // no fret?
                   return;                       // no party!
             score()->undoChangeProperty(this, P_FRET, nFret);
@@ -998,24 +1053,28 @@ void Note::endDrag()
             }
       else {
             // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch
-            nLine       = _line + _lineOffset;
+            int nLine       = _line + _lineOffset;
             _lineOffset = 0;
             // get note context
             int tick    = chord()->tick();
             ClefType clef    = staff->clef(tick);
             int key     = staff->key(tick).accidentalType();
             // determine new pitch of dragged note
-            nPitch      = line2pitch(nLine, clef, key);
-            tpc         = pitch2tpc(nPitch, key, PREFER_NEAREST);
+            int nPitch      = line2pitch(nLine, clef, key);
+            int tpc1        = pitch2tpc(nPitch, key, PREFER_NEAREST);
+            int tpc2        = pitch2tpc(nPitch - transposition(), key, PREFER_NEAREST);
             // undefined for non-tablature staves
-            nString     = -1;
-            nFret       = -1;
-//            }
-      Note* n = this;
-      while (n->tieBack())
-            n = n->tieBack()->startNote();
-      for (; n; n = n->tieFor() ? n->tieFor()->endNote() : 0)
-            score()->undoChangePitch(n, nPitch, tpc, nLine/*, nFret, nString*/);
+            Note* n = this;
+            while (n->tieBack())
+                  n = n->tieBack()->startNote();
+            for (; n; n = n->tieFor() ? n->tieFor()->endNote() : 0) {
+                  if (n->pitch() != nPitch)
+                        n->undoChangeProperty(P_PITCH, nPitch);
+                  if (n->_tpc[0] != tpc1)
+                        n->undoChangeProperty(P_TPC1, tpc1);
+                  if (n->_tpc[1] != tpc2)
+                        n->undoChangeProperty(P_TPC2, tpc2);
+                  }
             }
       score()->select(this, SELECT_SINGLE, 0);
       }
@@ -1456,7 +1515,7 @@ void Note::layout10(AccidentalState* as)
                   }
             }
       else {
-            _line = absStep(_tpc, epitch());
+            _line = absStep(tpc(), epitch());
 
             // calculate accidental
 
@@ -1467,16 +1526,16 @@ void Note::layout10(AccidentalState* as)
                         // TODO - what about double flat and double sharp?
                         KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
                         int ntpc = pitch2tpc(epitch(), key.accidentalType(), acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
-                        if (ntpc != _tpc) {
-//not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), _tpc, ntpc, acci);
+                        if (ntpc != tpc()) {
+//not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), tpc(), ntpc, acci);
 //                              setColor(QColor(255, 0, 0));
-//                              _tpc = ntpc;
-                              _line = absStep(_tpc, epitch());
+//                             setTpc(ntpc);
+                              _line = absStep(tpc(), epitch());
                               }
                         }
                   }
             else  {
-                  AccidentalVal accVal = tpc2alter(_tpc);
+                  AccidentalVal accVal = tpc2alter(tpc());
 
                   if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
                         as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
@@ -1637,8 +1696,6 @@ void Note::setLine(int n)
       {
       _line = n;
       rypos() = _line * spatium() * .5;
-      if (chord())
-            chord()->lineChanged();
       }
 
 //---------------------------------------------------------
@@ -1664,12 +1721,11 @@ void Note::setHeadGroup(NoteHeadGroup val)
 //---------------------------------------------------------
 //   ppitch
 //    playback pitch
-//    honours ottava and transposing instruments
 //---------------------------------------------------------
 
 int Note::ppitch() const
       {
-      return epitch() + staff()->pitchOffset(chord()->segment()->tick());
+      return _pitch + staff()->pitchOffset(chord()->segment()->tick());
       }
 
 //---------------------------------------------------------
@@ -1680,7 +1736,7 @@ int Note::ppitch() const
 
 int Note::epitch() const
       {
-      return _pitch - (!staff() || score()->styleB(ST_concertPitch) ? 0 : staff()->part()->instr()->transpose().chromatic);
+      return _pitch - (concertPitch() ? 0 : transposition());
       }
 
 //---------------------------------------------------------
@@ -1720,7 +1776,7 @@ void Note::endEdit()
 
 void Note::updateAccidental(AccidentalState* as)
       {
-      _line = absStep(_tpc, epitch());
+      _line = absStep(tpc(), epitch());
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
@@ -1739,7 +1795,7 @@ void Note::updateAccidental(AccidentalState* as)
 
       Accidental::AccidentalType acci = Accidental::ACC_NONE;
 
-      AccidentalVal accVal = tpc2alter(_tpc);
+      AccidentalVal accVal = tpc2alter(tpc());
       if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
             as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
             if (_tieBack)
@@ -1792,6 +1848,8 @@ void Note::updateAccidental(AccidentalState* as)
       int tick = chord()->tick();
       ClefType clef = s->clef(tick);
       _line    = relStep(_line, clef);
+      if (chord())
+            chord()->sortNotes();
       }
 
 //---------------------------------------------------------
@@ -1802,7 +1860,9 @@ void Note::updateLine()
       {
       Staff* s      = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
-      _line         = relStep(epitch(), _tpc, clef);
+      _line         = relStep(epitch(), tpc(), clef);
+      if (chord())
+            chord()->sortNotes();
       }
 
 //---------------------------------------------------------
@@ -1815,7 +1875,7 @@ void Note::setNval(NoteVal nval)
       _fret      = nval.fret;
       _string    = nval.string;
       if (nval.tpc != INVALID_TPC)
-            _tpc = nval.tpc;
+            setTpc(nval.tpc);
 
       _headGroup = NoteHeadGroup(nval.headGroup);
       }
@@ -1829,8 +1889,10 @@ QVariant Note::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_PITCH:
                   return pitch();
-            case P_TPC:
-                  return tpc();
+            case P_TPC1:
+                  return _tpc[0];
+            case P_TPC2:
+                  return _tpc[1];
             case P_SMALL:
                   return small();
             case P_MIRROR_HEAD:
@@ -1870,17 +1932,18 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_PITCH:
                   setPitch(v.toInt());
-                  if (chord()->measure()) {
+                  if (chord()->measure())
                         chord()->measure()->updateAccidentals(chord()->staffIdx());
-                        std::sort(chord()->notes().begin(), chord()->notes().end(),
-                           [](const Note* a,const Note* b)->bool { return b->line() < a->line(); }
-                           );
-                        }
                   score()->setPlaylistDirty(true);
                   break;
-            case P_TPC:
-                  setTpc(v.toInt());
-                  if (chord()->measure())
+            case P_TPC1:
+                  _tpc[0] = v.toInt();
+                  if (chord()->measure() && concertPitch())
+                        chord()->measure()->updateAccidentals(chord()->staffIdx());
+                  break;
+            case P_TPC2:
+                  _tpc[1] = v.toInt();
+                  if (chord()->measure() && !concertPitch())
                         chord()->measure()->updateAccidentals(chord()->staffIdx());
                   break;
             case P_SMALL:
@@ -2097,18 +2160,18 @@ QVariant Note::propertyDefault(P_ID propertyId) const
 //   setOnTimeOffset
 //---------------------------------------------------------
 
-void Note::setOnTimeOffset(int)
+void Note::setOnTimeOffset(int val)
       {
-      // TODO
+      _playEvents[0].setOntime(val);
       }
 
 //---------------------------------------------------------
 //   setOffTimeOffset
 //---------------------------------------------------------
 
-void Note::setOffTimeOffset(int)
+void Note::setOffTimeOffset(int val)
       {
-      // TODO
+      _playEvents[0].setLen(val - _playEvents[0].ontime());
       }
 
 //---------------------------------------------------------

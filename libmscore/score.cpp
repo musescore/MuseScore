@@ -2662,27 +2662,13 @@ void Score::cmdConcertPitchChanged(bool flag, bool useDoubleSharpsFlats)
             if (!flag)
                   interval.flip();
 
-            // cmdTransposeStaff(staff->idx(), interval, useDoubleSharpsFlats);
-            int staffIdx = staff->idx();
-
+            int staffIdx   = staff->idx();
             int startTrack = staffIdx * VOICES;
             int endTrack   = startTrack + VOICES;
 
             transposeKeys(staffIdx, staffIdx+1, 0, lastSegment()->tick(), interval);
 
             for (Segment* segment = firstSegment(Segment::SegChordRest); segment; segment = segment->next1(Segment::SegChordRest)) {
-                  for (int st = startTrack; st < endTrack; ++st) {
-                        Chord* chord = static_cast<Chord*>(segment->element(st));
-                        if (!chord || chord->type() != Element::CHORD)
-                            continue;
-                        for (Note* n : chord->notes()) {
-                              // transpose(n, interval, useDoubleSharpsFlats);
-                              int npitch;
-                              int ntpc;
-                              transposeInterval(n->pitch(), n->tpc(), &npitch, &ntpc, interval, useDoubleSharpsFlats);
-                              undo(new ChangeProperty(n, P_TPC, ntpc));
-                              }
-                        }
                   for (Element* e : segment->annotations()) {
                         if ((e->type() != Element::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                               continue;

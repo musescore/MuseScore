@@ -398,25 +398,17 @@ void Score::undoChangeElement(Element* oldElement, Element* newElement)
 //   undoChangePitch
 //---------------------------------------------------------
 
-void Score::undoChangePitch(Note* note, int pitch, int tpc, int line/*, int fret, int string*/)
+void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
       {
-      Chord* chord  = note->chord();
-      int noteIndex = chord->notes().indexOf(note);
-
-      Q_ASSERT(noteIndex >= 0);
-
-      const LinkedElements* l = chord->links();
+      const LinkedElements* l = note->links();
       if (l) {
-            foreach(Element* e, *l) {
-                  Chord* c = static_cast<Chord*>(e);
-                  Q_ASSERT(c->type() == Element::CHORD);
-                  Q_ASSERT(c->notes().size() > noteIndex);
-                  Note* n  = c->notes().at(noteIndex);
-                  undo(new ChangePitch(n, pitch, tpc, line));
+            for (Element* e : *l) {
+                  Note* n = static_cast<Note*>(e);
+                  undo()->push(new ChangePitch(n, pitch, tpc1, tpc2));
                   }
             }
       else
-            undo(new ChangePitch(note, pitch, tpc, line));
+            undo()->push(new ChangePitch(note, pitch, tpc1, tpc2));
       }
 
 //---------------------------------------------------------
@@ -582,15 +574,6 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   score->undo(new AddElement(clef));
                   }
             }
-      }
-
-//---------------------------------------------------------
-//   undoChangeTpc
-//---------------------------------------------------------
-
-void Score::undoChangeTpc(Note* note, int tpc)
-      {
-      undoChangeProperty(note, P_TPC, tpc);
       }
 
 //---------------------------------------------------------
@@ -868,8 +851,9 @@ void Score::undoAddElement(Element* element)
                         element->score()->layoutFingering(static_cast<Fingering*>(element));
                   else if (element->type() == Element::CHORD) {
                         for (Note* n : static_cast<Chord*>(element)->notes()) {
-                              if(n->tpc() == INVALID_TPC)
-                                    n->setTpcFromPitch();
+                        //      if(n->tpc() == INVALID_TPC)
+                        //            n->setTpcFromPitch();
+                              Q_ASSERT(n->tpc() != INVALID_TPC);
                               }
                         element->score()->updateNotes();
                         }
@@ -884,8 +868,10 @@ void Score::undoAddElement(Element* element)
                   if (ne->type() == Element::FINGERING)
                         e->score()->layoutFingering(static_cast<Fingering*>(ne));
                   else if (ne->type() == Element::CHORD) {
-                        for (Note* n : static_cast<Chord*>(ne)->notes())
-                              n->setTpcFromPitch();
+                        for (Note* n : static_cast<Chord*>(ne)->notes()) {
+                              Q_ASSERT(n->tpc() != INVALID_TPC);
+                        //      n->setTpcFromPitch();
+                              }
                         ne->score()->updateNotes();
                         }
                   else if (ne->type() == Element::SLUR) {
@@ -1177,8 +1163,9 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                   Chord* chord = static_cast<Chord*>(newcr);
                   // setTpcFromPitch needs to know the note tick position
                   foreach(Note* note, chord->notes()) {
-                        if (note->tpc() == INVALID_TPC)
-                              note->setTpcFromPitch();
+                        // if (note->tpc() == INVALID_TPC)
+                        //      note->setTpcFromPitch();
+                        Q_ASSERT(note->tpc() != INVALID_TPC);
                         }
                   }
             if (t) {
@@ -1254,6 +1241,16 @@ void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
 void Score::undoChangePageFormat(PageFormat* p, qreal v, int pageOffset)
       {
       undo(new ChangePageFormat(this, p, v, pageOffset));
+      }
+
+//---------------------------------------------------------
+//   undoChangeTpc
+//    TODO-TPC: check
+//---------------------------------------------------------
+
+void Score::undoChangeTpc(Note* note, int v)
+      {
+      note->undoChangeProperty(P_TPC1, v);
       }
 
 //---------------------------------------------------------
@@ -1672,34 +1669,32 @@ void SortStaves::undo()
 //   ChangePitch
 //---------------------------------------------------------
 
-ChangePitch::ChangePitch(Note* _note, int _pitch, int _tpc, int l)
+ChangePitch::ChangePitch(Note* _note, int _pitch, int _tpc1, int _tpc2)
       {
       note  = _note;
-      Q_ASSERT(_note != 0);
-      pitch  = _pitch;
-      tpc    = _tpc;
-      line   = l;
+      pitch = _pitch;
+      tpc1  = _tpc1;
+      tpc2  = _tpc2;
       }
 
 void ChangePitch::flip()
       {
-      int f_pitch                 = note->pitch();
-      int f_tpc                   = note->tpc();
-      int f_line                  = note->line();
+      int f_pitch = note->pitch();
+      int f_tpc1  = note->tpc1();
+      int f_tpc2  = note->tpc2();
 
       // do not change unless necessary: setting note pitch triggers chord re-fretting on TABs
       // which triggers ChangePitch(), leading to recursion with negative side effects
-      bool updateAccid = false;
-      if (f_pitch != pitch || f_tpc != tpc) {
-            updateAccid = true;
-            note->setPitch(pitch, tpc);
-            }
-      if (f_line != line)
-            note->setLine(line);
 
-      pitch          = f_pitch;
-      tpc            = f_tpc;
-      line           = f_line;
+      bool updateAccid = false;
+      if (f_pitch != pitch || f_tpc1 != tpc1 || f_tpc2 != tpc2) {
+            updateAccid = true;
+            note->setPitch(pitch, tpc1, tpc2);
+
+            }
+      pitch = f_pitch;
+      tpc1  = f_tpc1;
+      tpc2  = f_tpc2;
 
       Score* score = note->score();
       if (updateAccid) {

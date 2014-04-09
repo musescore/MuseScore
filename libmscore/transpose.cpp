@@ -247,9 +247,13 @@ void Score::cmdTransposeStaff(int staffIdx, Interval interval, bool useDoubleSha
 void Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
       {
       int npitch;
-      int ntpc;
-      transposeInterval(n->pitch(), n->tpc(), &npitch, &ntpc, interval, useDoubleSharpsFlats);
-      undoChangePitch(n, npitch, ntpc, n->line()/*, n->fret(), n->string()*/);
+      int ntpc1, ntpc2;
+      transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc1, interval, useDoubleSharpsFlats);
+      if (n->transposition())
+            transposeInterval(n->pitch() - n->transposition(), n->tpc2(), &npitch, &ntpc2, interval, useDoubleSharpsFlats);
+      else
+            ntpc2 = ntpc1;
+      undoChangePitch(n, npitch, ntpc1, ntpc2);
       }
 
 //---------------------------------------------------------
@@ -273,7 +277,6 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
       if (mode != TRANSPOSE_DIATONICALLY) {
             if (mode == TRANSPOSE_BY_KEY) {
                   // calculate interval from "transpose by key"
-//                  km       = staff(startStaffIdx)->keymap();
                   int oKey = km->key(startTick).accidentalType();
                   interval = keydiff2Interval(oKey, transposeKey, direction);
                   }
@@ -495,35 +498,53 @@ void Score::transposeSemitone(int step)
 void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals)
       {
       // compute note current absolute step
-      int   alter;
-      int   tick        = chord()->segment()->tick();
-      int   key         = !staff() ? KEY_C : staff()->keymap()->key(tick).accidentalType();
-      int   absStep     = pitch2absStepByKey(pitch(), tpc(), key, &alter);
+      int alter1;
+      int alter2;
+      int tick     = chord()->segment()->tick();
+      int key      = !staff() ? KEY_C : staff()->keymap()->key(tick).accidentalType();
+      int absStep1 = pitch2absStepByKey(pitch(),                 tpc1(), key, &alter1);
+      int absStep2 = pitch2absStepByKey(pitch()-transposition(), tpc2(), key, &alter2);
 
       // get pitch and tcp corresponding to unaltered degree for this key
-      int   newPitch    = absStep2pitchByKey(absStep + interval, key);
-      int   newTpc      = step2tpcByKey((absStep+interval) % STEP_DELTA_OCTAVE, key);
+      int newPitch = absStep2pitchByKey(absStep1 + interval, key);
+      int newTpc1  = step2tpcByKey((absStep1 + interval) % STEP_DELTA_OCTAVE, key);
+      int newTpc2  = step2tpcByKey((absStep2 + interval) % STEP_DELTA_OCTAVE, key);
 
       // if required, transfer original degree alteration to new pitch and tpc
-      if(keepAlterations) {
-            newPitch += alter;
-            newTpc   += alter * TPC_DELTA_SEMITONE;
+      if (keepAlterations) {
+            newPitch += alter1;
+            newTpc1  += alter1 * TPC_DELTA_SEMITONE;
+            newTpc2  += alter2 * TPC_DELTA_SEMITONE;
             }
 
       // check results are in ranges
-      while (newPitch > 127)        newPitch -= PITCH_DELTA_OCTAVE;
-      while (newPitch < 0)          newPitch += PITCH_DELTA_OCTAVE;
-      while (newTpc > TPC_MAX)      newTpc   -= TPC_DELTA_ENHARMONIC;
-      while (newTpc < TPC_MIN)      newTpc   += TPC_DELTA_ENHARMONIC;
+      while (newPitch > 127)
+            newPitch -= PITCH_DELTA_OCTAVE;
+      while (newPitch < 0)
+            newPitch += PITCH_DELTA_OCTAVE;
+      while (newTpc1 > TPC_MAX)
+            newTpc1 -= TPC_DELTA_ENHARMONIC;
+      while (newTpc1 < TPC_MIN)
+            newTpc1 += TPC_DELTA_ENHARMONIC;
+      while (newTpc2 > TPC_MAX)
+            newTpc2 -= TPC_DELTA_ENHARMONIC;
+      while (newTpc2 < TPC_MIN)
+            newTpc2 += TPC_DELTA_ENHARMONIC;
 
       // if required, reduce double alterations
-      if(!useDoubleAccidentals) {
-            if(newTpc >= TPC_F_SS)  newTpc   -= TPC_DELTA_ENHARMONIC;
-            if(newTpc <= TPC_B_BB)  newTpc   += TPC_DELTA_ENHARMONIC;
+      if (!useDoubleAccidentals) {
+            if (newTpc1 >= TPC_F_SS)
+                  newTpc1 -= TPC_DELTA_ENHARMONIC;
+            if (newTpc1 <= TPC_B_BB)
+                  newTpc1 += TPC_DELTA_ENHARMONIC;
+            if (newTpc2 >= TPC_F_SS)
+                  newTpc2 -= TPC_DELTA_ENHARMONIC;
+            if (newTpc2 <= TPC_B_BB)
+                  newTpc2 += TPC_DELTA_ENHARMONIC;
             }
 
       // store new data
-      score()->undoChangePitch(this, newPitch, newTpc, line()+interval);
+      score()->undoChangePitch(this, newPitch, newTpc1, newTpc2);
       }
 }
 

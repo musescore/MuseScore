@@ -142,7 +142,8 @@ class Note : public Element {
       Q_PROPERTY(int line                      READ line)
       Q_PROPERTY(int fret                      READ fret              WRITE undoSetFret)
       Q_PROPERTY(int string                    READ string            WRITE undoSetString)
-      Q_PROPERTY(int tpc                       READ tpc               WRITE undoSetTpc)
+      Q_PROPERTY(int tpc1                      READ tpc1              WRITE undoSetTpc1)
+      Q_PROPERTY(int tpc2                      READ tpc2              WRITE undoSetTpc2)
       Q_PROPERTY(int pitch                     READ pitch             WRITE undoSetPitch)
       Q_PROPERTY(int ppitch                    READ ppitch)
       Q_PROPERTY(bool ghost                    READ ghost             WRITE undoSetGhost)
@@ -166,7 +167,7 @@ class Note : public Element {
       int _line;              ///< y-Position; 0 - top line.
       int _fret;              ///< for tablature view
       int _string;
-      mutable int _tpc;       ///< tonal pitch class
+      mutable int _tpc[2];    ///< tonal pitch class  (concert/transposing)
       mutable int _pitch;     ///< Note pitch as midi value (0 - 127).
 
       bool _ghost;            ///< ghost note (guitar: death note)
@@ -214,6 +215,8 @@ class Note : public Element {
       void endEdit();
       void addSpanner(Spanner*);
       void removeSpanner(Spanner*);
+      bool concertPitch() const;
+      int concertPitchIdx() const;
 
    public:
       Note(Score* s = 0);
@@ -247,19 +250,28 @@ class Note : public Element {
       void setHeadGroup(NoteHeadGroup val);
       void setHeadType(NoteHeadType t);
 
-      int pitch() const                   { return _pitch;    }
       void setPitch(int val);
       void undoSetPitch(int val);
-      void setPitch(int a, int b);
-      int ppitch() const;     // playback pitch
-      int epitch() const;     // effective pitch
+      void setPitch(int pitch, int tpc1, int tpc2);
+      int pitch() const                   { return _pitch;    }
+      int ppitch() const;           ///< playback pitch
+      int epitch() const;           ///< effective pitch
       qreal tuning() const                { return _tuning;   }
       void setTuning(qreal v)             { _tuning = v;      }
-
-      int tpc() const                     { return _tpc;      }
-      void setTpc(int v);
       void undoSetTpc(int v);
+      int transposition() const;
+
+      int tpc() const;
+      int tpc1() const            { return _tpc[0]; }     // non transposed tpc
+      int tpc2() const            { return _tpc[1]; }     // transposed tpc
+
+      void setTpc(int v);
+      void setTpc1(int v)         { _tpc[0] = v; }
+      void setTpc2(int v)         { _tpc[1] = v; }
       void setTpcFromPitch();
+      int tpcFromPitch(int pitch) const;
+      void undoSetTpc1(int tpc)      { undoChangeProperty(P_TPC1, tpc); }
+      void undoSetTpc2(int tpc)      { undoChangeProperty(P_TPC2, tpc); }
 
       Q_INVOKABLE Ms::Accidental* accidental() const    { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a;    }

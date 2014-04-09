@@ -614,7 +614,7 @@ QVariant Ambitus::getProperty(P_ID propertyId) const
                   return hasLine();
             case P_LINE_WIDTH:
                   return lineWidth();
-            case P_TPC:
+            case P_TPC1:
                   return topTpc();
             case P_FBPARENTHESIS1:        // recycled property = _bottomTpc
                   return bottomTpc();
@@ -656,7 +656,7 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
             case P_LINE_WIDTH:
                   setLineWidth(v.toReal());
                   break;
-            case P_TPC:
+            case P_TPC1:
                   setTopTpc(v.toInt());
                   break;
             case P_FBPARENTHESIS1:        // recycled property = _bottomTpc
@@ -695,12 +695,13 @@ QVariant Ambitus::propertyDefault(P_ID id) const
             case P_MIRROR_HEAD:     return DIR_DEFAULT;
             case P_GHOST:           return HASLINE_DEFAULT;
             case P_LINE_WIDTH:      return LINEWIDTH_DEFAULT;
-            case P_TPC:             break;      // no defaults for pitches, tpc's and octaves
-            case P_FBPARENTHESIS1:  break;
-            case P_PITCH:           break;
-            case P_FBPARENTHESIS2:  break;
-            case P_FBPARENTHESIS3:  break;
-            case P_FBPARENTHESIS4:  break;
+            case P_TPC1:                  // no defaults for pitches, tpc's and octaves
+            case P_FBPARENTHESIS1:
+            case P_PITCH:
+            case P_FBPARENTHESIS2:
+            case P_FBPARENTHESIS3:
+            case P_FBPARENTHESIS4:
+                  break;
             default:                return Element::propertyDefault(id);
             }
       return QVariant();

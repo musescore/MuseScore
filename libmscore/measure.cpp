@@ -3853,7 +3853,7 @@ int Measure::snapNote(int /*tick*/, const QPointF p, int staff) const
 //---------------------------------------------------------
 
 QVariant Measure::getProperty(P_ID propertyId) const
-{
+      {
       switch(propertyId) {
             case P_TIMESIG_NOMINAL:
                   return QVariant::fromValue(_timesig);
