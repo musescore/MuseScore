@@ -2424,7 +2424,7 @@ Measure* Chord::measure() const
 
 void Chord::sortNotes()
       {
-      printf("Chord::sortNotes\n");
+      // printf("Chord::sortNotes\n");
       std::sort(notes().begin(), notes().end(),
          [](const Note* a,const Note* b)->bool { return b->line() < a->line(); }
          // [](const Note* a,const Note* b)->bool { return a->pitch() < b->pitch(); }

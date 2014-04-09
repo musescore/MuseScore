@@ -415,18 +415,18 @@
           <lid>7</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>8</lid>
-            <pitch>53</pitch>
-            <tpc>13</tpc>
-            <fret>8</fret>
-            <string>4</string>
-            </Note>
-          <Note>
             <lid>9</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>0</fret>
             <string>3</string>
+            </Note>
+          <Note>
+            <lid>8</lid>
+            <pitch>53</pitch>
+            <tpc>13</tpc>
+            <fret>8</fret>
+            <string>4</string>
             </Note>
           <Note>
             <lid>10</lid>
