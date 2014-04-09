@@ -2650,7 +2650,7 @@ void Score::sortStaves(QList<int>& dst)
 //   cmdConcertPitchChanged
 //---------------------------------------------------------
 
-void Score::cmdConcertPitchChanged(bool flag, bool useDoubleSharpsFlats)
+void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       {
       undo(new ChangeConcertPitch(this, flag));       // change style flag
 
