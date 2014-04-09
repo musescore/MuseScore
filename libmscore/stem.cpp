@@ -18,6 +18,7 @@
 #include "hook.h"
 #include "tremolo.h"
 #include "note.h"
+#include "xml.h"
 
 // TEMPORARY HACK!!
 #include "sym.h"

@@ -32,6 +32,7 @@
 #include "drumset.h"
 #include "style.h"
 #include "sym.h"
+#include "xml.h"
 
 namespace Ms {
 

@@ -16,6 +16,7 @@
 #include "staff.h"
 #include "chord.h"
 #include "note.h"
+#include "xml.h"
 
 namespace Ms {
 

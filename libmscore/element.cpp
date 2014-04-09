@@ -1778,5 +1778,13 @@ QString Element::toTimeSigString(const QString& s) const
       return d;
       }
 
+//---------------------------------------------------------
+//   concertPitch
+//---------------------------------------------------------
+
+bool Element::concertPitch() const
+      {
+      return score()->styleB(ST_concertPitch);
+      }
 }
 

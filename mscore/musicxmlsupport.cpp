@@ -212,8 +212,8 @@ void domError(const QDomElement& e)
       {
       QString m;
       QString s = domElementPath(e);
-      if (!docName.isEmpty())
-            m = QString("<%1>:").arg(docName);
+//      if (!docName.isEmpty())
+//            m = QString("<%1>:").arg(docName);
       int ln = e.lineNumber();
       if (ln != -1)
             m += QString("line:%1 ").arg(ln);
@@ -235,8 +235,8 @@ void domNotImplemented(const QDomElement& e)
       if (!MScore::debugMode)
             return;
       QString s = domElementPath(e);
-      if (!docName.isEmpty())
-            qDebug("<%s>:", qPrintable(docName));
+//      if (!docName.isEmpty())
+//            qDebug("<%s>:", qPrintable(docName));
       qDebug("%s: Node not implemented: <%s>, type %d",
              qPrintable(s), qPrintable(e.tagName()), e.nodeType());
       if (e.isText())

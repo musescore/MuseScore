@@ -16,9 +16,8 @@
 #include "libmscore/score.h"
 #include "libmscore/system.h"
 #include "libmscore/measure.h"
-//#include "libmscore/segment.h"
-//#include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
+#include "libmscore/xml.h"
 
 #define DIR QString("libmscore/copypastesymbollist/")
 

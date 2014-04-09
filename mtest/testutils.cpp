@@ -23,6 +23,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "mscore/musescoreCore.h"
 #include "mscore/shortcut.h"
+#include "libmscore/xml.h"
 
 namespace Ms {
 

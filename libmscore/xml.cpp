@@ -28,14 +28,15 @@ QString docName;
 int XmlReader::intAttribute(const char* s, int _default) const
       {
       if (attributes().hasAttribute(s))
-            return attributes().value(s).toString().toInt();
+            // return attributes().value(s).toString().toInt();
+            return attributes().value(s).toInt();
       else
             return _default;
       }
 
 int XmlReader::intAttribute(const char* s) const
       {
-      return attributes().value(s).toString().toInt();
+      return attributes().value(s).toInt();
       }
 
 //---------------------------------------------------------
@@ -44,14 +45,13 @@ int XmlReader::intAttribute(const char* s) const
 
 double XmlReader::doubleAttribute(const char* s) const
       {
-      QString value(attributes().value(s).toString());
-      return value.toDouble();
+      return attributes().value(s).toDouble();
       }
 
 double XmlReader::doubleAttribute(const char* s, double _default) const
       {
       if (attributes().hasAttribute(s))
-            return attributes().value(s).toUtf8().toDouble();
+            return attributes().value(s).toDouble();
       else
             return _default;
       }

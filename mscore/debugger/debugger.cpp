@@ -1074,7 +1074,6 @@ ShowNoteWidget::ShowNoteWidget()
       connect(nb.tieBack,    SIGNAL(clicked()), SLOT(tieBackClicked()));
       connect(nb.accidental, SIGNAL(clicked()), SLOT(accidentalClicked()));
       connect(nb.fingering,  SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
-      connect(nb.tpc,        SIGNAL(valueChanged(int)), SLOT(tpcChanged(int)));
       connect(nb.dot1,       SIGNAL(clicked()), SLOT(dot1Clicked()));
       connect(nb.dot2,       SIGNAL(clicked()), SLOT(dot2Clicked()));
       connect(nb.dot3,       SIGNAL(clicked()), SLOT(dot3Clicked()));
@@ -1090,12 +1089,14 @@ void ShowNoteWidget::setElement(Element* e)
       ShowElementBase::setElement(e);
 
       nb.pitch->setValue(note->pitch());
+      nb.epitch->setValue(note->epitch());
       nb.tuning->setValue(note->tuning());
       nb.line->setValue(note->line());
       nb.string->setValue(note->string());
       nb.fret->setValue(note->fret());
       nb.mirror->setChecked(note->mirror());
-      nb.tpc->setValue(note->tpc());
+      nb.tpc1->setValue(note->tpc1());
+      nb.tpc2->setValue(note->tpc2());
       nb.headGroup->setValue(int(note->headGroup()));
       nb.hidden->setChecked(note->hidden());
       nb.subchannel->setValue(note->subchannel());
@@ -1148,16 +1149,6 @@ void ShowNoteWidget::dot2Clicked()
 void ShowNoteWidget::dot3Clicked()
       {
       emit elementChanged(((Note*)element())->dot(2));
-      }
-
-//---------------------------------------------------------
-//   tpcChanged
-//---------------------------------------------------------
-
-void ShowNoteWidget::tpcChanged(int val)
-      {
-      ((Note*)element())->setTpc(val);
-      emit scoreChanged();
       }
 
 //---------------------------------------------------------

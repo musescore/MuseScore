@@ -20,6 +20,7 @@
 #include "sym.h"
 #include "system.h"
 #include "utils.h"
+#include "xml.h"
 
 namespace Ms {
 

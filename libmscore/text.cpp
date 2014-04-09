@@ -18,6 +18,7 @@
 #include "box.h"
 #include "textframe.h"
 #include "sym.h"
+#include "xml.h"
 
 namespace Ms {
 

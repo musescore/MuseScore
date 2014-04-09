@@ -53,7 +53,7 @@ class XmlReader : public QXmlStreamReader {
       void htmlToString(int level, QString*);
 
    public:
-      XmlReader(QFile* f) : QXmlStreamReader(f) { docName = f->fileName(); }
+      XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
       XmlReader(const QByteArray& d, const QString& s = QString()) : QXmlStreamReader(d), docName(s)  {}
       XmlReader(QIODevice* d, const QString& s = QString()) : QXmlStreamReader(d), docName(s) {}
       XmlReader(const QString& d, const QString& s = QString()) : QXmlStreamReader(d), docName(s) {}

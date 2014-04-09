@@ -20,6 +20,7 @@
 #include "rest.h"
 #include "score.h"
 #include "sym.h"
+#include "xml.h"
 
 namespace Ms {
 

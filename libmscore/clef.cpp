@@ -521,7 +521,7 @@ ClefType Clef::clefType(const QString& s)
 
 void Clef::setClefType(ClefType i)
       {
-      if (score()->concertPitch()) {
+      if (concertPitch()) {
             _clefTypes._concertClef = i;
             if (_clefTypes._transposingClef == ClefType::INVALID)
                   _clefTypes._transposingClef = i;
@@ -558,7 +558,7 @@ void Clef::setTransposingClef(ClefType val)
 
 ClefType Clef::clefType() const
       {
-      if (score()->concertPitch())
+      if (concertPitch())
             return _clefTypes._concertClef;
       else
             return _clefTypes._transposingClef;

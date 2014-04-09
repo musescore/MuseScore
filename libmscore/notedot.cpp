@@ -14,6 +14,7 @@
 #include "score.h"
 #include "staff.h"
 #include "sym.h"
+#include "xml.h"
 
 namespace Ms {
 
