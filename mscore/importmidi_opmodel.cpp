@@ -209,6 +209,7 @@ OperationsModel::OperationsModel()
       controller->showStaffBracket = showStaffBracket;
 
 
+      /*
       Node *doLHRH = new Node;
       doLHRH->name = QCoreApplication::translate("MIDI import operations", "Left/right hand separation");
       doLHRH->oper.type = MidiOperation::Type::DO_LHRH_SEPARATION;
@@ -268,6 +269,7 @@ OperationsModel::OperationsModel()
       LHRHPitchNote->parent = LHRHMethod;
       LHRHMethod->children.push_back(std::unique_ptr<Node>(LHRHPitchNote));
       controller->LHRHPitchNote = LHRHPitchNote;
+      */
 
       //--------------------------------------------------------------------
       connect(this,
