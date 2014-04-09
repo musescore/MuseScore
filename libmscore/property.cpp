@@ -14,6 +14,7 @@
 #include "mscore.h"
 #include "layoutbreak.h"
 #include "groups.h"
+#include "xml.h"
 
 namespace Ms {
 

@@ -261,16 +261,6 @@ Note::Note(const Note& n)
       }
 
 //---------------------------------------------------------
-//   concertPitch
-//    return true if current note is in concert pitch mode
-//---------------------------------------------------------
-
-inline bool Note::concertPitch() const
-      {
-      return score()->styleB(ST_concertPitch);
-      }
-
-//---------------------------------------------------------
 //   concertPitchIdx
 //---------------------------------------------------------
 
@@ -285,21 +275,11 @@ inline int Note::concertPitchIdx() const
 
 void Note::setPitch(int val)
       {
-      _pitch = restrict(val, 0, 127);
-#if 0
-      int pitchOffset = 0;
-      if (score()) {
-            Part* part = staff() ? staff()->part() : 0;
-            if (part)
-                  pitchOffset = concertPitch() ? 0 : transposition();
+      Q_ASSERT(val >= 0 && val <= 127);
+      if (_pitch != val) {
+            _pitch = val;
+            score()->setPlaylistDirty(true);
             }
-      for (int i = 0; i < _playEvents.size(); ++i)
-            _playEvents[i].setPitch(pitchOffset);
-      if (chord()) {
-            if (chord()->measure())
-                  chord()->measure()->updateAccidentals(chord()->staffIdx());
-            }
-#endif
       }
 
 void Note::setPitch(int pitch, int tpc1, int tpc2)
@@ -1569,13 +1549,7 @@ void Note::layout10(AccidentalState* as)
                         _accidental = 0;
                         }
                   }
-
-            //
-            // calculate the real note line depending on clef
-            //
-            Staff* s = score()->staff(staffIdx() + chord()->staffMove());
-            int tick = chord()->tick();
-            _line    = relStep(_line, s->clef(tick));
+            updateRelLine();
             }
       }
 
@@ -1786,76 +1760,75 @@ void Note::updateAccidental(AccidentalState* as)
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
-      if (_accidental &&
-            _accidental->accidentalType() > Accidental::ACC_NATURAL) {
-            // calculate the real note line depending on clef
+      if (!(_accidental && _accidental->accidentalType() > Accidental::ACC_NATURAL)) {
+            // calculate accidental
+            Accidental::AccidentalType acci = Accidental::ACC_NONE;
 
-            Staff* s = score()->staff(staffIdx() + chord()->staffMove());
-            int tick = chord()->tick();
-            ClefType clef = s->clef(tick);
-            _line    = relStep(_line, clef);
-            return;
-            }
-
-      // calculate accidental
-
-      Accidental::AccidentalType acci = Accidental::ACC_NONE;
-
-      AccidentalVal accVal = tpc2alter(tpc());
-      if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
-            as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
-            if (_tieBack)
-                  acci = Accidental::ACC_NONE;
-            else {
-                  acci = Accidental::value2subtype(accVal);
-                  if (acci == Accidental::ACC_NONE)
-                        acci = Accidental::ACC_NATURAL;
-                  }
-            }
-
-      if (acci != Accidental::ACC_NONE && !_tieBack && !_hidden) {
-            if (_accidental == 0) {
-                  Accidental* a = new Accidental(score());
-                  a->setParent(this);
-                  a->setAccidentalType(acci);
-                  score()->undoAddElement(a);
-                  }
-            else if (_accidental->accidentalType() != acci) {
-                  Accidental* a = _accidental->clone();
-                  a->setParent(this);
-                  a->setAccidentalType(acci);
-                  score()->undoChangeElement(_accidental, a);
-                  }
-            }
-      else {
-            if (_accidental) {
-                  // remove this if it was ACC_AUTO:
-                  if (_accidental->role() == Accidental::ACC_AUTO)
-                        score()->undoRemoveElement(_accidental);
+            AccidentalVal accVal = tpc2alter(tpc());
+            if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
+                  as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
+                  if (_tieBack)
+                        acci = Accidental::ACC_NONE;
                   else {
-                        // keep it, but update type if needed
                         acci = Accidental::value2subtype(accVal);
                         if (acci == Accidental::ACC_NONE)
                               acci = Accidental::ACC_NATURAL;
-                        if (_accidental->accidentalType() != acci) {
-                              Accidental* a = _accidental->clone();
-                              a->setParent(this);
-                              a->setAccidentalType(acci);
-                              score()->undoChangeElement(_accidental, a);
+                        }
+                  }
+
+            if (acci != Accidental::ACC_NONE && !_tieBack && !_hidden) {
+                  if (_accidental == 0) {
+                        Accidental* a = new Accidental(score());
+                        a->setParent(this);
+                        a->setAccidentalType(acci);
+                        score()->undoAddElement(a);
+                        }
+                  else if (_accidental->accidentalType() != acci) {
+                        Accidental* a = _accidental->clone();
+                        a->setParent(this);
+                        a->setAccidentalType(acci);
+                        score()->undoChangeElement(_accidental, a);
+                        }
+                  }
+            else {
+                  if (_accidental) {
+                        // remove this if it was ACC_AUTO:
+                        if (_accidental->role() == Accidental::ACC_AUTO)
+                              score()->undoRemoveElement(_accidental);
+                        else {
+                              // keep it, but update type if needed
+                              acci = Accidental::value2subtype(accVal);
+                              if (acci == Accidental::ACC_NONE)
+                                    acci = Accidental::ACC_NATURAL;
+                              if (_accidental->accidentalType() != acci) {
+                                    Accidental* a = _accidental->clone();
+                                    a->setParent(this);
+                                    a->setAccidentalType(acci);
+                                    score()->undoChangeElement(_accidental, a);
+                                    }
                               }
                         }
                   }
             }
+      updateRelLine();
+      }
 
-      //
-      // calculate the real note line depending on clef
-      //
+//---------------------------------------------------------
+//   updateRelLine
+//    calculate the real note line depending on clef,
+//    _line is the absolute line
+//---------------------------------------------------------
+
+void Note::updateRelLine()
+      {
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
-      int tick = chord()->tick();
-      ClefType clef = s->clef(tick);
-      _line    = relStep(_line, clef);
-      if (chord())
-            chord()->sortNotes();
+      ClefType clef = s->clef(chord()->tick());
+      int line = relStep(_line, clef);
+      if (line != _line) {
+            setLine(line);
+            if (chord())
+                  chord()->sortNotes();
+            }
       }
 
 //---------------------------------------------------------
@@ -1864,11 +1837,8 @@ void Note::updateAccidental(AccidentalState* as)
 
 void Note::updateLine()
       {
-      Staff* s      = score()->staff(staffIdx() + chord()->staffMove());
-      ClefType clef = s->clef(chord()->tick());
-      _line         = relStep(epitch(), tpc(), clef);
-      if (chord())
-            chord()->sortNotes();
+      _line = absStep(tpc(), epitch());
+      updateRelLine();
       }
 
 //---------------------------------------------------------
@@ -1882,7 +1852,10 @@ void Note::setNval(NoteVal nval)
       _string    = nval.string;
       if (nval.tpc != INVALID_TPC)
             setTpc(nval.tpc);
-
+      if (_tpc[0] == INVALID_TPC)
+            _tpc[0] = tpcFromPitch(_pitch);
+      if (_tpc[1] == INVALID_TPC)
+            _tpc[1] = tpcFromPitch(_pitch - transposition());
       _headGroup = NoteHeadGroup(nval.headGroup);
       }
 

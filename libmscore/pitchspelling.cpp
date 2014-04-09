@@ -164,9 +164,12 @@ static const int pitchByStepAndKey[NUM_OF_KEYS][STEP_DELTA_OCTAVE] = {
 
 int step2deltaPitchByKey(int step, int key)
       {
-      while (step < 0)        step+= STEP_DELTA_OCTAVE;
-      while (key < KEY_MIN)   key += KEY_DELTA_ENHARMONIC;
-      while (key > KEY_MAX)   key -= KEY_DELTA_ENHARMONIC;
+      while (step < 0)
+            step+= STEP_DELTA_OCTAVE;
+      while (key < KEY_MIN)
+            key += KEY_DELTA_ENHARMONIC;
+      while (key > KEY_MAX)
+            key -= KEY_DELTA_ENHARMONIC;
       return pitchByStepAndKey[key-KEY_MIN][step % STEP_DELTA_OCTAVE];
       }
 
@@ -176,7 +179,7 @@ int step2deltaPitchByKey(int step, int key)
 
 int tpc2pitch(int tpc)
       {
-      tpc += 1;
+      Q_ASSERT(tpcIsValid(tpc));
 
       static int pitches[] = {
 //step:     F   C   G   D   A   E   B
@@ -186,10 +189,7 @@ int tpc2pitch(int tpc)
             6,  1,  8,  3, 10,  5, 12,     // #
             7,  2,  9,  4, 11,  6, 13      // ##
             };
-      if (tpc < 0 || tpc >= int(sizeof(pitches)/sizeof(*pitches))) {
-            qFatal("tpc %d >= %d\n", tpc, int(sizeof(pitches)/sizeof(*pitches)));
-            }
-      return pitches[tpc];
+      return pitches[tpc + 1];
       }
 
 //---------------------------------------------------------

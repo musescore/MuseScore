@@ -16,6 +16,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/repeatlist.h"
 #include "libmscore/system.h"
+#include "libmscore/xml.h"
 
 namespace Ms {
 

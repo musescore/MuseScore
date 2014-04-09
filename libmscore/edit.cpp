@@ -356,8 +356,6 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       note->setParent(chord);
       note->setTrack(chord->track());
       note->setNval(noteVal);
-      if (note->tpc() == INVALID_TPC)
-            note->setTpcFromPitch();
       undoAddElement(note);
       _playNote = true;
       select(note, SELECT_SINGLE, 0);

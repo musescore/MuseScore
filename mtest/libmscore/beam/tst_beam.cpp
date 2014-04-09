@@ -60,6 +60,7 @@ void TestBeam::initTestCase()
 void TestBeam::beam(const char* path)
       {
       Score* score = readScore(DIR + path);
+      score->updateNotes();
       score->doLayout();
       QVERIFY(score);
       QVERIFY(saveCompareScore(score, path, DIR + path));

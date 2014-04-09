@@ -24,6 +24,7 @@
 #include "mscore.h"
 #include "stafftext.h"
 #include "icon.h"
+#include "xml.h"
 
 namespace Ms {
 

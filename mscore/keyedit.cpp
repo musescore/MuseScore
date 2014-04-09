@@ -27,6 +27,7 @@
 #include "keycanvas.h"
 #include "libmscore/clef.h"
 #include "libmscore/mscore.h"
+#include "libmscore/xml.h"
 
 namespace Ms {
 

@@ -17,6 +17,7 @@
 #include "part.h"
 #include "undo.h"
 #include "mscore.h"
+#include "xml.h"
 
 namespace Ms {
 

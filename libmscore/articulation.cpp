@@ -21,6 +21,7 @@
 #include "page.h"
 #include "barline.h"
 #include "sym.h"
+#include "xml.h"
 
 namespace Ms {
 

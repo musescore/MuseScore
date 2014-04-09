@@ -13,10 +13,10 @@
 #ifndef __ELEMENT_H__
 #define __ELEMENT_H__
 
-#include "xml.h"
 #include "mscore.h"
 #include "property.h"
 #include "spatium.h"
+#include "fraction.h"
 
 class QPainter;
 
@@ -306,7 +306,6 @@ class Element : public QObject {
       uint _tag;                  ///< tag bitmask
 
    protected:
-
       Score* _score;
 
       QPointF _startDragPosition;   ///< used during drag
@@ -567,6 +566,8 @@ class Element : public QObject {
       QPointF symAttach(SymId id) const;
       QString toTimeSigString(const QString& s) const;
       bool symIsValid(SymId id) const;
+
+      bool concertPitch() const;
       };
 
 //---------------------------------------------------------

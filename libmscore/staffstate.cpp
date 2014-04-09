@@ -17,6 +17,7 @@
 #include "staff.h"
 #include "part.h"
 #include "mscore.h"
+#include "xml.h"
 
 namespace Ms {
 

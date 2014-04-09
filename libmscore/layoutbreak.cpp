@@ -13,6 +13,7 @@
 #include "layoutbreak.h"
 #include "score.h"
 #include "mscore.h"
+#include "xml.h"
 
 namespace Ms {
 

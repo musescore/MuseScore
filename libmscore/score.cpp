@@ -2311,6 +2311,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         nnote->updateLine();
                         removeNotes.append(note);
                         }
+                  c->sortNotes();
                   foreach(Note* note, removeNotes) {
                         undoRemoveElement(note);
                         if (note->chord()->notes().isEmpty())

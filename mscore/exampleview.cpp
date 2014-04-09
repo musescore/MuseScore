@@ -17,6 +17,7 @@
 #include "libmscore/page.h"
 #include "libmscore/icon.h"
 #include "libmscore/chord.h"
+#include "libmscore/xml.h"
 
 namespace Ms {
 

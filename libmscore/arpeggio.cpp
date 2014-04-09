@@ -19,6 +19,7 @@
 #include "part.h"
 #include "segment.h"
 #include "property.h"
+#include "xml.h"
 
 namespace Ms {
 

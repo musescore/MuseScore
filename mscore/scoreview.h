@@ -48,6 +48,7 @@ class MeasureBase;
 class Staff;
 class OmrView;
 class PositionCursor;
+class Tuplet;
 
 enum class POS;
 
@@ -230,7 +231,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdEnterRest();
       void cmdTuplet(int n, ChordRest*);
       void cmdTuplet(int);
-      void cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet);
+      void cmdCreateTuplet(ChordRest* cr, Tuplet* tuplet);
       void cmdRepeatSelection();
       void cmdChangeEnharmonic(bool);
 

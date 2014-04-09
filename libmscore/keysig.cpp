@@ -17,6 +17,7 @@
 #include "segment.h"
 #include "score.h"
 #include "undo.h"
+#include "xml.h"
 
 namespace Ms {
 

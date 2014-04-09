@@ -13,6 +13,7 @@
 #include "pedal.h"
 #include "textline.h"
 #include "sym.h"
+#include "xml.h"
 
 #include "score.h"
 

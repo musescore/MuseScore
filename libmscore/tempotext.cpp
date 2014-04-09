@@ -15,6 +15,7 @@
 #include "tempo.h"
 #include "system.h"
 #include "measure.h"
+#include "xml.h"
 
 namespace Ms {
 
