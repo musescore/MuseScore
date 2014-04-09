@@ -286,6 +286,7 @@ inline int Note::concertPitchIdx() const
 void Note::setPitch(int val)
       {
       _pitch = restrict(val, 0, 127);
+#if 0
       int pitchOffset = 0;
       if (score()) {
             Part* part = staff() ? staff()->part() : 0;
@@ -298,13 +299,16 @@ void Note::setPitch(int val)
             if (chord()->measure())
                   chord()->measure()->updateAccidentals(chord()->staffIdx());
             }
+#endif
       }
 
 void Note::setPitch(int pitch, int tpc1, int tpc2)
       {
-      setPitch(pitch);
+      Q_ASSERT(tpcIsValid(tpc1));
+      Q_ASSERT(tpcIsValid(tpc2));
       _tpc[0] = tpc1;
       _tpc[1] = tpc2;
+      setPitch(pitch);
       }
 
 //---------------------------------------------------------
@@ -334,6 +338,8 @@ void Note::setTpcFromPitch()
       {
       _tpc[0] = tpcFromPitch(_pitch);
       _tpc[1] = tpcFromPitch(_pitch - transposition());
+      Q_ASSERT(tpcIsValid(_tpc[0]));
+      Q_ASSERT(tpcIsValid(_tpc[1]));
       }
 
 //---------------------------------------------------------
