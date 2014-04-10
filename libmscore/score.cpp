@@ -388,6 +388,9 @@ Score::Score(Score* parent)
             qreal sp = MScore::defaultStyle()->spatium();
             _style.setPageFormat(*pf);
             _style.setSpatium(sp);
+
+            //concert pitch is off for parts
+            _style.set(ST_concertPitch, false);
             }
 
       _synthesizerState = parent->_synthesizerState;
