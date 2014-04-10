@@ -41,7 +41,7 @@ MuseScore {
             if (!cursor.segment) { // no selection
                   fullScore = true;
                   startStaff = 0; // start with 1st staff
-                  endStaff = curScore.nstaves; // and end with last
+                  endStaff = curScore.nstaves - 1; // and end with last
             }
        console.log(startStaff + " - " + endStaff + " - " + endTick)
             for (var staff = startStaff; staff <= endStaff; staff++) {
