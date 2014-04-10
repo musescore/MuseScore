@@ -413,8 +413,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   continue;
 
             KeyList* km = staff(staffIdx)->keymap();
-            for (auto ke = km->lower_bound(tickStart);
-                  ke != km->lower_bound(tickEnd); ++ke) {
+            for (auto ke = km->lower_bound(tickStart); ke != km->lower_bound(tickEnd); ++ke) {
                   KeySigEvent oKey  = ke->second;
                   int tick  = ke->first;
                   int nKeyType = transposeKey(oKey.accidentalType(), interval);
@@ -435,8 +434,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         KeySigEvent key  = km->key(s->tick());
                         KeySigEvent okey = km->key(s->tick() - 1);
                         key.setNaturalType(okey.accidentalType());
-                        undo(new ChangeKeySig(ks, key, ks->showCourtesy(),
-                           ks->showNaturals()));
+                        undo(new ChangeKeySig(ks, key, ks->showCourtesy(), ks->showNaturals()));
                         }
                   }
             }
