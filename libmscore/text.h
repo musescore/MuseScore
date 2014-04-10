@@ -168,10 +168,15 @@ class TextBlock {
 
 //---------------------------------------------------------
 //   @@ Text
+///  Graphic representation of a text.
+//
+//   @P text        string   the raw text
 //---------------------------------------------------------
 
 class Text : public Element {
       Q_OBJECT
+      
+      Q_PROPERTY(QString text READ text WRITE undoSetText)
 
       QString _text;
       QList<TextBlock> _layout;
@@ -295,6 +300,8 @@ class Text : public Element {
       friend class TextFragment;
       virtual void textChanged() {}
       QString convertFromHtml(const QString& ss) const;
+      
+      void undoSetText(const QString& s) { undoChangeProperty(P_TEXT, s); };
       };
 
 
