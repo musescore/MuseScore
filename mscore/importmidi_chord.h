@@ -79,7 +79,10 @@ Iter findEndChordInRange(const ReducedFraction &endRangeTick,
       return it;
       }
 
+ReducedFraction minNoteOffTime(const QList<MidiNote> &notes);
 ReducedFraction maxNoteOffTime(const QList<MidiNote> &notes);
+ReducedFraction minNoteLen(const std::pair<const ReducedFraction, MidiChord> &chord);
+
 const ReducedFraction& minAllowedDuration();
 ReducedFraction findMinDuration(const ReducedFraction &onTime,
                                 const QList<MidiChord> &midiChords,

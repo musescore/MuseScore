@@ -22,7 +22,6 @@ struct TupletData
       ReducedFraction onTime;
       ReducedFraction len;
       int tupletNumber;
-      ReducedFraction tupletQuant;
       std::vector<DurationElement *> elements;
       };
 
@@ -59,7 +58,8 @@ findTupletContainsTime(int voice,
 std::multimap<ReducedFraction, TupletData>
 findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
                const TimeSigMap *sigmap,
-               const ReducedFraction &lastTick);
+               const ReducedFraction &lastTick,
+               const ReducedFraction &basicQuant);
 
 void removeEmptyTuplets(MTrack &track);
 
