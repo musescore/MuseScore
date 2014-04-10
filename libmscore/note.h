@@ -269,7 +269,8 @@ class Note : public Element {
       void setTpc1(int v)         { _tpc[0] = v; }
       void setTpc2(int v)         { _tpc[1] = v; }
       void setTpcFromPitch();
-      int tpcFromPitch(int pitch) const;
+      int tpc1default(int pitch) const;
+      int tpc2default(int pitch) const;
       void undoSetTpc1(int tpc)      { undoChangeProperty(P_TPC1, tpc); }
       void undoSetTpc2(int tpc)      { undoChangeProperty(P_TPC2, tpc); }
 
