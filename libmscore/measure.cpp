@@ -3517,6 +3517,8 @@ void Measure::layoutX(qreal stretch)
                               e->adjustReadPos();
                               }
                         }
+                  else if (t == AMBITUS)
+                        e->adjustReadPos();
                   else {
                         e->setPos(-e->bbox().x(), 0.0);
                         e->adjustReadPos();
