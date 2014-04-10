@@ -1063,6 +1063,64 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
       }
 
 //---------------------------------------------------------
+//   upDownChromatic
+//---------------------------------------------------------
+
+static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2)
+      {
+      if (up && pitch < 127) {
+            newPitch = pitch + 1;
+            if (n->concertPitch()) {
+                  if (tpc1 > TPC_A + key)
+                        newTpc1 = tpc1 - 5;   // up semitone diatonic
+                  else
+                        newTpc1 = tpc1 + 7;   // up semitone chromatic
+                  newTpc2 = n->tpc2default(newPitch);
+                  }
+            else {
+                  if (tpc2 > TPC_A + key)
+                        newTpc2 = tpc2 - 5;   // up semitone diatonic
+                  else
+                        newTpc2 = tpc2 + 7;   // up semitone chromatic
+                  newTpc1 = n->tpc1default(newPitch);
+                  }
+            }
+      else if (!up && pitch > 0) {
+            newPitch = pitch - 1;
+            if (n->concertPitch()) {
+                  if (tpc1 > TPC_C + key)
+                        newTpc1 = tpc1 - 7;   // down semitone chromatic
+                  else
+                        newTpc1 = tpc1 + 5;   // down semitone diatonic
+                  newTpc2 = n->tpc2default(newPitch);
+                  }
+            else {
+                  if (tpc2 > TPC_C + key)
+                        newTpc2 = tpc2 - 7;   // down semitone chromatic
+                  else
+                        newTpc2 = tpc2 + 5;   // down semitone diatonic
+                  newTpc1 = n->tpc1default(newPitch);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   setTpc
+//---------------------------------------------------------
+
+static void setTpc(Note* oNote, int newPitch, int tpc, int& newTpc1, int& newTpc2)
+      {
+      if (oNote->concertPitch()) {
+            newTpc1 = tpc;
+            newTpc2 = oNote->tpc2default(newPitch);
+            }
+      else {
+            newTpc2 = tpc;
+            newTpc1 = oNote->tpc1default(newPitch);
+            }
+      }
+
+//---------------------------------------------------------
 //   upDown
 ///   Increment/decrement pitch of note by one or by an octave.
 //---------------------------------------------------------
@@ -1096,14 +1154,11 @@ void Score::upDown(bool up, UpDownMode mode)
             int fret     = oNote->fret();
 
             switch (oNote->staff()->staffType()->group()) {
-#if 0
                   case PERCUSSION_STAFF_GROUP:
                         {
                         Drumset* ds = part->instr()->drumset();
-                        if (ds) {
+                        if (ds)
                               newPitch = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
-                              newTpc   = oNote->tpc();
-                              }
                         }
                         break;
                   case TAB_STAFF_GROUP:
@@ -1127,25 +1182,7 @@ void Score::upDown(bool up, UpDownMode mode)
 
                               case UP_DOWN_DIATONIC:        // increase / decrease the pitch,
                                                             // letting the algorithm to choose fret & string
-                                    if (up) {
-                                          if (pitch < 127) {
-                                                newPitch = pitch + 1;
-                                                if (tpc > TPC_A + key)
-                                                      newTpc = tpc - 5;   // up semitone diatonic
-                                                else
-                                                      newTpc = tpc + 7;   // up semitone chromatic
-                                                }
-                                          }
-                                    else {
-                                          if (pitch > 0) {
-                                                newPitch = pitch - 1;
-                                                if (tpc > TPC_C + key)
-                                                      newTpc = tpc - 7;   // down semitone chromatic
-                                                else
-                                                      newTpc = tpc + 5;   // down semitone diatonic
-                                                }
-                                          }
-
+                                    upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
                                     break;
 
                               case UP_DOWN_CHROMATIC:       // increase / decrease the fret
@@ -1156,7 +1193,16 @@ void Score::upDown(bool up, UpDownMode mode)
                                     else if (fret >= stringData->frets())
                                           fret = stringData->frets() - 1;
                                     newPitch    = stringData->getPitch(string, fret);
-                                    newTpc      = pitch2tpc(newPitch, key, up ? PREFER_SHARPS : PREFER_FLATS);
+                                    int nTpc = pitch2tpc(newPitch, key, up ? PREFER_SHARPS : PREFER_FLATS);
+                                    if (oNote->concertPitch()) {
+                                          newTpc1 = nTpc;
+                                          newTpc2 = oNote->tpc2default(newPitch);
+                                          }
+                                    else {
+                                          newTpc2 = nTpc;
+                                          newTpc1 = oNote->tpc1default(newPitch);
+                                          }
+
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
                                     undoChangeProperty(oNote, P_FRET, fret);
@@ -1166,7 +1212,6 @@ void Score::upDown(bool up, UpDownMode mode)
                               }
                         }
                         break;
-#endif
                   case STANDARD_STAFF_GROUP:
                         switch(mode) {
                               case UP_DOWN_OCTAVE:
@@ -1182,56 +1227,23 @@ void Score::upDown(bool up, UpDownMode mode)
                                     break;
 
                               case UP_DOWN_CHROMATIC:
-                                    if (up && pitch < 127) {
-                                          newPitch = pitch + 1;
-                                          if (oNote->concertPitch()) {
-                                                if (tpc1 > TPC_A + key)
-                                                      newTpc1 = tpc1 - 5;   // up semitone diatonic
-                                                else
-                                                      newTpc1 = tpc1 + 7;   // up semitone chromatic
-                                                newTpc2 = oNote->tpc2default(newPitch);
-                                                }
-                                          else {
-                                                if (tpc2 > TPC_A + key)
-                                                      newTpc2 = tpc2 - 5;   // up semitone diatonic
-                                                else
-                                                      newTpc2 = tpc2 + 7;   // up semitone chromatic
-                                                newTpc1 = oNote->tpc1default(newPitch);
-                                                }
-                                          }
-                                    else if (!up && pitch > 0) {
-                                          newPitch = pitch - 1;
-                                          if (oNote->concertPitch()) {
-                                                if (tpc1 > TPC_C + key)
-                                                      newTpc1 = tpc1 - 7;   // down semitone chromatic
-                                                else
-                                                      newTpc1 = tpc1 + 5;   // down semitone diatonic
-                                                newTpc2 = oNote->tpc2default(newPitch);
-                                                }
-                                          else {
-                                                if (tpc2 > TPC_C + key)
-                                                      newTpc2 = tpc2 - 7;   // down semitone chromatic
-                                                else
-                                                      newTpc2 = tpc2 + 5;   // down semitone diatonic
-                                                newTpc1 = oNote->tpc1default(newPitch);
-                                                }
-                                          }
-
+                                    upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
                                     break;
 
                               case UP_DOWN_DIATONIC:
-#if 0
+                                    {
+                                    int tpc = oNote->tpc();
                                     if (up) {
                                           if (tpc > TPC_A + key) {
                                                 if (pitch < 127) {
                                                       newPitch = pitch + 1;
-                                                      newTpc = tpc - 5;   // up semitone diatonic
+                                                      setTpc(oNote, newPitch, tpc - 5, newTpc1, newTpc2);
                                                       }
                                                 }
                                           else {
                                                 if (pitch < 126) {
                                                       newPitch = pitch + 2;
-                                                      newTpc = tpc + 2;   // up tone
+                                                      setTpc(oNote, newPitch, tpc + 2, newTpc1, newTpc2);
                                                       }
                                                 }
                                           }
@@ -1239,17 +1251,17 @@ void Score::upDown(bool up, UpDownMode mode)
                                           if (tpc > TPC_C + key) {
                                                 if (pitch > 1) {
                                                       newPitch = pitch - 2;
-                                                      newTpc = tpc - 2;   // down tone
+                                                      setTpc(oNote, newPitch, tpc - 2, newTpc1, newTpc2);
                                                       }
                                                 }
                                           else {
                                                 if (pitch > 0) {
                                                       newPitch = pitch - 1;
-                                                      newTpc = tpc + 5;   // down semitone diatonic
+                                                      setTpc(oNote, newPitch, tpc + 5, newTpc1, newTpc2);
                                                       }
                                                 }
                                           }
-#endif
+                                    }
                                     break;
                               }
                         break;
