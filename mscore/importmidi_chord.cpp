@@ -39,6 +39,19 @@ const ReducedFraction& minAllowedDuration()
       return minDuration;
       }
 
+ReducedFraction minNoteOffTime(const QList<MidiNote> &notes)
+      {
+      if (notes.isEmpty())
+            return {0, 1};
+      auto it = notes.begin();
+      ReducedFraction minOffTime = it->offTime;
+      for (++it; it != notes.end(); ++it) {
+            if (it->offTime < minOffTime)
+                  minOffTime = it->offTime;
+            }
+      return minOffTime;
+      }
+
 ReducedFraction maxNoteOffTime(const QList<MidiNote> &notes)
       {
       ReducedFraction maxOffTime(0, 1);
@@ -47,6 +60,12 @@ ReducedFraction maxNoteOffTime(const QList<MidiNote> &notes)
                   maxOffTime = note.offTime;
             }
       return maxOffTime;
+      }
+
+ReducedFraction minNoteLen(const std::pair<const ReducedFraction, MidiChord> &chord)
+      {
+      const auto minOffTime = minNoteOffTime(chord.second.notes);
+      return minOffTime - chord.first;
       }
 
 // remove overlapping notes with the same pitch

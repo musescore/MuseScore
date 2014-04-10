@@ -71,14 +71,11 @@ void cleanUpMidiEvents(std::multimap<int, MTrack> &tracks)
       for (auto &track: tracks) {
             MTrack &mtrack = track.second;
             opers.setCurrentTrack(mtrack.indexOfOperation);
-            const auto raster = Quantize::fixedQuantRaster();
-            const bool reduce = opers.currentTrackOperations().quantize.reduceToShorterNotesInBar;
 
             for (auto chordIt = mtrack.chords.begin(); chordIt != mtrack.chords.end(); ) {
                   MidiChord &ch = chordIt->second;
                   for (auto noteIt = ch.notes.begin(); noteIt != ch.notes.end(); ) {
-                        if ((noteIt->offTime - chordIt->first < MChord::minAllowedDuration())
-                                    || (!reduce && noteIt->offTime - chordIt->first < raster / 2)) {
+                        if (noteIt->offTime - chordIt->first < MChord::minAllowedDuration()) {
                               noteIt = ch.notes.erase(noteIt);
                               continue;
                               }
@@ -149,19 +146,23 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                        const ReducedFraction &lastTick)
       {
       auto &opers = preferences.midiImportOperations;
+                  // later it's better to set basicQuant to 1/16 for mechanical MIDI files
+                  // and to 1/8 for human-performed MIDI files
+      const auto basicQuant = ReducedFraction::fromTicks(120); // 1/16
+
       for (auto &track: tracks) {
             MTrack &mtrack = track.second;
                         // pass current track index through MidiImportOperations
                         // for further usage
             opers.setCurrentTrack(mtrack.indexOfOperation);
             opers.adaptForPercussion(mtrack.indexOfOperation, mtrack.mtrack->drumTrack());
-            mtrack.tuplets = MidiTuplet::findAllTuplets(mtrack.chords, sigmap, lastTick);
-
+            mtrack.tuplets = MidiTuplet::findAllTuplets(mtrack.chords, sigmap,
+                                                        lastTick, basicQuant);
             Q_ASSERT_X(!doNotesOverlap(track.second),
                        "quantizeAllTracks",
                        "There are overlapping notes of the same voice that is incorrect");
 
-            Quantize::quantizeChords(mtrack.chords, mtrack.tuplets, sigmap);
+            Quantize::quantizeChords(mtrack.chords, mtrack.tuplets, sigmap, basicQuant);
             }
       }
 

@@ -29,6 +29,7 @@
 #include "mscore/importmidi_tuplet.h"
 #include "mscore/importmidi_meter.h"
 #include "mscore/importmidi_inner.h"
+#include "mscore/importmidi_quant.h"
 #include "mscore/importmidi_fraction.h"
 #include "mscore/preferences.h"
 
@@ -351,7 +352,6 @@ void isSingleNoteInTupletAllowed(int tupletNumber,
       {
       MidiTuplet::TupletInfo tupletInfo;
       tupletInfo.len = ReducedFraction::fromTicks(MScore::division);
-      tupletInfo.regularQuant = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
@@ -377,7 +377,6 @@ void isChordCountInTupletAllowed(int tupletNumber,
       {
       MidiTuplet::TupletInfo tupletInfo;
       tupletInfo.len = ReducedFraction::fromTicks(MScore::division);
-      tupletInfo.regularQuant = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
       tupletInfo.firstChordIndex = 0;
@@ -404,7 +403,6 @@ void isTupletErrorAllowed(int tupletSumError,
       MidiTuplet::TupletInfo tupletInfo;
       tupletInfo.tupletNumber = 3;
       tupletInfo.len = ReducedFraction::fromTicks(MScore::division);
-      tupletInfo.regularQuant = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
@@ -517,8 +515,13 @@ void TestImportMidi::findTupletNumbers()
 void TestImportMidi::findOnTimeRegularError()
       {
       ReducedFraction quantValue = ReducedFraction::fromTicks(MScore::division) / 4;  // 1/16
-      ReducedFraction onTime = quantValue + ReducedFraction::fromTicks(12);
-      QCOMPARE(MidiTuplet::findQuantizationError(onTime, quantValue),
+      MidiChord chord;
+      MidiNote note;
+      note.offTime = quantValue * 4;
+      chord.notes.push_back(note);
+      const auto onTime = quantValue + ReducedFraction::fromTicks(12);
+      std::pair<const ReducedFraction, MidiChord> pair(onTime, chord);
+      QCOMPARE(Quantize::findOnTimeQuantError(pair, quantValue),
                ReducedFraction::fromTicks(12));
       }
 
@@ -546,8 +549,6 @@ void TestImportMidi::findTupletApproximation()
       QCOMPARE(tupletApprox.onTime, startTupletTime);
       QCOMPARE(tupletApprox.len, tupletLen);
       QCOMPARE(tupletApprox.tupletNumber, tupletNumber);
-      QCOMPARE(tupletApprox.tupletQuant, ReducedFraction::fromTicks(MScore::division) / 3);
-      QCOMPARE(tupletApprox.regularQuant, quantValue);
       QVERIFY(tupletApprox.chords.size() == 3);
       QCOMPARE(tupletApprox.tupletSumError, ReducedFraction::fromTicks(0));
       QCOMPARE(tupletApprox.regularSumError, ReducedFraction::fromTicks(80));
