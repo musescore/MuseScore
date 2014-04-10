@@ -4787,26 +4787,26 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             Element* el = score()->selection().element();
             if (addFlag && el && el->type() == Element::NOTE) {
                   Chord* chord = static_cast<Note*>(el)->chord();
-                  Note * n = chord->upNote();
+                  Note* n = chord->upNote();
                   octave = n->pitch() / 12;
                   if (note < n->pitch() / (octave * 7))
                         octave++;
                   }
             else {
                   int curPitch = -1;
-                  if(is.segment()) {
+                  if (is.segment()) {
                         Staff* staff = score()->staff(is.track() / VOICES);
                         Segment* seg = is.segment()->prev1(Segment::SegChordRest | Segment::SegClef);
                         while(seg) {
-                              if(seg->segmentType() == Segment::SegChordRest) {
+                              if (seg->segmentType() == Segment::SegChordRest) {
                                     Element* p = seg->element(is.track());
-                                    if(p && p->type() == Element::CHORD) {
+                                    if (p && p->type() == Element::CHORD) {
                                           Chord* ch = static_cast<Chord*>(p);
-                                          curPitch = ch->downNote()->pitch();
+                                          curPitch = ch->downNote()->epitch();
                                           break;
                                           }
                                     }
-                              else if(seg->segmentType() == Segment::SegClef) {
+                              else if (seg->segmentType() == Segment::SegClef) {
                                     Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
                                     if(p && p->type() == Element::CLEF) {
                                           Clef* clef = static_cast<Clef*>(p);
@@ -4820,7 +4820,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                                     }
                               seg = seg->prev1(Segment::SegChordRest | Segment::SegClef);
                               }
-                              octave = curPitch / 12;
+                        octave = curPitch / 12;
                         }
 
                   static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
@@ -4849,9 +4849,8 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   Chord* chord = static_cast<Note*>(el)->chord();
                   NoteVal val;
                   val.pitch  = line2pitch(pos.line, clef, 0);
-                  // val.tpc    = INVALID_TPC;
-                  // val.fret   = FRET_NONE;
-                  // val.string = STRING_NONE;
+                  if (!chord->concertPitch())
+                        val.pitch += chord->staff()->part()->instr()->transpose().chromatic;
                   _score->addNote(chord, val);
                   _score->endCmd();
                   return;
