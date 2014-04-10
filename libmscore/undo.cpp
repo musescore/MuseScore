@@ -1684,28 +1684,20 @@ void ChangePitch::flip()
       int f_pitch = note->pitch();
       int f_tpc1  = note->tpc1();
       int f_tpc2  = note->tpc2();
-
-      // do not change unless necessary: setting note pitch triggers chord re-fretting on TABs
-      // which triggers ChangePitch(), leading to recursion with negative side effects
-
-      bool updateAccid = false;
-      if (f_pitch != pitch || f_tpc1 != tpc1 || f_tpc2 != tpc2) {
-            updateAccid = true;
-            note->setPitch(pitch, tpc1, tpc2);
-
+      if (f_pitch == pitch && f_tpc1 == tpc1 && f_tpc2 == tpc2) {
+            // do not change unless necessary: setting note pitch triggers chord re-fretting on TABs
+            // which triggers ChangePitch(), leading to recursion with negative side effects
+            return;
             }
+
+      note->setPitch(pitch, tpc1, tpc2);
       pitch = f_pitch;
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
 
-      Score* score = note->score();
-      if (updateAccid) {
-            Chord* chord = note->chord();
-            Measure* measure = chord->segment()->measure();
-            measure->updateAccidentals(chord->staffIdx());
-            }
-      score->setLayoutAll(true);
-      score->setPlaylistDirty(true);
+      Chord* chord = note->chord();
+      chord->segment()->measure()->updateAccidentals(chord->staffIdx());
+      note->score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------

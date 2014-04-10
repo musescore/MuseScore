@@ -301,14 +301,54 @@ void Note::undoSetPitch(int p)
       }
 
 //---------------------------------------------------------
+//   tpc1default
+//---------------------------------------------------------
+
+int Note::tpc1default(int p) const
+      {
+      int key = 0;
+      if (staff() && chord()) {
+            key = staff()->key(chord()->tick()).accidentalType();
+            if (!concertPitch()) {
+                  Interval interval = staff()->part()->instr()->transpose();
+                  if (!interval.isZero()) {
+                        interval.flip();
+                        key = transposeKey(key, interval);
+                        }
+                  }
+            }
+      return pitch2tpc(p, key, PREFER_NEAREST);
+      }
+
+//---------------------------------------------------------
+//   tpc2default
+//---------------------------------------------------------
+
+int Note::tpc2default(int p) const
+      {
+      int key = 0;
+      if (staff() && chord()) {
+            key = staff()->key(chord()->tick()).accidentalType();
+            if (concertPitch()) {
+                  Interval interval = staff()->part()->instr()->transpose();
+                  if (!interval.isZero())
+                        key = transposeKey(key, interval);
+                  }
+            }
+      return pitch2tpc(p - transposition(), key, PREFER_NEAREST);
+      }
+
+#if 0
+//---------------------------------------------------------
 //   tpcFromPitch
 //---------------------------------------------------------
 
 int Note::tpcFromPitch(int p) const
       {
-      KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
-      return pitch2tpc(p, key.accidentalType(), PREFER_NEAREST);
+      int key = (staff() && chord()) ? staff()->key(chord()->tick()).accidentalType() : 0;
+      return pitch2tpc(p, key, PREFER_NEAREST);
       }
+#endif
 
 //---------------------------------------------------------
 //   setTpcFromPitch
@@ -316,8 +356,9 @@ int Note::tpcFromPitch(int p) const
 
 void Note::setTpcFromPitch()
       {
-      _tpc[0] = tpcFromPitch(_pitch);
-      _tpc[1] = tpcFromPitch(_pitch - transposition());
+      int key = (staff() && chord()) ? staff()->key(chord()->tick()).accidentalType() : 0;
+      _tpc[0] = pitch2tpc(_pitch, key, PREFER_NEAREST);
+      _tpc[1] = pitch2tpc(_pitch - transposition(), key, PREFER_NEAREST);
       Q_ASSERT(tpcIsValid(_tpc[0]));
       Q_ASSERT(tpcIsValid(_tpc[1]));
       }
@@ -708,7 +749,7 @@ void Note::write(Xml& xml) const
             }
       writeProperty(xml, P_PITCH);
       writeProperty(xml, P_TPC1);
-      if (tpcIsValid(_tpc[1]) &&  transposition() && _tpc[1] != tpcFromPitch(_pitch - transposition()))
+      if (transposition() && _tpc[1] != tpc2default(_pitch))
             writeProperty(xml, P_TPC2);
       writeProperty(xml, P_SMALL);
       writeProperty(xml, P_MIRROR_HEAD);
@@ -1542,9 +1583,8 @@ void Note::layout10(AccidentalState* as)
                   }
             else {
                   if (_accidental) {
-                        if (_accidental->selected()) {
+                        if (_accidental->selected())
                               score()->deselect(_accidental);
-                              }
                         delete _accidental;
                         _accidental = 0;
                         }
@@ -1853,9 +1893,9 @@ void Note::setNval(NoteVal nval)
       if (nval.tpc != INVALID_TPC)
             setTpc(nval.tpc);
       if (_tpc[0] == INVALID_TPC)
-            _tpc[0] = tpcFromPitch(_pitch);
+            _tpc[0] = tpc1default(_pitch);
       if (_tpc[1] == INVALID_TPC)
-            _tpc[1] = tpcFromPitch(_pitch - transposition());
+            _tpc[1] = tpc2default(_pitch);
       _headGroup = NoteHeadGroup(nval.headGroup);
       }
 
@@ -1917,12 +1957,12 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_TPC1:
                   _tpc[0] = v.toInt();
-                  if (chord()->measure() && concertPitch())
+                  if (chord()->measure())
                         chord()->measure()->updateAccidentals(chord()->staffIdx());
                   break;
             case P_TPC2:
                   _tpc[1] = v.toInt();
-                  if (chord()->measure() && !concertPitch())
+                  if (chord()->measure())
                         chord()->measure()->updateAccidentals(chord()->staffIdx());
                   break;
             case P_SMALL:

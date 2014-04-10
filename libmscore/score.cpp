@@ -2689,6 +2689,8 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         }
                   }
             }
+      updateNotes();
+      setLayoutAll(true);
       }
 
 //---------------------------------------------------------

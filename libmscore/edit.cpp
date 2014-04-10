@@ -674,7 +674,7 @@ void Score::putNote(const Position& p, bool replace)
       _is.setTrack(staffIdx * VOICES + _is.voice());
       _is.setSegment(s);
 
-      const Instrument* instr = st->part()->instr();
+      const Instrument* instr = st->part()->instr(s->tick());
       MScore::Direction stemDirection = MScore::AUTO;
       NoteVal nval;
       StringData* stringData = 0;
@@ -718,7 +718,7 @@ void Score::putNote(const Position& p, bool replace)
                   AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);
                   int step   = absStep(line, clef);
                   int octave = step/7;
-                  nval.pitch = step2pitch(step) + octave * 12 + acci;
+                  nval.pitch = step2pitch(step) + octave * 12 + acci + instr->transpose().chromatic;
                   nval.tpc   = step2tpc(step % 7, acci);
                   }
                   break;
@@ -814,7 +814,7 @@ void Score::repitchNote(const Position& p, bool replace)
       AccidentalVal acci = s->measure()->findAccidental(s, p.staffIdx, p.line);
       int step   = absStep(p.line, clef);
       int octave = step / 7;
-      nval.pitch = step2pitch(step) + octave * 12 + acci;
+      nval.pitch = step2pitch(step) + octave * 12 + acci + st->part()->instr(s->tick())->transpose().chromatic;
       nval.tpc   = step2tpc(step % 7, acci);
 
       Chord* chord;

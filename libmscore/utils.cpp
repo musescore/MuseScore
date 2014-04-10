@@ -758,6 +758,7 @@ int absStep(int tpc, int pitch)
       {
       int line     = tpc2step(tpc) + (pitch / 12) * 7;
       int tpcPitch = tpc2pitch(tpc);
+
       if (tpcPitch < 0)
             line += 7;
       else

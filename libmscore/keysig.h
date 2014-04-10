@@ -51,7 +51,7 @@ class KeySig : public Element {
       bool	_showCourtesy;
       bool	_showNaturals;
       QList<KeySym*> keySymbols;
-      KeySigEvent _sig;
+      KeySigEvent _sig;       // concertKeySig, transposingKeySig
       void addLayout(SymId sym, qreal x, int y);
 
    public:
