@@ -36,6 +36,12 @@ struct TupletLimits
 
 const TupletLimits& tupletLimits(int tupletNumber);
 
+int tupletVoiceLimit();
+
+std::vector<std::pair<ReducedFraction, ReducedFraction> >
+findTupletIntervals(const std::vector<TupletInfo> &tuplets,
+                    const ReducedFraction &basicQuant);
+
 std::vector<TupletData>
 findTupletsInBarForDuration(int voice,
                             const ReducedFraction &barStartTick,

@@ -48,6 +48,7 @@ add_library(
 	  ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet.cpp
 	  ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_detect.cpp
 	  ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_tonotes.cpp
+	  ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_filter.cpp
 	  ${PROJECT_SOURCE_DIR}/mscore/importmidi_chord.cpp
 	  ${PROJECT_SOURCE_DIR}/mscore/importmidi_data.cpp
 	  ${PROJECT_SOURCE_DIR}/mscore/importmidi_fraction.cpp

@@ -1,5 +1,7 @@
 #include "importmidi_tuplet_tonotes.h"
 #include "importmidi_tuplet.h"
+#include "importmidi_fraction.h"
+#include "importmidi_inner.h"
 #include "libmscore/staff.h"
 #include "libmscore/score.h"
 #include "libmscore/fraction.h"

@@ -1,5 +1,6 @@
 #include "importmidi_trmodel.h"
 #include "importmidi_operations.h"
+#include "importmidi_inner.h"
 
 
 namespace Ms {
