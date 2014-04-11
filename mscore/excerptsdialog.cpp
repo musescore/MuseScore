@@ -284,7 +284,6 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       Score* nscore = Ms::createExcerpt(e->parts());
       if (nscore == 0)
             return;
-      nscore->setParentScore(score);
       e->setScore(nscore);
       nscore->setName(e->title());
       nscore->rebuildMidiMapping();

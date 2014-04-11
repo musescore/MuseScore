@@ -393,6 +393,16 @@ Score::Score(Score* parent)
       _synthesizerState = parent->_synthesizerState;
       }
 
+Score::Score(Score* parent, const MStyle* s)
+   : _is(this), _selection(this)
+      {
+      _parentScore = parent;
+      init();
+      _tempomap = new TempoMap;
+      _sigmap   = new TimeSigMap();
+      _style    = *s;
+      }
+
 //---------------------------------------------------------
 //   ~Score
 //---------------------------------------------------------
@@ -2034,7 +2044,6 @@ void Score::replaceStaffTypes(const QList<StaffType*>& tl)
 
 void Score::addExcerpt(Score* score)
       {
-      score->setParentScore(this);
       Excerpt* ex = new Excerpt(score);
       excerpts().append(ex);
       ex->setTitle(score->name());
