@@ -338,18 +338,6 @@ int Note::tpc2default(int p) const
       return pitch2tpc(p - transposition(), key, PREFER_NEAREST);
       }
 
-#if 0
-//---------------------------------------------------------
-//   tpcFromPitch
-//---------------------------------------------------------
-
-int Note::tpcFromPitch(int p) const
-      {
-      int key = (staff() && chord()) ? staff()->key(chord()->tick()).accidentalType() : 0;
-      return pitch2tpc(p, key, PREFER_NEAREST);
-      }
-#endif
-
 //---------------------------------------------------------
 //   setTpcFromPitch
 //---------------------------------------------------------
@@ -1890,12 +1878,27 @@ void Note::setNval(NoteVal nval)
       setPitch(nval.pitch);
       _fret      = nval.fret;
       _string    = nval.string;
-      if (nval.tpc != INVALID_TPC)
-            setTpc(nval.tpc);
-      if (_tpc[0] == INVALID_TPC)
-            _tpc[0] = tpc1default(_pitch);
-      if (_tpc[1] == INVALID_TPC)
-            _tpc[1] = tpc2default(_pitch);
+      if (nval.tpc == INVALID_TPC) {
+            int key = staff()->key(chord()->tick()).accidentalType();
+            nval.tpc = pitch2tpc(nval.pitch, key, PREFER_NEAREST);
+            }
+
+      Interval v = staff()->part()->instr()->transpose();
+      if (!v.isZero()) {
+            if (concertPitch()) {
+                  v.flip();
+                  _tpc[0] = nval.tpc;
+                  _tpc[1] = transposeTpc(nval.tpc, v, false);
+                  }
+            else {
+                  _tpc[0] = transposeTpc(nval.tpc, v, false);
+                  _tpc[1] = nval.tpc;
+                  }
+            }
+      else {
+            _tpc[0] = nval.tpc;
+            _tpc[1] = nval.tpc;
+            }
       _headGroup = NoteHeadGroup(nval.headGroup);
       }
 
