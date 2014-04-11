@@ -102,6 +102,12 @@ struct TupletInfo
       std::map<ReducedFraction, int> staccatoChords;      // <onTime, note index>
       };
 
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval1,
+                      const std::pair<ReducedFraction, ReducedFraction> &interval2);
+bool haveIntersection(
+            const std::pair<ReducedFraction, ReducedFraction> &interval,
+            const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals);
+
 } // namespace MidiTuplet
 
 namespace MidiCharset {

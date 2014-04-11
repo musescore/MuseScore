@@ -3,6 +3,27 @@
 
 
 namespace Ms {
+namespace MidiTuplet {
+
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval1,
+                      const std::pair<ReducedFraction, ReducedFraction> &interval2)
+      {
+      return interval1.second > interval2.first && interval1.first < interval2.second;
+      }
+
+bool haveIntersection(
+            const std::pair<ReducedFraction, ReducedFraction> &interval,
+            const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals)
+      {
+      for (const auto &i: intervals) {
+            if (haveIntersection(i, interval))
+                  return true;
+            }
+      return false;
+      }
+
+}
+
 namespace MidiCharset {
 
 QString convertToCharset(const std::string &text)

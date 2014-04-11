@@ -3,10 +3,13 @@
 
 #include "midi/midifile.h"
 #include "importmidi_fraction.h"
-#include "importmidi_inner.h"
 
 
 namespace Ms {
+
+namespace MidiCharset {
+      QString defaultCharset();
+}
 
 struct TrackData;
 
@@ -26,7 +29,7 @@ class MidiData
       const MidiFile *midiFile(const QString &fileName) const;
                   // lyrics
       void addTrackLyrics(const QString &fileName,
-                          const std::multimap<ReducedFraction,  std::string> &trackLyrics);
+                          const std::multimap<ReducedFraction, std::string> &trackLyrics);
       const QList<std::multimap<ReducedFraction, std::string> > *
             getLyrics(const QString &fileName);
       QString charset(const QString &fileName) const;
