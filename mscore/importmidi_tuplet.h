@@ -55,6 +55,12 @@ findTupletContainsTime(int voice,
                        const ReducedFraction &time,
                        const std::multimap<ReducedFraction, TupletData> &tupletEvents);
 
+std::multimap<ReducedFraction, MidiChord>::iterator
+findTupletFreeChord(
+            const std::multimap<ReducedFraction, MidiChord>::iterator &startChordIt,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt,
+            const ReducedFraction &startDivTick);
+
 std::multimap<ReducedFraction, TupletData>
 findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
                const TimeSigMap *sigmap,
