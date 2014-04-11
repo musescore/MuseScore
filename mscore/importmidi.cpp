@@ -44,6 +44,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_quant.h"
 #include "importmidi_tuplet.h"
+#include "importmidi_tuplet_tonotes.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/articulation.h"
 #include "importmidi_swing.h"
