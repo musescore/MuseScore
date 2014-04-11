@@ -721,7 +721,7 @@ void Score::putNote(const Position& p, bool replace)
                   nval.pitch = step2pitch(step) + octave * 12 + acci;
                   if (!styleB(ST_concertPitch))
                         nval.pitch += instr->transpose().chromatic;
-                  nval.tpc   = step2tpc(step % 7, acci);
+                  nval.tpc = step2tpc(step % 7, acci);
                   }
                   break;
             }
