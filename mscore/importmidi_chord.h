@@ -10,22 +10,31 @@ namespace Ms {
 
 class Tie;
 
+namespace MidiTuplet {
+struct TupletData;
+}
+
 class MidiNote {
    public:
       int pitch;
       int velo;
       ReducedFraction offTime;
-      ReducedFraction quantizedOffTime = {-1, 1};     // invalid
       Tie* tie = nullptr;
       bool staccato = false;
+      bool isInTuplet = false;
+                  // for offTime quantization
+      std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator tuplet;
       };
 
 class MidiChord {
    public:
       int voice = 0;
-      bool isInTuplet = false;
-      ReducedFraction quantizedOnTime = {-1, 1};      // invalid
       QList<MidiNote> notes;
+      bool isInTuplet = false;
+      int barIndex = 0;
+                  // for onTime quantization
+      std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator tuplet;
+
       bool isStaccato() const
             {
             for (const auto &note: notes)

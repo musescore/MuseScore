@@ -13,12 +13,6 @@ namespace MidiTuplet {
 
 struct TupletInfo;
 
-std::pair<std::multimap<ReducedFraction, MidiChord>::iterator, ReducedFraction>
-findBestChordForTupletNote(const ReducedFraction &tupletNotePos,
-                           const ReducedFraction &quantValue,
-                           const std::multimap<ReducedFraction, MidiChord>::iterator &startChordIt,
-                           const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt);
-
 bool isTupletAllowed(const TupletInfo &tupletInfo);
 
 std::vector<int> findTupletNumbers(const ReducedFraction &divLen, const ReducedFraction &barFraction);

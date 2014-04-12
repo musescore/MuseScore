@@ -8,10 +8,6 @@ class MidiChord;
 class TimeSigMap;
 class ReducedFraction;
 
-namespace MidiTuplet {
-struct TupletData;
-}
-
 namespace Quantize {
 
 ReducedFraction quantForLen(
@@ -89,13 +85,8 @@ ReducedFraction findOffTimeQuantError(
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant);
 
-ReducedFraction findBarStart(
-            const ReducedFraction &time,
-            const TimeSigMap *sigmap);
-
 void quantizeChords(
             std::multimap<ReducedFraction, MidiChord> &chords,
-            const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tupletEvents,
             const TimeSigMap *sigmap,
             const ReducedFraction &basicQuant);
 
