@@ -577,10 +577,12 @@ QString TextLine::endText() const
 void TextLine::writeProperties(Xml& xml) const
       {
       if (_beginHook) {
+            writeProperty(xml, P_BEGIN_HOOK);
             writeProperty(xml, P_BEGIN_HOOK_HEIGHT);
             writeProperty(xml, P_BEGIN_HOOK_TYPE);
             }
       if (_endHook) {
+            writeProperty(xml, P_END_HOOK);
             writeProperty(xml, P_END_HOOK_HEIGHT);
             writeProperty(xml, P_END_HOOK_TYPE);
             }
@@ -645,12 +647,16 @@ bool TextLine::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "beginHookHeight") {
+      if (tag == "beginHook")
+            _beginHook = (e.readInt() != 0);
+      else if (tag == "beginHookHeight") {
             _beginHookHeight = Spatium(e.readDouble());
             _beginHook = true;
             }
       else if (tag == "beginHookType")
             _beginHookType = HookType(e.readInt());
+      else if (tag == "endHook")
+            _endHook = (e.readInt() != 0);
       else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
             _endHookHeight = Spatium(e.readDouble());
             _endHook = true;
