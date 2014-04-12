@@ -157,13 +157,14 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                         // for further usage
             opers.setCurrentTrack(mtrack.indexOfOperation);
             opers.adaptForPercussion(mtrack.indexOfOperation, mtrack.mtrack->drumTrack());
-            mtrack.tuplets = MidiTuplet::findAllTuplets(mtrack.chords, sigmap,
-                                                        lastTick, basicQuant);
+
+            MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, lastTick, basicQuant);
+
             Q_ASSERT_X(!doNotesOverlap(track.second),
                        "quantizeAllTracks",
                        "There are overlapping notes of the same voice that is incorrect");
 
-            Quantize::quantizeChords(mtrack.chords, mtrack.tuplets, sigmap, basicQuant);
+            Quantize::quantizeChords(mtrack.chords, sigmap, basicQuant);
             }
       }
 
@@ -268,10 +269,10 @@ MTrack::toDurationList(const Measure *measure,
                        Meter::DurationType durationType)
       {
       const bool useDots = preferences.midiImportOperations.currentTrackOperations().useDots;
-                  // find tuplets over which duration is go
+                  // find tuplets over which duration goes
       auto barTick = ReducedFraction::fromTicks(measure->tick());
-      auto tupletsData = MidiTuplet::findTupletsInBarForDuration(voice, barTick, startTick,
-                                                                len, tuplets);
+      auto tupletsData = MidiTuplet::findTupletsInBarForDuration(
+                        voice, barTick, startTick, len, tuplets);
       struct {
             bool operator()(const MidiTuplet::TupletData &d1,
                             const MidiTuplet::TupletData &d2)
@@ -928,6 +929,7 @@ void convertMidi(Score *score, const MidiFile *mf)
                  "convertMidi", "There are overlapping notes of the same voice that is incorrect");
 
       quantizeAllTracks(tracks, sigmap, lastTick);
+      MChord::removeOverlappingNotes(tracks);
 
       Q_ASSERT_X(!doNotesOverlap(tracks),
                  "convertMidi", "There are overlapping notes of the same voice that is incorrect");

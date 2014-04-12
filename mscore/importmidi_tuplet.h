@@ -35,8 +35,8 @@ struct TupletLimits
       };
 
 const TupletLimits& tupletLimits(int tupletNumber);
-
 int tupletVoiceLimit();
+void removeEmptyTuplets(MTrack &track);
 
 std::vector<std::pair<ReducedFraction, ReducedFraction> >
 findTupletIntervals(const std::vector<TupletInfo> &tuplets,
@@ -66,13 +66,12 @@ findTupletFreeChord(
             const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt,
             const ReducedFraction &startDivTick);
 
-std::multimap<ReducedFraction, TupletData>
-findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
-               const TimeSigMap *sigmap,
-               const ReducedFraction &lastTick,
-               const ReducedFraction &basicQuant);
-
-void removeEmptyTuplets(MTrack &track);
+void findAllTuplets(
+            std::multimap<ReducedFraction, TupletData> &tupletEvents,
+            std::multimap<ReducedFraction, MidiChord> &chords,
+            const TimeSigMap *sigmap,
+            const ReducedFraction &lastTick,
+            const ReducedFraction &basicQuant);
 
 } // namespace MidiTuplet
 } // namespace Ms

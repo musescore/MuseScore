@@ -76,7 +76,6 @@ class TestImportMidi : public QObject, public MTest
 
       // test tuplet recognition functions
       void findChordInBar();
-      void bestChordForTupletNote();
       void isTupletAllowed();
       void findTupletNumbers();
       void findOnTimeRegularError();
@@ -171,14 +170,6 @@ class TestImportMidi : public QObject, public MTest
       void tuplet16th8th() { mf("tuplet_16th_8th"); }
       void tuplet7Staccato() { mf("tuplet_7_staccato"); }
       void minDuration() { mf("min_duration"); }
-      void minDurationNoReduce()
-            {
-            TrackOperations opers;
-            opers.quantize.reduceToShorterNotesInBar = false;
-            preferences.midiImportOperations.appendTrackOperations(opers);
-            mf("min_duration_no_reduce");
-            preferences.midiImportOperations.clear();
-            }
 
       void pickupMeasure() { mf("pickup"); }
 
@@ -311,35 +302,6 @@ void TestImportMidi::findChordInBar()
 
       endChordIt = MChord::findEndChordInRange(endBarTick, firstChordIt, chords.end());
       QCOMPARE(endChordIt, chords.end());
-      }
-
-void TestImportMidi::bestChordForTupletNote()
-      {
-      const ReducedFraction tupletLen = ReducedFraction::fromTicks(MScore::division);
-      const ReducedFraction quantValue = ReducedFraction::fromTicks(MScore::division) / 4;
-      const int tupletNumber = 3;
-      const ReducedFraction tupletNoteLen = tupletLen / tupletNumber;
-
-      std::multimap<ReducedFraction, MidiChord> chords;
-      chords.insert({ReducedFraction::fromTicks(10), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(160), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(360), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(480), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(1480), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(2000), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(3201), MidiChord()});
-
-      ReducedFraction tupletNotePos = tupletNoteLen;
-      auto bestChord = MidiTuplet::findBestChordForTupletNote(tupletNotePos, quantValue,
-                                                              chords.begin(), chords.end());
-      QCOMPARE(bestChord.first, chords.find(ReducedFraction::fromTicks(160)));
-      QCOMPARE(bestChord.second, ReducedFraction(0, 1));
-
-      tupletNotePos = tupletNoteLen * 2;
-      bestChord = MidiTuplet::findBestChordForTupletNote(tupletNotePos, quantValue,
-                                                         chords.begin(), chords.end());
-      QCOMPARE(bestChord.first, chords.find(ReducedFraction::fromTicks(360)));
-      QCOMPARE(bestChord.second, ReducedFraction::fromTicks(40));
       }
 
 // tupletNoteNumber - number of note in tuplet (like index):
@@ -532,13 +494,30 @@ void TestImportMidi::findTupletApproximation()
       const ReducedFraction quantValue = ReducedFraction::fromTicks(MScore::division) / 4;  // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
-      chords.insert({ReducedFraction::fromTicks(0), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(160), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(320), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(480), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(1480), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(2000), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(3201), MidiChord()});
+      MidiChord chord;
+      MidiNote note;
+      chord.notes.push_back(note);
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(160);
+      chords.insert({ReducedFraction::fromTicks(0), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(320);
+      chords.insert({ReducedFraction::fromTicks(160), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(480);
+      chords.insert({ReducedFraction::fromTicks(320), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(1480);
+      chords.insert({ReducedFraction::fromTicks(480), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(2000);
+      chords.insert({ReducedFraction::fromTicks(1480), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(3201);
+      chords.insert({ReducedFraction::fromTicks(2000), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(4000);
+      chords.insert({ReducedFraction::fromTicks(3201), chord});
 
       {
       const ReducedFraction startTupletTime = ReducedFraction(0, 1);
