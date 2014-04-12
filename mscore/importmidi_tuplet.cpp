@@ -374,18 +374,17 @@ bool doTupletsHaveCommonChords(const std::vector<TupletInfo> &tuplets)
 #endif
 
 
-std::vector<TupletData> convertToData(const std::vector<TupletInfo> &tuplets)
+void convertToData(std::multimap<ReducedFraction, TupletData> &tupletEvents,
+                   const std::vector<TupletInfo> &tuplets)
       {
-      std::vector<TupletData> tupletsData;
       for (const auto &tupletInfo: tuplets) {
             MidiTuplet::TupletData tupletData = {tupletInfo.chords.begin()->second->second.voice,
                                                  tupletInfo.onTime,
                                                  tupletInfo.len,
                                                  tupletInfo.tupletNumber,
                                                  {}};
-            tupletsData.push_back(tupletData);
+            tupletEvents.insert({tupletData.onTime, tupletData});
             }
-      return tupletsData;
       }
 
 // check is the chord already in tuplet in prev bar or division
@@ -509,22 +508,23 @@ void findNonTupletQuantizedOnTime(
             }
       }
 
-std::vector<TupletData> findTuplets(
+void findTuplets(
             const ReducedFraction &startBarTick,
             const ReducedFraction &endBarTick,
             const ReducedFraction &barFraction,
             std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            std::multimap<ReducedFraction, TupletData> &tupletEvents)
       {
       if (chords.empty() || startBarTick >= endBarTick)     // invalid cases
-            return std::vector<TupletData>();
+            return;
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
       if (!operations.tuplets.doSearch)
-            return std::vector<TupletData>();
+            return;
       auto startBarChordIt = MChord::findFirstChordInRange(chords, startBarTick, endBarTick);
       startBarChordIt = findTupletFreeChord(startBarChordIt, chords.end(), startBarTick);
       if (startBarChordIt == chords.end())      // no chords in this bar
-            return std::vector<TupletData>();
+            return;
 
       const auto endBarChordIt = chords.lower_bound(endBarTick);
                   // update start chord: use chords with onTime >= (start bar tick - tol)
@@ -573,7 +573,7 @@ std::vector<TupletData> findTuplets(
       findTupletQuantizedOffTime(tuplets, startBarTick, endBarTick, basicQuant);
       findNonTupletQuantizedOnTime(nonTuplets, basicQuant);
 
-      return convertToData(tuplets);
+      convertToData(tupletEvents, tuplets);
       }
 
 std::multimap<ReducedFraction, TupletData>
@@ -587,10 +587,10 @@ findAllTuplets(std::multimap<ReducedFraction, MidiChord> &chords,
 
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
             const auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
-            const auto barFraction = ReducedFraction(sigmap->timesig(startBarTick.ticks()).timesig());
-            const auto tuplets = findTuplets(startBarTick, endBarTick, barFraction, chords, basicQuant);
-            for (const auto &tupletData: tuplets)
-                  tupletEvents.insert({tupletData.onTime, tupletData});
+            const auto barFraction = ReducedFraction(
+                              sigmap->timesig(startBarTick.ticks()).timesig());
+            findTuplets(startBarTick, endBarTick, barFraction,
+                        chords, basicQuant, tupletEvents);
             if (endBarTick > lastTick)
                   break;
             startBarTick = endBarTick;
