@@ -376,6 +376,26 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>beginText</tabstop>
+  <tabstop>beginTextTb</tabstop>
+  <tabstop>beginTextPlace</tabstop>
+  <tabstop>beginHook</tabstop>
+  <tabstop>beginHookHeight</tabstop>
+  <tabstop>beginHookType90</tabstop>
+  <tabstop>beginHookType45</tabstop>
+  <tabstop>continueText</tabstop>
+  <tabstop>continueTextTb</tabstop>
+  <tabstop>continueTextPlace</tabstop>
+  <tabstop>endText</tabstop>
+  <tabstop>endTextTb</tabstop>
+  <tabstop>endTextPlace</tabstop>
+  <tabstop>endHook</tabstop>
+  <tabstop>endHookHeight</tabstop>
+  <tabstop>endHookType90</tabstop>
+  <tabstop>endHookType45</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
