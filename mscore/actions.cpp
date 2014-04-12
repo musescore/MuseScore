@@ -2378,6 +2378,41 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Fret 9 (TAB)"),
          QT_TRANSLATE_NOOP("action","Add fret 9 of current string (TAB only)")
          ),
+      Shortcut(
+         STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-10",
+         QT_TRANSLATE_NOOP("action","Fret 10 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 10 of current string (TAB only)")
+         ),
+      Shortcut(
+         STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-11",
+         QT_TRANSLATE_NOOP("action","Fret 11 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 11 of current string (TAB only)")
+         ),
+      Shortcut(
+         STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-12",
+         QT_TRANSLATE_NOOP("action","Fret 12 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 12 of current string (TAB only)")
+         ),
+      Shortcut(
+         STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-13",
+         QT_TRANSLATE_NOOP("action","Fret 13 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 13 of current string (TAB only)")
+         ),
+      Shortcut(
+         STATE_NOTE_ENTRY_TAB,
+         0,
+         "fret-14",
+         QT_TRANSLATE_NOOP("action","Fret 14 (TAB)"),
+         QT_TRANSLATE_NOOP("action","Add fret 14 of current string (TAB only)")
+         ),
 
       // HARMONY / FIGURED BASS specific actions
 

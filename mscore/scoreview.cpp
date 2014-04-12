@@ -2993,6 +2993,16 @@ void ScoreView::cmd(const QAction* a)
             cmdAddFret(8);
       else if(cmd == "fret-9")
             cmdAddFret(9);
+      else if(cmd == "fret-10")
+            cmdAddFret(10);
+      else if(cmd == "fret-11")
+            cmdAddFret(11);
+      else if(cmd == "fret-12")
+            cmdAddFret(12);
+      else if(cmd == "fret-13")
+            cmdAddFret(13);
+      else if(cmd == "fret-14")
+            cmdAddFret(14);
       else
             _score->cmd(a);
       if (_score->processMidiInput())
