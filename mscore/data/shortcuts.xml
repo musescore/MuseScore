@@ -374,11 +374,11 @@
     </SC>
   <SC>
     <key>add-hairpin</key>
-    <seq>H</seq>
+    <seq>&lt;</seq>
     </SC>
   <SC>
     <key>add-hairpin-reverse</key>
-    <seq>Shift+H</seq>
+    <seq>&gt;</seq>
     </SC>
   <SC>
     <key>add-8va</key>
@@ -880,6 +880,21 @@
     <key>fret-9</key>
     <seq>9</seq>
     <seq>K</seq>
+    </SC>
+  <SC>
+    <key>fret-10</key>
+    </SC>
+  <SC>
+    <key>fret-11</key>
+    </SC>
+  <SC>
+    <key>fret-12</key>
+    </SC>
+  <SC>
+    <key>fret-13</key>
+    </SC>
+  <SC>
+    <key>fret-14</key>
     </SC>
 <!-- HARMONY / FIGURED BASS specific shortcuts -->
   <SC>
