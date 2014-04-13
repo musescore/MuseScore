@@ -178,6 +178,10 @@ int ReducedFraction::ticks() const
 
 void ReducedFraction::reduce()
       {
+      if (numerator_ == 0) {
+            denominator_ = 1;
+            return;
+            }
       const int tmp = gcd(numerator_, denominator_);
 
       Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
