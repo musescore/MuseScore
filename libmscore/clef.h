@@ -149,6 +149,8 @@ class Clef : public Element {
       virtual void draw(QPainter*) const;
       virtual void read(XmlReader&);
       virtual void write(Xml&) const;
+      
+      virtual bool isEditable() const                    { return false; }
 
       virtual void addElement(Element* e, qreal x, qreal y);
       virtual Space space() const      { return Space(0.0, bbox().x() * 2.0 + width()); }
