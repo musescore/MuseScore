@@ -3122,6 +3122,9 @@ void Measure::layoutX(qreal stretch)
                         bool accidentalStaff = false;
 
                         bool accidental = false;
+                        bool grace = false;
+                        qreal accidentalX = 1000.0;
+                        qreal noteX = 1000.0;
                         if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine) && !accidentalStaff) {
                               for (int voice = 0; voice < VOICES; ++voice) {
                                     ChordRest* cr = static_cast<ChordRest*>(s->element(track+voice));
@@ -3131,13 +3134,15 @@ void Measure::layoutX(qreal stretch)
                                     if (cr->type() == Element::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
                                           if (!c->graceNotes().empty())
-                                                accidental = true;
+                                                grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
                                                       if (note->accidental()) {
                                                             accidental = true;
-                                                            break;
+                                                            accidentalX = qMin(accidentalX, note->accidental()->x() + note->x());
                                                             }
+                                                      else
+                                                            noteX = qMin(noteX, note->x());
                                                       }
                                                 }
                                           }
@@ -3152,9 +3157,18 @@ void Measure::layoutX(qreal stretch)
                                     // no distance to full measure rest
                                     if (!(cr->type() == REST && static_cast<Rest*>(cr)->durationType() == TDuration::V_MEASURE)) {
                                           accidentalStaff = true;
-                                          StyleIdx si = accidental ? ST_barAccidentalDistance : ST_barNoteDistance;
-                                          qreal sp    = score()->styleS(si).val() * _spatium;
-                                          sp          += elsp;
+                                          qreal sp;
+                                          if (accidental) {
+                                                qreal bad = score()->styleS(ST_barAccidentalDistance).val() * _spatium;
+                                                qreal bnd = score()->styleS(ST_barNoteDistance).val() * _spatium;
+                                                qreal diff = qMax(noteX - accidentalX, 0.0);
+                                                sp = qMax(bad, bnd - diff);
+                                                }
+                                          else if (grace)
+                                                sp = score()->styleS(ST_barAccidentalDistance).val() * _spatium;
+                                          else
+                                                sp = score()->styleS(ST_barNoteDistance).val() * _spatium;
+                                          sp += elsp;
                                           minDistance = qMax(minDistance, sp);
                                           }
                                     }
