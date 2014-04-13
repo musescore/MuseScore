@@ -205,7 +205,7 @@ class EditTransition : public QMouseEventTransition
             QMouseEvent* me = static_cast<QMouseEvent*>(static_cast<QStateMachine::WrappedEvent*>(event)->event());
             QPointF p = canvas->toLogical(me->pos());
             Element* e = canvas->elementNear(p);
-            if (e)
+            if (e && e->isEditable())
                   canvas->setEditObject(e);
             return e && e->isEditable();
             }
