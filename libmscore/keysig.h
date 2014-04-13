@@ -40,16 +40,13 @@ struct KeySym {
 ///   The KeySig class represents a Key Signature on a staff
 //
 //    @P showCourtesy bool show courtesy key signature for this sig if appropriate
-//    @P showNaturals bool
 //---------------------------------------------------------------------------------------
 
 class KeySig : public Element {
       Q_OBJECT
       Q_PROPERTY(bool showCourtesy READ showCourtesy   WRITE undoSetShowCourtesy)
-      Q_PROPERTY(bool showNaturals READ showNaturals   WRITE undoSetShowNaturals)
 
       bool	_showCourtesy;
-      bool	_showNaturals;
       QList<KeySym*> keySymbols;
       KeySigEvent _sig;       // concertKeySig, transposingKeySig
       void addLayout(SymId sym, qreal x, int y);
@@ -69,7 +66,7 @@ class KeySig : public Element {
       void setOldSig(int oldSig);
 
       Segment* segment() const            { return (Segment*)parent(); }
-      Measure* measure() const            { return (Measure*)parent()->parent(); }
+      Measure* measure() const            { return parent() != nullptr ? (Measure*)parent()->parent() : nullptr; }
       Space space() const;
       void setCustom(const QList<KeySym*>& symbols);
       virtual void write(Xml&) const;
@@ -89,10 +86,6 @@ class KeySig : public Element {
       bool showCourtesy() const           { return _showCourtesy; }
       void setShowCourtesy(bool v)        { _showCourtesy = v;    }
       void undoSetShowCourtesy(bool v);
-
-      bool showNaturals() const           { return _showNaturals;    }
-      void setShowNaturals(bool v)        { _showNaturals = v;       }
-      void undoSetShowNaturals(bool v)    { _showNaturals = v;       }
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);

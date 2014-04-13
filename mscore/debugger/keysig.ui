@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>6</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>8</number>
+   </property>
+   <property name="topMargin">
+    <number>8</number>
+   </property>
+   <property name="rightMargin">
+    <number>8</number>
+   </property>
+   <property name="bottomMargin">
     <number>8</number>
    </property>
    <item>
@@ -98,13 +107,6 @@
        <widget class="QCheckBox" name="showCourtesySig">
         <property name="text">
          <string notr="true">showCourtesySig</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" colspan="2">
-       <widget class="QCheckBox" name="showNaturals">
-        <property name="text">
-         <string notr="true">showNaturals</string>
         </property>
        </widget>
       </item>

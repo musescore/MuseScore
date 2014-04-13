@@ -472,7 +472,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
                   if (ks && !ks->generated())
                         break;
                   if (ks->keySigEvent() != st)
-                        undo(new ChangeKeySig(ks, st, ks->showCourtesy(), ks->showNaturals()));
+                        undo(new ChangeKeySig(ks, st, ks->showCourtesy() /*, ks->showNaturals()*/));
                   }
             }
       }
@@ -1808,12 +1808,11 @@ void RemoveStaves::redo()
 //   ChangeKeySig
 //---------------------------------------------------------
 
-ChangeKeySig::ChangeKeySig(KeySig* _keysig, KeySigEvent _ks, bool sc, bool sn)
+ChangeKeySig::ChangeKeySig(KeySig* _keysig, KeySigEvent _ks, bool sc /*, bool sn*/)
       {
       keysig = _keysig;
       ks     = _ks;
       showCourtesy = sc;
-      showNaturals = sn;
       }
 
 //---------------------------------------------------------
@@ -1824,11 +1823,9 @@ void ChangeKeySig::flip()
       {
       KeySigEvent oe = keysig->keySigEvent();
       bool sc        = keysig->showCourtesy();
-      bool sn        = keysig->showNaturals();
 
       keysig->setKeySigEvent(ks);
       keysig->setShowCourtesy(showCourtesy);
-      keysig->setShowNaturals(showNaturals);
 
       // update keymap if keysig was not generated
       // this is needed during undo
@@ -1836,7 +1833,6 @@ void ChangeKeySig::flip()
             keysig->staff()->setKey(keysig->segment()->tick(), ks);
 
       showCourtesy = sc;
-      showNaturals = sn;
       ks           = oe;
 
       keysig->score()->setLayoutAll(true);

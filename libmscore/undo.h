@@ -335,13 +335,12 @@ class ChangeKeySig : public UndoCommand {
       KeySig* keysig;
       KeySigEvent ks;
       bool showCourtesy;
-      bool showNaturals;
 
       void flip();
 
    public:
-      ChangeKeySig(KeySig*, KeySigEvent newKeySig, bool sc, bool sn);
-      UNDO_NAME("ChangeKeySig");
+      ChangeKeySig(KeySig*, KeySigEvent newKeySig, bool sc /*, bool sn*/);
+      UNDO_NAME("ChangeKeySig")
       };
 
 //---------------------------------------------------------

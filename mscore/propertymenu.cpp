@@ -255,10 +255,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                      ? QT_TRANSLATE_NOOP("KeySig", "Hide Courtesy Key Signature")
                      : QT_TRANSLATE_NOOP("KeySig", "Show Courtesy Key Signature") );
                   a->setData("key-courtesy");
-                  a = popup->addAction(ks->showNaturals()
-                     ? QT_TRANSLATE_NOOP("KeySig", "Hide naturals")
-                     : QT_TRANSLATE_NOOP("KeySig", "Show naturals") );
-                  a->setData("key-naturals");
                   }
             }
       else if (e->type() == Element::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == STAFF_STATE_INSTRUMENT) {
@@ -497,11 +493,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "key-courtesy") {
             KeySig* ks = static_cast<KeySig*>(e);
-            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), !ks->showCourtesy(), ks->showNaturals()));
-            }
-      else if (cmd == "key-naturals") {
-            KeySig* ks = static_cast<KeySig*>(e);
-            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), ks->showCourtesy(), !ks->showNaturals()));
+            score()->undo(new ChangeKeySig(ks, ks->keySigEvent(), !ks->showCourtesy() /*, ks->showNaturals()*/));
             }
       else if (cmd == "ss-props") {
             StaffState* ss = static_cast<StaffState*>(e);
