@@ -27,6 +27,7 @@
         <file alias="data/instruments.xml">../share/templates/instruments.xml</file>
         <file>data/splash.jpg</file>
         <file alias="data/Promenade_Example.mscz">../demos/promenade.mscz</file>
+        <file alias="data/Reunion.mscz">../demos/Reunion.mscz</file>
         <file alias="data/tab_sample.mscx">../share/templates/tab_sample.mscx</file>
         <file>data/style.qss</file>
         <file>data/mscore.png</file>
