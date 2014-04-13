@@ -3415,22 +3415,35 @@ qreal Score::computeMinWidth(Segment* fs)
                               if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine)) {
                                     // check for accidentals in chord
                                     bool accidental = false;
+                                    bool grace = false;
+                                    qreal accidentalX = 1000.0;
+                                    qreal noteX = 1000.0;
                                     if (cr->type() == Element::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
                                           if (!c->graceNotes().empty())
-                                                accidental = true;
+                                                grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
                                                       if (note->accidental()) {
                                                             accidental = true;
-                                                            break;
+                                                            accidentalX = qMin(accidentalX, note->accidental()->x() + note->x());
                                                             }
+                                                      else
+                                                            noteX = qMin(noteX, note->x());
                                                       }
                                                 }
                                           }
-                                    StyleIdx si = accidental ? ST_barAccidentalDistance : ST_barNoteDistance;
-                                    qreal sp    = styleS(si).val() * _spatium;
-                                    sp         += elsp;
+                                    qreal sp;
+                                    if (accidental) {
+                                          qreal bad = styleS(ST_barAccidentalDistance).val() * _spatium;
+                                          qreal bnd = styleS(ST_barNoteDistance).val() * _spatium;
+                                          qreal diff = qMax(noteX - accidentalX, 0.0);
+                                          sp = qMax(bad, bnd - diff);
+                                          }
+                                    else if (grace)
+                                          sp = styleS(ST_barAccidentalDistance).val() * _spatium;
+                                    else
+                                          sp = styleS(ST_barNoteDistance).val() * _spatium;
                                     minDistance = qMax(minDistance, sp);
                                     stretchDistance = sp * .7;
                                     }
