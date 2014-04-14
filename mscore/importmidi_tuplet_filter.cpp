@@ -376,6 +376,49 @@ bool canUseIndex(
       return true;
       }
 
+
+#ifdef QT_DEBUG
+
+bool areTupletChordsEmpty(const std::vector<TupletInfo> &tuplets)
+      {
+      for (const auto &tuplet: tuplets) {
+            if (tuplet.chords.empty())
+                  return true;
+            }
+      return false;
+      }
+
+template<typename Iter>
+bool validateSelectedTuplets(Iter beginIt,
+                             Iter endIt,
+                             const std::vector<TupletInfo> &tuplets)
+      {
+                  // <chord address, used voices>
+      std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedChords;
+      for (auto indexIt = beginIt; indexIt != endIt; ++indexIt) {
+            const auto &tuplet = tuplets[*indexIt];
+            const auto &chords = tuplet.chords;
+            for (auto it = chords.begin(); it != chords.end(); ++it) {
+                  bool isFirstChord = (tuplet.firstChordIndex == 0 && it == tuplet.chords.begin());
+                  const auto fit = usedChords.find(&*(it->second));
+                  if (fit == usedChords.end()) {
+                        usedChords.insert({&*(it->second), isFirstChord ? 1 : VOICES});
+                        }
+                  else {
+                        if (!isFirstChord)
+                              return false;
+                        if (!isMoreTupletVoicesAllowed(fit->second, it->second->second.notes.size()))
+                              return false;
+                        ++(fit->second);
+                        }
+                  }
+            }
+      return true;
+      }
+
+#endif
+
+
 void tryUpdateBestIndexes(
             std::vector<int> &bestTupletIndexes,
             TupletErrorResult &minCurrentError,
@@ -498,6 +541,10 @@ void findNextTuplet(
             else {
                   selectedTuplets.push_back(index);
                   }
+
+            Q_ASSERT_X(validateSelectedTuplets(selectedTuplets.begin(), selectedTuplets.end(), tuplets),
+                       "MIDI tuplets::findNextTuplet", "Tuplets have common chords but they shouldn't");
+
             const auto voiceIntervals = prepareVoiceIntervals(selectedTuplets, tupletIntervals);
             const auto usedFirstChords = prepareUsedFirstChords(selectedTuplets, tuplets);
 
@@ -602,48 +649,6 @@ std::vector<int> findBestTuplets(
 
       return bestTupletIndexes;
       }
-
-#ifdef QT_DEBUG
-
-bool areTupletChordsEmpty(const std::vector<TupletInfo> &tuplets)
-      {
-      for (const auto &tuplet: tuplets) {
-            if (tuplet.chords.empty())
-                  return true;
-            }
-      return false;
-      }
-
-template<typename Iter>
-bool validateSelectedTuplets(Iter beginIt,
-                             Iter endIt,
-                             const std::vector<TupletInfo> &tuplets)
-      {
-                  // <chord address, used voices>
-      std::map<std::pair<const ReducedFraction, MidiChord> *, int> usedChords;
-      for (auto it = beginIt; it != endIt; ++it) {
-            const auto &tuplet = tuplets[*it];
-            const auto &chords = tuplet.chords;
-            for (auto it = chords.begin(); it != chords.end(); ++it) {
-                  bool isFirstChord = (tuplet.firstChordIndex == 0 && it == tuplet.chords.begin());
-                  const auto fit = usedChords.find(&*(it->second));
-                  if (fit == usedChords.end()) {
-                        usedChords.insert({&*(it->second), isFirstChord ? 1 : VOICES});
-                        }
-                  else {
-                        if (!isFirstChord)
-                              return false;
-                        if (!isMoreTupletVoicesAllowed(fit->second, it->second->second.notes.size()))
-                              return false;
-                        ++(fit->second);
-                        }
-                  }
-            }
-      return true;
-      }
-
-#endif
-
 
 void removeExtraTuplets(std::vector<TupletInfo> &tuplets)
       {
