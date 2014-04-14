@@ -66,7 +66,7 @@ ReducedFraction quantForLen(const ReducedFraction &basicQuant,
                             const ReducedFraction &tupletRatio)
       {
       auto quant = basicQuant / tupletRatio;
-      while (quant > noteLen)
+      while (quant > noteLen && quant >= MChord::minAllowedDuration() * 2)
             quant /= 2;
       return reduceQuantIfDottedNote(noteLen, quant, tupletRatio);
       }
