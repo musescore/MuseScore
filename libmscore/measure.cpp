@@ -3123,9 +3123,9 @@ void Measure::layoutX(qreal stretch)
 
                         bool accidental = false;
                         bool grace = false;
-                        qreal accidentalX = 1000.0;
-                        qreal noteX = 1000.0;
-                        if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine) && !accidentalStaff) {
+                        qreal accidentalX = 0.0;
+                        qreal noteX = 0.0;
+                        if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine | Segment::SegTimeSig) && !accidentalStaff) {
                               for (int voice = 0; voice < VOICES; ++voice) {
                                     ChordRest* cr = static_cast<ChordRest*>(s->element(track+voice));
                                     if (!cr)
@@ -3153,22 +3153,23 @@ void Measure::layoutX(qreal stretch)
                               if (!cr)
                                     continue;
                               found = true;
-                              if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine) && !accidentalStaff) {
+                              if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine | Segment::SegTimeSig) && !accidentalStaff) {
                                     // no distance to full measure rest
                                     if (!(cr->type() == REST && static_cast<Rest*>(cr)->durationType() == TDuration::V_MEASURE)) {
                                           accidentalStaff = true;
                                           qreal sp;
+                                          qreal bnd = score()->styleS(ST_barNoteDistance).val() * _spatium;
                                           if (accidental) {
                                                 qreal bad = score()->styleS(ST_barAccidentalDistance).val() * _spatium;
-                                                qreal bnd = score()->styleS(ST_barNoteDistance).val() * _spatium;
                                                 qreal diff = qMax(noteX - accidentalX, 0.0);
                                                 sp = qMax(bad, bnd - diff);
                                                 }
                                           else if (grace)
                                                 sp = score()->styleS(ST_barAccidentalDistance).val() * _spatium;
                                           else
-                                                sp = score()->styleS(ST_barNoteDistance).val() * _spatium;
-                                          sp += elsp;
+                                                sp = bnd;
+                                          if (pt & Segment::SegTimeSig)
+                                                sp += clefKeyRightMargin - bnd;
                                           minDistance = qMax(minDistance, sp);
                                           }
                                     }
@@ -3177,7 +3178,7 @@ void Measure::layoutX(qreal stretch)
                                     }
                               else {
                                     bool firstClef = (segmentIdx == 1) && (pt == Segment::SegClef);
-                                    if ((pt & (Segment::SegKeySig | Segment::SegTimeSig)) || firstClef)
+                                    if ((pt & Segment::SegKeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
                               space.max(cr->space());
