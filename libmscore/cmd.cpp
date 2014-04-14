@@ -1075,14 +1075,14 @@ static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int 
                         newTpc1 = tpc1 - 5;   // up semitone diatonic
                   else
                         newTpc1 = tpc1 + 7;   // up semitone chromatic
-                  newTpc2 = n->tpc2default(newPitch);
+                  newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
                   if (tpc2 > TPC_A + key)
                         newTpc2 = tpc2 - 5;   // up semitone diatonic
                   else
                         newTpc2 = tpc2 + 7;   // up semitone chromatic
-                  newTpc1 = n->tpc1default(newPitch);
+                  newTpc1 = n->transposeTpc(newTpc2);
                   }
             }
       else if (!up && pitch > 0) {
@@ -1092,14 +1092,14 @@ static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int 
                         newTpc1 = tpc1 - 7;   // down semitone chromatic
                   else
                         newTpc1 = tpc1 + 5;   // down semitone diatonic
-                  newTpc2 = n->tpc2default(newPitch);
+                  newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
                   if (tpc2 > TPC_C + key)
                         newTpc2 = tpc2 - 7;   // down semitone chromatic
                   else
                         newTpc2 = tpc2 + 5;   // down semitone diatonic
-                  newTpc1 = n->tpc1default(newPitch);
+                  newTpc1 = n->transposeTpc(newTpc2);
                   }
             }
       }
@@ -1108,15 +1108,15 @@ static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int 
 //   setTpc
 //---------------------------------------------------------
 
-static void setTpc(Note* oNote, int newPitch, int tpc, int& newTpc1, int& newTpc2)
+static void setTpc(Note* oNote, int tpc, int& newTpc1, int& newTpc2)
       {
       if (oNote->concertPitch()) {
             newTpc1 = tpc;
-            newTpc2 = oNote->tpc2default(newPitch);
+            newTpc2 = oNote->transposeTpc(tpc);
             }
       else {
             newTpc2 = tpc;
-            newTpc1 = oNote->tpc1default(newPitch);
+            newTpc1 = oNote->transposeTpc(tpc);
             }
       }
 
@@ -1237,13 +1237,13 @@ void Score::upDown(bool up, UpDownMode mode)
                                           if (tpc > TPC_A + key) {
                                                 if (pitch < 127) {
                                                       newPitch = pitch + 1;
-                                                      setTpc(oNote, newPitch, tpc - 5, newTpc1, newTpc2);
+                                                      setTpc(oNote, tpc - 5, newTpc1, newTpc2);
                                                       }
                                                 }
                                           else {
                                                 if (pitch < 126) {
                                                       newPitch = pitch + 2;
-                                                      setTpc(oNote, newPitch, tpc + 2, newTpc1, newTpc2);
+                                                      setTpc(oNote, tpc + 2, newTpc1, newTpc2);
                                                       }
                                                 }
                                           }
@@ -1251,13 +1251,13 @@ void Score::upDown(bool up, UpDownMode mode)
                                           if (tpc > TPC_C + key) {
                                                 if (pitch > 1) {
                                                       newPitch = pitch - 2;
-                                                      setTpc(oNote, newPitch, tpc - 2, newTpc1, newTpc2);
+                                                      setTpc(oNote, tpc - 2, newTpc1, newTpc2);
                                                       }
                                                 }
                                           else {
                                                 if (pitch > 0) {
                                                       newPitch = pitch - 1;
-                                                      setTpc(oNote, newPitch, tpc + 5, newTpc1, newTpc2);
+                                                      setTpc(oNote, tpc + 5, newTpc1, newTpc2);
                                                       }
                                                 }
                                           }
@@ -1356,7 +1356,15 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
                         stringData->convertPitch(pitch, &string, &fret);
                   }
             }
-      score->undo(new ChangePitch(n, pitch, tpc, n->line()));
+      int tpc1;
+      int tpc2 = n->transposeTpc(tpc);
+      if (score->styleB(ST_concertPitch))
+            tpc1 = tpc;
+      else {
+            tpc1 = tpc2;
+            tpc2 = tpc;
+            }
+      score->undoChangePitch(n, pitch, tpc1, tpc2);
       if (!st->isTabStaff()) {
             //
             // handle ties
@@ -1410,18 +1418,17 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
       //
       // accidental change may result in pitch change
       //
-      AccidentalVal acc    = Accidental::subtype2value(accidental);
-      AccidentalVal acc2   = measure->findAccidental(note);
-      Accidental::AccidentalType accType;
+      AccidentalVal acc2 = measure->findAccidental(note);
+      AccidentalVal acc = (accidental == Accidental::ACC_NONE) ? acc2 : Accidental::subtype2value(accidental);
 
-      int pitch, tpc;
+      int pitch = line2pitch(note->line(), clef, 0) + acc;
+      if (!note->concertPitch())
+            pitch += note->transposition();
+      int tpc = step2tpc(step, acc);
       if (accidental == Accidental::ACC_NONE) {
             //
             //  delete accidentals
             //
-            accType = Accidental::ACC_NONE;
-            pitch   = line2pitch(note->line(), clef, 0) + acc2;
-            tpc     = step2tpc(step, acc2);
             // check if there's accidentals left, previously set as
             // precautionary accidentals
             Accidental* a = note->accidental();
@@ -1429,13 +1436,10 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
                   undoRemoveElement(note->accidental());
             }
       else {
-            if (acc2 == acc) {
+            if (acc == acc2) {
                   //
                   // this is a precautionary accidental
                   //
-                  accType = accidental;
-                  pitch = line2pitch(note->line(), clef, 0) + Accidental::subtype2value(accType);
-                  tpc   = step2tpc(step, acc);
 
                   Accidental* a = new Accidental(this);
                   a->setParent(note);
@@ -1443,13 +1447,7 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
                   a->setRole(Accidental::ACC_USER);
                   undoAddElement(a);
                   }
-            else {
-                  accType = accidental;
-                  pitch = line2pitch(note->line(), clef, 0) + Accidental::subtype2value(accType);
-                  tpc   = step2tpc(step, acc);
-                  }
             }
-
 
       if (note->links()) {
             for (Element* e : *note->links())
