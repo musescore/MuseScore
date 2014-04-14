@@ -210,14 +210,18 @@ findTupletChords(const std::vector<TupletInfo> &tuplets)
       }
 
 std::list<std::multimap<ReducedFraction, MidiChord>::iterator>
-findNonTupletChords(const std::vector<TupletInfo> &tuplets,
-                    const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
-                    const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt)
+findNonTupletChords(
+            const std::vector<TupletInfo> &tuplets,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt,
+            const ReducedFraction &barStart)
       {
       const auto tupletChords = findTupletChords(tuplets);
       std::list<std::multimap<ReducedFraction, MidiChord>::iterator> nonTuplets;
       for (auto it = startBarChordIt; it != endBarChordIt; ++it) {
-            if (tupletChords.find(&*it) == tupletChords.end())
+                        // because of tol chord on time can belong to previous bar
+                        // so don't use it as non-tuplet chord
+            if (tupletChords.find(&*it) == tupletChords.end() && it->first >= barStart)
                   nonTuplets.push_back(it);
             }
 
@@ -349,7 +353,8 @@ void minimizeOffTimeError(
                   for (int i: removedIndexes)
                         newNotes.push_back(notes[i]);
                   notes = newNotes;
-                  nonTuplets.push_back(firstChord->second);
+                  if (firstChord->first >= startBarTick)
+                        nonTuplets.push_back(firstChord->second);
                   if (!newTupletChord.notes.empty())
                         firstChord->second = chords.insert({onTime, newTupletChord});
                   else {
@@ -441,6 +446,11 @@ void addTupletEvents(std::multimap<ReducedFraction, TupletData> &tupletEvents,
             for (auto &chord: tupletInfo.chords) {
                   MidiChord &midiChord = chord.second->second;
                   midiChord.tuplet = it;
+
+                  Q_ASSERT_X(!midiChord.isInTuplet,
+                             "MidiTuplet::addTupletEvents",
+                             "Chord is already in tuplet but it shouldn't");
+
                   midiChord.isInTuplet = true;
                   }
 
@@ -460,6 +470,11 @@ void addTupletEvents(std::multimap<ReducedFraction, TupletData> &tupletEvents,
                   for (auto &note: midiChord.notes) {
                         if (!note.isInTuplet && note.offTime <= tupletInfo.onTime + tupletInfo.len) {
                               note.tuplet = it;
+
+                              Q_ASSERT_X(!note.isInTuplet,
+                                         "MidiTuplet::addTupletEvents",
+                                         "Note is already in tuplet but it shouldn't");
+
                               note.isInTuplet = true;
                               }
                         }
@@ -632,8 +647,14 @@ void setBarIndex(
                   }
             }
 
-      for (auto &chord: nonTuplets)
+      for (auto &chord: nonTuplets) {
+
+            Q_ASSERT_X(chord->second.barIndex == -1,
+                       "MidiTuplet::setBarIndex",
+                       "Non-tuplet chord is already used in previous bar");
+
             chord->second.barIndex = barIndex;
+            }
       }
 
 ReducedFraction findPrevBarStart(const ReducedFraction &barStart,
@@ -681,9 +702,10 @@ void findTuplets(
       auto startNonTupletChordIt = startBarChordIt;
       while (startNonTupletChordIt->first < startBarTick)
             ++startNonTupletChordIt;
-      auto nonTuplets = findNonTupletChords(tuplets, startNonTupletChordIt, endBarChordIt);
+      auto nonTuplets = findNonTupletChords(tuplets, startNonTupletChordIt,
+                                            endBarChordIt, startBarTick);
       if (tupletVoiceLimit() == 1)
-            excludeExtraVoiceTuplets(tuplets, nonTuplets, basicQuant);
+            excludeExtraVoiceTuplets(tuplets, nonTuplets, basicQuant, startBarTick);
 
       resetTupletVoices(tuplets);  // because of tol some chords may have non-zero voices
       addChordsBetweenTupletNotes(tuplets, nonTuplets, startBarTick, basicQuant);

@@ -31,7 +31,7 @@ class MidiChord {
       int voice = 0;
       QList<MidiNote> notes;
       bool isInTuplet = false;
-      int barIndex = 0;
+      int barIndex = -1;
                   // for onTime quantization
       std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator tuplet;
 
