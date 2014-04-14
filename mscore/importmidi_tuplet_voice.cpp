@@ -225,7 +225,8 @@ size_t chordCount(
 void excludeExtraVoiceTuplets(
             std::vector<TupletInfo> &tuplets,
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart)
       {
                   // remove overlapping tuplets
       size_t sz = tuplets.size();
@@ -261,8 +262,10 @@ void excludeExtraVoiceTuplets(
             for (size_t i = 0; i < sz; ) {
                   const auto interval = tupletInterval(tuplets[i], basicQuant);
                   if (haveIntersection(interval, nonTupletIntervals)) {
-                        for (const auto &chord: tuplets[i].chords)
-                              nonTuplets.push_back(chord.second);
+                        for (const auto &chord: tuplets[i].chords) {
+                              if (chord.first >= barStart)
+                                    nonTuplets.push_back(chord.second);
+                              }
                         --sz;
                         if (i < sz) {
                               tuplets[i] = tuplets[sz];
@@ -283,7 +286,8 @@ void removeUnusedTuplets(
             std::vector<TupletInfo> &tuplets,
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
             std::set<int> &pendingTuplets,
-            std::set<std::pair<const ReducedFraction, MidiChord> *> &pendingNonTuplets)
+            std::set<std::pair<const ReducedFraction, MidiChord> *> &pendingNonTuplets,
+            const ReducedFraction &barStart)
       {
       if (pendingTuplets.empty())
             return;
@@ -295,7 +299,8 @@ void removeUnusedTuplets(
                   }
             else {
                   for (const auto &chord: tuplets[i].chords) {
-                        nonTuplets.push_back(chord.second);
+                        if (chord.first >= barStart)
+                              nonTuplets.push_back(chord.second);
                         pendingNonTuplets.insert(&*chord.second);
                         }
                   }
@@ -423,7 +428,7 @@ void assignVoices(
       Q_ASSERT_X((voiceLimit() == 1) ? pendingTuplets.empty() : true,
                  "MIDI tuplets: assignVoices", "Unused tuplets for the case !useMultipleVoices");
 
-      removeUnusedTuplets(tuplets, nonTuplets, pendingTuplets, pendingNonTuplets);
+      removeUnusedTuplets(tuplets, nonTuplets, pendingTuplets, pendingNonTuplets, startBarTick);
       setNonTupletVoices(pendingNonTuplets, tupletIntervals, basicQuant);
       }
 

@@ -26,7 +26,8 @@ void resetTupletVoices(std::vector<TupletInfo> &tuplets);
 void excludeExtraVoiceTuplets(
             std::vector<TupletInfo> &tuplets,
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
-            const ReducedFraction &basicQuant);
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart);
 
 void assignVoices(
             std::vector<TupletInfo> &tuplets,
