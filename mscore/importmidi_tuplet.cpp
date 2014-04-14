@@ -680,15 +680,14 @@ void findTuplets(
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
       if (!operations.tuplets.doSearch)
             return;
-      auto startBarChordIt = MChord::findFirstChordInRange(chords, startBarTick, endBarTick);
+
+      const auto tol = basicQuant / 2;
+      auto startBarChordIt = MChord::findFirstChordInRange(chords, startBarTick - tol, endBarTick);
       startBarChordIt = findTupletFreeChord(startBarChordIt, chords.end(), startBarTick);
       if (startBarChordIt == chords.end())      // no chords in this bar
             return;
 
       const auto endBarChordIt = chords.lower_bound(endBarTick);
-                  // update start chord: use chords with onTime >= (start bar tick - tol)
-      const auto tol = basicQuant / 2;
-      startBarChordIt = MChord::findFirstChordInRange(chords, startBarTick - tol, endBarTick);
 
       std::vector<TupletInfo> tuplets = detectTuplets(chords, barFraction, startBarTick, tol,
                                                       endBarChordIt, startBarChordIt, basicQuant);
