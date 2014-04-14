@@ -252,10 +252,10 @@ void splitTupletChord(const std::vector<TupletInfo>::iterator &lastMatch,
                         // erase the first note
       prevChord.notes.erase(prevChord.notes.begin());
       chordEvent = chords.insert({onTime, newChord});
-      if (prevChord.notes.isEmpty()) {
-                        // normally this should not happen at all because of filtering of tuplets
-            qDebug("Tuplets were not filtered correctly: same notes in different tuplets");
-            }
+
+      Q_ASSERT_X(!prevChord.notes.isEmpty(),
+                 "MidiTuplet::splitTupletChord",
+                 "Tuplets were not filtered correctly: same notes in different tuplets");
       }
 
 void splitFirstTupletChords(std::vector<TupletInfo> &tuplets,
