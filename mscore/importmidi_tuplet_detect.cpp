@@ -234,8 +234,7 @@ void detectStaccato(TupletInfo &tuplet)
 // this function is needed because if there are additional chords
 // that can be in the middle between tuplet chords,
 // and tuplet chords are staccato, i.e. have short length,
-// then such a long tuplet with lots of short chords
-// would be not pretty-looked converted to notation
+// then tied staccato chords would be not pretty-looked converted to notation
 
 bool haveChordsInTheMiddleBetweenTupletChords(
             const std::multimap<ReducedFraction, MidiChord>::iterator startDivChordIt,
