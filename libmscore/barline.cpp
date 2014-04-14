@@ -627,6 +627,8 @@ void BarLine::startEdit(MuseScoreView*, const QPointF&)
 
 void BarLine::endEdit()
       {
+      shiftDrag = false;
+
       if (ctrlDrag) {                      // if single bar line edit
             ctrlDrag = false;
             _customSpan       = true;           // mark bar line as custom spanning
@@ -719,14 +721,15 @@ void BarLine::editDrag(const EditData& ed)
 
 void BarLine::endEditDrag()
       {
+      if (yoff1 == 0.0 && yoff2 == 0.0)         // if no drag, do nothing
+            return;
+
       qreal y1, y2;
       getY(&y1, &y2);
       qreal ay0 = pagePos().y();
       qreal ay2 = ay0 + y2;                     // absolute (page-relative) bar line bottom coord
-
       int staffIdx1 = staffIdx();
       int staffIdx2;
-
       System* syst;
       if (parent()->type() == SYSTEM) {
             syst = static_cast<System*>(parent());
@@ -762,37 +765,42 @@ void BarLine::endEditDrag()
             }
       int newSpan = staffIdx2 - staffIdx1 + 1;
 
-      // determine new spanFrom value
-      int newSpanFrom = _spanFrom;
-      if(yoff1 != 0.0 && !shiftDrag) {
-            // round bar line top coord to nearest line of 1st staff (in half line dist units)
-            newSpanFrom = ((int)floor(y1 / (staff()->lineDistance() * spatium()) + 0.5 )) * 2;
-            // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
-            if(newSpanFrom <  MIN_BARLINE_SPAN_FROMTO)
-                  newSpanFrom = MIN_BARLINE_SPAN_FROMTO;
-            if(newSpanFrom > staff()->lines()*2)
-                  newSpanFrom = staff()->lines()*2;
-            }
+      // determine new spanFrom and spanTo values
+      int newSpanFrom, newSpanTo;
+      Staff * staff2    = score()->staff(staffIdx2);
+      int Staff1lines   = staff()->lines();
+      int Staff2lines   = staff2->lines();
 
-      // determine new spanTo value
-      int newSpanTo = _spanTo;
-      if(yoff2 != 0.0 && shiftDrag) {
-            // round bar line bottom coord to nearest line of 2nd staff (in half line dist units)
-            Staff * staff2   = score()->staff(staffIdx2);
-            qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
-            newSpanTo = ((int)floor( (ay2 - staff2TopY) / (staff2->lineDistance() * spatium()) + 0.5 )) * 2;
-            // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
-            if(newSpanTo <  MIN_BARLINE_SPAN_FROMTO)
-                  newSpanTo = MIN_BARLINE_SPAN_FROMTO;
-            if(newSpanTo > staff()->lines()*2)
-                  newSpanTo = staff2->lines()*2;
-            }
-      if (!shiftDrag) {
+      if (shiftDrag) {                    // if precision dragging
+            newSpanFrom = _spanFrom;
+            if(yoff1 != 0.0) {
+                  // round bar line top coord to nearest line of 1st staff (in half line dist units)
+                  newSpanFrom = ((int)floor(y1 / (staff()->lineDistance() * spatium()) + 0.5 )) * 2;
+                  // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
+                  if(newSpanFrom <  MIN_BARLINE_SPAN_FROMTO)
+                        newSpanFrom = MIN_BARLINE_SPAN_FROMTO;
+                  if(newSpanFrom > Staff1lines*2)
+                        newSpanFrom = Staff1lines*2;
+                  }
+
+            newSpanTo = _spanTo;
+            if(yoff2 != 0.0) {
+                  // round bar line bottom coord to nearest line of 2nd staff (in half line dist units)
+                  qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
+                  newSpanTo = ((int)floor( (ay2 - staff2TopY) / (staff2->lineDistance() * spatium()) + 0.5 )) * 2;
+                  // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
+                  if(newSpanTo <  MIN_BARLINE_SPAN_FROMTO)
+                        newSpanTo = MIN_BARLINE_SPAN_FROMTO;
+                  if(newSpanTo > Staff2lines*2)
+                        newSpanTo = Staff2lines*2;
+                  }
+//            shiftDrag = false;          // NO: a last call to this function is made when exiting editing:
+      }                                   // it would find shiftDrag = false and reset extrema to coarse resolution
+
+      else {                              // if coarse dragging
             newSpanFrom = 0;
-            newSpanTo = 8;
-            }
-      else
-            shiftDrag = false;
+            newSpanTo   = (Staff2lines - 1) * 2;
+      }
 
       // if any value changed, update
       if(newSpan != _span || newSpanFrom != _spanFrom || newSpanTo != _spanTo) {
