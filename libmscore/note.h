@@ -273,6 +273,7 @@ class Note : public Element {
       int tpc2default(int pitch) const;
       void undoSetTpc1(int tpc)      { undoChangeProperty(P_TPC1, tpc); }
       void undoSetTpc2(int tpc)      { undoChangeProperty(P_TPC2, tpc); }
+      int transposeTpc(int tpc);
 
       Q_INVOKABLE Ms::Accidental* accidental() const    { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a;    }

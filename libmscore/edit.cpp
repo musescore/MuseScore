@@ -766,8 +766,10 @@ void Score::putNote(const Position& p, bool replace)
                                                 (static_cast<Note*>(linkedNote))->undoChangeProperty(P_FRET,  nval.fret);
                                                 (static_cast<Note*>(linkedNote))->undoChangeProperty(P_STRING,nval.string);
                                                 }
-                                          else if (staff->isPitchedStaff())
-                                                undoChangePitch(linkedNote, nval.pitch, nval.tpc, linkedNote->line());
+                                          else if (staff->isPitchedStaff()) {
+                                                // TODO: check tpc2
+                                                undoChangePitch(linkedNote, nval.pitch, nval.tpc, nval.tpc);
+                                                }
                                           }
                                     return;
                                     }
