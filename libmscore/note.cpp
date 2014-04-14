@@ -999,15 +999,33 @@ void Note::read(XmlReader& e)
       // ensure sane values:
       _pitch = restrict(_pitch, 0, 127);
 
-      if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
+      if (score()->mscVersion() < 117 && !concertPitch()) {
+            _pitch += transposition();
+            _tpc[1] = _tpc[0];
+            _tpc[0] = INVALID_TPC;
+            }
+      if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
             KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
-            if (!tpcIsValid(_tpc[0]))
-                  _tpc[0] = pitch2tpc(_pitch, key.accidentalType(), PREFER_NEAREST);
-            if (!tpcIsValid(_tpc[1])) {
-                  if (transposition() == 0)
+            int tpc = pitch2tpc(_pitch, key.accidentalType(), PREFER_NEAREST);
+            if (concertPitch())
+                  _tpc[0] = tpc;
+            else
+                  _tpc[1] = tpc;
+            }
+      if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
+            Interval v = staff() ? staff()->part()->instr()->transpose() : Interval();
+            if (tpcIsValid(_tpc[0])) {
+                  v.flip();
+                  if (v.isZero())
                         _tpc[1] = _tpc[0];
                   else
-                        _tpc[1] = pitch2tpc(_pitch - transposition(), key.accidentalType(), PREFER_NEAREST);
+                        _tpc[1] = Ms::transposeTpc(_tpc[0], v, false);
+                  }
+            else {
+                  if (v.isZero())
+                        _tpc[0] = _tpc[1];
+                  else
+                        _tpc[0] = Ms::transposeTpc(_tpc[1], v, false);
                   }
             }
       }

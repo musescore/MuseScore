@@ -240,7 +240,7 @@ void Dynamic::setDynamicType(const QString& tag)
       {
       int n = sizeof(dynList)/sizeof(*dynList);
       for (int i = 0; i < n; ++i) {
-            if (dynList[i].tag == tag) {
+            if (dynList[i].tag == tag || dynList[i].text == tag) {
                   setDynamicType(DynamicType(i));
                   setText(QString::fromUtf8(dynList[i].text));
                   return;
