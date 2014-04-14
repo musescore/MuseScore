@@ -227,7 +227,20 @@ void quantizeChords(
             MidiChord chord = chordEvent.second;     // copy chord
             auto onTime = chordEvent.first;
             const auto barStart = ReducedFraction::fromTicks(sigmap->bar2tick(chord.barIndex, 0));
-
+                        // apply staccato in tuplets
+            for (MidiNote &note: chord.notes) {
+                  if (note.isInTuplet) {
+                        const MidiTuplet::TupletData &tuplet = note.tuplet->second;
+                        if (note.staccato) {
+                                    // decrease tuplet error by enlarging staccato notes:
+                                    // make note.len = tuplet note length
+                              const auto tupletNoteLen = (tuplet.onTime + tuplet.len)
+                                                          / tuplet.tupletNumber;
+                              note.offTime = onTime + tupletNoteLen;
+                              }
+                        }
+                  }
+                        // quantize on times
             if (chord.isInTuplet) {
                   const MidiTuplet::TupletData &tuplet = chord.tuplet->second;
                   const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
@@ -277,7 +290,7 @@ void quantizeChords(
                               }
                         }
                   }
-
+                        // quantize off times
             for (auto noteIt = chord.notes.begin(); noteIt != chord.notes.end(); ) {
                   MidiNote &note = *noteIt;
                   auto offTime = note.offTime;
@@ -285,20 +298,8 @@ void quantizeChords(
                   if (note.isInTuplet) {
                         const MidiTuplet::TupletData &tuplet = note.tuplet->second;
                         const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
-
-                        if (note.staccato) {
-                                    // decrease tuplet error by enlarging staccato notes:
-                                    // make note.len = tuplet note length
-                              const auto tupletNoteLen = (tuplet.onTime + tuplet.len)
-                                                          / tuplet.tupletNumber;
-                              offTime = Quantize::findQuantizedNoteOffTime(
-                                          chordEvent, chordEvent.first + tupletNoteLen, basicQuant,
-                                          tupletRatio, barStart);
-                              }
-                        else {
-                              offTime = Quantize::findQuantizedNoteOffTime(
-                                                chordEvent, offTime, basicQuant, tupletRatio, barStart);
-                              }
+                        offTime = Quantize::findQuantizedNoteOffTime(
+                                          chordEvent, offTime, basicQuant, tupletRatio, barStart);
                                     // verify that offTime is still inside tuplet
                         if (offTime < tuplet.onTime)
                               offTime = tuplet.onTime;
