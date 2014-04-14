@@ -3172,6 +3172,8 @@ void Measure::layoutX(qreal stretch)
                                                 sp += clefKeyRightMargin - bnd;
                                           minDistance = qMax(minDistance, sp);
                                           }
+                                    else if (pt & Segment::SegTimeSig)
+                                          minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
                               else if (pt & (Segment::SegChordRest)) {
                                     minDistance = qMax(minDistance, minNoteDistance);
