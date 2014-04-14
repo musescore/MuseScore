@@ -3412,12 +3412,12 @@ qreal Score::computeMinWidth(Segment* fs)
                               if (!cr)
                                     continue;
                               found = true;
-                              if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine)) {
+                              if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine | Segment::SegTimeSig)) {
                                     // check for accidentals in chord
                                     bool accidental = false;
                                     bool grace = false;
-                                    qreal accidentalX = 1000.0;
-                                    qreal noteX = 1000.0;
+                                    qreal accidentalX = 0.0;
+                                    qreal noteX = 0.0;
                                     if (cr->type() == Element::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
                                           if (!c->graceNotes().empty())
@@ -3434,16 +3434,18 @@ qreal Score::computeMinWidth(Segment* fs)
                                                 }
                                           }
                                     qreal sp;
+                                    qreal bnd = styleS(ST_barNoteDistance).val() * _spatium;
                                     if (accidental) {
                                           qreal bad = styleS(ST_barAccidentalDistance).val() * _spatium;
-                                          qreal bnd = styleS(ST_barNoteDistance).val() * _spatium;
                                           qreal diff = qMax(noteX - accidentalX, 0.0);
                                           sp = qMax(bad, bnd - diff);
                                           }
                                     else if (grace)
                                           sp = styleS(ST_barAccidentalDistance).val() * _spatium;
                                     else
-                                          sp = styleS(ST_barNoteDistance).val() * _spatium;
+                                          sp = bnd;
+                                    if (pt & Segment::SegTimeSig)
+                                          sp += clefKeyRightMargin - bnd;
                                     minDistance = qMax(minDistance, sp);
                                     stretchDistance = sp * .7;
                                     }
@@ -3453,7 +3455,7 @@ qreal Score::computeMinWidth(Segment* fs)
                               else {
                                     // if (pt & (Segment::SegKeySig | Segment::SegClef))
                                     bool firstClef = (segmentIdx == 1) && (pt == Segment::SegClef);
-                                    if ((pt & (Segment::SegKeySig | Segment::SegTimeSig)) || firstClef)
+                                    if ((pt & Segment::SegKeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
                               cr->layout();
