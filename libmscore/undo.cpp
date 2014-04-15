@@ -1291,15 +1291,11 @@ static void undoAddTuplet(DurationElement* cr)
       }
 
 //---------------------------------------------------------
-//   undo
+//   endUndoRedo
 //---------------------------------------------------------
 
-void AddElement::undo()
+void AddElement::endUndoRedo() const
       {
-//      qDebug("AddElement::undo: %s %p parent %s %p", element->name(), element,
-//         element->parent() ? element->parent()->name() : "nil", element->parent());
-
-      element->score()->removeElement(element);
       if (element->type() == Element::TIE) {
             Tie* tie = static_cast<Tie*>(element);
             Measure* m1 = tie->startNote()->chord()->measure();
@@ -1324,6 +1320,23 @@ void AddElement::undo()
             if (!ks->generated())
                   ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
             }
+      else if (element->type() == Element::NOTE) {
+            Measure* m = static_cast<Note*>(element)->chord()->measure();
+            m->updateAccidentals(element->staffIdx());
+            }
+      }
+
+//---------------------------------------------------------
+//   undo
+//---------------------------------------------------------
+
+void AddElement::undo()
+      {
+//      qDebug("AddElement::undo: %s %p parent %s %p", element->name(), element,
+//         element->parent() ? element->parent()->name() : "nil", element->parent());
+
+      element->score()->removeElement(element);
+      endUndoRedo();
       }
 
 //---------------------------------------------------------
@@ -1336,28 +1349,7 @@ void AddElement::redo()
 //         element->parent() ? element->parent()->name() : "nil", element->parent());
 
       element->score()->addElement(element);
-      if (element->type() == Element::TIE) {
-            Tie* tie = static_cast<Tie*>(element);
-            Measure* m1 = tie->startNote()->chord()->measure();
-            Measure* m2 = tie->endNote() ? tie->endNote()->chord()->measure() : 0;
-
-            if (m2 && (m1 != m2)) {
-                  m1->updateAccidentals(tie->staffIdx());
-                  if (m2)
-                        m2->updateAccidentals(tie->staffIdx());
-                  // tie->score()->cmdUpdateNotes();
-                  }
-            else
-                  m1->updateAccidentals(tie->staffIdx());
-            }
-      else if (element->isChordRest()) {
-            undoAddTuplet(static_cast<ChordRest*>(element));
-            }
-      else if (element->type() == Element::KEYSIG) {
-            KeySig* ks = static_cast<KeySig*>(element);
-            if (!ks->generated())
-                  ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
-            }
+      endUndoRedo();
       }
 
 //---------------------------------------------------------

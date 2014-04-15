@@ -633,6 +633,8 @@ class ChangeBracketSpan : public UndoCommand {
 class AddElement : public UndoCommand {
       Element* element;
 
+      void endUndoRedo() const;
+
    public:
       AddElement(Element*);
       virtual void undo();
