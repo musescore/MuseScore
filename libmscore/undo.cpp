@@ -1294,7 +1294,7 @@ static void undoAddTuplet(DurationElement* cr)
 //   endUndoRedo
 //---------------------------------------------------------
 
-void AddElement::endUndoRedo() const
+void AddElement::endUndoRedo(bool isUndo) const
       {
       if (element->type() == Element::TIE) {
             Tie* tie = static_cast<Tie*>(element);
@@ -1313,7 +1313,10 @@ void AddElement::endUndoRedo() const
                   m1->updateAccidentals(tie->staffIdx());
             }
       else if (element->isChordRest()) {
-            undoRemoveTuplet(static_cast<ChordRest*>(element));
+            if (isUndo)
+                  undoRemoveTuplet(static_cast<ChordRest*>(element));
+            else
+                  undoAddTuplet(static_cast<ChordRest*>(element));
             }
       else if (element->type() == Element::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(element);
@@ -1336,7 +1339,7 @@ void AddElement::undo()
 //         element->parent() ? element->parent()->name() : "nil", element->parent());
 
       element->score()->removeElement(element);
-      endUndoRedo();
+      endUndoRedo(true);
       }
 
 //---------------------------------------------------------
@@ -1349,7 +1352,7 @@ void AddElement::redo()
 //         element->parent() ? element->parent()->name() : "nil", element->parent());
 
       element->score()->addElement(element);
-      endUndoRedo();
+      endUndoRedo(false);
       }
 
 //---------------------------------------------------------

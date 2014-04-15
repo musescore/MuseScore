@@ -646,12 +646,15 @@ bool QXmlStreamReaderPrivate::parse()
             case '\n':
                 ++lineNumber;
                 lastLineStart = characterOffset + readBufferPos;
-            case 0x03:
-            case 0x10:
+
+                       // Changes for MuseScore:
+            case 0x03: // this characters are illegal in xml
+            case 0x10: // we treat them as space to allow reading of broken files
             case 0x11:
             case 0x12:
             case 0x0c:
             case 0x1e:
+
             case ' ':
             case '\t':
                 token = SPACE;
