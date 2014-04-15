@@ -3447,9 +3447,10 @@ qreal Score::computeMinWidth(Segment* fs)
                                     if (pt & Segment::SegTimeSig)
                                           sp += clefKeyRightMargin - bnd;
                                     minDistance = qMax(minDistance, sp);
-                                    stretchDistance = sp * .7;
+                                    if (!(pt & Segment::SegTimeSig))
+                                          stretchDistance = sp * .7;
                                     }
-                              else if (pt & (Segment::SegChordRest)) {
+                              else if (pt & Segment::SegChordRest) {
                                     minDistance = qMax(minDistance, minNoteDistance);
                                     }
                               else {
