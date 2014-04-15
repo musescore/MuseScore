@@ -229,15 +229,13 @@ void quantizeChords(
             const auto barStart = ReducedFraction::fromTicks(sigmap->bar2tick(chord.barIndex, 0));
                         // apply staccato in tuplets
             for (MidiNote &note: chord.notes) {
-                  if (note.isInTuplet) {
+                  if (note.isInTuplet && note.staccato) {
                         const MidiTuplet::TupletData &tuplet = note.tuplet->second;
-                        if (note.staccato) {
-                                    // decrease tuplet error by enlarging staccato notes:
-                                    // make note.len = tuplet note length
-                              const auto tupletNoteLen = (tuplet.onTime + tuplet.len)
-                                                          / tuplet.tupletNumber;
-                              note.offTime = onTime + tupletNoteLen;
-                              }
+                              // decrease tuplet error by enlarging staccato notes:
+                              // make note.len = tuplet note length
+                        const auto tupletNoteLen = (tuplet.onTime + tuplet.len)
+                                                    / tuplet.tupletNumber;
+                        note.offTime = onTime + tupletNoteLen;
                         }
                   }
                         // quantize on times
