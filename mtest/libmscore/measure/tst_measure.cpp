@@ -184,6 +184,8 @@ void TestMeasure::minWidth()
 
       score->doLayout();
 
+      printf("m1: %f / %f\n", mw1, m1->minWidth1());
+      printf("m2: %f / %f\n", mw2, m2->minWidth1());
       QCOMPARE(mw1, m1->minWidth1());
       QCOMPARE(mw2, m2->minWidth1());
 
