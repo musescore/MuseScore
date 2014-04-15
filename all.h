@@ -39,7 +39,7 @@
 #include <QAbstractMessageHandler>
 #include <QXmlSchema>
 #include <QXmlSchemaValidator>
-#include <QXmlStreamReader>
+// #include <QXmlStreamReader>
 
 #include <QPointF>
 #include <QVariant>
