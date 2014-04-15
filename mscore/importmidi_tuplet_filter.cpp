@@ -65,11 +65,11 @@ bool haveCommonChords(int i, int j, const std::vector<TupletInfo> &tuplets)
       {
       if (tuplets.empty())
             return false;
-      std::set<std::pair<const ReducedFraction, MidiChord> *> chordsI;
+      std::set<std::pair<const ReducedFraction, MidiChord> *> usedChords;
       for (const auto &chord: tuplets[i].chords)
-            chordsI.insert(&*chord.second);
+            usedChords.insert(&*chord.second);
       for (const auto &chord: tuplets[j].chords)
-            if (chordsI.find(&*chord.second) != chordsI.end())
+            if (usedChords.find(&*chord.second) != usedChords.end())
                   return true;
       return false;
       }
@@ -173,36 +173,32 @@ struct TupletCommon
       std::set<int> commonIndexes;
       };
 
+bool areInCommons(const TupletInfo &t1, const TupletInfo &t2)
+      {
+      for (auto it1 = t1.chords.begin(); it1 != t1.chords.end(); ++it1) {
+            for (auto it2 = t2.chords.begin(); it2 != t2.chords.end(); ++it2) {
+                  if (&*it1->second != &*it2->second)
+                        continue;
+                  if (t1.firstChordIndex != 0 || t2.firstChordIndex != 0
+                              || it1 != t1.chords.begin() || it2 != t2.chords.begin()
+                              || !isMoreTupletVoicesAllowed(1, it1->second->second.notes.size())) {
+                        return true;
+                        }
+                  }
+            }
+      return false;
+      }
 
 std::vector<TupletCommon> findTupletCommons(const std::vector<TupletInfo> &tuplets)
       {
-                 // <chord address, tuplet indexes>
-      std::map<std::pair<const ReducedFraction, MidiChord> *, std::set<int>> usedChords;
-      const int voiceLimit = tupletVoiceLimit();
-
-      for (size_t i = 0; i != tuplets.size(); ++i) {
-            const auto &tuplet = tuplets[i];
-            auto it = tuplet.chords.begin();
-            if (tuplet.firstChordIndex == 0
-                        && voiceLimit > 1
-                        && it->second->second.notes.size() > 1
-                        && usedChords.find(&*it->second) != usedChords.end()) {
-                  ++it;
-                  }
-            for ( ; it != tuplet.chords.end(); ++it)
-                  usedChords[&*it->second].insert(i);
-            }
-
       std::vector<TupletCommon> tupletCommons(tuplets.size());
 
-      for (size_t i = 0; i != tuplets.size(); ++i) {
-            for (const auto &chord: tuplets[i].chords) {
-                  auto &indexes = usedChords[&*chord.second];
-                  indexes.erase(i);
-                  tupletCommons[i].commonIndexes.insert(indexes.begin(), indexes.end());
+      for (size_t i = 0; i != tuplets.size() - 1; ++i) {
+            for (size_t j = i + 1; j != tuplets.size(); ++j) {
+                  if (areInCommons(tuplets[i], tuplets[j]))
+                        tupletCommons[i].commonIndexes.insert(j);
                   }
             }
-
       return tupletCommons;
       }
 
