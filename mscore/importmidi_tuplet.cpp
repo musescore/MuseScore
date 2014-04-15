@@ -468,13 +468,13 @@ void addTupletEvents(std::multimap<ReducedFraction, TupletData> &tupletEvents,
             for (auto &chord: tupletInfo.chords) {
                   MidiChord &midiChord = chord.second->second;
                   for (auto &note: midiChord.notes) {
-                        if (!note.isInTuplet && note.offTime <= tupletInfo.onTime + tupletInfo.len) {
-                              note.tuplet = it;
+                        if (note.offTime <= tupletInfo.onTime + tupletInfo.len) {
 
                               Q_ASSERT_X(!note.isInTuplet,
                                          "MidiTuplet::addTupletEvents",
                                          "Note is already in tuplet but it shouldn't");
 
+                              note.tuplet = it;
                               note.isInTuplet = true;
                               }
                         }
