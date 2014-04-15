@@ -733,7 +733,7 @@ void Tuplet::remove(Element* e)
             case REST:
             case TUPLET:
                   if (!_elements.removeOne(static_cast<DurationElement*>(e))) {
-                        qDebug("Tuplet::remove: cannot find element");
+                        qDebug("Tuplet::remove: cannot find element <%s>", e->name());
                         qDebug("  elements %d", _elements.size());
                         }
                   break;
