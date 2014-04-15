@@ -668,8 +668,8 @@ void Score::putNote(const Position& p, bool replace)
       Staff* st       = staff(staffIdx);
       ClefType clef   = st->clef(tick);
 
-// qDebug("putNote at tick %d staff %d line %d clef %d currentAccidental %d",
-//   tick, staffIdx, line, clef, acci);
+// qDebug("putNote at tick %d staff %d line %d clef %d",
+//   tick, staffIdx, line, clef);
 
       _is.setTrack(staffIdx * VOICES + _is.voice());
       _is.setSegment(s);
