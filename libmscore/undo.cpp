@@ -818,21 +818,18 @@ void Score::undoAddElement(Element* element)
                         ne->setSelected(false);
                         ne->setTrack(staffIdx * VOICES + element->voice());
                         }
-                  if (et == Element::REHEARSAL_MARK
-                     || et == Element::STAFF_TEXT
-                     || (et == Element::JUMP)
-                     || (et == Element::MARKER)
-                     || (et == Element::TEMPO_TEXT)
-                     ) {
+                  // allow rehearsal marks on a variety of segment types
+                  // but force others on SegChordRest
+                  if (et != Element::REHEARSAL_MARK) {
                         Segment* segment  = static_cast<Segment*>(element->parent());
                         int tick          = segment->tick();
                         Measure* m        = score->tick2measure(tick);
                         Segment* seg      = m->findSegment(Segment::SegChordRest, tick);
-                        int ntrack        = staffIdx * VOICES + element->voice();
-                        ne->setTrack(ntrack);
                         ne->setParent(seg);
-                        undo(new AddElement(ne));
                         }
+                  int ntrack = staffIdx * VOICES + element->voice();
+                  ne->setTrack(ntrack);
+                  undo(new AddElement(ne));
                   }
             return;
             }
