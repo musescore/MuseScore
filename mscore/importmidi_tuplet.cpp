@@ -457,6 +457,11 @@ void addTupletEvents(std::multimap<ReducedFraction, TupletData> &tupletEvents,
             for (const TiedTuplet &tuplet: backTiedTuplets) {
                   if (tuplet.tupletIndex == i) {
                         MidiChord &midiChord = tuplet.chord->second;
+
+                        Q_ASSERT_X(tuplet.voice == midiChord.voice,
+                                   "MidiTuplet::addTupletEvents",
+                                   "Tied tuplet and tied chord have different voices");
+
                         for (int j: tuplet.tiedNoteIndexes) {
                               midiChord.notes[j].tuplet = it;
                               midiChord.notes[j].isInTuplet = true;
