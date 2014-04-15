@@ -11,14 +11,16 @@
 //=============================================================================
 
 #include "barline.h"
-#include "score.h"
-#include "sym.h"
-#include "staff.h"
-#include "system.h"
-#include "measure.h"
-#include "segment.h"
 #include "articulation.h"
+#include "measure.h"
+//#include "rehearsalmark.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
 #include "stafftype.h"
+#include "sym.h"
+#include "system.h"
+#include "text.h"
 #include "xml.h"
 
 namespace Ms {
@@ -512,6 +514,9 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
                      || b->spanFrom() != 0 || b->spanTo() != DEFAULT_BARLINE_TO);
                   }
             }
+      else if (type == REHEARSAL_MARK) {
+            return true;
+      }
       else {
             return (type == ARTICULATION
                && parent()
@@ -529,68 +534,87 @@ Element* BarLine::drop(const DropData& data)
       {
       Element* e = data.element;
       int type = e->type();
-      if (type == BAR_LINE) {
-            BarLine* bl = static_cast<BarLine*>(e);
-            BarLineType st = bl->barLineType();
-            // if no change in subtype or no change in span, do nothing
-            if (st == barLineType() && bl->spanFrom() == 0 && bl->spanTo() == DEFAULT_BARLINE_TO) {
-                  delete e;
-                  return 0;
-                  }
-            // system left-side bar line
-            if (parent()->type() == SYSTEM) {
-                  BarLine* b = static_cast<System*>(parent())->barLine();
-                  score()->undoChangeProperty(b, P_SUBTYPE, int(bl->barLineType()));
-                  delete e;
-                  return 0;
-                  }
-
-            //parent is a segment
-            Measure* m = static_cast<Segment*>(parent())->measure();
-
-            // check if the new property can apply to this single bar line
-            bool oldRepeat = (barLineType() == START_REPEAT || barLineType() == END_REPEAT
-                        || barLineType() == END_START_REPEAT);
-            bool newRepeat = (bl->barLineType() == START_REPEAT || bl->barLineType() == END_REPEAT
-                        || bl->barLineType() == END_START_REPEAT);
-            // if repeats are not involved or drop refers to span rather than subtype =>
-            // single bar line drop
-            if( (!oldRepeat && !newRepeat) || (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) ) {
-                  // if drop refers to span, update this bar line span
-                  if(bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) {
-                        // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
-                        // adjust to the number of syaff lines
-                        int bottomSpan = (staff()->lines()-1) * 2;
-                        int spanFrom   = bl->spanFrom() > 4 ? bottomSpan - (8 - bl->spanFrom()) : bl->spanFrom();
-                        int spanTo     = bl->spanTo() > 4 ? bottomSpan - (8 - bl->spanTo()) : bl->spanTo();
-                        score()->undoChangeSingleBarLineSpan(this, 1, spanFrom, spanTo);
-                        }
-                  // if drop refer to subtype, update this bar line subtype
-                  else {
-//                        score()->undoChangeBarLine(m, bl->barLineType());
-                        score()->undoChangeProperty(this, P_SUBTYPE, int(bl->barLineType()));
-                        }
-                  delete e;
-                  return 0;
-                  }
-
-            // drop applies to all bar lines of the measure
-            if (st == START_REPEAT) {
-                  m = m->nextMeasure();
-                  if (m == 0) {
+      switch (type) {
+            case BAR_LINE:
+                  {
+                  BarLine* bl = static_cast<BarLine*>(e);
+                  BarLineType st = bl->barLineType();
+                  // if no change in subtype or no change in span, do nothing
+                  if (st == barLineType() && bl->spanFrom() == 0 && bl->spanTo() == DEFAULT_BARLINE_TO) {
                         delete e;
                         return 0;
                         }
+                  // system left-side bar line
+                  if (parent()->type() == SYSTEM) {
+                        BarLine* b = static_cast<System*>(parent())->barLine();
+                        score()->undoChangeProperty(b, P_SUBTYPE, int(bl->barLineType()));
+                        delete e;
+                        return 0;
+                        }
+
+                  //parent is a segment
+                  Measure* m = static_cast<Segment*>(parent())->measure();
+
+                  // check if the new property can apply to this single bar line
+                  bool oldRepeat = (barLineType() == START_REPEAT || barLineType() == END_REPEAT
+                              || barLineType() == END_START_REPEAT);
+                  bool newRepeat = (bl->barLineType() == START_REPEAT || bl->barLineType() == END_REPEAT
+                              || bl->barLineType() == END_START_REPEAT);
+                  // if repeats are not involved or drop refers to span rather than subtype =>
+                  // single bar line drop
+                  if( (!oldRepeat && !newRepeat) || (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) ) {
+                        // if drop refers to span, update this bar line span
+                        if(bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) {
+                              // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
+                              // adjust to the number of syaff lines
+                              int bottomSpan = (staff()->lines()-1) * 2;
+                              int spanFrom   = bl->spanFrom() > 4 ? bottomSpan - (8 - bl->spanFrom()) : bl->spanFrom();
+                              int spanTo     = bl->spanTo() > 4 ? bottomSpan - (8 - bl->spanTo()) : bl->spanTo();
+                              score()->undoChangeSingleBarLineSpan(this, 1, spanFrom, spanTo);
+                              }
+                        // if drop refer to subtype, update this bar line subtype
+                        else {
+      //                        score()->undoChangeBarLine(m, bl->barLineType());
+                              score()->undoChangeProperty(this, P_SUBTYPE, int(bl->barLineType()));
+                              }
+                        delete e;
+                        return 0;
+                        }
+
+                  // drop applies to all bar lines of the measure
+                  if (st == START_REPEAT) {
+                        m = m->nextMeasure();
+                        if (m == 0) {
+                              delete e;
+                              return 0;
+                              }
+                        }
+                  m->drop(data);
                   }
-            m->drop(data);
+                  break;
+            case ARTICULATION:
+                  {
+                  Articulation* atr = static_cast<Articulation*>(e);
+                  atr->setParent(this);
+                  atr->setTrack(track());
+                  score()->undoAddElement(atr);
+                  return atr;
+                  }
+            case REHEARSAL_MARK:
+                  {
+                  e->setParent(parent());       // rehearsal marks belong to segments
+                  e->setTrack((track() / VOICES) * VOICES);
+                  Text* f = static_cast<Text*>(e);
+                  int st = f->textStyleType();
+                  if (st >= TEXT_STYLE_DEFAULT)
+                        f->setTextStyleType(st);
+                  score()->undoAddElement(e);
+                  return e;
+                  }
+            default:
+                  break;
             }
-      else if (type == ARTICULATION) {
-            Articulation* atr = static_cast<Articulation*>(e);
-            atr->setParent(this);
-            atr->setTrack(track());
-            score()->undoAddElement(atr);
-            return atr;
-            }
+
       return 0;
       }
 
