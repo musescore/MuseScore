@@ -13,6 +13,7 @@
 #ifndef __XML_H__
 #define __XML_H__
 
+#include "xmlstream.h"
 #include "mscore.h"
 #include "spatium.h"
 #include "fraction.h"
