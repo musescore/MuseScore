@@ -415,7 +415,7 @@ void assignVoices(
                         // some chords can be the same as in forTiedTuplets
 
                   // only for chords in the current bar (because of tol some can be outside)
-            if (tuplet.chord->first < startBarTick)
+            if (tuplet.chord->second.barIndex != -1)
                   continue;
             tuplet.chord->second.voice = tuplet.voice;
                         // remove chords with already set voices
