@@ -2075,16 +2075,16 @@ void Measure::read(XmlReader& e, int staffIdx)
                   ts->setTrack(e.track());
                   ts->read(e);
                   // if time sig not at begining of measure => courtesy time sig
-                  int tick = e.tick();
-                  bool courtesySig = (tick > tick());
+                  int currTick = e.tick();
+                  bool courtesySig = (currTick > tick());
                   if (courtesySig) {
                         // if courtesy sig., just add it without map processing
-                        segment = getSegment(Segment::SegTimeSigAnnounce, tick);
+                        segment = getSegment(Segment::SegTimeSigAnnounce, currTick);
                         segment->add(ts);
                   }
                   else {
                         // if 'real' time sig., do full process
-                        segment = getSegment(Segment::SegTimeSig, tick);
+                        segment = getSegment(Segment::SegTimeSig, currTick);
                         segment->add(ts);
                         timeStretch = ts->stretch().reduced();
 
@@ -2107,12 +2107,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                   ks->setTrack(e.track());
                   ks->read(e);
                   // if key sig not at beginning of measure => courtesy key sig
-                  int tick = e.tick();
-                  bool courtesySig = (tick > tick());
-                  segment = getSegment(courtesySig ? Segment::SegKeySigAnnounce : Segment::SegKeySig, tick);
+                  int currTick = e.tick();
+                  bool courtesySig = (currTick > tick());
+                  segment = getSegment(courtesySig ? Segment::SegKeySigAnnounce : Segment::SegKeySig, currTick);
                   segment->add(ks);
                   if (!courtesySig)
-                        staff->setKey(tick, ks->keySigEvent());
+                        staff->setKey(currTick, ks->keySigEvent());
                   }
             else if (tag == "Lyrics") {       // obsolete, keep for compatibility with version 114
                   Element* element = Element::name2Element(tag, score());
