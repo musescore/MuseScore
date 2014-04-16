@@ -1579,7 +1579,7 @@ void Score::cmdAddStretch(qreal val)
             return;
       int startTick = selection().tickStart();
       int endTick   = selection().tickEnd();
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+      for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
             if (m->tick() < startTick)
                   continue;
             if (m->tick() >= endTick)
