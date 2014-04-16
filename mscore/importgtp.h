@@ -52,6 +52,7 @@ struct GpBar {
       BarLineType barLine;
       int repeatFlags;
       int repeats;
+      QList<int> voltaInfo;
 
       GpBar();
       };
@@ -85,6 +86,7 @@ class GuitarPro {
       QString readBytePascalString();
       int readInt();
       QString readDelphiString();
+      void readVolta(QList<int>*, Measure*);
       virtual void readBend();
       virtual void readMixChange();
       virtual int readBeatEffects(int track, Segment*) = 0;
