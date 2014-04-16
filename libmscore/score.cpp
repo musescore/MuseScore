@@ -291,10 +291,12 @@ void Score::init()
       _scoreFont = ScoreFont::fontFactory("emmentaler");
 
       _pageNumberOffset = 0;
-      int numOfPresets = StaffType::numOfPresets();
-      for (int idx = 0; idx < numOfPresets; idx++) {
-            StaffType * st = StaffType::preset(idx)->clone();
-            addStaffType(st);
+      if (!parentScore()) {
+            int numOfPresets = StaffType::numOfPresets();
+            for (int idx = 0; idx < numOfPresets; idx++) {
+                  StaffType * st = StaffType::preset(idx)->clone();
+                  addStaffType(st);
+                  }
             }
 
       _mscVersion             = MSCVERSION;
@@ -1982,10 +1984,16 @@ void Score::addStaffType(int idx, StaffType* st)
       // if the modified staff type IS replacing an existing type
       else {
             StaffType* oldStaffType = *(s->_staffTypes[idx]);
-            // update the type of each score staff which uses the old type
-            for (int staffIdx = 0; staffIdx < staves().size(); staffIdx++)
-                  if (staff(staffIdx)->staffType() == oldStaffType)
-                        staff(staffIdx)->setStaffType(st);
+            // update the type of each root score staff which uses the old type
+            // as well as the type of each staff linked to each score staff
+            for (int staffIdx = 0; staffIdx < s->staves().size(); staffIdx++) {
+                  Staff* currStaff = s->staff(staffIdx);
+                  if (currStaff->staffType() == oldStaffType)
+                        currStaff->setStaffType(st);
+                  foreach (Staff* linkStaff, currStaff->linkedStaves()->staves())
+                        if (linkStaff->staffType() == oldStaffType)
+                              linkStaff->setStaffType(st);
+                  }
             // store the updated staff type
             *(s->_staffTypes[idx]) = st;
             // delete old staff type if not built-in
