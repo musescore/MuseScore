@@ -629,18 +629,20 @@ void Score::timesigStretchChanged(TimeSig* ts, Measure* fm, int staffIdx)
 
 void Score::cmdRemoveTimeSig(TimeSig* ts)
       {
+      Measure* m = ts->measure();
+
+      //
+      // we cannot remove a courtesy time signature
+      //
+      if (m->tick() != ts->segment()->tick())
+            return;
+
       undoRemoveElement(ts->segment());
 
-      Measure* fm = ts->measure();
-      Measure* lm = fm;
-      Measure* pm = fm->prevMeasure();
+      Measure* pm = m->prevMeasure();
       Fraction ns(pm ? pm->timesig() : Fraction(4,4));
-      for (Measure* m = lm; m; m = m->nextMeasure()) {
-            if (m->first(Segment::SegTimeSig))
-                  break;
-            lm = m;
-            }
-      rewriteMeasures(fm, ns);
+
+      rewriteMeasures(m, ns);
       }
 
 //---------------------------------------------------------
