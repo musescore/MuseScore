@@ -18,7 +18,7 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include <freetype/tttables.h>
+#include FT_TRUETYPE_TABLES_H
 
 #include <QMap>
 #include <QString>
