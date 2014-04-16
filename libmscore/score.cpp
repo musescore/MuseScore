@@ -1988,9 +1988,6 @@ void Score::addStaffType(int idx, StaffType* st)
                         staff(staffIdx)->setStaffType(st);
             // store the updated staff type
             *(s->_staffTypes[idx]) = st;
-            // delete old staff type if not built-in
-            if (!oldStaffType->builtin())
-                  delete oldStaffType;
             }
       }
 
