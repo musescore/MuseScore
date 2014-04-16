@@ -29,10 +29,18 @@ void excludeExtraVoiceTuplets(
             const ReducedFraction &basicQuant,
             const ReducedFraction &barStart);
 
+std::list<TiedTuplet>
+findBackTiedTuplets(
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const std::vector<TupletInfo> &tuplets,
+            const ReducedFraction &prevBarStart,
+            const ReducedFraction &startBarTick,
+            const ReducedFraction &basicQuant);
+
 void assignVoices(
             std::vector<TupletInfo> &tuplets,
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
-            const std::vector<TiedTuplet> &backTiedTuplets,
+            std::list<TiedTuplet> &backTiedTuplets,
             const ReducedFraction &startBarTick,
             const ReducedFraction &basicQuant);
 
@@ -42,7 +50,7 @@ bool haveOverlappingVoices(
             const std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
             const std::vector<TupletInfo> &tuplets,
             const ReducedFraction &basicQuant,
-            const std::vector<TiedTuplet> &backTiedTuplets = std::vector<TiedTuplet>());
+            const std::list<TiedTuplet> &backTiedTuplets = std::list<TiedTuplet>());
 
 #endif
 
