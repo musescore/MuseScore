@@ -335,13 +335,13 @@ findTupletIntervals(const std::vector<TupletInfo> &tuplets,
 std::vector<std::pair<int, int> >
 findForTiedTuplets(
             const std::vector<TupletInfo> &tuplets,
-            const std::vector<TiedTuplet> &tiedTuplets,
+            const std::vector<TiedTuplet> &backTiedTuplets,
             const std::set<std::pair<const ReducedFraction, MidiChord> *> &pendingNonTuplets,
             const ReducedFraction &startBarTick)
       {
       std::vector<std::pair<int, int>> forTiedTuplets;  // <tuplet index, voice to assign>
 
-      for (const TiedTuplet &tuplet: tiedTuplets) {
+      for (const TiedTuplet &tuplet: backTiedTuplets) {
                         // only for chords in the current bar (because of tol some can be outside)
             if (tuplet.chord->first < startBarTick)
                   continue;
