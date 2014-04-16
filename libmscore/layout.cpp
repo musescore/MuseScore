@@ -2265,10 +2265,16 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                         Element* el = seg->element(staffIdx * VOICES);
                         if (el == 0)
                               continue;
-
+/*
                         if (el->generated() && ((st == Segment::SegTimeSigAnnounce && m != em)
                             || (el->type() == Element::CLEF   && seg->tick() != sm->tick())
                             || (el->type() == Element::KEYSIG && seg->tick() != sm->tick())))
+*/
+                        // courtesy time sigs and key sigs: remove if not in last measure (generated or not!)
+                        // clefs: remove if generated and not at beginning of first measure
+                        if ( ((st == Segment::SegTimeSigAnnounce || st == Segment::SegKeySigAnnounce) && m != em)
+                              || (el->type() == Element::CLEF && el->generated() && seg->tick() != sm->tick())
+                        )
                               {
                               undoRemoveElement(el);
                               }
