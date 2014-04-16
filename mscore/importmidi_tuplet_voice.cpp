@@ -341,6 +341,11 @@ findForTiedTuplets(
       std::vector<std::pair<int, int>> forTiedTuplets;  // <tuplet index, voice to assign>
 
       for (const TiedTuplet &tuplet: backTiedTuplets) {
+                        // optimization:
+                        // only for chords in the current bar (because of tol some can be outside)
+            if (tuplet.chord->second.barIndex != -1)
+                  continue;
+
             if (pendingNonTuplets.find(tuplet.chord) == pendingNonTuplets.end()) {
                   const int i = findTupletWithChord(tuplet.chord->second, tuplets);
                   if (i != -1)
