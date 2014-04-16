@@ -1990,9 +1990,10 @@ void Score::addStaffType(int idx, StaffType* st)
                   Staff* currStaff = s->staff(staffIdx);
                   if (currStaff->staffType() == oldStaffType)
                         currStaff->setStaffType(st);
-                  foreach (Staff* linkStaff, currStaff->linkedStaves()->staves())
-                        if (linkStaff->staffType() == oldStaffType)
-                              linkStaff->setStaffType(st);
+                  if (currStaff->linkedStaves())
+                        foreach (Staff* linkStaff, currStaff->linkedStaves()->staves())
+                              if (linkStaff->staffType() == oldStaffType)
+                                    linkStaff->setStaffType(st);
                   }
             // store the updated staff type
             *(s->_staffTypes[idx]) = st;
