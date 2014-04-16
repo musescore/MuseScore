@@ -120,7 +120,8 @@ bool PulseAudio::init()
       pa_ml                     = pa_mainloop_new();
       pa_mainloop_api* pa_mlapi = pa_mainloop_get_api(pa_ml);
       pa_context* pa_ctx        = pa_context_new(pa_mlapi, "MuseScore");
-      pa_context_connect(pa_ctx, NULL, pa_context_flags_t(0), NULL);
+      if (pa_context_connect(pa_ctx, NULL, pa_context_flags_t(0), NULL) != 0)
+            qDebug("PulseAudio Context Connect Failed with Error: %s", pa_strerror(pa_context_errno(pa_ctx)));
 
       int pa_ready = 0;
       pa_context_set_state_callback(pa_ctx, pa_state_cb, &pa_ready);
