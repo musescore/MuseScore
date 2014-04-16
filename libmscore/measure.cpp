@@ -2074,20 +2074,31 @@ void Measure::read(XmlReader& e, int staffIdx)
                   TimeSig* ts = new TimeSig(score());
                   ts->setTrack(e.track());
                   ts->read(e);
-                  segment = getSegment(Segment::SegTimeSig, e.tick());
-                  segment->add(ts);
-                  timeStretch = ts->stretch().reduced();
+                  // if time sig not at begining of measure => courtesy time sig
+                  int currTick = e.tick();
+                  bool courtesySig = (currTick > tick());
+                  if (courtesySig) {
+                        // if courtesy sig., just add it without map processing
+                        segment = getSegment(Segment::SegTimeSigAnnounce, currTick);
+                        segment->add(ts);
+                  }
+                  else {
+                        // if 'real' time sig., do full process
+                        segment = getSegment(Segment::SegTimeSig, currTick);
+                        segment->add(ts);
+                        timeStretch = ts->stretch().reduced();
 
-                  _timesig = ts->sig() * timeStretch;
+                        _timesig = ts->sig() * timeStretch;
 
-                  if (score()->mscVersion() > 114) {
-                        if (irregular) {
-                              score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
-                              score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
-                              }
-                        else {
-                              _len = _timesig;
-                              score()->sigmap()->add(tick(), SigEvent(_timesig));
+                        if (score()->mscVersion() > 114) {
+                              if (irregular) {
+                                    score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
+                                    score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
+                                    }
+                              else {
+                                    _len = _timesig;
+                                    score()->sigmap()->add(tick(), SigEvent(_timesig));
+                                    }
                               }
                         }
                   }
@@ -2095,10 +2106,13 @@ void Measure::read(XmlReader& e, int staffIdx)
                   KeySig* ks = new KeySig(score());
                   ks->setTrack(e.track());
                   ks->read(e);
-                  int tick = e.tick();
-                  segment = getSegment(Segment::SegKeySig, tick);
+                  // if key sig not at beginning of measure => courtesy key sig
+                  int currTick = e.tick();
+                  bool courtesySig = (currTick > tick());
+                  segment = getSegment(courtesySig ? Segment::SegKeySigAnnounce : Segment::SegKeySig, currTick);
                   segment->add(ks);
-                  staff->setKey(tick, ks->keySigEvent());
+                  if (!courtesySig)
+                        staff->setKey(currTick, ks->keySigEvent());
                   }
             else if (tag == "Lyrics") {       // obsolete, keep for compatibility with version 114
                   Element* element = Element::name2Element(tag, score());
