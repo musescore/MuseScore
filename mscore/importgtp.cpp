@@ -44,6 +44,7 @@
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/arpeggio.h"
+#include "libmscore/volta.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -271,6 +272,39 @@ void GuitarPro::addDynamic(Note* note, int d)
       note->chord()-> segment()-> add(dyn);
       }
 
+void GuitarPro::readVolta(QList<int>* voltaInfo, Measure* m)
+      {
+      /* Volta information is at most eight bits
+       * signifying which numbers should appear in the
+       * volta. A single bit 1 represents we should show
+       * 1, 100 represents 3, 10000 represents 6, 10101
+       * represents 1,3,5 etc. */
+      if (voltaInfo->length() != 0) {
+            // we have volta information - set up a volta
+            Ms::Volta* volta = new Ms::Volta(score);
+            volta->endings().clear();
+            QString voltaTextString = "";
+            QList<int>::iterator iter;
+            // initialise count to 1 as the first bit processed with represesnt first time volta
+            int count = 1;
+             // iterate through the volta information and determine the decimal numbers for voltas
+            for (iter = voltaInfo->begin(); iter != voltaInfo->end(); ++iter) {
+                  if (*iter == 1) {   // we want this number to be displayed in the volta
+                        if (voltaTextString == "")
+                              voltaTextString += QString::number(count);
+                        else
+                              voltaTextString += "," + QString::number(count);
+                        // add the decimal number to the endings field of voltas as well as the text
+                        volta->endings().append(count);
+                        }
+                  count++;
+                  }
+            volta->setText(voltaTextString);
+            volta->setTick(m->tick());
+            score->addElement(volta);
+            }
+      }
+
 //---------------------------------------------------------
 //   readBend
 //    bend graph
@@ -414,6 +448,7 @@ qDebug("staff %d group %d timesig %d", staffIdx, int(staffType->group()), staffT
                         s->add(t);
                         }
                   }
+            readVolta(&bars[i].voltaInfo, m);
             m->setRepeatFlags(bars[i].repeatFlags);
             m->setRepeatCount(bars[i].repeats);       // supported in gp5
             score->add(m);
@@ -3018,8 +3053,13 @@ void GuitarPro5::read(QFile* fp)
                   bar.marker = readDelphiString();     // new section?
                   /*int color =*/ readInt();    // color?
                   }
-            if (barBits & 0x10)                 // alternative ending to
-                  /*uchar c =*/ readUChar();
+            if (barBits & 0x10) {                      // a volta
+                  uchar voltaNumber = readUChar();
+                  while (voltaNumber > 0) {
+                        bar.voltaInfo.append(voltaNumber & 1);
+                        voltaNumber >>= 1;
+                        }
+                  }
             if (barBits & 0x40) {
                   bar.keysig = readUChar();
                   /*uchar c    =*/ readUChar();        // minor
