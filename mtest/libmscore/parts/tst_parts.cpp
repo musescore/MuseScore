@@ -24,6 +24,8 @@
 #include "libmscore/fingering.h"
 #include "libmscore/image.h"
 #include "libmscore/element.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafftype.h"
 #include "libmscore/sym.h"
 #include "mtest/testutils.h"
 
@@ -95,6 +97,7 @@ class TestParts : public QObject, public MTest
       void styleScoreReload();
 //      void stylePartDefault();
 //      void styleScoreDefault();
+      void staffStyles();
       };
 
 //---------------------------------------------------------
@@ -846,6 +849,34 @@ void TestParts::undoRedoRemoveImage()
       delete score;
       }
 #endif
+
+//---------------------------------------------------------
+//   undoRedoRemoveImage
+//---------------------------------------------------------
+
+void TestParts::staffStyles()
+      {
+      Score* score = readScore(DIR + "part1.mscx");
+      score->doLayout();
+      QVERIFY(score);
+      int numOfStaffTypes = score->staffTypes().count();
+      createParts(score);
+      // check the number of staff styles did not change
+      QVERIFY(numOfStaffTypes == score->staffTypes().count());
+      // modify a staff type
+      int numOfLines = score->staffType(0)->lines() - 1;
+      StaffType * newStaffType = score->staffType(0)->clone();
+      newStaffType->setLines(numOfLines);
+      score->addStaffType(0, newStaffType);
+      // check the number of staff lines is correctly updated in root score and in parts
+      QVERIFY(score->staff(0)->lines() == numOfLines);
+      Excerpt* part = score->excerpts().at(0);
+      QVERIFY(part->score()->staff(0)->lines() == numOfLines);
+      part = score->excerpts().at(1);
+      QVERIFY(part->score()->staff(0)->lines() == numOfLines);
+      delete score;
+      }
+
 
 QTEST_MAIN(TestParts)
 
