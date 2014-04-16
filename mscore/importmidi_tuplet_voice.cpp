@@ -336,15 +336,11 @@ std::vector<std::pair<int, int> >
 findForTiedTuplets(
             const std::vector<TupletInfo> &tuplets,
             const std::vector<TiedTuplet> &backTiedTuplets,
-            const std::set<std::pair<const ReducedFraction, MidiChord> *> &pendingNonTuplets,
-            const ReducedFraction &startBarTick)
+            const std::set<std::pair<const ReducedFraction, MidiChord> *> &pendingNonTuplets)
       {
       std::vector<std::pair<int, int>> forTiedTuplets;  // <tuplet index, voice to assign>
 
       for (const TiedTuplet &tuplet: backTiedTuplets) {
-                        // only for chords in the current bar (because of tol some can be outside)
-            if (tuplet.chord->first < startBarTick)
-                  continue;
             if (pendingNonTuplets.find(tuplet.chord) == pendingNonTuplets.end()) {
                   const int i = findTupletWithChord(tuplet.chord->second, tuplets);
                   if (i != -1)
@@ -393,8 +389,7 @@ void assignVoices(
       auto pendingTuplets = findPendingTuplets(tuplets);
       auto pendingNonTuplets = findPendingNonTuplets(nonTuplets);
 
-      const auto forTiedTuplets = findForTiedTuplets(tuplets, backTiedTuplets,
-                                                     pendingNonTuplets, startBarTick);
+      const auto forTiedTuplets = findForTiedTuplets(tuplets, backTiedTuplets, pendingNonTuplets);
       std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> tupletIntervals;
 
       for (const auto &t: forTiedTuplets) {
