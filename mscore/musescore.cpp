@@ -1274,11 +1274,16 @@ void MuseScore::selectScore(QAction* action)
       {
       QString a = action->data().toString();
       if (!a.isEmpty()) {
+            if (a == "clear-recent") {
+                  recentScores.clear();
+                  }
+            else {
             Score* score = readScore(a);
-            if (score) {
-                  setCurrentScoreView(appendScore(score));
-                  updateRecentScores(score);
-                  writeSessionFile(false);
+                  if (score) {
+                        setCurrentScoreView(appendScore(score));
+                        updateRecentScores(score);
+                        writeSessionFile(false);
+                        }
                   }
             }
       }
@@ -1440,14 +1445,23 @@ void MuseScore::loadScoreList()
 void MuseScore::openRecentMenu()
       {
       openRecent->clear();
+      bool one = false;
       foreach(QString s, recentScores) {
             if (s.isEmpty())
                   break;
-            // QFileInfo fi(s);
-            // QAction* action = openRecent->addAction(fi.completeBaseName());
             QString data(s);
-            QAction* action = openRecent->addAction(s.replace("&", "&&"));  // show complete path
-            action->setData(data);
+            QFileInfo fi(s);
+            if(fi.exists()) {
+                  QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show complete path
+                  action->setData(data);
+                  action->setToolTip(s);
+                  one = true;
+                  }
+            }
+      if (one) {
+            openRecent->addSeparator();
+            QAction* action = openRecent->addAction(tr("Clear Recent Files"));
+            action->setData("clear-recent");
             }
       }
 
@@ -4820,7 +4834,15 @@ int main(int argc, char* av[])
                   "}\n"
                   "QGroupBox::title {\n"
                   "   subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px;\n"
-                  "   }");
+                  "   }\n");
+                  /*"QDockWidget {\n"
+                  "   border: 1px solid lightgray;\n"
+                  "   titlebar-close-icon: url(:/data/close.png);\n"
+                  "   titlebar-normal-icon: url(undock.png);\n"
+                  "   }\n"
+                  "QTabBar::close-button {\n"
+                  "   image: url(:/data/close.png);\n"
+                  "   }");*/
             MgStyleConfigData::animationsEnabled = preferences.animations;
             qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
 
