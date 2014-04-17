@@ -31,7 +31,7 @@ set_target_properties (
 
 xcode_pch(audiofile all)
 
-ADD_DEPENDENCIES(midi mops1)
-ADD_DEPENDENCIES(midi mops2)
+ADD_DEPENDENCIES(audiofile mops1)
+ADD_DEPENDENCIES(audiofile mops2)
 
 
