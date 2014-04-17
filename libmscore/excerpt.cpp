@@ -37,6 +37,7 @@
 #include "layoutbreak.h"
 #include "harmony.h"
 #include "beam.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -101,7 +102,7 @@ Score* createExcerpt(const QList<Part*>& parts)
       QList<int> srcStaves;
 
       Score* oscore = parts.front()->score();
-      Score* score = new Score(oscore);
+      Score* score  = new Score(oscore);
 
       // clone layer:
       for (int i = 0; i < 32; ++i) {
@@ -154,12 +155,50 @@ Score* createExcerpt(const QList<Part*>& parts)
       //
       // layout score
       //
+      score->addLayoutFlags(LayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO));
+      score->doLayout();
+      //
+      // handle transposing instruments
+      //
+      if (oscore->styleB(ST_concertPitch) != score->styleB(ST_concertPitch)) {
+            for (Staff* staff : score->staves()) {
+                  if (staff->staffType()->group() == PERCUSSION_STAFF_GROUP)
+                        continue;
+                  Interval interval = staff->part()->instr()->transpose();
+                  if (interval.isZero())
+                        continue;
+                  if (oscore->styleB(ST_concertPitch))
+                        interval.flip();
+
+                  int staffIdx   = staff->idx();
+                  int startTrack = staffIdx * VOICES;
+                  int endTrack   = startTrack + VOICES;
+
+                  score->transposeKeys(staffIdx, staffIdx+1, 0, score->lastSegment()->tick(), interval);
+
+                  for (auto segment = score->firstSegment(Segment::SegChordRest); segment; segment = segment->next1(Segment::SegChordRest)) {
+                        for (auto e : segment->annotations()) {
+                              if ((e->type() != Element::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
+                                    continue;
+                              Harmony* h  = static_cast<Harmony*>(e);
+                              int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, false);
+                              int baseTpc = Ms::transposeTpc(h->baseTpc(), interval, false);
+                              score->undoTransposeHarmony(h, rootTpc, baseTpc);
+                              }
+                        }
+                  }
+            score->updateNotes();
+            }
+
+      //
+      // layout score
+      //
       score->setPlaylistDirty(true);
       score->rebuildMidiMapping();
       score->updateChannel();
 
       score->setLayoutAll(true);
-      score->addLayoutFlags(LayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO));
+//      score->addLayoutFlags(LayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO));
       score->doLayout();
       return score;
       }
