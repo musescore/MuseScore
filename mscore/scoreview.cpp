@@ -4798,8 +4798,8 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             if (addFlag && el && el->type() == Element::NOTE) {
                   Chord* chord = static_cast<Note*>(el)->chord();
                   Note* n = chord->upNote();
-                  octave = n->pitch() / 12;
-                  if (note < n->pitch() / (octave * 7))
+                  octave = n->epitch() / 12;
+                  if (note < n->epitch() / (octave * 7))
                         octave++;
                   }
             else {
