@@ -440,6 +440,7 @@ class Score : public QObject {
       Score();
       Score(const MStyle*);
       Score(Score*);                // used for excerpts
+      Score(Score*, const MStyle*);
       ~Score();
 
       Score* clone();
