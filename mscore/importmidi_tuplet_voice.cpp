@@ -411,6 +411,8 @@ void setBackTiedVoices(
                   setTupletVoice(tuplet.chords, tiedTuplet.voice);
                   pendingTuplets.erase(tiedTuplet.tupletIndex);
                   tupletIntervals[tiedTuplet.voice].push_back(backInterval);
+                  tupletIntervals[tiedTuplet.voice].push_back(
+                                    chordInterval(*tiedTuplet.chord, basicQuant));
 
                   Q_ASSERT_X(pendingNonTuplets.find(tiedTuplet.chord) == pendingNonTuplets.end(),
                              "MidiTuplet::setBackTiedVoices",
