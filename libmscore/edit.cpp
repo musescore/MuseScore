@@ -665,7 +665,6 @@ void Score::putNote(const Position& p, bool replace)
       Segment* s      = p.segment;
       int staffIdx    = p.staffIdx;
       int line        = p.line;
-
       int tick        = s->tick();
       Staff* st       = staff(staffIdx);
       ClefType clef   = st->clef(tick);

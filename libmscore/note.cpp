@@ -1898,7 +1898,15 @@ void Note::setNval(NoteVal nval)
       _string    = nval.string;
       if (nval.tpc == INVALID_TPC) {
             int key = staff()->key(chord()->tick()).accidentalType();
-            nval.tpc = pitch2tpc(nval.pitch, key, PREFER_NEAREST);
+            _tpc[0] = pitch2tpc(nval.pitch, key, PREFER_NEAREST);
+            Interval v = staff()->part()->instr()->transpose();
+            if (v.isZero())
+                  _tpc[1] = _tpc[0];
+            else {
+                  v.flip();
+                  _tpc[1] = Ms::transposeTpc(_tpc[0], v, false);
+                  }
+            return;
             }
 
       if (concertPitch()) {
