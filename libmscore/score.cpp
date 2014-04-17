@@ -403,8 +403,6 @@ Score::Score(Score* parent, const MStyle* s)
       {
       _parentScore = parent;
       init();
-      _tempomap = new TempoMap;
-      _sigmap   = new TimeSigMap();
       _style    = *s;
       }
 
