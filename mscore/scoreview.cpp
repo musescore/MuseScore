@@ -4858,7 +4858,13 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             if (el && el->type() == Element::NOTE) {
                   Chord* chord = static_cast<Note*>(el)->chord();
                   NoteVal val;
-                  val.pitch  = line2pitch(pos.line, clef, 0);
+
+                  Segment* s         = chord->segment();
+                  AccidentalVal acci = s->measure()->findAccidental(s, chord->staffIdx(), pos.line);
+                  int step           = absStep(pos.line, clef);
+                  int octave         = step/7;
+                  val.pitch          = step2pitch(step) + octave * 12 + acci;
+
                   if (!chord->concertPitch())
                         val.pitch += chord->staff()->part()->instr()->transpose().chromatic;
                   _score->addNote(chord, val);
