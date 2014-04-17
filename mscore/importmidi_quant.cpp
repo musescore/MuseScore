@@ -216,16 +216,16 @@ ReducedFraction findQuantForRange(
       return quantForLen(basicQuant, shortestLen, tupletRatio);
       }
 
-void setOffTimeForStaccato(std::pair<const ReducedFraction, MidiChord> &chordEvent)
+void setOffTimeForStaccato(MidiChord &chord, const ReducedFraction &onTime)
       {
-      for (MidiNote &note: chordEvent.second.notes) {
+      for (MidiNote &note: chord.notes) {
             if (note.isInTuplet && note.staccato) {
                   const MidiTuplet::TupletData &tuplet = note.tuplet->second;
                         // decrease tuplet error by enlarging staccato notes:
                         // make note.len = tuplet note length
                   const auto tupletNoteLen = (tuplet.onTime + tuplet.len)
                                               / tuplet.tupletNumber;
-                  note.offTime = chordEvent.first + tupletNoteLen;
+                  note.offTime = onTime + tupletNoteLen;
                   }
             }
       }
@@ -350,13 +350,13 @@ void quantizeChords(
       {
       std::multimap<ReducedFraction, MidiChord> quantizedChords;
       for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
-            auto &chordEvent = *chordIt;
+            const auto &chordEvent = *chordIt;
             MidiChord chord = chordEvent.second;     // copy chord
             auto onTime = chordEvent.first;
             const auto barStart = ReducedFraction::fromTicks(sigmap->bar2tick(chord.barIndex, 0));
 
                         // apply staccato in tuplets
-            setOffTimeForStaccato(chordEvent);
+            setOffTimeForStaccato(chord, onTime);
 
                         // quantize on times
             if (chord.isInTuplet)
