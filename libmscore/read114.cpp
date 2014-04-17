@@ -640,7 +640,6 @@ Score::FileError Score::read114(XmlReader& e)
                   }
             Score* nscore = Ms::createExcerpt(excerpt->parts());
             if (nscore) {
-                  nscore->setParentScore(this);
                   nscore->setName(excerpt->title());
                   nscore->rebuildMidiMapping();
                   nscore->updateChannel();

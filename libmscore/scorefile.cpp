@@ -1043,8 +1043,7 @@ bool Score::read(XmlReader& e)
                    if (MScore::noExcerpts)
                         e.skipCurrentElement();
                   else {
-                        Score* s = new Score(MScore::baseStyle());
-                        s->setParentScore(this);
+                        Score* s = new Score(this, MScore::baseStyle());
                         s->read(e);
                         addExcerpt(s);
                         }
