@@ -698,12 +698,6 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
-      <metaTag name="copyright"></metaTag>
-      <metaTag name="movementNumber"></metaTag>
-      <metaTag name="movementTitle"></metaTag>
-      <metaTag name="source"></metaTag>
-      <metaTag name="workNumber"></metaTag>
-      <metaTag name="workTitle"></metaTag>
       <PageList>
         <Page>
           <System>
@@ -1085,12 +1079,6 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
-      <metaTag name="copyright"></metaTag>
-      <metaTag name="movementNumber"></metaTag>
-      <metaTag name="movementTitle"></metaTag>
-      <metaTag name="source"></metaTag>
-      <metaTag name="workNumber"></metaTag>
-      <metaTag name="workTitle"></metaTag>
       <PageList>
         <Page>
           <System>
