@@ -617,8 +617,11 @@
     "unpitchedPercussionClef1": {
         "codepoint": "U+e1a0"
     },
+    "wiggleArpeggiatoDown": {
+        "codepoint": "U+e17e"
+    },
     "wiggleArpeggiatoDownArrow": {
-        "codepoint": "U+e180"
+        "codepoint": "U+e181"
     },
     "wiggleArpeggiatoUp": {
         "codepoint": "U+e17e"
