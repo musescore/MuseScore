@@ -38,6 +38,10 @@ const TupletLimits& tupletLimits(int tupletNumber);
 int tupletVoiceLimit();
 void removeEmptyTuplets(MTrack &track);
 
+std::pair<ReducedFraction, ReducedFraction>
+tupletInterval(const TupletInfo &tuplet,
+               const ReducedFraction &basicQuant);
+
 std::vector<std::pair<ReducedFraction, ReducedFraction> >
 findTupletIntervals(const std::vector<TupletInfo> &tuplets,
                     const ReducedFraction &basicQuant);

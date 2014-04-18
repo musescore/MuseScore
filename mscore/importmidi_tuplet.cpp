@@ -122,6 +122,30 @@ void sortTupletsByAveragePitch(std::vector<TupletInfo> &tuplets)
       std::sort(tuplets.begin(), tuplets.end(), averagePitchComparator);
       }
 
+std::pair<ReducedFraction, ReducedFraction>
+tupletInterval(const TupletInfo &tuplet,
+               const ReducedFraction &basicQuant)
+      {
+      ReducedFraction tupletEnd = tuplet.onTime + tuplet.len;
+
+      for (const auto &chord: tuplet.chords) {
+            const auto offTime = Quantize::findMaxQuantizedOffTime(*chord.second, basicQuant);
+            if (offTime > tupletEnd)
+                  tupletEnd = offTime;
+            }
+      return std::make_pair(tuplet.onTime, tupletEnd);
+      }
+
+std::vector<std::pair<ReducedFraction, ReducedFraction> >
+findTupletIntervals(const std::vector<TupletInfo> &tuplets,
+                    const ReducedFraction &basicQuant)
+      {
+      std::vector<std::pair<ReducedFraction, ReducedFraction>> tupletIntervals;
+      for (const auto &tuplet: tuplets)
+            tupletIntervals.push_back(tupletInterval(tuplet, basicQuant));
+
+      return tupletIntervals;
+      }
 
 // find tuplets over which duration lies
 

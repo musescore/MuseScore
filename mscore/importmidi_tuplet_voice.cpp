@@ -25,20 +25,6 @@ int tupletVoiceLimit()
       }
 
 std::pair<ReducedFraction, ReducedFraction>
-tupletInterval(const TupletInfo &tuplet,
-               const ReducedFraction &basicQuant)
-      {
-      ReducedFraction tupletEnd = tuplet.onTime + tuplet.len;
-
-      for (const auto &chord: tuplet.chords) {
-            const auto offTime = Quantize::findMaxQuantizedOffTime(*chord.second, basicQuant);
-            if (offTime > tupletEnd)
-                  tupletEnd = offTime;
-            }
-      return std::make_pair(tuplet.onTime, tupletEnd);
-      }
-
-std::pair<ReducedFraction, ReducedFraction>
 chordInterval(const std::pair<const ReducedFraction, MidiChord> &chord,
               const ReducedFraction &basicQuant)
       {
@@ -338,17 +324,6 @@ void removeUnusedTuplets(
       std::swap(tuplets, newTuplets);
       }
 
-std::vector<std::pair<ReducedFraction, ReducedFraction> >
-findTupletIntervals(const std::vector<TupletInfo> &tuplets,
-                    const ReducedFraction &basicQuant)
-      {
-      std::vector<std::pair<ReducedFraction, ReducedFraction>> tupletIntervals;
-      for (const auto &tuplet: tuplets)
-            tupletIntervals.push_back(tupletInterval(tuplet, basicQuant));
-
-      return tupletIntervals;
-      }
-
 std::set<int> findPendingTuplets(const std::vector<TupletInfo> &tuplets)
       {
       std::set<int> pendingTuplets;       // tuplet indexes
@@ -369,6 +344,23 @@ findPendingNonTuplets(
       return pendingNonTuplets;
       }
 
+std::list<TiedTuplet>::iterator
+eraseBackTiedTuplet(const std::list<TiedTuplet>::iterator &it,
+                    std::list<TiedTuplet> &backTiedTuplets,
+                    const TupletInfo &tuplet)
+      {
+      for (const auto &chord: tuplet.chords) {
+            for (auto it2 = backTiedTuplets.begin(); it2 != backTiedTuplets.end(); ++it2) {
+                  if (&(chord.second->second) == &(it2->chord->second)) {
+                        backTiedTuplets.erase(it2);
+                        break;
+                        }
+                  }
+            }
+
+      return backTiedTuplets.erase(it);
+      }
+
 void setBackTiedVoices(
             std::list<TiedTuplet> &backTiedTuplets,
             std::vector<TupletInfo> &tuplets,
@@ -377,19 +369,25 @@ void setBackTiedVoices(
             std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> &tupletIntervals,
             const ReducedFraction &basicQuant)
       {
+      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> backTupletIntervals;
+      for (const auto &t: backTiedTuplets) {
+            const auto &tuplet = tuplets[t.tupletIndex];
+            const auto interval = std::make_pair(tuplet.onTime, tuplet.onTime + tuplet.len);
+            backTupletIntervals[t.voice].push_back(interval);
+            }
                   // set voices that are already set from previous bar
       bool loopAgain = false;
       do {
             for (auto it = backTiedTuplets.begin(); it != backTiedTuplets.end(); ) {
                   const TiedTuplet &tiedTuplet = *it;
                   TupletInfo &tuplet = tuplets[tiedTuplet.tupletIndex];
-                  const auto backInterval = tupletInterval(tuplet, basicQuant);
+                  const auto backInterval = std::make_pair(tuplet.onTime, tuplet.onTime + tuplet.len);
 
                   if (tiedTuplet.voice == -1) {
                         ++it;
                         continue;
                         }
-                  if (haveIntersection(backInterval, tupletIntervals[tiedTuplet.voice])) {
+                  if (haveIntersection(backInterval, backTupletIntervals[tiedTuplet.voice])) {
                         it = backTiedTuplets.erase(it);
                         continue;
                         }
@@ -407,12 +405,14 @@ void setBackTiedVoices(
                                     }
                               }
                         }
-                              // set voices of tied tuplet chords
+
                   setTupletVoice(tuplet.chords, tiedTuplet.voice);
-                  pendingTuplets.erase(tiedTuplet.tupletIndex);
+                  backTupletIntervals[tiedTuplet.voice].push_back(backInterval);
                   tupletIntervals[tiedTuplet.voice].push_back(backInterval);
+                              // add to intervals chord from previous bar
                   tupletIntervals[tiedTuplet.voice].push_back(
                                     chordInterval(*tiedTuplet.chord, basicQuant));
+                  pendingTuplets.erase(tiedTuplet.tupletIndex);
 
                   Q_ASSERT_X(pendingNonTuplets.find(tiedTuplet.chord) == pendingNonTuplets.end(),
                              "MidiTuplet::setBackTiedVoices",
@@ -433,24 +433,33 @@ void setBackTiedVoices(
                   }
 
             TupletInfo &tuplet = tuplets[tiedTuplet.tupletIndex];
-            const auto backInterval = tupletInterval(tuplet, basicQuant);
+            const auto backInterval = std::make_pair(tuplet.onTime, tuplet.onTime + tuplet.len);
+            bool isNonTupletBackChord
+                        = (pendingNonTuplets.find(tiedTuplet.chord) != pendingNonTuplets.end());
 
             if (tiedTuplet.voice == -1) {
                   int voice = 0;
                   for ( ; voice != limit; ++voice) {
-                        if (haveIntersection(backInterval, tupletIntervals[voice]))
+                        if (haveIntersection(backInterval, backTupletIntervals[voice])
+                                    || (isNonTupletBackChord
+                                        && haveIntersection(chordInterval(*tiedTuplet.chord, basicQuant),
+                                                            backTupletIntervals[voice]))) {
                               continue;
+                              }
                         tiedTuplet.voice = voice;
                         break;
                         }
                   if (voice == limit) {     // no available voices
-                        it = backTiedTuplets.erase(it);
+                        it = eraseBackTiedTuplet(it, backTiedTuplets, tuplet);
                         continue;
                         }
                   }
             else {
-                  if (haveIntersection(backInterval, tupletIntervals[tiedTuplet.voice])) {
-                        it = backTiedTuplets.erase(it);
+                  if (haveIntersection(backInterval, backTupletIntervals[tiedTuplet.voice])
+                              || (isNonTupletBackChord
+                                  && haveIntersection(chordInterval(*tiedTuplet.chord, basicQuant),
+                                                      backTupletIntervals[tiedTuplet.voice]))) {
+                        it = eraseBackTiedTuplet(it, backTiedTuplets, tuplet);
                         continue;
                         }
                   }
@@ -467,11 +476,25 @@ void setBackTiedVoices(
                   }
                         // set voices of tied tuplet chords
             setTupletVoice(tuplet.chords, tiedTuplet.voice);
-            pendingTuplets.erase(tiedTuplet.tupletIndex);
+            backTupletIntervals[tiedTuplet.voice].push_back(backInterval);
             tupletIntervals[tiedTuplet.voice].push_back(backInterval);
+            pendingTuplets.erase(tiedTuplet.tupletIndex);
 
-            const int i = findTupletWithChord(tiedTuplet.chord->second, tuplets);
-            if (i != -1) {
+            if (isNonTupletBackChord) {
+                              // non-tuplet chord tied
+                  const auto interval = chordInterval(*tiedTuplet.chord, basicQuant);
+                  backTupletIntervals[tiedTuplet.voice].push_back(interval);
+                  tiedTuplet.chord->second.voice = tiedTuplet.voice;
+                  tupletIntervals[tiedTuplet.voice].push_back(interval);
+                  pendingNonTuplets.erase(tiedTuplet.chord);
+                  }
+            else {
+                              // tuplet tied
+                  const int i = findTupletWithChord(tiedTuplet.chord->second, tuplets);
+
+                  Q_ASSERT_X(i != -1, "MidiTuplet::setBackTiedVoices",
+                             "Tuplet chord not found in tuplets");
+
                   auto it2 = std::next(it);
                   for ( ; it2 != backTiedTuplets.end(); ++it2) {
                         if (it2->tupletIndex == i)
@@ -484,17 +507,11 @@ void setBackTiedVoices(
                   else {
                                     // set voice of not back-tied tuplet that have tied chord
                         setTupletVoice(tuplets[i].chords, tiedTuplet.voice);
+                        const auto interval = tupletInterval(tuplets[i], basicQuant);
+                        tupletIntervals[tiedTuplet.voice].push_back(interval);
+                        backTupletIntervals[tiedTuplet.voice].push_back(interval);
                         pendingTuplets.erase(i);
-                        tupletIntervals[tiedTuplet.voice].push_back(
-                                          tupletInterval(tuplets[i], basicQuant));
                         }
-                  }
-            else {
-                              // set tied chord (non-tuplet) voice
-                  tiedTuplet.chord->second.voice = tiedTuplet.voice;
-                  pendingNonTuplets.erase(tiedTuplet.chord);
-                  tupletIntervals[tiedTuplet.voice].push_back(
-                                    chordInterval(*tiedTuplet.chord, basicQuant));
                   }
 
             ++it;
@@ -572,6 +589,12 @@ std::vector<int> findTiedNotes(
       return tiedNotes;
       }
 
+// prepare tied tuplets - pairs of tuplet and chord back-tied to it
+// voices of back-tied chords from previous bar are set explicitly
+// other voices = -1
+// tied tuplets with voice != -1 don't intersect each other
+// tuplets can be tied only to one chord or tuplet (no 'branches')
+
 std::list<TiedTuplet>
 findBackTiedTuplets(
             const std::multimap<ReducedFraction, MidiChord> &chords,
@@ -581,8 +604,12 @@ findBackTiedTuplets(
             const ReducedFraction &basicQuant)
       {
       std::list<TiedTuplet> tiedTuplets;
+                  // <voice, intervals>
+      std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> backTupletIntervals;
+      std::set<int> usedTuplets;
+      std::set<std::pair<const ReducedFraction, MidiChord> *> usedChords;
+
       const auto tupletChords = findMappedTupletChords(tuplets);
-      const auto tupletIntervals = findTupletIntervals(tuplets, basicQuant);
 
       for (int i = 0; i != (int)tuplets.size(); ++i) {
 
@@ -595,35 +622,34 @@ findBackTiedTuplets(
 
                   const auto tupletIt = tupletChords.find(&*chordIt);
                   bool isInTupletOfThisBar = (tupletIt != tupletChords.end());
-
+                              // don't make back tie to the chord in overlapping tuplet
+                  if (isInTupletOfThisBar
+                              && areTupletsIntersect(tuplets[tupletIt->second], tuplets[i])) {
+                        continue;
+                        }
                               // remember voices of tuplets that have tied chords from previous bar
                               // and that chords don't belong to the tuplets of this bar
                   int voice = (chordIt->second.barIndex != -1 && !isInTupletOfThisBar)
                               ? chordIt->second.voice : -1;
-                  if (voice != -1) {
-                        bool voiceUsed = false;
-                                    // if already found back tied tuplets have same voice
-                                    // then they shouldn't intersect with tuplet 'i'
-                        for (const auto &t: tiedTuplets) {
-                              if (t.voice == voice) {
-                                    if (haveIntersection(tupletIntervals[i],
-                                                         tupletIntervals[t.tupletIndex])) {
-                                          voiceUsed = true;
-                                          break;
-                                          }
-                                    }
-                              }
-                        if (voiceUsed)
-                              continue;
+                  const auto interval = std::make_pair(tuplets[i].onTime,
+                                                       tuplets[i].onTime + tuplets[i].len);
+                  if (voice != -1 && haveIntersection(interval, backTupletIntervals[voice])) {
+                        continue;
                         }
-                              // don't make back tie to the chord in overlapping tuplet
-                  if (isInTupletOfThisBar) {
-                        if (areTupletsIntersect(tuplets[tupletIt->second], tuplets[i]))
-                              continue;
-                        }
+
                   const auto tiedNotes = findTiedNotes(tuplets[i], chordIt, startBarTick, basicQuant);
                   if (!tiedNotes.empty()) {
+                                    // don't tie back twice to the same chord or tuplet
+                        if (usedChords.find(&*chordIt) != usedChords.end())
+                              continue;
+                        const int tupletIndex = findTupletWithChord(chordIt->second, tuplets);
+                        if (usedTuplets.find(tupletIndex) != usedTuplets.end())
+                              continue;
+                                    // we can add back-tied tuplet
                         tiedTuplets.push_back({i, voice, &*chordIt, tiedNotes});
+                        backTupletIntervals[voice].push_back(interval);
+                        usedChords.insert(&*chordIt);
+                        usedTuplets.insert(tupletIndex);
                         break;
                         }
                   }
