@@ -1502,7 +1502,8 @@ void Chord::layout10(AccidentalState* as)
       Drumset* drumset = 0;
       if (staff()->part()->instr()->useDrumset())
             drumset = staff()->part()->instr()->drumset();
-      for (Note* note : notes()) {
+      QList<Note*> nl(notes());
+      for (Note* note : nl) {
             if (drumset) {
                   int pitch = note->pitch();
                   if (drumset->isValid(pitch)) {

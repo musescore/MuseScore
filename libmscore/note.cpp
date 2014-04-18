@@ -1798,6 +1798,7 @@ void Note::endEdit()
 
 //---------------------------------------------------------
 //   updateAccidental
+//    set _accidental and _line depending on tpc
 //---------------------------------------------------------
 
 void Note::updateAccidental(AccidentalState* as)
@@ -1821,7 +1822,6 @@ void Note::updateAccidental(AccidentalState* as)
                               acci = Accidental::ACC_NATURAL;
                         }
                   }
-
             if (acci != Accidental::ACC_NONE && !_tieBack && !_hidden) {
                   if (_accidental == 0) {
                         Accidental* a = new Accidental(score());
