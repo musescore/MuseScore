@@ -25,18 +25,42 @@ InspectorMarker::InspectorMarker(QWidget* parent)
    : InspectorBase(parent)
       {
       b.setupUi(addWidget());
+      t.setupUi(addWidget());
       m.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,       0, false, b.color,      b.resetColor      },
-            { P_VISIBLE,     0, false, b.visible,    b.resetVisible    },
-            { P_USER_OFF,    0, false, b.offsetX,    b.resetX          },
-            { P_USER_OFF,    1, false, b.offsetY,    b.resetY          },
-            { P_MARKER_TYPE, 0, false, m.markerType, m.resetMarkerType },
-            { P_LABEL,       0, false, m.jumpLabel,  m.resetJumpLabel  },
+            { P_COLOR,              0, false, b.color,      b.resetColor      },
+            { P_VISIBLE,            0, false, b.visible,    b.resetVisible    },
+            { P_USER_OFF,           0, false, b.offsetX,    b.resetX          },
+            { P_USER_OFF,           1, false, b.offsetY,    b.resetY          },
+            { P_TEXT_STYLE_TYPE,    0, 0,     t.style,      t.resetStyle      },
+            { P_MARKER_TYPE,        0, false, m.markerType, m.resetMarkerType },
+            { P_LABEL,              0, false, m.jumpLabel,  m.resetJumpLabel  }
             };
 
       mapSignals();
       }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorMarker::setElement()
+      {
+      Element* e = inspector->element();
+      Score* score = e->score();
+
+      t.style->blockSignals(true);
+      t.style->clear();
+      const QList<TextStyle>& ts = score->style()->textStyles();
+      int n = ts.size();
+      for (int i = 0; i < n; ++i) {
+            if (!(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+                  t.style->addItem(ts.at(i).name(), i);
+            }
+      t.style->blockSignals(false);
+      InspectorBase::setElement();
+      }
+
 }
 
