@@ -2143,7 +2143,7 @@ QVariant Text::propertyDefault(P_ID id) const
             case TEMPO_TEXT:        idx = TEXT_STYLE_TEMPO; break;
             default:
                   // if we cannot determine type, give up
-                  return QVariant();
+                  return Element::propertyDefault(id);
             }
       switch (id) {
             case P_TEXT_STYLE_TYPE:
