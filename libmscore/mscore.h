@@ -333,9 +333,9 @@ class AlignGrip
       int defaultGrip;
       QPointF aLine[8];       // Align line
       bool vert[8];       // Vertical Line = true
-      int aLines;            // number of Line
+      int aLines = 0;            // number of Line
       QRectF grip[8];       // edit "grips"
-      int grips;            // number of used grips
+      int grips = 0;            // number of used grips
       };
 //---------------------------------------------------------
 //   MScore
