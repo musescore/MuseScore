@@ -3712,7 +3712,7 @@ static void collectMatch(void* data, Element* e)
             return;
       if ((p->staff != -1) && (p->staff != e->staffIdx()))
             return;
-      if (e->type() == Element::CHORD || e->type() == Element::REST || e->type() == Element::NOTE || e->type() == Element::LYRICS) {
+      if (e->type() == Element::CHORD || e->type() == Element::REST || e->type() == Element::NOTE || e->type() == Element::LYRICS || e->type() == Element::STEM) {
             if (p->voice != -1 && p->voice != e->voice())
                   return;
             }
