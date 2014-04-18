@@ -103,28 +103,6 @@ void ScoreView::endEdit()
             score()->addRefresh(aGrip.grip[i]);
 
       updateRefreshAlines();
-/*
-      for (int i = 0; i < aGrip.aLines; ++i) {
-            if( aGrip.vert[i] ){
-                  QRectF vline (
-                                aGrip.aLine[i].x() + pageOffset.x() - aGrip.grip[0].width()/2,
-                                0,
-                                aGrip.grip[0].width(),
-                                page->height());
-                  score()->addRefresh(vline);
-                  }
-            else{
-                  QRectF hline (
-                                pageOffset.x(),
-                                aGrip.aLine[i].y() - aGrip.grip[0].height()/2,
-                                page->width(),
-                                aGrip.grip[0].height()
-                                );
-                  score()->addRefresh(hline);
-                  }
-            }
-
-*/
       editObject->endEdit();
       if (mscore->inspector())
             mscore->inspector()->setElement(0);
