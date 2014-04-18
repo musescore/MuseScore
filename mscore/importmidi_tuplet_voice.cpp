@@ -478,7 +478,8 @@ void setBackTiedVoices(
                               break;
                         }
                   if (it2 != backTiedTuplets.end()) {
-                        it2->voice = tiedTuplet.voice;
+                        if (it2->voice == -1)
+                              it2->voice = tiedTuplet.voice;
                         }
                   else {
                                     // set voice of not back-tied tuplet that have tied chord
