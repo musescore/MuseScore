@@ -21,9 +21,9 @@
 namespace Ms {
 
 SymId Breath::symList[Breath::breathSymbols] = {
-      SymId::breathMark,
-      SymId::breathMark,      // TODO-smufl SymId(lcommaSym),
-      SymId::caesura,         // SymId(caesuraCurvedSym),
+      SymId::breathMarkComma,
+      SymId::breathMarkComma,      // TODO-smufl SymId(lcommaSym),
+      SymId::caesuraCurved,
       SymId::caesura
       };
 

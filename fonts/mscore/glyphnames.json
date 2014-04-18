@@ -137,10 +137,10 @@
     "articTenutoBelow": {
         "codepoint": "U+e166"
     },
-    "articTenutoSlurAbove": {
+    "articTenutoStaccatoAbove": {
         "codepoint": "U+e168"
     },
-    "articTenutoSlurBelow": {
+    "articTenutoStaccatoBelow": {
         "codepoint": "U+e167"
     },
     "augmentationDot": {
@@ -158,7 +158,7 @@
     "brassMuteOpen": {
         "codepoint": "U+e16b"
     },
-    "breathMark": {
+    "breathMarkComma": {
         "codepoint": "U+e17a"
     },
     "cClef": {
@@ -166,6 +166,9 @@
     },
     "caesura": {
         "codepoint": "U+e18f"
+    },
+    "caesuraCurved": {
+        "codepoint": "U+e18e"
     },
     "coda": {
         "codepoint": "U+e178"
@@ -389,13 +392,13 @@
     "noteheadParenthesisRight": {
         "codepoint": "U+e11d"
     },
-    "noteheadSlashDiamondWhite": {
+    "noteheadSlashWhiteWhole": {
         "codepoint": "U+e136"
     },
     "noteheadSlashHorizontalEnds": {
         "codepoint": "U+e138"
     },
-    "noteheadSlashWhite": {
+    "noteheadSlashWhiteHalf": {
         "codepoint": "U+e137"
     },
     "noteheadTriangleDownBlack": {

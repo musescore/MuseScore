@@ -71,7 +71,7 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
             "tenuto", QT_TRANSLATE_NOOP("articulation", "tenuto"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
-      { SymId::articTenutoSlurAbove, SymId::articTenutoSlurBelow,
+      { SymId::articTenutoStaccatoAbove, SymId::articTenutoStaccatoBelow,
             "portato", QT_TRANSLATE_NOOP("articulation", "portato"),
             1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
             },
