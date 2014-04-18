@@ -25,19 +25,42 @@ InspectorJump::InspectorJump(QWidget* parent)
    : InspectorBase(parent)
       {
       b.setupUi(addWidget());
+      t.setupUi(addWidget());
       j.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,       0, false, b.color,      b.resetColor      },
-            { P_VISIBLE,     0, false, b.visible,    b.resetVisible    },
-            { P_USER_OFF,    0, false, b.offsetX,    b.resetX          },
-            { P_USER_OFF,    1, false, b.offsetY,    b.resetY          },
-            { P_JUMP_TO,     0, false, j.jumpTo,     j.resetJumpTo     },
-            { P_PLAY_UNTIL,  0, false, j.playUntil,  j.resetPlayUntil  },
-            { P_CONTINUE_AT, 0, false, j.continueAt, j.resetContinueAt }
+            { P_COLOR,              0, false, b.color,      b.resetColor      },
+            { P_VISIBLE,            0, false, b.visible,    b.resetVisible    },
+            { P_USER_OFF,           0, false, b.offsetX,    b.resetX          },
+            { P_USER_OFF,           1, false, b.offsetY,    b.resetY          },
+            { P_TEXT_STYLE_TYPE,    0, 0,     t.style,      t.resetStyle      },
+            { P_JUMP_TO,            0, false, j.jumpTo,     j.resetJumpTo     },
+            { P_PLAY_UNTIL,         0, false, j.playUntil,  j.resetPlayUntil  },
+            { P_CONTINUE_AT,        0, false, j.continueAt, j.resetContinueAt }
             };
 
       mapSignals();
       }
-}
 
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorJump::setElement()
+      {
+      Element* e = inspector->element();
+      Score* score = e->score();
+
+      t.style->blockSignals(true);
+      t.style->clear();
+      const QList<TextStyle>& ts = score->style()->textStyles();
+      int n = ts.size();
+      for (int i = 0; i < n; ++i) {
+            if (!(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+                  t.style->addItem(ts.at(i).name(), i);
+            }
+      t.style->blockSignals(false);
+      InspectorBase::setElement();
+      }
+
+}

@@ -207,6 +207,21 @@ class InspectorAccidental : public InspectorBase {
       };
 
 //---------------------------------------------------------
+//   InspectorText
+//---------------------------------------------------------
+
+class InspectorText : public InspectorBase {
+      Q_OBJECT
+
+      UiInspectorElement e;
+      Ui::InspectorText t;
+
+   public:
+      InspectorText(QWidget* parent);
+      virtual void setElement() override;
+      };
+
+//---------------------------------------------------------
 //   InspectorTempoText
 //---------------------------------------------------------
 
@@ -214,10 +229,12 @@ class InspectorTempoText : public InspectorBase {
       Q_OBJECT
 
       UiInspectorElement e;
-      Ui::InspectorTempoText t;
+      Ui::InspectorText t;
+      Ui::InspectorTempoText tt;
 
    public:
       InspectorTempoText(QWidget* parent);
+      virtual void setElement() override;
       virtual void postInit();
       };
 

@@ -1887,8 +1887,8 @@ void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
       {
       Element::writeProperties(xml);
       if (writeStyle) {
-            if (getProperty(P_TEXT_STYLE_TYPE) != propertyDefault(P_TEXT_STYLE_TYPE))
-                  xml.tag("style", textStyle().name());
+            // if (getProperty(P_TEXT_STYLE_TYPE)  != propertyDefault(P_TEXT_STYLE_TYPE))
+            xml.tag("style", textStyle().name());
             _textStyle.writeProperties(xml, score()->textStyle(_styleIndex));
             }
       if (writeText)
@@ -2118,6 +2118,43 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
             }
       score()->setLayoutAll(true);
       return rv;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Text::propertyDefault(P_ID id) const
+      {
+      int idx;
+      switch (type()) {
+            case DYNAMIC:           idx = TEXT_STYLE_DYNAMICS; break;
+            case FIGURED_BASS:      idx = TEXT_STYLE_FIGURED_BASS; break;
+            case FINGERING:         idx = TEXT_STYLE_FINGERING; break;
+            case HARMONY:           idx = TEXT_STYLE_HARMONY; break;
+            case INSTRUMENT_CHANGE: idx = TEXT_STYLE_INSTRUMENT_CHANGE; break;
+            // case INSTRUMENT_NAME: would need to differentiate long & short
+            // probably best handle this with another override
+            case JUMP:              idx = TEXT_STYLE_REPEAT; break;
+            case LYRICS:            idx = TEXT_STYLE_LYRIC1; break;
+            case MARKER:            idx = TEXT_STYLE_REPEAT; break;
+            case REHEARSAL_MARK:    idx = TEXT_STYLE_REHEARSAL_MARK; break;
+            case STAFF_TEXT:        idx = TEXT_STYLE_STAFF; break;
+            case TEMPO_TEXT:        idx = TEXT_STYLE_TEMPO; break;
+            default:
+                  // if we cannot determine type, give up
+                  return QVariant();
+            }
+      switch (id) {
+            case P_TEXT_STYLE_TYPE:
+                  return idx;
+            case P_TEXT_STYLE:
+                  return score()->textStyle(idx).name();
+            case P_TEXT:
+                  return QString("");
+            default:
+                  return Element::propertyDefault(id);
+            }
       }
 
 //---------------------------------------------------------
