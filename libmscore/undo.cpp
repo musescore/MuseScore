@@ -1691,7 +1691,7 @@ void ChangePitch::flip()
       tpc2  = f_tpc2;
 
       Chord* chord = note->chord();
-      chord->segment()->measure()->updateAccidentals(chord->staffIdx());
+      chord->measure()->updateAccidentals(chord->staffIdx());
       note->score()->setLayoutAll(true);
       }
 

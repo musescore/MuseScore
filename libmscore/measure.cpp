@@ -3680,13 +3680,16 @@ void Measure::updateAccidentals(int staffIdx)
 
                   // PITCHED_ and PERCUSSION_STAFF can go note by note
 
+
                   for (Chord* ch : chord->graceNotes()) {
-                        for (Note* note : ch->notes())
+                        QList<Note*> notes(ch->notes());  // we need a copy!
+                        for (Note* note : notes)
                               note->updateAccidental(&as);
                         ch->sortNotes();
                         }
 
-                  for (Note* note : chord->notes()) {
+                  QList<Note*> notes(chord->notes());  // we need a copy!
+                  for (Note* note : notes) {
                         switch(staffGroup) {
                               case STANDARD_STAFF_GROUP:
                                     if (note->tieBack()) {
