@@ -92,12 +92,12 @@ void ScoreView::endEdit()
       if (!editObject)
             return;
       editObject->endEditDrag();
+/*
       Element* page = editObject;
       while (page->parent())
             page = page->parent();
       QPointF pageOffset(page->pos());
 */
-
       _score->addRefresh(editObject->canvasBoundingRect());
       for (int i = 0; i < aGrip.grips; ++i)
             score()->addRefresh(aGrip.grip[i]);
