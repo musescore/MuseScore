@@ -173,6 +173,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::VOLTA_SEGMENT) {
             genPropertyMenu1(e, popup);
+            popup->addAction(tr("Line Properties..."))->setData("l-props");
             popup->addAction(tr("Volta Properties..."))->setData("v-props");
             }
       else if (e->type() == Element::TIMESIG) {
@@ -213,7 +214,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::TEXTLINE_SEGMENT
                   || e->type() == Element::OTTAVA_SEGMENT
-                  || e->type() == Element::VOLTA_SEGMENT
                   || e->type() == Element::PEDAL_SEGMENT) {
             if (e->visible())
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
