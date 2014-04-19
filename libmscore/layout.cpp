@@ -248,6 +248,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   Note* p = overlapNotes[0];
                   for (int i = 0, count = overlapNotes.size(); i < count; ++i) {
                         Note* n = overlapNotes[i];
+                        NoteHeadType nHeadType;
+                        NoteHeadType pHeadType;
                         if (n->mirror()) {
                               if (separation < 0) {
                                     // don't try to share heads if there is any mirroring
@@ -263,8 +265,10 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     // unison
                                     conflictUnison = true;
                                     matchPending = false;
-                                    if (n->headGroup() != p->headGroup() || n->headType() != p->headType() || n->chord()->durationType() != p->chord()->durationType()
-                                        || n->tpc() != p->tpc() || n->mirror() || p->mirror())
+                                    nHeadType = (n->headType() == NoteHeadType::HEAD_AUTO) ? n->chord()->durationType().headType() : n->headType();
+                                    pHeadType = (p->headType() == NoteHeadType::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
+                                    if (n->headGroup() != p->headGroup() || nHeadType != pHeadType || n->chord()->dots() != p->chord()->dots()
+                                        || n->tpc() != p->tpc() || !n->chord()->stem() || !p->chord()->stem() || n->mirror() || p->mirror())
                                           shareHeads = false;
                                     break;
                               case 1:
