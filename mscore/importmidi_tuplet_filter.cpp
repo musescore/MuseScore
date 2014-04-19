@@ -116,7 +116,9 @@ void removeUselessTuplets(std::vector<TupletInfo> &tuplets)
             }
       }
 
-std::set<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets)
+std::set<int> findLongestUncommonGroup(
+            const std::vector<TupletInfo> &tuplets,
+            const ReducedFraction &basicQuant)
       {
       struct TInfo
             {
@@ -142,7 +144,8 @@ std::set<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets)
       std::vector<TInfo> info;
       for (int i = 0; i != (int)tuplets.size(); ++i) {
             const auto &tuplet = tuplets[i];
-            info.push_back({tuplet.onTime, tuplet.onTime + tuplet.len, i});
+            const auto interval = tupletInterval(tuplet, basicQuant);
+            info.push_back({interval.first, interval.second, i});
             }
 
       std::sort(info.begin(), info.end());
@@ -364,7 +367,7 @@ bool canUseIndex(
             }
                   // check tuplets for resulting voice count
       const int voice = findAvailableVoice(indexToCheck, tupletIntervals, voiceIntervals);
-      const int voiceCount = qMax((int)voiceIntervals.size(), voice + 1);
+      const int voiceCount = qMax((int)voiceIntervals.size(), voice + 1);     // index + 1 = count
       if (voiceCount > tupletVoiceLimit() || (voiceCount > 1 && (int)tuplet.chords.size()
                         < tupletLimits(tuplet.tupletNumber).minNoteCountAddVoice)) {
             return false;
@@ -697,7 +700,7 @@ void filterTuplets(std::vector<TupletInfo> &tuplets,
       removeUselessTuplets(tuplets);
       removeExtraTuplets(tuplets);
 
-      std::set<int> uncommons = findLongestUncommonGroup(tuplets);
+      std::set<int> uncommons = findLongestUncommonGroup(tuplets, basicQuant);
 
       Q_ASSERT_X(validateSelectedTuplets(uncommons.begin(), uncommons.end(), tuplets),
                  "MIDI tuplets: filterTuplets",
