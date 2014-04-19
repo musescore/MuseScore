@@ -636,7 +636,7 @@ void findTuplets(
       sortNotesByPitch(startBarChordIt, endBarChordIt);
       sortTupletsByAveragePitch(tuplets);
 
-      if (operations.useMultipleVoices) {
+      if (tupletVoiceLimit() > 1) {
             splitFirstTupletChords(tuplets, chords);
             minimizeOffTimeError(tuplets, chords, nonTuplets, startBarTick, basicQuant);
             }
