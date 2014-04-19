@@ -1865,26 +1865,27 @@ void Note::updateAccidental(AccidentalState* as)
 //    _line is the absolute line
 //---------------------------------------------------------
 
-void Note::updateRelLine()
+void Note::updateRelLine(bool sort)
       {
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
       int line = relStep(_line, clef);
       if (line != _line) {
             setLine(line);
-            if (chord())
+            if (chord() && sort)
                   chord()->sortNotes();
             }
       }
 
 //---------------------------------------------------------
 //   updateLine
+//   sorting the chord is needed, after calling this method
 //---------------------------------------------------------
 
 void Note::updateLine()
       {
       _line = absStep(tpc(), epitch());
-      updateRelLine();
+      updateRelLine(false);
       }
 
 //---------------------------------------------------------
