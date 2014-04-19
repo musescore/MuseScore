@@ -223,7 +223,7 @@ void Ottava::endEdit()
       if (editTick != tick() || editTick2 != tick2()) {
             Staff* s = staff();
             s->pitchOffsets().remove(editTick);
-            s->pitchOffsets().remove(editTick2+1);
+            s->pitchOffsets().remove(editTick2);
 
             s->updateOttava(this);
             score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
