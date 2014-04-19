@@ -1591,8 +1591,10 @@ void Chord::layoutPitched()
 
             Accidental* accidental = note->accidental();
             if (accidental) {
+                  qreal x = accidental->x() + note->x();
                   // convert x position of accidental to segment coordinate system
-                  qreal x = accidental->x() + note->x() + note->chord()->x();
+                  if (_noteType == NOTE_NORMAL)
+                        x += note->chord()->x();
                   x -= score()->styleS(ST_accidentalDistance).val() * _spatium;
                   lll = qMax(lll, -x);
                   }
@@ -1724,7 +1726,7 @@ void Chord::layoutPitched()
             for (int i = n-1; i >= 0; --i) {
                   Chord* c = _graceNotes[i];
                   x -= c->space().rw();
-                  c->setPos(x, 0);
+                  c->setPos(x - ipos().x(), 0);
                   x -= c->space().lw() + minNoteDistance * graceMag;
                   }
             if (-x > _space.lw())
