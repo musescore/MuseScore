@@ -564,6 +564,7 @@ void TestImportMidi::findLongestUncommonGroup()
       {
       std::vector<MidiTuplet::TupletInfo> tuplets;
       MidiTuplet::TupletInfo info;
+      const ReducedFraction basicQuant = ReducedFraction::fromTicks(MScore::division) / 4;  // 1/16
                   // 0
       info.onTime = {5, 8};
       info.len = {1, 8};
@@ -593,7 +594,7 @@ void TestImportMidi::findLongestUncommonGroup()
       info.len = {1, 1};
       tuplets.push_back(info);
 
-      std::set<int> result = MidiTuplet::findLongestUncommonGroup(tuplets);
+      std::set<int> result = MidiTuplet::findLongestUncommonGroup(tuplets, basicQuant);
       QVERIFY(result.size() == 3);
       QVERIFY(result == std::set<int>({0, 1, 2})
               || result == std::set<int>({1, 2, 3}));
@@ -613,7 +614,7 @@ void TestImportMidi::findLongestUncommonGroup()
       info.len = {1, 1};
       tuplets.push_back(info);
 
-      result = MidiTuplet::findLongestUncommonGroup(tuplets);
+      result = MidiTuplet::findLongestUncommonGroup(tuplets, basicQuant);
       QVERIFY(result.size() == 1);
       }
 
