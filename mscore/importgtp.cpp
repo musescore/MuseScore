@@ -284,11 +284,10 @@ void GuitarPro::readVolta(QList<int>* voltaInfo, Measure* m)
             Ms::Volta* volta = new Ms::Volta(score);
             volta->endings().clear();
             QString voltaTextString = "";
-            QList<int>::iterator iter;
             // initialise count to 1 as the first bit processed with represesnt first time volta
             int count = 1;
              // iterate through the volta information and determine the decimal numbers for voltas
-            for (iter = voltaInfo->begin(); iter != voltaInfo->end(); ++iter) {
+            for (auto iter = voltaInfo->begin(); iter != voltaInfo->end(); ++iter) {
                   if (*iter == 1) {   // we want this number to be displayed in the volta
                         if (voltaTextString == "")
                               voltaTextString += QString::number(count);
