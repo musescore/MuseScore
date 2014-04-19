@@ -4153,6 +4153,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               bool endSlur = false;
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
+                                    if(cr->isGrace()){
+                                          slur[slurNo]->setAnchor(Spanner::ANCHOR_CHORD);
+                                          slur[slurNo]->setParent(cr);
+                                          }
                                     if (lineType == "dotted")
                                           slur[slurNo]->setLineType(1);
                                     else if (lineType == "dashed")
