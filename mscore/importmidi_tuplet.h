@@ -35,7 +35,6 @@ struct TupletLimits
       };
 
 const TupletLimits& tupletLimits(int tupletNumber);
-int tupletVoiceLimit();
 void removeEmptyTuplets(MTrack &track);
 
 std::pair<ReducedFraction, ReducedFraction>

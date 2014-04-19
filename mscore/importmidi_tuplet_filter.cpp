@@ -1,5 +1,6 @@
 #include "importmidi_tuplet_filter.h"
 #include "importmidi_tuplet.h"
+#include "importmidi_tuplet_voice.h"
 #include "importmidi_chord.h"
 #include "importmidi_quant.h"
 #include "importmidi_inner.h"
