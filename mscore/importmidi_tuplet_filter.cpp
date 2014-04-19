@@ -127,7 +127,7 @@ std::set<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets)
                   else if (offTime > other.offTime)
                         return false;
                   else
-                        return onTime >= other.onTime;
+                        return onTime > other.onTime;
                   }
             bool operator==(const TInfo &other) const
                   {
