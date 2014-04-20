@@ -274,6 +274,7 @@ enum StyleIdx {
       ST_minMMRestWidth,
       ST_hideEmptyStaves,
       ST_dontHideStavesInFirstSystem,
+      ST_hideInstrumentNameIfOneInstrument,
       ST_gateTime,
       ST_tenutoGateTime,
       ST_staccatoGateTime,
