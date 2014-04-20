@@ -16,6 +16,38 @@ extern Preferences preferences;
 
 namespace Quantize {
 
+ReducedFraction userQuantNoteToFraction(MidiOperation::QuantValue quantNote)
+      {
+      const auto division = ReducedFraction::fromTicks(MScore::division);
+      auto userQuantValue = ReducedFraction::fromTicks(preferences.shortestNote);
+                  // specified quantization value
+      switch (quantNote) {
+            case MidiOperation::QuantValue::N_4:
+                  userQuantValue = division;
+                  break;
+            case MidiOperation::QuantValue::N_8:
+                  userQuantValue = division / 2;
+                  break;
+            case MidiOperation::QuantValue::N_16:
+                  userQuantValue = division / 4;
+                  break;
+            case MidiOperation::QuantValue::N_32:
+                  userQuantValue = division / 8;
+                  break;
+            case MidiOperation::QuantValue::N_64:
+                  userQuantValue = division / 16;
+                  break;
+            case MidiOperation::QuantValue::N_128:
+                  userQuantValue = division / 32;
+                  break;
+            case MidiOperation::QuantValue::FROM_PREFERENCES:
+            default:
+                  break;
+            }
+
+      return userQuantValue;
+      }
+
 ReducedFraction shortestQuantizedNoteInRange(
             const std::multimap<ReducedFraction, MidiChord>::const_iterator &beg,
             const std::multimap<ReducedFraction, MidiChord>::const_iterator &end)
