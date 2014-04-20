@@ -2,6 +2,7 @@
 #define IMPORTMIDI_OPMODEL_H
 
 #include "importmidi_operation.h"
+#include "importmidi_fraction.h"
 
 #include <memory>
 
@@ -46,11 +47,14 @@ class OperationsModel : public QAbstractItemModel
 
    private slots:
       void onDataChanged(const QModelIndex &index);
+      void updateQuantValue();
 
    private:
       std::unique_ptr<Node> root;
       std::unique_ptr<Controller> controller;
       QString trackLabel;
+      QTimer *updateQuantTimer;
+      ReducedFraction prefQuantValue;
 
       Node* nodeFromIndex(const QModelIndex &index) const;
       };
