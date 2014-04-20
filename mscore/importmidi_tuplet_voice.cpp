@@ -12,17 +12,45 @@
 namespace Ms {
 namespace MidiTuplet {
 
+// no more than VOICES
+
+int toIntVoices(MidiOperation::AllowedVoices value)
+      {
+      switch (value) {
+            case MidiOperation::AllowedVoices::V_1:
+                  return 1;
+            case MidiOperation::AllowedVoices::V_2:
+                  return 2;
+            case MidiOperation::AllowedVoices::V_3:
+                  return 3;
+            case MidiOperation::AllowedVoices::V_4:
+                  return 4;
+            }
+      }
+
 int voiceLimit()
       {
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
-      return (operations.useMultipleVoices) ? VOICES : 1;
+      const int allowedVoices = toIntVoices(operations.allowedVoices);
+
+      Q_ASSERT_X(allowedVoices <= VOICES,
+                 "MidiTuplet::voiceLimit",
+                 "Allowed voice count exceeds MuseScore voice limit");
+
+      return allowedVoices;
       }
 
 int tupletVoiceLimit()
       {
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
+      const int allowedVoices = toIntVoices(operations.allowedVoices);
+
+      Q_ASSERT_X(allowedVoices <= VOICES,
+                 "MidiTuplet::tupletVoiceLimit",
+                 "Allowed voice count exceeds MuseScore voice limit");
+
                   // for multiple voices: one voice is reserved for non-tuplet chords
-      return (operations.useMultipleVoices) ? VOICES - 1 : 1;
+      return (allowedVoices == 1) ? 1 : allowedVoices - 1;
       }
 
 std::pair<ReducedFraction, ReducedFraction>

@@ -55,7 +55,7 @@ struct TrackOperations
       bool useDots = true;
       LHRHSeparation LHRH;
       SearchTuplets tuplets;
-      bool useMultipleVoices = true;
+      MidiOperation::AllowedVoices allowedVoices = MidiOperation::AllowedVoices::V_4;
       bool changeClef = true;
       MidiOperation::Swing swing = MidiOperation::Swing::NONE;
       SplitDrums splitDrums;

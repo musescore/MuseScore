@@ -42,7 +42,7 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                   continue;
             bool changed = false;
                               // all chords of drum track should have voice == 0
-                              // because useMultipleVoices == false (see MidiImportOperations)
+                              // because allowedVoices == V_1 (see MidiImportOperations)
                               // also, all chords should have different onTime values
 
             Q_ASSERT_X(MChord::areOnTimeValuesDifferent(chords),
