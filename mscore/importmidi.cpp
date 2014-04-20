@@ -604,7 +604,12 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   const auto tick = toMuseScoreTicks(i.first, track.division);
                               // remove time signature events
                   if ((e.type() == ME_META) && (e.metaType() == META_TIME_SIGNATURE)) {
-                        sigmap->add(tick.ticks(), metaTimeSignature(e));
+                                    // because file can have incorrect data
+                                    // like time sig event not at the beginning of bar
+                                    // we need to round tick value to integral bar count
+                        int bars, beats, ticks;
+                        sigmap->tickValues(tick.ticks(), &bars, &beats, &ticks);
+                        sigmap->add(sigmap->bar2tick(bars, 0), metaTimeSignature(e));
                         }
                   else if (e.type() == ME_NOTE) {
                         ++events;
