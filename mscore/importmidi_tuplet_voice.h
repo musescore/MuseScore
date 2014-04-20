@@ -13,7 +13,7 @@ struct TupletInfo;
 
 struct TiedTuplet
       {
-      int tupletIndex;
+      int tupletId;
       int voice;
       std::pair<const ReducedFraction, MidiChord> *chord;  // chord the tuplet is tied with
       std::vector<int> tiedNoteIndexes;   // indexes of tied notes of that chord
@@ -23,9 +23,10 @@ int tupletVoiceLimit();
 int voiceLimit();
 void resetTupletVoices(std::vector<TupletInfo> &tuplets);
 
-void excludeExtraVoiceTuplets(
+bool excludeExtraVoiceTuplets(
             std::vector<TupletInfo> &tuplets,
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
+            std::list<TiedTuplet> &backTiedTuplets,
             const ReducedFraction &basicQuant,
             const ReducedFraction &barStart);
 
@@ -49,8 +50,8 @@ void assignVoices(
 bool haveOverlappingVoices(
             const std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
             const std::vector<TupletInfo> &tuplets,
-            const ReducedFraction &basicQuant,
-            const std::list<TiedTuplet> &backTiedTuplets = std::list<TiedTuplet>());
+            const std::list<TiedTuplet> &backTiedTuplets,
+            const ReducedFraction &basicQuant);
 
 #endif
 

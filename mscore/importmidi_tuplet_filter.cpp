@@ -369,8 +369,8 @@ bool canUseIndex(
                   // check tuplets for resulting voice count
       const int voice = findAvailableVoice(indexToCheck, tupletIntervals, voiceIntervals);
       const int voiceCount = qMax((int)voiceIntervals.size(), voice + 1);     // index + 1 = count
-      if (voiceCount > tupletVoiceLimit() || (voiceCount > 1 && (int)tuplet.chords.size()
-                        < tupletLimits(tuplet.tupletNumber).minNoteCountAddVoice)) {
+      if (voiceCount > 1 && (int)tuplet.chords.size()
+                  < tupletLimits(tuplet.tupletNumber).minNoteCountAddVoice) {
             return false;
             }
       return true;
@@ -445,10 +445,6 @@ prepareVoiceIntervals(
       std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> voiceIntervals;
       for (int i: selectedTuplets) {
             int voice = findAvailableVoice(i, tupletIntervals, voiceIntervals);
-
-            Q_ASSERT_X(voice < tupletVoiceLimit(),
-                       "MidiTuplet::prepareVoiceIntervals", "Tuplet voice exceeds voice limit");
-
             voiceIntervals[voice].push_back(tupletIntervals[i]);
             }
       return voiceIntervals;

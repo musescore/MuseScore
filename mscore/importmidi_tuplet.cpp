@@ -35,6 +35,22 @@ const TupletLimits& tupletLimits(int tupletNumber)
       return it->second;
       }
 
+const TupletInfo& tupletFromId(int id, const std::vector<TupletInfo> &tuplets)
+      {
+      auto it = std::find_if(tuplets.begin(), tuplets.end(),
+                             [=](const TupletInfo &t) { return t.id == id; });
+
+      Q_ASSERT_X(it != tuplets.end(), "MidiTuplet::tupletFromId", "Tuplet not found from id");
+
+      return *it;
+      }
+
+TupletInfo& tupletFromId(int id, std::vector<TupletInfo> &tuplets)
+      {
+      return const_cast<TupletInfo &>(
+                        tupletFromId(id, const_cast<const std::vector<TupletInfo> &>(tuplets)));
+      }
+
 // tuplets with no chords are removed
 // tuplets with single chord with chord.onTime = tuplet.onTime
 //    and chord.len = tuplet.len are removed as well
@@ -479,7 +495,7 @@ void addTupletEvents(std::multimap<ReducedFraction, TupletData> &tupletEvents,
                   }
 
             for (const TiedTuplet &tiedTuplet: backTiedTuplets) {
-                  if (tiedTuplet.tupletIndex == i) {
+                  if (tiedTuplet.tupletId == tupletInfo.id) {
                         MidiChord &midiChord = tiedTuplet.chord->second;
 
 #ifdef QT_DEBUG
@@ -628,8 +644,6 @@ void findTuplets(
             ++startNonTupletChordIt;
       auto nonTuplets = findNonTupletChords(tuplets, startNonTupletChordIt,
                                             endBarChordIt, startBarTick);
-      if (tupletVoiceLimit() == 1)
-            excludeExtraVoiceTuplets(tuplets, nonTuplets, basicQuant, startBarTick);
 
       resetTupletVoices(tuplets);  // because of tol some chords may have non-zero voices
       addChordsBetweenTupletNotes(tuplets, nonTuplets, startBarTick, basicQuant);
@@ -645,11 +659,6 @@ void findTuplets(
 
       Q_ASSERT_X(!doTupletsHaveCommonChords(tuplets),
                  "MIDI tuplets: findTuplets", "Tuplets have common chords but they shouldn't");
-      Q_ASSERT_X((voiceLimit() == 1)
-                        ? !haveOverlappingVoices(nonTuplets, tuplets, basicQuant)
-                        : true,
-                 "MIDI tuplets: findTuplets",
-                 "Overlapping tuplet and non-tuplet voices for the case !useMultipleVoices");
 
       const auto prevBarStart = findPrevBarStart(startBarTick, endBarTick - startBarTick);
       auto backTiedTuplets = findBackTiedTuplets(chords, tuplets, prevBarStart,
