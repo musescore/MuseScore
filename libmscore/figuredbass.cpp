@@ -924,6 +924,8 @@ FiguredBass::FiguredBass(const FiguredBass& fb)
 
 FiguredBass::~FiguredBass()
       {
+      for (FiguredBassItem* item : items)
+            delete item;
       }
 
 //---------------------------------------------------------
@@ -945,8 +947,8 @@ void FiguredBass::write(Xml& xml) const
                   // if all items parsed and not unstled, we simnply have a special style: write it
                   xml.tag("style", textStyle().name());
             }
-      foreach(FiguredBassItem item, items)
-            item.write(xml);
+      for(FiguredBassItem* item : items)
+            item->write(xml);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -970,7 +972,7 @@ void FiguredBass::read(XmlReader& e)
                   pItem->setTrack(track());
                   pItem->setParent(this);
                   pItem->read(e);
-                  items.append(*pItem);
+                  items.push_back(pItem);
                   // add item normalized text
                   if(!normalizedText.isEmpty())
                         normalizedText.append('\n');
@@ -1020,9 +1022,9 @@ void FiguredBass::layout()
             layoutLines();
             bbox().setRect(0, 0, _lineLenghts.at(0), 0);
             // layout each item and enlarge bbox to include items bboxes
-            for(int i=0; i < items.size(); i++) {
-                  items[i].layout();
-                  addbbox(items[i].bbox().translated(items[i].pos()));
+            for(FiguredBassItem* item : items) {
+                  item->layout();
+                  addbbox(item->bbox().translated(item->pos()));
                   }
             }
       adjustReadPos();
@@ -1135,10 +1137,10 @@ void FiguredBass::draw(QPainter* painter) const
             if(items.size() < 1)                            // if not parseable into f.b. items
                   Text::draw(painter);                      // draw as standard text
             else
-                  foreach(FiguredBassItem item, items) {    // if parseable into f.b. items
-                        painter->translate(item.pos());     // draw each item in its proper position
-                        item.draw(painter);
-                        painter->translate(-item.pos());
+                  for(FiguredBassItem* item : items) {      // if parseable into f.b. items
+                        painter->translate(item->pos());    // draw each item in its proper position
+                        item->draw(painter);
+                        painter->translate(-item->pos());
                         }
             }
 /* DEBUG
@@ -1185,7 +1187,7 @@ void FiguredBass::endEdit()
                   }
             pItem->setTrack(track());
             pItem->setParent(this);
-            items.append(*pItem);
+            items.push_back(pItem);
 
             // add item normalized text
             if(!normalizedText.isEmpty())
@@ -1208,16 +1210,16 @@ void FiguredBass::endEdit()
 void FiguredBass::setSelected(bool flag)
       {
       Element::setSelected(flag);
-      for(int i=0; i < items.size(); i++) {
-            items[i].setSelected(flag);
+      for(FiguredBassItem* item : items) {
+            item->setSelected(flag);
             }
       }
 
 void FiguredBass::setVisible(bool flag)
       {
       Element::setVisible(flag);
-      for(int i=0; i < items.size(); i++) {
-            items[i].setVisible(flag);
+      for(FiguredBassItem* item : items) {
+            item->setVisible(flag);
             }
       }
 
@@ -1264,16 +1266,16 @@ FiguredBass* FiguredBass::nextFiguredBass() const
 qreal FiguredBass::additionalContLineX(qreal pagePosY) const
 {
       QPointF pgPos = pagePos();
-      foreach (FiguredBassItem fbi, items)
+      for (FiguredBassItem* fbi : items)
             // if item has cont.line but nothing before it
             // and item Y coord near enough to pagePosY
-            if(fbi.contLine()
-                  && fbi.digit() == FBIDigitNone
-                     && fbi.prefix() == FiguredBassItem::ModifierNone
-                        && fbi.suffix() == FiguredBassItem::ModifierNone
-                           && fbi.parenth4() == FiguredBassItem::ParenthesisNone
-                              && qAbs(pgPos.y() + fbi.ipos().y() - pagePosY) < 0.05)
-                  return pgPos.x() + fbi.ipos().x();
+            if(fbi->contLine()
+                  && fbi->digit() == FBIDigitNone
+                     && fbi->prefix() == FiguredBassItem::ModifierNone
+                        && fbi->suffix() == FiguredBassItem::ModifierNone
+                           && fbi->parenth4() == FiguredBassItem::ParenthesisNone
+                              && qAbs(pgPos.y() + fbi->ipos().y() - pagePosY) < 0.05)
+                  return pgPos.x() + fbi->ipos().x();
 
       return 0.0;                               // no suitable line
 }
@@ -1316,9 +1318,9 @@ QVariant FiguredBass::propertyDefault(P_ID id) const
 FiguredBassItem * FiguredBass::addItem()
       {
       int line = items.size();
-      FiguredBassItem fib(score(), line);
-      items.append(fib);
-      return &(items.last());
+      FiguredBassItem* fib = new FiguredBassItem(score(), line);
+      items.push_back(fib);
+      return fib;
       }
 
 //---------------------------------------------------------
@@ -1648,8 +1650,8 @@ bool FiguredBass::readMusicXML(XmlReader& e, int divisions, bool& extend)
 
 bool FiguredBass::hasParentheses() const
       {
-      foreach(FiguredBassItem item, items)
-            if (item.startsWithParenthesis())
+      for(FiguredBassItem* item : items)
+            if (item->startsWithParenthesis())
                   return true;
       return false;
       }
@@ -1665,8 +1667,8 @@ void FiguredBass::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const
             if (hasParentheses())
                   stag += " parentheses=\"yes\"";
             xml.stag(stag);
-            foreach(FiguredBassItem item, items)
-                  item.writeMusicXML(xml, doFigure, doExtend);
+            for(FiguredBassItem* item : items)
+                  item->writeMusicXML(xml, doFigure, doExtend);
             xml.etag();
             }
       }
