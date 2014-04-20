@@ -211,10 +211,22 @@ bool isInCommonIndexes(
             const std::vector<int> &selectedTuplets,
             const std::vector<TupletCommon> &tupletCommons)
       {
-      for (size_t i = 0; i != selectedTuplets.size() - 1; ++i) {
-            const auto &indexes = tupletCommons[selectedTuplets[i]].commonIndexes;
-            if (indexes.find(indexToCheck) != indexes.end())
-                  return true;
+      for (size_t i = 0; i != selectedTuplets.size(); ++i) {
+            const int tupletIndex = selectedTuplets[i];
+
+            Q_ASSERT_X(indexToCheck != tupletIndex, "MidiTuplet::isInCommonIndexes",
+                       "Checked indexes are the same but they should be different");
+
+            if (indexToCheck > tupletIndex) {
+                  const auto &indexes = tupletCommons[tupletIndex].commonIndexes;
+                  if (indexes.find(indexToCheck) != indexes.end())
+                        return true;
+                  }
+            else {
+                  const auto &indexes = tupletCommons[indexToCheck].commonIndexes;
+                  if (indexes.find(tupletIndex) != indexes.end())
+                        return true;
+                  }
             }
       return false;
       }
