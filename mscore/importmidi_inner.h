@@ -90,6 +90,7 @@ namespace MidiTuplet {
 
 struct TupletInfo
       {
+      int id;
       ReducedFraction onTime = {-1, 1};  // invalid
       ReducedFraction len = {-1, 1};
       int tupletNumber = -1;

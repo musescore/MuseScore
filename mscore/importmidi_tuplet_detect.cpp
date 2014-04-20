@@ -282,6 +282,7 @@ std::vector<TupletInfo> detectTuplets(
       const auto divLengths = Meter::divisionsOfBarForTuplets(barFraction);
 
       std::vector<TupletInfo> tuplets;
+      int id = 0;
       for (const auto &divLen: divLengths) {
             const auto tupletNumbers = findTupletNumbers(divLen, barFraction);
             const auto div = barFraction / divLen;
@@ -321,6 +322,7 @@ std::vector<TupletInfo> detectTuplets(
 
                         if (!isTupletAllowed(tupletInfo))
                               continue;
+                        tupletInfo.id = id++;
                         tuplets.push_back(tupletInfo);   // tuplet found
                         }      // next tuplet type
                   }

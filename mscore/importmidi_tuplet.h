@@ -37,6 +37,9 @@ struct TupletLimits
 const TupletLimits& tupletLimits(int tupletNumber);
 void removeEmptyTuplets(MTrack &track);
 
+const TupletInfo& tupletFromId(int id, const std::vector<TupletInfo> &tuplets);
+TupletInfo& tupletFromId(int id, std::vector<TupletInfo> &tuplets);
+
 std::pair<ReducedFraction, ReducedFraction>
 tupletInterval(const TupletInfo &tuplet,
                const ReducedFraction &basicQuant);
