@@ -147,9 +147,6 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                        const ReducedFraction &lastTick)
       {
       auto &opers = preferences.midiImportOperations;
-                  // later it's better to set basicQuant to 1/16 for mechanical MIDI files
-                  // and to 1/8 for human-performed MIDI files
-      const auto basicQuant = ReducedFraction::fromTicks(120); // 1/16
 
       for (auto &track: tracks) {
             MTrack &mtrack = track.second;
@@ -157,6 +154,8 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                         // for further usage
             opers.setCurrentTrack(mtrack.indexOfOperation);
             opers.adaptForPercussion(mtrack.indexOfOperation, mtrack.mtrack->drumTrack());
+            const auto basicQuant = Quantize::userQuantNoteToFraction(
+                                          opers.currentTrackOperations().quantize.value);
 
             MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, lastTick, basicQuant);
 

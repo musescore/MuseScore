@@ -49,7 +49,7 @@ OperationsModel::OperationsModel()
                   // - initialize opeations with their default values
                   // - string lists below should match Operation enum values
       Node *quantValue = new Node;
-      quantValue->name = QCoreApplication::translate("MIDI import operations", "Quantization");
+      quantValue->name = QCoreApplication::translate("MIDI import operations", "Max quantization value");
       quantValue->oper.type = MidiOperation::Type::QUANT_VALUE;
       quantValue->oper.value = (int)TrackOperations().quantize.value;
       quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "Value from preferences"));

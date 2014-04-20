@@ -1,6 +1,8 @@
 #ifndef IMPORTMIDI_QUANT_H
 #define IMPORTMIDI_QUANT_H
 
+#include "importmidi_operation.h"
+
 
 namespace Ms {
 
@@ -9,6 +11,8 @@ class TimeSigMap;
 class ReducedFraction;
 
 namespace Quantize {
+
+ReducedFraction userQuantNoteToFraction(MidiOperation::QuantValue quantNote);
 
 ReducedFraction quantForLen(
             const ReducedFraction &basicQuant,
