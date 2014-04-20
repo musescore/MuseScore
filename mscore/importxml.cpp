@@ -1892,7 +1892,7 @@ static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, b
                   readFiguredBassItem(pItem, e, parentheses, figureExtend);
                   if (figureExtend)
                         extend = true;
-                  fb->appendItem(*pItem);
+                  fb->appendItem(pItem);
                   // add item normalized text
                   if (!normalizedText.isEmpty())
                         normalizedText.append('\n');
