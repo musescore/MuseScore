@@ -524,18 +524,6 @@ void InstrumentWizard::createInstruments(Score* cs)
             staffIdx = nstaffIdx;
             }
 
-      //
-      // remove instrument names if only one part
-      //
-      if (cs->parts().size() == 1) {
-            Part* part = cs->parts().front();
-            if (part->instrList()->size() == 1) {
-                  Instrument& instrument = part->instrList()->instrument(0);
-                  instrument.setShortName("");
-                  instrument.setLongName("");
-                  }
-            }
-
       cs->setLayoutAll(true);
       }
 
