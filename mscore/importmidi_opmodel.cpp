@@ -31,7 +31,7 @@ struct Controller {
       Node *quintuplets = nullptr;
       Node *septuplets = nullptr;
       Node *nonuplets = nullptr;
-      Node *multipleVoices = nullptr;
+      Node *allowedVoices = nullptr;
       Node *splitDrums = nullptr;
       Node *showStaffBracket = nullptr;
       Node *pickupMeasure = nullptr;
@@ -71,20 +71,26 @@ OperationsModel::OperationsModel()
       root->children.push_back(std::unique_ptr<Node>(quantValue));
       controller->quantValue = quantValue;
 
+
+      Node *allowedVoices = new Node;
+      allowedVoices->name = QCoreApplication::translate("MIDI import operations", "Max allowed voices");
+      allowedVoices->oper.type = MidiOperation::Type::ALLOWED_VOICES;
+      allowedVoices->oper.value = (int)TrackOperations().allowedVoices;
+      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "1"));
+      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
+      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "3"));
+      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "4"));
+      allowedVoices->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(allowedVoices));
+      controller->allowedVoices = allowedVoices;
+
+
       Node *useDots = new Node;
       useDots->name = QCoreApplication::translate("MIDI import operations", "Use dots");
       useDots->oper.type = MidiOperation::Type::USE_DOTS;
       useDots->oper.value = TrackOperations().useDots;
       useDots->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(useDots));
-
-      Node *useMultipleVoices = new Node;
-      useMultipleVoices->name = QCoreApplication::translate("MIDI import operations", "Multiple voices");
-      useMultipleVoices->oper.type = MidiOperation::Type::USE_MULTIPLE_VOICES;
-      useMultipleVoices->oper.value = TrackOperations().useMultipleVoices;
-      useMultipleVoices->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(useMultipleVoices));
-      controller->multipleVoices = useMultipleVoices;
 
 
       // ------------- tuplets --------------
@@ -500,8 +506,8 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
                   case MidiOperation::Type::SWING:
                         node->oper.value = (int)opers.opers.swing; break;
 
-                  case MidiOperation::Type::USE_MULTIPLE_VOICES:
-                        node->oper.value = opers.opers.useMultipleVoices; break;
+                  case MidiOperation::Type::ALLOWED_VOICES:
+                        node->oper.value = (int)opers.opers.allowedVoices; break;
 
                   case MidiOperation::Type::TUPLET_SEARCH:
                         node->oper.value = opers.opers.tuplets.doSearch; break;
@@ -658,8 +664,8 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
                   splitDrums->visible = isDrumTrack;
             if (removeDrumRests)
                   removeDrumRests->visible = isDrumTrack;
-            if (multipleVoices)
-                  multipleVoices->visible = !isDrumTrack;
+            if (allowedVoices)
+                  allowedVoices->visible = !isDrumTrack;
             if (clef)
                   clef->visible = !isDrumTrack;
             if (pickupMeasure)

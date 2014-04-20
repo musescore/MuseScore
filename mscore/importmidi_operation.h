@@ -21,7 +21,7 @@ struct MidiOperation
             LHRH_SPLIT_NOTE,
 
             USE_DOTS,
-            USE_MULTIPLE_VOICES,
+            ALLOWED_VOICES,
 
             TUPLET_SEARCH,
             TUPLET_2,
@@ -55,6 +55,13 @@ struct MidiOperation
             N_32,
             N_64,
             N_128
+            };
+
+      enum class AllowedVoices {
+            V_1 = 0,
+            V_2,
+            V_3,
+            V_4
             };
 
       enum class Swing {

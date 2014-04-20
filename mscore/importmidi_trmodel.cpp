@@ -112,8 +112,8 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::SWING:
                   trackData.opers.swing = (MidiOperation::Swing)operValue.toInt();
                   break;
-            case MidiOperation::Type::USE_MULTIPLE_VOICES:
-                  trackData.opers.useMultipleVoices = operValue.toBool();
+            case MidiOperation::Type::ALLOWED_VOICES:
+                  trackData.opers.allowedVoices = (MidiOperation::AllowedVoices)operValue.toInt();
                   break;
             case MidiOperation::Type::TUPLET_SEARCH:
                   trackData.opers.tuplets.doSearch = operValue.toBool();
@@ -254,10 +254,10 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
                         }
                   }
 
-            // MidiOperation::Type::USE_MULTIPLE_VOICES
+            // MidiOperation::Type::ALLOWED_VOICES
             for (int i = 1; i != trackCount_; ++i) {
-                  if (tracksData_[i].opers.useMultipleVoices != opers.opers.useMultipleVoices) {
-                        opers.undefinedOpers.insert((int)MidiOperation::Type::USE_MULTIPLE_VOICES);
+                  if (tracksData_[i].opers.allowedVoices != opers.opers.allowedVoices) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::ALLOWED_VOICES);
                         break;
                         }
                   }
