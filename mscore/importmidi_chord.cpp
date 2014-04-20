@@ -74,10 +74,12 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
       {
       for (auto &track: tracks) {
             auto &chords = track.second.chords;
-            for (auto i1 = chords.begin(); i1 != chords.end(); ++i1) {
+            for (auto i1 = chords.begin(); i1 != chords.end(); ) {
                   auto &chord1 = i1->second;
                   const auto &onTime1 = i1->first;
-                  for (auto &note1: chord1.notes) {
+                  for (auto note1It = chord1.notes.begin(); note1It != chord1.notes.end(); ) {
+                        auto &note1 = *note1It;
+                        bool noteRemoved = false;
                         for (auto i2 = std::next(i1); i2 != chords.end(); ++i2) {
                               const auto &onTime2 = i2->first;
                               if (onTime2 >= note1.offTime)
@@ -92,17 +94,29 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                                            onTime1.ticks(), note1.offTime.ticks(),
                                            onTime2.ticks(), note2.offTime.ticks());
                                     note1.offTime = onTime2;
+
+                                    if (note1.offTime - onTime1 < MChord::minAllowedDuration()) {
+                                          note1It = chord1.notes.erase(note1It);
+                                          noteRemoved = true;
+                                                // it's not good to delete notes
+                                          qDebug() << "removeOverlappingNotes: "
+                                                      "note was removed due to its short length";
+                                          }
+
                                     i2 = std::prev(chords.end());
                                     break;
                                     }
                               }
-                        if (note1.offTime <= ReducedFraction(0, 1)) {
-                              qDebug("removeOverlappingNotes: duration <= 0: drop note at %d",
-                                     onTime1.ticks());
+                        if (noteRemoved)
                               continue;
-                              }
+                        ++note1It;
                         }
-                  } // for note1
+                  if (chord1.notes.isEmpty()) {
+                        i1 = chords.erase(i1);
+                        continue;
+                        }
+                  ++i1;
+                  }
             }
       }
 
