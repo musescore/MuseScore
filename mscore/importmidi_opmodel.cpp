@@ -1,8 +1,12 @@
 #include "importmidi_opmodel.h"
 #include "importmidi_operations.h"
+#include "preferences.h"
+#include "libmscore/mscore.h"
 
 
 namespace Ms {
+
+extern Preferences preferences;
 
 struct Node {
       QString name;
@@ -44,7 +48,11 @@ struct Controller {
 OperationsModel::OperationsModel()
             : root(std::unique_ptr<Node>(new Node()))
             , controller(std::unique_ptr<Controller>(new Controller()))
+            , updateQuantTimer(new QTimer)
       {
+      connect(updateQuantTimer, SIGNAL(timeout()), this, SLOT(updateQuantValue()));
+      updateQuantTimer->start(100);
+
       beginResetModel();
                   // - initialize opeations with their default values
                   // - string lists below should match Operation enum values
@@ -549,6 +557,36 @@ void OperationsModel::onDataChanged(const QModelIndex &index)
             return;
       if (controller->updateNodeDependencies(node, false))
             layoutChanged();
+      }
+
+void OperationsModel::updateQuantValue()
+      {
+      const auto newPrefQuantValue = ReducedFraction::fromTicks(preferences.shortestNote);
+      if (newPrefQuantValue == prefQuantValue)
+            return;
+
+      prefQuantValue = newPrefQuantValue;
+      const auto division = ReducedFraction::fromTicks(MScore::division);
+      QString value;
+
+      if (prefQuantValue == division)
+            value += "Quarter";
+      else if (prefQuantValue == division / 2)
+            value += "Eighth";
+      else if (prefQuantValue == division / 4)
+            value += "16th";
+      else if (prefQuantValue == division / 8)
+            value += "32nd";
+      else if (prefQuantValue == division / 16)
+            value += "64th";
+      else if (prefQuantValue == division / 32)
+            value += "128th";
+      else
+            Q_ASSERT_X(false, "OperationsModel::updateQuantValue", "Unknown quantization value");
+
+      controller->quantValue->values[0] = QCoreApplication::translate(
+                        "MIDI import operations", "Value from preferences (%1)").arg(value);
+      emit dataChanged(QModelIndex(), QModelIndex());
       }
 
 Node* OperationsModel::nodeFromIndex(const QModelIndex &index) const
