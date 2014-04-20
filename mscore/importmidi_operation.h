@@ -13,7 +13,6 @@ struct MidiOperation
             DO_IMPORT = 0,
 
             QUANT_VALUE,
-            QUANT_REDUCE,
             QUANT_HUMAN,
 
             DO_LHRH_SEPARATION,

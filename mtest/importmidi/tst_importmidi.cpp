@@ -67,7 +67,6 @@ class TestImportMidi : public QObject, public MTest
             const int defaultQuant = preferences.shortestNote;
             preferences.shortestNote = MScore::division; // midi quantization: 1/4
             TrackOperations opers;
-            opers.quantize.reduceToShorterNotesInBar = false;
             preferences.midiImportOperations.appendTrackOperations(opers);
             mf("quant_dotted_4th");
             preferences.shortestNote = defaultQuant;

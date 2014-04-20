@@ -81,9 +81,6 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::QUANT_VALUE:
                   trackData.opers.quantize.value = (MidiOperation::QuantValue)operValue.toInt();
                   break;
-            case MidiOperation::Type::QUANT_REDUCE:
-                  trackData.opers.quantize.reduceToShorterNotesInBar = operValue.toBool();
-                  break;
             case MidiOperation::Type::QUANT_HUMAN:
                   trackData.opers.quantize.humanPerformance = operValue.toBool();
                   break;
@@ -170,15 +167,6 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.quantize.value != opers.opers.quantize.value) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::QUANT_VALUE);
-                        break;
-                        }
-                  }
-
-            // MidiOperation::Type::QUANT_REDUCE
-            for (int i = 1; i != trackCount_; ++i) {
-                  if (tracksData_[i].opers.quantize.reduceToShorterNotesInBar
-                              != opers.opers.quantize.reduceToShorterNotesInBar) {
-                        opers.undefinedOpers.insert((int)MidiOperation::Type::QUANT_REDUCE);
                         break;
                         }
                   }
