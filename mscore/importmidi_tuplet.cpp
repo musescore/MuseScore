@@ -640,8 +640,11 @@ void findTuplets(
 
             // because of tol for non-tuplets we should use only chords with onTime >= bar start
       auto startNonTupletChordIt = startBarChordIt;
-      while (startNonTupletChordIt->first < startBarTick)
+      while (startNonTupletChordIt != chords.end()
+                        && startNonTupletChordIt->first < startBarTick) {
             ++startNonTupletChordIt;
+            }
+
       auto nonTuplets = findNonTupletChords(tuplets, startNonTupletChordIt,
                                             endBarChordIt, startBarTick);
 
