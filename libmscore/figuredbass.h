@@ -15,7 +15,8 @@
 
 #include "segment.h"
 #include "text.h"
-#include "libmscore/figuredbass.h"
+//#include "libmscore/figuredbass.h"
+#include <vector>
 
 namespace Ms {
 
@@ -251,7 +252,7 @@ class FiguredBass : public Text {
       Q_PROPERTY(bool   onNote      READ onNote)
       Q_PROPERTY(int    ticks       READ ticks  WRITE setTicks)
 
-      QList<FiguredBassItem>  items;            // the individual lines of the F.B.
+      std::vector<FiguredBassItem*> items;      // the individual lines of the F.B.
       QVector<qreal>    _lineLenghts;           // lengths of duration indicator lines (in raster units)
       bool              _onNote;                // true if this element is on a staff note | false if it is betweee notes
       int               _ticks;                 // the duration (used for cont. lines and for multiple F.B.
@@ -323,7 +324,7 @@ Q_INVOKABLE Ms::FiguredBassItem* addItem();
       virtual bool      setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant  propertyDefault(P_ID) const;
 
-      void appendItem(const FiguredBassItem& item) {  items.append(item); }
+      void appendItem(FiguredBassItem* item) {  items.push_back(item); }
       };
 
 
