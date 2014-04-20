@@ -222,6 +222,25 @@ size_t chordCount(
       return sum;
       }
 
+bool voiceDontExceedLimit(
+            const std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
+            const std::vector<TupletInfo> &tuplets)
+      {
+      for (const auto &tuplet: tuplets) {
+            const int voice = tuplet.chords.begin()->second->second.voice;
+            if (voice >= voiceLimit())
+                  return true;
+            }
+
+      for (const auto &chord: nonTuplets) {
+            const int voice = chord->second.voice;
+            if (voice >= voiceLimit())
+                  return true;
+            }
+
+      return false;
+      }
+
 #endif
 
 
@@ -782,6 +801,8 @@ void assignVoices(
                  "MIDI tuplets: assignVoices", "Tuplet chords have different voices");
       Q_ASSERT_X(!haveOverlappingVoices(nonTuplets, tuplets, backTiedTuplets, basicQuant),
                  "MIDI tuplets: assignVoices", "Overlapping tuplets of the same voice");
+      Q_ASSERT_X(!voiceDontExceedLimit(nonTuplets, tuplets),
+                 "MIDI tuplets: assignVoices", "Voice exceeds the limit");
       }
 
 } // namespace MidiTuplet
