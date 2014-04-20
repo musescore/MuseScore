@@ -29,7 +29,6 @@ struct SearchTuplets
 struct Quantization
       {
       MidiOperation::QuantValue value = MidiOperation::QuantValue::FROM_PREFERENCES;
-      bool reduceToShorterNotesInBar = true;
       bool humanPerformance = false;
       };
 

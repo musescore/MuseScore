@@ -63,14 +63,6 @@ OperationsModel::OperationsModel()
       root->children.push_back(std::unique_ptr<Node>(quantValue));
       controller->quantValue = quantValue;
 
-
-      Node *reduceToShorter = new Node;
-      reduceToShorter->name = QCoreApplication::translate("MIDI import operations", "Reduce to shortest note in measure");
-      reduceToShorter->oper.type = MidiOperation::Type::QUANT_REDUCE;
-      reduceToShorter->oper.value = Quantization().reduceToShorterNotesInBar;
-      reduceToShorter->parent = quantValue;
-      quantValue->children.push_back(std::unique_ptr<Node>(reduceToShorter));
-
       Node *useDots = new Node;
       useDots->name = QCoreApplication::translate("MIDI import operations", "Use dots");
       useDots->oper.type = MidiOperation::Type::USE_DOTS;
@@ -482,8 +474,6 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
 
                   case MidiOperation::Type::QUANT_VALUE:
                         node->oper.value = (int)opers.opers.quantize.value; break;
-                  case MidiOperation::Type::QUANT_REDUCE:
-                        node->oper.value = opers.opers.quantize.reduceToShorterNotesInBar; break;
                   case MidiOperation::Type::QUANT_HUMAN:
                         node->oper.value = opers.opers.quantize.humanPerformance; break;
 
