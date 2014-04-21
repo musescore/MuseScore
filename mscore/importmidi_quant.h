@@ -29,7 +29,7 @@ ReducedFraction findQuantizedChordOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart);
+            const ReducedFraction &rangeStart);
 
 ReducedFraction findQuantizedChordOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
@@ -40,7 +40,7 @@ ReducedFraction findQuantizedNoteOffTime(
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart);
+            const ReducedFraction &rangeStart);
 
 ReducedFraction findQuantizedNoteOffTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
@@ -51,7 +51,7 @@ ReducedFraction findMinQuantizedOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart);
+            const ReducedFraction &rangeStart);
 
 ReducedFraction findMinQuantizedOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
@@ -61,7 +61,7 @@ ReducedFraction findMaxQuantizedOffTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart);
+            const ReducedFraction &rangeStart);
 
 ReducedFraction findMaxQuantizedOffTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
@@ -71,7 +71,7 @@ ReducedFraction findOnTimeQuantError(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart);
+            const ReducedFraction &rangeStart);
 
 ReducedFraction findOnTimeQuantError(
             const std::pair<const ReducedFraction, MidiChord> &chord,
@@ -82,7 +82,7 @@ ReducedFraction findOffTimeQuantError(
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart);
+            const ReducedFraction &rangeStart);
 
 ReducedFraction findOffTimeQuantError(
             const std::pair<const ReducedFraction, MidiChord> &chord,
