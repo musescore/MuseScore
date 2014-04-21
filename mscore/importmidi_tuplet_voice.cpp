@@ -26,6 +26,7 @@ int toIntVoices(MidiOperation::AllowedVoices value)
             case MidiOperation::AllowedVoices::V_4:
                   return 4;
             }
+      return VOICES;
       }
 
 int voiceLimit()

@@ -123,10 +123,12 @@ ReducedFraction findQuantizedChordOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart)
+            const ReducedFraction &rangeStart)
       {
       const ReducedFraction minQuant = findMinQuant(chord, basicQuant, tupletRatio);
-      return barStart + quantizeValue(chord.first - barStart, minQuant);
+      if (chord.first <= rangeStart)
+            return rangeStart;
+      return rangeStart + quantizeValue(chord.first - rangeStart, minQuant);
       }
 
 ReducedFraction findQuantizedChordOnTime(
@@ -141,10 +143,12 @@ ReducedFraction findQuantizedNoteOffTime(
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart)
+            const ReducedFraction &rangeStart)
       {
+      if (offTime <= rangeStart)
+            return rangeStart;
       const auto quant = quantForLen(basicQuant, offTime - chord.first, tupletRatio);
-      return barStart + quantizeValue(offTime - barStart, quant);
+      return rangeStart + quantizeValue(offTime - rangeStart, quant);
       }
 
 ReducedFraction findQuantizedNoteOffTime(
@@ -159,12 +163,18 @@ ReducedFraction findMinQuantizedOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart)
+            const ReducedFraction &rangeStart)
       {
       ReducedFraction minOnTime(-1, 1);
       for (const auto &note: chord.second.notes) {
-            const auto quant = quantForLen(basicQuant, note.offTime - chord.first, tupletRatio);
-            const auto onTime = barStart + quantizeValue(chord.first - barStart, quant);
+            ReducedFraction onTime;
+            if (chord.first <= rangeStart)
+                  onTime = rangeStart;
+            else {
+                  const auto quant = quantForLen(
+                                    basicQuant, note.offTime - chord.first, tupletRatio);
+                  onTime = rangeStart + quantizeValue(chord.first - rangeStart, quant);
+                  }
             if (minOnTime == ReducedFraction(-1, 1) || onTime < minOnTime)
                   minOnTime = onTime;
             }
@@ -182,12 +192,12 @@ ReducedFraction findMaxQuantizedOffTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart)
+            const ReducedFraction &rangeStart)
       {
       ReducedFraction maxOffTime(0, 1);
       for (const auto &note: chord.second.notes) {
             const auto offTime = findQuantizedNoteOffTime(chord, note.offTime, basicQuant,
-                                                          tupletRatio, barStart);
+                                                          tupletRatio, rangeStart);
             if (offTime > maxOffTime)
                   maxOffTime = offTime;
             }
@@ -205,9 +215,10 @@ ReducedFraction findOnTimeQuantError(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart)
+            const ReducedFraction &rangeStart)
       {
-      const auto qOnTime = findQuantizedChordOnTime(chord, basicQuant, tupletRatio, barStart);
+      const auto qOnTime = findQuantizedChordOnTime(chord, basicQuant,
+                                                    tupletRatio, rangeStart);
       return (chord.first - qOnTime).absValue();
       }
 
@@ -223,10 +234,10 @@ ReducedFraction findOffTimeQuantError(
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant,
             const ReducedFraction &tupletRatio,
-            const ReducedFraction &barStart)
+            const ReducedFraction &rangeStart)
       {
       const auto qOffTime = findQuantizedNoteOffTime(chord, offTime, basicQuant,
-                                                     tupletRatio, barStart);
+                                                     tupletRatio, rangeStart);
       return (offTime - qOffTime).absValue();
       }
 
@@ -248,30 +259,14 @@ ReducedFraction findQuantForRange(
       return quantForLen(basicQuant, shortestLen, tupletRatio);
       }
 
-void setOffTimeForStaccato(MidiChord &chord, const ReducedFraction &onTime)
-      {
-      for (MidiNote &note: chord.notes) {
-            if (note.isInTuplet && note.staccato) {
-                  const MidiTuplet::TupletData &tuplet = note.tuplet->second;
-                        // decrease tuplet error by enlarging staccato notes:
-                        // make note.len = tuplet note length
-                  const auto tupletNoteLen = (tuplet.onTime + tuplet.len)
-                                              / tuplet.tupletNumber;
-                  note.offTime = onTime + tupletNoteLen;
-                  }
-            }
-      }
-
 ReducedFraction quantizeOnTimeForTuplet(
             const std::pair<const ReducedFraction, MidiChord> &chordEvent,
-            const MidiChord &chord,
-            const ReducedFraction &barStart,
             const ReducedFraction &basicQuant)
       {
-      const MidiTuplet::TupletData &tuplet = chord.tuplet->second;
+      const MidiTuplet::TupletData &tuplet = chordEvent.second.tuplet->second;
       const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
       auto onTime = Quantize::findQuantizedChordOnTime(
-                               chordEvent, basicQuant, tupletRatio, barStart);
+                               chordEvent, basicQuant, tupletRatio, tuplet.onTime);
                   // verify that onTime is still inside tuplet
       if (onTime < tuplet.onTime)
             onTime = tuplet.onTime;
@@ -282,49 +277,17 @@ ReducedFraction quantizeOnTimeForTuplet(
       }
 
 ReducedFraction quantizeOnTimeForNonTuplet(
-            const std::multimap<ReducedFraction, MidiChord>::const_iterator &chordIt,
-            const std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &barStart,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
+            const ReducedFraction &rangeStart,
+            const ReducedFraction &rangeEnd,
             const ReducedFraction &basicQuant)
       {
-      const MidiChord &chord = chordIt->second;
       auto onTime = Quantize::findQuantizedChordOnTime(*chordIt, basicQuant);
-                  // verify that onTime is inside current bar
-      const auto oldOnTime = onTime;      // correct onTime only once
-      if (onTime < barStart)
-            onTime = barStart;
-      if (onTime == oldOnTime) {
-                        // verify that onTime is still outside tuplets
-            auto prev = chordIt;
-            while (prev != chords.begin()) {
-                  --prev;
-                  if (prev->second.isInTuplet
-                              && prev->second.voice == chord.voice) {
-                        const auto &tuplet = prev->second.tuplet->second;
-                        if (onTime < tuplet.onTime + tuplet.len)
-                              onTime = tuplet.onTime + tuplet.len;
-                        break;
-                        }
-                  if (prev->second.barIndex != chord.barIndex)
-                        break;
-                  }
-            }
-      if (onTime == oldOnTime) {
-            auto next = std::next(chordIt);
-            while (next != chords.end()) {
-                  if (next->second.isInTuplet
-                              && next->second.voice == chord.voice) {
-                        const auto &tuplet = next->second.tuplet->second;
-                        if (onTime > tuplet.onTime)
-                              onTime = tuplet.onTime;
-                        break;
-                        }
-                  if (next->second.barIndex != chord.barIndex)
-                        break;
-                  ++next;
-                  }
-            }
-
+                  // verify that onTime is inside current range
+      if (onTime < rangeStart)
+            onTime = rangeStart;
+      if (onTime > rangeEnd)
+            onTime = rangeEnd;
       return onTime;
       }
 
@@ -332,12 +295,11 @@ ReducedFraction quantizeOffTimeForTuplet(
             const ReducedFraction &noteOffTime,
             const std::pair<const ReducedFraction, MidiChord> &chordEvent,
             const MidiTuplet::TupletData &tuplet,
-            const ReducedFraction &barStart,
             const ReducedFraction &basicQuant)
       {
       const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
       auto offTime = Quantize::findQuantizedNoteOffTime(
-                        chordEvent, noteOffTime, basicQuant, tupletRatio, barStart);
+                        chordEvent, noteOffTime, basicQuant, tupletRatio, tuplet.onTime);
                   // verify that offTime is still inside tuplet
       if (offTime < tuplet.onTime)
             offTime = tuplet.onTime;
@@ -349,7 +311,7 @@ ReducedFraction quantizeOffTimeForTuplet(
 
 ReducedFraction quantizeOffTimeForNonTuplet(
             const ReducedFraction &noteOffTime,
-            const std::multimap<ReducedFraction, MidiChord>::const_iterator &chordIt,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &basicQuant)
       {
@@ -358,8 +320,7 @@ ReducedFraction quantizeOffTimeForNonTuplet(
                  // verify that offTime is still outside tuplets
       auto next = std::next(chordIt);
       while (next != chords.end()) {
-            if (next->second.isInTuplet
-                        && next->second.voice == chord.voice) {
+            if (next->second.isInTuplet && next->second.voice == chord.voice) {
                   const auto &tuplet = next->second.tuplet->second;
                   if (offTime > tuplet.onTime)
                         offTime = tuplet.onTime;
@@ -373,29 +334,79 @@ ReducedFraction quantizeOffTimeForNonTuplet(
       return offTime;
       }
 
-// input chords - sorted by onTime value
 
-void quantizeChords(
-            std::multimap<ReducedFraction, MidiChord> &chords,
-            const TimeSigMap *sigmap,
+#ifdef QT_DEBUG
+
+bool areAllVoicesSame(
+            const std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> &chords)
+      {
+      auto it = chords.begin();
+      const int voice = (*it)->second.voice;
+      for (++it; it != chords.end(); ++it) {
+            if ((*it)->second.voice != voice)
+                  return false;
+            }
+      return true;
+      }
+
+#endif
+
+
+void quantizeOnTimesInRange(
+            const std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> &chords,
+            std::multimap<ReducedFraction, MidiChord> &quantizedChords,
+            const ReducedFraction &rangeStart,
+            const ReducedFraction &rangeEnd,
             const ReducedFraction &basicQuant)
       {
-      std::multimap<ReducedFraction, MidiChord> quantizedChords;
+      Q_ASSERT_X(!chords.empty(), "Quantize::quantizeChordOnTimes", "Empty chords");
+      Q_ASSERT_X(areAllVoicesSame(chords),
+                 "Quantize::quantizeChordOnTimes", "Chord voices are not the same");
+
+      bool isInTuplet = chords.front()->second.isInTuplet;
+      if (isInTuplet) {
+            // const MidiTuplet::TupletData &tuplet = chordIt->second.tuplet->second;
+            // const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber);
+
+            for (const auto &chordIt: chords) {
+                  const auto onTime = quantizeOnTimeForTuplet(*chordIt, basicQuant);
+                  quantizedChords.insert({onTime, chordIt->second});
+                  }
+            }
+      else {
+            for (const auto &chordIt: chords) {
+                  const auto onTime = quantizeOnTimeForNonTuplet(
+                                          chordIt, rangeStart, rangeEnd, basicQuant);
+                  quantizedChords.insert({onTime, chordIt->second});
+                  }
+            }
+      }
+
+// input chords - sorted by onTime value
+
+void applyTupletStaccato(std::multimap<ReducedFraction, MidiChord> &chords)
+      {
       for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
-            const auto &chordEvent = *chordIt;
-            MidiChord chord = chordEvent.second;     // copy chord
-            auto onTime = chordEvent.first;
-            const auto barStart = ReducedFraction::fromTicks(sigmap->bar2tick(chord.barIndex, 0));
+            for (MidiNote &note: chordIt->second.notes) {
+                  if (note.isInTuplet && note.staccato) {
+                        const MidiTuplet::TupletData &tuplet = note.tuplet->second;
+                              // decrease tuplet error by enlarging staccato notes:
+                              // make note.len = tuplet note length
+                        const auto tupletNoteLen = (tuplet.onTime + tuplet.len)
+                                                    / tuplet.tupletNumber;
+                        note.offTime = chordIt->first + tupletNoteLen;
+                        }
+                  }
+            }
+      }
 
-                        // apply staccato in tuplets
-            setOffTimeForStaccato(chord, onTime);
-
-                        // quantize on times
-            if (chord.isInTuplet)
-                  onTime = quantizeOnTimeForTuplet(chordEvent, chord, barStart, basicQuant);
-            else
-                  onTime = quantizeOnTimeForNonTuplet(chordIt, chords, barStart, basicQuant);
-
+void quantizeOffTimes(
+            std::multimap<ReducedFraction, MidiChord> &quantizedChords,
+            const ReducedFraction &basicQuant)
+      {
+      for (auto chordIt = quantizedChords.begin(); chordIt != quantizedChords.end(); ) {
+            auto &chordEvent = *chordIt;
+            MidiChord &chord = chordEvent.second;
                         // quantize off times
             for (auto noteIt = chord.notes.begin(); noteIt != chord.notes.end(); ) {
                   MidiNote &note = *noteIt;
@@ -403,16 +414,15 @@ void quantizeChords(
 
                   if (note.isInTuplet) {
                         offTime = quantizeOffTimeForTuplet(
-                                          offTime, chordEvent, note.tuplet->second,
-                                          barStart, basicQuant);
+                                          offTime, chordEvent, note.tuplet->second, basicQuant);
                         }
                   else {
                         offTime = quantizeOffTimeForNonTuplet(
-                                          offTime, chordIt, chords, basicQuant);
+                                          offTime, chordIt, quantizedChords, basicQuant);
                         }
 
                   note.offTime = offTime;
-                  if (note.offTime - onTime < MChord::minAllowedDuration()) {
+                  if (note.offTime - chordEvent.first < MChord::minAllowedDuration()) {
                         noteIt = chord.notes.erase(noteIt);
                         // TODO - never delete notes here
                         qDebug() << "quantizeChords: note was removed due to its short length";
@@ -421,9 +431,93 @@ void quantizeChords(
 
                   ++noteIt;
                   }
-            if (!chord.notes.isEmpty())
-                  quantizedChords.insert({onTime, chord});
+            if (chord.notes.isEmpty()) {
+                  chordIt = quantizedChords.erase(chordIt);
+                  continue;
+                  }
+            ++chordIt;
             }
+      }
+
+void quantizeOnTimes(
+            std::multimap<ReducedFraction, MidiChord> &chords,
+            std::multimap<ReducedFraction, MidiChord> &quantizedChords,
+            const ReducedFraction &basicQuant,
+            const TimeSigMap *sigmap)
+      {
+      int maxVoice = 0;
+      for (int voice = 0; voice <= maxVoice; ++voice) {
+            int currentBarIndex = -1;
+            ReducedFraction rangeStart(-1, 1);
+            ReducedFraction rangeEnd(-1, 1);
+            bool currentlyInTuplet = false;
+            std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> chordsToQuant;
+
+            for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
+                  if (chordIt->second.voice > maxVoice)
+                        maxVoice = chordIt->second.voice;
+                  if (chordIt->second.voice != voice)
+                        continue;
+
+                  if (chordsToQuant.empty()) {
+                        currentlyInTuplet = chordIt->second.isInTuplet;
+                        if (currentBarIndex != chordIt->second.barIndex) {
+                              currentBarIndex = chordIt->second.barIndex;
+                              if (!currentlyInTuplet) {
+                                    rangeStart = ReducedFraction::fromTicks(
+                                                      sigmap->bar2tick(currentBarIndex, 0));
+                                    }
+                              }
+                        if (currentlyInTuplet) {
+                              const auto &tuplet = chordIt->second.tuplet->second;
+                              rangeStart = tuplet.onTime;
+                              rangeEnd = tuplet.onTime + tuplet.len;
+                              }
+                        }
+
+                  chordsToQuant.push_back(chordIt);
+
+                  auto nextChord = std::next(chordIt);
+                  while (nextChord != chords.end() && nextChord->second.voice != voice)
+                        ++nextChord;
+                  if (nextChord == chords.end()
+                              || nextChord->second.barIndex != currentBarIndex
+                              || nextChord->second.isInTuplet != currentlyInTuplet) {
+
+                        if (nextChord != chords.end()) {
+                              if (nextChord->second.barIndex != currentBarIndex) {
+                                    rangeEnd = ReducedFraction::fromTicks(
+                                                      sigmap->bar2tick(currentBarIndex + 1, 0));
+                                    }
+                              else if (!currentlyInTuplet && nextChord->second.isInTuplet) {
+                                    rangeEnd = nextChord->second.tuplet->second.onTime;
+                                    }
+                              }
+                        else {
+                              if (!currentlyInTuplet) {
+                                    rangeEnd = ReducedFraction::fromTicks(
+                                                      sigmap->bar2tick(currentBarIndex + 1, 0));
+                                    }
+                              }
+
+                        quantizeOnTimesInRange(chordsToQuant, quantizedChords,
+                                               rangeStart, rangeEnd, basicQuant);
+                        chordsToQuant.clear();
+                        }
+                  }
+            }
+      }
+
+void quantizeChords(
+            std::multimap<ReducedFraction, MidiChord> &chords,
+            const TimeSigMap *sigmap,
+            const ReducedFraction &basicQuant)
+      {
+      applyTupletStaccato(chords);     // apply staccato for tuplet off times
+
+      std::multimap<ReducedFraction, MidiChord> quantizedChords;
+      quantizeOnTimes(chords, quantizedChords, basicQuant, sigmap);
+      quantizeOffTimes(quantizedChords, basicQuant);
 
       std::swap(chords, quantizedChords);
       }
