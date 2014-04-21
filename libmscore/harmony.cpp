@@ -229,7 +229,8 @@ void Harmony::write(Xml& xml) const
             }
       else
             xml.tag("name", _textName);
-      Element::writeProperties(xml);
+      bool writeStyle = textStyleType() != TEXT_STYLE_HARMONY;
+      Text::writeProperties(xml, false, writeStyle);
       if (_rightParen)
             xml.tagE("rightParen");
       xml.etag();
@@ -609,6 +610,16 @@ void Harmony::endEdit()
                         }
                   }
       score()->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   setTextStyle
+//---------------------------------------------------------
+
+void Harmony::setTextStyle(const TextStyle& st)
+      {
+      Text::setTextStyle(st);
+      render();
       }
 
 //---------------------------------------------------------
