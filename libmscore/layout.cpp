@@ -267,9 +267,26 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     matchPending = false;
                                     nHeadType = (n->headType() == NoteHeadType::HEAD_AUTO) ? n->chord()->durationType().headType() : n->headType();
                                     pHeadType = (p->headType() == NoteHeadType::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
-                                    if (n->headGroup() != p->headGroup() || nHeadType != pHeadType || n->chord()->dots() != p->chord()->dots()
-                                        || n->tpc() != p->tpc() || !n->chord()->stem() || !p->chord()->stem() || n->mirror() || p->mirror())
+                                    // the most important rules for sharing noteheads on unisons between voices are
+                                    // that notes must be one same line with same tpc
+                                    // and noteheads must be unmirrored and of same group and type
+                                    if (n->headGroup() != p->headGroup() || nHeadType != pHeadType || n->tpc() != p->tpc() || n->mirror() || p->mirror()) {
                                           shareHeads = false;
+                                          }
+                                    else {
+                                          // noteheads are potentially shareable
+                                          // it is more subjective at this point
+                                          // current default is to require *either* of the following:
+                                          //    1) both have same number of dots, and both have stems
+                                          // or 2) one or more of the noteheads is not of type AUTO, but is explicitly set to match the other
+                                          // thus user can force notes to be shared despite differing number of dots or either being stemless
+                                          // by setting one of the notehead types to match the other
+                                          // TODO: consider adding a style option, staff properties, or note property to control sharing
+                                          if ((n->chord()->dots() != p->chord()->dots() || !n->chord()->stem() || !p->chord()->stem()) &&
+                                              (n->headType() == NoteHeadType::HEAD_AUTO && p->headType() == NoteHeadType::HEAD_AUTO)) {
+                                                shareHeads = false;
+                                                }
+                                          }
                                     break;
                               case 1:
                                     // second
@@ -300,20 +317,23 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                               Note* p = overlapNotes[i-1];
                               Note* n = overlapNotes[i];
                               if (!(p->chord()->isNudged() || n->chord()->isNudged())) {
-                                    bool onLine = !(p->line() & 1);
-                                    if (onLine) {
-                                          // hide dots for lower voice
-                                          if (p->voice() & 1)
-                                                p->setDotsHidden(true);
-                                          else
-                                                n->setDotsHidden(true);
-                                          }
-                                    else {
-                                          // hide dots for upper voice
-                                          if (!(p->voice() & 1))
-                                                p->setDotsHidden(true);
-                                          else
-                                                n->setDotsHidden(true);
+                                    if (p->chord()->dots() == n->chord()->dots()) {
+                                          // hide one set dots
+                                          bool onLine = !(p->line() & 1);
+                                          if (onLine) {
+                                                // hide dots for lower voice
+                                                if (p->voice() & 1)
+                                                      p->setDotsHidden(true);
+                                                else
+                                                      n->setDotsHidden(true);
+                                                }
+                                          else {
+                                                // hide dots for upper voice
+                                                if (!(p->voice() & 1))
+                                                      p->setDotsHidden(true);
+                                                else
+                                                      n->setDotsHidden(true);
+                                                }
                                           }
                                     // formerly we hid noteheads in an effort to fix playback
                                     // but this doesn't work for cases where noteheads cannot be shared
