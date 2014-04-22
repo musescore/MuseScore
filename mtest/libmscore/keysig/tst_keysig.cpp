@@ -71,6 +71,7 @@ void TestKeySig::keysig()
       KeySigEvent ke2(2);
       score->startCmd();
       score->undoChangeKeySig(score->staff(0), m2->tick(), ke2);
+      score->cmdUpdateNotes();
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
@@ -78,6 +79,7 @@ void TestKeySig::keysig()
       KeySigEvent ke_3(-3);
       score->startCmd();
       score->undoChangeKeySig(score->staff(0), m2->tick(), ke_3);
+      score->cmdUpdateNotes();
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
@@ -88,6 +90,7 @@ void TestKeySig::keysig()
       Element* e=s->element(0);
       score->startCmd();
       score->undoRemoveElement(e);
+      score->cmdUpdateNotes();
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile3, reference3));
 
