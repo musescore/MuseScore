@@ -683,7 +683,9 @@ Palette* MuseScore::newGraceNotePalette()
             { ICON_GRACE4,       "grace4" },
             { ICON_GRACE16,      "grace16" },
             { ICON_GRACE32,      "grace32" },
-            { ICON_GRACE8B,      "grace8b" },
+            { ICON_GRACE8_AFTER,  "grace8after" },
+            { ICON_GRACE16_AFTER, "grace16after" },
+            { ICON_GRACE32_AFTER, "grace32after" },
             { -1, "" }
             };
       populateIconPalette(notePalette, gna);

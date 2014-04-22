@@ -1388,6 +1388,14 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
                   bm.l += adjust(_spStaff4, bm.s, cl);
                   }
             }
+      // shorten stem length if grace notes beam is under main notes beam.
+      // Value 4 estimated. Desired: to find a good formula.
+      if(grace && static_cast<const Chord*>(c1)->underBeam()){
+            if (bm.l > 0)
+                  bm.l -= 4;
+            else
+                  bm.l += 4;
+            }
       if (dx == 0.0)
             slope = 0.0;
       else

@@ -726,7 +726,7 @@ MuseScore::MuseScore()
             entryTools->addAction(getAction(s));
 
       static const char* sl4[] = {
-            "appoggiatura", "acciaccatura", "grace4", "grace16", "grace32",
+            "appoggiatura", "acciaccatura", "grace4", "grace16", "grace32", "grace8after", "grace16after", "grace32after",
             "beam-start", "beam-mid", "no-beam", "beam32", "auto-beam",
             "show-invisible", "show-unprintable", "show-frames", "show-pageborders"
             };

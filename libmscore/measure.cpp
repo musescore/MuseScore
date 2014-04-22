@@ -3679,11 +3679,11 @@ void Measure::updateAccidentals(int staffIdx)
                         }
 
                   // PITCHED_ and PERCUSSION_STAFF can go note by note
+                  QList<Chord*> graceNotesBefore;
+                  chord->getGraceNotesBefore(&graceNotesBefore);
 
-
-                  for (Chord* ch : chord->graceNotes()) {
-                        QList<Note*> notes(ch->notes());  // we need a copy!
-                        for (Note* note : notes)
+                  for (Chord* ch : graceNotesBefore) {
+                        for (Note* note : ch->notes())
                               note->updateAccidental(&as);
                         ch->sortNotes();
                         }
@@ -3720,6 +3720,12 @@ void Measure::updateAccidentals(int staffIdx)
                               case TAB_STAFF_GROUP:   // to avoid compiler warning
                                     break;
                               }
+                        }
+                  QList<Chord*> graceNotesAfter;
+                  chord->getGraceNotesAfter(&graceNotesAfter);
+                  for (Chord* ch : graceNotesAfter) {
+                        for (Note* note : ch->notes())
+                              note->updateAccidental(&as);
                         }
                   chord->sortNotes();
                   }
