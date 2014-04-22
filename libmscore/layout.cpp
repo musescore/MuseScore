@@ -277,12 +277,12 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                           // noteheads are potentially shareable
                                           // it is more subjective at this point
                                           // current default is to require *either* of the following:
-                                          //    1) both have same number of dots, and both have stems
+                                          //    1) both have same number of dots, both have stems, and both are the same size
                                           // or 2) one or more of the noteheads is not of type AUTO, but is explicitly set to match the other
                                           // thus user can force notes to be shared despite differing number of dots or either being stemless
                                           // by setting one of the notehead types to match the other
                                           // TODO: consider adding a style option, staff properties, or note property to control sharing
-                                          if ((n->chord()->dots() != p->chord()->dots() || !n->chord()->stem() || !p->chord()->stem()) &&
+                                          if ((n->chord()->dots() != p->chord()->dots() || !n->chord()->stem() || !p->chord()->stem() || n->headWidth() != p->headWidth()) &&
                                               (n->headType() == NoteHeadType::HEAD_AUTO && p->headType() == NoteHeadType::HEAD_AUTO)) {
                                                 shareHeads = false;
                                                 }
