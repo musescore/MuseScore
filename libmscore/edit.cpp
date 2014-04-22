@@ -757,19 +757,21 @@ void Score::putNote(const Position& p, bool replace)
                                                 qDebug("can't increase fret to %d", fret);
                                           }
                                     // set fret number (orignal or combined) in all linked notes
-                                    int tpc1 = pitch2tpc(nval.pitch, KEY_C, PREFER_NEAREST);
+//                                    int tpc1 = pitch2tpc(nval.pitch, KEY_C, PREFER_NEAREST);
                                     foreach (Element* e, note->linkList()) {
                                           Note* linkedNote = static_cast<Note*>(e);
+                                          nval.tpc = linkedNote->tpc1default(nval.pitch);
                                           Staff* staff = linkedNote->staff();
                                           if (staff->isTabStaff()) {
                                                 (static_cast<Note*>(linkedNote))->undoChangeProperty(P_PITCH, nval.pitch);
-                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_TPC1,   tpc1);
+                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_TPC1,  nval.tpc);
                                                 (static_cast<Note*>(linkedNote))->undoChangeProperty(P_FRET,  nval.fret);
                                                 (static_cast<Note*>(linkedNote))->undoChangeProperty(P_STRING,nval.string);
                                                 }
                                           else if (staff->isPitchedStaff()) {
                                                 // TODO: check tpc2
-                                                undoChangePitch(linkedNote, nval.pitch, nval.tpc, nval.tpc);
+                                                int tpc2 = linkedNote->tpc2default(nval.pitch);
+                                                undoChangePitch(linkedNote, nval.pitch, nval.tpc, tpc2);
                                                 }
                                           }
                                     return;
