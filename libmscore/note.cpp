@@ -1248,7 +1248,7 @@ Element* Note::drop(const DropData& data)
             case ICON:
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
-                  case ICON_ACCIACCATURA:
+                        case ICON_ACCIACCATURA:
                               score()->setGraceNote(ch, pitch(), NOTE_ACCIACCATURA, MScore::division/2);
                               break;
                         case ICON_APPOGGIATURA:
