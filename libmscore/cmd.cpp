@@ -1386,7 +1386,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
       // recalculate needed accidentals for
       // whole measure
       //
-      chord->measure()->updateAccidentals(staffIdx);
+      chord->measure()->cmdUpdateNotes(staffIdx);
       }
 
 //---------------------------------------------------------

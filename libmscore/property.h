@@ -43,6 +43,7 @@ enum P_ID {
       P_PITCH,
       P_TPC1,
       P_TPC2,
+      P_LINE,
 
       P_HEAD_TYPE,
       P_HEAD_GROUP,

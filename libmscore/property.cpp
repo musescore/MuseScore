@@ -44,6 +44,7 @@ static const PropertyData propertyList[] = {
       { P_PITCH,               true,  "pitch",         T_INT   },
       { P_TPC1,                false, "tpc",           T_INT   },
       { P_TPC2,                false, "tpc2",          T_INT   },
+      { P_LINE,                false, "line",          T_INT   },
 
       { P_HEAD_TYPE,           false, "headType",      T_INT   },
       { P_HEAD_GROUP,          false, "head",          T_INT },

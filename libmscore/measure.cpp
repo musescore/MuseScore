@@ -359,29 +359,6 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
       }
 
 //---------------------------------------------------------
-//   layout10
-//    computes note lines and accidentals
-//---------------------------------------------------------
-
-void Measure::layout10(int staffIdx)
-      {
-      AccidentalState as;      // state of already set accidentals for this measure
-      Staff* staff = score()->staff(staffIdx);
-      as.init(staff->keymap()->key(tick()));
-      int startTrack = staffIdx * VOICES;
-      int endTrack   = startTrack + VOICES;
-
-      for (Segment* s = first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
-            for (int track = startTrack; track < endTrack; ++track) {
-                  Chord* chord = static_cast<Chord*>(s->element(track));
-                  if (!chord || chord->type() != CHORD)
-                       continue;
-                  chord->layout10(&as);
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   findAccidental
 ///   return current accidental value at note position
 //---------------------------------------------------------
@@ -3646,82 +3623,51 @@ void Measure::layoutStage1()
       }
 
 //---------------------------------------------------------
-//   updateAccidentals
-//    recompute accidentals,
+//   updateNotes
+//    recompute note lines and accidentals
+///   not undoable add/remove
+//---------------------------------------------------------
+
+void Measure::updateNotes(int staffIdx)
+      {
+      AccidentalState as;      // state of already set accidentals for this measure
+      Staff* staff = score()->staff(staffIdx);
+      as.init(staff->keymap()->key(tick()));
+
+      int startTrack = staffIdx * VOICES;
+      int endTrack   = startTrack + VOICES;
+
+      for (Segment* s = first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
+            for (int track = startTrack; track < endTrack; ++track) {
+                  Chord* chord = static_cast<Chord*>(s->element(track));
+                  if (!chord || chord->type() != CHORD)
+                       continue;
+                  chord->updateNotes(&as);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   cmdUpdateNotes
+///   recompute note lines and accidental
 ///   undoable add/remove
 //---------------------------------------------------------
 
-void Measure::updateAccidentals(int staffIdx)
+void Measure::cmdUpdateNotes(int staffIdx)
       {
-      Staff* staff                 = score()->staff(staffIdx);
-      StaffGroup staffGroup        = staff->staffType()->group();
-      const Instrument* instrument = staff->part()->instr();
-      int startTrack               = staffIdx * VOICES;
-      int endTrack                 = startTrack + VOICES;
-
       AccidentalState as;      // list of already set accidentals for this measure
+      Staff* staff = score()->staff(staffIdx);
       as.init(staff->keymap()->key(tick()));
+
+      int startTrack = staffIdx * VOICES;
+      int endTrack   = startTrack + VOICES;
 
       for (Segment* segment = first(Segment::SegChordRest); segment; segment = segment->next(Segment::SegChordRest)) {
             for (int track = startTrack; track < endTrack; ++track) {
                   Chord* chord = static_cast<Chord*>(segment->element(track));
                   if (!chord || chord->type() != CHORD)
                        continue;
-
-                  // TAB_STAFF is different, as each note has to be fretted
-                  // in the context of the all of the chords of the whole segment
-
-                  if (staffGroup == TAB_STAFF_GROUP) {
-                        for (Chord* ch : chord->graceNotes())
-                              instrument->stringData()->fretChords(ch);
-                        instrument->stringData()->fretChords(chord);
-                        continue;               // skip other staff type cases
-                        }
-
-                  // PITCHED_ and PERCUSSION_STAFF can go note by note
-
-
-                  for (Chord* ch : chord->graceNotes()) {
-                        QList<Note*> notes(ch->notes());  // we need a copy!
-                        for (Note* note : notes)
-                              note->updateAccidental(&as);
-                        ch->sortNotes();
-                        }
-
-                  QList<Note*> notes(chord->notes());  // we need a copy!
-                  for (Note* note : notes) {
-                        switch(staffGroup) {
-                              case STANDARD_STAFF_GROUP:
-                                    if (note->tieBack()) {
-                                          if (note->accidental() && note->tpc() == note->tieBack()->startNote()->tpc()) {
-                                                // TODO: remove accidental only if note is not
-                                                // on new system
-                                                score()->undoRemoveElement(note->accidental());
-                                                }
-                                          }
-                                    note->updateAccidental(&as);
-                                    break;
-                              case PERCUSSION_STAFF_GROUP:
-                                    {
-                                    Drumset* drumset = instrument->drumset();
-                                    int pitch = note->pitch();
-                                    if (drumset) {
-                                          if (!drumset->isValid(pitch)) {
-                                                // qDebug("unmapped drum note %d", pitch);
-                                                }
-                                          else {
-                                                note->setHeadGroup(drumset->noteHead(pitch));
-                                                note->setLine(drumset->line(pitch));
-                                                continue;
-                                                }
-                                          }
-                                    }
-                                    break;
-                              case TAB_STAFF_GROUP:   // to avoid compiler warning
-                                    break;
-                              }
-                        }
-                  chord->sortNotes();
+                  chord->cmdUpdateNotes(&as);
                   }
             }
       }

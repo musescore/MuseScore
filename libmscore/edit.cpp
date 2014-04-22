@@ -228,7 +228,7 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
                   }
             }
 
-      measure->updateAccidentals(chord->staffIdx());
+      measure->cmdUpdateNotes(chord->staffIdx());
       return chord;
       }
 
@@ -1111,7 +1111,8 @@ void Score::deleteItem(Element* el)
       {
       if (!el)
             return;
-      switch(el->type()) {
+      printf("deleteItem %s\n", el->name());
+      switch (el->type()) {
             case Element::INSTRUMENT_NAME: {
                   Part* part = el->staff()->part();
                   InstrumentName* in = static_cast<InstrumentName*>(el);
@@ -1124,6 +1125,11 @@ void Score::deleteItem(Element* el)
 
             case Element::TIMESIG:
                   cmdRemoveTimeSig(static_cast<TimeSig*>(el));
+                  break;
+
+            case Element::KEYSIG:
+                  undoRemoveElement(el);
+                  cmdUpdateNotes();
                   break;
 
             case Element::OTTAVA_SEGMENT:

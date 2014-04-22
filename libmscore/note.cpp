@@ -600,7 +600,7 @@ void Note::remove(Element* e)
                         // update accidentals for endNote
                         Chord* chord = tie->endNote()->chord();
                         Measure* m = chord->segment()->measure();
-                        m->updateAccidentals(chord->staffIdx());
+                        m->cmdUpdateNotes(chord->staffIdx());
                         }
                   int n = tie->spannerSegments().size();
                   for (int i = 0; i < n; ++i) {
@@ -1548,7 +1548,7 @@ void Note::layout10(AccidentalState* as)
                   }
             }
       else {
-            _line = absStep(tpc(), epitch());
+            int relLine = absStep(tpc(), epitch());
 
             // calculate accidental
 
@@ -1563,15 +1563,15 @@ void Note::layout10(AccidentalState* as)
 //not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), tpc(), ntpc, acci);
 //                              setColor(QColor(255, 0, 0));
 //                             setTpc(ntpc);
-                              _line = absStep(tpc(), epitch());
+                              relLine = absStep(tpc(), epitch());
                               }
                         }
                   }
             else  {
                   AccidentalVal accVal = tpc2alter(tpc());
 
-                  if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
-                        as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
+                  if ((accVal != as->accidentalVal(relLine)) || hidden() || as->tieContext(relLine)) {
+                        as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                         if (!_tieBack) {
                               acci = Accidental::value2subtype(accVal);
                               if (acci == Accidental::ACC_NONE)
@@ -1595,7 +1595,7 @@ void Note::layout10(AccidentalState* as)
                         _accidental = 0;
                         }
                   }
-            updateRelLine();
+            updateRelLine(relLine, false);
             }
       }
 
@@ -1803,7 +1803,7 @@ void Note::endEdit()
 
 void Note::updateAccidental(AccidentalState* as)
       {
-      _line = absStep(tpc(), epitch());
+      int relLine = absStep(tpc(), epitch());
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
@@ -1812,8 +1812,8 @@ void Note::updateAccidental(AccidentalState* as)
             Accidental::AccidentalType acci = Accidental::ACC_NONE;
 
             AccidentalVal accVal = tpc2alter(tpc());
-            if ((accVal != as->accidentalVal(int(_line))) || hidden() || as->tieContext(int(_line))) {
-                  as->setAccidentalVal(int(_line), accVal, _tieBack != 0);
+            if ((accVal != as->accidentalVal(relLine)) || hidden() || as->tieContext(relLine)) {
+                  as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                   if (_tieBack)
                         acci = Accidental::ACC_NONE;
                   else {
@@ -1856,7 +1856,7 @@ void Note::updateAccidental(AccidentalState* as)
                         }
                   }
             }
-      updateRelLine();
+      updateRelLine(relLine, true);
       }
 
 //---------------------------------------------------------
@@ -1865,27 +1865,27 @@ void Note::updateAccidental(AccidentalState* as)
 //    _line is the absolute line
 //---------------------------------------------------------
 
-void Note::updateRelLine(bool sort)
+void Note::updateRelLine(int relLine, bool undoable)
       {
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
-      int line = relStep(_line, clef);
+      int line = relStep(relLine, clef);
       if (line != _line) {
-            setLine(line);
-            if (chord() && sort)
-                  chord()->sortNotes();
+            if (undoable)
+                  undoChangeProperty(P_LINE, line);
+            else
+                  setLine(line);
             }
       }
 
 //---------------------------------------------------------
 //   updateLine
-//   sorting the chord is needed, after calling this method
 //---------------------------------------------------------
 
 void Note::updateLine()
       {
-      _line = absStep(tpc(), epitch());
-      updateRelLine(false);
+      int relLine = absStep(tpc(), epitch());
+      updateRelLine(relLine, false);
       }
 
 //---------------------------------------------------------
@@ -1978,6 +1978,8 @@ QVariant Note::getProperty(P_ID propertyId) const
                   return veloType();
             case P_PLAY:
                   return play();
+            case P_LINE:
+                  return _line;
             default:
                   break;
             }
@@ -1994,18 +1996,21 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
             case P_PITCH:
                   setPitch(v.toInt());
                   if (chord()->measure())
-                        chord()->measure()->updateAccidentals(chord()->staffIdx());
+                        chord()->measure()->cmdUpdateNotes(chord()->staffIdx());
                   score()->setPlaylistDirty(true);
                   break;
             case P_TPC1:
                   _tpc[0] = v.toInt();
                   if (chord()->measure())
-                        chord()->measure()->updateAccidentals(chord()->staffIdx());
+                        chord()->measure()->cmdUpdateNotes(chord()->staffIdx());
                   break;
             case P_TPC2:
                   _tpc[1] = v.toInt();
                   if (chord()->measure())
-                        chord()->measure()->updateAccidentals(chord()->staffIdx());
+                        chord()->measure()->cmdUpdateNotes(chord()->staffIdx());
+                  break;
+            case P_LINE:
+                  _line = v.toInt();
                   break;
             case P_SMALL:
                   setSmall(v.toBool());
