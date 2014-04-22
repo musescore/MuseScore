@@ -49,6 +49,7 @@
 #include "drumset.h"
 #include "key.h"
 #include "sym.h"
+#include "stringdata.h"
 
 namespace Ms {
 
@@ -439,6 +440,10 @@ void Chord::add(Element* e)
                   _graceNotes.insert(_graceNotes.begin() + idx, gc);
                   }
                   break;
+            case LEDGER_LINE:
+                  qFatal("Chord::add ledgerline\n");
+                  break;
+
             default:
                   ChordRest::add(e);
                   break;
@@ -462,7 +467,7 @@ void Chord::remove(Element* e)
                                     // update accidentals for endNote
                                     Chord* chord = note->tieFor()->endNote()->chord();
                                     Measure* m = chord->segment()->measure();
-                                    m->updateAccidentals(chord->staffIdx());
+                                    m->cmdUpdateNotes(chord->staffIdx());
                                     }
                               }
                         }
@@ -558,7 +563,8 @@ qreal Chord::maxHeadWidth() const
 ///   \arg x          start x-position
 ///   \arg len        line length
 //---------------------------------------------------------
-/*
+
+#if 0
 void Chord::addLedgerLine(int track, int line, bool visible, qreal x, Spatium len)
       {
       qreal _spatium = spatium();
@@ -587,7 +593,8 @@ void Chord::addLedgerLine(int track, int line, bool visible, qreal x, Spatium le
       h->setNext(_ledgerLines);
       _ledgerLines = h;
       }
-*/
+#endif
+
 //---------------------------------------------------------
 //   createLedgerLines
 ///   Creates the ledger lines fro a chord
@@ -1491,28 +1498,89 @@ void Chord::layout2()
       }
 
 //---------------------------------------------------------
-//   layout10
+//   updateNotes
 //---------------------------------------------------------
 
-void Chord::layout10(AccidentalState* as)
+void Chord::updateNotes(AccidentalState* as)
       {
       for (Chord* c : _graceNotes)
-            c->layout10(as);
+            c->updateNotes(as);
 
       Drumset* drumset = 0;
       if (staff()->part()->instr()->useDrumset())
             drumset = staff()->part()->instr()->drumset();
+
       QList<Note*> nl(notes());
-      for (Note* note : nl) {
-            if (drumset) {
+      if (drumset) {
+            for (Note* note : nl) {
                   int pitch = note->pitch();
                   if (drumset->isValid(pitch)) {
                         note->setHeadGroup(drumset->noteHead(pitch));
                         note->setLine(drumset->line(pitch));
                         }
                   }
-            else
+            }
+      else {
+            for (Note* note : nl)
                   note->layout10(as);
+            }
+      sortNotes();
+      }
+
+//---------------------------------------------------------
+//   cmdUpdateNotes
+//---------------------------------------------------------
+
+void Chord::cmdUpdateNotes(AccidentalState* as)
+      {
+      // TAB_STAFF is different, as each note has to be fretted
+      // in the context of the all of the chords of the whole segment
+
+      StaffGroup staffGroup = staff()->staffType()->group();
+      if (staffGroup == TAB_STAFF_GROUP) {
+            const Instrument* instrument = staff()->part()->instr();
+            for (Chord* ch : graceNotes())
+                  instrument->stringData()->fretChords(ch);
+            instrument->stringData()->fretChords(this);
+            return;
+            }
+
+      // PITCHED_ and PERCUSSION_STAFF can go note by note
+
+      for (Chord* ch : graceNotes()) {
+            QList<Note*> notes(ch->notes());  // we need a copy!
+            for (Note* note : notes)
+                  note->updateAccidental(as);
+            ch->sortNotes();
+            }
+
+      QList<Note*> lnotes(notes());  // we need a copy!
+      for (Note* note : lnotes) {
+            if (staffGroup == STANDARD_STAFF_GROUP) {
+                  if (note->tieBack()) {
+                        if (note->accidental() && note->tpc() == note->tieBack()->startNote()->tpc()) {
+                              // TODO: remove accidental only if note is not
+                              // on new system
+                              score()->undoRemoveElement(note->accidental());
+                              }
+                        }
+                  note->updateAccidental(as);
+                  }
+            else if (staffGroup == PERCUSSION_STAFF_GROUP) {
+                  const Instrument* instrument = staff()->part()->instr();
+                  Drumset* drumset = instrument->drumset();
+                  int pitch = note->pitch();
+                  if (drumset) {
+                        if (!drumset->isValid(pitch)) {
+                              // qDebug("unmapped drum note %d", pitch);
+                              }
+                        else {
+                              note->setHeadGroup(drumset->noteHead(pitch));
+                              note->setLine(drumset->line(pitch));
+                              continue;
+                              }
+                        }
+                  }
             }
       sortNotes();
       }
@@ -2424,7 +2492,6 @@ Measure* Chord::measure() const
 
 void Chord::sortNotes()
       {
-      // printf("Chord::sortNotes\n");
       std::sort(notes().begin(), notes().end(),
          [](const Note* a,const Note* b)->bool { return b->line() < a->line(); }
          // [](const Note* a,const Note* b)->bool { return a->pitch() < b->pitch(); }

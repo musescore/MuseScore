@@ -1416,7 +1416,7 @@ void Score::addElement(Element* element)
 
             case Element::NOTE: {
                   Note* note = static_cast<Note*>(element);
-                  note->chord()->segment()->measure()->updateAccidentals(element->staffIdx());
+                  note->chord()->segment()->measure()->cmdUpdateNotes(element->staffIdx());
                   }
                   // fall through
 
@@ -2092,27 +2092,29 @@ void Score::removeExcerpt(Score* score)
 
 //---------------------------------------------------------
 //   updateNotes
-///   calculate note lines and accidental
+///   recompute note lines and accidental
+///   not undoable add/remove
 //---------------------------------------------------------
 
 void Score::updateNotes()
       {
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
-                  m->layout10(staffIdx);
+                  m->updateNotes(staffIdx);
             }
       }
 
 //---------------------------------------------------------
 //   cmdUpdateNotes
-///   calculate note lines and accidental
+///   recompute note lines and accidental
+///   undoable add/remove
 //---------------------------------------------------------
 
 void Score::cmdUpdateNotes()
       {
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
-                  m->updateAccidentals(staffIdx);
+                  m->cmdUpdateNotes(staffIdx);
             }
       }
 
@@ -2124,7 +2126,7 @@ void Score::cmdUpdateNotes()
 void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
       {
       for (Measure* m = beginMeasure; m; m = m->nextMeasureMM()) {
-            m->updateAccidentals(staffIdx);
+            m->cmdUpdateNotes(staffIdx);
             if (m == beginMeasure)
                   continue;
             for (Segment* s = m->first(Segment::SegKeySig); s; s = s->next(Segment::SegKeySig)) {
@@ -2699,8 +2701,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         }
                   }
             }
-      updateNotes();
-      setLayoutAll(true);
+      cmdUpdateNotes();
       }
 
 //---------------------------------------------------------

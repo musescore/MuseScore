@@ -1195,7 +1195,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                         }
                   }
             undo(new AddElement(newcr));
-            m->updateAccidentals(staffIdx);
+            m->cmdUpdateNotes(staffIdx);
             }
       }
 
@@ -1304,13 +1304,13 @@ void AddElement::endUndoRedo(bool isUndo) const
                   m2 = tie->endNote()->chord()->measure();
 
             if (m1 != m2) {
-                  m1->updateAccidentals(tie->staffIdx());
+                  m1->cmdUpdateNotes(tie->staffIdx());
                   if (m2)
-                        m2->updateAccidentals(tie->staffIdx());
+                        m2->cmdUpdateNotes(tie->staffIdx());
                   // tie->score()->cmdUpdateNotes();
                   }
             else
-                  m1->updateAccidentals(tie->staffIdx());
+                  m1->cmdUpdateNotes(tie->staffIdx());
             }
       else if (element->isChordRest()) {
             if (isUndo)
@@ -1318,14 +1318,9 @@ void AddElement::endUndoRedo(bool isUndo) const
             else
                   undoAddTuplet(static_cast<ChordRest*>(element));
             }
-      else if (element->type() == Element::KEYSIG) {
-            KeySig* ks = static_cast<KeySig*>(element);
-            if (!ks->generated())
-                  ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
-            }
       else if (element->type() == Element::NOTE) {
             Measure* m = static_cast<Note*>(element)->chord()->measure();
-            m->updateAccidentals(element->staffIdx());
+            m->cmdUpdateNotes(element->staffIdx());
             }
       }
 
@@ -1420,11 +1415,6 @@ void RemoveElement::undo()
                   }
             undoAddTuplet(static_cast<ChordRest*>(element));
             }
-      if (element->type() == Element::KEYSIG) {
-            KeySig* ks = static_cast<KeySig*>(element);
-            if (!ks->generated())
-                  ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
-            }
       }
 
 //---------------------------------------------------------
@@ -1449,14 +1439,9 @@ void RemoveElement::redo()
                         // update accidentals in endNotes's measure
                         Chord* eChord = endNote->chord();
                         Measure* m = eChord->segment()->measure();
-                        m->updateAccidentals(eChord->staffIdx());
+                        m->cmdUpdateNotes(eChord->staffIdx());
                         }
                   }
-            }
-      else if (element->type() == Element::KEYSIG) {
-            KeySig* ks = static_cast<KeySig*>(element);
-            if (!ks->generated())
-                  ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
             }
       }
 
@@ -1691,7 +1676,7 @@ void ChangePitch::flip()
       tpc2  = f_tpc2;
 
       Chord* chord = note->chord();
-      chord->measure()->updateAccidentals(chord->staffIdx());
+      chord->measure()->cmdUpdateNotes(chord->staffIdx());
       note->score()->setLayoutAll(true);
       }
 
@@ -1735,7 +1720,6 @@ void ChangeElement::flip()
             if (!ks->generated()) {
                   ks->staff()->setKey(ks->tick(),ks->keySigEvent());
                   ks->insertIntoKeySigChain();
-                  ks->score()->cmdUpdateAccidentals(ks->measure(), ks->staffIdx());
                   newElement->staff()->setUpdateKeymap(true);
                   }
             }
@@ -1831,9 +1815,6 @@ void ChangeKeySig::flip()
       ks           = oe;
 
       keysig->score()->setLayoutAll(true);
-      //keysig->score()->cmdUpdateNotes();
-      if (!keysig->generated())
-            keysig->score()->cmdUpdateAccidentals(keysig->measure(), keysig->staffIdx());
       }
 
 //---------------------------------------------------------
@@ -2568,7 +2549,7 @@ void ChangeChordStaffMove::flip()
       {
       int v = chord->staffMove();
       chord->setStaffMove(staffMove);
-      chord->measure()->updateAccidentals(chord->staffIdx());
+      chord->measure()->cmdUpdateNotes(chord->staffIdx());
       chord->score()->setLayoutAll(true);
       staffMove = v;
       }
