@@ -60,20 +60,37 @@ namespace Ms {
 Note* Chord::upNote() const
       {
       Note* result = _notes.back();
-      if (staff() && staff()->isDrumStaff()) {
-            foreach(Note*n, _notes) {
+      if (!staff())
+            return result;
+      if (staff()->isDrumStaff()) {
+            for (Note*n : _notes) {
                   if (n->line() < result->line()) {
                         result = n;
                         }
                   }
             }
-
+      else if (staff()->isTabStaff()) {
+            StaffTypeTablature*     tab  = (StaffTypeTablature*) staff()->staffType();
+            int                     line = tab->lines() - 1;      // start at bottom line
+            int noteLine;
+            // scan each note: if TAB strings are not in sequential order,
+            // visual order of notes might not correspond to pitch order
+            for (Note*n : _notes) {
+                  noteLine = tab->physStringToVisual(n->string());
+                  if (noteLine < line) {
+                        line = noteLine;
+                        result = n;
+                        }
+                  }
+            }
       return result;
       }
 
 Note* Chord::downNote() const
       {
       Note* result = _notes.front();
+      if (!staff())
+            return result;
       if (staff() && staff()->isDrumStaff()) {
             foreach(Note*n, _notes) {
                   if (n->line() > result->line()) {
@@ -81,7 +98,20 @@ Note* Chord::downNote() const
                         }
                   }
             }
-
+      else if (staff()->isTabStaff()) {
+            StaffTypeTablature*     tab  = (StaffTypeTablature*) staff()->staffType();
+            int line = 0;      // start at top line
+            int noteLine;
+            // scan each note: if TAB strings are not in sequential order,
+            // visual order of notes might not correspond to pitch order
+            for (Note*n : _notes) {
+                  noteLine = tab->physStringToVisual(n->string());
+                  if (noteLine > line) {
+                        line = noteLine;
+                        result = n;
+                  }
+            }
+      }
       return result;
       }
 
