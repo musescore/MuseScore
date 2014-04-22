@@ -793,9 +793,9 @@ void Note::read(XmlReader& e)
             else if (tag == "dotPosition")
                   setProperty(P_DOT_POSITION, Ms::getProperty(P_DOT_POSITION, e));
             else if (tag == "onTimeOffset")
-                  e.skipCurrentElement(); // TODO setOnTimeUserOffset(val.toInt());
+                  setOnTimeOffset(e.readInt());
             else if (tag == "offTimeOffset")
-                  e.skipCurrentElement(); // TODO setOffTimeUserOffset(val.toInt());
+                  setOffTimeOffset(e.readInt());
             else if (tag == "head")
                   setProperty(P_HEAD_GROUP, Ms::getProperty(P_HEAD_GROUP, e));
             else if (tag == "velocity")
