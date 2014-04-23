@@ -389,6 +389,26 @@ int Note::tpc() const
       }
 
 //---------------------------------------------------------
+//   transposeTpc
+//    return transposed tpc
+//    If in concertPitch mode return tpc for transposed view
+//    else return tpc for concert pitch view.
+//---------------------------------------------------------
+
+int Note::transposeTpc(int tpc)
+      {
+      Interval v = staff()->part()->instr()->transpose();
+      if (v.isZero())
+            return tpc;
+      if (concertPitch()) {
+            v.flip();
+            return Ms::transposeTpc(tpc, v, false);
+            }
+      else
+            return Ms::transposeTpc(tpc, v, false);
+      }
+
+//---------------------------------------------------------
 //   noteHead
 //---------------------------------------------------------
 
@@ -1919,26 +1939,6 @@ void Note::setNval(NoteVal nval)
             _tpc[1] = nval.tpc;
             }
       _headGroup = NoteHeadGroup(nval.headGroup);
-      }
-
-//---------------------------------------------------------
-//   transposeTpc
-//    return transposed tpc
-//    If in concertPitch mode return tpc for transposed view
-//    else return tpc for concert pitch view.
-//---------------------------------------------------------
-
-int Note::transposeTpc(int tpc)
-      {
-      Interval v = staff()->part()->instr()->transpose();
-      if (v.isZero())
-            return tpc;
-      if (concertPitch()) {
-            v.flip();
-            return Ms::transposeTpc(tpc, v, false);
-            }
-      else
-            return Ms::transposeTpc(tpc, v, false);
       }
 
 //---------------------------------------------------------
