@@ -2376,7 +2376,7 @@ void Score::cmd(const QAction* a)
             undo(new ChangeStyleVal(this, ST_createMultiMeasureRests, val));
             }
       else
-            qDebug("1unknown cmd <%s>", qPrintable(cmd));
+            qDebug("unknown cmd <%s>", qPrintable(cmd));
       }
 
 }
