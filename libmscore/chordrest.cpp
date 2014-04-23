@@ -1040,6 +1040,30 @@ bool ChordRest::isGrace() const
       }
 
 //---------------------------------------------------------
+//   isGraceBefore
+//---------------------------------------------------------
+
+bool ChordRest::isGraceBefore() const
+      {
+      return (type() == Element::CHORD && (((Chord*)this)->noteType() == NOTE_ACCIACCATURA
+                                          || ((Chord*)this)->noteType() == NOTE_APPOGGIATURA
+                                          || ((Chord*)this)->noteType() == NOTE_GRACE4
+                                          || ((Chord*)this)->noteType() == NOTE_GRACE16
+                                          || ((Chord*)this)->noteType() == NOTE_GRACE32));
+      }
+
+//---------------------------------------------------------
+//   isGraceAfter
+//---------------------------------------------------------
+
+bool ChordRest::isGraceAfter() const
+      {
+      return (type() == Element::CHORD && (((Chord*)this)->noteType() == NOTE_GRACE8_AFTER
+                                          || ((Chord*)this)->noteType() == NOTE_GRACE16_AFTER
+                                          || ((Chord*)this)->noteType() == NOTE_GRACE32_AFTER));
+      }
+
+//---------------------------------------------------------
 //   writeBeam
 //---------------------------------------------------------
 

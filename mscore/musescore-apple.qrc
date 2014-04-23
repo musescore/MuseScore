@@ -52,11 +52,13 @@
       <file>data/icons/fbeam1.svg</file>
       <file>data/icons/fbeam2.svg</file>
       <file>data/icons/grace4.svg</file>
-      <file>data/icons/grace8b.svg</file>
       <file>data/icons/grace16.svg</file>
       <file>data/icons/grace32.svg</file>
       <file>data/icons/acciaccatura.svg</file>
       <file>data/icons/appoggiatura.svg</file>
+      <file>data/icons/grace8after.svg</file>
+      <file>data/icons/grace16after.svg</file>
+      <file>data/icons/grace32after.svg</file>
       <file>data/icons/clef.svg</file>
       <file>data/icons/mscore.png</file>
       <file>data/icons/hraster.svg</file>

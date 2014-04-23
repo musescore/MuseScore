@@ -1052,12 +1052,17 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
 //   beamGraceNotes
 //---------------------------------------------------------
 
-void Score::beamGraceNotes(Chord* mainNote)
+void Score::beamGraceNotes(Chord* mainNote, bool after) 
       {
       ChordRest* a1    = 0;      // start of (potential) beam
       Beam* beam       = 0;      // current beam
       BeamMode bm = BeamMode::AUTO;
-      foreach (ChordRest* cr, mainNote->graceNotes()) {
+      QList<Chord*> graceNotes;
+      if(after)
+            mainNote->getGraceNotesAfter(&graceNotes);
+      else
+            mainNote->getGraceNotesBefore(&graceNotes);
+      foreach (ChordRest* cr, graceNotes) {
             bm = Groups::endBeam(cr);
             if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BeamMode::NONE)) {
                   if (beam) {
@@ -1139,8 +1144,8 @@ void Score::layoutStage2()
                         continue;
                   if (cr->type() == Element::CHORD) {
                         Chord* chord = static_cast<Chord*>(cr);
-                        beamGraceNotes(chord);
-
+                  beamGraceNotes(chord, false); // grace before
+                  beamGraceNotes(chord, true);  // grace after
                         // set up for cross-measure values as soon as possible
                         // to have all computations (stems, hooks, ...) consistent with it
                         if (!chord->isGrace())
