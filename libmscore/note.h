@@ -205,6 +205,8 @@ class Note : public Element {
       NoteDot* _dots[MAX_DOTS];
 
       NoteEventList _playEvents;
+      int _offTimeType = 0; // compatibility only 1 - user(absolute), 2 - offset (%)
+      int _onTimeType = 0; // compatibility only 1 - user, 2 - offset
 
       int _lineOffset;        ///< Used during mouse dragging.
       QList<Spanner*> _spannerFor;
