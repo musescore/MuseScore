@@ -188,7 +188,6 @@
           <name>&lt;font face=&quot;Times New Roman&quot;/&gt;Bo</name>
           </Harmony>
         <StaffText>
-          <style>Staff</style>
           <text><font face="Times New Roman"/>unrecognized</text>
           </StaffText>
         <Rest>

@@ -135,7 +135,6 @@
         <Tempo>
           <tempo>1.66667</tempo>
           <lid>4</lid>
-          <style>Tempo</style>
           <text>𝅘𝅥 = 100</text>
           </Tempo>
         <Chord>
@@ -155,7 +154,6 @@
             <Fingering>
               <lid>116</lid>
               <pos x="0.649687" y="-1.6"/>
-              <style>Fingering</style>
               <text>3</text>
               </Fingering>
             <pitch>74</pitch>
@@ -770,7 +768,6 @@
           <Tempo>
             <tempo>1.66667</tempo>
             <lid>4</lid>
-            <style>Tempo</style>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>
@@ -790,7 +787,6 @@
               <Fingering>
                 <lid>116</lid>
                 <pos x="0.649687" y="-1.6"/>
-                <style>Fingering</style>
                 <text>3</text>
                 </Fingering>
               <pitch>74</pitch>
@@ -1147,7 +1143,6 @@
           <Tempo>
             <tempo>1.66667</tempo>
             <lid>4</lid>
-            <style>Tempo</style>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>

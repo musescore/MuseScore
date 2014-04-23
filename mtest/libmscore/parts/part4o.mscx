@@ -135,7 +135,6 @@
         <Tempo>
           <tempo>1.66667</tempo>
           <lid>4</lid>
-          <style>Tempo</style>
           <text>𝅘𝅥 = 100</text>
           </Tempo>
         <Chord>
@@ -770,7 +769,6 @@
           <Tempo>
             <tempo>1.66667</tempo>
             <lid>4</lid>
-            <style>Tempo</style>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>
@@ -1147,7 +1145,6 @@
           <Tempo>
             <tempo>1.66667</tempo>
             <lid>4</lid>
-            <style>Tempo</style>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>

@@ -1,4 +1,4 @@
-set P=..\..\..\build.debug\mtest\libmscore\link
+set P=..\..\..\build.qtc\mtest\libmscore\parts
 
 xcopy /y %P%\part1-1.mscx part1.mscx
 xcopy /y %P%\part1-2.mscx part1-2o.mscx
