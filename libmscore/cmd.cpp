@@ -453,7 +453,8 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
             int valTmp = val < 0 ? val+1 : val-1;
 
             int npitch;
-            int ntpc;
+            int ntpc1;
+            int ntpc2;
             if (abs(valTmp) != 7) {
                   int line      = on->line() - valTmp;
                   int tick      = chord->tick();
@@ -461,22 +462,42 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   ClefType clef = estaff->clef(tick);
                   int key       = estaff->key(tick).accidentalType();
                   npitch        = line2pitch(line, clef, key);
-                  ntpc          = pitch2tpc(npitch, key, PREFER_NEAREST);
+
+                  int ntpc   = pitch2tpc(npitch, key, PREFER_NEAREST);
+                  Interval v = on->staff()->part()->instr()->transpose();
+                  if (v.isZero())
+                        ntpc1 = ntpc2 = ntpc;
+                  else {
+                        if (styleB(ST_concertPitch)) {
+                              v.flip();
+                              ntpc1 = ntpc;
+                              ntpc2 = Ms::transposeTpc(ntpc, v, false);
+                              }
+                        else {
+                              npitch += v.chromatic;
+                              ntpc2 = ntpc;
+                              ntpc1 = Ms::transposeTpc(ntpc, v, false);
+                              }
+                        }
                   }
             else { //special case for octave
                   Interval interval(7, 12);
                   if (val < 0)
                         interval.flip();
-                  transposeInterval(on->pitch(), on->tpc(), &npitch, &ntpc, interval, false);
+                  transposeInterval(on->pitch(), on->tpc(), &npitch, &ntpc1, interval, false);
+                  ntpc1 = on->tpc1();
+                  ntpc2 = on->tpc2();
                   }
-            note->setPitch(npitch, ntpc, ntpc);
+            note->setPitch(npitch, ntpc1, ntpc2);
 
             undoAddElement(note);
             _playNote = true;
-            setLayoutAll(true);
 
             select(note, SELECT_SINGLE, 0);
             }
+      Chord* c = nl.front()->chord();
+      c->measure()->cmdUpdateNotes(c->staffIdx());
+      setLayoutAll(true);
       _is.moveToNextInputPos();
       endCmd();
       }
