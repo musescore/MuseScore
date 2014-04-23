@@ -1765,7 +1765,7 @@ void Measure::read(XmlReader& e, int staffIdx)
 
       //sort tuplet elements. needed for nested tuplets #22537
       if (score()->mscVersion() <= 114) {
-            for(Tuplet* t : e.tuplets()) {
+            for (Tuplet* t : e.tuplets()) {
                   t->sortElements();
                   }
             }

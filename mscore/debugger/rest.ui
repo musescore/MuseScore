@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>113</height>
+    <height>130</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,6 +33,9 @@
         </property>
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
         </property>
        </widget>
       </item>
@@ -70,6 +73,12 @@
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
         </property>
+        <property name="minimum">
+         <number>-9999</number>
+        </property>
+        <property name="maximum">
+         <number>9999</number>
+        </property>
        </widget>
       </item>
       <item row="1" column="1">
@@ -93,6 +102,9 @@
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
         </property>
+        <property name="maximum">
+         <double>9999.989999999999782</double>
+        </property>
        </widget>
       </item>
       <item row="1" column="3">
@@ -115,6 +127,9 @@
         </property>
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <double>9999.989999999999782</double>
         </property>
        </widget>
       </item>
