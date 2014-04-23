@@ -1113,7 +1113,7 @@ void Score::deleteItem(Element* el)
       {
       if (!el)
             return;
-      printf("deleteItem %s\n", el->name());
+      qDebug("deleteItem %s", el->name());
       switch (el->type()) {
             case Element::INSTRUMENT_NAME: {
                   Part* part = el->staff()->part();
