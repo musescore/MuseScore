@@ -3174,7 +3174,7 @@ void Measure::layoutX(qreal stretch)
                                     if ((pt & Segment::SegKeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
-                              // qDebug("measure %d: minDistance = %f\n", _no, minDistance);
+                              // qDebug("measure %d: minDistance = %f", _no, minDistance);
                               space.max(cr->space());
                               int n = cr->lyricsList().size();
                               for (int i = 0; i < n; ++i) {
