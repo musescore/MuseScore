@@ -229,8 +229,7 @@ void Harmony::write(Xml& xml) const
             }
       else
             xml.tag("name", _textName);
-      bool writeStyle = textStyleType() != TEXT_STYLE_HARMONY;
-      Text::writeProperties(xml, false, writeStyle);
+      Text::writeProperties(xml, false, true);
       if (_rightParen)
             xml.tagE("rightParen");
       xml.etag();

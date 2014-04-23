@@ -124,7 +124,6 @@
         <Tempo>
           <tempo>3.16667</tempo>
           <lid>5</lid>
-          <style>Tempo</style>
           <text><sym>noteQuarterUp</sym> = 190</text>
           </Tempo>
         <Chord>
@@ -497,7 +496,6 @@
           <Tempo>
             <tempo>3.16667</tempo>
             <lid>5</lid>
-            <style>Tempo</style>
             <text><sym>noteQuarterUp</sym> = 190</text>
             </Tempo>
           <Chord>

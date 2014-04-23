@@ -87,7 +87,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <style>Lyrics Odd Lines</style>
             <text>Lyrics</text>
             </Lyrics>
           <Lyrics>
@@ -103,7 +102,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <style>Lyrics Odd Lines</style>
             <text>first</text>
             </Lyrics>
           <Lyrics>
@@ -121,7 +119,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <style>Lyrics Odd Lines</style>
             <text>line</text>
             </Lyrics>
           <Lyrics>
