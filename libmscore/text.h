@@ -222,7 +222,7 @@ class Text : public Element {
       bool editMode() const                   { return _editMode; }
       void setEditMode(bool val)              { _editMode = val;  }
 
-      void setTextStyle(const TextStyle& st)  { _textStyle = st;   }
+      virtual void setTextStyle(const TextStyle& st)  { _textStyle = st; }
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
       int textStyleType() const               { return _styleIndex; }
@@ -292,6 +292,7 @@ class Text : public Element {
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant& v);
+      virtual QVariant propertyDefault(P_ID id) const;
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
       virtual Element* drop(const DropData&) override;

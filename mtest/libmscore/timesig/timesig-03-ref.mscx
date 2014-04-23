@@ -186,7 +186,6 @@
             </Note>
           </Chord>
         <StaffText>
-          <style>Staff</style>
           <text>simile</text>
           </StaffText>
         <HairPin id="2">
@@ -396,7 +395,6 @@
           <durationType>half</durationType>
           </Rest>
         <StaffText>
-          <style>Staff</style>
           <text>wait</text>
           </StaffText>
         <Rest>

@@ -147,7 +147,6 @@
       <Measure number="2">
         <Tempo>
           <tempo>1.66667</tempo>
-          <style>Tempo</style>
           <text>𝅘𝅥 = 100</text>
           </Tempo>
         <Chord>
@@ -468,7 +467,6 @@
           <breakMultiMeasureRest/>
           <Tempo>
             <tempo>1.66667</tempo>
-            <style>Tempo</style>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>
@@ -720,7 +718,6 @@
           <Tempo>
             <tempo>1.66667</tempo>
             <lid>178</lid>
-            <style>Tempo</style>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Rest>
@@ -738,7 +735,6 @@
           <Tempo>
             <tempo>1.66667</tempo>
             <lid>178</lid>
-            <style>Tempo</style>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Rest>

@@ -131,7 +131,6 @@
         <Tempo>
           <tempo>1.66667</tempo>
           <lid>6</lid>
-          <style>Tempo</style>
           <text><sym>noteQuarterUp</sym> = 100</text>
           </Tempo>
         <Beam id="1">
@@ -2017,7 +2016,6 @@
           <Tempo>
             <tempo>1.66667</tempo>
             <lid>6</lid>
-            <style>Tempo</style>
             <text><sym>noteQuarterUp</sym> = 100</text>
             </Tempo>
           <Beam id="22">

@@ -186,7 +186,6 @@
               <program value="59"/>
               </Channel>
             </Instrument>
-          <style>Instrument Change</style>
           <text>Trumpet</text>
           </InstrumentChange>
         <Chord>
@@ -417,7 +416,6 @@
               <program value="59"/>
               </Channel>
             </Instrument>
-          <style>Instrument Change</style>
           <text>Trumpet</text>
           </InstrumentChange>
         <Chord>

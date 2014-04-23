@@ -114,7 +114,6 @@
         <Tempo>
           <tempo>1.2</tempo>
           <lid>3</lid>
-          <style>Tempo</style>
           <text><sym>noteQuarterUp</sym> = 72</text>
           </Tempo>
         <Rest>
@@ -305,7 +304,6 @@
           <Tempo>
             <tempo>1.2</tempo>
             <lid>3</lid>
-            <style>Tempo</style>
             <text><sym>noteQuarterUp</sym> = 72</text>
             </Tempo>
           <Rest>

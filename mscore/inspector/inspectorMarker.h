@@ -29,10 +29,12 @@ class InspectorMarker : public InspectorBase {
       Q_OBJECT
 
       UiInspectorElement b;
+      Ui::InspectorText t;
       Ui::InspectorMarker  m;
 
    public:
       InspectorMarker(QWidget* parent);
+      virtual void setElement() override;
       };
 
 

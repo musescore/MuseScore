@@ -390,6 +390,8 @@ void InspectorBase::resetClicked(int i)
       for (int i = 0; i < ii.parent; ++i)
             e = e->parent();
       QVariant def = e->propertyDefault(id);
+      if (!def.isValid())
+            return;
       QWidget* w   = ii.w;
 
       blockSignals = true;

@@ -28,10 +28,12 @@ class InspectorJump : public InspectorBase {
       Q_OBJECT
 
       UiInspectorElement b;
+      Ui::InspectorText t;
       Ui::InspectorJump j;
 
    public:
       InspectorJump(QWidget* parent);
+      virtual void setElement() override;
       };
 
 

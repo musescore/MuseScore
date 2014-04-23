@@ -229,7 +229,7 @@ void Harmony::write(Xml& xml) const
             }
       else
             xml.tag("name", _textName);
-      Element::writeProperties(xml);
+      Text::writeProperties(xml, false, true);
       if (_rightParen)
             xml.tagE("rightParen");
       xml.etag();
@@ -609,6 +609,16 @@ void Harmony::endEdit()
                         }
                   }
       score()->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   setTextStyle
+//---------------------------------------------------------
+
+void Harmony::setTextStyle(const TextStyle& st)
+      {
+      Text::setTextStyle(st);
+      render();
       }
 
 //---------------------------------------------------------
