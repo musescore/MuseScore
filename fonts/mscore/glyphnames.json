@@ -108,10 +108,10 @@
         "codepoint": "U+E121"
     },
     "articAccentAbove": {
-        "codepoint": "U+e161"
+        "codepoint": "U+E4A0"
     },
     "articAccentBelow": {
-        "codepoint": "U+e161"
+        "codepoint": "U+E4A1"
     },
     "articMarcatoAbove": {
         "codepoint": "U+e169"
@@ -126,16 +126,16 @@
         "codepoint": "U+e165"
     },
     "articStaccatoAbove": {
-        "codepoint": "U+e163"
+        "codepoint": "U+E4A2"
     },
     "articStaccatoBelow": {
-        "codepoint": "U+e163"
+        "codepoint": "U+E4A3"
     },
     "articTenutoAbove": {
-        "codepoint": "U+e166"
+        "codepoint": "U+E4A4"
     },
     "articTenutoBelow": {
-        "codepoint": "U+e166"
+        "codepoint": "U+E4A5"
     },
     "articTenutoStaccatoAbove": {
         "codepoint": "U+e168"
