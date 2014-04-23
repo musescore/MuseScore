@@ -131,7 +131,6 @@
       <Measure number="2" len="1/2">
         <Tempo>
           <tempo>1.66667</tempo>
-          <style>Tempo</style>
           <text>𝅘𝅥 = 100</text>
           </Tempo>
         <endSpanner id="2"/>

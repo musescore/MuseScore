@@ -226,7 +226,10 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorAmbitus(this);
                               break;
                         default:
-                              ie = new InspectorElement(this);
+                              if (_element->isText())
+                                    ie = new InspectorText(this);
+                              else
+                                    ie = new InspectorElement(this);
                               break;
                         }
                   }
@@ -536,6 +539,47 @@ void InspectorClef::valueChanged(int idx)
       }
 
 //---------------------------------------------------------
+//   InspectorText
+//---------------------------------------------------------
+
+InspectorText::InspectorText(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      t.setupUi(addWidget());
+
+      iList = {
+            { P_COLOR,              0, 0, e.color,    e.resetColor    },
+            { P_VISIBLE,            0, 0, e.visible,  e.resetVisible  },
+            { P_USER_OFF,           0, 0, e.offsetX,  e.resetX        },
+            { P_USER_OFF,           1, 0, e.offsetY,  e.resetY        },
+            { P_TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    }
+            };
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorText::setElement()
+      {
+      Element* e = inspector->element();
+      Score* score = e->score();
+
+      t.style->blockSignals(true);
+      t.style->clear();
+      const QList<TextStyle>& ts = score->style()->textStyles();
+      int n = ts.size();
+      for (int i = 0; i < n; ++i) {
+            if (!(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+                  t.style->addItem(ts.at(i).name(), i);
+            }
+      t.style->blockSignals(false);
+      InspectorBase::setElement();
+      }
+
+//---------------------------------------------------------
 //   InspectorTempoText
 //---------------------------------------------------------
 
@@ -544,17 +588,40 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       {
       e.setupUi(addWidget());
       t.setupUi(addWidget());
+      tt.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,             0, 0, e.color,      e.resetColor      },
-            { P_VISIBLE,           0, 0, e.visible,    e.resetVisible    },
-            { P_USER_OFF,          0, 0, e.offsetX,    e.resetX          },
-            { P_USER_OFF,          1, 0, e.offsetY,    e.resetY          },
-            { P_TEMPO,             0, 0, t.tempo,      t.resetTempo      },
-            { P_TEMPO_FOLLOW_TEXT, 0, 0, t.followText, t.resetFollowText }
+            { P_COLOR,             0, 0, e.color,       e.resetColor       },
+            { P_VISIBLE,           0, 0, e.visible,     e.resetVisible     },
+            { P_USER_OFF,          0, 0, e.offsetX,     e.resetX           },
+            { P_USER_OFF,          1, 0, e.offsetY,     e.resetY           },
+            { P_TEXT_STYLE_TYPE,   0, 0, t.style,       t.resetStyle       },
+            { P_TEMPO,             0, 0, tt.tempo,      tt.resetTempo      },
+            { P_TEMPO_FOLLOW_TEXT, 0, 0, tt.followText, tt.resetFollowText }
             };
       mapSignals();
-      connect(t.followText, SIGNAL(toggled(bool)), t.tempo, SLOT(setDisabled(bool)));
+      connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorTempoText::setElement()
+      {
+      Element* e = inspector->element();
+      Score* score = e->score();
+
+      t.style->blockSignals(true);
+      t.style->clear();
+      const QList<TextStyle>& ts = score->style()->textStyles();
+      int n = ts.size();
+      for (int i = 0; i < n; ++i) {
+            if (!(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+                  t.style->addItem(ts.at(i).name(), i);
+            }
+      t.style->blockSignals(false);
+      InspectorBase::setElement();
       }
 
 //---------------------------------------------------------
@@ -563,7 +630,7 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
 
 void InspectorTempoText::postInit()
       {
-      t.tempo->setDisabled(t.followText->isChecked());
+      tt.tempo->setDisabled(tt.followText->isChecked());
       }
 
 //---------------------------------------------------------
@@ -578,13 +645,13 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
       d.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,         0, 0, e.color,    e.resetColor    },
-            { P_VISIBLE,       0, 0, e.visible,  e.resetVisible  },
-            { P_USER_OFF,      0, 0, e.offsetX,  e.resetX        },
-            { P_USER_OFF,      1, 0, e.offsetY,  e.resetY        },
-            { P_TEXT_STYLE,    0, 0, t.style,    t.resetStyle    },
-            { P_DYNAMIC_RANGE, 0, 0, d.dynRange, d.resetDynRange },
-            { P_VELOCITY,      0, 0, d.velocity, d.resetVelocity }
+            { P_COLOR,              0, 0, e.color,    e.resetColor    },
+            { P_VISIBLE,            0, 0, e.visible,  e.resetVisible  },
+            { P_USER_OFF,           0, 0, e.offsetX,  e.resetX        },
+            { P_USER_OFF,           1, 0, e.offsetY,  e.resetY        },
+            { P_TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    },
+            { P_DYNAMIC_RANGE,      0, 0, d.dynRange, d.resetDynRange },
+            { P_VELOCITY,           0, 0, d.velocity, d.resetVelocity }
             };
       mapSignals();
       }
