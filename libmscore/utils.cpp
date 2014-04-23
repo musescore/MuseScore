@@ -65,7 +65,7 @@ Measure* Score::tick2measure(int tick) const
 Measure* Score::tick2measureMM(int tick) const
       {
       if (tick == -1)
-            return lastMeasure();
+            return lastMeasureMM();
       Measure* lm = 0;
 
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
