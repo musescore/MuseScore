@@ -812,10 +812,30 @@ void Note::read(XmlReader& e)
                   setProperty(P_MIRROR_HEAD, Ms::getProperty(P_MIRROR_HEAD, e));
             else if (tag == "dotPosition")
                   setProperty(P_DOT_POSITION, Ms::getProperty(P_DOT_POSITION, e));
-            else if (tag == "onTimeOffset")
-                  e.skipCurrentElement(); // TODO setOnTimeUserOffset(val.toInt());
-            else if (tag == "offTimeOffset")
-                  e.skipCurrentElement(); // TODO setOffTimeUserOffset(val.toInt());
+            else if (tag == "onTimeType") { //obsolete
+                  if (e.readElementText() == "offset")
+                        _onTimeType = 2;
+                  else
+                        _onTimeType = 1;
+                  }
+            else if (tag == "offTimeType") { //obsolete
+                  if (e.readElementText() == "offset")
+                        _offTimeType = 2;
+                  else
+                        _offTimeType = 1;
+            }
+            else if (tag == "onTimeOffset") {// obsolete
+                  if (_onTimeType == 1)
+                        setOnTimeOffset(e.readInt() * 1000 / chord()->actualTicks());
+                  else
+                        setOnTimeOffset(e.readInt() * 10);
+                  }
+            else if (tag == "offTimeOffset") {// obsolete
+                  if (_offTimeType == 1)
+                        setOffTimeOffset(e.readInt() * 1000 / chord()->actualTicks());
+                  else
+                        setOffTimeOffset(e.readInt() * 10);
+                  }
             else if (tag == "head")
                   setProperty(P_HEAD_GROUP, Ms::getProperty(P_HEAD_GROUP, e));
             else if (tag == "velocity")
@@ -2229,6 +2249,7 @@ QVariant Note::propertyDefault(P_ID propertyId) const
 void Note::setOnTimeOffset(int val)
       {
       _playEvents[0].setOntime(val);
+      chord()->setPlayEventType(PlayEventType::User);
       }
 
 //---------------------------------------------------------
@@ -2238,6 +2259,7 @@ void Note::setOnTimeOffset(int val)
 void Note::setOffTimeOffset(int val)
       {
       _playEvents[0].setLen(val - _playEvents[0].ontime());
+      chord()->setPlayEventType(PlayEventType::User);
       }
 
 //---------------------------------------------------------
