@@ -19,7 +19,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 0
 CreationTime: 1385043608
-ModificationTime: 1397816786
+ModificationTime: 1398273035
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -80,7 +80,7 @@ DisplaySize: -72
 AntiAlias: 1
 FitToEm: 1
 ExtremaBound: 10
-WinInfo: 57698 17 11
+WinInfo: 58497 17 11
 BeginPrivate: 0
 EndPrivate
 Grid
@@ -90,7 +90,7 @@ Grid
  0 -140.666 l 29
 EndSplineSet
 TeXData: 1 0 0 360448 180224 120149 0 1048576 120149 783286 444596 497025 792723 393216 433062 380633 303038 157286 324010 404750 52429 2506097 1059062 262144
-BeginChars: 65539 263
+BeginChars: 65539 269
 
 StartChar: .notdef
 Encoding: 65536 -1 0
@@ -20230,7 +20230,7 @@ StartChar: scripts.arpeggio.arrow.M1
 Encoding: 57728 57728 152
 Width: 257
 VWidth: 969
-Flags: WO
+Flags: W
 HStem: 48 314
 VStem: 9 327
 LayerCount: 2
@@ -20270,7 +20270,7 @@ StartChar: scripts.arpeggio.arrow.1
 Encoding: 57729 57729 153
 Width: 257
 VWidth: 1027
-Flags: WO
+Flags: W
 HStem: 154 314
 VStem: -70 327
 LayerCount: 2
@@ -34829,6 +34829,150 @@ LayerCount: 2
 Fore
 Refer: 63 57639 N 1 0 0 1 0 128 2
 Validated: 32769
+EndChar
+
+StartChar: uniE4A0
+Encoding: 58528 58528 263
+Width: 460
+VWidth: 1156
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+460 129 m 256,0,1
+ 460 110 460 110 441 110 c 257,2,-1
+ 19 1 l 258,3,4
+ 15.7236 0.137695 15.7236 0.137695 13.0127 0.137695 c 0,5,6
+ 0 0.137695 0 0.137695 0 20 c 256,7,8
+ 0 36 0 36 14 39 c 258,9,-1
+ 271 105 l 257,10,-1
+ 414 129 l 257,11,-1
+ 271 153 l 257,12,-1
+ 14 219 l 258,13,14
+ 0 222 0 222 0 238 c 256,15,16
+ 0 257.862 0 257.862 13.0127 257.862 c 0,17,18
+ 15.7236 257.862 15.7236 257.862 19 257 c 258,19,-1
+ 441 148 l 257,20,21
+ 460 148 460 148 460 129 c 256,0,1
+EndSplineSet
+EndChar
+
+StartChar: uniE4A1
+Encoding: 58529 58529 264
+Width: 460
+VWidth: 1156
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+460 -129 m 256,0,1
+ 460 -148 460 -148 441 -148 c 257,2,-1
+ 19 -257 l 258,3,4
+ 15.7236 -257.862 15.7236 -257.862 13.0127 -257.862 c 0,5,6
+ 0 -257.862 0 -257.862 0 -238 c 256,7,8
+ 0 -222 0 -222 14 -219 c 258,9,-1
+ 271 -153 l 257,10,-1
+ 414 -129 l 257,11,-1
+ 271 -105 l 257,12,-1
+ 14 -39 l 258,13,14
+ 0 -36 0 -36 0 -20 c 256,15,16
+ 0 -0.137695 0 -0.137695 13.0127 -0.137695 c 0,17,18
+ 15.7236 -0.137695 15.7236 -0.137695 19 -1 c 258,19,-1
+ 441 -110 l 257,20,21
+ 460 -110 460 -110 460 -129 c 256,0,1
+EndSplineSet
+EndChar
+
+StartChar: uniE4A2
+Encoding: 58530 58530 265
+Width: 102
+VWidth: 1074
+Flags: W
+HStem: 0 102<15.4702 86.5298>
+VStem: 0 102<15.4702 86.5298>
+LayerCount: 2
+Fore
+SplineSet
+0 51 m 256,0,1
+ 0 72 0 72 15 87 c 256,2,3
+ 30 102 30 102 51 102 c 256,4,5
+ 72 102 72 102 87 87 c 256,6,7
+ 102 72 102 72 102 51 c 256,8,9
+ 102 30 102 30 87 15 c 256,10,11
+ 72 0 72 0 51 0 c 256,12,13
+ 30 0 30 0 15 15 c 256,14,15
+ 0 30 0 30 0 51 c 256,0,1
+EndSplineSet
+EndChar
+
+StartChar: uniE4A3
+Encoding: 58531 58531 266
+Width: 102
+VWidth: 1074
+Flags: W
+HStem: -102 102<15.4702 86.5298>
+VStem: 0 102<-86.5298 -15.4702>
+LayerCount: 2
+Fore
+SplineSet
+0 -51 m 256,0,1
+ 0 -30 0 -30 15 -15 c 256,2,3
+ 30 0 30 0 51 0 c 256,4,5
+ 72 0 72 0 87 -15 c 256,6,7
+ 102 -30 102 -30 102 -51 c 256,8,9
+ 102 -72 102 -72 87 -87 c 256,10,11
+ 72 -102 72 -102 51 -102 c 256,12,13
+ 30 -102 30 -102 15 -87 c 256,14,15
+ 0 -72 0 -72 0 -51 c 256,0,1
+EndSplineSet
+EndChar
+
+StartChar: uniE4A4
+Encoding: 58532 58532 267
+Width: 308
+VWidth: 1044
+Flags: W
+HStem: 0 40<0.00158691 307.998>
+VStem: 0 308<6e-008 40>
+LayerCount: 2
+Fore
+SplineSet
+287 0 m 258,0,-1
+ 21 0 l 258,1,2
+ 13 0 13 0 6.5 6 c 256,3,4
+ 0 12 0 12 0 20 c 256,5,6
+ 0 28 0 28 6.5 34 c 256,7,8
+ 13 40 13 40 21 40 c 258,9,-1
+ 287 40 l 258,10,11
+ 295 40 295 40 301.5 34 c 256,12,13
+ 308 28 308 28 308 20 c 256,14,15
+ 308 12 308 12 301.5 6 c 256,16,17
+ 295 0 295 0 287 0 c 258,0,-1
+EndSplineSet
+EndChar
+
+StartChar: uniE4A5
+Encoding: 58533 58533 268
+Width: 308
+VWidth: 1044
+Flags: WO
+HStem: -40 40<0.00158691 307.998>
+VStem: 0 308<-40 -6e-008>
+LayerCount: 2
+Fore
+SplineSet
+287 -40 m 262,0,-1
+ 21 -40 l 262,1,2
+ 13 -40 13 -40 6.5 -34 c 260,3,4
+ 0 -28 0 -28 0 -20 c 260,5,6
+ 0 -12 0 -12 6.5 -6 c 260,7,8
+ 13 0 13 0 21 0 c 262,9,-1
+ 287 0 l 262,10,11
+ 295 0 295 0 301.5 -6 c 260,12,13
+ 308 -12 308 -12 308 -20 c 260,14,15
+ 308 -28 308 -28 301.5 -34 c 260,16,17
+ 295 -40 295 -40 287 -40 c 262,0,-1
+EndSplineSet
 EndChar
 EndChars
 EndSplineFont
