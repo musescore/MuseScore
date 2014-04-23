@@ -214,17 +214,16 @@ void Score::write(Xml& xml, bool selectionOnly)
 
 void Score::readStaff(XmlReader& e)
       {
-      MeasureBase* mb = first();
-      int staff       = e.intAttribute("id", 1) - 1;
+      int staff = e.intAttribute("id", 1) - 1;
       e.setTick(0);
       e.setTrack(staff * VOICES);
 
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
+      if (staff == 0) {
+            while (e.readNextStartElement()) {
+                  const QStringRef& tag(e.name());
 
-            if (tag == "Measure") {
-                  Measure* measure = 0;
-                  if (staff == 0) {
+                  if (tag == "Measure") {
+                        Measure* measure = 0;
                         measure = new Measure(this);
                         measure->setTick(e.tick());
                         if (_mscVersion < 115) {
@@ -241,43 +240,54 @@ void Score::readStaff(XmlReader& e)
                               measure->setLen(f);
                               measure->setTimesig(f);
                               }
-                        }
-                  else {
-                        while (mb) {
-                              if (mb->type() != Element::MEASURE) {
-                                    mb = mb->next();
-                                    }
-                              else {
-                                    measure = (Measure*)mb;
-                                    mb      = mb->next();
-                                    break;
-                                    }
+                        measure->read(e, staff);
+                        if (!measure->isMMRest()) {
+                              add(measure);
+                              e.setLastMeasure(measure);
+                              e.setTick(measure->tick() + measure->ticks());
                               }
+                        }
+                  else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
+                        MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, this));
+                        mb->read(e);
+                        mb->setTick(e.tick());
+                        add(mb);
+                        }
+                  else if (tag == "tick")
+                        e.setTick(e.readInt());
+                  else
+                        e.unknown();
+                  }
+            }
+      else {
+            Measure* measure = firstMeasure();
+            while (e.readNextStartElement()) {
+                  const QStringRef& tag(e.name());
+
+                  if (tag == "Measure") {
                         if (measure == 0) {
                               qDebug("Score::readStaff(): missing measure!");
                               measure = new Measure(this);
                               measure->setTick(e.tick());
                               add(measure);
                               }
+                        e.setTick(measure->tick());
+                        measure->read(e, staff);
+                        if (measure->isMMRest())
+                              measure = e.lastMeasure()->nextMeasure();
+                        else {
+                              e.setLastMeasure(measure);
+                              if (measure->mmRest())
+                                    measure = measure->mmRest();
+                              else
+                                    measure = measure->nextMeasure();
+                              }
                         }
-                  measure->read(e, staff);
-                  if (!measure->isMMRest()) {
-                        if (staff == 0)
-                              add(measure);
-                        e.setLastMeasure(measure);
-                        e.setTick(measure->tick() + measure->ticks());
-                        }
+                  else if (tag == "tick")
+                        e.setTick(e.readInt());
+                  else
+                        e.unknown();
                   }
-            else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                  MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, this));
-                  mb->read(e);
-                  mb->setTick(e.tick());
-                  add(mb);
-                  }
-            else if (tag == "tick")
-                  e.setTick(e.readInt());
-            else
-                  e.unknown();
             }
       }
 
