@@ -2311,6 +2311,8 @@ QPointF Chord::layoutArticulation(Articulation* a)
             if (stem())                         // if there is a stem, assume artic. will be beyond the stem
                   pos = stem()->hookPos();
 
+            a->layout();
+            
             qreal _spatium2 = _spatium * .5;
             qreal _spStaff2 = _spStaff * .5;
             if (stemSide) {                     // if artic. is really beyond a stem,
@@ -2335,6 +2337,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                               line += 2;                                // move 1 whole space below
                         if (!staff()->isTabStaff())                     // on pitched staves, note is at left of stem:
                               pos.rx() -= upNote()->headWidth() * .5;   // move half-a-note-head to left
+                        pos.ry() = -a->height() / 2;                    // symbol is below baseline, shift if a bit up
                         }
                   else {                        // if above chord
                         line = upLine();                                // staff position (lines and spaces) of chord highest note
@@ -2345,10 +2348,10 @@ QPointF Chord::layoutArticulation(Articulation* a)
                               line -= 2;                                // move 1 whole space above
                         if (!staff()->isTabStaff())                     // on pitched staves, note is at right of stem:
                               pos.rx() += upNote()->headWidth() * .5;   // move half-a-note-head to right
+                        pos.ry() = a->height() / 2;                     // symbol is on baseline, shift it a bit down
                         }
-                  pos.ry() = line * _spStaff2;                          // convert staff position to sp distance
+                  pos.ry() += line * _spStaff2;                          // convert staff position to sp distance
                   }
-            a->layout();
             a->setPos(pos);
             a->adjustReadPos();
             return QPointF(pos);
