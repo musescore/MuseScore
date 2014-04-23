@@ -41,12 +41,29 @@ ChordRest* nextChordRest(ChordRest* cr)
             // cr is a grace note
             Chord* c  = static_cast<Chord*>(cr);
             Chord* pc = static_cast<Chord*>(cr->parent());
-            auto i = std::find(pc->graceNotes().begin(), pc->graceNotes().end(), c);
-            if (i == pc->graceNotes().end())
-                  return 0;
-            ++i;
-            if (i != pc->graceNotes().end())
-                  return *i;
+            QList<Chord*> graceNotesBefore;
+            QList<Chord*> graceNotesAfter;
+
+            if(cr->isGraceBefore()){
+                  pc->getGraceNotesBefore(&graceNotesBefore);
+                  auto i = std::find(graceNotesBefore.begin(), graceNotesBefore.end(), c);
+                  if (i == graceNotesBefore.end())
+                        return 0;
+                  ++i;
+                  if (i != graceNotesBefore.end())
+                        return *i;
+                  }
+            else {
+                  int n = pc->getGraceNotesAfter(&graceNotesAfter);
+                  for(int i = 0; i < n; i++){
+                        if(c == graceNotesAfter[(i)]){
+                              if(i < n - 1)
+                                    return graceNotesAfter[i + 1];
+                              else
+                                    return 0;
+                              }
+                        }
+                  }
             return pc;
             }
       int track = cr->track();
@@ -79,13 +96,30 @@ ChordRest* prevChordRest(ChordRest* cr)
             // cr is a grace note
             Chord* c  = static_cast<Chord*>(cr);
             Chord* pc = static_cast<Chord*>(cr->parent());
-            auto i = std::find(pc->graceNotes().begin(), pc->graceNotes().end(), c);
-            if (i == pc->graceNotes().end())
-                  return 0;
-            if (i == pc->graceNotes().begin())
-                  cr = pc;
-            else
-                  return *--i;
+            QList<Chord*> graceNotesBefore;
+            QList<Chord*> graceNotesAfter;
+
+            if(cr->isGraceBefore()){
+                  pc->getGraceNotesBefore(&graceNotesBefore);
+                  auto i = std::find(graceNotesBefore.begin(),graceNotesBefore.end(), c);
+                  if (i == graceNotesBefore.end())
+                        return 0;
+                  if (i == graceNotesBefore.begin())
+                        cr = pc;
+                  else
+                        return *--i;
+                  }
+            else {
+                  int n = pc->getGraceNotesAfter(&graceNotesAfter);
+                  for(int i = 0; i < n; i++){
+                        if(c == graceNotesAfter[(i)]){
+                              if(i > 0)
+                                    return graceNotesAfter[i - 1];
+                              else
+                                    return 0;
+                              }
+                        }
+                  }
             }
       else {
             if (cr->type() == Element::CHORD) {

@@ -454,15 +454,27 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool
                         const Slur* s = static_cast<const Slur*>(el);
                         //define line type
                         QString rest = slurTieLineStyle(s);
-                        int i = findSlur(0);
-                        if (i >= 0) {
-                              slur[i] = s;
-                              started[i] = true;
-                              notations.tag(xml);
-                              xml.tagE(QString("slur%1 type=\"start\" number=\"%2\"").arg(rest).arg(i + 1));
-                              }
-                        else
-                              qDebug("no free slur slot");
+                        if (chord->isGraceBefore()){
+                             int i = findSlur(0);
+                             if (i >= 0) {
+                                   slur[i] = s;
+                                   started[i] = true;
+                                   notations.tag(xml);
+                                   xml.tagE(QString("slur%1 type=\"start\" number=\"%2\"").arg(rest).arg(i + 1));
+                                   }
+                             else
+                                   qDebug("no free slur slot");
+                             }
+                        else if (chord->isGraceAfter()){
+                             int i = findSlur(s);
+                             if (i >= 0) {
+                                   // remove from list and print stop
+                                   slur[i] = 0;
+                                   started[i] = false;
+                                   notations.tag(xml);
+                                   xml.tagE(QString("slur%1 type=\"stop\"%2 number=\"%3\"").arg(rest).arg(s->slurDirection() == MScore::UP ? " placement=\"above\"" : "").arg(i + 1));
+                                   }
+                             }
                         }
                   }
              return;
@@ -543,6 +555,27 @@ void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
                         started[i] = false;
                         notations.tag(xml);
                         xml.tagE("slur type=\"stop\" number=\"%d\"", i + 1);
+                        }
+                  }
+            }
+      // surch for slurs to grace notes after
+      QList<Chord*> graceNotesAfter;
+      chord->getGraceNotesAfter(&graceNotesAfter);
+      for (Chord* g : graceNotesAfter) {
+            foreach(Element* el, g->el()){
+                  if (el->type() == Element::SLUR){
+                        const Slur* s = static_cast<const Slur*>(el);
+                        //define line type
+                        QString rest = slurTieLineStyle(s);
+                        int i = findSlur(0);
+                        if (i >= 0) {
+                              slur[i] = s;
+                              started[i] = true;
+                              notations.tag(xml);
+                              xml.tagE(QString("slur%1 type=\"start\" number=\"%2\"").arg(rest).arg(i + 1));
+                              }
+                        else
+                              qDebug("no free slur slot"); break;
                         }
                   }
             }
@@ -4429,8 +4462,19 @@ void ExportMusicXml::write(QIODevice* dev)
                                           {
                                           Chord* c                 = static_cast<Chord*>(el);
                                           const QList<Lyrics*>* ll = &c->lyricsList();
-                                          for (Chord* g : c->graceNotes()) {
-                                                chord(g, sstaff, ll, part->instr()->useDrumset());
+                                   // ise grace after
+                                          if(c){
+                                                QList<Chord*> graceNotesBefore;
+                                                c->getGraceNotesBefore(&graceNotesBefore);
+                                                for (Chord* g : graceNotesBefore) {
+                                                      chord(g, sstaff, ll, part->instr()->useDrumset());
+                                                      }
+                                                chord(c, sstaff, ll, part->instr()->useDrumset());
+                                                QList<Chord*> graceNotesAfter;
+                                                 c->getGraceNotesAfter(&graceNotesAfter);
+                                                 for (Chord* g : graceNotesAfter) {
+                                                       chord(g, sstaff, ll, part->instr()->useDrumset());
+                                                       }
                                                 }
                                           chord(c, sstaff, ll, part->instr()->useDrumset());
                                           break;
