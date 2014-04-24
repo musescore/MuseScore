@@ -3937,7 +3937,7 @@ Measure* Measure::mmRest1() const
       if (_mmRest)
             return _mmRest;
       if (_mmRestCount != -1)
-            return 0;
+            return const_cast<Measure*>(this);
       const Measure* m = this;
       while (m && !m->_mmRest)
             m = m->prevMeasure();
