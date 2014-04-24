@@ -163,7 +163,7 @@ Staff::Staff(Score* s)
       _rstaff         = 0;
       _part           = 0;
       _keymap[0]      = KeySigEvent(0);                  // default to C major
-      _staffType      = _score->rootScore()->staffType(STANDARD_STAFF_TYPE);
+      _staffType      = _score->staffType(STANDARD_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -182,7 +182,7 @@ Staff::Staff(Score* s, Part* p, int rs)
       _rstaff         = rs;
       _part           = p;
       _keymap[0]      = KeySigEvent(0);                  // default to C major
-      _staffType      = _score->rootScore()->staffType(STANDARD_STAFF_TYPE);
+      _staffType      = _score->staffType(STANDARD_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -655,6 +655,7 @@ void LinkedStaves::remove(Staff* staff)
 ///  return true if staff is different and
 ///  linked to this staff
 //---------------------------------------------------------
+
 bool Staff::isLinked(Staff* staff)
       {
       if (staff == this || !_linkedStaves)
