@@ -1008,20 +1008,21 @@ void MuseScore::editInstrList()
                               }
                         ++rstaff;
                         }
-                  if(linked.size() == 0)
+                  if (linked.size() == 0)
                         part->staves()->front()->setBarLineSpan(part->nstaves());
                   //equivalent to cmdInsertPart(part, staffIdx)
                   // but we donnt add rests for linked parts
                   rootScore->undoInsertPart(part, staffIdx);
-                  for(Staff* s : nonLinked) {
+                  for (Staff* s : nonLinked) {
                         int si = rootScore->staffIdx(s);
                         for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
                               m->cmdAddStaves(si, si + 1, true);
                               if (m->hasMMRest())
-                                    m->mmRest()->cmdAddStaves(si, si + 1, true);
+                                    //m->mmRest()->cmdAddStaves(si, si + 1, true);
+                                    m->mmRest()->cmdAddStaves(si, si + 1, false);
                               }
                         }
-                  for(Staff* s : linked) {
+                  for (Staff* s : linked) {
                         int si = rootScore->staffIdx(s);
                         for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
                               m->cmdAddStaves(si, si + 1, false);
@@ -1050,10 +1051,7 @@ void MuseScore::editInstrList()
                               Staff* staff = sli->staff;
                               int sidx = staff->idx();
                               int eidx = sidx + 1;
-                              for (MeasureBase* mb = rootScore->measures()->first(); mb; mb = mb->next()) {
-                                    if (mb->type() != Element::MEASURE)
-                                          continue;
-                                    Measure* m = (Measure*)mb;
+                              for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
                                     m->cmdRemoveStaves(sidx, eidx);
                                     if (m->hasMMRest())
                                           m->mmRest()->cmdRemoveStaves(sidx, eidx);

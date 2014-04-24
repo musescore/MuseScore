@@ -136,11 +136,10 @@ void Part::setStaves(int n)
             Staff* staff = new Staff(_score, this, i);
             _staves.push_back(staff);
             _score->staves().insert(staffIdx, staff);
-            for (MeasureBase* mb = _score->first(); mb; mb = mb->next()) {
-                  if (mb->type() != Element::MEASURE)
-                        continue;
-                  Measure* m = static_cast<Measure*>(mb);
+            for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure()) {
                   m->insertStaff(staff, staffIdx);
+                  if (m->hasMMRest())
+                        m->mmRest()->insertStaff(staff, staffIdx);
                   }
             ++staffIdx;
             }
@@ -367,8 +366,11 @@ void Part::setProperty(int id, const QVariant& property)
       switch(id) {
             case SHOW:
                   setShow(property.toBool());
-                  for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure())
+                  for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
                         m->setDirty();
+                        if (m->mmRest())
+                              m->mmRest()->setDirty();
+                        }
                   break;
             default:
                   qDebug("Part::setProperty: unknown id %d", id);
