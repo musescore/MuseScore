@@ -1288,7 +1288,8 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                               }
                         e->write(xml);
                         }
-                  if (segment->segmentType() & (Segment::SegChordRest)) {
+                  Measure* m = segment->measure();
+                  if ((!(m && m->isMMRest())) && (segment->segmentType() & Segment::SegChordRest)) {
                         for (auto i : _spanner.map()) {     // TODO: dont search whole list
                               Spanner* s = i.second;
                               if (s->generated())
@@ -1348,7 +1349,6 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         cr->writeBeam(xml);
                         cr->writeTuplet(xml);
                         }
-                  Measure* m = segment->measure();
                   if ((segment->segmentType() == Segment::SegEndBarLine) && (m->mmRestCount() < 0)) {
                         BarLine* bl = static_cast<BarLine*>(e);
                         bl->setBarLineType(m->endBarLineType());
