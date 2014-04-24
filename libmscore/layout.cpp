@@ -1614,15 +1614,18 @@ static bool validMMRestMeasure(Measure* m)
       if (!m->isEmpty())
             return false;
 
+#if 0
       auto l = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
       for (::Interval<Spanner*> isp : l) {
             Spanner* s = isp.value;
             if (s->type() == Element::VOLTA && (s->tick() == m->tick() || s->tick2() == m->tick()))
                   return false;
             }
+#endif
+
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
-                  if(e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT && e->type() != Element::STAFF_TEXT)
+                  if (e->type() != Element::REHEARSAL_MARK && e->type() != Element::TEMPO_TEXT && e->type() != Element::STAFF_TEXT)
                         return false;
                   }
             }
@@ -1642,10 +1645,8 @@ static bool breakMultiMeasureRest(Measure* m)
       auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
       foreach (auto i, sl) {
             Spanner* s = i.value;
-            if (s->type() == Element::VOLTA) {
-                  if (s->tick() == m->tick() || s->tick2() == m->tick())
-                        return true;
-                  }
+            if (s->type() == Element::VOLTA && (s->tick() == m->tick() || s->tick2() == m->tick()))
+                  return true;
             }
 
       for (Segment* s = m->first(); s; s = s->next()) {

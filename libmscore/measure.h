@@ -293,6 +293,7 @@ class Measure : public MeasureBase {
       bool hasMMRest() const        { return _mmRest != 0; }
       bool isMMRest() const         { return _mmRestCount > 0; }
       Measure* mmRest() const       { return _mmRest;      }
+      Measure* mmRest1() const;
       void setMMRest(Measure* m)    { _mmRest = m;         }
       int mmRestCount() const       { return _mmRestCount; }    // number of measures _mmRest spans
       void setMMRestCount(int n)    { _mmRestCount = n;    }
