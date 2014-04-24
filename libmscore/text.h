@@ -180,7 +180,6 @@ class Text : public Element {
 
       QString _text;
       QList<TextBlock> _layout;
-      QRectF frame;           // calculated in layout()
       int _styleIndex;
 
       bool _layoutToParentWidth;
@@ -202,6 +201,7 @@ class Text : public Element {
 
    protected:
       QColor textColor() const;
+      QRectF frame;           // calculated in layout()
       void layoutFrame();
       void layoutEdit();
       void createLayout();
