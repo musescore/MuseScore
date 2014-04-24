@@ -3926,5 +3926,26 @@ Measure* Measure::mmRestLast() const
       return score()->lastMeasure();
       }
 
+//---------------------------------------------------------
+//   mmRest1
+//    return the multi measure rest this measure is covered
+//    by
+//---------------------------------------------------------
+
+Measure* Measure::mmRest1() const
+      {
+      if (_mmRest)
+            return _mmRest;
+      if (_mmRestCount != -1)
+            return 0;
+      const Measure* m = this;
+      while (m && !m->_mmRest)
+            m = m->prevMeasure();
+      if (m)
+            return const_cast<Measure*>(m->_mmRest);
+      return 0;
+      }
+
+
 }
 
