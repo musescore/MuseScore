@@ -1726,6 +1726,7 @@ void Score::createMMRests()
 
                   qDeleteAll(*mmr->el());
                   mmr->el()->clear();
+
                   for (Element* e : *lm->el())
                         mmr->add(e->clone());
 

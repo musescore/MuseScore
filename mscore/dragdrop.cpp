@@ -449,7 +449,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case Element::AMBITUS:
                         {
                         Element* el = 0;
-                        foreach(const Element* e, elementsAt(pos)) {
+                        for (const Element* e : elementsAt(pos)) {
                               if (e->acceptDrop(this, pos, dragElement)) {
                                     el = const_cast<Element*>(e);
                                     break;
@@ -457,30 +457,26 @@ void ScoreView::dropEvent(QDropEvent* event)
                               }
                         if (!el) {
                               if (!dropCanvas(dragElement)) {
-                                    qDebug("cannot drop %s to canvas", dragElement->name());
+                                    qDebug("cannot drop %s(%p) to canvas", dragElement->name(), dragElement);
                                     delete dragElement;
-                                    dragElement = 0;
                                     }
                               break;
                               }
                         _score->addRefresh(el->canvasBoundingRect());
+
+                        // HACK ALERT!
+                        if (el->type() == Element::MEASURE && dragElement->type() == Element::LAYOUT_BREAK) {
+                              Measure* m = static_cast<Measure*>(el);
+                              if (m->isMMRest())
+                                    el = m->mmRestLast();
+                              }
+
                         Element* dropElement = el->drop(dropData);
                         _score->addRefresh(el->canvasBoundingRect());
                         if (dropElement) {
                               if (!_score->noteEntryMode())
                                     _score->select(dropElement, SELECT_SINGLE, 0);
                               _score->addRefresh(dropElement->canvasBoundingRect());
-
-#if 0
-                              Qt::KeyboardModifiers keyState = event->keyboardModifiers();
-                              if (keyState == (Qt::ShiftModifier | Qt::ControlModifier)) {
-                                    //
-                                    // continue drag with a cloned element
-                                    //
-//??                                    CloneEvent* ce = new CloneEvent(dropElement);
-//                                    QCoreApplication::postEvent(this, ce);
-                                    }
-#endif
                               }
                         event->acceptProposedAction();
                         }
@@ -489,6 +485,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                         delete dragElement;
                         break;
                   }
+
             dragElement = 0;
             setDropTarget(0); // this also resets dropRectangle and dropAnchor
             score()->endCmd();
