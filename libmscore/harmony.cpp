@@ -913,7 +913,6 @@ void Harmony::layout()
 
       setPos(xx, yy);
 
-
       if (!readPos().isNull()) {
             // version 114 is measure based
             // rebase to segment
@@ -928,6 +927,14 @@ void Harmony::layout()
             qreal dist = -(bbox().top());
             mstaff->distanceUp = qMax(mstaff->distanceUp, dist + spatium());
             }
+
+      if (textStyle().hasFrame()) {
+            QRectF saveBbox = bbox();
+            setbbox(bboxtight());
+            layoutFrame();
+            setbbox(saveBbox);
+            }
+
       }
 
 //---------------------------------------------------------
@@ -969,11 +976,41 @@ QPainterPath Harmony::shape() const
 
 void Harmony::draw(QPainter* painter) const
       {
-      painter->setPen(curColor());
+      // painter->setPen(curColor());
       if (editMode() || textList.isEmpty()) {
             Text::draw(painter);
             return;
             }
+      if (textStyle().hasFrame()) {
+            if (textStyle().frameWidth().val() != 0.0) {
+                  QColor color(textStyle().frameColor());
+                  if (!visible())
+                        color = Qt::gray;
+                  else if (selected())
+                        color = MScore::selectColor[0];
+                  QPen pen(color, textStyle().frameWidth().val() * spatium());
+                  painter->setPen(pen);
+                  }
+            else
+                  painter->setPen(Qt::NoPen);
+            QColor bg(textStyle().backgroundColor());
+            painter->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
+            if (textStyle().circle())
+                  painter->drawArc(frame, 0, 5760);
+            else {
+                  int r2 = textStyle().frameRound() * lrint((frame.width() / frame.height()));
+                  if (r2 > 99)
+                        r2 = 99;
+                  painter->drawRoundRect(frame, textStyle().frameRound(), r2);
+                  }
+            }
+      painter->setBrush(Qt::NoBrush);
+      QColor color(textStyle().foregroundColor());
+      if (!visible())
+            color = Qt::gray;
+      else if (selected())
+            color = MScore::selectColor[0];
+      painter->setPen(color);
       foreach(const TextSegment* ts, textList) {
             painter->setFont(ts->font);
             painter->drawText(QPointF(ts->x, ts->y), ts->text);
