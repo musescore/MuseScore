@@ -142,6 +142,7 @@ class Note : public Element {
       Q_PROPERTY(int line                      READ line)
       Q_PROPERTY(int fret                      READ fret              WRITE undoSetFret)
       Q_PROPERTY(int string                    READ string            WRITE undoSetString)
+      Q_PROPERTY(int tpc                       READ tpc)
       Q_PROPERTY(int tpc1                      READ tpc1              WRITE undoSetTpc1)
       Q_PROPERTY(int tpc2                      READ tpc2              WRITE undoSetTpc2)
       Q_PROPERTY(int pitch                     READ pitch             WRITE undoSetPitch)

@@ -121,8 +121,10 @@ void Cursor::add(Element* s)
       {
       if (!_segment)
             return;
+
       s->setTrack(_track);
       s->setParent(_segment);
+
       if (s->isChordRest())
             s->score()->undoAddCR(static_cast<ChordRest*>(s), _segment->measure(), _segment->tick());
       else if (s->type() == Element::KEYSIG) {

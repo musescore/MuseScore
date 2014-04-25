@@ -577,10 +577,9 @@ void PageFormat::write(Xml& xml) const
 void Page::doRebuildBspTree()
       {
       QList<Element*> el;
-      foreach(System* s, _systems) {
-            foreach(MeasureBase* m, s->measures()) {
+      for (System* s : _systems) {
+            for (MeasureBase* m : s->measures())
                   m->scanElements(&el, collectElements, false);
-                  }
             }
       scanElements(&el, collectElements, false);
 
