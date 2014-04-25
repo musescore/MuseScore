@@ -63,6 +63,8 @@ TextProp::TextProp(QWidget* parent)
       connect(mmUnit, SIGNAL(toggled(bool)), SLOT(mmToggled(bool)));
       connect(resetToStyle, SIGNAL(clicked()), SLOT(doResetToTextStyle()));
       connect(resetToStyle, SIGNAL(clicked()), SIGNAL(resetToStyleClicked()));
+      connect(boxButton, SIGNAL(toggled(bool)), this, SLOT(boxButtonToggled(bool)));
+      connect(frame, SIGNAL(toggled(bool)), this, SLOT(boxButtonToggled(bool)));
       }
 
 //---------------------------------------------------------
@@ -233,6 +235,15 @@ TextStyle TextProp::textStyle() const
 void TextProp::doResetToTextStyle()
       {
       setTextStyle(_score->textStyle(textStyleType()));
+      }
+
+//---------------------------------------------------------
+//   boxButtonToggled
+//---------------------------------------------------------
+
+void TextProp::boxButtonToggled(bool state)
+      {
+      frameRound->setEnabled(frame->isChecked() && state);
       }
 
 }

@@ -43,6 +43,7 @@ class TextProp : public QWidget, public Ui::TextProperties {
    private slots:
       void mmToggled(bool);
       void doResetToTextStyle();
+      void boxButtonToggled(bool);
 
    signals:
       void resetToStyleClicked();

@@ -57,11 +57,7 @@ TextProperties::TextProperties(Text* t, QWidget* parent)
       tp->setScore(false, t->score());
 
       layout->addWidget(tp, 0, 1);
-      QLabel* l = new QLabel;
-      l->setPixmap(QPixmap(":/data/bg1.jpg"));
-      l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Ignored);
 
-      layout->addWidget(l, 0, 0, 2, 1);
       QHBoxLayout* hb = new QHBoxLayout;
       QDialogButtonBox* bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
       hb->addWidget(bb);

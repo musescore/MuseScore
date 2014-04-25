@@ -290,95 +290,95 @@
              </property>
             </spacer>
            </item>
+           <item>
+            <widget class="QCheckBox" name="sizeIsSpatiumDependent">
+             <property name="text">
+              <string>Size follows Space unit</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="label_23">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Color:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="indent">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Awl::ColorLabel" name="color">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>40</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>text color</string>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="systemFlag">
+             <property name="text">
+              <string>System flag</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
         </layout>
        </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="sizeIsSpatiumDependent">
-        <property name="text">
-         <string>Size follows Space unit</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="label_23">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Color:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="indent">
-           <number>5</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="Awl::ColorLabel" name="color">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>40</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>text color</string>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="systemFlag">
-          <property name="text">
-           <string>System flag</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
       </item>
       <item>
        <widget class="QGroupBox" name="groupBox">
@@ -436,6 +436,9 @@
              <property name="maximum">
               <double>999.990000000000009</double>
              </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
             </widget>
            </item>
           </layout>
@@ -480,6 +483,9 @@
              </property>
              <property name="maximum">
               <double>999.990000000000009</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
              </property>
             </widget>
            </item>
@@ -778,6 +784,9 @@
          </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <property name="spacing">
+            <number>10</number>
+           </property>
            <item>
             <widget class="QRadioButton" name="circleButton">
              <property name="toolTip">
@@ -798,6 +807,19 @@
              </property>
             </widget>
            </item>
+           <item>
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
          <item>
@@ -811,7 +833,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Width:</string>
+              <string>Border width:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -849,7 +871,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Margin:</string>
+              <string>Text margin:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -874,7 +896,7 @@
               <double>999.000000000000000</double>
              </property>
              <property name="singleStep">
-              <double>0.500000000000000</double>
+              <double>0.100000000000000</double>
              </property>
             </widget>
            </item>
@@ -887,7 +909,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Radius:</string>
+              <string>Border radius:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -926,7 +948,7 @@
            <item row="2" column="3">
             <widget class="Awl::ColorLabel" name="bgColor">
              <property name="toolTip">
-              <string>frame color</string>
+              <string>text background color</string>
              </property>
              <property name="frameShape">
               <enum>QFrame::Box</enum>
@@ -975,7 +997,7 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>40</height>
+          <height>0</height>
          </size>
         </property>
        </spacer>

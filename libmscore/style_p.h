@@ -43,10 +43,10 @@ class TextStyleData : public QSharedData, public ElementLayout {
       bool bold;
       bool italic;
       bool underline;
-      bool hasFrame;
 
       bool sizeIsSpatiumDependent;        // text point size depends on _spatium unit
 
+      bool hasFrame;
       Spatium frameWidth;
       Spatium paddingWidth;
       int frameRound;
@@ -62,7 +62,7 @@ class TextStyleData : public QSharedData, public ElementLayout {
          Align _align,
          const QPointF& _off, OffsetType _ot,
          bool sizeSpatiumDependent,
-         Spatium fw, Spatium pw, int fr,
+         bool hasFrame, Spatium fw, Spatium pw, int fr,
          QColor co, bool circle, bool systemFlag,
          QColor fg, QColor bg);
       TextStyleData();

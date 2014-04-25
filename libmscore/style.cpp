@@ -247,7 +247,7 @@ void initStyle(MStyle* s)
       // this is an empty style, no offsets are allowed
       // never show this style
       AS("", ff, 10, false, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, false,
-               Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false, false, QColor(Qt::black),
+               false, Spatium(.2), Spatium(.5), 25, QColor(Qt::black), false, false, QColor(Qt::black),
                QColor(255, 255, 255, 0), TextStyle::HIDE_ALWAYS);
 
       AS("Title",    ff, 24, false, false, false, ALIGN_HCENTER | ALIGN_TOP,    QPointF(), OA);
@@ -265,7 +265,7 @@ void initStyle(MStyle* s)
       AS("Technique", ff, 12, false, true, false,ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, -2.0), OS);
 
       AS("Tempo", ff, 12, false, false, false,ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS,
-         true, MMSP(.0), MMSP(.0), 0, Qt::black, false, true);
+         true, false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true);
 
       AS("Metronome", ff, 12, true, false, false, ALIGN_LEFT);
       AS("Measure Number", ff, 8, false, false, false,ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(.0, -2.0), OS, true);
@@ -274,26 +274,26 @@ void initStyle(MStyle* s)
 
       AS("System", ff,  10, false, false, false,
          ALIGN_LEFT, QPointF(0, -4.0), OS, true,
-         Spatium(0.0), Spatium(0.0), 25, Qt::black, false, true);
+         false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true);
 
       AS("Staff", ff,  10, false, false, false, ALIGN_LEFT, QPointF(0, -4.0), OS, true);
       AS("Chord Symbol", ff,  12, false, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, true);
 
       AS("Rehearsal Mark", ff,  14, true, false, false,
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -3.0), OS, true,
-         Spatium(0.2), Spatium(.5), 20, Qt::black, false, true);
+         true, Spatium(.2), Spatium(.5), 20, Qt::black, false, true);
 
       AS("Repeat Text Left", ff,  20, false, false, false,
          ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -2.0), OS, true,
-         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true);
+         false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true);
 
       AS("Repeat Text Right", ff,  12, false, false, false,
          ALIGN_RIGHT | ALIGN_BASELINE, QPointF(0, -2.0), OS, true,
-         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true);
+         false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true);
 
       AS("Repeat Text", ff,  12, false, false, false,          // for backward compatibility
          ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -2.0), OS, true,
-         MMSP(0.0), MMSP(0.0), 25, Qt::black, false, true);
+         false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true);
 
       // y offset may depend on voltaHook style element
       AS("Volta",     ff, 11, true, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.5, 1.9), OS, true);
@@ -303,7 +303,7 @@ void initStyle(MStyle* s)
 
       AS("String Number", ff,  8, false, false, false,
          ALIGN_CENTER, QPointF(0, -5.0), OS, true,
-         Spatium(0.1), Spatium(0.2), 0, Qt::black, true, false);
+         true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false);
 
       AS("Ottava", ff, 12, false, true, false, ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, true);
       AS("Bend", ff, 8, false, false, false, ALIGN_CENTER | ALIGN_BOTTOM, QPointF(), OS, true);
@@ -314,9 +314,9 @@ void initStyle(MStyle* s)
 
       AS("Figured Bass", "MScoreBC", 8, false, false, false,
          ALIGN_LEFT | ALIGN_TOP, QPointF(0, 6), OS, true,
-         Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
-         false, QColor(Qt::black), QColor(255, 255, 255, 0),            // default params
-         TextStyle::HIDE_IN_EDITOR);                                   // don't show in Style Editor
+         false, Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
+         false, QColor(Qt::black), QColor(255, 255, 255, 0),                   // default params
+         TextStyle::HIDE_IN_EDITOR);                                           // don't show in Style Editor
 
 #undef MM
 #undef OA
@@ -587,12 +587,12 @@ TextStyle::TextStyle(QString _name, QString _family, qreal _size,
    Align _align,
    const QPointF& _off, OffsetType _ot,
    bool sd,
-   Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
+   bool hasFrame, Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
    QColor fg, QColor bg, Hidden hidden)
       {
       d = new TextStyleData(_name, _family, _size,
          _bold, _italic, _underline, _align, _off, _ot,
-         sd, fw, pw, fr, co, _circle, _systemFlag, fg, bg);
+         sd, hasFrame, fw, pw, fr, co, _circle, _systemFlag, fg, bg);
       _hidden = hidden;
       }
 
@@ -647,17 +647,17 @@ TextStyleData::TextStyleData(
    Align _align,
    const QPointF& _off, OffsetType _ot,
    bool sd,
-   Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
+   bool _hasFrame, Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
    QColor fg, QColor bg)
    :
    ElementLayout(_align, _off, _ot),
    name(_name), size(_size), bold(_bold),
    italic(_italic), underline(_underline),
-   sizeIsSpatiumDependent(sd), frameWidth(fw), paddingWidth(pw),
+   sizeIsSpatiumDependent(sd), hasFrame(_hasFrame), frameWidth(fw), paddingWidth(pw),
    frameRound(fr), frameColor(co), circle(_circle), systemFlag(_systemFlag),
    foregroundColor(fg), backgroundColor(bg)
       {
-      hasFrame       = (fw.val() != 0.0) || (bg.alpha() != 0);
+      //hasFrame       = (fw.val() != 0.0) || (bg.alpha() != 0);
       family         = _family;
       frameWidthMM   = 0.0;
       paddingWidthMM = 0.0;
@@ -907,7 +907,7 @@ bool TextStyleData::readProperties(XmlReader& e)
             ;
       else if (tag == "sizeIsSpatiumDependent" || tag == "spatiumSizeDependent")
             sizeIsSpatiumDependent = e.readInt();
-      else if (tag == "frameWidth") {
+      else if (tag == "frameWidth") { // obsolete
             hasFrame = true;
             frameWidthMM = e.readDouble();
             }
