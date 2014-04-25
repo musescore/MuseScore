@@ -89,8 +89,7 @@ std::vector<int> findTupletNumbers(const ReducedFraction &divLen,
 
 ReducedFraction findSumLengthOfRests(
             const TupletInfo &tupletInfo,
-            const ReducedFraction &startBarTick,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &startBarTick)
       {
       auto beg = tupletInfo.onTime;
       const auto tupletEndTime = tupletInfo.onTime + tupletInfo.len;
@@ -102,7 +101,7 @@ ReducedFraction findSumLengthOfRests(
             const MidiChord &midiChord = chord.second->second;
             const auto &chordOnTime = (chord.second->first < startBarTick)
                         ? startBarTick
-                        : Quantize::findQuantizedChordOnTime(*chord.second, basicQuant,
+                        : Quantize::findQuantizedTupletChordOnTime(*chord.second, tupletInfo.len,
                                   tupletLimits(tupletInfo.tupletNumber).ratio, startBarTick);
             if (beg < chordOnTime)
                   sumLen += (chordOnTime - beg);
@@ -114,7 +113,7 @@ ReducedFraction findSumLengthOfRests(
                   if (noteOffTime > maxOffTime)
                         maxOffTime = noteOffTime;
                   }
-            beg = Quantize::findQuantizedNoteOffTime(*chord.second, maxOffTime, basicQuant,
+            beg = Quantize::findQuantizedTupletNoteOffTime(maxOffTime, tupletInfo.len,
                                     tupletLimits(tupletInfo.tupletNumber).ratio, startBarTick);
             if (beg >= tupletEndTime)
                   break;
@@ -266,7 +265,7 @@ bool isTupletLenAllowed(
             const ReducedFraction &basicQuant)
       {
       const auto tupletNoteLen = tupletLen / tupletNumber;
-      const auto regularQuant = Quantize::findQuantForRange(beg, end, basicQuant, {1, 1});
+      const auto regularQuant = Quantize::findQuantForRange(beg, end, basicQuant);
       return tupletNoteLen >= regularQuant;
       }
 
@@ -317,8 +316,7 @@ std::vector<TupletInfo> detectTuplets(
                                           startDivChordIt, endDivChordIt, tupletInfo)) {
                               detectStaccato(tupletInfo);
                               }
-                        tupletInfo.sumLengthOfRests = findSumLengthOfRests(
-                                                            tupletInfo, startBarTick, basicQuant);
+                        tupletInfo.sumLengthOfRests = findSumLengthOfRests(tupletInfo, startBarTick);
 
                         if (!isTupletAllowed(tupletInfo))
                               continue;

@@ -370,8 +370,8 @@ void minimizeOffTimeError(
                                  || (tupletInfo.chords.size() > 1
                                     && notes.size() > (int)removedIndexes.size() + 1))
                               {
-                              const auto tupletError = Quantize::findOffTimeQuantError(
-                                                *firstChord->second, note.offTime, basicQuant,
+                              const auto tupletError = Quantize::findOffTimeTupletQuantError(
+                                                note.offTime, tupletInfo.len,
                                                 tupletLimits(tupletInfo.tupletNumber).ratio, startBarTick);
                               const auto regularError = Quantize::findOffTimeQuantError(
                                                 *firstChord->second, note.offTime, basicQuant);
@@ -424,15 +424,14 @@ void addChordsBetweenTupletNotes(
                                                           basicQuant, chordIt)) {
                         const auto tupletRatio = tupletLimits(tuplet.tupletNumber).ratio;
 
-                        auto tupletError = Quantize::findOnTimeQuantError(
-                                                  *chordIt, basicQuant, tupletRatio, startBarTick);
+                        auto tupletError = Quantize::findOnTimeTupletQuantError(
+                                                  *chordIt, tuplet.len, tupletRatio, startBarTick);
                         auto regularError = Quantize::findOnTimeQuantError(*chordIt, basicQuant);
 
                         const auto offTime = MChord::maxNoteOffTime(chordIt->second.notes);
                         if (offTime < tuplet.onTime + tuplet.len) {
-                              tupletError += Quantize::findOffTimeQuantError(
-                                                *chordIt, offTime, basicQuant,
-                                                tupletRatio, startBarTick);
+                              tupletError += Quantize::findOffTimeTupletQuantError(
+                                                offTime, tuplet.len, tupletRatio, startBarTick);
                               regularError += Quantize::findOffTimeQuantError(
                                                 *chordIt, offTime, basicQuant);
                               }

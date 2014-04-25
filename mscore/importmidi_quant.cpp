@@ -70,11 +70,10 @@ ReducedFraction shortestQuantizedNoteInRange(
       }
 
 ReducedFraction reduceQuantIfDottedNote(const ReducedFraction &noteLen,
-                                        const ReducedFraction &raster,
-                                        const ReducedFraction &tupletRatio)
+                                        const ReducedFraction &raster)
       {
       auto newRaster = raster;
-      const auto div = noteLen * tupletRatio / raster;
+      const auto div = noteLen / raster;
       const double ratio = div.numerator() * 1.0 / div.denominator();
       if (ratio > 1.45 && ratio < 1.55)     // 1.5: dotted note that is larger than quantization value
             newRaster /= 2;                 // reduce quantization error for dotted notes
@@ -94,60 +93,71 @@ ReducedFraction quantizeValue(const ReducedFraction &value,
       }
 
 ReducedFraction quantForLen(const ReducedFraction &basicQuant,
-                            const ReducedFraction &noteLen,
-                            const ReducedFraction &tupletRatio)
+                            const ReducedFraction &noteLen)
       {
-      auto quant = basicQuant / tupletRatio;
+      auto quant = basicQuant;
       while (quant > noteLen && quant >= MChord::minAllowedDuration() * 2)
             quant /= 2;
       if (quant >= MChord::minAllowedDuration() * 2)
-            quant = reduceQuantIfDottedNote(noteLen, quant, tupletRatio);
+            quant = reduceQuantIfDottedNote(noteLen, quant);
+      return quant;
+      }
+
+ReducedFraction quantForTuplet(const ReducedFraction &tupletLen,
+                               const ReducedFraction &tupletRatio)
+      {
+      const auto quant = tupletLen / tupletRatio.numerator();
+
+      Q_ASSERT_X(quant >= MChord::minAllowedDuration(),
+                 "Quantize::quantForTuplet", "Too small quant value");
+
+      if (quant >= MChord::minAllowedDuration() * 2)
+            return quant / 2;
       return quant;
       }
 
 ReducedFraction findMinQuant(
             const std::pair<const ReducedFraction, MidiChord> &chord,
-            const ReducedFraction &basicQuant,
-            const ReducedFraction &tupletRatio)
+            const ReducedFraction &basicQuant)
       {
       ReducedFraction minQuant(-1, 1);
       for (const auto &note: chord.second.notes) {
-            const auto quant = quantForLen(basicQuant, note.offTime - chord.first, tupletRatio);
+            const auto quant = quantForLen(basicQuant, note.offTime - chord.first);
             if (minQuant == ReducedFraction(-1, 1) || quant < minQuant)
                   minQuant = quant;
             }
       return minQuant;
       }
 
-ReducedFraction findQuantizedChordOnTime(
+ReducedFraction findQuantizedTupletChordOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
-            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart)
       {
-      const ReducedFraction minQuant = findMinQuant(chord, basicQuant, tupletRatio);
       if (chord.first <= rangeStart)
             return rangeStart;
-      return rangeStart + quantizeValue(chord.first - rangeStart, minQuant);
+      const auto quant = quantForTuplet(tupletLen, tupletRatio);
+      return rangeStart + quantizeValue(chord.first - rangeStart, quant);
       }
 
 ReducedFraction findQuantizedChordOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant)
       {
-      return findQuantizedChordOnTime(chord, basicQuant, {1, 1}, {0, 1});
+      const ReducedFraction quant = findMinQuant(chord, basicQuant);
+      return quantizeValue(chord.first, quant);
       }
 
-ReducedFraction findQuantizedNoteOffTime(
-            const std::pair<const ReducedFraction, MidiChord> &chord,
+ReducedFraction findQuantizedTupletNoteOffTime(
             const ReducedFraction &offTime,
-            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart)
       {
       if (offTime <= rangeStart)
             return rangeStart;
-      const auto quant = quantForLen(basicQuant, offTime - chord.first, tupletRatio);
+      const auto quant = quantForTuplet(tupletLen, tupletRatio);
       return rangeStart + quantizeValue(offTime - rangeStart, quant);
       }
 
@@ -156,48 +166,37 @@ ReducedFraction findQuantizedNoteOffTime(
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant)
       {
-      return findQuantizedNoteOffTime(chord, offTime, basicQuant, {1, 1}, {0, 1});
-      }
-
-ReducedFraction findMinQuantizedOnTime(
-            const std::pair<const ReducedFraction, MidiChord> &chord,
-            const ReducedFraction &basicQuant,
-            const ReducedFraction &tupletRatio,
-            const ReducedFraction &rangeStart)
-      {
-      ReducedFraction minOnTime(-1, 1);
-      for (const auto &note: chord.second.notes) {
-            ReducedFraction onTime;
-            if (chord.first <= rangeStart)
-                  onTime = rangeStart;
-            else {
-                  const auto quant = quantForLen(
-                                    basicQuant, note.offTime - chord.first, tupletRatio);
-                  onTime = rangeStart + quantizeValue(chord.first - rangeStart, quant);
-                  }
-            if (minOnTime == ReducedFraction(-1, 1) || onTime < minOnTime)
-                  minOnTime = onTime;
-            }
-      return minOnTime;
+      const auto quant = quantForLen(basicQuant, offTime - chord.first);
+      return quantizeValue(offTime, quant);
       }
 
 ReducedFraction findMinQuantizedOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant)
       {
-      return findMinQuantizedOnTime(chord, basicQuant, {1, 1}, {0, 1});
+      ReducedFraction minOnTime(-1, 1);
+      for (const auto &note: chord.second.notes) {
+            const auto quant = quantForLen(
+                              basicQuant, note.offTime - chord.first);
+            const auto onTime = quantizeValue(chord.first, quant);
+            if (minOnTime == ReducedFraction(-1, 1) || onTime < minOnTime)
+                  minOnTime = onTime;
+            }
+      return minOnTime;
       }
 
-ReducedFraction findMaxQuantizedOffTime(
+ReducedFraction findMaxQuantizedTupletOffTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
-            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart)
       {
       ReducedFraction maxOffTime(0, 1);
       for (const auto &note: chord.second.notes) {
-            const auto offTime = findQuantizedNoteOffTime(chord, note.offTime, basicQuant,
-                                                          tupletRatio, rangeStart);
+            if (note.offTime <= rangeStart)
+                  continue;
+            const auto offTime = findQuantizedTupletNoteOffTime(
+                              note.offTime, tupletLen, tupletRatio, rangeStart);
             if (offTime > maxOffTime)
                   maxOffTime = offTime;
             }
@@ -208,17 +207,23 @@ ReducedFraction findMaxQuantizedOffTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant)
       {
-      return findMaxQuantizedOffTime(chord, basicQuant, {1, 1}, {0, 1});
+      ReducedFraction maxOffTime(0, 1);
+      for (const auto &note: chord.second.notes) {
+            const auto offTime = findQuantizedNoteOffTime(chord, note.offTime, basicQuant);
+            if (offTime > maxOffTime)
+                  maxOffTime = offTime;
+            }
+      return maxOffTime;
       }
 
-ReducedFraction findOnTimeQuantError(
+ReducedFraction findOnTimeTupletQuantError(
             const std::pair<const ReducedFraction, MidiChord> &chord,
-            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart)
       {
-      const auto qOnTime = findQuantizedChordOnTime(chord, basicQuant,
-                                                    tupletRatio, rangeStart);
+      const auto qOnTime = findQuantizedTupletChordOnTime(chord, tupletLen,
+                                                          tupletRatio, rangeStart);
       return (chord.first - qOnTime).absValue();
       }
 
@@ -226,18 +231,18 @@ ReducedFraction findOnTimeQuantError(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant)
       {
-      return findOnTimeQuantError(chord, basicQuant, {1, 1}, {0, 1});
+      const auto qOnTime = findQuantizedChordOnTime(chord, basicQuant);
+      return (chord.first - qOnTime).absValue();
       }
 
-ReducedFraction findOffTimeQuantError(
-            const std::pair<const ReducedFraction, MidiChord> &chord,
+ReducedFraction findOffTimeTupletQuantError(
             const ReducedFraction &offTime,
-            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart)
       {
-      const auto qOffTime = findQuantizedNoteOffTime(chord, offTime, basicQuant,
-                                                     tupletRatio, rangeStart);
+      const auto qOffTime = findQuantizedTupletNoteOffTime(offTime, tupletLen,
+                                                           tupletRatio, rangeStart);
       return (offTime - qOffTime).absValue();
       }
 
@@ -246,27 +251,26 @@ ReducedFraction findOffTimeQuantError(
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant)
       {
-      return findOffTimeQuantError(chord, offTime, basicQuant, {1, 1}, {0, 1});
+      const auto qOffTime = findQuantizedNoteOffTime(chord, offTime, basicQuant);
+      return (offTime - qOffTime).absValue();
       }
 
 ReducedFraction findQuantForRange(
             const std::multimap<ReducedFraction, MidiChord>::const_iterator &beg,
             const std::multimap<ReducedFraction, MidiChord>::const_iterator &end,
-            const ReducedFraction &basicQuant,
-            const ReducedFraction &tupletRatio)
+            const ReducedFraction &basicQuant)
       {
       const auto shortestLen = shortestQuantizedNoteInRange(beg, end);
-      return quantForLen(basicQuant, shortestLen, tupletRatio);
+      return quantForLen(basicQuant, shortestLen);
       }
 
 ReducedFraction quantizeOnTimeForTuplet(
-            const std::pair<const ReducedFraction, MidiChord> &chordEvent,
-            const ReducedFraction &basicQuant)
+            const std::pair<const ReducedFraction, MidiChord> &chordEvent)
       {
       const MidiTuplet::TupletData &tuplet = chordEvent.second.tuplet->second;
       const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
-      auto onTime = Quantize::findQuantizedChordOnTime(
-                               chordEvent, basicQuant, tupletRatio, tuplet.onTime);
+      auto onTime = findQuantizedTupletChordOnTime(
+                               chordEvent, tuplet.len, tupletRatio, tuplet.onTime);
                   // verify that onTime is still inside tuplet
       if (onTime < tuplet.onTime)
             onTime = tuplet.onTime;
@@ -282,7 +286,7 @@ ReducedFraction quantizeOnTimeForNonTuplet(
             const ReducedFraction &rangeEnd,
             const ReducedFraction &basicQuant)
       {
-      auto onTime = Quantize::findQuantizedChordOnTime(*chordIt, basicQuant);
+      auto onTime = findQuantizedChordOnTime(*chordIt, basicQuant);
                   // verify that onTime is inside current range
       if (onTime < rangeStart)
             onTime = rangeStart;
@@ -293,13 +297,11 @@ ReducedFraction quantizeOnTimeForNonTuplet(
 
 ReducedFraction quantizeOffTimeForTuplet(
             const ReducedFraction &noteOffTime,
-            const std::pair<const ReducedFraction, MidiChord> &chordEvent,
-            const MidiTuplet::TupletData &tuplet,
-            const ReducedFraction &basicQuant)
+            const MidiTuplet::TupletData &tuplet)
       {
       const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
-      auto offTime = Quantize::findQuantizedNoteOffTime(
-                        chordEvent, noteOffTime, basicQuant, tupletRatio, tuplet.onTime);
+      auto offTime = findQuantizedTupletNoteOffTime(
+                        noteOffTime, tuplet.len, tupletRatio, tuplet.onTime);
                   // verify that offTime is still inside tuplet
       if (offTime < tuplet.onTime)
             offTime = tuplet.onTime;
@@ -316,7 +318,7 @@ ReducedFraction quantizeOffTimeForNonTuplet(
             const ReducedFraction &basicQuant)
       {
       const MidiChord &chord = chordIt->second;
-      auto offTime = Quantize::findQuantizedNoteOffTime(*chordIt, noteOffTime, basicQuant);
+      auto offTime = findQuantizedNoteOffTime(*chordIt, noteOffTime, basicQuant);
                  // verify that offTime is still outside tuplets
       auto next = std::next(chordIt);
       while (next != chords.end()) {
@@ -369,7 +371,7 @@ void quantizeOnTimesInRange(
             // const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber);
 
             for (const auto &chordIt: chords) {
-                  const auto onTime = quantizeOnTimeForTuplet(*chordIt, basicQuant);
+                  const auto onTime = quantizeOnTimeForTuplet(*chordIt);
                   quantizedChords.insert({onTime, chordIt->second});
                   }
             }
@@ -413,8 +415,7 @@ void quantizeOffTimes(
                   auto offTime = note.offTime;
 
                   if (note.isInTuplet) {
-                        offTime = quantizeOffTimeForTuplet(
-                                          offTime, chordEvent, note.tuplet->second, basicQuant);
+                        offTime = quantizeOffTimeForTuplet(offTime, note.tuplet->second);
                         }
                   else {
                         offTime = quantizeOffTimeForNonTuplet(
