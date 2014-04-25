@@ -52,7 +52,7 @@ class TextStyle {
          Align _align,
          const QPointF& _off = QPointF(), OffsetType _ot = OFFSET_SPATIUM,
          bool sd = false,
-         Spatium fw = Spatium(0.0), Spatium pw = Spatium(0.0), int fr = 25,
+         bool hasFrame = false, Spatium fw = Spatium(0.2), Spatium pw = Spatium(0.5), int fr = 25,
          QColor co = QColor(Qt::black), bool circle = false, bool systemFlag = false,
          QColor fg = QColor(Qt::black), QColor bg = QColor(255, 255, 255, 0), Hidden hidden = HIDE_NEVER);
 
