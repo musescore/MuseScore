@@ -94,6 +94,7 @@
 #include "synthesizer/synthesizergui.h"
 #include "synthesizer/msynthesizer.h"
 #include "fluid/fluid.h"
+#include "qmlplugin.h"
 
 #ifdef AEOLUS
 extern Ms::Synthesizer* createAeolus();
@@ -4737,8 +4738,11 @@ int main(int argc, char* av[])
       MScore::PDPI = screen->physicalDotsPerInch();        // physical resolution
       //MScore::DPI  = MScore::PDPI;                       // logical drawing resolution
       MScore::DPI  = screen->logicalDotsPerInch();         // logical drawing resolution
-      MScore::init();                          // initialize libmscore
+      MScore::init();                                      // initialize libmscore
 
+#ifdef SCRIPT_INTERFACE
+      qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
+#endif
       if (MScore::debugMode) {
             qDebug("DPI %f", MScore::DPI);
 
