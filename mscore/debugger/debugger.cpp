@@ -457,9 +457,24 @@ void Debugger::updateList(Score* s)
                         if (mb->type() != Element::MEASURE)
                               continue;
                         Measure* measure = (Measure*) mb;
-                        if (measure->mmRest()) {
-                              ElementItem* mmi = new ElementItem(mi, measure->mmRest());
-                              addMeasure(mmi, measure->mmRest());
+                        if (cs->styleB(ST_concertPitch)) {
+                              if (measure->mmRest()) {
+                                    ElementItem* mmi = new ElementItem(mi, measure->mmRest());
+                                    addMeasure(mmi, measure->mmRest());
+                                    }
+                              }
+                        else {
+                              if (measure->isMMRest()) {
+                                    Measure* m1 = measure->mmRestFirst();
+                                    Measure* m2 = measure->mmRestLast();
+                                    for (;;) {
+                                          ElementItem* mmi = new ElementItem(mi, m1);
+                                          addMeasure(mmi, m1);
+                                          if (m1 == m2)
+                                                break;
+                                          m1 = m1->nextMeasure();
+                                          }
+                                    }
                               }
                         addMeasure(mi, measure);
                         }
