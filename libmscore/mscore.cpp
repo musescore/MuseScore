@@ -43,7 +43,7 @@
 #include "stafftext.h"
 #include "mscoreview.h"
 #include "plugins.h"
-#include "mscore/qmlplugin.h"
+// #include "mscore/qmlplugin.h"
 
 namespace Ms {
 
@@ -297,7 +297,7 @@ QQmlEngine* MScore::qml()
             //-----------mscore bindings
             qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
             qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
-            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
+//            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
             qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
             qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
             qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
@@ -329,7 +329,6 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
             qmlRegisterType<Spanner>();
-
             }
       return _qml;
       }
