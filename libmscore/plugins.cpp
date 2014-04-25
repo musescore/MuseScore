@@ -17,12 +17,9 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-// #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
-// #include "globals.h"
 #include "config.h"
-// #include "preferences.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/utils.h"
@@ -48,7 +45,6 @@
 #include "libmscore/accidental.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/layoutbreak.h"
-// #include "qmlplugin.h"
 
 namespace Ms {
 

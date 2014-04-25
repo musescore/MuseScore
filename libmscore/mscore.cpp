@@ -42,6 +42,8 @@
 #include "cursor.h"
 #include "stafftext.h"
 #include "mscoreview.h"
+#include "plugins.h"
+#include "mscore/qmlplugin.h"
 
 namespace Ms {
 
@@ -91,6 +93,7 @@ Sequencer* MScore::seq = 0;
 extern void initStaffTypes();
 extern void initDrumset();
 extern void initScoreFonts();
+extern QString mscoreGlobalShare;
 
 //---------------------------------------------------------
 //   init
@@ -289,12 +292,12 @@ QQmlEngine* MScore::qml()
             importPaths.append(dir.absolutePath());
             _qml->setImportPathList(importPaths);
 #endif
-//            qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
-//            qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
+            qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
+            qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
             //-----------mscore bindings
             qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
-//            qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
-//            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
+            qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
+            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
             qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
             qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
             qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
@@ -319,12 +322,10 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
             qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
 
-#if 0
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
 
             //-----------virtual classes
-#endif
             qmlRegisterType<ChordRest>();
             qmlRegisterType<SlurTie>();
             qmlRegisterType<Spanner>();
