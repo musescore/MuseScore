@@ -1321,13 +1321,21 @@ void GuitarPro3::read(QFile* fp)
                   tnumerator = readUChar();
             if (barBits & 0x2)
                   tdenominator = readUChar();
-            if (barBits & 0x4) {                // begin reapeat
-qDebug("BeginRepeat=============================================");
+            if (barBits & 0x4)
+                  bar.repeatFlags |= RepeatStart;
+            if (barBits & 0x8) {                // number of repeats
+                  bar.repeatFlags |= RepeatEnd;
+                  bar.repeats = readUChar();
                   }
-            if (barBits & 0x8)                  // number of repeats
-                  /*uchar c =*/ readUChar();
-            if (barBits & 0x10)                 // alternative ending to
-                  /*uchar c =*/ readUChar();
+            if (barBits & 0x10) {                      // a volta
+                  uchar voltaNumber = readUChar();
+                  // voltas are represented as a binary number
+                  bar.volta.voltaType = GP_VOLTA_BINARY;
+                  while (voltaNumber > 0) {
+                        bar.volta.voltaInfo.append(voltaNumber & 1);
+                        voltaNumber >>= 1;
+                        }
+                  }
             if (barBits & 0x20) {
                   bar.marker = readDelphiString();     // new section?
                   /*int color =*/ readInt();    // color?
@@ -1378,6 +1386,20 @@ qDebug("BeginRepeat=============================================");
                         t->setTrack(staffIdx * VOICES);
                         Segment* s = m->getSegment(Segment::SegKeySig, tick);
                         s->add(t);
+                        }
+                  }
+
+            readVolta(&bars[i].volta, m);
+            m->setRepeatFlags(bars[i].repeatFlags);
+            m->setRepeatCount(bars[i].repeats);
+
+            // reset the volta sequence if we have an opening repeat
+            if (bars[i].repeatFlags == RepeatStart)
+                  voltaSequence = 1;
+            // otherwise, if we see an end repeat symbol, only reset if the bar after it does not contain a volta
+            else if (bars[i].repeatFlags == RepeatEnd && i < bars.length() - 1) {
+                  if (bars[i+1].volta.voltaInfo.length() == 0) {
+                        voltaSequence = 1;
                         }
                   }
 
