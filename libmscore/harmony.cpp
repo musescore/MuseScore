@@ -573,6 +573,7 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
             Text::createLayout(); // create TextBlocks from text
             }
       Text::startEdit(view, p);
+      layout();
       }
 
 //---------------------------------------------------------

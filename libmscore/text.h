@@ -222,7 +222,7 @@ class Text : public Element {
       bool editMode() const                   { return _editMode; }
       void setEditMode(bool val)              { _editMode = val;  }
 
-      virtual void setTextStyle(const TextStyle& st)  { _textStyle = st; }
+      virtual void setTextStyle(const TextStyle& st);
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
       int textStyleType() const               { return _styleIndex; }

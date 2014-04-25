@@ -1998,6 +1998,19 @@ void Text::textStyleChanged()
       }
 
 //---------------------------------------------------------
+//   setTextStyle
+//---------------------------------------------------------
+
+void Text::setTextStyle(const TextStyle& st)
+      {
+      _textStyle = st;
+      if (editMode()) {
+            setText(plainText());
+            createLayout();
+            }
+      }
+
+//---------------------------------------------------------
 //   setTextStyleType
 //---------------------------------------------------------
 
