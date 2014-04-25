@@ -678,12 +678,12 @@ std::vector<int> findTiedNotes(
       {
       std::vector<int> tiedNotes;
       const auto tupletRatio = tupletLimits(tuplet.tupletNumber).ratio;
-      const auto firstTupletChordOnTime = Quantize::findQuantizedChordOnTime(
-                                          *tuplet.chords.begin()->second, basicQuant,
+      const auto firstTupletChordOnTime = Quantize::findQuantizedTupletChordOnTime(
+                                          *tuplet.chords.begin()->second, tuplet.len,
                                           tupletRatio, startBarTick);
 
-      const auto maxChordOffTime = Quantize::findMaxQuantizedOffTime(
-                        *chordIt, basicQuant, tupletRatio, startBarTick);
+      const auto maxChordOffTime = Quantize::findMaxQuantizedTupletOffTime(
+                        *chordIt, tuplet.len, tupletRatio, startBarTick);
 
       if (maxChordOffTime > firstTupletChordOnTime)
             return tiedNotes;
@@ -695,9 +695,8 @@ std::vector<int> findTiedNotes(
       for (int i = 0; i != chordIt->second.notes.size(); ++i) {
             const MidiNote &note = chordIt->second.notes[i];
 
-            const auto offTimeInTuplet = Quantize::findQuantizedNoteOffTime(
-                              *chordIt, note.offTime, basicQuant,
-                              tupletRatio, startBarTick);
+            const auto offTimeInTuplet = Quantize::findQuantizedTupletNoteOffTime(
+                              note.offTime, tuplet.len, tupletRatio, startBarTick);
 
             if (offTimeInTuplet < startBarTick
                         || offTimeInTuplet <= tuplet.onTime)

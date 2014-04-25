@@ -14,20 +14,14 @@ namespace Quantize {
 
 ReducedFraction userQuantNoteToFraction(MidiOperation::QuantValue quantNote);
 
-ReducedFraction quantForLen(
-            const ReducedFraction &basicQuant,
-            const ReducedFraction &noteLen,
-            const ReducedFraction &tupletRatio);
-
 ReducedFraction findQuantForRange(
             const std::multimap<ReducedFraction, MidiChord>::const_iterator &beg,
             const std::multimap<ReducedFraction, MidiChord>::const_iterator &end,
-            const ReducedFraction &basicQuant,
-            const ReducedFraction &tupletRatio);
+            const ReducedFraction &basicQuant);
 
-ReducedFraction findQuantizedChordOnTime(
+ReducedFraction findQuantizedTupletChordOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
-            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart);
 
@@ -35,10 +29,9 @@ ReducedFraction findQuantizedChordOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant);
 
-ReducedFraction findQuantizedNoteOffTime(
-            const std::pair<const ReducedFraction, MidiChord> &chord,
+ReducedFraction findQuantizedTupletNoteOffTime(
             const ReducedFraction &offTime,
-            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart);
 
@@ -49,17 +42,11 @@ ReducedFraction findQuantizedNoteOffTime(
 
 ReducedFraction findMinQuantizedOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
-            const ReducedFraction &basicQuant,
-            const ReducedFraction &tupletRatio,
-            const ReducedFraction &rangeStart);
-
-ReducedFraction findMinQuantizedOnTime(
-            const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant);
 
-ReducedFraction findMaxQuantizedOffTime(
+ReducedFraction findMaxQuantizedTupletOffTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
-            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart);
 
@@ -67,9 +54,9 @@ ReducedFraction findMaxQuantizedOffTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant);
 
-ReducedFraction findOnTimeQuantError(
+ReducedFraction findOnTimeTupletQuantError(
             const std::pair<const ReducedFraction, MidiChord> &chord,
-            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart);
 
@@ -77,10 +64,9 @@ ReducedFraction findOnTimeQuantError(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant);
 
-ReducedFraction findOffTimeQuantError(
-            const std::pair<const ReducedFraction, MidiChord> &chord,
+ReducedFraction findOffTimeTupletQuantError(
             const ReducedFraction &offTime,
-            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart);
 
