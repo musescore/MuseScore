@@ -11,10 +11,10 @@
 //=============================================================================
 
 #include "qmlplugin.h"
-// #include "plugins.h"
 #include "shortcut.h"
 #include "musescoreCore.h"
 #include "libmscore/score.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -81,7 +81,9 @@ Ms::Element* QmlPlugin::newElement(int t)
       Score* score = curScore();
       if (score == 0)
             return 0;
-      return Element::create(Element::ElementType(t), score);
+      Element* e = Element::create(Element::ElementType(t), score);
+      mscore->qml()->setObjectOwnership(e, QQmlEngine::CppOwnership);
+      return e;
       }
 
 //---------------------------------------------------------
