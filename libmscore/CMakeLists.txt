@@ -24,7 +24,7 @@ if (SCRIPT_INTERFACE)
       textline.h timesig.h tremolobar.h tremolo.h trill.h tuplet.h volta.h
       score.h cursor.h page.h part.h staff.h mscore.h staffstate.h marker.h
       jump.h stemslash.h ledgerline.h noteline.h
-      bagpembell.h ambitus.h
+      bagpembell.h ambitus.h plugins.h
       )
       set (LIB_SCRIPT_FILES plugins.cpp)
 endif (SCRIPT_INTERFACE)
