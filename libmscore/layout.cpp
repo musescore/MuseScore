@@ -1695,6 +1695,8 @@ void Score::createMMRests()
 
                   for (Measure* mm = m->nextMeasure(); mm; mm = mm->nextMeasure()) {
                         mm->setMMRestCount(-1);
+                        if (mm->mmRest())
+                              undo(new ChangeMMRest(mm, 0));
                         if (mm == lm)
                               break;
                         }

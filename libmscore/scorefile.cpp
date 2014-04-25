@@ -1289,6 +1289,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         e->write(xml);
                         }
                   Measure* m = segment->measure();
+                  // don't write spanners for multi measure rests
                   if ((!(m && m->isMMRest())) && (segment->segmentType() & Segment::SegChordRest)) {
                         for (auto i : _spanner.map()) {     // TODO: dont search whole list
                               Spanner* s = i.second;
@@ -1349,7 +1350,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         cr->writeBeam(xml);
                         cr->writeTuplet(xml);
                         }
-                  if ((segment->segmentType() == Segment::SegEndBarLine) && (m->mmRestCount() < 0)) {
+                  if ((segment->segmentType() == Segment::SegEndBarLine) && (m->mmRestCount() < 0 || m->mmRest())) {
                         BarLine* bl = static_cast<BarLine*>(e);
                         bl->setBarLineType(m->endBarLineType());
                         bl->setVisible(m->endBarLineVisible());
