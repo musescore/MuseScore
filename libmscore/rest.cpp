@@ -305,6 +305,16 @@ void Rest::layout()
 
       if (parent() && measure() && measure()->isMMRest()) {
             _space.setRw(point(score()->styleS(ST_minMMRestWidth)));
+
+            static const qreal verticalLineWidth = .2;
+            qreal _spatium = spatium();
+            qreal h        = _spatium * (2 + verticalLineWidth);
+            qreal w        = _mmWidth + _spatium * verticalLineWidth*.5;
+            bbox().setRect(-_spatium * verticalLineWidth*.5, -h * .5, w, h);
+
+            // text
+            qreal y  = -_spatium * 2.5 - staff()->height() *.5;
+            addbbox(QRectF(0, y, w, _spatium * 2));         // approximation
             return;
             }
 
@@ -516,13 +526,7 @@ void Rest::scanElements(void* data, void (*func)(void*, Element*), bool all)
 void Rest::setMMWidth(qreal val)
       {
       _mmWidth = val;
-      Segment* s = segment();
-      if (s && s->measure() && s->measure()->isMMRest()) {
-            qreal _spatium = spatium();
-            qreal h = _spatium * 2;
-            qreal w = _mmWidth;                       // + 1*lineWidth of vertical lines
-            bbox().setRect(0.0, -h * .5, w, h);
-            }
+      layout();
       }
 
 //---------------------------------------------------------
