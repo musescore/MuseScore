@@ -926,7 +926,7 @@ void convertMidi(Score *score, const MidiFile *mf)
 
       auto tracks = createMTrackList(lastTick, sigmap, mf);
       cleanUpMidiEvents(tracks);
-      MChord::collectChords(tracks);
+      MChord::collectChords(tracks, MChord::minAllowedDuration() / 2);
       MChord::removeOverlappingNotes(tracks);
 
       Q_ASSERT_X(!doNotesOverlap(tracks),
