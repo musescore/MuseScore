@@ -82,6 +82,7 @@ GuitarPro::GuitarPro(Score* s, int v)
       score   = s;
       version = v;
       _codec = QTextCodec::codecForName(preferences.importCharsetGP.toLatin1());
+      voltaSequence = 1;
       }
 
 GuitarPro::~GuitarPro()
@@ -272,34 +273,61 @@ void GuitarPro::addDynamic(Note* note, int d)
       note->chord()-> segment()-> add(dyn);
       }
 
-void GuitarPro::readVolta(QList<int>* voltaInfo, Measure* m)
+void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
       {
       /* Volta information is at most eight bits
        * signifying which numbers should appear in the
        * volta. A single bit 1 represents we should show
        * 1, 100 represents 3, 10000 represents 6, 10101
        * represents 1,3,5 etc. */
-      if (voltaInfo->length() != 0) {
+      if (gpVolta->voltaInfo.length() != 0) {
             // we have volta information - set up a volta
             Ms::Volta* volta = new Ms::Volta(score);
             volta->endings().clear();
             QString voltaTextString = "";
             // initialise count to 1 as the first bit processed with represesnt first time volta
-            int count = 1;
+            int count = 0;
+            int binaryNumber = 0;
              // iterate through the volta information and determine the decimal numbers for voltas
-            for (auto iter = voltaInfo->begin(); iter != voltaInfo->end(); ++iter) {
-                  if (*iter == 1) {   // we want this number to be displayed in the volta
-                        if (voltaTextString == "")
-                              voltaTextString += QString::number(count);
-                        else
-                              voltaTextString += "," + QString::number(count);
-                        // add the decimal number to the endings field of voltas as well as the text
-                        volta->endings().append(count);
+            auto iter = gpVolta->voltaInfo.begin();
+            while (iter != gpVolta->voltaInfo.end()) {
+                  switch (gpVolta->voltaType) {
+                        case GP_VOLTA_FLAGS:
+                              count++;
+                              if (*iter == 1) {   // we want this number to be displayed in the volta
+                                    if (voltaTextString == "")
+                                          voltaTextString += QString::number(count);
+                                    else
+                                          voltaTextString += "," + QString::number(count);
+                                    // add the decimal number to the endings field of voltas as well as the text
+                                    volta->endings().append(count);
+                                    }
+                              ++iter;
+                              break;
+                        case GP_VOLTA_BINARY:
+                              // find the binary number in decimal
+                              if (*iter == 1) {
+                                    binaryNumber += pow(2,count);
+                                    }
+                              ++iter;
+                              if (iter == gpVolta->voltaInfo.end()) {
+                                    // display all numbers in the volta from voltaSequence to the decimal
+                                    while (voltaSequence <= binaryNumber) {
+                                          if (voltaTextString == "")
+                                                voltaTextString = QString::number(voltaSequence);
+                                          else
+                                                voltaTextString += "," + QString::number(voltaSequence);
+                                          volta->endings().append(voltaSequence);
+                                          voltaSequence++;
+                                          }
+                                    }
+                              count++;
+                              break;
                         }
-                  count++;
                   }
             volta->setText(voltaTextString);
             volta->setTick(m->tick());
+            volta->setTick2(m->tick() + m->ticks());
             score->addElement(volta);
             }
       }
@@ -447,9 +475,20 @@ qDebug("staff %d group %d timesig %d", staffIdx, int(staffType->group()), staffT
                         s->add(t);
                         }
                   }
-            readVolta(&bars[i].voltaInfo, m);
+            readVolta(&bars[i].volta, m);
             m->setRepeatFlags(bars[i].repeatFlags);
             m->setRepeatCount(bars[i].repeats);       // supported in gp5
+
+            // reset the volta sequence if we have an opening repeat
+            if (bars[i].repeatFlags == RepeatStart)
+                  voltaSequence = 1;
+            // otherwise, if we see an end repeat symbol, only reset if the bar after it does not contain a volta
+            else if (bars[i].repeatFlags == RepeatEnd && i < bars.length() - 1) {
+                  if (bars[i+1].volta.voltaInfo.length() == 0) {
+                    voltaSequence = 1;      // reset  the volta count
+                        }
+            }
+
             score->add(m);
             tick += nts.ticks();
             ts = nts;
@@ -2010,8 +2049,15 @@ void GuitarPro4::read(QFile* fp)
                   bar.repeatFlags |= RepeatEnd;
                   bar.repeats = readUChar();
                   }
-            if (barBits & 0x10)                 // alternative ending to
-                  /*uchar c =*/ readUChar();
+            if (barBits & 0x10) {                      // a volta
+                  uchar voltaNumber = readUChar();
+                  while (voltaNumber > 0) {
+                        // volta information is represented as a binary number
+                        bar.volta.voltaType = GP_VOLTA_BINARY;
+                        bar.volta.voltaInfo.append(voltaNumber & 1);
+                        voltaNumber >>= 1;
+                        }
+                  }
             if (barBits & 0x20) {
                   bar.marker = readDelphiString();     // new section?
                   /*int color = */ readInt();    // color?
@@ -3055,7 +3101,9 @@ void GuitarPro5::read(QFile* fp)
             if (barBits & 0x10) {                      // a volta
                   uchar voltaNumber = readUChar();
                   while (voltaNumber > 0) {
-                        bar.voltaInfo.append(voltaNumber & 1);
+                        // voltas are represented as flags
+                        bar.volta.voltaType = GP_VOLTA_FLAGS;
+                        bar.volta.voltaInfo.append(voltaNumber & 1);
                         voltaNumber >>= 1;
                         }
                   }
