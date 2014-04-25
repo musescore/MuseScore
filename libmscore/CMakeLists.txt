@@ -26,6 +26,7 @@ if (SCRIPT_INTERFACE)
       jump.h stemslash.h ledgerline.h noteline.h
       bagpembell.h ambitus.h
       )
+      set (LIB_SCRIPT_FILES plugins.cpp)
 endif (SCRIPT_INTERFACE)
 
 add_custom_command(
@@ -47,6 +48,7 @@ add_library (
       ${PROJECT_BINARY_DIR}/all.h
       ${libqtMocs}
       ${INCS}
+      ${LIB_SCRIPT_FILES}
       segmentlist.cpp fingering.cpp accidental.cpp arpeggio.cpp
       articulation.cpp barline.cpp beam.cpp bend.cpp box.cpp
       bracket.cpp breath.cpp bsp.cpp chord.cpp chordline.cpp

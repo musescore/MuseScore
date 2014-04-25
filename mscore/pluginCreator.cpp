@@ -12,11 +12,12 @@
 
 #include "pluginCreator.h"
 #include "musescore.h"
-#include "plugins.h"
+// #include "plugins.h"
 #include "qmlplugin.h"
 #include "icons.h"
 #include "helpBrowser.h"
 #include "preferences.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -277,7 +278,7 @@ static void qmlMsgHandler(QtMsgType type, const char* msg)
 void PluginCreator::runClicked()
       {
       log->clear();
-      QQmlEngine* qml = mscore->qml();
+      QQmlEngine* qml = Ms::MScore::qml();
       connect(qml, SIGNAL(warnings(const QList<QQmlError>&)),
          SLOT(qmlWarnings(const QList<QQmlError>&)));
 

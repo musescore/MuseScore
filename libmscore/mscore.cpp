@@ -27,6 +27,21 @@
 #include "marker.h"
 #include "layoutbreak.h"
 #include "page.h"
+#include "slur.h"
+#include "lyrics.h"
+#include "accidental.h"
+#include "notedot.h"
+#include "tie.h"
+#include "staff.h"
+#include "timesig.h"
+#include "part.h"
+#include "measure.h"
+#include "score.h"
+#include "keysig.h"
+#include "harmony.h"
+#include "cursor.h"
+#include "stafftext.h"
+#include "mscoreview.h"
 
 namespace Ms {
 
@@ -66,6 +81,10 @@ int     MScore::mtcType;
 
 bool    MScore::noExcerpts = false;
 bool    MScore::noImages = false;
+
+#ifdef SCRIPT_INTERFACE
+QQmlEngine* MScore::_qml = 0;
+#endif
 
 Sequencer* MScore::seq = 0;
 
@@ -249,5 +268,69 @@ void MScore::defaultStyleForPartsHasChanged()
       _defaultStyleForParts = 0;
       }
 
+//---------------------------------------------------------
+//   qml
+//---------------------------------------------------------
+
+QQmlEngine* MScore::qml()
+      {
+      if (_qml == 0) {
+            //-----------some qt bindings
+            _qml = new QQmlEngine;
+#ifdef Q_OS_WIN
+            QStringList importPaths;
+            QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
+            importPaths.append(dir.absolutePath());
+            _qml->setImportPathList(importPaths);
+#endif
+#ifdef Q_OS_MAC
+            QStringList importPaths;
+            QDir dir(mscoreGlobalShare + QString("/qml"));
+            importPaths.append(dir.absolutePath());
+            _qml->setImportPathList(importPaths);
+#endif
+//            qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
+//            qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
+            //-----------mscore bindings
+            qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
+//            qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
+//            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
+            qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
+            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
+            qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
+            qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
+            qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
+            qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
+            qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
+            qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
+            qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
+            qmlRegisterType<Part>       ("MuseScore", 1, 0, "Part");
+            qmlRegisterType<Staff>      ("MuseScore", 1, 0, "Staff");
+            qmlRegisterType<Harmony>    ("MuseScore", 1, 0, "Harmony");
+            qmlRegisterType<PageFormat> ("MuseScore", 1, 0, "PageFormat");
+            qmlRegisterType<TimeSig>    ("MuseScore", 1, 0, "TimeSig");
+            qmlRegisterType<KeySig>     ("MuseScore", 1, 0, "KeySig");
+            qmlRegisterType<Slur>       ("MuseScore", 1, 0, "Slur");
+            qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
+            qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
+            qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
+            qmlRegisterType<Text>       ("MuseScore", 1, 0, "MText");
+            qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
+            qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
+            qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
+
+#if 0
+            qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
+               "Element", tr("you cannot create an element"));
+
+            //-----------virtual classes
+#endif
+            qmlRegisterType<ChordRest>();
+            qmlRegisterType<SlurTie>();
+            qmlRegisterType<Spanner>();
+
+            }
+      return _qml;
+      }
 }
 

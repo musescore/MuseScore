@@ -20,7 +20,7 @@
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
-#include "globals.h"
+// #include "globals.h"
 #include "config.h"
 #include "preferences.h"
 #include "libmscore/chord.h"
@@ -32,7 +32,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/rest.h"
 #include "libmscore/stafftext.h"
-#include "plugins.h"
+// #include "plugins.h"
 #include "libmscore/cursor.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
@@ -85,7 +85,7 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
             qDebug("Register Plugin <%s>", qPrintable(pluginPath));
       f.close();
       QObject* obj = 0;
-      QQmlComponent component(qml(), QUrl::fromLocalFile(pluginPath));
+      QQmlComponent component(Ms::MScore::qml(), QUrl::fromLocalFile(pluginPath));
       obj = component.create();
       if (obj == 0) {
             qDebug("creating component <%s> failed", qPrintable(pluginPath));
@@ -122,69 +122,6 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       pluginMapper->setMapping(a, pluginIdx);
 
       delete obj;
-      }
-
-//---------------------------------------------------------
-//   qml
-//---------------------------------------------------------
-
-QQmlEngine* MuseScore::qml()
-      {
-      if (_qml == 0) {
-            //-----------some qt bindings
-            _qml = new QQmlEngine;
-#ifdef Q_OS_WIN
-            QStringList importPaths;
-            QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-            importPaths.append(dir.absolutePath());
-            _qml->setImportPathList(importPaths);
-#endif
-#ifdef Q_OS_MAC
-            QStringList importPaths;
-            QDir dir(mscoreGlobalShare + QString("/qml"));
-            importPaths.append(dir.absolutePath());
-            _qml->setImportPathList(importPaths);
-#endif
-            qmlRegisterType<MsProcess>  ("MuseScore", 1, 0, "QProcess");
-            qmlRegisterType<FileIO, 1>  ("FileIO",    1, 0, "FileIO");
-            //-----------mscore bindings
-            qmlRegisterType<MScore>     ("MuseScore", 1, 0, "MScore");
-            qmlRegisterType<MsScoreView>("MuseScore", 1, 0, "ScoreView");
-            qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
-            qmlRegisterType<Score>      ("MuseScore", 1, 0, "Score");
-            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
-            qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
-            qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
-            qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
-            qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
-            qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
-            qmlRegisterType<Cursor>     ("MuseScore", 1, 0, "Cursor");
-            qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
-            qmlRegisterType<Part>       ("MuseScore", 1, 0, "Part");
-            qmlRegisterType<Staff>      ("MuseScore", 1, 0, "Staff");
-            qmlRegisterType<Harmony>    ("MuseScore", 1, 0, "Harmony");
-            qmlRegisterType<PageFormat> ("MuseScore", 1, 0, "PageFormat");
-            qmlRegisterType<TimeSig>    ("MuseScore", 1, 0, "TimeSig");
-            qmlRegisterType<KeySig>     ("MuseScore", 1, 0, "KeySig");
-            qmlRegisterType<Slur>       ("MuseScore", 1, 0, "Slur");
-            qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
-            qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
-            qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
-            qmlRegisterType<Text>       ("MuseScore", 1, 0, "MText");
-            qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
-            qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
-            qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
-
-            qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
-               "Element", tr("you cannot create an element"));
-
-            //-----------virtual classes
-            qmlRegisterType<ChordRest>();
-            qmlRegisterType<SlurTie>();
-            qmlRegisterType<Spanner>();
-
-            }
-      return _qml;
       }
 
 //---------------------------------------------------------
@@ -364,7 +301,7 @@ void MuseScore::pluginTriggered(int idx)
       {
       QString pp = plugins[idx];
 
-      QQmlEngine* engine = qml();
+      QQmlEngine* engine = Ms::MScore::qml();
 
       QQmlComponent component(engine);
       component.loadUrl(QUrl::fromLocalFile(pp));
@@ -418,189 +355,6 @@ void MuseScore::pluginTriggered(int idx)
       }
 
 //---------------------------------------------------------
-//   MsScoreView
-//---------------------------------------------------------
-
-MsScoreView::MsScoreView(QQuickItem* parent)
-   : QQuickPaintedItem(parent)
-      {
-      setAcceptedMouseButtons(Qt::LeftButton);
-      score = 0;
-      }
-
-//---------------------------------------------------------
-//   @@ FileIO
-//---------------------------------------------------------
-
-FileIO::FileIO(QObject *parent) :
-    QObject(parent)
-      {
-      }
-
-QString FileIO::read()
-      {
-      if (mSource.isEmpty()) {
-            emit error("source is empty");
-            return QString();
-            }
-      QUrl url(mSource);
-      QString source(mSource);
-      if(url.isValid() && url.isLocalFile()) {
-            source = url.toLocalFile();
-            }
-      QFile file(source);
-      QString fileContent;
-      if ( file.open(QIODevice::ReadOnly) ) {
-            QString line;
-            QTextStream t( &file );
-            do {
-                line = t.readLine();
-                fileContent += line + "\n";
-                } while (!line.isNull());
-            file.close();
-            }
-      else {
-          emit error("Unable to open the file");
-          return QString();
-          }
-      return fileContent;
-      }
-
-bool FileIO::write(const QString& data)
-      {
-      if (mSource.isEmpty())
-            return false;
-
-      QFile file(mSource);
-      if (!file.open(QFile::WriteOnly | QFile::Truncate))
-            return false;
-
-      QTextStream out(&file);
-      out << data;
-      file.close();
-      return true;
-      }
-
-bool FileIO::remove()
-      {
-      if (mSource.isEmpty())
-            return false;
-
-      QFile file(mSource);
-      return file.remove();
-      }
-
-bool FileIO::exists()
-      {
-      QFile file(mSource);
-      return file.exists();
-      }
-
-//---------------------------------------------------------
-//   setScore
-//---------------------------------------------------------
-
-void MsScoreView::setScore(Score* s)
-      {
-      _currentPage = 0;
-      score = s;
-
-      if (score) {
-            score->doLayout();
-
-            Page* page = score->pages()[_currentPage];
-            QRectF pr(page->abbox());
-            qreal m1 = width()  / pr.width();
-            qreal m2 = height() / pr.height();
-            mag = qMax(m1, m2);
-
-            _boundingRect = QRectF(0.0, 0.0, pr.width() * mag, pr.height() * mag);
-
-            setWidth(pr.width() * mag);
-            setHeight(pr.height() * mag);
-            }
-      update();
-      }
-
-//---------------------------------------------------------
-//   paint
-//---------------------------------------------------------
-
-void MsScoreView::paint(QPainter* p)
-      {
-      p->setRenderHint(QPainter::Antialiasing, true);
-      p->setRenderHint(QPainter::TextAntialiasing, true);
-      p->fillRect(QRect(0, 0, width(), height()), _color);
-      if (!score)
-            return;
-      p->scale(mag, mag);
-
-      Page* page = score->pages()[_currentPage];
-      QList<const Element*> el;
-      foreach(System* s, *page->systems()) {
-            foreach(MeasureBase* m, s->measures())
-                  m->scanElements(&el, collectElements, false);
-            }
-      page->scanElements(&el, collectElements, false);
-
-      foreach(const Element* e, el) {
-            QPointF pos(e->pagePos());
-            p->translate(pos);
-            e->draw(p);
-            p->translate(-pos);
-            }
-      }
-
-//---------------------------------------------------------
-//   setCurrentPage
-//---------------------------------------------------------
-
-void MsScoreView::setCurrentPage(int n)
-      {
-      if (score == 0)
-            return;
-      if (n < 0)
-            n = 0;
-      int nn = score->pages().size();
-      if (nn == 0)
-            return;
-      if (n >= nn)
-            n = nn - 1;
-      _currentPage = n;
-      update();
-      }
-
-//---------------------------------------------------------
-//   nextPage
-//---------------------------------------------------------
-
-void MsScoreView::nextPage()
-      {
-      setCurrentPage(_currentPage + 1);
-      }
-
-//---------------------------------------------------------
-//   prevPage
-//---------------------------------------------------------
-
-void MsScoreView::prevPage()
-      {
-      setCurrentPage(_currentPage - 1);
-      }
-
-const QRectF& MsScoreView::getGrip(int) const
-      {
-      static const QRectF a;
-      return a;
-      }
-
-const QTransform& MsScoreView::matrix() const
-      {
-      static const QTransform t;
-      return t; // _matrix;
-      }
-
-//---------------------------------------------------------
 //   collectPluginMetaInformation
 //---------------------------------------------------------
 
@@ -608,7 +362,7 @@ void collectPluginMetaInformation(PluginDescription* d)
       {
       qDebug("Collect meta for <%s>", qPrintable(d->path));
 
-      QQmlComponent component(mscore->qml(), QUrl::fromLocalFile(d->path));
+      QQmlComponent component(Ms::MScore::qml(), QUrl::fromLocalFile(d->path));
       QObject* obj = component.create();
       if (obj == 0) {
             qDebug("creating component <%s> failed", qPrintable(d->path));

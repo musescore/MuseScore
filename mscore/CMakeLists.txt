@@ -29,8 +29,8 @@ include_directories(
       )
 
 if (SCRIPT_INTERFACE)
-      set (SCRIPT_FILES plugins.cpp pluginCreator.cpp qmledit.cpp)
-      set (SCRIPT_MOCS plugins.h pluginCreator.h qmledit.h)
+      set (SCRIPT_FILES mscorePlugins pluginCreator.cpp qmledit.cpp)
+      set (SCRIPT_MOCS pluginCreator.h qmledit.h)
       set (SCRIPT_UI   pluginCreator.ui)
 endif (SCRIPT_INTERFACE)
 

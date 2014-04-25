@@ -37,7 +37,7 @@
 #include "file.h"
 #include "libmscore/mscore.h"
 #include "shortcut.h"
-#include "plugins.h"
+// #include "plugins.h"
 #include "zerberus/zerberus.h"
 #include "fluid/fluid.h"
 #include "pathlistdialog.h"

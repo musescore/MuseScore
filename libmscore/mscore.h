@@ -334,6 +334,10 @@ class MScore : public QObject {
       static QString _globalShare;
       static int _hRaster, _vRaster;
 
+#ifdef SCRIPT_INTERFACE
+      static QQmlEngine* _qml;
+#endif
+
    public:
       enum ValueType  { OFFSET_VAL, USER_VAL };
       enum Direction  { AUTO, UP, DOWN };
@@ -387,6 +391,10 @@ class MScore : public QObject {
 
       static bool noExcerpts;
       static bool noImages;
+
+#ifdef SCRIPT_INTERFACE
+      static QQmlEngine* qml();
+#endif
       };
 
 //---------------------------------------------------------

@@ -289,7 +289,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScriptEngine* se;
       QString pluginPath;
 
-      QQmlEngine* _qml;
       void createMenuEntry(PluginDescription*);
 
       QTimer* autoSaveTimer;
@@ -642,7 +641,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newLinesPalette();
 
       Inspector* getInspector()           { return inspector; }
-      QQmlEngine* qml();
       PluginCreator* getPluginCreator()   { return pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
       void showMessage(const QString& s, int timeout);
@@ -664,6 +662,8 @@ extern QPixmap sym2pixmap(const Sym* s, qreal mag);
 extern bool saveMxl(Score*, const QString& name);
 extern bool saveXml(Score*, const QString& name);
 
+struct PluginDescription;
+extern void collectPluginMetaInformation(PluginDescription*);
 } // namespace Ms
 #endif
 
