@@ -319,8 +319,15 @@ void Harmony::read(XmlReader& e)
                   // no id - look up name, in case it is in chord list with no id
                   getDescription(_textName);
             }
-      else if (_textName == "")
-            _textName = text();
+      else if (_textName == "") {
+            // unrecognized chords prior to 2.0 were stored as text with markup
+            // we need to strip away the markup
+            // this removes any user-applied formatting,
+            // but we no longer support user-applied formatting for chord symbols anyhow
+            createLayout();
+            _textName = plainText();
+            setText(_textName);
+            }
 
       // render chord from description (or _textName)
       render();
