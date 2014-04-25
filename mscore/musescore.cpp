@@ -70,7 +70,7 @@
 #include "shortcut.h"
 #include "pluginCreator.h"
 #include "pluginManager.h"
-#include "plugins.h"
+// #include "plugins.h"
 #include "helpBrowser.h"
 #include "drumtools.h"
 #include "editstafftype.h"
@@ -375,7 +375,6 @@ MuseScore::MuseScore()
       se                    = 0;    // script engine
       pluginCreator         = 0;
       pluginManager         = 0;
-      _qml                  = 0;
       pluginMapper          = 0;
       debugger              = 0;
       instrList             = 0;
@@ -1143,7 +1142,6 @@ void MuseScore::resizeEvent(QResizeEvent*)
 
 MuseScore::~MuseScore()
       {
-      delete _qml;
       }
 
 //---------------------------------------------------------

@@ -14,7 +14,6 @@
 #include "shortcut.h"
 #include "musescoreCore.h"
 #include "libmscore/score.h"
-#include "musescore.h"
 
 namespace Ms {
 
@@ -82,7 +81,7 @@ Ms::Element* QmlPlugin::newElement(int t)
       if (score == 0)
             return 0;
       Element* e = Element::create(Element::ElementType(t), score);
-      mscore->qml()->setObjectOwnership(e, QQmlEngine::CppOwnership);
+      Ms::MScore::qml()->setObjectOwnership(e, QQmlEngine::CppOwnership);
       return e;
       }
 

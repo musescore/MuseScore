@@ -130,9 +130,6 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       void setScale(qreal v)          { mag = v;           }
       };
 
-struct PluginDescription;
-extern void collectPluginMetaInformation(PluginDescription*);
-
 #endif
 
 } // namespace Ms

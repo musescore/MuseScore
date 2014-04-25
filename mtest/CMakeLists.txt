@@ -24,6 +24,7 @@ set(OMR_SRC ${PROJECT_SOURCE_DIR}/omr/importpdf.cpp)
 endif (OMR)
 
 QT4_WRAP_CPP (mtestMocs
+#      ${PROJECT_SOURCE_DIR}/mscore/musescore.h
       ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.h
       )
 
