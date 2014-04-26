@@ -30,7 +30,6 @@
 #include "segment.h"
 #include "accidental.h"
 #include "note.h"
-#include <QKeyEvent>
 #include "spannermap.h"
 #include "pitchspelling.h"
 
