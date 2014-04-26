@@ -82,6 +82,7 @@ class GuitarPro {
       Score* score;
       QFile* f;
       int curPos;
+      int previousTempo;
 
       int voltaSequence;
       QTextCodec* _codec;
@@ -97,14 +98,14 @@ class GuitarPro {
       QString readDelphiString();
       void readVolta(GPVolta*, Measure*);
       virtual void readBend();
-      virtual void readMixChange();
+      virtual void readMixChange(Measure* measure);
       virtual int readBeatEffects(int track, Segment*) = 0;
       void readLyrics();
       void readChannels();
       void setTuplet(Tuplet* tuplet, int tuple);
       Fraction len2fraction(int len);
       void addDynamic(Note*, int d);
-      void setTempo(int n);
+      void setTempo(int n, Measure* measure);
       void createMeasures();
       void applyBeatEffects(Chord*, int beatEffects);
 
