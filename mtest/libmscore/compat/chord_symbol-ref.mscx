@@ -68,8 +68,6 @@
       <Page>
         <System>
           </System>
-        <System>
-          </System>
         </Page>
       </PageList>
     <Part>
@@ -185,7 +183,7 @@
         </Measure>
       <Measure number="7">
         <Harmony>
-          <name>&lt;font face=&quot;Times New Roman&quot;/&gt;Bo</name>
+          <name>Bo</name>
           </Harmony>
         <StaffText>
           <text><font face="Times New Roman"/>unrecognized</text>
