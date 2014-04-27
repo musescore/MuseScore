@@ -1813,6 +1813,7 @@
           </Chord>
         </Measure>
       <Measure number="9">
+        <endSpanner id="2"/>
         <Volta id="3">
           <subtype>0</subtype>
           <beginHook>1</beginHook>
@@ -1861,6 +1862,7 @@
           <lid>242</lid>
           <track>1</track>
           </Dynamic>
+        <endSpanner id="2"/>
         <Chord>
           <lid>243</lid>
           <track>1</track>
@@ -1899,6 +1901,9 @@
             <string>0</string>
             </Note>
           </Chord>
+        <tick>11520</tick>
+        <endSpanner id="2"/>
+        <endSpanner id="2"/>
         </Measure>
       </Staff>
     <Score>
@@ -3635,6 +3640,7 @@
             </Chord>
           </Measure>
         <Measure number="9">
+          <endSpanner id="4"/>
           <Volta id="5">
             <subtype>0</subtype>
             <beginHook>1</beginHook>
@@ -3683,6 +3689,7 @@
             <lid>242</lid>
             <track>1</track>
             </Dynamic>
+          <endSpanner id="4"/>
           <Chord>
             <lid>243</lid>
             <track>1</track>
@@ -3721,6 +3728,9 @@
               <string>0</string>
               </Note>
             </Chord>
+          <tick>11520</tick>
+          <endSpanner id="4"/>
+          <endSpanner id="4"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -4918,6 +4928,7 @@
             </Chord>
           </Measure>
         <Measure number="9">
+          <endSpanner id="4"/>
           <Rest>
             <lid>238</lid>
             <dots>1</dots>
@@ -4928,6 +4939,7 @@
             <span>1</span>
             </BarLine>
           <tick>11520</tick>
+          <endSpanner id="4"/>
           <Chord>
             <lid>243</lid>
             <track>5</track>
@@ -4966,6 +4978,9 @@
               <string>0</string>
               </Note>
             </Chord>
+          <tick>11520</tick>
+          <endSpanner id="4"/>
+          <endSpanner id="4"/>
           </Measure>
         </Staff>
       <name>Guitar</name>
