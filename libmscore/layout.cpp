@@ -3421,8 +3421,10 @@ qreal Score::computeMinWidth(Segment* fs)
                   }
             bool rest2[_nstaves];
             bool hRest2[_nstaves];
+            bool spaceHarmony = false;
             Segment::SegmentType segType = s->segmentType();
             qreal segmentWidth     = 0.0;
+            qreal harmonyWidth     = 0.0;
             qreal stretchDistance  = 0.0;
             int pt                 = pSeg ? pSeg->segmentType() : Segment::SegBarLine;
 
@@ -3437,6 +3439,7 @@ qreal Score::computeMinWidth(Segment* fs)
                   bool found = false;
                   bool hFound = false;
                   bool eFound = false;
+
                   if (segType & (Segment::SegChordRest)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
@@ -3525,11 +3528,16 @@ qreal Score::computeMinWidth(Segment* fs)
                               else
                                     hBbox = b;
                               hFound = true;
-                              // allow chord at the beginning of a measure to be dragged left
-                              hSpace.max(Space(s->rtick()?-b.left():0.0, b.right()));
+                              spaceHarmony = true;
+                              // allow chord to be dragged
+                              qreal xoff = h->pos().x();
+                              qreal bl = -b.left() + qMin(xoff, 0.0);
+                              qreal br = b.right() - qMax(xoff, 0.0);
+                              hSpace.max(Space(bl, br));
                               }
                         }
                   else {
+                        // current segment (s) is not a ChordRest
                         Element* e = s->element(track);
                         if ((segType == Segment::SegClef) && (pt != Segment::SegChordRest))
                               minDistance = styleP(ST_clefLeftMargin);
@@ -3572,19 +3580,27 @@ qreal Score::computeMinWidth(Segment* fs)
                         qreal sp = 0.0;
 
                         // space chord symbols unless they miss each other vertically
-                        if (eFound || (hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
+                        if (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top())
                               sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
-                        hLastBbox[staffIdx] = hBbox;
 
+                        // barline, allocate half the width of previous harmony to this measure
+                        else if (eFound && !hFound && spaceHarmony)
+                              sp = hRest[staffIdx] * 0.5 + hSpace.lw(); // - styleS(ST_noteBarDistance).val() * _spatium;
+
+                        hLastBbox[staffIdx] = hBbox;
                         hRest[staffIdx] = hSpace.rw();
                         hRest2[staffIdx] = false;
-                        segmentWidth = qMax(segmentWidth, sp);
+                        harmonyWidth = qMax(harmonyWidth, sp);
                         }
                   else
                         hRest2[staffIdx] = true;
 
                   clefWidth[staffIdx] = 0.0;
                   }
+
+
+            // make room for harmony if needed
+            segmentWidth = qMax(segmentWidth, harmonyWidth);
 
             x += segmentWidth;
 
@@ -3595,10 +3611,11 @@ qreal Score::computeMinWidth(Segment* fs)
                   if (!staff(staffIdx)->show())
                         continue;
                   if (rest2[staffIdx])
-                        rest[staffIdx] -= qMin(rest[staffIdx],segmentWidth);
+                        rest[staffIdx] -= qMin(rest[staffIdx], segmentWidth);
                   if (hRest2[staffIdx])
-                        hRest[staffIdx] -= qMin(hRest[staffIdx],segmentWidth);
+                        hRest[staffIdx] -= qMin(hRest[staffIdx], segmentWidth);
                   }
+
             //
             // set pSeg only to used segments
             //
