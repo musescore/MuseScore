@@ -97,7 +97,7 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
             QRectF b(m->canvasBoundingRect());
 
             QPointF anchor;
-            if (pos.x() < (b.x() + b.width() * .5) || m->endBarLineType() == BarLineType::END_BAR)
+            if (pos.x() < (b.x() + b.width() * .5) || b == m->score()->lastMeasure()->canvasBoundingRect())
                   anchor = m->canvasBoundingRect().topLeft();
             else
                   anchor = m->canvasBoundingRect().topRight();
