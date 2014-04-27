@@ -6,6 +6,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_meter.h"
 #include "importmidi_tuplet.h"
+#include "importmidi_inner.h"
 
 #include <set>
 
@@ -92,8 +93,8 @@ ReducedFraction quantizeValue(const ReducedFraction &value,
       return ReducedFraction(valNum, commonDen).reduced();
       }
 
-ReducedFraction quantForLen(const ReducedFraction &basicQuant,
-                            const ReducedFraction &noteLen)
+ReducedFraction quantForLen(const ReducedFraction &noteLen,
+                            const ReducedFraction &basicQuant)
       {
       auto quant = basicQuant;
       while (quant > noteLen && quant >= MChord::minAllowedDuration() * 2)
@@ -122,7 +123,7 @@ ReducedFraction findMinQuant(
       {
       ReducedFraction minQuant(-1, 1);
       for (const auto &note: chord.second.notes) {
-            const auto quant = quantForLen(basicQuant, note.offTime - chord.first);
+            const auto quant = quantForLen(note.offTime - chord.first, basicQuant);
             if (minQuant == ReducedFraction(-1, 1) || quant < minQuant)
                   minQuant = quant;
             }
@@ -166,7 +167,7 @@ ReducedFraction findQuantizedNoteOffTime(
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant)
       {
-      const auto quant = quantForLen(basicQuant, offTime - chord.first);
+      const auto quant = quantForLen(offTime - chord.first, basicQuant);
       return quantizeValue(offTime, quant);
       }
 
@@ -176,8 +177,7 @@ ReducedFraction findMinQuantizedOnTime(
       {
       ReducedFraction minOnTime(-1, 1);
       for (const auto &note: chord.second.notes) {
-            const auto quant = quantForLen(
-                              basicQuant, note.offTime - chord.first);
+            const auto quant = quantForLen(note.offTime - chord.first, basicQuant);
             const auto onTime = quantizeValue(chord.first, quant);
             if (minOnTime == ReducedFraction(-1, 1) || onTime < minOnTime)
                   minOnTime = onTime;
@@ -261,7 +261,7 @@ ReducedFraction findQuantForRange(
             const ReducedFraction &basicQuant)
       {
       const auto shortestLen = shortestQuantizedNoteInRange(beg, end);
-      return quantForLen(basicQuant, shortestLen);
+      return quantForLen(shortestLen, basicQuant);
       }
 
 ReducedFraction quantizeOnTimeForTuplet(
@@ -337,6 +337,30 @@ ReducedFraction quantizeOffTimeForNonTuplet(
       }
 
 
+struct QuantPos
+      {
+      ReducedFraction time;
+      int metricalLevel;
+      double penalty;
+      int prevPos;
+      };
+
+struct QuantData
+      {
+      std::multimap<ReducedFraction, MidiChord>::iterator chord;
+      ReducedFraction quant;
+      ReducedFraction quantForLen;
+      ReducedFraction chordRangeStart;
+      ReducedFraction chordRangeEnd;
+                  // if inter on time interval with previous chord
+                  // is less than min allowed duration
+                  // then chord can be merged with previous chord
+      bool canMergeWithPrev = false;
+      int metricalLevelForLen;
+      std::vector<QuantPos> positions;
+      };
+
+
 #ifdef QT_DEBUG
 
 bool areAllVoicesSame(
@@ -351,25 +375,279 @@ bool areAllVoicesSame(
       return true;
       }
 
+bool notLessThanPrev(
+            const std::vector<QuantData>::iterator &it,
+            const std::vector<QuantData> &data)
+      {
+      if (it != data.begin()) {
+            const auto prev = std::prev(it);
+            if (prev->chordRangeStart > it->chordRangeStart)
+                  return false;
+            }
+      return true;
+      }
+
 #endif
 
+
+ReducedFraction quantizeToLarge(
+            const ReducedFraction &time,
+            const ReducedFraction &quant)
+      {
+      const auto ratio = time / quant;
+      auto quantized = quant * (ratio.numerator() / ratio.denominator());
+      if (quantized < time)
+            quantized += quant;
+      return quantized;
+      }
+
+ReducedFraction quantizeToSmall(
+            const ReducedFraction &time,
+            const ReducedFraction &quant)
+      {
+      const auto ratio = time / quant;
+      auto quantized = quant * (ratio.numerator() / ratio.denominator());
+      if (quantized >= time)
+            quantized -= quant;
+      return quantized;
+      }
+
+void findMetricalLevels(
+            std::vector<QuantData> &data,
+            const std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> &chords,
+            const ReducedFraction &tupletQuant,
+            const ReducedFraction &barStart,
+            const ReducedFraction &barFraction)
+      {
+      const auto divsInfo = (tupletQuant != ReducedFraction(-1, 1))
+                  ? Meter::divisionInfo(barFraction, {(*chords.begin())->second.tuplet->second})
+                  : Meter::divisionInfo(barFraction, {});
+
+      for (QuantData &d: data) {
+            for (auto t = d.chordRangeStart; t <= d.chordRangeEnd; t += d.quant) {
+                  QuantPos p;
+                  p.time = t;
+                  p.metricalLevel = Meter::levelOfTick(t - barStart, divsInfo);
+                  d.positions.push_back(p);
+                  }
+
+            int minLevel = std::numeric_limits<int>::max();
+            while (true) {
+                  for (auto t = d.chordRangeStart; t <= d.chordRangeEnd; t += d.quant) {
+                        if (((t - barStart) / d.quantForLen).reduced().denominator() != 1)
+                              continue;
+                        int level = Meter::levelOfTick(t - barStart, divsInfo);
+                        if (level < minLevel)
+                              minLevel = level;
+                        }
+                  if (minLevel == std::numeric_limits<int>::max()) {
+                        d.quantForLen /= 2;
+
+                        Q_ASSERT_X(d.quantForLen >= MChord::minAllowedDuration(),
+                                   "Quantize::findQuantData", "quantForLen < min allowed duration");
+
+                        continue;
+                        }
+                  break;
+                  }
+            d.metricalLevelForLen = minLevel;
+            }
+      }
+
+void findChordRangeEnds(
+            std::vector<QuantData> &data,
+            const ReducedFraction &rangeStart,
+            const ReducedFraction &rangeEnd,
+            const ReducedFraction &barStart,
+            const ReducedFraction &beatLen)
+      {
+      for (auto it = data.rbegin(); it != data.rend(); ++it) {
+            QuantData &d = *it;
+            d.chordRangeEnd = barStart + quantizeToSmall(rangeEnd - barStart, d.quant);
+
+            Q_ASSERT_X(d.chord->first + beatLen >= rangeStart,
+                       "Quantize::findQuantData", "chord on time + beatLen < rangeStart");
+
+            if (d.chord->first + beatLen < rangeEnd) {
+                  d.chordRangeEnd = barStart + quantizeToSmall(
+                                          d.chord->first + beatLen - barStart, d.quant);
+                  }
+            if (it != data.rbegin()) {
+                  const auto prev = std::prev(it);    // next in terms of time
+                  if (prev->chordRangeEnd < d.chordRangeEnd) {
+                        d.chordRangeEnd = barStart + quantizeToSmall(
+                                                prev->chordRangeEnd - barStart, d.quant);
+                        }
+                  if (!prev->canMergeWithPrev && d.chordRangeEnd == prev->chordRangeEnd)
+                        d.chordRangeEnd -= d.quant;
+                  }
+            if (d.chordRangeEnd < d.chordRangeStart)
+                  d.chordRangeEnd = d.chordRangeStart;
+
+            Q_ASSERT_X(d.chordRangeEnd <= rangeEnd,
+                       "Quantize::findQuantData", "chordRangeEnd > rangeEnd");
+            Q_ASSERT_X(d.chordRangeStart <= d.chordRangeEnd,
+                       "Quantize::findQuantData", "chordRangeStart is greater than chordRangeEnd");
+            Q_ASSERT_X(((d.chordRangeEnd - barStart) / d.quant).reduced().denominator() == 1,
+                       "Quantize::findQuantData",
+                       "chordRangeEnd - barStart is not dividable by quant");
+            Q_ASSERT_X(((d.chordRangeEnd - d.chordRangeStart) / d.quant).reduced().denominator() == 1,
+                       "Quantize::findQuantData",
+                       "chordRangeEnd - chordRangeStart is not dividable by quant");
+            }
+      }
+
+void findChordRangeStarts(
+            std::vector<QuantData> &data,
+            const ReducedFraction &rangeStart,
+            const ReducedFraction &rangeEnd,
+            const ReducedFraction &barStart,
+            const ReducedFraction &beatLen)
+      {
+      for (auto it = data.begin(); it != data.end(); ++it) {
+            QuantData &d = *it;
+            while (true) {
+                  d.chordRangeStart = barStart + quantizeToLarge(rangeStart - barStart, d.quant);
+
+                  Q_ASSERT_X(d.chord->first - beatLen <= rangeEnd,
+                             "Quantize::findQuantData", "chord on time - beatLen > rangeEnd");
+
+                  if (d.chord->first - beatLen > rangeStart) {
+                        d.chordRangeStart = barStart + quantizeToLarge(
+                                                d.chord->first - beatLen - barStart, d.quant);
+                        }
+
+                  if (it != data.begin()) {
+                        const auto prev = std::prev(it);
+                        if (prev->chordRangeStart > d.chordRangeStart) {
+                              d.chordRangeStart = barStart + quantizeToLarge(
+                                                      prev->chordRangeStart - barStart, d.quant);
+                              }
+                        if (!d.canMergeWithPrev && d.chordRangeStart == prev->chordRangeStart)
+                              d.chordRangeStart += d.quant;
+                        }
+
+                  if (d.chordRangeStart >= rangeEnd) {
+                        if (d.quant >= MChord::minAllowedDuration() * 2)
+                              d.quant /= 2;
+                        else
+                              d.canMergeWithPrev = true;
+                        continue;
+                        }
+                  break;
+                  }
+
+            Q_ASSERT_X(notLessThanPrev(it, data),
+                       "Quantize::findQuantData",
+                       "chordRangeStart is less than previous chordRangeStart");
+            Q_ASSERT_X(d.chordRangeStart >= rangeStart,
+                       "Quantize::findQuantData", "chordRangeStart < rangeStart");
+            Q_ASSERT_X(d.chordRangeStart < rangeEnd,
+                       "Quantize::findQuantData", "chordRangeStart >= rangeEnd");
+            Q_ASSERT_X(((d.chordRangeStart - barStart) / d.quant).reduced().denominator() == 1,
+                       "Quantize::findQuantData",
+                       "chordRangeStart - barStart is not dividable by quant");
+            }
+      }
+
+void findQuants(
+            std::vector<QuantData> &data,
+            const std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> &chords,
+            const ReducedFraction &rangeStart,
+            const ReducedFraction &rangeEnd,
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &tupletQuant,
+            const ReducedFraction &barFraction)
+      {
+      for (auto it = chords.begin(); it != chords.end(); ++it) {
+            const auto chordIt = *it;
+            QuantData d;
+            d.chord = chordIt;
+            auto len = MChord::minNoteLen(*chordIt);
+            if (rangeEnd - rangeStart < len)
+                  len = rangeEnd - rangeStart;
+            if (it != chords.begin()) {
+                  const auto prevChordIt = *std::prev(it);
+                  if (chordIt->first - prevChordIt->first < len)
+                        len = chordIt->first - prevChordIt->first;
+                  if (len < MChord::minAllowedDuration())
+                        d.canMergeWithPrev = true;
+                  }
+            if (tupletQuant != ReducedFraction(-1, 1)) {
+                  const MidiTuplet::TupletData &tuplet = (*chords.begin())->second.tuplet->second;
+                  d.quant = tupletQuant;
+                  d.quantForLen = tuplet.len / tuplet.tupletNumber;
+                  }
+            else {
+                  d.quant = quantForLen(len, basicQuant);
+                  auto maxQuant = basicQuant;
+                  while (maxQuant < barFraction)
+                        maxQuant *= 2;
+                  d.quantForLen = quantForLen(qMin(MChord::minNoteLen(*chordIt), rangeEnd - rangeStart),
+                                              maxQuant);
+                  }
+
+            Q_ASSERT_X(d.quant <= rangeEnd - rangeStart,
+                       "Quantize::findQuantData", "Quant value is larger than range interval");
+
+            data.push_back(d);
+            }
+      }
+
+ReducedFraction findTupletQuant(
+            const std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> &chords)
+      {
+      ReducedFraction tupletQuant(-1, 1);
+      if ((*chords.begin())->second.isInTuplet) {
+            const MidiTuplet::TupletData &tuplet = (*chords.begin())->second.tuplet->second;
+            const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
+            tupletQuant = quantForTuplet(tuplet.len, tupletRatio);
+            }
+
+      return tupletQuant;
+      }
+
+std::vector<QuantData> findQuantData(
+            const std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> &chords,
+            const ReducedFraction &rangeStart,
+            const ReducedFraction &rangeEnd,
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart,
+            const ReducedFraction &barFraction)
+      {
+
+      Q_ASSERT_X(!chords.empty(), "Quantize::findQuantData", "Empty chords");
+
+      std::vector<QuantData> data;
+      const auto tupletQuant = findTupletQuant(chords);
+      const auto beatLen = Meter::beatLength(barFraction);
+
+      findQuants(data, chords, rangeStart, rangeEnd, basicQuant, tupletQuant, barFraction);
+      findChordRangeStarts(data, rangeStart, rangeEnd, barStart, beatLen);
+      findChordRangeEnds(data, rangeStart, rangeEnd, barStart, beatLen);
+      findMetricalLevels(data, chords, tupletQuant, barStart, barFraction);
+
+      return data;
+      }
 
 void quantizeOnTimesInRange(
             const std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> &chords,
             std::multimap<ReducedFraction, MidiChord> &quantizedChords,
             const ReducedFraction &rangeStart,
             const ReducedFraction &rangeEnd,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart,
+            const ReducedFraction &barFraction)
       {
       Q_ASSERT_X(!chords.empty(), "Quantize::quantizeChordOnTimes", "Empty chords");
       Q_ASSERT_X(areAllVoicesSame(chords),
                  "Quantize::quantizeChordOnTimes", "Chord voices are not the same");
 
+      std::vector<QuantData> quantData = findQuantData(chords, rangeStart, rangeEnd,
+                                                       basicQuant, barStart, barFraction);
+
       bool isInTuplet = chords.front()->second.isInTuplet;
       if (isInTuplet) {
-            // const MidiTuplet::TupletData &tuplet = chordIt->second.tuplet->second;
-            // const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber);
-
             for (const auto &chordIt: chords) {
                   const auto onTime = quantizeOnTimeForTuplet(*chordIt);
                   quantizedChords.insert({onTime, chordIt->second});
@@ -451,6 +729,8 @@ void quantizeOnTimes(
             int currentBarIndex = -1;
             ReducedFraction rangeStart(-1, 1);
             ReducedFraction rangeEnd(-1, 1);
+            ReducedFraction barFraction(-1, 1);
+            ReducedFraction barStart(-1, 1);
             bool currentlyInTuplet = false;
             std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> chordsToQuant;
 
@@ -464,10 +744,11 @@ void quantizeOnTimes(
                         currentlyInTuplet = chordIt->second.isInTuplet;
                         if (currentBarIndex != chordIt->second.barIndex) {
                               currentBarIndex = chordIt->second.barIndex;
-                              if (!currentlyInTuplet) {
-                                    rangeStart = ReducedFraction::fromTicks(
-                                                      sigmap->bar2tick(currentBarIndex, 0));
-                                    }
+                              barStart = ReducedFraction::fromTicks(
+                                                sigmap->bar2tick(currentBarIndex, 0));
+                              barFraction = ReducedFraction(sigmap->timesig(barStart.ticks()).timesig());
+                              if (!currentlyInTuplet)
+                                    rangeStart = barStart;
                               }
                         if (currentlyInTuplet) {
                               const auto &tuplet = chordIt->second.tuplet->second;
@@ -483,7 +764,9 @@ void quantizeOnTimes(
                         ++nextChord;
                   if (nextChord == chords.end()
                               || nextChord->second.barIndex != currentBarIndex
-                              || nextChord->second.isInTuplet != currentlyInTuplet) {
+                              || nextChord->second.isInTuplet != currentlyInTuplet
+                              || (nextChord->second.isInTuplet && currentlyInTuplet
+                                  && nextChord->second.tuplet != chordIt->second.tuplet)) {
 
                         if (nextChord != chords.end()) {
                               if (nextChord->second.barIndex != currentBarIndex) {
@@ -501,8 +784,8 @@ void quantizeOnTimes(
                                     }
                               }
 
-                        quantizeOnTimesInRange(chordsToQuant, quantizedChords,
-                                               rangeStart, rangeEnd, basicQuant);
+                        quantizeOnTimesInRange(chordsToQuant, quantizedChords, rangeStart, rangeEnd,
+                                               basicQuant, barStart, barFraction);
                         chordsToQuant.clear();
                         }
                   }
