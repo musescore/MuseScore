@@ -3280,7 +3280,7 @@ void Measure::layoutX(qreal stretch)
                               }
                         if (e) {
                               eFound = true;
-                              if (!s->next()) // (segType & (Segment::SegBarLine | Segment::SegEndBarLine))
+                              if (!s->next())               // segType & Segment::SegEndBarLine
                                     spaceHarmony = true;    // to space last Harmony to end of measure
                               space.max(e->space());
                               }
@@ -3309,7 +3309,7 @@ void Measure::layoutX(qreal stretch)
 
                         // barline, allocate half the width of previous harmony to this measure
                         else if (eFound && !hFound && spaceHarmony)
-                              sp = hRest[staffIdx] * 0.5 + hSpace.lw(); // - score()->styleS(ST_noteBarDistance).val() * _spatium;
+                              sp = (hRest[staffIdx] + minHarmonyDistance + hSpace.lw()) * 0.5;
 
                         hLastBbox[staffIdx] = hBbox;
                         hRest[staffIdx] = hSpace.rw();
