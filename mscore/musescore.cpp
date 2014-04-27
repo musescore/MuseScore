@@ -4779,7 +4779,7 @@ int main(int argc, char* av[])
             QPixmap pm(":/data/splash.jpg");
             sc = new QSplashScreen(pm);
             sc->setWindowTitle(QString("MuseScore Startup"));
-            sc->setWindowFlags(Qt::FramelessWindowHint);
+            //sc->setWindowFlags(Qt::FramelessWindowHint);
             sc->show();
             qApp->processEvents();
             }
