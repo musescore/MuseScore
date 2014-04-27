@@ -3559,6 +3559,8 @@ qreal Score::computeMinWidth(Segment* fs)
                               }
                         if (e) {
                               eFound = true;
+                              if (!s->next())               // segType & Segment::SegEndBarLine
+                                    spaceHarmony = true;    // to space last Harmony to end of measure
                               e->layout();
                               space.max(e->space());
                               }
@@ -3585,7 +3587,7 @@ qreal Score::computeMinWidth(Segment* fs)
 
                         // barline, allocate half the width of previous harmony to this measure
                         else if (eFound && !hFound && spaceHarmony)
-                              sp = hRest[staffIdx] * 0.5 + hSpace.lw(); // - styleS(ST_noteBarDistance).val() * _spatium;
+                              sp = (hRest[staffIdx] + minHarmonyDistance + hSpace.lw()) * 0.5;
 
                         hLastBbox[staffIdx] = hBbox;
                         hRest[staffIdx] = hSpace.rw();
