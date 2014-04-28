@@ -13,3 +13,5 @@ cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx
 cp   $MSCORE/ghost_note.gp3.mscx ghost_note.gp3-ref.mscx
 cp   $MSCORE/grace.gp5.mscx grace.gp5-ref.mscx
 cp   $MSCORE/volta.gp5.mscx volta.gp5-ref.mscx
+cp   $MSCORE/volta.gp4.mscx volta.gp4-ref.mscx
+cp   $MSCORE/volta.gp3.mscx volta.gp3-ref.mscx
