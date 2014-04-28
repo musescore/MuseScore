@@ -42,7 +42,9 @@ private slots:
       void gpArpeggio() { gpReadTest("arpeggio_up_down", "gp4"); }
       void gpGhostNote() { gpReadTest("ghost_note", "gp3"); }
       void gpGraceNote() { gpReadTest("grace", "gp5"); }
-      void gpVolta() { gpReadTest("volta", "gp5"); }
+      void gp5Volta() { gpReadTest("volta", "gp5"); }
+      void gp4Volta() { gpReadTest("volta", "gp4"); }
+      void gp3Volta() { gpReadTest("volta", "gp3"); }
       };
 
 //---------------------------------------------------------

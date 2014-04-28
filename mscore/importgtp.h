@@ -40,10 +40,18 @@ static const int GP_DEFAULT_PERCUSSION_CHANNEL = 9;
 
 static const int GP_INVALID_KEYSIG = 127;
 
+static const int GP_VOLTA_BINARY = 1;
+static const int GP_VOLTA_FLAGS = 2;
+
 struct GpTrack {
       int patch;
       uchar volume, pan, chorus, reverb, phase, tremolo;
       };
+
+struct GPVolta {
+      int voltaType;
+      QList<int> voltaInfo;
+};
 
 struct GpBar {
       Fraction timesig;
@@ -52,7 +60,7 @@ struct GpBar {
       BarLineType barLine;
       int repeatFlags;
       int repeats;
-      QList<int> voltaInfo;
+      GPVolta volta;
 
       GpBar();
       };
@@ -75,6 +83,7 @@ class GuitarPro {
       QFile* f;
       int curPos;
 
+      int voltaSequence;
       QTextCodec* _codec;
 
       void skip(qint64 len);
@@ -86,7 +95,7 @@ class GuitarPro {
       QString readBytePascalString();
       int readInt();
       QString readDelphiString();
-      void readVolta(QList<int>*, Measure*);
+      void readVolta(GPVolta*, Measure*);
       virtual void readBend();
       virtual void readMixChange();
       virtual int readBeatEffects(int track, Segment*) = 0;
