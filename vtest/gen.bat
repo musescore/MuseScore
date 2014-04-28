@@ -12,7 +12,7 @@ set SRC=mmrest-1,bravura-mmrest,mmrest-2,mmrest-4,mmrest-5,mmrest-6,mmrest-7,mmr
  chord-layout-1,chord-layout-2,chord-layout-3,chord-layout-4,chord-layout-5, ^
  chord-layout-6,chord-layout-7,chord-layout-8,chord-layout-9,chord-layout-10, ^
  accidental-1,accidental-2,accidental-3,accidental-4,accidental-5,accidental-6, ^
- tie-1,grace-1
+ tie-1,grace-1,harmony-1
 
 set MSCORE=..\win32install\bin\mscore.exe
 set DPI=130
