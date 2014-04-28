@@ -355,7 +355,7 @@ void SlurSegment::editDrag(const EditData& ed)
                               Chord* c = static_cast<Chord*>(s->element(spanner->track()));
                               if (c && c->type() == CHORD && c != spanner->endCR()) {
                                     changeAnchor(ed.view, ed.curGrip, c);
-                                    QPointF p1 = ed.pos - ups[ed.curGrip].p - pagePos();
+                                    QPointF p1 = ed.pos - ups[ed.curGrip].p - canvasPos();
                                     ups[ed.curGrip].off = p1 / _spatium;
                                     slurTie()->layout();
                                     }
