@@ -172,7 +172,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>0</number>
+      <number>14</number>
      </property>
      <widget class="QWidget" name="Page1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -4313,7 +4313,7 @@
             <property name="title">
              <string>Positioning</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout2">
+            <layout class="QGridLayout" name="gridLayout_15">
              <item row="0" column="0">
               <widget class="QLabel" name="label_17">
                <property name="text">
@@ -4336,7 +4336,7 @@
                 <double>0.500000000000000</double>
                </property>
                <property name="value">
-                <double>-2.500000000000000</double>
+                <double>2.500000000000000</double>
                </property>
               </widget>
              </item>

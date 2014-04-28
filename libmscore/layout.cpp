@@ -3590,7 +3590,6 @@ qreal Score::computeMinWidth(Segment* fs)
                         if (eFound && !hFound && spaceHarmony)
                               sp = qMin(sp, maxHarmonyBarDistance);
 
-
                         hLastBbox[staffIdx] = hBbox;
                         hRest[staffIdx] = hSpace.rw();
                         hRest2[staffIdx] = false;
@@ -3601,7 +3600,6 @@ qreal Score::computeMinWidth(Segment* fs)
 
                   clefWidth[staffIdx] = 0.0;
                   }
-
 
             // make room for harmony if needed
             segmentWidth = qMax(segmentWidth, harmonyWidth);
