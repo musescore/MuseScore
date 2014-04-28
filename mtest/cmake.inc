@@ -36,12 +36,11 @@ if (NOT MINGW)
    target_link_libraries(${TARGET}
       dl
       pthread
-      fontconfig
       freetype)
 endif (NOT MINGW)
 
 if (OMR)
-      target_link_libraries(${TARGET} omr fitz openjpeg jbig2dec jpeg freetype)
+      target_link_libraries(${TARGET} omr fitz openjpeg jbig2dec jpeg fontconfig)
       if (OCR)
             target_link_libraries(${TARGET} tesseract_api)
       endif (OCR)
