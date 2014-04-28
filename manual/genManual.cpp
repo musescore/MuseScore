@@ -412,7 +412,7 @@ int main(int argc, char* argv[])
       srcPath = argv[0];
       dstPath = argv[1];
       QStringList files;
-      files << "mscore/plugins.h";
+      files << "libmscore/plugins.h";
 
       QDir libdir(srcPath + "/libmscore");
       QStringList filter;
