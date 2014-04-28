@@ -412,6 +412,7 @@ StyleData::StyleData()
             { ST_trillY,                      QVariant(-1) },
             { ST_harmonyY,                    QVariant(2.5) },
             { ST_harmonyFretDist,             QVariant(0.5) },
+            { ST_minHarmonyDistance,          QVariant(0.5) },
             { ST_maxHarmonyBarDistance,       QVariant(3.0) },
             { ST_capoPosition,                QVariant(0) },
             { ST_fretNumMag,                  QVariant(qreal(2.0)) },
