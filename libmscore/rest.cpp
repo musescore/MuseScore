@@ -65,8 +65,7 @@ void Rest::draw(QPainter* painter) const
       {
       if ( (staff() && staff()->isTabStaff()
             // in tab staff, do not draw rests is rests are off OR if dur. symbols are on
-            && ( !((StaffTypeTablature*)staff()->staffType())->showRests()
-                  || ((StaffTypeTablature*)staff()->staffType())->genDurations()) )
+            && (!staff()->staffType()->showRests() || staff()->staffType()->genDurations()))
             || generated())
             return;
       qreal _spatium = spatium();
@@ -320,9 +319,9 @@ void Rest::layout()
 
       rxpos() = 0.0;
       if (staff() && staff()->isTabStaff()) {
-            StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+            StaffType* tab = staff()->staffType();
             // if rests are shown and note values are shown as duration symbols
-            if(tab->showRests() && tab->genDurations()) {
+            if (tab->showRests() && tab->genDurations()) {
                   TDuration::DurationType type = durationType().type();
                   int                     dots = durationType().dots();
                   // if rest is whole measure, convert into actual type and dot values

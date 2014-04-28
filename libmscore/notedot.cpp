@@ -47,7 +47,7 @@ void NoteDot::draw(QPainter* p) const
       {
       if (note() && note()->dotsHidden())     // don't draw dot if note is hidden
             return;
-      if (!staff()->isTabStaff() || ((StaffTypeTablature*)staff()->staffType())->stemThrough()) {
+      if (!staff()->isTabStaff() || staff()->staffType()->stemThrough()) {
             p->setPen(curColor());
             drawSymbol(SymId::augmentationDot, p);
             }

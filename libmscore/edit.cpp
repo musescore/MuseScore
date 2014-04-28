@@ -679,7 +679,7 @@ void Score::putNote(const Position& p, bool replace)
       MScore::Direction stemDirection = MScore::AUTO;
       NoteVal nval;
       StringData* stringData = 0;
-      StaffTypeTablature * tab = 0;
+      StaffType* tab = 0;
 
       switch(st->staffType()->group()) {
             case PERCUSSION_STAFF_GROUP: {
@@ -699,7 +699,7 @@ void Score::putNote(const Position& p, bool replace)
                   if (_is.rest())
                         return;
                   stringData = instr->stringData();
-                  tab = (StaffTypeTablature*)st->staffType();
+                  tab = st->staffType();
                   int string = tab->VisualStringToPhys(line);
                   if (string < 0 || string >= stringData->strings())
                       return;

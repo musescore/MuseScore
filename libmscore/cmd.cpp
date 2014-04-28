@@ -1189,7 +1189,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         switch(mode) {
                               case UP_DOWN_OCTAVE:          // move same note to next string, if possible
                                     {
-                                    StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(oNote->staff()->staffType());
+                                    StaffType* stt = oNote->staff()->staffType();
                                     string = stt->physStringToVisual(string);
                                     string += (up ? -1 : 1);
                                     if (string < 0 || string >= stringData->strings())

@@ -61,152 +61,6 @@ class Staff;
 class Xml;
 
 //---------------------------------------------------------
-//   StaffType
-//---------------------------------------------------------
-
-class StaffType {
-      bool _builtin;          // used for memory management: do not delete if true
-
-   protected:
-      QString _name;
-      int _lines;
-      int _stepOffset;
-      Spatium _lineDistance;
-
-      bool _genClef;          // create clef at beginning of system
-      bool _showBarlines;
-      bool _slashStyle;       // do not show stems
-      bool _genTimesig;       // whether time signature is shown or not
-
-   public:
-      StaffType();
-      StaffType(const QString& name, int lines, qreal lineDist, bool genClef,
-            bool showBarLines, bool stemless, bool genTimeSig) :
-            _name(name), _lineDistance(Spatium(lineDist)), _genClef(genClef),_showBarlines(showBarLines),
-            _slashStyle(stemless), _genTimesig(genTimeSig)
-            {
-            _builtin = false;
-            setLines(lines);
-            }
-      virtual ~StaffType() {}
-
-      QString name() const                     { return _name;            }
-      void setName(const QString& val)         { _name = val;             }
-      virtual StaffGroup group() const = 0;
-      virtual StaffType* clone() const = 0;
-      virtual const char* groupName() const = 0;
-      virtual bool isEqual(const StaffType&) const;
-      virtual bool isSameStructure(const StaffType&) const;
-      virtual void setLines(int val);
-      int lines() const                        { return _lines;           }
-      void setStepOffset(int v)                { _stepOffset = v;         }
-      int stepOffset() const                   { return _stepOffset;      }
-      void setLineDistance(const Spatium& val) { _lineDistance = val;     }
-      Spatium lineDistance() const             { return _lineDistance;    }
-      void setGenClef(bool val)                { _genClef = val;          }
-      bool genClef() const                     { return _genClef;         }
-      void setShowBarlines(bool val)           { _showBarlines = val;     }
-      bool showBarlines() const                { return _showBarlines;    }
-      virtual void write(Xml& xml, int) const;
-      void writeProperties(Xml& xml) const;
-      virtual void read(XmlReader&);
-      bool readProperties(XmlReader& e);
-      void setSlashStyle(bool val)             { _slashStyle = val;       }
-      bool slashStyle() const                  { return _slashStyle;      }
-      bool genTimesig() const                  { return _genTimesig;      }
-      void setGenTimesig(bool val)             { _genTimesig = val;       }
-      qreal doty1() const;
-      qreal doty2() const;
-      bool builtin()            { return _builtin; }
-      void setBuiltin(bool val) { _builtin = val; }
-
-      // static function to deal with presets
-      static const StaffType* getDefaultPreset(StaffGroup grp, int* idx);
-      static size_t numOfPresets();
-      static const StaffType* preset(int idx);
-      static const StaffType* presetFromName(QString& name, int* idx);
-      static const StaffType* presetFromXmlName(QString& xmlName, int* idx);
-      static const QString& presetXmlName(int idx);
-      static const QString& presetName(int idx);
-      };
-
-// ready-made staff types:
-
-enum {
-      STANDARD_STAFF_TYPE,
-      PERC_1LINE_STAFF_TYPE, PERC_3LINE_STAFF_TYPE, PERC_5LINE_STAFF_TYPE,
-      TAB_6SIMPLE_STAFF_TYPE, TAB_6COMMON_STAFF_TYPE, TAB_6FULL_STAFF_TYPE,
-            TAB_4SIMPLE_STAFF_TYPE, TAB_4COMMON_STAFF_TYPE, TAB_4FULL_STAFF_TYPE,
-            TAB_UKULELE_STAFF_TYPE, TAB_BALALAJKA_STAFF_TYPE, TAB_ITALIAN_STAFF_TYPE, TAB_FRENCH_STAFF_TYPE,
-      STAFF_TYPES,
-      // some usefull shorthands:
-            PERC_DEFAULT_STAFF_TYPE = PERC_5LINE_STAFF_TYPE,
-            TAB_DEFAULT_STAFF_TYPE = TAB_6COMMON_STAFF_TYPE
-      };
-
-//---------------------------------------------------------
-//   StaffTypePitched
-//---------------------------------------------------------
-
-class StaffTypePitched : public StaffType {
-      bool _genKeysig;        // create key signature at beginning of system
-      bool _showLedgerLines;
-
-   public:
-      StaffTypePitched();
-      StaffTypePitched(const QString& name, int lines, qreal lineDist, bool genClef,
-            bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines) :
-            StaffType(name, lines, lineDist, genClef, showBarLines, stemless, genTimeSig),
-            _genKeysig(genKeySig), _showLedgerLines(showLedgerLines)
-            {
-            }
-      virtual StaffGroup group() const        { return STANDARD_STAFF_GROUP; }
-      virtual StaffTypePitched* clone() const { return new StaffTypePitched(*this); }
-      virtual const char* groupName() const   { return "pitched"; }
-      virtual bool isEqual(const StaffType&) const;
-      virtual bool isSameStructure(const StaffType& st) const;
-
-      virtual void read(XmlReader&);
-      virtual void write(Xml& xml, int) const;
-
-      void setGenKeysig(bool val)              { _genKeysig = val;        }
-      bool genKeysig() const                   { return _genKeysig;       }
-      void setShowLedgerLines(bool val)        { _showLedgerLines = val;  }
-      bool showLedgerLines() const             { return _showLedgerLines; }
-      };
-
-//---------------------------------------------------------
-//   StaffTypePercussion
-//---------------------------------------------------------
-
-class StaffTypePercussion : public StaffType {
-      bool _genKeysig;        // create key signature at beginning of system
-      bool _showLedgerLines;
-
-   public:
-      StaffTypePercussion();
-      StaffTypePercussion(const QString& name, int lines, qreal lineDist, bool genClef,
-            bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines) :
-            StaffType(name, lines, lineDist, genClef, showBarLines, stemless, genTimeSig),
-            _genKeysig(genKeySig), _showLedgerLines(showLedgerLines)
-            {
-            }
-      virtual StaffGroup group() const           { return PERCUSSION_STAFF_GROUP; }
-      virtual StaffTypePercussion* clone() const { return new StaffTypePercussion(*this); }
-      virtual const char* groupName() const      { return "percussion"; }
-      virtual bool isEqual(const StaffType&) const;
-      virtual bool isSameStructure(const StaffType& st) const;
-
-      virtual void read(XmlReader&);
-      virtual void write(Xml& xml, int) const;
-
-      void setGenKeysig(bool val)                { _genKeysig = val;        }
-      bool genKeysig() const                     { return _genKeysig;       }
-      void setShowLedgerLines(bool val)          { _showLedgerLines = val;  }
-      bool showLedgerLines() const               { return _showLedgerLines; }
-      };
-
-//---------------------------------------------------------
 //   TablatureFont
 //---------------------------------------------------------
 
@@ -259,12 +113,25 @@ struct TablatureDurationFont {
 };
 
 //---------------------------------------------------------
-//   StaffTypeTablature
+//   StaffType
 //---------------------------------------------------------
 
-class StaffTypeTablature : public StaffType {
+class StaffType {
 
-   protected:
+      StaffGroup _group;
+      QString _name;
+      int _lines;
+      int _stepOffset;
+      Spatium _lineDistance;
+
+      bool _genClef;          // create clef at beginning of system
+      bool _showBarlines;
+      bool _slashStyle;       // do not show stems
+      bool _genTimesig;       // whether time signature is shown or not
+
+      bool _genKeysig;        // create key signature at beginning of system
+      bool _showLedgerLines;
+
       // configurable properties
       qreal       _durationFontSize;      // the size (in points) for the duration symbol font
       qreal       _durationFontUserY;     // the vertical offset (spatium units) for the duration symb. font
@@ -306,17 +173,24 @@ class StaffTypeTablature : public StaffType {
       static QList<TablatureFretFont>     _fretFonts;
       static QList<TablatureDurationFont> _durationFonts;
 
-      void init();                        // init to reasonable defaults
-
    public:
-      StaffTypeTablature() : StaffType() { init(); }
-      StaffTypeTablature(const QString& name, int lines, qreal lineDist, bool genClef,
-            bool showBarLines, bool stemless, bool genTimesig,
-            const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
-            const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
-            bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
-            bool stemsDown, bool stemThrough, bool upsideDown, bool useNumbers)
+      StaffType();
+      StaffType(StaffGroup sg, const QString& name, int lines, qreal lineDist, bool genClef,
+            bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines) :
+            _group(sg), _name(name), _lineDistance(Spatium(lineDist)), _genClef(genClef),_showBarlines(showBarLines),
+            _slashStyle(stemless), _genTimesig(genTimeSig),
+            _genKeysig(genKeySig), _showLedgerLines(showLedgerLines)
             {
+            setLines(lines);
+            }
+      StaffType(StaffGroup sg, const QString& name, int lines, qreal lineDist, bool genClef,
+                  bool showBarLines, bool stemless, bool genTimesig,
+                  const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
+                  const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
+                  bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
+                  bool stemsDown, bool stemThrough, bool upsideDown, bool useNumbers)
+                  {
+            _group = sg;
             setName(name);
             setLines(lines);
             setLineDistance(Spatium(lineDist));
@@ -341,14 +215,49 @@ class StaffTypeTablature : public StaffType {
             setUseNumbers(useNumbers);
             }
 
-      // re-implemented virtual functions
-      virtual StaffGroup group() const          { return TAB_STAFF_GROUP; }
-      virtual StaffTypeTablature* clone() const { return new StaffTypeTablature(*this); }
-      virtual const char* groupName() const     { return "tablature"; }
-      virtual void read(XmlReader& e);
-      virtual void write(Xml& xml, int) const;
-      virtual bool isEqual(const StaffType&) const;
-      virtual bool isSameStructure(const StaffType& st) const;
+      virtual ~StaffType() {}
+      void init();
+
+      StaffGroup group() const                 { return _group;           }
+      QString name() const                     { return _name;            }
+      void setName(const QString& val)         { _name = val;             }
+      const char* groupName() const;
+      bool isEqual(const StaffType&) const;
+      bool isSameStructure(const StaffType&) const;
+      void setLines(int val);
+      int lines() const                        { return _lines;           }
+      void setStepOffset(int v)                { _stepOffset = v;         }
+      int stepOffset() const                   { return _stepOffset;      }
+      void setLineDistance(const Spatium& val) { _lineDistance = val;     }
+      Spatium lineDistance() const             { return _lineDistance;    }
+      void setGenClef(bool val)                { _genClef = val;          }
+      bool genClef() const                     { return _genClef;         }
+      void setShowBarlines(bool val)           { _showBarlines = val;     }
+      bool showBarlines() const                { return _showBarlines;    }
+
+      void write(Xml& xml) const;
+      void read(XmlReader&);
+
+      void setSlashStyle(bool val)             { _slashStyle = val;       }
+      bool slashStyle() const                  { return _slashStyle;      }
+      bool genTimesig() const                  { return _genTimesig;      }
+      void setGenTimesig(bool val)             { _genTimesig = val;       }
+      qreal doty1() const;
+      qreal doty2() const;
+
+      // static function to deal with presets
+      static const StaffType* getDefaultPreset(StaffGroup grp, int* idx);
+      static size_t numOfPresets();
+      static const StaffType* preset(int idx);
+      static const StaffType* presetFromName(QString& name, int* idx);
+      static const StaffType* presetFromXmlName(QString& xmlName, int* idx);
+      static const QString& presetXmlName(int idx);
+      static const QString& presetName(int idx);
+
+      void setGenKeysig(bool val)              { _genKeysig = val;        }
+      bool genKeysig() const                   { return _genKeysig;       }
+      void setShowLedgerLines(bool val)        { _showLedgerLines = val;  }
+      bool showLedgerLines() const             { return _showLedgerLines; }
 
       QString     fretString(int fret, bool ghost) const;   // returns a string with the text for fret
       QString     durationString(TDuration::DurationType type, int dots) const;
@@ -384,6 +293,7 @@ class StaffTypeTablature : public StaffType {
       bool  stemThrough() const           { return _stemsThrough;       }
       bool  upsideDown() const            { return _upsideDown;         }
       bool  useNumbers() const            { return _useNumbers;         }
+
       // properties setters (setting some props invalidates metrics)
       void  setDurationFontName(QString name);
       void  setDurationFontSize(qreal val);
@@ -392,7 +302,7 @@ class StaffTypeTablature : public StaffType {
       void  setFretFontSize(qreal val);
       void  setFretFontUserY(qreal val)   { _fretFontUserY = val;       }
       void  setGenDurations(bool val)     { _genDurations = val;        }
-      virtual void setLines(int val)      { _lines = val; _stepOffset = (val / 2 - 2) * 2; }
+//      virtual void setLines(int val)      { _lines = val; _stepOffset = (val / 2 - 2) * 2; }
       void  setLinesThrough(bool val)     { _linesThrough = val;        }
       void  setMinimStyle(TablatureMinimStyle val)    { _minimStyle = val;    }
       void  setOnLines(bool val);
@@ -420,9 +330,22 @@ class StaffTypeTablature : public StaffType {
       void  setFretMetrics();
       };
 
+// ready-made staff types:
+
+enum {
+      STANDARD_STAFF_TYPE,
+      PERC_1LINE_STAFF_TYPE, PERC_3LINE_STAFF_TYPE, PERC_5LINE_STAFF_TYPE,
+      TAB_6SIMPLE_STAFF_TYPE, TAB_6COMMON_STAFF_TYPE, TAB_6FULL_STAFF_TYPE,
+            TAB_4SIMPLE_STAFF_TYPE, TAB_4COMMON_STAFF_TYPE, TAB_4FULL_STAFF_TYPE,
+            TAB_UKULELE_STAFF_TYPE, TAB_BALALAJKA_STAFF_TYPE, TAB_ITALIAN_STAFF_TYPE, TAB_FRENCH_STAFF_TYPE,
+      STAFF_TYPES,
+      // some usefull shorthands:
+            PERC_DEFAULT_STAFF_TYPE = PERC_5LINE_STAFF_TYPE,
+            TAB_DEFAULT_STAFF_TYPE = TAB_6COMMON_STAFF_TYPE
+      };
+
 
 extern void initStaffTypes();
-//extern QList<StaffType*> staffTypes;
 
 //---------------------------------------------------------
 //   TabDurationSymbol
@@ -430,12 +353,12 @@ extern void initStaffTypes();
 //---------------------------------------------------------
 
 class TabDurationSymbol : public Element {
-      StaffTypeTablature* _tab;
-      QString             _text;
+      StaffType* _tab;
+      QString    _text;
 
    public:
       TabDurationSymbol(Score* s);
-      TabDurationSymbol(Score* s, StaffTypeTablature * tab, TDuration::DurationType type, int dots);
+      TabDurationSymbol(Score* s, StaffType* tab, TDuration::DurationType type, int dots);
       TabDurationSymbol(const TabDurationSymbol&);
       virtual TabDurationSymbol* clone() const  { return new TabDurationSymbol(*this); }
       virtual void draw(QPainter*) const;
@@ -443,7 +366,7 @@ class TabDurationSymbol : public Element {
       virtual void layout();
       virtual ElementType type() const          { return TAB_DURATION_SYMBOL; }
 
-      void  setDuration(TDuration::DurationType type, int dots, StaffTypeTablature* tab)
+      void  setDuration(TDuration::DurationType type, int dots, StaffType* tab)
                                                 { _tab = tab;
                                                   _text = tab->durationString(type, dots);
                                                 }

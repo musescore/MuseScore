@@ -447,7 +447,7 @@ qreal Note::headWidth() const
       return symWidth(noteHead());
       }
 
-qreal Note::tabHeadWidth(StaffTypeTablature* tab) const
+qreal Note::tabHeadWidth(StaffType* tab) const
       {
       qreal val;
       if (tab && _fret != FRET_NONE && _string != STRING_NONE) {
@@ -476,7 +476,11 @@ qreal Note::headHeight() const
       return symHeight(noteHead());
       }
 
-qreal Note::tabHeadHeight(StaffTypeTablature *tab) const
+//---------------------------------------------------------
+//   tabHeadHeight
+//---------------------------------------------------------
+
+qreal Note::tabHeadHeight(StaffType* tab) const
       {
       if(tab && _fret != FRET_NONE && _string != STRING_NONE)
             return tab->fretBoxH() * magS();
@@ -662,7 +666,7 @@ void Note::draw(QPainter* painter) const
       // tablature
 
       if (tablature) {
-            StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+            StaffType* tab = staff()->staffType();
             if (tieBack() && tab->slashStyle())
                   return;
             QString s = tab->fretString(_fret, _ghost);
@@ -1112,8 +1116,7 @@ void Note::endDrag()
       if (staff->isTabStaff()) {
             // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
             // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
-            int nString = _string + (static_cast<StaffTypeTablature*>(staff->staffType())->upsideDown() ?
-                        -_lineOffset : _lineOffset);
+            int nString = _string + staff->staffType()->upsideDown() ? -_lineOffset : _lineOffset;
             _lineOffset = 0;
             // get a fret number for same pitch on new string
             StringData* strData = staff->part()->instr()->stringData();
@@ -1424,7 +1427,7 @@ void Note::setDotY(MScore::Direction pos)
       if (staff()->isTabStaff()) {
             // with TAB's, dotPosX is not set:
             // get dot X from width of fret text and use TAB default spacing
-            StaffTypeTablature* tab = static_cast<StaffTypeTablature*>(staff()->staffType());
+            StaffType* tab = staff()->staffType();
             if (tab->stemThrough() ) {
                   // if fret mark on lines, use standard processing
                   if (tab->onLines())
@@ -1486,7 +1489,7 @@ void Note::layout()
       {
       bool useTablature = staff() && staff()->isTabStaff();
       if (useTablature) {
-            StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+            StaffType* tab = staff()->staffType();
             qreal mags = magS();
             qreal w = tabHeadWidth(tab);
             bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
@@ -1520,7 +1523,7 @@ void Note::layout2()
                   x = width();
                   dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
                   d = dd * 0.5;
-                  StaffTypeTablature* tab = static_cast<StaffTypeTablature*>( staff()->staffType());
+                  StaffType* tab = staff()->staffType();
                   if (!tab->stemThrough())
                         return;
                   }
@@ -1544,7 +1547,7 @@ void Note::layout2()
             if (e->type() == SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
                   qreal w = headWidth();
                   if (staff()->isTabStaff()) {
-                        StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+                        StaffType* tab = staff()->staffType();
                         w = tabHeadWidth(tab);
                         }
                   e->setPos(w, 0.0);

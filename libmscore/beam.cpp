@@ -260,11 +260,11 @@ void Beam::layout1()
       Chord* c2 = 0;
 
       // TAB's with stem beside staves have special layout
-      if (staff()->isTabStaff() && !((StaffTypeTablature*)staff()->staffType())->stemThrough()) {
+      if (staff()->isTabStaff() && !staff()->staffType()->stemThrough()) {
             //TABULATURES: all beams (and related chords) are:
             //    UP or DOWN according to TAB duration position
             //    slope 0
-            _up   = !((StaffTypeTablature*)staff()->staffType())->stemsDown();
+            _up   = !staff()->staffType()->stemsDown();
             slope = 0.0;
             cross = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
@@ -1440,9 +1440,9 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
       int n = crl.size();
 
-      StaffTypeTablature* tab = 0;
+      StaffType* tab = 0;
       if (staff()->isTabStaff() )
-            tab = (StaffTypeTablature*)staff()->staffType();
+            tab = staff()->staffType();
       if (tab && !tab->stemThrough() ) {
             //
             // TAB STAVES with stems beside staves: beam position is fixed depending on TAB parameters and chordrest up/down

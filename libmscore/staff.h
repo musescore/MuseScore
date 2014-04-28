@@ -35,7 +35,6 @@ class Part;
 class Score;
 class KeyList;
 class StaffType;
-class StaffTypeTablature;
 class Staff;
 class StringData;
 class ClefList;
@@ -106,7 +105,7 @@ class Staff : public QObject {
 
       qreal _userDist;        ///< user edited extra distance
 
-      StaffType* _staffType;
+      StaffType _staffType;
 
       LinkedStaves* _linkedStaves;
 
@@ -186,9 +185,11 @@ class Staff : public QObject {
       int channel(int tick, int voice) const;
       QMap<int,int>* channelList(int voice) { return  &_channelList[voice]; }
 
-      StaffType* staffType() const     { return _staffType;      }
-      void setStaffType(StaffType* st);
-      StaffGroup staffGroup() const    { return _staffType->group(); }
+      const StaffType* staffType() const { return &_staffType;      }
+      StaffType* staffType()             { return &_staffType;      }
+
+      void setStaffType(const StaffType* st);
+      StaffGroup staffGroup() const    { return _staffType.group(); }
       bool isPitchedStaff() const      { return staffGroup() == STANDARD_STAFF_GROUP; }
       bool isTabStaff() const          { return staffGroup() == TAB_STAFF_GROUP; }
       bool isDrumStaff() const         { return staffGroup() == PERCUSSION_STAFF_GROUP; }

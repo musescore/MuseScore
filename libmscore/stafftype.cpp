@@ -28,7 +28,6 @@ namespace Ms {
 
 StaffType::StaffType()
       {
-      _builtin         = false;
       _lines           = 5;
       _stepOffset      = 0;
       _lineDistance    = Spatium(1);
@@ -37,6 +36,25 @@ StaffType::StaffType()
       _showBarlines    = true;
       _slashStyle      = false;     // do not show stems
       _genTimesig      = true;      // whether time signature is shown or not
+      _genKeysig       = true;      // create key signature at beginning of system
+      _showLedgerLines = true;
+      }
+
+//---------------------------------------------------------
+//   groupName
+//---------------------------------------------------------
+
+const char* StaffType::groupName() const
+      {
+      switch (_group) {
+            default:
+            case STANDARD_STAFF_GROUP:
+                  return "pitched";
+            case PERCUSSION_STAFF_GROUP:
+                  return "percussion";
+            case TAB_STAFF_GROUP:
+                  return "tablature";
+            }
       }
 
 //---------------------------------------------------------
@@ -45,8 +63,30 @@ StaffType::StaffType()
 
 bool StaffType::isEqual(const StaffType& st) const
       {
-      return isSameStructure(st)
-         && st._name == _name;
+      if (_group != TAB_STAFF_GROUP) {
+            return isSameStructure(st)
+               && st._name == _name
+               && st._genKeysig       == _genKeysig
+               && st._showLedgerLines == _showLedgerLines;
+            }
+      else {
+           return st._durationFontIdx   == _durationFontIdx
+               && st._durationFontSize  == _durationFontSize
+               && st._durationFontUserY == _durationFontUserY
+               && st._fretFontIdx       == _fretFontIdx
+               && st._fretFontSize      == _fretFontSize
+               && st._fretFontUserY     == _fretFontUserY
+               && st._genDurations      == _genDurations
+               && st._linesThrough      == _linesThrough
+               && st._minimStyle        == _minimStyle
+               && st._onLines           == _onLines
+               && st._showRests         == _showRests
+               && st._stemsDown         == _stemsDown
+               && st._stemsThrough      == _stemsThrough
+               && st._upsideDown        == _upsideDown
+               && st._useNumbers        == _useNumbers
+               ;
+            }
       }
 
 //---------------------------------------------------------
@@ -57,15 +97,38 @@ bool StaffType::isEqual(const StaffType& st) const
 
 bool StaffType::isSameStructure(const StaffType& st) const
       {
-      return st.group() == group()
-         && st._lines        == _lines
-         && st._stepOffset   == _stepOffset
-         && st._lineDistance == _lineDistance
-         && st._genClef      == _genClef
-         && st._showBarlines == _showBarlines
-         && st._slashStyle   == _slashStyle
-         && st._genTimesig   == _genTimesig
-         ;
+      if (_group != TAB_STAFF_GROUP) {
+            return st.group()         == group()
+               && st._lines           == _lines
+               && st._stepOffset      == _stepOffset
+               && st._lineDistance    == _lineDistance
+               && st._genClef         == _genClef
+               && st._showBarlines    == _showBarlines
+               && st._slashStyle      == _slashStyle
+               && st._genTimesig      == _genTimesig
+               && st._genKeysig       == _genKeysig
+               && st._showLedgerLines == _showLedgerLines
+               ;
+            }
+      else {
+            return st.group()      == group()
+               && st._lines        == _lines
+               && st._stepOffset   == _stepOffset
+               && st._lineDistance == _lineDistance
+               && st._genClef      == _genClef
+               && st._showBarlines == _showBarlines
+               && st._slashStyle   == _slashStyle
+               && st._genDurations == _genDurations
+               && st._linesThrough == _linesThrough
+               && st._minimStyle   == _minimStyle
+               && st._onLines      == _onLines
+               && st._showRests    == _showRests
+               && st._stemsDown    == _stemsDown
+               && st._stemsThrough == _stemsThrough
+               && st._upsideDown   == _upsideDown
+               && st._useNumbers   == _useNumbers
+               ;
+            }
       }
 
 //---------------------------------------------------------
@@ -93,19 +156,9 @@ void StaffType::setLines(int val)
 //   write
 //---------------------------------------------------------
 
-void StaffType::write(Xml& xml, int idx) const
+void StaffType::write(Xml& xml) const
       {
-      xml.stag(QString("StaffType idx=\"%1\" group=\"%2\"").arg(idx).arg(groupName()));
-      writeProperties(xml);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void StaffType::writeProperties(Xml& xml) const
-      {
+      xml.stag(QString("StaffType group=\"%1\"").arg(groupName()));
       xml.tag("name", name());
       // uncontionally write properties: staff types are read back over a copy of the built-in types
       // and properties may be different across types => each might need to be properly (re-)set
@@ -115,6 +168,30 @@ void StaffType::writeProperties(Xml& xml) const
       xml.tag("slashStyle", slashStyle());
       xml.tag("barlines", showBarlines());
       xml.tag("timesig", genTimesig());
+      if (_group == STANDARD_STAFF_GROUP || _group == PERCUSSION_STAFF_GROUP) {
+            if (!genKeysig())
+                  xml.tag("keysig", genKeysig());
+            if (!showLedgerLines())
+                  xml.tag("ledgerlines", showLedgerLines());
+            }
+      else {
+            xml.tag("durations",          _genDurations);
+            xml.tag("durationFontName",   _durationFonts[_durationFontIdx].displayName);
+            xml.tag("durationFontSize",   _durationFontSize);
+            xml.tag("durationFontY",      _durationFontUserY);
+            xml.tag("fretFontName",       _fretFonts[_fretFontIdx].displayName);
+            xml.tag("fretFontSize",       _fretFontSize);
+            xml.tag("fretFontY",          _fretFontUserY);
+            xml.tag("linesThrough",       _linesThrough);
+            xml.tag("minimStyle",         _minimStyle);
+            xml.tag("onLines",            _onLines);
+            xml.tag("showRests",          _showRests);
+            xml.tag("stemsDown",          _stemsDown);
+            xml.tag("stemsThrough",       _stemsThrough);
+            xml.tag("upsideDown",         _upsideDown);
+            xml.tag("useNumbers",         _useNumbers);
+            }
+      xml.etag();
       }
 
 //---------------------------------------------------------
@@ -124,35 +201,54 @@ void StaffType::writeProperties(Xml& xml) const
 void StaffType::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            if (!readProperties(e))
+            const QStringRef& tag(e.name());
+            if (tag == "name")
+                  setName(e.readElementText());
+            else if (tag == "lines")
+                  setLines(e.readInt());
+            else if (tag == "lineDistance")
+                  setLineDistance(Spatium(e.readDouble()));
+            else if (tag == "clef")
+                  setGenClef(e.readInt());
+            else if (tag == "slashStyle")
+                  setSlashStyle(e.readInt());
+            else if (tag == "barlines")
+                  setShowBarlines(e.readInt());
+            else if (tag == "timesig")
+                  setGenTimesig(e.readInt());
+            else if (tag == "durations")
+                  setGenDurations(e.readInt() != 0);
+            else if (tag == "durationFontName")
+                  setDurationFontName(e.readElementText());
+            else if (tag == "durationFontSize")
+                  setDurationFontSize(e.readDouble());
+            else if (tag == "durationFontY")
+                  setDurationFontUserY(e.readDouble());
+            else if (tag == "fretFontName")
+                  setFretFontName(e.readElementText());
+            else if (tag == "fretFontSize")
+                  setFretFontSize(e.readDouble());
+            else if (tag == "fretFontY")
+                  setFretFontUserY(e.readDouble());
+            else if (tag == "linesThrough")
+                  setLinesThrough(e.readInt() != 0);
+            else if (tag == "minimStyle")
+                  setMinimStyle( (TablatureMinimStyle) e.readInt() );
+            else if (tag == "onLines")
+                  setOnLines(e.readInt() != 0);
+            else if (tag == "showRests")
+                  setShowRests(e.readInt() != 0);
+            else if (tag == "stemsDown")
+                  setStemsDown(e.readInt() != 0);
+            else if (tag == "stemsThrough")
+                  setStemsThrough(e.readInt() != 0);
+            else if (tag == "upsideDown")
+                  setUpsideDown(e.readInt() != 0);
+            else if (tag == "useNumbers")
+                  setUseNumbers(e.readInt() != 0);
+            else
                   e.unknown();
             }
-      }
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool StaffType::readProperties(XmlReader& e)
-      {
-      const QStringRef& tag(e.name());
-      if (tag == "name")
-            setName(e.readElementText());
-      else if (tag == "lines")
-            setLines(e.readInt());
-      else if (tag == "lineDistance")
-            setLineDistance(Spatium(e.readDouble()));
-      else if (tag == "clef")
-            setGenClef(e.readInt());
-      else if (tag == "slashStyle")
-            setSlashStyle(e.readInt());
-      else if (tag == "barlines")
-            setShowBarlines(e.readInt());
-      else if (tag == "timesig")
-            setGenTimesig(e.readInt());
-      else
-            return false;
-      return true;
       }
 
 //---------------------------------------------------------
@@ -210,155 +306,15 @@ qreal StaffType::doty2() const
       }
 
 //---------------------------------------------------------
-//   StaffTypePitched
-//---------------------------------------------------------
-
-StaffTypePitched::StaffTypePitched()
-   : StaffType()
-      {
-      _genKeysig       = true;      // create key signature at beginning of system
-      _showLedgerLines = true;
-      }
-
-//---------------------------------------------------------
-//   isEqual
-//---------------------------------------------------------
-
-bool StaffTypePitched::isEqual(const StaffType& st) const
-      {
-      return StaffType::isEqual(st)
-         && static_cast<const StaffTypePitched&>(st)._genKeysig       == _genKeysig
-         && static_cast<const StaffTypePitched&>(st)._showLedgerLines == _showLedgerLines
-         ;
-      }
-
-//---------------------------------------------------------
-//   isSameStructure
-//
-//    same as isEqual(), but ignores name
-//---------------------------------------------------------
-
-bool StaffTypePitched::isSameStructure(const StaffType& st) const
-{    return StaffType::isSameStructure(st)
-        && static_cast<const StaffTypePitched&>(st)._genKeysig       == _genKeysig
-        && static_cast<const StaffTypePitched&>(st)._showLedgerLines == _showLedgerLines;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffTypePitched::write(Xml& xml, int idx) const
-      {
-      xml.stag(QString("StaffType idx=\"%1\" group=\"%2\"").arg(idx).arg(groupName()));
-      StaffType::writeProperties(xml);
-
-      if (!genKeysig())
-            xml.tag("keysig", genKeysig());
-      if (!showLedgerLines())
-            xml.tag("ledgerlines", showLedgerLines());
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffTypePitched::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "keysig")
-                  setGenKeysig(e.readInt());
-            else if (tag == "ledgerlines")
-                  setShowLedgerLines(e.readInt());
-            else {
-                  if (!StaffType::readProperties(e))
-                        e.unknown();
-                  }
-            }
-      }
-
-//---------------------------------------------------------
-//   StaffTypePercussion
-//---------------------------------------------------------
-
-StaffTypePercussion::StaffTypePercussion()
-   : StaffType()
-      {
-      _genKeysig       = true;      // create key signature at beginning of system
-      _showLedgerLines = true;
-      }
-
-//---------------------------------------------------------
-//   isEqual
-//---------------------------------------------------------
-
-bool StaffTypePercussion::isEqual(const StaffType& st) const
-      {
-      return StaffType::isEqual(st)
-         && static_cast<const StaffTypePercussion&>(st)._genKeysig       == _genKeysig
-         && static_cast<const StaffTypePercussion&>(st)._showLedgerLines == _showLedgerLines
-         ;
-      }
-
-//---------------------------------------------------------
-//   isSameStructure
-//
-//    same as isEqual(), but ignores name
-//---------------------------------------------------------
-
-bool StaffTypePercussion::isSameStructure(const StaffType& st) const
-{    return StaffType::isSameStructure(st)
-        && static_cast<const StaffTypePercussion&>(st)._genKeysig       == _genKeysig
-        && static_cast<const StaffTypePercussion&>(st)._showLedgerLines == _showLedgerLines;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffTypePercussion::write(Xml& xml, int idx) const
-      {
-      xml.stag(QString("StaffType idx=\"%1\" group=\"%2\"").arg(idx).arg(groupName()));
-      StaffType::writeProperties(xml);
-
-      if (!genKeysig())
-            xml.tag("keysig", genKeysig());
-      if (!showLedgerLines())
-            xml.tag("ledgerlines", showLedgerLines());
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffTypePercussion::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "keysig")
-                  setGenKeysig(e.readInt());
-            else if (tag == "ledgerlines")
-                  setShowLedgerLines(e.readInt());
-            else {
-                  if (!StaffType::readProperties(e))
-                        e.unknown();
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   StaffTypeTablature
 //---------------------------------------------------------
 
 #define TAB_DEFAULT_DUR_YOFFS	(-1.75)
 
-QList<TablatureFretFont>     StaffTypeTablature::_fretFonts      = QList<TablatureFretFont>();
-QList<TablatureDurationFont> StaffTypeTablature::_durationFonts  = QList<TablatureDurationFont>();
+QList<TablatureFretFont>     StaffType::_fretFonts      = QList<TablatureFretFont>();
+QList<TablatureDurationFont> StaffType::_durationFonts  = QList<TablatureDurationFont>();
 
-void StaffTypeTablature::init()
+void StaffType::init()
       {
       // set reasonable defaults for type-specific members */
       setDurationFontName(_durationFonts[0].displayName);
@@ -385,126 +341,10 @@ void StaffTypeTablature::init()
       }
 
 //---------------------------------------------------------
-//   isEqual
-//---------------------------------------------------------
-
-bool StaffTypeTablature::isEqual(const StaffType& st) const
-      {
-      return StaffType::isEqual(st)
-         && static_cast<const StaffTypeTablature&>(st)._durationFontIdx       == _durationFontIdx
-         && static_cast<const StaffTypeTablature&>(st)._durationFontSize      == _durationFontSize
-         && static_cast<const StaffTypeTablature&>(st)._durationFontUserY     == _durationFontUserY
-         && static_cast<const StaffTypeTablature&>(st)._fretFontIdx           == _fretFontIdx
-         && static_cast<const StaffTypeTablature&>(st)._fretFontSize          == _fretFontSize
-         && static_cast<const StaffTypeTablature&>(st)._fretFontUserY         == _fretFontUserY
-         && static_cast<const StaffTypeTablature&>(st)._genDurations          == _genDurations
-         && static_cast<const StaffTypeTablature&>(st)._linesThrough          == _linesThrough
-         && static_cast<const StaffTypeTablature&>(st)._minimStyle            == _minimStyle
-         && static_cast<const StaffTypeTablature&>(st)._onLines               == _onLines
-         && static_cast<const StaffTypeTablature&>(st)._showRests             == _showRests
-         && static_cast<const StaffTypeTablature&>(st)._stemsDown             == _stemsDown
-         && static_cast<const StaffTypeTablature&>(st)._stemsThrough          == _stemsThrough
-         && static_cast<const StaffTypeTablature&>(st)._upsideDown            == _upsideDown
-         && static_cast<const StaffTypeTablature&>(st)._useNumbers            == _useNumbers
-         ;
-      }
-
-//---------------------------------------------------------
-//   isSameStructure
-//
-//    same as isEqual(), but ignores name and font data
-//---------------------------------------------------------
-
-bool StaffTypeTablature::isSameStructure(const StaffType &st) const
-      {
-      return StaffType::isSameStructure(st)
-         && static_cast<const StaffTypeTablature&>(st)._genDurations == _genDurations
-         && static_cast<const StaffTypeTablature&>(st)._linesThrough == _linesThrough
-         && static_cast<const StaffTypeTablature&>(st)._minimStyle   == _minimStyle
-         && static_cast<const StaffTypeTablature&>(st)._onLines      == _onLines
-         && static_cast<const StaffTypeTablature&>(st)._showRests    == _showRests
-         && static_cast<const StaffTypeTablature&>(st)._stemsDown    == _stemsDown
-         && static_cast<const StaffTypeTablature&>(st)._stemsThrough == _stemsThrough
-         && static_cast<const StaffTypeTablature&>(st)._upsideDown   == _upsideDown
-         && static_cast<const StaffTypeTablature&>(st)._useNumbers   == _useNumbers;
-      }
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StaffTypeTablature::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-
-            if (tag == "durations")
-                  setGenDurations(e.readInt() != 0);
-            else if (tag == "durationFontName")
-                  setDurationFontName(e.readElementText());
-            else if (tag == "durationFontSize")
-                  setDurationFontSize(e.readDouble());
-            else if (tag == "durationFontY")
-                  setDurationFontUserY(e.readDouble());
-            else if (tag == "fretFontName")
-                  setFretFontName(e.readElementText());
-            else if (tag == "fretFontSize")
-                  setFretFontSize(e.readDouble());
-            else if (tag == "fretFontY")
-                  setFretFontUserY(e.readDouble());
-            else if (tag == "linesThrough")
-                  setLinesThrough(e.readInt() != 0);
-            else if (tag == "minimStyle")
-                  setMinimStyle( (TablatureMinimStyle) e.readInt() );
-            else if (tag == "onLines")
-                  setOnLines(e.readInt() != 0);
-            else if (tag == "showRests")
-                  setShowRests(e.readInt() != 0);
-            else if (tag == "stemsDown")
-                  setStemsDown(e.readInt() != 0);
-            else if (tag == "stemsThrough")
-                  setStemsThrough(e.readInt() != 0);
-            else if (tag == "upsideDown")
-                  setUpsideDown(e.readInt() != 0);
-            else if (tag == "useNumbers")
-                  setUseNumbers(e.readInt() != 0);
-            else
-                  if (!StaffType::readProperties(e))
-                        e.unknown();
-            }
-      }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffTypeTablature::write(Xml& xml, int idx) const
-      {
-      xml.stag(QString("StaffType idx=\"%1\" group=\"%2\"").arg(idx).arg(groupName()));
-      StaffType::writeProperties(xml);
-      xml.tag("durations",          _genDurations);
-      xml.tag("durationFontName",   _durationFonts[_durationFontIdx].displayName);
-      xml.tag("durationFontSize",   _durationFontSize);
-      xml.tag("durationFontY",      _durationFontUserY);
-      xml.tag("fretFontName",       _fretFonts[_fretFontIdx].displayName);
-      xml.tag("fretFontSize",       _fretFontSize);
-      xml.tag("fretFontY",          _fretFontUserY);
-      xml.tag("linesThrough",       _linesThrough);
-      xml.tag("minimStyle",         _minimStyle);
-      xml.tag("onLines",            _onLines);
-      xml.tag("showRests",          _showRests);
-      xml.tag("stemsDown",          _stemsDown);
-      xml.tag("stemsThrough",       _stemsThrough);
-      xml.tag("upsideDown",         _upsideDown);
-      xml.tag("useNumbers",         _useNumbers);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
 //   setOnLines
 //---------------------------------------------------------
 
-void StaffTypeTablature::setOnLines(bool val)
+void StaffType::setOnLines(bool val)
       {
       _onLines = val;
       _durationMetricsValid = _fretMetricsValid = false;
@@ -515,8 +355,8 @@ void StaffTypeTablature::setOnLines(bool val)
 //    checks whether the internally computed metrics are is still valid and re-computes them, if not
 //---------------------------------------------------------
 
-void StaffTypeTablature::setDurationMetrics()
-{
+void StaffType::setDurationMetrics()
+      {
       if (_durationMetricsValid && _refDPI == MScore::DPI)           // metrics are still valid
             return;
 
@@ -535,17 +375,17 @@ void StaffTypeTablature::setDurationMetrics()
       // keep track of the conditions under which metrics have been computed
       _refDPI = MScore::DPI;
       _durationMetricsValid = true;
-}
+      }
 
-void StaffTypeTablature::setFretMetrics()
-{
-      if(_fretMetricsValid && _refDPI == MScore::DPI)
+void StaffType::setFretMetrics()
+      {
+      if (_fretMetricsValid && _refDPI == MScore::DPI)
             return;
 
       QFontMetricsF fm(fretFont());
       QRectF bb;
       // compute vertical displacement
-      if(_useNumbers) {
+      if (_useNumbers) {
             // compute total height of used characters
             QString txt = QString();
             for (int idx = 0; idx < 10; idx++)  // use only first 10 digits
@@ -566,7 +406,7 @@ void StaffTypeTablature::setFretMetrics()
             _fretYOffset = -bx.y() / 2.0;
             }
       // if on string, we are done; if between strings, raise by half line distance
-      if(!_onLines)
+      if (!_onLines)
             _fretYOffset -= lineDistance().val()*MScore::DPI*SPATIUM20 / 2.0;
 
       // from _fretYOffset, compute _fretBoxH and _fretBoxY
@@ -576,31 +416,33 @@ void StaffTypeTablature::setFretMetrics()
       // keep track of the conditions under which metrics have been computed
       _refDPI = MScore::DPI;
       _fretMetricsValid = true;
-}
+      }
 
 //---------------------------------------------------------
 //   setDurationFontName / setFretFontName
 //---------------------------------------------------------
 
-void StaffTypeTablature::setDurationFontName(QString name)
+void StaffType::setDurationFontName(QString name)
       {
-      int   idx;
-      for(idx=0; idx < _durationFonts.size(); idx++)
-            if(_durationFonts[idx].displayName == name)
+      int idx;
+      for (idx = 0; idx < _durationFonts.size(); idx++)
+            if (_durationFonts[idx].displayName == name)
                   break;
-      if(idx >= _durationFonts.size())    idx = 0;          // if name not found, use first font
+      if (idx >= _durationFonts.size())
+            idx = 0;          // if name not found, use first font
       _durationFont.setFamily(_durationFonts[idx].family);
       _durationFontIdx = idx;
       _durationMetricsValid = false;
       }
 
-void StaffTypeTablature::setFretFontName(QString name)
+void StaffType::setFretFontName(QString name)
       {
-      int   idx;
-      for(idx=0; idx < _fretFonts.size(); idx++)
-            if(_fretFonts[idx].displayName == name)
+      int idx;
+      for (idx = 0; idx < _fretFonts.size(); idx++)
+            if (_fretFonts[idx].displayName == name)
                   break;
-      if(idx >= _fretFonts.size())        idx = 0;          // if name not found, use first font
+      if (idx >= _fretFonts.size())
+            idx = 0;          // if name not found, use first font
       _fretFont.setFamily(_fretFonts[idx].family);
       _fretFontIdx = idx;
       _fretMetricsValid = false;
@@ -610,7 +452,7 @@ void StaffTypeTablature::setFretFontName(QString name)
 //   durationBoxH / durationBoxY
 //---------------------------------------------------------
 
-qreal StaffTypeTablature::durationBoxH()
+qreal StaffType::durationBoxH()
       {
       if (!_genDurations && !_slashStyle)
             return 0.0;
@@ -618,9 +460,9 @@ qreal StaffTypeTablature::durationBoxH()
       return _durationBoxH;
       }
 
-qreal StaffTypeTablature::durationBoxY()
+qreal StaffType::durationBoxY()
       {
-      if(!_genDurations && !_slashStyle)
+      if (!_genDurations && !_slashStyle)
             return 0.0;
       setDurationMetrics();
       return _durationBoxY + _durationFontUserY * MScore::MScore::DPI * SPATIUM20;
@@ -630,14 +472,14 @@ qreal StaffTypeTablature::durationBoxY()
 //   setDurationFontSize / setFretFontSize
 //---------------------------------------------------------
 
-void StaffTypeTablature::setDurationFontSize(qreal val)
+void StaffType::setDurationFontSize(qreal val)
       {
       _durationFontSize = val;
       _durationFont.setPixelSize( lrint(val * MScore::DPI / PPI) );
       _durationMetricsValid = false;
       }
 
-void StaffTypeTablature::setFretFontSize(qreal val)
+void StaffType::setFretFontSize(qreal val)
       {
       _fretFontSize = val;
       _fretFont.setPixelSize( lrint(val * MScore::DPI / PPI) );
@@ -654,7 +496,7 @@ void StaffTypeTablature::setFretFontSize(qreal val)
 //          returns the vertical position of stem start point
 //---------------------------------------------------------
 
-qreal StaffTypeTablature::chordRestStemPosY(const ChordRest *chordRest) const
+qreal StaffType::chordRestStemPosY(const ChordRest *chordRest) const
       {
       if (stemThrough())            // does not make sense for "stems through staves" setting; just return top line vert. position
             return 0.0;
@@ -678,10 +520,10 @@ qreal StaffTypeTablature::chordRestStemPosY(const ChordRest *chordRest) const
 
 //---------------------------------------------------------
 //   chordStemPos
-//          return position of note at other side of beam
+//    return position of note at other side of beam
 //---------------------------------------------------------
 
-QPointF StaffTypeTablature::chordStemPos(const Chord *chord) const
+QPointF StaffType::chordStemPos(const Chord* chord) const
       {
       qreal y;
       if (stemThrough())
@@ -699,7 +541,7 @@ QPointF StaffTypeTablature::chordStemPos(const Chord *chord) const
 //          return position of note at beam side of stem
 //---------------------------------------------------------
 
-QPointF StaffTypeTablature::chordStemPosBeam(const Chord *chord) const
+QPointF StaffType::chordStemPosBeam(const Chord* chord) const
       {
       qreal y = ( stemsDown() ? chord->downString() : chord->upString() ) * _lineDistance.val();
 
@@ -711,7 +553,7 @@ QPointF StaffTypeTablature::chordStemPosBeam(const Chord *chord) const
 //          return length of stem
 //---------------------------------------------------------
 
-qreal StaffTypeTablature::chordStemLength(const Chord *chord) const
+qreal StaffType::chordStemLength(const Chord* chord) const
       {
       qreal    stemLen;
       // if stems are through staff, length should be computed by relevant chord algorithm;
@@ -735,7 +577,7 @@ qreal StaffTypeTablature::chordStemLength(const Chord *chord) const
 
 static const QString unknownFret = QString("?");
 
-QString StaffTypeTablature::fretString(int fret, bool ghost) const
+QString StaffType::fretString(int fret, bool ghost) const
       {
       if (fret == FRET_NONE)
             return unknownFret;
@@ -757,13 +599,13 @@ QString StaffTypeTablature::fretString(int fret, bool ghost) const
            }
       }
 
-QString StaffTypeTablature::durationString(TDuration::DurationType type, int dots) const
-{
+QString StaffType::durationString(TDuration::DurationType type, int dots) const
+      {
       QString s = _durationFonts[_durationFontIdx].displayValue[type];
       for(int count=0; count < dots; count++)
             s.append(_durationFonts[_durationFontIdx].displayDot);
       return s;
-}
+      }
 
 //---------------------------------------------------------
 //   physStringToVisual / VisualStringToPhys
@@ -775,21 +617,21 @@ QString StaffTypeTablature::durationString(TDuration::DurationType type, int dot
 //    introduce more differences)
 //---------------------------------------------------------
 
-int StaffTypeTablature::physStringToVisual(int strg) const
-{
+int StaffType::physStringToVisual(int strg) const
+      {
       if(strg <= STRING_NONE || strg >= _lines)             // if no physical string, return topmost visual string
             return 0;
       // if TAB upside down, reverse string number
       return (_upsideDown ? _lines - 1 - strg : strg);
-}
+      }
 
-int StaffTypeTablature::VisualStringToPhys(int strg) const
-{
+int StaffType::VisualStringToPhys(int strg) const
+      {
       if(strg <= VISUAL_STRING_NONE || strg >= _lines)      // if no visual string, return topmost physical string
             return 0;
       // if TAB upside down, reverse string number
       return (_upsideDown ? _lines - 1 - strg : strg);
-}
+      }
 
 //---------------------------------------------------------
 //   TabDurationSymbol
@@ -804,7 +646,7 @@ TabDurationSymbol::TabDurationSymbol(Score* s)
       _text = QString();
       }
 
-TabDurationSymbol::TabDurationSymbol(Score* s, StaffTypeTablature * tab, TDuration::DurationType type, int dots)
+TabDurationSymbol::TabDurationSymbol(Score* s, StaffType* tab, TDuration::DurationType type, int dots)
    : Element(s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
@@ -970,11 +812,11 @@ bool TablatureDurationFont::read(XmlReader& e)
 //    resets everythings and reads the built-in config file if fileName is null or empty
 //---------------------------------------------------------
 
-bool StaffTypeTablature::readConfigFile(const QString& fileName)
+bool StaffType::readConfigFile(const QString& fileName)
       {
-      QString     path;
+      QString path;
 
-      if(fileName == 0 || fileName.isEmpty()) {       // defaults to built-in xml
+      if (fileName == 0 || fileName.isEmpty()) {       // defaults to built-in xml
 #ifdef Q_OS_IOS
             {
             extern QString resourcePath();
@@ -1035,7 +877,7 @@ qDebug("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
 //    the index of a name in the list can be used to retrieve the font data with fontData()
 //---------------------------------------------------------
 
-QList<QString> StaffTypeTablature::fontNames(bool bDuration)
+QList<QString> StaffType::fontNames(bool bDuration)
       {
       QList<QString> names;
       if(bDuration)
@@ -1055,8 +897,8 @@ QList<QString> StaffTypeTablature::fontNames(bool bDuration)
 // any of the pointer parameter can be null, if that datum is not needed
 //---------------------------------------------------------
 
-bool StaffTypeTablature::fontData(bool bDuration, int nIdx, QString * pFamily, QString * pDisplayName,
-            qreal * pSize, qreal* pYOff)
+bool StaffType::fontData(bool bDuration, int nIdx, QString* pFamily, QString* pDisplayName,
+   qreal* pSize, qreal* pYOff)
       {
       if (bDuration) {
             if (nIdx >= 0 && nIdx < _durationFonts.size()) {
@@ -1089,10 +931,14 @@ bool StaffTypeTablature::fontData(bool bDuration, int nIdx, QString * pFamily, Q
 
 QList<StaffType*> staffTypes;
 
+//---------------------------------------------------------
+//   StaffTypePreset
+//---------------------------------------------------------
+
 struct StaffTypePreset {
-      QString     xmlName;                      // the name used to reference this preset in intruments.xml
-      StaffType * staffType;                    // the actual StaffType settings
-};
+      QString     xmlName;        // the name used to reference this preset in intruments.xml
+      StaffType* staffType;       // the actual StaffType settings
+      };
 
 std::array<StaffTypePreset, STAFF_TYPES> _presets;
 
@@ -1121,7 +967,7 @@ const StaffType* StaffType::preset(int idx)
       }
 
 const StaffType* StaffType::presetFromXmlName(QString& xmlName, int* idx)
-{
+      {
       for (int i = 0; i < (int)_presets.size(); ++i)
             if (_presets[i].xmlName == xmlName) {
                   if (idx)
@@ -1129,10 +975,10 @@ const StaffType* StaffType::presetFromXmlName(QString& xmlName, int* idx)
                   return _presets[i].staffType;
                   }
       return 0;
-}
+      }
 
 const StaffType* StaffType::presetFromName(QString& name, int* idx)
-{
+      {
       for (int i = 0; i < (int)_presets.size(); ++i)
             if (_presets[i].staffType->name() == name) {
                   if (idx)
@@ -1140,7 +986,7 @@ const StaffType* StaffType::presetFromName(QString& name, int* idx)
                   return _presets[i].staffType;
                   }
       return 0;
-}
+      }
 
 const QString& StaffType::presetXmlName(int idx)
       {
@@ -1172,22 +1018,22 @@ void initStaffTypes()
       {
       // init staff type presets
 //                                                                                 human readable name  lin dst clef  bars stmless time  key  ledger
-      _presets[STANDARD_STAFF_TYPE].staffType     = new StaffTypePitched   (QObject::tr("Standard"),      5, 1, true, true, false, true, true, true);
-      _presets[PERC_1LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 1 line"), 1, 1, true, true, false, true, false, true);
-      _presets[PERC_3LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, false, true);
-      _presets[PERC_5LINE_STAFF_TYPE].staffType   = new StaffTypePercussion(QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, false, true);
+      _presets[STANDARD_STAFF_TYPE].staffType     = new StaffType(STANDARD_STAFF_GROUP,   QObject::tr("Standard"),      5, 1, true, true, false, true, true, true);
+      _presets[PERC_1LINE_STAFF_TYPE].staffType   = new StaffType(PERCUSSION_STAFF_GROUP, QObject::tr("Perc. 1 line"), 1, 1, true, true, false, true, false, true);
+      _presets[PERC_3LINE_STAFF_TYPE].staffType   = new StaffType(PERCUSSION_STAFF_GROUP, QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, false, true);
+      _presets[PERC_5LINE_STAFF_TYPE].staffType   = new StaffType(PERCUSSION_STAFF_GROUP, QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, false, true);
 //                                                                                     human-readable name  lin dist  clef   bars stemless time  duration font                 size off genDur fret font                       size off  thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
-      _presets[TAB_6SIMPLE_STAFF_TYPE].staffType  = new StaffTypeTablature(QObject::tr("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
-      _presets[TAB_6COMMON_STAFF_TYPE].staffType  = new StaffTypeTablature(QObject::tr("Tab. 6-str common"), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
-      _presets[TAB_6FULL_STAFF_TYPE].staffType    = new StaffTypeTablature(QObject::tr("Tab. 6-str full"),   6, 1.5, true,  true, false, true,  QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
-      _presets[TAB_4SIMPLE_STAFF_TYPE].staffType  = new StaffTypeTablature(QObject::tr("Tab. 4-str simple"), 4, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
-      _presets[TAB_4COMMON_STAFF_TYPE].staffType  = new StaffTypeTablature(QObject::tr("Tab. 4-str common"), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
-      _presets[TAB_4FULL_STAFF_TYPE].staffType    = new StaffTypeTablature(QObject::tr("Tab. 4-str full"),   4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
-      _presets[TAB_UKULELE_STAFF_TYPE].staffType  = new StaffTypeTablature(QObject::tr("Tab. ukulele"),      4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
-      _presets[TAB_BALALAJKA_STAFF_TYPE].staffType= new StaffTypeTablature(QObject::tr("Tab. balalajka"),    3, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
+      _presets[TAB_6SIMPLE_STAFF_TYPE].staffType  = new StaffType(TAB_STAFF_GROUP, QObject::tr("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
+      _presets[TAB_6COMMON_STAFF_TYPE].staffType  = new StaffType(TAB_STAFF_GROUP, QObject::tr("Tab. 6-str common"), 6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
+      _presets[TAB_6FULL_STAFF_TYPE].staffType    = new StaffType(TAB_STAFF_GROUP, QObject::tr("Tab. 6-str full"),   6, 1.5, true,  true, false, true,  QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      _presets[TAB_4SIMPLE_STAFF_TYPE].staffType  = new StaffType(TAB_STAFF_GROUP, QObject::tr("Tab. 4-str simple"), 4, 1.5, true,  true, true,  false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Sans"),     9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true);
+      _presets[TAB_4COMMON_STAFF_TYPE].staffType  = new StaffType(TAB_STAFF_GROUP, QObject::tr("Tab. 4-str common"), 4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true);
+      _presets[TAB_4FULL_STAFF_TYPE].staffType    = new StaffType(TAB_STAFF_GROUP, QObject::tr("Tab. 4-str full"),   4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
+      _presets[TAB_UKULELE_STAFF_TYPE].staffType  = new StaffType(TAB_STAFF_GROUP, QObject::tr("Tab. ukulele"),      4, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
+      _presets[TAB_BALALAJKA_STAFF_TYPE].staffType= new StaffType(TAB_STAFF_GROUP, QObject::tr("Tab. balalajka"),    3, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),    9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true);
 //                                                                        (QObject::tr("Tab. bandurria"),    6, 1.5, true,  true, false, false, QString("MuseScore Tab Modern"), 15, 0, false, QString("MuseScore Tab Serif"),   10, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true);
-      _presets[TAB_ITALIAN_STAFF_TYPE].staffType  = new StaffTypeTablature(QObject::tr("Tab. 6-str Italian"),6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
-      _presets[TAB_FRENCH_STAFF_TYPE].staffType   = new StaffTypeTablature(QObject::tr("Tab. 6-str French"), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
+      _presets[TAB_ITALIAN_STAFF_TYPE].staffType  = new StaffType(TAB_STAFF_GROUP, QObject::tr("Tab. 6-str Italian"),6, 1.5, false, true, true,  true,  QString("MuseScore Tab Italian"),15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true);
+      _presets[TAB_FRENCH_STAFF_TYPE].staffType   = new StaffType(TAB_STAFF_GROUP, QObject::tr("Tab. 6-str French"), 6, 1.5, false, true, true,  true,  QString("MuseScore Tab French"), 15, 0, true,  QString("MuseScore Tab Renaiss"), 10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false);
 
       _presets[STANDARD_STAFF_TYPE].xmlName     = QString("stdNormal");
       _presets[PERC_1LINE_STAFF_TYPE].xmlName   = QString("perc1Line");

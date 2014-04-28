@@ -83,7 +83,6 @@ class Text;
 class Omr;
 class Audio;
 class Parameter;
-class StaffType;
 class Revisions;
 class Spanner;
 class MuseScoreView;
@@ -294,7 +293,6 @@ class Score : public QObject {
 
       InputState _is;
       MStyle _style;
-      QList<StaffType**> _staffTypes;
 
       QFileInfo info;
       bool _created;          ///< file is never saved, has generated name
@@ -846,13 +844,6 @@ class Score : public QObject {
 
       SynthesizerState& synthesizerState()     { return _synthesizerState; }
       void setSynthesizerState(const SynthesizerState& s);
-
-      const QList<StaffType**>& staffTypes() const;
-      void replaceStaffTypes(const QList<StaffType*>&);
-      StaffType* staffType(int idx) const;
-      int staffTypeIdx(StaffType*) const;
-      void addStaffType(StaffType*);
-      void addStaffType(int idx, StaffType*);
 
       void addLayoutFlags(LayoutFlags val)               { layoutFlags |= val; }
       void updateHairpin(Hairpin*);       // add/modify hairpin to pitchOffset list

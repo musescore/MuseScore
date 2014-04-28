@@ -204,7 +204,7 @@ void MScore::init()
             }
 #endif
       initScoreFonts();
-      StaffTypeTablature::readConfigFile(0);          // get TAB font config, before initStaffTypes()
+      StaffType::readConfigFile(0);          // get TAB font config, before initStaffTypes()
       initStaffTypes();
       initDrumset();
       FiguredBass::readConfigFile(0);

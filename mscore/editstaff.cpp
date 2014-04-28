@@ -82,6 +82,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
 
 void EditStaff::fillStaffTypeCombo()
       {
+#if 0 // TODO-ST
       Score* score   = staff->score();
       int curIdx     = -1;
       // can this instrument accept tabs or drum set?
@@ -102,6 +103,7 @@ void EditStaff::fillStaffTypeCombo()
       if (curIdx == -1)
             qDebug("EditStaff::fillStaffTypeCombo: staff type not found");
       staffType->setCurrentIndex(curIdx == -1 ? 0 : curIdx);
+#endif
       }
 
 //---------------------------------------------------------
@@ -203,6 +205,7 @@ void EditStaff::bboxClicked(QAbstractButton* button)
 
 void EditStaff::apply()
       {
+#if 0 // TODO-ST
       Score* score  = staff->score();
       Part* part    = staff->part();
 
@@ -255,6 +258,7 @@ void EditStaff::apply()
 
       score->setLayoutAll(true);
       score->update();
+#endif
       }
 
 //---------------------------------------------------------
