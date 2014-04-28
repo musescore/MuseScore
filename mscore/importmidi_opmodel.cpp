@@ -38,7 +38,6 @@ struct Controller {
       Node *clef = nullptr;
       Node *removeDrumRests = nullptr;
 
-      int trackCount = 0;
       bool isDrumTrack = false;
       bool allTracksSelected = true;
 
@@ -70,6 +69,15 @@ OperationsModel::OperationsModel()
       quantValue->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(quantValue));
       controller->quantValue = quantValue;
+
+
+      Node *humanPerformance = new Node;
+      humanPerformance->name = QCoreApplication::translate("MIDI import operations", "Human performance");
+      humanPerformance->oper.type = MidiOperation::Type::QUANT_HUMAN;
+      humanPerformance->oper.value = Quantization().humanPerformance;
+      humanPerformance->parent = quantValue;
+      quantValue->children.push_back(std::unique_ptr<Node>(humanPerformance));
+      controller->quantHuman = humanPerformance;
 
 
       Node *allowedVoices = new Node;
@@ -287,11 +295,6 @@ OperationsModel::OperationsModel()
 
 OperationsModel::~OperationsModel()
       {
-      }
-
-void OperationsModel::reset(int trackCount)
-      {
-      controller->trackCount = trackCount;
       }
 
 QModelIndex OperationsModel::index(int row, int column, const QModelIndex &parent) const
@@ -670,6 +673,8 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
                   clef->visible = !isDrumTrack;
             if (pickupMeasure)
                   pickupMeasure->visible = allTracksSelected;
+            if (quantHuman)
+                  quantHuman->visible = allTracksSelected;
             result = true;
             }
 

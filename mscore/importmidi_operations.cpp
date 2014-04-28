@@ -71,10 +71,21 @@ void MidiImportOperations::addTrackLyrics(
       midiData_.addTrackLyrics(currentMidiFile_, trackLyrics);
       }
 
-const QList<std::multimap<ReducedFraction, std::string>>*
+const QList<std::multimap<ReducedFraction, std::string> >*
 MidiImportOperations::getLyrics()
       {
       return midiData_.getLyrics(currentMidiFile_);
+      }
+
+bool MidiImportOperations::isHumanPerformance() const
+      {
+      return midiData_.isHumanPerformance(currentMidiFile_);
+      }
+
+void MidiImportOperations::setHumanPerformance(bool value)
+      {
+      midiData_.setHumanPerformance(currentMidiFile_, value);
+      defaultOpers.quantize.humanPerformance = value;
       }
 
 } // namespace Ms

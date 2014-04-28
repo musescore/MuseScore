@@ -264,6 +264,54 @@ ReducedFraction findQuantForRange(
       return quantForLen(shortestLen, basicQuant);
       }
 
+//--------------------------------------------------------------------------------------------
+
+bool isHumanPerformance(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      if (chords.empty())
+            return false;
+      auto raster = ReducedFraction::fromTicks(MScore::division) / 4;    // 1/16
+      int matches = 0;
+      for (const auto &chord: chords) {
+            const auto diff = (quantizeValue(chord.first, raster) - chord.first).absValue();
+            if (diff < MChord::minAllowedDuration())
+                  ++matches;
+            }
+                  // Min beat-divisions match fraction for machine-generated MIDI.
+                  //   During some tests largest human value was 0.315966 with 0.26 on average,
+                  //   smallest machine value was 0.423301 with 0.78 on average
+      const double tolFraction = 0.4;
+
+      return matches * 1.0 / chords.size() < tolFraction;
+      }
+
+std::multimap<int, MTrack>
+getTrackWithAllChords(const std::multimap<int, MTrack> &tracks)
+      {
+      std::multimap<int, MTrack> singleTrack{{0, MTrack()}};
+      auto &allChords = singleTrack.begin()->second.chords;
+      for (const auto &track: tracks) {
+            const MTrack &t = track.second;
+            for (const auto &chord: t.chords) {
+                  allChords.insert(chord);
+                  }
+            }
+      return singleTrack;
+      }
+
+void setIfHumanPerformance(const std::multimap<int, MTrack> &tracks)
+      {
+      auto allChordsTrack = getTrackWithAllChords(tracks);
+      MChord::collectChords(allChordsTrack, MChord::minAllowedDuration() / 2);
+      const MTrack &track = allChordsTrack.begin()->second;
+      const auto &allChords = track.chords;
+      if (allChords.empty())
+            return;
+      preferences.midiImportOperations.setHumanPerformance(isHumanPerformance(allChords));
+      }
+
+//--------------------------------------------------------------------------------------------
+
 ReducedFraction quantizeOnTimeForTuplet(
             const std::pair<const ReducedFraction, MidiChord> &chordEvent)
       {

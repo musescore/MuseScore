@@ -341,19 +341,21 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
       updateUi();
 
       if (isMidiFileExists()) {
-            QList<TrackData> trackData
-                        = preferences.midiImportOperations.midiData().tracksData(fileName);
+            auto &midiData = preferences.midiImportOperations.midiData();
+            QList<TrackData> trackData = midiData.tracksData(fileName);
             if (trackData.isEmpty()) {          // open new MIDI file
                   resetTableViewState();
                   clearMidiPrefOperations();
                   const QList<TrackMeta> tracksMeta = extractMidiTracksMeta(fileName);
                   tracksModel->reset(tracksMeta);
                   tracksModel->setLyricsList(MidiLyrics::makeLyricsListForUI());
+                  const bool isHumanPerformance = midiData.isHumanPerformance(fileName);
+                  tracksModel->setOperation(0, MidiOperation::Type::QUANT_HUMAN,
+                                            QVariant(isHumanPerformance));
                   showOrHideStaffNameCol(tracksMeta);
-                  operationsModel->reset(tracksMeta.size());
                   for (int i = 0; i != tracksModel->trackCount(); ++i)
                         trackData.push_back(tracksModel->trackData(i));
-                  preferences.midiImportOperations.midiData().setTracksData(fileName, trackData);
+                  midiData.setTracksData(fileName, trackData);
                   showOrHideLyricsCol(trackData);
                   saveTableViewState(fileName);
                   }
