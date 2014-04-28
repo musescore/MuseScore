@@ -4313,46 +4313,11 @@
             <property name="title">
              <string>Positioning</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_15">
-             <item row="1" column="1">
-              <widget class="QDoubleSpinBox" name="harmonyFretDist">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="minimum">
-                <double>-10000.000000000000000</double>
-               </property>
-               <property name="maximum">
-                <double>10000.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.500000000000000</double>
-               </property>
-               <property name="value">
-                <double>0.500000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <spacer name="horizontalSpacer_11">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_79">
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_17">
                <property name="text">
-                <string>Distance to fretboard diagram:</string>
+                <string>Default vertical position:</string>
                </property>
               </widget>
              </item>
@@ -4372,6 +4337,35 @@
                </property>
                <property name="value">
                 <double>-2.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_79">
+               <property name="text">
+                <string>Distance to fretboard diagram:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="harmonyFretDist">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="suffix">
+                <string extracomment="spatium unit">sp</string>
+               </property>
+               <property name="minimum">
+                <double>-10000.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>10000.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.500000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.500000000000000</double>
                </property>
               </widget>
              </item>
@@ -4401,12 +4395,44 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_17">
+             <item row="2" column="2">
+              <widget class="QLabel" name="label_1002">
                <property name="text">
-                <string>Default vertical position:</string>
+                <string>Maximum barline distance:</string>
                </property>
               </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QDoubleSpinBox" name="maxHarmonyBarDistance">
+               <property name="suffix">
+                <string>sp</string>
+               </property>
+               <property name="minimum">
+                <double>-50.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>50.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.500000000000000</double>
+               </property>
+               <property name="value">
+                <double>3.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="4">
+              <spacer name="horizontalSpacer_11">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </widget>
@@ -5340,6 +5366,8 @@
   <tabstop>showFirstMeasureNumber</tabstop>
   <tabstop>showEverySystemMeasureNumber</tabstop>
   <tabstop>showAllStaffsMeasureNumber</tabstop>
+  <tabstop>showIntervalMeasureNumber</tabstop>
+  <tabstop>intervalMeasureNumber</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>bracketDistance</tabstop>
   <tabstop>akkoladeWidth</tabstop>
@@ -5349,6 +5377,7 @@
   <tabstop>minMeasureWidth_2</tabstop>
   <tabstop>measureSpacing</tabstop>
   <tabstop>barNoteDistance</tabstop>
+  <tabstop>barAccidentalDistance</tabstop>
   <tabstop>noteBarDistance</tabstop>
   <tabstop>minNoteDistance</tabstop>
   <tabstop>clefLeftMargin</tabstop>
@@ -5356,6 +5385,7 @@
   <tabstop>timesigLeftMargin</tabstop>
   <tabstop>clefKeyRightMargin</tabstop>
   <tabstop>clefBarlineDistance</tabstop>
+  <tabstop>multiMeasureRestMargin</tabstop>
   <tabstop>staffLineWidth</tabstop>
   <tabstop>showRepeatBarTips</tabstop>
   <tabstop>showStartBarlineSingle</tabstop>
@@ -5370,6 +5400,7 @@
   <tabstop>shortestStem</tabstop>
   <tabstop>accidentalNoteDistance</tabstop>
   <tabstop>accidentalDistance</tabstop>
+  <tabstop>dotMag</tabstop>
   <tabstop>noteDotDistance</tabstop>
   <tabstop>dotDotDistance</tabstop>
   <tabstop>stemWidth</tabstop>
@@ -5383,24 +5414,44 @@
   <tabstop>beamWidth</tabstop>
   <tabstop>beamDistance</tabstop>
   <tabstop>beamMinLen</tabstop>
+  <tabstop>beamNoSlope</tabstop>
   <tabstop>slurEndLineWidth</tabstop>
   <tabstop>slurMidLineWidth</tabstop>
   <tabstop>slurDottedLineWidth</tabstop>
   <tabstop>minTieLength</tabstop>
+  <tabstop>smallStaffSize</tabstop>
   <tabstop>smallNoteSize</tabstop>
   <tabstop>graceNoteSize</tabstop>
   <tabstop>smallClefSize</tabstop>
   <tabstop>hairpinY</tabstop>
+  <tabstop>resetHairpinY</tabstop>
   <tabstop>hairpinLineWidth</tabstop>
+  <tabstop>resetHairpinLineWidth</tabstop>
   <tabstop>hairpinHeight</tabstop>
+  <tabstop>resetHairpinHeight</tabstop>
   <tabstop>hairpinContinueHeight</tabstop>
+  <tabstop>resetHairpinContinueHeight</tabstop>
   <tabstop>voltaY</tabstop>
+  <tabstop>resetVoltaY</tabstop>
   <tabstop>voltaHook</tabstop>
+  <tabstop>resetVoltaHook</tabstop>
   <tabstop>voltaLineWidth</tabstop>
+  <tabstop>resetVoltaLineWidth</tabstop>
+  <tabstop>voltaLineStyle</tabstop>
+  <tabstop>resetVoltaLineStyle</tabstop>
   <tabstop>ottavaY</tabstop>
+  <tabstop>resetOttavaY</tabstop>
   <tabstop>ottavaHook</tabstop>
+  <tabstop>resetOttavaHook</tabstop>
   <tabstop>ottavaLineWidth</tabstop>
+  <tabstop>resetOttavaLineWidth</tabstop>
+  <tabstop>ottavaLineStyle</tabstop>
+  <tabstop>resetOttavaLineStyle</tabstop>
+  <tabstop>ottavaNumbersOnly</tabstop>
+  <tabstop>resetOttavaNumbersOnly</tabstop>
   <tabstop>pedalY</tabstop>
+  <tabstop>pedalLineWidth</tabstop>
+  <tabstop>pedalLineStyle</tabstop>
   <tabstop>trillY</tabstop>
   <tabstop>chordsStandard</tabstop>
   <tabstop>chordsJazz</tabstop>
@@ -5415,6 +5466,12 @@
   <tabstop>harmonyY</tabstop>
   <tabstop>harmonyFretDist</tabstop>
   <tabstop>minHarmonyDistance</tabstop>
+  <tabstop>maxHarmonyBarDistance</tabstop>
+  <tabstop>capoPosition</tabstop>
+  <tabstop>fretY</tabstop>
+  <tabstop>fretNumMag</tabstop>
+  <tabstop>radioFretNumLeft</tabstop>
+  <tabstop>radioFretNumRight</tabstop>
   <tabstop>comboFBFont</tabstop>
   <tabstop>doubleSpinFBSize</tabstop>
   <tabstop>doubleSpinFBVertPos</tabstop>
@@ -5424,6 +5481,7 @@
   <tabstop>radioFBModern</tabstop>
   <tabstop>radioFBHistoric</tabstop>
   <tabstop>propertyDistanceHead</tabstop>
+  <tabstop>articulationMag</tabstop>
   <tabstop>propertyDistanceStem</tabstop>
   <tabstop>propertyDistance</tabstop>
   <tabstop>articulationTable</tabstop>
@@ -5431,42 +5489,15 @@
   <tabstop>radioKeySigNatNone</tabstop>
   <tabstop>radioKeySigNatBefore</tabstop>
   <tabstop>radioKeySigNatAfter</tabstop>
-  <tabstop>buttonBox</tabstop>
-  <tabstop>showIntervalMeasureNumber</tabstop>
-  <tabstop>intervalMeasureNumber</tabstop>
-  <tabstop>barAccidentalDistance</tabstop>
-  <tabstop>multiMeasureRestMargin</tabstop>
-  <tabstop>dotMag</tabstop>
-  <tabstop>beamNoSlope</tabstop>
-  <tabstop>resetHairpinY</tabstop>
-  <tabstop>resetHairpinLineWidth</tabstop>
-  <tabstop>resetHairpinHeight</tabstop>
-  <tabstop>resetHairpinContinueHeight</tabstop>
-  <tabstop>voltaLineStyle</tabstop>
-  <tabstop>resetVoltaY</tabstop>
-  <tabstop>resetVoltaHook</tabstop>
-  <tabstop>resetVoltaLineWidth</tabstop>
-  <tabstop>resetVoltaLineStyle</tabstop>
-  <tabstop>resetOttavaY</tabstop>
-  <tabstop>ottavaLineStyle</tabstop>
-  <tabstop>resetOttavaHook</tabstop>
-  <tabstop>resetOttavaLineWidth</tabstop>
-  <tabstop>resetOttavaLineStyle</tabstop>
-  <tabstop>ottavaNumbersOnly</tabstop>
-  <tabstop>resetOttavaNumbersOnly</tabstop>
-  <tabstop>pedalLineWidth</tabstop>
-  <tabstop>pedalLineStyle</tabstop>
-  <tabstop>capoPosition</tabstop>
-  <tabstop>articulationMag</tabstop>
-  <tabstop>tupletOutOfStaff</tabstop>
+  <tabstop>tupletMaxSlope</tabstop>
   <tabstop>tupletVStemDistance</tabstop>
   <tabstop>tupletVHeadDistance</tabstop>
-  <tabstop>tupletMaxSlope</tabstop>
+  <tabstop>tupletOutOfStaff</tabstop>
   <tabstop>tupletStemLeftDistance</tabstop>
   <tabstop>tupletNoteLeftDistance</tabstop>
   <tabstop>tupletStemRightDistance</tabstop>
   <tabstop>tupletNoteRightDistance</tabstop>
-  <tabstop>smallStaffSize</tabstop>
+  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>

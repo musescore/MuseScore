@@ -3052,6 +3052,7 @@ void Measure::layoutX(qreal stretch)
       int tracks               = nstaves * VOICES;
       qreal clefKeyRightMargin = score()->styleS(ST_clefKeyRightMargin).val() * _spatium;
       qreal minHarmonyDistance = score()->styleS(ST_minHarmonyDistance).val() * _spatium;
+      qreal maxHarmonyBarDistance = score()->styleS(ST_maxHarmonyBarDistance).val() * _spatium;
 
       qreal rest[nstaves];    // fixed space needed from previous segment
       memset(rest, 0, nstaves * sizeof(qreal));
@@ -3304,12 +3305,12 @@ void Measure::layoutX(qreal stretch)
                         qreal sp = 0.0;
 
                         // space chord symbols unless they miss each other vertically
-                        if (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top())
+                        if (eFound || (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
                               sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
 
-                        // barline, allocate half the width of previous harmony to this measure
-                        else if (eFound && !hFound && spaceHarmony)
-                              sp = (hRest[staffIdx] + minHarmonyDistance + hSpace.lw()) * 0.5;
+                        // barline: limit space to maxHarmonyBarDistance
+                        if (eFound && !hFound && spaceHarmony)
+                              sp = qMin(sp, maxHarmonyBarDistance);
 
                         hLastBbox[staffIdx] = hBbox;
                         hRest[staffIdx] = hSpace.rw();

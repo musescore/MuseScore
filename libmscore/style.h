@@ -236,6 +236,7 @@ enum StyleIdx {
       ST_harmonyY,
       ST_harmonyFretDist,
       ST_minHarmonyDistance,
+      ST_maxHarmonyBarDistance,
       ST_capoPosition,
       ST_fretNumMag,
       ST_fretNumPos,
