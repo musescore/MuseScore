@@ -232,6 +232,7 @@ Score * StaffListItem::_score = 0;
 
 void StaffListItem::populateStaffTypes(Score *score)
       {
+#if 0 // TODO-ST
       STAFF_LIST_STAFF_TYPE staffTypeData;
       int idx;
 
@@ -265,6 +266,7 @@ void StaffListItem::populateStaffTypes(Score *score)
                         }
                   }
             }
+#endif
       }
 
 const StaffType* StaffListItem::getListedStaffType(int idx)
@@ -499,8 +501,8 @@ void InstrumentsDialog::genPartList()
                               }
                         }
                   sli->setLinked(bLinked);
-                  int staffTypeIdx = cs->staffTypeIdx(s->staffType());
-                  sli->setStaffType(staffTypeIdx);
+//TODO-ST                  int staffTypeIdx = cs->staffTypeIdx(s->staffType());
+//                  sli->setStaffType(staffTypeIdx);
                   }
             partiturList->setItemExpanded(pli, true);
             }
@@ -1108,6 +1110,7 @@ void MuseScore::editInstrList()
                               // look for a staff type with same structure among staff types already defined in the score
                               StaffType* st;
                               bool found = false;
+#if 0 //TODO-ST
                               foreach (StaffType** scoreStaffType, rootScore->staffTypes()) {
                                     if ( (*scoreStaffType)->isSameStructure(*stfType) ) {
                                           st = *scoreStaffType;         // staff type found in score: use for instrument staff
@@ -1126,6 +1129,7 @@ void MuseScore::editInstrList()
                                     rootScore->undo(new ChangeStaff(staff, staff->small(), staff->invisible(), staff->userDist(), staff->color(), st));
                               if (updateNeeded)
                                     rootScore->cmdUpdateNotes();
+#endif
                               }
                         else {
                               ++staffIdx;

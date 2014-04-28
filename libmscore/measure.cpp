@@ -3417,7 +3417,7 @@ void Measure::layoutX(qreal stretch)
             qreal distBelow = 0.0;
             Staff * staff = _score->staff(staffIdx);
             if (staff->isTabStaff()) {
-                  StaffTypeTablature* stt = static_cast<StaffTypeTablature*>(staff->staffType());
+                  StaffType* stt = staff->staffType();
                   if (stt->slashStyle())        // if no stems
                         distAbove = stt->genDurations() ? -stt->durationBoxY() : 0.0;
                   else {                        // if stems

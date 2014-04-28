@@ -1723,9 +1723,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
       lastMeasureLen        = 0;
       multiMeasureRestCount = -1;
       startMultiMeasureRest = false;
-      KeySigEvent ev;                  
-      KeySig currKeySig;              
-      currKeySig.setKeySigEvent(ev);  
+      KeySigEvent ev;
+      KeySig currKeySig;
+      currKeySig.setKeySigEvent(ev);
 
       // initVoiceMapperAndMapVoices(e);
       voicelist = pass1.getVoiceList(id);
@@ -1794,8 +1794,8 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             // Note: part has been read, staff type already set based on clef type and staff-details
             // but may be incorrect for a percussion staff that does not use a percussion clef
             for (int j = 0; j < part->nstaves(); ++j)
-                  if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
-                        part->staff(j)->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
+//TODO-ST                  if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
+//                        part->staff(j)->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
             // set drumset for instrument
             part->instr()->setUseDrumset(true);
             part->instr()->setDrumset(drumset);
@@ -2049,7 +2049,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
       QList<Chord*> graceNotes;
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "attributes")
-                  xmlAttributes(measure, staff, e.firstChildElement(), currKeySig);     
+                  xmlAttributes(measure, staff, e.firstChildElement(), currKeySig);
             else if (e.tagName() == "note") {
                   note = xmlNote(measure, staff, part->id(), beam, cv, e, graceNotes, alt);
                   if(note) {
@@ -3192,7 +3192,7 @@ static void xmlStaffDetails(Score* score, int staff, StringData* t, QDomElement 
 // staves must be read first, as it determines how many key and time signatures
 // must be inserted.
 
-void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig* currKeySig) 
+void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig* currKeySig)
       {
       QString beats = "";
       QString beatType = "";
@@ -3251,7 +3251,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                                     keysig->setVisible(printObject == "yes");
                                     Segment* s = measure->getSegment(keysig, tick);
                                     s->add(keysig);
-                                    currKeySig->setKeySigEvent(key);  
+                                    currKeySig->setKeySigEvent(key);
                                     }
                               }
                         }
@@ -3268,7 +3268,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                               keysig->setVisible(printObject == "yes");
                               Segment* s = measure->getSegment(keysig, tick);
                               s->add(keysig);
-                              currKeySig->setKeySigEvent(key); 
+                              currKeySig->setKeySigEvent(key);
                               }
                         }
                   }
@@ -3294,8 +3294,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         staffIdx += number - 1;
                   // qDebug("xmlAttributes clef score->staff(0) %p staffIdx %d score->staff(%d) %p",
                   //       score->staff(0), staffIdx, staffIdx, score->staff(staffIdx));
-                  if (st != STANDARD_STAFF_TYPE)
-                        score->staff(staffIdx)->setStaffType(score->staffType(st));
+//TODO-ST                  if (st != STANDARD_STAFF_TYPE)
+//                        score->staff(staffIdx)->setStaffType(score->staffType(st));
                   }
             else if (e.tagName() == "staves")
                   ;  // ignore, already handled
@@ -4629,7 +4629,7 @@ static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration d
 
  \a Staff is the number of first staff of the part this note belongs to.
  */
-Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam, 
+Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam,
                         QString& currentVoice, QDomElement e, QList<Chord*>& graceNotes, int& alt)
       {
       int ticks = 0;

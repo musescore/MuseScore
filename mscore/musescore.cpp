@@ -4281,15 +4281,15 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "staff-types") {
             Staff* staff = cs->staff(0);
             EditStaffType* est = new EditStaffType(this, staff);
-            if (est->exec() && est->isModified()) {
-                  Score* score = cs->rootScore();
-                  score->startCmd();
-                  score->deselectAll();
-                  QList<StaffType*> tl = est->getStaffTypes();
-                  score->replaceStaffTypes(tl);
-                  score->setLayoutAll(true);
-                  score->endCmd();
-                  }
+//            if (est->exec() && est->isModified()) {
+//                  Score* score = cs->rootScore();
+//                  score->startCmd();
+//                  score->deselectAll();
+//                  QList<StaffType*> tl = est->getStaffTypes();
+//TODO-ST                  score->replaceStaffTypes(tl);
+//                  score->setLayoutAll(true);
+//                  score->endCmd();
+//                  }
             delete est;
             }
       else if (cmd == "lock") {

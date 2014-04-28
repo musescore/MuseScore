@@ -32,8 +32,6 @@ namespace Ms {
 class Navigator;
 class ScoreView;
 class StaffType;
-class StaffTypePercussion;
-class StaffTypeTablature;
 class Staff;
 
 //---------------------------------------------------------
@@ -55,10 +53,10 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void blockPercPreviewSignals(bool block);
       void blockTabPreviewSignals(bool block);
       void saveCurrent(QListWidgetItem*);
-      void setDlgFromPerc(const StaffTypePercussion *st);
-      void setPercFromDlg(StaffTypePercussion* st);
-      void setDlgFromTab(const StaffTypeTablature* stt);
-      void setTabFromDlg(StaffTypeTablature* stt);
+      void setDlgFromPerc(const StaffType* st);
+      void setPercFromDlg(StaffType* st);
+      void setDlgFromTab(const StaffType* stt);
+      void setTabFromDlg(StaffType* stt);
       void tabStemsCompatibility(bool checked);
       void tabMinimShortCompatibility(bool checked);
       void tabStemThroughCompatibility(bool checked);

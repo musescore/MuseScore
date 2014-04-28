@@ -291,13 +291,6 @@ void Score::init()
       _scoreFont = ScoreFont::fontFactory("emmentaler");
 
       _pageNumberOffset = 0;
-      if (!parentScore()) {
-            int numOfPresets = StaffType::numOfPresets();
-            for (int idx = 0; idx < numOfPresets; idx++) {
-                  StaffType * st = StaffType::preset(idx)->clone();
-                  addStaffType(st);
-                  }
-            }
 
       _mscVersion             = MSCVERSION;
       _created                = false;
@@ -435,11 +428,6 @@ Score::~Score()
       delete _tempomap;
       delete _sigmap;
       delete _repeatList;
-      for (StaffType** st : staffTypes()) {
-            if (!(*st)->builtin())
-                  delete *st;
-            delete st;
-            }
       }
 
 //---------------------------------------------------------
@@ -1957,95 +1945,6 @@ Q_INVOKABLE QString Score::metaTag(const QString& s) const
 Q_INVOKABLE void Score::setMetaTag(const QString& tag, const QString& val)
       {
       _metaTags.insert(tag, val);
-      }
-
-//---------------------------------------------------------
-//   staffTypes
-//---------------------------------------------------------
-
-const QList<StaffType**>& Score::staffTypes() const
-      {
-      return rootScore()->_staffTypes;
-      }
-
-//---------------------------------------------------------
-//   addStaffType
-//    ownership of st move to score except if the buildin
-//    flag is set
-//---------------------------------------------------------
-
-void Score::addStaffType(StaffType* st)
-      {
-      addStaffType(-1, st);
-      }
-
-void Score::addStaffType(int idx, StaffType* st)
-      {
-      Score* s = rootScore();
-      // if the modified staff type is NOT replacing an existing type
-      if (idx < 0 || idx >= s->_staffTypes.size()) {
-            // store new pointer to pointer to type data
-            StaffType** stp = new StaffType*;
-            *stp = st;
-            s->_staffTypes.append(stp);
-            }
-      // if the modified staff type IS replacing an existing type
-      else {
-            StaffType* oldStaffType = *(s->_staffTypes[idx]);
-            // update the type of each root score staff which uses the old type
-            // as well as the type of each staff linked to each score staff
-            for (int staffIdx = 0; staffIdx < s->staves().size(); staffIdx++) {
-                  Staff* currStaff = s->staff(staffIdx);
-                  if (currStaff->staffType() == oldStaffType)
-                        currStaff->setStaffType(st);
-                  if (currStaff->linkedStaves())
-                        foreach (Staff* linkStaff, currStaff->linkedStaves()->staves())
-                              if (linkStaff->staffType() == oldStaffType)
-                                    linkStaff->setStaffType(st);
-                  }
-            // store the updated staff type
-            *(s->_staffTypes[idx]) = st;
-            // delete old staff type if not built-in
-            if (!oldStaffType->builtin())
-                  delete oldStaffType;
-            }
-      }
-
-//---------------------------------------------------------
-//   staffTypeIdx
-//---------------------------------------------------------
-
-int Score::staffTypeIdx(StaffType* st) const
-      {
-      const Score* s = rootScore();
-      for (int i = 0; i < s->_staffTypes.size(); ++i) {
-            if ((*s->_staffTypes[i]) == st)
-                  return i;
-            }
-      return -1;
-      }
-
-//---------------------------------------------------------
-//   staffType
-//---------------------------------------------------------
-
-StaffType* Score::staffType(int idx) const
-      {
-      const Score* s = rootScore();
-      if (idx < 0 || idx >= s->_staffTypes.size())
-            return 0;
-      return *(s->_staffTypes[idx]);
-      }
-
-//---------------------------------------------------------
-//   replaceStaffTypes
-//---------------------------------------------------------
-
-void Score::replaceStaffTypes(const QList<StaffType*>& tl)
-      {
-      Q_ASSERT(this == rootScore());
-      for (int idx = 0; idx < tl.size(); idx++)
-            addStaffType(idx, tl[idx]->clone());
       }
 
 //---------------------------------------------------------

@@ -70,8 +70,8 @@ Note* Chord::upNote() const
                   }
             }
       else if (staff()->isTabStaff()) {
-            StaffTypeTablature*     tab  = (StaffTypeTablature*) staff()->staffType();
-            int                     line = tab->lines() - 1;      // start at bottom line
+            StaffType* tab  = staff()->staffType();
+            int        line = tab->lines() - 1;      // start at bottom line
             int noteLine;
             // scan each note: if TAB strings are not in sequential order,
             // visual order of notes might not correspond to pitch order
@@ -99,8 +99,8 @@ Note* Chord::downNote() const
                   }
             }
       else if (staff()->isTabStaff()) {
-            StaffTypeTablature*     tab  = (StaffTypeTablature*) staff()->staffType();
-            int line = 0;      // start at top line
+            StaffType* tab  = staff()->staffType();
+            int line        = 0;      // start at top line
             int noteLine;
             // scan each note: if TAB strings are not in sequential order,
             // visual order of notes might not correspond to pitch order
@@ -145,8 +145,8 @@ int Chord::upString() const
       // if no staff or staff not a TAB, return 0 (=topmost line)
       if(!staff() || !staff()->isTabStaff())
             return 0;
-      StaffTypeTablature*     tab = (StaffTypeTablature*) staff()->staffType();
-      int                     line = tab->lines() - 1;      // start at bottom line
+      StaffType* tab = staff()->staffType();
+      int       line = tab->lines() - 1;      // start at bottom line
       int                     noteLine;
       // scan each note: if TAB strings are not in sequential order,
       // visual order of notes might not correspond to pitch order
@@ -161,17 +161,17 @@ int Chord::upString() const
 
 int Chord::downString() const
       {
-      if(!staff())                              // if no staff, return 0
+      if (!staff())                              // if no staff, return 0
             return 0;
-      if(!staff()->isTabStaff())                // if staff not a TAB, return bottom line
+      if (!staff()->isTabStaff())                // if staff not a TAB, return bottom line
             return staff()->lines()-1;
-      StaffTypeTablature*     tab = (StaffTypeTablature*) staff()->staffType();
-      int                     line = 0;         // start at top line
-      int                     noteLine;
+      StaffType* tab = staff()->staffType();
+      int       line = 0;         // start at top line
+      int        noteLine;
       int n = _notes.size();
       for (int i = 0; i < n; ++i) {
             noteLine = tab->physStringToVisual(_notes.at(i)->string());
-            if(noteLine > line)
+            if (noteLine > line)
                   line = noteLine;
             }
       return line;
@@ -303,7 +303,7 @@ void Chord::setStem(Stem* s)
 qreal Chord::stemPosX() const
       {
       if (staff() && staff()->isTabStaff())
-            return static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosX(this) * spatium();
+            return staff()->staffType()->chordStemPosX(this) * spatium();
 
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
@@ -326,7 +326,7 @@ QPointF Chord::stemPos() const
       QPointF p(pagePos());
 
       if (staff() && staff()->isTabStaff())
-            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPos(this) * _spatium) + p;
+            return staff()->staffType()->chordStemPos(this) * _spatium + p;
 
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
@@ -351,7 +351,7 @@ QPointF Chord::stemPosBeam() const
       {
       qreal _spatium = spatium();
       if (staff() && staff()->isTabStaff())
-            return (static_cast<StaffTypeTablature*>(staff()->staffType())->chordStemPosBeam(this) * _spatium) + pagePos();
+            return staff()->staffType()->chordStemPosBeam(this) * _spatium + pagePos();
       QPointF p(pagePos());
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
@@ -800,10 +800,10 @@ void Chord::addLedgerLines(int move)
 
 void Chord::computeUp()
       {
-      StaffTypeTablature* tab = 0;
+      StaffType* tab = 0;
       // TAB STAVES
       if (staff() && staff()->isTabStaff()) {
-            tab = (StaffTypeTablature*)staff()->staffType();
+            tab = staff()->staffType();
             // if no stems or stem beside staves
             if (tab->slashStyle() || !tab->stemThrough()) {
                   // if measure has voices, set stem direction according to voice
@@ -1112,7 +1112,7 @@ qreal Chord::centerX() const
       {
       // TAB 'notes' are always centered on the stem
       if (staff()->isTabStaff())
-            return ((StaffTypeTablature*)staff()->staffType())->chordStemPosX(this) * spatium();
+            return staff()->staffType()->chordStemPosX(this) * spatium();
 
       const Note* note = up() ? upNote() : downNote();
       qreal x = note->pos().x();
@@ -1288,9 +1288,9 @@ void Chord::layoutStem()
       // TAB
       //
       qreal _spatium = spatium();
-      StaffTypeTablature* tab = 0;
+      StaffType* tab = 0;
       if (staff() && staff()->isTabStaff()) {
-            tab = (StaffTypeTablature*)staff()->staffType();
+            tab = staff()->staffType();
             // require stems only if TAB is not stemless and this chord has a stem
             if (!tab->slashStyle() && _stem) {
                   // if stems are beside staff, apply special formatting
@@ -1870,7 +1870,7 @@ void Chord::layoutTablature()
       qreal rrr         = 0.0;                  // space to leave at right of chord
       Note* upnote      = upNote();
       qreal headWidth   = symWidth(SymId::noteheadBlack);
-      StaffTypeTablature* tab = (StaffTypeTablature*)staff()->staffType();
+      StaffType* tab    = staff()->staffType();
       qreal lineDist    = tab->lineDistance().val() *_spatium;
       qreal stemX       = tab->chordStemPosX(this) *_spatium;
 
@@ -2312,7 +2312,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   pos = stem()->hookPos();
 
             a->layout();
-            
+
             qreal _spatium2 = _spatium * .5;
             qreal _spStaff2 = _spStaff * .5;
             if (stemSide) {                     // if artic. is really beyond a stem,

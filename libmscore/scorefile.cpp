@@ -125,14 +125,6 @@ void Score::write(Xml& xml, bool selectionOnly)
 
       _style.save(xml, true);      // save only differences to buildin style
 
-      if (!parentScore()) {
-            int idx = 0;
-            foreach(StaffType** st, _staffTypes) {
-                  if ((idx >= STAFF_TYPES) || !(*st)->isEqual(*StaffType::preset(idx)))
-                        (*st)->write(xml, idx);
-                  ++idx;
-                  }
-            }
       xml.tag("showInvisible", _showInvisible);
       xml.tag("showUnprintable", _showUnprintable);
       xml.tag("showFrames", _showFrames);
@@ -896,7 +888,7 @@ bool Score::read(XmlReader& e)
                   ks->read(e);
                   customKeysigs.append(ks);
                   }
-            else if (tag == "StaffType") {
+            else if (tag == "StaffType") {      // obsolete
                   int idx           = e.intAttribute("idx");
                   QString groupName = e.attribute("group", "pitched");
                   int group;
@@ -907,27 +899,20 @@ bool Score::read(XmlReader& e)
                   else if (groupName == "tablature")
                         group = TAB_STAFF_GROUP;
                   else group = STANDARD_STAFF_GROUP;
+#if 0
                   StaffType* ost = staffType(idx);
                   StaffType* st;
                   if (ost && ost->group() == group)
-                        st = ost->clone();
+                        st = new StaffType(*ost);
                   else {
                         idx = -1;
-                        switch (group)
-                        {
-                        case PERCUSSION_STAFF_GROUP:
-                              st  = new StaffTypePercussion();
-                              break;
-                        case TAB_STAFF_GROUP:
-                              st  = new StaffTypeTablature();
-                              break;
-                        default:
-                              st  = new StaffTypePitched();
+                        st = new StaffType;
                         }
-                        }
-                  st->read(e);
-                  st->setBuiltin(false);
-                  addStaffType(idx, st);
+#endif
+                  StaffType st;
+                  st.read(e);
+//                  st->setBuiltin(false);
+                  // TODO addStaffType(idx, st);
                   }
             else if (tag == "siglist")
                   _sigmap->read(e, _fileDivision);

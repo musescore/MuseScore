@@ -163,7 +163,7 @@ Staff::Staff(Score* s)
       _rstaff         = 0;
       _part           = 0;
       _keymap[0]      = KeySigEvent(0);                  // default to C major
-      _staffType      = _score->staffType(STANDARD_STAFF_TYPE);
+//      _staffType      = _score->staffType(STANDARD_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -182,7 +182,7 @@ Staff::Staff(Score* s, Part* p, int rs)
       _rstaff         = rs;
       _part           = p;
       _keymap[0]      = KeySigEvent(0);                  // default to C major
-      _staffType      = _score->staffType(STANDARD_STAFF_TYPE);
+//      _staffType      = _score->staffType(STANDARD_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -374,7 +374,8 @@ void Staff::write(Xml& xml) const
                         xml.tag("linkedTo", s->staffIdx(staff) + 1);
                   }
             }
-      xml.tag("type", score()->staffTypeIdx(_staffType));
+      _staffType.write(xml);
+//      xml.tag("type", score()->staffTypeIdx(_staffType));
       if (small() && !xml.excerptmode)    // switch small staves to normal ones when extracting part
             xml.tag("small", small());
       if (invisible())
@@ -417,17 +418,8 @@ void Staff::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "type") {
-                  StaffType* st = score()->staffType(e.readInt());
-                  if (st) {
-                        _staffType = st;
-                        // set default barLineTo according to staff type (1-line staff bar lines are special)
-                        _barLineFrom = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
-                        _barLineTo   = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines() - 1) * 2);
-                        }
-                  else
-                        qDebug("Staff::read: unknown staff type");
-                  }
+            if (tag == "type")
+                  _staffType.read(e);
             else if (tag == "small")
                   setSmall(e.readInt());
             else if (tag == "invisible")
@@ -493,7 +485,7 @@ void Staff::read(XmlReader& e)
 
 qreal Staff::height() const
       {
-      return (lines()-1) * spatium() * _staffType->lineDistance().val();
+      return (lines()-1) * spatium() * _staffType.lineDistance().val();
       }
 
 //---------------------------------------------------------
@@ -561,7 +553,7 @@ int Staff::channel(int tick,  int voice) const
 
 int Staff::lines() const
       {
-      return _staffType->lines();
+      return _staffType.lines();
       }
 
 //---------------------------------------------------------
@@ -572,15 +564,7 @@ void Staff::setLines(int val)
       {
       if (val == lines())
             return;
-      //
-      // create new staff type
-      //
-      StaffType* st = _staffType->clone();
-      if(part() && !partName().isEmpty())
-            st->setName(partName());
-      st->setLines(val);
-      setStaffType(st);
-      score()->addStaffType(st);
+      _staffType.setLines(val);     // TODO: make undoable
       }
 
 //---------------------------------------------------------
@@ -589,7 +573,7 @@ void Staff::setLines(int val)
 
 qreal Staff::lineDistance() const
       {
-      return _staffType->lineDistance().val();
+      return _staffType.lineDistance().val();
       }
 
 //---------------------------------------------------------
@@ -598,7 +582,7 @@ qreal Staff::lineDistance() const
 
 bool Staff::slashStyle() const
       {
-      return _staffType->slashStyle();
+      return _staffType.slashStyle();
       }
 
 //---------------------------------------------------------
@@ -607,7 +591,7 @@ bool Staff::slashStyle() const
 
 void Staff::setSlashStyle(bool val)
       {
-      _staffType->setSlashStyle(val);
+      _staffType.setSlashStyle(val);
       }
 
 //---------------------------------------------------------
@@ -690,13 +674,14 @@ bool Staff::primaryStaff() const
 //   setStaffType
 //---------------------------------------------------------
 
-void Staff::setStaffType(StaffType* st)
+void Staff::setStaffType(const StaffType* st)
       {
-      if (_staffType == st)
-            return;
+//TODO      if (_staffType == *st)
+//            return;
       int linesOld = lines();
       int linesNew = st->lines();
-      _staffType = st;
+      _staffType = *st;
+
       if (linesNew != linesOld) {
             int sIdx = score()->staffIdx(this);
             if (sIdx < 0) {                     // staff does not belong to score (yet?)
@@ -720,8 +705,8 @@ void Staff::setStaffType(StaffType* st)
       ClefType ct = clef(0);
       StaffGroup csg = ClefInfo::staffGroup(ct);
 
-      if (_staffType->group() != csg) {
-            switch(_staffType->group()) {
+      if (_staffType.group() != csg) {
+            switch(_staffType.group()) {
                   case TAB_STAFF_GROUP:        ct = ClefType(score()->styleI(ST_tabClef)); break;
                   case STANDARD_STAFF_GROUP:   ct = ClefType::G; break;      // TODO: use preferred clef for instrument
                   case PERCUSSION_STAFF_GROUP: ct = ClefType::PERC; break;
@@ -758,21 +743,6 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
       if (!presetStaffType)
             presetStaffType = StaffType::getDefaultPreset(t->staffGroup, 0);
 
-      // look for a staff type with same structure among staff types already defined in the score
-      bool found = false;
-      foreach (StaffType** scoreStaffType, score()->staffTypes()) {
-            if ( (*scoreStaffType)->isSameStructure(*presetStaffType) ) {
-                  st = *scoreStaffType;         // staff type found in score: use for instrument staff
-                  found = true;
-                  break;
-                  }
-            }
-      // if staff type not found in score, use from preset (for staff and adding to score staff types)
-      if (!found) {
-            st = presetStaffType->clone();
-            score()->addStaffType(st);
-            }
-
       // use selected staff type
       setStaffType(st);
 //      if (st->group() == PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
@@ -790,22 +760,8 @@ void Staff::initFromStaffType(const StaffType* staffType)
       if (!presetStaffType)
             presetStaffType = StaffType::getDefaultPreset(STANDARD_STAFF_GROUP, 0);
 
-      // look for a staff type with same structure among staff types already defined in the score
-      StaffType* st = 0;
-      foreach (StaffType** scoreStaffType, score()->staffTypes()) {
-            if ( (*scoreStaffType)->isSameStructure(*presetStaffType) ) {
-                  st = *scoreStaffType;         // staff type found in score: use for instrument staff
-                  break;
-                  }
-            }
-      // if staff type not found in score, use from preset (for staff and adding to score staff types)
-      if (!st) {
-            st = presetStaffType->clone();
-            score()->addStaffType(st);
-            }
-
       // use selected staff type
-      setStaffType(st);
+      setStaffType(staffType);
       }
 
 //---------------------------------------------------------
@@ -832,16 +788,10 @@ bool Staff::show() const
 
 bool Staff::genKeySig()
       {
-      switch(_staffType->group()) {
-            case TAB_STAFF_GROUP:
-                  return false;
-            case STANDARD_STAFF_GROUP:
-                  return static_cast<StaffTypePitched*>(_staffType)->genKeysig();
-            case PERCUSSION_STAFF_GROUP:
-                  return static_cast<StaffTypePercussion*>(_staffType)->genKeysig();
-            default:
-                  return true;
-            }
+      if (_staffType.group() == TAB_STAFF_GROUP)
+            return false;
+      else
+            return _staffType.genKeysig();
       }
 
 //---------------------------------------------------------
@@ -850,16 +800,10 @@ bool Staff::genKeySig()
 
 bool Staff::showLedgerLines()
       {
-      switch(_staffType->group()) {
-            case TAB_STAFF_GROUP:
+      if (_staffType.group() == TAB_STAFF_GROUP)
                   return false;
-            case STANDARD_STAFF_GROUP:
-                  return static_cast<StaffTypePitched*>(_staffType)->showLedgerLines();
-            case PERCUSSION_STAFF_GROUP:
-                  return static_cast<StaffTypePercussion*>(_staffType)->showLedgerLines();
-            default:
-                  return true;
-            }
+      else
+            return _staffType.showLedgerLines();
       }
 
 //---------------------------------------------------------

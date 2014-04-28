@@ -3078,7 +3078,7 @@ void ScoreView::startNoteEntry()
                   // set InputState::_string to note visual string
                   if (el->type() == Element::NOTE) {
                         strg = (static_cast<Note*>(el))->string();
-                        strg = (static_cast<StaffTypeTablature*>(staff->staffType()))->physStringToVisual(strg);
+                        strg = staff->staffType()->physStringToVisual(strg);
                         }
                   is.setString(strg);
                   break;
