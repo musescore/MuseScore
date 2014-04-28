@@ -512,6 +512,10 @@
         </Measure>
       <Measure number="7">
         <startRepeat/>
+        <BarLine>
+          <subtype>start-repeat</subtype>
+          <span>1</span>
+          </BarLine>
         <endSpanner id="5"/>
         <Volta id="6">
           <subtype>0</subtype>
