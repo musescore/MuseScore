@@ -7,6 +7,7 @@
 namespace Ms {
 
 class MidiChord;
+class MTrack;
 class TimeSigMap;
 class ReducedFraction;
 
@@ -74,6 +75,8 @@ ReducedFraction findOffTimeQuantError(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant);
+
+void setIfHumanPerformance(const std::multimap<int, MTrack> &tracks);
 
 void quantizeChords(
             std::multimap<ReducedFraction, MidiChord> &chords,

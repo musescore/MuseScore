@@ -105,4 +105,20 @@ void MidiData::setCharset(const QString &fileName, const QString &charset)
       it.value().charset = charset;
       }
 
+bool MidiData::isHumanPerformance(const QString &fileName) const
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return false;
+      return it.value().isHumanPerformance;
+      }
+
+void MidiData::setHumanPerformance(const QString &fileName, bool value)
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return;
+      it.value().isHumanPerformance = value;
+      }
+
 } // namespace Ms

@@ -34,6 +34,9 @@ class MidiData
             getLyrics(const QString &fileName);
       QString charset(const QString &fileName) const;
       void setCharset(const QString &fileName, const QString &charset);
+                  // human performance: is MIDI unaligned
+      bool isHumanPerformance(const QString &fileName) const;
+      void setHumanPerformance(const QString &fileName, bool value);
 
    private:
       struct MidiDataStore
@@ -46,6 +49,7 @@ class MidiData
             int selectedRow = 0;
             MidiFile midiFile;
             QString charset = MidiCharset::defaultCharset();
+            bool isHumanPerformance = false;
             };
       QMap<QString, MidiDataStore> data;    // <file name, tracks data>
       };

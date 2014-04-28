@@ -105,6 +105,9 @@ class MidiImportOperations
                   // lyrics
       void addTrackLyrics(const std::multimap<ReducedFraction, std::string> &trackLyrics);
       const QList<std::multimap<ReducedFraction, std::string> > *getLyrics();
+                  // human performance: is MIDI unaligned
+      bool isHumanPerformance() const;
+      void setHumanPerformance(bool value);
 
    private:
       QList<TrackOperations> operations_;
