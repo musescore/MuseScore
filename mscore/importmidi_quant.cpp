@@ -312,37 +312,6 @@ void setIfHumanPerformance(const std::multimap<int, MTrack> &tracks)
 
 //--------------------------------------------------------------------------------------------
 
-ReducedFraction quantizeOnTimeForTuplet(
-            const std::pair<const ReducedFraction, MidiChord> &chordEvent)
-      {
-      const MidiTuplet::TupletData &tuplet = chordEvent.second.tuplet->second;
-      const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
-      auto onTime = findQuantizedTupletChordOnTime(
-                               chordEvent, tuplet.len, tupletRatio, tuplet.onTime);
-                  // verify that onTime is still inside tuplet
-      if (onTime < tuplet.onTime)
-            onTime = tuplet.onTime;
-      else if (onTime > tuplet.onTime + tuplet.len)
-            onTime = tuplet.onTime + tuplet.len;
-
-      return onTime;
-      }
-
-ReducedFraction quantizeOnTimeForNonTuplet(
-            const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
-            const ReducedFraction &rangeStart,
-            const ReducedFraction &rangeEnd,
-            const ReducedFraction &basicQuant)
-      {
-      auto onTime = findQuantizedChordOnTime(*chordIt, basicQuant);
-                  // verify that onTime is inside current range
-      if (onTime < rangeStart)
-            onTime = rangeStart;
-      if (onTime > rangeEnd)
-            onTime = rangeEnd;
-      return onTime;
-      }
-
 ReducedFraction quantizeOffTimeForTuplet(
             const ReducedFraction &noteOffTime,
             const MidiTuplet::TupletData &tuplet)
@@ -678,6 +647,76 @@ std::vector<QuantData> findQuantData(
       return data;
       }
 
+int findLastChordPosition(const std::vector<QuantData> &quantData)
+      {
+      int posIndex = -1;
+      double minPenalty = std::numeric_limits<double>::max();
+      const auto &lastPositions = quantData[quantData.size() - 1].positions;
+      for (int i = 0; i != (int)lastPositions.size(); ++i) {
+            if (lastPositions[i].penalty < minPenalty) {
+                  minPenalty = lastPositions[i].penalty;
+                  posIndex = i;
+                  }
+            }
+
+      Q_ASSERT_X(posIndex != -1,
+                 "Quantize::quantizeOnTimesInRange", "Last index was not found");
+
+      return posIndex;
+      }
+
+void applyDynamicProgramming(std::vector<QuantData> &quantData)
+      {
+      const auto &opers = preferences.midiImportOperations.currentTrackOperations();
+      const bool isHuman = opers.quantize.humanPerformance;
+      const double MERGE_PENALTY_COEFF = 5.0;
+
+      for (int chordIndex = 0; chordIndex != (int)quantData.size(); ++chordIndex) {
+            QuantData &d = quantData[chordIndex];
+            for (int pos = 0; pos != (int)d.positions.size(); ++pos) {
+                  QuantPos &p = d.positions[pos];
+                  const auto timeDiff = (d.chord->first - p.time).absValue();
+                  const double timePenalty = timeDiff.numerator() * 1.0 / timeDiff.denominator();
+                  const double levelDiff = 1 + qAbs(d.metricalLevelForLen - p.metricalLevel);
+
+                  if (p.metricalLevel <= d.metricalLevelForLen)
+                        p.penalty = timePenalty * levelDiff;
+                  else
+                        p.penalty = (isHuman) ? timePenalty / levelDiff : timePenalty;
+
+                  if (chordIndex > 0) {
+                        const QuantData &dPrev = quantData[chordIndex - 1];
+                        double minPenalty = std::numeric_limits<double>::max();
+                        int minPos = -1;
+                        for (int posPrev = 0; posPrev != (int)dPrev.positions.size(); ++posPrev) {
+                              const QuantPos &pPrev = dPrev.positions[posPrev];
+                              if (pPrev.time > p.time)
+                                    continue;
+                              double penalty = pPrev.penalty;
+                              if (pPrev.time == p.time) {
+                                    if (!d.canMergeWithPrev)
+                                          continue;
+                                    penalty += d.quant.numerator() * MERGE_PENALTY_COEFF
+                                                / d.quant.denominator();
+                                    }
+                              // penalty += tempo penalty
+
+                              if (penalty < minPenalty) {
+                                    minPenalty = penalty;
+                                    minPos = posPrev;
+                                    }
+                              }
+
+                        Q_ASSERT_X(minPos != -1,
+                                   "Quantize::quantizeOnTimesInRange", "Min pos was not found");
+
+                        p.penalty += minPenalty;
+                        p.prevPos = minPos;
+                        }
+                  }
+            }
+      }
+
 void quantizeOnTimesInRange(
             const std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> &chords,
             std::multimap<ReducedFraction, MidiChord> &quantizedChords,
@@ -693,20 +732,22 @@ void quantizeOnTimesInRange(
 
       std::vector<QuantData> quantData = findQuantData(chords, rangeStart, rangeEnd,
                                                        basicQuant, barStart, barFraction);
+      applyDynamicProgramming(quantData);
 
-      bool isInTuplet = chords.front()->second.isInTuplet;
-      if (isInTuplet) {
-            for (const auto &chordIt: chords) {
-                  const auto onTime = quantizeOnTimeForTuplet(*chordIt);
-                  quantizedChords.insert({onTime, chordIt->second});
-                  }
-            }
-      else {
-            for (const auto &chordIt: chords) {
-                  const auto onTime = quantizeOnTimeForNonTuplet(
-                                          chordIt, rangeStart, rangeEnd, basicQuant);
-                  quantizedChords.insert({onTime, chordIt->second});
-                  }
+                  // backward dynamic programming step - collect optimal chord positions
+      int posIndex = findLastChordPosition(quantData);
+
+      Q_ASSERT_X(quantData.size() == chords.size(),
+                 "Quantize::quantizeOnTimesInRange",
+                 "Sizes of quant data and chords are not equal");
+
+      for (int chordIndex = quantData.size() - 1; ; --chordIndex) {
+            const QuantPos &p = quantData[chordIndex].positions[posIndex];
+            const auto onTime = p.time;
+            quantizedChords.insert({onTime, chords[chordIndex]->second});
+            if (chordIndex == 0)
+                  break;
+            posIndex = p.prevPos;
             }
       }
 
