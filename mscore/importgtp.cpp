@@ -337,16 +337,24 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
 //    bend graph
 //---------------------------------------------------------
 
-void GuitarPro::readBend()
+void GuitarPro::readBend(Note* note)
       {
       readUChar();                        // icon
       readInt();                          // shown aplitude
-      int n = readInt();
-      for (int i = 0; i < n; ++i) {
-            readInt();                    // time
-            readInt();                    // pitch
-            readUChar();                  // vibrato
+      int numPoints = readInt();          // the number of points in the bend
+
+      // there are no notes in the bend, exit the function
+      if (numPoints == 0)
+            return;
+      Bend* bend = new Bend(gscore);
+      for (int i = 0; i < numPoints; ++i) {
+            int bendTime  = readInt();
+            int bendPitch = readInt();
+            int bendVibrato = readUChar();
+            bend->points().append(PitchValue(bendTime, bendPitch, bendVibrato));
             }
+      bend->setTrack(note->track());
+      note->add(bend);
       }
 
 //---------------------------------------------------------
@@ -1065,7 +1073,7 @@ void GuitarPro1::readNote(int string, Note* note)
             if (version >= 400)
                   modMask2 = readUChar();
             if (modMask1 & 0x1)
-                  readBend();
+                  readBend(note);
             if (modMask1 & 0x10) {
                   // GP3 grace note
                   int fret = readUChar();            // grace fret
@@ -1647,22 +1655,6 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
 
 
 //---------------------------------------------------------
-//   readBend
-//    bend graph
-//---------------------------------------------------------
-
-void GuitarPro4::readBend()
-      {
-      skip(5);
-      int n = readInt();
-      for (int i = 0; i < n; ++i) {
-            readInt();                    // time position
-            readInt();                    // pitch
-            readUChar();                  // vibrato
-            }
-      }
-
-//---------------------------------------------------------
 //   readMixChange
 //---------------------------------------------------------
 
@@ -1713,7 +1705,7 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
             effects = readUChar();      // effect 1-tapping, 2-slapping, 3-popping
             }
       if (fxBits2 & 0x04)
-            readBend();
+            readTremoloBar(track,segment);
       if (fxBits1 & 0x40) {
             int strokeup = readUChar();            // up stroke length
             int strokedown = readUChar();            // down stroke length
@@ -1821,7 +1813,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
             uchar modMask1 = readUChar();
             uchar modMask2 = readUChar();
             if (modMask1 & 0x1)
-                  readBend();
+                  readBend(note);
             if (modMask1 & 0x2) {         // hammer on / pull off
                   gpNote->slur = true;
                   }
@@ -2653,36 +2645,10 @@ void GuitarPro5::readArtificialHarmonic()
       }
 
 //---------------------------------------------------------
-//   readBend
-//---------------------------------------------------------
-
-void GuitarPro5::readBend(Note* note)
-      {
-      /*int a1 =*/ readChar();
-      /*int a2 =*/ readChar();
-      /*int a3 =*/ readChar();
-      /*int a4 =*/ readChar();
-      /*int a5 =*/ readChar();
-      int n  = readInt();
-
-      QList<PitchValue> points;
-      for (int i = 0; i < n; ++i) {
-            int time  = readInt();
-            int pitch = readInt();
-            int vibrato = readUChar();
-            points.append(PitchValue(time, pitch, vibrato));
-            }
-      Bend* b = new Bend(note->score());
-      b->setPoints(points);
-      b->setTrack(note->track());
-      note->add(b);
-      }
-
-//---------------------------------------------------------
 //   readTremoloBar
 //---------------------------------------------------------
 
-void GuitarPro5::readTremoloBar(int /*track*/, Segment* /*segment*/)
+void GuitarPro::readTremoloBar(int /*track*/, Segment* /*segment*/)
       {
       /*int a1 =*/ readChar();
       /*int a2 =*/ readChar();
