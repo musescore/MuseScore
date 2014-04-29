@@ -1893,12 +1893,14 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Toggle foto mode"),
          fotomode_ICON
          ),
+#ifdef OMR
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "show-omr",
          QT_TRANSLATE_NOOP("action","Show OMR image")
          ),
+#endif
       Shortcut(
          STATE_NORMAL & (~STATE_TEXT_EDIT),
          0,
@@ -2038,6 +2040,7 @@ Shortcut Shortcut::sc[] = {
          Qt::ApplicationShortcut,
          QT_TRANSLATE_NOOP("action", "Resource Manager")
          ),
+#ifdef OMR
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
@@ -2045,6 +2048,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","OMR Panel"),
          QT_TRANSLATE_NOOP("action","Show OMR Panel")
          ),
+#endif
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
