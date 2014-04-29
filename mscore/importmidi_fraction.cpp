@@ -153,6 +153,11 @@ ReducedFraction ReducedFraction::absValue() const
       return ReducedFraction(qAbs(numerator_), qAbs(denominator_));
       }
 
+double ReducedFraction::toDouble() const
+      {
+      return numerator_ * 1.0 / denominator_;
+      }
+
 int ReducedFraction::ticks() const
       {
       int integral = numerator_ / denominator_;
