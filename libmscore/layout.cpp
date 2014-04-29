@@ -250,6 +250,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         Note* n = overlapNotes[i];
                         NoteHeadType nHeadType;
                         NoteHeadType pHeadType;
+                        Chord* nchord = n->chord();
+                        Chord* pchord = p->chord();
                         if (n->mirror()) {
                               if (separation < 0) {
                                     // don't try to share heads if there is any mirroring
@@ -269,20 +271,21 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     pHeadType = (p->headType() == NoteHeadType::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
                                     // the most important rules for sharing noteheads on unisons between voices are
                                     // that notes must be one same line with same tpc
-                                    // and noteheads must be unmirrored and of same group and type
-                                    if (n->headGroup() != p->headGroup() || nHeadType != pHeadType || n->tpc() != p->tpc() || n->mirror() || p->mirror()) {
+                                    // noteheads must be unmirrored and of same group and type
+                                    // and chords must be same size (or sharing code won't work)
+                                    if (n->headGroup() != p->headGroup() || nHeadType != pHeadType || n->tpc() != p->tpc() || n->mirror() || p->mirror() || nchord->small() != pchord->small()) {
                                           shareHeads = false;
                                           }
                                     else {
                                           // noteheads are potentially shareable
                                           // it is more subjective at this point
                                           // current default is to require *either* of the following:
-                                          //    1) both have same number of dots, both have stems, and both are the same size
+                                          //    1) both chords have same number of dots, both have stems, and both noteheads are full size
                                           // or 2) one or more of the noteheads is not of type AUTO, but is explicitly set to match the other
                                           // thus user can force notes to be shared despite differing number of dots or either being stemless
                                           // by setting one of the notehead types to match the other
                                           // TODO: consider adding a style option, staff properties, or note property to control sharing
-                                          if ((n->chord()->dots() != p->chord()->dots() || !n->chord()->stem() || !p->chord()->stem() || n->headWidth() != p->headWidth()) &&
+                                          if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem() || n->small() || p->small()) &&
                                               (n->headType() == NoteHeadType::HEAD_AUTO && p->headType() == NoteHeadType::HEAD_AUTO)) {
                                                 shareHeads = false;
                                                 }
