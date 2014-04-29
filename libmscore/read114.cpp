@@ -145,7 +145,8 @@ static const StyleVal2 style114[] = {
       { ST_tupletStemLeftDistance,       QVariant(.5) },
       { ST_tupletStemRightDistance,      QVariant(.5) },
       { ST_tupletNoteLeftDistance,       QVariant(0.0) },
-      { ST_tupletNoteRightDistance,      QVariant(0.0) }
+      { ST_tupletNoteRightDistance,      QVariant(0.0) },
+      { ST_hideInstrumentNameIfOneInstrument, QVariant(false) }
       };
 
 

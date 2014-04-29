@@ -153,6 +153,7 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_minMMRestWidth,              StyleType("minMMRestWidth",          ST_SPATIUM) },       // minimum width of multi measure rest
       { ST_hideEmptyStaves,             StyleType("hideEmptyStaves",         ST_BOOL) },
       { ST_dontHideStavesInFirstSystem, StyleType("dontHidStavesInFirstSystm", ST_BOOL) },
+      { ST_hideInstrumentNameIfOneInstrument,  StyleType("hideInstrumentNameIfOneInstrument", ST_BOOL) },
       { ST_gateTime,                    StyleType("gateTime",                ST_INT) },           // 0-100%
       { ST_tenutoGateTime,              StyleType("tenutoGateTime",          ST_INT) },
       { ST_staccatoGateTime,            StyleType("staccatoGateTime",        ST_INT) },
@@ -212,7 +213,7 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_tupletStemLeftDistance,      StyleType("tupletStemLeftDistance",  ST_SPATIUM) },
       { ST_tupletStemRightDistance,     StyleType("tupletStemRightDistance", ST_SPATIUM) },
       { ST_tupletNoteLeftDistance,      StyleType("tupletNoteLeftDistance",  ST_SPATIUM) },
-      { ST_tupletNoteRightDistance,     StyleType("tupletNoteRightDistance", ST_SPATIUM) },
+      { ST_tupletNoteRightDistance,     StyleType("tupletNoteRightDistance", ST_SPATIUM) }
       };
 
 class StyleTypes {
@@ -318,8 +319,6 @@ void initStyle(MStyle* s)
          false, Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
          false, QColor(Qt::black), QColor(255, 255, 255, 0),                   // default params
          TextStyle::HIDE_IN_EDITOR);                                           // don't show in Style Editor
-
-      s->set(ST_hideInstrumentNameIfOneInstrument, true);
 
 #undef MM
 #undef OA
@@ -451,6 +450,7 @@ StyleData::StyleData()
             { ST_minMMRestWidth,              QVariant(4) },
             { ST_hideEmptyStaves,             QVariant(false) },
             { ST_dontHideStavesInFirstSystem, QVariant(true) },
+            { ST_hideInstrumentNameIfOneInstrument, QVariant(true) },
             { ST_gateTime,                    QVariant(100) },
             { ST_tenutoGateTime,              QVariant(100) },
             { ST_staccatoGateTime,            QVariant(50) },
