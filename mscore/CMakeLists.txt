@@ -298,6 +298,15 @@ target_link_libraries(mscore
       effects
       vorbisfile
       )
+
+if (MSCORE_OUTPUT_NAME)
+      set_target_properties(
+            ${ExecutableName}
+            PROPERTIES
+            OUTPUT_NAME ${MSCORE_OUTPUT_NAME}
+            )
+endif (MSCORE_OUTPUT_NAME)
+
 if (ZERBERUS)
       target_link_libraries(mscore zerberus synthesizer)
 endif ()
