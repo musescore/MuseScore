@@ -334,7 +334,8 @@ void Shortcut::init()
                   break;
             _shortcuts[sc[i]._key] = &sc[i];
             }
-      load();
+      if (!MScore::noGui)
+            load();
       }
 
 //---------------------------------------------------------
