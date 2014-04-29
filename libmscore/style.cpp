@@ -117,6 +117,7 @@ static const StyleTypes2 styleTypes2[] = {
       { ST_harmonyY,                    StyleType("harmonyY",                ST_SPATIUM) },
       { ST_harmonyFretDist,             StyleType("harmonyFretDist",         ST_SPATIUM) },
       { ST_minHarmonyDistance,          StyleType("minHarmonyDistance",      ST_SPATIUM) },
+      { ST_maxHarmonyBarDistance,       StyleType("maxHarmonyBarDistance",   ST_SPATIUM) },
       { ST_capoPosition,                StyleType("capoPosition",            ST_INT) },
       { ST_fretNumMag,                  StyleType("fretNumMag",              ST_DOUBLE) },
       { ST_fretNumPos,                  StyleType("fretNumPos",              ST_INT) },  // 0 = left, 1 = right
@@ -414,6 +415,7 @@ StyleData::StyleData()
             { ST_harmonyY,                    QVariant(2.5) },
             { ST_harmonyFretDist,             QVariant(0.5) },
             { ST_minHarmonyDistance,          QVariant(0.5) },
+            { ST_maxHarmonyBarDistance,       QVariant(3.0) },
             { ST_capoPosition,                QVariant(0) },
             { ST_fretNumMag,                  QVariant(qreal(2.0)) },
             { ST_fretNumPos,                  QVariant(0) },
