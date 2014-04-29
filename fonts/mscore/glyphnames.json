@@ -293,6 +293,18 @@
     "keyboardPedalP": {
         "codepoint": "U+e1a9"
     },
+    "keyboardPedalE": {
+        "codepoint": "U+e1ab"
+    },
+    "keyboardPedalD": {
+        "codepoint": "U+e1aa"
+    },
+    "keyboardPedalDot": {
+        "codepoint": "U+e1a8"
+    },
+    "keyboardPedalHyphen": {
+        "codepoint": "U+e1a7"
+    },
     "keyboardPedalPed": {
         "codepoint": "U+e1ac"
     },
@@ -535,6 +547,9 @@
     },
     "restLonga": {
         "codepoint": "U+e105"
+    },
+    "restMaxima": {
+        "codepoint": "U+e104"
     },
     "restQuarter": {
         "codepoint": "U+e107"
