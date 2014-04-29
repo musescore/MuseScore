@@ -464,6 +464,7 @@ void EditStyle::getValues()
       lstyle.set(ST_harmonyY,                Spatium(harmonyY->value()));
       lstyle.set(ST_harmonyFretDist,         Spatium(harmonyFretDist->value()));
       lstyle.set(ST_minHarmonyDistance,      Spatium(minHarmonyDistance->value()));
+      lstyle.set(ST_maxHarmonyBarDistance,   Spatium(maxHarmonyBarDistance->value()));
 
       lstyle.set(ST_capoPosition,            capoPosition->value());
 
@@ -722,6 +723,7 @@ void EditStyle::setValues()
       harmonyY->setValue(lstyle.value(ST_harmonyY).toDouble());
       harmonyFretDist->setValue(lstyle.value(ST_harmonyFretDist).toDouble());
       minHarmonyDistance->setValue(lstyle.value(ST_minHarmonyDistance).toDouble());
+      maxHarmonyBarDistance->setValue(lstyle.value(ST_maxHarmonyBarDistance).toDouble());
       capoPosition->setValue(lstyle.value(ST_capoPosition).toInt());
       fretNumMag->setValue(lstyle.value(ST_fretNumMag).toDouble()*100.0);
       radioFretNumLeft->setChecked(lstyle.value(ST_fretNumPos).toInt() == 0);

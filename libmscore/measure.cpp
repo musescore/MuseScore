@@ -3052,6 +3052,7 @@ void Measure::layoutX(qreal stretch)
       int tracks               = nstaves * VOICES;
       qreal clefKeyRightMargin = score()->styleS(ST_clefKeyRightMargin).val() * _spatium;
       qreal minHarmonyDistance = score()->styleS(ST_minHarmonyDistance).val() * _spatium;
+      qreal maxHarmonyBarDistance = score()->styleS(ST_maxHarmonyBarDistance).val() * _spatium;
 
       qreal rest[nstaves];    // fixed space needed from previous segment
       memset(rest, 0, nstaves * sizeof(qreal));
@@ -3105,14 +3106,17 @@ void Measure::layoutX(qreal stretch)
                   pSeg = s;
                   continue;
                   }
-            bool gotHarmony = false;
             bool rest2[nstaves];
             bool hRest2[nstaves];
+            bool spaceHarmony = false;
             Segment::SegmentType segType = s->segmentType();
             qreal segmentWidth     = 0.0;
             qreal harmonyWidth     = 0.0;
             qreal stretchDistance  = 0.0;
             int pt                 = pSeg ? pSeg->segmentType() : Segment::SegBarLine;
+#if 0
+            qreal firstHarmonyDistance = 0.0;
+#endif
 
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                   if (!score()->staff(staffIdx)->show())
@@ -3125,6 +3129,9 @@ void Measure::layoutX(qreal stretch)
                   bool found = false;
                   bool hFound = false;
                   bool eFound = false;
+#if 0
+                  qreal harmonyCarryOver = system()->firstMeasure() == this ? 0.0 : // calculate value for this staff; but how to duplicate in Score::computeMinWidth?
+#endif
 
                   if (segType & (Segment::SegChordRest)) {
                         qreal llw = 0.0;
@@ -3227,12 +3234,32 @@ void Measure::layoutX(qreal stretch)
                               else
                                     hBbox = b;
                               hFound = true;
-                              gotHarmony = true;
-                              // allow chord at the beginning of a measure to be dragged left
+                              spaceHarmony = true;
+                              // allow chord to be dragged
+                              qreal xoff = h->pos().x();
+                              qreal bl = -b.left() + qMin(xoff, 0.0);
+                              qreal br = b.right() - qMax(xoff, 0.0);
+                              hSpace.max(Space(bl, br));
+#if 0
                               hSpace.max(Space(s->rtick()?-b.left():0.0, b.right()));
+                              // account for carryover from last measure
+                              if (harmonyCarryOver > 0.0) {
+                                    if (!s->rtick()) {
+                                          // first ChordRest of measure
+                                          // use minDistance to clear carryover harmony
+                                          minDistance = qMax(minDistance, harmonyCarryOver - x);
+                                          }
+                                    else {
+                                          // otherwise, use stretch
+                                          firstHarmonyDistance = qMax(firstHarmonyDistance, harmonyCarryOver + minHarmonyDistance);
+                                          }
+                                    harmonyCarryOver = 0.0;
+                                    }
+#endif
                               }
                         }
                   else {
+                        // current segment (s) is not a ChordRest
                         Element* e = s->element(track);
                         if ((segType == Segment::SegClef) && (pt != Segment::SegChordRest))
                               minDistance = score()->styleS(ST_clefLeftMargin).val() * _spatium;
@@ -3254,7 +3281,8 @@ void Measure::layoutX(qreal stretch)
                               }
                         if (e) {
                               eFound = true;
-                              gotHarmony = true;      // to avoid closing barline
+                              if (!s->next())               // segType & Segment::SegEndBarLine
+                                    spaceHarmony = true;    // to space last Harmony to end of measure
                               space.max(e->space());
                               }
                         }
@@ -3277,10 +3305,14 @@ void Measure::layoutX(qreal stretch)
                         qreal sp = 0.0;
 
                         // space chord symbols unless they miss each other vertically
-                        if (eFound || (hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
+                        if (eFound || (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
                               sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
-                        hLastBbox[staffIdx] = hBbox;
 
+                        // barline: limit space to maxHarmonyBarDistance
+                        if (eFound && !hFound && spaceHarmony)
+                              sp = qMin(sp, maxHarmonyBarDistance);
+
+                        hLastBbox[staffIdx] = hBbox;
                         hRest[staffIdx] = hSpace.rw();
                         hRest2[staffIdx] = false;
                         harmonyWidth = qMax(harmonyWidth, sp);
@@ -3290,6 +3322,7 @@ void Measure::layoutX(qreal stretch)
 
                   clefWidth[staffIdx] = 0.0;
                   }
+
             // set previous seg width before adding in harmony, to allow stretching
             if (segmentIdx) {
                   width[segmentIdx-1] = segmentWidth;
@@ -3298,7 +3331,7 @@ void Measure::layoutX(qreal stretch)
                   }
 
             // make room for harmony if needed
-            segmentWidth = qMax(segmentWidth,harmonyWidth);
+            segmentWidth = qMax(segmentWidth, harmonyWidth);
 
             x += segmentWidth;
             xpos[segmentIdx]  = x;
@@ -3307,10 +3340,11 @@ void Measure::layoutX(qreal stretch)
                   if (!score()->staff(staffIdx)->show())
                         continue;
                   if (rest2[staffIdx])
-                        rest[staffIdx] -= qMin(rest[staffIdx],segmentWidth);
+                        rest[staffIdx] -= qMin(rest[staffIdx], segmentWidth);
                   if (hRest2[staffIdx])
-                        hRest[staffIdx] -= qMin(hRest[staffIdx],segmentWidth);
+                        hRest[staffIdx] -= qMin(hRest[staffIdx], segmentWidth);
                   }
+
             if ((s->segmentType() == Segment::SegChordRest)) {
                   const Segment* nseg = s;
                   for (;;) {
@@ -3339,10 +3373,19 @@ void Measure::layoutX(qreal stretch)
                   ticksList[segmentIdx] = 0;
 
             // if we are on a chord symbol, stretch the notes below it if necessary
-            if (gotHarmony) {
-                  if (hLastIdx >= 0)
+            if (spaceHarmony) {
+                  if (hLastIdx >= 0) {
+                        qDebug("measure %d, segments %d-%d: stretching to %f", _no, hLastIdx, segmentIdx, x-lastx);
                         computeStretch(hMinTick, 0.0, x-lastx, hLastIdx, segmentIdx, ticksList, xpos, width);
-
+                        }
+#if 0
+                  else if (s->rtick() && firstHarmonyDistance > 0.0) {
+                        // account for carryover from previous measure
+                        qDebug("measure %d, initial %d segments: stretching to %f", _no, segmentIdx, firstHarmonyDistance);
+                        computeStretch(0, 0.0, firstHarmonyDistance, 0, segmentIdx, ticksList, xpos, width);
+                        firstHarmonyDistance = 0.0;
+                        }
+#endif
                   hMinTick = 10000;
                   lastx = x;
                   hLastIdx = segmentIdx;
