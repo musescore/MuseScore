@@ -15,3 +15,6 @@ cp   $MSCORE/grace.gp5.mscx grace.gp5-ref.mscx
 cp   $MSCORE/volta.gp5.mscx volta.gp5-ref.mscx
 cp   $MSCORE/volta.gp4.mscx volta.gp4-ref.mscx
 cp   $MSCORE/volta.gp3.mscx volta.gp3-ref.mscx
+cp   $MSCORE/copyright.gp5.mscx copyright.gp5-ref.mscx
+cp   $MSCORE/copyright.gp4.mscx copyright.gp4-ref.mscx
+cp   $MSCORE/copyright.gp3.mscx copyright.gp3-ref.mscx
