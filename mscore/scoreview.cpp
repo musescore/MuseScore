@@ -2811,10 +2811,12 @@ void ScoreView::cmd(const QAction* a)
                   }
             _score->setLayoutAll(true);
             }
+#ifdef OMR
       else if (cmd == "show-omr") {
             if (_score->omr())
                   showOmr(!_score->showOmr());
             }
+#endif
       else if (cmd == "split-measure") {
             Element* e = _score->selection().element();
             if (!(e && (e->type() == Element::NOTE || e->type() == Element::REST))) {
