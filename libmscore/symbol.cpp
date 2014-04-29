@@ -1,4 +1,4 @@
-//=============================================================================
+ //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -113,10 +113,6 @@ void Symbol::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "name") {
                   QString val(e.readElementText());
-                  if (val == "acc dot")               // compatibility hack
-                        val = "accordion.accDot";
-                  else if (val == "acc old ee")
-                        val = "accordion.accOldEE";
                   SymId symId = Sym::name2id(val);
                   if (val != "noSym") {
                         if (symId == SymId::noSym) {
@@ -127,9 +123,9 @@ void Symbol::read(XmlReader& e)
                               if (symId == SymId::noSym)
                                     symId = Sym::oldName2id(val);
                               if (symId == SymId::noSym) {
-                                    qDebug("unknown symbol <%s>, falling back to default symbol", qPrintable(val));
+                                    qDebug("unknown symbol <%s>, falling back to no symbol", qPrintable(val));
                                     // set a default symbol, or layout() will crash
-                                    symId = SymId::noteheadBlack;
+                                    symId = SymId::noSym;
                                     }
                               }
                         }
