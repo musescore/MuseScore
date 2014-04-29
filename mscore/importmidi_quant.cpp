@@ -699,7 +699,11 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
                                     penalty += d.quant.numerator() * MERGE_PENALTY_COEFF
                                                 / d.quant.denominator();
                                     }
-                              // penalty += tempo penalty
+
+                              const auto tempoChangePenalty = ((d.chord->first - p.time)
+                                                - (dPrev.chord->first - pPrev.time)).absValue();
+                              penalty += tempoChangePenalty.numerator() * 1.0
+                                                / tempoChangePenalty.denominator();
 
                               if (penalty < minPenalty) {
                                     minPenalty = penalty;
