@@ -724,10 +724,12 @@
     <key>inspector</key>
     <seq>F8</seq>
     </SC>
+<!--
   <SC>
     <key>omr</key>
     <seq>F5</seq>
     </SC>
+-->
   <SC>
     <key>figured-bass</key>
     <seq>Ctrl+G</seq>
