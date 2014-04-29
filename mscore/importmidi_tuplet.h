@@ -72,6 +72,8 @@ findTupletFreeChord(
             const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt,
             const ReducedFraction &startDivTick);
 
+// Find tuplets and set bar indexes
+
 void findAllTuplets(
             std::multimap<ReducedFraction, TupletData> &tupletEvents,
             std::multimap<ReducedFraction, MidiChord> &chords,

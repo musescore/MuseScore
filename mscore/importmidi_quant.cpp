@@ -903,6 +903,12 @@ void quantizeOnTimes(
                                     }
                               }
 
+                        Q_ASSERT_X(rangeStart != ReducedFraction(-1, 1)
+                                    && rangeEnd != ReducedFraction(-1, 1)
+                                    && rangeStart < rangeEnd,
+                                   "Quantize::quantizeOnTimes",
+                                   "range start and/or range end are incorrect");
+
                         quantizeOnTimesInRange(chordsToQuant, quantizedChords, rangeStart, rangeEnd,
                                                basicQuant, barStart, barFraction);
                         chordsToQuant.clear();
