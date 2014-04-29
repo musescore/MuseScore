@@ -173,6 +173,8 @@ class Shortcut {
 
       bool compareKeys(const Shortcut&) const;
       QString keysToString() const;
+      static QString getMenuShortcutString(const QMenu* menu);
+
       void write(Ms::Xml&) const;
       void read(Ms::XmlReader&);
 
