@@ -318,6 +318,8 @@ void initStyle(MStyle* s)
          false, QColor(Qt::black), QColor(255, 255, 255, 0),                   // default params
          TextStyle::HIDE_IN_EDITOR);                                           // don't show in Style Editor
 
+      s->set(ST_hideInstrumentNameIfOneInstrument, true);
+
 #undef MM
 #undef OA
 #undef OS

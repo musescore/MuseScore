@@ -322,6 +322,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="hideInstrumentNameIfOneInstrument">
+            <property name="text">
+             <string>Hide instrument name if there is only 1 instrument</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>

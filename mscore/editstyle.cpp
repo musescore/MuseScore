@@ -333,6 +333,7 @@ void EditStyle::getValues()
       lstyle.set(ST_minMMRestWidth,          Spatium(minMeasureWidth->value()));
       lstyle.set(ST_hideEmptyStaves,         hideEmptyStaves->isChecked());
       lstyle.set(ST_dontHideStavesInFirstSystem, dontHideStavesInFirstSystem->isChecked());
+      lstyle.set(ST_hideInstrumentNameIfOneInstrument, hideInstrumentNameIfOneInstrument->isChecked());
 
       lstyle.set(ST_accidentalNoteDistance,  Spatium(accidentalNoteDistance->value()));
       lstyle.set(ST_accidentalDistance,      Spatium(accidentalDistance->value()));
@@ -587,6 +588,7 @@ void EditStyle::setValues()
       hideEmptyStaves->setChecked(lstyle.value(ST_hideEmptyStaves).toBool());
       dontHideStavesInFirstSystem->setChecked(lstyle.value(ST_dontHideStavesInFirstSystem).toBool());
       dontHideStavesInFirstSystem->setEnabled(hideEmptyStaves->isChecked());
+      hideInstrumentNameIfOneInstrument->setChecked(lstyle.value(ST_hideInstrumentNameIfOneInstrument).toBool());
 
       accidentalNoteDistance->setValue(lstyle.value(ST_accidentalNoteDistance).toDouble());
       accidentalDistance->setValue(lstyle.value(ST_accidentalDistance).toDouble());
