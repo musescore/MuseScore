@@ -20,6 +20,7 @@ class ReducedFraction
       static ReducedFraction fromTicks(int ticks);
       ReducedFraction reduced() const;
       ReducedFraction absValue() const;
+      double toDouble() const;
       int ticks() const;
       void reduce();
 

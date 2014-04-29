@@ -75,7 +75,7 @@ ReducedFraction reduceQuantIfDottedNote(const ReducedFraction &noteLen,
       {
       auto newRaster = raster;
       const auto div = noteLen / raster;
-      const double ratio = div.numerator() * 1.0 / div.denominator();
+      const double ratio = div.toDouble();
       if (ratio > 1.45 && ratio < 1.55)     // 1.5: dotted note that is larger than quantization value
             newRaster /= 2;                 // reduce quantization error for dotted notes
       return newRaster;
@@ -665,6 +665,34 @@ int findLastChordPosition(const std::vector<QuantData> &quantData)
       return posIndex;
       }
 
+double findTempoPenalty(
+            const QuantPos &p,
+            const QuantPos &pPrev,
+            const QuantData &d,
+            const QuantData &dPrev,
+            const std::vector<QuantData> &quantData,
+            int chordIndex)
+      {
+      double penalty;
+      const QuantData &dPrevPrev = quantData[chordIndex - 2];
+      const QuantPos &pPrevPrev = dPrevPrev.positions[pPrev.prevPos];
+      if (pPrev.time != p.time && pPrevPrev.time != pPrev.time) {
+            const double veloc = ((pPrev.time - p.time)
+                        / (dPrev.chord->first - d.chord->first)).toDouble();
+            const double prevVeloc = ((pPrevPrev.time - pPrev.time)
+                        / (dPrevPrev.chord->first - dPrev.chord->first)).toDouble();
+            const double timeDiff = ((p.time + pPrev.time) / 2
+                           - (pPrevPrev.time + pPrev.time) / 2).toDouble();
+            penalty = qAbs((veloc - prevVeloc) * timeDiff);
+            }
+      else {
+            const auto tempoChangePenalty = ((d.chord->first - p.time)
+                            - (dPrev.chord->first - pPrev.time)).absValue();
+            penalty = tempoChangePenalty.toDouble();
+            }
+      return penalty;
+      }
+
 void applyDynamicProgramming(std::vector<QuantData> &quantData)
       {
       const auto &opers = preferences.midiImportOperations.currentTrackOperations();
@@ -675,8 +703,7 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
             QuantData &d = quantData[chordIndex];
             for (int pos = 0; pos != (int)d.positions.size(); ++pos) {
                   QuantPos &p = d.positions[pos];
-                  const auto timeDiff = (d.chord->first - p.time).absValue();
-                  const double timePenalty = timeDiff.numerator() * 1.0 / timeDiff.denominator();
+                  const auto timePenalty = (d.chord->first - p.time).absValue().toDouble();
                   const double levelDiff = 1 + qAbs(d.metricalLevelForLen - p.metricalLevel);
 
                   if (p.metricalLevel <= d.metricalLevelForLen)
@@ -696,14 +723,13 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
                               if (pPrev.time == p.time) {
                                     if (!d.canMergeWithPrev)
                                           continue;
-                                    penalty += d.quant.numerator() * MERGE_PENALTY_COEFF
-                                                / d.quant.denominator();
+                                    penalty += d.quant.toDouble() * MERGE_PENALTY_COEFF;
                                     }
 
-                              const auto tempoChangePenalty = ((d.chord->first - p.time)
-                                                - (dPrev.chord->first - pPrev.time)).absValue();
-                              penalty += tempoChangePenalty.numerator() * 1.0
-                                                / tempoChangePenalty.denominator();
+                              if (chordIndex > 1) {
+                                    penalty += findTempoPenalty(p, pPrev, d, dPrev,
+                                                                quantData, chordIndex);
+                                    }
 
                               if (penalty < minPenalty) {
                                     minPenalty = penalty;
