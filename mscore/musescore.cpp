@@ -812,6 +812,7 @@ MuseScore::MuseScore()
       //    Menu Edit
       //---------------------
 
+
       menuEdit = mb->addMenu(tr("&Edit"));
       menuEdit->setObjectName("Edit");
       menuEdit->addAction(getAction("undo"));
@@ -836,6 +837,7 @@ MuseScore::MuseScore()
       menuMeasure->addAction(getAction("split-measure"));
       menuMeasure->addAction(getAction("join-measure"));
       menuEdit->addMenu(menuMeasure);
+
 
       menuEdit->addSeparator();
       QMenu* menuVoices = new QMenu(tr("&Voices"));
@@ -1084,6 +1086,7 @@ MuseScore::MuseScore()
       menuHelp->addSeparator();
 
       QAction *aboutAction = new QAction(tr("&About"), 0);
+
       aboutAction->setMenuRole(QAction::AboutRole);
       connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
       menuHelp->addAction(aboutAction);
@@ -1109,6 +1112,12 @@ MuseScore::MuseScore()
 
       menuHelp->addSeparator();
       menuHelp->addAction(getAction("resource-manager"));
+
+      //accessibility for menus
+      foreach (QMenu* menu, mb->findChildren<QMenu*>()) {
+            menu->setAccessibleName(menu->objectName());
+            menu->setAccessibleDescription(Shortcut::getMenuShortcutString(menu));
+            }
 
       setCentralWidget(envelope);
 
