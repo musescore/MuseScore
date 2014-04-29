@@ -715,7 +715,7 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
       tt->setTrack(0);
       Segment* segment = measure->getSegment(Segment::SegChordRest, measure->tick());
       segment->add(tt);
-      score->setTempo(measure->tick(),tt->tempo());
+      score->setTempo(measure->tick(), tt->tempo());
       }
 
 //---------------------------------------------------------
@@ -1596,7 +1596,7 @@ void GuitarPro3::read(QFile* fp)
                         }
                   }
             }
-      setTempo(tempo,score->firstMeasure());
+      setTempo(tempo, score->firstMeasure());
       }
 
 int GuitarPro3::readBeatEffects(int track, Segment* segment)
@@ -1665,7 +1665,7 @@ void GuitarPro4::readBend()
 //   readMixChange
 //---------------------------------------------------------
 
-void GuitarPro4::readMixChange()
+void GuitarPro4::readMixChange(Measure* measure)
       {
       /*char patch   =*/ readChar();
       char volume  = readChar();
@@ -1688,8 +1688,14 @@ void GuitarPro4::readMixChange()
             readChar();
       if (tremolo >= 0)
             readChar();
-      if (tempo >= 0)
+      if (tempo >= 0) {
+            if (tempo != previousTempo) {
+                  previousTempo = tempo;
+                  setTempo(tempo, measure);
+                  }
             readChar();
+            }
+
       readChar();       // bitmask: what should be applied to all tracks
       }
 
@@ -2233,7 +2239,7 @@ void GuitarPro4::read(QFile* fp)
                         if (beatBits & 0x8)
                               readBeatEffects(staffIdx * VOICES, segment);
                         if (beatBits & 0x10)
-                              readMixChange();
+                              readMixChange(measure);
                         int strings = readUChar();   // used strings mask
                         Fraction l  = len2fraction(len);
 
@@ -2321,7 +2327,7 @@ void GuitarPro4::read(QFile* fp)
                         }
                   }
             }
-      setTempo(tempo,score->firstMeasure());
+      setTempo(tempo, score->firstMeasure());
       }
 
 //---------------------------------------------------------
@@ -2791,7 +2797,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       if (beatBits & 0x8)
             beatEffects = readBeatEffects(staffIdx * VOICES + voice, segment);
       if (beatBits & 0x10)
-            readMixChange();
+            readMixChange(measure);
 
       int strings = readUChar();   // used strings mask
 
@@ -2897,7 +2903,7 @@ void GuitarPro5::readMeasure(Measure* measure, int staffIdx, Tuplet** tuplets)
 //   readMixChange
 //---------------------------------------------------------
 
-void GuitarPro5::readMixChange()
+void GuitarPro5::readMixChange(Measure* measure)
       {
       /*char patch   =*/ readChar();
       skip(16);
@@ -2924,6 +2930,10 @@ void GuitarPro5::readMixChange()
       if (tremolo >= 0)
             readChar();
       if (tempo >= 0) {
+            if (tempo != previousTempo) {
+                  previousTempo = tempo;
+                  setTempo(tempo, measure);
+                  }
             readChar();
             if (version > 500)
                   readChar();
@@ -3166,7 +3176,7 @@ void GuitarPro5::read(QFile* fp)
       createMeasures();
       readTracks();
       readMeasures();
-      setTempo(tempo,score->firstMeasure());
+      setTempo(tempo, score->firstMeasure());
       }
 
 //---------------------------------------------------------
