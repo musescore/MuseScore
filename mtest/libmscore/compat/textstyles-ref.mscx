@@ -29,6 +29,7 @@
       <chordStyle>custom</chordStyle>
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>cchords_muse.xml</chordDescriptionFile>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <concertPitch>1</concertPitch>
       <minTieLength>0</minTieLength>
       <voltaY>-2</voltaY>
