@@ -3201,7 +3201,6 @@ void Measure::layoutX(qreal stretch)
                                     if ((pt & Segment::SegKeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
-                              // qDebug("measure %d: minDistance = %f", _no, minDistance);
                               space.max(cr->space());
                               int n = cr->lyricsList().size();
                               for (int i = 0; i < n; ++i) {
@@ -3375,7 +3374,6 @@ void Measure::layoutX(qreal stretch)
             // if we are on a chord symbol, stretch the notes below it if necessary
             if (spaceHarmony) {
                   if (hLastIdx >= 0) {
-                        qDebug("measure %d, segments %d-%d: stretching to %f", _no, hLastIdx, segmentIdx, x-lastx);
                         computeStretch(hMinTick, 0.0, x-lastx, hLastIdx, segmentIdx, ticksList, xpos, width);
                         }
 #if 0
