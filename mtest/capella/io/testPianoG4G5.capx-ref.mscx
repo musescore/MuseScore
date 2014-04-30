@@ -47,7 +47,8 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          </StaffType>
         <barLineSpan>2</barLineSpan>
         </Staff>
       <trackName>right hand</trackName>
@@ -60,7 +61,8 @@
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          </StaffType>
         <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>left hand</trackName>

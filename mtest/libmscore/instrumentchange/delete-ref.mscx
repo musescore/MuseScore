@@ -43,7 +43,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
@@ -78,7 +80,9 @@
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Oboe</trackName>

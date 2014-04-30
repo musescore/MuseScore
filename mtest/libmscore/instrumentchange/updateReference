@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/instrumentchange/add-test.mscx    add-ref.mscx
+cp ../../../build.debug/mtest/libmscore/instrumentchange/change-test.mscx change-ref.mscx
+cp ../../../build.debug/mtest/libmscore/instrumentchange/copy-test.mscx   copy-ref.mscx
+cp ../../../build.debug/mtest/libmscore/instrumentchange/delete-test.mscx delete-ref.mscx
+cp ../../../build.debug/mtest/libmscore/instrumentchange/mixer-test.mscx  mixer-ref.mscx
+
+

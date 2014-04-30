@@ -44,11 +44,14 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          </StaffType>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>

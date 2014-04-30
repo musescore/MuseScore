@@ -23,30 +23,6 @@
         </page-layout>
       <Spatium>1.76389</Spatium>
       </Style>
-    <StaffType idx="5" group="tablature">
-      <name>Tab. 6-str common</name>
-      <lines>6</lines>
-      <lineDistance>1.5</lineDistance>
-      <clef>1</clef>
-      <slashStyle>1</slashStyle>
-      <barlines>1</barlines>
-      <timesig>0</timesig>
-      <durations>0</durations>
-      <durationFontName>MuseScore Tab Modern</durationFontName>
-      <durationFontSize>15</durationFontSize>
-      <durationFontY>0</durationFontY>
-      <fretFontName>MuseScore Tab Serif</fretFontName>
-      <fretFontSize>9</fretFontSize>
-      <fretFontY>0</fretFontY>
-      <linesThrough>0</linesThrough>
-      <minimStyle>1</minimStyle>
-      <onLines>1</onLines>
-      <showRests>0</showRests>
-      <stemsDown>1</stemsDown>
-      <stemsThrough>0</stemsThrough>
-      <upsideDown>0</upsideDown>
-      <useNumbers>1</useNumbers>
-      </StaffType>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -67,7 +43,8 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          </StaffType>
         </Staff>
       <trackName>Track 1</trackName>
       <Instrument>
@@ -291,12 +268,33 @@
       <Part>
         <Staff id="1">
           <linkedTo>1</linkedTo>
-          <type>0</type>
+          <StaffType group="pitched">
+            </StaffType>
           <bracket type="0" span="2"/>
           </Staff>
         <Staff id="2">
           <linkedTo>1</linkedTo>
-          <type>5</type>
+          <StaffType group="tablature">
+            <name>Tab. 6-str common</name>
+            <lines>6</lines>
+            <lineDistance>1.5</lineDistance>
+            <timesig>0</timesig>
+            <durations>0</durations>
+            <durationFontName>MuseScore Tab Modern</durationFontName>
+            <durationFontSize>15</durationFontSize>
+            <durationFontY>0</durationFontY>
+            <fretFontName>MuseScore Tab Serif</fretFontName>
+            <fretFontSize>9</fretFontSize>
+            <fretFontY>0</fretFontY>
+            <linesThrough>0</linesThrough>
+            <minimStyle>1</minimStyle>
+            <onLines>1</onLines>
+            <showRests>0</showRests>
+            <stemsDown>1</stemsDown>
+            <stemsThrough>0</stemsThrough>
+            <upsideDown>0</upsideDown>
+            <useNumbers>1</useNumbers>
+            </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>

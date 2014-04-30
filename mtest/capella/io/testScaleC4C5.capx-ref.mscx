@@ -47,7 +47,8 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          </StaffType>
         </Staff>
       <trackName></trackName>
       <Instrument>
