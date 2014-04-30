@@ -298,6 +298,18 @@ target_link_libraries(mscore
       effects
       vorbisfile
       )
+
+#if MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by ther user), the output executable will be
+#called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
+#both installed in the same prefix on a Linux system.
+if (MSCORE_OUTPUT_NAME)
+      set_target_properties(
+            ${ExecutableName}
+            PROPERTIES
+            OUTPUT_NAME ${MSCORE_OUTPUT_NAME}
+            )
+endif (MSCORE_OUTPUT_NAME)
+
 if (ZERBERUS)
       target_link_libraries(mscore zerberus synthesizer)
 endif ()
