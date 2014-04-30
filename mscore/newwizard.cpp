@@ -103,7 +103,6 @@ void InstrumentWizard::expandOrCollapse(const QModelIndex &model)
 void InstrumentWizard::init()
       {
       partiturList->clear();
-      StaffListItem::populateStaffTypes(0);     // no score yet!
       instrumentList->clearSelection();
       addButton->setEnabled(false);
       removeButton->setEnabled(false);
@@ -423,7 +422,7 @@ void InstrumentWizard::on_belowButton_clicked()
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
       nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
-      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
+    nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
       partiturList->clearSelection();     // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }

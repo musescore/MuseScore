@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>751</width>
-    <height>456</height>
+    <width>696</width>
+    <height>542</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,29 +26,7 @@
    <string>MuseScore: Edit Staff/Part Properties</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0" rowspan="3">
-    <widget class="QLabel" name="label_5">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="musescore.qrc">:/data/bg1.jpg</pixmap>
-     </property>
-     <property name="scaledContents">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
+   <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -537,7 +515,7 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="2" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -547,7 +525,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -568,17 +546,7 @@
       <bool>false</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="3">
-       <widget class="QComboBox" name="staffType">
-        <property name="maxVisibleItems">
-         <number>16</number>
-        </property>
-        <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToContents</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
+      <item row="4" column="0">
        <widget class="QLabel" name="label_15">
         <property name="text">
          <string>Extra distance:</string>
@@ -586,26 +554,23 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QCheckBox" name="invisible">
+       <widget class="QLabel" name="label_12">
         <property name="text">
-         <string>Invisible staff lines</string>
+         <string>Type:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <spacer name="horizontalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+      <item row="0" column="3">
+       <widget class="QToolButton" name="changeStaffType">
+        <property name="text">
+         <string>Change Type...</string>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>79</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       </widget>
       </item>
-      <item row="1" column="3">
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="staffGroupName"/>
+      </item>
+      <item row="4" column="1">
        <widget class="QDoubleSpinBox" name="spinExtraDistance">
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -624,40 +589,46 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>Type:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>79</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="small">
+      <item row="1" column="0" colspan="4">
+       <widget class="QFrame" name="frame">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="text">
-         <string>Small staff</string>
-        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QCheckBox" name="invisible">
+           <property name="text">
+            <string>Invisible staff lines</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="small">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Small staff</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>Staff line color:</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
-      <item row="1" column="5">
+      <item row="1" column="4">
        <widget class="Awl::ColorLabel" name="color">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
@@ -676,13 +647,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="5">
-       <widget class="QLabel" name="label_16">
-        <property name="text">
-         <string>Staff line color:</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -697,10 +661,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>invisible</tabstop>
-  <tabstop>small</tabstop>
-  <tabstop>staffType</tabstop>
-  <tabstop>spinExtraDistance</tabstop>
   <tabstop>partName</tabstop>
   <tabstop>instrumentName</tabstop>
   <tabstop>changeInstrument</tabstop>

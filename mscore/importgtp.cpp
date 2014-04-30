@@ -871,7 +871,7 @@ qDebug("BeginRepeat=============================================");
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-//TODO-ST                  staff->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -1458,7 +1458,7 @@ void GuitarPro3::read(QFile* fp)
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-//TODO-ST                  staff->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -2165,7 +2165,7 @@ void GuitarPro4::read(QFile* fp)
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-//TODO-ST                  staff->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -3028,7 +3028,7 @@ void GuitarPro5::readTracks()
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-//TODO-TS                  staff->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -3330,9 +3330,9 @@ Score::FileError importGTP(Score* score, const QString& name)
                   Staff* s1 = p->staff(1);
                   s1->setUpdateKeymap(true);
 
-//TODO-ST                  StaffType* st = static_cast<StaffTypeTablature*>(pscore->staffType(TAB_DEFAULT_STAFF_TYPE));
-//                  st->setSlashStyle(true);
-//                  s1->setStaffType(st);
+                  StaffType st = *StaffType::preset(TAB_DEFAULT_STAFF_TYPE);
+                  st.setSlashStyle(true);
+                  s1->setStaffType(&st);
                   s1->linkTo(s);
                   cloneStaff(s,s1);
                   p->staves()->front()->addBracket(BracketItem(BRACKET_NORMAL, 2));
@@ -3345,10 +3345,10 @@ Score::FileError importGTP(Score* score, const QString& name)
             excerpt->parts().append(part);
             score->excerpts().append(excerpt);
 
-//TODO-ST            if (part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
-//                  Staff* staff2 = pscore->staff(1);
-//                  staff2->setStaffType(pscore->staffType(TAB_DEFAULT_STAFF_TYPE));
-//                  }
+            if (part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
+                  Staff* staff2 = pscore->staff(1);
+                  staff2->setStaffType(StaffType::preset(TAB_DEFAULT_STAFF_TYPE));
+                  }
 
             //
             // create excerpt title

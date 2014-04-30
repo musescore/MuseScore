@@ -2159,14 +2159,6 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
-         "staff-types",
-         QT_TRANSLATE_NOOP("action","Staff Types..."),
-         QT_TRANSLATE_NOOP("action","Staff type editor"),
-         QT_TRANSLATE_NOOP("action","Show staff type editor")
-         ),
-      Shortcut(
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
          "add-noteline",
          QT_TRANSLATE_NOOP("action","Note anchored Textline")
          ),

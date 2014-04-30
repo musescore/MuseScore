@@ -374,8 +374,9 @@ void Staff::write(Xml& xml) const
                         xml.tag("linkedTo", s->staffIdx(staff) + 1);
                   }
             }
+
       _staffType.write(xml);
-//      xml.tag("type", score()->staffTypeIdx(_staffType));
+
       if (small() && !xml.excerptmode)    // switch small staves to normal ones when extracting part
             xml.tag("small", small());
       if (invisible())
@@ -418,7 +419,12 @@ void Staff::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "type")
+            if (tag == "type") {    // obsolete
+                  int staffTypeIdx = e.readInt();
+                  qDebug("Staff::read staffTypeIdx %d", staffTypeIdx);
+                  _staffType = *StaffType::preset(staffTypeIdx);
+                  }
+            else if (tag == "StaffType")
                   _staffType.read(e);
             else if (tag == "small")
                   setSmall(e.readInt());
@@ -733,19 +739,12 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);
             }
+      const StaffType* pst = staffType ? staffType : t->staffTypePreset;
+      if (!pst)
+            pst = StaffType::getDefaultPreset(t->staffGroup);
 
-      // determine staff type and set number of lines accordingly
-      // set lines AFTER setting the staff type, so if lines are different, the right staff type is cloned
-      StaffType* st = 0;
-      // get staff type if given or from instrument staff type, if not given
-      // (if none, get default for staff group)
-      const StaffType* presetStaffType = (staffType ? staffType : StaffType::preset(t->staffTypePreset) );
-      if (!presetStaffType)
-            presetStaffType = StaffType::getDefaultPreset(t->staffGroup, 0);
-
-      // use selected staff type
-      setStaffType(st);
-//      if (st->group() == PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
+      setStaffType(pst);
+//      if (pst->group() == PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
 //            setLines(t->staffLines[cidx]);      // use number of lines from instr. template
       }
 
@@ -756,9 +755,8 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
 void Staff::initFromStaffType(const StaffType* staffType)
       {
       // get staff type if given (if none, get default preset for default staff group)
-      const StaffType* presetStaffType = staffType;
-      if (!presetStaffType)
-            presetStaffType = StaffType::getDefaultPreset(STANDARD_STAFF_GROUP, 0);
+      if (!staffType)
+            staffType = StaffType::getDefaultPreset(STANDARD_STAFF_GROUP);
 
       // use selected staff type
       setStaffType(staffType);

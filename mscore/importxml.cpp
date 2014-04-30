@@ -1794,8 +1794,8 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             // Note: part has been read, staff type already set based on clef type and staff-details
             // but may be incorrect for a percussion staff that does not use a percussion clef
             for (int j = 0; j < part->nstaves(); ++j)
-//TODO-ST                  if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
-//                        part->staff(j)->setStaffType(score->staffType(PERC_DEFAULT_STAFF_TYPE));
+                  if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
+                        part->staff(j)->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
             // set drumset for instrument
             part->instr()->setUseDrumset(true);
             part->instr()->setDrumset(drumset);
@@ -3294,8 +3294,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         staffIdx += number - 1;
                   // qDebug("xmlAttributes clef score->staff(0) %p staffIdx %d score->staff(%d) %p",
                   //       score->staff(0), staffIdx, staffIdx, score->staff(staffIdx));
-//TODO-ST                  if (st != STANDARD_STAFF_TYPE)
-//                        score->staff(staffIdx)->setStaffType(score->staffType(st));
+                  if (st != STANDARD_STAFF_TYPE)
+                        score->staff(staffIdx)->setStaffType(StaffType::preset(st));
                   }
             else if (e.tagName() == "staves")
                   ;  // ignore, already handled

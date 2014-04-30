@@ -90,7 +90,6 @@ QQmlEngine* MScore::_qml = 0;
 
 Sequencer* MScore::seq = 0;
 
-extern void initStaffTypes();
 extern void initDrumset();
 extern void initScoreFonts();
 extern QString mscoreGlobalShare;
@@ -204,8 +203,7 @@ void MScore::init()
             }
 #endif
       initScoreFonts();
-      StaffType::readConfigFile(0);          // get TAB font config, before initStaffTypes()
-      initStaffTypes();
+      StaffType::initStaffTypes();
       initDrumset();
       FiguredBass::readConfigFile(0);
       }

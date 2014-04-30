@@ -18,6 +18,7 @@
 #include "spatium.h"
 #include "fraction.h"
 #include "property.h"
+#include "stafftype.h"
 
 namespace Ms {
 
@@ -51,6 +52,7 @@ class XmlReader : public QXmlStreamReader {
       QList<Beam*>    _beams;
       QList<Tuplet*>  _tuplets;
       QList<SpannerValues> _spannerValues;
+      QList<StaffType> _staffTypes;
       void htmlToString(int level, QString*);
 
    public:
@@ -102,6 +104,7 @@ class XmlReader : public QXmlStreamReader {
       QList<Beam*>& beams()                          { return _beams; }
       void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
       const SpannerValues* spannerValues(int id);
+      QList<StaffType>& staffType() { return _staffTypes; }
       };
 
 //---------------------------------------------------------

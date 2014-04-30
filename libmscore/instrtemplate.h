@@ -23,6 +23,7 @@ class Xml;
 class Part;
 class Staff;
 class StringData;
+class StaffType;
 
 //---------------------------------------------------------
 //   InstrumentGenre
@@ -39,7 +40,8 @@ class InstrumentGenre {
       void read(XmlReader&);
       };
 
-//---------------------------------------------------------//   InstrumentTemplate
+//---------------------------------------------------------
+//   InstrumentTemplate
 //---------------------------------------------------------
 
 class InstrumentTemplate {
@@ -61,7 +63,7 @@ class InstrumentTemplate {
       Interval transpose;     // for transposing instruments
 
       StaffGroup  staffGroup;
-      int         staffTypePreset;
+      const StaffType* staffTypePreset;
       bool useDrumset;
       Drumset* drumset;
 

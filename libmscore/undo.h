@@ -33,6 +33,7 @@
 #include "noteevent.h"
 #include "synthesizerstate.h"
 #include "bracket.h"
+#include "stafftype.h"
 
 namespace Ms {
 
@@ -61,7 +62,6 @@ class PageFormat;
 class TextStyle;
 class Tuplet;
 class KeySig;
-class StaffType;
 class TimeSig;
 class Clef;
 class Image;
@@ -738,13 +738,27 @@ class ChangeStaff : public UndoCommand {
       bool        invisible;
       qreal       userDist;
       QColor      color;
-      StaffType*  staffType;
 
       void flip();
 
    public:
-      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, QColor _color, StaffType*);
+      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, QColor _color);
       UNDO_NAME("ChangeStaff")
+      };
+
+//---------------------------------------------------------
+//   ChangeStaffType
+//---------------------------------------------------------
+
+class ChangeStaffType : public UndoCommand {
+      Staff*     staff;
+      StaffType  staffType;
+
+      void flip();
+
+   public:
+      ChangeStaffType(Staff* s, const StaffType& t) : staff(s), staffType(t) {}
+      UNDO_NAME("ChangeStaffType")
       };
 
 //---------------------------------------------------------
