@@ -566,7 +566,7 @@ namespace Bww {
    Display error \a s.
    */
 
-  void Parser::errorHandler(QString s)
+  void Parser::errorHandler(QString /*s*/)
   {
 #if 0 // WS
     std::cerr << "Parse error line "
