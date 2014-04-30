@@ -211,37 +211,42 @@ void StaffType::setLines(int val)
 void StaffType::write(Xml& xml) const
       {
       xml.stag(QString("StaffType group=\"%1\"").arg(groupName()));
-      xml.tag("name", name());
-      // uncontionally write properties: staff types are read back over a copy of the built-in types
-      // and properties may be different across types => each might need to be properly (re-)set
-      xml.tag("lines", lines());
-      xml.tag("lineDistance", lineDistance().val());
-      xml.tag("clef", genClef());
-      xml.tag("slashStyle", slashStyle());
-      xml.tag("barlines", showBarlines());
-      xml.tag("timesig", genTimesig());
+      if (!_name.isEmpty())
+            xml.tag("name", _name);
+      if (_lines != 5)
+            xml.tag("lines", _lines);
+      if (_lineDistance.val() != 1.0)
+            xml.tag("lineDistance", _lineDistance.val());
+      if (!_genClef)
+            xml.tag("clef", _genClef);
+      if (_slashStyle)
+            xml.tag("slashStyle", _slashStyle);
+      if (!_showBarlines)
+            xml.tag("barlines", _showBarlines);
+      if (!_genTimesig)
+            xml.tag("timesig", _genTimesig);
       if (_group == STANDARD_STAFF_GROUP || _group == PERCUSSION_STAFF_GROUP) {
-            if (!genKeysig())
-                  xml.tag("keysig", genKeysig());
-            if (!showLedgerLines())
-                  xml.tag("ledgerlines", showLedgerLines());
+            if (!_genKeysig)
+                  xml.tag("keysig", _genKeysig);
+            if (!_showLedgerLines)
+                  xml.tag("ledgerlines", _showLedgerLines);
             }
       else {
-            xml.tag("durations",          _genDurations);
-            xml.tag("durationFontName",   _durationFonts[_durationFontIdx].displayName);
-            xml.tag("durationFontSize",   _durationFontSize);
-            xml.tag("durationFontY",      _durationFontUserY);
-            xml.tag("fretFontName",       _fretFonts[_fretFontIdx].displayName);
-            xml.tag("fretFontSize",       _fretFontSize);
-            xml.tag("fretFontY",          _fretFontUserY);
-            xml.tag("linesThrough",       _linesThrough);
-            xml.tag("minimStyle",         _minimStyle);
-            xml.tag("onLines",            _onLines);
-            xml.tag("showRests",          _showRests);
-            xml.tag("stemsDown",          _stemsDown);
-            xml.tag("stemsThrough",       _stemsThrough);
-            xml.tag("upsideDown",         _upsideDown);
-            xml.tag("useNumbers",         _useNumbers);
+            xml.tag("durations",        _genDurations);
+            xml.tag("durationFontName", _durationFonts[_durationFontIdx].displayName);
+            xml.tag("durationFontSize", _durationFontSize);
+            xml.tag("durationFontY",    _durationFontUserY);
+            xml.tag("fretFontName",     _fretFonts[_fretFontIdx].displayName);
+            xml.tag("fretFontSize",     _fretFontSize);
+            xml.tag("fretFontY",        _fretFontUserY);
+            xml.tag("linesThrough",     _linesThrough);
+            xml.tag("minimStyle",       _minimStyle);
+            xml.tag("onLines",          _onLines);
+            xml.tag("showRests",        _showRests);
+            xml.tag("stemsDown",        _stemsDown);
+            xml.tag("stemsThrough",     _stemsThrough);
+            xml.tag("upsideDown",       _upsideDown);
+            xml.tag("useNumbers",       _useNumbers);
             }
       xml.etag();
       }
@@ -268,6 +273,10 @@ void StaffType::read(XmlReader& e)
                   setShowBarlines(e.readInt());
             else if (tag == "timesig")
                   setGenTimesig(e.readInt());
+            else if (tag == "keysig")
+                  _genKeysig = e.readInt();
+            else if (tag == "ledgerlines")
+                  _showLedgerLines = e.readInt();
             else if (tag == "durations")
                   setGenDurations(e.readInt() != 0);
             else if (tag == "durationFontName")

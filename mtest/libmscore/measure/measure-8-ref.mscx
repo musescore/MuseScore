@@ -55,7 +55,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="1"/>
         </Staff>
       <trackName>Voice</trackName>

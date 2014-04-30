@@ -41,7 +41,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
@@ -116,6 +118,12 @@
           </BarLine>
         </Measure>
       <Measure number="4">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
         <Chord>
           <durationType>whole</durationType>
           <Note>
@@ -127,16 +135,6 @@
           <concertClefType>F</concertClefType>
           <transposingClefType>F</transposingClefType>
           </Clef>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
-        </Measure>
-      <Measure number="5">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
@@ -163,6 +161,16 @@
           </BarLine>
         </Measure>
       <Measure number="8">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      <Measure number="9">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>

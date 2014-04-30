@@ -45,7 +45,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Alto</trackName>
@@ -79,7 +81,9 @@
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Tenor</trackName>
@@ -708,7 +712,9 @@
       <Part>
         <Staff id="1">
           <linkedTo>1</linkedTo>
-          <type>0</type>
+          <StaffType group="pitched">
+            <name>Standard</name>
+            </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>
@@ -1071,7 +1077,9 @@
       <Part>
         <Staff id="1">
           <linkedTo>2</linkedTo>
-          <type>0</type>
+          <StaffType group="pitched">
+            <name>Standard</name>
+            </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>

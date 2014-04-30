@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/keysig/keysig01-test.mscx keysig01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/keysig/keysig02-test.mscx keysig02-ref.mscx
+
+

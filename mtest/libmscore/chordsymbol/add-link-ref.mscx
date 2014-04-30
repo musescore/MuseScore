@@ -42,12 +42,16 @@
     <Part>
       <Staff id="1">
         <linkedTo>2</linkedTo>
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <Staff id="2">
         <linkedTo>1</linkedTo>
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Classical Guitar</trackName>
