@@ -18,3 +18,6 @@ cp   $MSCORE/volta.gp3.mscx volta.gp3-ref.mscx
 cp   $MSCORE/copyright.gp5.mscx copyright.gp5-ref.mscx
 cp   $MSCORE/copyright.gp4.mscx copyright.gp4-ref.mscx
 cp   $MSCORE/copyright.gp3.mscx copyright.gp3-ref.mscx
+cp   $MSCORE/tempo.gp5.mscx tempo.gp5-ref.mscx
+cp   $MSCORE/tempo.gp4.mscx tempo.gp4-ref.mscx
+cp   $MSCORE/tempo.gp3.mscx tempo.gp3-ref.mscx
