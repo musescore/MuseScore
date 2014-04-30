@@ -64,7 +64,7 @@ MuseScore is licensed under GPL version 2.0. See LICENSE.GPL in the same directo
     Not used currently. [Diff, Match and Patch Library](http://code.google.com/p/google-diff-match-patch/)
 
     * **thirdparty/ofqf**
-    OSC server interface. Based on [OSC for Qt4](http://www.arnoldarts.de/drupal/?q=ofqf)
+    OSC server interface. Based on [OSC for Qt4](http://www.arnoldarts.de/ofqf.html)
 
     * **thirdparty/singleapp**
     Clone from [Qt Single Application](http://qt.gitorious.org/qt-solutions/qt-solutions/trees/master/qtsingleapplication)
