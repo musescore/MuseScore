@@ -134,7 +134,6 @@ QString revision;
 QErrorMessage* errorMessage;
 const char* voiceActions[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
 
-extern void initStaffTypes();
 extern bool savePositions(Score*, const QString& name);
 extern TextPalette* textPalette;
 
@@ -1029,12 +1028,10 @@ MuseScore::MuseScore()
       menuStyle->addAction(getAction("edit-text-style"));
       if (enableExperimental)
             menuStyle->addAction(getAction("edit-harmony"));
-      menuStyle->addAction(getAction("staff-types"));
 
       menuStyle->addSeparator();
       menuStyle->addAction(getAction("load-style"));
       menuStyle->addAction(getAction("save-style"));
-//      menuStyle->addAction(getAction("save-default-style"));
 
       //---------------------
       //    Menu Plugins
@@ -4277,20 +4274,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   cs->doLayout();
                   cs->setUpdateAll(true);
                   }
-            }
-      else if (cmd == "staff-types") {
-            Staff* staff = cs->staff(0);
-            EditStaffType* est = new EditStaffType(this, staff);
-//            if (est->exec() && est->isModified()) {
-//                  Score* score = cs->rootScore();
-//                  score->startCmd();
-//                  score->deselectAll();
-//                  QList<StaffType*> tl = est->getStaffTypes();
-//TODO-ST                  score->replaceStaffTypes(tl);
-//                  score->setLayoutAll(true);
-//                  score->endCmd();
-//                  }
-            delete est;
             }
       else if (cmd == "lock") {
             if (_sstate == STATE_LOCK)

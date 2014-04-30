@@ -94,24 +94,14 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       // Call initStaffTypeCombo(true) ONLY if the item has been repositioned
       // or a memory leak may result
 
-      bool canUseTabs = false;                   // assume only normal staves are applicable
-      bool canUsePerc = false;
-      PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
-      // PartListItem has different members filled out if used in New Score Wizard or in Instruments Wizard
-      if (part) {
-            StringData* stringData = part->it ? part->it->stringData :
-                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->stringData() : 0);
-            canUseTabs = stringData && stringData->strings() > 0;
-            canUsePerc = part->it ? part->it->useDrumset :
-                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->useDrumset() : false);
-            }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
-      foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList)
-            if ( (canUseTabs && staffTypeData.staffType->group() == TAB_STAFF_GROUP)
-                        || ( canUsePerc && staffTypeData.staffType->group() == PERCUSSION_STAFF_GROUP)
-                        || (!canUsePerc && staffTypeData.staffType->group() == STANDARD_STAFF_GROUP) )
-                  _staffTypeCombo->addItem(staffTypeData.displayName, staffTypeData.idx);
+
+      int idx = 0;
+      for (const StaffType& st : StaffType::presets()) {
+            _staffTypeCombo->addItem(st.name(), idx);
+            ++idx;
+            }
       treeWidget()->setItemWidget(this, 4, _staffTypeCombo);
       connect(_staffTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(staffTypeChanged(int)) );
       }
@@ -143,7 +133,6 @@ void StaffListItem::setClef(const ClefTypeList& val)
 void StaffListItem::setLinked(bool val)
       {
       _linked = val;
-//      setText(3, _linked ? InstrumentsDialog::tr("linked") : "");
       setIcon(3, _linked ? *icons[checkmark_ICON] : QIcon() );
       }
 
@@ -151,10 +140,25 @@ void StaffListItem::setLinked(bool val)
 //   setStaffType
 //---------------------------------------------------------
 
-void StaffListItem::setStaffType(int staffTypeIdx)
+void StaffListItem::setStaffType(const StaffType* st)
       {
-      int itemIdx = _staffTypeCombo->findData(staffTypeIdx);
-      _staffTypeCombo->setCurrentIndex(itemIdx >= 0 ? itemIdx : 0);
+      for (int i = 0; i < _staffTypeCombo->count(); ++i) {
+            const StaffType* _st = StaffType::preset(_staffTypeCombo->itemData(i).toInt());
+            if (_st == st) {
+                  _staffTypeCombo->setCurrentIndex(i);
+                  return;
+                  }
+            }
+      _staffTypeCombo->setCurrentIndex(0);
+      }
+
+//---------------------------------------------------------
+//   setStaffType
+//---------------------------------------------------------
+
+void StaffListItem::setStaffType(int idx)
+      {
+      _staffTypeCombo->setCurrentIndex(idx);
       }
 
 //---------------------------------------------------------
@@ -163,9 +167,7 @@ void StaffListItem::setStaffType(int staffTypeIdx)
 
 const StaffType* StaffListItem::staffType() const
       {
-      int staffTypeIdx = _staffTypeCombo->itemData(_staffTypeCombo->currentIndex()).toInt();
-      const StaffType* stfType = getListedStaffType(staffTypeIdx);
-      return (stfType ? stfType : StaffType::preset(0));
+      return StaffType::preset(staffTypeIdx());
       }
 
 //---------------------------------------------------------
@@ -185,7 +187,7 @@ void StaffListItem::staffTypeChanged(int idx)
       {
       // check current clef matches new staff type
       int staffTypeIdx = _staffTypeCombo->itemData(idx).toInt();
-      const StaffType* stfType = getListedStaffType(staffTypeIdx);
+      const StaffType* stfType = StaffType::preset(staffTypeIdx);
       if (stfType->group() != ClefInfo::staffGroup(_clef._transposingClef)) {
             ClefType clefType;
             switch (stfType->group()) {
@@ -201,81 +203,9 @@ void StaffListItem::staffTypeChanged(int idx)
                   }
             setClef(ClefTypeList(clefType, clefType));
             }
-      if (_score && staff && staff->staffType() != stfType)
+      if (staff && staff->staffType()->name() != stfType->name())
             if (op != ITEM_DELETE && op != ITEM_ADD)
                   op = ITEM_UPDATE;
-      }
-
-//---------------------------------------------------------
-//   static members
-//---------------------------------------------------------
-
-//---------------------------------------------------------
-//   populateStaffTypes
-//
-//    Contructs a list of all staff types OR presets for a given score.
-//    The list can be accessed later with getListedStaffType().
-//    The list is intended to be used to populate the staff type/preset drop down lists and its
-//    contents and order are optimized for this.
-//
-//    If the score contains some staff type, staff types are listed; if there is no score or it
-//    has no staff types (as it happens for new scores with the New Score Wizard), presets are listed instead.
-//
-//    The list is sorted by staff group: Standard, Percussion, Tab.
-//
-//    Currently, the staff type list is used by the New Instrument page of the New Score Wizard
-//    and by the "Add | Instruments" dlg box.
-//---------------------------------------------------------
-
-std::vector<StaffListItem::STAFF_LIST_STAFF_TYPE> StaffListItem::staffTypeList;
-Score * StaffListItem::_score = 0;
-
-void StaffListItem::populateStaffTypes(Score *score)
-      {
-#if 0 // TODO-ST
-      STAFF_LIST_STAFF_TYPE staffTypeData;
-      int idx;
-
-      staffTypeList.clear();
-      _score = score;
-      int numOfPresets = StaffType::numOfPresets();
-      // sort staff types by group
-      for (int group=0; group < STAFF_GROUP_MAX; group++) {
-            // if there is a score and it has some staff types, list them
-            if (score && score->staffTypes().count() > 0) {
-                  idx = 0;
-                  foreach(StaffType** staffType, score->staffTypes() ) {
-                        if ( (*staffType)->group() == group && !(*staffType)->builtin() ) {
-                              staffTypeData.idx             = idx;
-                              staffTypeData.displayName     = (*staffType)->name();
-                              staffTypeData.staffType       = *staffType;
-                              staffTypeList.push_back(staffTypeData);
-                              }
-                        idx++;
-                        }
-                  }
-            else {
-                  // otherwise, list presets
-                  for (idx = 0; idx < numOfPresets; idx++) {
-                        if ( StaffType::preset(idx)->group() == group) {
-                              staffTypeData.idx             = idx;
-                              staffTypeData.staffType       = StaffType::preset(idx);
-                              staffTypeData.displayName     = staffTypeData.staffType->name();
-                              staffTypeList.push_back(staffTypeData);
-                              }
-                        }
-                  }
-            }
-#endif
-      }
-
-const StaffType* StaffListItem::getListedStaffType(int idx)
-      {
-      foreach (STAFF_LIST_STAFF_TYPE staffTypeData, staffTypeList) {
-            if (staffTypeData.idx == idx)
-                  return staffTypeData.staffType;
-            }
-      return 0;
       }
 
 //---------------------------------------------------------
@@ -474,7 +404,6 @@ void InstrumentsDialog::expandOrCollapse(const QModelIndex &model)
 void InstrumentsDialog::genPartList()
       {
       partiturList->clear();
-      StaffListItem::populateStaffTypes(cs);
 
       foreach(Part* p, cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
@@ -501,8 +430,7 @@ void InstrumentsDialog::genPartList()
                               }
                         }
                   sli->setLinked(bLinked);
-//TODO-ST                  int staffTypeIdx = cs->staffTypeIdx(s->staffType());
-//                  sli->setStaffType(staffTypeIdx);
+                  sli->setStaffType(s->staffType());
                   }
             partiturList->setItemExpanded(pli, true);
             }
@@ -674,12 +602,11 @@ void InstrumentsDialog::on_upButton_clicked()
                   // get the currently selected staff type of each combo and re-insert
                   int numOfStaffListItems = item->childCount();
                   int staffIdx[numOfStaffListItems];
-                  int itemIdx;
-                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
+                  for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
                         staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
                   partiturList->insertTopLevelItem(idx-1, item);
                   // after-re-insertion, recreate each combo and set its index
-                  for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
+                  for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
                         StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
                         staffItem->initStaffTypeCombo(true);
                         staffItem->setStaffType(staffIdx[itemIdx]);
@@ -855,8 +782,8 @@ void InstrumentsDialog::on_belowButton_clicked()
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
       nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
-      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
-      partiturList->clearSelection();     // should not be necessary
+      nsli->setStaffType(sli->staffType());     // before a widget can be set into it
+      partiturList->clearSelection();           // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }
 
@@ -884,8 +811,8 @@ void InstrumentsDialog::on_linkedButton_clicked()
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
       nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
-      nsli->setStaffType(sli->staffTypeIdx());  // before a widget can be set into it
-      partiturList->clearSelection();     // should not be necessary
+      nsli->setStaffType(sli->staffType());     // before a widget can be set into it
+      partiturList->clearSelection();           // should not be necessary
       partiturList->setItemSelected(nsli, true);
       }
 
@@ -1107,29 +1034,12 @@ void MuseScore::editInstrList()
                               StaffGroup og = staff->staffGroup();      // old staff group
                               bool updateNeeded = (ng == TAB_STAFF_GROUP) != (og == TAB_STAFF_GROUP);
 
-                              // look for a staff type with same structure among staff types already defined in the score
-                              StaffType* st;
-                              bool found = false;
-#if 0 //TODO-ST
-                              foreach (StaffType** scoreStaffType, rootScore->staffTypes()) {
-                                    if ( (*scoreStaffType)->isSameStructure(*stfType) ) {
-                                          st = *scoreStaffType;         // staff type found in score: use for instrument staff
-                                          found = true;
-                                          break;
-                                          }
-                                    }
-                              // if staff type not found in score, use from preset (for staff and for adding to score staff types)
-                              if (!found) {
-                                    st = stfType->clone();
-                                    rootScore->addStaffType(st);
-                                    }
-
                               // use selected staff type
-                              if (st != staff->staffType())
-                                    rootScore->undo(new ChangeStaff(staff, staff->small(), staff->invisible(), staff->userDist(), staff->color(), st));
+                              if (stfType->name() != staff->staffType()->name())
+                                    rootScore->undo(new ChangeStaffType(staff, *stfType));
+
                               if (updateNeeded)
                                     rootScore->cmdUpdateNotes();
-#endif
                               }
                         else {
                               ++staffIdx;
@@ -1165,16 +1075,7 @@ void MuseScore::editInstrList()
                   dl.push_back(idx);
             }
 
-//      bool sort = false;
-//      for (int i = 0; i < dl.size(); ++i) {
-//            if (dl[i] != i) {
-//                  sort = true;
-//                  break;
-//                  }
-//            }
-
-//      if (sort)
-            rootScore->undo(new SortStaves(rootScore, dl));
+      rootScore->undo(new SortStaves(rootScore, dl));
 
       //
       // check for valid barLineSpan and bracketSpan

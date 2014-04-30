@@ -43,7 +43,6 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       int         _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
 
       void apply();
-      void fillStaffTypeCombo();
       void setInterval(const Interval&);
       void updateInstrument();
 
@@ -55,6 +54,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       void editDrumsetClicked();
       void editStringDataClicked();
       void showInstrumentDialog();
+      void showStaffTypeDialog();
       void editShortNameClicked();
       void editLongNameClicked();
       void minPitchAClicked();

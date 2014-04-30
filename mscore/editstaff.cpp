@@ -36,6 +36,7 @@
 #include "editpitch.h"
 #include "editstringdata.h"
 #include "libmscore/stringdata.h"
+#include "editstafftype.h"
 
 namespace Ms {
 
@@ -54,9 +55,10 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       instrument = *part->instr();
       Score* score = part->score();
 
+      staffGroupName->setText(staff->staffType()->groupName());
+
       // hide string data controls if instrument has no strings
       stringDataFrame->setVisible(instrument.stringData() && instrument.stringData()->strings() > 0);
-      fillStaffTypeCombo();
       small->setChecked(staff->small());
       invisible->setChecked(staff->invisible());
       spinExtraDistance->setValue(s->userDist() / score->spatium());
@@ -67,6 +69,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
 
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
       connect(changeInstrument, SIGNAL(clicked()), SLOT(showInstrumentDialog()));
+      connect(changeStaffType,  SIGNAL(clicked()), SLOT(showStaffTypeDialog()));
       connect(editShortName,    SIGNAL(clicked()), SLOT(editShortNameClicked()));
       connect(editLongName,     SIGNAL(clicked()), SLOT(editLongNameClicked()));
       connect(minPitchASelect,  SIGNAL(clicked()), SLOT(minPitchAClicked()));
@@ -74,36 +77,6 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       connect(minPitchPSelect,  SIGNAL(clicked()), SLOT(minPitchPClicked()));
       connect(maxPitchPSelect,  SIGNAL(clicked()), SLOT(maxPitchPClicked()));
       connect(editStringData,   SIGNAL(clicked()), SLOT(editStringDataClicked()));
-      }
-
-//---------------------------------------------------------
-//   fillStaffTypecombo
-//---------------------------------------------------------
-
-void EditStaff::fillStaffTypeCombo()
-      {
-#if 0 // TODO-ST
-      Score* score   = staff->score();
-      int curIdx     = -1;
-      // can this instrument accept tabs or drum set?
-      bool canUseTabs = instrument.stringData() && instrument.stringData()->strings() > 0;
-      bool canUsePerc = instrument.useDrumset();
-      staffType->clear();
-
-      for (int idx = 0; idx < score->staffTypes().size(); ++idx) {
-            StaffType* st = score->staffType(idx);
-            if ( (canUseTabs && st->group() == TAB_STAFF_GROUP)
-                        || ( canUsePerc && st->group() == PERCUSSION_STAFF_GROUP)
-                        || (!canUsePerc && st->group() == STANDARD_STAFF_GROUP) ) {
-                  staffType->addItem(st->name(), idx);
-                  if (st == staff->staffType())
-                        curIdx = staffType->count() - 1;
-                  }
-            }
-      if (curIdx == -1)
-            qDebug("EditStaff::fillStaffTypeCombo: staff type not found");
-      staffType->setCurrentIndex(curIdx == -1 ? 0 : curIdx);
-#endif
       }
 
 //---------------------------------------------------------
@@ -205,7 +178,6 @@ void EditStaff::bboxClicked(QAbstractButton* button)
 
 void EditStaff::apply()
       {
-#if 0 // TODO-ST
       Score* score  = staff->score();
       Part* part    = staff->part();
 
@@ -231,34 +203,25 @@ void EditStaff::apply()
       bool inv          = invisible->isChecked();
       qreal userDist    = spinExtraDistance->value();
       QColor col        = color->color();
-      int staffIdx      = staffType->itemData(staffType->currentIndex()).toInt();
-      StaffType* st     = score->staffType(staffIdx);
 
       // before changing instrument, check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another
 
-      StaffGroup ng = st->group();                          // new staff group
-      StaffGroup og = staff->staffType()->group();          // old staff group
-
-      bool updateNeeded = (ng == TAB_STAFF_GROUP && og != TAB_STAFF_GROUP) ||
-                          (ng != TAB_STAFF_GROUP && og == TAB_STAFF_GROUP) ||
-                          (ng == TAB_STAFF_GROUP && og == TAB_STAFF_GROUP
-                             && instrument.stringData() != part->instr()->stringData());
+      bool updateNeeded = instrument.stringData() != part->instr()->stringData();
 
       if (!(instrument == *part->instr()) || part->partName() != partName->text()) {
             score->undo(new ChangePart(part, instrument, partName->text()));
             emit instrumentChanged();
             }
 
-      if (s != staff->small() || inv != staff->invisible() || userDist != staff->userDist() || st  != staff->staffType() || col != staff->color())
-            score->undo(new ChangeStaff(staff, s, inv, userDist * score->spatium(), col, st));
+      if (s != staff->small() || inv != staff->invisible() || userDist != staff->userDist() || col != staff->color())
+            score->undo(new ChangeStaff(staff, s, inv, userDist * score->spatium(), col));
 
       if (updateNeeded)
             score->cmdUpdateNotes();
 
       score->setLayoutAll(true);
       score->update();
-#endif
       }
 
 //---------------------------------------------------------
@@ -281,7 +244,6 @@ void EditStaff::showInstrumentDialog()
       if (si.exec()) {
             instrument = Instrument::fromTemplate(si.instrTemplate());
             updateInstrument();
-            fillStaffTypeCombo();
             }
       }
 
@@ -366,13 +328,9 @@ void EditStaff::editStringDataClicked()
       if (esd->exec()) {
             StringData* stringData = new StringData(frets, stringList);
             // detect number of strings going from 0 to !0 or vice versa
-            bool redoStaffTypeCombo =
-                  (stringList.size() != 0) != (instrument.stringData()->strings() != 0);
             instrument.setStringData(stringData);
             int numStr = stringData ? stringData->strings() : 0;
             numOfStrings->setText(QString::number(numStr));
-            if (redoStaffTypeCombo)
-                  fillStaffTypeCombo();
             }
       }
 
@@ -400,5 +358,27 @@ QString EditStaff::midiCodeToStr(int midiCode)
       {
       return QString("%1 %2").arg(g_cNoteName[midiCode % 12]).arg(midiCode / 12 - 1);
       }
+
+//---------------------------------------------------------
+//   showStaffTypeDialog
+//---------------------------------------------------------
+
+void EditStaff::showStaffTypeDialog()
+      {
+      EditStaffType editor(this, staff);
+      if (editor.exec()) {
+            const StaffType* nt = editor.getStaffType();
+            StaffGroup og = staff->staffType()->group();
+            StaffGroup ng = nt->group();
+            bool updateNeeded = (ng == TAB_STAFF_GROUP && og != TAB_STAFF_GROUP) ||
+                          (ng != TAB_STAFF_GROUP && og == TAB_STAFF_GROUP) ||
+                          (ng == TAB_STAFF_GROUP && og == TAB_STAFF_GROUP);
+
+            staff->score()->undo()->push(new ChangeStaffType(staff, *editor.getStaffType()));
+            if (updateNeeded)
+                  staff->score()->cmdUpdateNotes();
+            }
+      }
+
 }
 

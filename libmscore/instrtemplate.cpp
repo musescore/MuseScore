@@ -471,15 +471,13 @@ void InstrumentTemplate::read(XmlReader& e)
                         staffGroup = TAB_STAFF_GROUP;
                   else
                         staffGroup = STANDARD_STAFF_GROUP;
-                  int staffTypeIdx;
-                  const StaffType* stfType = 0;
+                  staffTypePreset = 0;
                   if (!xmlPresetName.isEmpty())
-                        stfType = StaffType::presetFromXmlName(xmlPresetName, &staffTypeIdx);
-                  if (!stfType || stfType->group() != staffGroup)
-                        stfType = StaffType::getDefaultPreset(staffGroup, &staffTypeIdx);
-                  if (stfType)
-                        staffLines[staffIdx] = stfType->lines();
-                  staffTypePreset = staffTypeIdx;
+                        staffTypePreset = StaffType::presetFromXmlName(xmlPresetName);
+                  if (!staffTypePreset || staffTypePreset->group() != staffGroup)
+                        staffTypePreset = StaffType::getDefaultPreset(staffGroup);
+                  if (staffTypePreset)
+                        staffLines[staffIdx] = staffTypePreset->lines();
                   }
             else if (tag == "init") {
                   QString val(e.readElementText());

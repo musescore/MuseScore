@@ -68,16 +68,8 @@ class StaffListItem : public QObject, public QTreeWidgetItem {
       bool _linked;
       QComboBox* _staffTypeCombo;
 
-      struct STAFF_LIST_STAFF_TYPE {
-            int               idx;              // idx identifying the staff type
-            QString           displayName;
-            const StaffType*  staffType;
-      };
-
-      // static members to mamage staff type / preset list
-      static Score* _score;
-      static std::vector<STAFF_LIST_STAFF_TYPE> staffTypeList;
-      static const StaffType* getListedStaffType(int idx);
+   private slots:
+      void staffTypeChanged(int);
 
    public:
       StaffListItem();
@@ -93,15 +85,12 @@ class StaffListItem : public QObject, public QTreeWidgetItem {
       const ClefTypeList& clef() const { return _clef;    }
       void setLinked(bool val);
       bool linked() const              { return _linked;  }
-      void setStaffType(int staffTypeIdx);
+      void setStaffType(const StaffType*);
+      void setStaffType(int);
       const StaffType* staffType() const;
       int staffTypeIdx() const;
       void initStaffTypeCombo(bool forceRecreate = false);
-
-      static void populateStaffTypes(Score * score);
-
-   private slots:
-      void staffTypeChanged(int);
+      QComboBox* staffTypeCombo() { return _staffTypeCombo; }
       };
 
 //---------------------------------------------------------

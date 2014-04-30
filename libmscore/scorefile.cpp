@@ -889,8 +889,10 @@ bool Score::read(XmlReader& e)
                   customKeysigs.append(ks);
                   }
             else if (tag == "StaffType") {      // obsolete
+#if 0
                   int idx           = e.intAttribute("idx");
                   QString groupName = e.attribute("group", "pitched");
+
                   int group;
                   // staff type numbering did change!
                   // attempt to keep some compatibility with existing 2.0 scores
@@ -898,8 +900,9 @@ bool Score::read(XmlReader& e)
                         group = PERCUSSION_STAFF_GROUP;
                   else if (groupName == "tablature")
                         group = TAB_STAFF_GROUP;
-                  else group = STANDARD_STAFF_GROUP;
-#if 0
+                  else
+                        group = STANDARD_STAFF_GROUP;
+
                   StaffType* ost = staffType(idx);
                   StaffType* st;
                   if (ost && ost->group() == group)
@@ -909,10 +912,10 @@ bool Score::read(XmlReader& e)
                         st = new StaffType;
                         }
 #endif
+                  qDebug("Score::read  staffType idx %d", e.intAttribute("idx"));
                   StaffType st;
                   st.read(e);
-//                  st->setBuiltin(false);
-                  // TODO addStaffType(idx, st);
+                  e.staffType().append(st);
                   }
             else if (tag == "siglist")
                   _sigmap->read(e, _fileDivision);

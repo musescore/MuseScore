@@ -18,9 +18,12 @@
 #include "mscore.h"
 #include "durationtype.h"
 
-class QPainter;
-
 namespace Ms {
+
+class Chord;
+class ChordRest;
+class Staff;
+class Xml;
 
 // all in spatium units
 #define STAFFTYPE_TAB_DEFAULTSTEMLEN_UP   3.0
@@ -42,6 +45,7 @@ namespace Ms {
 #define STAFFTYPE_TAB_SLASH_THICK         0.4   /* slash thickness */
 #define STAFFTYPE_TAB_SLASH_DISPL         0.8   /* the total displacement between one slash and the next:
                                                       includes slash thickness and empty space between slashes*/
+
 // the total height of a double slash
 #define STAFFTYPE_TAB_SLASH_2TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK+STAFFTYPE_TAB_SLASH_DISPL+STAFFTYPE_TAB_SLASH_SLANTY)
 // the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
@@ -55,11 +59,6 @@ namespace Ms {
 // the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
 #define STAFFTYPE_TAB_SLASH_4STARTY_DN     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP+STAFFTYPE_TAB_SLASH_4TOTHEIGHT)*0.5)
 
-class Chord;
-class ChordRest;
-class Staff;
-class Xml;
-
 //---------------------------------------------------------
 //   TablatureFont
 //---------------------------------------------------------
@@ -68,17 +67,17 @@ class Xml;
 #define NUM_OF_LETTERFRETS    17
 
 struct TablatureFretFont {
-      QString           family;                 // the family of the physical font to use
-      QString           displayName;            // the name to display to the user
-      qreal             defPitch;               // the default size of the font
-      qreal             defYOffset;             // the default Y displacement
-      QChar             xChar;                  // the char to use for 'x'
-      QChar             ghostChar;              // the char to use for ghost notes
-      QString           displayDigit[NUM_OF_DIGITFRETS];    // the string to draw for digit frets
-      QChar             displayLetter[NUM_OF_LETTERFRETS];  // the char to use for letter frets
+      QString family;                 // the family of the physical font to use
+      QString displayName;            // the name to display to the user
+      qreal   defPitch;               // the default size of the font
+      qreal   defYOffset;             // the default Y displacement
+      QChar   xChar;                  // the char to use for 'x'
+      QChar   ghostChar;              // the char to use for ghost notes
+      QString displayDigit[NUM_OF_DIGITFRETS];    // the string to draw for digit frets
+      QChar   displayLetter[NUM_OF_LETTERFRETS];  // the char to use for letter frets
 
       bool read(XmlReader&);
-};
+      };
 
 enum {
       TAB_VAL_LONGA = 0,
@@ -92,138 +91,135 @@ enum {
       TAB_VAL_64,
       TAB_VAL_128,
       TAB_VAL_256,
-            NUM_OF_TAB_VALS
-};
+      NUM_OF_TAB_VALS
+      };
 
 enum TablatureMinimStyle {
       TAB_MINIM_NONE = 0,                       // do not draw half notes at all
       TAB_MINIM_SHORTER,                        // draw half notes with a shorter stem
       TAB_MINIM_SLASHED                         // draw half notes with stem with two slashes
-};
+      };
 
 struct TablatureDurationFont {
-      QString           family;                 // the family of the physical font to use
-      QString           displayName;            // the name to display to the user
-      qreal             defPitch;               // the default size of the font
-      qreal             defYOffset;             // the default Y displacement
-      QChar             displayDot;             // the char to use to draw a dot
-      QChar             displayValue[NUM_OF_TAB_VALS];       // the char to use to draw a duration value
+      QString family;                 // the family of the physical font to use
+      QString displayName;            // the name to display to the user
+      qreal   defPitch;               // the default size of the font
+      qreal   defYOffset;             // the default Y displacement
+      QChar   displayDot;             // the char to use to draw a dot
+      QChar   displayValue[NUM_OF_TAB_VALS];       // the char to use to draw a duration value
 
       bool read(XmlReader&);
-};
+      };
+
+// ready-made staff types:
+
+enum {
+      STANDARD_STAFF_TYPE,
+      PERC_1LINE_STAFF_TYPE, PERC_3LINE_STAFF_TYPE, PERC_5LINE_STAFF_TYPE,
+      TAB_6SIMPLE_STAFF_TYPE, TAB_6COMMON_STAFF_TYPE, TAB_6FULL_STAFF_TYPE,
+            TAB_4SIMPLE_STAFF_TYPE, TAB_4COMMON_STAFF_TYPE, TAB_4FULL_STAFF_TYPE,
+            TAB_UKULELE_STAFF_TYPE, TAB_BALALAJKA_STAFF_TYPE, TAB_ITALIAN_STAFF_TYPE, TAB_FRENCH_STAFF_TYPE,
+      STAFF_TYPES,
+      // some usefull shorthands:
+            PERC_DEFAULT_STAFF_TYPE = PERC_5LINE_STAFF_TYPE,
+            TAB_DEFAULT_STAFF_TYPE = TAB_6COMMON_STAFF_TYPE
+      };
 
 //---------------------------------------------------------
 //   StaffType
 //---------------------------------------------------------
 
 class StaffType {
+      StaffGroup _group = STANDARD_STAFF_GROUP;
 
-      StaffGroup _group;
-      QString _name;
-      int _lines;
-      int _stepOffset;
-      Spatium _lineDistance;
+      QString _xmlName;                   // the name used to reference this preset in intruments.xml
+      QString _name;                      // user visible name
 
-      bool _genClef;          // create clef at beginning of system
-      bool _showBarlines;
-      bool _slashStyle;       // do not show stems
-      bool _genTimesig;       // whether time signature is shown or not
+      int _lines            = 5;
+      int _stepOffset       = 0;
+      Spatium _lineDistance = Spatium(1);
 
-      bool _genKeysig;        // create key signature at beginning of system
-      bool _showLedgerLines;
+      bool _genClef         = true;       // create clef at beginning of system
+      bool _showBarlines    = true;
+      bool _slashStyle      = false;      // do not show stems
+      bool _genTimesig      = true;       // whether time signature is shown or not
+      bool _genKeysig       = true;       // create key signature at beginning of system
+      bool _showLedgerLines = true;
 
       // configurable properties
-      qreal       _durationFontSize;      // the size (in points) for the duration symbol font
-      qreal       _durationFontUserY;     // the vertical offset (spatium units) for the duration symb. font
+      qreal _durationFontSize = 15.0;     // the size (in points) for the duration symbol font
+      qreal _durationFontUserY = 0.0;     // the vertical offset (spatium units) for the duration symb. font
                                           // user configurable
-      qreal       _fretFontSize;          // the size (in points) for the fret marks font
-      qreal       _fretFontUserY;         // additional vert. offset of fret marks with respect to
+      qreal _fretFontSize  = 10.0;        // the size (in points) for the fret marks font
+      qreal _fretFontUserY = 0.0;         // additional vert. offset of fret marks with respect to
                                           // the string line (spatium unit); user configurable
-      bool        _genDurations;          // whether duration symbols are drawn or not
-      bool        _linesThrough;          // whether lines for strings and stems may pass through fret marks or not
-      TablatureMinimStyle _minimStyle;    // how to draw minim stems (stem-and-beam durations only)
-      bool        _onLines;               // whether fret marks are drawn on the string lines or between them
-      bool        _showRests;             // whether to draw rests or not
-      bool        _stemsDown;             // stems are drawn downward (stem-and-beam durations only)
-      bool        _stemsThrough;          // stems are drawn through the staff rather than beside it (stem-and-beam durations only)
-      bool        _upsideDown;            // whether lines are drwan with highest string at top (false) or at bottom (true)
-      bool        _useNumbers;            // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
+      bool  _genDurations = false;        // whether duration symbols are drawn or not
+      bool  _linesThrough = false;        // whether lines for strings and stems may pass through fret marks or not
+      TablatureMinimStyle _minimStyle = TAB_MINIM_NONE;    // how to draw minim stems (stem-and-beam durations only)
+      bool  _onLines      = true;         // whether fret marks are drawn on the string lines or between them
+      bool  _showRests    = false;        // whether to draw rests or not
+      bool  _stemsDown    = true;         // stems are drawn downward (stem-and-beam durations only)
+      bool  _stemsThrough = true;         // stems are drawn through the staff rather than beside it (stem-and-beam durations only)
+      bool  _upsideDown   = false;        // whether lines are drwan with highest string at top (false) or at bottom (true)
+      bool  _useNumbers   = true;         // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
 
       // internally managed variables
-      qreal       _durationBoxH, _durationBoxY; // the height and the y rect.coord. (relative to staff top line)
+      qreal _durationBoxH = 0.0;
+      qreal _durationBoxY = 0.0;          // the height and the y rect.coord. (relative to staff top line)
                                           // of a box bounding all duration symbols (raster units) internally computed:
                                           // depends upon _onString and the metrics of the duration font
-      QFont       _durationFont;          // font used to draw dur. symbols; cached for efficiency
-      int         _durationFontIdx;       // the index of current dur. font in dur. font array
-      qreal       _durationYOffset;       // the vertical offset to draw duration symbols with respect to the
+      QFont _durationFont;                // font used to draw dur. symbols; cached for efficiency
+      int   _durationFontIdx = 0;         // the index of current dur. font in dur. font array
+      qreal _durationYOffset = 0.0;       // the vertical offset to draw duration symbols with respect to the
                                           // string lines (raster units); internally computed: depends upon _onString
-      bool        _durationMetricsValid;  // whether duration font metrics are valid or not
-      qreal       _fretBoxH, _fretBoxY;   // the height and the y rect.coord. (relative to staff line)
+      bool  _durationMetricsValid = false;  // whether duration font metrics are valid or not
+      qreal _fretBoxH = 0.0;
+      qreal _fretBoxY = 0.0;              // the height and the y rect.coord. (relative to staff line)
                                           // of a box bounding all fret characters (raster units) internally computed:
                                           // depends upon _onString, _useNumbers and the metrics of the fret font
-      QFont       _fretFont;              // font used to draw fret marks; cached for efficiency
-      int         _fretFontIdx;           // the index of current fret font in fret font array
-      qreal       _fretYOffset;           // the vertical offset to draw fret marks with respect to the string lines;
+      QFont _fretFont;                    // font used to draw fret marks; cached for efficiency
+      int   _fretFontIdx = 0;             // the index of current fret font in fret font array
+      qreal _fretYOffset = 0.0;           // the vertical offset to draw fret marks with respect to the string lines;
                                           // (raster units); internally computed: depends upon _onString, _useNumbers
                                           // and the metrics of the fret font
-      bool        _fretMetricsValid;      // whether fret font metrics are valid or not
-      qreal       _refDPI;                // reference value used to last compute metrics and to see if they are still valid
+      bool  _fretMetricsValid = false;    // whether fret font metrics are valid or not
+      qreal _refDPI = 0.0;                // reference value used to last compute metrics and to see if they are still valid
 
       // the array of configured fonts
-      static QList<TablatureFretFont>     _fretFonts;
+      static QList<TablatureFretFont> _fretFonts;
       static QList<TablatureDurationFont> _durationFonts;
+      static std::vector<StaffType> _presets;
+
+      void  setDurationMetrics();
+      void  setFretMetrics();
+
+      static bool readConfigFile(const QString& fileName);
 
    public:
       StaffType();
-      StaffType(StaffGroup sg, const QString& name, int lines, qreal lineDist, bool genClef,
-            bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines) :
-            _group(sg), _name(name), _lineDistance(Spatium(lineDist)), _genClef(genClef),_showBarlines(showBarLines),
-            _slashStyle(stemless), _genTimesig(genTimeSig),
-            _genKeysig(genKeySig), _showLedgerLines(showLedgerLines)
-            {
-            setLines(lines);
-            }
-      StaffType(StaffGroup sg, const QString& name, int lines, qreal lineDist, bool genClef,
+      StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, qreal lineDist, bool genClef,
+            bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines);
+
+      StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, qreal lineDist, bool genClef,
                   bool showBarLines, bool stemless, bool genTimesig,
                   const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
                   const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
                   bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
-                  bool stemsDown, bool stemThrough, bool upsideDown, bool useNumbers)
-                  {
-            _group = sg;
-            setName(name);
-            setLines(lines);
-            setLineDistance(Spatium(lineDist));
-            setGenClef(genClef);
-            setShowBarlines(showBarLines);
-            setSlashStyle(stemless);
-            setGenTimesig(genTimesig);
-            setDurationFontName(durFontName);
-            setDurationFontSize(durFontSize);
-            setDurationFontUserY(durFontUserY);
-            setGenDurations(genDur);
-            setFretFontName(fretFontName);
-            setFretFontSize(fretFontSize);
-            setFretFontUserY(fretFontUserY);
-            setLinesThrough(linesThrough);
-            setMinimStyle(minimStyle);
-            setOnLines(onLines);
-            setShowRests(showRests);
-            setStemsDown(stemsDown);
-            setStemsThrough(stemThrough);
-            setUpsideDown(upsideDown);
-            setUseNumbers(useNumbers);
-            }
+                  bool stemsDown, bool stemThrough, bool upsideDown, bool useNumbers);
 
       virtual ~StaffType() {}
-      void init();
 
       StaffGroup group() const                 { return _group;           }
-      QString name() const                     { return _name;            }
+      const QString& name() const              { return _name;            }
+      const QString& xmlName() const           { return _xmlName;         }
       void setName(const QString& val)         { _name = val;             }
+      void setXmlName(const QString& val)      { _xmlName = val;          }
       const char* groupName() const;
+      static const char* groupName(StaffGroup);
+
       bool isEqual(const StaffType&) const;
       bool isSameStructure(const StaffType&) const;
+
       void setLines(int val);
       int lines() const                        { return _lines;           }
       void setStepOffset(int v)                { _stepOffset = v;         }
@@ -246,39 +242,39 @@ class StaffType {
       qreal doty2() const;
 
       // static function to deal with presets
-      static const StaffType* getDefaultPreset(StaffGroup grp, int* idx);
-      static size_t numOfPresets();
+      static const StaffType* getDefaultPreset(StaffGroup grp);
       static const StaffType* preset(int idx);
-      static const StaffType* presetFromName(QString& name, int* idx);
-      static const StaffType* presetFromXmlName(QString& xmlName, int* idx);
-      static const QString& presetXmlName(int idx);
-      static const QString& presetName(int idx);
+//      static const StaffType* presetFromName(QString& name);
+      static const StaffType* presetFromXmlName(QString& xmlName);
 
       void setGenKeysig(bool val)              { _genKeysig = val;        }
       bool genKeysig() const                   { return _genKeysig;       }
       void setShowLedgerLines(bool val)        { _showLedgerLines = val;  }
       bool showLedgerLines() const             { return _showLedgerLines; }
 
-      QString     fretString(int fret, bool ghost) const;   // returns a string with the text for fret
-      QString     durationString(TDuration::DurationType type, int dots) const;
+      QString fretString(int fret, bool ghost) const;   // returns a string with the text for fret
+      QString durationString(TDuration::DurationType type, int dots) const;
+
       // functions to cope with tabulature visual order (top down or upside down)
-      int         physStringToVisual(int strg) const;       // return the string in visual order from physical string
-      int         VisualStringToPhys(int strg) const;       // return the string in physical order from visual string
+      int physStringToVisual(int strg) const;       // return the string in visual order from physical string
+      int VisualStringToPhys(int strg) const;       // return the string in physical order from visual string
 
       // properties getters (some getters require updated metrics)
       qreal durationBoxH();
       qreal durationBoxY();
 
-      const QFont&  durationFont()             { return _durationFont;     }
-      const QString durationFontName() const   { return _durationFonts[_durationFontIdx].displayName; }
+      const QFont&  durationFont()           { return _durationFont;     }
+      const QString durationFontName() const { return _durationFonts[_durationFontIdx].displayName; }
       qreal durationFontSize() const      { return _durationFontSize;   }
       qreal durationFontUserY() const     { return _durationFontUserY;  }
       qreal durationFontYOffset()         { setDurationMetrics(); return _durationYOffset + _durationFontUserY * MScore::DPI*SPATIUM20; }
       qreal fretBoxH()                    { setFretMetrics(); return _fretBoxH; }
       qreal fretBoxY()                    { setFretMetrics(); return _fretBoxY + _fretFontUserY * MScore::DPI*SPATIUM20; }
+
       // 2 methods to return the size of a box masking lines under a fret mark
       qreal fretMaskH()                   { return _lineDistance.val() * MScore::DPI*SPATIUM20; }
       qreal fretMaskY()                   { return (_onLines ? -0.5 : -1.0) * _lineDistance.val() * MScore::DPI*SPATIUM20; }
+
       const QFont&  fretFont()            { return _fretFont;           }
       const QString fretFontName() const  { return _fretFonts[_fretFontIdx].displayName; }
       qreal fretFontSize() const          { return _fretFontSize;       }
@@ -295,17 +291,16 @@ class StaffType {
       bool  useNumbers() const            { return _useNumbers;         }
 
       // properties setters (setting some props invalidates metrics)
-      void  setDurationFontName(QString name);
-      void  setDurationFontSize(qreal val);
+      void  setDurationFontName(const QString&);
+      void  setDurationFontSize(qreal);
       void  setDurationFontUserY(qreal val)     { _durationFontUserY = val; }
-      void  setFretFontName(QString name);
-      void  setFretFontSize(qreal val);
+      void  setFretFontName(const QString&);
+      void  setFretFontSize(qreal);
       void  setFretFontUserY(qreal val)   { _fretFontUserY = val;       }
       void  setGenDurations(bool val)     { _genDurations = val;        }
-//      virtual void setLines(int val)      { _lines = val; _stepOffset = (val / 2 - 2) * 2; }
       void  setLinesThrough(bool val)     { _linesThrough = val;        }
       void  setMinimStyle(TablatureMinimStyle val)    { _minimStyle = val;    }
-      void  setOnLines(bool val);
+      void  setOnLines(bool);
       void  setShowRests(bool val)        { _showRests = val;           }
       void  setStemsDown(bool val)        { _stemsDown = val;           }
       void  setStemsThrough(bool val)     { _stemsThrough = val;        }
@@ -313,39 +308,18 @@ class StaffType {
       void  setUseNumbers(bool val)       { _useNumbers = val; _fretMetricsValid = false; }
 
       // utility functions for tab specially managed elements
-      QPointF     chordStemPos(const Chord * chord) const;
-      qreal       chordRestStemPosY(const ChordRest * chordRest) const;
-      qreal       chordStemPosX(const Chord * /*chord*/) const    { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
-      QPointF     chordStemPosBeam(const  Chord * chord) const;
-      qreal       chordStemLength(const Chord *chord) const;
+      QPointF chordStemPos(const Chord*) const;
+      qreal   chordRestStemPosY(const ChordRest*) const;
+      qreal   chordStemPosX(const Chord*) const       { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
+      QPointF chordStemPosBeam(const  Chord*) const;
+      qreal   chordStemLength(const Chord*) const;
 
       // static functions for font config files
-      static bool             readConfigFile(const QString& fileName);
-      static QList<QString>   fontNames(bool bDuration);
-      static bool             fontData(bool bDuration, int nIdx, QString *pFamily,
-                                    QString *pDisplayName, qreal * pSize, qreal *pYOff);
-
-   protected:
-      void  setDurationMetrics();
-      void  setFretMetrics();
+      static QList<QString> fontNames(bool bDuration);
+      static bool fontData(bool bDuration, int nIdx, QString *pFamily, QString *pDisplayName, qreal * pSize, qreal *pYOff);
+      static void initStaffTypes();
+      static const std::vector<StaffType>& presets() { return _presets; }
       };
-
-// ready-made staff types:
-
-enum {
-      STANDARD_STAFF_TYPE,
-      PERC_1LINE_STAFF_TYPE, PERC_3LINE_STAFF_TYPE, PERC_5LINE_STAFF_TYPE,
-      TAB_6SIMPLE_STAFF_TYPE, TAB_6COMMON_STAFF_TYPE, TAB_6FULL_STAFF_TYPE,
-            TAB_4SIMPLE_STAFF_TYPE, TAB_4COMMON_STAFF_TYPE, TAB_4FULL_STAFF_TYPE,
-            TAB_UKULELE_STAFF_TYPE, TAB_BALALAJKA_STAFF_TYPE, TAB_ITALIAN_STAFF_TYPE, TAB_FRENCH_STAFF_TYPE,
-      STAFF_TYPES,
-      // some usefull shorthands:
-            PERC_DEFAULT_STAFF_TYPE = PERC_5LINE_STAFF_TYPE,
-            TAB_DEFAULT_STAFF_TYPE = TAB_6COMMON_STAFF_TYPE
-      };
-
-
-extern void initStaffTypes();
 
 //---------------------------------------------------------
 //   TabDurationSymbol
@@ -366,12 +340,11 @@ class TabDurationSymbol : public Element {
       virtual void layout();
       virtual ElementType type() const          { return TAB_DURATION_SYMBOL; }
 
-      void  setDuration(TDuration::DurationType type, int dots, StaffType* tab)
-                                                { _tab = tab;
-                                                  _text = tab->durationString(type, dots);
-                                                }
+      void setDuration(TDuration::DurationType type, int dots, StaffType* tab) {
+            _tab = tab;
+            _text = tab->durationString(type, dots);
+            }
       };
-
 
 }     // namespace Ms
 #endif

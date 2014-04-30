@@ -98,7 +98,7 @@ bool StringData::convertPitch(int pitch, int* string, int* fret) const
       int strings = stringTable.size();
 
       // if above max fret on highest string, fret on first string, but return failure
-      if(pitch > stringTable.at(strings-1) + _frets) {
+      if (pitch > stringTable.at(strings-1) + _frets) {
             *string = 0;
             *fret   = 0;
             return false;
