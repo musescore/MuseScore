@@ -2447,6 +2447,16 @@ void ChangePart::flip()
             printf("ChangePart transpose %d %d    %d %d\n", oint.diatonic, oint.chromatic,
                nint.diatonic, nint.chromatic);
             }
+
+      foreach (Staff* linked_staff, part->staff(0)->linkedStaves()->staves()) {
+            Part* excerpt_part = linked_staff->part();
+            if(excerpt_part == part) continue;
+            excerpt_part->setInstrument(instrument);
+            excerpt_part->setPartName(partName);
+            excerpt_part->score()->rebuildMidiMapping();
+            excerpt_part->score()->setInstrumentsChanged(true);
+            excerpt_part->score()->setPlaylistDirty(true);
+            }
       // check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another
 
