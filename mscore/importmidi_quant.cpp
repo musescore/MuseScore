@@ -469,7 +469,8 @@ void findMetricalLevels(
                         d.quantForLen /= 2;
 
                         Q_ASSERT_X(d.quantForLen >= MChord::minAllowedDuration(),
-                                   "Quantize::findQuantData", "quantForLen < min allowed duration");
+                                   "Quantize::findMetricalLevels",
+                                   "quantForLen < min allowed duration");
 
                         continue;
                         }
@@ -491,7 +492,7 @@ void findChordRangeEnds(
             d.chordRangeEnd = barStart + quantizeToSmall(rangeEnd - barStart, d.quant);
 
             Q_ASSERT_X(d.chord->first + beatLen >= rangeStart,
-                       "Quantize::findQuantData", "chord on time + beatLen < rangeStart");
+                       "Quantize::findChordRangeEnds", "chord on time + beatLen < rangeStart");
 
             if (d.chord->first + beatLen < rangeEnd) {
                   d.chordRangeEnd = barStart + quantizeToSmall(
@@ -510,14 +511,14 @@ void findChordRangeEnds(
                   d.chordRangeEnd = d.chordRangeStart;
 
             Q_ASSERT_X(d.chordRangeEnd <= rangeEnd,
-                       "Quantize::findQuantData", "chordRangeEnd > rangeEnd");
+                       "Quantize::findChordRangeEnds", "chordRangeEnd > rangeEnd");
             Q_ASSERT_X(d.chordRangeStart <= d.chordRangeEnd,
-                       "Quantize::findQuantData", "chordRangeStart is greater than chordRangeEnd");
+                       "Quantize::findChordRangeEnds", "chordRangeStart is greater than chordRangeEnd");
             Q_ASSERT_X(((d.chordRangeEnd - barStart) / d.quant).reduced().denominator() == 1,
-                       "Quantize::findQuantData",
+                       "Quantize::findChordRangeEnds",
                        "chordRangeEnd - barStart is not dividable by quant");
             Q_ASSERT_X(((d.chordRangeEnd - d.chordRangeStart) / d.quant).reduced().denominator() == 1,
-                       "Quantize::findQuantData",
+                       "Quantize::findChordRangeEnds",
                        "chordRangeEnd - chordRangeStart is not dividable by quant");
             }
       }
@@ -535,7 +536,7 @@ void findChordRangeStarts(
                   d.chordRangeStart = barStart + quantizeToLarge(rangeStart - barStart, d.quant);
 
                   Q_ASSERT_X(d.chord->first - beatLen <= rangeEnd,
-                             "Quantize::findQuantData", "chord on time - beatLen > rangeEnd");
+                             "Quantize::findChordRangeStarts", "chord on time - beatLen > rangeEnd");
 
                   if (d.chord->first - beatLen > rangeStart) {
                         d.chordRangeStart = barStart + quantizeToLarge(
@@ -563,14 +564,14 @@ void findChordRangeStarts(
                   }
 
             Q_ASSERT_X(notLessThanPrev(it, data),
-                       "Quantize::findQuantData",
+                       "Quantize::findChordRangeStarts",
                        "chordRangeStart is less than previous chordRangeStart");
             Q_ASSERT_X(d.chordRangeStart >= rangeStart,
-                       "Quantize::findQuantData", "chordRangeStart < rangeStart");
+                       "Quantize::findChordRangeStarts", "chordRangeStart < rangeStart");
             Q_ASSERT_X(d.chordRangeStart < rangeEnd,
-                       "Quantize::findQuantData", "chordRangeStart >= rangeEnd");
+                       "Quantize::findChordRangeStarts", "chordRangeStart >= rangeEnd");
             Q_ASSERT_X(((d.chordRangeStart - barStart) / d.quant).reduced().denominator() == 1,
-                       "Quantize::findQuantData",
+                       "Quantize::findChordRangeStarts",
                        "chordRangeStart - barStart is not dividable by quant");
             }
       }
@@ -608,12 +609,12 @@ void findQuants(
                   auto maxQuant = basicQuant;
                   while (maxQuant < barFraction)
                         maxQuant *= 2;
-                  d.quantForLen = quantForLen(qMin(MChord::minNoteLen(*chordIt), rangeEnd - rangeStart),
-                                              maxQuant);
+                  d.quantForLen = quantForLen(
+                           qMin(MChord::minNoteLen(*chordIt), rangeEnd - rangeStart), maxQuant);
                   }
 
             Q_ASSERT_X(d.quant <= rangeEnd - rangeStart,
-                       "Quantize::findQuantData", "Quant value is larger than range interval");
+                       "Quantize::findQuants", "Quant value is larger than range interval");
 
             data.push_back(d);
             }
@@ -668,7 +669,7 @@ int findLastChordPosition(const std::vector<QuantData> &quantData)
             }
 
       Q_ASSERT_X(posIndex != -1,
-                 "Quantize::quantizeOnTimesInRange", "Last index was not found");
+                 "Quantize::findLastChordPosition", "Last index was not found");
 
       return posIndex;
       }
@@ -746,7 +747,7 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
                               }
 
                         Q_ASSERT_X(minPos != -1,
-                                   "Quantize::quantizeOnTimesInRange", "Min pos was not found");
+                                   "Quantize::applyDynamicProgramming", "Min pos was not found");
 
                         p.penalty += minPenalty;
                         p.prevPos = minPos;
@@ -842,7 +843,7 @@ void quantizeOffTimes(
                   if (note.offTime - chordEvent.first < MChord::minAllowedDuration()) {
                         noteIt = chord.notes.erase(noteIt);
                         // TODO - never delete notes here
-                        qDebug() << "quantizeChords: note was removed due to its short length";
+                        qDebug() << "quantizeOffTimes: note was removed due to its short length";
                         continue;
                         }
 
