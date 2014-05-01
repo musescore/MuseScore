@@ -46,6 +46,10 @@ Bend::Bend(Score* s)
 
 void Bend::layout()
       {
+      // during mtest, there may be no score. If so, exit.
+      if (!score())
+            return;
+
       qreal _spatium = spatium();
 
       if (staff() && !staff()->isTabStaff()) {
