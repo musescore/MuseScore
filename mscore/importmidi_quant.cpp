@@ -404,6 +404,14 @@ bool notLessThanPrev(
       return true;
       }
 
+bool isTupletRangeCorrect(
+            const MidiTuplet::TupletData &tuplet,
+            const ReducedFraction &rangeStart,
+            const ReducedFraction &rangeEnd)
+      {
+      return (rangeStart == tuplet.onTime && rangeEnd == tuplet.onTime + tuplet.len);
+      }
+
 #endif
 
 
@@ -756,9 +764,20 @@ void quantizeOnTimesInRange(
             const ReducedFraction &barStart,
             const ReducedFraction &barFraction)
       {
-      Q_ASSERT_X(!chords.empty(), "Quantize::quantizeChordOnTimes", "Empty chords");
+      Q_ASSERT_X(!chords.empty(), "Quantize::quantizeOnTimesInRange", "Empty chords");
       Q_ASSERT_X(areAllVoicesSame(chords),
-                 "Quantize::quantizeChordOnTimes", "Chord voices are not the same");
+                 "Quantize::quantizeOnTimesInRange", "Chord voices are not the same");
+
+      Q_ASSERT_X(rangeStart != ReducedFraction(-1, 1)
+                  && rangeEnd != ReducedFraction(-1, 1)
+                  && rangeStart < rangeEnd,
+                 "Quantize::quantizeOnTimesInRange",
+                 "range start and/or range end are incorrect");
+
+      Q_ASSERT_X((chords.front()->second.isInTuplet) ? isTupletRangeCorrect(
+                  chords.front()->second.tuplet->second, rangeStart, rangeEnd) : true,
+                 "Quantize::quantizeOnTimesInRange", "Tuplet range is incorrect");
+
 
       std::vector<QuantData> quantData = findQuantData(chords, rangeStart, rangeEnd,
                                                        basicQuant, barStart, barFraction);
@@ -887,27 +906,21 @@ void quantizeOnTimes(
                               || (nextChord->second.isInTuplet && currentlyInTuplet
                                   && nextChord->second.tuplet != chordIt->second.tuplet)) {
 
-                        if (nextChord != chords.end()) {
-                              if (nextChord->second.barIndex != currentBarIndex) {
+                        if (!currentlyInTuplet) {
+                              if (nextChord != chords.end()) {
+                                    if (nextChord->second.barIndex != currentBarIndex) {
+                                          rangeEnd = ReducedFraction::fromTicks(
+                                                       sigmap->bar2tick(currentBarIndex + 1, 0));
+                                          }
+                                    else if (nextChord->second.isInTuplet) {
+                                          rangeEnd = nextChord->second.tuplet->second.onTime;
+                                          }
+                                    }
+                              else {
                                     rangeEnd = ReducedFraction::fromTicks(
                                                       sigmap->bar2tick(currentBarIndex + 1, 0));
                                     }
-                              else if (!currentlyInTuplet && nextChord->second.isInTuplet) {
-                                    rangeEnd = nextChord->second.tuplet->second.onTime;
-                                    }
                               }
-                        else {
-                              if (!currentlyInTuplet) {
-                                    rangeEnd = ReducedFraction::fromTicks(
-                                                      sigmap->bar2tick(currentBarIndex + 1, 0));
-                                    }
-                              }
-
-                        Q_ASSERT_X(rangeStart != ReducedFraction(-1, 1)
-                                    && rangeEnd != ReducedFraction(-1, 1)
-                                    && rangeStart < rangeEnd,
-                                   "Quantize::quantizeOnTimes",
-                                   "range start and/or range end are incorrect");
 
                         quantizeOnTimesInRange(chordsToQuant, quantizedChords, rangeStart, rangeEnd,
                                                basicQuant, barStart, barFraction);
