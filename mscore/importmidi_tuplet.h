@@ -72,6 +72,12 @@ findTupletFreeChord(
             const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt,
             const ReducedFraction &startDivTick);
 
+bool isChordBelongToThisBar(
+            const ReducedFraction &chordOnTime,
+            const ReducedFraction &barStart,
+            int chordBarIndex,
+            int currentBarIndex);
+
 // Find tuplets and set bar indexes
 
 void findAllTuplets(

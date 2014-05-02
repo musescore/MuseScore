@@ -372,8 +372,10 @@ void removeUnusedTuplets(
             else {
                   eraseBackTiedTuplet(tuplets[i].id, backTiedTuplets);
                   for (const auto &chord: tuplets[i].chords) {
-                        if (chord.first >= barStart || chord.second->second.barIndex == barIndex)
+                        if (isChordBelongToThisBar(chord.first, barStart,
+                                                   chord.second->second.barIndex, barIndex)) {
                               nonTuplets.push_back(chord.second);
+                              }
                         pendingNonTuplets.insert(&*chord.second);
                         }
                   }

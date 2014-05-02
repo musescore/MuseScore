@@ -249,6 +249,15 @@ findTupletChords(const std::vector<TupletInfo> &tuplets)
       return tupletChords;
       }
 
+bool isChordBelongToThisBar(
+            const ReducedFraction &chordOnTime,
+            const ReducedFraction &barStart,
+            int chordBarIndex,
+            int currentBarIndex)
+      {
+      return chordOnTime >= barStart || chordBarIndex == currentBarIndex;
+      }
+
 std::list<std::multimap<ReducedFraction, MidiChord>::iterator>
 findNonTupletChords(
             const std::vector<TupletInfo> &tuplets,
@@ -263,8 +272,10 @@ findNonTupletChords(
                         // because of tol chord on time can belong to previous bar
                         // so don't use it as non-tuplet chord
             if (tupletChords.find(&*it) == tupletChords.end()
-                        && (it->first >= barStart || it->second.barIndex == barIndex))
+                        && isChordBelongToThisBar(it->first, barStart,
+                                                  it->second.barIndex, barIndex)) {
                   nonTuplets.push_back(it);
+                  }
             }
 
       return nonTuplets;
@@ -396,8 +407,8 @@ void minimizeOffTimeError(
                   for (int i: removedIndexes)
                         newNotes.push_back(notes[i]);
                   notes = newNotes;
-                  if (firstChord->first >= startBarTick
-                              || firstChord->second->second.barIndex == barIndex) {
+                  if (isChordBelongToThisBar(firstChord->first, startBarTick,
+                                             firstChord->second->second.barIndex, barIndex)) {
                         nonTuplets.push_back(firstChord->second);
                         }
                   if (!newTupletChord.notes.empty())
