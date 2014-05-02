@@ -604,11 +604,6 @@ void setBarIndexes(
             }
 
       for (auto &chord: nonTuplets) {
-
-            Q_ASSERT_X(chord->second.barIndex == barIndex,
-                       "MidiTuplet::setBarIndex",
-                       "Non-tuplet chord is already used in previous bar");
-
             const auto onTime = Quantize::findMinQuantizedOnTime(*chord, basicQuant);
             if (onTime >= endBarTick)
                   chord->second.barIndex = barIndex + 1;
@@ -625,6 +620,8 @@ ReducedFraction findPrevBarStart(const ReducedFraction &barStart,
             prevBarStart = ReducedFraction(0, 1);
       return prevBarStart;
       }
+
+// indexes of each new bar should be -1 except possibly chords at the end of prev bar
 
 void findTuplets(
             const ReducedFraction &startBarTick,
@@ -732,17 +729,20 @@ void findAllTuplets(
             const auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(i, 0));
             const auto barFraction = ReducedFraction(
                               sigmap->timesig(startBarTick.ticks()).timesig());
-            const auto startBarChordIt = MChord::findFirstChordInRange(
-                                          chords, startBarTick, endBarTick);
-            if (startBarChordIt != chords.end()) {
-                        // set bar index
-                  const auto endBarChordIt = chords.lower_bound(endBarTick);
-                  for (auto it = startBarChordIt; it != endBarChordIt; ++it)
-                        it->second.barIndex = i - 1;
-                  }
                         // look for tuplets
             findTuplets(startBarTick, endBarTick, barFraction,
                         chords, basicQuant, tupletEvents, i - 1);
+                        // if bar indexes == -1 (no tuplets, for example) - set them
+            const auto startBarChordIt = MChord::findFirstChordInRange(
+                                          chords, startBarTick, endBarTick);
+            if (startBarChordIt != chords.end()) {
+                  const auto endBarChordIt = chords.lower_bound(endBarTick);
+                  for (auto it = startBarChordIt; it != endBarChordIt; ++it) {
+                        if (it->second.barIndex == -1)
+                              it->second.barIndex = i - 1;
+                        }
+                  }
+
             if (endBarTick > lastTick)
                   break;
             startBarTick = endBarTick;
