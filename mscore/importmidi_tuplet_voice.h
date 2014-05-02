@@ -43,7 +43,8 @@ void assignVoices(
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
             std::list<TiedTuplet> &backTiedTuplets,
             const ReducedFraction &startBarTick,
-            const ReducedFraction &basicQuant);
+            const ReducedFraction &basicQuant,
+            int barIndex);
 
 #ifdef QT_DEBUG
 
