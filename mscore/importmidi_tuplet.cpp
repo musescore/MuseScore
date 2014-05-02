@@ -684,7 +684,7 @@ void findTuplets(
 
       const auto prevBarStart = findPrevBarStart(startBarTick, endBarTick - startBarTick);
       auto backTiedTuplets = findBackTiedTuplets(chords, tuplets, prevBarStart,
-                                                 startBarTick, basicQuant);
+                                                 startBarTick, basicQuant, barIndex);
                   // backTiedTuplets can be changed here (incompatible are removed)
       assignVoices(tuplets, nonTuplets, backTiedTuplets, startBarTick, basicQuant, barIndex);
       setBarIndexes(tuplets, nonTuplets, barIndex, endBarTick, basicQuant);

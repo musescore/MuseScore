@@ -36,7 +36,8 @@ findBackTiedTuplets(
             const std::vector<TupletInfo> &tuplets,
             const ReducedFraction &prevBarStart,
             const ReducedFraction &startBarTick,
-            const ReducedFraction &basicQuant);
+            const ReducedFraction &basicQuant,
+            int barIndex);
 
 void assignVoices(
             std::vector<TupletInfo> &tuplets,
