@@ -927,7 +927,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       auto tracks = createMTrackList(lastTick, sigmap, mf);
       cleanUpMidiEvents(tracks);
       if (preferences.midiImportOperations.count() == 0)        // newly opened MIDI file
-            Quantize::setIfHumanPerformance(tracks);
+            Quantize::setIfHumanPerformance(tracks, sigmap);
       MChord::collectChords(tracks, MChord::minAllowedDuration() / 2);
       MChord::removeOverlappingNotes(tracks);
 
