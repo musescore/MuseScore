@@ -375,8 +375,8 @@ void removeUnusedTuplets(
                         if (isChordBelongToThisBar(chord.first, barStart,
                                                    chord.second->second.barIndex, barIndex)) {
                               nonTuplets.push_back(chord.second);
+                              pendingNonTuplets.insert(&*chord.second);
                               }
-                        pendingNonTuplets.insert(&*chord.second);
                         }
                   }
             }
