@@ -716,6 +716,14 @@ std::vector<int> findTiedNotes(
       return tiedNotes;
       }
 
+bool isChordFromPrevBar(
+            int chordBarIndex,
+            int currentBarIndex,
+            bool isInTupletOfThisBar)
+      {
+      return chordBarIndex != -1 && chordBarIndex == currentBarIndex - 1 && !isInTupletOfThisBar;
+      }
+
 // prepare tied tuplets - pairs of tuplet and chord back-tied to it
 // voices of back-tied chords from previous bar are set explicitly
 // other voices = -1
@@ -728,7 +736,8 @@ findBackTiedTuplets(
             const std::vector<TupletInfo> &tuplets,
             const ReducedFraction &prevBarStart,
             const ReducedFraction &startBarTick,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            int barIndex)
       {
       std::list<TiedTuplet> tiedTuplets;
                   // <voice, intervals>
@@ -755,7 +764,8 @@ findBackTiedTuplets(
                         }
                               // remember voices of tuplets that have tied chords from previous bar
                               // and that chords don't belong to the tuplets of this bar
-                  int voice = (chordIt->second.barIndex != -1 && !isInTupletOfThisBar)
+                  int voice = isChordFromPrevBar(chordIt->second.barIndex, barIndex,
+                                                 isInTupletOfThisBar)
                               ? chordIt->second.voice : -1;
                   const auto interval = std::make_pair(tuplets[i].onTime,
                                                        tuplets[i].onTime + tuplets[i].len);
