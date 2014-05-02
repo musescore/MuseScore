@@ -358,7 +358,8 @@ void removeUnusedTuplets(
             std::set<int> &pendingTuplets,
             std::list<TiedTuplet> &backTiedTuplets,
             std::set<std::pair<const ReducedFraction, MidiChord> *> &pendingNonTuplets,
-            const ReducedFraction &barStart)
+            const ReducedFraction &barStart,
+            int barIndex)
       {
       if (pendingTuplets.empty())
             return;
@@ -371,7 +372,7 @@ void removeUnusedTuplets(
             else {
                   eraseBackTiedTuplet(tuplets[i].id, backTiedTuplets);
                   for (const auto &chord: tuplets[i].chords) {
-                        if (chord.first >= barStart)
+                        if (chord.first >= barStart || chord.second->second.barIndex == barIndex)
                               nonTuplets.push_back(chord.second);
                         pendingNonTuplets.insert(&*chord.second);
                         }
@@ -790,7 +791,8 @@ void assignVoices(
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
             std::list<TiedTuplet> &backTiedTuplets,
             const ReducedFraction &startBarTick,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            int barIndex)
       {
       Q_ASSERT_X(!haveTupletsEmptyChords(tuplets),
                  "MIDI tuplets: assignVoices", "Empty tuplet chords");
@@ -805,7 +807,7 @@ void assignVoices(
                         tupletIntervals, basicQuant);
       setTupletVoices(tuplets, pendingTuplets, tupletIntervals, basicQuant);
       removeUnusedTuplets(tuplets, nonTuplets, pendingTuplets, backTiedTuplets,
-                          pendingNonTuplets, startBarTick);
+                          pendingNonTuplets, startBarTick, barIndex);
 
       if (tupletVoiceLimit() == 1) {
             bool excluded = excludeExtraVoiceTuplets(tuplets, nonTuplets, backTiedTuplets,
