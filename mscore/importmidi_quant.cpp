@@ -266,23 +266,38 @@ ReducedFraction findQuantForRange(
 
 //--------------------------------------------------------------------------------------------
 
-bool isHumanPerformance(const std::multimap<ReducedFraction, MidiChord> &chords)
+bool isHumanPerformance(
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const TimeSigMap *sigmap)
       {
       if (chords.empty())
             return false;
-      auto raster = ReducedFraction::fromTicks(MScore::division) / 4;    // 1/16
-      int matches = 0;
-      for (const auto &chord: chords) {
-            const auto diff = (quantizeValue(chord.first, raster) - chord.first).absValue();
-            if (diff < MChord::minAllowedDuration())
-                  ++matches;
-            }
-                  // Min beat-divisions match fraction for machine-generated MIDI.
-                  //   During some tests largest human value was 0.315966 with 0.26 on average,
-                  //   smallest machine value was 0.423301 with 0.78 on average
-      const double tolFraction = 0.4;
 
-      return matches * 1.0 / chords.size() < tolFraction;
+      const auto quant = ReducedFraction::fromTicks(MScore::division) / 4;    // 1/16
+      int matches = 0;
+      int count = 0;
+
+      for (const auto &chord: chords) {
+            const auto onTime = quantizeValue(chord.first, quant);
+            int barIndex, beat, tick;
+            sigmap->tickValues(onTime.ticks(), &barIndex, &beat, &tick);
+
+            const auto barStart = ReducedFraction::fromTicks(sigmap->bar2tick(barIndex, 0));
+            const auto barFraction = ReducedFraction(sigmap->timesig(barStart.ticks()).timesig());
+            const auto beatLen = Meter::beatLength(barFraction);
+
+            if (((onTime - barStart) / beatLen).reduced().denominator() == 1) {
+                  ++count;
+                  const auto diff = (onTime - chord.first).absValue();
+                  if (diff < MChord::minAllowedDuration())
+                        ++matches;
+                  }
+            }
+
+      const double TOL = 0.6;
+      const double matched = matches * 1.0 / count;
+
+      return matched < TOL;
       }
 
 std::multimap<int, MTrack>
@@ -299,7 +314,9 @@ getTrackWithAllChords(const std::multimap<int, MTrack> &tracks)
       return singleTrack;
       }
 
-void setIfHumanPerformance(const std::multimap<int, MTrack> &tracks)
+void setIfHumanPerformance(
+            const std::multimap<int, MTrack> &tracks,
+            const TimeSigMap *sigmap)
       {
       auto allChordsTrack = getTrackWithAllChords(tracks);
       MChord::collectChords(allChordsTrack, MChord::minAllowedDuration() / 2);
@@ -307,7 +324,8 @@ void setIfHumanPerformance(const std::multimap<int, MTrack> &tracks)
       const auto &allChords = track.chords;
       if (allChords.empty())
             return;
-      preferences.midiImportOperations.setHumanPerformance(isHumanPerformance(allChords));
+      const bool isHuman = isHumanPerformance(allChords, sigmap);
+      preferences.midiImportOperations.setHumanPerformance(isHuman);
       }
 
 //--------------------------------------------------------------------------------------------

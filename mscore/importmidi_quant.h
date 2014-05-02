@@ -76,7 +76,9 @@ ReducedFraction findOffTimeQuantError(
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant);
 
-void setIfHumanPerformance(const std::multimap<int, MTrack> &tracks);
+void setIfHumanPerformance(
+            const std::multimap<int, MTrack> &tracks,
+            const TimeSigMap *sigmap);
 
 void quantizeChords(
             std::multimap<ReducedFraction, MidiChord> &chords,
