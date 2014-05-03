@@ -48,4 +48,31 @@ std::string fromUchar(const uchar *text)
       }
 
 } // namespace MidiCharset
+
+namespace MidiTempo {
+
+ReducedFraction time2Tick(double time, double ticksPerSec)
+      {
+      return ReducedFraction::fromTicks(int(ticksPerSec * time));
+      }
+
+// tempo in beats per second
+
+double findBasicTempo(const std::multimap<int, MTrack> &tracks)
+      {
+      for (const auto &track: tracks) {
+            for (const auto &ie : track.second.mtrack->events()) {
+                  const MidiEvent &e = ie.second;
+                  if (e.type() == ME_META && e.metaType() == META_TEMPO) {
+                        const uchar* data = (uchar*)e.edata();
+                        const unsigned tempo = data[2] + (data[1] << 8) + (data[0] << 16);
+                        return 1000000.0 / double(tempo);
+                        }
+                  }
+            }
+
+      return 2;   // default beats per second = 120 beats per minute
+      }
+
+} // namespace MidiTempo
 } // namespace Ms

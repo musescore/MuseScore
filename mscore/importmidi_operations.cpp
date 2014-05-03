@@ -100,5 +100,16 @@ void MidiImportOperations::setQuantValue(MidiOperation::QuantValue value)
       defaultOpers.quantize.value = value;
       }
 
+const std::set<ReducedFraction>*
+MidiImportOperations::getHumanBeats() const
+      {
+      return midiData_.getHumanBeats(currentMidiFile_);
+      }
+
+void MidiImportOperations::setHumanBeats(const std::set<ReducedFraction> &humanBeats)
+      {
+      return midiData_.setHumanBeats(currentMidiFile_, humanBeats);
+      }
+
 } // namespace Ms
 

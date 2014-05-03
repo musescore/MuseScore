@@ -5,6 +5,8 @@
 #include "importmidi_fraction.h"
 #include "importmidi_operation.h"
 
+#include <set>
+
 
 namespace Ms {
 
@@ -28,6 +30,7 @@ class MidiData
       void setSelectedRow(const QString &fileName, int row);
       void setMidiFile(const QString &fileName, const MidiFile &midiFile);
       const MidiFile *midiFile(const QString &fileName) const;
+
                   // lyrics
       void addTrackLyrics(const QString &fileName,
                           const std::multimap<ReducedFraction, std::string> &trackLyrics);
@@ -35,9 +38,13 @@ class MidiData
             getLyrics(const QString &fileName);
       QString charset(const QString &fileName) const;
       void setCharset(const QString &fileName, const QString &charset);
+
                   // human performance: is MIDI unaligned
       bool isHumanPerformance(const QString &fileName) const;
       void setHumanPerformance(const QString &fileName, bool value);
+      const std::set<ReducedFraction>* getHumanBeats(const QString &fileName) const;
+      void setHumanBeats(const QString &fileName, const std::set<ReducedFraction> &humanBeats);
+
                   // quantization
       MidiOperation::QuantValue quantValue(const QString &fileName) const;
       void setQuantValue(const QString &fileName, MidiOperation::QuantValue value);
@@ -58,6 +65,7 @@ class MidiData
             QString charset = MidiCharset::defaultCharset();
             bool isHumanPerformance = false;
             MidiOperation::QuantValue quantValue = defaultQuantValue();
+            std::set<ReducedFraction> humanBeats;
             };
 
       QMap<QString, MidiDataStore> data;    // <file name, tracks data>
