@@ -313,7 +313,7 @@ const Groups& Staff::group(int tick) const
             return Groups::endings(ts->sig());
             }
       Measure* m = score()->tick2measure(tick);
-      return Groups::endings(m->timesig());
+      return Groups::endings(m ? m->timesig() : Fraction(4,4));
       }
 
 //---------------------------------------------------------
