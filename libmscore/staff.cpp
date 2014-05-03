@@ -163,7 +163,6 @@ Staff::Staff(Score* s)
       _rstaff         = 0;
       _part           = 0;
       _keymap[0]      = KeySigEvent(0);                  // default to C major
-//      _staffType      = _score->staffType(STANDARD_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -182,7 +181,6 @@ Staff::Staff(Score* s, Part* p, int rs)
       _rstaff         = rs;
       _part           = p;
       _keymap[0]      = KeySigEvent(0);                  // default to C major
-//      _staffType      = _score->staffType(STANDARD_STAFF_TYPE);
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
@@ -682,8 +680,8 @@ bool Staff::primaryStaff() const
 
 void Staff::setStaffType(const StaffType* st)
       {
-//TODO      if (_staffType == *st)
-//            return;
+      if (_staffType == *st)
+            return;
       int linesOld = lines();
       int linesNew = st->lines();
       _staffType = *st;

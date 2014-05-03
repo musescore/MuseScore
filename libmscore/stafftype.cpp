@@ -83,6 +83,7 @@ StaffType::StaffType(StaffGroup sg, const QString& xml, const QString& name, int
       setUseNumbers(useNumbers);
       }
 
+
 //---------------------------------------------------------
 //   groupName
 //---------------------------------------------------------
@@ -106,10 +107,10 @@ const char* StaffType::groupName(StaffGroup r)
       }
 
 //---------------------------------------------------------
-//   isEqual
+//   operator==
 //---------------------------------------------------------
 
-bool StaffType::isEqual(const StaffType& st) const
+bool StaffType::operator==(const StaffType& st) const
       {
       if (_group != TAB_STAFF_GROUP) {
             return isSameStructure(st)
