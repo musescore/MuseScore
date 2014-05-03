@@ -277,6 +277,8 @@ bool isHumanPerformance(
       int matches = 0;
       int count = 0;
 
+      std::set<ReducedFraction> usedOnTimes;
+
       for (const auto &chord: chords) {
             const auto onTime = quantizeValue(chord.first, quant);
             int barIndex, beat, tick;
@@ -286,7 +288,9 @@ bool isHumanPerformance(
             const auto barFraction = ReducedFraction(sigmap->timesig(barStart.ticks()).timesig());
             const auto beatLen = Meter::beatLength(barFraction);
 
-            if (((onTime - barStart) / beatLen).reduced().denominator() == 1) {
+            if (((onTime - barStart) / beatLen).reduced().denominator() == 1
+                        && usedOnTimes.find(onTime) == usedOnTimes.end()) {
+                  usedOnTimes.insert(onTime);
                   ++count;
                   const auto diff = (onTime - chord.first).absValue();
                   if (diff < MChord::minAllowedDuration())
