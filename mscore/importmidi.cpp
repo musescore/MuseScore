@@ -958,6 +958,11 @@ void convertMidi(Score *score, const MidiFile *mf)
       createTimeSignatures(score);
       score->connectTies();
       MidiLyrics::setLyricsToScore(mf, trackList);
+
+      if (preferences.midiImportOperations.count() == 0) {
+                  // clear defaults - they can be set during opening of this new MIDI file
+            preferences.midiImportOperations.clear();
+            }
       }
 
 void loadMidiData(MidiFile &mf)

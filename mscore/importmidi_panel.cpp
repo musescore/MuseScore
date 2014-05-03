@@ -349,9 +349,15 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                   const QList<TrackMeta> tracksMeta = extractMidiTracksMeta(fileName);
                   tracksModel->reset(tracksMeta);
                   tracksModel->setLyricsList(MidiLyrics::makeLyricsListForUI());
+
+                  const int row = 0;            // for all tracks
                   const bool isHumanPerformance = midiData.isHumanPerformance(fileName);
-                  tracksModel->setOperation(0, MidiOperation::Type::QUANT_HUMAN,
+                  tracksModel->setOperation(row, MidiOperation::Type::QUANT_HUMAN,
                                             QVariant(isHumanPerformance));
+                  const auto quantValue = midiData.quantValue(fileName);
+                  tracksModel->setOperation(row, MidiOperation::Type::QUANT_VALUE,
+                                            QVariant((int)quantValue));
+
                   showOrHideStaffNameCol(tracksMeta);
                   for (int i = 0; i != tracksModel->trackCount(); ++i)
                         trackData.push_back(tracksModel->trackData(i));

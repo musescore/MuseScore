@@ -108,6 +108,9 @@ class MidiImportOperations
                   // human performance: is MIDI unaligned
       bool isHumanPerformance() const;
       void setHumanPerformance(bool value);
+                  // quantization
+      MidiOperation::QuantValue quantValue() const;
+      void setQuantValue(MidiOperation::QuantValue value);
 
    private:
       QList<TrackOperations> operations_;

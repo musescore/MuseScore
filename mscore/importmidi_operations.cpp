@@ -19,6 +19,7 @@ void MidiImportOperations::clear()
       {
       operations_.clear();
       currentTrack_ = -1;
+      defaultOpers = TrackOperations();
       }
 
 void MidiImportOperations::setCurrentTrack(int trackIndex)
@@ -86,6 +87,17 @@ void MidiImportOperations::setHumanPerformance(bool value)
       {
       midiData_.setHumanPerformance(currentMidiFile_, value);
       defaultOpers.quantize.humanPerformance = value;
+      }
+
+MidiOperation::QuantValue MidiImportOperations::quantValue() const
+      {
+      return midiData_.quantValue(currentMidiFile_);
+      }
+
+void MidiImportOperations::setQuantValue(MidiOperation::QuantValue value)
+      {
+      midiData_.setQuantValue(currentMidiFile_, value);
+      defaultOpers.quantize.value = value;
       }
 
 } // namespace Ms
