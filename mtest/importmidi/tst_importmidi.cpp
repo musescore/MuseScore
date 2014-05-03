@@ -73,6 +73,9 @@ class TestImportMidi : public QObject, public MTest
             preferences.midiImportOperations.clear();
             }
 
+      // human-performed (unaligned) files
+      void human4_4() { mf("human_4-4"); }
+
       // test tuplet recognition functions
       void findChordInBar();
       void isTupletAllowed();
