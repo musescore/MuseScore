@@ -330,6 +330,8 @@ void setIfHumanPerformance(
             return;
       const bool isHuman = isHumanPerformance(allChords, sigmap);
       preferences.midiImportOperations.setHumanPerformance(isHuman);
+      if (isHuman)
+            preferences.midiImportOperations.setQuantValue(MidiOperation::QuantValue::N_8);
       }
 
 //--------------------------------------------------------------------------------------------

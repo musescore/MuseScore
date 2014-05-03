@@ -3,6 +3,7 @@
 
 #include "midi/midifile.h"
 #include "importmidi_fraction.h"
+#include "importmidi_operation.h"
 
 
 namespace Ms {
@@ -37,8 +38,13 @@ class MidiData
                   // human performance: is MIDI unaligned
       bool isHumanPerformance(const QString &fileName) const;
       void setHumanPerformance(const QString &fileName, bool value);
+                  // quantization
+      MidiOperation::QuantValue quantValue(const QString &fileName) const;
+      void setQuantValue(const QString &fileName, MidiOperation::QuantValue value);
 
    private:
+      static MidiOperation::QuantValue defaultQuantValue();
+
       struct MidiDataStore
             {
             QByteArray HHeaderData;
@@ -46,11 +52,14 @@ class MidiData
             QList<TrackData> tracksData;
                         // tracks of <tick, lyric fragment> from karaoke files
             QList<std::multimap<ReducedFraction, std::string>> lyricTracks;
+                        // default values - when MIDI is opened
             int selectedRow = 0;
             MidiFile midiFile;
             QString charset = MidiCharset::defaultCharset();
             bool isHumanPerformance = false;
+            MidiOperation::QuantValue quantValue = defaultQuantValue();
             };
+
       QMap<QString, MidiDataStore> data;    // <file name, tracks data>
       };
 

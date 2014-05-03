@@ -121,4 +121,25 @@ void MidiData::setHumanPerformance(const QString &fileName, bool value)
       it.value().isHumanPerformance = value;
       }
 
+MidiOperation::QuantValue MidiData::quantValue(const QString &fileName) const
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return Quantization().value;
+      return it.value().quantValue;
+      }
+
+void MidiData::setQuantValue(const QString &fileName, MidiOperation::QuantValue value)
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return;
+      it.value().quantValue = value;
+      }
+
+MidiOperation::QuantValue MidiData::defaultQuantValue()
+      {
+      return Quantization().value;
+      }
+
 } // namespace Ms
