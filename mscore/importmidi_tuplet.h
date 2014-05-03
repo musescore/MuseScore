@@ -32,6 +32,7 @@ struct TupletLimits
       int minNoteCount;
       int minNoteCountAddVoice;
       int minNoteCountStaccato;
+      int minNoteCountHuman;
       };
 
 const TupletLimits& tupletLimits(int tupletNumber);

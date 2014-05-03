@@ -34,7 +34,11 @@ bool isTupletAllowed(const TupletInfo &tupletInfo)
             }
       }
                   // for all tuplets
-      const int minAllowedNoteCount = tupletLimits(tupletInfo.tupletNumber).minNoteCount;
+      const bool isHumanPerformance = preferences.midiImportOperations
+                              .currentTrackOperations().quantize.humanPerformance;
+      const int minAllowedNoteCount = (isHumanPerformance)
+                  ? tupletLimits(tupletInfo.tupletNumber).minNoteCountHuman
+                  : tupletLimits(tupletInfo.tupletNumber).minNoteCount;
       if ((int)tupletInfo.chords.size() < minAllowedNoteCount)
             return false;
                   // allow duplets and quadruplets with error == regular error
