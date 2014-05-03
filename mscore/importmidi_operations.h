@@ -102,12 +102,17 @@ class MidiImportOperations
       MidiData& midiData() { return midiData_; }
       QString charset() const;
       void adaptForPercussion(int trackIndex, bool isDrumTrack);
+
                   // lyrics
       void addTrackLyrics(const std::multimap<ReducedFraction, std::string> &trackLyrics);
       const QList<std::multimap<ReducedFraction, std::string> > *getLyrics();
+
                   // human performance: is MIDI unaligned
       bool isHumanPerformance() const;
       void setHumanPerformance(bool value);
+      const std::set<ReducedFraction>* getHumanBeats() const;
+      void setHumanBeats(const std::set<ReducedFraction> &humanBeats);
+
                   // quantization
       MidiOperation::QuantValue quantValue() const;
       void setQuantValue(MidiOperation::QuantValue value);

@@ -142,4 +142,21 @@ MidiOperation::QuantValue MidiData::defaultQuantValue()
       return Quantization().value;
       }
 
+const std::set<ReducedFraction>*
+MidiData::getHumanBeats(const QString &fileName) const
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return nullptr;
+      return &it.value().humanBeats;
+      }
+
+void MidiData::setHumanBeats(const QString &fileName, const std::set<ReducedFraction> &humanBeats)
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return;
+      it.value().humanBeats = humanBeats;
+      }
+
 } // namespace Ms

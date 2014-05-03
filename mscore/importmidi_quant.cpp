@@ -323,7 +323,7 @@ void setIfHumanPerformance(
             const TimeSigMap *sigmap)
       {
       auto allChordsTrack = getTrackWithAllChords(tracks);
-      MChord::collectChords(allChordsTrack, MChord::minAllowedDuration() / 2);
+      MChord::collectChords(allChordsTrack);
       const MTrack &track = allChordsTrack.begin()->second;
       const auto &allChords = track.chords;
       if (allChords.empty())
