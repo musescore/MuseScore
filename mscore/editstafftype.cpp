@@ -220,7 +220,7 @@ void EditStaffType::setValues()
 //   nameEdited
 //---------------------------------------------------------
 
-void EditStaffType::nameEdited(const QString& s)
+void EditStaffType::nameEdited(const QString& /*s*/)
       {
 //      staffTypeList->currentItem()->setText(s);
       }

@@ -1448,7 +1448,7 @@ void MuseScore::openRecentMenu()
             QString data(s);
             QFileInfo fi(s);
             if(fi.exists()) {
-                  QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show complete path
+                  QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
                   action->setData(data);
                   action->setToolTip(s);
                   one = true;
