@@ -234,6 +234,7 @@
             <name>Tab. 6-str common</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
+            <slashStyle>1</slashStyle>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -317,11 +318,6 @@
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
-            <Number>
-              <track>4</track>
-              <style>Tuplet</style>
-              <text>3</text>
-              </Number>
             </Tuplet>
           <Rest>
             <lid>6</lid>
@@ -420,10 +416,6 @@
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
-            <Number>
-              <style>Tuplet</style>
-              <text>3</text>
-              </Number>
             </Tuplet>
           <Rest>
             <lid>6</lid>
