@@ -569,8 +569,10 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               }
                         }
                   else {
-                        written = score->rewriteMeasures(fm, ns);
-                        nfm = fm->prev() ? fm->prev()->nextMeasure() : firstMeasure();
+                        if (_sigmap->timesig(seg->tick()).timesig() != ts->sig()) {
+                              written = score->rewriteMeasures(fm, ns);
+                              nfm = fm->prev() ? fm->prev()->nextMeasure() : firstMeasure();
+                              }
                         }
                   }
 
