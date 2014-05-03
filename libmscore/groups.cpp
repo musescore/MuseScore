@@ -68,9 +68,7 @@ static std::vector<NoteGroup> noteGroups {
 
 BeamMode Groups::endBeam(ChordRest* cr)
       {
-      if (cr->isGrace())
-            return cr->beamMode();
-      if (cr->beamMode() != BeamMode::AUTO)
+      if (cr->isGrace() || cr->beamMode() != BeamMode::AUTO)
             return cr->beamMode();
       Q_ASSERT(cr->staff());
 
@@ -89,6 +87,7 @@ BeamMode Groups::endBeam(ChordRest* cr)
 
 //---------------------------------------------------------
 //   beamMode
+//    tick is relative to begin of measure
 //---------------------------------------------------------
 
 BeamMode Groups::beamMode(int tick, TDuration::DurationType d) const

@@ -472,6 +472,8 @@ void Score::fixTicks()
       if (fm == 0)
             return;
 
+      for (Staff* staff : _staves)
+            staff->clearTimeSig();
       TimeSigMap* smap = sigmap();
       Fraction sig(fm->len());
       Fraction nsig(fm->timesig());
@@ -507,8 +509,14 @@ void Score::fixTicks()
                   Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegBreath;
 
                   for (Segment* s = m->first(st); s; s = s->next(st)) {
-                        if (s->segmentType() == Segment::SegBreath) {
+                        if (s->segmentType() == Segment::SegBreath)
                               setPause(s->tick(), .1);
+                        else if (s->segmentType() == Segment::SegTimeSig) {
+                              for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                                    TimeSig* ts = static_cast<TimeSig*>(s->element(staffIdx * VOICES));
+                                    if (ts)
+                                          staff(staffIdx)->addTimeSig(ts);
+                                    }
                               }
                         else {
                               foreach(Element* e, s->annotations()) {

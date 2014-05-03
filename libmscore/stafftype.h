@@ -208,6 +208,8 @@ class StaffType {
                   bool stemsDown, bool stemThrough, bool upsideDown, bool useNumbers);
 
       virtual ~StaffType() {}
+      bool operator==(const StaffType&) const;
+      bool isSameStructure(const StaffType&) const;
 
       StaffGroup group() const                 { return _group;           }
       const QString& name() const              { return _name;            }
@@ -216,9 +218,6 @@ class StaffType {
       void setXmlName(const QString& val)      { _xmlName = val;          }
       const char* groupName() const;
       static const char* groupName(StaffGroup);
-
-      bool isEqual(const StaffType&) const;
-      bool isSameStructure(const StaffType&) const;
 
       void setLines(int val);
       int lines() const                        { return _lines;           }
@@ -244,7 +243,6 @@ class StaffType {
       // static function to deal with presets
       static const StaffType* getDefaultPreset(StaffGroup grp);
       static const StaffType* preset(int idx);
-//      static const StaffType* presetFromName(QString& name);
       static const StaffType* presetFromXmlName(QString& xmlName);
 
       void setGenKeysig(bool val)              { _genKeysig = val;        }
