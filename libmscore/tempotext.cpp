@@ -83,14 +83,16 @@ struct TempoPattern {
       TDuration d;
       TempoPattern(const char* s, qreal v, TDuration::DurationType val, int dots = 0) : pattern(s), f(v), d(val) { d.setDots(dots); }
       };
-      
+
+// note: findTempoDuration requires the longer patterns to be before the shorter patterns in tp
+
 static const TempoPattern tp[] = {
-      TempoPattern("<sym>noteHalfUp</sym>",                                      1.0/30.0,  TDuration::V_HALF),       // 1/2
-      TempoPattern("<sym>noteQuarterUp</sym>",                                   1.0/60.0,  TDuration::V_QUARTER),    // 1/4
-      TempoPattern("<sym>note8thUp</sym>",                                       1.0/120.0, TDuration::V_EIGHT),      // 1/8
       TempoPattern("<sym>noteHalfUp</sym>\\s*<sym>textAugmentationDot</sym>",    1.5/30.0,  TDuration::V_HALF, 1),    // dotted 1/2
       TempoPattern("<sym>noteQuarterUp</sym>\\s*<sym>textAugmentationDot</sym>", 1.5/60.0,  TDuration::V_QUARTER, 1), // dotted 1/4
       TempoPattern("<sym>note8thUp</sym>\\s*<sym>textAugmentationDot</sym>",     1.5/120.0, TDuration::V_EIGHT, 1),   // dotted 1/8
+      TempoPattern("<sym>noteHalfUp</sym>",                                      1.0/30.0,  TDuration::V_HALF),       // 1/2
+      TempoPattern("<sym>noteQuarterUp</sym>",                                   1.0/60.0,  TDuration::V_QUARTER),    // 1/4
+      TempoPattern("<sym>note8thUp</sym>",                                       1.0/120.0, TDuration::V_EIGHT),      // 1/8
       };
       
 //---------------------------------------------------------
