@@ -84,9 +84,9 @@ void Bracket::layout()
             path.moveTo( XM(   -8), YM(-2048));
             path.cubicTo(XM(   -8), YM(-3192), XM(-360), YM(-4304), XM( -360), YM(-5400)); // c 0
             path.cubicTo(XM( -360), YM(-5952), XM(-264), YM(-6488), XM(   32), YM(-6968)); // c 1
-            path.cubicTo(XM(   40), YM(-6976), XM(  40), YM(-6976), XM(   40), YM(-6984)); // c 0
-            path.cubicTo(XM(   40), YM(-7000), XM(  16), YM(-7024), XM(    0), YM(-7024)); // c 0
-            path.cubicTo(XM(   -8), YM(-7024), XM( -24), YM(-7024), XM(  -32), YM(-7008)); // c 1
+            path.cubicTo(XM(   36), YM(-6974), XM(  38), YM(-6984), XM(   38), YM(-6990)); // c 0
+            path.cubicTo(XM(   38), YM(-7008), XM(  16), YM(-7024), XM(    0), YM(-7024)); // c 0
+            path.cubicTo(XM(   -8), YM(-7024), XM( -22), YM(-7022), XM(  -32), YM(-7008)); // c 1
             path.cubicTo(XM( -416), YM(-6392), XM(-544), YM(-5680), XM( -544), YM(-4960)); // c 0
             path.cubicTo(XM( -544), YM(-3800), XM(-168), YM(-2680), XM( -168), YM(-1568)); // c 0
             path.cubicTo(XM( -168), YM(-1016), XM(-264), YM( -496), XM( -560), YM(  -16)); // c 1
@@ -95,9 +95,9 @@ void Bracket::layout()
             path.cubicTo(XM( -264), YM(  496), XM(-168), YM( 1016), XM( -168), YM( 1568)); // c 0
             path.cubicTo(XM( -168), YM( 2680), XM(-544), YM( 3800), XM( -544), YM( 4960)); // c 0
             path.cubicTo(XM( -544), YM( 5680), XM(-416), YM( 6392), XM(  -32), YM( 7008)); // c 1
-            path.cubicTo(XM(  -24), YM( 7024), XM(  -8), YM( 7024), XM(    0), YM( 7024)); // c 0
-            path.cubicTo(XM(   16), YM( 7024), XM(  40), YM( 7000), XM(   40), YM( 6984)); // c 0
-            path.cubicTo(XM(   40), YM( 6976), XM(  40), YM( 6976), XM(   32), YM( 6968)); // c 1
+            path.cubicTo(XM(  -22), YM( 7022), XM(  -8), YM( 7024), XM(    0), YM( 7024)); // c 0
+            path.cubicTo(XM(   16), YM( 7024), XM(  38), YM( 7008), XM(   38), YM( 6990)); // c 0
+            path.cubicTo(XM(   38), YM( 6984), XM(  36), YM( 6974), XM(   32), YM( 6968)); // c 1
             path.cubicTo(XM( -264), YM( 6488), XM(-360), YM( 5952), XM( -360), YM( 5400)); // c 0
             path.cubicTo(XM( -360), YM( 4304), XM(  -8), YM( 3192), XM(   -8), YM( 2048)); // c 0
             path.cubicTo(XM( -  8), YM( 1320), XM(-136), YM(  624), XM( -512), YM(    0)); // c 1
