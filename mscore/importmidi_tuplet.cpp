@@ -385,7 +385,7 @@ void minimizeOffTimeError(
                                     && notes.size() > (int)removedIndexes.size() + 1))
                               {
                               const auto tupletError = Quantize::findOffTimeTupletQuantError(
-                                                note.offTime, tupletInfo.len,
+                                                onTime, note.offTime, tupletInfo.len,
                                                 tupletLimits(tupletInfo.tupletNumber).ratio, startBarTick);
                               const auto regularError = Quantize::findOffTimeQuantError(
                                                 *firstChord->second, note.offTime, basicQuant);
@@ -447,7 +447,7 @@ void addChordsBetweenTupletNotes(
                         const auto offTime = MChord::maxNoteOffTime(chordIt->second.notes);
                         if (offTime < tuplet.onTime + tuplet.len) {
                               tupletError += Quantize::findOffTimeTupletQuantError(
-                                                offTime, tuplet.len, tupletRatio, startBarTick);
+                                             onTime, offTime, tuplet.len, tupletRatio, startBarTick);
                               regularError += Quantize::findOffTimeQuantError(
                                                 *chordIt, offTime, basicQuant);
                               }

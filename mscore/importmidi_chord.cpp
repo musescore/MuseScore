@@ -95,13 +95,9 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                                            onTime2.ticks(), note2.offTime.ticks());
                                     note1.offTime = onTime2;
 
-                                    if (note1.offTime - onTime1 < MChord::minAllowedDuration()) {
-                                          note1It = chord1.notes.erase(note1It);
-                                          noteRemoved = true;
-                                                // it's not good to delete notes
-                                          qDebug() << "removeOverlappingNotes: "
-                                                      "note was removed due to its short length";
-                                          }
+                                    Q_ASSERT_X(note1.offTime - onTime1 >= MChord::minAllowedDuration(),
+                                               "MChord::removeOverlappingNotes",
+                                               "Too small note length");
 
                                     i2 = std::prev(chords.end());
                                     break;
