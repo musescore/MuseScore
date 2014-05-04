@@ -651,6 +651,8 @@ ScoreView::ScoreView(QWidget* parent)
       _fgColor    = Qt::white;
       fgPixmap    = 0;
       bgPixmap    = 0;
+      curGrip     = -1;
+      defaultGrip = -1;
       lasso       = new Lasso(_score);
       _foto       = new Lasso(_score);
 
