@@ -31,6 +31,7 @@ ReducedFraction findQuantizedChordOnTime(
             const ReducedFraction &basicQuant);
 
 ReducedFraction findQuantizedTupletNoteOffTime(
+            const ReducedFraction &onTime,
             const ReducedFraction &offTime,
             const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
@@ -66,6 +67,7 @@ ReducedFraction findOnTimeQuantError(
             const ReducedFraction &basicQuant);
 
 ReducedFraction findOffTimeTupletQuantError(
+            const ReducedFraction &onTime,
             const ReducedFraction &offTime,
             const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,

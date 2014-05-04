@@ -152,6 +152,7 @@ ReducedFraction findQuantizedChordOnTime(
       }
 
 ReducedFraction findQuantizedTupletNoteOffTime(
+            const ReducedFraction &onTime,
             const ReducedFraction &offTime,
             const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
@@ -159,8 +160,22 @@ ReducedFraction findQuantizedTupletNoteOffTime(
       {
       if (offTime <= rangeStart)
             return rangeStart;
-      const auto quant = quantForTuplet(tupletLen, tupletRatio);
-      return rangeStart + quantizeValue(offTime - rangeStart, quant);
+
+      ReducedFraction qOffTime;
+      auto quant = quantForTuplet(tupletLen, tupletRatio);
+
+      while (true) {
+            qOffTime = rangeStart + quantizeValue(offTime - rangeStart, quant);
+            if (qOffTime <= onTime) {
+                  if (quant >= MChord::minAllowedDuration() * 2) {
+                        quant /= 2;
+                        continue;
+                        }
+                  qOffTime = onTime + quant;
+                  }
+            break;
+            }
+      return qOffTime;
       }
 
 ReducedFraction findQuantizedNoteOffTime(
@@ -168,8 +183,21 @@ ReducedFraction findQuantizedNoteOffTime(
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant)
       {
-      const auto quant = quantForLen(offTime - chord.first, basicQuant);
-      return quantizeValue(offTime, quant);
+      ReducedFraction qOffTime;
+      auto quant = quantForLen(offTime - chord.first, basicQuant);
+
+      while (true) {
+            qOffTime = quantizeValue(offTime, quant);
+            if (qOffTime <= chord.first) {
+                  if (quant >= MChord::minAllowedDuration() * 2) {
+                        quant /= 2;
+                        continue;
+                        }
+                  qOffTime = chord.first + quant;
+                  }
+            break;
+            }
+      return qOffTime;
       }
 
 ReducedFraction findMinQuantizedOnTime(
@@ -197,7 +225,7 @@ ReducedFraction findMaxQuantizedTupletOffTime(
             if (note.offTime <= rangeStart)
                   continue;
             const auto offTime = findQuantizedTupletNoteOffTime(
-                              note.offTime, tupletLen, tupletRatio, rangeStart);
+                              chord.first, note.offTime, tupletLen, tupletRatio, rangeStart);
             if (offTime > maxOffTime)
                   maxOffTime = offTime;
             }
@@ -237,12 +265,13 @@ ReducedFraction findOnTimeQuantError(
       }
 
 ReducedFraction findOffTimeTupletQuantError(
+            const ReducedFraction &onTime,
             const ReducedFraction &offTime,
             const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart)
       {
-      const auto qOffTime = findQuantizedTupletNoteOffTime(offTime, tupletLen,
+      const auto qOffTime = findQuantizedTupletNoteOffTime(onTime, offTime, tupletLen,
                                                            tupletRatio, rangeStart);
       return (offTime - qOffTime).absValue();
       }
@@ -341,12 +370,13 @@ void setIfHumanPerformance(
 //--------------------------------------------------------------------------------------------
 
 ReducedFraction quantizeOffTimeForTuplet(
+            const ReducedFraction &onTime,
             const ReducedFraction &noteOffTime,
             const MidiTuplet::TupletData &tuplet)
       {
       const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
       auto offTime = findQuantizedTupletNoteOffTime(
-                        noteOffTime, tuplet.len, tupletRatio, tuplet.onTime);
+                        onTime, noteOffTime, tuplet.len, tupletRatio, tuplet.onTime);
                   // verify that offTime is still inside tuplet
       if (offTime < tuplet.onTime)
             offTime = tuplet.onTime;
@@ -364,18 +394,33 @@ ReducedFraction quantizeOffTimeForNonTuplet(
       {
       const MidiChord &chord = chordIt->second;
       auto offTime = findQuantizedNoteOffTime(*chordIt, noteOffTime, basicQuant);
-                 // verify that offTime is still outside tuplets
-      auto next = std::next(chordIt);
-      while (next != chords.end()) {
-            if (next->second.isInTuplet && next->second.voice == chord.voice) {
-                  const auto &tuplet = next->second.tuplet->second;
-                  if (offTime > tuplet.onTime)
-                        offTime = tuplet.onTime;
-                  break;
+
+                  // verify that offTime is still outside tuplets
+      if (chord.isInTuplet) {
+            const auto &tuplet = chord.tuplet->second;
+            if (offTime < tuplet.onTime + tuplet.len) {
+                  offTime = tuplet.onTime + tuplet.len;
+                  return offTime;
                   }
-            if (next->second.barIndex != chord.barIndex)
+            }
+      auto next = std::next(chordIt);
+      while (true) {
+            if (next == chords.end())
                   break;
-            ++next;
+            if (!next->second.isInTuplet || next->second.voice != chord.voice) {
+                  ++next;
+                  continue;
+                  }
+            const auto &tuplet = next->second.tuplet->second;
+            if (next->second.tuplet == chord.tuplet
+                        || tuplet.onTime + tuplet.len <= offTime) {
+                  ++next;
+                  continue;
+                  }
+
+            if (offTime > tuplet.onTime)
+                  offTime = tuplet.onTime;
+            break;
             }
 
       return offTime;
@@ -438,6 +483,70 @@ bool isTupletRangeCorrect(
             const ReducedFraction &rangeEnd)
       {
       return (rangeStart == tuplet.onTime && rangeEnd == tuplet.onTime + tuplet.len);
+      }
+
+void checkOffTime(
+            const MidiNote &note,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
+            const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      Q_ASSERT_X(note.offTime - chordIt->first >= MChord::minAllowedDuration(),
+                 "Quantize::quantizeOffTimes", "Too small note length");
+
+      if (note.isInTuplet) {
+            const auto &tuplet = note.tuplet->second;
+
+            Q_ASSERT_X(note.offTime >= tuplet.onTime
+                       && note.offTime <= tuplet.onTime + tuplet.len,
+                       "Quantize::quantizeOffTimes",
+                       "Note off time is outside tuplet but should be inside");
+            }
+      else {
+            const auto &chord = chordIt->second;
+
+            auto next = std::next(chordIt);
+            while (true) {
+                  if (next == chords.end())
+                        break;
+                  if (!next->second.isInTuplet || next->second.voice != chord.voice) {
+                        ++next;
+                        continue;
+                        }
+                  const auto &tuplet = next->second.tuplet->second;
+                  if (next->second.tuplet == chord.tuplet
+                              || tuplet.onTime + tuplet.len <= note.offTime) {
+                        ++next;
+                        continue;
+                        }
+
+                  Q_ASSERT_X(note.offTime <= tuplet.onTime,
+                             "Quantize::quantizeOffTimes",
+                             "Note off time is inside next tuplet but it shouldn't");
+                  break;
+                  }
+
+            auto prev = chordIt;
+            while (true) {
+                  if (prev->second.barIndex != chord.barIndex)
+                        break;
+                  if (prev->second.voice != chord.voice
+                              || !prev->second.isInTuplet
+                              || prev->second.tuplet == chord.tuplet) {
+                        if (prev != chords.begin()) {
+                              --prev;
+                              continue;
+                              }
+                        }
+                  else {
+                        const auto &tuplet = prev->second.tuplet->second;
+
+                        Q_ASSERT_X(note.offTime >= tuplet.onTime + tuplet.len,
+                                   "Quantize::quantizeOffTimes",
+                                   "Note off time is inside prev tuplet but it shouldn't");
+                        }
+                  break;
+                  }
+            }
       }
 
 #endif
@@ -865,7 +974,8 @@ void quantizeOffTimes(
                   auto offTime = note.offTime;
 
                   if (note.isInTuplet) {
-                        offTime = quantizeOffTimeForTuplet(offTime, note.tuplet->second);
+                        offTime = quantizeOffTimeForTuplet(
+                                          chordEvent.first, offTime, note.tuplet->second);
                         }
                   else {
                         offTime = quantizeOffTimeForNonTuplet(
@@ -873,13 +983,9 @@ void quantizeOffTimes(
                         }
 
                   note.offTime = offTime;
-                  if (note.offTime - chordEvent.first < MChord::minAllowedDuration()) {
-                        noteIt = chord.notes.erase(noteIt);
-                        // TODO - never delete notes here
-                        qDebug() << "quantizeOffTimes: note was removed due to its short length";
-                        continue;
-                        }
-
+#ifdef QT_DEBUG
+                  checkOffTime(note, chordIt, quantizedChords);
+#endif
                   ++noteIt;
                   }
             if (chord.notes.isEmpty()) {
