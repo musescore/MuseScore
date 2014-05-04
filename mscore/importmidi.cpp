@@ -55,6 +55,7 @@
 #include "importmidi_lrhand.h"
 #include "importmidi_lyrics.h"
 #include "importmidi_tie.h"
+#include "importmidi_beat.h"
 
 #include <set>
 
@@ -930,6 +931,8 @@ void convertMidi(Score *score, const MidiFile *mf)
       if (preferences.midiImportOperations.count() == 0)        // newly opened MIDI file
             Quantize::setIfHumanPerformance(tracks, sigmap);
       MChord::collectChords(tracks);
+      MidiBeat::adjustChordsToBeats(tracks, lastTick);
+      MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
 
       MChord::removeOverlappingNotes(tracks);
 

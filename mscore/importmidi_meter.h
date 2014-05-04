@@ -43,6 +43,10 @@ std::vector<DivisionInfo> divisionInfo(const ReducedFraction &barFraction,
 // tick is counted from the beginning of bar
 int levelOfTick(const ReducedFraction &tick, const std::vector<DivisionInfo> &divsInfo);
 
+std::vector<int> metricLevelsOfBar(const ReducedFraction &barFraction,
+                                   const std::vector<DivisionInfo> &divsInfo,
+                                   const ReducedFraction &minDuration);
+
 bool isSimpleNoteDuration(const ReducedFraction &duration);   // quarter, half, eighth, 16th ...
 
             // division lengths of bar, each can be a tuplet length

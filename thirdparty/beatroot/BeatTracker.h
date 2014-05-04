@@ -40,6 +40,8 @@ namespace BeatTracker {
        */
       std::vector<double> beatTrack(const AgentParameters &params, const EventList &events);
 
+      std::vector<double> beatTrack(const EventList &events);
+
 } // namespace BeatTracker
 
 

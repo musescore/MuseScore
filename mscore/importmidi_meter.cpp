@@ -185,6 +185,16 @@ int levelOfTick(const ReducedFraction &tick, const std::vector<DivisionInfo> &di
       return 0;
       }
 
+std::vector<int> metricLevelsOfBar(const ReducedFraction &barFraction,
+                                   const std::vector<DivisionInfo> &divsInfo,
+                                   const ReducedFraction &minDuration)
+      {
+      std::vector<int> levels;
+      for (ReducedFraction tick(0, 1); tick < barFraction; tick += minDuration)
+            levels.push_back(levelOfTick(tick, divsInfo));
+      return levels;
+      }
+
 // return level with pos == Fraction(-1, 1) if undefined - see MaxLevel class
 
 Meter::MaxLevel maxLevelBetween(const ReducedFraction &startTickInBar,

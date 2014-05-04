@@ -21,10 +21,9 @@
 
 namespace BeatTracker {
 
-std::vector<double>
-beatTrack(const AgentParameters &params,
-                       const EventList &events,
-                       const EventList &beats)
+std::vector<double> beatTrack(const AgentParameters &params,
+                              const EventList &events,
+                              const EventList &beats)
       {
       AgentList agents;
       int count = 0;
@@ -71,6 +70,11 @@ beatTrack(const AgentParameters &params,
 std::vector<double> beatTrack(const AgentParameters &params, const EventList &events)
       {
       return beatTrack(params, events, EventList());
+      }
+
+std::vector<double> beatTrack(const EventList &events)
+      {
+      return beatTrack(AgentParameters(), events);
       }
 
 } // namespace BeatTracker

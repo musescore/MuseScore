@@ -7,6 +7,7 @@
 #include "importmidi_meter.h"
 #include "importmidi_tuplet.h"
 #include "importmidi_inner.h"
+#include "importmidi_beat.h"
 
 #include <set>
 
@@ -330,8 +331,11 @@ void setIfHumanPerformance(
             return;
       const bool isHuman = isHumanPerformance(allChords, sigmap);
       preferences.midiImportOperations.setHumanPerformance(isHuman);
-      if (isHuman)
+      if (isHuman) {
             preferences.midiImportOperations.setQuantValue(MidiOperation::QuantValue::N_8);
+            const double ticksPerSec = MidiTempo::findBasicTempo(tracks) * MScore::division;
+            MidiBeat::findBeatLocations(allChords, sigmap, ticksPerSec);
+            }
       }
 
 //--------------------------------------------------------------------------------------------
@@ -710,6 +714,11 @@ double findTempoPenalty(
       const QuantData &dPrevPrev = quantData[chordIndex - 2];
       const QuantPos &pPrevPrev = dPrevPrev.positions[pPrev.prevPos];
       if (pPrev.time != p.time && pPrevPrev.time != pPrev.time) {
+
+            Q_ASSERT_X(dPrev.chord->first != d.chord->first
+                        && dPrevPrev.chord->first != dPrev.chord->first,
+                       "Quantize::findTempoPenalty", "Chords have equal on times");
+
             const double veloc = ((pPrev.time - p.time)
                         / (dPrev.chord->first - d.chord->first)).toDouble();
             const double prevVeloc = ((pPrevPrev.time - pPrev.time)
