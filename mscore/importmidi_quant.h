@@ -80,6 +80,10 @@ void setIfHumanPerformance(
             const std::multimap<int, MTrack> &tracks,
             const TimeSigMap *sigmap);
 
+ReducedFraction quantizeValue(
+            const ReducedFraction &value,
+            const ReducedFraction &quant);
+
 void quantizeChords(
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap,
