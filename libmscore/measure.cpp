@@ -2044,7 +2044,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   clef->setGenerated(false);
 
                   // there may be more than one clef segment for same tick position
-                  if (!segment)
+                  if (!segment || segment->segmentType() != Segment::SegClef)
                         segment = getSegment(Segment::SegClef, e.tick());
                   else {
                         Segment* ns = 0;
