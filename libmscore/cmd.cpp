@@ -1400,7 +1400,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
                   Note* nn = n;
                   while (nn->tieFor()) {
                         nn = nn->tieFor()->endNote();
-                        score->undo(new ChangePitch(nn, pitch, tpc, nn->line()));
+                        score->undo(new ChangePitch(nn, pitch, tpc1, tpc2));
                         }
                   }
             }
@@ -1419,14 +1419,6 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
 
 void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
       {
-      QList<Staff*> staffList;
-      Staff* ostaff = note->chord()->staff();
-      LinkedStaves* linkedStaves = ostaff->linkedStaves();
-      if (linkedStaves)
-            staffList = linkedStaves->staves();
-      else
-            staffList.append(ostaff);
-
       Chord* chord     = note->chord();
       Segment* segment = chord->segment();
       Measure* measure = segment->measure();
@@ -1446,6 +1438,7 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
       int pitch = line2pitch(note->line(), clef, 0) + acc;
       if (!note->concertPitch())
             pitch += note->transposition();
+
       int tpc = step2tpc(step, acc);
       if (accidental == Accidental::ACC_NONE) {
             //
