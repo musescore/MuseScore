@@ -61,6 +61,7 @@ add_library(
           ${PROJECT_SOURCE_DIR}/mscore/importmidi_tie.cpp
           ${PROJECT_SOURCE_DIR}/mscore/importmidi_inner.cpp
           ${PROJECT_SOURCE_DIR}/mscore/importmidi_beat.cpp
+          ${PROJECT_SOURCE_DIR}/mscore/importmidi_simplify.cpp
           ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
           ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
           ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp

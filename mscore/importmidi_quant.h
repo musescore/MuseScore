@@ -30,14 +30,18 @@ ReducedFraction findQuantizedChordOnTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &basicQuant);
 
-ReducedFraction findQuantizedTupletNoteOffTime(
+            // <offTime, resulting quant>
+std::pair<ReducedFraction, ReducedFraction>
+findQuantizedTupletNoteOffTime(
             const ReducedFraction &onTime,
             const ReducedFraction &offTime,
             const ReducedFraction &tupletLen,
             const ReducedFraction &tupletRatio,
             const ReducedFraction &rangeStart);
 
-ReducedFraction findQuantizedNoteOffTime(
+            // <offTime, resulting quant>
+std::pair<ReducedFraction, ReducedFraction>
+findQuantizedNoteOffTime(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const ReducedFraction &offTime,
             const ReducedFraction &basicQuant);
@@ -84,6 +88,10 @@ void setIfHumanPerformance(
 
 ReducedFraction quantizeValue(
             const ReducedFraction &value,
+            const ReducedFraction &quant);
+
+ReducedFraction quantizeToLarge(
+            const ReducedFraction &time,
             const ReducedFraction &quant);
 
 void quantizeChords(
