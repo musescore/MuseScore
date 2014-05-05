@@ -118,7 +118,7 @@ ReducedFraction findSumLengthOfRests(
                         maxOffTime = noteOffTime;
                   }
             beg = Quantize::findQuantizedTupletNoteOffTime(chord.first, maxOffTime, tupletInfo.len,
-                                    tupletLimits(tupletInfo.tupletNumber).ratio, startBarTick);
+                                    tupletLimits(tupletInfo.tupletNumber).ratio, startBarTick).first;
             if (beg >= tupletEndTime)
                   break;
             }

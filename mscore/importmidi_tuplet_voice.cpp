@@ -699,14 +699,14 @@ std::vector<int> findTiedNotes(
             const MidiNote &note = chordIt->second.notes[i];
 
             const auto offTimeInTuplet = Quantize::findQuantizedTupletNoteOffTime(
-                        chordIt->first, note.offTime, tuplet.len, tupletRatio, startBarTick);
+                        chordIt->first, note.offTime, tuplet.len, tupletRatio, startBarTick).first;
 
             if (offTimeInTuplet < startBarTick
                         || offTimeInTuplet <= tuplet.onTime)
                   continue;
 
             const auto regularOffTime = Quantize::findQuantizedNoteOffTime(
-                                                *chordIt, note.offTime, basicQuant);
+                                                *chordIt, note.offTime, basicQuant).first;
             const auto regularError = (note.offTime - regularOffTime).absValue();
             const auto tupletError = (note.offTime - offTimeInTuplet).absValue();
             if (tupletError > regularError)

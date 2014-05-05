@@ -56,6 +56,7 @@
 #include "importmidi_lyrics.h"
 #include "importmidi_tie.h"
 #include "importmidi_beat.h"
+#include "importmidi_simplify.h"
 
 #include <set>
 
@@ -949,6 +950,7 @@ void convertMidi(Score *score, const MidiFile *mf)
                  "convertMidi", "There are notes of length < min allowed duration");
 
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
+      Simplify::simplifyNotation(tracks, sigmap);
       LRHand::splitIntoLeftRightHands(tracks);
       MidiDrum::splitDrumVoices(tracks);
       MidiDrum::splitDrumTracks(tracks);
