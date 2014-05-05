@@ -373,6 +373,15 @@ void Staff::write(Xml& xml) const
                   }
             }
 
+      // for copy/paste we need to know the actual transposition
+      if (xml.clipboardmode) {
+            Interval v = part()->instr(0)->transpose();
+            if (v.diatonic)
+                  xml.tag("transposeDiatonic", v.diatonic);
+            if (v.chromatic)
+                  xml.tag("transposeChromatic", v.chromatic);
+            }
+
       _staffType.write(xml);
 
       if (small() && !xml.excerptmode)    // switch small staves to normal ones when extracting part
@@ -478,6 +487,10 @@ void Staff::read(XmlReader& e)
                   }
             else if (tag == "color")
                   _color = e.readColor();
+            else if (tag == "transposeDiatonic")
+                  e.setTransposeDiatonic(e.readInt());
+            else if (tag == "transposeChromatic")
+                  e.setTransposeChromatic(e.readInt());
             else
                   e.unknown();
             }
