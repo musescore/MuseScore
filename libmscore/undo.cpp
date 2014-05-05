@@ -427,7 +427,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
             staffList.append(ostaff);
 
       LinkedElements* links = 0;
-      foreach(Staff* staff, staffList) {
+      foreach (Staff* staff, staffList) {
             Score* score = staff->score();
 
             Measure* measure = score->tick2measure(tick);
@@ -474,6 +474,8 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
                   if (ks->keySigEvent() != st)
                         undo(new ChangeKeySig(ks, st, ks->showCourtesy() /*, ks->showNaturals()*/));
                   }
+            for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM())
+                  m->cmdUpdateNotes(staff->idx());
             }
       }
 
