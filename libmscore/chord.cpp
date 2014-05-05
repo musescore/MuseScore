@@ -238,6 +238,12 @@ Chord::Chord(const Chord& c)
       _tremolo          = 0;
       _noteType         = c._noteType;
       _crossMeasure     = CROSSMEASURE_UNKNOWN;
+      for (Element* e : c.el()) {
+            if (e->type() == Element::CHORDLINE) {
+                   ChordLine* cl = static_cast<ChordLine*>(e);
+                   add(new ChordLine(*cl));
+                   }
+            }
       }
 
 //---------------------------------------------------------
