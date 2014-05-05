@@ -19,6 +19,7 @@
 #include "fraction.h"
 #include "property.h"
 #include "stafftype.h"
+#include "interval.h"
 
 namespace Ms {
 
@@ -54,6 +55,7 @@ class XmlReader : public QXmlStreamReader {
       QList<SpannerValues> _spannerValues;
       QList<StaffType> _staffTypes;
       void htmlToString(int level, QString*);
+      Interval _transpose;
 
    public:
       XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
@@ -105,6 +107,9 @@ class XmlReader : public QXmlStreamReader {
       void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
       const SpannerValues* spannerValues(int id);
       QList<StaffType>& staffType() { return _staffTypes; }
+      Interval transpose() const { return _transpose; }
+      void setTransposeChromatic(int v) { _transpose.chromatic = v; }
+      void setTransposeDiatonic(int v) { _transpose.diatonic = v; }
       };
 
 //---------------------------------------------------------

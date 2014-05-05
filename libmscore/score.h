@@ -419,7 +419,7 @@ class Score : public QObject {
       void addAudioTrack();
       void parseVersion(const QString&);
       QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
-      void pasteChordRest(ChordRest* cr, int tick);
+      void pasteChordRest(ChordRest* cr, int tick, const Interval&);
       void init();
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m);

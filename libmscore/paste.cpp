@@ -51,7 +51,6 @@
 #include "stafftext.h"
 #include "style.h"
 #include "system.h"
-//#include "stringdata.h"
 #include "tempo.h"
 #include "tempotext.h"
 #include "text.h"
@@ -102,8 +101,12 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                         e.unknown();
                         break;
                         }
+                  e.setTransposeChromatic(0);
+                  e.setTransposeDiatonic(0);
+
                   int srcStaffIdx = e.attribute("id", "0").toInt();
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
+
                   if (dstStaffIdx >= nstaves()) {
                         done = true; // break main loop, nothing more to paste
                         break;
@@ -158,7 +161,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                                                 }
                                           graceNotes.clear();
                                           }
-                                    pasteChordRest(cr, tick);
+                                    pasteChordRest(cr, tick, e.transpose());
                                     }
                               }
                         else if (tag == "HairPin"
@@ -338,7 +341,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
 //   pasteChordRest
 //---------------------------------------------------------
 
-void Score::pasteChordRest(ChordRest* cr, int tick)
+void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose)
       {
 // qDebug("pasteChordRest %s at %d", cr->name(), tick);
       if (cr->type() == Element::CHORD) {
@@ -346,21 +349,21 @@ void Score::pasteChordRest(ChordRest* cr, int tick)
             // check if staffMove moves a note to a
             // nonexistant staff
             //
-            int track  = cr->track();
             Chord* c   = static_cast<Chord*>(cr);
-            Part* part = cr->staff()->part();
+            int track  = cr->track();
             int nn     = (track / VOICES) + c->staffMove();
             if (nn < 0 || nn >= nstaves())
                   c->setStaffMove(0);
+            Part* part = c->staff()->part();
+            Interval dstTranspose = part->instr()->transpose();
 
-            if (!styleB(ST_concertPitch) && part->instr()->transpose().chromatic) {
-                  Interval interval = part->instr()->transpose();
-                  if (!interval.isZero()) {
-                        interval.flip();
+            if (srcTranspose != dstTranspose) {
+                  if (!dstTranspose.isZero()) {
+                        dstTranspose.flip();
                         for (Note* n : c->notes()) {
                               int npitch;
                               int ntpc;
-                              transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc, interval, true);
+                              transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc, dstTranspose, true);
                               n->setTpc2(ntpc);
                               }
                         }
