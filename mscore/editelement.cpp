@@ -114,49 +114,74 @@ void ScoreView::endEdit()
       }
 
 //---------------------------------------------------------
+//   editElementDragTransition
+//    (start dragEdit)
+//---------------------------------------------------------
+
+bool ScoreView::editElementDragTransition(QMouseEvent* ev)
+      {
+      data.startMove = toLogical(ev->pos());
+      data.lastPos   = data.startMove;
+      data.pos       = data.startMove;
+      data.view      = this;
+
+      Element* e = elementNear(data.startMove);
+      if (e && (e == editObject) && (editObject->isText())) {
+            if (editObject->mousePress(data.startMove, ev)) {
+                  _score->addRefresh(editObject->canvasBoundingRect());
+                  _score->end();
+                  }
+            return true;
+            }
+      int i;
+      qreal a = grip[0].width() * 1.0;
+      for (i = 0; i < grips; ++i) {
+            if (grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
+                  curGrip = i;
+                  data.curGrip = i;
+                  updateGrips();
+                  score()->end();
+                  break;
+                  }
+            }
+      return i != grips;
+      }
+
+//---------------------------------------------------------
 //   doDragEdit
 //---------------------------------------------------------
 
 void ScoreView::doDragEdit(QMouseEvent* ev)
       {
-      QPointF p     = toLogical(ev->pos());
-      QPointF delta = p - data.startMove;
+      data.lastPos = data.pos;
+      data.pos     = toLogical(ev->pos());
 
-      if (qApp->keyboardModifiers() & Qt::ShiftModifier) {
-            if(editObject->type() == Element::BAR_LINE)
+      if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
+            if (editObject->type() == Element::BAR_LINE)
                   BarLine::setShiftDrag(true);
-            else {
-                  p.setX(0.0);
-                  delta.setX(0.0);
-                  }
+            else
+                  data.pos.setX(data.lastPos.x());
             }
-            
-      if (qApp->keyboardModifiers() & Qt::ControlModifier) {
-            if(editObject->type() == Element::BAR_LINE)
+
+      if (qApp->keyboardModifiers() == Qt::ControlModifier) {
+            if (editObject->type() == Element::BAR_LINE)
                   BarLine::setCtrlDrag(true);
-            else {
-                  p.setY(0.0);
-                  delta.setY(0.0);
-                  }
+            else
+                  data.pos.setY(data.lastPos.y());
             }
+      data.delta = data.pos - data.lastPos;
 
       _score->setLayoutAll(false);
       score()->addRefresh(editObject->canvasBoundingRect());
       if (editObject->isText()) {
             Text* text = static_cast<Text*>(editObject);
-            text->dragTo(p);
+            text->dragTo(data.pos);
             }
       else {
-            EditData ed;
-            ed.view    = this;
-            ed.curGrip = curGrip;
-            ed.delta   = delta;
-            ed.pos     = p;
-            ed.hRaster = false;
-            ed.vRaster = false;
-            editObject->editDrag(ed);
+            data.hRaster = false;
+            data.vRaster = false;
+            editObject->editDrag(data);
             updateGrips();
-            data.startMove = p;
             }
       QRectF r(editObject->canvasBoundingRect());
       _score->addRefresh(r);

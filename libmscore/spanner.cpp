@@ -400,7 +400,7 @@ void Spanner::computeEndElement()
             case ANCHOR_SEGMENT:
                   if (type() == SLUR) {
                         Segment* s = score()->tick2segmentMM(tick2(), false, Segment::SegChordRest);
-                        _endElement = s ? static_cast<ChordRest*>(s->element(track())) : nullptr;
+                        _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
                         }
                   else
                         _endElement = score()->findCR(tick2() - 1, track2());
