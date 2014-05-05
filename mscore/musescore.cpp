@@ -4437,6 +4437,7 @@ void MuseScore::switchLayoutMode(int val)
             cs->doLayout();
             cs->setUpdateAll(true);
             cv->update();
+            cv->loopUpdate(getAction("loop")->isChecked());
             }
       }
 
