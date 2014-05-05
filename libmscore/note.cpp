@@ -760,8 +760,9 @@ void Note::write(Xml& xml) const
             xml.etag();
             }
       writeProperty(xml, P_PITCH);
+      // write tpc1 before tpc2 !
       writeProperty(xml, P_TPC1);
-      if (transposition() && _tpc[1] != tpc2default(_pitch))
+      if (_tpc[1] != _tpc[0])
             writeProperty(xml, P_TPC2);
       writeProperty(xml, P_SMALL);
       writeProperty(xml, P_MIRROR_HEAD);
@@ -806,8 +807,10 @@ void Note::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "pitch")
                   _pitch = e.readInt();
-            else if (tag == "tpc")
+            else if (tag == "tpc") {
                   _tpc[0] = e.readInt();
+                  _tpc[1] = _tpc[0];
+                  }
             else if (tag == "tpc2")
                   _tpc[1] = e.readInt();
             else if (tag == "small")
