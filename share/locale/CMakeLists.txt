@@ -52,6 +52,7 @@ install(FILES
       mscore_mn_MN.qm
       mscore_nl.qm
       mscore_nb.qm
+      mscore_nn.qm
       mscore_pl.qm
       mscore_pt.qm
       mscore_pt_BR.qm
