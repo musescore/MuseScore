@@ -2044,25 +2044,40 @@ void Measure::read(XmlReader& e, int staffIdx)
                   clef->setGenerated(false);
 
                   // there may be more than one clef segment for same tick position
-                  if (!segment || segment->segmentType() != Segment::SegClef)
+                  if (!segment) {
+                        // this is the first segment of measure
                         segment = getSegment(Segment::SegClef, e.tick());
+                        }
                   else {
-                        Segment* ns = 0;
-                        if (segment->next()) {
-                              ns = segment->next();
-                              while (ns && ns->tick() < e.tick())
-                                    ns = ns->next();
-                              }
-                        segment = 0;
-                        for (Segment* s = ns; s && s->tick() == e.tick(); s = s->next()) {
+                        bool firstSegment = false;
+                        for (Segment* s = _segments.first(); s && s->tick() == e.tick(); s = s->next()) {
                               if (s->segmentType() == Segment::SegClef) {
-                                    segment = s;
+                                    firstSegment = true;
                                     break;
                                     }
                               }
-                        if (!segment) {
-                              segment = new Segment(this, Segment::SegClef, e.tick());
-                              _segments.insert(segment, ns);
+                        if (firstSegment) {
+                              Segment* ns = 0;
+                              if (segment->next()) {
+                                    ns = segment->next();
+                                    while (ns && ns->tick() < e.tick())
+                                          ns = ns->next();
+                                    }
+                              segment = 0;
+                              for (Segment* s = ns; s && s->tick() == e.tick(); s = s->next()) {
+                                    if (s->segmentType() == Segment::SegClef) {
+                                          segment = s;
+                                          break;
+                                          }
+                                    }
+                              if (!segment) {
+                                    segment = new Segment(this, Segment::SegClef, e.tick());
+                                    _segments.insert(segment, ns);
+                                    }
+                              }
+                        else {
+                              // this is the first clef: move to left
+                              segment = getSegment(Segment::SegClef, e.tick());
                               }
                         }
                   segment->add(clef);
