@@ -115,8 +115,9 @@ struct EditData {
       MuseScoreView* view;
       int curGrip;
       QPointF startMove;
-      QPointF delta;
       QPointF pos;
+      QPointF lastPos;
+      QPointF delta;
       bool hRaster;
       bool vRaster;
       };

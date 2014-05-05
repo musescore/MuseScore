@@ -3292,34 +3292,6 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* event)
       }
 
 //---------------------------------------------------------
-//   editElementDragTransition
-//---------------------------------------------------------
-
-bool ScoreView::editElementDragTransition(QMouseEvent* ev)
-      {
-      data.startMove = toLogical(ev->pos());
-      Element* e = elementNear(data.startMove);
-      if (e && (e == editObject) && (editObject->isText())) {
-            if (editObject->mousePress(data.startMove, ev)) {
-                  _score->addRefresh(editObject->canvasBoundingRect());
-                  _score->end();
-                  }
-            return true;
-            }
-      int i;
-      qreal a = grip[0].width() * 1.0;
-      for (i = 0; i < grips; ++i) {
-            if (grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
-                  curGrip = i;
-                  updateGrips();
-                  score()->end();
-                  break;
-                  }
-            }
-      return i != grips;
-      }
-
-//---------------------------------------------------------
 //   onEditPasteTransition
 //---------------------------------------------------------
 
