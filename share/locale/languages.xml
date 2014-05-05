@@ -32,7 +32,8 @@
   <language code="lt" name="Lietuvių" />
   <language code="mn_MN" name="Монгол хэл" />
   <language code="nl" name="Nederlands" handbook="http://www.musescore.org/nl/handboek" />
-  <language code="nb" name="Norsk" handbook="http://www.musescore.org/nb/håndbok" />
+  <language code="nb" name="Norsk (Bokmål)" handbook="http://www.musescore.org/nb/håndbok" />
+  <language code="nn" name="Norsk (Nynorsk)" handbook="http://www.musescore.org/nb/håndbok" />
   <language code="pl" name="Polski" handbook="http://www.musescore.org/pl/podręcznik" />
   <language code="pt" name="Português" handbook="http://www.musescore.org/pt-br/manual" />
   <language code="pt_BR" name="Português brasileiro" handbook="http://www.musescore.org/pt-br/manual" />
