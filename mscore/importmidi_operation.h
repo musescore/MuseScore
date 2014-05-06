@@ -21,6 +21,9 @@ struct MidiOperation
             LHRH_SPLIT_NOTE,
 
             USE_DOTS,
+
+            MINIMIZE_NUMBER_OF_RESTS,
+
             ALLOWED_VOICES,
 
             TUPLET_SEARCH,
