@@ -243,6 +243,17 @@ void Tie::read(XmlReader& e)
             else
                   e.unknown();
             }
+      if (score()->mscVersion() <= 114 && spannerSegments().size() == 1) {
+            // ignore manual adjustments to single-segment ties in older scores
+            SlurSegment* ss = frontSegment();
+            QPointF zeroP;
+            ss->ups[GRIP_START].off     = zeroP;
+            ss->ups[GRIP_BEZIER1].off   = zeroP;
+            ss->ups[GRIP_BEZIER2].off   = zeroP;
+            ss->ups[GRIP_END].off       = zeroP;
+            ss->setUserOff(zeroP);
+            ss->setUserOff2(zeroP);
+            }
       }
 
 //---------------------------------------------------------

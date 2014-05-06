@@ -815,8 +815,12 @@ void Note::read(XmlReader& e)
                   _tpc[1] = e.readInt();
             else if (tag == "small")
                   setSmall(e.readInt());
-            else if (tag == "mirror")
-                  setProperty(P_MIRROR_HEAD, Ms::getProperty(P_MIRROR_HEAD, e));
+            else if (tag == "mirror") {
+                  if (score()->mscVersion() > 114)
+                        setProperty(P_MIRROR_HEAD, Ms::getProperty(P_MIRROR_HEAD, e));
+                  else
+                        e.skipCurrentElement(); // ignore manual layout in older scores
+                  }
             else if (tag == "dotPosition")
                   setProperty(P_DOT_POSITION, Ms::getProperty(P_DOT_POSITION, e));
             else if (tag == "onTimeType") { //obsolete
@@ -1038,6 +1042,12 @@ void Note::read(XmlReader& e)
                   e.skipCurrentElement(); // _offTimeType = readValueType(e);
             else if (tag == "tick")                         // bad input file
                   e.skipCurrentElement();
+            else if (tag == "offset") {
+                  if (score()->mscVersion() > 114 || voice() >= 2)
+                        Element::readProperties(e);
+                  else
+                        e.skipCurrentElement(); // ignore manual layout in older scores (except for note offsets in voices 3 & 4)
+                  }
             else if (Element::readProperties(e))
                   ;
             else
