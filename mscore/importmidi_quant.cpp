@@ -662,7 +662,7 @@ void findChordRangeEnds(
             if (d.chordRangeEnd < d.chordRangeStart)
                   d.chordRangeEnd = d.chordRangeStart;
 
-            Q_ASSERT_X(d.chordRangeEnd <= rangeEnd,
+            Q_ASSERT_X(d.chordRangeEnd < rangeEnd,
                        "Quantize::findChordRangeEnds", "chordRangeEnd > rangeEnd");
             Q_ASSERT_X(d.chordRangeStart <= d.chordRangeEnd,
                        "Quantize::findChordRangeEnds", "chordRangeStart is greater than chordRangeEnd");
