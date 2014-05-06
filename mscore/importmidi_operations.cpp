@@ -22,6 +22,11 @@ void MidiImportOperations::clear()
       defaultOpers = TrackOperations();
       }
 
+void MidiImportOperations::setDefaults(const TrackOperations &operations)
+      {
+      defaultOpers = operations;
+      }
+
 void MidiImportOperations::setCurrentTrack(int trackIndex)
       {
       if (!isValidIndex(trackIndex))

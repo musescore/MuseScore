@@ -52,13 +52,22 @@ class TestImportMidi : public QObject, public MTest
 
       void mf(const char* name);
 
+      void noSimplification(const char *file)
+            {
+            TrackOperations opers;
+            opers.minimizeNumberOfRests = false;
+            preferences.midiImportOperations.setDefaults(opers);
+            mf(file);
+            preferences.midiImportOperations.clear();
+            }
+
    private slots:
       void initTestCase();
-      void im1() { mf("m1"); }
-      void im2() { mf("m2"); }     // tie across bar line
-      void im3() { mf("m3"); }     // voices, typeA, resolve with tie
-      void im4() { mf("m4"); }     // voices, typeB, resolve with tie
-      void im5() { mf("m5"); }     // same as m1 with division 240
+      void im1() { noSimplification("m1"); }
+      void im2() { noSimplification("m2"); }     // tie across bar line
+      void im3() { noSimplification("m3"); }     // voices, typeA, resolve with tie
+      void im4() { noSimplification("m4"); }     // voices, typeB, resolve with tie
+      void im5() { noSimplification("m5"); }     // same as m1 with division 240
 
       // quantization
       void quantDotted4th()
@@ -66,15 +75,12 @@ class TestImportMidi : public QObject, public MTest
                         // 1/4 quantization should preserve 4th dotted note
             const int defaultQuant = preferences.shortestNote;
             preferences.shortestNote = MScore::division; // midi quantization: 1/4
-            TrackOperations opers;
-            preferences.midiImportOperations.appendTrackOperations(opers);
-            mf("quant_dotted_4th");
-            preferences.shortestNote = defaultQuant;
-            preferences.midiImportOperations.clear();
+            noSimplification("quant_dotted_4th");
+            preferences.shortestNote = defaultQuant;        // restore default
             }
 
       // human-performed (unaligned) files
-      void human4_4() { mf("human_4-4"); }
+      void human4_4() { noSimplification("human_4-4"); }
 
       // test tuplet recognition functions
       void findChordInBar();
@@ -91,32 +97,32 @@ class TestImportMidi : public QObject, public MTest
       void isSimpleDuration();
 
       // test scores for meter (duration subdivision)
-      void meterTimeSig4_4() { mf("meter_4-4"); }
-      void metertimeSig9_8() { mf("meter_9-8"); }
-      void metertimeSig12_8() { mf("meter_12-8"); }
-      void metertimeSig15_8() { mf("meter_15-8"); }
-      void meterCentralLongNote() { mf("meter_central_long_note"); }
-      void meterCentralLongRest() { mf("meter_central_long_rest"); }
-      void meterChordExample() { mf("meter_chord_example"); }
-      void meterDotsExample1() { mf("meter_dots_example1"); }
-      void meterDotsExample2() { mf("meter_dots_example2"); }
-      void meterDotsExample3() { mf("meter_dots_example3"); }
-      void meterHalfRest3_4() { mf("meter_half_rest_3-4"); }
-      void meterFirst2_8thRestsCompound() { mf("meter_first_2_8th_rests_compound"); }
-      void meterLastQuarterRestCompound() { mf("meter_last_quarter_rest_compound"); }
-      void meterRests() { mf("meter_rests"); }
-      void meterTwoBeatsOver() { mf("meter_two_beats_over"); }
-      void meterDotTie() { mf("meter_dot_tie"); }
+      void meterTimeSig4_4() { noSimplification("meter_4-4"); }
+      void metertimeSig9_8() { noSimplification("meter_9-8"); }
+      void metertimeSig12_8() { noSimplification("meter_12-8"); }
+      void metertimeSig15_8() { noSimplification("meter_15-8"); }
+      void meterCentralLongNote() { noSimplification("meter_central_long_note"); }
+      void meterCentralLongRest() { noSimplification("meter_central_long_rest"); }
+      void meterChordExample() { noSimplification("meter_chord_example"); }
+      void meterDotsExample1() { noSimplification("meter_dots_example1"); }
+      void meterDotsExample2() { noSimplification("meter_dots_example2"); }
+      void meterDotsExample3() { noSimplification("meter_dots_example3"); }
+      void meterHalfRest3_4() { noSimplification("meter_half_rest_3-4"); }
+      void meterFirst2_8thRestsCompound() { noSimplification("meter_first_2_8th_rests_compound"); }
+      void meterLastQuarterRestCompound() { noSimplification("meter_last_quarter_rest_compound"); }
+      void meterRests() { noSimplification("meter_rests"); }
+      void meterTwoBeatsOver() { noSimplification("meter_two_beats_over"); }
+      void meterDotTie() { noSimplification("meter_dot_tie"); }
 
       // time sig
-      void timesigChanges() { mf("timesig_changes"); }
+      void timesigChanges() { noSimplification("timesig_changes"); }
 
       // test scores for tuplets
       void tuplet2Voices3_5Tuplets()
             {
                         // requires 1/32 quantization
             const int defaultQuant = preferences.shortestNote;
-            mf("tuplet_2_voices_3_5_tuplets");
+            noSimplification("tuplet_2_voices_3_5_tuplets");
             preferences.shortestNote = defaultQuant;
             }
       void tuplet2VoicesTupletNon() { mf("tuplet_2_voices_tuplet_non"); }
@@ -124,63 +130,65 @@ class TestImportMidi : public QObject, public MTest
             {
             TrackOperations opers;
             opers.changeClef = false;
-            preferences.midiImportOperations.appendTrackOperations(opers);
+            opers.minimizeNumberOfRests = false;
+            preferences.midiImportOperations.setDefaults(opers);
             mf("tuplet_3_5_7_tuplets");
             preferences.midiImportOperations.clear();
             }
-      void tuplet5_5TupletsRests() { mf("tuplet_5_5_tuplets_rests"); }
-      void tuplet3_4() { mf("tuplet_3-4"); }
-      void tupletDuplet() { mf("tuplet_duplet"); }
-      void tupletMars() { mf("tuplet_mars"); }
+      void tuplet5_5TupletsRests() { noSimplification("tuplet_5_5_tuplets_rests"); }
+      void tuplet3_4() { noSimplification("tuplet_3-4"); }
+      void tupletDuplet() { noSimplification("tuplet_duplet"); }
+      void tupletMars() { noSimplification("tuplet_mars"); }
       void tupletNonuplet3_4()
             {
                         // requires 1/64 quantization
             const int defaultQuant = preferences.shortestNote;
-            mf("tuplet_nonuplet_3-4");
-            preferences.shortestNote = defaultQuant;
+            noSimplification("tuplet_nonuplet_3-4");
+            preferences.shortestNote = defaultQuant;        // restore default
             }
       void tupletNonuplet4_4()
             {
                         // requires 1/64 quantization
             const int defaultQuant = preferences.shortestNote;
-            mf("tuplet_nonuplet_4-4");
-            preferences.shortestNote = defaultQuant;
+            noSimplification("tuplet_nonuplet_4-4");
+            preferences.shortestNote = defaultQuant;        // restore default
             }
-      void tupletQuadruplet() { mf("tuplet_quadruplet"); }
-      void tupletSeptuplet() { mf("tuplet_septuplet"); }
-      void tupletTripletsMixed() { mf("tuplet_triplets_mixed"); }
-      void tupletTriplet() { mf("tuplet_triplet"); }
-      void tupletTripletFirstTied() { mf("tuplet_triplet_first_tied"); }
-      void tupletTripletFirstTied2() { mf("tuplet_triplet_first_tied2"); }
-      void tupletTripletLastTied() { mf("tuplet_triplet_last_tied"); }
+      void tupletQuadruplet() { noSimplification("tuplet_quadruplet"); }
+      void tupletSeptuplet() { noSimplification("tuplet_septuplet"); }
+      void tupletTripletsMixed() { noSimplification("tuplet_triplets_mixed"); }
+      void tupletTriplet() { noSimplification("tuplet_triplet"); }
+      void tupletTripletFirstTied() { noSimplification("tuplet_triplet_first_tied"); }
+      void tupletTripletFirstTied2() { noSimplification("tuplet_triplet_first_tied2"); }
+      void tupletTripletLastTied() { noSimplification("tuplet_triplet_last_tied"); }
       void tupletTied3_5()
             {
                         // requires 1/32 quantization
             const int defaultQuant = preferences.shortestNote;
-            mf("tuplet_tied_3_5_tuplets");
-            preferences.shortestNote = defaultQuant;
+            noSimplification("tuplet_tied_3_5_tuplets");
+            preferences.shortestNote = defaultQuant;        // restore default
             }
       void tupletTied3_5_2()
             {
             // requires 1/32 quantization
             const int defaultQuant = preferences.shortestNote;
-            mf("tuplet_tied_3_5_tuplets2");
-            preferences.shortestNote = defaultQuant;
+            noSimplification("tuplet_tied_3_5_tuplets2");
+            preferences.shortestNote = defaultQuant;        // restore default
             }
-      void tupletOffTimeOtherBar() { mf("tuplet_off_time_other_bar"); }
-      void tupletOffTimeOtherBar2() { mf("tuplet_off_time_other_bar2"); }
-      void tuplet16th8th() { mf("tuplet_16th_8th"); }
-      void tuplet7Staccato() { mf("tuplet_7_staccato"); }
-      void minDuration() { mf("min_duration"); }
+      void tupletOffTimeOtherBar() { noSimplification("tuplet_off_time_other_bar"); }
+      void tupletOffTimeOtherBar2() { noSimplification("tuplet_off_time_other_bar2"); }
+      void tuplet16th8th() { noSimplification("tuplet_16th_8th"); }
+      void tuplet7Staccato() { noSimplification("tuplet_7_staccato"); }
+      void minDuration() { noSimplification("min_duration"); }
 
-      void pickupMeasure() { mf("pickup"); }
+      void pickupMeasure() { noSimplification("pickup"); }
 
       // LH/RH separation
       void LHRH_Nontuplet()
             {
             TrackOperations opers;
             opers.LHRH.doIt = true;
-            preferences.midiImportOperations.appendTrackOperations(opers);
+            opers.minimizeNumberOfRests = false;
+            preferences.midiImportOperations.setDefaults(opers);
             mf("split_nontuplet");
             preferences.midiImportOperations.clear();
             }
@@ -188,7 +196,8 @@ class TestImportMidi : public QObject, public MTest
             {
             TrackOperations opers;
             opers.LHRH.doIt = true;
-            preferences.midiImportOperations.appendTrackOperations(opers);
+            opers.minimizeNumberOfRests = false;
+            preferences.midiImportOperations.setDefaults(opers);
             mf("split_tuplet");
             preferences.midiImportOperations.clear();
             }
@@ -198,7 +207,8 @@ class TestImportMidi : public QObject, public MTest
             {
             TrackOperations opers;
             opers.swing = MidiOperation::Swing::SWING;
-            preferences.midiImportOperations.appendTrackOperations(opers);
+            opers.minimizeNumberOfRests = false;
+            preferences.midiImportOperations.setDefaults(opers);
             mf("swing_triplets");
             preferences.midiImportOperations.clear();
             }
@@ -206,7 +216,8 @@ class TestImportMidi : public QObject, public MTest
             {
             TrackOperations opers;
             opers.swing = MidiOperation::Swing::SHUFFLE;
-            preferences.midiImportOperations.appendTrackOperations(opers);
+            opers.minimizeNumberOfRests = false;
+            preferences.midiImportOperations.setDefaults(opers);
             mf("swing_shuffle");
             preferences.midiImportOperations.clear();
             }
@@ -215,19 +226,20 @@ class TestImportMidi : public QObject, public MTest
             TrackOperations opers;
             opers.swing = MidiOperation::Swing::SWING;
             opers.changeClef = true;
-            preferences.midiImportOperations.appendTrackOperations(opers);
+            opers.minimizeNumberOfRests = false;
+            preferences.midiImportOperations.setDefaults(opers);
             mf("swing_clef");
             preferences.midiImportOperations.clear();
             }
 
       // percussion
-      void percDrums() { mf("perc_drums"); }
-      void percRemoveTies() { mf("perc_remove_ties"); }
+      void percDrums() { noSimplification("perc_drums"); }
+      void percRemoveTies() { noSimplification("perc_remove_ties"); }
 
       // clef changes along the score
-      void clefTied() { mf("clef_tied"); }
-      void clefMelody() { mf("clef_melody"); }
-      void clefPrev() { mf("clef_prev"); }
+      void clefTied() { noSimplification("clef_tied"); }
+      void clefMelody() { noSimplification("clef_melody"); }
+      void clefPrev() { noSimplification("clef_prev"); }
       };
 
 //---------------------------------------------------------

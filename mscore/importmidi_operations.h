@@ -94,6 +94,7 @@ class MidiImportOperations
    public:
       void appendTrackOperations(const TrackOperations& operations);
       void clear();
+      void setDefaults(const TrackOperations& operations);
       void setCurrentTrack(int trackIndex);
       void setCurrentMidiFile(const QString &fileName);
       int currentTrack() const { return currentTrack_; }
