@@ -4476,7 +4476,6 @@ void ExportMusicXml::write(QIODevice* dev)
                                                        chord(g, sstaff, ll, part->instr()->useDrumset());
                                                        }
                                                 }
-                                          chord(c, sstaff, ll, part->instr()->useDrumset());
                                           break;
                                           }
                                     case Element::REST:
