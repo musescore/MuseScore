@@ -225,6 +225,12 @@ void Articulation::read(XmlReader& e)
                   }
             else if (tag == "timeStretch")
                   _timeStretch = e.readDouble();
+            else if (tag == "offset") {
+                  if (score()->mscVersion() > 114)
+                        Element::readProperties(e);
+                  else
+                        e.skipCurrentElement(); // ignore manual layout in older scores
+                  }
             else if (!Element::readProperties(e))
                   e.unknown();
             }

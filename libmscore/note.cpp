@@ -1043,10 +1043,10 @@ void Note::read(XmlReader& e)
             else if (tag == "tick")                         // bad input file
                   e.skipCurrentElement();
             else if (tag == "offset") {
-                  if (score()->mscVersion() > 114 || voice() >= 2)
+                  if (score()->mscVersion() > 114) // || voice() >= 2)
                         Element::readProperties(e);
                   else
-                        e.skipCurrentElement(); // ignore manual layout in older scores (except for note offsets in voices 3 & 4)
+                        e.skipCurrentElement(); // ignore manual layout in older scores
                   }
             else if (Element::readProperties(e))
                   ;

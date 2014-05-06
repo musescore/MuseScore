@@ -805,12 +805,17 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
 
-            qreal sx = x + chord->x() + note->userOff().x();      // segment-relative x position
-
             // find leftmost non-mirrored note to set as X origin for accidental layout
             // a mirrored note that extends to left of segment X origin
             // will displace accidentals only if there is conflict
-            if (note->mirror() && !chord->up() && sx < 0.0)
+
+            // currently, we ignore user note/chord offsets in setting X origin
+            // previous versions took these offsets into account
+            // replace chord->rxpos() with chord->x() + note->userOff().x()
+            // to restore previous behavior
+            qreal sx = x + chord->rxpos();      // segment-relative x position
+
+           if (note->mirror() && !chord->up() && sx < 0.0)
                   leftNotes.append(note);
             else if (sx < lx)
                   lx = sx;
