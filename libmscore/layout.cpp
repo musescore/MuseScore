@@ -805,7 +805,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
 
-            qreal sx = x + chord->rxpos();      // segment-relative x position
+            qreal sx = x + chord->x() + note->userOff().x();      // segment-relative x position
 
             // find leftmost non-mirrored note to set as X origin for accidental layout
             // a mirrored note that extends to left of segment X origin
