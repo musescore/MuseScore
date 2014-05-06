@@ -1345,7 +1345,7 @@ Element* Note::drop(const DropData& data)
                   // before the current note
                   for (int i = nl.size() - 1; i >= 0; --i) {
                         int p = BagpipeEmbellishment::BagpipeNoteInfoList[nl.at(i)].pitch;
-                        score()->setGraceNote(ch, p, NOTE_GRACE32, false, MScore::division/8);
+                        score()->setGraceNote(ch, p, NOTE_GRACE32, MScore::division/8);
                         }
                   }
                   delete e;
