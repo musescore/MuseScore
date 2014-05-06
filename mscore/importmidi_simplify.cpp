@@ -100,7 +100,7 @@ void lengthenNote(
       note.offTime = bestOffTime;
       }
 
-void simplifyNoteDurations(
+void minimizeNumberOfRests(
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap,
             const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
@@ -152,7 +152,8 @@ void simplifyNotation(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigm
                         // for further usage
             opers.setCurrentTrack(mtrack.indexOfOperation);
 
-            simplifyNoteDurations(chords, sigmap, mtrack.tuplets);
+            if (opers.currentTrackOperations().minimizeNumberOfRests)
+                  minimizeNumberOfRests(chords, sigmap, mtrack.tuplets);
             }
       }
 

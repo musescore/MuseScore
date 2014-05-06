@@ -101,6 +101,14 @@ OperationsModel::OperationsModel()
       root->children.push_back(std::unique_ptr<Node>(useDots));
 
 
+      Node *minimizeRests = new Node;
+      minimizeRests->name = QCoreApplication::translate("MIDI import operations", "Minimize number of rests");
+      minimizeRests->oper.type = MidiOperation::Type::MINIMIZE_NUMBER_OF_RESTS;
+      minimizeRests->oper.value = TrackOperations().minimizeNumberOfRests;
+      minimizeRests->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(minimizeRests));
+
+
       // ------------- tuplets --------------
 
       Node *searchTuplets = new Node;
@@ -505,6 +513,9 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
 
                   case MidiOperation::Type::USE_DOTS:
                         node->oper.value = opers.opers.useDots; break;
+
+                  case MidiOperation::Type::MINIMIZE_NUMBER_OF_RESTS:
+                        node->oper.value = opers.opers.minimizeNumberOfRests; break;
 
                   case MidiOperation::Type::SWING:
                         node->oper.value = (int)opers.opers.swing; break;
