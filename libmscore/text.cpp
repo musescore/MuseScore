@@ -852,11 +852,13 @@ void Text::draw(QPainter* p) const
                   }
             }
       p->setBrush(Qt::NoBrush);
-      QColor color(textStyle().foregroundColor());
-      if (!visible())
-            color = Qt::gray;
-      else if (selected())
+      QColor color;
+      if (selected())
             color = MScore::selectColor[0];
+      else if (!visible())
+            color = Qt::gray;
+      else
+            color = textStyle().foregroundColor();
       p->setPen(color);
       if (_editMode && _cursor.hasSelection()) {
             int r1 = _cursor.selectLine();
