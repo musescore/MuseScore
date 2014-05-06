@@ -184,9 +184,11 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             int endTrack   = part->endTrack();
             cr = searchCR(e->segment(), startTrack, endTrack);
             }
-      if (cr == 0 || cr == e1)
-            return true;
-      changeAnchor(viewer, curGrip, cr);
+      if (cr && cr != e1 &&
+            ((curGrip == GRIP_END && cr->tick() > sl->tick())
+             || (curGrip == GRIP_START && cr->tick() < sl->tick2() ))
+            )
+            changeAnchor(viewer, curGrip, cr);
       return true;
       }
 
@@ -333,10 +335,12 @@ void SlurSegment::editDrag(const EditData& ed)
                ) {
                   Spanner* spanner = slurTie();
                   Qt::KeyboardModifiers km = qApp->keyboardModifiers();
-                  Element* e = ed.view->elementNear(ed.pos);
-                  if (e && e->type() == NOTE) {
+                  Note* note = static_cast<Note*>(ed.view->elementNear(ed.pos));
+                  if (note && note->type() == NOTE &&
+                     ((ed.curGrip == GRIP_END && note->chord()->tick() > slurTie()->tick())
+                      || (ed.curGrip == GRIP_START && note->chord()->tick() < slurTie()->tick2()))
+                     ) {
                         if (ed.curGrip == GRIP_END && spanner->type() == TIE) {
-                              Note* note = static_cast<Note*>(e);
                               Tie* tie = static_cast<Tie*>(spanner);
                               if (tie->startNote()->pitch() == note->pitch()) {
                                     ed.view->setDropTarget(note);
@@ -347,7 +351,6 @@ void SlurSegment::editDrag(const EditData& ed)
                                     }
                               }
                         else if (spanner->type() != TIE && km != (Qt::ShiftModifier | Qt::ControlModifier)) {
-                              Note* note = static_cast<Note*>(e);
                               Chord* c = note->chord();
                               ed.view->setDropTarget(note);
                               if (c != spanner->endCR()) {
