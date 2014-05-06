@@ -351,16 +351,14 @@ bool ChordRest::readProperties(XmlReader& e)
                   setUserOff(pt * spatium());
             }
       else if (tag == "offset") {
-            if (score()->mscVersion() > 114 || voice() >= 2) {
+            if (score()->mscVersion() > 114) // || voice() >= 2) {
                   DurationElement::readProperties(e);
-                  }
             else if (type() == REST) {
                   DurationElement::readProperties(e);
                   setUserXoffset(0.0); // honor Y offset but not X for rests in older scores
                   }
-            else {
+            else
                   e.skipCurrentElement(); // ignore manual layout otherwise
-                  }
             }
       else if (DurationElement::readProperties(e))
             return true;
