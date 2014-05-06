@@ -80,10 +80,10 @@ void TextLineSegment::draw(QPainter* painter) const
       bool normalColor = false;
       if (selected() && !(score() && score()->printing()))
             color = MScore::selectColor[0];
-      else if (!visible())
+      else if (!tl->visible())
             color = Qt::gray;
       else {
-            color = textLine()->curColor();
+            color = tl->curColor();
             normalColor = true;
             }
       qreal l = 0.0;
@@ -97,7 +97,7 @@ void TextLineSegment::draw(QPainter* painter) const
                   l = _text->pos().x() + bb.width() + textlineTextDistance;
                   }
             painter->translate(_text->pos());
-            painter->setPen(normalColor ? _text->curColor() : color);
+            _text->setVisible(tl->visible());
             _text->draw(painter);
             painter->translate(-_text->pos());
             }
@@ -625,6 +625,7 @@ void TextLine::writeProperties(Xml& xml) const
 //---------------------------------------------------------
 //   resolveSymCompatibility
 //---------------------------------------------------------
+
 static QString resolveSymCompatibility(SymId i, QString programVersion)
       {
       if (!programVersion.isEmpty() && programVersion < "1.1")

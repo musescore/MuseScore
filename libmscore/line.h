@@ -111,7 +111,7 @@ class SLine : public Spanner {
       void setDiagonal(bool v)            { _diagonal = v;    }
 
       Spatium lineWidth() const           { return _lineWidth;            }
-      QColor lineColor() const            { return (_lineColor == Qt::black)? curColor() : _lineColor; }
+      QColor lineColor() const            { return _lineColor;            }
       Qt::PenStyle lineStyle() const      { return _lineStyle;            }
       void setLineWidth(const Spatium& v) { _lineWidth = v;               }
       void setLineColor(const QColor& v)  { _lineColor = v;               }
