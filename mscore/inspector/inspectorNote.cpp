@@ -33,7 +33,7 @@ InspectorNote::InspectorNote(QWidget* parent)
       s.setupUi(addWidget());
       c.setupUi(addWidget());
       n.setupUi(addWidget());
-            
+
       static const NoteHeadGroup heads[] = {
             NoteHeadGroup::HEAD_NORMAL,
             NoteHeadGroup::HEAD_CROSS,
@@ -156,6 +156,11 @@ void InspectorNote::setElement()
       hook->setEnabled(note->chord()->hook());
       beam->setEnabled(note->chord()->beam());
       InspectorBase::setElement();
+      bool nograce = !note->chord()->isGrace();
+      s.leadingSpace->setEnabled(nograce);
+      s.trailingSpace->setEnabled(nograce);
+      s.resetTrailingSpace->setEnabled(nograce);
+      s.resetLeadingSpace->setEnabled(nograce);
       }
 
 //---------------------------------------------------------
