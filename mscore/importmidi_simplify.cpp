@@ -58,14 +58,14 @@ void lengthenNote(
             double noteDurationCount = 0;
             double restDurationCount = 0;
             const auto noteDurations = Meter::toDurationList(
-                                          durationStart - barStart, offTime - barStart, barFraction,
-                                          tupletsForDuration, Meter::DurationType::NOTE, useDots);
+                              durationStart - barStart, offTime - barStart, barFraction,
+                              tupletsForDuration, Meter::DurationType::NOTE, useDots, false);
             noteDurationCount += durationCount(noteDurations);
 
             if (offTime < endTime) {
                   const auto restDurations = Meter::toDurationList(
-                                          offTime - barStart, endTime - barStart, barFraction,
-                                          tupletsForDuration, Meter::DurationType::REST, useDots);
+                              offTime - barStart, endTime - barStart, barFraction,
+                              tupletsForDuration, Meter::DurationType::REST, useDots, false);
                   restDurationCount += durationCount(restDurations);
                   }
 

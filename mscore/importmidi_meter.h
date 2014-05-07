@@ -60,7 +60,8 @@ toDurationList(const ReducedFraction &startTickInBar,
                const ReducedFraction &barFraction,
                const std::vector<MidiTuplet::TupletData> &tupletsInBar,
                DurationType durationType,
-               bool useDots);
+               bool useDots,
+               bool printRestRemains = true);
 
 } // namespace Meter
 } // namespace Ms
