@@ -49,6 +49,7 @@ static const int MSCVERSION = 124;
 
 class MStyle;
 class Sequencer;
+enum class ValueType : char;
 
 static const int VOICES = 4;
 inline int staff2track(int staffIdx) { return staffIdx << 2; }
@@ -71,6 +72,9 @@ static const char mimeStaffListFormat[]   = "application/mscore/stafflist";
 static const int  VISUAL_STRING_NONE      = -2;       // no ordinal for the visual repres. of string (0 = topmost in TAB)
 static const int  STRING_NONE             = -1;       // no ordinal for a physical string (0 = topmost in instrument)
 static const int  FRET_NONE               = -1;       // no ordinal for a fret
+
+enum class Direction  : char { AUTO, UP, DOWN };
+enum class DirectionH : char { DH_AUTO, DH_LEFT, DH_RIGHT };
 
 //---------------------------------------------------------
 //   ArticulationType
@@ -339,10 +343,6 @@ class MScore : public QObject {
 #endif
 
    public:
-      enum ValueType  { OFFSET_VAL, USER_VAL };
-      enum Direction  { AUTO, UP, DOWN };
-      enum DirectionH { DH_AUTO, DH_LEFT, DH_RIGHT };
-
       static void init();
 
       static MStyle* defaultStyle();
@@ -424,9 +424,9 @@ Q_ENUMS(DirectionH)
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::BeamMode)
-Q_DECLARE_METATYPE(Ms::MScore::ValueType)
-Q_DECLARE_METATYPE(Ms::MScore::Direction)
-Q_DECLARE_METATYPE(Ms::MScore::DirectionH)
+Q_DECLARE_METATYPE(Ms::ValueType)
+Q_DECLARE_METATYPE(Ms::Direction)
+Q_DECLARE_METATYPE(Ms::DirectionH)
 
 
 #endif

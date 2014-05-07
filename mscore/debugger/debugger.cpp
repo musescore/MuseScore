@@ -1073,7 +1073,7 @@ void ChordDebug::beamModeChanged(int n)
 
 void ChordDebug::directionChanged(int val)
       {
-      ((Chord*)element())->setStemDirection(MScore::Direction(val));
+      ((Chord*)element())->setStemDirection(Direction(val));
       }
 
 //---------------------------------------------------------
@@ -1900,7 +1900,7 @@ void SlurTieView::setElement(Element* e)
       SpannerView::setElement(e);
 
       st.upFlag->setChecked(slur->up());
-      st.direction->setCurrentIndex(slur->slurDirection());
+      st.direction->setCurrentIndex(int(slur->slurDirection()));
       }
 
 //---------------------------------------------------------

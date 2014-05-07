@@ -381,7 +381,7 @@ void setMusicNotesFromMidi(Score *score,
             note->setTpcFromPitch();
 
             chord->add(note);
-            note->setVeloType(MScore::USER_VAL);
+            note->setVeloType(ValueType::USER_VAL);
             note->setVeloOffset(mn.velo);
 
             NoteEventList el;
@@ -397,7 +397,7 @@ void setMusicNotesFromMidi(Score *score,
                   if (!drumset->isValid(mn.pitch))
                         qDebug("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
                   else {
-                        MScore::Direction sd = drumset->stemDirection(mn.pitch);
+                        Direction sd = drumset->stemDirection(mn.pitch);
                         chord->setStemDirection(sd);
                         }
                   }

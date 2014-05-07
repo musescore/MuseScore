@@ -889,12 +889,12 @@ class ChangeChordStaffMove : public UndoCommand {
 
 class ChangeVelocity : public UndoCommand {
       Note* note;
-      MScore::ValueType veloType;
+      ValueType veloType;
       int veloOffset;
       void flip();
 
    public:
-      ChangeVelocity(Note*, MScore::ValueType, int);
+      ChangeVelocity(Note*, ValueType, int);
       UNDO_NAME("ChangeVelocity");
       };
 

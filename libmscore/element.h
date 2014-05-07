@@ -287,6 +287,11 @@ class Element : public QObject {
       Element* _parent       = 0;
 
       bool _generated;            ///< automatically generated Element
+  protected:
+      bool _selected;             ///< set if element is selected
+      bool _visible;              ///< visibility attribute
+
+  private:
       Placement _placement;
 
       mutable ElementFlags _flags;
@@ -306,9 +311,6 @@ class Element : public QObject {
 
    protected:
       Score* _score;
-      bool _selected;             ///< set if element is selected
-      bool _visible;              ///< visibility attribute
-
       QPointF _startDragPosition;   ///< used during drag
 
    public:

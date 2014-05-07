@@ -19,7 +19,7 @@
 namespace Ms {
 
 class Xml;
-enum class NoteHeadGroup;
+enum class NoteHeadGroup : char;
 
 //---------------------------------------------------------
 //   DrumInstrument
@@ -29,12 +29,12 @@ struct DrumInstrument {
       QString name;
       NoteHeadGroup notehead; ///< notehead symbol set
       int line;               ///< place notehead onto this line
-      MScore::Direction stemDirection;
+      Direction stemDirection;
       int voice;
       char shortcut;          ///< accelerator key (CDEFGAB)
 
       DrumInstrument() {}
-      DrumInstrument(const char* s, NoteHeadGroup nh, int l, MScore::Direction d,
+      DrumInstrument(const char* s, NoteHeadGroup nh, int l, Direction d,
          int v = 0, char sc = 0)
          : name(s), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
       };
@@ -55,7 +55,7 @@ class Drumset {
       NoteHeadGroup noteHead(int pitch) const  { return _drum[pitch].notehead;       }
       int line(int pitch) const                { return _drum[pitch].line;           }
       int voice(int pitch) const               { return _drum[pitch].voice;          }
-      MScore::Direction stemDirection(int pitch) const { return _drum[pitch].stemDirection;  }
+      Direction stemDirection(int pitch) const { return _drum[pitch].stemDirection;  }
       const QString& name(int pitch) const     { return _drum[pitch].name;           }
       int shortcut(int pitch) const            { return _drum[pitch].shortcut;       }
 

@@ -1459,7 +1459,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				int pitch = oveNote->getNote();
 
 				//note->setTrack(noteTrack);
-                note->setVeloType(MScore::USER_VAL);
+                note->setVeloType(ValueType::USER_VAL);
 				note->setVeloOffset(oveNote->getOnVelocity());
 				//note->setUserAccidental(OveAccidental_to_Accidental(notePtr->getAccidental()));
 				note->setPitch(pitch);
@@ -1509,7 +1509,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				cr->setVisible(oveNote->getShow());
 				((Ms::Chord*) cr)->setNoStem((int) container->getNoteType() <= OVE::Note_Whole);
 				if(!setDirection)
-					((Ms::Chord*) cr)->setStemDirection(container->getStemUp() ? MScore::UP : MScore::DOWN);
+					((Ms::Chord*) cr)->setStemDirection(container->getStemUp() ? Direction::UP : Direction::DOWN);
 
 				// cross staff
 				int staffMove = 0;
@@ -1576,7 +1576,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				const OVE::Tuplet* oveTuplet = getTuplet(tuplets, container->start()->getOffset());
 				if (oveTuplet != 0) {
 					//set direction
-					tuplet->setDirection(oveTuplet->getLeftShoulder()->getYOffset() < 0 ? MScore::UP : MScore::DOWN);
+					tuplet->setDirection(oveTuplet->getLeftShoulder()->getYOffset() < 0 ? Direction::UP : Direction::DOWN);
 
 					if(container->start()->getOffset() == oveTuplet->stop()->getOffset()){
 						tuplet = 0;
@@ -2158,7 +2158,7 @@ void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
 			int absEndTick = mtt_->getTick(slurPtr->start()->getMeasure()+slurPtr->stop()->getMeasure(), endContainer->getTick());
 
 	        Slur* slur = new Slur(score_);
-	        slur->setSlurDirection(slurPtr->getShowOnTop()? MScore::UP : MScore::DOWN);
+	        slur->setSlurDirection(slurPtr->getShowOnTop()? Direction::UP : Direction::DOWN);
 		slur->setTick(absStartTick);
 		slur->setTick2(absEndTick);
 	        slur->setTrack(track);

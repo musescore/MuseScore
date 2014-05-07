@@ -220,7 +220,7 @@ Element* Rest::drop(const DropData& data)
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
-                  MScore::Direction dir = c->stemDirection();
+                  Direction dir = c->stemDirection();
                   // score()->select(0, SELECT_SINGLE, 0);
                   NoteVal nval;
                   nval.pitch = n->pitch();

@@ -474,8 +474,8 @@ void ChordRest::layoutArticulations()
             //
             // determine Direction
             //
-            if (a->direction() != MScore::AUTO) {
-                  a->setUp(a->direction() == MScore::UP);
+            if (a->direction() != Direction::AUTO) {
+                  a->setUp(a->direction() == Direction::UP);
                   }
             else {
                   if (a->anchor() == A_CHORD)
@@ -736,7 +736,7 @@ Element* ChordRest::drop(const DropData& data)
                   NoteVal nval;
                   nval.pitch = note->pitch();
                   nval.headGroup = note->headGroup();
-                  score()->setNoteRest(segment(), track(), nval, data.duration, MScore::AUTO);
+                  score()->setNoteRest(segment(), track(), nval, data.duration, Direction::AUTO);
                   delete e;
                   }
                   break;

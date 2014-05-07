@@ -145,7 +145,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
       Slur* sl = static_cast<Slur*>(slurTie());
 
       if (key == Qt::Key_X) {
-            sl->setSlurDirection(sl->up() ? MScore::DOWN : MScore::UP);
+            sl->setSlurDirection(sl->up() ? Direction::DOWN : Direction::UP);
             sl->layout();
             return true;
             }
@@ -635,7 +635,7 @@ bool SlurSegment::isEdited() const
 SlurTie::SlurTie(Score* s)
    : Spanner(s)
       {
-      _slurDirection = MScore::AUTO;
+      _slurDirection = Direction::AUTO;
       _up            = true;
       _lineType      = 0;     // default is solid
       }
@@ -945,8 +945,8 @@ void SlurTie::writeProperties(Xml& xml) const
       int idx = 0;
       foreach(const SpannerSegment* ss, spannerSegments())
             ((SlurSegment*)ss)->write(xml, idx++);
-      if (_slurDirection)
-            xml.tag("up", _slurDirection);
+      if (_slurDirection != Direction::AUTO)
+            xml.tag("up", int(_slurDirection));
       if (_lineType)
             xml.tag("lineType", _lineType);
       }
@@ -969,7 +969,7 @@ bool SlurTie::readProperties(XmlReader& e)
             add(segment);
             }
       else if (tag == "up")
-            _slurDirection = MScore::Direction(e.readInt());
+            _slurDirection = Direction(e.readInt());
       else if (tag == "lineType")
             _lineType = e.readInt();
       else if (!Element::readProperties(e))
@@ -990,9 +990,9 @@ void SlurTie::undoSetLineType(int t)
 //   undoSetSlurDirection
 //---------------------------------------------------------
 
-void SlurTie::undoSetSlurDirection(MScore::Direction d)
+void SlurTie::undoSetSlurDirection(Direction d)
       {
-      score()->undoChangeProperty(this, P_SLUR_DIRECTION, d);
+      score()->undoChangeProperty(this, P_SLUR_DIRECTION, int(d));
       }
 
 //---------------------------------------------------------
@@ -1012,7 +1012,7 @@ QVariant SlurTie::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_LINE_TYPE:      return lineType();
-            case P_SLUR_DIRECTION: return slurDirection();
+            case P_SLUR_DIRECTION: return int(slurDirection());
             default:
                   return Spanner::getProperty(propertyId);
             }
@@ -1026,7 +1026,7 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_LINE_TYPE:      setLineType(v.toInt()); break;
-            case P_SLUR_DIRECTION: setSlurDirection(MScore::Direction(v.toInt())); break;
+            case P_SLUR_DIRECTION: setSlurDirection(Direction(v.toInt())); break;
             default:
                   return Spanner::setProperty(propertyId, v);
             }
@@ -1043,7 +1043,7 @@ QVariant SlurTie::propertyDefault(P_ID id) const
             case P_LINE_TYPE:
                   return 0;
             case P_SLUR_DIRECTION:
-                  return MScore::AUTO;
+                  return int(Direction::AUTO);
             default:
                   return Spanner::propertyDefault(id);
             }
@@ -1247,13 +1247,13 @@ void Slur::layout()
             return;
             }
       switch (_slurDirection) {
-            case MScore::UP:
+            case Direction::UP:
                   _up = true;
                   break;
-            case MScore::DOWN:
+            case Direction::DOWN:
                   _up = false;
                   break;
-            case MScore::AUTO:
+            case Direction::AUTO:
                   {
                   //
                   // assumption:
@@ -1446,10 +1446,10 @@ void Slur::layoutChord()
       Note* startNote = c1->upNote();
       // Note* endNote = c2->upNote();
 
-      if (_slurDirection == MScore::AUTO)
+      if (_slurDirection == Direction::AUTO)
             _up = false;
       else
-            _up = _slurDirection == MScore::UP ? true : false;
+            _up = _slurDirection == Direction::UP ? true : false;
 
       qreal w   = startNote->headWidth();
       qreal xo1 = w * 1.12;

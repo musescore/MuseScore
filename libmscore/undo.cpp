@@ -1233,9 +1233,9 @@ void Score::undoChangeTuning(Note* n, qreal v)
       undoChangeProperty(n, P_TUNING, v);
       }
 
-void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
+void Score::undoChangeUserMirror(Note* n, DirectionH d)
       {
-      undoChangeProperty(n, P_MIRROR_HEAD, d);
+      undoChangeProperty(n, P_MIRROR_HEAD, int(d));
       }
 
 //---------------------------------------------------------
@@ -2566,14 +2566,14 @@ void ChangeChordStaffMove::flip()
 //   ChangeVelocity
 //---------------------------------------------------------
 
-ChangeVelocity::ChangeVelocity(Note* n, MScore::ValueType t, int o)
+ChangeVelocity::ChangeVelocity(Note* n, ValueType t, int o)
    : note(n), veloType(t), veloOffset(o)
       {
       }
 
 void ChangeVelocity::flip()
       {
-      MScore::ValueType t = note->veloType();
+      ValueType t = note->veloType();
       int o       = note->veloOffset();
       note->setVeloType(veloType);
       note->setVeloOffset(veloOffset);

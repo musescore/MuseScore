@@ -24,13 +24,13 @@
 
 namespace Ms {
 
-static const NoteHeadGroup          NOTEHEADGROUP_DEFAULT   = NoteHeadGroup::HEAD_NORMAL;
-static const NoteHeadType           NOTEHEADTYPE_DEFAULT    = NoteHeadType::HEAD_AUTO;
-static const MScore::DirectionH     DIR_DEFAULT             = MScore::DH_AUTO;
-static const bool                   HASLINE_DEFAULT         = true;
-static const qreal                  LINEWIDTH_DEFAULT       = 0.12;
-static const qreal                  LEDGEROFFSET_DEFAULT    = 0.25;
-static const qreal                  LINEOFFSET_DEFAULT      = 0.8;      // the distance between note head and line
+static const NoteHeadGroup  NOTEHEADGROUP_DEFAULT   = NoteHeadGroup::HEAD_NORMAL;
+static const NoteHeadType   NOTEHEADTYPE_DEFAULT    = NoteHeadType::HEAD_AUTO;
+static const DirectionH     DIR_DEFAULT             = DirectionH::DH_AUTO;
+static const bool           HASLINE_DEFAULT         = true;
+static const qreal          LINEWIDTH_DEFAULT       = 0.12;
+static const qreal          LEDGEROFFSET_DEFAULT    = 0.25;
+static const qreal          LINEOFFSET_DEFAULT      = 0.8;      // the distance between note head and line
 
 //---------------------------------------------------------
 //   Ambitus
@@ -166,7 +166,7 @@ void Ambitus::write(Xml& xml) const
       xml.stag("Ambitus");
       xml.tag(P_HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
       xml.tag(P_HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
-      xml.tag(P_MIRROR_HEAD,_dir,           DIR_DEFAULT);
+      xml.tag(P_MIRROR_HEAD,int(_dir),           int(DIR_DEFAULT));
       xml.tag("hasLine",    _hasLine,       true);
       xml.tag(P_LINE_WIDTH, _lineWidth,     LINEWIDTH_DEFAULT);
       xml.tag("topPitch",   _topPitch);
@@ -340,7 +340,7 @@ void Ambitus::layout()
       bool collision =
             (_topAccid.ipos().y() + _topAccid.bbox().y() + _topAccid.height()
                    > _bottomAccid.ipos().y() + _bottomAccid.bbox().y() )
-            && _dir != MScore::DH_RIGHT;
+            && _dir != DirectionH::DH_RIGHT;
       if (collision) {
             // displace bottom accidental (also attempting to 'undercut' flats)
             xAccidOffBottom = xAccidOffTop +
@@ -351,14 +351,14 @@ void Ambitus::layout()
             }
 
       switch (_dir) {
-            case MScore::DH_AUTO:               // note heads one above the other
+            case DirectionH::DH_AUTO:               // note heads one above the other
                   // left align note heads and right align accidentals 'hanging' on the left
                   _topPos.setX(0.0);
                   _bottomPos.setX(0.0);
                   _topAccid.rxpos()       = - xAccidOffTop;
                   _bottomAccid.rxpos()    = - xAccidOffBottom;
                   break;
-            case MScore::DH_LEFT:               // top note head at the left of bottom note head
+            case DirectionH::DH_LEFT:               // top note head at the left of bottom note head
                   // place top note head at left margin; bottom note head at right of top head;
                   // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
                   _topPos.setX(0.0);
@@ -366,7 +366,7 @@ void Ambitus::layout()
                   _topAccid.rxpos() = - xAccidOffTop;
                   _bottomAccid.rxpos() = collision ? - xAccidOffBottom : headWdt - xAccidOffBottom;
                   break;
-            case MScore::DH_RIGHT:              // top note head at the right of bottom note head
+            case DirectionH::DH_RIGHT:              // top note head at the right of bottom note head
                   // bottom note head at left margin; top note head at right of bottomnote head
                   // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
                   _bottomPos.setX(0.0);
@@ -601,7 +601,7 @@ QVariant Ambitus::getProperty(P_ID propertyId) const
             case P_HEAD_TYPE:
                   return int(noteHeadType());
             case P_MIRROR_HEAD:
-                  return direction();
+                  return int(direction());
             case P_GHOST:                 // recycled property = _hasLine
                   return hasLine();
             case P_LINE_WIDTH:
@@ -640,7 +640,7 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
                   setNoteHeadType( NoteHeadType(v.toInt()) );
                   break;
             case P_MIRROR_HEAD:
-                  setDirection( MScore::DirectionH(v.toInt()) );
+                  setDirection(DirectionH(v.toInt()) );
                   break;
             case P_GHOST:                 // recycled property = _hasLine
                   setHasLine(v.toBool());
@@ -684,7 +684,7 @@ QVariant Ambitus::propertyDefault(P_ID id) const
       switch(id) {
             case P_HEAD_GROUP:      return int(NOTEHEADGROUP_DEFAULT);
             case P_HEAD_TYPE:       return int(NOTEHEADTYPE_DEFAULT);
-            case P_MIRROR_HEAD:     return DIR_DEFAULT;
+            case P_MIRROR_HEAD:     return int(DIR_DEFAULT);
             case P_GHOST:           return HASLINE_DEFAULT;
             case P_LINE_WIDTH:      return LINEWIDTH_DEFAULT;
             case P_TPC1:                  // no defaults for pitches, tpc's and octaves

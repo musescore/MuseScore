@@ -170,9 +170,9 @@ Note::Note(Score* s)
       _tuning            = 0.0;
       _accidental        = 0;
       _mirror            = false;
-      _userMirror        = MScore::DH_AUTO;
+      _userMirror        = DirectionH::DH_AUTO;
       _small             = false;
-      _userDotPosition   = MScore::AUTO;
+      _userDotPosition   = Direction::AUTO;
       _line              = 0;
       _fret              = -1;
       _string            = -1;
@@ -189,7 +189,7 @@ Note::Note(Score* s)
       _hidden            = false;
       _subchannel        = 0;
 
-      _veloType          = MScore::OFFSET_VAL;
+      _veloType          = ValueType::OFFSET_VAL;
       _veloOffset        = 0;
 
       _dots[0]           = 0;
@@ -1397,7 +1397,7 @@ Element* Note::drop(const DropData& data)
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
-                  MScore::Direction dir = c->stemDirection();
+                  Direction dir = c->stemDirection();
                   int t         = (staff2track(staffIdx()) + n->voice());
                   score()->select(0, SELECT_SINGLE, 0);
                   NoteVal nval;
@@ -1422,7 +1422,7 @@ Element* Note::drop(const DropData& data)
 //   setDotPosition
 //---------------------------------------------------------
 
-void Note::setDotY(MScore::Direction pos)
+void Note::setDotY(Direction pos)
       {
       bool onLine = false;
       qreal y = 0;
@@ -1449,17 +1449,17 @@ void Note::setDotY(MScore::Direction pos)
       bool oddVoice = voice() & 1;
       if (onLine) {
             // displace dots by half spatium up or down according to voice
-            if (pos == MScore::AUTO)
+            if (pos == Direction::AUTO)
                   y = oddVoice ? 0.5 : -0.5;
-            else if (pos == MScore::UP)
+            else if (pos == Direction::UP)
                   y = -0.5;
             else
                   y = 0.5;
             }
       else {
-            if (pos == MScore::UP && !oddVoice)
+            if (pos == Direction::UP && !oddVoice)
                   y -= 1.0;
-            else if (pos == MScore::DOWN && oddVoice)
+            else if (pos == Direction::DOWN && oddVoice)
                   y += 1.0;
             }
       y *= spatium() * staff()->lineDistance();
@@ -1566,10 +1566,10 @@ bool Note::dotIsUp() const
       {
       if (_dots[0] == 0)
             return true;
-      if (_userDotPosition == MScore::AUTO)
+      if (_userDotPosition == Direction::AUTO)
             return _dots[0]->y() < spatium() * .1;
       else
-            return (_userDotPosition == MScore::UP);
+            return (_userDotPosition == Direction::UP);
       }
 
 //---------------------------------------------------------
@@ -1736,7 +1736,7 @@ void Note::reset()
       {
       score()->undoChangeProperty(this, P_USER_OFF, QPointF());
       score()->undoChangeProperty(chord(), P_USER_OFF, QPointF());
-      score()->undoChangeProperty(chord(), P_STEM_DIRECTION, MScore::AUTO);
+      score()->undoChangeProperty(chord(), P_STEM_DIRECTION, int(Direction::AUTO));
       }
 
 //---------------------------------------------------------
@@ -1821,9 +1821,9 @@ int Note::epitch() const
 
 int Note::customizeVelocity(int velo) const
       {
-      if (veloType() == MScore::OFFSET_VAL)
+      if (veloType() == ValueType::OFFSET_VAL)
             velo = velo + (velo * veloOffset()) / 100;
-      else if (veloType() == MScore::USER_VAL)
+      else if (veloType() == ValueType::USER_VAL)
             velo = veloOffset();
       return restrict(velo, 1, 127);
       }
@@ -1983,9 +1983,9 @@ QVariant Note::getProperty(P_ID propertyId) const
             case P_SMALL:
                   return small();
             case P_MIRROR_HEAD:
-                  return userMirror();
+                  return int(userMirror());
             case P_DOT_POSITION:
-                  return userDotPosition();
+                  return int(userDotPosition());
             case P_HEAD_GROUP:
                   return int(headGroup());
             case P_VELO_OFFSET:
@@ -2001,7 +2001,7 @@ QVariant Note::getProperty(P_ID propertyId) const
             case P_HEAD_TYPE:
                   return int(headType());
             case P_VELO_TYPE:
-                  return veloType();
+                  return int(veloType());
             case P_PLAY:
                   return play();
             case P_LINE:
@@ -2042,10 +2042,10 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   setSmall(v.toBool());
                   break;
             case P_MIRROR_HEAD:
-                  setUserMirror(MScore::DirectionH(v.toInt()));
+                  setUserMirror(DirectionH(v.toInt()));
                   break;
             case P_DOT_POSITION:
-                  setUserDotPosition(MScore::Direction(v.toInt()));
+                  setUserDotPosition(Direction(v.toInt()));
                   break;
             case P_HEAD_GROUP:
                   setHeadGroup(NoteHeadGroup(v.toInt()));
@@ -2071,7 +2071,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   setHeadType(NoteHeadType(v.toInt()));
                   break;
             case P_VELO_TYPE:
-                  setVeloType(MScore::ValueType(v.toInt()));
+                  setVeloType(ValueType(v.toInt()));
                   score()->setPlaylistDirty(true);
                   break;
             case P_VISIBLE: {                     // P_VISIBLE requires reflecting property on dots
@@ -2154,9 +2154,9 @@ void Note::undoSetTuning(qreal val)
 //   undoSetVeloType
 //---------------------------------------------------------
 
-void Note::undoSetVeloType(MScore::ValueType val)
+void Note::undoSetVeloType(ValueType val)
       {
-      undoChangeProperty(P_VELO_TYPE, val);
+      undoChangeProperty(P_VELO_TYPE, int(val));
       }
 
 //---------------------------------------------------------
@@ -2172,18 +2172,18 @@ void Note::undoSetVeloOffset(int val)
 //   undoSetUserMirror
 //---------------------------------------------------------
 
-void Note::undoSetUserMirror(MScore::DirectionH val)
+void Note::undoSetUserMirror(DirectionH val)
       {
-      undoChangeProperty(P_MIRROR_HEAD, val);
+      undoChangeProperty(P_MIRROR_HEAD, int(val));
       }
 
 //---------------------------------------------------------
 //   undoSetUserDotPosition
 //---------------------------------------------------------
 
-void Note::undoSetUserDotPosition(MScore::Direction val)
+void Note::undoSetUserDotPosition(Direction val)
       {
-      undoChangeProperty(P_DOT_POSITION, val);
+      undoChangeProperty(P_DOT_POSITION, int(val));
       }
 
 //---------------------------------------------------------
@@ -2224,9 +2224,9 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             case P_SMALL:
                   return false;
             case P_MIRROR_HEAD:
-                  return MScore::DH_AUTO;
+                  return int(DirectionH::DH_AUTO);
             case P_DOT_POSITION:
-                  return MScore::AUTO;
+                  return int(Direction::AUTO);
             case P_HEAD_GROUP:
                   return int(NoteHeadGroup::HEAD_NORMAL);
             case P_VELO_OFFSET:
@@ -2239,7 +2239,7 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             case P_HEAD_TYPE:
                   return int(NoteHeadType::HEAD_AUTO);
             case P_VELO_TYPE:
-                  return MScore::OFFSET_VAL;
+                  return int (ValueType::OFFSET_VAL);
             case P_PLAY:
                   return true;
             default:

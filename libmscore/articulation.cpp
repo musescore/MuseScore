@@ -183,7 +183,7 @@ ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
 Articulation::Articulation(Score* s)
    : Element(s)
       {
-      _direction = MScore::AUTO;
+      _direction = Direction::AUTO;
       _up = true;
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       setArticulationType(Articulation_Fermata);
@@ -307,7 +307,7 @@ void Articulation::setSubtype(const QString& s)
             for (i = 0; i < n; ++i) {
                   if (s == al[i].name) {
                         _up = al[i].up;
-                        _direction = (_up ? MScore::UP : MScore::DOWN);
+                        _direction = (_up ? Direction::UP : Direction::DOWN);
                         st  = int(al[i].type);
                         break;
                         }
@@ -410,11 +410,11 @@ void Articulation::layout()
 //   setDirection
 //---------------------------------------------------------
 
-void Articulation::setDirection(MScore::Direction d)
+void Articulation::setDirection(Direction d)
       {
       _direction = d;
-      if (d != MScore::AUTO)
-            _up = (d == MScore::UP);
+      if (d != Direction::AUTO)
+            _up = (d == Direction::UP);
       }
 
 //---------------------------------------------------------
@@ -423,8 +423,8 @@ void Articulation::setDirection(MScore::Direction d)
 
 void Articulation::reset()
       {
-      if (_direction != MScore::AUTO)
-            score()->undoChangeProperty(this, P_DIRECTION, int(MScore::AUTO));
+      if (_direction != Direction::AUTO)
+            score()->undoChangeProperty(this, P_DIRECTION, int(Direction::AUTO));
       ArticulationAnchor a = score()->style()->articulationAnchor(articulationType());
       if (_anchor != a)
             score()->undoChangeProperty(this, P_ARTICULATION_ANCHOR, int(a));
@@ -467,7 +467,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch (propertyId) {
             case P_DIRECTION:
-                  setDirection(MScore::Direction(v.toInt()));
+                  setDirection(Direction(v.toInt()));
                   break;
             case P_ARTICULATION_ANCHOR:
                   anchorStyle = PropertyStyle::UNSTYLED;
@@ -501,7 +501,7 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_DIRECTION:
-                  return int(MScore::AUTO);
+                  return int(Direction::AUTO);
 
             case P_ARTICULATION_ANCHOR:
                   return int(score()->style()->articulationAnchor(_articulationType));
