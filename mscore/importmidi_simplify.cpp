@@ -115,7 +115,10 @@ void minimizeNumberOfRests(
                                     ? barStart : barStart + barFraction;
                   if (note.isInTuplet) {
                         const auto &tuplet = note.tuplet->second;
-                        endTime = durationStart + tuplet.len / tuplet.tupletNumber;
+                        if (note.offTime == tuplet.onTime + tuplet.len)
+                              continue;
+                        endTime = barStart + Quantize::quantizeToLarge(
+                                    note.offTime - barStart, tuplet.len / tuplet.tupletNumber);
                         }
 
                   const auto beatLen = Meter::beatLength(barFraction);
@@ -130,6 +133,12 @@ void minimizeNumberOfRests(
                   if (next != chords.end()) {
                         if (next->first < endTime)
                               endTime = next->first;
+                        if (next->second.isInTuplet
+                                    && !note.isInTuplet && next->second.tuplet == note.tuplet) {
+                              const auto &tuplet = next->second.tuplet->second;
+                              if (tuplet.onTime < endTime)
+                                    endTime = tuplet.onTime;
+                              }
                         }
                   lengthenNote(note, it->second.voice, it->first, durationStart, endTime,
                                barStart, barFraction, tuplets);
