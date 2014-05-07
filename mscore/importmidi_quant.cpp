@@ -968,8 +968,7 @@ void applyTupletStaccato(std::multimap<ReducedFraction, MidiChord> &chords)
                         const MidiTuplet::TupletData &tuplet = note.tuplet->second;
                               // decrease tuplet error by enlarging staccato notes:
                               // make note.len = tuplet note length
-                        const auto tupletNoteLen = (tuplet.onTime + tuplet.len)
-                                                    / tuplet.tupletNumber;
+                        const auto tupletNoteLen = tuplet.len / tuplet.tupletNumber;
                         note.offTime = chordIt->first + tupletNoteLen;
                         }
                   }
