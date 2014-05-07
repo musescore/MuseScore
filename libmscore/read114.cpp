@@ -440,7 +440,7 @@ Score::FileError Score::read114(XmlReader& e)
                   e.unknown();
             }
 
-      if (e.error() != QXmlStreamReader::NoError)
+      if (e.error() != XmlStreamReader::NoError)
             return FILE_BAD_FORMAT;
 
       int n = nstaves();

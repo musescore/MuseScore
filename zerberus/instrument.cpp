@@ -17,8 +17,8 @@
 #include <QStringList>
 
 #include "libmscore/xml.h"
-#include "libmscore/qzipreader_p.h"
 #include "audiofile/audiofile.h"
+#include "thirdparty/qzip/qzipreader_p.h"
 
 #include "instrument.h"
 #include "zone.h"

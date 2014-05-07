@@ -97,7 +97,7 @@
 #include "libmscore/chordline.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/fret.h"
-#include "libmscore/qzipreader_p.h"
+#include "thirdparty/qzip/qzipreader_p.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/stringdata.h"
 #include "libmscore/drumset.h"

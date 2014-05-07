@@ -75,13 +75,14 @@ add_library (
       tempo.cpp sig.cpp pos.cpp fraction.cpp duration.cpp
       figuredbass.cpp rehearsalmark.cpp transpose.cpp
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
-      qzip.cpp audio.cpp splitMeasure.cpp joinMeasure.cpp
+      audio.cpp splitMeasure.cpp joinMeasure.cpp
       cursor.cpp read114.cpp paste.cpp
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
       synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
       noteline.cpp spannermap.cpp
       bagpembell.cpp ambitus.cpp
-      xmlstream.cpp xmlutils.cpp
+      ../thirdparty/qzip/qzip.cpp
+      ../thirdparty/xmlstream/xmlstream.cpp ../thirdparty/xmlstream/xmlutils.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (

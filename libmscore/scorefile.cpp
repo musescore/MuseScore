@@ -43,8 +43,8 @@
 #include "imageStore.h"
 #include "audio.h"
 #include "barline.h"
-#include "libmscore/qzipreader_p.h"
-#include "libmscore/qzipwriter_p.h"
+#include "thirdparty/qzip/qzipreader_p.h"
+#include "thirdparty/qzip/qzipwriter_p.h"
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <stdio.h>
@@ -1074,7 +1074,7 @@ bool Score::read(XmlReader& e)
             else
                   e.unknown();
             }
-      if (e.error() != QXmlStreamReader::NoError) {
+      if (e.error() != XmlStreamReader::NoError) {
             qDebug("%s: xml read error at line %lld col %lld: %s",
                qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
                e.name().toUtf8().data());

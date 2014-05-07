@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef QXMLUTILS_P_H
-#define QXMLUTILS_P_H
+#ifndef __XMLUTILS_P_H__
+#define __XMLUTILS_P_H__
 
 //
 //  W A R N I N G

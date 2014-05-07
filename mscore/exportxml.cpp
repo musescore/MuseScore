@@ -93,7 +93,7 @@
 #include "libmscore/figuredbass.h"
 #include "libmscore/stringdata.h"
 #include "libmscore/rehearsalmark.h"
-#include "libmscore/qzipwriter_p.h"
+#include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/fret.h"
 #include "libmscore/tie.h"
 
@@ -233,7 +233,7 @@ class SlurHandler {
 
 public:
       SlurHandler();
-      void doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool grace = false); 
+      void doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool grace = false);
       void doSlurStop(Chord* chord, Notations& notations, Xml& xml);
       };
 
@@ -447,7 +447,7 @@ int SlurHandler::findSlur(const Slur* s) const
 
 void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool grace)
       {
-      // slurs on grace notes are not in spanner list, therefore: 
+      // slurs on grace notes are not in spanner list, therefore:
       if (grace){
             foreach(Element* el, chord->el()){
                   if (el->type() == Element::SLUR){
@@ -2330,7 +2330,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
 
             if (note == nl.front()) {
                   if (grace){
-                        sh.doSlurStart(chord, notations, xml, true);  
+                        sh.doSlurStart(chord, notations, xml, true);
                         }
                   else {
                         tupletStartStop(chord, notations, xml);

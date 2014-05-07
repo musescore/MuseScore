@@ -13,7 +13,7 @@
 #ifndef __XML_H__
 #define __XML_H__
 
-#include "xmlstream.h"
+#include "thirdparty/xmlstream/xmlstream.h"
 #include "mscore.h"
 #include "spatium.h"
 #include "fraction.h"
@@ -43,7 +43,7 @@ struct SpannerValues {
 //   XmlReader
 //---------------------------------------------------------
 
-class XmlReader : public QXmlStreamReader {
+class XmlReader : public XmlStreamReader {
       QString docName;  // used for error reporting
 
       // Score read context (for read optimizations):
@@ -58,10 +58,10 @@ class XmlReader : public QXmlStreamReader {
       Interval _transpose;
 
    public:
-      XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
-      XmlReader(const QByteArray& d, const QString& s = QString()) : QXmlStreamReader(d), docName(s)  {}
-      XmlReader(QIODevice* d, const QString& s = QString()) : QXmlStreamReader(d), docName(s) {}
-      XmlReader(const QString& d, const QString& s = QString()) : QXmlStreamReader(d), docName(s) {}
+      XmlReader(QFile* f) : XmlStreamReader(f), docName(f->fileName()) {}
+      XmlReader(const QByteArray& d, const QString& s = QString()) : XmlStreamReader(d), docName(s)  {}
+      XmlReader(QIODevice* d, const QString& s = QString()) : XmlStreamReader(d), docName(s) {}
+      XmlReader(const QString& d, const QString& s = QString()) : XmlStreamReader(d), docName(s) {}
 
       void unknown() const;
 

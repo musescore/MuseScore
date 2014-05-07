@@ -34,8 +34,8 @@
 #include "libmscore/icon.h"
 #include "libmscore/mscore.h"
 #include "libmscore/imageStore.h"
-#include "libmscore/qzipreader_p.h"
-#include "libmscore/qzipwriter_p.h"
+#include "thirdparty/qzip/qzipreader_p.h"
+#include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/slur.h"
 #include "paletteBoxButton.h"
 
