@@ -25,7 +25,7 @@
 
 #include <assert.h>
 #include "libmscore/score.h"
-#include "libmscore/qzipreader_p.h"
+#include "thirdparty/qzip/qzipreader_p.h"
 #include "capella.h"
 
 namespace Ms {

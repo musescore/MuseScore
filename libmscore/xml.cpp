@@ -83,14 +83,14 @@ bool XmlReader::hasAttribute(const char* s) const
 
 QPointF XmlReader::readPoint()
       {
-      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+      Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
 #ifndef NDEBUG
       if (!attributes().hasAttribute("x")) {
-            QXmlStreamAttributes map = attributes();
+            XmlStreamAttributes map = attributes();
             qDebug("XmlReader::readPoint: x attribute missing: %s (%d)",
                name().toUtf8().data(), map.size());
             for (int i = 0; i < map.size(); ++i) {
-                  const QXmlStreamAttribute& a = map.at(i);
+                  const XmlStreamAttribute& a = map.at(i);
                   qDebug(" attr <%s> <%s>", a.name().toUtf8().data(), a.value().toUtf8().data());
                   }
             unknown();
@@ -112,7 +112,7 @@ QPointF XmlReader::readPoint()
 
 QColor XmlReader::readColor()
       {
-      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+      Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
       QColor c;
       c.setRed(intAttribute("r"));
       c.setGreen(intAttribute("g"));
@@ -128,7 +128,7 @@ QColor XmlReader::readColor()
 
 QSizeF XmlReader::readSize()
       {
-      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+      Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
       QSizeF p;
       p.setWidth(doubleAttribute("w", 0.0));
       p.setHeight(doubleAttribute("h", 0.0));
@@ -142,7 +142,7 @@ QSizeF XmlReader::readSize()
 
 QRectF XmlReader::readRect()
       {
-      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+      Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
       QRectF p;
       p.setX(doubleAttribute("x", 0.0));
       p.setY(doubleAttribute("y", 0.0));
@@ -158,7 +158,7 @@ QRectF XmlReader::readRect()
 
 Fraction XmlReader::readFraction()
       {
-      Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+      Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
       int z = attribute("z", "0").toInt();
       int n = attribute("n", "0").toInt();
       skipCurrentElement();
@@ -172,7 +172,7 @@ Fraction XmlReader::readFraction()
 
 void XmlReader::unknown() const
       {
-      if (QXmlStreamReader::error())
+      if (XmlStreamReader::error())
             qDebug("StreamReaderError: %s", qPrintable(errorString()));
       qFatal("%s: xml read error at line %lld col %lld: %s",
          qPrintable(docName), lineNumber(), columnNumber(),
@@ -625,25 +625,25 @@ void Xml::dump(int len, const unsigned char* p)
 void XmlReader::htmlToString(int level, QString* s)
       {
       *s += QString("<%1").arg(name().toString());
-      for (const QXmlStreamAttribute& a : attributes())
+      for (const XmlStreamAttribute& a : attributes())
             *s += QString(" %1=\"%2\"").arg(a.name().toString()).arg(a.value().toString());
       *s += ">";
       ++level;
       for (;;) {
-            QXmlStreamReader::TokenType t = readNext();
+            XmlStreamReader::TokenType t = readNext();
             switch(t) {
-                  case QXmlStreamReader::StartElement:
+                  case XmlStreamReader::StartElement:
                         htmlToString(level, s);
                         break;
-                  case QXmlStreamReader::EndElement:
+                  case XmlStreamReader::EndElement:
                         *s += QString("</%1>").arg(name().toString());
                         --level;
                         return;
-                  case QXmlStreamReader::Characters:
+                  case XmlStreamReader::Characters:
                         if (!isWhitespace())
                               *s += text().toString().toHtmlEscaped();
                         break;
-                  case QXmlStreamReader::Comment:
+                  case XmlStreamReader::Comment:
                         break;
 
                   default:
@@ -663,18 +663,18 @@ QString XmlReader::readXml()
       QString s;
       int level = 1;
       for (;;) {
-            QXmlStreamReader::TokenType t = readNext();
+            XmlStreamReader::TokenType t = readNext();
             switch(t) {
-                  case QXmlStreamReader::StartElement:
+                  case XmlStreamReader::StartElement:
                         htmlToString(level, &s);
                         break;
-                  case QXmlStreamReader::EndElement:
+                  case XmlStreamReader::EndElement:
                         return s;
-                  case QXmlStreamReader::Characters:
+                  case XmlStreamReader::Characters:
                         if (!isWhitespace())
                               s += text().toString().toHtmlEscaped();
                         break;
-                  case QXmlStreamReader::Comment:
+                  case XmlStreamReader::Comment:
                         break;
 
                   default:
