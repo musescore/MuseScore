@@ -39,7 +39,7 @@ Tuplet::Tuplet(Score* s)
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
-      _direction    = MScore::AUTO;
+      _direction    = Direction::AUTO;
       }
 
 Tuplet::Tuplet(const Tuplet& t)
@@ -141,13 +141,13 @@ void Tuplet::layout()
       //
       // find out main direction
       //
-      if (_direction == MScore::AUTO) {
+      if (_direction == Direction::AUTO) {
             int up = 1;
             foreach (const DurationElement* e, _elements) {
                   if (e->type() == CHORD) {
                         const Chord* c = static_cast<const Chord*>(e);
-                        if (c->stemDirection() != MScore::AUTO)
-                              up += c->stemDirection() == MScore::UP ? 1000 : -1000;
+                        if (c->stemDirection() != Direction::AUTO)
+                              up += c->stemDirection() == Direction::UP ? 1000 : -1000;
                         else
                               up += c->up() ? 1 : -1;
                         }
@@ -158,7 +158,7 @@ void Tuplet::layout()
             _isUp = up > 0;
             }
       else
-            _isUp = _direction == MScore::UP;
+            _isUp = _direction == Direction::UP;
 
       const DurationElement* cr1 = _elements.front();
       while (cr1->type() == TUPLET) {
@@ -858,7 +858,7 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_DIRECTION:
-                  return _direction;
+                  return int(_direction);
             case P_NUMBER_TYPE:
                   return _numberType;
             case P_BRACKET_TYPE:
@@ -886,7 +886,7 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
             case P_DIRECTION:
-                  setDirection(MScore::Direction(v.toInt()));
+                  setDirection(Direction(v.toInt()));
                   break;
             case P_NUMBER_TYPE:
                   setNumberType(v.toInt());
@@ -922,7 +922,7 @@ QVariant Tuplet::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_DIRECTION:
-                  return MScore::AUTO;
+                  return int(Direction::AUTO);
             case P_NUMBER_TYPE:
                   return Tuplet::SHOW_NUMBER;
             case P_BRACKET_TYPE:

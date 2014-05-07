@@ -15,6 +15,7 @@
 #include "layoutbreak.h"
 #include "groups.h"
 #include "xml.h"
+#include "note.h"
 
 namespace Ms {
 
@@ -251,22 +252,22 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   {
                   QString value(e.readElementText());
                   if (value == "up")
-                        return QVariant(MScore::UP);
+                        return QVariant(int(Direction::UP));
                   else if (value == "down")
-                        return QVariant(MScore::DOWN);
+                        return QVariant(int(Direction::DOWN));
                   else if (value == "auto")
-                        return QVariant(MScore::AUTO);
+                        return QVariant(int(Direction::AUTO));
                   }
                   break;
             case T_DIRECTION_H:
                   {
                   QString value(e.readElementText());
                   if (value == "left")
-                        return QVariant(MScore::DH_LEFT);
+                        return QVariant(int(DirectionH::DH_LEFT));
                   else if (value == "right")
-                        return QVariant(MScore::DH_RIGHT);
+                        return QVariant(int(DirectionH::DH_RIGHT));
                   else if (value == "auto")
-                        return QVariant(MScore::DH_AUTO);
+                        return QVariant(int(DirectionH::DH_AUTO));
                   }
                   break;
             case T_LAYOUT_BREAK: {
@@ -283,9 +284,9 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case T_VALUE_TYPE: {
                   QString value(e.readElementText());
                   if (value == "offset")
-                        return QVariant(int(MScore::OFFSET_VAL));
+                        return QVariant(int(ValueType::OFFSET_VAL));
                   else if (value == "user")
-                        return QVariant(int(MScore::USER_VAL));
+                        return QVariant(int(ValueType::USER_VAL));
                   }
                   break;
             case T_PLACEMENT: {

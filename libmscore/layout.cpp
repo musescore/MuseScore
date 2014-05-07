@@ -544,12 +544,12 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
                         note->rxpos() = 0.0;
                         }
                   }
-            if (note->userMirror() == MScore::DH_AUTO) {
+            if (note->userMirror() == DirectionH::DH_AUTO) {
                   mirror = nmirror;
                   }
             else {
                   mirror = note->chord()->up();
-                  if (note->userMirror() == MScore::DH_LEFT)
+                  if (note->userMirror() == DirectionH::DH_LEFT)
                         mirror = !mirror;
                   }
             note->setMirror(mirror);
@@ -825,9 +825,9 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                         upDotPosX = qMax(upDotPosX, xx);
                   else
                         downDotPosX = qMax(downDotPosX, xx);
-                  MScore::Direction dotPosition = note->userDotPosition();
+                  Direction dotPosition = note->userDotPosition();
 
-                  if (dotPosition == MScore::AUTO && nNotes > 1) {
+                  if (dotPosition == Direction::AUTO && nNotes > 1) {
                         // resolve dot conflicts
                         int line = note->line();
                         Note* above = (i < nNotes - 1) ? notes[i+1] : 0;
@@ -837,14 +837,14 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                         if ((line & 1) == 0) {
                               // line
                               if (intervalAbove == 1 && intervalBelow != 1)
-                                    dotPosition = MScore::DOWN;
+                                    dotPosition = Direction::DOWN;
                               else if (intervalBelow ==1 && intervalAbove != 1)
-                                    dotPosition = MScore::UP;
+                                    dotPosition = Direction::UP;
                               else if (intervalAbove == 0 && above->chord()->dots()) {
                                     // unison
                                     if (((above->voice() & 1) == (note->voice() & 1))) {
-                                          above->setDotY(MScore::UP);
-                                          dotPosition = MScore::DOWN;
+                                          above->setDotY(Direction::UP);
+                                          dotPosition = Direction::DOWN;
                                           }
                                     }
                               }
@@ -853,12 +853,12 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                               if (intervalAbove == 0 && above->chord()->dots()) {
                                     // unison
                                     if (!(note->voice() & 1))
-                                          dotPosition = MScore::UP;
+                                          dotPosition = Direction::UP;
                                     else {
                                           if (!(above->voice() & 1))
-                                                above->setDotY(MScore::UP);
+                                                above->setDotY(Direction::UP);
                                           else
-                                                dotPosition = MScore::DOWN;
+                                                dotPosition = Direction::DOWN;
                                           }
                                     }
                               }

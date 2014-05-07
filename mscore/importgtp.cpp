@@ -2870,9 +2870,9 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             Chord* chord = static_cast<Chord*>(cr);
             applyBeatEffects(chord, beatEffects);
             if (rr == 0x2)
-                  chord->setStemDirection(MScore::DOWN);
+                  chord->setStemDirection(Direction::DOWN);
             else if (rr == 0xa)
-                  chord->setStemDirection(MScore::UP);
+                  chord->setStemDirection(Direction::UP);
             else
                   qDebug("  1beat read 0x%02x", rr);
             }

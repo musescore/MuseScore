@@ -100,12 +100,11 @@ extern QString mscoreGlobalShare;
 
 void MScore::init()
       {
-      printf("================= sizeof element %d\n", sizeof(Element));
 #ifdef SCRIPT_INTERFACE
       qRegisterMetaType<Element::ElementType>("ElementType");
-      qRegisterMetaType<MScore::ValueType>("ValueType");
-      qRegisterMetaType<MScore::Direction>("Direction");
-      qRegisterMetaType<MScore::DirectionH>("DirectionH");
+      qRegisterMetaType<ValueType>("ValueType");
+      qRegisterMetaType<Direction>("Direction");
+      qRegisterMetaType<DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
       qRegisterMetaType<Accidental::AccidentalRole>("AccidentalRole");
       qRegisterMetaType<Accidental::AccidentalType>("AccidentalType");

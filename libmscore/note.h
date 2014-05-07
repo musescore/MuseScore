@@ -43,11 +43,13 @@ class Spanner;
 class StaffType;
 enum class SymId;
 
+enum class ValueType : char { OFFSET_VAL, USER_VAL };
+
 //---------------------------------------------------------
 //   NoteHeadGroup
 //---------------------------------------------------------
 
-enum class NoteHeadGroup {
+enum class NoteHeadGroup : char {
       HEAD_NORMAL = 0,
       HEAD_CROSS,
       HEAD_DIAMOND,
@@ -70,7 +72,7 @@ enum class NoteHeadGroup {
 //   NoteHeadType
 //---------------------------------------------------------
 
-enum class NoteHeadType {
+enum class NoteHeadType : char{
       HEAD_AUTO = -1, HEAD_WHOLE = 0, HEAD_HALF = 1, HEAD_QUARTER = 2,
       HEAD_BREVIS = 3,
       HEAD_TYPES
@@ -153,12 +155,12 @@ class Note : public Element {
       Q_PROPERTY(bool small                    READ small             WRITE undoSetSmall)
       Q_PROPERTY(bool play                     READ play              WRITE undoSetPlay)
       Q_PROPERTY(qreal tuning                  READ tuning            WRITE undoSetTuning)
-      Q_PROPERTY(Ms::MScore::ValueType veloType    READ veloType      WRITE undoSetVeloType)
+      Q_PROPERTY(Ms::ValueType  veloType       READ veloType          WRITE undoSetVeloType)
       Q_PROPERTY(int veloOffset                READ veloOffset        WRITE undoSetVeloOffset)
-      Q_PROPERTY(Ms::MScore::DirectionH userMirror READ userMirror    WRITE undoSetUserMirror)
-      Q_PROPERTY(Ms::MScore::Direction userDotPosition      READ userDotPosition   WRITE undoSetUserDotPosition)
-      Q_PROPERTY(NoteHeadGroup     headGroup   READ headGroup         WRITE undoSetHeadGroup)
-      Q_PROPERTY(NoteHeadType      headType    READ headType          WRITE undoSetHeadType)
+      Q_PROPERTY(Ms::DirectionH userMirror     READ userMirror        WRITE undoSetUserMirror)
+      Q_PROPERTY(Ms::Direction userDotPosition READ userDotPosition   WRITE undoSetUserDotPosition)
+      Q_PROPERTY(NoteHeadGroup  headGroup      READ headGroup         WRITE undoSetHeadGroup)
+      Q_PROPERTY(NoteHeadType   headType       READ headType          WRITE undoSetHeadType)
       Q_PROPERTY(QQmlListProperty<Element> elements  READ qmlElements)
 
       Q_ENUMS(NoteHeadGroup)
@@ -186,16 +188,17 @@ class Note : public Element {
       bool _play;             // note is not played if false
       mutable bool _mark;     // for use in sequencer
 
+      DirectionH _userMirror;     ///< user override of mirror
+      Direction _userDotPosition; ///< user override of dot position
+
       NoteHeadGroup _headGroup;
       NoteHeadType _headType;
 
-      MScore::ValueType _veloType;
+      ValueType _veloType;
       short int _veloOffset; ///< velocity user offset in percent, or absolute velocity for this note
 
       qreal _tuning;         ///< pitch offset in cent, playable only by internal synthesizer
 
-      MScore::DirectionH _userMirror;     ///< user override of mirror
-      MScore::Direction _userDotPosition; ///< user override of dot position
 
       Accidental* _accidental;
 
@@ -207,7 +210,7 @@ class Note : public Element {
 
       NoteEventList _playEvents;
       int _offTimeType = 0; // compatibility only 1 - user(absolute), 2 - offset (%)
-      int _onTimeType = 0; // compatibility only 1 - user, 2 - offset
+      int _onTimeType = 0;  // compatibility only 1 - user, 2 - offset
 
       int _lineOffset;        ///< Used during mouse dragging.
       QList<Spanner*> _spannerFor;
@@ -335,17 +338,17 @@ class Note : public Element {
       int subchannel() const                    { return _subchannel; }
       void setSubchannel(int val)               { _subchannel = val;  }
 
-      MScore::DirectionH userMirror() const     { return _userMirror; }
-      void setUserMirror(MScore::DirectionH d)  { _userMirror = d; }
+      DirectionH userMirror() const             { return _userMirror; }
+      void setUserMirror(DirectionH d)          { _userMirror = d; }
 
-      MScore::Direction userDotPosition() const       { return _userDotPosition; }
-      void setUserDotPosition(MScore::Direction d)    { _userDotPosition = d;    }
+      Direction userDotPosition() const         { return _userDotPosition; }
+      void setUserDotPosition(Direction d)      { _userDotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
 
       void reset();
 
-      MScore::ValueType veloType() const    { return _veloType;          }
-      void setVeloType(MScore::ValueType v) { _veloType = v;             }
+      ValueType veloType() const            { return _veloType;          }
+      void setVeloType(ValueType v)         { _veloType = v;             }
       int veloOffset() const                { return _veloOffset;        }
       void setVeloOffset(int v)             { _veloOffset = v;           }
 
@@ -379,12 +382,12 @@ class Note : public Element {
       void undoSetSmall(bool);
       void undoSetPlay(bool);
       void undoSetTuning(qreal);
-      void undoSetVeloType(MScore::ValueType);
+      void undoSetVeloType(ValueType);
       void undoSetVeloOffset(int);
       void undoSetOnTimeUserOffset(int);
       void undoSetOffTimeUserOffset(int);
-      void undoSetUserMirror(MScore::DirectionH);
-      void undoSetUserDotPosition(MScore::Direction);
+      void undoSetUserMirror(DirectionH);
+      void undoSetUserDotPosition(Direction);
       void undoSetHeadGroup(NoteHeadGroup);
       void undoSetHeadType(NoteHeadType);
 
@@ -395,7 +398,7 @@ class Note : public Element {
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
       virtual void setScore(Score* s);
-      void setDotY(MScore::Direction);
+      void setDotY(Direction);
 
       static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
       };

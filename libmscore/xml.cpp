@@ -16,6 +16,7 @@
 #include "beam.h"
 #include "tuplet.h"
 #include "sym.h"
+#include "note.h"
 
 namespace Ms {
 
@@ -409,26 +410,26 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   break;
 
             case T_DIRECTION:
-                  switch(MScore::Direction(data.toInt())) {
-                        case MScore::UP:
+                  switch(Direction(data.toInt())) {
+                        case Direction::UP:
                               tag(name, QVariant("up"));
                               break;
-                        case MScore::DOWN:
+                        case Direction::DOWN:
                               tag(name, QVariant("down"));
                               break;
-                        case MScore::AUTO:
+                        case Direction::AUTO:
                               break;
                         }
                   break;
             case T_DIRECTION_H:
-                  switch(MScore::DirectionH(data.toInt())) {
-                        case MScore::DH_LEFT:
+                  switch(DirectionH(data.toInt())) {
+                        case DirectionH::DH_LEFT:
                               tag(name, QVariant("left"));
                               break;
-                        case MScore::DH_RIGHT:
+                        case DirectionH::DH_RIGHT:
                               tag(name, QVariant("right"));
                               break;
-                        case MScore::DH_AUTO:
+                        case DirectionH::DH_AUTO:
                               break;
                         }
                   break;
@@ -446,11 +447,11 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case T_VALUE_TYPE:
-                  switch(MScore::ValueType(data.toInt())) {
-                        case MScore::OFFSET_VAL:
+                  switch(ValueType(data.toInt())) {
+                        case ValueType::OFFSET_VAL:
                               tag(name, QVariant("offset"));
                               break;
-                        case MScore::USER_VAL:
+                        case ValueType::USER_VAL:
                               tag(name, QVariant("user"));
                               break;
                         }

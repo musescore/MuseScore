@@ -996,12 +996,12 @@ void StyleData::load(XmlReader& e)
                         idx = static_cast<StyleIdx>(i);
                         if (styleTypes.name(idx) == tag) {
                               switch(styleTypes.valueType(idx)) {
-                                    case ST_SPATIUM:   set(idx, QVariant(val.toDouble())); break;
-                                    case ST_DOUBLE:    set(idx, QVariant(val.toDouble()));   break;
-                                    case ST_BOOL:      set(idx, QVariant(bool(val.toInt())));       break;
-                                    case ST_INT:       set(idx, QVariant(val.toInt()));             break;
-                                    case ST_DIRECTION: set(idx, QVariant(MScore::Direction(val.toInt())));  break;
-                                    case ST_STRING:    set(idx, QVariant(val));                     break;
+                                    case ST_SPATIUM:   set(idx, QVariant(val.toDouble()));    break;
+                                    case ST_DOUBLE:    set(idx, QVariant(val.toDouble()));    break;
+                                    case ST_BOOL:      set(idx, QVariant(bool(val.toInt()))); break;
+                                    case ST_INT:       set(idx, QVariant(val.toInt()));       break;
+                                    case ST_DIRECTION: set(idx, QVariant(val.toInt()));       break;
+                                    case ST_STRING:    set(idx, QVariant(val));               break;
                                     }
                               break;
                               }
@@ -1442,9 +1442,9 @@ void MStyle::set(StyleIdx t, int val)
       set(t, QVariant(val));
       }
 
-void MStyle::set(StyleIdx t, MScore::Direction val)
+void MStyle::set(StyleIdx t, Direction val)
       {
-      set(t, QVariant(val));
+      set(t, QVariant(int(val)));
       }
 
 //---------------------------------------------------------

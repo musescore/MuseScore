@@ -15,13 +15,14 @@
 
 #include "accidental.h"
 #include "element.h"
-#include "note.h"
+// #include "note.h"
 
 class QPainter;
 
 namespace Ms {
 
-enum class NoteHeadGroup;
+enum class NoteHeadGroup : char;
+enum class NoteHeadType : char;
 
 //---------------------------------------------------------
 //   @@ Ambitus
@@ -32,7 +33,7 @@ class Ambitus : public Element {
 
       NoteHeadGroup       _noteHeadGroup;
       NoteHeadType        _noteHeadType;
-      MScore::DirectionH  _dir;
+      DirectionH  _dir;
       bool  _hasLine;
       qreal _lineWidth;                     // in spatium
       Accidental  _topAccid, _bottomAccid;
@@ -55,7 +56,7 @@ class Ambitus : public Element {
       virtual ElementType type() const                { return AMBITUS;    }
       NoteHeadGroup noteHeadGroup() const             { return _noteHeadGroup;}
       NoteHeadType noteHeadType() const               { return _noteHeadType; }
-      MScore::DirectionH direction() const            { return _dir;          }
+      DirectionH direction() const                    { return _dir;          }
       bool hasLine() const                            { return _hasLine;      }
       qreal lineWidth() const                         { return _lineWidth;    }
       int topOctave() const                           { return _topPitch / 12;}
@@ -67,7 +68,7 @@ class Ambitus : public Element {
 
       void setNoteHeadGroup(NoteHeadGroup val)        { _noteHeadGroup = val; }
       void setNoteHeadType (NoteHeadType val)         { _noteHeadType  = val; }
-      void setDirection    (MScore::DirectionH val)   { _dir = val;           }
+      void setDirection    (DirectionH val)           { _dir = val;           }
       void setHasLine      (bool val)                 { _hasLine = val;       }
       void setLineWidth    (qreal val)                { _lineWidth = val;     }
       void setTopPitch     (int val);

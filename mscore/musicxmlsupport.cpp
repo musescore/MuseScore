@@ -140,7 +140,7 @@ QString MusicXMLDrumInstrument::toString() const
              .arg(name)
              .arg(int(notehead))
              .arg(line)
-             .arg(stemDirection);
+             .arg(int(stemDirection));
       }
 
 void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& description,

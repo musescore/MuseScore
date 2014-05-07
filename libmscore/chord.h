@@ -85,7 +85,7 @@ class Chord : public ChordRest {
       QList<Chord*> _graceNotes;
       int _graceIndex;              ///< if this is a grace note, index in parent list
 
-      MScore::Direction  _stemDirection;
+      Direction  _stemDirection;
       TremoloChordType   _tremoloChordType;
       NoteType           _noteType;         ///< mark grace notes: acciaccatura and appoggiatura
       bool               _noStem;
@@ -118,8 +118,8 @@ class Chord : public ChordRest {
       virtual void setSelected(bool f);
       virtual Element* drop(const DropData&);
 
-      void setStemDirection(MScore::Direction d)     { _stemDirection = d; }
-      MScore::Direction stemDirection() const        { return _stemDirection; }
+      void setStemDirection(Direction d)  { _stemDirection = d; }
+      Direction stemDirection() const     { return _stemDirection; }
 
       LedgerLine* ledgerLines()           { return _ledgerLines; }
 

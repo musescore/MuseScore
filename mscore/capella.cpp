@@ -447,10 +447,10 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         chord->setTrack(track);
                         switch (o->stemDir) {
                               case ChordObj::DOWN:
-                                    chord->setStemDirection(MScore::DOWN);
+                                    chord->setStemDirection(Direction::DOWN);
                                     break;
                               case ChordObj::UP:
-                                    chord->setStemDirection(MScore::UP);
+                                    chord->setStemDirection(Direction::UP);
                                     break;
                               case ChordObj::NONE:
                                     chord->setNoStem(true);

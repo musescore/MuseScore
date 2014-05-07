@@ -204,12 +204,12 @@ void MuseData::readNote(Part* part, const QString& s)
                   break;
                   }
             }
-      MScore::Direction dir = MScore::AUTO;
+      Direction dir = Direction::AUTO;
       if (s.size() >= 23) {
             if (s[22] == 'u')
-                  dir = MScore::UP;
+                  dir = Direction::UP;
             else if (s[22] == 'd')
-                  dir = MScore::DOWN;
+                  dir = Direction::DOWN;
             }
 
       int staffIdx = 0;
