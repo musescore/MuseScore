@@ -290,27 +290,24 @@ Element::~Element()
 //---------------------------------------------------------
 
 Element::Element(Score* s) :
-   QObject(0),
-   _links(0),
-   _parent(0),
-   _selected(false),
-   _generated(false),
-   _visible(true),
-   _placement(BELOW),
-   _flags(ELEMENT_SELECTABLE),
-   _track(-1),
-   _color(MScore::defaultColor),
-   _mag(1.0),
-   _tag(1),
-   _score(s),
-   itemDiscovered(false)
+   QObject(0)
       {
+      _selected      = false;
+      _generated     = false;
+      _visible       = true;
+      _placement     = BELOW;
+      _flags         = ELEMENT_SELECTABLE;
+      _track         = -1;
+      _color         = MScore::defaultColor;
+      _mag           = 1.0;
+      _tag           = 1;
+      _score         = s;
+      itemDiscovered = false;
       }
 
 Element::Element(const Element& e)
    : QObject(0)
       {
-      _links      = 0;
       _parent     = e._parent;
       _selected   = e._selected;
       _generated  = e._generated;
@@ -472,13 +469,13 @@ QColor Element::curColor(const Element* proxy) const
             const Note* note = static_cast<const Note*>(this);
             marked = note->mark();
             }
-      if (_selected || marked ) {
+      if (proxy->selected() || marked ) {
             if (track() == -1)
                   return MScore::selectColor[0];
             else
                   return MScore::selectColor[voice()];
             }
-      if (!_visible)
+      if (!proxy->visible())
             return Qt::gray;
       return proxy->color();
       }
@@ -705,9 +702,9 @@ bool Element::readProperties(XmlReader& e)
       if (tag == "track")
             setTrack(e.readInt());
       else if (tag == "color")
-            _color = e.readColor();
+            setColor(e.readColor());
       else if (tag == "visible")
-            _visible = e.readInt();
+            setVisible(e.readInt());
       else if (tag == "selected") // obsolete
             e.readInt();
       else if (tag == "userOff")
@@ -1503,15 +1500,15 @@ QVariant Element::getProperty(P_ID propertyId) const
 
 bool Element::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_COLOR:
                   _color = v.value<QColor>();
                   break;
             case P_VISIBLE:
-                  _visible = v.toBool();
+                  setVisible(v.toBool());
                   break;
             case P_SELECTED:
-                  _selected = v.toBool();
+                  setSelected(v.toBool());
                   break;
             case P_USER_OFF:
                   _userOff = v.toPointF();

@@ -75,6 +75,8 @@ class SpannerSegment : public Element {
       virtual bool setProperty(P_ID id, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual void reset() override;
+      virtual void setSelected(bool f) override;
+      virtual void setVisible(bool f) override;
       };
 
 //----------------------------------------------------------------------------------
@@ -144,7 +146,6 @@ class Spanner : public Element {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
-      virtual void setSelected(bool f) override;
       bool removeSpannerBack();
       virtual void setYoff(qreal) {};    // used in musicxml import
 
@@ -172,6 +173,11 @@ class Spanner : public Element {
 
       Segment* startSegment() const;
       Segment* endSegment() const;
+
+      virtual void setSelected(bool f) override;
+      virtual void setVisible(bool f) override;
+
+      friend class SpannerSegment;
       };
 
 }     // namespace Ms

@@ -146,6 +146,32 @@ void SpannerSegment::reset()
       }
 
 //---------------------------------------------------------
+//   setSelected
+//---------------------------------------------------------
+
+void SpannerSegment::setSelected(bool f)
+      {
+      for (SpannerSegment* ss : _spanner->spannerSegments())
+            ss->_selected = f;
+      _spanner->_selected = f;
+      }
+
+//---------------------------------------------------------
+//   setVisible
+//---------------------------------------------------------
+
+void SpannerSegment::setVisible(bool f)
+      {
+      if (_spanner) {
+            for (SpannerSegment* ss : _spanner->spannerSegments())
+                  ss->_visible = f;
+            _spanner->_visible = f;
+            }
+      else
+            _visible = f;
+      }
+
+//---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
 
@@ -180,6 +206,7 @@ void Spanner::add(Element* e)
       {
       SpannerSegment* ls = static_cast<SpannerSegment*>(e);
       ls->setSpanner(this);
+      ls->setSelected(selected());
       segments.append(ls);
       }
 
@@ -197,13 +224,13 @@ void Spanner::remove(Element* e)
 
 //---------------------------------------------------------
 //   scanElements
-//    used for palettes
+//    used in palettes
 //---------------------------------------------------------
 
 void Spanner::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       Q_UNUSED(all)
-      foreach (SpannerSegment* seg, segments)
+      for (SpannerSegment* seg : segments)
             seg->scanElements(data, func, true);
       }
 
@@ -270,17 +297,6 @@ void Spanner::endEdit()
             score()->undoPropertyChanged(ss, P_USER_OFF2, userOffsets2[i]);
             }
 #endif
-      }
-
-//---------------------------------------------------------
-//   setSelected
-//---------------------------------------------------------
-
-void Spanner::setSelected(bool f)
-      {
-      foreach(SpannerSegment* ss, segments)
-            ss->setSelected(f);
-      Element::setSelected(f);
       }
 
 //---------------------------------------------------------
@@ -494,5 +510,28 @@ Segment* Spanner::endSegment() const
       {
       return score()->tick2leftSegment(tick2());
       }
+
+//---------------------------------------------------------
+//   setSelected
+//---------------------------------------------------------
+
+void Spanner::setSelected(bool f)
+      {
+      for (SpannerSegment* ss : spannerSegments())
+            ss->setSelected(f);
+      _selected = f;
+      }
+
+//---------------------------------------------------------
+//   setVisible
+//---------------------------------------------------------
+
+void Spanner::setVisible(bool f)
+      {
+      for (SpannerSegment* ss : spannerSegments())
+            ss->setVisible(f);
+      _visible = f;
+      }
+
 }
 

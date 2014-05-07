@@ -77,7 +77,7 @@ void SlurSegment::draw(QPainter* painter) const
       QPen pen(curColor());
       switch (slurTie()->lineType()) {
             case 0:
-                  painter->setBrush(QBrush(QColor(curColor())));
+                  painter->setBrush(QBrush(pen.color()));
                   pen.setCapStyle(Qt::RoundCap);
                   pen.setJoinStyle(Qt::RoundJoin);
                   pen.setWidthF(point(score()->styleS(ST_SlurEndWidth)));

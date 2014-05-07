@@ -395,7 +395,7 @@ void Page::drawStyledHeaderFooter(QPainter* p, int area, const QPointF& pt,
 
 void Page::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      foreach(System* s, _systems)
+      for (System* s :_systems)
             s->scanElements(data, func, all);
       func(data, this);
       }
