@@ -815,12 +815,8 @@ void Note::read(XmlReader& e)
                   _tpc[1] = e.readInt();
             else if (tag == "small")
                   setSmall(e.readInt());
-            else if (tag == "mirror") {
-                  if (score()->mscVersion() > 114)
-                        setProperty(P_MIRROR_HEAD, Ms::getProperty(P_MIRROR_HEAD, e));
-                  else
-                        e.skipCurrentElement(); // ignore manual layout in older scores
-                  }
+            else if (tag == "mirror")
+                  setProperty(P_MIRROR_HEAD, Ms::getProperty(P_MIRROR_HEAD, e));
             else if (tag == "dotPosition")
                   setProperty(P_DOT_POSITION, Ms::getProperty(P_DOT_POSITION, e));
             else if (tag == "onTimeType") { //obsolete

@@ -271,22 +271,24 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     pHeadType = (p->headType() == NoteHeadType::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
                                     // the most important rules for sharing noteheads on unisons between voices are
                                     // that notes must be one same line with same tpc
-                                    // noteheads must be unmirrored and of same group and type
-                                    // and chords must be same size (or sharing code won't work)
-                                    if (n->headGroup() != p->headGroup() || nHeadType != pHeadType || n->tpc() != p->tpc() || n->mirror() || p->mirror() || nchord->small() != pchord->small()) {
+                                    // noteheads must be unmirrored and of same group
+                                    // and chords must be same size (or else sharing code won't work)
+                                    if (n->headGroup() != p->headGroup() || n->tpc() != p->tpc() || n->mirror() || p->mirror() || nchord->small() != pchord->small()) {
                                           shareHeads = false;
                                           }
                                     else {
                                           // noteheads are potentially shareable
                                           // it is more subjective at this point
                                           // current default is to require *either* of the following:
-                                          //    1) both chords have same number of dots, both have stems, and both noteheads are full size
-                                          // or 2) one or more of the noteheads is not of type AUTO, but is explicitly set to match the other
+                                          //    1) both chords have same number of dots, both have stems, and both noteheads are same type and are full size (automatic match)
+                                          // or 2) one or more of the noteheads is not of type AUTO, but is explicitly set to match the other (user-forced match)
+                                          // or 3) exactly one of the noteheads is invisible (user-forced match)
                                           // thus user can force notes to be shared despite differing number of dots or either being stemless
-                                          // by setting one of the notehead types to match the other
+                                          // by setting one of the notehead types to match the other or by making one notehead invisible
                                           // TODO: consider adding a style option, staff properties, or note property to control sharing
-                                          if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem() || n->small() || p->small()) &&
-                                              (n->headType() == NoteHeadType::HEAD_AUTO && p->headType() == NoteHeadType::HEAD_AUTO)) {
+                                          if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem() || nHeadType != pHeadType || n->small() || p->small()) &&
+                                              ((n->headType() == NoteHeadType::HEAD_AUTO && p->headType() == NoteHeadType::HEAD_AUTO) || nHeadType != pHeadType) &&
+                                              (n->visible() == p->visible())) {
                                                 shareHeads = false;
                                                 }
                                           }
@@ -465,28 +467,26 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
             incIdx = -1;
             }
 
-      int ll        = 1000;         // line distance to previous note head
+      int ll        = 1000;         // line of previous note head
                                     // hack: start high so first note won't show as conflict
-      bool mirror   = false;        // do we need to mirror this notehead?
+      bool lvisible = false;        // was last note visible?
+      bool mirror   = false;        // should current note head be mirrored?
+                                    // value is retained and may be used on next iteration
+                                    // to track mirror status of previous note
       bool isLeft   = notes[startIdx]->chord()->up();             // is note head on left?
-      int move1     = notes[startIdx]->chord()->staffMove();      // chord moved to staff above or below
+      int lmove     = notes[startIdx]->chord()->staffMove();      // staff offset of last note (for cross-staff beaming)
 
       for (int idx = startIdx; idx != endIdx; idx += incIdx) {
 
             Note* note    = notes[idx];                     // current note
             int line      = note->line();                   // line of current note
             Chord* chord  = note->chord();
-            int ticks     = chord->actualTicks();           // duration of current note
-            int move      = chord->staffMove();
-
-            //NoteHeadGroup headGroup = note->headGroup();    // head group of current note
-            // calculate head type of current note if group is AUTO
-            //NoteHeadType headType   =  (note->headType() == NoteHeadType::HEAD_AUTO)
-            //   ? note->chord()->durationType().headType() : NoteHeadType(int(note->headType()) - 1);
+            int move      = chord->staffMove();             // staff offset of current note
 
             // there is a conflict
-            // if this same or adjacent line as previous note
-            bool conflict = (qAbs(ll - line) < 2) && (move1 == move);
+            // if this is same or adjacent line as previous note (and chords are on same staff!)
+            // but no need to do anything about it if either note is invisible
+            bool conflict = (qAbs(ll - line) < 2) && (lmove == move) && note->visible() && lvisible;
 
             // this note is on opposite side of stem as previous note
             // if there is a conflict
@@ -494,28 +494,23 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
             if (conflict || (chord->up() != isLeft))
                   isLeft = !isLeft;
 
-            // we need to mirror this note
-            // if it's not on the correct side
-            // previously we also skipped the mirror
-            // if it shared a note head with previous note
-            // but it's been suggested that it would be better
-            // to show the unison more clearly by default
-            bool nmirror  = (chord->up() != isLeft);
+            // determine if we would need to mirror current note
+            // to get it to the correct side
+            // this would be needed to get a note to left or downstem or right of upstem
+            // whether or not we actually do this is determined later (based on user mirror property)
+            bool nmirror = (chord->up() != isLeft);
 
-            // two notes can *possibly* share a notehead if on same line and have same group and type
-            // however, we will only actually do this if user mirrors
-            bool sameHead = (ll == line) && (nmirror == mirror);
-
-            // we will potentially hide note and dots
-            // for notes sharing a head
-            // we will only show them if one is nudged
+            // by defaults, notes and dots are not hidden
+            // this may be changed later to allow unisons to share note heads
             note->setHidden(false);
             note->setDotsHidden(false);
 
-            // now start the actual layout
-
+            // be sure chord position is initialized
+            // chord may be moved to the right later
+            // if there are conflicts between voices
             chord->rxpos() = 0.0;
 
+<<<<<<< HEAD
             // handle conflict
             if (conflict && (nmirror == mirror)) {          // && idx
                   if (sameHead) {
@@ -544,6 +539,7 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
                         note->rxpos() = 0.0;
                         }
                   }
+            // let user mirror property override the default we calculated
             if (note->userMirror() == DirectionH::DH_AUTO) {
                   mirror = nmirror;
                   }
@@ -553,12 +549,16 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
                         mirror = !mirror;
                   }
             note->setMirror(mirror);
+
+            // accumulate return value
             if (!mirror)
                   maxWidth = qMax(maxWidth, note->headWidth());
-            move1         = move;
+
+            // prepare for next iteration
+            lvisible      = note->visible();
+            lmove         = move;
             ll            = line;
-            // lastHeadGroup = headGroup;
-            // lastHeadType  = headType;
+
             }
 
       return maxWidth;
@@ -832,18 +832,22 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                         downDotPosX = qMax(downDotPosX, xx);
                   Direction dotPosition = note->userDotPosition();
 
-                  if (dotPosition == Direction::AUTO && nNotes > 1) {
+                  if (dotPosition == Direction::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
                         // resolve dot conflicts
                         int line = note->line();
                         Note* above = (i < nNotes - 1) ? notes[i+1] : 0;
+                        if (above && (!above->visible() || above->dotsHidden()))
+                              above = 0;
                         int intervalAbove = above ? line - above->line() : 1000;
                         Note* below = (i > 0) ? notes[i-1] : 0;
+                        if (below && (!below->visible() || below->dotsHidden()))
+                              below = 0;
                         int intervalBelow = below ? below->line() - line : 1000;
                         if ((line & 1) == 0) {
                               // line
                               if (intervalAbove == 1 && intervalBelow != 1)
                                     dotPosition = Direction::DOWN;
-                              else if (intervalBelow ==1 && intervalAbove != 1)
+                              else if (intervalBelow == 1 && intervalAbove != 1)
                                     dotPosition = Direction::UP;
                               else if (intervalAbove == 0 && above->chord()->dots()) {
                                     // unison
