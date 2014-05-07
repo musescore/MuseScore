@@ -29,6 +29,19 @@ double durationCount(const QList<std::pair<ReducedFraction, TDuration> > &durati
       return count;
       }
 
+bool hasComplexBeamedDurations(const QList<std::pair<ReducedFraction, TDuration> > &list)
+      {
+      for (const auto &d: list) {
+            if (d.second == TDuration::DurationType::V_16TH
+                        || d.second == TDuration::DurationType::V_32ND
+                        || d.second == TDuration::DurationType::V_64TH
+                        || d.second == TDuration::DurationType::V_128TH) {
+                  return true;
+                  }
+            }
+      return false;
+      }
+
 void lengthenNote(
             MidiNote &note,
             int voice,
@@ -50,13 +63,25 @@ void lengthenNote(
       Q_ASSERT_X(note.quant != ReducedFraction(-1, 1),
                  "Simplify::lengthenNote", "Note quant value was not set");
 
-      double minNoteDurationCount = -1;   // double - because can be + 0.5 for dots
-      double minRestDurationCount = -1;
+      const auto origNoteDurations = Meter::toDurationList(
+                              durationStart - barStart, note.offTime - barStart, barFraction,
+                              tupletsForDuration, Meter::DurationType::NOTE, useDots, false);
+
+      const auto origRestDurations = Meter::toDurationList(
+                              note.offTime - barStart, endTime - barStart, barFraction,
+                              tupletsForDuration, Meter::DurationType::REST, useDots, false);
+
+                  // double - because can be + 0.5 for dots
+      double minNoteDurationCount = durationCount(origNoteDurations);
+      double minRestDurationCount = durationCount(origRestDurations);
+
       ReducedFraction bestOffTime(-1, 1);
 
-      for (ReducedFraction offTime = note.offTime; offTime <= endTime; offTime += note.quant) {
+      for (ReducedFraction offTime = note.offTime + note.quant;
+                           offTime <= endTime; offTime += note.quant) {
             double noteDurationCount = 0;
             double restDurationCount = 0;
+
             const auto noteDurations = Meter::toDurationList(
                               durationStart - barStart, offTime - barStart, barFraction,
                               tupletsForDuration, Meter::DurationType::NOTE, useDots, false);
@@ -69,13 +94,8 @@ void lengthenNote(
                   restDurationCount += durationCount(restDurations);
                   }
 
-            if (offTime == note.offTime) {      // initialization
-                  minNoteDurationCount = noteDurationCount;
-                  minRestDurationCount = restDurationCount;
-                  bestOffTime = offTime;
-                  }
-            else if (noteDurationCount + restDurationCount
-                            < minNoteDurationCount + minRestDurationCount) {
+            if (noteDurationCount + restDurationCount
+                              < minNoteDurationCount + minRestDurationCount) {
                   if (opers.quantize.humanPerformance || noteDurationCount == 1) {
                         minNoteDurationCount = noteDurationCount;
                         minRestDurationCount = restDurationCount;
@@ -84,17 +104,36 @@ void lengthenNote(
                   }
             }
 
-      Q_ASSERT_X(minNoteDurationCount != -1, "Simplify::lengthenNote", "Off time was not found");
+      Q_ASSERT_X(minNoteDurationCount != -1,
+                 "Simplify::lengthenNote", "Off time was not found");
 
-                  // check for staccato:
-                  //    don't apply staccato if note is tied
-                  //    (case noteOnTime != durationStart - another bar, for example)
-      if (noteOnTime == durationStart && minNoteDurationCount == 1) {
-            const double STACCATO_TOL = 0.3;
-            const double addedPart = ((bestOffTime - note.offTime)
-                                      / (bestOffTime - durationStart)).toDouble();
-            if (addedPart >= STACCATO_TOL)
+      // check for staccato:
+      //    don't apply staccato if note is tied
+      //    (case noteOnTime != durationStart - another bar, for example)
+
+      bool hasLossOfAccuracy = false;
+      const double addedPart = ((bestOffTime - note.offTime)
+                                / (bestOffTime - durationStart)).toDouble();
+      const double STACCATO_TOL = 0.3;
+
+      if (addedPart >= STACCATO_TOL) {
+            if (noteOnTime == durationStart && minNoteDurationCount == 1)
                   note.staccato = true;
+            else
+                  hasLossOfAccuracy = true;
+            }
+
+      // if the difference is only in one note/rest and there is some loss of accuracy -
+      // discard change because it silently reduces duration accuracy
+      // without significant improvement of readability
+
+      if (!opers.quantize.humanPerformance
+                  && (origNoteDurations.size() + origRestDurations.size())
+                       - (minNoteDurationCount + minRestDurationCount) <= 1
+                  && !hasComplexBeamedDurations(origNoteDurations)
+                  && !hasComplexBeamedDurations(origRestDurations)
+                  && hasLossOfAccuracy) {
+            return;
             }
 
       note.offTime = bestOffTime;
