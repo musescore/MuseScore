@@ -377,7 +377,8 @@ ReducedFraction findTupletRatio(const ReducedFraction &startPos,
 QList<std::pair<ReducedFraction, TDuration> >
 collectDurations(const std::map<ReducedFraction, Node> &nodes,
                  const std::vector<MidiTuplet::TupletData> &tupletsInBar,
-                 bool useDots)
+                 bool useDots,
+                 bool printRestRemains)
       {
       QList<std::pair<ReducedFraction, TDuration>> resultDurations;
 
@@ -388,7 +389,7 @@ collectDurations(const std::map<ReducedFraction, Node> &nodes,
                   break;
             const auto tupletRatio = findTupletRatio(it1->first, it2->first, tupletsInBar);
             const auto duration = tupletRatio * (it2->first - it1->first);
-            auto list = toDurationList(duration.fraction(), useDots, 1);
+            auto list = toDurationList(duration.fraction(), useDots, 1, printRestRemains);
             for (const auto &duration: list)
                   resultDurations.push_back({tupletRatio, duration});
             }
@@ -478,7 +479,8 @@ toDurationList(const ReducedFraction &startTickInBar,
                const ReducedFraction &barFraction,
                const std::vector<MidiTuplet::TupletData> &tupletsInBar,
                DurationType durationType,
-               bool useDots)
+               bool useDots,
+               bool printRestRemains)
       {
       if (startTickInBar < ReducedFraction(0, 1)
                   || endTickInBar <= startTickInBar || endTickInBar > barFraction)
@@ -529,7 +531,7 @@ toDurationList(const ReducedFraction &startTickInBar,
       const int tol = (durationType == DurationType::NOTE) ? 1 : 0;
       excludeNodes(nodes, tol, useDots);
 
-      return collectDurations(nodes, tupletsInBar, useDots);
+      return collectDurations(nodes, tupletsInBar, useDots, printRestRemains);
       }
 
 } // namespace Meter
