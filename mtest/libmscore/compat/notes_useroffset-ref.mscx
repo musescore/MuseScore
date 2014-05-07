@@ -13,6 +13,7 @@
       <bracketDistance>0.25</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
       <minNoteDistance>0.4</minNoteDistance>
+      <measureSpacing>1.14</measureSpacing>
       <ledgerLineWidth>0.12</ledgerLineWidth>
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>
@@ -215,7 +216,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Stem>
-            <pos x="0.382035" y="-3.5"/>
+            <pos x="-0.382035" y="-0.5"/>
             <userLen>0.2</userLen>
             </Stem>
           <Note>
