@@ -240,6 +240,14 @@ class TestImportMidi : public QObject, public MTest
       void clefTied() { noSimplification("clef_tied"); }
       void clefMelody() { noSimplification("clef_melody"); }
       void clefPrev() { noSimplification("clef_prev"); }
+
+      // notation simplification
+      void simplify16thStaccato() { mf("simplify_16th_staccato"); }
+      void simplify8thDont() { mf("simplify_8th_dont"); }
+      void simplify32ndStaccato() { mf("simplify_32nd_staccato"); }
+      void simplify8thDottedNoStaccato() { mf("simplify_8th_dotted_no_staccato"); }
+      void simplify4thDottedTied() { mf("simplify_4th_dotted_tied"); }
+      void simplifyTripletStaccato() { mf("simplify_triplet_staccato"); }
       };
 
 //---------------------------------------------------------
