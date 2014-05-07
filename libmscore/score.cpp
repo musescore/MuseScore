@@ -680,7 +680,8 @@ int Score::staffIdx(const Part* part) const
 void Score::setShowInvisible(bool v)
       {
       _showInvisible = v;
-      _updateAll     = true;
+      rebuildBspTree();
+      _updateAll = true;
       end();
       }
 
@@ -1744,9 +1745,9 @@ int Score::inputPos() const
 
 void Score::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      for(MeasureBase* m = first(); m; m = m->next())
+      for (MeasureBase* m = first(); m; m = m->next())
             m->scanElements(data, func, all);
-      foreach(Page* page, pages())
+      for (Page* page : pages())
             page->scanElements(data, func, all);
       }
 

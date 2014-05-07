@@ -283,12 +283,10 @@ class Element : public QObject {
       Q_PROPERTY(QPointF userOff     READ scriptUserOff WRITE scriptSetUserOff)
       Q_PROPERTY(QRectF  bbox        READ bbox )
 
-      LinkedElements* _links;
-      Element* _parent;
+      LinkedElements* _links = 0;
+      Element* _parent       = 0;
 
-      bool _selected;             ///< set if element is selected
       bool _generated;            ///< automatically generated Element
-      bool _visible;              ///< visibility attribute
       Placement _placement;
 
       mutable ElementFlags _flags;
@@ -308,6 +306,8 @@ class Element : public QObject {
 
    protected:
       Score* _score;
+      bool _selected;             ///< set if element is selected
+      bool _visible;              ///< visibility attribute
 
       QPointF _startDragPosition;   ///< used during drag
 

@@ -736,6 +736,7 @@ bool SLine::readProperties(XmlReader& e)
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
             ls->read(e);
+            ls->setVisible(visible());
             add(ls);
             }
       else if (tag == "length")

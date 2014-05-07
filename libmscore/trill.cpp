@@ -29,7 +29,7 @@ namespace Ms {
 
 void TrillSegment::draw(QPainter* painter) const
       {
-      painter->setPen(curColor(trill()));
+      painter->setPen(spanner()->curColor());
       drawSymbols(_symbols, painter);
       }
 
