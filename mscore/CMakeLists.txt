@@ -285,7 +285,6 @@ add_executable ( ${ExecutableName}
 #qt5_use_modules(${ExecutableName} Gui Widgets Network)
 
 target_link_libraries(mscore
-      libmscore
       awl
       mstyle
       diff_match_patch
@@ -297,6 +296,9 @@ target_link_libraries(mscore
       fluid
       effects
       vorbisfile
+      libmscore
+      xmlstream
+      qzip
       )
 
 #if MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by ther user), the output executable will be

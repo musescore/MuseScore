@@ -81,8 +81,6 @@ add_library (
       synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
       noteline.cpp spannermap.cpp
       bagpembell.cpp ambitus.cpp
-      ../thirdparty/qzip/qzip.cpp
-      ../thirdparty/xmlstream/xmlstream.cpp ../thirdparty/xmlstream/xmlutils.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (
