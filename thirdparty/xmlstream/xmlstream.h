@@ -50,7 +50,7 @@
 #include <QtCore/qscopedpointer.h>
 
 
-class Q_CORE_EXPORT XmlStreamStringRef {
+class XmlStreamStringRef {
     QString m_string;
     int m_position, m_size;
 public:
@@ -69,7 +69,7 @@ public:
 
 class XmlStreamReaderPrivate;
 class XmlStreamAttributes;
-class Q_CORE_EXPORT XmlStreamAttribute {
+class XmlStreamAttribute {
     XmlStreamStringRef m_name, m_namespaceUri, m_qualifiedName, m_value;
     void *reserved;
     uint m_isDefault : 1;
@@ -103,7 +103,7 @@ public:
 
 Q_DECLARE_TYPEINFO(XmlStreamAttribute, Q_MOVABLE_TYPE);
 
-class Q_CORE_EXPORT XmlStreamAttributes : public QVector<XmlStreamAttribute>
+class XmlStreamAttributes : public QVector<XmlStreamAttribute>
 {
 public:
     inline XmlStreamAttributes() {}
@@ -138,7 +138,7 @@ public:
 #endif
 };
 
-class Q_CORE_EXPORT XmlStreamNamespaceDeclaration {
+class XmlStreamNamespaceDeclaration {
     XmlStreamStringRef m_prefix, m_namespaceUri;
     void *reserved;
 
@@ -161,7 +161,7 @@ public:
 Q_DECLARE_TYPEINFO(XmlStreamNamespaceDeclaration, Q_MOVABLE_TYPE);
 typedef QVector<XmlStreamNamespaceDeclaration> XmlStreamNamespaceDeclarations;
 
-class Q_CORE_EXPORT XmlStreamNotationDeclaration {
+class XmlStreamNotationDeclaration {
     XmlStreamStringRef m_name, m_systemId, m_publicId;
     void *reserved;
 
@@ -185,7 +185,7 @@ public:
 Q_DECLARE_TYPEINFO(XmlStreamNotationDeclaration, Q_MOVABLE_TYPE);
 typedef QVector<XmlStreamNotationDeclaration> XmlStreamNotationDeclarations;
 
-class Q_CORE_EXPORT XmlStreamEntityDeclaration {
+class XmlStreamEntityDeclaration {
     XmlStreamStringRef m_name, m_notationName, m_systemId, m_publicId, m_value;
     void *reserved;
 
@@ -215,7 +215,7 @@ Q_DECLARE_TYPEINFO(XmlStreamEntityDeclaration, Q_MOVABLE_TYPE);
 typedef QVector<XmlStreamEntityDeclaration> XmlStreamEntityDeclarations;
 
 
-class Q_CORE_EXPORT XmlStreamEntityResolver
+class XmlStreamEntityResolver
 {
 public:
     virtual ~XmlStreamEntityResolver();
@@ -346,7 +346,7 @@ private:
 
 class XmlStreamWriterPrivate;
 
-class Q_CORE_EXPORT XmlStreamWriter
+class XmlStreamWriter
 {
     QDOC_PROPERTY(bool autoFormatting READ autoFormatting WRITE setAutoFormatting)
     QDOC_PROPERTY(int autoFormattingIndent READ autoFormattingIndent WRITE setAutoFormattingIndent)
