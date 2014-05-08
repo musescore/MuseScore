@@ -3498,27 +3498,8 @@ void Score::undoInsertTime(int tick, int len)
 void Score::insertTime(int tick, int len)
       {
       for (Score* score : scoreList()) {
-            for(Staff* staff : score->staves()) {
-                  KeyList* kl = staff->keymap();
-                  KeyList kl2;
-                  for (auto i = kl->upper_bound(tick); i != kl->end();) {
-                        KeySigEvent kse = i->second;
-                        int key = i->first;
-                        kl->erase(i++);
-                        kl2[key + len] = kse;
-                        }
-                  kl->insert(kl2.begin(), kl2.end());
-
-                  ClefList* cl = staff->clefList();
-                  ClefList cl2;
-                  for (auto i = cl->upper_bound(tick); i != cl->end();) {
-                        ClefTypeList ctl = i->second;
-                        int key = i->first;
-                        cl->erase(i++);
-                        cl2[key + len] = ctl;
-                        }
-                  cl->insert(cl2.begin(), cl2.end());
-                  }
+            for (Staff* staff : score->staves())
+                  staff->insertTime(tick, len);
             }
       }
 

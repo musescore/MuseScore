@@ -883,7 +883,7 @@ qDebug("BeginRepeat=============================================");
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::SegClef, 0);
             segment->add(clef);
-
+            clef->staff()->setClef(0, clef->clefTypeList());
 
             Channel& ch = instr->channel(0);
             if (midiChannel == PERC_DEFAULT_STAFF_TYPE) {
@@ -1470,6 +1470,7 @@ void GuitarPro3::read(QFile* fp)
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::SegClef, 0);
             segment->add(clef);
+            clef->staff()->setClef(0, clef->clefTypeList());
 
             Channel& ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
@@ -2177,6 +2178,7 @@ void GuitarPro4::read(QFile* fp)
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::SegClef, 0);
             segment->add(clef);
+            clef->staff()->setClef(0, clef->clefTypeList());
 
 
             Channel& ch = instr->channel(0);
@@ -2535,7 +2537,7 @@ void GuitarPro5::readNote(int string, Note* note)
             uchar noteType = readUChar();
             if (noteType == 1) {
                   }
-            if (noteType == 2) {
+            else if (noteType == 2) {
                   tieNote = true;
                   }
             else if (noteType == 3) {                 // dead notes
@@ -2873,8 +2875,9 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   chord->setStemDirection(Direction::DOWN);
             else if (rr == 0xa)
                   chord->setStemDirection(Direction::UP);
-            else
-                  qDebug("  1beat read 0x%02x", rr);
+            else {
+                  ; // qDebug("  1beat read 0x%02x", rr);
+                  }
             }
       int r = readChar();
       if (r & 0x8) {
@@ -3040,7 +3043,7 @@ void GuitarPro5::readTracks()
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::SegClef, 0);
             segment->add(clef);
-
+            clef->staff()->setClef(0, clef->clefTypeList());
 
             Channel& ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
@@ -3086,8 +3089,8 @@ void GuitarPro5::readMeasures()
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                   readMeasure(measure, staffIdx, tuplets);
                   if (!(((bar == (measures-1)) && (staffIdx == (staves-1))))) {
-                        int a = readChar();
-                        qDebug("    ======skip %02x", a);
+                        /*int a = */  readChar();
+                        // qDebug("    ======skip %02x", a);
                         }
                   }
             }

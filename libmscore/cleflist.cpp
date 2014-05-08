@@ -41,10 +41,12 @@ bool ClefTypeList::operator!=(const ClefTypeList& t) const
 
 ClefTypeList ClefList::clef(int tick) const
       {
+      if (empty())
+            return ClefTypeList();
       auto i = upper_bound(tick);
-      if (i != begin())
-            --i;
-      return i->second;
+      if (i == begin())
+            return ClefTypeList();
+      return (--i)->second;
       }
 
 //---------------------------------------------------------
@@ -53,11 +55,17 @@ ClefTypeList ClefList::clef(int tick) const
 
 void ClefList::setClef(int tick, ClefTypeList ctl)
       {
-      auto i = find(tick);
-      if (i == end())
-            insert(std::pair<int, ClefTypeList>(tick, ctl));
-      else
-            i->second = ctl;
+      if (clef(tick) == ctl)
+            return;
+      if (clef(tick-1) == ctl)
+            erase(tick);
+      else  {
+            auto i = find(tick);
+            if (i == end())
+                  insert(std::pair<int, ClefTypeList>(tick, ctl));
+            else
+                  i->second = ctl;
+            }
       }
 
 //---------------------------------------------------------
@@ -79,6 +87,5 @@ void ClefList::read(XmlReader& e, Score* cs)
                   e.unknown();
             }
       }
-
 }
 

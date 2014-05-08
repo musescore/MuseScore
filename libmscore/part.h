@@ -23,7 +23,6 @@ class Xml;
 class Staff;
 class Score;
 class InstrumentTemplate;
-class ClefList;
 
 //---------------------------------------------------------
 //   @@ Part

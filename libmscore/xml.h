@@ -26,7 +26,6 @@ namespace Ms {
 class Spanner;
 class Beam;
 class Tuplet;
-class ClefList;
 class Measure;
 
 //---------------------------------------------------------

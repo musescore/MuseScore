@@ -37,7 +37,6 @@ class KeyList;
 class StaffType;
 class Staff;
 class StringData;
-class ClefList;
 struct ClefTypeList;
 class Segment;
 class Clef;
@@ -141,13 +140,13 @@ class Staff : public QObject {
       QList <BracketItem> brackets() const { return _brackets; }
       void cleanupBrackets();
 
+      ClefList* clefList()           { return &clefs; }
       ClefTypeList clefTypeList(int tick) const;
       ClefType clef(int tick) const;
-      ClefType clef(Segment*) const;
-      void addClef(Clef*);
-      void removeClef(Clef*);
       void setClef(int, const ClefTypeList&);
-      void setClef(int, ClefType);
+      void setClef(int tick, const ClefType& ct) { setClef(tick, ClefTypeList(ct, ct)); }
+      void removeClef(int);
+      void undoSetClef(int, const ClefTypeList&);
 
       void addTimeSig(TimeSig*);
       void removeTimeSig(TimeSig*);
@@ -213,11 +212,11 @@ class Staff : public QObject {
       bool genKeySig();
       bool showLedgerLines();
 
-      ClefList* clefList() { return &clefs; }
 
       QColor color() const                { return _color; }
       void setColor(const QColor& val)    { _color = val;    }
       void undoSetColor(const QColor& val);
+      void insertTime(int tick, int len);
       };
 
 }     // namespace Ms

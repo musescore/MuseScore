@@ -258,6 +258,18 @@ void StaffType::write(Xml& xml) const
 
 void StaffType::read(XmlReader& e)
       {
+      QString group = e.attribute("group", "pitched");
+      if (group == "tablature")
+            _group = TAB_STAFF_GROUP;
+      else if (group == "percussion")
+            _group = PERCUSSION_STAFF_GROUP;
+      else if (group == "pitched")
+            _group = STANDARD_STAFF_GROUP;
+      else {
+            qDebug("StaffType::read: unknown group: %s", qPrintable(group));
+            _group = STANDARD_STAFF_GROUP;
+            }
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")

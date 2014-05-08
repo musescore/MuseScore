@@ -15,7 +15,7 @@
 
 /**
  \file
- Definition of classes Clef and ClefList.
+ Definition of classes Clef
 */
 
 #include "element.h"
@@ -66,8 +66,8 @@ enum class ClefType : signed char {
 //---------------------------------------------------------
 
 struct ClefTypeList {
-      ClefType _concertClef;
-      ClefType _transposingClef;
+      ClefType _concertClef = ClefType::G;
+      ClefType _transposingClef = ClefType::G;
 
       ClefTypeList() {}
       ClefTypeList(ClefType a, ClefType b) : _concertClef(a), _transposingClef(b) {}
@@ -149,7 +149,7 @@ class Clef : public Element {
       virtual void draw(QPainter*) const;
       virtual void read(XmlReader&);
       virtual void write(Xml&) const;
-      
+
       virtual bool isEditable() const                    { return false; }
 
       virtual void addElement(Element* e, qreal x, qreal y);
@@ -165,6 +165,7 @@ class Clef : public Element {
       void undoSetShowCourtesy(bool v);
 
       static ClefType clefType(const QString& s);
+      const char* clefTypeName();
 
       ClefType clefType() const;
       void setClefType(ClefType i);
