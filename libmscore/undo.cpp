@@ -577,6 +577,8 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   clef->setParent(destSeg);
                   score->undo(new AddElement(clef));
                   }
+            undo(new SetClefType(clef->staff(), tick, clef->clefTypeList()));
+            cmdUpdateNotes();
             }
       }
 
@@ -3087,7 +3089,6 @@ void ChangeClefType::flip()
       clef->setConcertClef(concertClef);
       clef->setTransposingClef(transposingClef);
       clef->setClefType(clef->concertPitch() ? concertClef : transposingClef);
-      clef->staff()->addClef(clef);
 
       Segment* segment = clef->segment();
       updateNoteLines(segment, clef->track());
@@ -3344,6 +3345,17 @@ void ChangeNoteEvent::flip()
 
       // TODO:
       note->chord()->setPlayEventType(PlayEventType::User);
+      }
+
+//---------------------------------------------------------
+//   SetClefType
+//---------------------------------------------------------
+
+void SetClefType::flip()
+      {
+      ClefTypeList ol = staff->clefTypeList(tick);
+      staff->setClef(tick, ctl);
+      ctl = ol;
       }
 }
 

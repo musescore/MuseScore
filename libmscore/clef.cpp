@@ -210,7 +210,7 @@ void Clef::layout()
             }
 
       // if nothing changed since last layout, do nothing
-//      if (curClefType == clefType() && curLines == lines && curLineDist == lineDist)
+//DEBUG      if (curClefType == clefType() && curLines == lines && curLineDist == lineDist)
 //            return;
       // if something has changed, cache new values and re-layout
       curClefType = clefType();
@@ -470,6 +470,15 @@ void Clef::setClefType(const QString& s)
             ct = ClefType::G;
             }
       setClefType(ct);
+      }
+
+//---------------------------------------------------------
+//   clefTypeName
+//---------------------------------------------------------
+
+const char* Clef::clefTypeName()
+      {
+      return ClefInfo::tag(clefType());
       }
 
 //---------------------------------------------------------

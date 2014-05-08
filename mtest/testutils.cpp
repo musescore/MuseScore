@@ -24,6 +24,7 @@
 #include "mscore/musescoreCore.h"
 #include "mscore/shortcut.h"
 #include "libmscore/xml.h"
+#include "libmscore/excerpt.h"
 
 namespace Ms {
 
@@ -148,6 +149,8 @@ Score* MTest::readCreatedScore(const QString& name)
             return 0;
             }
       score->updateNotes();
+      for (Excerpt* e : score->excerpts())
+            e->score()->updateNotes();
       return score;
       }
 

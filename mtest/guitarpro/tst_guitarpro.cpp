@@ -15,6 +15,7 @@
 #include "mtest/testutils.h"
 #include "libmscore/score.h"
 #include "mscore/preferences.h"
+#include "libmscore/excerpt.h"
 
 #define DIR QString("guitarpro/")
 
@@ -29,7 +30,7 @@ class TestGuitarPro : public QObject, public MTest
       Q_OBJECT
 
       void gpReadTest(const char* file,  const char* ext);
-      
+
 private slots:
       void initTestCase();
       void gpTestIrrTuplet() { gpReadTest("testIrrTuplet", "gp4"); }
@@ -71,6 +72,7 @@ void TestGuitarPro::gpReadTest(const char* file, const char* ext)
       {
       Score* score = readScore(DIR + file + "." + ext);
       QVERIFY(score);
+
       score->doLayout();
       QVERIFY(saveCompareScore(score, QString("%1.%2.mscx").arg(file).arg(ext),
                                DIR + QString("%1.%2-ref.mscx").arg(file).arg(ext)));

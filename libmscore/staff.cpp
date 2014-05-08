@@ -172,7 +172,6 @@ Staff::Staff(Score* s)
       _updateKeymap   = true;
       _linkedStaves   = 0;
       _color          = MScore::defaultColor;
-      setClef(0, ClefType::G);
       }
 
 Staff::Staff(Score* s, Part* p, int rs)
@@ -190,7 +189,6 @@ Staff::Staff(Score* s, Part* p, int rs)
       _updateKeymap   = true;
       _linkedStaves   = 0;
       _color          = MScore::defaultColor;
-      setClef(0, ClefType::G);
       }
 
 //---------------------------------------------------------
@@ -221,34 +219,8 @@ ClefTypeList Staff::clefTypeList(int tick) const
 
 ClefType Staff::clef(int tick) const
       {
-      ClefTypeList c = clefs.clef(tick);
+      ClefTypeList c = clefTypeList(tick);
       return score()->styleB(ST_concertPitch) ? c._concertClef : c._transposingClef;
-      }
-
-ClefType Staff::clef(Segment* segment) const
-      {
-      return clef(segment->tick());
-      }
-
-//---------------------------------------------------------
-//   timeStretch
-//---------------------------------------------------------
-
-Fraction Staff::timeStretch(int tick) const
-      {
-      TimeSig* timesig = timeSig(tick);
-      return timesig == 0 ? Fraction(1,1) : timesig->stretch();
-      }
-
-//---------------------------------------------------------
-//   addClef
-//---------------------------------------------------------
-
-void Staff::addClef(Clef* clef)
-      {
-      int tick = clef->segment()->tick();
-      if (tick == 0 || !clef->generated())
-            clefs.setClef(tick, clef->clefTypeList());
       }
 
 //---------------------------------------------------------
@@ -260,29 +232,23 @@ void Staff::setClef(int tick, const ClefTypeList& ctl)
       clefs.setClef(tick, ctl);
       }
 
-void Staff::setClef(int tick, ClefType ct)
+//---------------------------------------------------------
+//   undoSetClef
+//---------------------------------------------------------
+
+void Staff::undoSetClef(int tick, const ClefTypeList& ctl)
       {
-      setClef(tick, ClefTypeList(ct, ct));
+      score()->undo(new SetClefType(this, tick, ctl));
       }
 
 //---------------------------------------------------------
-//   removeClef
+//   timeStretch
 //---------------------------------------------------------
 
-void Staff::removeClef(Clef* clef)
+Fraction Staff::timeStretch(int tick) const
       {
-      if (clef->generated())
-            return;
-      int tick = clef->segment()->tick();
-      if (tick == 0) {
-            setClef(0, ClefType::G);
-            return;
-            }
-      auto i = clefs.find(tick);
-      if (i != clefs.end())
-            clefs.erase(i);
-      else
-            qDebug("Staff::removeClef: Clef at %d not found", tick);
+      TimeSig* timesig = timeSig(tick);
+      return timesig == 0 ? Fraction(1,1) : timesig->stretch();
       }
 
 //---------------------------------------------------------
@@ -431,8 +397,9 @@ void Staff::read(XmlReader& e)
                   qDebug("Staff::read staffTypeIdx %d", staffTypeIdx);
                   _staffType = *StaffType::preset(staffTypeIdx);
                   }
-            else if (tag == "StaffType")
+            else if (tag == "StaffType") {
                   _staffType.read(e);
+                  }
             else if (tag == "small")
                   setSmall(e.readInt());
             else if (tag == "invisible")
@@ -810,7 +777,7 @@ bool Staff::genKeySig()
 bool Staff::showLedgerLines()
       {
       if (_staffType.group() == TAB_STAFF_GROUP)
-                  return false;
+            return false;
       else
             return _staffType.showLedgerLines();
       }
@@ -832,6 +799,31 @@ void Staff::updateOttava(Ottava* o)
 void Staff::undoSetColor(const QColor& /*val*/)
       {
 //      score()->undoChangeProperty(this, P_COLOR, val);
+      }
+
+//---------------------------------------------------------
+//   insertTime
+//---------------------------------------------------------
+
+void Staff::insertTime(int tick, int len)
+      {
+      KeyList kl2;
+      for (auto i = _keymap.upper_bound(tick); i != _keymap.end();) {
+            KeySigEvent kse = i->second;
+            int key = i->first;
+            _keymap.erase(i++);
+            kl2[key + len] = kse;
+            }
+      _keymap.insert(kl2.begin(), kl2.end());
+
+      ClefList cl2;
+      for (auto i = clefs.upper_bound(tick); i != clefs.end();) {
+            ClefTypeList ctl = i->second;
+            int key = i->first;
+            clefs.erase(i++);
+            cl2.setClef(key + len, ctl);
+            }
+      clefs.insert(cl2.begin(), cl2.end());
       }
 
 }

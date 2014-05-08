@@ -455,7 +455,7 @@ Score::FileError Score::read114(XmlReader& e)
                   s->setBarLineSpan(n - idx);
                   }
             // first clef can be implicit in 1.3 #22607
-            if(s->clefList()->count(0) == 0) {
+            if (s->clefList()->count(0) == 0) {
                   Segment* seg = firstMeasure()->getSegment(Segment::SegClef, 0);
                   ClefType ct = Clef::clefType("0");
                   Clef* clef = new Clef(this);

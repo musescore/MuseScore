@@ -1297,16 +1297,23 @@ void Score::deleteItem(Element* el)
             case Element::CLEF:
                   {
                   Clef* clef = static_cast<Clef*>(el);
+                  int tick = clef->segment()->tick();
                   Measure* m = clef->measure();
                   if (m->isMMRest()) {
                         // propagate to original measure
                         m = m->mmRestLast();
                         Segment* s = m->findSegment(Segment::SegClef, clef->segment()->tick());
-                        if (s && s->element(clef->track()))
-                              undoRemoveElement(s->element(clef->track()));
+                        if (s && s->element(clef->track())) {
+                              Clef* c = static_cast<Clef*>(s->element(clef->track()));
+                              undoRemoveElement(c);
+                              undo(new SetClefType(c->staff(), tick, c->staff()->clefTypeList(tick-1)));
+                              }
                         }
-                  else
-                        undoRemoveElement(el);
+                  else {
+                        undoRemoveElement(clef);
+                        undo(new SetClefType(clef->staff(), tick, clef->staff()->clefTypeList(tick-1)));
+                        }
+                  cmdUpdateNotes();
                   }
                   break;
 

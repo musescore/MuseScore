@@ -122,7 +122,7 @@ void KeySig::layout()
       // determine current clef for this staff
       ClefType clef = ClefType::G;
       if (staff())
-            clef = staff()->clef(segment());
+            clef = staff()->clef(segment()->tick());
 
       int t1   = _sig.accidentalType();
       int t2   = _sig.naturalType();

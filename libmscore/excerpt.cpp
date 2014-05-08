@@ -374,6 +374,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
       for (int dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
             Staff* srcStaff = oscore->staff(map[dstStaffIdx]);
             Staff* dstStaff = score->staff(dstStaffIdx);
+            *dstStaff->clefList() = *srcStaff->clefList();
             if (srcStaff->primaryStaff()) {
                   int span = srcStaff->barLineSpan();
                   int sIdx = srcStaff->idx();

@@ -181,9 +181,7 @@ Segment::~Segment()
       foreach(Element* e, _elist) {
             if (!e)
                   continue;
-            if (e->type() == CLEF)
-                  e->staff()->removeClef(static_cast<Clef*>(e));
-            else if (e->type() == TIMESIG)
+            if (e->type() == TIMESIG)
                   e->staff()->removeTimeSig(static_cast<TimeSig*>(e));
             delete e;
             }
@@ -462,7 +460,6 @@ void Segment::add(Element* el)
                            score()->sigmap()->pos(tick()), tick(), track, score());
                         }
                   _elist[track] = el;
-                  el->staff()->addClef(static_cast<Clef*>(el));
                   empty = false;
                   break;
 
@@ -583,16 +580,12 @@ void Segment::remove(Element* el)
                   removeAnnotation(el);
                   break;
 
-            case CLEF:
-                  _elist[track] = 0;
-                  el->staff()->removeClef(static_cast<Clef*>(el));
-                  break;
-
             case TIMESIG:
                   _elist[track] = 0;
                   el->staff()->removeTimeSig(static_cast<TimeSig*>(el));
                   break;
 
+            case CLEF:
             case KEYSIG:
             case BAR_LINE:
             case BREATH:
