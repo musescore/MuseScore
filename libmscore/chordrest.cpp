@@ -367,6 +367,15 @@ void ChordRest::setSmall(bool val)
       }
 
 //---------------------------------------------------------
+//   undoSetSmall
+//---------------------------------------------------------
+
+void ChordRest::undoSetSmall(bool val)
+      {
+      undoChangeProperty(P_SMALL, val);
+      }
+
+//---------------------------------------------------------
 //   layoutArticulations
 //    called from chord()->layout()
 //---------------------------------------------------------
