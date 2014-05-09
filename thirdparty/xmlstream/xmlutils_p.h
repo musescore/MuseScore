@@ -66,7 +66,7 @@ class QXmlCharRange;
   \short This class contains helper functions related to XML, for validating character classes,
          productions in the XML specification, and so on.
  */
-class Q_CORE_EXPORT QXmlUtils
+class QXmlUtils
 {
 public:
     static bool isEncName(const QString &encName);
