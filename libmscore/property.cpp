@@ -263,9 +263,9 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   {
                   QString value(e.readElementText());
                   if (value == "left" || value == "1")
-                        return QVariant(DirectionH::DH_LEFT);
+                        return QVariant(int(DirectionH::DH_LEFT));
                   else if (value == "right" || value == "2")
-                        return QVariant(DirectionH::DH_RIGHT);
+                        return QVariant(int(DirectionH::DH_RIGHT));
                   else if (value == "auto")
                         return QVariant(int(DirectionH::DH_AUTO));
                   }

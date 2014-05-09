@@ -500,7 +500,7 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
             // whether or not we actually do this is determined later (based on user mirror property)
             bool nmirror = (chord->up() != isLeft);
 
-            // by defaults, notes and dots are not hidden
+            // by default, notes and dots are not hidden
             // this may be changed later to allow unisons to share note heads
             note->setHidden(false);
             note->setDotsHidden(false);
@@ -510,35 +510,6 @@ qreal Score::layoutChords2(QList<Note*>& notes, bool up)
             // if there are conflicts between voices
             chord->rxpos() = 0.0;
 
-<<<<<<< HEAD
-            // handle conflict
-            if (conflict && (nmirror == mirror)) {          // && idx
-                  if (sameHead) {
-                        Note* pnote = notes[idx-incIdx];    // idx-1
-                        if (!(pnote->parent()->isNudged() || note->parent()->isNudged())) {
-                              if (ticks > pnote->chord()->actualTicks()) {
-                                    pnote->setHidden(true);
-                                    if (chord->dots() == pnote->chord()->dots())
-                                          pnote->setDotsHidden(true);
-                                    // TODO: pnote->setAccidentalType(ACC_NONE);
-                                    }
-                              else {
-                                    // TODO: note->setAccidentalType(ACC_NONE);
-                                    note->setHidden(true);
-                                    if (chord->dots() == pnote->chord()->dots())
-                                          note->setDotsHidden(true);
-                                    }
-                              }
-                        }
-                  else {
-                        qreal x = note->headWidth() - note->point(styleS(ST_stemWidth));
-                        if ((line > ll) || !chord->up())
-                              note->chord()->rxpos() = x;
-                        else
-                              notes[idx-incIdx]->chord()->rxpos() = x;
-                        note->rxpos() = 0.0;
-                        }
-                  }
             // let user mirror property override the default we calculated
             if (note->userMirror() == DirectionH::DH_AUTO) {
                   mirror = nmirror;
