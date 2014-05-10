@@ -243,6 +243,10 @@ Chord::Chord(const Chord& c)
                    ChordLine* cl = static_cast<ChordLine*>(e);
                    add(new ChordLine(*cl));
                    }
+            else if (e->type() == Element::SLUR) {
+                  Slur* sl = static_cast<Slur*>(e);
+                  add(new Slur(*sl));
+                  }
             }
       }
 
@@ -260,6 +264,10 @@ Chord* Chord::linkedClone()
       n = _graceNotes.size();
       for (int i = 0; i < n; ++i)
             _graceNotes[i]->linkTo(chord->_graceNotes[i]);
+      for (int i = 0; i < _el.size(); ++i) {
+            _el[i]->linkTo(chord->el()[i]);
+            }
+
       return chord;
       }
 
