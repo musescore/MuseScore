@@ -630,6 +630,9 @@ Score::FileError Score::read114(XmlReader& e)
             }
       if (style(ST_minEmptyMeasures).toInt() == 0)
             style()->set(ST_minEmptyMeasures, 1);
+      // hack: net overall effect of layout changes has been for things to take slightly more room
+      qreal adjustedSpacing = qMax(styleD(ST_measureSpacing) * 0.95, 1.0);
+      style()->set(ST_measureSpacing, adjustedSpacing);
 
       _showOmr = false;
 
