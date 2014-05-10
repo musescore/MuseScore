@@ -412,6 +412,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void adjustCanvasPosition(const Element* el, bool playBack);
       virtual void setCursor(const QCursor& c) { QWidget::setCursor(c); }
       virtual QCursor cursor() const { return QWidget::cursor(); }
+      void loopUpdate(bool val)   {  loopToggled(val); }
 
       OmrView* omrView() const    { return _omrView; }
       void setOmrView(OmrView* v) { _omrView = v;    }
