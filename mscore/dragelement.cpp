@@ -94,6 +94,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
             _score->doLayoutSystems();
             _score->layoutSpanner();
             update();
+            loopUpdate(getAction("loop")->isChecked());
             return;
             }
 
