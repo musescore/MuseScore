@@ -2443,17 +2443,6 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
 //   metronome
 //---------------------------------------------------------
 
-static QString ucs4ToString(int uc)
-      {
-      QString s;
-      if (uc & 0xffff0000) {
-            s = QChar(QChar::highSurrogate(uc));
-            s += QChar(QChar::lowSurrogate(uc));
-            }
-      else
-            s = QChar(uc);
-      return s;
-      }
 /**
  Read the MusicXML metronome element.
  */
@@ -2475,42 +2464,45 @@ static QString ucs4ToString(int uc)
 static void metronome(QDomElement e, Text* t)
       {
       if (!t) return;
-      bool textAdded = false;
       QString tempoText = t->text();
+      QString perMinute;
 
       QString parenth = e.attribute("parentheses");
       if (parenth == "yes")
             tempoText += "(";
+      TDuration dur1;
+      TDuration dur2;
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             QString txt = e.text();
             if (e.tagName() == "beat-unit") {
-                  if (textAdded) tempoText += " = ";
-                  if (txt == "breve") tempoText += ucs4ToString(0x1d15c);
-                  else if (txt == "whole") tempoText += ucs4ToString(0x1d15d);
-                  else if (txt == "half") tempoText += ucs4ToString(0x1d15e);
-                  else if (txt == "quarter") tempoText += ucs4ToString(0x1d15f);
-                  else if (txt == "eighth") tempoText += ucs4ToString(0x1d160);
-                  else if (txt == "16th") tempoText += ucs4ToString(0x1d161);
-                  else if (txt == "32nd") tempoText += ucs4ToString(0x1d162);
-                  else if (txt == "64th") tempoText += ucs4ToString(0x1d163);
-                  else tempoText += txt;
-                  textAdded = true;
-                  }
+                  // set first dur that is still invalid
+                  if (!dur1.isValid()) dur1.setType(txt);
+                  else if (!dur2.isValid()) dur2.setType(txt);
+            }
             else if (e.tagName() == "beat-unit-dot") {
-                  tempoText += ucs4ToString(0x1d16d);
-                  textAdded = true;
-                  }
+                  if (dur2.isValid()) dur2.setDots(1);
+                  else if (dur1.isValid()) dur1.setDots(1);
+            }
             else if (e.tagName() == "per-minute") {
-                  if (textAdded) tempoText += " = ";
-                  tempoText += txt;
-                  textAdded = true;
-                  }
+                  perMinute = txt;
+            }
             else
                   domError(e);
             } // for (e = e.firstChildElement(); ...
+
+      if (dur1.isValid())
+            tempoText += TempoText::duration2tempoTextString(dur1);
+      if (dur2.isValid()) {
+            tempoText += " = ";
+            tempoText += TempoText::duration2tempoTextString(dur2);
+            }
+      else if (perMinute != "") {
+            tempoText += " = ";
+            tempoText += perMinute;
+            }
       if (parenth == "yes")
             tempoText += ")";
-      t->setPlainText(tempoText);
+      t->setText(tempoText);
       }
 
 //---------------------------------------------------------
@@ -2813,6 +2805,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   t = new TempoText(score);
                   double tpo = tempo.toDouble()/60.0;
                   ((TempoText*) t)->setTempo(tpo);
+                  ((TempoText*) t)->setFollowText(true);
                   score->setTempo(tick, tpo);
                   }
             else {
