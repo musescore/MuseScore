@@ -119,6 +119,23 @@ int TempoText::findTempoDuration(const QString& s, int& len, TDuration& dur)
 
       return -1;
       }
+      
+//---------------------------------------------------------
+//   duration2tempoTextString
+//    find the tempoText string representation for duration
+//---------------------------------------------------------
+
+QString TempoText::duration2tempoTextString(const TDuration dur)
+      {
+      for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
+            if (tp[i].d == dur) {
+                  QString res = tp[i].pattern;
+                  res.remove("\\s*");
+                  return res;
+                  }
+            }
+      return "";
+      }
 
 //---------------------------------------------------------
 //   textChanged
@@ -137,8 +154,6 @@ void TempoText::textChanged()
                   QStringList sl = re.capturedTexts();
                   if (sl.size() == 2) {
                         qreal nt = qreal(sl[1].toInt()) * tp[i].f;
-                        qDebug("TempoText::textChanged() text '%s' nt %g",
-                               qPrintable(text()), nt);
                         if (nt != _tempo) {
                               _tempo = qreal(sl[1].toInt()) * tp[i].f;
                               if(segment())
