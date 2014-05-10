@@ -120,7 +120,9 @@ class NoteHead : public Symbol {
 //   @P line              int   notehead position (read only)
 //   @P fret              int   fret number in tablature
 //   @P string            int   string number in tablature
-//   @P tpc               int   tonal pitch class
+//   @P tpc               int   tonal pitch class, as per concert pitch setting
+//   @P tpc1              int   tonal pitch class, non transposed
+//   @P tpc2              int   tonal pitch class, transposed
 //   @P pitch             int   midi pitch
 //   @P ppitch            int   actual played midi pitch (honoring ottavas) (read only)
 //   @P ghost             bool  ghost note (guitar: death note)
