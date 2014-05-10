@@ -262,9 +262,9 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case T_DIRECTION_H:
                   {
                   QString value(e.readElementText());
-                  if (value == "left")
+                  if (value == "left" || value == "1")
                         return QVariant(int(DirectionH::DH_LEFT));
-                  else if (value == "right")
+                  else if (value == "right" || value == "2")
                         return QVariant(int(DirectionH::DH_RIGHT));
                   else if (value == "auto")
                         return QVariant(int(DirectionH::DH_AUTO));

@@ -13,6 +13,7 @@
       <bracketDistance>0.25</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
       <minNoteDistance>0.4</minNoteDistance>
+      <measureSpacing>1.14</measureSpacing>
       <ledgerLineWidth>0.12</ledgerLineWidth>
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>
@@ -106,7 +107,6 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <offset x="-1" y="0"/>
           <durationType>quarter</durationType>
           <Note>
             <pitch>72</pitch>
@@ -124,7 +124,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pos x="1" y="1.5"/>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -152,7 +151,6 @@
             <tpc>17</tpc>
             </Note>
           <Note>
-            <pos x="1" y="1.5"/>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -171,9 +169,6 @@
       <Measure number="4">
         <Chord>
           <durationType>quarter</durationType>
-          <Stem>
-            <pos x="1.065" y="-0.5"/>
-            </Stem>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -183,7 +178,6 @@
             <tpc>18</tpc>
             </Note>
           <Note>
-            <pos x="1" y="-0.5"/>
             <pitch>79</pitch>
             <tpc>15</tpc>
             </Note>
@@ -198,9 +192,6 @@
       <Measure number="5">
         <Chord>
           <durationType>quarter</durationType>
-          <Stem>
-            <pos x="0.065" y="-2.5"/>
-            </Stem>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -210,7 +201,6 @@
             <tpc>18</tpc>
             </Note>
           <Note>
-            <pos x="0" y="-2.5"/>
             <pitch>79</pitch>
             <tpc>15</tpc>
             </Note>
@@ -226,7 +216,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Stem>
-            <pos x="0.617965" y="-3.5"/>
+            <pos x="-0.382035" y="-0.5"/>
             <userLen>0.2</userLen>
             </Stem>
           <Note>
@@ -238,7 +228,6 @@
             <tpc>18</tpc>
             </Note>
           <Note>
-            <pos x="1" y="-3.5"/>
             <pitch>79</pitch>
             <tpc>15</tpc>
             </Note>
