@@ -7637,6 +7637,7 @@ bool getMiddleUnit(
 			OveSong* ove, int /*part*/, int /*track*/,
 			Measure* measure1, Measure* measure2, int unit1, int /*unit2*/,
 			Measure* middleMeasure, int& middleUnit) {
+	Q_UNUSED(middleMeasure); // avoid (bogus?) warning to show up
 	QList<int> barUnits;
 	int i;
 	int bar1Index = measure1->getBarNumber()->getIndex();
