@@ -22,11 +22,17 @@
 
 namespace Ms {
 
-      
 //---------------------------------------------------------
-//   x
+//   MScoreTextToMXML
 //---------------------------------------------------------
 
+class MScoreTextToMXML {
+      QString text;
+
+public:
+      MScoreTextToMXML(const QString& t);
+      void parse() const;
+};
 
 } // namespace Ms
 
