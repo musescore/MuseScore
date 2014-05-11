@@ -80,8 +80,62 @@ void TempoText::read(XmlReader& e)
 struct TempoPattern {
       const char* pattern;
       qreal f;
-      TempoPattern(const char* s, qreal v) : pattern(s), f(v) {}
+      TDuration d;
+      TempoPattern(const char* s, qreal v, TDuration::DurationType val, int dots = 0) : pattern(s), f(v), d(val) { d.setDots(dots); }
       };
+
+// note: findTempoDuration requires the longer patterns to be before the shorter patterns in tp
+
+static const TempoPattern tp[] = {
+      TempoPattern("<sym>noteHalfUp</sym>\\s*<sym>textAugmentationDot</sym>",    1.5/30.0,  TDuration::V_HALF, 1),    // dotted 1/2
+      TempoPattern("<sym>noteQuarterUp</sym>\\s*<sym>textAugmentationDot</sym>", 1.5/60.0,  TDuration::V_QUARTER, 1), // dotted 1/4
+      TempoPattern("<sym>note8thUp</sym>\\s*<sym>textAugmentationDot</sym>",     1.5/120.0, TDuration::V_EIGHT, 1),   // dotted 1/8
+      TempoPattern("<sym>noteHalfUp</sym>",                                      1.0/30.0,  TDuration::V_HALF),       // 1/2
+      TempoPattern("<sym>noteQuarterUp</sym>",                                   1.0/60.0,  TDuration::V_QUARTER),    // 1/4
+      TempoPattern("<sym>note8thUp</sym>",                                       1.0/120.0, TDuration::V_EIGHT),      // 1/8
+      };
+      
+//---------------------------------------------------------
+//   findTempoDuration
+//    find the duration part (note + dot) of a tempo text in string s
+//    return the match position or -1 if not found
+//    set len to the match length and dur to the duration value
+//---------------------------------------------------------
+
+int TempoText::findTempoDuration(const QString& s, int& len, TDuration& dur)
+      {
+      len = 0;
+      dur = TDuration();
+
+      for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
+            QRegExp re(tp[i].pattern);
+            int pos = re.indexIn(s);
+            if (pos != -1) {
+                  len = re.matchedLength();
+                  dur = tp[i].d;
+                  return pos;
+                  }
+            }
+
+      return -1;
+      }
+      
+//---------------------------------------------------------
+//   duration2tempoTextString
+//    find the tempoText string representation for duration
+//---------------------------------------------------------
+
+QString TempoText::duration2tempoTextString(const TDuration dur)
+      {
+      for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
+            if (tp[i].d == dur) {
+                  QString res = tp[i].pattern;
+                  res.remove("\\s*");
+                  return res;
+                  }
+            }
+      return "";
+      }
 
 //---------------------------------------------------------
 //   textChanged
@@ -94,17 +148,8 @@ void TempoText::textChanged()
             return;
       QString s = text();
 
-      static const TempoPattern tp[] = {
-            TempoPattern("<sym>noteHalfUp</sym>\\s*=\\s*(\\d+)", 1.0/30.0),                        // 1/2
-            TempoPattern("<sym>noteQuarterUp</sym>\\s*=\\s*(\\d+)", 1.0/60.0),                     // 1/4
-            TempoPattern("<sym>note8thUp</sym>\\s*=\\s*(\\d+)", 1.0/120.0),                    // 1/8
-            TempoPattern("<sym>noteHalfUp</sym>\\s*</sym>textAugmentationDot</sym>\\s*=\\s*(\\d+)", 1.5/30.0),       // dotted 1/2
-            TempoPattern("<sym>noteQuarterUp</sym>\\s*<sym>textAugmentationDot</sym>\\s*=\\s*(\\d+)", 1.5/60.0),    // dotted 1/4
-            TempoPattern("<sym>note8thUp</sym>\\s*<sym>textAugmentationDot</sym>\\s*=\\s*(\\d+)", 1.5/120.0),   // dotted 1/8
-            };
-
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
-            QRegExp re(tp[i].pattern);      // 1/4
+            QRegExp re(QString(tp[i].pattern)+"\\s*=\\s*(\\d+)");      // 1/4
             if (re.indexIn(s) != -1) {
                   QStringList sl = re.capturedTexts();
                   if (sl.size() == 2) {
