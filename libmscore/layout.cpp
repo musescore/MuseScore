@@ -3242,7 +3242,8 @@ void Score::doLayoutSystems()
       {
       foreach(System* system, _systems)
             system->layout2();
-      layoutPages();
+      if (layoutMode() != LayoutLine)
+            layoutPages();
       rebuildBspTree();
       _updateAll = true;
 
