@@ -150,12 +150,9 @@ QT4_WRAP_CPP (mocs
       inspector/inspectorJump.h inspector/inspectorMarker.h inspector/inspectorGlissando.h
       inspector/inspectorNote.h inspector/inspectorAmbitus.h
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
-      importmidi_panel.h importmidi_operations.h
-      importmidi_opmodel.h importmidi_trmodel.h importmidi_opdelegate.h
-      importmidi_operation.h importmidi_quant.h importmidi_chord.h
-      importmidi_inner.h importmidi_data.h importmidi_swing.h
-      debugger/debugger.h importmidi_fraction.h importmidi_drum.h
-      importmidi_lrhand.h importmidi_lyrics.h importmidi_trview.h importmidi_tie.h
+      importmidi_panel.h
+      importmidi_opmodel.h importmidi_opdelegate.h
+      debugger/debugger.h
       resourceManager.h downloadUtils.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
@@ -301,7 +298,7 @@ target_link_libraries(mscore
       qzip
       )
 
-#if MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by ther user), the output executable will be
+#if MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
 #called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
 #both installed in the same prefix on a Linux system.
 if (MSCORE_OUTPUT_NAME)
