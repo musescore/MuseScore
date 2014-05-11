@@ -13,6 +13,7 @@
 #ifndef __TEMPOTEXT_H__
 #define __TEMPOTEXT_H__
 
+#include "durationtype.h"
 #include "text.h"
 
 namespace Ms {
@@ -52,6 +53,9 @@ class TempoText : public Text  {
 
       virtual void textChanged() override;
       virtual void layout();
+      
+      static int findTempoDuration(const QString& s, int& len, TDuration& dur);
+      static QString duration2tempoTextString(const TDuration dur);
 
       QVariant getProperty(P_ID propertyId) const override;
       bool setProperty(P_ID propertyId, const QVariant&) override;

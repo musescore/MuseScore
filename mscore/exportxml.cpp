@@ -2594,9 +2594,11 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                               tagname += " placement=\"below\"";
                         }
                   else {
-                   qDebug("directionTag()  staf ely=%g elh=%g bby=%g bbh=%g",
-                         el->y(), el->height(),
-                         bb.y(), bb.height());
+                        /*
+                        qDebug("directionTag()  staf ely=%g elh=%g bby=%g bbh=%g",
+                               el->y(), el->height(),
+                               bb.y(), bb.height());
+                         */
                         if (el->y() + el->height() / 2 < /*bb.y() +*/ bb.height() / 2)
                               tagname += " placement=\"above\"";
                         else
@@ -2656,50 +2658,15 @@ static void partGroupStart(Xml& xml, int number, int bracket)
 //   words
 //---------------------------------------------------------
 
-// The note and dot symbols are in Unicode plane, they are stored
-// in a QString as a surrogate pair.
-// Example: quarter note is 0x1d15f, stored as 0xd834 0xdd5f.
-
-// a line containing only a note and zero or more dots
-QRegExp metro("^\\xd834([\\xdd5c-\\xdd5f]|[\\xdd60-\\xdd63])(\\xd834\\xdd6d)?$");
-// a note, zero or more dots, zero or more spaces, an equals sign, zero or more spaces
-QRegExp metroPlusEquals("\\xd834([\\xdd5c-\\xdd5f]|[\\xdd60-\\xdd63])(\\xd834\\xdd6d)? ?= ?");
-// a parenthesis open, zero or more spaces at end of line
-QRegExp leftParen("\\( ?$");
-// zero or more spaces, an equals sign, zero or more spaces at end of line
-QRegExp equals(" ?= ?$");
-
-// note: findUnitAndDots does not check the first char of the surrogate pair
-//       this has already been done by findMetronome using the regexps above
-
-static bool findUnitAndDots(QString words, QString& unit, int& dots)
+static bool findUnit(TDuration::DurationType val, QString& unit)
       {
       unit = "";
-      dots = 0;
-      // qDebug("findUnitAndDots('%s') slen=%d", qPrintable(words), words.length());
-      if (!metro.exactMatch(words))
-            return false;
-      switch (words.at(1).unicode()) {
-            case 0xdd5c: unit = "breve"; break;
-            case 0xdd5d: unit = "whole"; break;
-            case 0xdd5e: unit = "half"; break;
-            case 0xdd5f: unit = "quarter"; break;
-            case 0xdd60: unit = "eighth"; break;
-            case 0xdd61: unit = "16th"; break;
-            case 0xdd62: unit = "32nd"; break;
-            case 0xdd63: unit = "64th"; break;
-            default: qDebug("findUnitAndDots: unknown char '%s'(0x%0xd)",
-                            qPrintable(words.mid(0, 1)), words.at(0).unicode());
+      switch (val) {
+            case TDuration::V_HALF: unit = "half"; break;
+            case TDuration::V_QUARTER: unit = "quarter"; break;
+            case TDuration::V_EIGHT: unit = "eighth"; break;
+            default: qDebug("findUnit: unknown DurationType %d", val);
             }
-      for (int i = 3; i < words.length(); i += 2)
-            switch (words.at(i).unicode()) {
-                  case '.':    // fall through
-                  case 0xdd6d: ++dots; break;
-                  // TODO case 0xe10b: ++dots; ++dots; break;
-                  default: qDebug("findUnitAndDots: unknown char '%s'(0x%0xd)",
-                                  qPrintable(words.mid(i, 1)), words.at(i).unicode());
-                  }
-      // qDebug(" unit='%s' dots=%d", qPrintable(unit), dots);
       return true;
       }
 
@@ -2711,58 +2678,80 @@ static bool findMetronome(QString words,
                           QString& wordsRight  // words right of metronome
                           )
       {
-      QString hexWords;
-      for (int i = 0; i < words.length(); ++i) {
-            QString n;
-            n.setNum(words.at(i).unicode(),16);
-            if (i != 0) hexWords += " ";
-            hexWords += "0x";
-            hexWords += n;
-            }
-      // qDebug("findMetronome('%s') (%s) slen=%d", qPrintable(words), qPrintable(hexWords), words.length());
+      //qDebug("findMetronome('%s')", qPrintable(words));
       wordsLeft  = "";
       hasParen   = false;
       metroLeft  = "";
       metroRight = "";
       wordsRight = "";
-      int pos = metroPlusEquals.indexIn(words);
-      if (pos != -1) {
-            int len = metroPlusEquals.matchedLength();
-            /*
-            qDebug(" mpos=%d mlen=%d",
-                   pos, len
-                   );
-            */
-            if (words.length() > pos + len) {
-                  QString s1 = words.mid(0, pos);    // string to the left of metronome
-                  QString s2 = words.mid(pos, len);  // first note and equals sign
-                  QString s3 = words.mid(pos + len); // string to the right of equals sign
+      int indEq  = words.indexOf('=');
+      if (indEq <= 0)
+            return false;
+      int len1 = 0;
+      TDuration dur;
+      // find first note, limiting search to the part left of the first '=',
+      // to prevent matching the second note in a "note1 = note2" metronome
+      int pos1 = TempoText::findTempoDuration(words.left(indEq), len1, dur);
+      QRegExp eq("\\s*=\\s*");
+      int pos2 = eq.indexIn(words, pos1 + len1);
+      if (pos1 != -1 && pos2 == pos1 + len1) {
+            int len2 = eq.matchedLength();
+            if (words.length() > pos2 + len2) {
+                  QString s1 = words.mid(0, pos1);     // string to the left of metronome
+                  QString s2 = words.mid(pos1, len1);  // first note
+                  QString s3 = words.mid(pos2, len2);  // equals sign
+                  QString s4 = words.mid(pos2 + len2); // string to the right of equals sign
                   /*
-                  qDebug("found metronome: '%s'%s'%s'",
+                  qDebug("found note and equals: '%s'%s'%s'%s'",
                          qPrintable(s1),
                          qPrintable(s2),
-                         qPrintable(s3)
+                         qPrintable(s3),
+                         qPrintable(s4)
                          );
-                  */
+                   */
+                  // now determine what is to the right of the equals sign
+                  // must have either a (dotted) note or a number at start of s4
+                  int len3 = 0;
+                  QRegExp nmb("\\d+");
+                  int pos3 = TempoText::findTempoDuration(s4, len3, dur);
+                  if (pos3 == -1) {
+                        // did not find note, try to find a number
+                        pos3 = nmb.indexIn(s4);
+                        if (pos3 == 0)
+                              len3 = nmb.matchedLength();
+                        }
+                  if (pos3 == -1)
+                        // neither found
+                        return false;
+
+                  QString s5 = s4.mid(0, len3); // number or second note
+                  QString s6 = s4.mid(len3);    // string to the right of metronome
+                  /*
+                  qDebug("found right part: '%s'%s'",
+                         qPrintable(s5),
+                         qPrintable(s6)
+                         );
+                   */
+
                   // determine if metronome has parentheses
                   // left part of string must end with parenthesis plus optional spaces
                   // right part of string must have parenthesis (but not in first pos)
-                  int lparen = leftParen.indexIn(s1);
-                  int rparen = s3.indexOf(")");
-                  hasParen = (lparen != -1 && rparen > 0);
-                  // qDebug(" lparen=%d rparen=%d hasP=%d", lparen, rparen, hasParen);
-                  if (hasParen) wordsLeft = s1.mid(0, lparen);
-                  else wordsLeft = s1;
-                  int equalsPos = equals.indexIn(s2);
-                  if (equalsPos != -1) metroLeft = s2.mid(0, equalsPos);
-                  // else qDebug("\ncan't find equals in s2");
-                  if (hasParen) {
-                        metroRight = s3.mid(0, rparen);
-                        wordsRight = s3.mid(rparen + 1, s3.length() - rparen - 1);
-                        }
-                  else {
-                        metroRight = s3;
-                        }
+                  int lparen = s1.indexOf("(");
+                  int rparen = s6.indexOf(")");
+                  hasParen = (lparen == s1.length() - 1 && rparen == 0);
+                  //qDebug(" lparen=%d rparen=%d hasP=%d", lparen, rparen, hasParen);
+
+                  if (hasParen)
+                        wordsLeft = s1.mid(0, lparen);
+                  else
+                        wordsLeft = s1;
+                  metroLeft = s2;
+                  metroRight = s5;
+                  if (hasParen)
+                        wordsRight = s6.mid(1);
+                  else
+                        metroRight = s5;
+
                   /*
                   qDebug(" '%s'%s'%s'%s'",
                          qPrintable(wordsLeft),
@@ -2770,13 +2759,23 @@ static bool findMetronome(QString words,
                          qPrintable(metroRight),
                          qPrintable(wordsRight)
                          );
-                  */
-                  QString unit;
-                  int dots;
-                  return findUnitAndDots(metroLeft, unit, dots);
+                   */
+                  return true;
                   }
             }
       return false;
+      }
+
+static void beatUnit(Xml& xml, const TDuration dur)
+      {
+      int dots = dur.dots();
+      QString unit;
+      findUnit(dur.type(), unit);
+      xml.tag("beat-unit", unit);
+      while (dots > 0) {
+            xml.tagE("beat-unit-dot");
+            --dots;
+            }
       }
 
 static void wordsMetrome(Xml& xml, Text const* const text)
@@ -2794,23 +2793,16 @@ static void wordsMetrome(Xml& xml, Text const* const text)
                   }
             xml.stag("direction-type");
             xml.stag(QString("metronome parentheses=\"%1\"").arg(hasParen ? "yes" : "no"));
-            QString unit;
-            int dots;
-            findUnitAndDots(metroLeft, unit, dots);
-            xml.tag("beat-unit", unit);
-            while (dots > 0) {
-                  xml.tagE("beat-unit-dot");
-                  --dots;
-                  }
-            if (findUnitAndDots(metroRight, unit, dots)) {
-                  xml.tag("beat-unit", unit);
-                  while (dots > 0) {
-                        xml.tagE("beat-unit-dot");
-                        --dots;
-                        }
-                  }
+            int len1 = 0;
+            TDuration dur;
+            TempoText::findTempoDuration(metroLeft, len1, dur);
+            beatUnit(xml, dur);
+
+            if (TempoText::findTempoDuration(metroRight, len1, dur) != -1)
+                  beatUnit(xml, dur);
             else
                   xml.tag("per-minute", metroRight);
+
             xml.etag();
             xml.etag();
             if (wordsRight != "") {
