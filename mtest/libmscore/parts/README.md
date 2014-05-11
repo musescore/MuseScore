@@ -1,15 +1,37 @@
-Linked Parts:
-========================================
+Filename convention
+=====================
 
-      1 - create
-      2 - add
-      3 - add undo
-      4 - add redo
-      5 - remove
-      6 - remove undo
-      7 - remove redo
+**part-_{1}_-_{2}_.mscx**
 
-- --- --- SYMBOL
+_{1}_ which element is tested
+
+* `empty`     	 -> just notes
+* `all` 		 -> all or as much as possible elements
+* _element name_ -> tests for a specific element (fingering, symbol etc...)
+
+
+{2} action - which action is tested for the given element
+
+* _empty string_ =  no parts created 
+* `parts` == parts created
+* _actions for elements_ == (add, uadd, uradd, del, udel, urdel) for elements
+* _actions for all_ == ()
+
+
+Linked Parts
+================
+
+1. create
+2. add
+3. add undo
+4. add redo
+5. remove
+6. remove undo
+7. remove redo
+
+```
+1 234 567 ELEMENT
+x xxx xxx SYMBOL
 - --- --- TEXT
 - --- --- INSTRUMENT_NAME
 - --- --- BAR_LINE
@@ -38,7 +60,7 @@ x xxx xxx BREATH
 - --- --- FIGURED_BASS
 - --- --- MARKER
 - --- --- JUMP
-- --- --- FINGERING
+x xxx xxx FINGERING
 - --- --- TUPLET
 - --- --- TEMPO_TEXT
 - --- --- STAFF_TEXT
@@ -80,4 +102,4 @@ x --- --- VBOX
 - --- --- TBOX
 - --- --- FBOX
 - --- --- ACCIDENTAL_BRACKET
-
+```

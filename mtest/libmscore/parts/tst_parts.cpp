@@ -151,7 +151,7 @@ void TestParts::testPartCreation(const QString& test)
       QVERIFY(score);
       QVERIFY(saveCompareScore(score, test + "-1.mscx", DIR + test + ".mscx"));
       createParts(score);
-      QVERIFY(saveCompareScore(score, test + "-2.mscx", DIR + test + "-2o.mscx"));
+      QVERIFY(saveCompareScore(score, test + "-parts.mscx", DIR + test + "-parts.mscx"));
       delete score;
       }
 
@@ -161,7 +161,7 @@ void TestParts::testPartCreation(const QString& test)
 
 void TestParts::appendMeasure()
       {
-      Score* score = readScore(DIR + "part2.mscx");
+      Score* score = readScore(DIR + "part-all.mscx");
       score->doLayout();
 
       QVERIFY(score);
@@ -171,12 +171,12 @@ void TestParts::appendMeasure()
       score->insertMeasure(Element::MEASURE, 0);
       score->endCmd();
 
-      QVERIFY(saveCompareScore(score, "part2-3.mscx", DIR + "part2-3o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-all-appendmeasures.mscx", DIR + "part-all-appendmeasures.mscx"));
 
       score->undo()->undo();
       score->endUndoRedo();
 
-      QVERIFY(saveCompareScore(score, "part2-4.mscx", DIR + "part2-4o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-all-uappendmeasures.mscx", DIR + "part-all-uappendmeasures.mscx"));
       delete score;
       }
 
@@ -186,7 +186,7 @@ void TestParts::appendMeasure()
 
 void TestParts::insertMeasure()
       {
-      Score* score = readScore(DIR + "part2.mscx");
+      Score* score = readScore(DIR + "part-all.mscx");
       score->doLayout();
       QVERIFY(score);
       createParts(score);
@@ -196,12 +196,12 @@ void TestParts::insertMeasure()
       score->insertMeasure(Element::MEASURE, m);
       score->endCmd();
 
-      // QVERIFY(saveCompareScore(score, "part2-5.mscx", DIR + "part2-5o.mscx"));
+      // QVERIFY(saveCompareScore(score, "part-all-insertmeasures.mscx", DIR + "part-all-insertmeasures.mscx"));
 
       score->undo()->undo();
       score->endUndoRedo();
 
-      QVERIFY(saveCompareScore(score, "part2-6.mscx", DIR + "part2-6o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-all-uinsertmeasures.mscx", DIR + "part-all-uinsertmeasures.mscx"));
       delete score;
       }
 
@@ -273,27 +273,27 @@ void TestParts::styleScoreDefault()
 
 void TestParts::createPart1()
       {
-      testPartCreation("part1");
+      testPartCreation("part-empty");
       }
 
 void TestParts::createPart2()
       {
-      testPartCreation("part2");
+      testPartCreation("part-all");
       }
 
 void TestParts::createPartBreath()
       {
-      testPartCreation("part3");
+      testPartCreation("part-breath");
       }
 
 void TestParts::createPartFingering()
       {
-      testPartCreation("part10");
+      testPartCreation("part-fingering");
       }
 
 void TestParts::createPartSymbol()
       {
-      testPartCreation("part11");
+      testPartCreation("part-symbol");
       }
 
 #if 0
@@ -309,7 +309,7 @@ void TestParts::createPartImage()
 
 Score* TestParts::doAddBreath()
       {
-      Score* score = readScore(DIR + "part1-2o.mscx");
+      Score* score = readScore(DIR + "part-empty-parts.mscx");
       score->doLayout();
 
       foreach(Excerpt* e, score->excerpts())
@@ -339,7 +339,7 @@ Score* TestParts::doAddBreath()
 void TestParts::addBreath()
       {
       Score* score = doAddBreath();
-      QVERIFY(saveCompareScore(score, "part4.mscx", DIR + "part4o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-breath-add.mscx", DIR + "part-breath-add.mscx"));
       delete score;
       }
 
@@ -354,7 +354,7 @@ void TestParts::undoAddBreath()
       score->undo()->undo();
       score->endUndoRedo();
 
-      QVERIFY(saveCompareScore(score, "part5.mscx", DIR + "part5o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-breath-uadd.mscx", DIR + "part-breath-uadd.mscx"));
       delete score;
       }
 
@@ -372,7 +372,7 @@ void TestParts::undoRedoAddBreath()
       score->undo()->redo();
       score->endUndoRedo();
 
-      QVERIFY(saveCompareScore(score, "part6.mscx", DIR + "part6o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-breath-uradd.mscx", DIR + "part-breath-uradd.mscx"));
       delete score;
       }
 
@@ -382,7 +382,7 @@ void TestParts::undoRedoAddBreath()
 
 Score* TestParts::doRemoveBreath()
       {
-      Score* score = readScore(DIR + "part4o.mscx");
+      Score* score = readScore(DIR + "part-breath-add.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
             e->score()->doLayout();
@@ -406,7 +406,7 @@ Score* TestParts::doRemoveBreath()
 void TestParts::removeBreath()
       {
       Score* score = doRemoveBreath();
-      QVERIFY(saveCompareScore(score, "part7.mscx", DIR + "part7o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-breath-del.mscx", DIR + "part-breath-del.mscx"));
       delete score;
       }
 
@@ -419,7 +419,7 @@ void TestParts::undoRemoveBreath()
       Score* score = doRemoveBreath();
       score->undo()->undo();
       score->endUndoRedo();
-      QVERIFY(saveCompareScore(score, "part8.mscx", DIR + "part8o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-breath-udel.mscx", DIR + "part-breath-udel.mscx"));
       delete score;
       }
 
@@ -436,7 +436,7 @@ void TestParts::undoRedoRemoveBreath()
       score->undo()->redo();
       score->endUndoRedo();
 
-      QVERIFY(saveCompareScore(score, "part9.mscx", DIR + "part9o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-breath-urdel.mscx", DIR + "part-breath-urdel.mscx"));
       delete score;
       }
 
@@ -446,7 +446,7 @@ void TestParts::undoRedoRemoveBreath()
 
 Score* TestParts::doAddFingering()
       {
-      Score* score = readScore(DIR + "part1-2o.mscx");
+      Score* score = readScore(DIR + "part-empty-parts.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
             e->score()->doLayout();
@@ -474,7 +474,7 @@ Score* TestParts::doAddFingering()
 void TestParts::addFingering()
       {
       Score* score = doAddFingering();
-      QVERIFY(saveCompareScore(score, "part13.mscx", DIR + "part13o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-fingering-add.mscx", DIR + "part-fingering-add.mscx"));
       delete score;
       }
 
@@ -487,7 +487,7 @@ void TestParts::undoAddFingering()
       Score* score = doAddFingering();
       score->undo()->undo();
       score->endUndoRedo();
-      QVERIFY(saveCompareScore(score, "part14.mscx", DIR + "part14o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-fingering-uadd.mscx", DIR + "part-fingering-uadd.mscx"));
       delete score;
       }
 
@@ -502,7 +502,7 @@ void TestParts::undoRedoAddFingering()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
-      QVERIFY(saveCompareScore(score, "part15.mscx", DIR + "part15o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-fingering-uradd.mscx", DIR + "part-fingering-uradd.mscx"));
       delete score;
       }
 
@@ -512,7 +512,7 @@ void TestParts::undoRedoAddFingering()
 
 Score* TestParts::doRemoveFingering()
       {
-      Score* score = readScore(DIR + "part10-2o.mscx");
+      Score* score = readScore(DIR + "part-fingering-parts.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
             e->score()->doLayout();
@@ -544,7 +544,7 @@ Score* TestParts::doRemoveFingering()
 void TestParts::removeFingering()
       {
       Score* score = doRemoveFingering();
-      QVERIFY(saveCompareScore(score, "part16.mscx", DIR + "part16o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-fingering-del.mscx", DIR + "part-fingering-del.mscx"));
       delete score;
       }
 
@@ -557,7 +557,7 @@ void TestParts::undoRemoveFingering()
       Score* score = doRemoveFingering();
       score->undo()->undo();
       score->endUndoRedo();
-      QVERIFY(saveCompareScore(score, "part17.mscx", DIR + "part17o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-fingering-udel.mscx", DIR + "part-fingering-udel.mscx"));
       delete score;
       }
 
@@ -572,7 +572,7 @@ void TestParts::undoRedoRemoveFingering()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
-      QVERIFY(saveCompareScore(score, "part18.mscx", DIR + "part18o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-fingering-urdel.mscx", DIR + "part-fingering-urdel.mscx"));
       delete score;
       }
 
@@ -582,7 +582,7 @@ void TestParts::undoRedoRemoveFingering()
 
 Score* TestParts::doAddSymbol()
       {
-      Score* score = readScore(DIR + "part1-2o.mscx");
+      Score* score = readScore(DIR + "part-empty-parts.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
             e->score()->doLayout();
@@ -610,7 +610,7 @@ Score* TestParts::doAddSymbol()
 void TestParts::addSymbol()
       {
       Score* score = doAddSymbol();
-      QVERIFY(saveCompareScore(score, "part19.mscx", DIR + "part19o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-symbol-add.mscx", DIR + "part-symbol-add.mscx"));
       delete score;
       }
 
@@ -623,7 +623,7 @@ void TestParts::undoAddSymbol()
       Score* score = doAddSymbol();
       score->undo()->undo();
       score->endUndoRedo();
-      QVERIFY(saveCompareScore(score, "part20.mscx", DIR + "part20o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-symbol-uadd.mscx", DIR + "part-symbol-uadd.mscx"));
       delete score;
       }
 
@@ -638,7 +638,7 @@ void TestParts::undoRedoAddSymbol()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
-      QVERIFY(saveCompareScore(score, "part21.mscx", DIR + "part21o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-symbol-uradd.mscx", DIR + "part-symbol-uradd.mscx"));
       delete score;
       }
 
@@ -648,7 +648,7 @@ void TestParts::undoRedoAddSymbol()
 
 Score* TestParts::doRemoveSymbol()
       {
-      Score* score = readScore(DIR + "part11-2o.mscx");
+      Score* score = readScore(DIR + "part-symbol-parts.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
             e->score()->doLayout();
@@ -680,7 +680,7 @@ Score* TestParts::doRemoveSymbol()
 void TestParts::removeSymbol()
       {
       Score* score = doRemoveSymbol();
-      QVERIFY(saveCompareScore(score, "part22.mscx", DIR + "part22o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-symbol-del.mscx", DIR + "part-symbol-del.mscx"));
       delete score;
       }
 
@@ -693,7 +693,7 @@ void TestParts::undoRemoveSymbol()
       Score* score = doRemoveSymbol();
       score->undo()->undo();
       score->endUndoRedo();
-      QVERIFY(saveCompareScore(score, "part23.mscx", DIR + "part23o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-symbol-udel.mscx", DIR + "part-symbol-udel.mscx"));
       delete score;
       }
 
@@ -708,7 +708,7 @@ void TestParts::undoRedoRemoveSymbol()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
-      QVERIFY(saveCompareScore(score, "part24.mscx", DIR + "part24o.mscx"));
+      QVERIFY(saveCompareScore(score, "part-symbol-urdel.mscx", DIR + "part-symbol-urdel.mscx"));
       delete score;
       }
 
