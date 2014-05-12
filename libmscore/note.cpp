@@ -1050,7 +1050,7 @@ void Note::read(XmlReader& e)
                   e.unknown();
             }
       // ensure sane values:
-      _pitch = restrict(_pitch, 0, 127);
+      _pitch = limit(_pitch, 0, 127);
 
       if (score()->mscVersion() < 117 && !concertPitch()) {
             _pitch += transposition();
@@ -1831,7 +1831,7 @@ int Note::customizeVelocity(int velo) const
             velo = velo + (velo * veloOffset()) / 100;
       else if (veloType() == ValueType::USER_VAL)
             velo = veloOffset();
-      return restrict(velo, 1, 127);
+      return limit(velo, 1, 127);
       }
 
 //---------------------------------------------------------
