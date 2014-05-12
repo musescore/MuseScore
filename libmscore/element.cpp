@@ -733,7 +733,7 @@ bool Element::readProperties(XmlReader& e)
             }
       else if (tag == "tick") {
             int val = e.readInt();
-            if (val >= 0 && type() != SYMBOL  && ((type() != GLISSANDO && type() != FINGERING) || score()->mscVersion() > 114))   // hack for 1.2
+            if (val >= 0 && type() != SYMBOL  && ((type() != GLISSANDO && type() != FINGERING && type() != STAFF_TEXT) || score()->mscVersion() > 114))   // hack for 1.2
                   e.setTick(score()->fileDivision(val));
             }
       else if (tag == "offset")
