@@ -167,7 +167,7 @@ enum OffsetType {
 //   BeamMode
 //---------------------------------------------------------
 
-enum class BeamMode {
+enum class BeamMode : char {
       AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
       };
 

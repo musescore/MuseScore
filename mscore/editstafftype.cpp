@@ -28,21 +28,23 @@ extern Score::FileError readScore(Score* score, QString name, bool ignoreVersion
 EditStaffType::EditStaffType(QWidget* parent, Staff* st)
    : QDialog(parent)
       {
-      setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      setupUi(this);
+
+      QButtonGroup* bg1 = new QButtonGroup(this);
+      bg1->addButton(numbersRadio);
+      bg1->addButton(lettersRadio);
+
+      QButtonGroup* bg2 = new QButtonGroup(this);
+      bg2->addButton(onLinesRadio);
+      bg2->addButton(aboveLinesRadio);
+
+      QButtonGroup* bg3 = new QButtonGroup(this);
+      bg3->addButton(linesThroughRadio);
+      bg3->addButton(linesBrokenRadio);
 
       staff     = st;
       staffType = *staff->staffType();
-
-      // init preset list
-      int idx = 0;
-      for (const StaffType& st : StaffType::presets()) {
-            QListWidgetItem* item = new QListWidgetItem(st.name());
-            item->setData(Qt::UserRole, idx);
-            staffTypeList->addItem(item);
-            ++idx;
-            }
-      staffTypeList->setCurrentRow(0);
 
       groupCombo->clear();
       groupCombo->addItem(StaffType::groupName(STANDARD_STAFF_GROUP), STANDARD_STAFF_GROUP);
@@ -58,53 +60,48 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       foreach(const QString& name, fontNames)   // fill duration font name combo
             durFontName->addItem(name);
       durFontName->setCurrentIndex(0);
+
       // load a sample tabulature score in preview
       Score* sc = new Score(MScore::defaultStyle());
-      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FILE_NO_ERROR) {
-            // add a preview widget to tabulature page
-            preview = new ScoreView(this);
-            static_cast<QVBoxLayout*>(groupPreview->layout())->insertWidget(0, preview);
+      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FILE_NO_ERROR)
             preview->setScore(sc);
-            }
 
       setValues();
 
       connect(name,           SIGNAL(textEdited(const QString&)), SLOT(nameEdited(const QString&)));
-      connect(lines,          SIGNAL(valueChanged(int)),          SLOT(updatePreviews()));
-      connect(lineDistance,   SIGNAL(valueChanged(double)),       SLOT(updatePreviews()));
-      connect(showBarlines,   SIGNAL(toggled(bool)),              SLOT(updatePreviews()));
-      connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updatePreviews()));
-      connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updatePreviews()));
+      connect(lines,          SIGNAL(valueChanged(int)),          SLOT(updatePreview()));
+      connect(lineDistance,   SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
+      connect(showBarlines,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
 
-      connect(genKeysigPercussion,       SIGNAL(toggled(bool)),   SLOT(updatePercPreview()));
-      connect(showLedgerLinesPercussion, SIGNAL(toggled(bool)),   SLOT(updatePercPreview()));
-      connect(stemlessPercussion,        SIGNAL(toggled(bool)),   SLOT(updatePercPreview()));
+      connect(genKeysigPercussion,       SIGNAL(toggled(bool)),   SLOT(updatePreview()));
+      connect(showLedgerLinesPercussion, SIGNAL(toggled(bool)),   SLOT(updatePreview()));
+      connect(stemlessPercussion,        SIGNAL(toggled(bool)),   SLOT(updatePreview()));
 
-      connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(noteValuesStems,SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
-      connect(stemBesideRadio,SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(stemBesideRadio,SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(stemThroughRadio,SIGNAL(toggled(bool)),             SLOT(tabStemThroughToggled(bool)));
-      connect(stemAboveRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(stemBelowRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-//    connect(minimNoneRadio, SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(stemAboveRadio, SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(stemBelowRadio, SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(minimShortRadio,SIGNAL(toggled(bool)),              SLOT(tabMinimShortToggled(bool)));
-      connect(minimSlashedRadio,SIGNAL(toggled(bool)),            SLOT(updateTabPreview()));
-      connect(showRests,      SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(minimSlashedRadio,SIGNAL(toggled(bool)),            SLOT(updatePreview()));
+      connect(showRests,      SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(durFontNameChanged(int)));
-      connect(durFontSize,    SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
-      connect(durY,           SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
+      connect(durFontSize,    SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
+      connect(durY,           SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
       connect(fretFontName,   SIGNAL(currentIndexChanged(int)),   SLOT(fretFontNameChanged(int)));
-      connect(fretFontSize,   SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
-      connect(fretY,          SIGNAL(valueChanged(double)),       SLOT(updateTabPreview()));
-      connect(linesThroughRadio, SIGNAL(toggled(bool)),           SLOT(updateTabPreview()));
-      connect(onLinesRadio,   SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(upsideDown,     SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
-      connect(numbersRadio,   SIGNAL(toggled(bool)),              SLOT(updateTabPreview()));
+      connect(fretFontSize,   SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
+      connect(fretY,          SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
 
-      connect(save,             SIGNAL(clicked()), SLOT(savePresets()));
-      connect(load,             SIGNAL(clicked()), SLOT(loadPresets()));
-      connect(loadFromTemplate, SIGNAL(clicked()), SLOT(loadFromTemplateClicked()));
-      connect(addToTemplates,   SIGNAL(clicked()), SLOT(addToTemplatesClicked()));
+      connect(linesThroughRadio, SIGNAL(toggled(bool)),           SLOT(updatePreview()));
+      connect(onLinesRadio,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(upsideDown,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(numbersRadio,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+
+      connect(loadFromTemplate, SIGNAL(clicked()),                SLOT(loadFromTemplateClicked()));
+      connect(addToTemplates,   SIGNAL(clicked()),                SLOT(addToTemplatesClicked()));
       connect(groupCombo,       SIGNAL(currentIndexChanged(int)), SLOT(staffGroupChanged(int)));
       }
 
@@ -125,6 +122,8 @@ void EditStaffType::staffGroupChanged(int n)
 
 void EditStaffType::setValues()
       {
+      blockSignals(true);
+
       StaffGroup group = staffType.group();
       int idx = int(group);
       stack->setCurrentIndex(idx);
@@ -146,7 +145,6 @@ void EditStaffType::setValues()
 
             case TAB_STAFF_GROUP:
                   {
-                  blockTabPreviewSignals(true);
                   upsideDown->setChecked(staffType.upsideDown());
                   int idx = fretFontName->findText(staffType.fretFontName(), Qt::MatchFixedString);
                   if (idx == -1)
@@ -154,12 +152,12 @@ void EditStaffType::setValues()
                   fretFontName->setCurrentIndex(idx);
                   fretFontSize->setValue(staffType.fretFontSize());
                   fretY->setValue(staffType.fretFontUserY());
+
                   numbersRadio->setChecked(staffType.useNumbers());
-                  lettersRadio->setChecked(!staffType.useNumbers());
                   onLinesRadio->setChecked(staffType.onLines());
-                  aboveLinesRadio->setChecked(!staffType.onLines());
                   linesThroughRadio->setChecked(staffType.linesThrough());
                   linesBrokenRadio->setChecked(!staffType.linesThrough());
+
                   idx = durFontName->findText(staffType.durationFontName(), Qt::MatchFixedString);
                   if (idx == -1)
                         idx = 0;          // if name not found, use first name
@@ -199,21 +197,17 @@ void EditStaffType::setValues()
                   tabStemThroughCompatibility(stemThroughRadio->isChecked());
                   tabMinimShortCompatibility(minimShortRadio->isChecked());
                   tabStemsCompatibility(noteValuesStems->isChecked());
-                  updateTabPreview();
-
-                  blockTabPreviewSignals(false);
                   }
                   break;
 
             case PERCUSSION_STAFF_GROUP:
-                  blockPercPreviewSignals(true);
                   genKeysigPercussion->setChecked(staffType.genKeysig());
                   showLedgerLinesPercussion->setChecked(staffType.showLedgerLines());
                   stemlessPercussion->setChecked(staffType.slashStyle());
-                  updatePercPreview();
-                  blockPercPreviewSignals(false);
                   break;
             }
+      updatePreview();
+      blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -225,64 +219,10 @@ void EditStaffType::nameEdited(const QString& /*s*/)
 //      staffTypeList->currentItem()->setText(s);
       }
 
-//---------------------------------------------------------
-//   updatePreviews
-//---------------------------------------------------------
-
-void EditStaffType::updatePreviews()
-      {
-      updatePercPreview();
-      updateTabPreview();
-      }
-
 //=========================================================
 //   PERCUSSION PAGE METHODS
 //=========================================================
 
-//---------------------------------------------------------
-//   setPercFromDlg
-//
-//    initializes a StaffTypePercussion from dlg controls
-//---------------------------------------------------------
-
-void EditStaffType::setPercFromDlg()
-      {
-      staffType.setName(name->text());
-      staffType.setLines(lines->value());
-      staffType.setLineDistance(Spatium(lineDistance->value()));
-      staffType.setGenClef(genClef->isChecked());
-      staffType.setShowBarlines(showBarlines->isChecked());
-      staffType.setGenTimesig(genTimesig->isChecked());
-      staffType.setGenKeysig(genKeysigPercussion->isChecked());
-      staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
-      staffType.setSlashStyle(stemlessPercussion->isChecked());
-      }
-
-//---------------------------------------------------------
-//   Update percussion preview
-///   update percussion-related fields
-//---------------------------------------------------------
-
-void EditStaffType::updatePercPreview()
-      {
-      setPercFromDlg();
-      }
-
-//---------------------------------------------------------
-//   Block percussion preview signals
-//---------------------------------------------------------
-
-void EditStaffType::blockPercPreviewSignals(bool block)
-      {
-      lines->blockSignals(block);
-      lineDistance->blockSignals(block);
-      genClef->blockSignals(block);
-      genTimesig->blockSignals(block);
-      showBarlines->blockSignals(block);
-      showLedgerLinesPercussion->blockSignals(block);
-      genKeysigPercussion->blockSignals(block);
-      stemlessPercussion->blockSignals(block);
-      }
 
 //=========================================================
 //   TABULATURE PAGE METHODS
@@ -301,7 +241,7 @@ void EditStaffType::durFontNameChanged(int idx)
             durFontSize->setValue(size);
             durY->setValue(yOff);
             }
-      updateTabPreview();
+      updatePreview();
       }
 
 void EditStaffType::fretFontNameChanged(int idx)
@@ -311,7 +251,7 @@ void EditStaffType::fretFontNameChanged(int idx)
             fretFontSize->setValue(size);
             fretY->setValue(yOff);
             }
-      updateTabPreview();
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -323,7 +263,7 @@ void EditStaffType::fretFontNameChanged(int idx)
 void EditStaffType::tabStemsToggled(bool checked)
       {
       tabStemsCompatibility(checked);
-      updateTabPreview();
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -335,7 +275,7 @@ void EditStaffType::tabStemsToggled(bool checked)
 void EditStaffType::tabMinimShortToggled(bool checked)
       {
       tabMinimShortCompatibility(checked);
-      updateTabPreview();
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -345,16 +285,16 @@ void EditStaffType::tabMinimShortToggled(bool checked)
 void EditStaffType::tabStemThroughToggled(bool checked)
       {
       tabStemThroughCompatibility(checked);
-      updateTabPreview();
+      updatePreview();
       }
 
 //---------------------------------------------------------
-//   setTabFromDlg
+//   setFromDlg
 //
-//    initializes a StaffTypeTablature from dlg controls
+//    initializes a StaffType from dlg controls
 //---------------------------------------------------------
 
-void EditStaffType::setTabFromDlg()
+void EditStaffType::setFromDlg()
       {
       staffType.setName(name->text());
       staffType.setLines(lines->value());
@@ -384,13 +324,18 @@ void EditStaffType::setTabFromDlg()
             staffType.setGenDurations(true);
       if (noteValuesStems->isChecked())
             staffType.setSlashStyle(false);
+
+
+      staffType.setGenKeysig(genKeysigPercussion->isChecked());
+      staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
+      staffType.setSlashStyle(stemlessPercussion->isChecked());
       }
 
 //---------------------------------------------------------
-//   Block tabulature preview signals
+//   Block preview signals
 //---------------------------------------------------------
 
-void EditStaffType::blockTabPreviewSignals(bool block)
+void EditStaffType::blockSignals(bool block)
       {
       lines->blockSignals(block);
       lineDistance->blockSignals(block);
@@ -405,10 +350,12 @@ void EditStaffType::blockTabPreviewSignals(bool block)
       fretFontName->blockSignals(block);
       fretFontSize->blockSignals(block);
       fretY->blockSignals(block);
+
+      numbersRadio->blockSignals(block);
       linesThroughRadio->blockSignals(block);
       onLinesRadio->blockSignals(block);
+
       upsideDown->blockSignals(block);
-      numbersRadio->blockSignals(block);
       stemAboveRadio->blockSignals(block);
       stemBelowRadio->blockSignals(block);
       stemBesideRadio->blockSignals(block);
@@ -416,6 +363,10 @@ void EditStaffType::blockTabPreviewSignals(bool block)
       minimShortRadio->blockSignals(block);
       minimSlashedRadio->blockSignals(block);
       showRests->blockSignals(block);
+
+      showLedgerLinesPercussion->blockSignals(block);
+      genKeysigPercussion->blockSignals(block);
+      stemlessPercussion->blockSignals(block);
       }
 
 //---------------------------------------------------------
@@ -444,7 +395,7 @@ void EditStaffType::tabStemsCompatibility(bool checked)
 
 void EditStaffType::tabMinimShortCompatibility(bool checked)
       {
-      if(checked) {
+      if (checked) {
             if(stemThroughRadio->isChecked()) {
                   stemThroughRadio->setChecked(false);
                   stemBesideRadio->setChecked(true);
@@ -464,7 +415,7 @@ void EditStaffType::tabMinimShortCompatibility(bool checked)
 
 void EditStaffType::tabStemThroughCompatibility(bool checked)
       {
-      if(checked) {
+      if (checked) {
             if(minimShortRadio->isChecked()) {
                   minimShortRadio->setChecked(false);
                   minimSlashedRadio->setChecked(true);
@@ -478,18 +429,19 @@ void EditStaffType::tabStemThroughCompatibility(bool checked)
       }
 
 //---------------------------------------------------------
-//    updateTabPreview
-///   update tabulature staff type in preview score
+//    updatePreview
+///   update staff type in preview score
 //---------------------------------------------------------
 
-void EditStaffType::updateTabPreview()
+void EditStaffType::updatePreview()
       {
-      setTabFromDlg();
+      setFromDlg();
       if (preview) {
             preview->score()->staff(0)->setStaffType(&staffType);
             preview->score()->cmdUpdateNotes();
             preview->score()->doLayout();
             preview->updateAll();
+            preview->update();
             }
       }
 
@@ -527,15 +479,6 @@ QString EditStaffType::createUniqueStaffTypeName(StaffGroup group)
       }
 
 //---------------------------------------------------------
-//   accept
-//---------------------------------------------------------
-
-void EditStaffType::accept()
-      {
-      QDialog::accept();
-      }
-
-//---------------------------------------------------------
 //   savePresets
 //---------------------------------------------------------
 
@@ -559,9 +502,13 @@ void EditStaffType::loadPresets()
 
 void EditStaffType::loadFromTemplateClicked()
       {
-      int idx = staffTypeList->currentItem()->data(Qt::UserRole).toInt();
-      staffType = *StaffType::preset(idx);
-      setValues();
+      StaffTypeTemplates stt(staffType);
+      if (stt.exec()) {
+            StaffType* st = stt.staffType();
+            staffType = *st;
+            setValues();
+            updatePreview();
+            }
       }
 
 //---------------------------------------------------------
@@ -570,7 +517,40 @@ void EditStaffType::loadFromTemplateClicked()
 
 void EditStaffType::addToTemplatesClicked()
       {
-      printf("add to templates\n");
+      qDebug("not implemented: add to templates");
+      }
+
+//---------------------------------------------------------
+//   StaffTypeTemplates
+//---------------------------------------------------------
+
+StaffTypeTemplates::StaffTypeTemplates(const StaffType& st, QWidget* parent)
+   : QDialog(parent)
+      {
+      setupUi(this);
+
+      QList<const StaffType*> stl;
+      for (const StaffType& t : StaffType::presets()) {
+            if (t.group() == st.group())
+                  stl.append(&t);
+            }
+      for (const StaffType* t : stl) {
+            QListWidgetItem* item = new QListWidgetItem(t->name());
+            item->setData(Qt::UserRole,
+               QVariant::fromValue<void*>((void*)t)
+               );
+            staffTypeList->addItem(item);
+            }
+      staffTypeList->setCurrentRow(0);
+      }
+
+//---------------------------------------------------------
+//   staffType
+//---------------------------------------------------------
+
+StaffType* StaffTypeTemplates::staffType() const
+      {
+      return (StaffType*)staffTypeList->currentItem()->data(Qt::UserRole).value<void*>();
       }
 
 }
