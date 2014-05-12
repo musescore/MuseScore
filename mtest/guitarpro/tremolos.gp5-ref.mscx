@@ -280,6 +280,9 @@
               <fret>3</fret>
               <string>3</string>
               </Note>
+            <Tremolo>
+              <subtype>r32</subtype>
+              </Tremolo>
             </Chord>
           <Rest>
             <lid>7</lid>
@@ -300,6 +303,9 @@
               <fret>0</fret>
               <string>1</string>
               </Note>
+            <Tremolo>
+              <subtype>r8</subtype>
+              </Tremolo>
             </Chord>
           <Rest>
             <lid>11</lid>
@@ -331,6 +337,9 @@
               <fret>3</fret>
               <string>3</string>
               </Note>
+            <Tremolo>
+              <subtype>r32</subtype>
+              </Tremolo>
             </Chord>
           <Rest>
             <lid>7</lid>
@@ -346,6 +355,9 @@
               <fret>0</fret>
               <string>1</string>
               </Note>
+            <Tremolo>
+              <subtype>r8</subtype>
+              </Tremolo>
             </Chord>
           <Rest>
             <lid>11</lid>
