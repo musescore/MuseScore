@@ -25,12 +25,12 @@ class Segment;
 //   @@ Dynamic
 ///   dynamics marker; determines midi velocity
 //
-//    @P dynRange  DynamicRange  DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
+//    @P range  DynamicRange  DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
 //-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
       Q_OBJECT
-      Q_PROPERTY(DynamicRange type READ dynRange  WRITE undoSetDynRange)
+      Q_PROPERTY(DynamicRange range READ dynRange  WRITE undoSetDynRange)
 
    public:
       enum DynamicType {
