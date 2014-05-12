@@ -27,6 +27,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/sym.h"
+#include "libmscore/chordline.h"
 #include "mtest/testutils.h"
 
 #define DIR QString("libmscore/parts/")
@@ -50,6 +51,8 @@ class TestParts : public QObject, public MTest
       Score* doRemoveFingering();
       Score* doAddSymbol();
       Score* doRemoveSymbol();
+      Score* doAddChordline();
+      Score* doRemoveChordline();
 //      Score* doAddImage();
 //      Score* doRemoveImage();
 
@@ -82,6 +85,14 @@ class TestParts : public QObject, public MTest
       void removeSymbol();
       void undoRemoveSymbol();
       void undoRedoRemoveSymbol();
+
+      void createPartChordline();
+      void addChordline();
+      void undoAddChordline();
+      void undoRedoAddChordline();
+      void removeChordline();
+      void undoRemoveChordline();
+      void undoRedoRemoveChordline();
 
 //      void createPartImage();
 //      void addImage();
@@ -296,13 +307,17 @@ void TestParts::createPartSymbol()
       testPartCreation("part-symbol");
       }
 
+void TestParts::createPartChordline()
+      {
+      testPartCreation("part-chordline");
+      }
+
 #if 0
 void TestParts::createPartImage()
       {
-      testPartCreation("part12");
+      testPartCreation("part-image");
       }
 #endif
-
 //---------------------------------------------------------
 //    doAddBreath
 //---------------------------------------------------------
@@ -657,14 +672,14 @@ Score* TestParts::doRemoveSymbol()
       Segment* s   = m->first()->next(Segment::SegChordRest);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
-      Element* fingering = 0;
+      Element* se = 0;
       foreach(Element* e, note->el()) {
             if (e->type() == Element::SYMBOL) {
-                  fingering = e;
+                  se = e;
                   break;
                   }
             }
-      score->select(fingering);
+      score->select(se);
 
       score->startCmd();
       score->cmdDeleteSelection();
@@ -712,6 +727,142 @@ void TestParts::undoRedoRemoveSymbol()
       delete score;
       }
 
+//---------------------------------------------------------
+//   doAddChordline
+//---------------------------------------------------------
+
+Score* TestParts::doAddChordline()
+      {
+      Score* score = readScore(DIR + "part-empty-parts.mscx");
+      score->doLayout();
+      foreach(Excerpt* e, score->excerpts())
+            e->score()->doLayout();
+
+      Measure* m   = score->firstMeasure();
+      Segment* s   = m->tick2segment(480);
+      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+      Note* note   = chord->upNote();
+      DropData dd;
+      dd.view = 0;
+      ChordLine* b  = new ChordLine(score);
+      b->setChordLineType(ChordLineType::CHORDLINE_FALL);
+      dd.element = b;
+
+      score->startCmd();
+      note->drop(dd);
+      score->endCmd();        // does layout
+      return score;
+      }
+
+//---------------------------------------------------------
+//   addChordline
+//---------------------------------------------------------
+
+void TestParts::addChordline()
+      {
+      Score* score = doAddChordline();
+      QVERIFY(saveCompareScore(score, "part-chordline-add.mscx", DIR + "part-chordline-add.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoAddChordline
+//---------------------------------------------------------
+
+void TestParts::undoAddChordline()
+      {
+      Score* score = doAddChordline();
+      score->undo()->undo();
+      score->endUndoRedo();
+      QVERIFY(saveCompareScore(score, "part-chordline-uadd.mscx", DIR + "part-chordline-uadd.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoRedoAddChordline
+//---------------------------------------------------------
+
+void TestParts::undoRedoAddChordline()
+      {
+      Score* score = doAddChordline();
+      score->undo()->undo();
+      score->endUndoRedo();
+      score->undo()->redo();
+      score->endUndoRedo();
+      QVERIFY(saveCompareScore(score, "part-chordline-uradd.mscx", DIR + "part-chordline-uradd.mscx"));
+      delete score;
+      }
+
+
+//---------------------------------------------------------
+//   doRemoveChordline
+//---------------------------------------------------------
+
+Score* TestParts::doRemoveChordline()
+      {
+      Score* score = readScore(DIR + "part-chordline-parts.mscx");
+      score->doLayout();
+      foreach(Excerpt* e, score->excerpts())
+            e->score()->doLayout();
+
+      Measure* m   = score->firstMeasure();
+      Segment* s   = m->first()->next(Segment::SegChordRest);
+      Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+
+      Element* se = 0;
+      foreach(Element* e, chord->el()) {
+            if (e->type() == Element::CHORDLINE) {
+                  se = e;
+                  break;
+                  }
+            }
+      score->select(se);
+
+      score->startCmd();
+      score->cmdDeleteSelection();
+      score->setLayoutAll(true);
+      score->endCmd();
+      return score;
+      }
+
+//---------------------------------------------------------
+//   removeChordline
+//---------------------------------------------------------
+
+void TestParts::removeChordline()
+      {
+      Score* score = doRemoveChordline();
+      QVERIFY(saveCompareScore(score, "part-chordline-del.mscx", DIR + "part-chordline-del.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoRemoveChordline
+//---------------------------------------------------------
+
+void TestParts::undoRemoveChordline()
+      {
+      Score* score = doRemoveChordline();
+      score->undo()->undo();
+      score->endUndoRedo();
+      QVERIFY(saveCompareScore(score, "part-chordline-udel.mscx", DIR + "part-chordline-udel.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoRedoRemoveChordline
+//---------------------------------------------------------
+
+void TestParts::undoRedoRemoveChordline()
+      {
+      Score* score = doRemoveChordline();
+      score->undo()->undo();
+      score->endUndoRedo();
+      score->undo()->redo();
+      score->endUndoRedo();
+      QVERIFY(saveCompareScore(score, "part-chordline-urdel.mscx", DIR + "part-chordline-urdel.mscx"));
+      delete score;
+      }
 #if 0
 //---------------------------------------------------------
 //   doAddImage
