@@ -576,7 +576,7 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pnd, qr
       if (gap >= pd)
             return false;
 
-      qreal allowableOverlap = qMax(upper->descent, lower->ascent);
+      qreal allowableOverlap = qMax(upper->descent, lower->ascent) - pd;
 
       // accidentals that are "close" (small gap or even slight overlap)
       if (qAbs(gap) <= 0.25 * sp) {
@@ -595,17 +595,17 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pnd, qr
       // acceptable if one accidental can subsume overlap
       if (left == lower && -gap <= allowableOverlap) {
             qreal offset = qMax(left->rightClear, right->leftClear);
-            offset = qMin(offset, left->width - pd);
-            lx = qMin(lx, right->x + offset);
+            offset = qMin(offset, left->width) - pd * 1.4;
+            lx = qMin(lx, right->x + offset) + pnd;
             return false;
             }
 
       // accidentals with even more overlap
       // can work if both accidentals can subsume overlap
-      if (left == lower && -gap <= upper->descent + lower->ascent) {
-            qreal offset = qMin(left->rightClear, right->leftClear);
+      if (left == lower && -gap <= upper->descent + lower->ascent - pd) {
+            qreal offset = qMin(left->rightClear, right->leftClear) - pd * 1.4;
             if (offset > 0.0) {
-                  lx = qMin(lx, right->x + offset);
+                  lx = qMin(lx, right->x + offset) + pnd;
                   return false;
                   }
             }
@@ -636,10 +636,10 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
             qreal lnBottom = lnTop + sp;
             if (me->top - lnBottom <= pnd && lnTop - me->bottom <= pnd) {
                   // undercut note above if possible
-                  if (lnBottom - me->top <= me->ascent)
-                        lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear);
+                  if (lnBottom - me->top <= me->ascent - pnd)
+                        lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear - pnd);
                   else
-                        lx = qMin(lx, ln->x() + ln->chord()->x());
+                        lx = qMin(lx, ln->x() + ln->chord()->x() - pnd);
                   }
             else if (lnTop > me->bottom)
                   break;
@@ -703,6 +703,28 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   acel.top    = line * 0.5 * sp + ac->bbox().top();
                   acel.bottom = line * 0.5 * sp + ac->bbox().bottom();
                   acel.width  = ac->width();
+#if 1
+                  QPointF bboxNE = ac->symBbox(ac->symbol()).topRight();
+                  QPointF bboxSW = ac->symBbox(ac->symbol()).bottomLeft();
+                  QPointF cutOutNE = ac->symCutOutNE(ac->symbol());
+                  QPointF cutOutSW = ac->symCutOutSW(ac->symbol());
+                  if (!cutOutNE.isNull()) {
+                        acel.ascent     = cutOutNE.y() - bboxNE.y();
+                        acel.rightClear = bboxNE.x() - cutOutNE.x();
+                        }
+                  else {
+                        acel.ascent     = 0.0;
+                        acel.rightClear = 0.0;
+                        }
+                  if (!cutOutSW.isNull()) {
+                        acel.descent   = bboxSW.y() - cutOutSW.y();
+                        acel.leftClear = cutOutSW.x() - bboxSW.x();
+                        }
+                  else {
+                        acel.descent   = 0.0;
+                        acel.leftClear = 0.0;
+                        }
+#else
                   qreal scale = sp * ac->mag();
                   switch (ac->accidentalType()) {
                         case Accidental::ACC_FLAT:
@@ -735,6 +757,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                               acel.rightClear = 0;
                               acel.leftClear = 0;
                         }
+#endif
                   int pitchClass = (line + 700) % 7;
                   acel.next = columnBottom[pitchClass];
                   columnBottom[pitchClass] = nAcc;

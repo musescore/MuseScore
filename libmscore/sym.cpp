@@ -6113,6 +6113,7 @@ void ScoreFont::load()
       if (error.error != QJsonParseError::NoError)
             qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
                error.offset, qPrintable(error.errorString()));
+
       QJsonObject oo = o.value("glyphs").toObject();
       for (auto i : oo.keys()) {
             QJsonObject ooo = oo.value(i).toObject();
@@ -6132,6 +6133,39 @@ void ScoreFont::load()
                         }
                   }
             }
+
+      oo = o.value("glyphsWithAnchors").toObject();
+      for (auto i : oo.keys()) {
+            qreal scale = MScore::DPI * SPATIUM20;
+            QJsonObject ooo = oo.value(i).toObject();
+            SymId symId = Sym::lnhash.value(i, SymId::noSym);
+            if (symId == SymId::noSym)
+                  qDebug("ScoreFont: symId not found <%s> in <%s>", qPrintable(i), qPrintable(fi.fileName()));
+            Sym* sym = &_symbols[int(symId)];
+            for (auto i : ooo.keys()) {
+                  if (i == "cutOutNE") {
+                        qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
+                        qreal y = ooo.value(i).toArray().at(1).toDouble() * scale;
+                        sym->setCutOutNE(QPointF(x, -y));
+                        }
+                  else if (i == "cutOutNW") {
+                        qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
+                        qreal y = ooo.value(i).toArray().at(1).toDouble() * scale;
+                        sym->setCutOutNW(QPointF(x, -y));
+                        }
+                  else if (i == "cutOutSE") {
+                        qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
+                        qreal y = ooo.value(i).toArray().at(1).toDouble() * scale;
+                        sym->setCutOutSE(QPointF(x, -y));
+                        }
+                  else if (i == "cutOutSW") {
+                        qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
+                        qreal y = ooo.value(i).toArray().at(1).toDouble() * scale;
+                        sym->setCutOutSW(QPointF(x, -y));
+                        }
+                  }
+            }
+
       // create missing composed glyphs
 
       struct Composed {
@@ -6206,7 +6240,7 @@ void ScoreFont::load()
                   for (SymId id : c.rids)
                         s += _symbols[int(id)].string();
                   sym->setString(s);
-                   sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
+                  sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
                   }
             }
       
