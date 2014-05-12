@@ -35,6 +35,15 @@ Tremolo::Tremolo(Score* score)
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       }
 
+Tremolo::Tremolo(const Tremolo& t)
+   : Element(t)
+      {
+      setTremoloType(t.tremoloType());
+      _chord1  = t.chord1();
+      _chord2  = t.chord2();
+      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      }
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------

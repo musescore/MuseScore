@@ -218,6 +218,7 @@ Chord::Chord(const Chord& c)
       _glissando     = 0;
       _arpeggio      = 0;
       _stemSlash     = 0;
+      _tremolo       = 0;
 
       _graceIndex     = c._graceIndex;
       _noStem         = c._noStem;
@@ -234,8 +235,9 @@ Chord::Chord(const Chord& c)
       if (c._stemSlash)
             add(new StemSlash(*(c._stemSlash)));
       _stemDirection    = c._stemDirection;
-      _tremoloChordType = TremoloChordType::TremoloSingle;
-      _tremolo          = 0;
+      _tremoloChordType = c._tremoloChordType;
+      if (c._tremolo)
+            add(new Tremolo(*(c._tremolo)));
       _noteType         = c._noteType;
       _crossMeasure     = CROSSMEASURE_UNKNOWN;
       for (Element* e : c.el()) {
