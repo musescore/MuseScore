@@ -106,7 +106,7 @@ class Volta : public TextLine {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::VoltaType)
+Q_DECLARE_METATYPE(Ms::VoltaType);
 
 #endif
 

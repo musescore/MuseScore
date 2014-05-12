@@ -406,10 +406,10 @@ inline static qreal center(qreal x1, qreal x2) {
       }
 
 //---------------------------------------------------------
-//   restrict
+//   limit
 //---------------------------------------------------------
 
-inline static int restrict(int val, int min, int max) {
+inline static int limit(int val, int min, int max) {
       if (val > max)
             return max;
       if (val < min)
@@ -423,10 +423,10 @@ Q_ENUMS(DirectionH)
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::BeamMode)
-Q_DECLARE_METATYPE(Ms::ValueType)
-Q_DECLARE_METATYPE(Ms::Direction)
-Q_DECLARE_METATYPE(Ms::DirectionH)
+Q_DECLARE_METATYPE(Ms::BeamMode);
+Q_DECLARE_METATYPE(Ms::ValueType);
+Q_DECLARE_METATYPE(Ms::Direction);
+Q_DECLARE_METATYPE(Ms::DirectionH);
 
 
 #endif

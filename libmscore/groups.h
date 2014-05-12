@@ -83,7 +83,7 @@ struct NoteGroup {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Groups)
+Q_DECLARE_METATYPE(Ms::Groups);
 
 #endif
 

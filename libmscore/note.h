@@ -410,8 +410,8 @@ class Note : public Element {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::NoteHeadGroup)
-Q_DECLARE_METATYPE(Ms::NoteHeadType)
+Q_DECLARE_METATYPE(Ms::NoteHeadGroup);
+Q_DECLARE_METATYPE(Ms::NoteHeadType);
 
 #endif
 

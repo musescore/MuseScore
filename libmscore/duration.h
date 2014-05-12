@@ -31,7 +31,7 @@ class Spanner;
 
 class DurationElement : public Element {
       Q_OBJECT
-      Q_PROPERTY(int duration READ durationTicks WRITE setDuration);
+      Q_PROPERTY(int duration READ durationTicks WRITE setDuration)
 
       Fraction _duration;
       Tuplet* _tuplet;

@@ -81,7 +81,7 @@ class Marker : public Text {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::MarkerType)
+Q_DECLARE_METATYPE(Ms::MarkerType);
 
 #endif
 

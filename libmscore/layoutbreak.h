@@ -82,6 +82,6 @@ class LayoutBreak : public Element {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::LayoutBreak::LayoutBreakType)
+Q_DECLARE_METATYPE(Ms::LayoutBreak::LayoutBreakType);
 
 #endif

@@ -125,8 +125,8 @@ class SlurSegment : public SpannerSegment {
 
 class SlurTie : public Spanner {
       Q_OBJECT
-      Q_PROPERTY(int lineType                        READ lineType WRITE undoSetLineType)
-      Q_PROPERTY(Ms::Direction slurDirection READ slurDirection WRITE undoSetSlurDirection)
+      Q_PROPERTY(int lineType                 READ lineType       WRITE undoSetLineType)
+      Q_PROPERTY(Ms::Direction slurDirection  READ slurDirection  WRITE undoSetSlurDirection)
 
       int _lineType;    // 0 = solid, 1 = dotted, 2 = dashed
 
