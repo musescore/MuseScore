@@ -6139,8 +6139,12 @@ void ScoreFont::load()
             qreal scale = MScore::DPI * SPATIUM20;
             QJsonObject ooo = oo.value(i).toObject();
             SymId symId = Sym::lnhash.value(i, SymId::noSym);
-            if (symId == SymId::noSym)
-                  qDebug("ScoreFont: symId not found <%s> in <%s>", qPrintable(i), qPrintable(fi.fileName()));
+            if (symId == SymId::noSym) {
+                  // currently, Bravura contains a bunch of entries in glyphsWithAnchors
+                  // for glyph names that will not be found - flag32ndUpStraight, etc.
+                  //qDebug("ScoreFont: symId not found <%s> in <%s>", qPrintable(i), qPrintable(fi.fileName()));
+                  continue;
+                  }
             Sym* sym = &_symbols[int(symId)];
             for (auto i : ooo.keys()) {
                   if (i == "cutOutNE") {

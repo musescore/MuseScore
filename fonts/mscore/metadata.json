@@ -1778,11 +1778,11 @@
         "accidentalNatural": {
             "cutOutNE": [
                 0.22,
-                0.9
+                0.86
             ],
             "cutOutSW": [
                 0.45,
-                -0.9
+                -0.86
             ]
         },
         "accidentalSharp": {
