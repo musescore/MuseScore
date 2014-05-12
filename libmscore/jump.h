@@ -82,7 +82,7 @@ class Jump : public Text {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::JumpType)
+Q_DECLARE_METATYPE(Ms::JumpType);
 
 #endif
 

@@ -162,8 +162,8 @@ class AccidentalBracket : public Compound {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Accidental::AccidentalRole)
-Q_DECLARE_METATYPE(Ms::Accidental::AccidentalType)
+Q_DECLARE_METATYPE(Ms::Accidental::AccidentalRole);
+Q_DECLARE_METATYPE(Ms::Accidental::AccidentalType);
 
 #endif
 

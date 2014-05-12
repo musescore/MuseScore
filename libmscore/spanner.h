@@ -182,7 +182,7 @@ class Spanner : public Element {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Spanner::Anchor)
+Q_DECLARE_METATYPE(Ms::Spanner::Anchor);
 
 #endif
 

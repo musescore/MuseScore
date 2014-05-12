@@ -155,7 +155,7 @@ class WebScoreView : public ScoreView
       void setScore(const QString&);
       };
 
-Q_DECLARE_METATYPE(WebScoreView)
+Q_DECLARE_METATYPE(WebScoreView);
 #endif
 }
 #endif

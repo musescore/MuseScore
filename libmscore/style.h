@@ -407,6 +407,6 @@ extern void initStyle(MStyle*);
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::TextStyle)
+Q_DECLARE_METATYPE(Ms::TextStyle);
 
 #endif

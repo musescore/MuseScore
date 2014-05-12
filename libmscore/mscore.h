@@ -423,10 +423,10 @@ Q_ENUMS(DirectionH)
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::BeamMode)
-Q_DECLARE_METATYPE(Ms::ValueType)
-Q_DECLARE_METATYPE(Ms::Direction)
-Q_DECLARE_METATYPE(Ms::DirectionH)
+Q_DECLARE_METATYPE(Ms::BeamMode);
+Q_DECLARE_METATYPE(Ms::ValueType);
+Q_DECLARE_METATYPE(Ms::Direction);
+Q_DECLARE_METATYPE(Ms::DirectionH);
 
 
 #endif

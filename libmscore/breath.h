@@ -23,7 +23,7 @@ enum class SymId;
 
 //---------------------------------------------------------
 //   @@ Breath
-///    brathT() is index in symList
+///    breathType() is index in symList
 //---------------------------------------------------------
 
 class Breath : public Element {
