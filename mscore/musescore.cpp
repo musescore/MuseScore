@@ -4763,7 +4763,10 @@ int main(int argc, char* av[])
             QPixmap pm(":/data/splash.jpg");
             sc = new QSplashScreen(pm);
             sc->setWindowTitle(QString("MuseScore Startup"));
-            //sc->setWindowFlags(Qt::FramelessWindowHint);
+#ifdef Q_OS_MAC // to have session dialog on top of splashscreen on mac
+            sc->setWindowFlags(Qt::FramelessWindowHint);
+#endif
+            
             sc->show();
             qApp->processEvents();
             }
