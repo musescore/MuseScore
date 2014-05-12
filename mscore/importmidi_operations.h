@@ -120,7 +120,6 @@ class MidiImportOperations
 } // namespace Ms
 
 
-Q_DECLARE_METATYPE(Ms::MidiOperation);
 Q_DECLARE_METATYPE(Ms::TrackData);
 
 
