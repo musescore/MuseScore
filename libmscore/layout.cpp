@@ -555,6 +555,7 @@ struct AcEl {
 
 //---------------------------------------------------------
 //   resolveAccidentals
+//    lx = calculated position of rightmost edge of left accidental relative to origin
 //---------------------------------------------------------
 
 static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pnd, qreal pd, qreal sp)
@@ -584,34 +585,38 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pnd, qr
             // if one of the accidentals can subsume the overlap
             // and both accidentals allow it
             if (-gap <= allowableOverlap && qMin(upper->descent, lower->ascent) > 0.0) {
-                  // offset by pd (caller will subtract pnd back)
-                  qreal align = qMin(left->width, right->width) + pnd;
+                  qreal align = qMin(left->width, right->width);
                   lx = qMin(lx, right->x + align - pd);
-                  return false;
+                  return true;
                   }
             }
+
+      // amount by which overlapping accidentals will be separated
+      // for example, the vertical stems of two flat signs
+      // these need more space than we would need between non-overlapping accidentals
+      qreal overlapShift = pd * 1.4;
 
       // accidentals with more significant overlap
       // acceptable if one accidental can subsume overlap
       if (left == lower && -gap <= allowableOverlap) {
             qreal offset = qMax(left->rightClear, right->leftClear);
-            offset = qMin(offset, left->width) - pd * 1.4;
-            lx = qMin(lx, right->x + offset) + pnd;
-            return false;
+            offset = qMin(offset, left->width) - overlapShift;
+            lx = qMin(lx, right->x + offset);
+            return true;
             }
 
       // accidentals with even more overlap
       // can work if both accidentals can subsume overlap
       if (left == lower && -gap <= upper->descent + lower->ascent - pd) {
-            qreal offset = qMin(left->rightClear, right->leftClear) - pd * 1.4;
+            qreal offset = qMin(left->rightClear, right->leftClear) - overlapShift;
             if (offset > 0.0) {
-                  lx = qMin(lx, right->x + offset) + pnd;
-                  return false;
+                  lx = qMin(lx, right->x + offset);
+                  return true;
                   }
             }
 
       // otherwise, there is real conflict
-      lx = qMin(lx, right->x);
+      lx = qMin(lx, right->x - pd);
       return true;
       }
 
@@ -654,8 +659,10 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
             conflictAbove = resolveAccidentals(me, above, lx, pnd, pd, sp);
       if (below)
             conflictBelow = resolveAccidentals(me, below, lx, pnd, pd, sp);
-      if (conflictAbove || conflictBelow || colOffset != 0.0)
-            me->x = lx - pd * acc->mag() - acc->width();
+      if (conflictAbove || conflictBelow)
+            me->x = lx - acc->width() - acc->bbox().x();
+      else if (colOffset != 0.0)
+            me->x = lx - pd * acc->mag() - acc->width() - acc->bbox().x();
       else
             me->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
 
