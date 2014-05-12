@@ -79,6 +79,6 @@ class Fraction {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Fraction)
+Q_DECLARE_METATYPE(Ms::Fraction);
 #endif
 

@@ -107,7 +107,7 @@ class Trill : public SLine {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Trill::TrillType)
+Q_DECLARE_METATYPE(Ms::Trill::TrillType);
 
 #endif
 

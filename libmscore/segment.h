@@ -191,11 +191,11 @@ class Segment : public Element {
       bool operator>(const Segment&) const;
       };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Segment::SegmentTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Segment::SegmentTypes);
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Segment::SegmentType)
+Q_DECLARE_METATYPE(Ms::Segment::SegmentType);
 
 #endif
 

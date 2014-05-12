@@ -518,6 +518,6 @@ class StatefulBrush {
             class StatefulBrushPrivate* d;
       };
 
-Q_DECLARE_METATYPE(StatefulBrush) /* so we can pass it in QVariant's */
+Q_DECLARE_METATYPE(StatefulBrush); /* so we can pass it in QVariant's */
 
 #endif // KCOLORSCHEME_H

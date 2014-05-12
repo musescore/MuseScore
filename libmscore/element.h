@@ -703,9 +703,9 @@ extern void collectElements(void* data, Element* e);
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Element::ElementType)
-Q_DECLARE_METATYPE(Ms::Element::DynamicRange)
-Q_DECLARE_METATYPE(Ms::Element::Placement)
+Q_DECLARE_METATYPE(Ms::Element::ElementType);
+Q_DECLARE_METATYPE(Ms::Element::DynamicRange);
+Q_DECLARE_METATYPE(Ms::Element::Placement);
 
 #endif
 

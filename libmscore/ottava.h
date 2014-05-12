@@ -122,7 +122,7 @@ class Ottava : public TextLine {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::OttavaType)
+Q_DECLARE_METATYPE(Ms::OttavaType);
 
 #endif
 
