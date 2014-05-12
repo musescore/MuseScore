@@ -2042,7 +2042,9 @@ void Measure::read(XmlReader& e, int staffIdx)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
-                  staff->setClef(e.tick(), clef->clefTypeList());
+                  // in some 1.3 scores, clefs can be in score but not in cleflist
+                  if (score()->mscVersion() > 114)
+                        staff->setClef(e.tick(), clef->clefTypeList());
 
                   // there may be more than one clef segment for same tick position
                   if (!segment) {
