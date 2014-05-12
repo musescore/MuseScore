@@ -83,6 +83,7 @@ class FiguredBassItem : public Element {
       Q_OBJECT
       Q_ENUMS(Modifier)
       Q_ENUMS(Parenthesis)
+      Q_ENUMS(ContLine)
       Q_PROPERTY(Modifier     prefix            READ prefix       WRITE undoSetPrefix)
       Q_PROPERTY(int          digit             READ digit        WRITE undoSetDigit)
       Q_PROPERTY(Modifier     suffix            READ suffix       WRITE undoSetSuffix)
@@ -332,6 +333,7 @@ Q_INVOKABLE Ms::FiguredBassItem* addItem();
 
 Q_DECLARE_METATYPE(Ms::FiguredBassItem::Modifier);
 Q_DECLARE_METATYPE(Ms::FiguredBassItem::Parenthesis);
+Q_DECLARE_METATYPE(Ms::FiguredBassItem::ContLine);
 
 #endif
 
