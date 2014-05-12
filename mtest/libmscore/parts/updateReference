@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cp ../../../build.debug/mtest/libmscore/parts/part-symbol-1.mscx   part-symbol.mscx
+cp ../../../build.debug/mtest/libmscore/parts/part-symbol-add.mscx   part-symbol-add.mscx
 cp ../../../build.debug/mtest/libmscore/parts/part-symbol-del.mscx   part-symbol-del.mscx
 cp ../../../build.debug/mtest/libmscore/parts/part-symbol-parts.mscx   part-symbol-parts.mscx
 cp ../../../build.debug/mtest/libmscore/parts/part-symbol-uadd.mscx   part-symbol-uadd.mscx
@@ -31,8 +33,16 @@ cp ../../../build.debug/mtest/libmscore/parts/part-fingering-uradd.mscx   part-f
 cp ../../../build.debug/mtest/libmscore/parts/part-fingering-urdel.mscx   part-fingering-urdel.mscx
 cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-reload-test.mscx   partStyle-score-reload-test.mscx
 cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-test.mscx   partStyle-score-test.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-1.mscx   part-symbol.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-add.mscx   part-symbol-add.mscx
+
+cp ../../../build.debug/mtest/libmscore/parts/part-chordline-1.mscx   	part-chordline.mscx
+cp ../../../build.debug/mtest/libmscore/parts/part-chordline-add.mscx   part-chordline-add.mscx
+cp ../../../build.debug/mtest/libmscore/parts/part-chordline-del.mscx   part-chordline-del.mscx
+cp ../../../build.debug/mtest/libmscore/parts/part-chordline-parts.mscx part-chordline-parts.mscx
+cp ../../../build.debug/mtest/libmscore/parts/part-chordline-uadd.mscx  part-chordline-uadd.mscx
+cp ../../../build.debug/mtest/libmscore/parts/part-chordline-udel.mscx  part-chordline-udel.mscx
+cp ../../../build.debug/mtest/libmscore/parts/part-chordline-uradd.mscx part-chordline-uradd.mscx
+cp ../../../build.debug/mtest/libmscore/parts/part-chordline-urdel.mscx part-chordline-urdel.mscx
+
 
 
 
