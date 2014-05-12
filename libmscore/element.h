@@ -153,7 +153,7 @@ struct ElementName {
 class Element : public QObject {
       Q_OBJECT
       Q_ENUMS(ElementType)
-      Q_ENUMS(DynamicType)
+      Q_ENUMS(DynamicRange)
       Q_ENUMS(Placement)
 
    public:
