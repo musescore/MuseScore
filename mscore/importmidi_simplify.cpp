@@ -42,6 +42,23 @@ bool hasComplexBeamedDurations(const QList<std::pair<ReducedFraction, TDuration>
       return false;
       }
 
+
+#ifdef QT_DEBUG
+
+bool areDurationsEqual(
+            const QList<std::pair<ReducedFraction, TDuration> > &durations,
+            const ReducedFraction &desiredLen)
+      {
+      ReducedFraction sum(0, 1);
+      for (const auto &d: durations)
+            sum += ReducedFraction(d.second.fraction()) / d.first;
+
+      return desiredLen == desiredLen;
+      }
+
+#endif
+
+
 void lengthenNote(
             MidiNote &note,
             int voice,
@@ -58,7 +75,7 @@ void lengthenNote(
       const auto &opers = preferences.midiImportOperations.currentTrackOperations();
       const bool useDots = opers.useDots;
       const auto tupletsForDuration = MidiTuplet::findTupletsInBarForDuration(
-                                           voice, barStart, note.offTime, endTime, tuplets);
+                              voice, barStart, note.offTime, endTime - note.offTime, tuplets);
 
       Q_ASSERT_X(note.quant != ReducedFraction(-1, 1),
                  "Simplify::lengthenNote", "Note quant value was not set");
@@ -70,6 +87,11 @@ void lengthenNote(
       const auto origRestDurations = Meter::toDurationList(
                               note.offTime - barStart, endTime - barStart, barFraction,
                               tupletsForDuration, Meter::DurationType::REST, useDots, false);
+
+      Q_ASSERT_X(areDurationsEqual(origNoteDurations, note.offTime - durationStart),
+                 "Simplify::lengthenNote", "Too short note durations remaining");
+      Q_ASSERT_X(areDurationsEqual(origRestDurations, endTime - note.offTime),
+                 "Simplify::lengthenNote", "Too short rest durations remaining");
 
                   // double - because can be + 0.5 for dots
       double minNoteDurationCount = durationCount(origNoteDurations);
@@ -85,12 +107,20 @@ void lengthenNote(
             const auto noteDurations = Meter::toDurationList(
                               durationStart - barStart, offTime - barStart, barFraction,
                               tupletsForDuration, Meter::DurationType::NOTE, useDots, false);
+
+            Q_ASSERT_X(areDurationsEqual(noteDurations, offTime - durationStart),
+                       "Simplify::lengthenNote", "Too short note durations remaining");
+
             noteDurationCount += durationCount(noteDurations);
 
             if (offTime < endTime) {
                   const auto restDurations = Meter::toDurationList(
                               offTime - barStart, endTime - barStart, barFraction,
                               tupletsForDuration, Meter::DurationType::REST, useDots, false);
+
+                  Q_ASSERT_X(areDurationsEqual(restDurations, endTime - offTime),
+                             "Simplify::lengthenNote", "Too short rest durations remaining");
+
                   restDurationCount += durationCount(restDurations);
                   }
 
@@ -104,8 +134,8 @@ void lengthenNote(
                   }
             }
 
-      Q_ASSERT_X(minNoteDurationCount != -1,
-                 "Simplify::lengthenNote", "Off time was not found");
+      if (bestOffTime == ReducedFraction(-1, 1))
+            return;
 
       // check for staccato:
       //    don't apply staccato if note is tied
@@ -150,6 +180,11 @@ void minimizeNumberOfRests(
                   const auto barFraction = ReducedFraction(
                                                 sigmap->timesig(barStart.ticks()).timesig());
                   auto durationStart = (it->first > barStart) ? it->first : barStart;
+                  if (it->second.isInTuplet) {
+                        const auto &tuplet = it->second.tuplet->second;
+                        if (note.offTime >= tuplet.onTime + tuplet.len)
+                              durationStart = tuplet.onTime + tuplet.len;
+                        }
                   auto endTime = (barStart == note.offTime)
                                     ? barStart : barStart + barFraction;
                   if (note.isInTuplet) {
@@ -167,8 +202,11 @@ void minimizeNumberOfRests(
                         endTime = beatTime;
 
                   auto next = std::next(it);
-                  while (next != chords.end() && next->second.voice != it->second.voice)
+                  while (next != chords.end()
+                              && (next->second.voice != it->second.voice
+                                  || next->first < note.offTime)) {
                         ++next;
+                        }
                   if (next != chords.end()) {
                         if (next->first < endTime)
                               endTime = next->first;
@@ -179,6 +217,7 @@ void minimizeNumberOfRests(
                                     endTime = tuplet.onTime;
                               }
                         }
+
                   lengthenNote(note, it->second.voice, it->first, durationStart, endTime,
                                barStart, barFraction, tuplets);
                   }
@@ -199,6 +238,9 @@ void simplifyNotation(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigm
                         // pass current track index through MidiImportOperations
                         // for further usage
             opers.setCurrentTrack(mtrack.indexOfOperation);
+
+            if (opers.currentTrackOperations().allowedVoices != MidiOperation::AllowedVoices::V_1)
+                  separateVoices(chords);
 
             if (opers.currentTrackOperations().minimizeNumberOfRests)
                   minimizeNumberOfRests(chords, sigmap, mtrack.tuplets);
