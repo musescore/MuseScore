@@ -46,7 +46,7 @@ QT4_WRAP_UI (ui_headers
       fretdprops.ui stafftype.ui sectionbreak.ui  bend.ui tremolobar.ui textproperties.ui
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui album.ui layer.ui
       omrpanel.ui startdialog.ui masterpalette.ui pluginManager.ui harmonyedit.ui pathlistdialog.ui
-      note_groups.ui importmidi_panel.ui resourceManager.ui
+      note_groups.ui importmidi_panel.ui resourceManager.ui stafftypetemplates.ui
 
       debugger/barline.ui
       debugger/harmony.ui

@@ -43,14 +43,11 @@
 #define __XMLSTREAM_H__
 
 #include <QtCore/qiodevice.h>
-
-
 #include <QtCore/qstring.h>
 #include <QtCore/qvector.h>
 #include <QtCore/qscopedpointer.h>
 
-
-class XmlStreamStringRef {
+class   XmlStreamStringRef {
     QString m_string;
     int m_position, m_size;
 public:
@@ -69,6 +66,7 @@ public:
 
 class XmlStreamReaderPrivate;
 class XmlStreamAttributes;
+
 class XmlStreamAttribute {
     XmlStreamStringRef m_name, m_namespaceUri, m_qualifiedName, m_value;
     void *reserved;
@@ -101,7 +99,7 @@ public:
         { return !operator==(other); }
 };
 
-Q_DECLARE_TYPEINFO(XmlStreamAttribute, Q_MOVABLE_TYPE);
+// Q_DECLARE_TYPEINFO(XmlStreamAttribute, Q_MOVABLE_TYPE);
 
 class XmlStreamAttributes : public QVector<XmlStreamAttribute>
 {
@@ -158,7 +156,8 @@ public:
         { return !operator==(other); }
 };
 
-Q_DECLARE_TYPEINFO(XmlStreamNamespaceDeclaration, Q_MOVABLE_TYPE);
+// Q_DECLARE_TYPEINFO(XmlStreamNamespaceDeclaration, Q_MOVABLE_TYPE);
+
 typedef QVector<XmlStreamNamespaceDeclaration> XmlStreamNamespaceDeclarations;
 
 class XmlStreamNotationDeclaration {
@@ -182,7 +181,8 @@ public:
         { return !operator==(other); }
 };
 
-Q_DECLARE_TYPEINFO(XmlStreamNotationDeclaration, Q_MOVABLE_TYPE);
+// Q_DECLARE_TYPEINFO(XmlStreamNotationDeclaration, Q_MOVABLE_TYPE);
+
 typedef QVector<XmlStreamNotationDeclaration> XmlStreamNotationDeclarations;
 
 class XmlStreamEntityDeclaration {
@@ -211,7 +211,8 @@ public:
         { return !operator==(other); }
 };
 
-Q_DECLARE_TYPEINFO(XmlStreamEntityDeclaration, Q_MOVABLE_TYPE);
+// Q_DECLARE_TYPEINFO(XmlStreamEntityDeclaration, Q_MOVABLE_TYPE);
+
 typedef QVector<XmlStreamEntityDeclaration> XmlStreamEntityDeclarations;
 
 

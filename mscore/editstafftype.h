@@ -14,6 +14,7 @@
 #define __EDITSTAFFTYPE_H__
 
 #include "ui_stafftype.h"
+#include "ui_stafftypetemplates.h"
 #include "libmscore/mscore.h"
 #include "libmscore/stafftype.h"
 
@@ -32,13 +33,10 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
 
       Staff* staff;
       StaffType staffType;
-      ScoreView* preview = 0;
 
-      void blockPercPreviewSignals(bool block);
-      void blockTabPreviewSignals(bool block);
+      void blockSignals(bool block);
 
-      void setPercFromDlg();
-      void setTabFromDlg();
+      void setFromDlg();
 
       void tabStemsCompatibility(bool checked);
       void tabMinimShortCompatibility(bool checked);
@@ -53,9 +51,7 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void tabStemThroughToggled(bool checked);
       void tabMinimShortToggled(bool checked);
       void tabStemsToggled(bool checked);
-      void updatePreviews();
-      void updatePercPreview();
-      void updateTabPreview();
+      void updatePreview();
 
       void savePresets();
       void loadPresets();
@@ -63,15 +59,23 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
       void addToTemplatesClicked();
       void staffGroupChanged(int);
 
-public slots:
-      virtual void accept();
-
    public:
       EditStaffType(QWidget* parent, Staff*);
       ~EditStaffType() {}
       const StaffType* getStaffType() const { return &staffType; }
       };
 
+//---------------------------------------------------------
+//   StaffTypeTemplates
+//---------------------------------------------------------
+
+class StaffTypeTemplates : public QDialog, private Ui::StaffTypeTemplates {
+      Q_OBJECT
+
+   public:
+      StaffTypeTemplates(const StaffType&, QWidget* parent = 0);
+      StaffType* staffType() const;
+      };
 
 } // namespace Ms
 #endif
