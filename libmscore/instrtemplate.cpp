@@ -124,7 +124,6 @@ InstrumentTemplate::InstrumentTemplate()
       useDrumset         = false;
       drumset            = 0;
       extended           = false;
-      stringData         = 0;
 
       for (int i = 0; i < MAX_STAVES; ++i) {
             clefTypes[i]._concertClef = ClefType::G;
@@ -176,10 +175,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
             drumset = new Drumset(*t.drumset);
       else
             drumset = 0;
-      if (t.stringData)
-            stringData = new StringData(*t.stringData);
-      else
-            stringData = 0;
+      stringData  = t.stringData;
       midiActions = t.midiActions;
       channel     = t.channel;
       }
@@ -214,8 +210,7 @@ void InstrumentTemplate::write(Xml& xml) const
       xml.tag("musicXMLid", musicXMLid);
       if (extended)
             xml.tag("extended", extended);
-      if (stringData)
-            stringData->write(xml);
+      stringData.write(xml);
       if (staves > 1)
             xml.tag("staves", staves);
       for (int i = 0; i < staves; ++i) {
@@ -422,10 +417,8 @@ void InstrumentTemplate::read(XmlReader& e)
                   transpose.chromatic = e.readInt();
             else if (tag == "transposeDiatonic")
                   transpose.diatonic = e.readInt();
-            else if (tag == "StringData") {
-                  stringData = new StringData;
-                  stringData->read(e);
-                  }
+            else if (tag == "StringData")
+                  stringData.read(e);
             else if (tag == "drumset")
                   useDrumset = e.readInt();
             else if (tag == "Drum") {

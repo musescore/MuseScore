@@ -160,8 +160,8 @@ class Instrument {
       void setArticulation(const QList<MidiArticulation>& l);
       void setChannel(const QList<Channel>& l);
       void setChannel(int i, const Channel& c);
-      StringData* stringData() const;
-      void setStringData(StringData* t);
+      const StringData* stringData() const;
+      void setStringData(const StringData&);
       static Instrument fromTemplate(const InstrumentTemplate*);
 
       const QList<StaffName>& longNames() const;

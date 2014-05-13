@@ -326,11 +326,10 @@ void EditStaff::editStringDataClicked()
 
       EditStringData* esd = new EditStringData(this, &stringList, &frets);
       if (esd->exec()) {
-            StringData* stringData = new StringData(frets, stringList);
+            StringData stringData(frets, stringList);
             // detect number of strings going from 0 to !0 or vice versa
             instrument.setStringData(stringData);
-            int numStr = stringData ? stringData->strings() : 0;
-            numOfStrings->setText(QString::number(numStr));
+            numOfStrings->setText(QString::number(stringData.strings()));
             }
       }
 
@@ -374,9 +373,10 @@ void EditStaff::showStaffTypeDialog()
                           (ng != TAB_STAFF_GROUP && og == TAB_STAFF_GROUP) ||
                           (ng == TAB_STAFF_GROUP && og == TAB_STAFF_GROUP);
 
-            staff->score()->undo()->push(new ChangeStaffType(staff, *editor.getStaffType()));
+            staff->score()->undo()->push(new ChangeStaffType(staff, *nt));
             if (updateNeeded)
                   staff->score()->cmdUpdateNotes();
+            staffGroupName->setText(staff->staffType()->groupName());
             }
       }
 

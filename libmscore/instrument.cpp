@@ -91,7 +91,6 @@ InstrumentData::InstrumentData()
       _maxPitchP   = 127;
       _useDrumset  = false;
       _drumset     = 0;
-      _stringData  = 0;
       }
 
 InstrumentData::InstrumentData(const InstrumentData& i)
@@ -106,10 +105,10 @@ InstrumentData::InstrumentData(const InstrumentData& i)
       _maxPitchP    = i._maxPitchP;
       _transpose    = i._transpose;
       _useDrumset   = i._useDrumset;
+      _stringData   = i._stringData;
       _drumset      = 0;
-      _stringData    = 0;
       setDrumset(i._drumset);
-      setStringData(i._stringData);
+      _stringData   = i._stringData;
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
       _channel      = i._channel;
@@ -121,19 +120,7 @@ InstrumentData::InstrumentData(const InstrumentData& i)
 
 InstrumentData::~InstrumentData()
       {
-      delete _stringData;
       delete _drumset;
-      }
-
-//---------------------------------------------------------
-//   tablature
-//    If instrument has no tablature, return default
-//    (guitar) tablature
-//---------------------------------------------------------
-
-StringData *InstrumentData::stringData() const
-      {
-      return _stringData ? _stringData : &emptyStringData;
       }
 
 //---------------------------------------------------------
@@ -189,8 +176,8 @@ void InstrumentData::write(Xml& xml) const
             xml.tag("useDrumset", _useDrumset);
             _drumset->save(xml);
             }
-      if (_stringData)
-            _stringData->write(xml);
+      if (!(_stringData == StringData()))
+            _stringData.write(xml);
       foreach(const NamedEventList& a, _midiActions)
             a.write(xml, "MidiAction");
       foreach(const MidiArticulation& a, _articulation)
@@ -269,10 +256,8 @@ void InstrumentData::read(XmlReader& e)
                   _drumset->load(e);
                   }
             // support tag "Tablature" for a while for compatibility with existent 2.0 scores
-            else if (tag == "Tablature" || tag == "StringData") {
-                  _stringData = new StringData();
-                  _stringData->read(e);
-                  }
+            else if (tag == "Tablature" || tag == "StringData")
+                  _stringData.read(e);
             else if (tag == "MidiAction") {
                   NamedEventList a;
                   a.read(e);
@@ -681,19 +666,6 @@ void InstrumentData::setDrumset(Drumset* ds)
       }
 
 //---------------------------------------------------------
-//   setTablature
-//---------------------------------------------------------
-
-void InstrumentData::setStringData(StringData* t)
-      {
-      delete _stringData;
-      if (t)
-            _stringData = new StringData(*t);
-      else
-            _stringData = 0;
-      }
-
-//---------------------------------------------------------
 //   setLongName
 //---------------------------------------------------------
 
@@ -1051,7 +1023,7 @@ void Instrument::setChannel(int i, const Channel& c)
 //   tablature
 //---------------------------------------------------------
 
-StringData* Instrument::stringData() const
+const StringData* Instrument::stringData() const
       {
       return d->stringData();
       }
@@ -1060,7 +1032,7 @@ StringData* Instrument::stringData() const
 //   setTablature
 //---------------------------------------------------------
 
-void Instrument::setStringData(StringData* t)
+void Instrument::setStringData(const StringData& t)
       {
       d->setStringData(t);
       }
@@ -1213,9 +1185,8 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr.setMidiActions(t->midiActions);
       instr.setArticulation(t->articulation);
       instr.setChannel(t->channel);
-      instr.setStringData(t->stringData ? new StringData(*t->stringData) : 0);
+      instr.setStringData(t->stringData);
       return instr;
       }
-
 }
 

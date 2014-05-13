@@ -18,26 +18,17 @@
 
 namespace Ms {
 
-// static int guitarStrings[6] = { 40, 45, 50, 55, 59, 64 };
-
-StringData emptyStringData(0, 0, 0);
-
 //---------------------------------------------------------
 //   StringData
 //---------------------------------------------------------
 
 bool StringData::bFretting = false;
 
-StringData::StringData()
-      {
-      _frets = 0;
-      stringTable = QList<int>();
-      }
-
 StringData::StringData(int numFrets, int numStrings, int strings[])
       {
       _frets = numFrets;
 
+      stringTable.clear();
       for (int i = 0; i < numStrings; i++)
             stringTable.append(strings[i]);
       }
@@ -46,6 +37,7 @@ StringData::StringData(int numFrets, QList<int>& strings)
       {
       _frets = numFrets;
 
+      stringTable.clear();
       foreach(int i, strings)
             stringTable.append( i);
       }
@@ -56,6 +48,7 @@ StringData::StringData(int numFrets, QList<int>& strings)
 
 void StringData::read(XmlReader& e)
       {
+      stringTable.clear();
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "frets")
