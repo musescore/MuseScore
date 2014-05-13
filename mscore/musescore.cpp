@@ -1391,7 +1391,8 @@ void MuseScore::updateTabNames()
 static void usage()
       {
       printVersion("MuseScore");
-      fprintf(stderr, "Usage: mscore flags scorefile\n"
+      fprintf(stderr, QT_TRANSLATE_NOOP(usage,
+        "Usage: mscore flags scorefile\n"
         "   Flags:\n"
         "   -v        print version\n"
         "   -d        debug mode\n"
@@ -1407,12 +1408,13 @@ static void usage()
         "   -S style  load style file\n"
         "   -p name   execute named plugin\n"
         "   -F        use factory settings\n"
+        "   -R        revert to default preferences\n"
         "   -i        load icons from INSTALLPATH/icons\n"
         "   -e        enable experimental features\n"
         "   -c dir    override config/settings folder\n"
         "   -t        set testMode flag for all files\n"
         "   -w        write buildin workspace\n"
-        );
+        ));
       exit(-1);
       }
 
