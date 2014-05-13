@@ -2844,20 +2844,32 @@ class Sym {
       QString _string;
       QPointF _attach;
       qreal _width;                       // cached width
-      QRectF _bbox;                       // cached bbbox
+      QRectF _bbox;                       // cached bbox
+      QPointF _cutOutNE;
+      QPointF _cutOutNW;
+      QPointF _cutOutSE;
+      QPointF _cutOutSW;
 
    public:
       Sym() { }
 
-      const QString& string() const              { return _string;    }
-      void setString(const QString& s)           { _string = s;       }
+      const QString& string() const              { return _string;   }
+      void setString(const QString& s)           { _string = s;      }
       bool isValid() const                       { return !_string.isEmpty(); }
       QPointF attach() const                     { return _attach;   }
-      void setAttach(const QPointF& r)           { _attach = r; }
-      void setWidth(qreal val)                   { _width = val; }
-      qreal width() const                        { return _width; }
-      void setBbox(QRectF val)                    { _bbox = val; }
-      QRectF bbox() const                         { return _bbox; }
+      void setAttach(const QPointF& r)           { _attach = r;      }
+      qreal width() const                        { return _width;    }
+      void setWidth(qreal val)                   { _width = val;     }
+      QRectF bbox() const                        { return _bbox;     }
+      void setBbox(QRectF val)                   { _bbox = val;      }
+      QPointF cutOutNE() const                   { return _cutOutNE; }
+      void setCutOutNE(const QPointF& r)         { _cutOutNE = r;    }
+      QPointF cutOutNW() const                   { return _cutOutNW; }
+      void setCutOutNW(const QPointF& r)         { _cutOutNW = r;    }
+      QPointF cutOutSE() const                   { return _cutOutSE; }
+      void setCutOutSE(const QPointF& r)         { _cutOutSE = r;    }
+      QPointF cutOutSW() const                   { return _cutOutSW; }
+      void setCutOutSW(const QPointF& r)         { _cutOutSW = r;    }
 
       static SymId name2id(const QString& s)     { return lnhash.value(s, SymId::noSym); }     // return noSym if not found
       static SymId oldName2id(const QString s)   { return lonhash.value(s, SymId::noSym);}
@@ -2915,14 +2927,18 @@ class ScoreFont {
       QString symToHtml(SymId, SymId, int leftMargin=0);
       QPixmap sym2pixmap(SymId id, qreal mag);
 
-      qreal height(SymId id, qreal mag) const        { return _fm->tightBoundingRect(toString(id)).height() * mag; }
-      qreal width(SymId id, qreal mag) const         { return _symbols[int(id)].width() * mag;  }
-      qreal width(const QString& s, qreal mag) const { return _fm->width(s) * mag;  }
+      qreal height(SymId id, qreal mag) const         { return _fm->tightBoundingRect(toString(id)).height() * mag; }
+      qreal width(SymId id, qreal mag) const          { return _symbols[int(id)].width() * mag;  }
+      qreal width(const QString& s, qreal mag) const  { return _fm->width(s) * mag;  }
       const QRectF bbox(SymId id, qreal mag) const;
       const QRectF bbox(const QString& s, qreal mag) const;
-      QPointF attach(SymId id, qreal mag) const { return _symbols[int(id)].attach() * mag; }
-      bool isValid(SymId id) const              { return _symbols[int(id)].isValid(); }
-      const QString& family() const             { return _family; }
+      QPointF attach(SymId id, qreal mag) const       { return _symbols[int(id)].attach() * mag;   }
+      QPointF cutOutNE(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutNE() * mag; }
+      QPointF cutOutNW(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutNW() * mag; }
+      QPointF cutOutSE(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutSE() * mag; }
+      QPointF cutOutSW(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutSW() * mag; }
+      bool isValid(SymId id) const                    { return _symbols[int(id)].isValid(); }
+      const QString& family() const                   { return _family; }
       };
 
 extern void initScoreFonts();

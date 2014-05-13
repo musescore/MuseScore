@@ -1734,6 +1734,30 @@ QPointF Element::symAttach(SymId id) const
       }
 
 //---------------------------------------------------------
+//   symCutOutNE / symCutOutNW / symCutOutSE / symCutOutNW
+//---------------------------------------------------------
+
+QPointF Element::symCutOutNE(SymId id) const
+      {
+      return score()->scoreFont()->cutOutNE(id, magS());
+      }
+
+QPointF Element::symCutOutNW(SymId id) const
+      {
+      return score()->scoreFont()->cutOutNW(id, magS());
+      }
+
+QPointF Element::symCutOutSE(SymId id) const
+      {
+      return score()->scoreFont()->cutOutSE(id, magS());
+      }
+
+QPointF Element::symCutOutSW(SymId id) const
+      {
+      return score()->scoreFont()->cutOutSW(id, magS());
+      }
+
+//---------------------------------------------------------
 //   symIsValid
 //---------------------------------------------------------
 
