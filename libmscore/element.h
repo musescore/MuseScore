@@ -663,10 +663,10 @@ class Line : public Element {
 class Compound : public Element {
       Q_OBJECT
 
-      QList<Element*> elemente;
+      QList<Element*> elements;
 
    protected:
-      const QList<Element*>& getElemente() const { return elemente; }
+      const QList<Element*>& getElements() const { return elements; }
 
    public:
       Compound(Score*);
