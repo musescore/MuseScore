@@ -695,6 +695,8 @@ bool TextLine::readProperties(XmlReader& e)
                   _beginText = new Text(score());
                   _beginText->setParent(this);
                   }
+            else
+                  _beginText->setText("");
             _beginText->read(e);
             }
       else if (tag == "continueText") {
@@ -702,6 +704,8 @@ bool TextLine::readProperties(XmlReader& e)
                   _continueText = new Text(score());
                   _continueText->setParent(this);
                   }
+            else
+                  _continueText->setText("");
             _continueText->read(e);
             }
       else if (tag == "endText") {
@@ -709,6 +713,8 @@ bool TextLine::readProperties(XmlReader& e)
                   _endText = new Text(score());
                   _endText->setParent(this);
                   }
+            else
+                  _endText->setText("");
             _endText->read(e);
             }
       else if (!SLine::readProperties(e)) {
