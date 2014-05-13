@@ -472,7 +472,7 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool
                                    slur[i] = 0;
                                    started[i] = false;
                                    notations.tag(xml);
-                                   xml.tagE(QString("slur%1 type=\"stop\"%2 number=\"%3\"").arg(rest).arg(s->slurDirection() == MScore::UP ? " placement=\"above\"" : "").arg(i + 1));
+                                   xml.tagE(QString("slur%1 type=\"stop\"%2 number=\"%3\"").arg(rest).arg(s->slurDirection() == Direction::UP ? " placement=\"above\"" : "").arg(i + 1));
                                    }
                              }
                         }
