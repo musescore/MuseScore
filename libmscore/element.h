@@ -567,6 +567,10 @@ class Element : public QObject {
       QRectF symBbox(SymId id) const;
       QRectF symBbox(const QString&) const;
       QPointF symAttach(SymId id) const;
+      QPointF symCutOutNE(SymId id) const;
+      QPointF symCutOutNW(SymId id) const;
+      QPointF symCutOutSE(SymId id) const;
+      QPointF symCutOutSW(SymId id) const;
       QString toTimeSigString(const QString& s) const;
       bool symIsValid(SymId id) const;
 

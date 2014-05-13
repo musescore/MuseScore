@@ -1752,5 +1752,57 @@
                 0.316
             ]
         }
+    },
+
+    "glyphsWithAnchors" : {
+        "accidentalFlat": {
+            "cutOutNE": [
+                0.25,
+                0.65
+            ],
+            "cutOutSE": [
+                0.5,
+                -0.4
+            ]
+        },
+        "accidentalDoubleFlat": {
+            "cutOutNE": [
+                0.9,
+                0.65
+            ],
+            "cutOutSE": [
+                1.15,
+                -0.4
+            ]
+        },
+        "accidentalNatural": {
+            "cutOutNE": [
+                0.22,
+                0.86
+            ],
+            "cutOutSW": [
+                0.45,
+                -0.86
+            ]
+        },
+        "accidentalSharp": {
+            "cutOutNE": [
+                0.9,
+                1.0
+            ],
+            "cutOutNW": [
+                0.2,
+                0.66
+            ],
+            "cutOutSE": [
+                0.9,
+                -0.65
+            ],
+            "cutOutSW": [
+                0.2,
+                -0.95
+            ]
+        }
     }
+
 }
