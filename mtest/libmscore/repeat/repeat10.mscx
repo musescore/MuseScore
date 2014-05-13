@@ -21,10 +21,15 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
@@ -44,18 +49,8 @@
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
-        <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p align="right" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><span style=" font-family:'FreeSerif'; font-size:12pt;">Voice</span><!--EndFragment--></p></body></html>
-          </longName>
-        <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p align="right" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><span style=" font-family:'FreeSerif'; font-size:12pt;">Vo.</span><!--EndFragment--></p></body></html>
-          </shortName>
+        <longName pos="0">Voice</longName>
+        <shortName pos="0">Vo.</shortName>
         <trackName></trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
@@ -77,21 +72,9 @@ p, li { white-space: pre-wrap; }
         <bottomMargin>5</bottomMargin>
         <Text>
           <pos x="-3.61536" y="1.48464"/>
-          <halign>center</halign>
-          <valign>top</valign>
-          <offsetType>absolute</offsetType>
-          <family>FreeSerif</family>
-          <size>24</size>
-          <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerif'; font-size:24pt; font-weight:400; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Volta test 1</p>
-<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt;">playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</span></p></td></tr></table></body></html>
-            </html-data>
+          <style></style>
+          <text>Volta test 1
+playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</text>
           </Text>
         </VBox>
       <Measure number="1">
@@ -102,8 +85,6 @@ p, li { white-space: pre-wrap; }
           </Clef>
         <KeySig>
           <accidental>0</accidental>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -176,27 +157,15 @@ p, li { white-space: pre-wrap; }
       <Measure number="3">
         <Volta id="2">
           <subtype>1</subtype>
+          <beginHookHeight>1.9</beginHookHeight>
+          <endHookHeight>1.9</endHookHeight>
+          <beginTextPlace>2</beginTextPlace>
+          <beginTextPlace>2</beginTextPlace>
           <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
-            <halign>left</halign>
-            <valign>top</valign>
-            <xoffset>0.5</xoffset>
-            <yoffset>0</yoffset>
-            <offsetType>absolute</offsetType>
-            <family>FreeSerif</family>
-            <size>11</size>
-            <bold>1</bold>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerif'; font-size:11pt; font-weight:600; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt;">1.</span></p></td></tr></table></body></html>
-              </html-data>
+            <style>Volta</style>
+            <text>1.</text>
             </beginText>
           <endings>1</endings>
           </Volta>
@@ -264,27 +233,15 @@ p, li { white-space: pre-wrap; }
       <Measure number="5">
         <Volta id="3">
           <subtype>1</subtype>
+          <beginHookHeight>1.9</beginHookHeight>
+          <endHookHeight>1.9</endHookHeight>
+          <beginTextPlace>2</beginTextPlace>
+          <beginTextPlace>2</beginTextPlace>
           <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
-            <halign>left</halign>
-            <valign>top</valign>
-            <xoffset>0.5</xoffset>
-            <yoffset>0</yoffset>
-            <offsetType>absolute</offsetType>
-            <family>FreeSerif</family>
-            <size>11</size>
-            <bold>1</bold>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerif'; font-size:11pt; font-weight:600; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt;">2.</span></p></td></tr></table></body></html>
-              </html-data>
+            <style>Volta</style>
+            <text>2.</text>
             </beginText>
           <endings>1</endings>
           </Volta>
@@ -416,27 +373,15 @@ p, li { white-space: pre-wrap; }
       <Measure number="9">
         <Volta id="4">
           <subtype>1</subtype>
+          <beginHookHeight>1.9</beginHookHeight>
+          <endHookHeight>1.9</endHookHeight>
+          <beginTextPlace>2</beginTextPlace>
+          <beginTextPlace>2</beginTextPlace>
           <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
-            <halign>left</halign>
-            <valign>top</valign>
-            <xoffset>0.5</xoffset>
-            <yoffset>0</yoffset>
-            <offsetType>absolute</offsetType>
-            <family>FreeSerif</family>
-            <size>11</size>
-            <bold>1</bold>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <html-data>
-<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'FreeSerif'; font-size:11pt; font-weight:600; font-style:normal;">
-<table border="0" style="-qt-table-type: root; margin-top:1px; margin-bottom:1px; margin-left:1px; margin-right:1px;">
-<tr>
-<td style="border: none;">
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Times New Roman'; font-size:11pt;">3.</span></p></td></tr></table></body></html>
-              </html-data>
+            <style>Volta</style>
+            <text>3.</text>
             </beginText>
           <endings>3</endings>
           </Volta>

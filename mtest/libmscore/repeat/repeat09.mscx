@@ -86,10 +86,15 @@ p, li { white-space: pre-wrap; }
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
@@ -107,18 +112,8 @@ p, li { white-space: pre-wrap; }
         </Staff>
       <trackName>Violin</trackName>
       <Instrument>
-        <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p align="right" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><span style=" font-family:'FreeSerif'; font-size:12pt;">Violin</span><!--EndFragment--></p></body></html>
-          </longName>
-        <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p align="right" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><span style=" font-family:'FreeSerif'; font-size:12pt;">Vln.</span><!--EndFragment--></p></body></html>
-          </shortName>
+        <longName pos="0">Violin</longName>
+        <shortName pos="0">Vln.</shortName>
         <trackName></trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -161,8 +156,6 @@ p, li { white-space: pre-wrap; }
           </Clef>
         <KeySig>
           <accidental>0</accidental>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -191,6 +184,10 @@ p, li { white-space: pre-wrap; }
         <endRepeat>2</endRepeat>
         <Volta id="2">
           <subtype>1</subtype>
+          <beginHookHeight>1.9</beginHookHeight>
+          <endHookHeight>1.9</endHookHeight>
+          <beginTextPlace>2</beginTextPlace>
+          <beginTextPlace>2</beginTextPlace>
           <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <Segment>
@@ -217,6 +214,10 @@ p, li { white-space: pre-wrap; }
         <endRepeat>2</endRepeat>
         <Volta id="3">
           <subtype>1</subtype>
+          <beginHookHeight>1.9</beginHookHeight>
+          <endHookHeight>1.9</endHookHeight>
+          <beginTextPlace>2</beginTextPlace>
+          <beginTextPlace>2</beginTextPlace>
           <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <Segment>
@@ -242,9 +243,10 @@ p, li { white-space: pre-wrap; }
       <Measure number="5">
         <Volta id="4">
           <subtype>0</subtype>
+          <beginHookHeight>1.9</beginHookHeight>
+          <beginTextPlace>1</beginTextPlace>
+          <beginTextPlace>1</beginTextPlace>
           <lineWidth>0.1</lineWidth>
-          <beginTextPlace>above</beginTextPlace>
-          <continueTextPlace>above</continueTextPlace>
           <anchor>1</anchor>
           <Segment>
             <subtype>0</subtype>
@@ -255,10 +257,6 @@ p, li { white-space: pre-wrap; }
             <style>Volta</style>
             <text>3.</text>
             </beginText>
-          <continueText>
-            <style>TextLine</style>
-            <text></text>
-            </continueText>
           <endings>2</endings>
           </Volta>
         <Chord>

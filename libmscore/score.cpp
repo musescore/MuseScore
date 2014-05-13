@@ -252,30 +252,24 @@ void Score::init()
       _layerTags[0]   = "default";
 
       if (!_parentScore) {
-#ifdef Q_OS_WIN
-            _metaTags.insert("platform", "WIN");
-#endif
-#ifdef Q_OS_MAC
-            _metaTags.insert("platform", "MAC");
-#endif
-#ifdef Q_OS_LINUX
-            _metaTags.insert("platform", "X11");
+#if defined(Q_OS_WIN)
+            _metaTags.insert("platform", "Microsoft Windows");
+#elif defined(Q_OS_MAC)
+            _metaTags.insert("platform", "Apple Macintosh");
+#elif defined(Q_OS_LINUX)
+            _metaTags.insert("platform", "Linux");
+#else
+            _metaTags.insert("platform", "Unknown");
 #endif
             _metaTags.insert("movementNumber", "");
             _metaTags.insert("movementTitle", "");
             _metaTags.insert("workNumber", "");
             _metaTags.insert("workTitle", "");
-            /* TODO enable following block of code
-             * This adds arranger, composer, lyricist, poet and translator fields
-             * to the File / Info dialog.
-             * As these fields are saved in every .msc[xz] file, it requires updating
-             * all regression test files in the mtest directory.
             _metaTags.insert("arranger", "");
             _metaTags.insert("composer", "");
             _metaTags.insert("lyricist", "");
             _metaTags.insert("poet", "");
             _metaTags.insert("translator", "");
-             */
             _metaTags.insert("source", "");
             _metaTags.insert("copyright", "");
             _metaTags.insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
