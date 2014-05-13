@@ -16,6 +16,7 @@
 #include "mscore.h"
 #include "instrument.h"
 #include "clef.h"
+#include "stringdata.h"
 
 namespace Ms {
 
@@ -67,7 +68,7 @@ class InstrumentTemplate {
       bool useDrumset;
       Drumset* drumset;
 
-      StringData* stringData;
+      StringData stringData;
 
       QList<NamedEventList>   midiActions;
       QList<MidiArticulation> articulation;

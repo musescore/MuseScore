@@ -1128,7 +1128,7 @@ void Note::endDrag()
             int nString = _string + staff->staffType()->upsideDown() ? -_lineOffset : _lineOffset;
             _lineOffset = 0;
             // get a fret number for same pitch on new string
-            StringData* strData = staff->part()->instr()->stringData();
+            const StringData* strData = staff->part()->instr()->stringData();
             int nFret       = strData->fret(_pitch, nString);
             if (nFret < 0)                      // no fret?
                   return;                       // no party!
@@ -1600,7 +1600,7 @@ void Note::layout10(AccidentalState* as)
                   }
             if (_fret < 0) {
                   int string, fret;
-                  StringData* stringData = staff()->part()->instr()->stringData();
+                  const StringData* stringData = staff()->part()->instr()->stringData();
                   if (stringData->convertPitch(_pitch, &string, &fret)) {
                         _fret   = fret;
                         _string = string;

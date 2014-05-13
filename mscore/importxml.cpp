@@ -3172,7 +3172,7 @@ static void xmlStaffDetails(Score* score, int staff, StringData* t, QDomElement 
       if (t) {
             readStringData(t, e);
             Instrument* i = score->staff(staff)->part()->instr();
-            i->setStringData(t);
+            i->setStringData(*t);
             }
       }
 
@@ -5009,7 +5009,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                         s->add(cr);
                         }
                    // append grace notes
-                  // first excerpt grace notes after                        
+                  // first excerpt grace notes after
                   QList<Chord*> toRemove;
                   if(graceNotes.length()){
                         for(int i =  0; i < graceNotes.length(); i++){

@@ -579,7 +579,7 @@ void GuitarPro1::read(QFile* fp)
                   tuning2[strings-k-1] = tuning[k];
 
             int frets = 32;   // TODO
-            StringData* stringData = new StringData(frets, strings, tuning2);
+            StringData stringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
             instr->setStringData(stringData);
@@ -854,7 +854,7 @@ qDebug("BeginRepeat=============================================");
             int tuning2[strings];
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
-            StringData* stringData = new StringData(frets, strings, tuning2);
+            StringData stringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
             instr->setStringData(stringData);
@@ -1441,7 +1441,7 @@ void GuitarPro3::read(QFile* fp)
             int tuning2[strings];
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
-            StringData* stringData = new StringData(frets, strings, tuning2);
+            StringData stringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
             instr->setStringData(stringData);
@@ -2149,7 +2149,7 @@ void GuitarPro4::read(QFile* fp)
             int tuning2[strings];
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
-            StringData* stringData = new StringData(frets, strings, tuning2);
+            StringData stringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instr();
             instr->setStringData(stringData);
@@ -3016,7 +3016,7 @@ void GuitarPro5::readTracks()
             int tuning2[strings];
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
-            StringData* stringData = new StringData(frets, strings, tuning2);
+            StringData stringData(frets, strings, tuning2);
             Instrument* instr = part->instr();
             instr->setStringData(stringData);
             part->setPartName(name);

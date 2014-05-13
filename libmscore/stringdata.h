@@ -25,15 +25,15 @@ class Note;
 //---------------------------------------------------------
 
 class StringData {
-      QList<int>  stringTable;
-      int         _frets;
+      QList<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
+      int         _frets = 19;
 
       static bool bFretting;
 
-      void        sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord* chord, int* count) const;
+      void sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord* chord, int* count) const;
 
 public:
-      StringData();
+      StringData() {}
       StringData(int numFrets, int numStrings, int strings[]);
       StringData(int numFrets, QList<int>& strings);
       bool        convertPitch(int pitch, int* string, int* fret) const;
@@ -49,9 +49,8 @@ public:
       void        write(Xml&) const;
 //      void        readMusicXML(XmlReader& de);
       void        writeMusicXML(Xml& xml) const;
+      bool operator==(const StringData& d) const { return d._frets == _frets && d.stringTable == stringTable; }
       };
-
-extern StringData emptyStringData;
 
 }     // namespace Ms
 #endif

@@ -14,6 +14,7 @@
 #define __INSTRUMENT_P_H__
 
 #include "instrument.h"
+#include "stringdata.h"
 
 namespace Ms {
 
@@ -31,7 +32,7 @@ class InstrumentData : public QSharedData {
 
       bool       _useDrumset;
       Drumset*   _drumset;
-      StringData* _stringData;
+      StringData _stringData;
 
       QList<NamedEventList>   _midiActions;
       QList<MidiArticulation> _articulation;
@@ -75,8 +76,8 @@ class InstrumentData : public QSharedData {
       void setArticulation(const QList<MidiArticulation>& l) { _articulation = l; }
       void setChannel(const QList<Channel>& l)               { _channel = l;      }
       void setChannel(int i, const Channel& c)               { _channel[i] = c;   }
-      StringData* stringData() const;
-      void setStringData(StringData* t);    // move ownership of tablature to Instrument
+      const StringData* stringData() const                   { return &_stringData; }
+      void setStringData(const StringData& d)                { _stringData = d;     }
 
       void setLongName(const QString& f);
       void setShortName(const QString& f);

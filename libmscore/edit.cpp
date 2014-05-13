@@ -680,7 +680,7 @@ void Score::putNote(const Position& p, bool replace)
       const Instrument* instr = st->part()->instr(s->tick());
       Direction stemDirection = Direction::AUTO;
       NoteVal nval;
-      StringData* stringData = 0;
+      const StringData* stringData = 0;
       StaffType* tab = 0;
 
       switch(st->staffType()->group()) {
