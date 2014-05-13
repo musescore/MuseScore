@@ -455,7 +455,7 @@ void Segment::add(Element* el)
             case CLEF:
                   Q_ASSERT(_segmentType == SegClef);
                   if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
+                        qDebug("Segment::add(%s) there is already a %s at %s(%d) track %d. score %p",
                            el->name(), _elist[track]->name(),
                            score()->sigmap()->pos(tick()), tick(), track, score());
                         }
@@ -466,7 +466,7 @@ void Segment::add(Element* el)
             case TIMESIG:
                   Q_ASSERT(segmentType() == SegTimeSig || segmentType() == SegTimeSigAnnounce);
                   if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
+                        qDebug("Segment::add(%s) there is already a %s at %s(%d) track %d. score %p",
                            el->name(), _elist[track]->name(),
                            score()->sigmap()->pos(tick()), tick(), track, score());
                         }
@@ -479,7 +479,7 @@ void Segment::add(Element* el)
             case REST:
                   Q_ASSERT(_segmentType == SegChordRest);
                   if (_elist[track]) {
-                        qDebug("%p Segment %s add(%s) there is already an %s at %s(%d) track %d. score %p",
+                        qDebug("%p Segment %s add(%s) there is already a %s at %s(%d) track %d. score %p",
                            this, subTypeName(), el->name(), _elist[track]->name(),
                            score()->sigmap()->pos(tick()), tick(), track, score());
 // abort();
@@ -494,7 +494,7 @@ void Segment::add(Element* el)
             case BAR_LINE:
             case BREATH:
                   if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already an %s at %s(%d) track %d. score %p",
+                        qDebug("Segment::add(%s) there is already a %s at %s(%d) track %d. score %p",
                            el->name(), _elist[track]->name(),
                            score()->sigmap()->pos(tick()), tick(), track, score());
                         }

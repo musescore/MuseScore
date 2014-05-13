@@ -23,15 +23,6 @@
         </page-layout>
       <Spatium>1.76389</Spatium>
       </Style>
-    <StaffType idx="3" group="pitched">
-      <name>Pitched 5 lines</name>
-      <lines>5</lines>
-      <lineDistance>1</lineDistance>
-      <clef>1</clef>
-      <slashStyle>0</slashStyle>
-      <barlines>1</barlines>
-      <timesig>1</timesig>
-      </StaffType>
     <StaffType idx="4" group="tablature">
       <name>Tab</name>
       <lines>6</lines>
@@ -56,7 +47,16 @@
       <upsideDown>0</upsideDown>
       <useNumbers>1</useNumbers>
       </StaffType>
-    <StaffType idx="5" group="percussion">
+    <StaffType idx="14" group="pitched">
+      <name>Pitched 5 lines</name>
+      <lines>5</lines>
+      <lineDistance>1</lineDistance>
+      <clef>1</clef>
+      <slashStyle>0</slashStyle>
+      <barlines>1</barlines>
+      <timesig>1</timesig>
+      </StaffType>
+    <StaffType idx="15" group="percussion">
       <name>Percussion 5 lines</name>
       <lines>5</lines>
       <lineDistance>1</lineDistance>
@@ -70,10 +70,15 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
@@ -89,18 +94,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Flute<!--EndFragment--></p></body></html>
-          </longName>
-        <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Fl.<!--EndFragment--></p></body></html>
-          </shortName>
+        <longName pos="0">Flute</longName>
+        <shortName pos="0">Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -167,7 +162,7 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
         <Marker>
           <pos x="0" y="-2.7986"/>
           <style>Repeat Text Left</style>
-          <text></text>
+          <text><sym>segno</sym></text>
           <label>segno</label>
           </Marker>
         <Chord>
@@ -234,6 +229,10 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
         <endRepeat>2</endRepeat>
         <Volta id="2">
           <subtype>1</subtype>
+          <beginHookHeight>1.9</beginHookHeight>
+          <endHookHeight>1.9</endHookHeight>
+          <beginTextPlace>2</beginTextPlace>
+          <beginTextPlace>2</beginTextPlace>
           <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
@@ -275,6 +274,9 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="5">
         <Volta id="3">
           <subtype>0</subtype>
+          <beginHookHeight>1.9</beginHookHeight>
+          <beginTextPlace>2</beginTextPlace>
+          <beginTextPlace>2</beginTextPlace>
           <lineWidth>0.1</lineWidth>
           <anchor>1</anchor>
           <beginText>
