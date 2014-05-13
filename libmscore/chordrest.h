@@ -152,6 +152,8 @@ class ChordRest : public DurationElement {
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
       bool isGrace() const;
+      bool isGraceBefore() const;
+      bool isGraceAfter() const;
       void writeBeam(Xml& xml);
       };
 

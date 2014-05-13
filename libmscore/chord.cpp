@@ -50,6 +50,7 @@
 #include "key.h"
 #include "sym.h"
 #include "stringdata.h"
+#include "beam.h"
 
 namespace Ms {
 
@@ -943,6 +944,15 @@ void Chord::write(Xml& xml) const
             case NOTE_GRACE32:
                   xml.tagE("grace32");
                   break;
+            case NOTE_GRACE8_AFTER:
+                  xml.tagE("grace8after");
+                  break;
+            case NOTE_GRACE16_AFTER:
+                  xml.tagE("grace16after");
+                  break;
+            case NOTE_GRACE32_AFTER:
+                  xml.tagE("grace32after");
+                  break;
             }
 
       if (_noStem)
@@ -1030,6 +1040,18 @@ void Chord::read(XmlReader& e)
                   }
             else if (tag == "grace32") {
                   _noteType = NOTE_GRACE32;
+                  e.readNext();
+                  }
+            else if (tag == "grace8after") {
+                  _noteType = NOTE_GRACE8_AFTER;
+                  e.readNext();
+                  }
+            else if (tag == "grace16after") {
+                  _noteType = NOTE_GRACE16_AFTER;
+                  e.readNext();
+                  }
+            else if (tag == "grace32after") {
+                  _noteType = NOTE_GRACE32_AFTER;
                   e.readNext();
                   }
             else if (tag == "StemDirection") {
@@ -1479,6 +1501,30 @@ void Chord::layoutStem()
       }
 
 //---------------------------------------------------------
+//    underBeam: true, if grace note is placed under a beam.
+//---------------------------------------------------------
+
+bool Chord::underBeam() const
+      {
+      if(_noteType == NOTE_NORMAL)
+          return false;
+      const Chord* cr = static_cast<Chord*>(parent());
+      Beam* beam = cr->beam();
+      if(!beam || !cr->beam()->up())
+            return false;
+      int s = beam->elements().count();
+      if(isGraceBefore()){
+            if(beam->elements()[0] != cr)
+                return true;
+            }
+      if(isGraceAfter()){
+            if(beam->elements()[s - 1] != cr)
+                return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   layout2
 //    Called after horizontal positions of all elements
 //    are fixed.
@@ -1832,19 +1878,46 @@ void Chord::layoutPitched()
       _space.setLw(lll);
       _space.setRw(rrr);
 
-      int n = _graceNotes.size();
-      if (n) {
-            qreal x = -(_space.lw() + minNoteDistance);
-            qreal graceMag = score()->styleD(ST_graceNoteMag);
-            for (int i = n-1; i >= 0; --i) {
-                  Chord* c = _graceNotes[i];
-                  x -= c->space().rw();
-                  c->setPos(x - ipos().x(), 0);
-                  x -= c->space().lw() + minNoteDistance * graceMag;
-                  }
-            if (-x > _space.lw())
-                  _space.setLw(-x);
-            }
+      QList<Chord*> graceNotesBefore;
+      qreal graceMag = score()->styleD(ST_graceNoteMag);
+      int nb = getGraceNotesBefore(&graceNotesBefore);
+      if (nb){
+              qreal xl = -(_space.lw() + minNoteDistance);
+              for (int i = nb-1; i >= 0; --i) {
+                    Chord* c = graceNotesBefore.value(i);
+                    xl -= c->space().rw()/* * 1.2*/;
+                    c->setPos(xl, 0);
+                    xl -= c->space().lw() + minNoteDistance * graceMag;
+                    }
+              if (-xl > _space.lw())
+                    _space.setLw(-xl);
+              }
+       QList<Chord*> graceNotesAfter;
+       getGraceNotesAfter(&graceNotesAfter);
+       int na = graceNotesAfter.size();
+       if (na){
+           // get factor for start distance after main note. Values found by testing.
+           qreal fc;
+           switch (durationType().type()) {
+                 case TDuration::V_LONG:    fc = 3.8; break;
+                 case TDuration::V_BREVE:   fc = 3.8; break;
+                 case TDuration::V_WHOLE:   fc = 3.8; break;
+                 case TDuration::V_HALF:    fc = 3.6; break;
+                 case TDuration::V_QUARTER: fc = 2.1; break;
+                 case TDuration::V_EIGHT:   fc = 1.4; break;
+                 case TDuration::V_16TH:    fc = 1.2; break;
+                 default: fc = 1;
+                 }
+           qreal xr = fc * (_space.rw() + minNoteDistance);
+           for (int i = 0; i <= na - 1; i++) {
+                 Chord* c = graceNotesAfter.value(i);
+                 xr += c->space().lw() * (i == 0 ? 1.3 : 1);
+                 c->setPos(xr, 0);
+                 xr += c->space().rw() + minNoteDistance * graceMag;
+                 }
+           if (xr > _space.rw())
+                 _space.setRw(xr);
+           }
 
       for (Element* e : _el) {
             if (e->type() == Element::SLUR)     // we cannot at this time as chordpositions are not fixed
@@ -2016,20 +2089,46 @@ void Chord::layoutTablature()
       _space.setLw(lll);
       _space.setRw(rrr);
 
-      int numOfGraces = _graceNotes.size();
-      if (numOfGraces) {
-            qreal x = -(_space.lw() + minNoteDistance);
-            qreal graceMag = score()->styleD(ST_graceNoteMag);
-            for (int i = numOfGraces-1; i >= 0; --i) {
-                  Chord* c = _graceNotes[i];
-                  x -= c->space().rw();
-                  c->setPos(x, 0);
-                  x -= c->space().lw() + minNoteDistance * graceMag;
-                  }
-            if (-x > _space.lw())
-                  _space.setLw(-x);
-            }
-
+      QList<Chord*> graceNotesBefore;
+      qreal graceMag = score()->styleD(ST_graceNoteMag);
+      int nb = getGraceNotesBefore(&graceNotesBefore);
+      if (nb){
+              qreal xl = -(_space.lw() + minNoteDistance);
+              for (int i = nb-1; i >= 0; --i) {
+                    Chord* c = graceNotesBefore.value(i);
+                    xl -= c->space().rw()/* * 1.2*/;
+                    c->setPos(xl, 0);
+                    xl -= c->space().lw() + minNoteDistance * graceMag;
+                    }
+              if (-xl > _space.lw())
+                    _space.setLw(-xl);
+              }
+       QList<Chord*> graceNotesAfter;
+       getGraceNotesAfter(&graceNotesAfter);
+       int na = graceNotesAfter.size();
+       if (na){
+           // get factor for start distance after main note. Values found by testing.
+           qreal fc;
+           switch (durationType().type()) {
+                 case TDuration::V_LONG:    fc = 3.8; break;
+                 case TDuration::V_BREVE:   fc = 3.8; break;
+                 case TDuration::V_WHOLE:   fc = 3.8; break;
+                 case TDuration::V_HALF:    fc = 3.6; break;
+                 case TDuration::V_QUARTER: fc = 2.1; break;
+                 case TDuration::V_EIGHT:   fc = 1.4; break;
+                 case TDuration::V_16TH:    fc = 1.2; break;
+                 default: fc = 1;
+                 }
+           qreal xr = fc * (_space.rw() + minNoteDistance);
+           for (int i = 0; i <= na - 1; i++) {
+                 Chord* c = graceNotesAfter.value(i);
+                 xr += c->space().lw() * (i == 0 ? 1.3 : 1);
+                 c->setPos(xr, 0);
+                 xr += c->space().rw() + minNoteDistance * graceMag;
+                 }
+           if (xr > _space.rw())
+                 _space.setRw(xr);
+           }
       for (Element* e : _el) {
             e->layout();
             if (e->type() == CHORDLINE) {
@@ -2535,6 +2634,47 @@ Measure* Chord::measure() const
       }
 
 //---------------------------------------------------------
+//   getGraceNotesBefore
+//---------------------------------------------------------
+
+int Chord::getGraceNotesBefore(QList<Chord*>* graceNotesBefore)
+      {
+      int i = 0;
+      foreach (Chord* c, _graceNotes){
+               if (c->noteType() == NOTE_ACCIACCATURA
+               || c->noteType() == NOTE_APPOGGIATURA
+               || c->noteType() == NOTE_GRACE4
+               || c->noteType() == NOTE_GRACE16
+               || c->noteType() == NOTE_GRACE32){
+                    graceNotesBefore->append(c);
+                    i++;
+                    }
+              }
+      return i;
+      }
+
+//---------------------------------------------------------
+//   getGraceNotesAfter
+//---------------------------------------------------------
+
+int Chord::getGraceNotesAfter(QList<Chord*>* graceNotesAfter)
+      {
+      if(_graceNotes.length() == 0)
+            return 0;
+      int i = 0;
+      for(int j = _graceNotes.length() - 1; j >= 0; --j){
+            Chord* c = _graceNotes.at(j);
+            if (c->noteType() == NOTE_GRACE8_AFTER
+             || c->noteType() == NOTE_GRACE16_AFTER
+             || c->noteType() == NOTE_GRACE32_AFTER){
+                  graceNotesAfter->append(c);
+                  i++;
+                  }
+            }
+      return i;
+      }
+
+//---------------------------------------------------------
 //   sortNotes
 //---------------------------------------------------------
 
@@ -2544,6 +2684,20 @@ void Chord::sortNotes()
          [](const Note* a,const Note* b)->bool { return b->line() < a->line(); }
          // [](const Note* a,const Note* b)->bool { return a->pitch() < b->pitch(); }
          );
+     }
+
+//---------------------------------------------------------
+//   toGraceAfter
+//---------------------------------------------------------
+
+void Chord::toGraceAfter()
+      {
+      switch (noteType()) {
+            case NOTE_APPOGGIATURA:  setNoteType(NOTE_GRACE8_AFTER); break;
+            case NOTE_GRACE16:  setNoteType(NOTE_GRACE16_AFTER); break;
+            case NOTE_GRACE32:  setNoteType(NOTE_GRACE32_AFTER); break;
+            default: break;
+            }
       }
 }
 

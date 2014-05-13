@@ -687,8 +687,19 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
 
 void Slur::slurPosChord(SlurPos* sp)
       {
-      Note* _startNote = startChord()->downNote();
-      Note* _endNote   = endChord()->downNote();
+      Chord* stChord;
+      Chord* enChord ;
+      if(startChord()->isGraceAfter()){     // grace notes after, coming in reverse order
+            stChord = endChord();
+            enChord = startChord();
+            _up = false;
+            }
+      else{
+            stChord = startChord();
+            enChord = endChord();
+            }
+      Note* _startNote = stChord->downNote();
+      Note* _endNote   = enChord->downNote();
       qreal hw         = _startNote->headWidth();
       qreal __up       = _up ? -1.0 : 1.0;
       qreal _spatium = spatium();
@@ -709,10 +720,10 @@ void Slur::slurPosChord(SlurPos* sp)
             xo = _startNote->x() + hw * 0.4;
             yo = _startNote->pos().y() + _spatium * .75 * __up;
             }
-      sp->p1 = startChord()->pagePos() - pp + QPointF(xo, yo);
+      sp->p1 = stChord->pagePos() - pp + QPointF(xo, yo);
 
       //------p2
-      if ((endChord()->notes().size() > 1) || (endChord()->stem() && !endChord()->up() && !_up)) {
+      if ((enChord->notes().size() > 1) || (enChord->stem() && !enChord->up() && !_up)) {
             xo = _endNote->x() - hw * 0.12;
             yo = _endNote->pos().y() + hw * .3 * __up;
             }
@@ -720,7 +731,7 @@ void Slur::slurPosChord(SlurPos* sp)
             xo = _endNote->x() + hw * 0.15;
             yo = _endNote->pos().y() + _spatium * .75 * __up;
             }
-      sp->p2 = endChord()->pagePos() - pp + QPointF(xo, yo);
+      sp->p2 = enChord->pagePos() - pp + QPointF(xo, yo);
       }
 
 //---------------------------------------------------------

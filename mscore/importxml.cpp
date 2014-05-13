@@ -2267,7 +2267,11 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
             else
                   domError(e);
             }
-
+       // grace notes appearing at the end of a measure are added as grace notes after to the last Chord
+      foreach (Chord* gc, graceNotes){
+           addGraceNoteAfter(gc, measure->last());
+           graceNotes.clear();
+           }
 #ifdef DEBUG_TICK
       qDebug("end_of_measure measure->tick()=%d maxtick=%d lastMeasureLen=%d measureLen=%d tsig=%d(%s)",
              measure->tick(), maxtick, lastMeasureLen, measureLen.ticks(),
@@ -4183,9 +4187,16 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     slur[slurNo]->setEndElement(cr);
                                     }
                               else {
-                                    slur[slurNo]->setTick2(cr->tick());
-                                    slur[slurNo]->setTrack2(track);
-                                    slur[slurNo]->setEndElement(cr);
+                                    if(cr->isGrace()){
+                                          slur[slurNo]->setAnchor(Spanner::ANCHOR_CHORD);
+                                          slur[slurNo]->setEndElement(slur[slurNo]->startElement());
+                                          slur[slurNo]->setStartElement(cr);
+                                          }
+                                    else {
+                                          slur[slurNo]->setTick2(cr->tick());
+                                          slur[slurNo]->setTrack2(track);
+                                          slur[slurNo]->setEndElement(cr);
+                                          }
                                     slur[slurNo] = 0;
                                     }
                               }
@@ -4945,8 +4956,43 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                         cr->setTrack(track);
                         setDuration(cr, false, false, duration, ticks);
                         ch->setNoteType(graceNoteType(duration, graceSlash));
-                        }
-                  }
+                        // check whether grace is slured with prev. main note, then handle all grace
+                        // notes until this as after
+                        bool found = false;
+                        if(!notations.empty()) {
+                              foreach(QDomElement de, notations) {
+                                    for (QDomElement ee = de.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
+                                          if (ee.tagName() == "slur") {
+                                                int slurNo   = ee.attribute(QString("number"), "1").toInt() - 1;
+                                                QString slurType = ee.attribute(QString("type"));
+                                                if (slurType == "stop") {
+                                                     QDomElement eLastNote = org_e.previousSiblingElement("note");
+                                                      while(!eLastNote.isNull()){
+                                                            if (eLastNote.elementsByTagName("grace").isEmpty()){
+                                                                  QList<QDomElement> eSlurs = findSlurElements(eLastNote);
+                                                                  foreach (QDomElement es, eSlurs){
+                                                                       if (!es.isNull() && slurNo == es.attribute(QString("number"), "1").toInt() - 1 && es.attribute(QString("type")) == "start"){
+                                                                             foreach (Chord* cg, graceNotes)
+                                                                                   cg->toGraceAfter();
+                                                                             found = true;
+                                                                             break;
+                                                                             }
+                                                                       }
+                                                                  if (found)
+                                                                        break;
+                                                                  }
+                                                            eLastNote = eLastNote.previousSiblingElement("note");
+                                                            }
+                                                      break;
+                                                      }
+                                                }
+                                          }
+                                    if (found)
+                                          break;
+                                    }
+                             }
+                       }
+                 }
             else {
                   // regular note
                   // if there is already a chord just add to it
@@ -4962,11 +5008,32 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                         Segment* s = measure->getSegment(cr, loc_tick);
                         s->add(cr);
                         }
-                  // add grace notes (if any)
-                  for (int i = 0; i < graceNotes.size(); ++i) {
-                        Chord* gc = graceNotes[i];
-                        gc->setGraceIndex(i);
-                        cr->add(gc);
+                   // append grace notes
+                  // first excerpt grace notes after                        
+                  QList<Chord*> toRemove;
+                  if(graceNotes.length()){
+                        for(int i =  0; i < graceNotes.length(); i++){
+                              // grace notes from voice before, upcoming here must be grace after
+                              if(graceNotes[i]->voice() != cr->voice()){
+                                    addGraceNoteAfter(graceNotes[i], measure->last());
+                                    toRemove.append(graceNotes[i]);
+                                    }
+                              else if(graceNotes[i]->isGraceAfter()){
+                                    addGraceNoteAfter(graceNotes[i],  cr->segment()->prev());
+                                    toRemove.append(graceNotes[i]);
+                                    }
+                              }
+                        }
+                  foreach(Chord* cRem, toRemove)
+                        graceNotes.removeOne(cRem);
+                  toRemove.clear();
+                  // append grace notes before
+                  int ii = -1;
+                  for (ii = graceNotes.size() - 1; ii >= 0; ii--) {
+                        Chord* gc = graceNotes[ii];
+                        if(gc->voice() == cr->voice()){
+                             cr->add(gc);
+                             }
                         }
                   graceNotes.clear();
                   }
@@ -5442,6 +5509,38 @@ int MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
       Segment* s = measure->getSegment(clefs, tick);
       s->add(clefs);
       return res;
+      }
+
+//---------------------------------------------------------
+//   findSlurElement
+//---------------------------------------------------------
+QList<QDomElement> MusicXml::findSlurElements(QDomElement e)
+      {
+      QList<QDomElement> slurs;
+      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+            QString tag(e.tagName());
+            if (tag == "notations"){
+                  for(e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+                        if (e.tagName() == "slur")
+                              slurs.append(e);
+                  }
+            }
+      return slurs;
+      }
+
+//---------------------------------------------------------
+//   addGraceNoteAfter
+//---------------------------------------------------------
+
+void MusicXml::addGraceNoteAfter(Chord* graceNote, Segment* segm)
+      {
+      if(segm){
+            graceNote->toGraceAfter();
+            Chord* cr = static_cast<Chord*>(segm->element(graceNote->track()));
+            if(cr){
+                  cr->add(graceNote);
+                  }
+            }
       }
 }
 

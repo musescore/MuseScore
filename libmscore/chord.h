@@ -157,13 +157,15 @@ class Chord : public ChordRest {
 
       const QList<Chord*>& graceNotes() const { return _graceNotes; }
       QList<Chord*>& graceNotes()             { return _graceNotes; }
+      int getGraceNotesBefore(QList<Chord*>*);
+      int getGraceNotesAfter(QList<Chord*>*);
       int graceIndex() const                        { return _graceIndex; }
       void setGraceIndex(int val)                   { _graceIndex = val;  }
 
       virtual QPointF stemPos() const;        ///< page coordinates
       virtual qreal stemPosX() const;
       QPointF stemPosBeam() const;            ///< page coordinates
-
+      bool underBeam() const;
       Hook* hook() const                     { return _hook; }
 
       Q_INVOKABLE virtual void add(Ms::Element*);
@@ -178,7 +180,7 @@ class Chord : public ChordRest {
       NoteType noteType() const       { return _noteType; }
       void setNoteType(NoteType t)    { _noteType = t; }
       bool isGrace() const            { return _noteType != NOTE_NORMAL; }
-
+      void toGraceAfter();
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
       virtual void setTrack(int val);

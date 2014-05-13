@@ -1187,15 +1187,36 @@ Shortcut Shortcut::sc[] = {
         QT_TRANSLATE_NOOP("action","Grace: 32nd"),
          grace32_ICON
         ),
-     Shortcut(
-        STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-        "grace8b",
-        QT_TRANSLATE_NOOP("action","Grace: 8th after"),
-        QT_TRANSLATE_NOOP("action","Add 8th grace note after"),
-        QT_TRANSLATE_NOOP("action","Grace: 8th after"),
-         grace8b_ICON
-        ),
+        Shortcut(
+          STATE_NORMAL | STATE_NOTE_ENTRY,
+          0,
+        /* no stroke: 8th*/
+         "grace8after",
+         QT_TRANSLATE_NOOP("action","Grace: 8th after"),
+         QT_TRANSLATE_NOOP("action","Add 8th grace note after"),
+         QT_TRANSLATE_NOOP("action","Grace: quarter"),
+          grace8after_ICON
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+          0,
+       /* no stroke: 16th*/
+         "grace16after",
+         QT_TRANSLATE_NOOP("action","Grace: 16th after"),
+         QT_TRANSLATE_NOOP("action","Add 16th grace note after"),
+         QT_TRANSLATE_NOOP("action","Grace: 16th after"),
+          grace16after_ICON
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+          0,
+       /* no stroke: 32nd*/
+         "grace32after",
+         QT_TRANSLATE_NOOP("action","Grace: 32nd after"),
+         QT_TRANSLATE_NOOP("action","Add 32nd grace note after"),
+         QT_TRANSLATE_NOOP("action","Grace: 32nd after"),
+          grace32after_ICON
+         ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
