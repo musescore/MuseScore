@@ -129,6 +129,7 @@ static QString pluginName;
 static QString styleFile;
 QString localeName;
 bool useFactorySettings = false;
+bool deletePreferences = false;
 QString styleName;
 QString revision;
 QErrorMessage* errorMessage;
@@ -4640,6 +4641,10 @@ int main(int argc, char* av[])
                         break;
                   case 'F':
                         useFactorySettings = true;
+                        deletePreferences = true;
+                        break;
+                  case 'R':
+                        useFactorySettings = true;
                         break;
                   case 'e':
                         enableExperimental = true;
@@ -4692,7 +4697,13 @@ int main(int argc, char* av[])
 /**/
       if (dataPath.isEmpty())
             dataPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-
+      
+      if (deletePreferences) {
+            QDir(dataPath).removeRecursively();
+            QSettings settings;
+            QFile::remove(settings.fileName());
+            }
+            
       // create local plugin directory
       // if not already there:
       QDir dir;
@@ -4710,7 +4721,7 @@ int main(int argc, char* av[])
             QSettings s;
             localeName = s.value("language", "system").toString();
             }
-
+      
       setMscoreLocale(localeName);
 
       Shortcut::init();
