@@ -95,7 +95,7 @@ void removeEmptyTuplets(MTrack &track)
       }
 
 int averagePitch(const std::map<ReducedFraction,
-                                std::multimap<ReducedFraction, MidiChord>::iterator> &chords)
+                 std::multimap<ReducedFraction, MidiChord>::iterator> &chords)
       {
       if (chords.empty())
             return -1;
@@ -201,7 +201,7 @@ findTupletForTimeRange(
             const std::multimap<ReducedFraction, TupletData> &tupletEvents)
       {
       Q_ASSERT_X(len >= ReducedFraction(0, 1),
-                 "MidiTuplet::findTupletForTimeRange", "Negative length of time range");
+                 "MidiTuplet::findTupletForTimeRange", "Negative length of the time range");
 
       if (tupletEvents.empty())
             return tupletEvents.end();

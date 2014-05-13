@@ -103,6 +103,7 @@ void collectChords(std::multimap<int, MTrack> &tracks);
 void removeOverlappingNotes(std::multimap<int, MTrack> &tracks);
 void mergeChordsWithEqualOnTimeAndVoice(std::multimap<int, MTrack> &tracks);
 void splitUnequalChords(std::multimap<int, MTrack> &tracks);
+int chordAveragePitch(const QList<MidiNote> &notes);
 
 #ifdef QT_DEBUG
 

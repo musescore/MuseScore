@@ -877,38 +877,39 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
                   else
                         p.penalty = (isHuman) ? timePenalty / levelDiff : timePenalty;
 
-                  if (chordIndex > 0) {
-                        const QuantData &dPrev = quantData[chordIndex - 1];
-                        double minPenalty = std::numeric_limits<double>::max();
-                        int minPos = -1;
-                        for (int posPrev = 0; posPrev != (int)dPrev.positions.size(); ++posPrev) {
-                              const QuantPos &pPrev = dPrev.positions[posPrev];
-                              if (pPrev.time > p.time)
+                  if (chordIndex == 0)
+                        continue;
+
+                  const QuantData &dPrev = quantData[chordIndex - 1];
+                  double minPenalty = std::numeric_limits<double>::max();
+                  int minPos = -1;
+                  for (int posPrev = 0; posPrev != (int)dPrev.positions.size(); ++posPrev) {
+                        const QuantPos &pPrev = dPrev.positions[posPrev];
+                        if (pPrev.time > p.time)
+                              continue;
+                        double penalty = pPrev.penalty;
+                        if (pPrev.time == p.time) {
+                              if (!d.canMergeWithPrev)
                                     continue;
-                              double penalty = pPrev.penalty;
-                              if (pPrev.time == p.time) {
-                                    if (!d.canMergeWithPrev)
-                                          continue;
-                                    penalty += d.quant.toDouble() * MERGE_PENALTY_COEFF;
-                                    }
-
-                              if (chordIndex > 1) {
-                                    penalty += findTempoPenalty(p, pPrev, d, dPrev,
-                                                                quantData, chordIndex);
-                                    }
-
-                              if (penalty < minPenalty) {
-                                    minPenalty = penalty;
-                                    minPos = posPrev;
-                                    }
+                              penalty += d.quant.toDouble() * MERGE_PENALTY_COEFF;
                               }
 
-                        Q_ASSERT_X(minPos != -1,
-                                   "Quantize::applyDynamicProgramming", "Min pos was not found");
+                        if (chordIndex > 1) {
+                              penalty += findTempoPenalty(p, pPrev, d, dPrev,
+                                                          quantData, chordIndex);
+                              }
 
-                        p.penalty += minPenalty;
-                        p.prevPos = minPos;
+                        if (penalty < minPenalty) {
+                              minPenalty = penalty;
+                              minPos = posPrev;
+                              }
                         }
+
+                  Q_ASSERT_X(minPos != -1,
+                             "Quantize::applyDynamicProgramming", "Min pos was not found");
+
+                  p.penalty += minPenalty;
+                  p.prevPos = minPos;
                   }
             }
       }
