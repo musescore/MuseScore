@@ -407,7 +407,7 @@ class Score : public QObject {
 
       void layoutStage2();
       void layoutStage3();
-      void beamGraceNotes(Chord*);
+      void beamGraceNotes(Chord*, bool);
 
       void hideEmptyStaves(System* system, bool isFirstSystem);
 
@@ -526,7 +526,7 @@ class Score : public QObject {
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(int tick, int len);
 
-      void setGraceNote(Chord*,  int pitch, NoteType type, bool behind, int len);
+      void setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
       Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = Direction::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);
