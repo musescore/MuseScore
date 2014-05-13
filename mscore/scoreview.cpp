@@ -142,7 +142,7 @@ class MagTransition1 : public QEventTransition
             QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
             bool b1 = me->button() == Qt::LeftButton;
             ScoreView* c = static_cast<ScoreView*>(eventSource());
-            c->zoom(b1 ? 2 : -1, me->pos());
+            c->zoomStep(b1 ? 2 : -1, me->pos());
             }
    public:
       MagTransition1(QObject* obj, QState* target)
@@ -165,7 +165,7 @@ class MagTransition2 : public QEventTransition
             QMouseEvent* me = static_cast<QMouseEvent*>(static_cast<QStateMachine::WrappedEvent*>(e)->event());
             bool b1 = me->button() == Qt::LeftButton;
             ScoreView* c = static_cast<ScoreView*>(eventSource());
-            c->zoom(b1 ? 2 : -1, me->pos());
+            c->zoomStep(b1 ? 2 : -1, me->pos());
             }
    public:
       MagTransition2(QObject* obj)
@@ -1918,29 +1918,20 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       }
 
 //---------------------------------------------------------
-//   zoom
+//   zoomStep: zoom in or out by some number of steps
 //---------------------------------------------------------
 
-void ScoreView::zoom(int step, const QPoint& pos)
+void ScoreView::zoomStep(qreal step, const QPoint& pos)
       {
       qreal _mag = mag();
 
-      if (step > 0) {
-            for (int i = 0; i < step; ++i) {
-                   _mag *= 1.1;
-                  }
-            }
-      else {
-            for (int i = 0; i < -step; ++i) {
-                  _mag /= 1.1;
-                  }
-            }
+      _mag *= qPow(1.1, step);
 
       zoom(_mag, QPointF(pos));
       }
 
 //---------------------------------------------------------
-//   zoom
+//   zoom: zoom to some absolute zoom level
 //---------------------------------------------------------
 
 void ScoreView::zoom(qreal _mag, const QPointF& pos)
@@ -2019,7 +2010,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
             }
       if (event->modifiers() & Qt::ControlModifier) {
             QApplication::sendPostedEvents(this, 0);
-            zoom(n, event->pos());
+            zoomStep(n, event->pos());
             return;
             }
       int dx = 0;
