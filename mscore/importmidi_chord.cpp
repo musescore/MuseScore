@@ -335,5 +335,15 @@ void mergeChordsWithEqualOnTimeAndVoice(std::multimap<int, MTrack> &tracks)
             }
       }
 
+int chordAveragePitch(const QList<MidiNote> &notes)
+      {
+      Q_ASSERT_X(!notes.isEmpty(), "MChord::chordAveragePitch", "Empty notes");
+
+      int sum = 0;
+      for (const auto &note: notes)
+            sum += note.pitch;
+      return qRound(sum * 1.0 / notes.size());
+      }
+
 } // namespace MChord
 } // namespace Ms
