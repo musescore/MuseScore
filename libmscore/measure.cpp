@@ -1217,7 +1217,6 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
       int type = e->type();
       // convert p from canvas to measure relative position and take x and y coordinates
       QPointF mrp = p - canvasPos(); // pos() - system()->pos() - system()->page()->pos();
-      qreal mrpx = mrp.x();
       qreal mrpy = mrp.y();
 
       System* s = system();
@@ -1238,11 +1237,7 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
       r.translate(page->pos());
       rr.translate(page->pos());
 
-      switch(type) {
-            case STAFF_LIST:
-                  viewer->setDropRectangle(r);
-                  return true;
-
+      switch (type) {
             case MEASURE_LIST:
             case JUMP:
             case MARKER:
@@ -1250,6 +1245,7 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
                   viewer->setDropRectangle(rr);
                   return true;
 
+            case STAFF_LIST:
             case BRACKET:
             case REPEAT_MEASURE:
             case MEASURE:
@@ -1260,32 +1256,13 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
 
             case BAR_LINE:
             case SYMBOL:
+            case CLEF:
                   // accept drop only inside staff
                   if (mrpy < t || mrpy > b)
                         return false;
                   viewer->setDropRectangle(r);
                   return true;
 
-            case CLEF:
-                  {
-                  // accept drop only inside staff
-                  if (mrpy < t || mrpy > b)
-                        return false;
-                  viewer->setDropRectangle(r);
-                  // search segment list backwards for segchordrest
-                  for (Segment* seg = last(); seg; seg = seg->prev()) {
-                        if (seg->segmentType() != Segment::SegChordRest)
-                              continue;
-                        // SegChordRest found, check if it contains anything in this staff
-                        for (int track = idx * VOICES; track < idx * VOICES + VOICES; ++track)
-                              if (seg->element(track)) {
-                                    // LVIFIX: for the rest in newly created empty measures,
-                                    // seg->pos().x() is incorrect
-                                    return mrpx < seg->pos().x();
-                                    }
-                        }
-                  }
-                  return false;
             case ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
