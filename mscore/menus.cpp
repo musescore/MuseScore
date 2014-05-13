@@ -251,7 +251,7 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
                   }
             }
       AccidentalBracket* ab = new AccidentalBracket(gscore);
-      sp->append(ab, QT_TRANSLATE_NOOP("Palette", "round bracket"));
+      sp->append(ab, QT_TRANSLATE_NOOP("Palette", "round brackets"));
       return sp;
       }
 
