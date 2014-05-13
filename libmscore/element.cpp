@@ -1073,9 +1073,9 @@ Compound::Compound(Score* s)
 Compound::Compound(const Compound& c)
    : Element(c)
       {
-      elemente.clear();
-      foreach(Element* e, c.elemente)
-            elemente.append(e->clone());
+      elements.clear();
+      foreach(Element* e, c.elements)
+            elements.append(e->clone());
       }
 
 //---------------------------------------------------------
@@ -1084,7 +1084,7 @@ Compound::Compound(const Compound& c)
 
 void Compound::draw(QPainter* painter) const
       {
-      foreach(Element* e, elemente) {
+      foreach(Element* e, elements) {
             QPointF pt(e->pos());
             painter->translate(pt);
             e->draw(painter);
@@ -1104,7 +1104,7 @@ void Compound::addElement(Element* e, qreal x, qreal y)
       {
       e->setPos(x, y);
       e->setParent(this);
-      elemente.push_back(e);
+      elements.push_back(e);
       }
 
 //---------------------------------------------------------
@@ -1114,7 +1114,7 @@ void Compound::addElement(Element* e, qreal x, qreal y)
 void Compound::layout()
       {
       setbbox(QRectF());
-      for (auto i = elemente.begin(); i != elemente.end(); ++i) {
+      for (auto i = elements.begin(); i != elements.end(); ++i) {
             Element* e = *i;
             e->layout();
             addbbox(e->bbox().translated(e->pos()));
@@ -1128,7 +1128,7 @@ void Compound::layout()
 void Compound::setSelected(bool f)
       {
       Element::setSelected(f);
-      for (auto i = elemente.begin(); i != elemente.end(); ++i)
+      for (auto i = elements.begin(); i != elements.end(); ++i)
             (*i)->setSelected(f);
       }
 
@@ -1139,7 +1139,7 @@ void Compound::setSelected(bool f)
 void Compound::setVisible(bool f)
       {
       Element::setVisible(f);
-      for (auto i = elemente.begin(); i != elemente.end(); ++i)
+      for (auto i = elements.begin(); i != elements.end(); ++i)
             (*i)->setVisible(f);
       }
 
@@ -1149,12 +1149,12 @@ void Compound::setVisible(bool f)
 
 void Compound::clear()
       {
-      foreach(Element* e, elemente) {
+      foreach(Element* e, elements) {
             if (e->selected())
                   score()->deselect(e);
             delete e;
             }
-      elemente.clear();
+      elements.clear();
       }
 
 //---------------------------------------------------------
