@@ -89,6 +89,8 @@ void StringData::write(Xml& xml) const
 bool StringData::convertPitch(int pitch, int* string, int* fret) const
       {
       int strings = stringTable.size();
+      if (strings < 1)
+            return false;
 
       // if above max fret on highest string, fret on first string, but return failure
       if (pitch > stringTable.at(strings-1) + _frets) {
@@ -121,6 +123,8 @@ bool StringData::convertPitch(int pitch, int* string, int* fret) const
 int StringData::getPitch(int string, int fret) const
       {
       int strings = stringTable.size();
+      if (strings < 1)
+            return INVALID_PITCH;
       return stringTable[strings - string - 1] + fret;
       }
 
@@ -133,6 +137,8 @@ int StringData::getPitch(int string, int fret) const
 int StringData::fret(int pitch, int string) const
       {
       int strings = stringTable.size();
+      if (strings < 1)
+            return FRET_NONE;
 
       if (string < 0 || string >= strings)
             return FRET_NONE;

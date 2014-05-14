@@ -25,8 +25,10 @@ class Note;
 //---------------------------------------------------------
 
 class StringData {
-      QList<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
-      int         _frets = 19;
+//      QList<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
+//      int         _frets = 19;
+      QList<int>  stringTable {  };                         // no strings by default
+      int         _frets = 0;
 
       static bool bFretting;
 
