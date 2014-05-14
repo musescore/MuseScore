@@ -28,7 +28,7 @@ void Score::cmdSplitMeasure(ChordRest* cr)
       Measure* measure = segment->measure();
 
       ScoreRange range;
-      range.read(measure->first(), measure->last(), 0, nstaves() * VOICES);
+      range.read(measure->first(), measure->last());
 
       startCmd();
       deleteItem(measure);
@@ -46,8 +46,7 @@ void Score::cmdSplitMeasure(ChordRest* cr)
       m2->setTimesig(measure->timesig());
       m1->adjustToLen(Fraction::fromTicks(ticks1));
       m2->adjustToLen(Fraction::fromTicks(ticks2));
-      range.write(0, m1);
-      range.fixup(m1);
+      range.write(this, m1->tick());
 
       endCmd();
       }

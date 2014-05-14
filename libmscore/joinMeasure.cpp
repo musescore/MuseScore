@@ -25,11 +25,11 @@ namespace Ms {
 void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       {
       startCmd();
-      
+
       deselectAll();
-      
+
       ScoreRange range;
-      range.read(m1->first(), m2->last(), 0, nstaves() * VOICES);
+      range.read(m1->first(), m2->last());
 
       undoRemoveMeasures(m1, m2);
       Measure* m = static_cast<Measure*>(insertMeasure(Element::MEASURE, m2->next(), true));
@@ -44,8 +44,7 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
                   break;
             }
       m->setLen(f);
-      range.write(0, m);
-      range.fixup(m);
+      range.write(this, m1->tick());
 
       endCmd();
       }
