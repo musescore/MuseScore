@@ -6114,27 +6114,7 @@ void ScoreFont::load()
             qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
                error.offset, qPrintable(error.errorString()));
 
-      QJsonObject oo = o.value("glyphs").toObject();
-      for (auto i : oo.keys()) {
-            QJsonObject ooo = oo.value(i).toObject();
-            SymId symId = Sym::lnhash.value(i, SymId::noSym);
-            if (symId == SymId::noSym)
-                  qDebug("ScoreFont: symId not found <%s> in <%s>", qPrintable(i), qPrintable(fi.fileName()));
-            Sym* sym = &_symbols[int(symId)];
-            for (auto i : ooo.keys()) {
-                  if (i == "stemDownNW") {
-                        //qreal x = ooo.value(i).toArray().at(0).toDouble();
-                        //qreal y = ooo.value(i).toArray().at(1).toDouble();
-                        }
-                  else if (i == "stemUpSE") {
-                        qreal x = ooo.value(i).toArray().at(0).toDouble();
-                        qreal y = ooo.value(i).toArray().at(1).toDouble();
-                        sym->setAttach(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
-                        }
-                  }
-            }
-
-      oo = o.value("glyphsWithAnchors").toObject();
+      QJsonObject oo = o.value("glyphsWithAnchors").toObject();
       for (auto i : oo.keys()) {
             qreal scale = MScore::DPI * SPATIUM20;
             QJsonObject ooo = oo.value(i).toObject();
@@ -6147,7 +6127,16 @@ void ScoreFont::load()
                   }
             Sym* sym = &_symbols[int(symId)];
             for (auto i : ooo.keys()) {
-                  if (i == "cutOutNE") {
+                  if (i == "stemDownNW") {
+                        //qreal x = ooo.value(i).toArray().at(0).toDouble();
+                        //qreal y = ooo.value(i).toArray().at(1).toDouble();
+                        }
+                  else if (i == "stemUpSE") {
+                        qreal x = ooo.value(i).toArray().at(0).toDouble();
+                        qreal y = ooo.value(i).toArray().at(1).toDouble();
+                        sym->setAttach(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
+                        }
+                  else if (i == "cutOutNE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
                         qreal y = ooo.value(i).toArray().at(1).toDouble() * scale;
                         sym->setCutOutNE(QPointF(x, -y));

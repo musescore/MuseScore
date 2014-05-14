@@ -558,7 +558,7 @@ struct AcEl {
 //    lx = calculated position of rightmost edge of left accidental relative to origin
 //---------------------------------------------------------
 
-static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pnd, qreal pd, qreal sp)
+static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qreal sp)
       {
       AcEl* upper;
       AcEl* lower;
@@ -594,7 +594,7 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pnd, qr
       // amount by which overlapping accidentals will be separated
       // for example, the vertical stems of two flat signs
       // these need more space than we would need between non-overlapping accidentals
-      qreal overlapShift = pd * 1.4;
+      qreal overlapShift = pd * 1.41;
 
       // accidentals with more significant overlap
       // acceptable if one accidental can subsume overlap
@@ -656,9 +656,9 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
       Accidental* acc = me->note->accidental();
 
       if (above)
-            conflictAbove = resolveAccidentals(me, above, lx, pnd, pd, sp);
+            conflictAbove = resolveAccidentals(me, above, lx, pd, sp);
       if (below)
-            conflictBelow = resolveAccidentals(me, below, lx, pnd, pd, sp);
+            conflictBelow = resolveAccidentals(me, below, lx, pd, sp);
       if (conflictAbove || conflictBelow)
             me->x = lx - acc->width() - acc->bbox().x();
       else if (colOffset != 0.0)
@@ -710,7 +710,6 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   acel.top    = line * 0.5 * sp + ac->bbox().top();
                   acel.bottom = line * 0.5 * sp + ac->bbox().bottom();
                   acel.width  = ac->width();
-#if 1
                   QPointF bboxNE = ac->symBbox(ac->symbol()).topRight();
                   QPointF bboxSW = ac->symBbox(ac->symbol()).bottomLeft();
                   QPointF cutOutNE = ac->symCutOutNE(ac->symbol());
@@ -731,40 +730,6 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                         acel.descent   = 0.0;
                         acel.leftClear = 0.0;
                         }
-#else
-                  qreal scale = sp * ac->mag();
-                  switch (ac->accidentalType()) {
-                        case Accidental::ACC_FLAT:
-                              acel.ascent = 1.2 * scale;
-                              acel.descent = 0;
-                              acel.rightClear = 0.5 * scale;
-                              acel.leftClear = 0;
-                              break;
-                        case Accidental::ACC_FLAT2:
-                              acel.ascent = 1.2 * scale;
-                              acel.descent = 0;
-                              acel.rightClear = 0.25 * scale;
-                              acel.leftClear = 0;
-                              break;
-                        case Accidental::ACC_NATURAL:
-                              acel.ascent = 0.5 * scale;
-                              acel.descent = 0.7 * scale;
-                              acel.rightClear = 0.5 * scale;
-                              acel.leftClear = 0.5 * scale;
-                              break;
-                        case Accidental::ACC_SHARP:
-                              acel.ascent = 0.25 * scale;
-                              acel.descent = 0.25 * scale;
-                              acel.rightClear = 0;
-                              acel.leftClear = 0;
-                              break;
-                        default:
-                              acel.ascent = 0;
-                              acel.descent = 0;
-                              acel.rightClear = 0;
-                              acel.leftClear = 0;
-                        }
-#endif
                   int pitchClass = (line + 700) % 7;
                   acel.next = columnBottom[pitchClass];
                   columnBottom[pitchClass] = nAcc;
