@@ -23,7 +23,6 @@
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
-      <minTieLength>0</minTieLength>
       <voltaY>-2</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
