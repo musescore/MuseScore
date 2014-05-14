@@ -302,6 +302,16 @@ void EditStaffType::setFromDlg()
       staffType.setGenClef(genClef->isChecked());
       staffType.setShowBarlines(showBarlines->isChecked());
       staffType.setGenTimesig(genTimesig->isChecked());
+      if (staffType.group() == STANDARD_STAFF_GROUP) {
+            staffType.setGenKeysig(genKeysigPitched->isChecked());
+            staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
+            staffType.setSlashStyle(stemlessPitched->isChecked());
+            }
+      if (staffType.group() == PERCUSSION_STAFF_GROUP) {
+            staffType.setGenKeysig(genKeysigPercussion->isChecked());
+            staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
+            staffType.setSlashStyle(stemlessPercussion->isChecked());
+            }
       staffType.setDurationFontName(durFontName->currentText());
       staffType.setDurationFontSize(durFontSize->value());
       staffType.setDurationFontUserY(durY->value());
@@ -318,17 +328,14 @@ void EditStaffType::setFromDlg()
       //note values
       staffType.setStemsDown(stemBelowRadio->isChecked());
       staffType.setStemsThrough(stemThroughRadio->isChecked());
-      staffType.setSlashStyle(true);                 // assume no note values
-      staffType.setGenDurations(false);              //    "     "
-      if (noteValuesSymb->isChecked())
-            staffType.setGenDurations(true);
-      if (noteValuesStems->isChecked())
-            staffType.setSlashStyle(false);
-
-
-      staffType.setGenKeysig(genKeysigPercussion->isChecked());
-      staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
-      staffType.setSlashStyle(stemlessPercussion->isChecked());
+      if (staffType.group() == TAB_STAFF_GROUP) {
+            staffType.setSlashStyle(true);                 // assume no note values
+            staffType.setGenDurations(false);              //    "     "
+            if (noteValuesSymb->isChecked())
+                  staffType.setGenDurations(true);
+            if (noteValuesStems->isChecked())
+                  staffType.setSlashStyle(false);
+            }
       }
 
 //---------------------------------------------------------
