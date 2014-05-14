@@ -50,8 +50,10 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       Instrument* instr = staff->part()->instr();
 
       groupCombo->clear();
+      // standard group is always present
       groupCombo->addItem(StaffType::groupName(STANDARD_STAFF_GROUP), STANDARD_STAFF_GROUP);
-            if (instr != nullptr) {
+      // only add percussion and tab groups if the instrument supports them
+      if (instr != nullptr) {
             if (instr->drumset() != nullptr)
                   groupCombo->addItem(StaffType::groupName(PERCUSSION_STAFF_GROUP), PERCUSSION_STAFF_GROUP);
             if (instr->stringData() != nullptr && instr->stringData()->strings() > 0)
