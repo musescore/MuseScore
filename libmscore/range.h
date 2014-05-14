@@ -24,6 +24,7 @@ class Segment;
 class Spanner;
 class ScoreRange;
 class ChordRest;
+class Score;
 
 //---------------------------------------------------------
 //   TrackList
@@ -74,10 +75,9 @@ class ScoreRange {
    public:
       ScoreRange() {}
       ~ScoreRange();
-      void read(Segment* first, Segment* last, int startTrack, int endTrack);
+      void read(Segment* first, Segment* last);
       bool canWrite(const Fraction&) const;
-      bool write(int track, Measure*) const;
-      void fixup(Measure*) const;
+      bool write(Score*, int tick) const;
       Fraction duration() const;
       Segment* first() const { return _first; }
       Segment* last() const  { return _last;  }

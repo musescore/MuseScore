@@ -22,6 +22,8 @@
 #include "tuplet.h"
 #include "barline.h"
 #include "utils.h"
+#include "staff.h"
+#include "excerpt.h"
 
 namespace Ms {
 
@@ -108,6 +110,8 @@ void TrackList::append(Element* e)
 
 void TrackList::appendGap(const Fraction& d)
       {
+      if (d.isZero())
+            return;
       Element* e = isEmpty() ? 0 : back();
       if (e && (e->type() == Element::REST)) {
             Rest* rest  = static_cast<Rest*>(back());
@@ -492,10 +496,12 @@ bool ScoreRange::canWrite(const Fraction& f) const
 //   read
 //---------------------------------------------------------
 
-void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrack)
+void ScoreRange::read(Segment* first, Segment* last)
       {
       _first = first;
       _last  = last;
+      int startTrack = 0;
+      int endTrack = first->score()->nstaves() * VOICES;
       spanner.clear();
       for (auto i : first->score()->spanner()) {
             Spanner* s = i.second;
@@ -518,24 +524,28 @@ void ScoreRange::read(Segment* first, Segment* last, int startTrack, int endTrac
 //   write
 //---------------------------------------------------------
 
-bool ScoreRange::write(int track, Measure* m) const
+bool ScoreRange::write(Score* score, int tick) const
       {
-      int n = tracks.size();
-      for (int i = 0; i < n; ++i) {
-            const TrackList* dl = tracks[i];
-            if (!dl->write(track + i, m))
+      int track = 0;
+      for (TrackList* dl : tracks) {
+            if (!dl->write(track, score->tick2measure(tick)))
                   return false;
+
+            if ((track % VOICES) == 0) {
+                  int staffIdx = track / VOICES;
+                  Staff* ostaff = score->staff(staffIdx);
+                  LinkedStaves* linkedStaves = ostaff->linkedStaves();
+                  if (linkedStaves) {
+                        for (Staff* nstaff : linkedStaves->staves()) {
+                              if (nstaff == ostaff)
+                                    continue;
+                              cloneStaff2(ostaff, nstaff, tick, tick + dl->duration().ticks());
+                              }
+                        }
+                  }
+
+            ++track;
             }
-      return true;
-      }
-
-//---------------------------------------------------------
-//   fixup
-//---------------------------------------------------------
-
-void ScoreRange::fixup(Measure* m) const
-      {
-      Score* score = m->score();
       for (Spanner* s : spanner) {
             s->setTick(s->tick() + first()->tick());
             s->setTick2(s->tick2() + first()->tick());
@@ -550,6 +560,7 @@ void ScoreRange::fixup(Measure* m) const
                   score->undoAddElement(a.e);
                   }
             }
+      return true;
       }
 
 //---------------------------------------------------------

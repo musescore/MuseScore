@@ -424,13 +424,12 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
 
 //---------------------------------------------------------
 //   cloneStaff
-//    srcStaff and dstStaff are in the same score
+//    staves are in same score
 //---------------------------------------------------------
 
 void cloneStaff(Staff* srcStaff, Staff* dstStaff)
       {
       Score* score = srcStaff->score();
-
       TieMap tieMap;
 
       int srcStaffIdx = score->staffIdx(srcStaff);
@@ -455,6 +454,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               ne = oe->linkedClone();
                         ne->setTrack(dstTrack);
                         ne->setParent(seg);
+                        ne->setScore(score);
                         score->undoAddElement(ne);
                         if (oe->isChordRest()) {
                               ChordRest* ocr = static_cast<ChordRest*>(oe);
@@ -490,6 +490,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                 Element* ne = e->clone();
                                                 ne->setTrack(dstTrack);
                                                 ne->setParent(seg);
+                                                ne->setScore(score);
                                                 score->undoAddElement(ne);
                                           }
                                     }
@@ -533,6 +534,141 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                   //export other spanner if staffidx matches
                   if (srcStaffIdx == staffIdx) {
                         dstTrack = dstStaffIdx * VOICES + s->voice();
+                        dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
+                        }
+                  }
+            if (dstTrack == -1)
+                  continue;
+            Spanner* ns = static_cast<Spanner*>(s->linkedClone());
+            ns->setScore(score);
+            ns->setParent(0);
+            ns->setTrack(dstTrack);
+            ns->setTrack2(dstTrack2);
+            score->addSpanner(ns);
+            }
+      }
+
+//---------------------------------------------------------
+//   cloneStaff2
+//    staves are in different scores
+//---------------------------------------------------------
+
+void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
+      {
+      Score* oscore = srcStaff->score();
+      Score* score  = dstStaff->score();
+      Measure* m1   = oscore->tick2measure(stick);
+      Measure* m2   = oscore->tick2measure(etick);
+
+      TieMap tieMap;
+
+      int srcStaffIdx = oscore->staffIdx(srcStaff);
+      int dstStaffIdx = score->staffIdx(dstStaff);
+
+      for (Measure* m = m1; m != m2; m = m->nextMeasure()) {
+            Measure* nm = score->tick2measure(m->tick());
+            int sTrack = srcStaffIdx * VOICES;
+            int eTrack = sTrack + VOICES;
+            for (int srcTrack = sTrack; srcTrack < eTrack; ++srcTrack) {
+                  TupletMap tupletMap;    // tuplets cannot cross measure boundaries
+                  int dstTrack = dstStaffIdx * VOICES + (srcTrack - sTrack);
+                  for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
+                        Element* oe = oseg->element(srcTrack);
+                        if (oe == 0 || oe->generated())
+                              continue;
+                        if (oe->type() == Element::TIMESIG)
+                              continue;
+                        Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
+                        Element* ne;
+                        if (oe->type() == Element::CLEF)
+                              ne = oe->clone();
+                        else
+                              ne = oe->linkedClone();
+                        ne->setTrack(dstTrack);
+                        ne->setParent(ns);
+                        ne->setScore(score);
+                        score->undoAddElement(ne);
+                        if (oe->isChordRest()) {
+                              ChordRest* ocr = static_cast<ChordRest*>(oe);
+                              ChordRest* ncr = static_cast<ChordRest*>(ne);
+                              Tuplet* ot     = ocr->tuplet();
+                              if (ot) {
+                                    Tuplet* nt = tupletMap.findNew(ot);
+                                    if (nt == 0) {
+                                          nt = new Tuplet(*ot);
+                                          nt->clear();
+                                          nt->setTrack(dstTrack);
+                                          nt->setParent(m);
+                                          tupletMap.add(ot, nt);
+                                          }
+                                    ncr->setTuplet(nt);
+                                    nt->add(ncr);
+                                    }
+                              foreach (Element* e, oseg->annotations()) {
+                                    if (e->generated() || e->systemFlag())
+                                          continue;
+                                    if (e->track() != srcTrack)
+                                          continue;
+                                    switch (e->type()) {
+                                          // exclude certain element types
+                                          // this should be same list excluded in Score::undoAddElement()
+                                          case Element::STAFF_TEXT:
+                                          case Element::HARMONY:
+                                          case Element::FIGURED_BASS:
+                                          case Element::LYRICS:
+                                          case Element::DYNAMIC:
+                                                continue;
+                                          default:
+                                                Element* ne = e->clone();
+                                                ne->setTrack(dstTrack);
+                                                ne->setParent(ns);
+                                                ne->setScore(score);
+                                                score->undoAddElement(ne);
+                                          }
+                                    }
+                              if (oe->type() == Element::CHORD) {
+                                    Chord* och = static_cast<Chord*>(ocr);
+                                    Chord* nch = static_cast<Chord*>(ncr);
+                                    int n = och->notes().size();
+                                    for (int i = 0; i < n; ++i) {
+                                          Note* on = och->notes().at(i);
+                                          Note* nn = nch->notes().at(i);
+                                          if (on->tieFor()) {
+                                                Tie* tie = new Tie(score);
+                                                nn->setTieFor(tie);
+                                                tie->setStartNote(nn);
+                                                tie->setTrack(nn->track());
+                                                tieMap.add(on->tieFor(), tie);
+                                                }
+                                          if (on->tieBack()) {
+                                                Tie* tie = tieMap.findNew(on->tieBack());
+                                                if (tie) {
+                                                      nn->setTieBack(tie);
+                                                      tie->setEndNote(nn);
+                                                      }
+                                                else {
+                                                      qDebug("cloneStave: cannot find tie");
+                                                      }
+                                                }
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+
+      for (auto i : oscore->spanner()) {
+            Spanner* s = i.second;
+            if (!(s->tick() >= stick && s->tick2() < etick))
+                  continue;
+
+            int staffIdx = s->staffIdx();
+            int dstTrack = -1;
+            int dstTrack2 = -1;
+            if (s->type() != Element::VOLTA) {
+                  //export other spanner if staffidx matches
+                  if (srcStaffIdx == staffIdx) {
+                        dstTrack  = dstStaffIdx * VOICES + s->voice();
                         dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
                         }
                   }

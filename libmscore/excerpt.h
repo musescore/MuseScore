@@ -46,6 +46,7 @@ class Excerpt {
 extern Score* createExcerpt(const QList<Part*>&);
 extern void cloneStaves(Score* oscore, Score* score, const QList<int>& map);
 extern void cloneStaff(Staff* ostaff, Staff* nstaff);
+extern void cloneStaff2(Staff* ostaff, Staff* nstaff, int stick, int etick);
 
 
 }     // namespace Ms

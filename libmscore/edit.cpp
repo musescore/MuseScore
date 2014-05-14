@@ -366,8 +366,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
 
 //---------------------------------------------------------
 //   rewriteMeasures
-//    rewrite all measures up to the next time signature
-//    or section break
+//    rewrite all measures from fm to lm
 //---------------------------------------------------------
 
 bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
@@ -377,58 +376,58 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
             ++measures;
 
       ScoreRange range;
-      range.read(fm->first(), lm->last(), 0, nstaves() * VOICES);
+      range.read(fm->first(), lm->last());
       if (!range.canWrite(ns))
             return false;
 
-      undoRemoveMeasures(fm, lm);
       //
       // calculate number of required measures = nm
       //
-      Fraction k   = range.duration();
-      k           /= ns;
-      int nm       = (k.numerator() + k.denominator() - 1)/ k.denominator();
+      Fraction k = range.duration() / ns;
+      int nm     = (k.numerator() + k.denominator() - 1)/ k.denominator();
 
       Fraction nd(nm * ns.numerator(), ns.denominator()); // total new duration
 
       // evtl. we have to fill the last measure
       Fraction fill = nd - range.duration();
-      if (!fill.isZero())
-            range.fill(fill);
+      range.fill(fill);
 
-      Measure* nfm = 0;
-      Measure* nlm = 0;
+      for (Score* s : scoreList()) {
+            Measure* m1 = s->tick2measure(fm->tick());
+            Measure* m2 = s->tick2measure(lm->tick());
+            s->undoRemoveMeasures(m1, m2);
 
-      // create destination measures
-      int tick = 0;
-      bool endBarGenerated = fm->endBarLineGenerated();
-      for (int i = 0; i < nm; ++i) {
-            Measure* m = new Measure(this);
-            m->setPrev(nlm);
-            if (nlm)
-                  nlm->setNext(m);
-            m->setTimesig(ns);
-            m->setLen(ns);
-            m->setTick(tick);
-            m->setEndBarLineType(NORMAL_BAR, endBarGenerated);
-            tick += m->ticks();
-            nlm = m;
-            if (nfm == 0)
-                  nfm = m;
+            Measure* nlm = 0;
+            Measure* nfm = 0;
+            int tick     = 0;
+            bool endBarGenerated = m1->endBarLineGenerated();
+            for (int i = 0; i < nm; ++i) {
+                  Measure* m = new Measure(s);
+                  m->setPrev(nlm);
+                  if (nlm)
+                        nlm->setNext(m);
+                  m->setTimesig(ns);
+                  m->setLen(ns);
+                  m->setTick(tick);
+                  m->setEndBarLineType(NORMAL_BAR, endBarGenerated);
+                  tick += m->ticks();
+                  nlm = m;
+                  if (nfm == 0)
+                        nfm = m;
+                  }
+            nlm->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
+               m2->endBarLineVisible(), m2->endBarLineColor());
+            //
+            // insert new calculated measures
+            //
+            nfm->setPrev(m1->prev());
+            nlm->setNext(m2->next());
+            s->undo(new InsertMeasures(nfm, nlm));
             }
-      if (!range.write(0, nfm)) {
-            qFatal("Cannot write measures\n");
-            }
-      nlm->setEndBarLineType(lm->endBarLineType(), lm->endBarLineGenerated(),
-         lm->endBarLineVisible(), lm->endBarLineColor());
 
-      //
-      // insert new calculated measures
-      //
-      nfm->setPrev(fm->prev());
-      nlm->setNext(lm->next());
-      undo(new InsertMeasures(nfm, nlm));
-      range.fixup(nfm);
+      if (!range.write(rootScore(), fm->tick()))
+            qFatal("Cannot write measures");
+
       return true;
       }
 
@@ -502,7 +501,6 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       TimeSig* lts = staff(staffIdx)->timeSig(tick);
       Fraction stretch;
       Fraction lsig;                // last signature
-      bool written = true;
       if (lts) {
             stretch = lts->stretch();
             lsig    = lts->sig();
@@ -537,14 +535,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             return;
             }
 
-      foreach(Score* score, scoreList()) {
-            Measure* fm = score->tick2measure(tick);
-            Measure* nfm = fm;
-            if (ots && ots->sig() == ts->sig() && ots->stretch() == ts->stretch()) {
-                  //
-                  // Set time signature of all measures up to next
-                  // time signature. Do not touch measure contents.
-                  //
+      if (ots && ots->sig() == ts->sig() && ots->stretch() == ts->stretch()) {
+            foreach (Score* score, scoreList()) {
+                  Measure* fm = score->tick2measure(tick);
                   for (Measure* m = fm; m; m = m->nextMeasure()) {
                         if ((m != fm) && m->first(Segment::SegTimeSig))
                               break;
@@ -554,46 +547,49 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               undoChangeProperty(m, P_TIMESIG_ACTUAL,  QVariant::fromValue(ns));
                         }
                   }
+            }
+      else {
+            Score* score = rootScore();
+            Measure* fm  = score->tick2measure(tick);
+            //
+            // rewrite all measures up to the next time signature
+            //
+            if (fm == score->firstMeasure() && (fm->len() != fm->timesig())) {
+                  // handle upbeat
+                  undoChangeProperty(fm, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                  Measure* m = fm->nextMeasure();
+                  Segment* s = m->findSegment(Segment::SegTimeSig, m->tick());
+                  fm = s ? 0 : fm->nextMeasure();
+                  }
             else {
-                  //
-                  // rewrite all measures up to the next time signature
-                  //
-                  if (fm == firstMeasure() && (fm->len() != fm->timesig())) {
-                        // handle upbeat
-                        undoChangeProperty(fm, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
-                        Measure* m = fm->nextMeasure();
-                        Segment* s = m->findSegment(Segment::SegTimeSig, m->tick());
-                        if (!s) {
-                              // there is something to rewrite
-                              written = score->rewriteMeasures(fm->nextMeasure(), ns);
-                              }
-                        }
-                  else {
-                        if (_sigmap->timesig(seg->tick()).timesig() != ts->sig()) {
-                              written = score->rewriteMeasures(fm, ns);
-                              nfm = fm->prev() ? fm->prev()->nextMeasure() : firstMeasure();
-                              }
+                  if (sigmap()->timesig(seg->tick()).timesig() == ts->sig())
+                        fm = 0;
+                  }
+            if (fm) {
+                  if (!score->rewriteMeasures(fm, ns)) {
+                        delete ts;
+                        return;
                         }
                   }
 
-            if(!written)
-                  break;
-
-            seg   = nfm->undoGetSegment(Segment::SegTimeSig, nfm->tick());
-            int n = score->nstaves();
-            for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-                  TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
-                  if (nsig == 0) {
-                        nsig = new TimeSig(this);
-                        nsig->setTrack(staffIdx * VOICES);
-                        nsig->setParent(seg);
-                        nsig->setSig(ts->sig(), ts->timeSigType());
-                        undoAddElement(nsig);
-                        }
-                  else {
-                        undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
-                              ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
-                        nsig->setDropTarget(0);       // DEBUG
+            foreach (Score* score, scoreList()) {
+                  Measure* nfm = score->tick2measure(tick);
+                  seg   = nfm->undoGetSegment(Segment::SegTimeSig, nfm->tick());
+                  int n = score->nstaves();
+                  for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+                        TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
+                        if (nsig == 0) {
+                              nsig = new TimeSig(score);
+                              nsig->setTrack(staffIdx * VOICES);
+                              nsig->setParent(seg);
+                              nsig->setSig(ts->sig(), ts->timeSigType());
+                              undoAddElement(nsig);
+                              }
+                        else {
+                              undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
+                                    ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
+                              nsig->setDropTarget(0);       // DEBUG
+                              }
                         }
                   }
             }
