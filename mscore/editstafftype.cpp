@@ -11,8 +11,10 @@
 //=============================================================================
 
 #include "editstafftype.h"
+#include "libmscore/part.h"
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
+#include "libmscore/stringdata.h"
 #include "musescore.h"
 #include "navigator.h"
 #include "scoreview.h"
@@ -45,11 +47,16 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       staff     = st;
       staffType = *staff->staffType();
+      Instrument* instr = staff->part()->instr();
 
       groupCombo->clear();
       groupCombo->addItem(StaffType::groupName(STANDARD_STAFF_GROUP), STANDARD_STAFF_GROUP);
-      groupCombo->addItem(StaffType::groupName(PERCUSSION_STAFF_GROUP), PERCUSSION_STAFF_GROUP);
-      groupCombo->addItem(StaffType::groupName(TAB_STAFF_GROUP), TAB_STAFF_GROUP);
+            if (instr != nullptr) {
+            if (instr->drumset() != nullptr)
+                  groupCombo->addItem(StaffType::groupName(PERCUSSION_STAFF_GROUP), PERCUSSION_STAFF_GROUP);
+            if (instr->stringData() != nullptr && instr->stringData()->strings() > 0)
+                  groupCombo->addItem(StaffType::groupName(TAB_STAFF_GROUP), TAB_STAFF_GROUP);
+            }
 
       // tab page configuration
       QList<QString> fontNames = StaffType::fontNames(false);
