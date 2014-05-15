@@ -13,7 +13,7 @@
 namespace Ms {
 namespace Simplify {
 
-const ReducedFraction findBarStart(const ReducedFraction &time, const TimeSigMap *sigmap)
+ReducedFraction findBarStart(const ReducedFraction &time, const TimeSigMap *sigmap)
       {
       int barIndex, beat, tick;
       sigmap->tickValues(time.ticks(), &barIndex, &beat, &tick);
@@ -668,6 +668,80 @@ void separateVoices(
             }
       }
 
+int findBarIndexForOffTime(const ReducedFraction &offTime, const TimeSigMap *sigmap)
+      {
+      int barIndex, beat, tick;
+      sigmap->tickValues(offTime.ticks(), &barIndex, &beat, &tick);
+      if (beat == 0 && tick == 0)
+            --barIndex;
+      return barIndex;
+      }
+
+int averagePitchOfChords(
+            const std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> &chords)
+      {
+      if (chords.empty())
+            return -1;
+
+      int sumPitch = 0;
+      int noteCounter = 0;
+      for (const auto &chord: chords) {
+            const auto &midiNotes = chord->second.notes;
+            for (const auto &midiNote: midiNotes) {
+                  sumPitch += midiNote.pitch;
+                  ++noteCounter;
+                  }
+            }
+
+      return qRound(sumPitch * 1.0 / noteCounter);
+      }
+
+void sortVoicesByPitch(std::map<int, std::vector<
+                              std::multimap<ReducedFraction, MidiChord>::iterator>> &voiceChords)
+      {
+            // <average pitch, old voice>
+      std::vector<std::pair<int, int>> pitches;
+      for (const auto &v: voiceChords)
+            pitches.push_back({averagePitchOfChords(v.second), v.first});
+
+      std::sort(pitches.begin(), pitches.end(), std::greater<std::pair<int, int>>());
+
+      for (int newVoice = 0; newVoice != (int)pitches.size(); ++newVoice) {
+            const int oldVoice = pitches[newVoice].second;
+            for (auto &chord: voiceChords[oldVoice])
+                  chord->second.voice = newVoice;
+            }
+      }
+
+void sortVoices(
+            std::multimap<ReducedFraction, MidiChord> &chords,
+            const TimeSigMap *sigmap)
+      {
+                  // <voice, chords>
+      std::map<int, std::vector<std::multimap<ReducedFraction, MidiChord>::iterator>> voiceChords;
+      int minBarIndex = 0;
+      int maxBarIndex = 0;
+
+      for (auto it = chords.begin(); it != chords.end(); ++it) {
+            const auto chord = it->second;
+
+            if (chord.barIndex >= minBarIndex && chord.barIndex <= maxBarIndex) {
+                  voiceChords[chord.voice].push_back(it);
+                  const int barIndex = findBarIndexForOffTime(
+                                          MChord::maxNoteOffTime(chord.notes), sigmap);
+                  if (barIndex > maxBarIndex)
+                        maxBarIndex = barIndex;
+                  }
+
+            if (std::next(it) == chords.end()
+                        || chord.barIndex < minBarIndex || chord.barIndex > maxBarIndex) {
+                  sortVoicesByPitch(voiceChords);
+                  voiceChords.clear();
+                  minBarIndex = ++maxBarIndex;
+                  }
+            }
+      }
+
 void simplifyNotation(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap)
       {
       auto &opers = preferences.midiImportOperations;
@@ -684,8 +758,10 @@ void simplifyNotation(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigm
             opers.setCurrentTrack(mtrack.indexOfOperation);
 
             if (opers.currentTrackOperations().simplifyNotation) {
-                  if (MidiTuplet::voiceLimit() > 1)
+                  if (MidiTuplet::voiceLimit() > 1) {
                         separateVoices(chords, sigmap, mtrack.tuplets);
+                        sortVoices(chords, sigmap);
+                        }
                   minimizeNumberOfRests(chords, sigmap, mtrack.tuplets);
                   }
             }
