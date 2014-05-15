@@ -293,13 +293,13 @@ bool TrackList::canWrite(const Fraction& measureLen) const
 
 void TrackList::dump() const
       {
-      printf("TrackList: elements %d, duration %d/%d\n", size(), _duration.numerator(), _duration.denominator());
+      qDebug("TrackList: elements %d, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
       for (int i = 0; i < size(); ++i) {
             Element* e = at(i);
-            printf("   %s\n", e->name());
+            qDebug("   %s", e->name());
             if (e->isDurationElement()) {
                   Fraction d = static_cast<DurationElement*>(e)->duration();
-                  printf("     duration %d/%d\n", d.numerator(), d.denominator());
+                  qDebug("     duration %d/%d", d.numerator(), d.denominator());
                   }
             }
       }

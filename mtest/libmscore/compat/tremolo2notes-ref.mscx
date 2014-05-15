@@ -128,9 +128,6 @@
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
-          <Tremolo>
-            <subtype>c8</subtype>
-            </Tremolo>
           </Chord>
         <BarLine>
           <subtype>normal</subtype>
@@ -156,9 +153,6 @@
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
-          <Tremolo>
-            <subtype>c16</subtype>
-            </Tremolo>
           </Chord>
         <BarLine>
           <subtype>normal</subtype>
@@ -184,9 +178,6 @@
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
-          <Tremolo>
-            <subtype>c32</subtype>
-            </Tremolo>
           </Chord>
         <BarLine>
           <subtype>end</subtype>
