@@ -1,0 +1,15 @@
+
+namespace Ms {
+
+/*
+ * This class inherits QToolButton and allows tabbing through the tool bar's buttons
+ */
+class AccessibleToolButton : public QToolButton{
+public:
+    AccessibleToolButton(QWidget* parent, QAction* defaultQAction );
+    void focusInEvent(QFocusEvent* e);
+    void focusOutEvent(QFocusEvent* e);
+    bool event(QEvent *e);
+};
+
+}
