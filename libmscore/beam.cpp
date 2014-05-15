@@ -1468,6 +1468,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             //
             qreal px1 = c1->stemPosX() + c1->pageX();
             qreal px2 = c2->stemPosX() + c2->pageX();
+
             if (_userModified[dIdx]) {
                   py1 += _pagePos.y();
                   py2 += _pagePos.y();
@@ -1498,9 +1499,11 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal y2   = 200000;
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
-                        if (c->type() != CHORD)
-                              continue;
-                        qreal y  = c->upNote()->pagePos().y();
+                        qreal y;
+                        if (c->type() == REST)
+                              continue;   //y = c->pagePos().y();
+                        else
+                              y  = c->upNote()->pagePos().y();
                         y1       = qMax(y1, y);
                         y2       = qMin(y2, y);
                         }
@@ -1548,12 +1551,12 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   }
             else {
                   py1 = c1->stemPos().y();
-                  py2 = c2->stemPos().y();
+                  py2 = c2->stemPos().y();      // for debug
                   computeStemLen(crl, py1, beamLevels);
                   }
-            py2 = (px2 - px1) * slope + py1;
+            py2  = (px2 - px1) * slope + py1;   // for debug
+            py2 -= _pagePos.y();                //
             py1 -= _pagePos.y();
-            py2 -= _pagePos.y();
             }
 
       //---------------------------------------------
@@ -1568,7 +1571,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             for (int i = 0; i < n;) {
                   ChordRest* cr1 = crl[i];
                   int l = cr1->durationType().hooks() - 1;
-                  if ((cr1->type() == REST) || l < beamLevel) {
+//                  if ((cr1->type() == REST) || l < beamLevel) {
+                  if (l < beamLevel) {
                         ++i;
                         continue;
                         }
@@ -1673,9 +1677,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   //feathered beams
                   qreal yo   = py1 + bl * _beamDist * _grow1;
-                  qreal yoo = py1 + bl * _beamDist * _grow2;
+                  qreal yoo  = py1 + bl * _beamDist * _grow2;
                   qreal ly1  = (x2 - x1) * slope + yo;
                   qreal ly2  = (x3 - x1) * slope + yoo;
+
                   if (!qIsFinite(x2) || !qIsFinite(ly1)
                      || !qIsFinite(x3) || !qIsFinite(ly2)) {
                         qDebug("bad beam segment: slope %f", slope);
@@ -1707,6 +1712,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             qreal x2 = stemPos.x() - _pagePos.x();
             qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
             qreal y2 = stemPos.y();
+
             qreal fuzz = _spatium * .1;
 
             qreal by = y2 < y1 ? -1000000 : 1000000;
@@ -1726,6 +1732,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   }
             stem->setLen(y2 - (by + _pagePos.y()));
+
 #if 0       // TODO ??
             if (!tab) {
                   bool _up = c->up();
