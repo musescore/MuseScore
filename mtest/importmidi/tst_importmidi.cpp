@@ -55,7 +55,7 @@ class TestImportMidi : public QObject, public MTest
       void noSimplification(const char *file)
             {
             TrackOperations opers;
-            opers.minimizeNumberOfRests = false;
+            opers.simplifyNotation = false;
             preferences.midiImportOperations.setDefaults(opers);
             mf(file);
             preferences.midiImportOperations.clear();
@@ -130,7 +130,7 @@ class TestImportMidi : public QObject, public MTest
             {
             TrackOperations opers;
             opers.changeClef = false;
-            opers.minimizeNumberOfRests = false;
+            opers.simplifyNotation = false;
             preferences.midiImportOperations.setDefaults(opers);
             mf("tuplet_3_5_7_tuplets");
             preferences.midiImportOperations.clear();
@@ -187,7 +187,7 @@ class TestImportMidi : public QObject, public MTest
             {
             TrackOperations opers;
             opers.LHRH.doIt = true;
-            opers.minimizeNumberOfRests = false;
+            opers.simplifyNotation = false;
             preferences.midiImportOperations.setDefaults(opers);
             mf("split_nontuplet");
             preferences.midiImportOperations.clear();
@@ -196,7 +196,7 @@ class TestImportMidi : public QObject, public MTest
             {
             TrackOperations opers;
             opers.LHRH.doIt = true;
-            opers.minimizeNumberOfRests = false;
+            opers.simplifyNotation = false;
             preferences.midiImportOperations.setDefaults(opers);
             mf("split_tuplet");
             preferences.midiImportOperations.clear();
@@ -207,7 +207,7 @@ class TestImportMidi : public QObject, public MTest
             {
             TrackOperations opers;
             opers.swing = MidiOperation::Swing::SWING;
-            opers.minimizeNumberOfRests = false;
+            opers.simplifyNotation = false;
             preferences.midiImportOperations.setDefaults(opers);
             mf("swing_triplets");
             preferences.midiImportOperations.clear();
@@ -216,7 +216,7 @@ class TestImportMidi : public QObject, public MTest
             {
             TrackOperations opers;
             opers.swing = MidiOperation::Swing::SHUFFLE;
-            opers.minimizeNumberOfRests = false;
+            opers.simplifyNotation = false;
             preferences.midiImportOperations.setDefaults(opers);
             mf("swing_shuffle");
             preferences.midiImportOperations.clear();
@@ -226,7 +226,7 @@ class TestImportMidi : public QObject, public MTest
             TrackOperations opers;
             opers.swing = MidiOperation::Swing::SWING;
             opers.changeClef = true;
-            opers.minimizeNumberOfRests = false;
+            opers.simplifyNotation = false;
             preferences.midiImportOperations.setDefaults(opers);
             mf("swing_clef");
             preferences.midiImportOperations.clear();
