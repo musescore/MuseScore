@@ -94,12 +94,25 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       // Call initStaffTypeCombo(true) ONLY if the item has been repositioned
       // or a memory leak may result
 
+      bool canUseTabs = false; // assume only normal staves are applicable
+      bool canUsePerc = false;
+      PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
+      // PartListItem has different members filled out if used in New Score Wizard or in Instruments Wizard
+      if (part) {
+            const StringData* stringData = part->it ? &(part->it->stringData) :
+                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->stringData() : 0);
+            canUseTabs = stringData && stringData->strings() > 0;
+            canUsePerc = part->it ? part->it->useDrumset :
+                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->useDrumset() : false);
+            }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
-
       int idx = 0;
       for (const StaffType& st : StaffType::presets()) {
-            _staffTypeCombo->addItem(st.name(), idx);
+            if (st.group() == STANDARD_STAFF_GROUP
+                        || (st.group() == PERCUSSION_STAFF_GROUP && canUsePerc)
+                        || (st.group() == TAB_STAFF_GROUP && canUseTabs))
+                  _staffTypeCombo->addItem(st.name(), idx);
             ++idx;
             }
       treeWidget()->setItemWidget(this, 4, _staffTypeCombo);
@@ -144,7 +157,7 @@ void StaffListItem::setStaffType(const StaffType* st)
       {
       for (int i = 0; i < _staffTypeCombo->count(); ++i) {
             const StaffType* _st = StaffType::preset(_staffTypeCombo->itemData(i).toInt());
-            if (_st == st) {
+            if (*_st == *st) {
                   _staffTypeCombo->setCurrentIndex(i);
                   return;
                   }
