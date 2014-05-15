@@ -324,7 +324,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           Chord* och = static_cast<Chord*>(ocr);
                                           Chord* nch = static_cast<Chord*>(ncr);
 
-                                          int n      = och->notes().size();
+                                          int n = och->notes().size();
                                           for (int i = 0; i < n; ++i) {
                                                 Note* on = och->notes().at(i);
                                                 Note* nn = nch->notes().at(i);
@@ -368,6 +368,13 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                       }
                                                 else
                                                       qDebug("inconsistent two note tremolo");
+                                                }
+                                          for (Element* e : och->el()) {
+                                                if (e->type() == Element::CHORDLINE) {
+                                                      Element* ne = e->linkedClone();
+                                                      ne->setScore(nch->score());
+                                                      nch->add(ne);
+                                                      }
                                                 }
                                           }
                                     }
