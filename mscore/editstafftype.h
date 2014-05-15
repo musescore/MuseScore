@@ -13,7 +13,7 @@
 #ifndef __EDITSTAFFTYPE_H__
 #define __EDITSTAFFTYPE_H__
 
-#include "ui_stafftype.h"
+#include "ui_editstafftype.h"
 #include "ui_stafftypetemplates.h"
 #include "libmscore/mscore.h"
 #include "libmscore/stafftype.h"
