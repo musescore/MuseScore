@@ -192,7 +192,7 @@ void StaffListItem::staffTypeChanged(int idx)
             ClefType clefType;
             switch (stfType->group()) {
                   case STANDARD_STAFF_GROUP:
-                        clefType = ClefType::G2;
+                        clefType = ClefType::G3;
                         break;
                   case TAB_STAFF_GROUP:
                         clefType = ClefType::TAB2;
