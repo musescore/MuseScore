@@ -12,8 +12,6 @@
 
 #include <fenv.h>
 #include <QToolBar>
-#include <QWidget>
-#include <QMenuBar>
 
 #include "palettebox.h"
 #include "config.h"
