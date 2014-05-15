@@ -96,11 +96,11 @@ class ChordRest : public DurationElement {
       virtual qreal downPos() const = 0;
       virtual qreal centerX() const = 0;
 
-      virtual int upLine() const                { return 0;}
-      virtual int downLine() const              { return 8;}
+      virtual int upLine() const                { return 4;}
+      virtual int downLine() const              { return 4;}
       int line(bool up) const                   { return up ? upLine() : downLine(); }
       int line() const                          { return _up ? upLine() : downLine(); }
-      virtual QPointF stemPos() const           { return canvasPos(); }    // point to connect stem
+      virtual QPointF stemPos() const           { return pagePos(); }    // point to connect stem
       virtual qreal stemPosX() const            { return 0.0; }
       bool up() const                           { return _up;   }
       void setUp(bool val)                      { _up = val; }
