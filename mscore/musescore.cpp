@@ -12,6 +12,7 @@
 
 #include <fenv.h>
 #include <QToolBar>
+#include <QWidget>
 
 #include "config.h"
 #include "musescore.h"
@@ -675,10 +676,12 @@ MuseScore::MuseScore()
       transportTools->addWidget(new AccessibleToolButton(transportTools, metronomeAction));
 
       mag = new MagBox;
+      mag->setFocusPolicy(Qt::ClickFocus);
       mag->setFixedHeight(preferences.iconHeight + 10);  // hack
       connect(mag, SIGNAL(magChanged(int)), SLOT(magChanged(int)));
       fileTools->addWidget(mag);
       viewModeCombo = new QComboBox(this);
+      viewModeCombo->setFocusPolicy(Qt::ClickFocus);
       viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
       viewModeCombo->addItem(tr("Page View"));
       viewModeCombo->addItem(tr("Continuous View"));
@@ -750,6 +753,7 @@ MuseScore::MuseScore()
             QAction* a = getAction(voiceActions[i]);
             a->setCheckable(true);
             tb->setDefaultAction(a);
+            tb->setFocusPolicy(Qt::ClickFocus);
             entryTools->addWidget(tb);
             }
 
@@ -758,6 +762,7 @@ MuseScore::MuseScore()
       //---------------------
 
       QMenuBar* mb = menuBar();
+      mb->setFocusPolicy(Qt::ClickFocus);
 
       //---------------------
       //    Menu File
@@ -1101,7 +1106,7 @@ MuseScore::MuseScore()
       menuHelp->addAction(getAction("resource-manager"));
 
       setCentralWidget(envelope);
-
+      envelope->setFocusPolicy(Qt::ClickFocus);
       // load cascading instrument templates
       loadInstrumentTemplates(preferences.instrumentList1);
       if (!preferences.instrumentList2.isEmpty())
