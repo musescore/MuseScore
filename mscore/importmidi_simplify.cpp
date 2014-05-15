@@ -66,10 +66,12 @@ bool areNotesSortedByPitchInAscOrder(const QList<MidiNote>& notes)
       return true;
       }
 
-bool areNotesSortedByOffTimeInAscOrder(const QList<MidiNote>& notes)
+bool areNotesSortedByOffTimeInAscOrder(
+            const QList<MidiNote>& notes,
+            const std::vector<int> &groupOfIndexes)
       {
-      for (int i = 0; i != notes.size() - 1; ++i) {
-            if (notes[i].offTime > notes[i + 1].offTime)
+      for (int i = 0; i != (int)groupOfIndexes.size() - 1; ++i) {
+            if (notes[groupOfIndexes[i]].offTime > notes[groupOfIndexes[i + 1]].offTime)
                   return false;
             }
       return true;
@@ -263,7 +265,7 @@ int findDurationCountInGroup(
             const TimeSigMap *sigmap,
             const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
       {
-      Q_ASSERT_X(areNotesSortedByOffTimeInAscOrder(notes),
+      Q_ASSERT_X(areNotesSortedByOffTimeInAscOrder(notes, groupOfIndexes),
                  "Simplify::findDurationCountInGroup",
                  "Notes are not sorted by off time in ascending order");
 
