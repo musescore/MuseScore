@@ -369,13 +369,6 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                 else
                                                       qDebug("inconsistent two note tremolo");
                                                 }
-                                          for (Element* e : och->el()) {
-                                                if (e->type() == Element::CHORDLINE) {
-                                                      Element* ne = e->linkedClone();
-                                                      ne->setScore(nch->score());
-                                                      nch->add(ne);
-                                                      }
-                                                }
                                           }
                                     }
                               ns->add(ne);
