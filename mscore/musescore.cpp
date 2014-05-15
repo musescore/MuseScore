@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include <fenv.h>
+#include <QToolBar>
 
 #include "config.h"
 #include "musescore.h"
@@ -96,6 +97,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "fluid/fluid.h"
 #include "qmlplugin.h"
+#include "accessibletoolbutton.h"
 
 #ifdef AEOLUS
 extern Ms::Synthesizer* createAeolus();
@@ -635,9 +637,9 @@ MuseScore::MuseScore()
       fileTools = addToolBar(tr("File Operations"));
       fileTools->setObjectName("file-operations");
       fileTools->addAction(getAction("file-new"));
-      fileTools->addAction(getAction("file-open"));
-      fileTools->addAction(getAction("file-save"));
-      fileTools->addAction(getAction("print"));
+      fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("file-open")));
+      fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("file-save")));
+      fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("print")));
       fileTools->addAction(getAction("musescore-connect"));
       fileTools->addSeparator();
 
@@ -654,23 +656,23 @@ MuseScore::MuseScore()
       transportTools = addToolBar(tr("Transport Tools"));
       transportTools->setObjectName("transport-tools");
 #ifdef HAS_MIDI
-      transportTools->addAction(getAction("midi-on"));
+      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("midi-on")));
 #endif
       transportTools->addSeparator();
-      transportTools->addAction(getAction("rewind"));
+      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("rewind")));
       //transportTools->addAction(getAction("loop-in"));
-      transportTools->addAction(getAction("play"));
-      transportTools->addAction(getAction("loop"));
+      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("play")));
+      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("loop")));
       //transportTools->addAction(getAction("loop-out"));
       transportTools->addSeparator();
       a = getAction("repeat");
       a->setChecked(MScore::playRepeats);
-      transportTools->addAction(a);
+      transportTools->addWidget(new AccessibleToolButton(transportTools, a));
       a = getAction("pan");
       a->setChecked(MScore::panPlayback);
-      transportTools->addAction(a);
+      transportTools->addWidget(new AccessibleToolButton(transportTools, a));
 
-      transportTools->addAction(metronomeAction);
+      transportTools->addWidget(new AccessibleToolButton(transportTools, metronomeAction));
 
       mag = new MagBox;
       mag->setFixedHeight(preferences.iconHeight + 10);  // hack
