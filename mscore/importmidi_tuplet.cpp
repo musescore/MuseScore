@@ -99,6 +99,7 @@ int averagePitch(const std::map<ReducedFraction,
       {
       if (chords.empty())
             return -1;
+
       int sumPitch = 0;
       int noteCounter = 0;
       for (const auto &chord: chords) {
@@ -108,7 +109,8 @@ int averagePitch(const std::map<ReducedFraction,
                   ++noteCounter;
                   }
             }
-      return sumPitch / noteCounter;
+
+      return qRound(sumPitch * 1.0 / noteCounter);
       }
 
 void sortNotesByPitch(const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
