@@ -248,6 +248,7 @@ class TestImportMidi : public QObject, public MTest
       void simplify8thDottedNoStaccato() { mf("simplify_8th_dotted_no_staccato"); }
       void simplify4thDottedTied() { mf("simplify_4th_dotted_tied"); }
       void simplifyTripletStaccato() { mf("simplify_triplet_staccato"); }
+      void voiceSeparationAcid() { mf("voice_acid"); }
       };
 
 //---------------------------------------------------------
