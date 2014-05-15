@@ -47,6 +47,9 @@
            <property name="text">
             <string>Name:</string>
            </property>
+           <property name="buddy">
+            <cstring>name</cstring>
+           </property>
           </widget>
          </item>
          <item>
@@ -74,6 +77,9 @@
              </property>
              <property name="margin">
               <number>5</number>
+             </property>
+             <property name="buddy">
+              <cstring>lines</cstring>
              </property>
             </widget>
            </item>
@@ -116,6 +122,9 @@
              </property>
              <property name="margin">
               <number>5</number>
+             </property>
+             <property name="buddy">
+              <cstring>lineDistance</cstring>
              </property>
             </widget>
            </item>
@@ -182,7 +191,7 @@
           <number>2</number>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,0,0">
@@ -365,6 +374,9 @@
                         <property name="textFormat">
                          <enum>Qt::PlainText</enum>
                         </property>
+                        <property name="buddy">
+                         <cstring>fretFontName</cstring>
+                        </property>
                        </widget>
                       </item>
                       <item row="0" column="1">
@@ -384,6 +396,9 @@
                         </property>
                         <property name="alignment">
                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        </property>
+                        <property name="buddy">
+                         <cstring>fretFontSize</cstring>
                         </property>
                        </widget>
                       </item>
@@ -417,6 +432,9 @@
                         </property>
                         <property name="alignment">
                          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                        </property>
+                        <property name="buddy">
+                         <cstring>fretY</cstring>
                         </property>
                        </widget>
                       </item>
@@ -452,6 +470,9 @@
                       </property>
                       <property name="text">
                        <string>Marks are:</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>numbersRadio</cstring>
                       </property>
                      </widget>
                     </item>
@@ -501,6 +522,9 @@
                       <property name="text">
                        <string>Marks are drawn:</string>
                       </property>
+                      <property name="buddy">
+                       <cstring>onLinesRadio</cstring>
+                      </property>
                      </widget>
                     </item>
                     <item row="1" column="1" rowspan="2">
@@ -515,7 +539,7 @@
                        <string>On lines</string>
                       </property>
                       <property name="checked">
-                       <bool>true</bool>
+                       <bool>false</bool>
                       </property>
                       <property name="autoExclusive">
                        <bool>true</bool>
@@ -542,6 +566,9 @@
                       </property>
                       <property name="text">
                        <string>Lines are:</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>linesThroughRadio</cstring>
                       </property>
                      </widget>
                     </item>
@@ -596,6 +623,9 @@
                       <property name="textFormat">
                        <enum>Qt::PlainText</enum>
                       </property>
+                      <property name="buddy">
+                       <cstring>durFontName</cstring>
+                      </property>
                      </widget>
                     </item>
                     <item>
@@ -611,6 +641,9 @@
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                      <property name="buddy">
+                       <cstring>durFontSize</cstring>
                       </property>
                      </widget>
                     </item>
@@ -640,6 +673,9 @@
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                      <property name="buddy">
+                       <cstring>durY</cstring>
                       </property>
                      </widget>
                     </item>
@@ -689,6 +725,9 @@
                        </property>
                        <property name="text">
                         <string>Shown as:</string>
+                       </property>
+                       <property name="buddy">
+                        <cstring>noteValuesNone</cstring>
                        </property>
                       </widget>
                      </item>
@@ -773,6 +812,9 @@
                        <property name="text">
                         <string>Stem style:</string>
                        </property>
+                       <property name="buddy">
+                        <cstring>stemBesideRadio</cstring>
+                       </property>
                       </widget>
                      </item>
                      <item>
@@ -843,6 +885,9 @@
                        <property name="text">
                         <string>Stem position:</string>
                        </property>
+                       <property name="buddy">
+                        <cstring>stemAboveRadio</cstring>
+                       </property>
                       </widget>
                      </item>
                      <item>
@@ -912,6 +957,9 @@
                        </property>
                        <property name="text">
                         <string>Half notes:</string>
+                       </property>
+                       <property name="buddy">
+                        <cstring>minimNoneRadio</cstring>
                        </property>
                       </widget>
                      </item>
@@ -1059,6 +1107,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="addToTemplates">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="toolTip">
             <string>Create a new staff type of current group.</string>
            </property>
@@ -1111,6 +1162,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>groupCombo</tabstop>
   <tabstop>name</tabstop>
   <tabstop>lines</tabstop>
   <tabstop>lineDistance</tabstop>
@@ -1120,8 +1172,9 @@
   <tabstop>showLedgerLinesPitched</tabstop>
   <tabstop>genKeysigPitched</tabstop>
   <tabstop>stemlessPitched</tabstop>
-  <tabstop>addToTemplates</tabstop>
-  <tabstop>widget_2</tabstop>
+  <tabstop>showLedgerLinesPercussion</tabstop>
+  <tabstop>genKeysigPercussion</tabstop>
+  <tabstop>stemlessPercussion</tabstop>
   <tabstop>upsideDown</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>fretFontName</tabstop>
@@ -1147,9 +1200,8 @@
   <tabstop>minimShortRadio</tabstop>
   <tabstop>minimSlashedRadio</tabstop>
   <tabstop>showRests</tabstop>
-  <tabstop>showLedgerLinesPercussion</tabstop>
-  <tabstop>genKeysigPercussion</tabstop>
-  <tabstop>stemlessPercussion</tabstop>
+  <tabstop>loadFromTemplate</tabstop>
+  <tabstop>addToTemplates</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
