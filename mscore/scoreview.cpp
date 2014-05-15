@@ -2762,34 +2762,10 @@ void ScoreView::cmd(const QAction* a)
             }
       else if (cmd == "insert-fretframe")
             cmdInsertMeasure(Element::FBOX);
-      else if (cmd == "move-left") {
-            Element* e = _score->getSelectedElement();
-            if (e && (e->type() == Element::NOTE || e->type() == Element::REST)) {
-                  if (e->type() == Element::NOTE)
-                        e = e->parent();
-                  ChordRest* cr1 = static_cast<ChordRest*>(e);
-                  ChordRest* cr2 = prevChordRest(cr1);
-                  if (cr2) {
-                        _score->startCmd();
-                        _score->undoSwapCR(cr1, cr2);
-                        _score->endCmd();
-                        }
-                  }
-            }
-      else if (cmd == "move-right") {
-            Element* e = _score->getSelectedElement();
-            if (e && (e->type() == Element::NOTE || e->type() == Element::REST)) {
-                  if (e->type() == Element::NOTE)
-                        e = e->parent();
-                  ChordRest* cr1 = static_cast<ChordRest*>(e);
-                  ChordRest* cr2 = nextChordRest(cr1);
-                  if (cr2) {
-                        _score->startCmd();
-                        _score->undoSwapCR(cr1, cr2);
-                        _score->endCmd();
-                        }
-                  }
-            }
+      else if (cmd == "move-left")
+            cmdMoveCR(true);
+      else if (cmd == "move-right")
+            cmdMoveCR(false);
       else if (cmd == "reset") {
             if (editMode()) {
                   editObject->reset();
@@ -5571,6 +5547,35 @@ void ScoreView::loopToggled(bool val)
       _curLoopIn->setVisible(val);
       _curLoopOut->setVisible(val);
       update();
+      }
+
+//---------------------------------------------------------
+//   cmdMoveCR
+//---------------------------------------------------------
+
+void ScoreView::cmdMoveCR(bool left)
+      {
+      Element* e = _score->getSelectedElement();
+      if (e && (e->type() == Element::NOTE || e->type() == Element::REST)) {
+            if (e->type() == Element::NOTE)
+                  e = e->parent();
+            QList<ChordRest*> crl;
+            if (e->links()) {
+                  for (Element* cr : *e->links())
+                        crl.append(static_cast<ChordRest*>(cr));
+                  }
+            else
+                  crl.append(static_cast<ChordRest*>(e));
+
+            for (ChordRest* cr1 : crl) {
+                  ChordRest* cr2 = left ? prevChordRest(cr1) : nextChordRest(cr1);
+                  if (cr2) {
+                        _score->startCmd();
+                        _score->undo(new SwapCR(cr1, cr2));
+                        _score->endCmd();
+                        }
+                  }
+            }
       }
 }
 

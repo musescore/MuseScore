@@ -251,6 +251,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool dropCanvas(Element*);
       void editCmd(const QString&);
       void setLoopCursor(PositionCursor* curLoop, int tick, bool isInPos);
+      void cmdMoveCR(bool left);
 
    private slots:
       void enterState();
