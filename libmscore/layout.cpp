@@ -49,6 +49,7 @@
 #include "ottava.h"
 #include "notedot.h"
 #include "element.h"
+#include "tremolo.h"
 
 namespace Ms {
 
@@ -1030,7 +1031,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
 //   beamGraceNotes
 //---------------------------------------------------------
 
-void Score::beamGraceNotes(Chord* mainNote, bool after) 
+void Score::beamGraceNotes(Chord* mainNote, bool after)
       {
       ChordRest* a1    = 0;      // start of (potential) beam
       Beam* beam       = 0;      // current beam
@@ -2366,6 +2367,22 @@ void Score::connectTies()
                         else {
                               tie->setEndNote(nnote);
                               nnote->setTieBack(tie);
+                              }
+                        }
+                  // connect two note tremolos
+                  Tremolo* tremolo = c->tremolo();
+                  if (tremolo && tremolo->twoNotes() && !tremolo->chord2()) {
+                        for (Segment* ls = s->next1(st); ls; ls = ls->next1(st)) {
+                              Chord* nc = static_cast<Chord*>(ls->element(i));
+                              if (nc == 0)
+                                    continue;
+                              if (nc->type() != Element::CHORD)
+                                    qDebug("cannot connect tremolo");
+                              else {
+                                    nc->setTremolo(tremolo);
+                                    tremolo->setChords(c, nc);
+                                    }
+                              break;
                               }
                         }
                   }

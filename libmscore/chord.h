@@ -85,11 +85,10 @@ class Chord : public ChordRest {
       QList<Chord*> _graceNotes;
       int _graceIndex;              ///< if this is a grace note, index in parent list
 
-      Direction  _stemDirection;
-      TremoloChordType   _tremoloChordType;
-      NoteType           _noteType;         ///< mark grace notes: acciaccatura and appoggiatura
-      bool               _noStem;
-      PlayEventType      _playEventType;   ///< play events were modified by user
+      Direction     _stemDirection;
+      NoteType      _noteType;         ///< mark grace notes: acciaccatura and appoggiatura
+      bool          _noStem;
+      PlayEventType _playEventType;    ///< play events were modified by user
 
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
@@ -195,8 +194,7 @@ class Chord : public ChordRest {
       PlayEventType playEventType() const           { return _playEventType; }
       void setPlayEventType(PlayEventType v)        { _playEventType = v;    }
 
-      TremoloChordType tremoloChordType() const     { return _tremoloChordType; }
-      void setTremoloChordType(TremoloChordType t)  { _tremoloChordType = t; }
+      TremoloChordType tremoloChordType() const;
 
       ElementList& el()               { return _el; }
       const ElementList& el() const   { return _el; }

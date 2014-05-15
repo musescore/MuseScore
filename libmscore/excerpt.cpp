@@ -38,6 +38,7 @@
 #include "harmony.h"
 #include "beam.h"
 #include "utils.h"
+#include "tremolo.h"
 
 namespace Ms {
 
@@ -252,8 +253,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     }
                               ++st;
                               }
-//                        if (((srcTrack % VOICES) == 0) && track != -1) {
-//                              }
+                        Tremolo* tremolo = 0;
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                               Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
 
@@ -306,7 +306,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           ncr->setBeam(nb);
                                           }
 
-                                    Tuplet* ot     = ocr->tuplet();
+                                    Tuplet* ot = ocr->tuplet();
                                     if (ot) {
                                           Tuplet* nt = tupletMap.findNew(ot);
                                           if (nt == 0) {
@@ -345,6 +345,29 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                             qDebug("cloneStave: cannot find tie");
                                                             }
                                                       }
+                                                }
+                                          // two note tremolo
+                                          if (och->tremolo() && och->tremolo()->twoNotes()) {
+                                               if (och == och->tremolo()->chord1()) {
+                                                      if (tremolo)
+                                                            qDebug("unconnected two note tremolo");
+                                                      tremolo = static_cast<Tremolo*>(och->tremolo()->linkedClone());
+                                                      tremolo->setScore(nch->score());
+                                                      tremolo->setParent(nch);
+                                                      tremolo->setTrack(nch->track());
+                                                      tremolo->setChords(nch, 0);
+                                                      nch->setTremolo(tremolo);
+                                                      }
+                                                else if (och == och->tremolo()->chord2()) {
+                                                      if (!tremolo)
+                                                            qDebug("first note for two note tremolo missing");
+                                                      else {
+                                                            tremolo->setChords(tremolo->chord1(), nch);
+                                                            nch->setTremolo(tremolo);
+                                                            }
+                                                      }
+                                                else
+                                                      qDebug("inconsistent two note tremolo");
                                                 }
                                           }
                                     }

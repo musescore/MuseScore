@@ -92,7 +92,7 @@ Note* Chord::downNote() const
       Note* result = _notes.front();
       if (!staff())
             return result;
-      if (staff() && staff()->isDrumStaff()) {
+      if (staff()->isDrumStaff()) {
             foreach(Note*n, _notes) {
                   if (n->line() > result->line()) {
                         result = n;
@@ -110,9 +110,9 @@ Note* Chord::downNote() const
                   if (noteLine > line) {
                         line = noteLine;
                         result = n;
+                        }
                   }
             }
-      }
       return result;
       }
 
@@ -191,7 +191,6 @@ Chord::Chord(Score* s)
       _stemDirection    = Direction::AUTO;
       _arpeggio         = 0;
       _tremolo          = 0;
-      _tremoloChordType = TremoloChordType::TremoloSingle;
       _glissando        = 0;
       _noteType         = NOTE_NORMAL;
       _stemSlash        = 0;
@@ -236,8 +235,7 @@ Chord::Chord(const Chord& c)
       if (c._stemSlash)
             add(new StemSlash(*(c._stemSlash)));
       _stemDirection    = c._stemDirection;
-      _tremoloChordType = c._tremoloChordType;
-      if (c._tremolo)
+      if (c._tremolo && !c._tremolo->twoNotes())
             add(new Tremolo(*(c._tremolo)));
       _noteType         = c._noteType;
       _crossMeasure     = CROSSMEASURE_UNKNOWN;
@@ -444,12 +442,8 @@ void Chord::add(Element* e)
                               if (tr->chord2())
                                     tr->chord2()->setDurationType(d);
                               }
-                        _tremoloChordType = TremoloChordType::TremoloFirstNote;
                         tr->chord2()->setTremolo(tr);
-                        tr->chord2()->setTremoloChordType(TremoloChordType::TremoloSecondNote);
                         }
-                  else
-                        _tremoloChordType = TremoloChordType::TremoloSingle;
                   _tremolo = tr;
                   }
                   break;
@@ -541,7 +535,6 @@ void Chord::remove(Element* e)
                         if (tremolo->chord2())
                               tremolo->chord2()->setDurationType(d);
                         tremolo->chord2()->setTremolo(0);
-                        tremolo->chord2()->setTremoloChordType(TremoloChordType::TremoloSingle);
                         }
                   _tremolo = 0;
                   }
@@ -972,7 +965,7 @@ void Chord::write(Xml& xml) const
             _arpeggio->write(xml);
       if (_glissando)
             _glissando->write(xml);
-      if (_tremolo)
+      if (_tremolo && tremoloChordType() != TremoloChordType::TremoloSecondNote)
             _tremolo->write(xml);
       for (Element* e : _el) {
             if (e->type() == Element::SLUR) {
@@ -1175,7 +1168,7 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
             func(data, _stemSlash);
       if (_arpeggio)
             func(data, _arpeggio);
-      if (_tremolo && (_tremoloChordType != TremoloChordType::TremoloSecondNote))
+      if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote))
             func(data, _tremolo);
       if (_glissando)
             func(data, _glissando);
@@ -2698,6 +2691,25 @@ void Chord::toGraceAfter()
             case NOTE_GRACE32:  setNoteType(NOTE_GRACE32_AFTER); break;
             default: break;
             }
+      }
+
+//---------------------------------------------------------
+//   tremoloChordType
+//---------------------------------------------------------
+
+TremoloChordType Chord::tremoloChordType() const
+      {
+      if (_tremolo) {
+            if (_tremolo->twoNotes()) {
+                  if (_tremolo->chord1() == this)
+                        return TremoloChordType::TremoloFirstNote;
+                  else if (_tremolo->chord2() == this)
+                        return TremoloChordType::TremoloSecondNote;
+                  else
+                        qDebug("Chord::tremoloChordType(): inconsistency");
+                  }
+            }
+      return TremoloChordType::TremoloSingle;
       }
 }
 

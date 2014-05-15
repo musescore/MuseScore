@@ -135,7 +135,7 @@ static void dumpHash(const QByteArray& _hash)
             p[i * 2 + 1] = hex[_hash[i] & 0xf];
             }
       p[32] = 0;
-      printf("   <%s>\n", p);
+      qDebug("   <%s>", p);
       }
 #endif
 
