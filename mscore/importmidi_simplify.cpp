@@ -683,7 +683,7 @@ void simplifyNotation(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigm
                         // for further usage
             opers.setCurrentTrack(mtrack.indexOfOperation);
 
-            if (opers.currentTrackOperations().minimizeNumberOfRests) {
+            if (opers.currentTrackOperations().simplifyNotation) {
                   if (MidiTuplet::voiceLimit() > 1)
                         separateVoices(chords, sigmap, mtrack.tuplets);
                   minimizeNumberOfRests(chords, sigmap, mtrack.tuplets);
