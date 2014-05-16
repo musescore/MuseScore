@@ -73,7 +73,6 @@ enum class OttavaType {
 
 class Ottava : public TextLine {
       Q_OBJECT
-      Q_ENUMS(OttavaType)
       Q_PROPERTY(OttavaType ottavaType READ ottavaType WRITE undoSetOttavaType)
 
       OttavaType _ottavaType;
