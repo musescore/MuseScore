@@ -20,9 +20,20 @@ void addElementToTuplet(int voice,
                         DurationElement *el,
                         std::multimap<ReducedFraction, TupletData> &tuplets)
       {
-      const auto it = findTupletForTimeRange(voice, onTime, len, tuplets);
-      if (it != tuplets.end()) {
-            auto &tuplet = const_cast<TupletData &>(it->second);
+      const auto range = findTupletsForTimeRange(voice, onTime, len, tuplets);
+
+#ifdef QT_DEBUG
+      if (!(range.first == range.second || range.second == std::next(range.first))) {
+            qDebug() << "Measure number (from 1):" << el->measure()->no() + 1
+                     << ", staff index (from 0):" << el->staff()->idx();
+
+            Q_ASSERT_X(false, "MidiTuplet::addElementToTuplet",
+                       "More than one tuplet contains specified duration");
+            }
+#endif
+
+      if (range.first != tuplets.end()) {
+            auto &tuplet = const_cast<TupletData &>(range.first->second);
             tuplet.elements.push_back(el);       // add chord/rest to the tuplet
             }
       }
