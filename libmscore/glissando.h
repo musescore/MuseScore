@@ -79,5 +79,8 @@ class Glissando : public Element {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::GlissandoType);
+
 #endif
 

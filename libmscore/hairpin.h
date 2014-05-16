@@ -131,5 +131,8 @@ class Hairpin : public SLine {
       };
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Hairpin::HairpinType);
+
 #endif
 

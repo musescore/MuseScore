@@ -95,5 +95,8 @@ class Lyrics : public Text {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Lyrics::Syllabic);
+
 #endif
 
