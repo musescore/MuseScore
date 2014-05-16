@@ -73,8 +73,8 @@ class SysStaff {
 
 //---------------------------------------------------------
 //   @@ System
-///  One row of measures for all instruments;
-///  a complete piece of the timeline.
+///    One row of measures for all instruments;
+///    a complete piece of the timeline.
 //---------------------------------------------------------
 
 class System : public Element {

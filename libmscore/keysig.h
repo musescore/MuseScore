@@ -37,9 +37,9 @@ struct KeySym {
 
 //---------------------------------------------------------------------------------------
 //   @@ KeySig
-///   The KeySig class represents a Key Signature on a staff
+///    The KeySig class represents a Key Signature on a staff
 //
-//    @P showCourtesy bool show courtesy key signature for this sig if appropriate
+//   @P showCourtesy  bool  show courtesy key signature for this sig if appropriate
 //---------------------------------------------------------------------------------------
 
 class KeySig : public Element {

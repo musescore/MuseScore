@@ -23,6 +23,7 @@ class Harmony;
 
 //---------------------------------------------------------
 //   @@ FretDiagram
+///    Fretboard diagram
 //---------------------------------------------------------
 
 class FretDiagram : public Element {

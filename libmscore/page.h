@@ -42,15 +42,15 @@ extern const PaperSize* getPaperSize(const qreal wi, const qreal hi);
 
 //---------------------------------------------------------
 //   @@ PageFormat
-//   @P size            QSizeF     paper size in inch
-//   @P printableWidth   qreal
-//   @P evenLeftMargin   qreal
-//   @P oddLeftMargin    qreal
-//   @P eventTopMargin   qreal
-//   @P oddTopMargin     qreal
-//   @P evenBottomMargin qreal
-//   @P oddBottomMargin  qreal
-//   @P twosided         bool
+//   @P size              QSizeF  paper size in inch
+//   @P printableWidth    qreal
+//   @P evenLeftMargin    qreal
+//   @P oddLeftMargin     qreal
+//   @P eventTopMargin    qreal
+//   @P oddTopMargin      qreal
+//   @P evenBottomMargin  qreal
+//   @P oddBottomMargin   qreal
+//   @P twosided          bool
 //---------------------------------------------------------
 
 class PageFormat : public QObject {

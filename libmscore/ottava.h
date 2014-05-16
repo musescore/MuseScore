@@ -68,7 +68,7 @@ enum class OttavaType {
 
 //---------------------------------------------------------
 //   @@ Ottava
-//   @P ottavaType   enum OttavaType OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB, OTTAVA_22MA, OTTAVA_22MB
+//   @P ottavaType  Ms::OttavaType  (OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB, OTTAVA_22MA, OTTAVA_22MB)
 //---------------------------------------------------------
 
 class Ottava : public TextLine {

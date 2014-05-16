@@ -40,8 +40,8 @@ struct GroupNode {
       };
 
 //---------------------------------------------------------
-//   Groups
-//    GroupNodes must be sorted by tick
+//   @@ Groups
+///    GroupNodes must be sorted by tick
 //---------------------------------------------------------
 
 class Groups : public std::vector<GroupNode> {

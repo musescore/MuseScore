@@ -49,12 +49,12 @@ enum class PlayEventType : char    {
 
 //---------------------------------------------------------
 //   @@ Chord
-///   Graphic representation of a chord.
-///   Single notes are handled as degenerated chords.
+///    Graphic representation of a chord.
+///    Single notes are handled as degenerated chords.
 //
-//   @P notes  array[Note]    the list of notes (read only)
-//   @P lyrics  array[Lyrics]  the list of lyrics (read only)
-//   @P graceNotes  array[Chord]  the list of grace note chords (read only)
+//   @P notes       array[Ms::Note]    the list of notes (read only)
+//   @P lyrics      array[Ms::Lyrics]  the list of lyrics (read only)
+//   @P graceNotes  array[Ms::Chord]   the list of grace note chords (read only)
 //---------------------------------------------------------
 
 class Chord : public ChordRest {

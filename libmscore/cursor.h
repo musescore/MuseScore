@@ -28,15 +28,15 @@ class Measure;
 
 //---------------------------------------------------------
 //   @@ Cursor
-//   @P track    int          current track
-//   @P staffIdx int          current staff (track / 4)
-//   @P voice    int          current voice (track % 4)
-//   @P element  Element*     current element at track, read only
-//   @P segment  Segment*     current segment, read only
-//   @P measure  Measure*     current measure, read only
-//   @P tick     int          midi tick position, read only
-//   @P time     double       time at tick position, read only
-//   @P score    Score*       associated score
+//   @P track     int           current track
+//   @P staffIdx  int           current staff (track / 4)
+//   @P voice     int           current voice (track % 4)
+//   @P element   Ms::Element*  current element at track, read only
+//   @P segment   Ms::Segment*  current segment, read only
+//   @P measure   Ms::Measure*  current measure, read only
+//   @P tick      int           midi tick position, read only
+//   @P time      double        time at tick position, read only
+//   @P score     Ms::Score*    associated score
 //---------------------------------------------------------
 
 class Cursor : public QObject {

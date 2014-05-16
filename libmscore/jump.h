@@ -33,7 +33,7 @@ enum class JumpType {
 
 //---------------------------------------------------------
 //   @@ Jump
-///   Jump label
+///    Jump label
 //
 //   @P jumpTo      QString
 //   @P playUntil   QString

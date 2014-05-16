@@ -29,8 +29,8 @@ enum class GlissandoType {
 
 //---------------------------------------------------------
 //   @@ Glissando
-//   @P glissandoType  GlissandoType (STRAIGHT, WAVY)
-//   @P text           Qstring
+//   @P glissandoType  Ms::GlissandoType (STRAIGHT, WAVY)
+//   @P text           QString
 //   @P showText       bool
 //---------------------------------------------------------
 

@@ -25,7 +25,7 @@ enum class SymId;
 
 //---------------------------------------------------------
 //   @@ Symbol
-///   Symbol constructed from builtin symbol.
+///    Symbol constructed from builtin symbol.
 //---------------------------------------------------------
 
 class Symbol : public BSymbol {
@@ -59,7 +59,7 @@ class Symbol : public BSymbol {
 
 //---------------------------------------------------------
 //   @@ FSymbol
-///   Symbol constructed from a font glyph.
+///    Symbol constructed from a font glyph.
 //---------------------------------------------------------
 
 class FSymbol : public BSymbol {

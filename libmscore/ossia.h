@@ -19,7 +19,7 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   @@ Ossia
-///   not implemented yet
+///    not implemented yet
 //---------------------------------------------------------
 
 class Ossia : public Element {
