@@ -1584,7 +1584,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         BeamMode bm = Groups::endBeam(c);
                         bool b32 = (beamLevel >= 1) && (bm == BeamMode::BEGIN32);
                         bool b64 = (beamLevel >= 2) && (bm == BeamMode::BEGIN64);
-                        if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel))
+                        if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel)
+                           || ((c->type() == REST) && (l == beamLevel)))
                               break;
                         }
 
@@ -1626,6 +1627,9 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   else {
                         // create broken segment
+                        if (cr1->type() == REST)
+                              continue;
+
                         int n = crl.size();
                         qreal len = beamMinLen;
                         //
@@ -1645,14 +1649,19 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               // CON: it fails in some highly subdivided tuplets (9-plet or more) or sub-tuplets.
                               // Compute the position in the measure of the end of this
                               // (i.e. of the beginning of next chord)
+
                               int measTick = cr1->measure()->tick();
                               int tickNext = crl[c1+1]->tick() - measTick;
+
                               // determine the tick length of a chord with one beam level less than this
                               // (i.e. twice the ticks of this)
+
                               int tickMod  = (tickNext - (crl[c1]->tick() - measTick)) * 2;
+
                               // if this completes, within the measure, a unit of tickMod length, flip beam to left
                               // (allow some tolerance for tick rounding in tuplets
                               // without tuplet tolerance, could be simplified to:)
+
 //                            if (tickNext % tickMod == 0)
                               static const int BEAM_TUPLET_TOLERANCE = 6;
                               int mod = tickNext % tickMod;
