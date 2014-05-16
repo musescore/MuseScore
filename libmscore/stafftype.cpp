@@ -112,70 +112,53 @@ const char* StaffType::groupName(StaffGroup r)
 
 bool StaffType::operator==(const StaffType& st) const
       {
-      if (_group != TAB_STAFF_GROUP) {
-            return isSameStructure(st)
-               && st._name == _name
-               && st._genKeysig       == _genKeysig
-               && st._showLedgerLines == _showLedgerLines;
-            }
-      else {
-           return st._durationFontIdx   == _durationFontIdx
+      if (!isSameStructure(st) || st._name != _name)        // common to all type groups
+            return false;
+      if (_group == TAB_STAFF_GROUP) {                      // TAB-specific
+            return st._durationFontIdx  == _durationFontIdx
                && st._durationFontSize  == _durationFontSize
                && st._durationFontUserY == _durationFontUserY
                && st._fretFontIdx       == _fretFontIdx
                && st._fretFontSize      == _fretFontSize
                && st._fretFontUserY     == _fretFontUserY
-               && st._genDurations      == _genDurations
-               && st._linesThrough      == _linesThrough
-               && st._minimStyle        == _minimStyle
-               && st._onLines           == _onLines
-               && st._showRests         == _showRests
-               && st._stemsDown         == _stemsDown
-               && st._stemsThrough      == _stemsThrough
-               && st._upsideDown        == _upsideDown
-               && st._useNumbers        == _useNumbers
                ;
             }
+      return true;
       }
 
 //---------------------------------------------------------
 //   isSameStructure
 //
-//    same as isEqual(), but ignores name
+//    same as operator==, but ignores names and fonts
 //---------------------------------------------------------
 
 bool StaffType::isSameStructure(const StaffType& st) const
       {
-      if (_group != TAB_STAFF_GROUP) {
-            return st.group()         == group()
-               && st._lines           == _lines
-               && st._stepOffset      == _stepOffset
-               && st._lineDistance    == _lineDistance
-               && st._genClef         == _genClef
-               && st._showBarlines    == _showBarlines
-               && st._slashStyle      == _slashStyle
-               && st._genTimesig      == _genTimesig
-               && st._genKeysig       == _genKeysig
+      if (st.group()         != group()                     // common to all type groups
+         || st._lines        != _lines
+         || st._stepOffset   != _stepOffset
+         || st._lineDistance != _lineDistance
+         || st._genClef      != _genClef
+         || st._showBarlines != _showBarlines
+         || st._slashStyle   != _slashStyle
+         || st._genTimesig   != _genTimesig)
+            return false;
+
+      if (_group != TAB_STAFF_GROUP) {                      // common to pitched and percussion
+            return st._genKeysig      == _genKeysig
                && st._showLedgerLines == _showLedgerLines
                ;
             }
-      else {
-            return st.group()      == group()
-               && st._lines        == _lines
-               && st._stepOffset   == _stepOffset
-               && st._lineDistance == _lineDistance
-               && st._genClef      == _genClef
-               && st._showBarlines == _showBarlines
-               && st._slashStyle   == _slashStyle
-               && st._genDurations == _genDurations
-               && st._linesThrough == _linesThrough
-               && st._minimStyle   == _minimStyle
-               && st._onLines      == _onLines
-               && st._showRests    == _showRests
-               && st._stemsDown    == _stemsDown
-               && st._stemsThrough == _stemsThrough
-               && st._upsideDown   == _upsideDown
-               && st._useNumbers   == _useNumbers
+      else {                                                // TAB-specific
+            return st._genDurations == _genDurations
+               && st._linesThrough  == _linesThrough
+               && st._minimStyle    == _minimStyle
+               && st._onLines       == _onLines
+               && st._showRests     == _showRests
+               && st._stemsDown     == _stemsDown
+               && st._stemsThrough  == _stemsThrough
+               && st._upsideDown    == _upsideDown
+               && st._useNumbers    == _useNumbers
                ;
             }
       }
