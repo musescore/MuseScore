@@ -396,9 +396,17 @@ void Staff::read(XmlReader& e)
                   int staffTypeIdx = e.readInt();
                   qDebug("Staff::read staffTypeIdx %d", staffTypeIdx);
                   _staffType = *StaffType::preset(staffTypeIdx);
+                  // set default barLineFrom and barLineTo according to staff type num. of lines
+                  // (1-line staff bar lines are special)
+                  _barLineFrom = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
+                  _barLineTo   = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO   : (lines() - 1) * 2);
                   }
             else if (tag == "StaffType") {
                   _staffType.read(e);
+                  // set default barLineFrom and barLineTo according to staff type num. of lines
+                  // (1-line staff bar lines are special)
+                  _barLineFrom = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
+                  _barLineTo   = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO   : (lines() - 1) * 2);
                   }
             else if (tag == "small")
                   setSmall(e.readInt());
@@ -415,7 +423,7 @@ void Staff::read(XmlReader& e)
                   }
             else if (tag == "barLineSpan") {
 // WARNING: following statement assumes number of staff lines to be correctly set
-                  // must read attributes before reading the main value
+                  // must read <StaffType> before reading the <barLineSpan>
                   int defaultSpan = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
                   _barLineFrom = e.attribute("from", QString::number(defaultSpan)).toInt();
                   // the proper default SpanTo depends upon the barLineSpan
