@@ -34,19 +34,19 @@ extern int updateVersion();
 //---------------------------------------------------------
 //   QmlPlugin
 //   @@ MuseScore
-//   @P menuPath              QString        where the plugin is placed in menu
-//   @P version               QString
-//   @P description           QString
-//   @P pluginType            QString
-//   @P dockArea              QString
-//   @P division              int            number of MIDI ticks for 1/4 note, read only
-//   @P mscoreVersion         int            the complete version number of MuseScore in the form: MMmmuu, read only
-//   @P mscoreMajorVersion    int            the 1st part of the MuseScore version, read only
-//   @P mscoreMinorVersion    int            the 2nd part of the MuseScore version, read only
-//   @P mscoreUpdateVersion   int            the 3rd part of the MuseScore version, read only
-//   @P mscoreDPI             qreal          read only
-//   @P curScore              Score*         the current score, if any, read only
-//   @P scores                array[Score]   all currently open scores, read only
+//   @P menuPath             QString           where the plugin is placed in menu
+//   @P version              QString
+//   @P description          QString
+//   @P pluginType           QString
+//   @P dockArea             QString
+//   @P division             int               number of MIDI ticks for 1/4 note (read only)
+//   @P mscoreVersion        int               complete version number of MuseScore in the form: MMmmuu (read only)
+//   @P mscoreMajorVersion   int               1st part of the MuseScore version (read only)
+//   @P mscoreMinorVersion   int               2nd part of the MuseScore version (read only)
+//   @P mscoreUpdateVersion  int               3rd part of the MuseScore version (read only)
+//   @P mscoreDPI            qreal             (read only)
+//   @P curScore             Ms::Score*        current score, if any (read only)
+//   @P scores               array[Ms::Score]  all currently open scores (read only)
 //---------------------------------------------------------
 
 class QmlPlugin : public QQuickItem {

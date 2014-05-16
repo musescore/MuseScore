@@ -33,10 +33,10 @@ class System;
 
 //------------------------------------------------------------------------
 //   @@ Segment
-///   A segment holds all vertical aligned staff elements.
-///   Segments are typed and contain only Elements of the same type.
+///    A segment holds all vertical aligned staff elements.
+///    Segments are typed and contain only Elements of the same type.
 //
-//    @P segmentType SegmentType
+//   @P segmentType  Ms::Segment::SegmentType  (SegInvalid, SegClef, SegKeySig, SegAmbitus, SegTimeSig, SegStartRepeatBarLine, SegBarLine, SegChordRest, SegBreath, SegEndBarLine SegTimeSigAnnounce, SegKeySigAnnounce, SegAll)
 //------------------------------------------------------------------------
 
 /**

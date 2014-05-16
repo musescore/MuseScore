@@ -40,10 +40,10 @@ struct SymElement {
 
 //---------------------------------------------------------
 //   @@ Accidental
-//    @P hasBracket bool
-//    @P small      bool
-//    @P acctype    enum ACC_NONE, ACC_SHARP, ACC_FLAT, ACC_SHARP2, ACC_FLAT2, ACC_NATURAL, ... (read only)
-//    @P role       enum ACC_AUTO, ACC_USER (read only)
+//   @P hasBracket  bool
+//   @P small       bool
+//   @P acctype     Ms::Accidental::AccidentalType  (ACC_NONE, ACC_SHARP, ACC_FLAT, ACC_SHARP2, ACC_FLAT2, ACC_NATURAL, ...) (read only)
+//   @P role        Ms::Accidental::AccidentalRole  (ACC_AUTO, ACC_USER) (read only)
 //---------------------------------------------------------
 
 class Accidental : public Element {
@@ -147,7 +147,7 @@ class Accidental : public Element {
 
 //---------------------------------------------------------
 //   @@ AccidentalBracket
-///    used as icon in palette
+//!    used as icon in palette
 //---------------------------------------------------------
 
 class AccidentalBracket : public Compound {

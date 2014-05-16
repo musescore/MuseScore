@@ -33,7 +33,7 @@ enum SpannerSegmentType {
 
 //---------------------------------------------------------
 //   @@ SpannerSegment
-//    parent: System
+//!    parent: System
 //---------------------------------------------------------
 
 class SpannerSegment : public Element {

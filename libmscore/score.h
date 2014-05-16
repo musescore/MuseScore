@@ -223,10 +223,10 @@ struct Layer {
 
 //---------------------------------------------------------
 //   @@ Score
-//   @P name QString    name of the score
-//   @P nstaves int     number of staves, read only
-//   @P ntracks int     number of tracks (staves * 4), read only
-//   @P npages  int     number of pages, read only
+//   @P name     QString  name of the score
+//   @P nstaves  int      number of staves (read only)
+//   @P ntracks  int      number of tracks (staves * 4) (read only)
+//   @P npages   int      number of pages (read only)
 //---------------------------------------------------------
 
 class Score : public QObject {

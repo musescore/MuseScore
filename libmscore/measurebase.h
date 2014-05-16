@@ -29,10 +29,10 @@ class Measure;
 
 //---------------------------------------------------------
 //   @@ MeasureBase
-///   Virtual base class for Measure, HBox and VBox
+///    Virtual base class for Measure, HBox and VBox
 //
-//    @P lineBreak   bool true if a system break is positioned on this measure
-//    @P pageBreak   bool true if a page break is positioned on this measure
+//   @P lineBreak   bool  true if a system break is positioned on this measure
+//   @P pageBreak   bool  true if a page break is positioned on this measure
 //---------------------------------------------------------
 
 class MeasureBase : public Element {

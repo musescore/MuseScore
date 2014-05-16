@@ -21,11 +21,11 @@ class Chord;
 
 //---------------------------------------------------------
 //    @@ LedgerLine
-///   Graphic representation of a ledger line.
-///
-///    parent:     Chord
-///    x-origin:   Chord
-///    y-origin:   SStaff
+///     Graphic representation of a ledger line.
+//!
+//!    parent:     Chord
+//!    x-origin:   Chord
+//!    y-origin:   SStaff
 //---------------------------------------------------------
 
 class LedgerLine : public Line {

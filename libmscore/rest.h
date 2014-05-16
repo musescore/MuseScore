@@ -22,7 +22,7 @@ enum class SymId;
 
 //---------------------------------------------------------
 //    @@ Rest
-///   This class implements a rest.
+///     This class implements a rest.
 //---------------------------------------------------------
 
 class Rest : public ChordRest {

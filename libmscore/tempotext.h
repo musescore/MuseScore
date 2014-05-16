@@ -20,10 +20,10 @@ namespace Ms {
 
 //-------------------------------------------------------------------
 //   @@ TempoText
-///   Tempo marker which determines the midi tempo.
+///    Tempo marker which determines the midi tempo.
 //
-//    @P tempo qreal      tempo in beats per second (beat=1/4)
-//    @P followText bool  determine tempo from text
+//   @P tempo       qreal  tempo in beats per second (beat=1/4)
+//   @P followText  bool   determine tempo from text
 //-------------------------------------------------------------------
 
 class TempoText : public Text  {

@@ -40,12 +40,12 @@ enum class LineStyle {
 
 //---------------------------------------------------------
 //   @@ LineSegment
-///   Virtual base class for segmented lines segments
-///   (OttavaSegment, HairpinSegment, TrillSegment...)
-//
-///   This class describes one segment of an segmented
-///   line object. Line objects can span multiple staves.
-///   For every staff a segment is created.
+///    Virtual base class for segmented lines segments
+///    (OttavaSegment, HairpinSegment, TrillSegment...)
+///
+///    This class describes one segment of an segmented
+///    line object. Line objects can span multiple staves.
+///    For every staff a segment is created.
 //---------------------------------------------------------
 
 class LineSegment : public SpannerSegment {
