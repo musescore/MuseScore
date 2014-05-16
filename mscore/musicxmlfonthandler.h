@@ -17,8 +17,10 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __MUSICXMLFONTHANDLING_H__
-#define __MUSICXMLFONTHANDLING_H__
+#ifndef __MUSICXMLFONTHANDLER_H__
+#define __MUSICXMLFONTHANDLER_H__
+
+#include "libmscore/text.h"
 
 namespace Ms {
 
@@ -27,11 +29,18 @@ namespace Ms {
 //---------------------------------------------------------
 
 class MScoreTextToMXML {
-      QString text;
 
 public:
       MScoreTextToMXML(const QString& t);
-      void parse() const;
+      void parse();
+
+private:
+      void handleStartElement(QXmlStreamReader& r);
+      void handleEndElement(QXmlStreamReader& r);
+      QString updateFormat();
+      QString text;
+      CharFormat oldFormat;
+      CharFormat newFormat;
 };
 
 } // namespace Ms
