@@ -62,7 +62,6 @@ class VoltaSegment : public TextLineSegment {
 
 class Volta : public TextLine {
       Q_OBJECT
-      Q_ENUMS(VoltaType)
 
    private:
       Q_PROPERTY(VoltaType voltaType READ voltaType WRITE undoSetVoltaType)

@@ -161,12 +161,9 @@ class Note : public Element {
       Q_PROPERTY(int veloOffset                READ veloOffset        WRITE undoSetVeloOffset)
       Q_PROPERTY(Ms::DirectionH userMirror     READ userMirror        WRITE undoSetUserMirror)
       Q_PROPERTY(Ms::Direction userDotPosition READ userDotPosition   WRITE undoSetUserDotPosition)
-      Q_PROPERTY(NoteHeadGroup  headGroup      READ headGroup         WRITE undoSetHeadGroup)
-      Q_PROPERTY(NoteHeadType   headType       READ headType          WRITE undoSetHeadType)
-      Q_PROPERTY(QQmlListProperty<Element> elements  READ qmlElements)
-
-      Q_ENUMS(NoteHeadGroup)
-      Q_ENUMS(NoteHeadType)
+      Q_PROPERTY(Ms::NoteHeadGroup  headGroup  READ headGroup         WRITE undoSetHeadGroup)
+      Q_PROPERTY(Ms::NoteHeadType   headType   READ headType          WRITE undoSetHeadType)
+      Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
 
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.

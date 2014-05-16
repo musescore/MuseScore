@@ -329,9 +329,6 @@ enum {
 
 class MScore : public QObject {
       Q_OBJECT
-      Q_ENUMS(ValueType)
-      Q_ENUMS(Direction)
-      Q_ENUMS(DirectionH)
 
    private:
       static MStyle* _defaultStyle;       // buildin modified by preferences
@@ -422,7 +419,6 @@ inline static int limit(int val, int min, int max) {
 
 Q_DECLARE_FLAGS(Align, AlignmentFlags);
 Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
-Q_ENUMS(DirectionH)
 
 }     // namespace Ms
 
