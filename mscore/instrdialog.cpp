@@ -155,14 +155,19 @@ void StaffListItem::setLinked(bool val)
 
 void StaffListItem::setStaffType(const StaffType* st)
       {
-      for (int i = 0; i < _staffTypeCombo->count(); ++i) {
-            const StaffType* _st = StaffType::preset(_staffTypeCombo->itemData(i).toInt());
-            if (*_st == *st) {
-                  _staffTypeCombo->setCurrentIndex(i);
-                  return;
+      if (st == nullptr)                              // if no staff type given, dault to stadard
+            _staffTypeCombo->setCurrentIndex(0);      // staff type (at combo box index 0)
+      else {
+            // if staff type given, look into combo box item data for a preset equal to staff type
+            for (int i = 0; i < _staffTypeCombo->count(); ++i) {
+                  const StaffType* _st = StaffType::preset(_staffTypeCombo->itemData(i).toInt());
+                  if (*_st == *st) {
+                        _staffTypeCombo->setCurrentIndex(i);
+                        return;
+                        }
                   }
+            _staffTypeCombo->setCurrentIndex(0);      // if none found, default to standard staff type
             }
-      _staffTypeCombo->setCurrentIndex(0);
       }
 
 //---------------------------------------------------------
