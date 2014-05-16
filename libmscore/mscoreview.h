@@ -40,9 +40,9 @@ class MuseScoreView {
       virtual void dataChanged(const QRectF&) = 0;
       virtual void updateAll() = 0;
 
-      virtual void moveCursor()          {};
-      virtual void updateLoopCursors()   {};
-      virtual void showLoopCursors(bool) {};
+      virtual void moveCursor()          {}
+      virtual void updateLoopCursors()   {}
+      virtual void showLoopCursors(bool) {}
 
       virtual void adjustCanvasPosition(const Element* el, bool playBack) = 0;
       virtual void setScore(Score* s) { _score = s; }
