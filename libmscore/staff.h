@@ -78,7 +78,7 @@ struct BracketItem {
       };
 
 //---------------------------------------------------------
-//   @@ Staff
+//    Staff
 ///    Global staff data not directly related to drawing.
 //---------------------------------------------------------
 
