@@ -476,6 +476,7 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
 
 //---------------------------------------------------------
 //   AccidentalBracket
+//    used as icon in palette
 //---------------------------------------------------------
 
 AccidentalBracket::AccidentalBracket(Score* s)
