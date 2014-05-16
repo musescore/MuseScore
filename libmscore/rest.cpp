@@ -549,5 +549,45 @@ qreal Rest::mag() const
             m *= score()->styleD(ST_smallNoteMag);
       return m;
       }
+
+//---------------------------------------------------------
+//   upLine
+//---------------------------------------------------------
+
+int Rest::upLine() const
+      {
+      return lrint(bbox().top() * 2.0 / spatium());
+      }
+
+//---------------------------------------------------------
+//   downLine
+//---------------------------------------------------------
+
+int Rest::downLine() const
+      {
+      return lrint(bbox().bottom() * 2.0 / spatium());
+      }
+
+//---------------------------------------------------------
+//   stemPos
+//    point to connect stem
+//---------------------------------------------------------
+
+QPointF Rest::stemPos() const
+      {
+      return pagePos();
+      }
+
+//---------------------------------------------------------
+//   stemPosX
+//---------------------------------------------------------
+
+qreal Rest::stemPosX() const
+      {
+      if (_up)
+            return bbox().right();
+      else
+            return bbox().left();
+      }
 }
 

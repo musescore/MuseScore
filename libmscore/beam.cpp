@@ -1136,8 +1136,7 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
       const ChordRest* c2 = cl.back();
       qreal dx            = c2->pagePos().x() - c1->pagePos().x();
       bool grace          = c1->isGrace();
-
-      bool zeroSlant  = slopeZero(cl);
+      bool zeroSlant      = slopeZero(cl);
 
       int l1 = c1->line() * 2;
       int l2 = c2->line() * 2;
@@ -1390,7 +1389,7 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
             }
       // shorten stem length if grace notes beam is under main notes beam.
       // Value 4 estimated. Desired: to find a good formula.
-      if(grace && static_cast<const Chord*>(c1)->underBeam()){
+      if (grace && static_cast<const Chord*>(c1)->underBeam()){
             if (bm.l > 0)
                   bm.l -= 4;
             else
@@ -1571,6 +1570,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             for (int i = 0; i < n;) {
                   ChordRest* cr1 = crl[i];
                   int l = cr1->durationType().hooks() - 1;
+
                   if ((cr1->type() == REST && i) || l < beamLevel) {
                         ++i;
                         continue;
