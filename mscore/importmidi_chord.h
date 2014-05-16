@@ -23,7 +23,7 @@ class MidiNote {
       bool staccato = false;
       bool isInTuplet = false;
                   // for offTime quantization
-      std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator tuplet;
+      std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator tuplet;
                   // for notation simplification - final quant value
       ReducedFraction quant = ReducedFraction(-1, 1);       // invalid by default
       };
@@ -35,7 +35,7 @@ class MidiChord {
       bool isInTuplet = false;
       int barIndex = -1;
                   // for onTime quantization
-      std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator tuplet;
+      std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator tuplet;
 
       bool isStaccato() const
             {
@@ -104,6 +104,18 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks);
 void mergeChordsWithEqualOnTimeAndVoice(std::multimap<int, MTrack> &tracks);
 void splitUnequalChords(std::multimap<int, MTrack> &tracks);
 int chordAveragePitch(const QList<MidiNote> &notes);
+
+std::map<int, ReducedFraction>
+findMaxChordLengths(const std::multimap<ReducedFraction, MidiChord> &chords);
+
+std::pair<std::multimap<ReducedFraction, MidiChord>::const_iterator,
+          std::multimap<ReducedFraction, MidiChord>::const_iterator>
+findChordsForTimeRange(
+            int voice,
+            const ReducedFraction &onTime,
+            const ReducedFraction &offTime,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            std::map<int, ReducedFraction> &maxChordLengths);
 
 #ifdef QT_DEBUG
 

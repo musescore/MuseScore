@@ -388,65 +388,44 @@ struct VoiceSplit {
       int voice = -1;
       };
 
-// it's an optimization function: we can don't check chords
-// with (on time + max chord len) < given time moment
-// because chord cannot be longer than found max length
-// result: <voice, max chord length>
-
-std::map<int, ReducedFraction> findMaxChordLengths(
-            const std::multimap<ReducedFraction, MidiChord> &chords)
+std::multimap<ReducedFraction,
+                  std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator>::const_iterator
+findInsertedTuplet(const ReducedFraction &onTime,
+           int voice,
+           const std::multimap<ReducedFraction,
+                 std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets)
       {
-      std::map<int, ReducedFraction> maxLengths;
-
-      for (const auto &chord: chords) {
-            const auto offTime = MChord::maxNoteOffTime(chord.second.notes);
-            if (offTime - chord.first > maxLengths[chord.second.voice])
-                  maxLengths[chord.second.voice] = offTime - chord.first;
+      const auto range = insertedTuplets.equal_range(onTime);
+      for (auto it = range.first; it != range.second; ++it) {
+            if (it->second->second.voice == voice)
+                  return it;
             }
-      return maxLengths;
+      return insertedTuplets.end();
       }
+
+// if new chord intersected with tuplet that already was inserted
+// due to some previous chord separation - then it is not an intersection:
+// the new chord belongs to this tuplet
 
 bool hasIntersectionWithTuplets(
             int voice,
             const ReducedFraction &onTime,
             const ReducedFraction &offTime,
-            const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
+            const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets,
+            const std::multimap<ReducedFraction,
+                  std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
+            const ReducedFraction &tupletOnTime)
       {
-      auto it = MidiTuplet::findTupletForTimeRange(voice, onTime, offTime - onTime, tuplets);
-      return it != tuplets.end();
-      }
-
-bool hasIntersectionWithChords(
-            int voice,
-            const ReducedFraction &onTime,
-            const ReducedFraction &offTime,
-            const std::multimap<ReducedFraction, MidiChord> &chords,
-            std::map<int, ReducedFraction> &maxChordLengths)
-      {
-      auto it = chords.lower_bound(offTime);
-
-      if (it == chords.begin())
-            return true;
-      if (it == chords.end())
-            return false;
-
-      bool hasIntersection = false;
-      while (it->first + maxChordLengths[voice] > onTime) {
-            const MidiChord &chord = it->second;
-            const auto chordInterval = std::make_pair(
-                              it->first, MChord::maxNoteOffTime(chord.notes));
-            const auto durationInterval = std::make_pair(onTime, offTime);
-            if (chord.voice == voice && MidiTuplet::haveIntersection(
-                        chordInterval, durationInterval)) {
-                  hasIntersection = true;
-                  break;
-                  }
-            if (it == chords.begin())
-                  break;
-            --it;
+      const auto range = MidiTuplet::findTupletsForTimeRange(voice, onTime,
+                                                             offTime - onTime, tuplets);
+      for (auto tupletIt = range.first; tupletIt != range.second; ++tupletIt) {
+            const auto ins = findInsertedTuplet(tupletIt->first, voice, insertedTuplets);
+            const bool belongsToInserted = (ins != insertedTuplets.end() && ins->first == tupletOnTime);
+            if (!belongsToInserted)
+                  return true;
             }
 
-      return hasIntersection;
+      return false;
       }
 
 void addGroupSplits(
@@ -454,6 +433,9 @@ void addGroupSplits(
             std::map<int, ReducedFraction> &maxChordLengths,
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets,
+            const std::multimap<ReducedFraction,
+                  std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
+            const ReducedFraction &tupletOnTime,
             const ReducedFraction &onTime,
             const ReducedFraction &groupOffTime,
             int origVoice,
@@ -463,9 +445,12 @@ void addGroupSplits(
       for (int voice = 0; voice != voiceLimit; ++voice) {
             if (voice == origVoice)
                   continue;
-            if (hasIntersectionWithTuplets(voice, onTime, groupOffTime, tuplets))
+            if (hasIntersectionWithTuplets(voice, onTime, groupOffTime,
+                                           tuplets, insertedTuplets, tupletOnTime))
                   continue;
-            if (hasIntersectionWithChords(voice, onTime, groupOffTime, chords, maxChordLengths))
+            const auto chordRange = MChord::findChordsForTimeRange(voice, onTime, groupOffTime,
+                                                                   chords, maxChordLengths);
+            if (chordRange.first != chordRange.second)
                   continue;
 
             VoiceSplit split;
@@ -475,34 +460,59 @@ void addGroupSplits(
             }
       }
 
+ReducedFraction maximizeOffTime(const MidiNote &note, const ReducedFraction& offTime)
+      {
+      auto result = offTime;
+      if (note.offTime > offTime)
+            result = note.offTime;
+      if (note.isInTuplet) {
+            const auto &tuplet = note.tuplet->second;
+            if (tuplet.onTime + tuplet.len > result)
+                  result = tuplet.onTime + tuplet.len;
+            }
+      return result;
+      }
+
 std::vector<VoiceSplit> findPossibleVoiceSplits(
             int origVoice,
-            const QList<MidiNote> &notes,
-            const ReducedFraction &onTime,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
             int splitPoint,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
+            const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets,
+            const std::multimap<ReducedFraction,
+                  std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets)
       {
       std::vector<VoiceSplit> splits;
 
+      ReducedFraction onTime = chordIt->first;
       ReducedFraction lowGroupOffTime(0, 1);
       ReducedFraction highGroupOffTime(0, 1);
 
-      for (int i = 0; i != splitPoint; ++i) {
-            if (notes[i].offTime > lowGroupOffTime)
-                  lowGroupOffTime = notes[i].offTime;
-            }
-      for (int i = splitPoint; i != notes.size(); ++i) {
-            if (notes[i].offTime > highGroupOffTime)
-                  highGroupOffTime = notes[i].offTime;
+      const auto &notes = chordIt->second.notes;
+      for (int i = 0; i != splitPoint; ++i)
+            lowGroupOffTime = maximizeOffTime(notes[i], lowGroupOffTime);
+      for (int i = splitPoint; i != notes.size(); ++i)
+            highGroupOffTime = maximizeOffTime(notes[i], highGroupOffTime);
+
+      ReducedFraction tupletOnTime(-1, 1);
+      if (chordIt->second.isInTuplet) {
+            const auto &tuplet = chordIt->second.tuplet->second;
+            tupletOnTime = tuplet.onTime;
+            if (tuplet.onTime < onTime)
+                  onTime = tuplet.onTime;
+            if (tuplet.onTime + tuplet.len > lowGroupOffTime)
+                  lowGroupOffTime = tuplet.onTime + tuplet.len;
+            if (tuplet.onTime + tuplet.len > highGroupOffTime)
+                  highGroupOffTime = tuplet.onTime + tuplet.len;
             }
 
-      std::map<int, ReducedFraction> maxChordLengths = findMaxChordLengths(chords);
+      std::map<int, ReducedFraction> maxChordLengths = MChord::findMaxChordLengths(chords);
 
-      addGroupSplits(splits, maxChordLengths, chords, tuplets, onTime, lowGroupOffTime,
-                     origVoice, ShiftedPitchGroup::LOW);
-      addGroupSplits(splits, maxChordLengths, chords, tuplets, onTime, highGroupOffTime,
-                     origVoice, ShiftedPitchGroup::HIGH);
+      addGroupSplits(splits, maxChordLengths, chords, tuplets, insertedTuplets, tupletOnTime,
+                     onTime, lowGroupOffTime, origVoice, ShiftedPitchGroup::LOW);
+
+      addGroupSplits(splits, maxChordLengths, chords, tuplets, insertedTuplets, tupletOnTime,
+                     onTime, highGroupOffTime, origVoice, ShiftedPitchGroup::HIGH);
 
       return splits;
       }
@@ -617,29 +627,34 @@ VoiceSplit findBestSplit(
       return possibleSplits[bestSplit];
       }
 
-std::pair<int, int>
-findIndexRange(ShiftedPitchGroup splitGroup, int splitPoint, int noteCount)
+void addOrUpdateTuplet(
+            std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator &tuplet,
+            int newVoice,
+            std::multimap<ReducedFraction,
+                  std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
+            std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
       {
-      int beg = 0;
-      int end = noteCount;
-
-      switch (splitGroup) {
-            case ShiftedPitchGroup::LOW:
-                  end = splitPoint;
-                  break;
-            case ShiftedPitchGroup::HIGH:
-                  beg = splitPoint;
-                  break;
+      const auto tupletOnTime = tuplet->first;
+      const auto ins = findInsertedTuplet(tupletOnTime, newVoice, insertedTuplets);
+      if (ins == insertedTuplets.end()) {
+            MidiTuplet::TupletData newTuplet = tuplet->second;
+            newTuplet.voice = newVoice;
+            tuplet = tuplets.insert({tupletOnTime, newTuplet});
+            insertedTuplets.insert({tupletOnTime, tuplet});
             }
-      return {beg, end};
+      else {
+            tuplet = ins->second;
+            }
       }
 
 void separateVoices(
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap,
-            const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
+            std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
       {
       MChord::sortNotesByPitch(chords);
+      std::multimap<ReducedFraction,
+                  std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> insertedTuplets;
 
       for (auto it = chords.begin(); it != chords.end(); ++it) {
             const ReducedFraction onTime = it->first;
@@ -651,20 +666,41 @@ void separateVoices(
             if (splitPoint == -1)
                   continue;
             const auto possibleSplits = findPossibleVoiceSplits(
-                                          chord.voice, notes, onTime,
-                                          splitPoint, chords, tuplets);
+                             chord.voice, it, splitPoint, chords, tuplets, insertedTuplets);
+            if (possibleSplits.empty())
+                  continue;
 
             const VoiceSplit bestSplit = findBestSplit(it, chords, possibleSplits, splitPoint);
 
             MidiChord newChord(chord);
-            const auto indexRange = findIndexRange(bestSplit.group, splitPoint,
-                                                   chord.notes.size());
             newChord.notes.clear();
-            for (int i = indexRange.first; i != indexRange.second; ++i)
-                  newChord.notes.append(chord.notes[i]);
-            for (int i = indexRange.first; i != indexRange.second; ++i)
-                  chord.notes.removeAt(i);
             newChord.voice = bestSplit.voice;
+            QList<MidiNote> updatedOldNotes;
+
+            switch (bestSplit.group) {
+                  case ShiftedPitchGroup::LOW:
+                        for (int i = 0; i != splitPoint; ++i)
+                              newChord.notes.append(notes[i]);
+                        for (int i = splitPoint; i != notes.size(); ++i)
+                              updatedOldNotes.append(notes[i]);
+                        break;
+                  case ShiftedPitchGroup::HIGH:
+                        for (int i = splitPoint; i != notes.size(); ++i)
+                              newChord.notes.append(notes[i]);
+                        for (int i = 0; i != splitPoint; ++i)
+                              updatedOldNotes.append(notes[i]);
+                        break;
+                  }
+
+            notes = updatedOldNotes;
+
+            if (chord.isInTuplet)
+                  addOrUpdateTuplet(chord.tuplet, newChord.voice, insertedTuplets, tuplets);
+
+            for (auto &note: newChord.notes) {
+                  if (note.isInTuplet)
+                        addOrUpdateTuplet(note.tuplet, newChord.voice, insertedTuplets, tuplets);
+                  }
 
             it = chords.insert({onTime, newChord});
             }
@@ -701,17 +737,25 @@ int averagePitchOfChords(
 void sortVoicesByPitch(std::map<int, std::vector<
                               std::multimap<ReducedFraction, MidiChord>::iterator>> &voiceChords)
       {
-            // <average pitch, old voice>
-      std::vector<std::pair<int, int>> pitches;
+            // [newVoice] = <average pitch, old voice>
+      std::vector<std::pair<int, int>> pitchVoices;
       for (const auto &v: voiceChords)
-            pitches.push_back({averagePitchOfChords(v.second), v.first});
+            pitchVoices.push_back({averagePitchOfChords(v.second), v.first});
 
-      std::sort(pitches.begin(), pitches.end(), std::greater<std::pair<int, int>>());
+      std::sort(pitchVoices.begin(), pitchVoices.end(), std::greater<std::pair<int, int>>());
 
-      for (int newVoice = 0; newVoice != (int)pitches.size(); ++newVoice) {
-            const int oldVoice = pitches[newVoice].second;
-            for (auto &chord: voiceChords[oldVoice])
-                  chord->second.voice = newVoice;
+      for (int newVoice = 0; newVoice != (int)pitchVoices.size(); ++newVoice) {
+            const int oldVoice = pitchVoices[newVoice].second;
+            for (auto &chord: voiceChords[oldVoice]) {
+                  MidiChord &c = chord->second;
+                  c.voice = newVoice;
+                  if (c.isInTuplet)
+                        c.tuplet->second.voice = newVoice;
+                  for (auto &note: c.notes) {
+                        if (note.isInTuplet)
+                              note.tuplet->second.voice = newVoice;
+                        }
+                  }
             }
       }
 
@@ -721,13 +765,16 @@ void sortVoices(
       {
                   // <voice, chords>
       std::map<int, std::vector<std::multimap<ReducedFraction, MidiChord>::iterator>> voiceChords;
-      int minBarIndex = 0;
       int maxBarIndex = 0;
 
       for (auto it = chords.begin(); it != chords.end(); ++it) {
-            const auto chord = it->second;
+            const auto &chord = it->second;
 
-            if (chord.barIndex >= minBarIndex && chord.barIndex <= maxBarIndex) {
+            // some notes: if chord off time belongs to tuplet
+            // then this tuplet belongs to the same bar as the chord off time
+            // same is for chord on time
+
+            if (chord.barIndex <= maxBarIndex) {
                   voiceChords[chord.voice].push_back(it);
                   const int barIndex = findBarIndexForOffTime(
                                           MChord::maxNoteOffTime(chord.notes), sigmap);
@@ -735,11 +782,12 @@ void sortVoices(
                         maxBarIndex = barIndex;
                   }
 
-            if (std::next(it) == chords.end()
-                        || chord.barIndex < minBarIndex || chord.barIndex > maxBarIndex) {
+            Q_ASSERT_X(chord.barIndex != -1,
+                       "Simplify::sortVoices", "Chord bar index is undefined");
+
+            if (std::next(it) == chords.end() || chord.barIndex > maxBarIndex) {
                   sortVoicesByPitch(voiceChords);
                   voiceChords.clear();
-                  minBarIndex = ++maxBarIndex;
                   }
             }
       }
@@ -761,8 +809,23 @@ void simplifyNotation(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigm
 
             if (opers.currentTrackOperations().simplifyNotation) {
                   if (MidiTuplet::voiceLimit() > 1) {
+
+                        Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(chords, mtrack.tuplets),
+                                   "Simplify::simplifyNotation",
+                                   "Not all tuplets are referenced in chords or notes");
+
                         separateVoices(chords, sigmap, mtrack.tuplets);
+                        MidiTuplet::removeEmptyTuplets(mtrack);
+
+                        Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(chords, mtrack.tuplets),
+                                   "Simplify::simplifyNotation",
+                                   "Not all tuplets are referenced in chords or notes");
+
                         sortVoices(chords, sigmap);
+
+                        Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(chords, mtrack.tuplets),
+                                   "Simplify::simplifyNotation",
+                                   "Not all tuplets are referenced in chords or notes");
                         }
                   minimizeNumberOfRests(chords, sigmap, mtrack.tuplets);
                   }

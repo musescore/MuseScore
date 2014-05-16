@@ -56,8 +56,9 @@ findTupletsInBarForDuration(int voice,
                             const ReducedFraction &durationLen,
                             const std::multimap<ReducedFraction, TupletData> &tupletEvents);
 
-std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator
-findTupletForTimeRange(int voice,
+std::pair<std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator,
+          std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator>
+findTupletsForTimeRange(int voice,
                        const ReducedFraction &onTime,
                        const ReducedFraction &len,
                        const std::multimap<ReducedFraction, TupletData> &tupletEvents);
@@ -87,6 +88,14 @@ void findAllTuplets(
             const TimeSigMap *sigmap,
             const ReducedFraction &lastTick,
             const ReducedFraction &basicQuant);
+
+#ifdef QT_DEBUG
+
+bool areAllTupletsReferenced(
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const std::multimap<ReducedFraction, TupletData> &tupletEvents);
+
+#endif
 
 } // namespace MidiTuplet
 } // namespace Ms

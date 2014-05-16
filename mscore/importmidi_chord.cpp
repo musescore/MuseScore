@@ -345,5 +345,71 @@ int chordAveragePitch(const QList<MidiNote> &notes)
       return qRound(sum * 1.0 / notes.size());
       }
 
+// it's an optimization function: we can don't check chords
+// with (on time + max chord len) < given time moment
+// because chord cannot be longer than found max length
+// result: <voice, max chord length>
+
+std::map<int, ReducedFraction> findMaxChordLengths(
+            const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      std::map<int, ReducedFraction> maxLengths;
+
+      for (const auto &chord: chords) {
+            const auto offTime = maxNoteOffTime(chord.second.notes);
+            if (offTime - chord.first > maxLengths[chord.second.voice])
+                  maxLengths[chord.second.voice] = offTime - chord.first;
+            }
+      return maxLengths;
+      }
+
+std::pair<std::multimap<ReducedFraction, MidiChord>::const_iterator,
+          std::multimap<ReducedFraction, MidiChord>::const_iterator>
+findChordsForTimeRange(
+            int voice,
+            const ReducedFraction &onTime,
+            const ReducedFraction &offTime,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            std::map<int, ReducedFraction> &maxChordLengths)
+      {
+
+      Q_ASSERT_X(!maxChordLengths.empty(),
+                 "MChord::findChordsForTimeRange", "Empty maxChordLenghts");
+
+      auto beg = chords.end();
+      auto end = chords.end();
+
+      if (chords.empty())
+            return {beg, end};
+
+      auto it = chords.lower_bound(offTime);
+      if (it == chords.begin())
+            return {beg, end};
+      --it;
+
+      while (it->first + maxChordLengths[voice] > onTime) {
+            const MidiChord &chord = it->second;
+            if (chord.voice == voice) {
+                  const auto chordInterval = std::make_pair(it->first, maxNoteOffTime(chord.notes));
+                  const auto durationInterval = std::make_pair(onTime, offTime);
+
+                  if (MidiTuplet::haveIntersection(chordInterval, durationInterval)) {
+                        if (end == beg) {
+                              beg = it;
+                              end = std::next(beg);
+                              }
+                        else {
+                              beg = it;
+                              }
+                        }
+                  }
+            if (it == chords.begin())
+                  break;
+            --it;
+            }
+
+      return {beg, end};
+      }
+
 } // namespace MChord
 } // namespace Ms

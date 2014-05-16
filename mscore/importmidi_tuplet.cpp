@@ -57,40 +57,52 @@ TupletInfo& tupletFromId(int id, std::vector<TupletInfo> &tuplets)
 
 void removeEmptyTuplets(MTrack &track)
       {
-      if (track.tuplets.empty())
+      auto &tuplets = track.tuplets;
+      if (tuplets.empty())
             return;
-      for (auto it = track.tuplets.begin(); it != track.tuplets.end(); ) {
-            const auto &tupletData = it->second;
-            bool ok = false;
-            for (const auto &chord: track.chords) {
-                  if (chord.first >= tupletData.onTime + tupletData.len)
-                        break;
-                  if (tupletData.voice != chord.second.voice)
-                        continue;
-                  const ReducedFraction &onTime = chord.first;
-                  if (onTime >= tupletData.onTime
-                              && onTime < tupletData.onTime + tupletData.len) {
-                                    // tuplet contains at least one chord
-                                    // check now for notes with len == tupletData.len
-                        if (onTime == tupletData.onTime) {
-                              for (const auto &note: chord.second.notes) {
-                                    if (note.offTime - onTime < tupletData.len) {
-                                          ok = true;
-                                          break;
-                                          }
+      auto &chords = track.chords;
+      std::map<int, ReducedFraction> maxChordLengths = MChord::findMaxChordLengths(chords);
+
+      for (auto tupletIt = tuplets.begin(); tupletIt != tuplets.end(); ) {
+            const auto &tuplet = tupletIt->second;
+            bool haveIntersectionWithChord = false;
+            const auto chordRange = MChord::findChordsForTimeRange(
+                              tuplet.voice, tuplet.onTime, tuplet.onTime + tuplet.len,
+                              chords, maxChordLengths);
+
+            for (auto chordIt = chordRange.first; chordIt != chordRange.second; ++chordIt) {
+                              // ok, tuplet contains at least one chord
+                              // check now does it have notes with len < tuplet.len
+                  if (chordIt->first == tuplet.onTime) {
+                        for (const auto &note: chordIt->second.notes) {
+                              if (note.offTime - chordIt->first < tuplet.len) {
+                                    haveIntersectionWithChord = true;
+                                    break;
                                     }
                               }
-                        else {
-                              ok = true;
-                              break;
-                              }
+                        }
+                  else {
+                        haveIntersectionWithChord = true;
+                        break;
                         }
                   }
-            if (!ok) {
-                  it = track.tuplets.erase(it);
+
+            if (!haveIntersectionWithChord) {    // tuplet is useless - remove it
+                  for (auto &chord: chords) {
+                        if (chord.first >= tuplet.onTime + tuplet.len)
+                              break;
+                        MidiChord &c = chord.second;
+                        if (c.isInTuplet && c.tuplet == tupletIt)
+                              c.isInTuplet = false;
+                        for (auto &note: c.notes) {
+                              if (note.isInTuplet && note.tuplet == tupletIt)
+                                    note.isInTuplet = false;
+                              }
+                        }
+                  tupletIt = tuplets.erase(tupletIt);
                   continue;
                   }
-            ++it;
+            ++tupletIt;
             }
       }
 
@@ -195,8 +207,9 @@ findTupletsInBarForDuration(
       return tupletsData;
       }
 
-std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator
-findTupletForTimeRange(
+std::pair<std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator,
+          std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator>
+findTupletsForTimeRange(
             int voice,
             const ReducedFraction &onTime,
             const ReducedFraction &len,
@@ -205,12 +218,17 @@ findTupletForTimeRange(
       Q_ASSERT_X(len >= ReducedFraction(0, 1),
                  "MidiTuplet::findTupletForTimeRange", "Negative length of the time range");
 
+      auto beg = tupletEvents.end();
+      auto end = tupletEvents.end();
+
       if (tupletEvents.empty())
-            return tupletEvents.end();
+            return {beg, end};
 
       auto it = tupletEvents.upper_bound(onTime + len);
-      if (it != tupletEvents.begin())
-            --it;
+      if (it == tupletEvents.begin())
+            return {beg, end};
+
+      --it;
       while (true) {
             const auto &tupletData = it->second;
             const auto &tupletOffTime = tupletData.onTime + tupletData.len;
@@ -220,13 +238,19 @@ findTupletForTimeRange(
                              ? onTime + len <= tupletOffTime
                              : onTime < tupletOffTime)
                             )) {
-                  return it;
+                  if (end == beg) {
+                        beg = it;
+                        end = std::next(beg);
+                        }
+                  else {
+                        beg = it;
+                        }
                   }
             if (it == tupletEvents.begin())
                   break;
             --it;
             }
-      return tupletEvents.end();
+      return {beg, end};
       }
 
 std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator
@@ -235,7 +259,7 @@ findTupletContainsTime(
             const ReducedFraction &time,
             const std::multimap<ReducedFraction, TupletData> &tupletEvents)
       {
-      return findTupletForTimeRange(voice, time, ReducedFraction(0, 1), tupletEvents);
+      return findTupletsForTimeRange(voice, time, ReducedFraction(0, 1), tupletEvents).first;
       }
 
 std::set<std::pair<const ReducedFraction, MidiChord> *>
@@ -491,6 +515,34 @@ bool areBarIndexesSet(const std::multimap<ReducedFraction, MidiChord> &chords)
       return true;
       }
 
+bool areAllTupletsReferenced(
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const std::multimap<ReducedFraction, TupletData> &tupletEvents)
+      {
+      std::set<std::pair<ReducedFraction, int>> referencedTuplets;      // <onTime, voice>
+                  // first - check tuplet events for uniqueness
+      for (const auto &tuplet: tupletEvents) {
+            const auto &t = tuplet.second;
+            const auto result = referencedTuplets.insert({t.onTime, t.voice});
+            Q_ASSERT_X(result.second == true, "MidiTuplet::areAllTupletsReferenced",
+                       "Not unique tuplets in tupletEvents");
+            }
+      referencedTuplets.clear();
+
+      for (const auto &chord: chords) {
+            if (chord.second.isInTuplet) {
+                  const auto &tuplet = chord.second.tuplet->second;
+                  referencedTuplets.insert({tuplet.onTime, tuplet.voice});
+                  }
+            }
+      if (referencedTuplets.size() < tupletEvents.size())
+            qDebug() << "Referenced tuplets count < tuplet events count";
+      if (referencedTuplets.size() > tupletEvents.size())
+            qDebug() << "Referenced tuplets count > tuplet events count";
+
+      return tupletEvents.size() == referencedTuplets.size();
+      }
+
 #endif
 
 
@@ -706,7 +758,7 @@ void findTuplets(
       }
 
 void setAllTupletOffTimes(
-            const std::multimap<ReducedFraction, TupletData> &tupletEvents,
+            std::multimap<ReducedFraction, TupletData> &tupletEvents,
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap)
       {
@@ -722,7 +774,8 @@ void setAllTupletOffTimes(
                                           chord.voice, note.offTime, tupletEvents);
                         if (it != tupletEvents.end()) {
                               note.isInTuplet = true;
-                              note.tuplet = it;
+                                          // hack to remove constness of iterator
+                              note.tuplet = tupletEvents.erase(it, it);
                               }
                         }
                   }
@@ -765,6 +818,9 @@ void findAllTuplets(
 
       Q_ASSERT_X(areBarIndexesSet(chords),
                  "MidiTuplet::findAllTuplets", "Not all bar indexes were set");
+      Q_ASSERT_X(areAllTupletsReferenced(chords, tupletEvents),
+                 "MidiTuplet::findAllTuplets",
+                 "Not all tuplets are referenced in chords or notes");
       }
 
 } // namespace MidiTuplet
