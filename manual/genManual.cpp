@@ -242,6 +242,8 @@ static void writeOutput()
                         }
                   out += "</div>\n";
                   }
+            else
+                  out += "<br />";
 
             if (!cl.procs.isEmpty()) {
                   out += "<h4>Methods</h4>\n";
@@ -325,6 +327,7 @@ static void writeOutput()
             out += QString("<li><a href=\"%1\">%2</a></li>\n")
                     .arg(s.name.toLower() + ".html").arg(s.name);
             }
+      out += "</ul>\n";
       addFooter(out);
 
       QString ofile = dstPath + "/plugins/plugins.html";
