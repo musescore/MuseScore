@@ -275,6 +275,10 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   int velocity = staff->velocities().velo(seg->tick());
                   Instrument* instr = chord->staff()->part()->instr(tick);
                   int channel = instr->channel(chord->upNote()->subchannel()).channel;
+                  
+                  foreach (Articulation* a, chord->articulations()) {
+                        instr->updateVelocity(&velocity,channel, a->subtypeName());
+                  }
 
                   for (Chord* c : chord->graceNotes()) {
                         for (const Note* note : c->notes())
