@@ -1571,8 +1571,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             for (int i = 0; i < n;) {
                   ChordRest* cr1 = crl[i];
                   int l = cr1->durationType().hooks() - 1;
-//                  if ((cr1->type() == REST) || l < beamLevel) {
-                  if (l < beamLevel) {
+                  if ((cr1->type() == REST && i) || l < beamLevel) {
                         ++i;
                         continue;
                         }
