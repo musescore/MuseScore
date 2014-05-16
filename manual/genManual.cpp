@@ -412,7 +412,8 @@ int main(int argc, char* argv[])
       srcPath = argv[0];
       dstPath = argv[1];
       QStringList files;
-      files << "libmscore/plugins.h";
+      files << "mscore/qmlplugin.h";
+      files << "mscore/svggenerator.h";
 
       QDir libdir(srcPath + "/libmscore");
       QStringList filter;
