@@ -1,4 +1,7 @@
 .*,
+*~
+*.swp
+*.autosave
 .qped
 .directory
 build.release
