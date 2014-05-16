@@ -302,7 +302,7 @@ class Text : public Element {
       virtual void textChanged() {}
       QString convertFromHtml(const QString& ss) const;
       
-      void undoSetText(const QString& s) { undoChangeProperty(P_TEXT, s); };
+      void undoSetText(const QString& s) { undoChangeProperty(P_TEXT, s); }
       };
 
 

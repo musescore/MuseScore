@@ -958,7 +958,7 @@ class Score : public QObject {
 extern Score* gscore;
 extern void fixTicks();
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 
 }     // namespace Ms
 

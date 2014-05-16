@@ -53,7 +53,7 @@ enum ElementFlag {
       };
 
 typedef QFlags<ElementFlag> ElementFlags;
-Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags);
 
 //---------------------------------------------------------
 ///   \brief Unit of horizontal measure
