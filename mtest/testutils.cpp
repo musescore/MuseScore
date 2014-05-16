@@ -173,6 +173,7 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith)
       {
       QString cmd = "diff";
       QStringList args;
+      args.append("-u");
       args.append(saveName);
       args.append(root + "/" + compareWith);
       QProcess p;
@@ -182,7 +183,7 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith)
       if (p.exitCode()) {
             QByteArray ba = p.readAll();
             qDebug("%s", qPrintable(ba));
-            qDebug("   <diff %s %s failed", qPrintable(saveName),
+            qDebug("   <diff -u %s %s failed", qPrintable(saveName),
                qPrintable(QString(root + "/" + compareWith)));
             return false;
             }
