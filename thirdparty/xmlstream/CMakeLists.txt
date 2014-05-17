@@ -34,6 +34,6 @@ set_target_properties (
 
 xcode_pch(xmlstream all)
 
-ADD_DEPENDENCIES(diff_match_patch mops1)
-ADD_DEPENDENCIES(diff_match_patch mops2)
+ADD_DEPENDENCIES(xmlstream mops1)
+ADD_DEPENDENCIES(xmlstream mops2)
 
