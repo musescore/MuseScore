@@ -68,12 +68,11 @@ enum class OttavaType {
 
 //---------------------------------------------------------
 //   @@ Ottava
-//   @P ottavaType   enum OttavaType OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB, OTTAVA_22MA, OTTAVA_22MB
+//   @P ottavaType  Ms::OttavaType  (OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB, OTTAVA_22MA, OTTAVA_22MB)
 //---------------------------------------------------------
 
 class Ottava : public TextLine {
       Q_OBJECT
-      Q_ENUMS(OttavaType)
       Q_PROPERTY(OttavaType ottavaType READ ottavaType WRITE undoSetOttavaType)
 
       OttavaType _ottavaType;

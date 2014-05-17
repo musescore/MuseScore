@@ -33,7 +33,7 @@ enum SpannerSegmentType {
 
 //---------------------------------------------------------
 //   @@ SpannerSegment
-//    parent: System
+//!    parent: System
 //---------------------------------------------------------
 
 class SpannerSegment : public Element {
@@ -83,9 +83,9 @@ class SpannerSegment : public Element {
 //   @@ Spanner
 ///   Virtual base class for slurs, ties, lines etc.
 //
-//    @P tick      int     tick start position
-//    @P tick2     int     tick end position
-//    @P anchor    Anchor  ANCHOR_SEGMENT ANCHOR_MEASURE ANCHOR_CHORD ANCHOR_NOTE
+//    @P tick      int                  tick start position
+//    @P tick2     int                  tick end position
+//    @P anchor    Ms::Spanner::Anchor  (ANCHOR_SEGMENT ANCHOR_MEASURE ANCHOR_CHORD ANCHOR_NOTE)
 //----------------------------------------------------------------------------------
 
 class Spanner : public Element {

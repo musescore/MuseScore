@@ -60,7 +60,7 @@ MsScoreView::MsScoreView(QQuickItem* parent)
       }
 
 //---------------------------------------------------------
-//   @@ FileIO
+//   FileIO
 //---------------------------------------------------------
 
 FileIO::FileIO(QObject *parent) :

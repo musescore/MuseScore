@@ -87,7 +87,7 @@ class Box : public MeasureBase {
 
 //---------------------------------------------------------
 //   @@ HBox
-///   horizontal frame
+///    horizontal frame
 //---------------------------------------------------------
 
 class HBox : public Box {
@@ -109,7 +109,7 @@ class HBox : public Box {
 
 //---------------------------------------------------------
 //   @@ VBox
-///   vertical frame
+///    vertical frame
 //---------------------------------------------------------
 
 class VBox : public Box {

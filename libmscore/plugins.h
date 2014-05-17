@@ -57,7 +57,7 @@ class FileIO : public QObject {
 
 //---------------------------------------------------------
 //   MsProcess
-//    @@ QProcess
+//   @@ QProcess
 //---------------------------------------------------------
 
 class MsProcess : public QProcess {
@@ -74,10 +74,10 @@ class MsProcess : public QProcess {
 
 //---------------------------------------------------------
 //   @@ ScoreView
-///   This is an GUI element to show a score.
+///    This is an GUI element to show a score.
 //
-//   @P color QColor    background color
-//   @P scale qreal     scaling factor
+//   @P color  QColor  background color
+//   @P scale  qreal   scaling factor
 //---------------------------------------------------------
 
 class MsScoreView : public QQuickPaintedItem, public MuseScoreView {

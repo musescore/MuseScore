@@ -57,7 +57,7 @@ class TrillSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Trill
-//   @P trillType   enum TrillType TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE
+//   @P trillType  Ms::Trill::TrillType  (TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE)
 //---------------------------------------------------------
 
 class Trill : public SLine {

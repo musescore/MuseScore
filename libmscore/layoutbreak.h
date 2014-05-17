@@ -25,7 +25,7 @@ namespace Ms {
 //   @@ LayoutBreak
 ///    symbols for line break, page break etc.
 //
-//   @P layoutBreakType enum PAGE, LINE, SECTION
+//   @P layoutBreakType  Ms::LayoutBreak::LayoutBreakType  (PAGE, LINE, SECTION)
 //---------------------------------------------------------
 
 class LayoutBreak : public Element {

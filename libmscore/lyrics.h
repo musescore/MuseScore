@@ -25,7 +25,7 @@ class Chord;
 
 //---------------------------------------------------------
 //   @@ Lyrics
-//   @P syllabic  enum SINGLE, BEGIN, END, MIDDLE
+//   @P syllabic  Ms::Lyrics::Syllabic  (SINGLE, BEGIN, END, MIDDLE)
 //---------------------------------------------------------
 
 class Lyrics : public Text {
@@ -95,5 +95,8 @@ class Lyrics : public Text {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Lyrics::Syllabic);
+
 #endif
 

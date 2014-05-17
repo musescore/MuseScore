@@ -23,7 +23,7 @@ class Chord;
 
 //---------------------------------------------------------
 //   @@ Stem
-///   Graphic representation of a note stem.
+///    Graphic representation of a note stem.
 //---------------------------------------------------------
 
 class Stem : public Element {
