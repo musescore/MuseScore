@@ -199,7 +199,7 @@ class Measure : public MeasureBase {
       void remove(Segment* s);
       SegmentList* segments()              { return &_segments; }
 
-      qreal userStretch() const            { return _userStretch; }
+      qreal userStretch() const;
       void setUserStretch(qreal v)         { _userStretch = v;    }
 
       void layoutX(qreal stretch);
