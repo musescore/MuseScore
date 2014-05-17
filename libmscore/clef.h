@@ -107,10 +107,10 @@ class ClefInfo {
 
 //---------------------------------------------------------
 //   @@ Clef
-///   Graphic representation of a clef.
+///    Graphic representation of a clef.
 //
-//    @P showCourtesy bool
-//    @P small        bool      r/o, set by layout
+//   @P showCourtesy  bool
+//   @P small         bool  set by layout (read only)
 //---------------------------------------------------------
 
 class Clef : public Element {

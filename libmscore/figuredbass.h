@@ -64,17 +64,17 @@ and it is edited (via the normalized text); so it is derived from Text.
 //   @@ FiguredBassItem
 ///   One line of a figured bass indication
 //
-//    @P prefix               enum FiguredBassItem.ModifierNone, .ModifierDoubleFlat, .ModifierFlat, .ModifierNatural, .ModifierSharp, .ModifierDoubleSharp the accidental before the digit
-//    @P digit                int         the main digit (0 - 9)
-//    @P suffix               enum FiguredBassItem.ModifierNone, .ModifierDoubleFlat, .ModifierFlat, .ModifierNatural, .ModifierSharp, .ModifierDoubleSharp, .ModifierPlus, .ModifierBackslash, .ModifierSlash    the accidental/diacritic after the digit
-//    @P continuationLine     bool        whether the item has a continuation line or not
-//    @P parenthesis1         enum FiguredBassItem.ParenthesisNone, .ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed     the parentesis before the prefix
-//    @P parenthesis2         enum FiguredBassItem.ParenthesisNone, .ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed     the parentesis after the prefix / before the digit
-//    @P parenthesis3         enum FiguredBassItem.ParenthesisNone, .ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed     the parentesis after the digit / before the suffix
-//    @P parenthesis4         enum FiguredBassItem.ParenthesisNone, .ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed     the parentesis after the suffix / before the cont. line
-//    @P parenthesis5         enum FiguredBassItem.ParenthesisNone, .ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed     the parentesis after the cont. line
-//    @P displayText          string      R/O the text displayed (depends on configured fonts)
-//    @P normalizedText       string      R/O conventional textual representation of item properties (= text used during input)
+//   @P prefix             Ms::FiguredBassItem  (ModifierNone, ModifierDoubleFlat, ModifierFlat, ModifierNatural, ModifierSharp, ModifierDoubleSharp)  accidental before the digit
+//   @P digit              int                  main digit (0 - 9)
+//   @P suffix             Ms::FiguredBassItem  (ModifierNone, ModifierDoubleFlat, ModifierFlat, ModifierNatural, ModifierSharp, ModifierDoubleSharp, ModifierPlus, ModifierBackslash, ModifierSlash)  accidental/diacritic after the digit
+//   @P continuationLine   bool                 whether item has continuation line or not
+//   @P parenthesis1       Ms::FiguredBassItem  (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis before the prefix
+//   @P parenthesis2       Ms::FiguredBassItem  (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis after the prefix / before the digit
+//   @P parenthesis3       Ms::FiguredBassItem  (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis after the digit / before the suffix
+//   @P parenthesis4       Ms::FiguredBassItem  (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed) parentesis after the suffix / before the cont. line
+//   @P parenthesis5       Ms::FiguredBassItem  (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis after the cont. line
+//   @P displayText        QString              text displayed (depends on configured fonts) (read only)
+//   @P normalizedText     Qstring              conventional textual representation of item properties (= text used during input) (read ony)
 //---------------------------------------------------------
 
 class FiguredBass;
@@ -240,10 +240,10 @@ struct FiguredBassFont {
 
 //---------------------------------------------------------
 //   @@ FiguredBass
-///   A complete figured bass indication
+///    A complete figured bass indication
 //
-//    @P onNote   bool                    whether it is placed on a note beginning or between notes (r/o)
-//    @P ticks    int                     duration in ticks
+//   @P onNote  bool  whether it is placed on a note beginning or between notes (read only)
+//   @P ticks   int   duration in ticks
 //---------------------------------------------------------
 
 class FiguredBass : public Text {

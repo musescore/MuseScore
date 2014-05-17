@@ -57,12 +57,11 @@ class VoltaSegment : public TextLineSegment {
 
 //---------------------------------------------------------
 //   @@ Volta
-//   @P voltaType enum VoltaType OPEN, CLOSED
+//   @P voltaType  Ms::VoltaType  (OPEN, CLOSED)
 //---------------------------------------------------------
 
 class Volta : public TextLine {
       Q_OBJECT
-      Q_ENUMS(VoltaType)
 
    private:
       Q_PROPERTY(VoltaType voltaType READ voltaType WRITE undoSetVoltaType)

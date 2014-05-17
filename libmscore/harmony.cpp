@@ -609,13 +609,13 @@ void Harmony::endEdit()
       setHarmony(text());
       layout();
       if (links()) {
-                  foreach(Element* e, *links()) {
-                        if (e == this)
-                              continue;
-                        Harmony* h = static_cast<Harmony*>(e);
-                        h->setHarmony(text());
-                        }
+            foreach(Element* e, *links()) {
+                  if (e == this)
+                        continue;
+                  Harmony* h = static_cast<Harmony*>(e);
+                  h->setHarmony(text());
                   }
+            }
       score()->setLayoutAll(true);
       }
 
@@ -871,12 +871,12 @@ void Harmony::layout()
             }
 
       qreal yy = 0.0;
+      qreal _spatium  = spatium();
       if (parent()->type() == SEGMENT) {
             Measure* m = static_cast<Measure*>(parent()->parent());
             yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
             yy -= score()->styleP(ST_harmonyY);
             Segment* s = static_cast<Segment*>(parent());
-            qreal _spatium  = spatium();
             for (Element* e : s->annotations()) {
                   if (e != this && e->type() == FRET_DIAGRAM && e->track() == track()) {
                         yy += score()->styleP(ST_harmonyY);
@@ -889,7 +889,7 @@ void Harmony::layout()
             }
       else if (parent()->type() == FRET_DIAGRAM)
             yy = score()->styleP(ST_harmonyFretDist);
-      yy += textStyle().offset(spatium()).y();
+      yy += textStyle().offset(_spatium).y();
       if (!editMode()) {
             qreal hb = lineHeight() - Text::baseLine();
             if (textStyle().align() & ALIGN_BOTTOM)
@@ -906,7 +906,7 @@ void Harmony::layout()
                   }
             }
 
-      qreal xx = textStyle().offset(spatium()).x();
+      qreal xx = textStyle().offset(_spatium).x();
       if (!editMode()) {
             qreal cw = symWidth(SymId::noteheadBlack);
             if (textStyle().align() & ALIGN_RIGHT) {
@@ -933,7 +933,7 @@ void Harmony::layout()
       if (parent()->type() == FRET_DIAGRAM && parent()->parent()->type() == SEGMENT) {
             MStaff* mstaff = static_cast<Segment*>(parent()->parent())->measure()->mstaff(staffIdx());
             qreal dist = -(bbox().top());
-            mstaff->distanceUp = qMax(mstaff->distanceUp, dist + spatium());
+            mstaff->distanceUp = qMax(mstaff->distanceUp, dist + _spatium);
             }
 
       if (textStyle().hasFrame()) {

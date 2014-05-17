@@ -27,7 +27,7 @@ struct SlurPos;
 
 //---------------------------------------------------------
 //   @@ Tie
-///   ties have a Note as startElement/endElement
+//!    a Tie has a Note as startElement/endElement
 //---------------------------------------------------------
 
 class Tie : public SlurTie {

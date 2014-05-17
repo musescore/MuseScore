@@ -114,30 +114,30 @@ class NoteHead : public Symbol {
 
 //---------------------------------------------------------------------------------------
 //   @@ Note
-///  Graphic representation of a note.
+///    Graphic representation of a note.
 //
-//   @P subchannel        int   midi subchannel (for midi articulation) (read only)
-//   @P line              int   notehead position (read only)
-//   @P fret              int   fret number in tablature
-//   @P string            int   string number in tablature
-//   @P tpc               int   tonal pitch class, as per concert pitch setting
-//   @P tpc1              int   tonal pitch class, non transposed
-//   @P tpc2              int   tonal pitch class, transposed
-//   @P pitch             int   midi pitch
-//   @P ppitch            int   actual played midi pitch (honoring ottavas) (read only)
-//   @P ghost             bool  ghost note (guitar: death note)
-//   @P hidden            bool  hidden, not played note (read only)
-//   @P mirror            bool  mirror note head on x axis (read only)
-//   @P small             bool  small note head
-//   @P play              bool  play note
-//   @P tuning            qreal tuning offset in cent
-//   @P veloType          enum  OFFSET_VAL, USER_VAL
-//   @P veloOffset        int
-//   @P userMirror        enum DH_AUTO, DH_LEFT, DH_RIGHT
-//   @P userDotPosition   enum AUTO, UP, DOWN
-//   @P headGroup         enum HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT
-//   @P headType          enum HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS
-//   @P elements          array[Element] list of elements attached to note head
+//   @P subchannel       int                 midi subchannel (for midi articulation) (read only)
+//   @P line             int                 notehead position (read only)
+//   @P fret             int                 fret number in tablature
+//   @P string           int                 string number in tablature
+//   @P tpc              int                 tonal pitch class, as per concert pitch setting
+//   @P tpc1             int                 tonal pitch class, non transposed
+//   @P tpc2             int                 tonal pitch class, transposed
+//   @P pitch            int                 midi pitch
+//   @P ppitch           int                 actual played midi pitch (honoring ottavas) (read only)
+//   @P ghost            bool                ghost note (guitar: death note)
+//   @P hidden           bool                hidden, not played note (read only)
+//   @P mirror           bool                mirror note head on x axis (read only)
+//   @P small            bool                small note head
+//   @P play             bool                play note
+//   @P tuning           qreal               tuning offset in cent
+//   @P veloType         Ms::ValueType       (OFFSET_VAL, USER_VAL)
+//   @P veloOffset       int
+//   @P userMirror       Ms::DirectionH      (DH_AUTO, DH_LEFT, DH_RIGHT)
+//   @P userDotPosition  Ms::Direction       (AUTO, UP, DOWN)
+//   @P headGroup        Ms::NoteHeadGroup   (HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT)
+//   @P headType         Ms::NoteHeadType    (HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS)
+//   @P elements         array[Ms::Element]  list of elements attached to note head
 //---------------------------------------------------------------------------------------
 
 class Note : public Element {
@@ -161,12 +161,9 @@ class Note : public Element {
       Q_PROPERTY(int veloOffset                READ veloOffset        WRITE undoSetVeloOffset)
       Q_PROPERTY(Ms::DirectionH userMirror     READ userMirror        WRITE undoSetUserMirror)
       Q_PROPERTY(Ms::Direction userDotPosition READ userDotPosition   WRITE undoSetUserDotPosition)
-      Q_PROPERTY(NoteHeadGroup  headGroup      READ headGroup         WRITE undoSetHeadGroup)
-      Q_PROPERTY(NoteHeadType   headType       READ headType          WRITE undoSetHeadType)
-      Q_PROPERTY(QQmlListProperty<Element> elements  READ qmlElements)
-
-      Q_ENUMS(NoteHeadGroup)
-      Q_ENUMS(NoteHeadType)
+      Q_PROPERTY(Ms::NoteHeadGroup  headGroup  READ headGroup         WRITE undoSetHeadGroup)
+      Q_PROPERTY(Ms::NoteHeadType   headType   READ headType          WRITE undoSetHeadType)
+      Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
 
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.

@@ -168,9 +168,9 @@ class TextBlock {
 
 //---------------------------------------------------------
 //   @@ Text
-///  Graphic representation of a text.
+///    Graphic representation of a text.
 //
-//   @P text        string   the raw text
+//   @P text  Qstring  the raw text
 //---------------------------------------------------------
 
 class Text : public Element {
@@ -302,7 +302,7 @@ class Text : public Element {
       virtual void textChanged() {}
       QString convertFromHtml(const QString& ss) const;
       
-      void undoSetText(const QString& s) { undoChangeProperty(P_TEXT, s); };
+      void undoSetText(const QString& s) { undoChangeProperty(P_TEXT, s); }
       };
 
 

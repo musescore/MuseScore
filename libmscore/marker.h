@@ -35,8 +35,8 @@ enum class MarkerType {
 //---------------------------------------------------------
 //   @@ Marker
 //
-//   @P label           QString
-//   @P markerType      MarkerType
+//   @P label       QString
+//   @P markerType  Ms::MarkerType  (SEGNO, VARSEGNO, CODA, VARCODA, CODETTA, FINE, TOCODA, USER)
 //---------------------------------------------------------
 
 class Marker : public Text {

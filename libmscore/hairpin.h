@@ -57,9 +57,9 @@ class HairpinSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Hairpin
-//   @P hairpinType enum HairpinType CRESCENDO, DECRESCENDO
-//   @P veloChange int
-//   @P dynRange   enum Element::DynamicRange
+//   @P hairpinType  Ms::Hairpin::HairpinType  (CRESCENDO, DECRESCENDO)
+//   @P veloChange   int
+//   @P dynRange     Ms::Element::DynamicRange (DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM)
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
@@ -131,5 +131,8 @@ class Hairpin : public SLine {
       };
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Hairpin::HairpinType);
+
 #endif
 

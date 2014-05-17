@@ -41,8 +41,8 @@ class Spanner;
 ///    Virtual base class. Chords and rests can be part of a beam
 //
 //   @P durationType  int
-//   @P beamMode      BeamMode
-//   @P small         bool      small chord/rest
+//   @P beamMode      Ms::BeamMode (AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID)
+//   @P small         bool         small chord/rest
 //-------------------------------------------------------------------
 
 class ChordRest : public DurationElement {

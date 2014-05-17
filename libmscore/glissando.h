@@ -29,8 +29,8 @@ enum class GlissandoType {
 
 //---------------------------------------------------------
 //   @@ Glissando
-//   @P glissandoType  GlissandoType (STRAIGHT, WAVY)
-//   @P text           Qstring
+//   @P glissandoType  Ms::GlissandoType (STRAIGHT, WAVY)
+//   @P text           QString
 //   @P showText       bool
 //---------------------------------------------------------
 
@@ -79,5 +79,8 @@ class Glissando : public Element {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::GlissandoType);
+
 #endif
 
