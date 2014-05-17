@@ -67,6 +67,7 @@ struct MidiArticulation {
       void read(XmlReader&);
 
       MidiArticulation() {}
+      MidiArticulation(const QString& n, const QString& d, int v, int g) : name(n), descr(d), velocity(v), gateTime(g) {}
       bool operator==(const MidiArticulation& i) const;
       };
 
