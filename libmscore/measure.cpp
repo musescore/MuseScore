@@ -4002,6 +4002,14 @@ Measure* Measure::mmRest1() const
       return 0;
       }
 
+//-------------------------------------------------------------------
+//   userStretch
+//-------------------------------------------------------------------
+      
+qreal Measure::userStretch() const
+      {
+      return (score()->layoutMode() == LayoutFloat ? 1.0 : _userStretch);
+      }
 
 }
 
