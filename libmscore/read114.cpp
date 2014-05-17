@@ -246,6 +246,13 @@ void Part::read114(XmlReader& e)
                   staff->setLines(lines);
                   }
             }
+      //set default articulations
+      QList<MidiArticulation> articulations;
+      articulations.append(MidiArticulation("", "", 100, 100));
+      articulations.append(MidiArticulation("staccato", "", 100, 50));
+      articulations.append(MidiArticulation("tenuto", "", 100, 100));
+      articulations.append(MidiArticulation("sforzato", "", 120, 100));
+      instr(0)->setArticulation(articulations);
       }
 
 //---------------------------------------------------------
