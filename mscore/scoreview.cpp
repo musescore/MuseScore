@@ -2005,12 +2005,12 @@ void ScoreView::wheelEvent(QWheelEvent* event)
       if (!pixelsScrolled.isNull()) {
             dx = pixelsScrolled.x();
             dy = pixelsScrolled.y();
-            nReal = ((qreal)dx) / PIXELSSTEPSFACTOR;
+            nReal = static_cast<qreal>(dx) / PIXELSSTEPSFACTOR;
             }
       else if (!stepsScrolled.isNull()) {
-            dx = stepsScrolled.x() * qMax(2, width() / 10) / 120;
-            dy = stepsScrolled.y() * qMax(2, height() / 10) / 120;
-            nReal = ((qreal)stepsScrolled.y()) / 120;
+            dx = static_cast<qreal>(stepsScrolled.x()) * qMax(2, width() / 10) / 120;
+            dy = static_cast<qreal>(stepsScrolled.y()) * qMax(2, height() / 10) / 120;
+            nReal = static_cast<qreal>(stepsScrolled.y()) / 120;
             }
 
       n = (int) nReal;
