@@ -136,8 +136,6 @@ class Chord : public ChordRest {
       // Chord has at least one Note
       Note* upNote() const;
       Note* downNote() const;
-      virtual int upLine() const;
-      virtual int downLine() const;
       virtual int upString() const;
       virtual int downString() const;
 
@@ -161,9 +159,11 @@ class Chord : public ChordRest {
       int graceIndex() const                        { return _graceIndex; }
       void setGraceIndex(int val)                   { _graceIndex = val;  }
 
-      virtual QPointF stemPos() const;        ///< page coordinates
+      virtual int upLine() const;
+      virtual int downLine() const;
+      virtual QPointF stemPos() const;          ///< page coordinates
+      virtual QPointF stemPosBeam() const;      ///< page coordinates
       virtual qreal stemPosX() const;
-      QPointF stemPosBeam() const;            ///< page coordinates
       bool underBeam() const;
       Hook* hook() const                     { return _hook; }
 

@@ -556,7 +556,7 @@ qreal Rest::mag() const
 
 int Rest::upLine() const
       {
-      return lrint(bbox().top() * 2.0 / spatium());
+      return lrint((pos().y() + bbox().top() + spatium()) * 2 / spatium());
       }
 
 //---------------------------------------------------------
@@ -565,7 +565,7 @@ int Rest::upLine() const
 
 int Rest::downLine() const
       {
-      return lrint(bbox().bottom() * 2.0 / spatium());
+      return lrint((pos().y() + bbox().top() + spatium()) * 2 / spatium());
       }
 
 //---------------------------------------------------------
@@ -576,6 +576,22 @@ int Rest::downLine() const
 QPointF Rest::stemPos() const
       {
       return pagePos();
+      }
+
+//---------------------------------------------------------
+//   stemPosBeam
+//    return stem position of note on beam side
+//    return canvas coordinates
+//---------------------------------------------------------
+
+QPointF Rest::stemPosBeam() const
+      {
+      QPointF p(pagePos());
+      if (_up)
+            p.ry() += bbox().top() + spatium() * 2;
+      else
+            p.ry() += bbox().bottom() - spatium() * 2;
+      return p;
       }
 
 //---------------------------------------------------------

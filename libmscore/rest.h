@@ -69,6 +69,7 @@ class Rest : public ChordRest {
       virtual int downLine() const;
       virtual QPointF stemPos() const;
       virtual qreal stemPosX() const;
+      virtual QPointF stemPosBeam() const;
       };
 
 

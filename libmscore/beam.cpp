@@ -528,7 +528,7 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
       //
       // return true if beam spans a rest
       //
-      foreach(const ChordRest* cr, cl) {
+      for(const ChordRest* cr : cl) {
             if (cr->type() != CHORD)
                   return true;
             }
@@ -1008,50 +1008,33 @@ static Bm beamMetric1(bool up, char l1, char l2)
 //---------------------------------------------------------
 //   adjust
 //    adjust stem len for notes between start-end
+//    return 1/4 spatium units
 //---------------------------------------------------------
 
 static int adjust(qreal _spatium4, int slant, const QList<ChordRest*>& cl)
       {
       int n = cl.size();
-      const Chord* c1 = 0;
-      const Chord* c2 = 0;
-      int i1, i2;
-      for (i1 = 0; i1 < n; ++i1) {
-            if (cl[i1]->type() == Element::CHORD) {
-                  c1 = static_cast<Chord*>(cl[i1]);
-                  break;
-                  }
-            }
-      for (i2 = n-1; i2 >= 0; --i2) {
-            if (cl[i2]->type() == Element::CHORD) {
-                  c2 = static_cast<Chord*>(cl[i2]);
-                  break;
-                  }
-            }
-      if (!(c1 && c2))
-            return 0;
+      const ChordRest* c1 = cl[0];
+      const ChordRest* c2 = cl[n-1];
+
       QPointF p1(c1->stemPosBeam());   // canvas coordinates
       qreal slope = (slant * _spatium4) / (c2->stemPosBeam().x() - p1.x());
       int ml = -1000;
       if (c1->up()) {
-            for (int i = i1+1; i <= i2; ++i) {
-                  const Chord* c = static_cast<Chord*>(cl[i]);
-                  if (c->type() != Element::CHORD)
-                        continue;
+            for (int i = 1; i < n; ++i) {
+                  const ChordRest* c = cl[i];
                   QPointF p3(c->stemPosBeam());
                   qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
-                  int l       = lrint((yUp - p3.y()) / _spatium4);
+                  int l       = lrint((yUp - p3.y()) / (_spatium4));
                   ml          = qMax(ml, l);
                   }
             }
       else {
-            for (int i = i1+1; i <= i2; ++i) {
-                  const Chord* c = static_cast<Chord*>(cl[i]);
-                  if (c->type() != Element::CHORD)
-                        continue;
+            for (int i = 1; i < n; ++i) {
+                  const ChordRest* c = cl[i];
                   QPointF p3(c->stemPosBeam());
                   qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
-                  int l       = lrint((p3.y() - yUp) / _spatium4);
+                  int l       = lrint((p3.y() - yUp) / (_spatium4));
                   ml          = qMax(ml, l);
                   }
             }
@@ -1399,7 +1382,9 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
             slope = 0.0;
       else
             slope   = (bm.s * _spatium4) / dx;
-      py1 += ((c1->line(_up) - c1->line(!_up)) * 2 + bm.l) * _spStaff4;
+      int dy = (c1->line(_up) - c1->line(!_up)) * 2;
+
+      py1 += (dy + bm.l) * _spStaff4;
       }
 
 //---------------------------------------------------------
@@ -1584,9 +1569,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         BeamMode bm = Groups::endBeam(c);
                         bool b32 = (beamLevel >= 1) && (bm == BeamMode::BEGIN32);
                         bool b64 = (beamLevel >= 2) && (bm == BeamMode::BEGIN64);
-                        if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel)
-                           || ((c->type() == REST) && (l == beamLevel)))
+
+                        if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel)) {
+                              if (i && crl[i-1]->type() == REST) {
+                                    --i;
+                                    }
                               break;
+                              }
                         }
 
                   int bl = growDown ? beamLevel : -beamLevel;
