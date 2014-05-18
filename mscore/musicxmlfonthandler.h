@@ -31,13 +31,15 @@ namespace Ms {
 class MScoreTextToMXML {
 
 public:
-      MScoreTextToMXML(const QString& t);
-      void parse();
+      MScoreTextToMXML(const QString& tag, const QString& attr, const QString& t, const int fs = 0);
+      void write(Xml& xml);
 
 private:
       void handleStartElement(QXmlStreamReader& r);
       void handleEndElement(QXmlStreamReader& r);
       QString updateFormat();
+      QString attribs;
+      QString tagname;
       QString text;
       CharFormat oldFormat;
       CharFormat newFormat;

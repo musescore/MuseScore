@@ -21,9 +21,15 @@
  MusicXML font handling support.
  */
 
+#include "libmscore/xml.h"
 #include "musicxmlfonthandler.h"
 
 namespace Ms {
+      
+//---------------------------------------------------------
+//   charFormat2QString
+//    convert charFormat to QString for debug print
+//---------------------------------------------------------
 
 static QString charFormat2QString(const CharFormat& f)
       {
@@ -43,26 +49,39 @@ static QString charFormat2QString(const CharFormat& f)
 //    into MusicXML text with formatting
 //---------------------------------------------------------
 
-MScoreTextToMXML::MScoreTextToMXML(const QString& t)
+MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, const QString& t, const int fs)
+      : attribs(attr), tagname(tag)
       {
-      text = "<dummy>" + t + "</dummy>"; // convert text into valid xml
       qDebug("MScoreTextToMXML('%s')", qPrintable(t));
+      // font size update iff fs != 0
+      oldFormat.setFontSize(0);
+      newFormat.setFontSize(fs);
+      // convert text into valid xml by adding dummy start and end tags
+      text = "<dummy>" + t + "</dummy>";
       }
 
-void MScoreTextToMXML::parse()
+//---------------------------------------------------------
+//   MScoreTextToMXML
+//    write to xml
+//---------------------------------------------------------
+
+void MScoreTextToMXML::write(Xml& xml)
       {
       qDebug("MScoreTextToMXML::parse()");
       QXmlStreamReader r(text);
+      bool firstTime = true; // write additional attributes only the first time characters are written
       while (!r.atEnd()) {
             // do processing
             r.readNext();
             if(r.isCharacters()) {
                   qDebug("old %s", qPrintable(charFormat2QString(oldFormat)));
                   qDebug("new %s", qPrintable(charFormat2QString(newFormat)));
-                  updateFormat();
+                  QString formatAttr = updateFormat();
                   qDebug("old %s", qPrintable(charFormat2QString(oldFormat)));
                   qDebug("new %s", qPrintable(charFormat2QString(newFormat)));
                   qDebug("Characters '%s'", qPrintable(r.text().toString()));
+                  xml.tag(tagname + (firstTime ? attribs : "") + formatAttr, r.text().toString());
+                  firstTime = false;
             }
             else if(r.isEndElement()) {
                   qDebug("EndElem '%s'", qPrintable(r.name().toString()));
@@ -82,6 +101,11 @@ void MScoreTextToMXML::parse()
             qDebug("Error %s", qPrintable(r.errorString()));
             }
       }
+
+//---------------------------------------------------------
+//   MScoreTextToMXML
+//    update newFormat for start element
+//---------------------------------------------------------
       
 void MScoreTextToMXML::handleStartElement(QXmlStreamReader& r)
 {
@@ -96,11 +120,11 @@ void MScoreTextToMXML::handleStartElement(QXmlStreamReader& r)
       else if (r.name() == "font" && r.attributes().hasAttribute("face"))
             newFormat.setFontFamily(r.attributes().value("face").toString());
       else if (r.name() == "sub")
-            ; // ignore (TODO)
+            ; // ignore (not supported in MusicXML)
       else if (r.name() == "sup")
-            ; // ignore (TODO)
+            ; // ignore (not supported in MusicXML)
       else if (r.name() == "sym")
-            // ignore (TODO)
+            // ignore (TODO ?)
             r.skipCurrentElement();
       else if (r.name() == "dummy")
             ; // ignore
@@ -109,6 +133,11 @@ void MScoreTextToMXML::handleStartElement(QXmlStreamReader& r)
             r.skipCurrentElement();
       }
 }
+      
+//---------------------------------------------------------
+//   MScoreTextToMXML
+//    update newFormat for end element
+//---------------------------------------------------------
       
 void MScoreTextToMXML::handleEndElement(QXmlStreamReader& r)
 {
@@ -121,11 +150,11 @@ void MScoreTextToMXML::handleEndElement(QXmlStreamReader& r)
       else if (r.name() == "font")
             ; // ignore
       else if (r.name() == "sub")
-            ; // ignore (TODO)
+            ; // ignore (not supported in MusicXML)
       else if (r.name() == "sup")
-            ; // ignore (TODO)
+            ; // ignore (not supported in MusicXML)
       else if (r.name() == "sym")
-            ; // ignore (TODO)
+            ; // ignore (TODO ?)
       else if (r.name() == "dummy")
             ; // ignore
       else {
@@ -133,6 +162,11 @@ void MScoreTextToMXML::handleEndElement(QXmlStreamReader& r)
             r.skipCurrentElement();
       }
 }
+      
+//---------------------------------------------------------
+//   attribute
+//    add one attribute if necessary
+//---------------------------------------------------------
 
 static QString attribute(bool needed, bool value, QString trueString, QString falseString)
       {
@@ -162,7 +196,7 @@ QString MScoreTextToMXML::updateFormat()
       res += attribute(needSize, true, QString("font-size=\"%1\"").arg(newFormat.fontSize()), "");
       qDebug("updateFormat() res '%s'", qPrintable(res));
       oldFormat = newFormat;
-      return "";
+      return res;
       }
 
 } // namespace Ms
