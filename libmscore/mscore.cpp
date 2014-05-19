@@ -165,16 +165,6 @@ void MScore::init()
       Ms::initStyle(_defaultStyle);
       _defaultStyleForParts = 0;
       _baseStyle            = new MStyle(*_defaultStyle);
-      void setPageFormat(const PageFormat& pf);
-
-      if (!MScore::testMode) {
-            // QPrinter::PaperSize ps = QPrinter().paperSize();      // get default paper size
-            QSizeF psf = QPrinter().paperSize(QPrinter::Inch);
-            PaperSize ps("system", psf.width(), psf.height());
-            PageFormat pf;
-            pf.setSize(&ps);
-            _defaultStyle->setPageFormat(pf);
-            }
 
       //
       //  load internal fonts
@@ -269,6 +259,7 @@ void MScore::defaultStyleForPartsHasChanged()
       _defaultStyleForParts = 0;
       }
 
+#ifdef SCRIPT_INTERFACE
 //---------------------------------------------------------
 //   qml
 //---------------------------------------------------------
@@ -330,5 +321,6 @@ QQmlEngine* MScore::qml()
             }
       return _qml;
       }
+#endif
 }
 
