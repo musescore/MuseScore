@@ -410,9 +410,9 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5Sensors.dll
       ${CROSSQT}/bin/Qt5Multimedia.dll
       ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
-      ${CROSSQT}/bin/icuin51.dll
-      ${CROSSQT}/bin/icuuc51.dll
-      ${CROSSQT}/bin/icudt51.dll
+      ${CROSSQT}/bin/icuin52.dll
+      ${CROSSQT}/bin/icuuc52.dll
+      ${CROSSQT}/bin/icudt52.dll
       DESTINATION bin)
 
     install(FILES
