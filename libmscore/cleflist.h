@@ -28,8 +28,9 @@ class ClefList : public std::map<int, ClefTypeList> {
    public:
       ClefList() {}
       ClefTypeList clef(int tick) const;
-      void setClef(int tick, ClefTypeList);
-      void read(XmlReader&, Score*);
+      bool         isClefChangeAt(int tick) const;
+      void         setClef(int tick, ClefTypeList);
+      void         read(XmlReader&, Score*);
       };
 
 

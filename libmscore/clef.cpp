@@ -149,28 +149,30 @@ void Clef::layout()
       qreal       lineDist    = 1.0;
       ClefType    clfType    = clefType();
 
-      // TO DO: detect clefs not (or no longer) present in staff clef map
-      // either here or in Score::computeMinWidth() (layout.cpp, line 3563 ca.)
-      // (hint: use map::at(key) to find a specific item and catch the exception
-      // raised if the key is not found.)
-
       Staff* stf = staff();
       StaffType* staffType = nullptr;
       if (stf && stf->staffType()) {
             staffType = staff()->staffType();
-            // if no clef, set empty bbox and do nothing
-            if (!staffType->genClef()) {
-                  qDeleteAll(elements);
+
+            // determine tick position of this clef
+            Segment* clefSeg = static_cast<Segment*>(parent());
+            int tick = 0;
+            if (clefSeg)
+                  tick = clefSeg->tick();
+
+            // TO DO / NOTE: detection of clefs not (or no longer) present in staff clef map
+            // could also go in Score::computeMinWidth() (layout.cpp, line 3563 ca.)
+
+            // if no clef display OR (no clef change in map AND not generated)...
+            if (!staffType->genClef()
+                        || !(stf->clefList()->isClefChangeAt(tick) || generated()) ) {
+                  qDeleteAll(elements);               // ...remove everything to an empty box and do nothing
                   elements.clear();
                   setbbox(QRectF());
                   return;
                   }
 
             // retrieve clef type as stored in staff clef map
-            Segment* clefSeg = static_cast<Segment*>(parent());
-            int tick = 0;
-            if (clefSeg)
-                  tick = clefSeg->tick();
             clfType = stf->clef(tick);
 #if (0)
 // CURRENTLY DISABLED: let any inconsistency to show up!

@@ -50,6 +50,18 @@ ClefTypeList ClefList::clef(int tick) const
       }
 
 //---------------------------------------------------------
+//   isClefChangeAt
+//    returns true if there is a clef change at tick
+//---------------------------------------------------------
+
+bool ClefList::isClefChangeAt(int tick) const
+      {
+      if (empty())
+            return (tick == 0);           // there is always a clef set at 0 (possibly implicitly)
+      return (count(tick) > 0);
+      }
+
+//---------------------------------------------------------
 //   setClef
 //---------------------------------------------------------
 
