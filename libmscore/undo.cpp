@@ -2370,14 +2370,42 @@ void ChangeStaff::flip()
       }
 
 //---------------------------------------------------------
-//   flip
+//   ChangeStaffType
 //---------------------------------------------------------
 
+ChangeStaffType::ChangeStaffType(Staff* s, const StaffType& t)
+   : staff(s), staffType(t)
+      {
+      initClefList = *s->clefList();
+      }
+
+//---------------------------------------------------------
+//   flip
+//---------------------------------------------------------
+/*
 void ChangeStaffType::flip()
       {
-      StaffType st = *staff->staffType();
+      StaffType    st   = *staff->staffType();
+      ClefList ctl  = staff->clefTypeList(0);
       staff->setStaffType(&staffType);
-      staffType = st;
+      staff->clefList()->setClef(0, ctl);
+      staffType         = st;
+      initClefTypeList  = ctl;
+      }
+*/
+void ChangeStaffType::redo()
+      {
+      initClefList      = *staff->clefList();
+      StaffType    st   = *staff->staffType();
+      staff->setStaffType(&staffType);
+      staffType         = st;
+      }
+void ChangeStaffType::undo()
+      {
+      StaffType    st   = *staff->staffType();
+      staff->setStaffType(&staffType);
+      staffType         = st;
+      *staff->clefList()= initClefList;
       }
 
 //---------------------------------------------------------

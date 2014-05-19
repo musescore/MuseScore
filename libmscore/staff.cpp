@@ -674,6 +674,9 @@ void Staff::setStaffType(const StaffType* st)
       int linesNew = st->lines();
       _staffType = *st;
 
+      //
+      //    adjust bar line spans if number of lines did change
+      //
       if (linesNew != linesOld) {
             int sIdx = score()->staffIdx(this);
             if (sIdx < 0) {                     // staff does not belong to score (yet?)
@@ -691,19 +694,26 @@ void Staff::setStaffType(const StaffType* st)
             }
 
       //
-      //    check for right clef-type and fix
-      //    if necessary
+      //    check for right clef type and fix if necessary
       //
-      ClefType ct = clef(0);
-      StaffGroup csg = ClefInfo::staffGroup(ct);
+      ClefType    clefType          = clef(0);
+      StaffGroup  clefStaffGroup    = ClefInfo::staffGroup(clefType);
 
-      if (_staffType.group() != csg) {
+      if (_staffType.group() != clefStaffGroup) {
             switch(_staffType.group()) {
-                  case TAB_STAFF_GROUP:        ct = ClefType(score()->styleI(ST_tabClef)); break;
-                  case STANDARD_STAFF_GROUP:   ct = ClefType::G; break;      // TODO: use preferred clef for instrument
-                  case PERCUSSION_STAFF_GROUP: ct = ClefType::PERC; break;
+                  case STANDARD_STAFF_GROUP:    // TODO: use default clef for instrument, needs access
+                        clefType = ClefType::G; // to the IntrumentTemplate as default pitched clef(s)
+                        break;                  // are not stored in Instrument, Part or Staff.
+                  case PERCUSSION_STAFF_GROUP:
+                        clefs.clear();
+                        clefType = ClefType::PERC;
+                        break;
+                  case TAB_STAFF_GROUP:
+                        clefs.clear();
+                        clefType = ClefType(score()->styleI(ST_tabClef));
+                        break;
                   }
-            clefs.setClef(0, ClefTypeList(ct, ct));
+            clefs.setClef(0, ClefTypeList(clefType, clefType));
             }
       }
 
