@@ -1522,10 +1522,11 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             }
 #endif
       if (!cs) {
-            changeState(STATE_DISABLED);
             setWindowTitle("MuseScore");
-            if (_navigator && _navigator->widget())
+            if (_navigator && _navigator->widget()) {
+                  navigator()->setScoreView(view);
                   navigator()->setScore(0);
+                  }
             if (inspector)
                   inspector->setElement(0);
             viewModeCombo->setEnabled(false);
@@ -1538,6 +1539,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   _pianoTools->hide();
             if (_drumTools)
                   _drumTools->hide();
+            changeState(STATE_DISABLED);
             return;
             }
       viewModeCombo->setEnabled(true);
@@ -2001,6 +2003,8 @@ void MuseScore::removeTab(int i)
             f.remove();
             }
       delete score;
+      // Shouldn't be necessary... but fix #21841
+      update();
       }
 
 //---------------------------------------------------------
