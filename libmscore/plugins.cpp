@@ -17,6 +17,9 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include "plugins.h"
+
+#ifdef SCRIPT_INTERFACE
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "config.h"
@@ -29,7 +32,6 @@
 #include "libmscore/segment.h"
 #include "libmscore/rest.h"
 #include "libmscore/stafftext.h"
-#include "plugins.h"
 #include "libmscore/cursor.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
@@ -232,4 +234,4 @@ const QTransform& MsScoreView::matrix() const
       }
 
 }
-
+#endif
