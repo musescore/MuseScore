@@ -129,10 +129,9 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       qreal scale() const             { return mag;        }
       void setScale(qreal v)          { mag = v;           }
       };
-
+} // namespace Ms
 #endif
 
-} // namespace Ms
 #endif
 
 
