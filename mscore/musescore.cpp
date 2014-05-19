@@ -4739,6 +4739,13 @@ int main(int argc, char* av[])
       //MScore::DPI  = MScore::PDPI;                       // logical drawing resolution
       MScore::DPI  = screen->logicalDotsPerInch();         // logical drawing resolution
       MScore::init();                                      // initialize libmscore
+      if (!MScore::testMode) {
+            QSizeF psf = QPrinter().paperSize(QPrinter::Inch);
+            PaperSize ps("system", psf.width(), psf.height());
+            PageFormat pf;
+            pf.setSize(&ps);
+            MScore::defaultStyle()->setPageFormat(pf);
+            }
 
 #ifdef SCRIPT_INTERFACE
       qmlRegisterType<QmlPlugin>  ("MuseScore", 1, 0, "MuseScore");
