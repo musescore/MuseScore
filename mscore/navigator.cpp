@@ -138,7 +138,9 @@ void Navigator::setScoreView(ScoreView* v)
             }
       else {
             _score = 0;
-            update();
+            updateViewRect();
+            //update() should be enough... see #21841
+            repaint();
             }
       }
 
@@ -297,7 +299,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
       {
       QPainter p(this);
       QRect r(ev->rect());
-      p.fillRect(r, Qt::gray);
+      p.fillRect(r, palette().color(QPalette::Window));
 
 //      qDebug("navigator paint %d %d", r.width(), r.height());
 
