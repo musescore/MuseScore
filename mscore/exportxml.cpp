@@ -96,6 +96,7 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/fret.h"
 #include "libmscore/tie.h"
+#include "musicxmlfonthandler.h"
 
 namespace Ms {
 
@@ -1021,8 +1022,14 @@ static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
       const PageFormat* pf = s->pageFormat();
       if (pf)
             writePageFormat(pf, xml, INCH / millimeters * tenths);
+      
       // TODO: also write default system layout here
       // when exporting only manual or no breaks, system-distance is not written at all
+      
+      // font defaults
+      // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
+      xml.tagE("word-font font-family=\"FreeSerif\" font-size=\"10\"");  // TODO: real value instead of hardcoded defaults
+      xml.tagE("lyric-font font-family=\"FreeSerif\" font-size=\"11\""); // TODO: real value instead of hardcoded defaults
       xml.etag();
       }
 
@@ -1034,13 +1041,12 @@ static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
 static void creditWords(Xml& xml, double x, double y, int fs, QString just, QString val, QString words)
       {
       xml.stag("credit page=\"1\"");
-      QString tagname = QString("credit-words");
-      tagname += QString(" default-x=\"%1\"").arg(x);
-      tagname += QString(" default-y=\"%1\"").arg(y);
-      tagname += QString(" font-size=\"%1\"").arg(fs);
-      tagname += " justify=\"" + just + "\"";
-      tagname += " valign=\"" + val + "\"";
-      xml.tag(tagname, words);
+      QString attr = QString(" default-x=\"%1\"").arg(x);
+      attr += QString(" default-y=\"%1\"").arg(y);
+      attr += " justify=\"" + just + "\"";
+      attr += " valign=\"" + val + "\"";
+      MScoreTextToMXML mttm("credit-words", attr, words, 10 /* TODO: real value */, fs);
+      mttm.write(xml);
       xml.etag();
       }
 
@@ -2821,7 +2827,10 @@ static void wordsMetrome(Xml& xml, Text const* const text)
       if (findMetronome(text->text(), wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
             if (wordsLeft != "") {
                   xml.stag("direction-type");
-                  xml.tag("words", wordsLeft);
+                  QString attr; // TODO TBD
+                  int fs = 10; // TODO TBD
+                  MScoreTextToMXML mttm("words", attr, wordsLeft, 10 /* TODO: real value */, fs);
+                  mttm.write(xml);
                   xml.etag();
                   }
             xml.stag("direction-type");
@@ -2840,13 +2849,19 @@ static void wordsMetrome(Xml& xml, Text const* const text)
             xml.etag();
             if (wordsRight != "") {
                   xml.stag("direction-type");
-                  xml.tag("words", wordsRight);
+                  QString attr; // TODO TBD
+                  int fs = 10; // TODO TBD
+                  MScoreTextToMXML mttm("words", attr, wordsRight, 10 /* TODO: real value */, fs);
+                  mttm.write(xml);
                   xml.etag();
                   }
             }
       else {
             xml.stag("direction-type");
-            xml.tag("words", text->text());
+            QString attr; // TODO TBD
+            int fs = 10; // TODO TBD
+            MScoreTextToMXML mttm("words", attr, text->text(), 10 /* TODO: real value */, fs);
+            mttm.write(xml);
             xml.etag();
             }
       }
@@ -3217,7 +3232,10 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
                                     qDebug("unknown syllabic %d", syl);
                               }
                         xml.tag("syllabic", s);
-                        xml.tag("text", (l)->text());
+                        QString attr; // TODO TBD
+                        int fs = 11; // TODO TBD
+                        MScoreTextToMXML mttm("text", attr, (l)->text(), 11 /* TODO: real value */, fs);
+                        mttm.write(xml);
                         /*
                          Temporarily disabled because it doesn't work yet (and thus breaks the regression test).
                          See MusicXml::xmlLyric: "// TODO-WS      l->setTick(tick);"
