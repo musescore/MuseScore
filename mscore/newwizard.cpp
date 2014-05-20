@@ -207,9 +207,9 @@ void InstrumentWizard::on_addButton_clicked()
                   sli->setPartIdx(i);
                   sli->staffIdx = -1;
                   if (i > MAX_STAVES)
-                        sli->setClef(ClefTypeList(ClefType::G, ClefType::G));
+                        sli->setDefaultClef(ClefTypeList(ClefType::G, ClefType::G));
                   else
-                        sli->setClef(it->clefTypes[i]);
+                        sli->setDefaultClef(it->clefTypes[i]);
                   sli->setStaffType(it->staffTypePreset);
                   }
             partiturList->setItemExpanded(pli, true);
@@ -388,7 +388,7 @@ void InstrumentWizard::on_linkedButton_clicked()
       pli->setVisible(true);
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
-      nsli->setClef(sli->clef());
+      nsli->setDefaultClef(sli->clef());
       nsli->setLinked(true);
       if (staff)
             nsli->op = ITEM_ADD;
@@ -417,7 +417,7 @@ void InstrumentWizard::on_belowButton_clicked()
       PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
-      nsli->setClef(sli->clef());
+      nsli->setDefaultClef(sli->clef());
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
