@@ -64,6 +64,7 @@ class PartListItem : public QTreeWidgetItem {
 class StaffListItem : public QObject, public QTreeWidgetItem {
       Q_OBJECT
       ClefTypeList _clef;
+      ClefTypeList _defaultClef;    // the clef to use when the staff type does not mandate a specific clef
       int _partIdx;
       bool _linked;
       QComboBox* _staffTypeCombo;
@@ -83,6 +84,7 @@ class StaffListItem : public QObject, public QTreeWidgetItem {
 
       void setClef(const ClefTypeList& val);
       const ClefTypeList& clef() const { return _clef;    }
+      void setDefaultClef(const ClefTypeList& val);
       void setLinked(bool val);
       bool linked() const              { return _linked;  }
       void setStaffType(const StaffType*);
