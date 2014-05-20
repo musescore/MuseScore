@@ -752,7 +752,7 @@ class ChangeStaff : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeStaffType : public UndoCommand {
-      ClefList    initClefList;
+      ClefList    initClefList;           // changng staff type may affect clefs: store clef map
       Staff*      staff;
       StaffType   staffType;
 

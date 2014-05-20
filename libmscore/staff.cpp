@@ -158,6 +158,7 @@ QString Staff::partName() const
 //---------------------------------------------------------
 
 Staff::Staff(Score* s)
+   : clefs(this)
       {
       _score          = s;
       _rstaff         = 0;
@@ -175,6 +176,7 @@ Staff::Staff(Score* s)
       }
 
 Staff::Staff(Score* s, Part* p, int rs)
+   : clefs(this)
       {
       _score          = s;
       _rstaff         = rs;
@@ -833,7 +835,7 @@ void Staff::insertTime(int tick, int len)
             kl2[key + len] = kse;
             }
       _keymap.insert(kl2.begin(), kl2.end());
-
+/*
       ClefList cl2;
       for (auto i = clefs.upper_bound(tick); i != clefs.end();) {
             ClefTypeList ctl = i->second;
@@ -842,6 +844,8 @@ void Staff::insertTime(int tick, int len)
             cl2.setClef(key + len, ctl);
             }
       clefs.insert(cl2.begin(), cl2.end());
+*/
+      clefs.insertTime(tick, len);
       }
 
 }

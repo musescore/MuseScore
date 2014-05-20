@@ -223,6 +223,8 @@ void Clef::layout()
                         setbbox(QRectF());
                         return;
                         }
+                  else
+                        setSmall(true);
                   }
 
             lines = staffType->lines();

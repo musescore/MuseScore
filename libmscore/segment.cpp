@@ -89,6 +89,8 @@ void Segment::setElement(int track, Element* el)
 void Segment::removeElement(int track)
       {
       Element* el = element(track);
+      if (el == nullptr)
+            return;
       if (el->isChordRest()) {
             ChordRest* cr = (ChordRest*)el;
             Beam* beam = cr->beam();
@@ -98,6 +100,8 @@ void Segment::removeElement(int track)
             if (tuplet)
                   tuplet->remove(cr);
             }
+      delete el;
+      _elist[track] = nullptr;
       }
 
 //---------------------------------------------------------

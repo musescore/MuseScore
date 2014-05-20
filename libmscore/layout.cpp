@@ -2260,7 +2260,6 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
             // remove generated elements from all measures in [sm;em]
             //    assume: generated elements are only living in voice 0
             //    - do not remove end bar lines
-            //    - set size of clefs to small
             //
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   Segment::SegmentType st = seg->segmentType();
@@ -2293,11 +2292,12 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                         else if (el->type() == Element::CLEF) {
                               Clef* clef = static_cast<Clef*>(el);
                               System* s = m->system();
+/* MOVED TO Clef::layout()
                               bool small = seg != m->first() || s->firstMeasure() != m;
                               if (clef->small() != small) {
                                     clef->setSmall(small);
                                     m->setDirty();
-                                    }
+                                    } */
                               //
                               // if measure is not the first in the system, the clef at
                               // measure start has to be moved to the end of the previous measure

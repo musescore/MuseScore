@@ -461,18 +461,22 @@ Score::FileError Score::read114(XmlReader& e)
                      s->barLineSpan(), n - idx);
                   s->setBarLineSpan(n - idx);
                   }
+
             // first clef can be implicit in 1.3 #22607
-            if (s->clefList()->count(0) == 0) {
-                  Segment* seg = firstMeasure()->getSegment(Segment::SegClef, 0);
+            if (!s->clefList()->isClefChangeAt(0)) {
+/*    INCLUDED IN ClefList::setClef()
+                    Segment* seg = firstMeasure()->getSegment(Segment::SegClef, 0);
                   ClefType ct = Clef::clefType("0");
                   Clef* clef = new Clef(this);
                   clef->setClefType(ct);
                   clef->setTrack(track);
                   clef->setParent(seg);
                   clef->setGenerated(false);
-                  seg->add(clef);
+                  seg->add(clef); */
+                  s->clefList()->setClef(0, ClefTypeList());
                   }
-            for (auto i = s->clefList()->cbegin(); i != s->clefList()->cend(); ++i) {
+/*    INCLUDED IN ClefList::read()
+              for (auto i = s->clefList()->cbegin(); i != s->clefList()->cend(); ++i) {
                   int tick = i->first;
                   ClefType clefId = i->second._concertClef;
                   Measure* m = tick2measure(tick);
@@ -492,7 +496,7 @@ Score::FileError Score::read114(XmlReader& e)
                         seg->add(clef);
                         }
                   }
-
+*/
             KeyList* km = s->keymap();
             for (auto i = km->begin(); i != km->end(); ++i) {
                   int tick = i->first;

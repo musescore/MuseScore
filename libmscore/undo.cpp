@@ -2374,9 +2374,9 @@ void ChangeStaff::flip()
 //---------------------------------------------------------
 
 ChangeStaffType::ChangeStaffType(Staff* s, const StaffType& t)
-   : staff(s), staffType(t)
+: initClefList(*s->clefList()), staff(s), staffType(t)
       {
-      initClefList = *s->clefList();
+
       }
 
 //---------------------------------------------------------
@@ -2395,17 +2395,21 @@ void ChangeStaffType::flip()
 */
 void ChangeStaffType::redo()
       {
-      initClefList      = *staff->clefList();
+//      initClefList      = *staff->clefList();
       StaffType    st   = *staff->staffType();
       staff->setStaffType(&staffType);
       staffType         = st;
       }
 void ChangeStaffType::undo()
       {
+      // if there is no change of staff group, there is no need to restore the clef map
+      bool restoreClefMap = staffType.group() != staff->staffType()->group();
+
       StaffType    st   = *staff->staffType();
       staff->setStaffType(&staffType);
       staffType         = st;
-      *staff->clefList()= initClefList;
+      if (restoreClefMap)
+            *staff->clefList() = initClefList;
       }
 
 //---------------------------------------------------------
