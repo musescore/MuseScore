@@ -20,8 +20,7 @@ before_install:
   - "export PATH=`pwd`/qt5/bin:$PATH"
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
 before_script:
-  - "gem install --version 0.8.9 faraday"
-  - "gem install travis-artifacts"
+  - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
   - "make revision"
   - "make debug CPUS=16"
   - "sudo make installdebug"
@@ -31,7 +30,7 @@ script:
   - "../../build/run_tests.sh"
 after_script:
   - "export TRAVIS_SHORT_COMMIT=`echo $TRAVIS_COMMIT | cut -c 1-8`"
-  - "travis-artifacts upload --path ../../vtest/html --target-path $TRAVIS_SHORT_COMMIT"
+  - "artifacts upload --target-paths $TRAVIS_SHORT_COMMIT ../../vtest/html "
 notifications:
   recipients:
     - build@musescore.org
