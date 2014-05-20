@@ -19,6 +19,7 @@
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
+#include "durationtype.h"
 #include "figuredbass.h"
 #include "harmony.h"
 #include "input.h"
@@ -26,6 +27,7 @@
 #include "lyrics.h"
 #include "measure.h"
 #include "note.h"
+#include "notedot.h"
 #include "page.h"
 #include "rest.h"
 #include "score.h"
@@ -33,13 +35,16 @@
 #include "select.h"
 #include "sig.h"
 #include "slur.h"
+#include "stem.h"
 #include "system.h"
 #include "text.h"
 #include "textline.h"
+#include "tie.h"
 #include "tuplet.h"
 #include "utils.h"
 #include "xml.h"
 
+#include "thirdparty/intervaltree/IntervalTree.h"
 namespace Ms {
 
 //---------------------------------------------------------
@@ -276,8 +281,10 @@ void Selection::updateSelectedElements()
       int startTrack = _staffStart * VOICES;
       int endTrack   = _staffEnd * VOICES;
 
+      Segment* previousEndSegment = 0;
       for (int st = startTrack; st < endTrack; ++st) {
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
+                  previousEndSegment = s;
                   if (s->segmentType() == Segment::SegEndBarLine)  // do not select end bar line
                         continue;
                   Element* e = s->element(st);
@@ -285,8 +292,29 @@ void Selection::updateSelectedElements()
                         continue;
                   if (e->type() == Element::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
-                        foreach(Note* note, chord->notes())
+                        foreach (Articulation* art, chord->articulations()) {
+                              _el.append(art);
+                        }
+                        if (chord->beam()) _el.append(chord->beam());
+                        if (chord->stem()) _el.append(chord->stem());
+
+                        foreach (Note* note, chord->notes()) {
                               _el.append(note);
+
+                              if (note->accidental()) _el.append(note->accidental());
+
+                              for(int x = 0; x < MAX_DOTS; x++) {
+                                    if (note->dot(x) != 0) _el.append(note->dot(x));
+                                    }
+                              if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
+                                    if (note->tieFor()->endElement()->type() == Element::NOTE) {
+                                          Note* endNote = static_cast<Note*>(note->tieFor()->endElement());
+                                          Segment* s = endNote->chord()->segment();
+                                          if (_endSegment && (s->tick() < _endSegment->tick()))
+                                                _el.append(note->tieFor());
+                                          }
+                                    }
+                              }
                         }
                   else {
                         _el.append(e);
@@ -338,6 +366,9 @@ void Selection::updateSelectedElements()
                         }
 #endif
                   }
+            }
+      foreach(::Interval<Spanner*> i, score()->spannerMap().findContained(startSegment()->tick(),previousEndSegment->tick())) {
+            _el.append(i.value);
             }
       update();
       }
