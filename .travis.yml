@@ -22,6 +22,9 @@ before_install:
 before_script:
   - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
   - "export PATH=$PATH:$HOME/bin"
+#compatibility between ruby travis artefact and GO one
+  - "export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID"
+  - "export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY"
   - "make revision"
   - "make debug CPUS=16"
   - "sudo make installdebug"
