@@ -1497,18 +1497,9 @@ qDebug("drop staffList");
       }
 
 //---------------------------------------------------------
-//   cmdRemoveEmptySegment
-//---------------------------------------------------------
-
-void Measure::cmdRemoveEmptySegment(Segment* s)
-      {
-      if (s->isEmpty())
-            _score->undoRemoveElement(s);
-      }
-
-//---------------------------------------------------------
 //   cmdInsertRepeatMeasure
 //---------------------------------------------------------
+
 RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       {
       //
@@ -1524,8 +1515,6 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
                         if (el)
                               _score->undoRemoveElement(el);
                         }
-                  if (s->isEmpty())
-                        _score->undoRemoveElement(s);
                   }
             }
       //
@@ -1536,7 +1525,7 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       rm->setTrack(staffIdx * VOICES);
       rm->setParent(seg);
       _score->undoAddElement(rm);
-      foreach(Element* el, _el) {
+      foreach (Element* el, _el) {
             if (el->type() == SLUR && el->staffIdx() == staffIdx)
                   _score->undoRemoveElement(el);
             }
@@ -1551,33 +1540,37 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
 
 void Measure::adjustToLen(Fraction nf)
       {
-      int ol = len().ticks();
-      int nl = nf.ticks();
-      int diff   = nl - ol;
+      int ol   = len().ticks();
+      int nl   = nf.ticks();
+      int diff = nl - ol;
 
       int startTick = endTick();
       if (diff < 0)
             startTick += diff;
+
       score()->undoInsertTime(startTick, diff);
 
-      score()->undo(new ChangeMeasureLen(this, nf));
-
-      int staves = score()->nstaves();
-
-      if (nl > ol) {
-            // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
-            for (Segment* s = first(); s; s = s->next()) {
-                  if (s->segmentType() & (Segment::SegEndBarLine|Segment::SegTimeSigAnnounce|Segment::SegKeySigAnnounce)) {
-                        s->setTick(tick() + nl);
+      for (Score* s : score()->scoreList()) {
+            Measure* m = s->tick2measure(tick());
+            s->undo(new ChangeMeasureLen(m, nf));
+            if (nl > ol) {
+                  // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
+                  for (Segment* s = m->first(); s; s = s->next()) {
+                        if (s->segmentType() & (Segment::SegEndBarLine|Segment::SegTimeSigAnnounce|Segment::SegKeySigAnnounce)) {
+                              s->setTick(tick() + nl);
+                              }
                         }
                   }
             }
+      Score* s   = score()->rootScore();
+      Measure* m = this;
+      int staves = s->nstaves();
 
       for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
             int rests  = 0;
             int chords = 0;
             Rest* rest = 0;
-            for (Segment* segment = first(); segment; segment = segment->next()) {
+            for (Segment* segment = m->first(); segment; segment = segment->next()) {
                   int strack = staffIdx * VOICES;
                   int etrack = strack + VOICES;
                   for (int track = strack; track < etrack; ++track) {
@@ -1594,39 +1587,28 @@ void Measure::adjustToLen(Fraction nf)
                   }
             // if just a single rest
             if (rests == 1 && chords == 0) {
-//                  if (rest->durationType().type() == TDuration::V_MEASURE) {
-//                        if (_timesig == nf) {
-//                              score()->undo(new ChangeChordRestDuration(rest, nf));
-//                              continue;
-//                              }
-//                        else {
-//                              score()->undo(new ChangeChordRestLen(rest, _timesig));
-//                              // DON'T continue here because we want the rest broken up below
-//                              }
-//                        }
                   // if measure value didn't change, stick to whole measure rest
-                  if (_timesig == nf) {
-                        score()->undo(new ChangeChordRestLen(rest, TDuration(TDuration::V_MEASURE)));
-                        continue;
-                        }
-                  // if measure value did change, represent with rests actual measure value
-                  else {
+                  if (_timesig == nf)
+                        s->undo(new ChangeChordRestLen(rest, TDuration(TDuration::V_MEASURE)));
+                  else {      // if measure value did change, represent with rests actual measure value
                         // convert the measure duration in a list of values (no dots for rests)
                         QList<TDuration> durList = toDurationList(nf, false, 0);
+
                         // set the existing rest to the first value of the duration list
-                        score()->undo(new ChangeChordRestLen(rest, durList[0]));
+                        s->undo(new ChangeChordRestLen(rest, durList[0]));
+
                         // add rests for any other duration list value
                         int tickOffset = tick() + durList[0].ticks();
                         for (int i = 1; i < durList.count(); i++) {
-                              Rest* newRest = new Rest(score());
+                              Rest* newRest = new Rest(s);
                               newRest->setDurationType(durList.at(i));
                               newRest->setDuration(durList.at(i).fraction());
                               newRest->setTrack(rest->track());
                               score()->undoAddCR(newRest, this, tickOffset);
                               tickOffset += durList.at(i).ticks();
                               }
-                        continue;
                         }
+                  continue;
                   }
 
             int strack = staffIdx * VOICES;
@@ -1636,7 +1618,7 @@ void Measure::adjustToLen(Fraction nf)
                   int n = diff;
                   bool rFlag = false;
                   if (n < 0)  {
-                        for (Segment* segment = last(); segment;) {
+                        for (Segment* segment = m->last(); segment;) {
                               Segment* pseg = segment->prev();
                               Element* e = segment->element(trk);
                               if (e && e->isChordRest()) {
@@ -1648,9 +1630,7 @@ void Measure::adjustToLen(Fraction nf)
                                           }
                                     else
                                           n += cr->actualTicks();
-                                    score()->undoRemoveElement(e);
-                                    if (segment->isEmpty())
-                                          score()->undoRemoveElement(segment);
+                                    s->undoRemoveElement(e);
                                     if (n >= 0)
                                           break;
                                     }
@@ -1663,7 +1643,7 @@ void Measure::adjustToLen(Fraction nf)
                         // add rest to measure
                         int rtick = tick() + nl - n;
                         int track = staffIdx * VOICES + voice;
-                        score()->setRest(rtick, track, Fraction::fromTicks(n), false, 0, false);
+                        s->setRest(rtick, track, Fraction::fromTicks(n), false, 0, false);
                         }
                   }
             }
@@ -1671,9 +1651,9 @@ void Measure::adjustToLen(Fraction nf)
             //
             //  CHECK: do not remove all slurs
             //
-            foreach(Element* e, _el) {
+            foreach(Element* e, *m->el()) {
                   if (e->type() == SLUR)
-                        score()->undoRemoveElement(e);
+                        s->undoRemoveElement(e);
                   }
             }
       }
@@ -3904,6 +3884,16 @@ QVariant Measure::getProperty(P_ID propertyId) const
                   return repeatFlags();
             case P_MEASURE_NUMBER_MODE:
                   return int(measureNumberMode());
+            case P_BREAK_MMR:
+                  return breakMultiMeasureRest();
+            case P_REPEAT_COUNT:
+                  return repeatCount();
+            case P_USER_STRETCH:
+                  return userStretch();
+            case P_NO_OFFSET:
+                  return noOffset();
+            case P_IRREGULAR:
+                  return irregular();
             default:
                   return MeasureBase::getProperty(propertyId);
             }
@@ -3928,9 +3918,25 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
             case P_MEASURE_NUMBER_MODE:
                   setMeasureNumberMode(MeasureNumberMode(value.toInt()));
                   break;
+            case P_BREAK_MMR:
+                  setBreakMultiMeasureRest(value.toBool());
+                  break;
+            case P_REPEAT_COUNT:
+                  setRepeatCount(value.toInt());
+                  break;
+            case P_USER_STRETCH:
+                  setUserStretch(value.toDouble());
+                  break;
+            case P_NO_OFFSET:
+                  setNoOffset(value.toInt());
+                  break;
+            case P_IRREGULAR:
+                  setIrregular(value.toBool());
+                  break;
             default:
                   return MeasureBase::setProperty(propertyId, value);
             }
+      score()->setLayoutAll(true);
       return true;
       }
 
@@ -3948,6 +3954,16 @@ QVariant Measure::propertyDefault(P_ID propertyId) const
                   return 0;
             case P_MEASURE_NUMBER_MODE:
                   return int(MeasureNumberMode::AUTO);
+            case P_BREAK_MMR:
+                  return false;
+            case P_REPEAT_COUNT:
+                  return 2;
+            case P_USER_STRETCH:
+                  return 1.0;
+            case P_NO_OFFSET:
+                  return 0;
+            case P_IRREGULAR:
+                  return false;
             default:
                   break;
             }
@@ -4005,7 +4021,7 @@ Measure* Measure::mmRest1() const
 //-------------------------------------------------------------------
 //   userStretch
 //-------------------------------------------------------------------
-      
+
 qreal Measure::userStretch() const
       {
       return (score()->layoutMode() == LayoutFloat ? 1.0 : _userStretch);
