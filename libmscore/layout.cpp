@@ -771,12 +771,15 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
 
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
+            // we need to do this now
+            // or else note pos / readPos / userOff will be out of sync
+            // and we rely on note->x() throughout the layout process
+            note->adjustReadPos();
 
             // find leftmost non-mirrored note to set as X origin for accidental layout
             // a mirrored note that extends to left of segment X origin
             // will displace accidentals only if there is conflict
-            qreal sx = chord->x() + note->x();
-
+            qreal sx = x + chord->x(); // segment-relative X position of note
             if (note->mirror() && !chord->up() && sx < 0.0)
                   leftNotes.append(note);
             else if (sx < lx)
@@ -1014,6 +1017,9 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             }
 
       for (const AcEl& e : aclist) {
+            // even though we initially calculate accidental position relative to segment
+            // we must record pos for accidental relative to note,
+            // since pos is always interpreted relative to parent
             Note* note = e.note;
             qreal x    = e.x + lx - (note->x() + note->chord()->x());
             note->accidental()->setPos(x, 0);
@@ -3460,10 +3466,12 @@ qreal Score::computeMinWidth(Segment* fs)
                                                 for (Note* note : c->notes()) {
                                                       if (note->accidental()) {
                                                             accidental = true;
-                                                            accidentalX = qMin(accidentalX, note->accidental()->x() + note->x());
+                                                            // segment-relative
+                                                            accidentalX = qMin(accidentalX, note->accidental()->x() + note->x() + c->x());
                                                             }
                                                       else
-                                                            noteX = qMin(noteX, note->x());
+                                                            // segment-relative
+                                                            noteX = qMin(noteX, note->x() + c->x());
                                                       }
                                                 }
                                           }
@@ -3494,8 +3502,19 @@ qreal Score::computeMinWidth(Segment* fs)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
                               cr->layout();
-                              space.max(cr->space());
-                              foreach(Lyrics* l, cr->lyricsList()) {
+
+                              // calculate space needed for segment
+                              // take cr position into account
+                              // by converting to segment-relative space
+                              qreal cx = cr->userOff().x();
+                              qreal lx = qMax(cx, 0.0); // nudge left shouldn't require more leading space
+                              qreal rx = qMin(cx, 0.0); // nudge right shouldn't require more trailing space
+                              Space crSpace = cr->space();
+                              Space segRelSpace(crSpace.lw()-lx, crSpace.rw()+rx);
+                              space.max(segRelSpace);
+
+                              // lyrics
+                              foreach (Lyrics* l, cr->lyricsList()) {
                                     if (!l)
                                           continue;
                                     if (!l->isEmpty()) {
