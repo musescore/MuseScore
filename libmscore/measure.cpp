@@ -3133,10 +3133,10 @@ void Measure::layoutX(qreal stretch)
                                                 for (Note* note : c->notes()) {
                                                       if (note->accidental()) {
                                                             accidental = true;
-                                                            accidentalX = qMin(accidentalX, note->accidental()->x() + note->x());
+                                                            accidentalX = qMin(accidentalX, note->accidental()->x() + note->x() + c->x());
                                                             }
                                                       else
-                                                            noteX = qMin(noteX, note->x());
+                                                            noteX = qMin(noteX, note->x() + c->x());
                                                       }
                                                 }
                                           }
@@ -3177,7 +3177,18 @@ void Measure::layoutX(qreal stretch)
                                     if ((pt & Segment::SegKeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
-                              space.max(cr->space());
+
+                              // calculate space needed for segment
+                              // take cr position into account
+                              // by converting to segment-relative space
+                              qreal cx = cr->userOff().x();
+                              qreal lx = qMax(cx, 0.0); // nudge left shouldn't require more leading space
+                              qreal rx = qMin(cx, 0.0); // nudge right shouldn't require more trailing space
+                              Space crSpace = cr->space();
+                              Space segRelSpace(crSpace.lw()-lx, crSpace.rw()+rx);
+                              space.max(segRelSpace);
+
+                              // lyrics
                               int n = cr->lyricsList().size();
                               for (int i = 0; i < n; ++i) {
                                     Lyrics* l = cr->lyricsList().at(i);
