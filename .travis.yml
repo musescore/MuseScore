@@ -22,9 +22,6 @@ before_install:
 before_script:
   - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
   - "export PATH=$PATH:$HOME/bin"
-#compatibility between ruby travis artefact and GO one
-  - "export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID"
-  - "export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY"
   - "make revision"
   - "make debug CPUS=16"
   - "sudo make installdebug"
@@ -33,8 +30,14 @@ before_script:
 script:
   - "../../build/run_tests.sh"
 after_script:
+#compatibility between ruby travis artefact and GO one
+  - "export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID"
+  - "export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY"
   - "export TRAVIS_SHORT_COMMIT=`echo $TRAVIS_COMMIT | cut -c 1-8`"
-  - "artifacts upload --target-paths $TRAVIS_SHORT_COMMIT ../../vtest/html "
+  - "export ARTIFACTS_TARGET_PATHS=$TRAVIS_SHORT_COMMIT"
+  - "export ARTIFACTS_PATHS=../../vtest/html"
+  - export $ARTIFACTS_PERMISSIONS="public-read"
+  - "artifacts upload"
 notifications:
   recipients:
     - build@musescore.org
