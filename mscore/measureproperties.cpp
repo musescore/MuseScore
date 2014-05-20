@@ -206,30 +206,17 @@ void MeasureProperties::apply()
             if (ms->visible() != v || ms->slashStyle() != s)
                   score->undo(new ChangeMStaffProperties(ms, v, s));
             }
-      int mode = measureNumberMode->currentIndex();
-      if (isIrregular() != m->irregular()
-         || breakMultiMeasureRest->isChecked() != m->breakMultiMeasureRest()
-         || repeatCount() != m->repeatCount()
-         || layoutStretch->value() != m->userStretch()
-         || measureNumberOffset->value() != m->noOffset()
-         || m->len() != len()
-         || int(m->measureNumberMode()) != mode
-         ) {
-            score->undo(new ChangeMeasureProperties(
-               m,
-               breakMultiMeasureRest->isChecked(),
-               repeatCount(),
-               layoutStretch->value(),
-               measureNumberOffset->value(),
-               isIrregular())
-               );
-            if (int(m->measureNumberMode()) != mode)
-                  score->undoChangeProperty(m, P_MEASURE_NUMBER_MODE, mode);
-            if (m->len() != len()) {
-                  m->adjustToLen(len());
-                  score->select(m, SELECT_RANGE, 0);
-                  }
-            }
+
+      m->undoChangeProperty(P_REPEAT_COUNT, repeatCount());
+      m->undoChangeProperty(P_BREAK_MMR, breakMultiMeasureRest->isChecked());
+      m->undoChangeProperty(P_USER_STRETCH, layoutStretch->value());
+      m->undoChangeProperty(P_MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
+      m->undoChangeProperty(P_NO_OFFSET, measureNumberOffset->value());
+      m->undoChangeProperty(P_IRREGULAR, isIrregular());
+
+      if (m->len() != len())
+            m->adjustToLen(len());
+
       score->select(0, SELECT_SINGLE, 0);
       score->end();
       }

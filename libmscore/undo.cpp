@@ -1210,19 +1210,18 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
 void Score::undoRemoveElement(Element* element)
       {
       QList<Segment*> segments;
-      foreach (Element* e, element->linkList()) {
+      for (Element* e : element->linkList()) {
             undo(new RemoveElement(e));
-            if (!e->isChordRest() && e->parent() && (e->parent()->type() == Element::SEGMENT)) {
+//            if (!e->isChordRest() && e->parent() && (e->parent()->type() == Element::SEGMENT)) {
+            if (e->parent() && (e->parent()->type() == Element::SEGMENT)) {
                   Segment* s = static_cast<Segment*>(e->parent());
                   if (!segments.contains(s))
                         segments.append(s);
                   }
             }
       for (Segment* s : segments) {
-            if (s->isEmpty()) {
-                  // qDebug("remove empty segment %s %p", s->subTypeName(), s);
+            if (s->isEmpty())
                   undo(new RemoveElement(s));
-                  }
             }
       }
 
@@ -2604,57 +2603,6 @@ void ChangeMStaffProperties::flip()
       mstaff->setSlashStyle(slashStyle);
       visible    = v;
       slashStyle = s;
-      }
-
-//---------------------------------------------------------
-//   ChangeMeasureProperties
-//---------------------------------------------------------
-
-ChangeMeasureProperties::ChangeMeasureProperties(
-   Measure* m,
-   bool _bmm,
-   int rc,
-   qreal s,
-   int o,
-   bool ir
-   ) :
-   measure(m),
-   breakMM(_bmm),
-   repeatCount(rc),
-   stretch(s),
-   noOffset(o),
-   irregular(ir)
-      {
-      }
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeMeasureProperties::flip()
-      {
-      bool a   = measure->getBreakMultiMeasureRest();
-      int r    = measure->repeatCount();
-      qreal s  = measure->userStretch();
-      int o    = measure->noOffset();
-      bool ir  = measure->irregular();
-
-      measure->setBreakMultiMeasureRest(breakMM);
-      measure->setRepeatCount(repeatCount);
-      measure->setUserStretch(stretch);
-      Score* score = measure->score();
-      if (o != noOffset || ir != irregular) {
-            measure->setNoOffset(noOffset);
-            measure->setIrregular(irregular);
-            }
-      breakMM     = a;
-      repeatCount = r;
-      stretch     = s;
-      noOffset    = o;
-      irregular   = ir;
-
-      score->addLayoutFlags(LAYOUT_FIX_TICKS);
-      score->setLayoutAll(true);
       }
 
 //---------------------------------------------------------

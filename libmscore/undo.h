@@ -915,26 +915,6 @@ class ChangeMStaffProperties : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeMeasureProperties
-//---------------------------------------------------------
-
-class ChangeMeasureProperties : public UndoCommand {
-      Measure* measure;
-      bool breakMM;
-      int repeatCount;
-      qreal stretch;
-      int noOffset;
-      bool irregular;
-
-      void flip();
-
-   public:
-      ChangeMeasureProperties(Measure*, bool breakMM,
-         int repeatCount, qreal stretch, int noOffset, bool irregular);
-      UNDO_NAME("ChangeMeasureProperties")
-      };
-
-//---------------------------------------------------------
 //   ChangeTimesig
 //---------------------------------------------------------
 

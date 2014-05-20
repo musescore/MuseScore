@@ -2059,12 +2059,12 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       //
       // remember line breaks in list of measures
       //
-      int n = system->measures().size() - 1;
-      if (n >= 0) {
-            for (int i = 0; i < n; ++i)
-                  undoChangeProperty(system->measure(i), P_BREAK_HINT, false);
-            undoChangeProperty(system->measures().last(), P_BREAK_HINT, true);
-            }
+//      int n = system->measures().size() - 1;
+//      if (n >= 0) {
+//            for (int i = 0; i < n; ++i)
+//                  undoChangeProperty(system->measure(i), P_BREAK_HINT, false);
+//            undoChangeProperty(system->measures().last(), P_BREAK_HINT, true);
+//            }
 
       if (!undoRedo() && firstMeasure && lastMeasure && firstMeasure != lastMeasure)
             removeGeneratedElements(firstMeasure, lastMeasure);

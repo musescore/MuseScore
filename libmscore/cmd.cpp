@@ -737,10 +737,8 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   tuplet = 0;
                   }
             else {
-                  if(seg != firstSegment || !keepChord)
+                  if (seg != firstSegment || !keepChord)
                         undoRemoveElement(cr);
-                  if (seg != firstSegment && seg->isEmpty() && seg->annotations().size() == 0)
-                        undoRemoveElement(seg);
                   }
             nextTick += td.ticks();
             if (sd < td) {

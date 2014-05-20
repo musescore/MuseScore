@@ -186,6 +186,7 @@ void TestParts::appendMeasure()
 
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
 
       QVERIFY(saveCompareScore(score, "part-all-uappendmeasures.mscx", DIR + "part-all-uappendmeasures.mscx"));
       delete score;
@@ -211,6 +212,7 @@ void TestParts::insertMeasure()
 
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
 
       QVERIFY(saveCompareScore(score, "part-all-uinsertmeasures.mscx", DIR + "part-all-uinsertmeasures.mscx"));
       delete score;
@@ -368,6 +370,7 @@ void TestParts::undoAddBreath()
 
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
 
       QVERIFY(saveCompareScore(score, "part-breath-uadd.mscx", DIR + "part-breath-uadd.mscx"));
       delete score;
@@ -383,9 +386,11 @@ void TestParts::undoRedoAddBreath()
 
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
 
       score->undo()->redo();
       score->endUndoRedo();
+      score->doLayout();
 
       QVERIFY(saveCompareScore(score, "part-breath-uradd.mscx", DIR + "part-breath-uradd.mscx"));
       delete score;
@@ -434,6 +439,7 @@ void TestParts::undoRemoveBreath()
       Score* score = doRemoveBreath();
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-breath-udel.mscx", DIR + "part-breath-udel.mscx"));
       delete score;
       }
@@ -447,9 +453,11 @@ void TestParts::undoRedoRemoveBreath()
       Score* score = doRemoveBreath();
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
 
       score->undo()->redo();
       score->endUndoRedo();
+      score->doLayout();
 
       QVERIFY(saveCompareScore(score, "part-breath-urdel.mscx", DIR + "part-breath-urdel.mscx"));
       delete score;
@@ -502,6 +510,7 @@ void TestParts::undoAddFingering()
       Score* score = doAddFingering();
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-fingering-uadd.mscx", DIR + "part-fingering-uadd.mscx"));
       delete score;
       }
@@ -517,6 +526,7 @@ void TestParts::undoRedoAddFingering()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-fingering-uradd.mscx", DIR + "part-fingering-uradd.mscx"));
       delete score;
       }
@@ -572,6 +582,7 @@ void TestParts::undoRemoveFingering()
       Score* score = doRemoveFingering();
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-fingering-udel.mscx", DIR + "part-fingering-udel.mscx"));
       delete score;
       }
@@ -587,6 +598,7 @@ void TestParts::undoRedoRemoveFingering()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-fingering-urdel.mscx", DIR + "part-fingering-urdel.mscx"));
       delete score;
       }
@@ -638,6 +650,7 @@ void TestParts::undoAddSymbol()
       Score* score = doAddSymbol();
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-symbol-uadd.mscx", DIR + "part-symbol-uadd.mscx"));
       delete score;
       }
@@ -653,6 +666,7 @@ void TestParts::undoRedoAddSymbol()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-symbol-uradd.mscx", DIR + "part-symbol-uradd.mscx"));
       delete score;
       }
@@ -708,6 +722,7 @@ void TestParts::undoRemoveSymbol()
       Score* score = doRemoveSymbol();
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-symbol-udel.mscx", DIR + "part-symbol-udel.mscx"));
       delete score;
       }
@@ -723,6 +738,7 @@ void TestParts::undoRedoRemoveSymbol()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-symbol-urdel.mscx", DIR + "part-symbol-urdel.mscx"));
       delete score;
       }
@@ -774,6 +790,7 @@ void TestParts::undoAddChordline()
       Score* score = doAddChordline();
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-chordline-uadd.mscx", DIR + "part-chordline-uadd.mscx"));
       delete score;
       }
@@ -789,6 +806,7 @@ void TestParts::undoRedoAddChordline()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-chordline-uradd.mscx", DIR + "part-chordline-uradd.mscx"));
       delete score;
       }
@@ -845,6 +863,7 @@ void TestParts::undoRemoveChordline()
       Score* score = doRemoveChordline();
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-chordline-udel.mscx", DIR + "part-chordline-udel.mscx"));
       delete score;
       }
@@ -860,6 +879,7 @@ void TestParts::undoRedoRemoveChordline()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part-chordline-urdel.mscx", DIR + "part-chordline-urdel.mscx"));
       delete score;
       }
@@ -911,6 +931,7 @@ void TestParts::undoAddImage()
       Score* score = doAddImage();
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part26.mscx", DIR + "part26o.mscx"));
       delete score;
       }
@@ -926,6 +947,7 @@ void TestParts::undoRedoAddImage()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part27.mscx", DIR + "part27o.mscx"));
       delete score;
       }
@@ -981,6 +1003,7 @@ void TestParts::undoRemoveImage()
       Score* score = doRemoveImage();
       score->undo()->undo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part29.mscx", DIR + "part29o.mscx"));
       delete score;
       }
@@ -996,6 +1019,7 @@ void TestParts::undoRedoRemoveImage()
       score->endUndoRedo();
       score->undo()->redo();
       score->endUndoRedo();
+      score->doLayout();
       QVERIFY(saveCompareScore(score, "part30.mscx", DIR + "part30o.mscx"));
       delete score;
       }

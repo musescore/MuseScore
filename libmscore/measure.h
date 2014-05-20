@@ -250,7 +250,6 @@ class Measure : public MeasureBase {
       bool endBarLineVisible() const            { return _endBarLineVisible;   }
       QColor endBarLineColor() const            { return _endBarLineColor;     }
 
-      void cmdRemoveEmptySegment(Segment* s);
       RepeatMeasure* cmdInsertRepeatMeasure(int staffIdx);
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;

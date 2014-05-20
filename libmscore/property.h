@@ -43,8 +43,8 @@ enum P_ID {
       P_PITCH,
       P_TPC1,
       P_TPC2,
-      P_LINE,
 
+      P_LINE,
       P_HEAD_TYPE,
       P_HEAD_GROUP,
       P_VELO_TYPE,
@@ -54,8 +54,8 @@ enum P_ID {
       P_STEM_DIRECTION,
       P_NO_STEM,
       P_SLUR_DIRECTION,
-      P_LEADING_SPACE,
 
+      P_LEADING_SPACE,
       P_TRAILING_SPACE,
       P_DISTRIBUTE,
       P_MIRROR_HEAD,
@@ -65,9 +65,9 @@ enum P_ID {
       P_BARLINE_SPAN,
       P_BARLINE_SPAN_FROM,
       P_BARLINE_SPAN_TO,
+
       P_USER_OFF,
       P_FRET,
-
       P_STRING,
       P_GHOST,
       P_PLAY,
@@ -76,9 +76,9 @@ enum P_ID {
       P_NUMBER_TYPE,
       P_BRACKET_TYPE,
       P_NORMAL_NOTES,
+
       P_ACTUAL_NOTES,
       P_P1,
-
       P_P2,
       P_GROW_LEFT,
       P_GROW_RIGHT,
@@ -87,9 +87,9 @@ enum P_ID {
       P_TOP_GAP,
       P_BOTTOM_GAP,
       P_LEFT_MARGIN,
+
       P_RIGHT_MARGIN,
       P_TOP_MARGIN,
-
       P_BOTTOM_MARGIN,
       P_LAYOUT_BREAK,
       P_AUTOSCALE,
@@ -98,10 +98,10 @@ enum P_ID {
       P_LOCK_ASPECT_RATIO,
       P_SIZE_IS_SPATIUM,
       P_TEXT_STYLE,
+
       P_TEXT_STYLE_TYPE,
       P_TEXT,
       P_HTML_TEXT,
-
       P_USER_MODIFIED,
       P_BEAM_POS,
       P_BEAM_MODE,
@@ -109,21 +109,20 @@ enum P_ID {
       P_USER_LEN,       // used for stems
       P_SPACE,          // used for spacer
       P_TEMPO,
+
       P_TEMPO_FOLLOW_TEXT,
       P_ACCIDENTAL_BRACKET,
       P_NUMERATOR_STRING,
-
       P_DENOMINATOR_STRING,
-//      P_SHOW_NATURALS,
       P_BREAK_HINT,
       P_FBPREFIX,             // used for FiguredBassItem
       P_FBDIGIT,              //    "           "
       P_FBSUFFIX,             //    "           "
       P_FBCONTINUATIONLINE,   //    "           "
       P_FBPARENTHESIS1,       //    "           "
+
       P_FBPARENTHESIS2,       //    "           "
       P_FBPARENTHESIS3,       //    "           "
-
       P_FBPARENTHESIS4,       //    "           "
       P_FBPARENTHESIS5,       //    "           "
       P_VOLTA_TYPE,
@@ -132,10 +131,10 @@ enum P_ID {
       P_TRILL_TYPE,
       P_HAIRPIN_CIRCLEDTIP,
       P_HAIRPIN_TYPE,
+
       P_HAIRPIN_HEIGHT,
       P_HAIRPIN_CONT_HEIGHT,
       P_VELO_CHANGE,
-
       P_DYNAMIC_RANGE,
       P_PLACEMENT,
       P_VELOCITY,
@@ -143,10 +142,10 @@ enum P_ID {
       P_PLAY_UNTIL,
       P_CONTINUE_AT,
       P_LABEL,
+
       P_MARKER_TYPE,
       P_ARP_USER_LEN1,
       P_ARP_USER_LEN2,
-
       P_REPEAT_FLAGS,
       P_END_BARLINE_TYPE,
       P_END_BARLINE_VISIBLE,
@@ -154,10 +153,10 @@ enum P_ID {
       P_MEASURE_NUMBER_MODE,
       P_GLISS_TYPE,
       P_GLISS_TEXT,
+
       P_GLISS_SHOW_TEXT,
       P_DIAGONAL,
       P_GROUPS,
-
       P_LINE_STYLE,
       P_LINE_COLOR,
       P_LINE_WIDTH,
@@ -165,17 +164,18 @@ enum P_ID {
       P_LASSO_SIZE,
       P_TIME_STRETCH,
       P_TIMESIG,
+
       P_TIMESIG_GLOBAL,
       P_SPANNER_TICK,
       P_SPANNER_TICK2,
       P_SPANNER_TRACK2,
-
       P_USER_OFF2,
       P_BEGIN_TEXT_PLACE,
       P_CONTINUE_TEXT_PLACE,
       P_END_TEXT_PLACE,
       P_BEGIN_HOOK,
       P_END_HOOK,
+
       P_BEGIN_HOOK_HEIGHT,
       P_END_HOOK_HEIGHT,
       P_BEGIN_HOOK_TYPE,
@@ -186,6 +186,12 @@ enum P_ID {
       P_BEGIN_TEXT_STYLE,
       P_CONTINUE_TEXT_STYLE,
       P_END_TEXT_STYLE,
+
+      P_BREAK_MMR,
+      P_REPEAT_COUNT,
+      P_USER_STRETCH,
+      P_NO_OFFSET,
+      P_IRREGULAR,
 
       P_END
       };

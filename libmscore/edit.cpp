@@ -1845,11 +1845,18 @@ void Score::cmdEnterRest(const TDuration& d)
 
 void Score::removeChordRest(ChordRest* cr, bool clearSegment)
       {
-      undoRemoveElement(cr);
+      QList<Segment*> segments;
+      for (Element* e : cr->linkList()) {
+            undo(new RemoveElement(e));
+            Segment* s = cr->segment();
+            if (!segments.contains(s))
+                  segments.append(s);
+            }
       if (clearSegment) {
-            Segment* seg = cr->segment();
-            if (seg->isEmpty() && seg->annotations().size() == 0)
-                  undoRemoveElement(seg);
+            for (Segment* s : segments) {
+                  if (s->isEmpty())
+                        undo(new RemoveElement(s));
+                  }
             }
       if (cr->beam()) {
             Beam* beam = cr->beam();
