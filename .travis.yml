@@ -21,6 +21,7 @@ before_install:
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
 before_script:
   - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
+  - "export PATH=$PATH:$HOME/bin"
   - "make revision"
   - "make debug CPUS=16"
   - "sudo make installdebug"
