@@ -1526,7 +1526,9 @@ void Note::layout()
 
 void Note::layout2()
       {
-      adjustReadPos();
+      // this is now done in Score::layoutChords3()
+      // so that the results are available there
+      // adjustReadPos();
 
       int dots = chord()->dots();
       if (dots) {

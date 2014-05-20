@@ -1693,7 +1693,8 @@ void Chord::layoutPitched()
             c->layoutPitched();
 
       qreal _spatium  = spatium();
-      qreal minNoteDistance = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
+      qreal dotNoteDistance = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
+      qreal minNoteDistance = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
       qreal minTieLength = score()->styleS(StyleIdx::MinTieLength).val() * _spatium;
 
       while (_ledgerLines) {
@@ -1743,11 +1744,11 @@ void Chord::layoutPitched()
 
             Accidental* accidental = note->accidental();
             if (accidental) {
-                  qreal x = accidental->x() + note->x();
                   // convert x position of accidental to segment coordinate system
-                  if (_noteType == NoteType::NORMAL)
-                        x += note->chord()->x();
-                  x -= score()->styleS(StyleIdx::accidentalDistance).val() * _spatium;
+                  qreal x = accidental->pos().x() + note->pos().x();
+                  if (_noteType == NoteType::NOTE_NORMAL)
+                        x += ipos().x();
+                  // x -= score()->styleS(StyleIdx::accidentalDistance).val() * _spatium;
                   lll = qMax(lll, -x);
                   }
 
@@ -1835,7 +1836,7 @@ void Chord::layoutPitched()
             lll += _spatium * .5;
 
       if (dots()) {
-            qreal x = dotPosX() + minNoteDistance
+            qreal x = dotPosX() + dotNoteDistance
                + (dots()-1) * score()->styleS(StyleIdx::dotDotDistance).val() * _spatium;
             x += symWidth(SymId::augmentationDot);
             rrr = qMax(rrr, x);
@@ -1863,7 +1864,7 @@ void Chord::layoutPitched()
             s = s->prev(Segment::SegChordRest);
             if (s && s->element(track()) && s->element(track())->type() == ElementType::CHORD
                && static_cast<Chord*>(s->element(track()))->ledgerLines()) {
-                  // TODO: detect case were one chord is above staff, the other below
+                  // TODO: detect case where one chord is above staff, the other below
                   lll = qMax(_spatium * 0.8f, lll);
                   }
             }
@@ -1936,7 +1937,8 @@ void Chord::layoutPitched()
 void Chord::layoutTablature()
       {
       qreal _spatium  = spatium();
-      qreal minNoteDistance = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
+      qreal dotNoteDistance = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
+      qreal minNoteDistance = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
 
       for (Chord* c : _graceNotes)
             c->layoutTablature();
@@ -2059,7 +2061,7 @@ void Chord::layoutTablature()
             lll += _spatium * .5;
 
       if (dots()) {
-            qreal x = dotPosX() + minNoteDistance
+            qreal x = dotPosX() + dotNoteDistance
                + (dots()-1) * score()->styleS(StyleIdx::dotDotDistance).val() * _spatium;
             x += symWidth(SymId::augmentationDot);
             if (x > rrr)
