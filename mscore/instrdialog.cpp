@@ -873,7 +873,7 @@ void MuseScore::editInstrList()
       // keep the keylist of the first staff to apply it to new ones
       KeyList tmpKeymap;
       Staff* firstStaff = nullptr;
-      for(Staff* s : rootScore->staves()) {
+      for (Staff* s : rootScore->staves()) {
             KeyList* km = s->keymap();
             if(!s->isDrumStaff()) {
                   tmpKeymap.insert(km->begin(), km->end());
@@ -883,16 +883,16 @@ void MuseScore::editInstrList()
             }
       //normalize the keyevent to concert pitch if necessary
       if (firstStaff && !rootScore->styleB(ST_concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
-                  int interval = firstStaff->part()->instr()->transpose().chromatic;
-                  for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
-                        int tick = i->first;
-                        KeySigEvent oKey = i->second;
-                        int nKeyType = transposeKey(oKey.accidentalType(), interval);
-                        KeySigEvent nKey;
-                        nKey.setAccidentalType(nKeyType);
-                        tmpKeymap[tick] = nKey;
-                        }
+            int interval = firstStaff->part()->instr()->transpose().chromatic;
+            for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
+                  int tick = i->first;
+                  KeySigEvent oKey = i->second;
+                  int nKeyType = transposeKey(oKey.accidentalType(), interval);
+                  KeySigEvent nKey;
+                  nKey.setAccidentalType(nKeyType);
+                  tmpKeymap[tick] = nKey;
                   }
+            }
 
       //
       // process modified partitur list
@@ -1003,12 +1003,6 @@ void MuseScore::editInstrList()
                                     if (m->hasMMRest())
                                           m->mmRest()->cmdRemoveStaves(sidx, eidx);
                                     }
-/*                              foreach(Beam* e, rootScore->beams()) {
-                                    int staffIdx = e->staffIdx();
-                                    if (staffIdx >= sidx && staffIdx < eidx)
-                                          rootScore->undoRemoveElement(e);
-                                    }
- */
                               rootScore->cmdRemoveStaff(sidx);
                               }
                         else if (sli->op == ITEM_ADD) {

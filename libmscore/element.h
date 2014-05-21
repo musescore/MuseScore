@@ -323,7 +323,8 @@ class Element : public QObject {
       QList<Element*> linkList() const;
 
       void linkTo(Element*);
-      void unlink(Element*);
+      void unlink();
+      void undoUnlink();
       int lid() const                         { return _links ? _links->lid() : 0; }
       const LinkedElements* links() const     { return _links;      }
       void setLinks(LinkedElements* le)       { _links = le;        }

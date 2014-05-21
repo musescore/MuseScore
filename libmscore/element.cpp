@@ -356,11 +356,23 @@ void Element::linkTo(Element* element)
 //   unlink
 //---------------------------------------------------------
 
-void Element::unlink(Element* element)
+void Element::unlink()
       {
-      Q_ASSERT(_links);
-      Q_ASSERT(_links->contains(element));
-      _links->removeOne(element);
+      if (_links) {
+            Q_ASSERT(_links->contains(this));
+            _links->removeOne(this);
+            _links = 0;
+            }
+      }
+
+//---------------------------------------------------------
+//   undoUnlink
+//---------------------------------------------------------
+
+void Element::undoUnlink()
+      {
+      if (_links)
+            _score->undo(new Unlink(this));
       }
 
 //---------------------------------------------------------

@@ -1437,12 +1437,11 @@ void Score::removeElement(Element* element)
       {
       Element* parent = element->parent();
 
-#if 0
       if (MScore::debugMode) {
             qDebug("   Score(%p)::removeElement %p(%s) parent %p(%s)",
                this, element, element->name(), parent, parent ? parent->name() : "");
             }
-#endif
+
       if (parent && parent->type() == Element::SEGMENT)
             static_cast<Segment*>(parent)->measure()->setDirty();
 
@@ -1518,6 +1517,7 @@ void Score::removeElement(Element* element)
                   ChordRest* cr = static_cast<ChordRest*>(element);
                   if (cr->beam())
                         cr->beam()->remove(cr);
+                  // TODO: check for tuplet?
                   }
                   break;
             case Element::CLEF:

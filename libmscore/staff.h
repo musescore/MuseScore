@@ -203,6 +203,8 @@ class Staff : public QObject {
 
       LinkedStaves* linkedStaves() const    { return _linkedStaves; }
       void setLinkedStaves(LinkedStaves* l) { _linkedStaves = l;    }
+      QList<Staff*> staffList() const;
+
       void linkTo(Staff* staff);
       bool isLinked(Staff* staff);
       bool primaryStaff() const;
