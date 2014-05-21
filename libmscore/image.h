@@ -19,7 +19,7 @@ namespace Ms {
 
 class ImageStoreItem;
 
-enum ImageType { IMAGE_NONE, IMAGE_RASTER, IMAGE_SVG };
+enum class ImageType : char { NONE, RASTER, SVG };
 
 //---------------------------------------------------------
 //   @@ Image
