@@ -1587,7 +1587,7 @@ void DynamicView::setElement(Element* e)
       tb.layoutToParentWidth->setChecked(dynamic->layoutToParentWidth());
 
       ShowElementBase::setElement(e);
-      bl.subType->setValue(dynamic->dynamicType());
+      bl.subType->setValue(int(dynamic->dynamicType()));
       }
 
 //---------------------------------------------------------

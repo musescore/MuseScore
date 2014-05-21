@@ -128,7 +128,7 @@ Dynamic::Dynamic(Score* s)
       _velocity = -1;
       _dynRange = DYNAMIC_PART;
       setTextStyleType(TEXT_STYLE_DYNAMICS);
-      _dynamicType  = DYNAMIC_OTHER;
+      _dynamicType  = DynamicType::OTHER;
       }
 
 Dynamic::Dynamic(const Dynamic& d)
@@ -154,7 +154,7 @@ void Dynamic::setVelocity(int v)
 
 int Dynamic::velocity() const
       {
-      return _velocity <= 0 ? dynList[dynamicType()].velocity : _velocity;
+      return _velocity <= 0 ? dynList[int(dynamicType())].velocity : _velocity;
       }
 
 //---------------------------------------------------------
@@ -167,7 +167,7 @@ void Dynamic::write(Xml& xml) const
       xml.tag("subtype", dynamicTypeName());
       writeProperty(xml, P_VELOCITY);
       writeProperty(xml, P_DYNAMIC_RANGE);
-      Text::writeProperties(xml, dynamicType() == 0);
+      Text::writeProperties(xml, dynamicType() == DynamicType::OTHER);
       xml.etag();
       }
 
@@ -247,7 +247,7 @@ void Dynamic::setDynamicType(const QString& tag)
                   }
             }
       qDebug("setDynamicType: other <%s>", qPrintable(tag));
-      setDynamicType(DYNAMIC_OTHER);
+      setDynamicType(DynamicType::OTHER);
       setText(tag);
       }
 
@@ -257,7 +257,7 @@ void Dynamic::setDynamicType(const QString& tag)
 
 QString Dynamic::dynamicTypeName() const
       {
-      return dynList[dynamicType()].tag;
+      return dynList[int(dynamicType())].tag;
       }
 
 //---------------------------------------------------------
@@ -276,8 +276,8 @@ void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
 void Dynamic::endEdit()
       {
       Text::endEdit();
-      if (text() != QString::fromUtf8(dynList[_dynamicType].text))
-            _dynamicType = DYNAMIC_OTHER;
+      if (text() != QString::fromUtf8(dynList[int(_dynamicType)].text))
+            _dynamicType = DynamicType::OTHER;
       }
 
 //---------------------------------------------------------
@@ -352,7 +352,7 @@ QVariant Dynamic::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_DYNAMIC_RANGE:     return int(_dynRange);
             case P_VELOCITY:          return velocity();
-            case P_SUBTYPE:           return _dynamicType;
+            case P_SUBTYPE:           return int(_dynamicType);
             default:
                   return Text::getProperty(propertyId);
             }
