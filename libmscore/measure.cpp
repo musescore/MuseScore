@@ -3181,9 +3181,13 @@ void Measure::layoutX(qreal stretch)
                               // calculate space needed for segment
                               // take cr position into account
                               // by converting to segment-relative space
-                              qreal cx = cr->userOff().x();
-                              qreal lx = qMax(cx, 0.0); // nudge left shouldn't require more leading space
-                              qreal rx = qMin(cx, 0.0); // nudge right shouldn't require more trailing space
+                              // chord space itself already has ipos offset built in
+                              // but lyrics do not
+                              // and neither have user offsets
+                              qreal cx = cr->ipos().x();
+                              qreal cxu = cr->userOff().x();
+                              qreal lx = qMax(cxu, 0.0); // nudge left shouldn't require more leading space
+                              qreal rx = qMin(cxu, 0.0); // nudge right shouldn't require more trailing space
                               Space crSpace = cr->space();
                               Space segRelSpace(crSpace.lw()-lx, crSpace.rw()+rx);
                               space.max(segRelSpace);
@@ -3197,8 +3201,8 @@ void Measure::layoutX(qreal stretch)
                                     lyrics = l;
                                     if (!lyrics->isMelisma()) {
                                           QRectF b(l->bbox().translated(l->pos()));
-                                          llw = qMax(llw, -b.left());
-                                          rrw = qMax(rrw, b.right());
+                                          llw = qMax(llw, -(b.left()+lx+cx));
+                                          rrw = qMax(rrw, b.right()+rx+cx);
                                           }
                                     }
                               }
