@@ -21,7 +21,7 @@ namespace Ms {
 //   MarkerType
 //---------------------------------------------------------
 
-enum class MarkerType {
+enum class MarkerType : char {
       SEGNO,
       VARSEGNO,
       CODA,

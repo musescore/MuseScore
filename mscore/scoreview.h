@@ -50,7 +50,7 @@ class OmrView;
 class PositionCursor;
 class Tuplet;
 
-enum class POS;
+enum class POS : char;
 
 enum {
       TEXT_TITLE,

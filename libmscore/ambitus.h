@@ -21,8 +21,8 @@ class QPainter;
 
 namespace Ms {
 
-enum class NoteHeadGroup : char;
-enum class NoteHeadType : char;
+enum class NoteHeadGroup : signed char;
+enum class NoteHeadType : signed char;
 
 //---------------------------------------------------------
 //   @@ Ambitus

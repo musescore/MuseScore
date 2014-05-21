@@ -22,7 +22,7 @@ namespace Ms {
 
 class Sym;
 class Segment;
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   KeySym

@@ -21,7 +21,7 @@ namespace Ms {
 
 class Segment;
 class ScoreFont;
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   @@ Symbol

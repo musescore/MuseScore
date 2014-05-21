@@ -21,7 +21,7 @@ class QPainter;
 namespace Ms {
 
 class ChordRest;
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   ArticulationInfo

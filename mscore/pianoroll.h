@@ -23,7 +23,7 @@ namespace Awl {
 
 namespace Ms {
 
-enum class POS;
+enum class POS : char;
 
 class Score;
 class Staff;

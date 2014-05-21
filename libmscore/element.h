@@ -37,7 +37,7 @@ class MuseScoreView;
 class Segment;
 class TextStyle;
 class Element;
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   ElementFlag

@@ -57,7 +57,7 @@ class OttavaSegment : public TextLineSegment {
 //   OttavaType
 //---------------------------------------------------------
 
-enum class OttavaType {
+enum class OttavaType : char {
       OTTAVA_8VA,
       OTTAVA_8VB,
       OTTAVA_15MA,
