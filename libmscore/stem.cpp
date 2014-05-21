@@ -157,7 +157,7 @@ void Stem::draw(QPainter* painter) const
       bool _up = up();
 
       // slashed half note stem
-      if (chord()->durationType().type() == TDuration::V_HALF && stt->minimStyle() == TAB_MINIM_SLASHED) {
+      if (chord()->durationType().type() == TDuration::DurationType::V_HALF && stt->minimStyle() == TAB_MINIM_SLASHED) {
             // position slashes onto stem
             qreal y = _up ? -(_len+_userLen) + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp : (_len+_userLen) - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp;
             // if stems through, try to align slashes within or across lines

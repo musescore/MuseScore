@@ -1619,9 +1619,9 @@ static void fillGap(Measure* measure, int track, int tstart, int tend)
       // MScore::division / 64 (#ticks in a 256th note) uequals 7.5 but is rounded down to 7
       while (restLen > MScore::division / 64) {
             int len = restLen;
-            TDuration d(TDuration::V_INVALID);
+            TDuration d(TDuration::DurationType::V_INVALID);
             if (measure->ticks() == restLen)
-                  d.setType(TDuration::V_MEASURE);
+                  d.setType(TDuration::DurationType::V_MEASURE);
             else
                   d.setVal(len);
             Rest* rest = new Rest(measure->score(), d);
@@ -3517,16 +3517,16 @@ static bool hasElem(const QDomElement e, const QString& tagname)
 
 static void tupletAssert()
       {
-      if (!(TDuration::V_BREVE      == TDuration::V_LONG + 1
-            && TDuration::V_WHOLE   == TDuration::V_BREVE + 1
-            && TDuration::V_HALF    == TDuration::V_WHOLE + 1
-            && TDuration::V_QUARTER == TDuration::V_HALF + 1
-            && TDuration::V_EIGHT   == TDuration::V_QUARTER + 1
-            && TDuration::V_16TH    == TDuration::V_EIGHT + 1
-            && TDuration::V_32ND    == TDuration::V_16TH + 1
-            && TDuration::V_64TH    == TDuration::V_32ND + 1
-            && TDuration::V_128TH   == TDuration::V_64TH + 1
-            && TDuration::V_256TH   == TDuration::V_128TH + 1
+      if (!(int(TDuration::DurationType::V_BREVE)      == int(TDuration::DurationType::V_LONG)    + 1
+            && int(TDuration::DurationType::V_WHOLE)   == int(TDuration::DurationType::V_BREVE)   + 1
+            && int(TDuration::DurationType::V_HALF)    == int(TDuration::DurationType::V_WHOLE)   + 1
+            && int(TDuration::DurationType::V_QUARTER) == int(TDuration::DurationType::V_HALF)    + 1
+            && int(TDuration::DurationType::V_EIGHT)   == int(TDuration::DurationType::V_QUARTER) + 1
+            && int(TDuration::DurationType::V_16TH)    == int(TDuration::DurationType::V_EIGHT)   + 1
+            && int(TDuration::DurationType::V_32ND)    == int(TDuration::DurationType::V_16TH)    + 1
+            && int(TDuration::DurationType::V_64TH)    == int(TDuration::DurationType::V_32ND)    + 1
+            && int(TDuration::DurationType::V_128TH)   == int(TDuration::DurationType::V_64TH)    + 1
+            && int(TDuration::DurationType::V_256TH)   == int(TDuration::DurationType::V_128TH)   + 1
             )) {
             qFatal("tupletAssert() failed");
             }
@@ -3550,7 +3550,7 @@ static void tupletAssert()
 
 static void smallestTypeAndCount(ChordRest const* const cr, int& type, int& count)
       {
-      type = cr->durationType().type();
+      type = int(cr->durationType().type());
       count = 1;
       switch (cr->durationType().dots()) {
             case 0:
@@ -3693,7 +3693,7 @@ bool isTupletFilled(Tuplet* t, TDuration normalType)
 
       // then compare ...
       if (normalType.isValid()) {
-            int matchedNormalType  = normalType.type();
+            int matchedNormalType  = int(normalType.type());
             int matchedNormalCount = t->ratio().numerator();
             // match the types
             matchTypeAndCount(tupletType, tupletCount, matchedNormalType, matchedNormalCount);
@@ -4548,13 +4548,13 @@ NoteType graceNoteType(TDuration duration, QString graceSlash)
             NoteType nt = NOTE_APPOGGIATURA;
             if (graceSlash == "yes")
                   nt = NOTE_ACCIACCATURA;
-            if (duration.type() == TDuration::V_QUARTER) {
+            if (duration.type() == TDuration::DurationType::V_QUARTER) {
                   nt = NOTE_GRACE4;
             }
-            else if (duration.type() == TDuration::V_16TH) {
+            else if (duration.type() == TDuration::DurationType::V_16TH) {
                   nt = NOTE_GRACE16;
             }
-            else if (duration.type() == TDuration::V_32ND) {
+            else if (duration.type() == TDuration::DurationType::V_32ND) {
                   nt = NOTE_GRACE32;
             }
             return nt;
@@ -4603,9 +4603,9 @@ static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration d
             // By convention, whole measure rests do not have a "type" element
             // As of MusicXML 3.0, this can be indicated by an attribute "measure",
             // but for backwards compatibility the "old" convention still has to be supported.
-            if (duration.type() == TDuration::V_INVALID) {
+            if (duration.type() == TDuration::DurationType::V_INVALID) {
                   if (wholeMeasure)
-                        duration.setType(TDuration::V_MEASURE);
+                        duration.setType(TDuration::DurationType::V_MEASURE);
                   else
                         duration.setVal(ticks);
                   cr->setDurationType(duration);
@@ -4617,8 +4617,8 @@ static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration d
             }
       }
       else {
-            if (duration.type() == TDuration::V_INVALID)
-                  duration.setType(TDuration::V_QUARTER);
+            if (duration.type() == TDuration::DurationType::V_INVALID)
+                  duration.setType(TDuration::DurationType::V_QUARTER);
             cr->setDurationType(duration);
             cr->setDuration(cr->durationType().fraction());
             }
@@ -4659,7 +4659,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       bool parentheses = false;
       bool editorial = false;
       bool cautionary = false;
-      TDuration duration(TDuration::V_INVALID);
+      TDuration duration(TDuration::DurationType::V_INVALID);
       NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
       bool noStem = false;
       QColor noteheadColor = QColor::Invalid;

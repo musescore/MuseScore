@@ -151,7 +151,7 @@ Rest* Score::addRest(int tick, int track, TDuration d, Tuplet* tuplet)
       {
       Measure* measure = tick2measure(tick);
       Rest* rest       = new Rest(this, d);
-      if (d.type() == TDuration::V_MEASURE)
+      if (d.type() == TDuration::DurationType::V_MEASURE)
             rest->setDuration(measure->stretchedLen(staff(track/VOICES)));
       else
             rest->setDuration(d.fraction());
@@ -168,7 +168,7 @@ Rest* Score::addRest(int tick, int track, TDuration d, Tuplet* tuplet)
 Rest* Score::addRest(Segment* s, int track, TDuration d, Tuplet* tuplet)
       {
       Rest* rest = new Rest(this, d);
-      if (d.type() == TDuration::V_MEASURE)
+      if (d.type() == TDuration::DurationType::V_MEASURE)
             rest->setDuration(s->measure()->stretchedLen(staff(track/VOICES)));
       else
             rest->setDuration(d.fraction());
@@ -303,7 +303,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                && (measure->tick() == tick)
                && (measure->timesig() == f)
                && (useFullMeasureRest)) {
-                  Rest* rest = addRest(tick, track, TDuration(TDuration::V_MEASURE), tuplet);
+                  Rest* rest = addRest(tick, track, TDuration(TDuration::DurationType::V_MEASURE), tuplet);
                   tick += measure->timesig().ticks();
                   if (r == 0)
                         r = rest;
@@ -612,7 +612,7 @@ void Score::timesigStretchChanged(TimeSig* ts, Measure* fm, int staffIdx)
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (!cr)
                               continue;
-                        if (cr->type() == Element::REST && cr->durationType() == TDuration::V_MEASURE)
+                        if (cr->type() == Element::REST && cr->durationType() == TDuration::DurationType::V_MEASURE)
                               cr->setDuration(ts->sig());
                         else
                               qDebug("timeSigChanged: not implemented: chord/rest does not fit");
@@ -1194,7 +1194,7 @@ void Score::deleteItem(Element* el)
                   RepeatMeasure* rm = static_cast<RepeatMeasure*>(el);
                   removeChordRest(rm, false);
                   Rest* rest = new Rest(this);
-                  rest->setDurationType(TDuration::V_MEASURE);
+                  rest->setDurationType(TDuration::DurationType::V_MEASURE);
                   rest->setDuration(rm->measure()->len());
                   rest->setTrack(rm->track());
                   rest->setParent(rm->parent());
@@ -1633,7 +1633,7 @@ void Score::cmdFullMeasureRest()
                         }
                   for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
                         if (!(track % VOICES) && m->isOnlyRests(track)) {
-			      addRest(m->tick(), track, TDuration(TDuration::V_MEASURE), 0);
+			      addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
 			}
                         if (s2 && (m == s2->measure()))
                               break;
@@ -2098,7 +2098,7 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                   Segment* s = static_cast<Measure*>(omb)->findSegment(Segment::SegChordRest, tick);
                   if (s == 0 || s->element(track) == 0) {
                         // add rest to this staff and to all the staves linked to it
-                        Rest* rest = new Rest(_root, TDuration(TDuration::V_MEASURE));
+                        Rest* rest = new Rest(_root, TDuration(TDuration::DurationType::V_MEASURE));
                         Fraction timeStretch(_root->staff(staffIdx)->timeStretch(tick));
                         rest->setDuration(static_cast<Measure*>(omb)->len() / timeStretch);
                         rest->setTrack(track);

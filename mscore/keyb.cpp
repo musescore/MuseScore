@@ -308,16 +308,16 @@ void MuseScore::updateInputState(Score* score)
       getAction("pad-dot")->setChecked(is.duration().dots() == 1);
       getAction("pad-dotdot")->setChecked(is.duration().dots() == 2);
 
-      getAction("note-longa")->setChecked(is.duration()  == TDuration::V_LONG);
-      getAction("note-breve")->setChecked(is.duration()  == TDuration::V_BREVE);
-      getAction("pad-note-1")->setChecked(is.duration()  == TDuration::V_WHOLE);
-      getAction("pad-note-2")->setChecked(is.duration()  == TDuration::V_HALF);
-      getAction("pad-note-4")->setChecked(is.duration()  == TDuration::V_QUARTER);
-      getAction("pad-note-8")->setChecked(is.duration()  == TDuration::V_EIGHT);
-      getAction("pad-note-16")->setChecked(is.duration() == TDuration::V_16TH);
-      getAction("pad-note-32")->setChecked(is.duration() == TDuration::V_32ND);
-      getAction("pad-note-64")->setChecked(is.duration() == TDuration::V_64TH);
-      getAction("pad-note-128")->setChecked(is.duration() == TDuration::V_128TH);
+      getAction("note-longa")->setChecked(is.duration()  == TDuration::DurationType::V_LONG);
+      getAction("note-breve")->setChecked(is.duration()  == TDuration::DurationType::V_BREVE);
+      getAction("pad-note-1")->setChecked(is.duration()  == TDuration::DurationType::V_WHOLE);
+      getAction("pad-note-2")->setChecked(is.duration()  == TDuration::DurationType::V_HALF);
+      getAction("pad-note-4")->setChecked(is.duration()  == TDuration::DurationType::V_QUARTER);
+      getAction("pad-note-8")->setChecked(is.duration()  == TDuration::DurationType::V_EIGHT);
+      getAction("pad-note-16")->setChecked(is.duration() == TDuration::DurationType::V_16TH);
+      getAction("pad-note-32")->setChecked(is.duration() == TDuration::DurationType::V_32ND);
+      getAction("pad-note-64")->setChecked(is.duration() == TDuration::DurationType::V_64TH);
+      getAction("pad-note-128")->setChecked(is.duration() == TDuration::DurationType::V_128TH);
 
       // uncheck all voices if multi-selection
       int voice = score->selection().isSingle() ? is.voice() : -1;

@@ -182,10 +182,10 @@ void TestMidi::midi01()
 
       c.addKeySig(0);
       c.addTimeSig(Fraction(4,4));
-      c.addChord(60, TDuration(TDuration::V_QUARTER));
-      c.addChord(61, TDuration(TDuration::V_QUARTER));
-      c.addChord(62, TDuration(TDuration::V_QUARTER));
-      c.addChord(63, TDuration(TDuration::V_QUARTER));
+      c.addChord(60, TDuration(TDuration::DurationType::V_QUARTER));
+      c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
+      c.addChord(62, TDuration(TDuration::DurationType::V_QUARTER));
+      c.addChord(63, TDuration(TDuration::DurationType::V_QUARTER));
       Score* score = c.score();
 
       score->doLayout();
@@ -223,9 +223,9 @@ void TestMidi::midi02()
 
       c.addKeySig(0);
       c.addTimeSig(Fraction(3,4));
-      c.addChord(60, TDuration(TDuration::V_QUARTER));
-      c.addChord(61, TDuration(TDuration::V_QUARTER));
-      c.addChord(62, TDuration(TDuration::V_QUARTER));
+      c.addChord(60, TDuration(TDuration::DurationType::V_QUARTER));
+      c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
+      c.addChord(62, TDuration(TDuration::DurationType::V_QUARTER));
       Score* score = c.score();
 
       score->doLayout();
@@ -264,10 +264,10 @@ void TestMidi::midi03()
 
       c.addKeySig(1);
       c.addTimeSig(Fraction(4,4));
-      c.addChord(60, TDuration(TDuration::V_QUARTER));
-      c.addChord(61, TDuration(TDuration::V_QUARTER));
-      c.addChord(62, TDuration(TDuration::V_QUARTER));
-      c.addChord(63, TDuration(TDuration::V_QUARTER));
+      c.addChord(60, TDuration(TDuration::DurationType::V_QUARTER));
+      c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
+      c.addChord(62, TDuration(TDuration::DurationType::V_QUARTER));
+      c.addChord(63, TDuration(TDuration::DurationType::V_QUARTER));
       Score* score = c.score();
 
       score->doLayout();

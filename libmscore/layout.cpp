@@ -1043,7 +1043,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
             mainNote->getGraceNotesBefore(&graceNotes);
       foreach (ChordRest* cr, graceNotes) {
             bm = Groups::endBeam(cr);
-            if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BeamMode::NONE)) {
+            if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
                   if (beam) {
                         beam->layoutGraceNotes();
                         beam = 0;
@@ -1155,7 +1155,7 @@ void Score::layoutStage2()
                               beam    = 0;
                               }
                         }
-                  if ((cr->durationType().type() <= TDuration::V_QUARTER) || (bm == BeamMode::NONE)) {
+                  if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
                         if (beam) {
                               beam->layout1();
                               beam = 0;
@@ -1721,7 +1721,7 @@ void Score::createMMRests()
                         int track = staffIdx * VOICES;
                         if (s->element(track) == 0) {
                               Rest* r = new Rest(this);
-                              r->setDurationType(TDuration::V_MEASURE);
+                              r->setDurationType(TDuration::DurationType::V_MEASURE);
                               r->setTrack(track);
                               r->setParent(s);
                               undo(new AddElement(r));

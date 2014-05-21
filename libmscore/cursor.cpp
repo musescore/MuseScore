@@ -168,7 +168,7 @@ void Cursor::setDuration(int z, int n)
       {
       TDuration d(Fraction(z, n));
       if (!d.isValid())
-            d = TDuration(TDuration::V_QUARTER);
+            d = TDuration(TDuration::DurationType::V_QUARTER);
       _score->inputState().setDuration(d);
       }
 

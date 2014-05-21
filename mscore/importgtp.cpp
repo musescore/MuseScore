@@ -2286,7 +2286,7 @@ void GuitarPro4::read(QFile* fp)
                               l = l + (l/2);
                         cr->setDuration(l);
                         if (cr->type() == Element::REST && (pause == 0 || l == measure->len()))
-                              cr->setDurationType(TDuration::V_MEASURE);
+                              cr->setDurationType(TDuration::DurationType::V_MEASURE);
                         else
                               cr->setDurationType(d);
                         if(!segment->cr(staffIdx * VOICES))
@@ -2846,7 +2846,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   l = l + (l/2);
             cr->setDuration(l);
             if (cr->type() == Element::REST && pause == 0)
-                  cr->setDurationType(TDuration::V_MEASURE);
+                  cr->setDurationType(TDuration::DurationType::V_MEASURE);
             else
                   cr->setDurationType(d);
 

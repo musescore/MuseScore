@@ -63,7 +63,7 @@ class Rest : public ChordRest {
       int getDotline() const { return dotline; }
       SymId sym() const        { return _sym;    }
       int computeLineOffset();
-      bool isFullMeasureRest() const { return durationType() == TDuration::V_MEASURE; }
+      bool isFullMeasureRest() const { return durationType() == TDuration::DurationType::V_MEASURE; }
 
       virtual int upLine() const;
       virtual int downLine() const;

@@ -303,7 +303,7 @@ void EditDrumset::updateExample()
       else
             up = line > 4;
       Chord* chord = new Chord(gscore);
-      chord->setDurationType(TDuration::V_QUARTER);
+      chord->setDurationType(TDuration::DurationType::V_QUARTER);
       chord->setStemDirection(dir);
       chord->setTrack(voice);
       chord->setUp(up);

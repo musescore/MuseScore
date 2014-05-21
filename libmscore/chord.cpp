@@ -1892,13 +1892,13 @@ void Chord::layoutPitched()
            // get factor for start distance after main note. Values found by testing.
            qreal fc;
            switch (durationType().type()) {
-                 case TDuration::V_LONG:    fc = 3.8; break;
-                 case TDuration::V_BREVE:   fc = 3.8; break;
-                 case TDuration::V_WHOLE:   fc = 3.8; break;
-                 case TDuration::V_HALF:    fc = 3.6; break;
-                 case TDuration::V_QUARTER: fc = 2.1; break;
-                 case TDuration::V_EIGHT:   fc = 1.4; break;
-                 case TDuration::V_16TH:    fc = 1.2; break;
+                 case TDuration::DurationType::V_LONG:    fc = 3.8; break;
+                 case TDuration::DurationType::V_BREVE:   fc = 3.8; break;
+                 case TDuration::DurationType::V_WHOLE:   fc = 3.8; break;
+                 case TDuration::DurationType::V_HALF:    fc = 3.6; break;
+                 case TDuration::DurationType::V_QUARTER: fc = 2.1; break;
+                 case TDuration::DurationType::V_EIGHT:   fc = 1.4; break;
+                 case TDuration::DurationType::V_16TH:    fc = 1.2; break;
                  default: fc = 1;
                  }
            qreal xr = fc * (_space.rw() + minNoteDistance);
@@ -1977,7 +1977,7 @@ void Chord::layoutTablature()
       // or duration longer than half (if halves have stems) or duration longer than crochet
       // remove stems
       if (tab->slashStyle() || _noStem || durationType().type() <
-         (tab->minimStyle() != TAB_MINIM_NONE ? TDuration::V_HALF : TDuration::V_QUARTER) ) {
+         (tab->minimStyle() != TAB_MINIM_NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
             delete _stem;
             delete _hook;
             _stem = 0;
@@ -2103,13 +2103,13 @@ void Chord::layoutTablature()
            // get factor for start distance after main note. Values found by testing.
            qreal fc;
            switch (durationType().type()) {
-                 case TDuration::V_LONG:    fc = 3.8; break;
-                 case TDuration::V_BREVE:   fc = 3.8; break;
-                 case TDuration::V_WHOLE:   fc = 3.8; break;
-                 case TDuration::V_HALF:    fc = 3.6; break;
-                 case TDuration::V_QUARTER: fc = 2.1; break;
-                 case TDuration::V_EIGHT:   fc = 1.4; break;
-                 case TDuration::V_16TH:    fc = 1.2; break;
+                 case TDuration::DurationType::V_LONG:    fc = 3.8; break;
+                 case TDuration::DurationType::V_BREVE:   fc = 3.8; break;
+                 case TDuration::DurationType::V_WHOLE:   fc = 3.8; break;
+                 case TDuration::DurationType::V_HALF:    fc = 3.6; break;
+                 case TDuration::DurationType::V_QUARTER: fc = 2.1; break;
+                 case TDuration::DurationType::V_EIGHT:   fc = 1.4; break;
+                 case TDuration::DurationType::V_16TH:    fc = 1.2; break;
                  default: fc = 1;
                  }
            qreal xr = fc * (_space.rw() + minNoteDistance);

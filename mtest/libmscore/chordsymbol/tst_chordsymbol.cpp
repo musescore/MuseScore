@@ -79,7 +79,7 @@ void TestChordSymbol::testExtend()
       Measure* m = score->firstMeasure();
       Segment* s = m->first(Segment::SegChordRest);
       ChordRest* cr = s->cr(0);
-      score->changeCRlen(cr, TDuration::V_WHOLE);
+      score->changeCRlen(cr, TDuration::DurationType::V_WHOLE);
       score->doLayout();
       test_post(score, "extend");
       }

@@ -1590,7 +1590,7 @@ void Measure::adjustToLen(Fraction nf)
             if (rests == 1 && chords == 0) {
                   // if measure value didn't change, stick to whole measure rest
                   if (_timesig == nf)
-                        s->undo(new ChangeChordRestLen(rest, TDuration(TDuration::V_MEASURE)));
+                        s->undo(new ChangeChordRestLen(rest, TDuration(TDuration::DurationType::V_MEASURE)));
                   else {      // if measure value did change, represent with rests actual measure value
                         // convert the measure duration in a list of values (no dots for rests)
                         QList<TDuration> durList = toDurationList(nf, false, 0);
@@ -1624,7 +1624,7 @@ void Measure::adjustToLen(Fraction nf)
                               Element* e = segment->element(trk);
                               if (e && e->isChordRest()) {
                                     ChordRest* cr = static_cast<ChordRest*>(e);
-                                    if (cr->durationType() == TDuration::V_MEASURE) {
+                                    if (cr->durationType() == TDuration::DurationType::V_MEASURE) {
                                           int actualTicks = cr->actualTicks();
                                           n += actualTicks;
                                           cr->setDurationType(TDuration(actualTicks));
@@ -1904,7 +1904,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "Rest") {
                   Rest* rest = new Rest(score());
-                  rest->setDurationType(TDuration::V_MEASURE);
+                  rest->setDurationType(TDuration::DurationType::V_MEASURE);
                   rest->setDuration(timesig()/timeStretch);
                   rest->setTrack(e.track());
                   rest->read(e);
@@ -2786,7 +2786,7 @@ bool Measure::isFullMeasureRest()
                   if (e->type() != REST)
                         return false;
                   Rest* rest = static_cast<Rest*>(e);
-                  if (rest->durationType().type() != TDuration::V_MEASURE)
+                  if (rest->durationType().type() != TDuration::DurationType::V_MEASURE)
                         return false;
                   }
             }
@@ -3149,7 +3149,7 @@ void Measure::layoutX(qreal stretch)
                               found = true;
                               if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine | Segment::SegTimeSig) && !accidentalStaff) {
                                     // no distance to full measure rest
-                                    if (!(cr->type() == REST && static_cast<Rest*>(cr)->durationType() == TDuration::V_MEASURE)) {
+                                    if (!(cr->type() == REST && static_cast<Rest*>(cr)->durationType() == TDuration::DurationType::V_MEASURE)) {
                                           accidentalStaff = true;
                                           qreal sp;
                                           qreal bnd = score()->styleS(ST_barNoteDistance).val() * _spatium;

@@ -336,7 +336,7 @@ void Score::expandVoice(Segment* s, int track)
             }
       ticks  = ns ? (ns->tick() - s->tick()) : (m->ticks() - s->rtick());
       if (ticks == m->ticks())
-            addRest(s, track, TDuration(TDuration::V_MEASURE), 0);
+            addRest(s, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
       else
             setRest(s->tick(), track, Fraction::fromTicks(ticks), false, 0);
       }
@@ -622,7 +622,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
             if (cr == 0) {
                   if (track % VOICES)
-                        cr = addRest(segment, track, TDuration(TDuration::V_MEASURE), 0);
+                        cr = addRest(segment, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
                   else {
                         qDebug("no rest in voice 0");
                         break;
@@ -864,7 +864,7 @@ bool Score::makeGap1(int tick, int staffIdx, Fraction len)
             int track  = cr->track();
             cr = static_cast<ChordRest*>(s->element(track));
             if (cr == 0) {
-                  addRest(s, track, TDuration(TDuration::V_MEASURE), 0);
+                  addRest(s, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
                   cr = static_cast<ChordRest*>(s->element(track));
                   }
             }
@@ -919,7 +919,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
       {
       Fraction srcF(cr->duration());
       Fraction dstF;
-      if (d.type() == TDuration::V_MEASURE)
+      if (d.type() == TDuration::DurationType::V_MEASURE)
             dstF = cr->measure()->stretchedLen(cr->staff());
       else
             dstF = d.fraction();
@@ -1944,7 +1944,7 @@ void Score::cmdHalfDuration()
 
       ChordRest* cr = static_cast<ChordRest*>(el);
       TDuration d = _is.duration().shift(1);
-      if (!d.isValid() || (d.type() > TDuration::V_64TH))
+      if (!d.isValid() || (d.type() > TDuration::DurationType::V_64TH))
             return;
       if (cr->type() == Element::CHORD && (static_cast<Chord*>(cr)->noteType() != NOTE_NORMAL)) {
             //
@@ -1974,7 +1974,7 @@ void Score::cmdDoubleDuration()
 
       ChordRest* cr = static_cast<ChordRest*>(el);
       TDuration d = _is.duration().shift(-1);
-      if (!d.isValid() || (d.type() < TDuration::V_WHOLE))
+      if (!d.isValid() || (d.type() < TDuration::DurationType::V_WHOLE))
             return;
       if (cr->type() == Element::CHORD && (static_cast<Chord*>(cr)->noteType() != NOTE_NORMAL)) {
             //
@@ -2196,31 +2196,31 @@ void Score::cmd(const QAction* a)
 //                  case TDuration::V_LONG:
 //                        padToggle(PAD_NOTE128);
 //                        break;
-                  case TDuration::V_BREVE:
+                  case TDuration::DurationType::V_BREVE:
                         padToggle(PAD_NOTE00);
                         break;
-                  case TDuration::V_WHOLE:
+                  case TDuration::DurationType::V_WHOLE:
                         padToggle(PAD_NOTE0);
                         break;
-                  case TDuration::V_HALF:
+                  case TDuration::DurationType::V_HALF:
                         padToggle(PAD_NOTE1);
                         break;
-                  case TDuration::V_QUARTER:
+                  case TDuration::DurationType::V_QUARTER:
                         padToggle(PAD_NOTE2);
                         break;
-                  case TDuration::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHT:
                         padToggle(PAD_NOTE4);
                         break;
-                  case TDuration::V_16TH:
+                  case TDuration::DurationType::V_16TH:
                         padToggle(PAD_NOTE8);
                         break;
-                  case TDuration::V_32ND:
+                  case TDuration::DurationType::V_32ND:
                         padToggle(PAD_NOTE16);
                         break;
-                  case TDuration::V_64TH:
+                  case TDuration::DurationType::V_64TH:
                         padToggle(PAD_NOTE32);
                         break;
-                  case TDuration::V_128TH:
+                  case TDuration::DurationType::V_128TH:
                         padToggle(PAD_NOTE64);
                         break;
                   default:
@@ -2229,35 +2229,35 @@ void Score::cmd(const QAction* a)
             }
       else if (cmd == "pad-note-decrease-TAB") {
             switch (_is.duration().type() ) {
-                  case TDuration::V_LONG:
+                  case TDuration::DurationType::V_LONG:
                         padToggle(PAD_NOTE0);
                         break;
-                  case TDuration::V_BREVE:
+                  case TDuration::DurationType::V_BREVE:
                         padToggle(PAD_NOTE1);
                         break;
-                  case TDuration::V_WHOLE:
+                  case TDuration::DurationType::V_WHOLE:
                         padToggle(PAD_NOTE2);
                         break;
-                  case TDuration::V_HALF:
+                  case TDuration::DurationType::V_HALF:
                         padToggle(PAD_NOTE4);
                         break;
-                  case TDuration::V_QUARTER:
+                  case TDuration::DurationType::V_QUARTER:
                         padToggle(PAD_NOTE8);
                         break;
-                  case TDuration::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHT:
                         padToggle(PAD_NOTE16);
                         break;
-                  case TDuration::V_16TH:
+                  case TDuration::DurationType::V_16TH:
                         padToggle(PAD_NOTE32);
                         break;
-                  case TDuration::V_32ND:
+                  case TDuration::DurationType::V_32ND:
                         padToggle(PAD_NOTE64);
                         break;
-                  case TDuration::V_64TH:
+                  case TDuration::DurationType::V_64TH:
                         padToggle(PAD_NOTE128);
                         break;
 // cycle back from shortest to longest?
-//                  case TDuration::V_128TH:
+//                  case TDuration::DurationType::V_128TH:
 //                        padToggle(PAD_NOTE00);
 //                        break;
                   default:
