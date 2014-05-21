@@ -295,7 +295,7 @@ Element::Element(Score* s) :
       _selected      = false;
       _generated     = false;
       _visible       = true;
-      _placement     = BELOW;
+      _placement     = Placement::BELOW;
       _flags         = ELEMENT_SELECTABLE;
       _track         = -1;
       _color         = MScore::defaultColor;
@@ -1486,7 +1486,7 @@ Space& Space::operator+=(const Space& s)
 
 void Element::undoSetPlacement(Placement v)
       {
-      score()->undoChangeProperty(this, P_PLACEMENT, v);
+      score()->undoChangeProperty(this, P_PLACEMENT, int(v));
       }
 
 //---------------------------------------------------------
@@ -1550,7 +1550,7 @@ QVariant Element::propertyDefault(P_ID id) const
             case P_COLOR:
                   return MScore::defaultColor;
             case P_PLACEMENT:
-                  return BELOW;
+                  return int(Placement::BELOW);
             case P_SELECTED:
                   return false;
             case P_USER_OFF:

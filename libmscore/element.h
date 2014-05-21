@@ -267,7 +267,7 @@ class Element : public QObject {
       enum DynamicRange {
             DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
             };
-      enum Placement  { ABOVE, BELOW };
+      enum class Placement : char { ABOVE, BELOW };
 
    private:
       Q_PROPERTY(ElementType type    READ type)

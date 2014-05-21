@@ -458,10 +458,10 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   break;
             case T_PLACEMENT:
                   switch(Element::Placement(data.toInt())) {
-                        case Element::ABOVE:
+                        case Element::Placement::ABOVE:
                               tag(name, QVariant("above"));
                               break;
-                        case Element::BELOW:
+                        case Element::Placement::BELOW:
                               tag(name, QVariant("below"));
                               break;
                         }
