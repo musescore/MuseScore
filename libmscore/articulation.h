@@ -37,7 +37,7 @@ enum class ArticulationAnchor : char {
       };
 
 // flags:
-enum { ARTICULATION_SHOW_IN_PITCHED_STAFF = 1, ARTICULATION_SHOW_IN_TABLATURE = 2 };
+enum ArticulationShowIn : char { PITCHED_STAFF = 1, TABLATURE = 2 };
 
 struct ArticulationInfo {
       SymId upSym;
