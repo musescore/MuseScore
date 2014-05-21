@@ -87,14 +87,14 @@ class HChord {
 //---------------------------------------------------------
 
 struct RenderAction {
-      enum RenderActionType {
-            RENDER_SET, RENDER_MOVE, RENDER_PUSH, RENDER_POP,
-            RENDER_NOTE, RENDER_ACCIDENTAL
+      enum class RenderActionType : char {
+            SET, MOVE, PUSH, POP,
+            NOTE, ACCIDENTAL
             };
 
       RenderActionType type;
-      qreal movex, movey;          // RENDER_MOVE
-      QString text;                 // RENDER_SET
+      qreal movex, movey;          // MOVE
+      QString text;                 // SET
 
       RenderAction() {}
       RenderAction(RenderActionType t) : type(t) {}
