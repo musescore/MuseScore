@@ -368,13 +368,13 @@ void ChordToken::read(XmlReader& e)
       {
       QString c = e.attribute("class");
       if (c == "quality")
-            tokenClass = QUALITY;
+            tokenClass = ChordTokenClass::QUALITY;
       else if (c == "extension")
-            tokenClass = EXTENSION;
+            tokenClass = ChordTokenClass::EXTENSION;
       else if (c == "modifier")
-            tokenClass = MODIFIER;
+            tokenClass = ChordTokenClass::MODIFIER;
       else
-            tokenClass = ALL;
+            tokenClass = ChordTokenClass::ALL;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
@@ -392,13 +392,13 @@ void ChordToken::write(Xml& xml) const
       {
       QString t = "token";
       switch (tokenClass) {
-            case QUALITY:
+            case ChordTokenClass::QUALITY:
                   t += " class=\"quality\"";
                   break;
-            case EXTENSION:
+            case ChordTokenClass::EXTENSION:
                   t += " class=\"extension\"";
                   break;
-            case MODIFIER:
+            case ChordTokenClass::MODIFIER:
                   t += " class=\"modifier\"";
                   break;
             default:
@@ -496,7 +496,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
       // eat leading parens
       firstLeadingToken = _tokenList.size();
       while (i < len && leading.contains(s[i]))
-           addToken(QString(s[i++]),QUALITY);
+           addToken(QString(s[i++]),ChordTokenClass::QUALITY);
 #endif
       lastLeadingToken = _tokenList.size();
       // get quality
@@ -572,14 +572,14 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             tok1L = "";
             }
       if (tok1 != "")
-            addToken(tok1,QUALITY);
+            addToken(tok1,ChordTokenClass::QUALITY);
 #if 0
 // enable this code to allow quality to be parenthesized
 // otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
       else {
-            // leading tokens were not really QUALITY
+            // leading tokens were not really ChordTokenClass::QUALITY
             for (int t = firstLeadingToken; t < lastLeadingToken; ++t)
-                  _tokenList[t].tokenClass = EXTENSION;
+                  _tokenList[t].tokenClass = ChordTokenClass::EXTENSION;
             }
 #endif
       if (!syntaxOnly) {
@@ -596,7 +596,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             }
       // eat trailing parens and commas
       while (i < len && trailing.contains(s[i]))
-           addToken(QString(s[i++]),QUALITY);
+           addToken(QString(s[i++]),ChordTokenClass::QUALITY);
 
 #if 0
 // enable this code to allow extensions to be parenthesized
@@ -604,7 +604,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
       // eat leading parens
       firstLeadingToken = _tokenList.size();
       while (i < len && leading.contains(s[i]))
-            addToken(QString(s[i++]),EXTENSION);
+            addToken(QString(s[i++]),ChordTokenClass::EXTENSION);
 #endif
       lastLeadingToken = _tokenList.size();
       // get extension - up to first non-digit
@@ -629,14 +629,14 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   }
             }
       if (tok1 != "")
-            addToken(tok1,EXTENSION);
+            addToken(tok1,ChordTokenClass::EXTENSION);
 #if 0
 // enable this code to allow extensions to be parenthesized
 // otherwise, parentheses will automatically cause contents to be interpreted as modifier
       else {
-            // leading tokens were not really EXTENSION
+            // leading tokens were not really ChordTokenClass::EXTENSION
             for (int t = firstLeadingToken; t < lastLeadingToken; ++t) {
-                  _tokenList[t].tokenClass = MODIFIER;
+                  _tokenList[t].tokenClass = ChordTokenClass::MODIFIER;
                   if (!syntaxOnly)
                         _xmlParens = "yes";
                   }
@@ -767,7 +767,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             }
       // eat trailing parens and commas
       while (i < len && trailing.contains(s[i]))
-           addToken(QString(s[i++]),EXTENSION);
+           addToken(QString(s[i++]),ChordTokenClass::EXTENSION);
 
       // get modifiers
       bool addPending = false;
@@ -775,7 +775,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
       while (i < len) {
             // eat leading parens
             while (i < len && leading.contains(s[i])) {
-                  addToken(QString(s[i++]),MODIFIER);
+                  addToken(QString(s[i++]),ChordTokenClass::MODIFIER);
                   _xmlParens = "yes";
                   }
             // get first token - up to first digit, paren, or comma
@@ -802,7 +802,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             // this allows the argument to itself be a two-part string
             // thus allowing addb9 -> add;b,9
             if (tok1L == "add") {
-                  addToken(tok1,MODIFIER);
+                  addToken(tok1,ChordTokenClass::MODIFIER);
                   addPending = true;
                   continue;
                   }
@@ -878,9 +878,9 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             if (m != "")
                   _modifierList += m;
             if (tok1 != "")
-                  addToken(tok1,MODIFIER);
+                  addToken(tok1,ChordTokenClass::MODIFIER);
             if (tok2 != "")
-                  addToken(tok2,MODIFIER);
+                  addToken(tok2,ChordTokenClass::MODIFIER);
             if (!syntaxOnly) {
                   int d;
                   if (tok2L == "")
@@ -1086,7 +1086,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   }
             // eat trailing parens and commas
             while (i < len && trailing.contains(s[i]))
-                  addToken(QString(s[i++]),MODIFIER);
+                  addToken(QString(s[i++]),ChordTokenClass::MODIFIER);
             addPending = false;
             }
       if (!syntaxOnly) {
@@ -1384,14 +1384,14 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
                               }
                         }
                   }
-            // find matching class, fallback on ALL
+            // find matching class, fallback on ChordTokenClass::ALL
             foreach (ChordToken matchingTok, definedTokens) {
                   if (tok.tokenClass == matchingTok.tokenClass) {
                         rl = matchingTok.renderList;
                         found = true;
                         break;
                         }
-                  else if (matchingTok.tokenClass == ALL) {
+                  else if (matchingTok.tokenClass == ChordTokenClass::ALL) {
                         rl = matchingTok.renderList;
                         found = true;
                         }
