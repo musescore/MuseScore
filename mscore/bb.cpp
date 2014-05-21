@@ -516,7 +516,7 @@ Score::FileError importBB(Score* score, const QString& name)
             Measure* measure = (Measure*)mb;
             if (n && (n % 4) == 0) {
                   LayoutBreak* lb = new LayoutBreak(score);
-                  lb->setLayoutBreakType(LayoutBreak::LINE);
+                  lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
                   measure->add(lb);
                   }
             if (startChorus == n)

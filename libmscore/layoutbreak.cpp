@@ -119,7 +119,7 @@ void LayoutBreak::layout0()
       path.addRect(rect);
 
       switch(layoutBreakType()) {
-            case LINE:
+            case LayoutBreakType::LINE:
                   path2.moveTo(w * .8, h * .3);
                   path2.lineTo(w * .8, h * .6);
                   path2.lineTo(w * .3, h * .6);
@@ -130,7 +130,7 @@ void LayoutBreak::layout0()
                   path2.lineTo(w * .4, h * .5);
                   break;
 
-            case PAGE:
+            case LayoutBreakType::PAGE:
                   path2.moveTo(w*.25, h*.2);
                   path2.lineTo(w*.60, h*.2);
                   path2.lineTo(w*.75, h*.35);
@@ -143,7 +143,7 @@ void LayoutBreak::layout0()
                   path2.lineTo(w*.74, h*.40);
                   break;
 
-            case SECTION:
+            case LayoutBreakType::SECTION:
                   path2.moveTo(w*.25, h*.2);
                   path2.lineTo(w*.75, h*.2);
                   path2.lineTo(w*.75, h*.8);
@@ -210,7 +210,7 @@ QVariant LayoutBreak::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_LAYOUT_BREAK:
-                  return _layoutBreakType;
+                  return int(_layoutBreakType);
             case P_PAUSE:
                   return _pause;
             default:
@@ -263,7 +263,7 @@ QVariant LayoutBreak::propertyDefault(P_ID id) const
 
 void LayoutBreak::undoSetLayoutBreakType(LayoutBreakType t)
       {
-      undoChangeProperty(P_LAYOUT_BREAK, t);
+      undoChangeProperty(P_LAYOUT_BREAK, int(t));
       }
 
 }

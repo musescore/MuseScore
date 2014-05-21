@@ -1408,9 +1408,9 @@ qDebug("drop staffList");
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
                   if (
-                        (lb->layoutBreakType() == LayoutBreak::PAGE && _pageBreak)
-                     || (lb->layoutBreakType() == LayoutBreak::LINE && _lineBreak)
-                     || (lb->layoutBreakType() == LayoutBreak::SECTION && _sectionBreak)
+                        (lb->layoutBreakType() == LayoutBreak::LayoutBreakType::PAGE && _pageBreak)
+                     || (lb->layoutBreakType() == LayoutBreak::LayoutBreakType::LINE && _lineBreak)
+                     || (lb->layoutBreakType() == LayoutBreak::LayoutBreakType::SECTION && _sectionBreak)
                      ) {
                         //
                         // if break already set
@@ -1418,12 +1418,12 @@ qDebug("drop staffList");
                         delete lb;
                         break;
                         }
-                  // make sure there is only LayoutBreak::LINE or LayoutBreak::PAGE
-                  if ((lb->layoutBreakType() != LayoutBreak::SECTION) && (_pageBreak || _lineBreak)) {
+                  // make sure there is only LayoutBreak::LayoutBreakType::LINE or LayoutBreak::LayoutBreakType::PAGE
+                  if ((lb->layoutBreakType() != LayoutBreak::LayoutBreakType::SECTION) && (_pageBreak || _lineBreak)) {
                         foreach(Element* le, _el) {
                               if (le->type() == LAYOUT_BREAK
-                                 && (static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::LINE
-                                  || static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::PAGE)) {
+                                 && (static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::LayoutBreakType::LINE
+                                  || static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::LayoutBreakType::PAGE)) {
                                     score()->undoChangeElement(le, e);
                                     break;
                                     }

@@ -2088,7 +2088,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                               LayoutBreak* lb = new LayoutBreak(score);
                               lb->setTrack(staff * VOICES);
                               lb->setLayoutBreakType(
-                                    newSystem == "yes" ? LayoutBreak::LINE : LayoutBreak::PAGE
+                                    newSystem == "yes" ? LayoutBreak::LayoutBreakType::LINE : LayoutBreak::LayoutBreakType::PAGE
                                     );
                               pm->add(lb);
                               }

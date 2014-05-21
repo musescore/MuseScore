@@ -94,9 +94,9 @@ class MeasureBase : public Element {
       void setPageBreak(bool v)              { _pageBreak = v;    }
       void setSectionBreak(LayoutBreak* v)   { _sectionBreak = v; }
       void undoSetBreak(bool v, LayoutBreak::LayoutBreakType type);
-      void undoSetLineBreak(bool v)          {  undoSetBreak(v, LayoutBreak::LINE);}
-      void undoSetPageBreak(bool v)          {  undoSetBreak(v, LayoutBreak::PAGE);}
-      void undoSetSectionBreak(bool v)       {  undoSetBreak(v, LayoutBreak::SECTION);}
+      void undoSetLineBreak(bool v)          {  undoSetBreak(v, LayoutBreak::LayoutBreakType::LINE);}
+      void undoSetPageBreak(bool v)          {  undoSetBreak(v, LayoutBreak::LayoutBreakType::PAGE);}
+      void undoSetSectionBreak(bool v)       {  undoSetBreak(v, LayoutBreak::LayoutBreakType::SECTION);}
 
       virtual void moveTicks(int diff)       { setTick(tick() + diff); }
 

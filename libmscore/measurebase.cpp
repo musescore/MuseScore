@@ -121,13 +121,13 @@ void MeasureBase::add(Element* e)
                         }
                   }
             switch (b->layoutBreakType()) {
-                  case LayoutBreak::PAGE:
+                  case LayoutBreak::LayoutBreakType::PAGE:
                         _pageBreak = true;
                         break;
-                  case LayoutBreak::LINE:
+                  case LayoutBreak::LayoutBreakType::LINE:
                         _lineBreak = true;
                         break;
-                  case LayoutBreak::SECTION:
+                  case LayoutBreak::LayoutBreakType::SECTION:
                         _sectionBreak = b;
 //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
                         score()->setLayoutAll(true);
@@ -150,13 +150,13 @@ void MeasureBase::remove(Element* el)
       if (el->type() == LAYOUT_BREAK) {
             LayoutBreak* lb = static_cast<LayoutBreak*>(el);
             switch (lb->layoutBreakType()) {
-                  case LayoutBreak::PAGE:
+                  case LayoutBreak::LayoutBreakType::PAGE:
                         _pageBreak = false;
                         break;
-                  case LayoutBreak::LINE:
+                  case LayoutBreak::LayoutBreakType::LINE:
                         _lineBreak = false;
                         break;
-                  case LayoutBreak::SECTION:
+                  case LayoutBreak::LayoutBreakType::SECTION:
                         _sectionBreak = 0;
                         score()->tempomap()->setPause(endTick(), 0);
                         score()->setLayoutAll(true);
@@ -264,13 +264,13 @@ void MeasureBase::layout0()
                   continue;
             LayoutBreak* e = static_cast<LayoutBreak*>(element);
             switch (e->layoutBreakType()) {
-                  case LayoutBreak::PAGE:
+                  case LayoutBreak::LayoutBreakType::PAGE:
                         _pageBreak = true;
                         break;
-                  case LayoutBreak::LINE:
+                  case LayoutBreak::LayoutBreakType::LINE:
                         _lineBreak = true;
                         break;
-                  case LayoutBreak::SECTION:
+                  case LayoutBreak::LayoutBreakType::SECTION:
                         _sectionBreak = e;
                         break;
                   }

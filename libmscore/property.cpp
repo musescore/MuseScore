@@ -278,11 +278,11 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case T_LAYOUT_BREAK: {
                   QString value(e.readElementText());
                   if (value == "line")
-                        return QVariant(int(LayoutBreak::LINE));
+                        return QVariant(int(LayoutBreak::LayoutBreakType::LINE));
                   if (value == "page")
-                        return QVariant(int(LayoutBreak::PAGE));
+                        return QVariant(int(LayoutBreak::LayoutBreakType::PAGE));
                   if (value == "section")
-                        return QVariant(int(LayoutBreak::SECTION));
+                        return QVariant(int(LayoutBreak::LayoutBreakType::SECTION));
                   qDebug("getProperty: invalid T_LAYOUT_BREAK: <%s>", qPrintable(value));
                   }
                   break;
