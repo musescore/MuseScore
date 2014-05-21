@@ -46,7 +46,4 @@ set_target_properties (
       )
 endif(APPLE)
 
-xcode_pch(genManual all)
-
 ADD_DEPENDENCIES(genManual mops1)
-ADD_DEPENDENCIES(genManual mops2)
