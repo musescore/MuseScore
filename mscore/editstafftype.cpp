@@ -118,9 +118,10 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 //   staffGroupChanged
 //---------------------------------------------------------
 
-void EditStaffType::staffGroupChanged(int n)
+void EditStaffType::staffGroupChanged(int /*n*/)
       {
-      StaffGroup group = StaffGroup(n);
+      int groupIdx = groupCombo->itemData(groupCombo->currentIndex()).toInt();
+      StaffGroup group = StaffGroup(groupIdx);
       staffType = *StaffType::getDefaultPreset(group); // overwrite with default
       setValues();
       }
@@ -136,7 +137,7 @@ void EditStaffType::setValues()
       StaffGroup group = staffType.group();
       int idx = int(group);
       stack->setCurrentIndex(idx);
-      groupCombo->setCurrentIndex(idx);
+//      groupCombo->setCurrentIndex(idx);
 
       name->setText(staffType.name());
       lines->setValue(staffType.lines());
@@ -353,6 +354,8 @@ void EditStaffType::setFromDlg()
 
 void EditStaffType::blockSignals(bool block)
       {
+      stack->blockSignals(block);
+      groupCombo->blockSignals(block);
       lines->blockSignals(block);
       lineDistance->blockSignals(block);
       showBarlines->blockSignals(block);
