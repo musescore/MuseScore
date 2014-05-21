@@ -209,8 +209,10 @@ void Clef::layout()
                         if (clefSegNext)
                               clefNext = static_cast<Clef*>(clefSegNext->element(track()));
                         }
-                  // show this clef if: it is not a courtesy clef (no next clef or not at the end of the measure)
-                  showClef = !clefNext || (clefSeg->tick() != meas->tick() + meas->ticks())
+                  // courtesy clef? If there is a next clef and it is at the end of the measure
+                  bool courtClef = clefNext && (tick == meas->tick() + meas->ticks());
+                  // show this clef if: it is not a courtesy clef
+                  showClef = !courtClef
                         // if courtesy clef: show if score has courtesy clefs on
                         || ( score()->styleB(ST_genCourtesyClef)
                         // AND measure is not at the end of a repeat or of a section
@@ -224,7 +226,7 @@ void Clef::layout()
                         return;
                         }
                   else
-                        setSmall(true);
+                        setSmall(tick != meas->tick());
                   }
 
             lines = staffType->lines();
