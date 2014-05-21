@@ -38,7 +38,7 @@ after_script:
   - export ARTIFACTS_PATHS=$(ls ../../vtest/html | tr "\n" ":")
   - "export ARTIFACTS_PERMISSIONS=public-read"
   - "export TRAVIS_BUILD_DIR=../../vtest/html"
-  - "artifacts -D upload"
+  - "artifacts upload"
 notifications:
   recipients:
     - build@musescore.org
