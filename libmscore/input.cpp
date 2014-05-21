@@ -86,8 +86,8 @@ void InputState::update(Element* e)
             }
       else if (e->type() == Element::REST) {
             Rest* rest   = static_cast<Rest*>(e);
-            if (rest->durationType().type() == TDuration::V_MEASURE)
-                  setDuration(TDuration::V_QUARTER);
+            if (rest->durationType().type() == TDuration::DurationType::V_MEASURE)
+                  setDuration(TDuration::DurationType::V_QUARTER);
             else
                   setDuration(rest->durationType());
             setRest(true);

@@ -139,7 +139,7 @@ void SwingDetector::applySwing()
 
       Tuplet *tuplet = nullptr;
       for (ChordRest *el: elements) {
-            el->setDurationType(TDuration::V_EIGHT);
+            el->setDurationType(TDuration::DurationType::V_EIGHT);
             el->setDuration(Fraction(1, 8));
             el->setDots(0);
             if (el->tuplet()) {

@@ -425,7 +425,7 @@ Score::FileError importBB(Score* score, const QString& name)
                   if (mb->type() != Element::MEASURE)
                         continue;
                   Measure* measure = (Measure*)mb;
-                  Rest* rest = new Rest(score, TDuration(TDuration::V_MEASURE));
+                  Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   rest->setDuration(measure->len());
                   rest->setTrack(0);
                   Segment* s = measure->getSegment(rest, measure->tick());
@@ -444,7 +444,7 @@ Score::FileError importBB(Score* score, const QString& name)
             Measure* measure = (Measure*)mb;
             Segment* s = measure->findSegment(Segment::SegChordRest, measure->tick());
             if (s == 0) {
-                  Rest* rest = new Rest(score, TDuration(TDuration::V_MEASURE));
+                  Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   rest->setDuration(measure->len());
                   rest->setTrack(0);
                   Segment* s = measure->getSegment(rest, measure->tick());

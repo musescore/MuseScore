@@ -638,7 +638,7 @@ void MuseScore::newFile()
                                     if (rest)
                                           rest = static_cast<Rest*>(rest->linkedClone());
                                     else
-                                          rest = new Rest(score, TDuration(TDuration::V_MEASURE));
+                                          rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                                     rest->setDuration(measure->len());
                                     rest->setTrack(s->idx() * VOICES);
                                     Segment* seg = measure->getSegment(rest, tick);

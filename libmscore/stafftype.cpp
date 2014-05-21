@@ -526,7 +526,7 @@ qreal StaffType::chordRestStemPosY(const ChordRest *chordRest) const
       // if stems beside staff, position are fixed, but take into account delta for half notes
       qreal delta =                             // displacement for half note stems (if used)
             // if half notes have not a short stem OR not a half note => 0
-            (minimStyle() != TAB_MINIM_SHORTER || chordRest->durationType().type() != TDuration::V_HALF) ?
+            (minimStyle() != TAB_MINIM_SHORTER || chordRest->durationType().type() != TDuration::DurationType::V_HALF) ?
                   0.0 :
                   // if stem is up, displace of half stem length down (positive)
                   // if stem is down, displace of half stem length up (negative)
@@ -584,7 +584,7 @@ qreal StaffType::chordStemLength(const Chord* chord) const
             return STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU * _lineDistance.val();
       // if stems beside staff, length is fixed, but take into account shorter half note stems
       else {
-            bool shrt = (minimStyle() == TAB_MINIM_SHORTER) && (chord->durationType().type() == TDuration::V_HALF);
+            bool shrt = (minimStyle() == TAB_MINIM_SHORTER) && (chord->durationType().type() == TDuration::DurationType::V_HALF);
             stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
                         * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * chord->mag();
             }
@@ -623,7 +623,7 @@ QString StaffType::fretString(int fret, bool ghost) const
 
 QString StaffType::durationString(TDuration::DurationType type, int dots) const
       {
-      QString s = _durationFonts[_durationFontIdx].displayValue[type];
+      QString s = _durationFonts[_durationFontIdx].displayValue[int(type)];
       for(int count=0; count < dots; count++)
             s.append(_durationFonts[_durationFontIdx].displayDot);
       return s;

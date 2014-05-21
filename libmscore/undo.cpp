@@ -2101,7 +2101,7 @@ void ChangeChordRestLen::flip()
       {
       TDuration od = cr->durationType();
       cr->setDurationType(d);
-      if (d == TDuration::V_MEASURE) {
+      if (d == TDuration::DurationType::V_MEASURE) {
             cr->setDuration(cr->measure()->len());
             }
       else {

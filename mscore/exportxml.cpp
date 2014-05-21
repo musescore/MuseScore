@@ -2482,7 +2482,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
 
       TDuration d = rest->durationType();
       int tickLen = rest->actualTicks();
-      if (d.type() == TDuration::V_MEASURE) {
+      if (d.type() == TDuration::DurationType::V_MEASURE) {
             // to avoid forward since rest->ticklen=0 in this case.
             tickLen = rest->measure()->ticks();
             }
@@ -2501,7 +2501,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
       xml.tag("voice", voice);
 
       // do not output a "type" element for whole measure rest
-      if (d.type() != TDuration::V_MEASURE) {
+      if (d.type() != TDuration::DurationType::V_MEASURE) {
             QString s = d.name();
             int dots  = rest->dots();
             xml.tag("type", s);
@@ -2695,9 +2695,9 @@ static bool findUnit(TDuration::DurationType val, QString& unit)
       {
       unit = "";
       switch (val) {
-            case TDuration::V_HALF: unit = "half"; break;
-            case TDuration::V_QUARTER: unit = "quarter"; break;
-            case TDuration::V_EIGHT: unit = "eighth"; break;
+            case TDuration::DurationType::V_HALF: unit = "half"; break;
+            case TDuration::DurationType::V_QUARTER: unit = "quarter"; break;
+            case TDuration::DurationType::V_EIGHT: unit = "eighth"; break;
             default: qDebug("findUnit: unknown DurationType %d", val);
             }
       return true;

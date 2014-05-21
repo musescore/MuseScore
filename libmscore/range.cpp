@@ -343,7 +343,7 @@ bool TrackList::write(int track, Measure* measure) const
                               segment = m->getSegment(e, m->tick() + pos.ticks());
                               if ((track % VOICES) == 0) {
                                     // write only for voice 1
-                                    Rest* r = new Rest(score, TDuration::V_MEASURE);
+                                    Rest* r = new Rest(score, TDuration::DurationType::V_MEASURE);
                                     r->setDuration(m->len());
                                     r->setTrack(track);
                                     segment->add(r);

@@ -111,7 +111,7 @@ void DrumTools::updateDrumset()
                   up = line > 4;
 
             Chord* chord = new Chord(gscore);
-            chord->setDurationType(TDuration::V_QUARTER);
+            chord->setDurationType(TDuration::DurationType::V_QUARTER);
             chord->setStemDirection(dir);
             chord->setUp(up);
             chord->setTrack(voice);

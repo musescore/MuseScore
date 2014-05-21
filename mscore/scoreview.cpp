@@ -1886,7 +1886,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   // HACK for whole measure rest:
                   if (ns == 0 || ns == es) {    // last segment?
                         Element* e = s->element(staffStart * VOICES);
-                        if (e && e->type() == Element::REST && static_cast<Rest*>(e)->durationType().type() == TDuration::V_MEASURE)
+                        if (e && e->type() == Element::REST && static_cast<Rest*>(e)->durationType().type() == TDuration::DurationType::V_MEASURE)
                               x2 = s->measure()->abbox().right() - _spatium;
                         }
 
@@ -2664,13 +2664,13 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
       else if (cmd == "rest-1")
-            cmdEnterRest(TDuration(TDuration::V_WHOLE));
+            cmdEnterRest(TDuration(TDuration::DurationType::V_WHOLE));
       else if (cmd == "rest-2")
-            cmdEnterRest(TDuration(TDuration::V_HALF));
+            cmdEnterRest(TDuration(TDuration::DurationType::V_HALF));
       else if (cmd == "rest-4")
-            cmdEnterRest(TDuration(TDuration::V_QUARTER));
+            cmdEnterRest(TDuration(TDuration::DurationType::V_QUARTER));
       else if (cmd == "rest-8")
-            cmdEnterRest(TDuration(TDuration::V_EIGHT));
+            cmdEnterRest(TDuration(TDuration::DurationType::V_EIGHT));
       else if (cmd.startsWith("interval")) {
             int n = cmd.mid(8).toInt();
             QList<Note*> nl = _score->selection().noteList();
@@ -3021,8 +3021,8 @@ void ScoreView::startNoteEntry()
             el = note;
             }
       TDuration d(is.duration());
-      if (!d.isValid() || d.isZero() || d.type() == TDuration::V_MEASURE)
-            is.setDuration(TDuration(TDuration::V_QUARTER));
+      if (!d.isValid() || d.isZero() || d.type() == TDuration::DurationType::V_MEASURE)
+            is.setDuration(TDuration(TDuration::DurationType::V_QUARTER));
 
       _score->select(el, SELECT_SINGLE, 0);
       is.update(el);
@@ -4218,7 +4218,7 @@ void ScoreView::setCursorVisible(bool v)
 
 void ScoreView::cmdTuplet(int n, ChordRest* cr)
       {
-      if (cr->durationType() < TDuration(TDuration::V_128TH) && cr->durationType() != TDuration(TDuration::V_MEASURE)) {
+      if (cr->durationType() < TDuration(TDuration::DurationType::V_128TH) && cr->durationType() != TDuration(TDuration::DurationType::V_MEASURE)) {
             mscore->noteTooShortForTupletDialog();
             return;
             }

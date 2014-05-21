@@ -255,7 +255,7 @@ void Beam::layout1()
       qDeleteAll(beamSegments);
       beamSegments.clear();
 
-      maxDuration.setType(TDuration::V_INVALID);
+      maxDuration.setType(TDuration::DurationType::V_INVALID);
       Chord* c1 = 0;
       Chord* c2 = 0;
 
@@ -368,7 +368,7 @@ void Beam::layoutGraceNotes()
       qDeleteAll(beamSegments);
       beamSegments.clear();
 
-      maxDuration.setType(TDuration::V_INVALID);
+      maxDuration.setType(TDuration::DurationType::V_INVALID);
       Chord* c1 = 0;
       Chord* c2 = 0;
 
