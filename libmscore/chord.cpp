@@ -1823,7 +1823,7 @@ void Chord::layoutPitched()
 
       if (_arpeggio) {
             _arpeggio->layout();    // only for width() !
-            lll        += _arpeggio->width() + _spatium * .5;
+            lll        += _arpeggio->width() + _spatium * .5 + ipos().x();
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
             _arpeggio->setPos(-lll, y1);
             _arpeggio->adjustReadPos();
@@ -1851,7 +1851,7 @@ void Chord::layoutPitched()
                   _hook->layout();
                   if (up() && stem()) {
                         // hook position is not set yet
-                        qreal x = _hook->bbox().right() + stem()->hookPos().x();
+                        qreal x = _hook->bbox().right() + stem()->hookPos().x() + ipos().x();
                         rrr = qMax(rrr, x);
                         }
                   }
@@ -1920,9 +1920,13 @@ void Chord::layoutPitched()
                   continue;
             e->layout();
             if (e->type() == ElementType::CHORDLINE) {
-                  int x = e->bbox().translated(e->pos()).right();
-                  if (x > _space.rw())
-                        _space.setRw(x);
+                  QRectF tbbox = e->bbox().translated(e->pos());
+                  qreal lx = tbbox.left() + ipos().x();
+                  qreal rx = tbbox.right() + ipos().x();
+                  if (-lx > _space.lw())
+                        _space.setLw(-lx);
+                  if (rx > _space.rw())
+                        _space.setRw(rx);
                   }
             }
       for (int i = 0; i < _notes.size(); ++i)
