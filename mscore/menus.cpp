@@ -621,19 +621,19 @@ Palette* MuseScore::newArpeggioPalette()
             };
 
       ChordLine* cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_FALL);
+      cl->setChordLineType(ChordLineType::FALL);
       sp->append(cl, tr(scorelineNames[0]));
 
       cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_DOIT);
+      cl->setChordLineType(ChordLineType::DOIT);
       sp->append(cl, tr(scorelineNames[1]));
 
       cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_PLOP);
+      cl->setChordLineType(ChordLineType::PLOP);
       sp->append(cl, tr(scorelineNames[2]));
 
       cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_SCOOP);
+      cl->setChordLineType(ChordLineType::SCOOP);
       sp->append(cl, tr(scorelineNames[3]));
 
       return sp;

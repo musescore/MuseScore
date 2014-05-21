@@ -22,9 +22,9 @@ namespace Ms {
 class Chord;
 
 // subtypes:
-enum ChordLineType {
-      CHORDLINE_NOTYPE, CHORDLINE_FALL, CHORDLINE_DOIT,
-      CHORDLINE_PLOP, CHORDLINE_SCOOP
+enum class ChordLineType : char {
+      NOTYPE, FALL, DOIT,
+      PLOP, SCOOP
       };
 
 //---------------------------------------------------------

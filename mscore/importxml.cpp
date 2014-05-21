@@ -4487,13 +4487,13 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
       if (chordLineType != "") {
             ChordLine* cl = new ChordLine(score);
             if (chordLineType == "falloff")
-                  cl->setChordLineType(CHORDLINE_FALL);
+                  cl->setChordLineType(ChordLineType::FALL);
             if (chordLineType == "doit")
-                  cl->setChordLineType(CHORDLINE_DOIT);
+                  cl->setChordLineType(ChordLineType::DOIT);
             if (chordLineType == "plop")
-                  cl->setChordLineType(CHORDLINE_PLOP);
+                  cl->setChordLineType(ChordLineType::PLOP);
             if (chordLineType == "scoop")
-                  cl->setChordLineType(CHORDLINE_SCOOP);
+                  cl->setChordLineType(ChordLineType::SCOOP);
             note->chord()->add(cl);
             }
 

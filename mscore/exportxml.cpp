@@ -1724,16 +1724,16 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                   ChordLine const* const cl = static_cast<ChordLine const* const>(e);
                   QString subtype;
                   switch (cl->chordLineType()) {
-                        case CHORDLINE_FALL:
+                        case ChordLineType::FALL:
                               subtype = "falloff";
                               break;
-                        case CHORDLINE_DOIT:
+                        case ChordLineType::DOIT:
                               subtype = "doit";
                               break;
-                        case CHORDLINE_PLOP:
+                        case ChordLineType::PLOP:
                               subtype = "plop";
                               break;
-                        case CHORDLINE_SCOOP:
+                        case ChordLineType::SCOOP:
                               subtype = "scoop";
                               break;
                         default:
