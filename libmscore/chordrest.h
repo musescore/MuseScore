@@ -18,11 +18,11 @@
 
 namespace Ms {
 
-enum {
-      CROSSMEASURE_UNKNOWN = -1,
-      CROSSMEASURE_NONE = 0,
-      CROSSMEASURE_FIRST,
-      CROSSMEASURE_SECOND
+enum class CrossMeasure : signed char {
+      UNKNOWN = -1,
+      NONE = 0,
+      FIRST,
+      SECOND
       };
 
 class Score;
@@ -65,7 +65,7 @@ class ChordRest : public DurationElement {
       bool _small;
 
       // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
-      char _crossMeasure;            ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
+      CrossMeasure _crossMeasure;            ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
       TDuration _crossMeasureTDur;  ///< the total Duration type of the combined notes
 
       Space _space;                       // cached value from layout
@@ -120,7 +120,7 @@ class ChordRest : public DurationElement {
 
       void layoutArticulations();
 
-      const TDuration& durationType() const     { return _crossMeasure == CROSSMEASURE_FIRST ?
+      const TDuration& durationType() const     { return _crossMeasure == CrossMeasure::FIRST ?
                                                       _crossMeasureTDur : _durationType;        }
       const TDuration& actualDurationType() const   { return _durationType; }
       void setDurationType(TDuration::DurationType t);
@@ -128,10 +128,10 @@ class ChordRest : public DurationElement {
       void setDurationType(int ticks);
       void setDurationType(const TDuration& v);
       void setDots(int n)                       { _durationType.setDots(n); }
-      int dots() const        { return _crossMeasure == CROSSMEASURE_FIRST ? _crossMeasureTDur.dots()
-                                    : (_crossMeasure == CROSSMEASURE_SECOND ? 0 : _durationType.dots()); }
+      int dots() const        { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.dots()
+                                    : (_crossMeasure == CrossMeasure::SECOND ? 0 : _durationType.dots()); }
       int actualDots() const  { return _durationType.dots(); }
-      int durationTypeTicks() { return _crossMeasure == CROSSMEASURE_FIRST ? _crossMeasureTDur.ticks()
+      int durationTypeTicks() { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks()
                                     : _durationType.ticks(); }
 
       virtual void setTrack(int val);
@@ -146,8 +146,8 @@ class ChordRest : public DurationElement {
       virtual void remove(Element*);
       void removeDeleteBeam(bool beamed = false);
 
-      int crossMeasure() const            { return _crossMeasure; }
-      void setCrossMeasure(int val)       { _crossMeasure = val;  }
+      CrossMeasure crossMeasure() const            { return _crossMeasure; }
+      void setCrossMeasure(CrossMeasure val)       { _crossMeasure = val;  }
       virtual void crossMeasureSetup(bool /*on*/)   { }
 
       virtual QVariant getProperty(P_ID propertyId) const;

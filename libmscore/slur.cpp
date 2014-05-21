@@ -71,7 +71,7 @@ void SlurSegment::draw(QPainter* painter) const
       // hide tie toward the second chord of a cross-measure value
       if ((slurTie()->type() == TIE)
          && (static_cast<Tie*>(slurTie())->endNote())
-         && (static_cast<Tie*>(slurTie())->endNote()->chord()->crossMeasure() == CROSSMEASURE_SECOND))
+         && (static_cast<Tie*>(slurTie())->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND))
             return;
 
       QPen pen(curColor());
