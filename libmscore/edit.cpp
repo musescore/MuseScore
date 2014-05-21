@@ -968,7 +968,7 @@ void Score::cmdAddHairpin(bool decrescendo)
             return;
 
       Hairpin* pin = new Hairpin(this);
-      pin->setHairpinType(decrescendo ? Hairpin::DECRESCENDO : Hairpin::CRESCENDO);
+      pin->setHairpinType(decrescendo ? Hairpin::HairpinType::DECRESCENDO : Hairpin::HairpinType::CRESCENDO);
       pin->setTrack(cr1->track());
       pin->setTick(cr1->segment()->tick());
       pin->setTick2(cr2->segment()->tick());
@@ -1055,8 +1055,8 @@ void Score::cmdFlip()
                   }
             else if (e->type() == Element::HAIRPIN_SEGMENT) {
                   Hairpin* h = static_cast<HairpinSegment*>(e)->hairpin();
-                  int st = h->hairpinType() == 0 ? 1 : 0;
-                  undoChangeProperty(h, P_HAIRPIN_TYPE, st);
+                  Hairpin::HairpinType st = h->hairpinType() == Hairpin::HairpinType::CRESCENDO ? Hairpin::HairpinType::CRESCENDO : Hairpin::HairpinType::DECRESCENDO;
+                  undoChangeProperty(h, P_HAIRPIN_TYPE, int(st));
                   }
             else if (e->type() == Element::ARTICULATION) {
                   Articulation* a = static_cast<Articulation*>(e);
