@@ -749,7 +749,7 @@ Score* TestParts::doAddChordline()
       DropData dd;
       dd.view = 0;
       ChordLine* b  = new ChordLine(score);
-      b->setChordLineType(ChordLineType::CHORDLINE_FALL);
+      b->setChordLineType(ChordLineType::FALL);
       dd.element = b;
 
       score->startCmd();
