@@ -531,7 +531,7 @@ void System::setInstrumentNames(bool longName)
                         iname->setGenerated(true);
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
-                        iname->setInstrumentNameType(longName ? INSTRUMENT_NAME_LONG : INSTRUMENT_NAME_SHORT);
+                        iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                         // score()->undoAddElement(iname);
                         score()->addElement(iname);
                         }

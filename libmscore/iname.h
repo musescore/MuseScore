@@ -17,8 +17,8 @@
 
 namespace Ms {
 
-enum InstrumentNameType {
-      INSTRUMENT_NAME_LONG, INSTRUMENT_NAME_SHORT
+enum class InstrumentNameType : char {
+      LONG, SHORT
       };
 
 //---------------------------------------------------------
