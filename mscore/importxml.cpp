@@ -2313,7 +2313,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                                if ((alter == -1 && currAccVal == AccidentalVal::FLAT && nt->accidental()->accidentalType() == Accidental::ACC_FLAT    && !accTmp.value(ln))
                                      || (alter ==  0 && currAccVal == AccidentalVal::NATURAL && nt->accidental()->accidentalType() == Accidental::ACC_NATURAL && !accTmp.value(ln))
                                      || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == Accidental::ACC_SHARP   && !accTmp.value(ln))) {
-                                     nt->accidental()->setRole(Accidental::ACC_USER);
+                                     nt->accidental()->setRole(Accidental::AccidentalRole::USER);
                                      }
                                else {
                                      accTmp.replace(ln, true);
@@ -5091,7 +5091,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   a->setAccidentalType(accidental);
                    if (editorial || cautionary || parentheses) {
                           a->setHasBracket(cautionary || parentheses);
-                          a->setRole(Accidental::ACC_USER);
+                          a->setRole(Accidental::AccidentalRole::USER);
                           }
                     else {
                           alt = alter;

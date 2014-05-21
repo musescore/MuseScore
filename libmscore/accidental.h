@@ -43,14 +43,14 @@ struct SymElement {
 //   @P hasBracket  bool
 //   @P small       bool
 //   @P acctype     Ms::Accidental::AccidentalType  (ACC_NONE, ACC_SHARP, ACC_FLAT, ACC_SHARP2, ACC_FLAT2, ACC_NATURAL, ...) (read only)
-//   @P role        Ms::Accidental::AccidentalRole  (ACC_AUTO, ACC_USER) (read only)
+//   @P role        Ms::Accidental::AccidentalRole  (AUTO, USER) (read only)
 //---------------------------------------------------------
 
 class Accidental : public Element {
    public:
-      enum AccidentalRole {
-            ACC_AUTO,               // layout created accidental
-            ACC_USER                // user created accidental
+      enum class AccidentalRole : char {
+            AUTO,               // layout created accidental
+            USER                // user created accidental
             };
       enum AccidentalType {
             ACC_NONE,

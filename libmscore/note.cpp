@@ -946,7 +946,7 @@ void Note::read(XmlReader& e)
                               }
                         _accidental->setAccidentalType(at);
                         _accidental->setHasBracket(bracket);
-                        _accidental->setRole(Accidental::ACC_USER);
+                        _accidental->setRole(Accidental::AccidentalRole::USER);
                         hasAccidental = true;   // we now have an accidental
                         }
                   }
@@ -1614,7 +1614,7 @@ void Note::layout10(AccidentalState* as)
             // calculate accidental
 
             Accidental::AccidentalType acci = Accidental::ACC_NONE;
-            if (_accidental && _accidental->role() == Accidental::ACC_USER) {
+            if (_accidental && _accidental->role() == Accidental::AccidentalRole::USER) {
                   acci = _accidental->accidentalType();
                   if (acci == Accidental::ACC_SHARP || acci == Accidental::ACC_FLAT) {
                         // TODO - what about double flat and double sharp?
@@ -1899,8 +1899,8 @@ void Note::updateAccidental(AccidentalState* as)
                   }
             else {
                   if (_accidental) {
-                        // remove this if it was ACC_AUTO:
-                        if (_accidental->role() == Accidental::ACC_AUTO)
+                        // remove this if it was AUTO:
+                        if (_accidental->role() == Accidental::AccidentalRole::AUTO)
                               score()->undoRemoveElement(_accidental);
                         else {
                               // keep it, but update type if needed

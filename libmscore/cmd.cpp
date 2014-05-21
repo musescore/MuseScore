@@ -1457,7 +1457,7 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
                   Accidental* a = new Accidental(this);
                   a->setParent(note);
                   a->setAccidentalType(accidental);
-                  a->setRole(Accidental::ACC_USER);
+                  a->setRole(Accidental::AccidentalRole::USER);
                   undoAddElement(a);
                   }
             }
