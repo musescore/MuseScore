@@ -5372,11 +5372,11 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                         }
                   else {
                         if (degreeType == "add")
-                              degreeList << HDegree(degreeValue, degreeAlter, ADD);
+                              degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::ADD);
                         else if (degreeType == "alter")
-                              degreeList << HDegree(degreeValue, degreeAlter, ALTER);
+                              degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::ALTER);
                         else if (degreeType == "subtract")
-                              degreeList << HDegree(degreeValue, degreeAlter, SUBTRACT);
+                              degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT);
                         }
                   }
             else if (tag == "frame") {

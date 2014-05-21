@@ -205,19 +205,19 @@ void Harmony::write(Xml& xml) const
             if (rBaseTpc != INVALID_TPC)
                   xml.tag("base", rBaseTpc);
             foreach(const HDegree& hd, _degreeList) {
-                  int tp = hd.type();
-                  if (tp == ADD || tp == ALTER || tp == SUBTRACT) {
+                  HDegreeType tp = hd.type();
+                  if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
                         xml.stag("degree");
                         xml.tag("degree-value", hd.value());
                         xml.tag("degree-alter", hd.alter());
                         switch (tp) {
-                              case ADD:
+                              case HDegreeType::ADD:
                                     xml.tag("degree-type", "add");
                                     break;
-                              case ALTER:
+                              case HDegreeType::ALTER:
                                     xml.tag("degree-type", "alter");
                                     break;
-                              case SUBTRACT:
+                              case HDegreeType::SUBTRACT:
                                     xml.tag("degree-type", "subtract");
                                     break;
                               default:
@@ -287,11 +287,11 @@ void Harmony::read(XmlReader& e)
                         }
                   else {
                         if (degreeType == "add")
-                              addDegree(HDegree(degreeValue, degreeAlter, ADD));
+                              addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
                         else if (degreeType == "alter")
-                              addDegree(HDegree(degreeValue, degreeAlter, ALTER));
+                              addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
                         else if (degreeType == "subtract")
-                              addDegree(HDegree(degreeValue, degreeAlter, SUBTRACT));
+                              addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
                         }
                   }
             else if (tag == "leftParen") {
@@ -673,14 +673,14 @@ qreal Harmony::baseLine() const
 
 QString HDegree::text() const
       {
-      if (_type == UNDEF)
+      if (_type == HDegreeType::UNDEF)
             return QString();
       const char* d = 0;
       switch(_type) {
-            case UNDEF: break;
-            case ADD:         d= "add"; break;
-            case ALTER:       d= "alt"; break;
-            case SUBTRACT:    d= "sub"; break;
+            case HDegreeType::UNDEF: break;
+            case HDegreeType::ADD:         d= "add"; break;
+            case HDegreeType::ALTER:       d= "alt"; break;
+            case HDegreeType::SUBTRACT:    d= "sub"; break;
             }
       QString degree(d);
       switch(_alter) {

@@ -1428,10 +1428,10 @@ void HarmonyView::setElement(Element* e)
             const HDegree& d = harmony->degree(i);
             QString s;
             switch (d.type()) {
-                  case ADD:      s = "add";      break;
-                  case ALTER:    s = "alter";    break;
-                  case SUBTRACT: s = "subtract"; break;
-                  default:       s = "";         break;
+                  case HDegreeType::ADD:      s = "add";      break;
+                  case HDegreeType::ALTER:    s = "alter";    break;
+                  case HDegreeType::SUBTRACT: s = "subtract"; break;
+                  default:                    s = "";         break;
                   }
             hb.degreeTab->setItem(i, 0, new QTableWidgetItem(s));
             hb.degreeTab->setItem(i, 1, new QTableWidgetItem(QVariant(d.value()).toString()));
