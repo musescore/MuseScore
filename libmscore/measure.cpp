@@ -3125,7 +3125,7 @@ void Measure::layoutX(qreal stretch)
                                     // check for accidentals in chord
                                     if (cr->type() == Element::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
-                                          if (!c->graceNotes().empty())
+                                          if (c->getGraceNotesBefore(0))
                                                 grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
