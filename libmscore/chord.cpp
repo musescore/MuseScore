@@ -1748,7 +1748,9 @@ void Chord::layoutPitched()
                   qreal x = accidental->pos().x() + note->pos().x();
                   if (_noteType == NoteType::NOTE_NORMAL)
                         x += ipos().x();
-                  // x -= score()->styleS(StyleIdx::accidentalDistance).val() * _spatium;
+                  // distance from accidental to note already taken into account
+                  // but here perhaps we create more padding in *front* of accidental?
+                  x -= score()->styleS(StyleIdx::accidentalDistance).val() * _spatium;
                   lll = qMax(lll, -x);
                   }
 
@@ -1876,7 +1878,7 @@ void Chord::layoutPitched()
       qreal graceMag = score()->styleD(StyleIdx::graceNoteMag);
       int nb = getGraceNotesBefore(&graceNotesBefore);
       if (nb){
-              qreal xl = -(_space.lw() + minNoteDistance);
+              qreal xl = -(_space.lw() + minNoteDistance) - ipos().x();
               for (int i = nb-1; i >= 0; --i) {
                     Chord* c = graceNotesBefore.value(i);
                     xl -= c->space().rw()/* * 1.2*/;
@@ -2641,7 +2643,8 @@ int Chord::getGraceNotesBefore(QList<Chord*>* graceNotesBefore)
                || c->noteType() == NoteType::GRACE4
                || c->noteType() == NoteType::GRACE16
                || c->noteType() == NoteType::GRACE32){
-                    graceNotesBefore->append(c);
+                    if (graceNotesBefore)
+                          graceNotesBefore->append(c);
                     i++;
                     }
               }
@@ -2662,7 +2665,8 @@ int Chord::getGraceNotesAfter(QList<Chord*>* graceNotesAfter)
             if (c->noteType() == NoteType::GRACE8_AFTER
              || c->noteType() == NoteType::GRACE16_AFTER
              || c->noteType() == NoteType::GRACE32_AFTER){
-                  graceNotesAfter->append(c);
+                  if (graceNotesAfter)
+                        graceNotesAfter->append(c);
                   i++;
                   }
             }

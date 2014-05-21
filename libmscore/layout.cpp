@@ -1038,7 +1038,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
       Beam* beam       = 0;      // current beam
       BeamMode bm = BeamMode::AUTO;
       QList<Chord*> graceNotes;
-      if(after)
+      if (after)
             mainNote->getGraceNotesAfter(&graceNotes);
       else
             mainNote->getGraceNotesBefore(&graceNotes);
@@ -3460,7 +3460,7 @@ qreal Score::computeMinWidth(Segment* fs)
                                     qreal noteX = 0.0;
                                     if (cr->type() == Element::ElementType::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
-                                          if (!c->graceNotes().empty())
+                                          if (c->getGraceNotesBefore(0))
                                                 grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
