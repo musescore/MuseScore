@@ -67,7 +67,7 @@ class Hairpin : public SLine {
       Q_ENUMS(HairpinType)
 
    public:
-      enum HairpinType { CRESCENDO, DECRESCENDO };
+      enum class HairpinType : char { CRESCENDO, DECRESCENDO };
 
    private:
       Q_PROPERTY(HairpinType                 hairpinType READ hairpinType WRITE undoSetHairpinType)

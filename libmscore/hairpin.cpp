@@ -47,7 +47,7 @@ void HairpinSegment::layout()
       circledTipRadius = 0;
       if( drawCircledTip )
         circledTipRadius  = 0.6 * _spatium * .5;
-      if (hairpin()->hairpinType() == 0) {
+      if (hairpin()->hairpinType() == Hairpin::HairpinType::CRESCENDO) {
             // crescendo
             switch (spannerSegmentType()) {
                   case SEGMENT_SINGLE:
@@ -126,7 +126,7 @@ void HairpinSegment::updateGrips(int* grips, int* defaultGrip, QRectF* grip) con
       if(len < offsetX * 3 )                            // For small hairpin, offset = 30% of len
           offsetX = len/3;                              // else offset is fixed to 10
 
-      if( hairpin()->hairpinType() == 0 )
+      if( hairpin()->hairpinType() == Hairpin::HairpinType::CRESCENDO )
             lineApertureX = len - offsetX;              // End of CRESCENDO - Offset
         else
             lineApertureX = offsetX;                    // Begin of DECRESCENDO + Offset
@@ -287,7 +287,7 @@ void HairpinSegment::resetProperty(P_ID id)
 Hairpin::Hairpin(Score* s)
    : SLine(s)
       {
-      _hairpinType = CRESCENDO;
+      _hairpinType = HairpinType::CRESCENDO;
       _hairpinCircledTip = false;
       _veloChange  = 10;
       _dynRange    = DYNAMIC_PART;
@@ -326,7 +326,7 @@ LineSegment* Hairpin::createLineSegment()
 void Hairpin::write(Xml& xml) const
       {
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
-      xml.tag("subtype", _hairpinType);
+      xml.tag("subtype", int(_hairpinType));
       xml.tag("veloChange", _veloChange);
       writeProperty(xml, P_HAIRPIN_CIRCLEDTIP);
       writeProperty(xml, P_DYNAMIC_RANGE);
@@ -381,7 +381,7 @@ void Hairpin::read(XmlReader& e)
 
 void Hairpin::undoSetHairpinType(HairpinType val)
       {
-      score()->undoChangeProperty(this, P_HAIRPIN_TYPE, val);
+      score()->undoChangeProperty(this, P_HAIRPIN_TYPE, int(val));
       }
 
 //---------------------------------------------------------
@@ -412,7 +412,7 @@ QVariant Hairpin::getProperty(P_ID id) const
             case P_HAIRPIN_CIRCLEDTIP:
                 return _hairpinCircledTip;
             case P_HAIRPIN_TYPE:
-                return _hairpinType;
+                return int(_hairpinType);
             case P_VELO_CHANGE:
                   return _veloChange;
             case P_DYNAMIC_RANGE:
@@ -472,7 +472,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
       {
       switch (id) {
             case P_HAIRPIN_CIRCLEDTIP:  return false;
-            case P_HAIRPIN_TYPE:        return HairpinType::CRESCENDO;
+            case P_HAIRPIN_TYPE:        return int(HairpinType::CRESCENDO);
             case P_VELO_CHANGE:         return 10;
             case P_DYNAMIC_RANGE:       return DYNAMIC_PART;
             case P_LINE_WIDTH:          return score()->styleS(ST_hairpinLineWidth).val();

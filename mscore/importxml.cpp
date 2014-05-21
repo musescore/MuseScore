@@ -2836,7 +2836,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             Text* t = new RehearsalMark(score);
             t->setPlainText(rehearsal);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
-            else t->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
+            else t->setPlacement(placement == "above" ? Element::Placement::ABOVE : Element::Placement::BELOW);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             addElem(t, hasYoffset, staff, rstaff, score, placement,
                        rx, ry, offset, measure, tick);
@@ -2915,7 +2915,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else {
                         hairpin = new Hairpin(score);
                         hairpin->setHairpinType(type == "crescendo"
-                                                ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
+                                                ? Hairpin::HairpinType::CRESCENDO : Hairpin::HairpinType::DECRESCENDO);
                         setSLinePlacement(hairpin,
                                           score->spatium(), placement,
                                           hasYoffset, yoffset);
