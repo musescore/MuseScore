@@ -2327,11 +2327,11 @@ void Score::cmd(const QAction* a)
       else if (cmd == "system-break" || cmd == "page-break" || cmd == "section-break") {
             LayoutBreak::LayoutBreakType type;
             if (cmd == "system-break")
-                  type = LayoutBreak::LINE;
+                  type = LayoutBreak::LayoutBreakType::LINE;
             else if (cmd == "page-break")
-                  type = LayoutBreak::PAGE;
+                  type = LayoutBreak::LayoutBreakType::PAGE;
             else
-                  type = LayoutBreak::SECTION;
+                  type = LayoutBreak::LayoutBreakType::SECTION;
 
             if (el && el->type() == Element::BAR_LINE && el->parent()->type() == Element::SEGMENT) {
                   Measure* measure = static_cast<Measure*>(el->parent()->parent());

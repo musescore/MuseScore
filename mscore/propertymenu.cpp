@@ -289,7 +289,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             if (enableExperimental)
                   popup->addAction(tr("Chord Articulation..."))->setData("articulation");
             }
-      else if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() == LayoutBreak::SECTION) {
+      else if (e->type() == Element::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() == LayoutBreak::LayoutBreakType::SECTION) {
             popup->addAction(tr("Section Break Properties..."))->setData("break-props");
             }
       else if (e->type() == Element::INSTRUMENT_CHANGE) {

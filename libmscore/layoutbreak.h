@@ -32,7 +32,7 @@ class LayoutBreak : public Element {
       Q_OBJECT
 
    public:
-      enum LayoutBreakType {
+      enum class LayoutBreakType : char {
             PAGE, LINE, SECTION
             };
    private:

@@ -389,17 +389,17 @@ Palette* MuseScore::newBreaksPalette()
       sp->setDrawGrid(true);
 
       LayoutBreak* lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LayoutBreak::LINE);
+      lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
       PaletteCell* cell = sp->append(lb, tr("Line break"));
       cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LayoutBreak::PAGE);
+      lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::PAGE);
       cell = sp->append(lb, tr("Page break"));
       cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LayoutBreak::SECTION);
+      lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::SECTION);
       cell = sp->append(lb, tr("Section break"));
       cell->mag = 1.2;
 

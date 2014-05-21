@@ -379,7 +379,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             foreach (Element* e, *mb->el()) {
                   if (e->type() == Element::LAYOUT_BREAK) {
                         LayoutBreak::LayoutBreakType st = static_cast<LayoutBreak*>(e)->layoutBreakType();
-                        if (st == LayoutBreak::PAGE || st == LayoutBreak::LINE)
+                        if (st == LayoutBreak::LayoutBreakType::PAGE || st == LayoutBreak::LayoutBreakType::LINE)
                               continue;
                         }
                   Element* ne;
