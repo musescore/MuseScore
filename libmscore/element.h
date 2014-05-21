@@ -163,7 +163,7 @@ class Element : public QObject {
       //   Note: keep in sync with array elementNames[] in element.cpp
       //-------------------------------------------------------------------
 
-       enum ElementType {
+      enum ElementType {
             INVALID = 0,
             SYMBOL,
             TEXT,
@@ -264,8 +264,8 @@ class Element : public QObject {
       //   DynamicRange
       //---------------------------------------------------------
 
-      enum DynamicRange {
-            DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
+      enum class DynamicRange : char {
+            STAFF, PART, SYSTEM
             };
       enum class Placement : char { ABOVE, BELOW };
 

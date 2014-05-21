@@ -126,7 +126,7 @@ Dynamic::Dynamic(Score* s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
       _velocity = -1;
-      _dynRange = DYNAMIC_PART;
+      _dynRange = DynamicRange::PART;
       setTextStyleType(TEXT_STYLE_DYNAMICS);
       _dynamicType  = DynamicType::OTHER;
       }
@@ -340,7 +340,7 @@ QRectF Dynamic::drag(EditData* ed)
 
 void Dynamic::undoSetDynRange(DynamicRange v)
       {
-      score()->undoChangeProperty(this, P_DYNAMIC_RANGE, v);
+      score()->undoChangeProperty(this, P_DYNAMIC_RANGE, int(v));
       }
 
 //---------------------------------------------------------
@@ -391,7 +391,7 @@ QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_TEXT_STYLE_TYPE: return TEXT_STYLE_DYNAMICS;
-            case P_DYNAMIC_RANGE:   return DYNAMIC_PART;
+            case P_DYNAMIC_RANGE:   return int(DynamicRange::PART);
             case P_VELOCITY:        return -1;
             default:                return Text::propertyDefault(id);
             }

@@ -25,7 +25,7 @@ class Segment;
 //   @@ Dynamic
 ///    dynamics marker; determines midi velocity
 //
-//   @P range  Ms::Element::DynamicRange (DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM)
+//   @P range  Ms::Element::DynamicRange (STAFF, PART, SYSTEM)
 //-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
@@ -70,7 +70,7 @@ class Dynamic : public Text {
 
       mutable QPointF dragOffset;
       int _velocity;          // associated midi velocity 0-127
-      DynamicRange _dynRange;   // DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
+      DynamicRange _dynRange;   // STAFF, PART, SYSTEM
 
       virtual QRectF drag(EditData*) override;
 

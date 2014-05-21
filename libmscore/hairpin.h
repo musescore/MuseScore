@@ -59,7 +59,7 @@ class HairpinSegment : public LineSegment {
 //   @@ Hairpin
 //   @P hairpinType  Ms::Hairpin::HairpinType  (CRESCENDO, DECRESCENDO)
 //   @P veloChange   int
-//   @P dynRange     Ms::Element::DynamicRange (DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM)
+//   @P dynRange     Ms::Element::DynamicRange (STAFF, PART, SYSTEM)
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
