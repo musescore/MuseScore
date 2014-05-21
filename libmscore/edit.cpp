@@ -1096,8 +1096,8 @@ void Score::cmdFlip()
                | (e->type() == Element::HAIRPIN)
                | (e->type() == Element::DYNAMIC)
                ) {
-                  Element::Placement p = e->placement() == Element::ABOVE ? Element::BELOW : Element::ABOVE;
-                  undoChangeProperty(e, P_PLACEMENT, p);
+                  Element::Placement p = e->placement() == Element::Placement::ABOVE ? Element::Placement::BELOW : Element::Placement::ABOVE;
+                  undoChangeProperty(e, P_PLACEMENT, int(p));
                   }
             }
       _layoutAll = true;      // must be set in und/redo

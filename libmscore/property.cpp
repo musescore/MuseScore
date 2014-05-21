@@ -297,9 +297,9 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case T_PLACEMENT: {
                   QString value(e.readElementText());
                   if (value == "above")
-                        return QVariant(int(Element::ABOVE));
+                        return QVariant(int(Element::Placement::ABOVE));
                   else if (value == "below")
-                        return QVariant(int(Element::BELOW));
+                        return QVariant(int(Element::Placement::BELOW));
                   }
                   break;
             case T_BEAM_MODE:             // TODO
