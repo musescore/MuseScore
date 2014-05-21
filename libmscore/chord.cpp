@@ -2403,14 +2403,14 @@ QPointF Chord::layoutArticulation(Articulation* a)
       ArticulationType st = a->articulationType();
 
       // TENUTO and STACCATO: always near the note head (or stem end if beyond a stem)
-      if ((st == Articulation_Tenuto || st == Articulation_Staccato) && (aa != A_TOP_STAFF && aa != A_BOTTOM_STAFF)) {
+      if ((st == Articulation_Tenuto || st == Articulation_Staccato) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
             // if there area voices, articulation is on stem side
-            if ((aa == A_CHORD) && measure()->hasVoices(a->staffIdx()))
+            if ((aa == ArticulationAnchor::CHORD) && measure()->hasVoices(a->staffIdx()))
                   bottom = !up();
             // otherwise, look at specific anchor type (and at chord up/down if necessary)
             else
-                  bottom = (aa == A_BOTTOM_CHORD) || (aa == A_CHORD && up());
+                  bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
             bool stemSide = (bottom != up()) && stem();     // true if there a stem between the nearest note and the articulation
             a->setUp(!bottom);
 
@@ -2532,13 +2532,13 @@ QPointF Chord::layoutArticulation(Articulation* a)
       else {
             if (measure()->hasVoices(a->staffIdx())) {
                   a->setUp(up());
-                  aa = up() ? A_TOP_STAFF : A_BOTTOM_STAFF;
+                  aa = up() ? ArticulationAnchor::TOP_STAFF : ArticulationAnchor::BOTTOM_STAFF;
                   }
             else {
-                  if (aa == A_CHORD)
+                  if (aa == ArticulationAnchor::CHORD)
                         a->setUp(!up());
                   else
-                        a->setUp(aa == A_TOP_STAFF || aa == A_TOP_CHORD);
+                        a->setUp(aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::TOP_CHORD);
                   }
             }
 
@@ -2549,15 +2549,15 @@ QPointF Chord::layoutArticulation(Articulation* a)
             default: dist = score()->styleS(ST_propertyDistance).val() * _spStaff;
             }
 
-      if (aa == A_CHORD || aa == A_TOP_CHORD || aa == A_BOTTOM_CHORD) {
+      if (aa == ArticulationAnchor::CHORD || aa == ArticulationAnchor::TOP_CHORD || aa == ArticulationAnchor::BOTTOM_CHORD) {
             bool bottom;
-            if ((aa == A_CHORD) && measure()->hasVoices(a->staffIdx()))
+            if ((aa == ArticulationAnchor::CHORD) && measure()->hasVoices(a->staffIdx()))
                   bottom = !up();
             else
-                  bottom = (aa == A_BOTTOM_CHORD) || (aa == A_CHORD && up());
+                  bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
             y = bottom ? chordBotY + dist : chordTopY - dist;
             }
-      else if (aa == A_TOP_STAFF || aa == A_BOTTOM_STAFF) {
+      else if (aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
             y = a->up() ? staffTopY - dist : staffBotY + dist;
             }
       a->layout();

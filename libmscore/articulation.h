@@ -28,12 +28,12 @@ enum class SymId;
 //    gives infos about note attributes
 //---------------------------------------------------------
 
-enum ArticulationAnchor {
-      A_TOP_STAFF,      // anchor is always placed at top of staff
-      A_BOTTOM_STAFF,   // anchor is always placed at bottom of staff
-      A_CHORD,          // anchor depends on chord direction, away from stem
-      A_TOP_CHORD,      // attribute is alway placed at top of chord
-      A_BOTTOM_CHORD,   // attribute is placed at bottom of chord
+enum class ArticulationAnchor : char {
+      TOP_STAFF,      // anchor is always placed at top of staff
+      BOTTOM_STAFF,   // anchor is always placed at bottom of staff
+      CHORD,          // anchor depends on chord direction, away from stem
+      TOP_CHORD,      // attribute is alway placed at top of chord
+      BOTTOM_CHORD,   // attribute is placed at bottom of chord
       };
 
 // flags:
