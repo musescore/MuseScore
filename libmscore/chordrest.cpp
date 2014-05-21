@@ -71,7 +71,7 @@ ChordRest::ChordRest(Score* s)
       _beamMode    = BeamMode::AUTO;
       _up          = true;
       _small       = false;
-      _crossMeasure = CROSSMEASURE_UNKNOWN;
+      _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
 ChordRest::ChordRest(const ChordRest& cr)
@@ -849,25 +849,25 @@ void ChordRest::setBeam(Beam* b)
 void ChordRest::setDurationType(TDuration::DurationType t)
       {
       _durationType.setType(t);
-      _crossMeasure = CROSSMEASURE_UNKNOWN;
+      _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
 void ChordRest::setDurationType(const QString& s)
       {
       _durationType.setType(s);
-      _crossMeasure = CROSSMEASURE_UNKNOWN;
+      _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
 void ChordRest::setDurationType(int ticks)
       {
       _durationType.setVal(ticks);
-      _crossMeasure = CROSSMEASURE_UNKNOWN;
+      _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
 void ChordRest::setDurationType(const TDuration& v)
       {
       _durationType = v;
-      _crossMeasure = CROSSMEASURE_UNKNOWN;
+      _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
 //---------------------------------------------------------
