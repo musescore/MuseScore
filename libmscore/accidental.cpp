@@ -80,7 +80,7 @@ Accidental::Accidental(Score* s)
       {
       setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
       _hasBracket     = false;
-      _role           = ACC_AUTO;
+      _role           = AccidentalRole::AUTO;
       _small          = false;
       _accidentalType = ACC_NONE;
       }
@@ -217,7 +217,7 @@ void Accidental::read(XmlReader& e)
                   }
             else if (tag == "role") {
                   int i = e.readInt();
-                  if (i == ACC_AUTO || i == ACC_USER)
+                  if (i == int(AccidentalRole::AUTO) || i == int(AccidentalRole::USER))
                         _role = AccidentalRole(i);
                   }
             else if (tag == "small")
@@ -244,8 +244,8 @@ void Accidental::write(Xml& xml) const
       xml.stag(name());
       if (_hasBracket)
             xml.tag("bracket", _hasBracket);
-      if (_role != ACC_AUTO)
-            xml.tag("role", _role);
+      if (_role != AccidentalRole::AUTO)
+            xml.tag("role", int(_role));
       if (_small)
             xml.tag("small", _small);
       xml.tag("subtype", accList[_accidentalType].tag);
