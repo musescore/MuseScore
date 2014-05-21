@@ -325,7 +325,7 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
             fontList.append(st->fontPx(_spatium));
 
       foreach(const RenderAction& a, renderList) {
-            if (a.type == RenderAction::RENDER_SET) {
+            if (a.type == RenderAction::RenderActionType::SET) {
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   ChordSymbol cs = chordList->symbol(a.text);
                   if (cs.isValid()) {
@@ -337,22 +337,22 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
                   textList.append(ts);
                   x += ts->width();
                   }
-            else if (a.type == RenderAction::RENDER_MOVE) {
+            else if (a.type == RenderAction::RenderActionType::MOVE) {
                   x += a.movex;//  * mag;
                   y += a.movey; //  * mag;
                   }
-            else if (a.type == RenderAction::RENDER_PUSH)
+            else if (a.type == RenderAction::RenderActionType::PUSH)
                   stack.push(QPointF(x,y));
-            else if (a.type == RenderAction::RENDER_POP) {
+            else if (a.type == RenderAction::RenderActionType::POP) {
                   if (!stack.isEmpty()) {
                         QPointF pt = stack.pop();
                         x = pt.x();
                         y = pt.y();
                         }
                   else
-                        qDebug("RenderAction::RENDER_POP: stack empty");
+                        qDebug("RenderAction::RenderActionType::POP: stack empty");
                   }
-            else if (a.type == RenderAction::RENDER_NOTE) {
+            else if (a.type == RenderAction::RenderActionType::NOTE) {
                   QString c;
                   int acc;
                   tpc2name(tpc, spelling, lowerCase, c, acc);
@@ -370,7 +370,7 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
                   textList.append(ts);
                   x += ts->width();
                   }
-            else if (a.type == RenderAction::RENDER_ACCIDENTAL) {
+            else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
                   QString c;
                   QString acc;
                   tpc2name(tpc, spelling, lowerCase, c, acc);
@@ -599,12 +599,12 @@ void HarmonyCanvas::updateChordDescription()
                   continue;
                   }
             if (ts->x != x || ts->y != y) {
-                  RenderAction ra(RenderAction::RENDER_MOVE);
+                  RenderAction ra(RenderAction::RenderActionType::MOVE);
                   ra.movex = ts->x - x;
                   ra.movey = ts->y - y;
                   chordDescription->renderList.append(ra);
                   }
-            RenderAction ra(RenderAction::RENDER_SET);
+            RenderAction ra(RenderAction::RenderActionType::SET);
             ra.text  = ts->text;
             chordDescription->renderList.append(ra);
             x = ts->x + ts->width();

@@ -300,22 +300,22 @@ static void readRenderList(QString val, QList<RenderAction>& renderList)
                   QStringList ssl = s.split(":", QString::SkipEmptyParts);
                   if (ssl.size() == 3) {
                         RenderAction a;
-                        a.type = RenderAction::RENDER_MOVE;
+                        a.type = RenderAction::RenderActionType::MOVE;
                         a.movex = ssl[1].toDouble();
                         a.movey = ssl[2].toDouble();
                         renderList.append(a);
                         }
                   }
             else if (s == ":push")
-                  renderList.append(RenderAction(RenderAction::RENDER_PUSH));
+                  renderList.append(RenderAction(RenderAction::RenderActionType::PUSH));
             else if (s == ":pop")
-                  renderList.append(RenderAction(RenderAction::RENDER_POP));
+                  renderList.append(RenderAction(RenderAction::RenderActionType::POP));
             else if (s == ":n")
-                  renderList.append(RenderAction(RenderAction::RENDER_NOTE));
+                  renderList.append(RenderAction(RenderAction::RenderActionType::NOTE));
             else if (s == ":a")
-                  renderList.append(RenderAction(RenderAction::RENDER_ACCIDENTAL));
+                  renderList.append(RenderAction(RenderAction::RenderActionType::ACCIDENTAL));
             else {
-                  RenderAction a(RenderAction::RENDER_SET);
+                  RenderAction a(RenderAction::RenderActionType::SET);
                   a.text = s;
                   renderList.append(a);
                   }
@@ -336,23 +336,23 @@ static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QStri
                   s += " ";
             const RenderAction& a = (*al)[i];
             switch(a.type) {
-                  case RenderAction::RENDER_SET:
+                  case RenderAction::RenderActionType::SET:
                         s += a.text;
                         break;
-                  case RenderAction::RENDER_MOVE:
+                  case RenderAction::RenderActionType::MOVE:
                         if (a.movex != 0.0 || a.movey != 0.0)
                               s += QString("m:%1:%2").arg(a.movex).arg(a.movey);
                         break;
-                  case RenderAction::RENDER_PUSH:
+                  case RenderAction::RenderActionType::PUSH:
                         s += ":push";
                         break;
-                  case RenderAction::RENDER_POP:
+                  case RenderAction::RenderActionType::POP:
                         s += ":pop";
                         break;
-                  case RenderAction::RENDER_NOTE:
+                  case RenderAction::RenderActionType::NOTE:
                         s += ":n";
                         break;
-                  case RenderAction::RENDER_ACCIDENTAL:
+                  case RenderAction::RenderActionType::ACCIDENTAL:
                         s += ":a";
                         break;
                   }
@@ -1400,7 +1400,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
                   _renderList.append(rl);
             else {
                   // no definition for token, so render as literal
-                  RenderAction a(RenderAction::RENDER_SET);
+                  RenderAction a(RenderAction::RenderActionType::SET);
                   a.text = tok.names.first();
                   _renderList.append(a);
                   }

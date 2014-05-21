@@ -1108,7 +1108,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
       qreal mag = (MScore::DPI / PPI) * (_spatium / (SPATIUM20 * MScore::DPI));
 
       foreach(const RenderAction& a, renderList) {
-            if (a.type == RenderAction::RENDER_SET) {
+            if (a.type == RenderAction::RenderActionType::SET) {
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   ChordSymbol cs = chordList->symbol(a.text);
                   if (cs.isValid()) {
@@ -1120,22 +1120,22 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   textList.append(ts);
                   x += ts->width();
                   }
-            else if (a.type == RenderAction::RENDER_MOVE) {
+            else if (a.type == RenderAction::RenderActionType::MOVE) {
                   x += a.movex * mag;
                   y += a.movey * mag;
                   }
-            else if (a.type == RenderAction::RENDER_PUSH)
+            else if (a.type == RenderAction::RenderActionType::PUSH)
                   stack.push(QPointF(x,y));
-            else if (a.type == RenderAction::RENDER_POP) {
+            else if (a.type == RenderAction::RenderActionType::POP) {
                   if (!stack.isEmpty()) {
                         QPointF pt = stack.pop();
                         x = pt.x();
                         y = pt.y();
                         }
                   else
-                        qDebug("RenderAction::RENDER_POP: stack empty");
+                        qDebug("RenderAction::RenderActionType::POP: stack empty");
                   }
-            else if (a.type == RenderAction::RENDER_NOTE) {
+            else if (a.type == RenderAction::RenderActionType::NOTE) {
                   QString c;
                   int acc;
                   tpc2name(tpc, spelling, lowerCase, c, acc);
@@ -1153,7 +1153,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   textList.append(ts);
                   x += ts->width();
                   }
-            else if (a.type == RenderAction::RENDER_ACCIDENTAL) {
+            else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
                   QString c;
                   QString acc;
                   tpc2name(tpc, spelling, lowerCase, c, acc);
