@@ -2022,9 +2022,9 @@ void MuseScore::addImage(Score* score, Element* e)
       QString suffix(fi.suffix().toLower());
 
       if (suffix == "svg")
-            s->setImageType(IMAGE_SVG);
+            s->setImageType(ImageType::SVG);
       else if (suffix == "jpg" || suffix == "jpeg" || suffix == "png")
-            s->setImageType(IMAGE_RASTER);
+            s->setImageType(ImageType::RASTER);
       else
             return;
       s->load(fn);
