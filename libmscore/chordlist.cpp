@@ -258,21 +258,21 @@ void HChord::add(const QList<HDegree>& degreeList)
                   dv -= 1;
                   }
 
-            if (d.type() == ADD)
+            if (d.type() == HDegreeType::ADD)
                   *this += dv;
-            else if (d.type() == ALTER) {
+            else if (d.type() == HDegreeType::ALTER) {
                   if (contains(dv1)) {
                         *this -= dv1;
                         *this += dv;
                         }
                   else {
-//                        qDebug("ALTER: chord does not contain degree %d(%d):",
+//                        qDebug("HDegreeType::ALTER: chord does not contain degree %d(%d):",
 //                           d.value(), d.alter());
 //                        print();
                         *this += dv;      // DEBUG: default to add
                         }
                   }
-            else if (d.type() == SUBTRACT) {
+            else if (d.type() == HDegreeType::SUBTRACT) {
                   if (contains(dv1))
                         *this -= dv1;
                   else {
@@ -891,7 +891,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   bool alter = false;
                   if (tok1L == "add") {
                         if (d)
-                              hdl += HDegree(d, 0, ADD);
+                              hdl += HDegree(d, 0, HDegreeType::ADD);
                         else if (tok2L != "") {
                               // this was result of addPending
                               // alteration; tok1 = alter, tok2 = value
@@ -902,23 +902,23 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                                           tok2L = "#7";
                                           }
                                     else if (raise.contains(tok1))
-                                          hdl += HDegree(d, 1, ADD);
+                                          hdl += HDegree(d, 1, HDegreeType::ADD);
                                     }
                               else if (lower.contains(tok1)) {
                                     if (d == 7)
                                           chord += 10;
                                     else
-                                          hdl += HDegree(d, -1, ADD);
+                                          hdl += HDegree(d, -1, HDegreeType::ADD);
                                     }
                               else if (d)
-                                    hdl += HDegree(d, 0, ADD);
+                                    hdl += HDegree(d, 0, HDegreeType::ADD);
                               }
                         degree = "add" + tok2L;
                         }
                   else if (tok1L == "no") {
                         degree = "sub" + tok2L;
                         if (d)
-                              hdl += HDegree(d, 0, SUBTRACT);
+                              hdl += HDegree(d, 0, HDegreeType::SUBTRACT);
                         }
                   else if (tok1L == "sus") {
 #if 0
@@ -990,7 +990,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                         chord -= 10;
                         chord += 11;
                         if (d && d != 7)
-                              hdl += HDegree(d, 0, ADD);
+                              hdl += HDegree(d, 0, HDegreeType::ADD);
                         }
                   else if (tok1L == "alt") {
                         _xmlDegrees += "altb5";
@@ -1036,15 +1036,15 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   else if (addPending) {
                         degree = "add" + tok1L + tok2L;
                         if (raise.contains(tok1L))
-                              hdl += HDegree(d, 1, ADD);
+                              hdl += HDegree(d, 1, HDegreeType::ADD);
                         else if (lower.contains(tok1L))
-                              hdl += HDegree(d, -1, ADD);
+                              hdl += HDegree(d, -1, HDegreeType::ADD);
                         else
-                              hdl += HDegree(d, 0, ADD);
+                              hdl += HDegree(d, 0, HDegreeType::ADD);
                         }
                   else if (tok1L == "" && tok2L != "") {
                         degree = "add" + tok2L;
-                        hdl += HDegree(d, 0, ADD);
+                        hdl += HDegree(d, 0, HDegreeType::ADD);
                         }
                   else if (lower.contains(tok1L)) {
                         tok1L = "b";
@@ -1075,11 +1075,11 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                               degree = "add";
                         degree += tok1L + tok2L;
                         if (chord.contains(key[d]) && !(susChord && (d == 11)))
-                              hdl += HDegree(d, 0, SUBTRACT);
+                              hdl += HDegree(d, 0, HDegreeType::SUBTRACT);
                         if (tok1L == "#")
-                              hdl += HDegree(d, 1, ADD);
+                              hdl += HDegree(d, 1, HDegreeType::ADD);
                         else if (tok1L == "b")
-                              hdl += HDegree(d, -1, ADD);
+                              hdl += HDegree(d, -1, HDegreeType::ADD);
                         }
                   if (degree != "")
                         _xmlDegrees += degree;
@@ -1218,18 +1218,18 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             QString mod;
             int v = d.value();
             switch (d.type()) {
-                  case ADD:
-                  case ALTER:
+                  case HDegreeType::ADD:
+                  case HDegreeType::ALTER:
                         switch (d.alter()) {
                               case -1:    mod = "b"; break;
                               case 1:     mod = "#"; break;
                               case 0:     mod = "add"; break;
                               }
                         break;
-                  case SUBTRACT:
+                  case HDegreeType::SUBTRACT:
                         mod = "no";
                         break;
-                  case UNDEF:
+                  case HDegreeType::UNDEF:
                   default:
                         break;
                   }
@@ -1352,7 +1352,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
       _xmlSymbols = useSymbols;
       _xmlParens = useParens;
       foreach (const HDegree& d, dl) {
-            if (kind == "half-diminished" && d.type() == ALTER && d.alter() == -1 && d.value() == 5)
+            if (kind == "half-diminished" && d.type() == HDegreeType::ALTER && d.alter() == -1 && d.value() == 5)
                   continue;
             _xmlDegrees += d.text();
             }

@@ -4724,19 +4724,19 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       xml.tag(QString("kind text=\"%1\"").arg(h->extensionName()), extension);
       for (int i = 0; i < h->numberOfDegrees(); i++) {
             HDegree hd = h->degree(i);
-            int tp = hd.type();
-            if (tp == ADD || tp == ALTER || tp == SUBTRACT) {
+            HDegreeType tp = hd.type();
+            if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
                   xml.stag("degree");
                   xml.tag("degree-value", hd.value());
                   xml.tag("degree-alter", hd.alter());
                   switch (tp) {
-                        case ADD:
+                        case HDegreeType::ADD:
                               xml.tag("degree-type", "add");
                               break;
-                        case ALTER:
+                        case HDegreeType::ALTER:
                               xml.tag("degree-type", "alter");
                               break;
-                        case SUBTRACT:
+                        case HDegreeType::SUBTRACT:
                               xml.tag("degree-type", "subtract");
                               break;
                         default:
