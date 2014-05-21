@@ -3872,11 +3872,11 @@ static void addArticulationToChord(ChordRest* cr, ArticulationType articSym, QSt
       na->setArticulationType(articSym);
       if (dir == "up") {
             na->setUp(true);
-            na->setAnchor(A_TOP_STAFF);
+            na->setAnchor(ArticulationAnchor::TOP_STAFF);
             }
       else if (dir == "down") {
             na->setUp(false);
-            na->setAnchor(A_BOTTOM_STAFF);
+            na->setAnchor(ArticulationAnchor::BOTTOM_STAFF);
             }
       cr->add(na);
       }

@@ -497,10 +497,10 @@ void ChordRest::layoutArticulations()
                   a->setUp(a->direction() == Direction::UP);
                   }
             else {
-                  if (a->anchor() == A_CHORD)
+                  if (a->anchor() == ArticulationAnchor::CHORD)
                         a->setUp(!up());
                   else
-                        a->setUp(a->anchor() == A_TOP_STAFF || a->anchor() == A_TOP_CHORD);
+                        a->setUp(a->anchor() == ArticulationAnchor::TOP_STAFF || a->anchor() == ArticulationAnchor::TOP_CHORD);
                   }
             }
 
@@ -518,14 +518,14 @@ void ChordRest::layoutArticulations()
                && (a->articulationType() != Articulation_Staccato))
                   continue;
 
-            if (aa != A_CHORD && aa != A_TOP_CHORD && aa != A_BOTTOM_CHORD)
+            if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
                   continue;
 
             bool bottom;
-            if ((aa == A_CHORD) && measure()->hasVoices(a->staffIdx()))
+            if ((aa == ArticulationAnchor::CHORD) && measure()->hasVoices(a->staffIdx()))
                   bottom = !up();
             else
-                  bottom = (aa == A_BOTTOM_CHORD) || (aa == A_CHORD && up());
+                  bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
             bool headSide = bottom == up();
 
             dy += distance1;
@@ -624,7 +624,7 @@ void ChordRest::layoutArticulations()
                || (a->articulationType() == Articulation_Staccato))
                   continue;
 
-            if (aa != A_CHORD && aa != A_TOP_CHORD && aa != A_BOTTOM_CHORD)
+            if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
                   continue;
 
             // for tenuto and staccate check for staff line collision
@@ -632,7 +632,7 @@ void ChordRest::layoutArticulations()
                                || a->articulationType() == Articulation_Staccato;
 
 //            qreal sh = a->bbox().height() * mag();
-            bool bottom = (aa == A_BOTTOM_CHORD) || (aa == A_CHORD && up());
+            bool bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
 
             dy += distance1;
             if (bottom) {
@@ -676,7 +676,7 @@ void ChordRest::layoutArticulations()
       for (int i = 0; i < n; ++i) {
             Articulation* a = _articulations.at(i);
             ArticulationAnchor aa = a->anchor();
-            if (aa == A_TOP_STAFF || aa == A_BOTTOM_STAFF) {
+            if (aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
                   if (a->up()) {
                         a->setPos(x, dyTop);
                         dyTop -= distance0;

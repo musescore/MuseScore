@@ -81,11 +81,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             articulationTable->setItem(i, 0, item);
 
             QComboBox* cb = new QComboBox();
-            cb->addItem(tr("Above Staff"), A_TOP_STAFF);
-            cb->addItem(tr("Below Staff"), A_BOTTOM_STAFF);
-            cb->addItem(tr("Chord Automatic"), A_CHORD);
-            cb->addItem(tr("Above Chord"), A_TOP_CHORD);
-            cb->addItem(tr("Below Chord"), A_BOTTOM_CHORD);
+            cb->addItem(tr("Above Staff"), int(ArticulationAnchor::TOP_STAFF));
+            cb->addItem(tr("Below Staff"), int(ArticulationAnchor::BOTTOM_STAFF));
+            cb->addItem(tr("Chord Automatic"), int(ArticulationAnchor::CHORD));
+            cb->addItem(tr("Above Chord"), int(ArticulationAnchor::TOP_CHORD));
+            cb->addItem(tr("Below Chord"), int(ArticulationAnchor::BOTTOM_CHORD));
             articulationTable->setCellWidget(i, 1, cb);
             }
       QButtonGroup* bg = new QButtonGroup(this);
@@ -635,13 +635,13 @@ void EditStyle::setValues()
             QComboBox* cb = static_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
             if (cb == 0)
                   continue;
-            int st  = lstyle.articulationAnchor(i);
+            ArticulationAnchor st  = lstyle.articulationAnchor(i);
             int idx = 0;
-            if (st == A_TOP_STAFF)
+            if (st == ArticulationAnchor::TOP_STAFF)
                   idx = 0;
-            else if (st == A_BOTTOM_STAFF)
+            else if (st == ArticulationAnchor::BOTTOM_STAFF)
                   idx = 1;
-            else if (st == A_CHORD)
+            else if (st == ArticulationAnchor::CHORD)
                   idx = 2;
             cb->setCurrentIndex(idx);
             }

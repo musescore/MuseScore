@@ -1064,14 +1064,14 @@ void Score::cmdFlip()
                      || a->articulationType() == Articulation_Tenuto
                      || a->articulationType() == Articulation_Sforzatoaccent) {
                         ArticulationAnchor aa = a->anchor();
-                        if (aa == A_TOP_CHORD)
-                              aa = A_BOTTOM_CHORD;
-                        else if (aa == A_BOTTOM_CHORD)
-                              aa = A_TOP_CHORD;
-                        else if (aa == A_CHORD)
-                              aa = a->up() ? A_BOTTOM_CHORD : A_TOP_CHORD;
+                        if (aa == ArticulationAnchor::TOP_CHORD)
+                              aa = ArticulationAnchor::BOTTOM_CHORD;
+                        else if (aa == ArticulationAnchor::BOTTOM_CHORD)
+                              aa = ArticulationAnchor::TOP_CHORD;
+                        else if (aa == ArticulationAnchor::CHORD)
+                              aa = a->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
                         if (aa != a->anchor())
-                              undoChangeProperty(a, P_ARTICULATION_ANCHOR, aa);
+                              undoChangeProperty(a, P_ARTICULATION_ANCHOR, int(aa));
                         }
                   else {
                         Direction d = a->up() ? Direction::DOWN : Direction::UP;
