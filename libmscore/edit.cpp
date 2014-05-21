@@ -1218,7 +1218,7 @@ void Score::deleteItem(Element* el)
 
             case Element::ACCIDENTAL:
                   if (el->parent()->type() == Element::NOTE)
-                        changeAccidental(static_cast<Note*>(el->parent()), Accidental::ACC_NONE);
+                        changeAccidental(static_cast<Note*>(el->parent()), Accidental::AccidentalType::NONE);
                   else
                         undoRemoveElement(el);
                   break;

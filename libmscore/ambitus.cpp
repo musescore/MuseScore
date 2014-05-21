@@ -173,12 +173,12 @@ void Ambitus::write(Xml& xml) const
       xml.tag("topTpc",     _topTpc);
       xml.tag("bottomPitch",_bottomPitch);
       xml.tag("bottomTpc",  _bottomTpc);
-      if (_topAccid.accidentalType() != Accidental::ACC_NONE) {
+      if (_topAccid.accidentalType() != Accidental::AccidentalType::NONE) {
             xml.stag("topAccidental");
             _topAccid.write(xml);
             xml.etag();
             }
-      if (_bottomAccid.accidentalType() != Accidental::ACC_NONE) {
+      if (_bottomAccid.accidentalType() != Accidental::AccidentalType::NONE) {
             xml.stag("bottomAccidental");
             _bottomAccid.write(xml);
             xml.etag();
@@ -286,15 +286,15 @@ void Ambitus::layout()
             Accidental::AccidentalType accidType;
             // if (13 <= (tpc - key) <= 19) there is no accidental)
             if (_topTpc - key >= 13 && _topTpc - key <= 19)
-                  accidType = Accidental::ACC_NONE;
+                  accidType = Accidental::AccidentalType::NONE;
             else {
                   AccidentalVal accidVal = AccidentalVal( (_topTpc - TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
                   accidType = Accidental::value2subtype(accidVal);
-                  if (accidType == Accidental::ACC_NONE)
-                        accidType = Accidental::ACC_NATURAL;
+                  if (accidType == Accidental::AccidentalType::NONE)
+                        accidType = Accidental::AccidentalType::NATURAL;
                   }
             _topAccid.setAccidentalType(accidType);
-            if (accidType != Accidental::ACC_NONE)
+            if (accidType != Accidental::AccidentalType::NONE)
                   _topAccid.layout();
             else
                   _topAccid.setbbox(QRect());
@@ -311,15 +311,15 @@ void Ambitus::layout()
             // compute accidental
             Accidental::AccidentalType accidType;
             if (_bottomTpc - key >= 13 && _bottomTpc - key <= 19)
-                  accidType = Accidental::ACC_NONE;
+                  accidType = Accidental::AccidentalType::NONE;
             else {
                   AccidentalVal accidVal = AccidentalVal( (_bottomTpc - TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
                   accidType = Accidental::value2subtype(accidVal);
-                  if (accidType == Accidental::ACC_NONE)
-                        accidType = Accidental::ACC_NATURAL;
+                  if (accidType == Accidental::AccidentalType::NONE)
+                        accidType = Accidental::AccidentalType::NATURAL;
                   }
             _bottomAccid.setAccidentalType(accidType);
-            if (accidType != Accidental::ACC_NONE)
+            if (accidType != Accidental::AccidentalType::NONE)
                   _bottomAccid.layout();
             else
                   _bottomAccid.setbbox(QRect());
@@ -344,9 +344,9 @@ void Ambitus::layout()
       if (collision) {
             // displace bottom accidental (also attempting to 'undercut' flats)
             xAccidOffBottom = xAccidOffTop +
-                  ((_bottomAccid.accidentalType() == Accidental::ACC_FLAT
-                        || _bottomAccid.accidentalType() == Accidental::ACC_FLAT2
-                        || _bottomAccid.accidentalType() == Accidental::ACC_NATURAL)
+                  ((_bottomAccid.accidentalType() == Accidental::AccidentalType::FLAT
+                        || _bottomAccid.accidentalType() == Accidental::AccidentalType::FLAT2
+                        || _bottomAccid.accidentalType() == Accidental::AccidentalType::NATURAL)
                   ? _bottomAccid.width() * 0.5 : _bottomAccid.width());
             }
 
@@ -445,8 +445,8 @@ Space Ambitus::space() const
       qreal _spatium = spatium();
       // reduce left space if there accidentals
       qreal leftSpace = _spatium *
-            ((_topAccid.accidentalType() != Accidental::ACC_NONE
-                  || _bottomAccid.accidentalType() != Accidental::ACC_NONE)
+            ((_topAccid.accidentalType() != Accidental::AccidentalType::NONE
+                  || _bottomAccid.accidentalType() != Accidental::AccidentalType::NONE)
             ? 0.5 : 0.75);
       return Space(leftSpace - bbox().x(), width() + bbox().x() + _spatium * 0.5);
       }
@@ -458,9 +458,9 @@ Space Ambitus::space() const
 void Ambitus::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
       {
       func(data, this);
-      if (_topAccid.accidentalType() != Accidental::ACC_NONE)
+      if (_topAccid.accidentalType() != Accidental::AccidentalType::NONE)
             func(data, &_topAccid);
-      if (_bottomAccid.accidentalType() != Accidental::ACC_NONE)
+      if (_bottomAccid.accidentalType() != Accidental::AccidentalType::NONE)
             func(data, &_bottomAccid);
       }
 

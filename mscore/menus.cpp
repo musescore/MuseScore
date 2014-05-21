@@ -227,12 +227,12 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
 
       if (basic) {
             static Accidental::AccidentalType types[] = {
-                  Accidental::ACC_NONE,
-                  Accidental::ACC_SHARP,
-                  Accidental::ACC_FLAT,
-                  Accidental::ACC_SHARP2,
-                  Accidental::ACC_FLAT2,
-                  Accidental::ACC_NATURAL
+                  Accidental::AccidentalType::NONE,
+                  Accidental::AccidentalType::SHARP,
+                  Accidental::AccidentalType::FLAT,
+                  Accidental::AccidentalType::SHARP2,
+                  Accidental::AccidentalType::FLAT2,
+                  Accidental::AccidentalType::NATURAL
                   };
             for (auto i : types) {
                   Accidental* s = new Accidental(gscore);
@@ -241,7 +241,7 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
                   }
             }
       else {
-            for (int i = Accidental::ACC_SHARP; i < Accidental::ACC_END; ++i) {
+            for (int i = int(Accidental::AccidentalType::SHARP); i < int(Accidental::AccidentalType::END); ++i) {
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(Accidental::AccidentalType(i));
                   if (s->symbol() != SymId::noSym)
@@ -651,13 +651,13 @@ Palette* MuseScore::newClefsPalette()
       sp->setGrid(33, 60);
       sp->setYOffset(1.0);
       // Up to ClefType::MAX-1, because ClefType::PERC2 is no longer supported
-      static const ClefType clefs[(int)(ClefType::MAX)-1] = {
+      static const ClefType clefs[int(ClefType::MAX)-1] = {
             ClefType::G, ClefType::G1, ClefType::G2, ClefType::G3, ClefType::G4,
             ClefType::C1, ClefType::C2, ClefType::C3, ClefType::C4, ClefType::C5,
             ClefType::F, ClefType::F_8VA, ClefType::F_15MA, ClefType::F8, ClefType::F15, ClefType::F_B, ClefType::F_C,
             ClefType::PERC, ClefType::TAB, ClefType::TAB2
             };
-      for (int i = 0; i < (int)(ClefType::MAX)-1; ++i) {
+      for (int i = 0; i < int(ClefType::MAX)-1; ++i) {
             ClefType j = clefs[i];
             Clef* k = new Ms::Clef(gscore);
             k->setClefType(ClefTypeList(j, j));

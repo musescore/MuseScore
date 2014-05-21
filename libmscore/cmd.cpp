@@ -1431,14 +1431,14 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
       // accidental change may result in pitch change
       //
       AccidentalVal acc2 = measure->findAccidental(note);
-      AccidentalVal acc = (accidental == Accidental::ACC_NONE) ? acc2 : Accidental::subtype2value(accidental);
+      AccidentalVal acc = (accidental == Accidental::AccidentalType::NONE) ? acc2 : Accidental::subtype2value(accidental);
 
       int pitch = line2pitch(note->line(), clef, 0) + acc;
       if (!note->concertPitch())
             pitch += note->transposition();
 
       int tpc = step2tpc(step, acc);
-      if (accidental == Accidental::ACC_NONE) {
+      if (accidental == Accidental::AccidentalType::NONE) {
             //
             //  delete accidentals
             //
@@ -2279,15 +2279,15 @@ void Score::cmd(const QAction* a)
       else if (cmd == "beam-32")
             cmdSetBeamMode(BeamMode::BEGIN32);
       else if (cmd == "sharp2")
-            changeAccidental(Accidental::ACC_SHARP2);
+            changeAccidental(Accidental::AccidentalType::SHARP2);
       else if (cmd == "sharp")
-            changeAccidental(Accidental::ACC_SHARP);
+            changeAccidental(Accidental::AccidentalType::SHARP);
       else if (cmd == "nat")
-            changeAccidental(Accidental::ACC_NATURAL);
+            changeAccidental(Accidental::AccidentalType::NATURAL);
       else if (cmd == "flat")
-            changeAccidental(Accidental::ACC_FLAT);
+            changeAccidental(Accidental::AccidentalType::FLAT);
       else if (cmd == "flat2")
-            changeAccidental(Accidental::ACC_FLAT2);
+            changeAccidental(Accidental::AccidentalType::FLAT2);
       else if (cmd == "repitch")
             _is.setRepitchMode(a->isChecked());
       else if (cmd == "flip")
