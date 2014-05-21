@@ -35,7 +35,7 @@ script:
 after_script:
   - "export TRAVIS_SHORT_COMMIT=`echo $TRAVIS_COMMIT | cut -c 1-8`"
   - "export ARTIFACTS_TARGET_PATHS=$TRAVIS_SHORT_COMMIT"
-  - export ARTIFACTS_PATHS=$(ls | tr "\n" ":")
+  - export ARTIFACTS_PATHS=$(ls ../../vtest/html | tr "\n" ":")
   - "export ARTIFACTS_PERMISSIONS=public-read"
   - "export TRAVIS_BUILD_DIR=../../vtest/html"
   - "artifacts -D upload"
