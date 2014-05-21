@@ -19,7 +19,7 @@
 namespace Ms {
 
 class Xml;
-enum class NoteHeadGroup : char;
+enum class NoteHeadGroup : signed char;
 
 //---------------------------------------------------------
 //   DrumInstrument

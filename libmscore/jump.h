@@ -21,7 +21,7 @@ namespace Ms {
 //   JumpType
 //---------------------------------------------------------
 
-enum class JumpType {
+enum class JumpType : char {
       DC,
       DC_AL_FINE,
       DC_AL_CODA,

@@ -23,7 +23,7 @@ class Note;
 //   GlissandoType
 //---------------------------------------------------------
 
-enum class GlissandoType {
+enum class GlissandoType : char {
       STRAIGHT, WAVY
       };
 

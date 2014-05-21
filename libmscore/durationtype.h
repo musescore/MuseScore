@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-enum class NoteHeadType : char;
+enum class NoteHeadType : signed char;
 
 static const int MAX_DOTS = 3;
 

@@ -21,7 +21,7 @@ namespace Ms {
 
 class Chord;
 
-enum class ArpeggioType {
+enum class ArpeggioType : char {
       NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
       };
 

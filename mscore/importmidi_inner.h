@@ -43,7 +43,7 @@ struct DivisionInfo
       std::vector<DivLengthInfo> divLengths;    // lengths of 'len' subdivisions
       };
 
-enum class DurationType;
+enum class DurationType : char;
 
 } // namespace Meter
 

@@ -26,7 +26,7 @@ class Measure;
 //   VoltaType
 //---------------------------------------------------------
 
-enum class VoltaType {
+enum class VoltaType : char {
       OPEN, CLOSED
       };
 

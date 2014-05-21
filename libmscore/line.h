@@ -30,7 +30,7 @@ enum { GRIP_LINE_START, GRIP_LINE_MIDDLE, GRIP_LINE_END, GRIP_LINE_APERTURE };
 //   LineStyle
 //---------------------------------------------------------
 
-enum class LineStyle {
+enum class LineStyle : char {
       Solid      = Qt::SolidLine,
       Dash       = Qt::DashLine,
       Dot        = Qt::DotLine,

@@ -13,7 +13,7 @@ struct TupletData;
 
 namespace Meter {
 
-enum class DurationType
+enum class DurationType : char
       {
       NOTE,
       REST

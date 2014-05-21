@@ -24,7 +24,7 @@
 class Voice;
 class Channel;
 class ZInstrument;
-enum class Trigger;
+enum class Trigger : char;
 
 static const int MAX_VOICES  = 512;
 static const int MAX_CHANNEL = 64;
