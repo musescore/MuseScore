@@ -1044,33 +1044,32 @@ void Measure::insertStaves(int sStaff, int eStaff)
 
 void Measure::cmdRemoveStaves(int sStaff, int eStaff)
       {
-// qDebug("cmdRemoveStaves %d-%d", sStaff, eStaff);
       int sTrack = sStaff * VOICES;
       int eTrack = eStaff * VOICES;
       for (Segment* s = first(); s; s = s->next()) {
-//            qDebug(" seg %d <%s>", s->tick(), s->subTypeName());
             for (int track = eTrack - 1; track >= sTrack; --track) {
                   Element* el = s->element(track);
-//                  if (el && !el->generated()) {
                   if (el) {
-//                        qDebug("  remove %s track %d", el->name(), track);
-                        _score->undoRemoveElement(el);
+                        el->undoUnlink();
+                        _score->undo(new RemoveElement(el));
                         }
                   }
-            foreach(Element* e, s->annotations()) {
+            foreach (Element* e, s->annotations()) {
                   int staffIdx = e->staffIdx();
                   if ((staffIdx >= sStaff) && (staffIdx < eStaff)) {
-                        qDebug("  remove annotation %s %p staffIdx %d", e->name(), e, staffIdx);
-                        _score->undoRemoveElement(e);
+                        e->undoUnlink();
+                        _score->undo(new RemoveElement(e));
                         }
                   }
             }
-      foreach(Element* e, _el) {
+      foreach (Element* e, _el) {
             if (e->track() == -1)
                   continue;
             int staffIdx = e->staffIdx();
-            if (staffIdx >= sStaff && staffIdx < eStaff)
-                  _score->undoRemoveElement(e);
+            if (staffIdx >= sStaff && staffIdx < eStaff) {
+                  e->undoUnlink();
+                  _score->undo(new RemoveElement(e));
+                  }
             }
 
       _score->undo(new RemoveStaves(this, sStaff, eStaff));

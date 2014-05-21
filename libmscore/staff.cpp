@@ -834,5 +834,20 @@ void Staff::insertTime(int tick, int len)
       clefs.insert(cl2.begin(), cl2.end());
       }
 
+//---------------------------------------------------------
+//   staffList
+//    return list of linked staves
+//---------------------------------------------------------
+
+QList<Staff*> Staff::staffList() const
+      {
+      QList<Staff*> staffList;
+      if (_linkedStaves)
+            staffList = _linkedStaves->staves();
+      else
+            staffList.append(const_cast<Staff*>(this));
+      return staffList;
+      }
+
 }
 

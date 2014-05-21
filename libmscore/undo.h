@@ -1403,6 +1403,20 @@ class SetClefType : public UndoCommand {
       SetClefType(Staff* st, int t, const ClefTypeList& l) : staff(st), tick(t), ctl(l) {}
       };
 
+//---------------------------------------------------------
+//   Unlink
+//---------------------------------------------------------
+
+class Unlink : public UndoCommand {
+      Element* e;
+      Element* le = 0;
+
+   public:
+      Unlink(Element* _e) : e(_e) {}
+      virtual void undo();
+      virtual void redo();
+      };
+
 }     // namespace Ms
 #endif
 

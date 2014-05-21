@@ -419,15 +419,8 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
 
 void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
       {
-      QList<Staff*> staffList;
-      LinkedStaves* linkedStaves = ostaff->linkedStaves();
-      if (linkedStaves)
-            staffList = linkedStaves->staves();
-      else
-            staffList.append(ostaff);
-
-      LinkedElements* links = 0;
-      foreach (Staff* staff, staffList) {
+      KeySig* lks = 0;
+      foreach (Staff* staff, ostaff->staffList()) {
             Score* score = staff->score();
 
             Measure* measure = score->tick2measure(tick);
@@ -440,24 +433,23 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
             int track    = staffIdx * VOICES;
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
-            KeySig* nks  = new KeySig(score);
-            nks->setTrack(track);
-
             int diff = -staff->part()->instr()->transpose().chromatic;
-            if (diff != 0 && !score->styleB(ST_concertPitch))
+            if (diff && !score->styleB(ST_concertPitch))
                   st.setAccidentalType(transposeKey(st.accidentalType(), diff));
 
-            nks->changeKeySigEvent(st);
-            nks->setParent(s);
-            if (links == 0)
-                  links = new LinkedElements(score);
-            links->append(nks);
-            nks->setLinks(links);
-
             if (ks)
-                  undo(new ChangeElement(ks, nks));
-            else
+                  undo(new ChangeKeySig(ks, st, ks->showCourtesy()));
+            else {
+                  KeySig* nks  = new KeySig(score);
+                  nks->setParent(s);
+                  nks->setTrack(track);
+                  nks->setKeySigEvent(st);
                   undo(new AddElement(nks));
+                  if (lks)
+                        lks->linkTo(nks);
+                  else
+                        lks = nks;
+                  }
             updateNoteLines(s, track);
             //
             // change all following generated keysigs
@@ -472,7 +464,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
                   if (ks && !ks->generated())
                         break;
                   if (ks->keySigEvent() != st)
-                        undo(new ChangeKeySig(ks, st, ks->showCourtesy() /*, ks->showNaturals()*/));
+                        undo(new ChangeKeySig(ks, st, ks->showCourtesy()));
                   }
             for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM())
                   m->cmdUpdateNotes(staff->idx());
@@ -1701,7 +1693,7 @@ void ChangeElement::flip()
 
       const LinkedElements* links = oldElement->links();
       if (links) {
-            oldElement->unlink(oldElement);
+            oldElement->unlink();
             oldElement->linkTo(newElement);
             }
 
@@ -3295,6 +3287,33 @@ void SetClefType::flip()
       ClefTypeList ol = staff->clefTypeList(tick);
       staff->setClef(tick, ctl);
       ctl = ol;
+      }
+
+//---------------------------------------------------------
+//   Unlink::undo
+//---------------------------------------------------------
+
+void Unlink::undo()
+      {
+      e->linkTo(le);
+      le = nullptr;
+      }
+
+//---------------------------------------------------------
+//   Unlink::redo
+//---------------------------------------------------------
+
+void Unlink::redo()
+      {
+      const LinkedElements* l = e->links();
+      for (Element* ee : *l) {
+            if (e != ee) {
+                  le = ee;
+                  break;
+                  }
+            }
+      Q_ASSERT(le);
+      e->unlink();
       }
 }
 
