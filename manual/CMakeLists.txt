@@ -45,3 +45,8 @@ set_target_properties (
       COMPILE_FLAGS "-include all.h -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
       )
 endif(APPLE)
+
+xcode_pch(genManual all)
+
+ADD_DEPENDENCIES(genManual mops1)
+ADD_DEPENDENCIES(genManual mops2)
