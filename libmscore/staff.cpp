@@ -605,6 +605,8 @@ void Staff::linkTo(Staff* staff)
             }
       else {
             _linkedStaves->add(staff);
+            if (!staff->linkedStaves())
+                  staff->_linkedStaves = _linkedStaves;
             }
       }
 

@@ -1561,11 +1561,11 @@ void Measure::adjustToLen(Fraction nf)
                         }
                   }
             }
-      Score* s   = score()->rootScore();
-      Measure* m = this;
-      int staves = s->nstaves();
+      Score* s      = score()->rootScore();
+      Measure* m    = this;
+      QList<int> sl = s->uniqueStaves();
 
-      for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
+      for (int staffIdx : sl) {
             int rests  = 0;
             int chords = 0;
             Rest* rest = 0;

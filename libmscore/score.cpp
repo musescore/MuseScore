@@ -3511,5 +3511,31 @@ void Score::setPos(POS pos, int tick)
             }
       }
 
+//---------------------------------------------------------
+//   uniqueStaves
+//---------------------------------------------------------
+
+QList<int> Score::uniqueStaves() const
+      {
+      QList<int> sl;
+
+      for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+            Staff* s = staff(staffIdx);
+            if (s->linkedStaves()) {
+                  bool alreadyInList = false;
+                  for (int idx : sl) {
+                        if (s->linkedStaves()->staves().contains(staff(idx))) {
+                              alreadyInList = true;
+                              break;
+                              }
+                        }
+                  if (alreadyInList)
+                        continue;
+                  }
+            sl.append(staffIdx);
+            }
+      return sl;
+      }
+
 }
 

@@ -468,7 +468,7 @@ void InstrumentWizard::createInstruments(Score* cs)
 
                   if (sli->linked() && !part->staves()->isEmpty()) {
                         Staff* linkedStaff = part->staves()->back();
-                        linkedStaff->linkTo(staff);
+                        staff->linkTo(linkedStaff);
                         }
                   part->staves()->push_back(staff);
                   cs->staves().insert(staffIdx + rstaff, staff);

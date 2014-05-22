@@ -582,6 +582,9 @@ void MuseScore::newFile()
                   continue;
             Measure* measure = static_cast<Measure*>(mb);
             int ticks = measure->ticks();
+
+            QList<int> sl = score->uniqueStaves();
+
             for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                   Staff* staff = score->staff(staffIdx);
                   if (tick == 0) {
@@ -610,36 +613,49 @@ void MuseScore::newFile()
                         }
                   if (staff->primaryStaff()) {
                         if (measure->timesig() != measure->len()) {
-                              int tick = measure->tick();
                               QList<TDuration> dList = toDurationList(measure->len(), false);
                               if (!dList.isEmpty()) {
-                                    foreach(TDuration d, dList) {
-                                          Rest* rest = new Rest(score, d);
-                                          rest->setDuration(d.fraction());
-                                          rest->setTrack(staffIdx * VOICES);
-                                          Segment* s = measure->getSegment(rest, tick);
-                                          s->add(rest);
+                                    int tick = measure->tick();
+                                    foreach (TDuration d, dList) {
+                                          Rest* rest = 0;
+                                          for (Staff* s : staff->staffList()) {
+                                                if (rest)
+                                                      rest = static_cast<Rest*>(rest->linkedClone());
+                                                else
+                                                      rest = new Rest(score, d);
+                                                rest->setDuration(d.fraction());
+                                                rest->setTrack(s->idx() * VOICES);
+                                                Segment* seg = measure->getSegment(rest, tick);
+                                                seg->add(rest);
+                                                }
                                           tick += rest->actualTicks();
                                           }
                                     }
                               }
                         else {
-                              Rest* rest = new Rest(score, TDuration(TDuration::V_MEASURE));
-                              rest->setDuration(measure->len());
-                              rest->setTrack(staffIdx * VOICES);
-                              Segment* s = measure->getSegment(rest, tick);
-                              s->add(rest);
+                              Rest* rest = 0;
+                              for (Staff* s : staff->staffList()) {
+                                    if (rest)
+                                          rest = static_cast<Rest*>(rest->linkedClone());
+                                    else
+                                          rest = new Rest(score, TDuration(TDuration::V_MEASURE));
+                                    rest->setDuration(measure->len());
+                                    rest->setTrack(s->idx() * VOICES);
+                                    Segment* seg = measure->getSegment(rest, tick);
+                                    seg->add(rest);
+                                    }
                               }
                         }
                   }
             tick += ticks;
             }
       score->fixTicks();
+#if 0
       //
       // ceate linked staves
       //
       QMap<Score*, QList<int>> scoremap;
-      foreach(Staff* staff, score->staves()) {
+      foreach (Staff* staff, score->staves()) {
             if (!staff->linkedStaves())
                   continue;
             foreach(Staff* lstaff, staff->linkedStaves()->staves()) {
@@ -661,6 +677,7 @@ void MuseScore::newFile()
             cloneStaves(score, it.key(), it.value());
             ++it;
             }
+#endif
 
       //
       // select first rest
