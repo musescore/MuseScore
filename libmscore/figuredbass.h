@@ -64,17 +64,17 @@ and it is edited (via the normalized text); so it is derived from Text.
 //   @@ FiguredBassItem
 ///   One line of a figured bass indication
 //
-//   @P prefix             Ms::FiguredBassItem  (ModifierNone, ModifierDoubleFlat, ModifierFlat, ModifierNatural, ModifierSharp, ModifierDoubleSharp)  accidental before the digit
-//   @P digit              int                  main digit (0 - 9)
-//   @P suffix             Ms::FiguredBassItem  (ModifierNone, ModifierDoubleFlat, ModifierFlat, ModifierNatural, ModifierSharp, ModifierDoubleSharp, ModifierPlus, ModifierBackslash, ModifierSlash)  accidental/diacritic after the digit
-//   @P continuationLine   bool                 whether item has continuation line or not
-//   @P parenthesis1       Ms::FiguredBassItem  (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis before the prefix
-//   @P parenthesis2       Ms::FiguredBassItem  (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis after the prefix / before the digit
-//   @P parenthesis3       Ms::FiguredBassItem  (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis after the digit / before the suffix
-//   @P parenthesis4       Ms::FiguredBassItem  (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed) parentesis after the suffix / before the cont. line
-//   @P parenthesis5       Ms::FiguredBassItem  (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis after the cont. line
-//   @P displayText        QString              text displayed (depends on configured fonts) (read only)
-//   @P normalizedText     Qstring              conventional textual representation of item properties (= text used during input) (read ony)
+//   @P prefix             Ms::FiguredBassItem::Modifier  (NONE, DOUBLEFLAT, FLAT, NATURAL, SHARP, DOUBLESHARP, PLUS, BACKSLASH, SLASH, NUMOF)  accidental before the digit
+//   @P digit              int                            main digit (0 - 9)
+//   @P suffix             Ms::FiguredBassItem::Modifier  (NONE, DOUBLEFLAT, FLAT, NATURAL, SHARP, DOUBLESHARP, PLUS, BACKSLASH, SLASH, NUMOF)  accidental/diacritic after the digit
+//   @P continuationLine   bool                           whether item has continuation line or not
+//   @P parenthesis1       Ms::FiguredBassItem            (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis before the prefix
+//   @P parenthesis2       Ms::FiguredBassItem            (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis after the prefix / before the digit
+//   @P parenthesis3       Ms::FiguredBassItem            (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis after the digit / before the suffix
+//   @P parenthesis4       Ms::FiguredBassItem            (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed) parentesis after the suffix / before the cont. line
+//   @P parenthesis5       Ms::FiguredBassItem            (ParenthesisNone, ParenthesisRoundOpen, ParenthesisRoundClosed, ParenthesisSquaredOpen, ParenthesisSquaredClosed)  parentesis after the cont. line
+//   @P displayText        QString                        text displayed (depends on configured fonts) (read only)
+//   @P normalizedText     Qstring                        conventional textual representation of item properties (= text used during input) (read ony)
 //---------------------------------------------------------
 
 class FiguredBass;
@@ -97,17 +97,17 @@ class FiguredBassItem : public Element {
       Q_PROPERTY(QString      normalizedText    READ normalizedText)
 
    public:
-      enum Modifier {
-            ModifierNone = 0,
-            ModifierDoubleFlat,
-            ModifierFlat,
-            ModifierNatural,
-            ModifierSharp,
-            ModifierDoubleSharp,
-            ModifierCross,
-            ModifierBackslash,
-            ModifierSlash,
-                  NumOfModifiers
+      enum class Modifier : char {
+            NONE = 0,
+            DOUBLEFLAT,
+            FLAT,
+            NATURAL,
+            SHARP,
+            DOUBLESHARP,
+            CROSS,
+            BACKSLASH,
+            SLASH,
+                  NUMOF
       };
       enum Parenthesis {
             ParenthesisNone = 0,
@@ -231,7 +231,7 @@ struct FiguredBassFont {
       QString           displayName;
       qreal             defPitch;
       qreal             defLineHeight;
-      QChar             displayAccidental[FiguredBassItem::NumOfModifiers];
+      QChar             displayAccidental[int(FiguredBassItem::Modifier::NUMOF)];
       QChar             displayParenthesis[FiguredBassItem::NumOfParentheses];
       QChar             displayDigit[FiguredBassItem::NumOfStyles][10][FiguredBassItem::NumOfCombinations];
 
