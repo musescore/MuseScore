@@ -335,14 +335,23 @@ void mergeChordsWithEqualOnTimeAndVoice(std::multimap<int, MTrack> &tracks)
             }
       }
 
+int chordAveragePitch(const QList<MidiNote> &notes, int beg, int end)
+      {
+      Q_ASSERT_X(!notes.isEmpty(), "MChord::chordAveragePitch", "Empty notes");
+      Q_ASSERT_X(end > 0 && beg >= 0 && end > beg,
+                 "MChord::chordAveragePitch", "Invalid note indexes");
+
+      int sum = 0;
+      for (int i = beg; i != end; ++i)
+            sum += notes[i].pitch;
+      return qRound(sum * 1.0 / (end - beg));
+      }
+
 int chordAveragePitch(const QList<MidiNote> &notes)
       {
       Q_ASSERT_X(!notes.isEmpty(), "MChord::chordAveragePitch", "Empty notes");
 
-      int sum = 0;
-      for (const auto &note: notes)
-            sum += note.pitch;
-      return qRound(sum * 1.0 / notes.size());
+      return chordAveragePitch(notes, 0, notes.size());
       }
 
 // it's an optimization function: we can don't check chords
