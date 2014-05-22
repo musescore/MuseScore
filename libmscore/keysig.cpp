@@ -47,7 +47,7 @@ const char* keyNames[] = {
 KeySig::KeySig(Score* s)
   : Element(s)
       {
-      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
+      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _showCourtesy = true;
       }
 

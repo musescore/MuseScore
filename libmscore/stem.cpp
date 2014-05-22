@@ -36,7 +36,7 @@ Stem::Stem(Score* s)
       {
       _len     = 0.0;
       _userLen = 0.0;
-      setFlags(ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------

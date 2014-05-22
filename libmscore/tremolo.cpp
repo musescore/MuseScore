@@ -32,7 +32,7 @@ Tremolo::Tremolo(Score* score)
       setTremoloType(TREMOLO_R8);
       _chord1  = 0;
       _chord2  = 0;
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 Tremolo::Tremolo(const Tremolo& t)
@@ -41,7 +41,7 @@ Tremolo::Tremolo(const Tremolo& t)
       setTremoloType(t.tremoloType());
       _chord1  = t.chord1();
       _chord2  = t.chord2();
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------

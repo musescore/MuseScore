@@ -74,7 +74,7 @@ void TBox::add(Element* e)
       if (e->type() == TEXT) {
             Text* text = static_cast<Text*>(e);
             text->setLayoutToParentWidth(true);
-            text->setFlag(ELEMENT_MOVABLE, false);
+            text->setFlag(ElementFlag::MOVABLE, false);
             }
       Box::add(e);
       }

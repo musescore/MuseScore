@@ -32,7 +32,7 @@ namespace Ms {
 Glissando::Glissando(Score* s)
   : Element(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
 
       _glissandoType = GlissandoType::STRAIGHT;
       _text          = "gliss.";

@@ -78,7 +78,7 @@ static Acc accList[] = {
 Accidental::Accidental(Score* s)
    : Element(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _hasBracket     = false;
       _role           = AccidentalRole::AUTO;
       _small          = false;

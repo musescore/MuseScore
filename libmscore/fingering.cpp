@@ -25,7 +25,7 @@ Fingering::Fingering(Score* s)
   : Text(s)
       {
       setTextStyleType(TEXT_STYLE_FINGERING);
-      setFlag(ELEMENT_HAS_TAG, true);
+      setFlag(ElementFlag::HAS_TAG, true);
       }
 
 //---------------------------------------------------------

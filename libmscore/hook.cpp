@@ -25,7 +25,7 @@ namespace Ms {
 Hook::Hook(Score* s)
   : Symbol(s)
       {
-      setFlag(ELEMENT_MOVABLE, false);
+      setFlag(ElementFlag::MOVABLE, false);
       }
 
 //---------------------------------------------------------

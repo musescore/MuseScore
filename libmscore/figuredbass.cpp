@@ -903,7 +903,7 @@ bool FiguredBassItem::startsWithParenthesis() const
 FiguredBass::FiguredBass(Score* s)
    : Text(s)
       {
-      setFlag(ELEMENT_ON_STAFF, true);
+      setFlag(ElementFlag::ON_STAFF, true);
       setOnNote(true);
       setTextStyleType(TEXT_STYLE_FIGURED_BASS);
       TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),

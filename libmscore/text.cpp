@@ -777,7 +777,7 @@ Text::Text(Score* s)
             _textStyle = s->textStyle(TEXT_STYLE_DEFAULT);
       _layoutToParentWidth = false;
       _editMode            = false;
-      setFlag(ELEMENT_MOVABLE, true);
+      setFlag(ElementFlag::MOVABLE, true);
       }
 
 Text::Text(const Text& st)

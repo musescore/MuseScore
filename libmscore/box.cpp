@@ -430,7 +430,7 @@ void HBox::layout2()
 bool Box::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
       int type = e->type();
-      if(e->flag(ELEMENT_ON_STAFF))
+      if(e->flag(ElementFlag::ON_STAFF))
             return false;
       switch(type) {
             case LAYOUT_BREAK:
@@ -459,7 +459,7 @@ bool Box::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* Box::drop(const DropData& data)
       {
       Element* e = data.element;
-      if(e->flag(ELEMENT_ON_STAFF))
+      if(e->flag(ElementFlag::ON_STAFF))
             return 0;
       switch(e->type()) {
             case LAYOUT_BREAK:
@@ -631,7 +631,7 @@ void FBox::add(Element* e)
       e->setParent(this);
       if (e->type() == FRET_DIAGRAM) {
 //            FretDiagram* fd = static_cast<FretDiagram*>(e);
-//            fd->setFlag(ELEMENT_MOVABLE, false);
+//            fd->setFlag(ElementFlag::MOVABLE, false);
             }
       else {
             qDebug("FBox::add: element not allowed");

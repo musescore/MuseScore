@@ -44,7 +44,7 @@ static const JumpTypeTable jumpTypeTable[] = {
 Jump::Jump(Score* s)
    : Text(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setTextStyleType(TEXT_STYLE_REPEAT);
       }
 

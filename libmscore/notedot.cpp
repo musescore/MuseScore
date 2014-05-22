@@ -25,7 +25,7 @@ namespace Ms {
 NoteDot::NoteDot(Score* s)
    : Element(s)
       {
-      setFlag(ELEMENT_MOVABLE, false);
+      setFlag(ElementFlag::MOVABLE, false);
       }
 
 //---------------------------------------------------------

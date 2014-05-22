@@ -39,7 +39,7 @@ class OttavaSegment : public TextLineSegment {
    protected:
 
    public:
-      // OttavaSegment(Score* s) : TextLineSegment(s) { setFlag(ELEMENT_ON_STAFF, true); }
+      // OttavaSegment(Score* s) : TextLineSegment(s) { setFlag(ElementFlag::ON_STAFF, true); }
       OttavaSegment(Score* s) : TextLineSegment(s) { }
       virtual ElementType type() const override     { return OTTAVA_SEGMENT; }
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }

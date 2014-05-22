@@ -296,7 +296,7 @@ Element::Element(Score* s) :
       _generated     = false;
       _visible       = true;
       _placement     = Placement::BELOW;
-      _flags         = ELEMENT_SELECTABLE;
+      _flags         = ElementFlag::SELECTABLE;
       _track         = -1;
       _color         = MScore::defaultColor;
       _mag           = 1.0;
@@ -474,7 +474,7 @@ QColor Element::curColor(const Element* proxy) const
       if (score() && score()->printing())
             return (proxy->color() == MScore::defaultColor) ? Qt::black : proxy->color();
 
-      if (flag(ELEMENT_DROP_TARGET))
+      if (flag(ElementFlag::DROP_TARGET))
             return MScore::dropColor;
       bool marked = false;
       if (type() == Element::NOTE) {
@@ -531,7 +531,7 @@ QPointF Element::pagePos() const
       if (parent() == 0)
             return p;
 
-      if (_flags & ELEMENT_ON_STAFF) {
+      if (_flags & ElementFlag::ON_STAFF) {
             System* system;
             if (parent()->type() == SEGMENT)
                   system = static_cast<Segment*>(parent())->measure()->system();
@@ -566,7 +566,7 @@ QPointF Element::canvasPos() const
       if (parent() == 0)
             return p;
 
-      if (_flags & ELEMENT_ON_STAFF) {
+      if (_flags & ElementFlag::ON_STAFF) {
             System* system;
             if (parent()->type() == SEGMENT)
                   system = static_cast<Segment*>(parent())->measure()->system();

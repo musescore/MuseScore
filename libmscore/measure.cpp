@@ -155,7 +155,7 @@ Measure::Measure(Score* s)
       _endBarLineType        = NORMAL_BAR;
       _mmRest                = 0;
       _mmRestCount           = 0;
-      setFlag(ELEMENT_MOVABLE, true);
+      setFlag(ElementFlag::MOVABLE, true);
       }
 
 //---------------------------------------------------------
@@ -618,8 +618,8 @@ void Measure::layout2()
                         if ((staffIdx == nn || score()->styleB(ST_measureNumberAllStaffs))) {
                               if (t == 0) {
                                     t = new Text(score());
-                                    t->setFlag(ELEMENT_ON_STAFF, true);
-                                    // t->setFlag(ELEMENT_MOVABLE, false); ??
+                                    t->setFlag(ElementFlag::ON_STAFF, true);
+                                    // t->setFlag(ElementFlag::MOVABLE, false); ??
                                     t->setTrack(staffIdx * VOICES);
                                     t->setGenerated(true);
                                     t->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
@@ -2220,8 +2220,8 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "MeasureNumber") {
                   Text* noText = new Text(score());
                   noText->read(e);
-                  noText->setFlag(ELEMENT_ON_STAFF, true);
-                  // noText->setFlag(ELEMENT_MOVABLE, false); ??
+                  noText->setFlag(ElementFlag::ON_STAFF, true);
+                  // noText->setFlag(ElementFlag::MOVABLE, false); ??
                   noText->setTrack(e.track());
                   noText->setParent(this);
                   staves[noText->staffIdx()]->setNoText(noText);
