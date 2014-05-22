@@ -33,7 +33,7 @@ QList<QPointF> Spanner::userOffsets;
 SpannerSegment::SpannerSegment(Score* s)
    : Element(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_SEGMENT);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::SEGMENT);
       setSpannerSegmentType(SEGMENT_SINGLE);
       _spanner = 0;
       }

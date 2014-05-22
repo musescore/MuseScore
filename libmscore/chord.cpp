@@ -198,7 +198,7 @@ Chord::Chord(Score* s)
       _playEventType    = PlayEventType::Auto;
       _crossMeasure     = CrossMeasure::UNKNOWN;
       _graceIndex   = 0;
-      setFlags(ELEMENT_MOVABLE | ELEMENT_ON_STAFF);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
       }
 
 Chord::Chord(const Chord& c)
@@ -476,7 +476,7 @@ void Chord::add(Element* e)
                   {
                   Chord* gc = static_cast<Chord*>(e);
                   int idx = gc->graceIndex();
-                  gc->setFlags(ELEMENT_MOVABLE);
+                  gc->setFlags(ElementFlag::MOVABLE);
                   _graceNotes.insert(_graceNotes.begin() + idx, gc);
                   }
                   break;

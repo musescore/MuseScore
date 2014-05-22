@@ -163,7 +163,7 @@ NoteHeadGroup NoteHead::headGroup() const
 Note::Note(Score* s)
    : Element(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       dragMode           = false;
       _pitch             = 0;
       _play              = true;

@@ -43,13 +43,13 @@ enum class SymId : short;
 //   ElementFlag
 //---------------------------------------------------------
 
-enum ElementFlag {
-      ELEMENT_DROP_TARGET  = 0x2,
-      ELEMENT_SELECTABLE   = 0x4,
-      ELEMENT_MOVABLE      = 0x8,
-      ELEMENT_SEGMENT      = 0x10,
-      ELEMENT_HAS_TAG      = 0x20,
-      ELEMENT_ON_STAFF     = 0x40   // parent is Segment() type
+enum ElementFlag : char {
+      DROP_TARGET  = 0x2,
+      SELECTABLE   = 0x4,
+      MOVABLE      = 0x8,
+      SEGMENT      = 0x10,
+      HAS_TAG      = 0x20,
+      ON_STAFF     = 0x40   // parent is Segment() type
       };
 
 typedef QFlags<ElementFlag> ElementFlags;
@@ -530,17 +530,17 @@ class Element : public QObject {
       void setFlags(ElementFlags f)    { _flags = f;    }
       ElementFlags flags() const       { return _flags; }
       virtual bool systemFlag() const  { return false;  }
-      bool selectable() const          { return flag(ELEMENT_SELECTABLE);  }
-      void setSelectable(bool val)     { setFlag(ELEMENT_SELECTABLE, val); }
-      bool dropTarget() const          { return flag(ELEMENT_DROP_TARGET); }
+      bool selectable() const          { return flag(ElementFlag::SELECTABLE);  }
+      void setSelectable(bool val)     { setFlag(ElementFlag::SELECTABLE, val); }
+      bool dropTarget() const          { return flag(ElementFlag::DROP_TARGET); }
       void setDropTarget(bool v) const {
             if (v)
-                  _flags |= ELEMENT_DROP_TARGET;
+                  _flags |= ElementFlag::DROP_TARGET;
             else
-                  _flags &= ~ELEMENT_DROP_TARGET;
+                  _flags &= ~ElementFlag::DROP_TARGET;
             }
-      virtual bool isMovable() const   { return flag(ELEMENT_MOVABLE);     }
-      bool isSegment() const           { return flag(ELEMENT_SEGMENT);     }
+      virtual bool isMovable() const   { return flag(ElementFlag::MOVABLE);     }
+      bool isSegment() const           { return flag(ElementFlag::SEGMENT);     }
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
 

@@ -24,7 +24,7 @@ BSymbol::BSymbol(Score* s)
    : Element(s)
       {
       _z = SYMBOL * 100;
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _systemFlag = false;
       }
 

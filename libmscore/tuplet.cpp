@@ -33,7 +33,7 @@ namespace Ms {
 Tuplet::Tuplet(Score* s)
   : DurationElement(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _numberType   = Tuplet::SHOW_NUMBER;
       _bracketType  = Tuplet::AUTO_BRACKET;
       _number       = 0;

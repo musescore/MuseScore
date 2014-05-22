@@ -50,7 +50,7 @@ Ambitus::Ambitus(Score* s)
       _bottomAccid.setParent(this);
 //      _topAccid.setFlags(0);
 //      _bottomAccid.setFlags(0);
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------

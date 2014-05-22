@@ -36,7 +36,7 @@ static const int DEFAULT_FRETS = 5;
 FretDiagram::FretDiagram(Score* score)
    : Element(score)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_ON_STAFF | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SELECTABLE);
       _strings    = DEFAULT_STRINGS;
       _frets      = DEFAULT_FRETS;
       _maxFrets   = 24;

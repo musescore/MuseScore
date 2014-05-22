@@ -185,7 +185,7 @@ Articulation::Articulation(Score* s)
       {
       _direction = Direction::AUTO;
       _up = true;
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setArticulationType(Articulation_Fermata);
        }
 
