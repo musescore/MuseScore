@@ -56,6 +56,7 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/musicxmlfonthandler.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
       ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.cpp
       ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
