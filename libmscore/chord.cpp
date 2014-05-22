@@ -1696,6 +1696,7 @@ void Chord::layoutPitched()
       qreal dotNoteDistance = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
       qreal minNoteDistance = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
       qreal minTieLength = score()->styleS(StyleIdx::MinTieLength).val() * _spatium;
+      qreal chordX = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
 
       while (_ledgerLines) {
             LedgerLine* l = _ledgerLines->next();
@@ -1735,9 +1736,7 @@ void Chord::layoutPitched()
             Note* note = _notes.at(i);
             note->layout();
 
-            qreal x1 = note->pos().x();
-            if (_noteType == NoteType::NORMAL)
-                  x1 += ipos().x();
+            qreal x1 = note->pos().x() + chordX;
             qreal x2 = x1 + note->headWidth();
             lll = qMax(lll, -x1);
             rrr = qMax(rrr, x2);
@@ -1745,9 +1744,7 @@ void Chord::layoutPitched()
             Accidental* accidental = note->accidental();
             if (accidental) {
                   // convert x position of accidental to segment coordinate system
-                  qreal x = accidental->pos().x() + note->pos().x();
-                  if (_noteType == NoteType::NOTE_NORMAL)
-                        x += ipos().x();
+                  qreal x = accidental->pos().x() + note->pos().x() + chordX;
                   // distance from accidental to note already taken into account
                   // but here perhaps we create more padding in *front* of accidental?
                   x -= score()->styleS(StyleIdx::accidentalDistance).val() * _spatium;
@@ -1823,7 +1820,7 @@ void Chord::layoutPitched()
 
       if (_arpeggio) {
             _arpeggio->layout();    // only for width() !
-            lll        += _arpeggio->width() + _spatium * .5 + ipos().x();
+            lll        += _arpeggio->width() + _spatium * .5 + chordX;
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
             _arpeggio->setPos(-lll, y1);
             _arpeggio->adjustReadPos();
@@ -1851,7 +1848,7 @@ void Chord::layoutPitched()
                   _hook->layout();
                   if (up() && stem()) {
                         // hook position is not set yet
-                        qreal x = _hook->bbox().right() + stem()->hookPos().x() + ipos().x();
+                        qreal x = _hook->bbox().right() + stem()->hookPos().x() + chordX;
                         rrr = qMax(rrr, x);
                         }
                   }
@@ -1878,7 +1875,7 @@ void Chord::layoutPitched()
       qreal graceMag = score()->styleD(StyleIdx::graceNoteMag);
       int nb = getGraceNotesBefore(&graceNotesBefore);
       if (nb){
-              qreal xl = -(_space.lw() + minNoteDistance) - ipos().x();
+              qreal xl = -(_space.lw() + minNoteDistance) - chordX;
               for (int i = nb-1; i >= 0; --i) {
                     Chord* c = graceNotesBefore.value(i);
                     xl -= c->space().rw()/* * 1.2*/;
@@ -1921,8 +1918,8 @@ void Chord::layoutPitched()
             e->layout();
             if (e->type() == ElementType::CHORDLINE) {
                   QRectF tbbox = e->bbox().translated(e->pos());
-                  qreal lx = tbbox.left() + ipos().x();
-                  qreal rx = tbbox.right() + ipos().x();
+                  qreal lx = tbbox.left() + chordX;
+                  qreal rx = tbbox.right() + chordX;
                   if (-lx > _space.lw())
                         _space.setLw(-lx);
                   if (rx > _space.rw())
