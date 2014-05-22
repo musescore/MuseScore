@@ -278,7 +278,7 @@ void Stem::reset()
 
 bool Stem::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      if ((e->type() == TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TREMOLO_R64)) {
+      if ((e->type() == ElementType::TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TREMOLO_R64)) {
             return true;
             }
       return false;
@@ -293,7 +293,7 @@ Element* Stem::drop(const DropData& data)
       Element* e = data.element;
       Chord* ch = chord();
       switch(e->type()) {
-            case TREMOLO:
+            case ElementType::TREMOLO:
                   e->setParent(ch);
                   score()->setLayoutAll(true);
                   score()->undoAddElement(e);

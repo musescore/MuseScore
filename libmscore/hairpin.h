@@ -42,7 +42,7 @@ class HairpinSegment : public LineSegment {
       HairpinSegment(Score* s) : LineSegment(s) {}
       Hairpin* hairpin() const                  { return (Hairpin*)spanner(); }
       virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
-      virtual ElementType type() const override { return HAIRPIN_SEGMENT; }
+      virtual ElementType type() const override { return ElementType::HAIRPIN_SEGMENT; }
       virtual void draw(QPainter*) const override;
       virtual void updateGrips(int*, int*, QRectF*) const override;
       virtual void editDrag(const EditData&) override;
@@ -89,7 +89,7 @@ class Hairpin : public SLine {
    public:
       Hairpin(Score* s);
       virtual Hairpin* clone() const override   { return new Hairpin(*this); }
-      virtual ElementType type() const override { return HAIRPIN;  }
+      virtual ElementType type() const override { return ElementType::HAIRPIN;  }
 
       HairpinType hairpinType() const      { return _hairpinType; }
       void setHairpinType(HairpinType val) { _hairpinType = val;  }

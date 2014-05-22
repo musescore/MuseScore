@@ -35,7 +35,7 @@ class NoteLine : public TextLine {
       ~NoteLine() {}
 
       virtual NoteLine* clone() const           { return new NoteLine(*this); }
-      virtual ElementType type() const          { return NOTELINE; }
+      virtual ElementType type() const          { return ElementType::NOTELINE; }
 
       void setStartNote(Note* n)  { _startNote = n; }
       Note* startNote() const     { return _startNote; }

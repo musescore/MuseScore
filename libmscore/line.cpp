@@ -347,7 +347,7 @@ void LineSegment::editDrag(const EditData& ed)
             // if we touch a different note, change anchor
             //
             Element* e = ed.view->elementNear(ed.pos);
-            if (e && e->type() == NOTE) {
+            if (e && e->type() == ElementType::NOTE) {
                   SLine* l = line();
                   if (ed.curGrip == GRIP_LINE_END && e != line()->endElement()) {
                         qDebug("LineSegment: move end anchor");
@@ -473,7 +473,7 @@ QPointF SLine::linePos(int grip, System** sys)
                   // anchor() == ANCHOR_MEASURE
                   Measure* m;
                   if (grip == GRIP_LINE_START) {
-                        Q_ASSERT(startElement()->type() == MEASURE);
+                        Q_ASSERT(startElement()->type() == ElementType::MEASURE);
                         m = static_cast<Measure*>(startElement());
                         x = m->pos().x();
                         if(score()->styleB(ST_createMultiMeasureRests) && m->hasMMRest()) {
@@ -481,7 +481,7 @@ QPointF SLine::linePos(int grip, System** sys)
                               }
                         }
                   else {
-                        Q_ASSERT(endElement()->type() == MEASURE);
+                        Q_ASSERT(endElement()->type() == ElementType::MEASURE);
                         m = static_cast<Measure*>(endElement());
                         x = m->pos().x() + m->bbox().right();
 
@@ -499,7 +499,7 @@ QPointF SLine::linePos(int grip, System** sys)
                         Segment* seg = m->last();
                         if (seg->segmentType() == Segment::SegEndBarLine) {
                               Element* e = seg->element(0);
-                              if (e && e->type() == BAR_LINE) {
+                              if (e && e->type() == ElementType::BAR_LINE) {
                                     if (static_cast<BarLine*>(e)->barLineType() == START_REPEAT)
                                           x -= e->width() - _spatium * .5;
                                     else

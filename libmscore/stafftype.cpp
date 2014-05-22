@@ -698,7 +698,7 @@ void TabDurationSymbol::layout()
       qreal w = fm.width(_text);
       qreal y = _tab->durationBoxY();
       // with rests, move symbol down by half its displacement from staff
-      if(parent() && parent()->type() == REST)
+      if(parent() && parent()->type() == ElementType::REST)
             y += TAB_RESTSYMBDISPL * spatium();
       bbox().setRect(0.0, y * mags, w * mags, _tab->durationBoxH() * mags);
       }
@@ -718,7 +718,7 @@ void TabDurationSymbol::draw(QPainter* painter) const
       painter->scale(mag, mag);
       painter->setFont(_tab->durationFont());
       qreal y = _tab->durationFontYOffset();
-      if(parent() && parent()->type() == REST)
+      if(parent() && parent()->type() == ElementType::REST)
             y += TAB_RESTSYMBDISPL * spatium();
       painter->drawText(QPointF(0.0, y), _text);
       painter->scale(imag, imag);

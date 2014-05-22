@@ -27,7 +27,7 @@ class RehearsalMark : public Text  {
    public:
       RehearsalMark(Score* score);
       virtual RehearsalMark* clone() const { return new RehearsalMark(*this); }
-      virtual ElementType type() const { return REHEARSAL_MARK; }
+      virtual ElementType type() const { return ElementType::REHEARSAL_MARK; }
       Segment* segment() const { return (Segment*)parent(); }
       };
 

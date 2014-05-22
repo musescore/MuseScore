@@ -360,7 +360,7 @@ void Clef::draw(QPainter* painter) const
 
 bool Clef::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return (e->type() == CLEF || (/*!generated() &&*/ e->type() == AMBITUS) );
+      return (e->type() == ElementType::CLEF || (/*!generated() &&*/ e->type() == ElementType::AMBITUS) );
       }
 
 //---------------------------------------------------------
@@ -371,7 +371,7 @@ Element* Clef::drop(const DropData& data)
       {
       Element* e = data.element;
       Clef* c = 0;
-      if (e->type() == CLEF) {
+      if (e->type() == ElementType::CLEF) {
             Clef* clef = static_cast<Clef*>(e);
             ClefType stype  = clef->clefType();
             if (clefType() != stype) {
@@ -379,7 +379,7 @@ Element* Clef::drop(const DropData& data)
                   c = this;
                   }
             }
-      else if (e->type() == AMBITUS) {
+      else if (e->type() == ElementType::AMBITUS) {
             /*if (!generated())*/ {
                   Measure*    meas  = measure();
                   Segment*    segm  = meas->getSegment(Segment::SegAmbitus, meas->tick());

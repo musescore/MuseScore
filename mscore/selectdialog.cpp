@@ -50,15 +50,15 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
 
 void SelectDialog::setPattern(ElementPattern* p)
       {
-      p->type    = e->type();
-      p->subtype = e->subType();
+      p->type    = int(e->type());
+      p->subtype = int(e->subType());
       p->staff   = sameStaff->isChecked() ? e->staffIdx() : -1;
       p->voice   = sameVoice->isChecked() ? e->voice() : -1;
       p->subtypeValid = sameSubtype->isChecked();
       p->system  = 0;
       if (sameSystem->isChecked()) {
             do {
-                  if (e->type() == Element::SYSTEM) {
+                  if (e->type() == Element::ElementType::SYSTEM) {
                         p->system = static_cast<const System*>(e);
                         break;
                         }

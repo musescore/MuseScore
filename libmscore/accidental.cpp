@@ -399,7 +399,7 @@ void Accidental::draw(QPainter* painter) const
 
 bool Accidental::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == ACCIDENTAL_BRACKET;
+      return e->type() == ElementType::ACCIDENTAL_BRACKET;
       }
 
 //---------------------------------------------------------
@@ -410,7 +410,7 @@ Element* Accidental::drop(const DropData& data)
       {
       Element* e = data.element;
       switch(e->type()) {
-            case ACCIDENTAL_BRACKET:
+            case ElementType::ACCIDENTAL_BRACKET:
                   if (!_hasBracket)
                         undoSetHasBracket(true);
                   break;

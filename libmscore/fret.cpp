@@ -102,7 +102,7 @@ QPointF FretDiagram::pagePos() const
       {
       if (parent() == 0)
             return pos();
-      if (parent()->type() == SEGMENT) {
+      if (parent()->type() == ElementType::SEGMENT) {
             Measure* m = static_cast<Segment*>(parent())->measure();
             System* system = m->system();
             qreal yp = y();
@@ -121,7 +121,7 @@ QPointF FretDiagram::pagePos() const
 
 QLineF FretDiagram::dragAnchor() const
       {
-      if (parent()->type() == SEGMENT) {
+      if (parent()->type() == ElementType::SEGMENT) {
             Segment* s     = static_cast<Segment*>(parent());
             Measure* m     = s->measure();
             System* system = m->system();
@@ -304,7 +304,7 @@ void FretDiagram::layout()
       if (_harmony)
             _harmony->layout();
 
-      if (parent() == 0 || parent()->type() != SEGMENT)
+      if (parent() == 0 || parent()->type() != ElementType::SEGMENT)
             return;
       Measure* m     = static_cast<Segment*>(parent())->measure();
       int idx        = staffIdx();
@@ -433,7 +433,7 @@ void FretDiagram::setFingering(int string, int finger)
 void FretDiagram::add(Element* e)
       {
       e->setParent(this);
-      if (e->type() == HARMONY) {
+      if (e->type() == ElementType::HARMONY) {
             _harmony = static_cast<Harmony*>(e);
             _harmony->setTrack(track());
             }
@@ -459,7 +459,7 @@ void FretDiagram::remove(Element* e)
 
 bool FretDiagram::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == HARMONY;
+      return e->type() == ElementType::HARMONY;
       }
 
 //---------------------------------------------------------
@@ -469,7 +469,7 @@ bool FretDiagram::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* FretDiagram::drop(const DropData& data)
       {
       Element* e = data.element;
-      if (e->type() == HARMONY) {
+      if (e->type() == ElementType::HARMONY) {
             // TODO: make undoable
             Harmony* h = static_cast<Harmony*>(e);
             h->setParent(this);

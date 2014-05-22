@@ -259,7 +259,7 @@ void Measure::remove(Segment* el)
             }
 
       // Q_ASSERT(!score()->undoRedo());
-      Q_ASSERT(el->type() == SEGMENT);
+      Q_ASSERT(el->type() == ElementType::SEGMENT);
       if (el->prev()) {
             Q_ASSERT(el->prev()->next() == el);
             }
@@ -329,7 +329,7 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
       if (cr->small())
             m *= score()->styleD(ST_smallNoteMag);
 
-      if (cr->type() == CHORD) {
+      if (cr->type() == ElementType::CHORD) {
             Chord* chord = static_cast<Chord*>(cr);
             for (Chord* c : chord->graceNotes())
                   layoutCR0(c, mm);
@@ -374,7 +374,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
             int endTrack   = startTrack + VOICES;
             for (int track = startTrack; track < endTrack; ++track) {
                   Element* e = segment->element(track);
-                  if (!e || e->type() != CHORD)
+                  if (!e || e->type() != ElementType::CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
                   for (Chord* chord1 : chord->graceNotes()) {
@@ -434,7 +434,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
                   }
             for (int track = startTrack; track < endTrack; ++track) {
                   Element* e = segment->element(track);
-                  if (!e || e->type() != CHORD)
+                  if (!e || e->type() != ElementType::CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
                   for (Chord* chord1 : chord->graceNotes()) {
@@ -652,7 +652,7 @@ void Measure::layout2()
                   Element* el = s->element(track);
                   if (el) {
                         ChordRest* cr = static_cast<ChordRest*>(el);
-                        if (cr->type() == CHORD) {
+                        if (cr->type() == ElementType::CHORD) {
                               Chord* c = static_cast<Chord*>(cr);
                               foreach(const Note* note, c->notes()) {
                                     foreach (Spanner* sp, note->spannerFor())
@@ -681,7 +681,7 @@ Chord* Measure::findChord(int tick, int track)
                   return 0;
             if (seg->tick() == tick) {
                   Element* el = seg->element(track);
-                  if (el && el->type() == CHORD)
+                  if (el && el->type() == ElementType::CHORD)
                         return static_cast<Chord*>(el);
                   }
             }
@@ -700,7 +700,7 @@ ChordRest* Measure::findChordRest(int tick, int track)
                   return 0;
             if (seg->tick() == tick) {
                   Element* el = seg->element(track);
-                  if (el && (el->type() == CHORD || el->type() == REST)) {
+                  if (el && (el->type() == ElementType::CHORD || el->type() == ElementType::REST)) {
                         return (ChordRest*)el;
                         }
                   }
@@ -796,15 +796,15 @@ void Measure::add(Element* el)
 //            qDebug("measure %p(%d): add %s %p", this, _no, el->name(), el);
 
       switch (type) {
-            case TEXT:
+            case ElementType::TEXT:
                   staves[el->staffIdx()]->setNoText(static_cast<Text*>(el));
                   break;
 
-            case TUPLET:
+            case ElementType::TUPLET:
                   qDebug("Measure::add(Tuplet) ??");
                   break;
 
-            case SPACER:
+            case ElementType::SPACER:
                   {
                   Spacer* sp = static_cast<Spacer*>(el);
                   if (sp->spacerType() == SPACER_UP)
@@ -813,7 +813,7 @@ void Measure::add(Element* el)
                         staves[el->staffIdx()]->_vspacerDown = sp;
                   }
                   break;
-            case SEGMENT:
+            case ElementType::SEGMENT:
                   {
                   Segment* seg = static_cast<Segment*>(el);
                   int tracks = staves.size() * VOICES;
@@ -876,18 +876,18 @@ void Measure::add(Element* el)
                   }
                   break;
 
-            case JUMP:
+            case ElementType::JUMP:
                   _repeatFlags |= RepeatJump;
                   _el.push_back(el);
                   break;
 
-            case HBOX:
+            case ElementType::HBOX:
                   if (el->staff())
                         el->setMag(el->staff()->mag());     // ?!
                   _el.push_back(el);
                   break;
 
-            case MEASURE:
+            case ElementType::MEASURE:
                   _mmRest = static_cast<Measure*>(el);
                   break;
 
@@ -907,36 +907,36 @@ void Measure::remove(Element* el)
       {
       setDirty();
       switch(el->type()) {
-            case TEXT:
+            case ElementType::TEXT:
                   staves[el->staffIdx()]->setNoText(static_cast<Text*>(0));
                   break;
 
-            case SPACER:
+            case ElementType::SPACER:
                   if (static_cast<Spacer*>(el)->spacerType() == SPACER_DOWN)
                         staves[el->staffIdx()]->_vspacerDown = 0;
                   else if (static_cast<Spacer*>(el)->spacerType() == SPACER_UP)
                         staves[el->staffIdx()]->_vspacerUp = 0;
                   break;
 
-            case SEGMENT:
+            case ElementType::SEGMENT:
                   remove(static_cast<Segment*>(el));
                   break;
 
-            case JUMP:
+            case ElementType::JUMP:
                   _repeatFlags &= ~RepeatJump;
                   // fall through
 
-            case HBOX:
+            case ElementType::HBOX:
                   if (!_el.remove(el)) {
                         qDebug("Measure(%p)::remove(%s,%p) not found",
                            this, el->name(), el);
                         }
                   break;
 
-            case CLEF:
-            case CHORD:
-            case REST:
-            case TIMESIG:
+            case ElementType::CLEF:
+            case ElementType::CHORD:
+            case ElementType::REST:
+            case ElementType::TIMESIG:
                   for (Segment* segment = first(); segment; segment = segment->next()) {
                         int staves = _score->nstaves();
                         int tracks = staves * VOICES;
@@ -951,7 +951,7 @@ void Measure::remove(Element* el)
                   qDebug("Measure::remove: %s %p not found", el->name(), el);
                   break;
 
-            case MEASURE:
+            case ElementType::MEASURE:
                   _mmRest = 0;
                   break;
 
@@ -967,7 +967,7 @@ void Measure::remove(Element* el)
 
 void Measure::change(Element* o, Element* n)
       {
-      if (o->type() == TUPLET) {
+      if (o->type() == ElementType::TUPLET) {
             Tuplet* t = static_cast<Tuplet*>(n);
             foreach(DurationElement* e, t->elements()) {
                   e->setTuplet(t);
@@ -1215,7 +1215,7 @@ QRectF Measure::staffabbox(int staffIdx) const
 
 bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) const
       {
-      int type = e->type();
+      ElementType type = e->type();
       // convert p from canvas to measure relative position and take x and y coordinates
       QPointF mrp = p - canvasPos(); // pos() - system()->pos() - system()->page()->pos();
       qreal mrpy = mrp.y();
@@ -1239,32 +1239,32 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
       rr.translate(page->pos());
 
       switch (type) {
-            case MEASURE_LIST:
-            case JUMP:
-            case MARKER:
-            case LAYOUT_BREAK:
+            case ElementType::MEASURE_LIST:
+            case ElementType::JUMP:
+            case ElementType::MARKER:
+            case ElementType::LAYOUT_BREAK:
                   viewer->setDropRectangle(rr);
                   return true;
 
-            case STAFF_LIST:
-            case BRACKET:
-            case REPEAT_MEASURE:
-            case MEASURE:
-            case SPACER:
-            case IMAGE:
+            case ElementType::STAFF_LIST:
+            case ElementType::BRACKET:
+            case ElementType::REPEAT_MEASURE:
+            case ElementType::MEASURE:
+            case ElementType::SPACER:
+            case ElementType::IMAGE:
                   viewer->setDropRectangle(r);
                   return true;
 
-            case BAR_LINE:
-            case SYMBOL:
-            case CLEF:
+            case ElementType::BAR_LINE:
+            case ElementType::SYMBOL:
+            case ElementType::CLEF:
                   // accept drop only inside staff
                   if (mrpy < t || mrpy > b)
                         return false;
                   viewer->setDropRectangle(r);
                   return true;
 
-            case ICON:
+            case ElementType::ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
                         case ICON_HFRAME:
@@ -1276,8 +1276,8 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
                         }
                   break;
 
-            case KEYSIG:
-            case TIMESIG:
+            case ElementType::KEYSIG:
+            case ElementType::TIMESIG:
                   // accept drop only inside staff
                   if (mrpy < t || mrpy > b)
                         return false;
@@ -1310,33 +1310,33 @@ Element* Measure::drop(const DropData& data)
       Staff* staff = score()->staff(staffIdx);
 
       switch(e->type()) {
-            case MEASURE_LIST:
+            case ElementType::MEASURE_LIST:
 qDebug("drop measureList or StaffList");
                   delete e;
                   break;
 
-            case STAFF_LIST:
+            case ElementType::STAFF_LIST:
 qDebug("drop staffList");
 //TODO                  score()->pasteStaff(e, this, staffIdx);
                   delete e;
                   break;
 
-            case MARKER:
-            case JUMP:
+            case ElementType::MARKER:
+            case ElementType::JUMP:
                   e->setParent(seg);
                   e->setTrack(0);
                   score()->undoAddElement(e);
                   return e;
 
-            case DYNAMIC:
-            case FRET_DIAGRAM:
+            case ElementType::DYNAMIC:
+            case ElementType::FRET_DIAGRAM:
                   e->setParent(seg);
                   e->setTrack(staffIdx * VOICES);
                   score()->undoAddElement(e);
                   return e;
 
-            case IMAGE:
-            case SYMBOL:
+            case ElementType::IMAGE:
+            case ElementType::SYMBOL:
                   e->setParent(seg);
                   e->setTrack(staffIdx * VOICES);
                   e->layout();
@@ -1347,7 +1347,7 @@ qDebug("drop staffList");
                   score()->undoAddElement(e);
                   return e;
 
-            case BRACKET:
+            case ElementType::BRACKET:
                   {
                   Bracket* b = static_cast<Bracket*>(e);
                   int level = 0;
@@ -1365,12 +1365,12 @@ qDebug("drop staffList");
                   }
                   return 0;
 
-            case CLEF:
+            case ElementType::CLEF:
                   score()->undoChangeClef(staff, first(), static_cast<Clef*>(e)->clefType());
                   delete e;
                   break;
 
-            case KEYSIG:
+            case ElementType::KEYSIG:
                   {
                   KeySig* ks    = static_cast<KeySig*>(e);
                   KeySigEvent k = ks->keySigEvent();
@@ -1399,12 +1399,12 @@ qDebug("drop staffList");
                   break;
                   }
 
-            case TIMESIG:
+            case ElementType::TIMESIG:
                   score()->cmdAddTimeSig(this, staffIdx, static_cast<TimeSig*>(e),
                      data.modifiers & Qt::ControlModifier);
                   return 0;
 
-            case LAYOUT_BREAK:
+            case ElementType::LAYOUT_BREAK:
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
                   if (
@@ -1421,7 +1421,7 @@ qDebug("drop staffList");
                   // make sure there is only LayoutBreak::LayoutBreakType::LINE or LayoutBreak::LayoutBreakType::PAGE
                   if ((lb->layoutBreakType() != LayoutBreak::LayoutBreakType::SECTION) && (_pageBreak || _lineBreak)) {
                         foreach(Element* le, _el) {
-                              if (le->type() == LAYOUT_BREAK
+                              if (le->type() == ElementType::LAYOUT_BREAK
                                  && (static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::LayoutBreakType::LINE
                                   || static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::LayoutBreakType::PAGE)) {
                                     score()->undoChangeElement(le, e);
@@ -1436,7 +1436,7 @@ qDebug("drop staffList");
                   return lb;
                   }
 
-            case SPACER:
+            case ElementType::SPACER:
                   {
                   Spacer* spacer = static_cast<Spacer*>(e);
                   spacer->setTrack(staffIdx * VOICES);
@@ -1445,7 +1445,7 @@ qDebug("drop staffList");
                   return spacer;
                   }
 
-            case BAR_LINE:
+            case ElementType::BAR_LINE:
                   {
                   BarLine* bl = static_cast<BarLine*>(e);
                   // if dropped bar line refers to span rather than to subtype
@@ -1464,27 +1464,27 @@ qDebug("drop staffList");
                   break;
                   }
 
-            case REPEAT_MEASURE:
+            case ElementType::REPEAT_MEASURE:
                   {
                   delete e;
                   return cmdInsertRepeatMeasure(staffIdx);
                   }
-            case ICON:
+            case ElementType::ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_VFRAME:
-                              score()->insertMeasure(VBOX, this);
+                              score()->insertMeasure(ElementType::VBOX, this);
                               break;
                         case ICON_HFRAME:
-                              score()->insertMeasure(HBOX, this);
+                              score()->insertMeasure(ElementType::HBOX, this);
                               break;
                         case ICON_TFRAME:
-                              score()->insertMeasure(TBOX, this);
+                              score()->insertMeasure(ElementType::TBOX, this);
                               break;
                         case ICON_FFRAME:
-                              score()->insertMeasure(FBOX, this);
+                              score()->insertMeasure(ElementType::FBOX, this);
                               break;
                         case ICON_MEASURE:
-                              score()->insertMeasure(MEASURE, this);
+                              score()->insertMeasure(ElementType::MEASURE, this);
                               break;
                         }
                   break;
@@ -1527,7 +1527,7 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       rm->setParent(seg);
       _score->undoAddElement(rm);
       foreach (Element* el, _el) {
-            if (el->type() == SLUR && el->staffIdx() == staffIdx)
+            if (el->type() == ElementType::SLUR && el->staffIdx() == staffIdx)
                   _score->undoRemoveElement(el);
             }
       return rm;
@@ -1577,11 +1577,11 @@ void Measure::adjustToLen(Fraction nf)
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = segment->element(track);
                         if (e) {
-                              if (e->type() == REST) {
+                              if (e->type() == ElementType::REST) {
                                     ++rests;
                                     rest = static_cast<Rest*>(e);
                                     }
-                              else if (e->type() == CHORD)
+                              else if (e->type() == ElementType::CHORD)
                                     ++chords;
                               }
                         }
@@ -1653,7 +1653,7 @@ void Measure::adjustToLen(Fraction nf)
             //  CHECK: do not remove all slurs
             //
             foreach(Element* e, *m->el()) {
-                  if (e->type() == SLUR)
+                  if (e->type() == ElementType::SLUR)
                         s->undoRemoveElement(e);
                   }
             }
@@ -1877,7 +1877,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                                     Chord* pch = 0;       // previous chord
                                     if (ss) {
                                           ChordRest* cr = static_cast<ChordRest*>(ss->element(track));
-                                          if (cr && cr->type() == CHORD)
+                                          if (cr && cr->type() == ElementType::CHORD)
                                                 pch = static_cast<Chord*>(cr);
                                           }
                                     if (pch) {
@@ -1934,11 +1934,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                               // track is the same as the beginning of the slur
                         if (spanner->track2() == -1)
                               spanner->setTrack2(spanner->track() ? spanner->track() : e.track());
-                        if (spanner->type() == OTTAVA) {
+                        if (spanner->type() == ElementType::OTTAVA) {
                               Ottava* o = static_cast<Ottava*>(spanner);
                               o->staff()->updateOttava(o);
                               }
-                        else if (spanner->type() == HAIRPIN) {
+                        else if (spanner->type() == ElementType::HAIRPIN) {
                               Hairpin* hp = static_cast<Hairpin*>(spanner);
                               score()->updateHairpin(hp);
                               }
@@ -2259,7 +2259,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   if (s->segmentType() == Segment::SegChordRest) {
                         if (s->element(0)) {
                               ChordRest* cr = static_cast<ChordRest*>(s->element(0));
-                              if (cr->type() == REPEAT_MEASURE)
+                              if (cr->type() == ElementType::REPEAT_MEASURE)
                                     ticks1 = ticks();
                               else
                                     ticks1 = s->rtick() + cr->actualTicks();
@@ -2761,7 +2761,7 @@ bool Measure::isMeasureRest(int staffIdx)
       for (Segment* s = first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
             for (int track = strack; track < etrack; ++track) {
                   Element* e = s->element(track);
-                  if (e && e->type() != REST)
+                  if (e && e->type() != ElementType::REST)
                         return false;
                   }
             }
@@ -2783,7 +2783,7 @@ bool Measure::isFullMeasureRest()
       for (int track = strack; track < etrack; ++track) {
             Element* e = s->element(track);
             if (e) {
-                  if (e->type() != REST)
+                  if (e->type() != ElementType::REST)
                         return false;
                   Rest* rest = static_cast<Rest*>(e);
                   if (rest->durationType().type() != TDuration::DurationType::V_MEASURE)
@@ -2810,7 +2810,7 @@ bool Measure::isRepeatMeasure(Part* part)
 
       for (int track = strack; track < etrack; ++track) {
             Element* e = s->element(track);
-            if (e && e->type() == REPEAT_MEASURE)
+            if (e && e->type() == ElementType::REPEAT_MEASURE)
                   return true;
             }
       return false;
@@ -2857,7 +2857,7 @@ bool Measure::isEmpty() const
                         continue;
                         }
                   if (s->element(track))  {
-                        if (s->element(track)->type() != REST)
+                        if (s->element(track)->type() != ElementType::REST)
                               return false;
                         restFound = true;
                         }
@@ -2881,7 +2881,7 @@ bool Measure::isOnlyRests(int track) const
       for (const Segment* s = first(st); s; s = s->next(st)) {
             if (s->segmentType() != Segment::SegChordRest || !s->element(track))
                   continue;
-            if (s->element(track)->type() != REST)
+            if (s->element(track)->type() != ElementType::REST)
                   return false;
             }
       return true;
@@ -3125,7 +3125,7 @@ void Measure::layoutX(qreal stretch)
                                     if (!cr)
                                           continue;
                                     // check for accidentals in chord
-                                    if (cr->type() == Element::CHORD) {
+                                    if (cr->type() == Element::ElementType::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
                                           if (!c->graceNotes().empty())
                                                 grace = true;
@@ -3149,7 +3149,7 @@ void Measure::layoutX(qreal stretch)
                               found = true;
                               if (pt & (Segment::SegStartRepeatBarLine | Segment::SegBarLine | Segment::SegTimeSig) && !accidentalStaff) {
                                     // no distance to full measure rest
-                                    if (!(cr->type() == REST && static_cast<Rest*>(cr)->durationType() == TDuration::DurationType::V_MEASURE)) {
+                                    if (!(cr->type() == ElementType::REST && static_cast<Rest*>(cr)->durationType() == TDuration::DurationType::V_MEASURE)) {
                                           accidentalStaff = true;
                                           qreal sp;
                                           qreal bnd = score()->styleS(ST_barNoteDistance).val() * _spatium;
@@ -3200,7 +3200,7 @@ void Measure::layoutX(qreal stretch)
 
                         // add spacing for chord symbols
                         foreach (const Element* e, s->annotations()) {
-                              if (e->type() != Element::HARMONY || e->track() < track || e->track() >= track+VOICES)
+                              if (e->type() != Element::ElementType::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
                               const Harmony* h = static_cast<const Harmony*>(e);
                               QRectF b(h->bboxtight().translated(h->pos()));
@@ -3472,7 +3472,7 @@ void Measure::layoutX(qreal stretch)
                   ElementType t = e->type();
                   Rest* rest = static_cast<Rest*>(e);
                   if (((track % VOICES) == 0) &&
-                     (t == REPEAT_MEASURE || (t == REST && (isMMRest() || rest->isFullMeasureRest())))) {
+                     (t == ElementType::REPEAT_MEASURE || (t == ElementType::REST && (isMMRest() || rest->isFullMeasureRest())))) {
                         //
                         // element has to be centered in free space
                         //    x1 - left measure position of free space
@@ -3548,11 +3548,11 @@ void Measure::layoutX(qreal stretch)
                               rest->adjustReadPos();
                               }
                         }
-                  else if (t == REST)
+                  else if (t == ElementType::REST)
                         e->rxpos() = 0;
-                  else if (t == CHORD)
+                  else if (t == ElementType::CHORD)
                         static_cast<Chord*>(e)->layout2();
-                  else if (t == CLEF) {
+                  else if (t == ElementType::CLEF) {
                         if (s == first()) {
                               // clef at the beginning of measure
                               qreal gap = 0.0;
@@ -3563,7 +3563,7 @@ void Measure::layoutX(qreal stretch)
                               e->adjustReadPos();
                               }
                         }
-                  else if (t == AMBITUS)
+                  else if (t == ElementType::AMBITUS)
                         e->adjustReadPos();
                   else {
                         e->setPos(-e->bbox().x(), 0.0);
@@ -3651,7 +3651,7 @@ void Measure::layoutStage1()
             }
 #endif
       MeasureBase* mb = prev();
-      if (mb && mb->type() == Element::MEASURE) {
+      if (mb && mb->type() == Element::ElementType::MEASURE) {
             Measure* pm = static_cast<Measure*>(mb);
             if (pm->endBarLineType() != NORMAL_BAR
                && pm->endBarLineType() != BROKEN_BAR && pm->endBarLineType() != DOTTED_BAR)
@@ -3677,7 +3677,7 @@ void Measure::updateNotes(int staffIdx)
       for (Segment* s = first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
             for (int track = startTrack; track < endTrack; ++track) {
                   Chord* chord = static_cast<Chord*>(s->element(track));
-                  if (!chord || chord->type() != CHORD)
+                  if (!chord || chord->type() != ElementType::CHORD)
                        continue;
                   chord->updateNotes(&as);
                   }
@@ -3702,7 +3702,7 @@ void Measure::cmdUpdateNotes(int staffIdx)
       for (Segment* segment = first(Segment::SegChordRest); segment; segment = segment->next(Segment::SegChordRest)) {
             for (int track = startTrack; track < endTrack; ++track) {
                   Chord* chord = static_cast<Chord*>(segment->element(track));
-                  if (!chord || chord->type() != CHORD)
+                  if (!chord || chord->type() != ElementType::CHORD)
                        continue;
                   chord->cmdUpdateNotes(&as);
                   }
@@ -3781,7 +3781,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                                           }
                                     ncr->setTuplet(nt);
                                     }
-                              if (oe->type() == CHORD) {
+                              if (oe->type() == ElementType::CHORD) {
                                     Chord* och = static_cast<Chord*>(ocr);
                                     Chord* nch = static_cast<Chord*>(ncr);
                                     int n = och->notes().size();

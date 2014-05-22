@@ -42,7 +42,7 @@ class Symbol : public BSymbol {
       Symbol &operator=(const Symbol&);
 
       virtual Symbol* clone() const     { return new Symbol(*this); }
-      virtual ElementType type() const  { return SYMBOL; }
+      virtual ElementType type() const  { return ElementType::SYMBOL; }
 
       void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf;    }
       SymId sym() const                 { return _sym;  }
@@ -73,7 +73,7 @@ class FSymbol : public BSymbol {
       FSymbol(const FSymbol&);
 
       virtual FSymbol* clone() const    { return new FSymbol(*this); }
-      virtual ElementType type() const  { return FSYMBOL; }
+      virtual ElementType type() const  { return ElementType::FSYMBOL; }
 
       virtual void draw(QPainter*) const;
       virtual void write(Xml& xml) const;

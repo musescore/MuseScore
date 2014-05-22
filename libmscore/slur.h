@@ -82,7 +82,7 @@ class SlurSegment : public SpannerSegment {
       SlurSegment(Score*);
       SlurSegment(const SlurSegment&);
       virtual SlurSegment* clone() const { return new SlurSegment(*this); }
-      virtual ElementType type() const   { return SLUR_SEGMENT; }
+      virtual ElementType type() const   { return ElementType::SLUR_SEGMENT; }
 
       void layout(const QPointF& p1, const QPointF& p2);
       virtual QPainterPath shape() const { return shapePath; }
@@ -188,7 +188,7 @@ class Slur : public SlurTie {
       Slur(Score* = 0);
       ~Slur();
       virtual Slur* clone() const      { return new Slur(*this); }
-      virtual ElementType type() const { return SLUR; }
+      virtual ElementType type() const { return ElementType::SLUR; }
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       virtual void layout();

@@ -105,7 +105,7 @@ class System : public Element {
       System(Score*);
       ~System();
       virtual System* clone() const    { return new System(*this); }
-      virtual ElementType type() const { return SYSTEM; }
+      virtual ElementType type() const { return ElementType::SYSTEM; }
 
       virtual void add(Element*);
       virtual void remove(Element*);

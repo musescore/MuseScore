@@ -1245,7 +1245,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
 
       // scan segment annotations for an existing FB element in the this' staff
       for (Element* e : nextSegm->annotations())
-            if (e->type() == FIGURED_BASS && e->track() == track())
+            if (e->type() == ElementType::FIGURED_BASS && e->track() == track())
                   return static_cast<FiguredBass*>(e);
 
       return 0;
@@ -1345,7 +1345,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
       // scan segment annotations for an existing FB element in the same staff
       FiguredBass* fb = 0;
       for (Element* e : seg->annotations()) {
-            if (e->type() == FIGURED_BASS && (e->track() / VOICES) == staff) {
+            if (e->type() == ElementType::FIGURED_BASS && (e->track() / VOICES) == staff) {
                   // an FB already exists in segment: re-use it
                   fb = static_cast<FiguredBass*>(e);
                   *pNew = false;
@@ -1375,7 +1375,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
             // set onNote status
             fb->setOnNote(false);               // assume not onNote
             for (int i = track; i < track + VOICES; i++)         // if segment has chord in staff, set onNote
-                  if (seg->element(i) && seg->element(i)->type() == CHORD) {
+                  if (seg->element(i) && seg->element(i)->type() == ElementType::CHORD) {
                         fb->setOnNote(true);
                         break;
                   }
@@ -1389,7 +1389,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
             FiguredBass*      prevFB = 0;
             for(prevSegm = seg->prev1(Segment::SegChordRest); prevSegm; prevSegm = prevSegm->prev1(Segment::SegChordRest)) {
                   for (Element* e : prevSegm->annotations()) {
-                        if (e->type() == FIGURED_BASS && (e->track() ) == track) {
+                        if (e->type() == ElementType::FIGURED_BASS && (e->track() ) == track) {
                               prevFB = static_cast<FiguredBass*>(e);   // previous FB found
                               break;
                               }
@@ -1691,7 +1691,7 @@ void FiguredBass::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const
 FiguredBass* Score::addFiguredBass()
       {
       Element* el = selection().element();
-      if (el == 0 || (el->type() != Element::NOTE && el->type() != Element::FIGURED_BASS)) {
+      if (el == 0 || (el->type() != Element::ElementType::NOTE && el->type() != Element::ElementType::FIGURED_BASS)) {
             if (!MScore::noGui)
                   QMessageBox::information(0,
                      QMessageBox::tr("MuseScore"),
@@ -1703,12 +1703,12 @@ FiguredBass* Score::addFiguredBass()
 
       FiguredBass * fb;
       bool bNew;
-      if (el->type() == Element::NOTE) {
+      if (el->type() == Element::ElementType::NOTE) {
             ChordRest * cr = static_cast<Note*>(el)->chord();
             fb = FiguredBass::addFiguredBassToSegment(cr->segment(),
                         (cr->track() / VOICES) * VOICES, 0, &bNew);
             }
-      else if (el->type() == Element::FIGURED_BASS) {
+      else if (el->type() == Element::ElementType::FIGURED_BASS) {
             fb = static_cast<FiguredBass*>(el);
             bNew = false;
             }

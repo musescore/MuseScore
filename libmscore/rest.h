@@ -43,7 +43,7 @@ class Rest : public ChordRest {
       Rest(Score* s = 0);
       Rest(Score*, const TDuration&);
       virtual Rest* clone() const override      { return new Rest(*this); }
-      virtual ElementType type() const override { return REST; }
+      virtual ElementType type() const override { return ElementType::REST; }
 
       virtual Measure* measure() const override { return parent() ? (Measure*)(parent()->parent()) : 0; }
       virtual qreal mag() const override;

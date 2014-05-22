@@ -221,7 +221,7 @@ void Score::cmdTransposeStaff(int staffIdx, Interval interval, bool useDoubleSha
       for (Segment* segment = firstSegment(); segment; segment = segment->next1()) {
            for (int st = startTrack; st < endTrack; ++st) {
                   Element* e = segment->element(st);
-                  if (!e || e->type() != Element::CHORD)
+                  if (!e || e->type() != Element::ElementType::CHORD)
                       continue;
 
                   Chord* chord = static_cast<Chord*>(e);
@@ -230,7 +230,7 @@ void Score::cmdTransposeStaff(int staffIdx, Interval interval, bool useDoubleSha
                       transpose(n, interval, useDoubleSharpsFlats);
                   }
             foreach (Element* e, segment->annotations()) {
-                  if ((e->type() != Element::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
+                  if ((e->type() != Element::ElementType::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                         continue;
                   Harmony* h  = static_cast<Harmony*>(e);
                   int rootTpc = transposeTpc(h->rootTpc(), interval, false);
@@ -305,22 +305,22 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
             foreach(Element* e, _selection.elements()) {
                   if (e->staff()->staffType()->group() == PERCUSSION_STAFF_GROUP)
                         continue;
-                  if (e->type() == Element::NOTE) {
+                  if (e->type() == Element::ElementType::NOTE) {
                         Note* note = static_cast<Note*>(e);
                         if (mode == TRANSPOSE_DIATONICALLY)
                               note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                         else
                               transpose(note, interval, useDoubleSharpsFlats);
                         }
-                  else if ((e->type() == Element::HARMONY) && transposeChordNames) {
+                  else if ((e->type() == Element::ElementType::HARMONY) && transposeChordNames) {
                         Harmony* h  = static_cast<Harmony*>(e);
                         int rootTpc, baseTpc;
                         if (mode == TRANSPOSE_DIATONICALLY) {
                               int tick = 0;
-                              if (h->parent()->type() == Element::SEGMENT)
+                              if (h->parent()->type() == Element::ElementType::SEGMENT)
                                     tick = static_cast<Segment*>(h->parent())->tick();
-                              else if (h->parent()->type() == Element::FRET_DIAGRAM
-                                 && h->parent()->parent()->type() == Element::SEGMENT) {
+                              else if (h->parent()->type() == Element::ElementType::FRET_DIAGRAM
+                                 && h->parent()->parent()->type() == Element::ElementType::SEGMENT) {
                                     tick = static_cast<Segment*>(h->parent()->parent())->tick();
                                     }
                               int key = !h->staff() ? KEY_C : h->staff()->keymap()->key(tick).accidentalType();
@@ -335,7 +335,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                               }
                         undoTransposeHarmony(h, rootTpc, baseTpc);
                         }
-                  else if ((e->type() == Element::KEYSIG) && mode != TRANSPOSE_DIATONICALLY && trKeys) {
+                  else if ((e->type() == Element::ElementType::KEYSIG) && mode != TRANSPOSE_DIATONICALLY && trKeys) {
                         KeySig* ks = static_cast<KeySig*>(e);
                         KeySigEvent key  = km->key(ks->tick());
                         KeySigEvent okey = km->key(ks->tick() - 1);
@@ -355,7 +355,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                   if (staff(st/VOICES)->staffType()->group() == PERCUSSION_STAFF_GROUP)
                         continue;
                   Element* e = segment->element(st);
-                  if (!e || e->type() != Element::CHORD)
+                  if (!e || e->type() != Element::ElementType::CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
                   QList<Note*> nl = chord->notes();
@@ -376,7 +376,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                   }
             if (transposeChordNames) {
                   foreach (Element* e, segment->annotations()) {
-                        if ((e->type() != Element::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
+                        if ((e->type() != Element::ElementType::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                               continue;
                         Harmony* h  = static_cast<Harmony*>(e);
                         int rootTpc, baseTpc;

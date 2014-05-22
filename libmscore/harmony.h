@@ -103,7 +103,7 @@ class Harmony : public Text {
       Harmony(const Harmony&);
       ~Harmony();
       virtual Harmony* clone() const           { return new Harmony(*this); }
-      virtual ElementType type() const         { return HARMONY; }
+      virtual ElementType type() const         { return ElementType::HARMONY; }
 
       void setId(int d)                        { _id = d; }
       int id() const                           { return _id;           }

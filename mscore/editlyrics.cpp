@@ -80,7 +80,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             // search prev chord
             while ((nextSegment = nextSegment->prev1(Segment::SegChordRest))) {
                   Element* el = nextSegment->element(track);
-                  if (el &&  el->type() == Element::CHORD)
+                  if (el &&  el->type() == Element::ElementType::CHORD)
                         break;
                   }
             }
@@ -88,7 +88,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             // search next chord
             while ((nextSegment = nextSegment->next1(Segment::SegChordRest))) {
                   Element* el = nextSegment->element(track);
-                  if (el &&  el->type() == Element::CHORD)
+                  if (el &&  el->type() == Element::ElementType::CHORD)
                         break;
                   }
             }
@@ -190,7 +190,7 @@ void ScoreView::lyricsMinus()
       Segment* nextSegment = segment;
       while ((nextSegment = nextSegment->next1(Segment::SegChordRest))) {
             Element* el = nextSegment->element(track);
-            if (el &&  el->type() == Element::CHORD)
+            if (el &&  el->type() == Element::ElementType::CHORD)
                   break;
             }
       if (nextSegment == 0) {
@@ -277,7 +277,7 @@ void ScoreView::lyricsUnderscore()
       Segment* nextSegment = segment;
       while ((nextSegment = nextSegment->next1(Segment::SegChordRest))) {
             Element* el = nextSegment->element(track);
-            if (el &&  el->type() == Element::CHORD)
+            if (el &&  el->type() == Element::ElementType::CHORD)
                   break;
             }
 

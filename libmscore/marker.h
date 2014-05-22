@@ -57,7 +57,7 @@ class Marker : public Text {
       MarkerType markerType() const    { return _markerType; }
 
       virtual Marker* clone() const override    { return new Marker(*this); }
-      virtual ElementType type() const override { return MARKER; }
+      virtual ElementType type() const override { return ElementType::MARKER; }
 
       Segment* segment() const         { return (Segment*)parent(); }
       Measure* measure() const         { return (Measure*)parent()->parent(); }

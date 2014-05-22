@@ -29,7 +29,7 @@ class Fingering : public Text {
    public:
       Fingering(Score* s);
       virtual Fingering* clone() const { return new Fingering(*this); }
-      virtual ElementType type() const { return FINGERING; }
+      virtual ElementType type() const { return ElementType::FINGERING; }
 
       Note* note() const { return (Note*)parent(); }
 

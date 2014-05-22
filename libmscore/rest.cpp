@@ -166,33 +166,33 @@ QRectF Rest::drag(EditData* data)
 
 bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      int type = e->type();
+      ElementType type = e->type();
       if (
-         (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
-         || (type == ARTICULATION && static_cast<Articulation*>(e)->articulationType() == Articulation_Fermata)
-         || (type == CLEF)
-         || (type == STAFF_TEXT)
-         || (type == BAR_LINE)
-         || (type == BREATH)
-         || (type == CHORD)
-         || (type == STAFF_STATE)
-         || (type == INSTRUMENT_CHANGE)
-         || (type == DYNAMIC)
-         || (type == HARMONY)
-         || (type == TEMPO_TEXT)
-         || (type == STAFF_TEXT)
-         || (type == REHEARSAL_MARK)
-         || (type == FRET_DIAGRAM)
-         || (type == SYMBOL)
+         (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
+         || (type == ElementType::ARTICULATION && static_cast<Articulation*>(e)->articulationType() == Articulation_Fermata)
+         || (type == ElementType::CLEF)
+         || (type == ElementType::STAFF_TEXT)
+         || (type == ElementType::BAR_LINE)
+         || (type == ElementType::BREATH)
+         || (type == ElementType::CHORD)
+         || (type == ElementType::STAFF_STATE)
+         || (type == ElementType::INSTRUMENT_CHANGE)
+         || (type == ElementType::DYNAMIC)
+         || (type == ElementType::HARMONY)
+         || (type == ElementType::TEMPO_TEXT)
+         || (type == ElementType::STAFF_TEXT)
+         || (type == ElementType::REHEARSAL_MARK)
+         || (type == ElementType::FRET_DIAGRAM)
+         || (type == ElementType::SYMBOL)
          ) {
             return true;
             }
-      if(type == REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
+      if(type == ElementType::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
             return true;
       return false;
       }
@@ -205,7 +205,7 @@ Element* Rest::drop(const DropData& data)
       {
       Element* e = data.element;
       switch (e->type()) {
-            case ARTICULATION:
+            case ElementType::ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
                   if (a->articulationType() != Articulation_Fermata
@@ -216,7 +216,7 @@ Element* Rest::drop(const DropData& data)
                   }
                   return e;
 
-            case CHORD:
+            case ElementType::CHORD:
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
@@ -237,7 +237,7 @@ Element* Rest::drop(const DropData& data)
                   delete e;
                   }
                   break;
-            case REPEAT_MEASURE:
+            case ElementType::REPEAT_MEASURE:
                   delete e;
                   if (durationType().type() == TDuration::DurationType::V_MEASURE) {
                         measure()->cmdInsertRepeatMeasure(staffIdx());
