@@ -422,12 +422,6 @@
         </note>
       </measure>
     <measure number="9">
-      <direction placement="above">
-        <direction-type>
-          <words></words>
-          </direction-type>
-        <sound tempo="40"/>
-        </direction>
       <note>
         <pitch>
           <step>C</step>

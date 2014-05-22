@@ -258,7 +258,7 @@ add_executable ( ${ExecutableName}
       editelement.cpp inspector/inspectorVolta.cpp inspector/inspectorOttava.cpp
       inspector/inspectorTrill.cpp
       inspector/inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
-      musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
+      musicxmlfonthandler.cpp musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp pluginManager.cpp inspector/inspectorJump.cpp inspector/inspectorMarker.cpp
       inspector/inspectorGlissando.cpp inspector/inspectorNote.cpp inspector/inspectorAmbitus.cpp
       paletteBoxButton.cpp driver.cpp exportmidi.cpp noteGroups.cpp
