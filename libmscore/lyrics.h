@@ -34,7 +34,7 @@ class Lyrics : public Text {
       Q_ENUMS(Syllabic)
 
    public:
-      enum Syllabic : char { SINGLE, BEGIN, END, MIDDLE };
+      enum class Syllabic : char { SINGLE, BEGIN, END, MIDDLE };
 
    private:
       int _ticks;             ///< if > 0 then draw an underline to tick() + _ticks

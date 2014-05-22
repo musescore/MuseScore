@@ -535,7 +535,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               l->setTrack(track);
                               l->setText(v.text);
                               if (v.hyphen)
-                                    l->setSyllabic(Lyrics::BEGIN);
+                                    l->setSyllabic(Lyrics::Syllabic::BEGIN);
                               l->setNo(v.num);
                               chord->add(l);
                               }

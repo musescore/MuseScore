@@ -30,7 +30,7 @@ Lyrics::Lyrics(Score* s)
       setTextStyleType(TEXT_STYLE_LYRIC1);
       _no          = 0;
       _ticks       = 0;
-      _syllabic    = SINGLE;
+      _syllabic    = Syllabic::SINGLE;
       _verseNumber = 0;
       }
 
@@ -78,11 +78,11 @@ void Lyrics::write(Xml& xml) const
       xml.stag("Lyrics");
       if (_no)
             xml.tag("no", _no);
-      if (_syllabic != SINGLE) {
+      if (_syllabic != Syllabic::SINGLE) {
             static const char* sl[] = {
                   "single", "begin", "end", "middle"
                   };
-            xml.tag("syllabic", sl[_syllabic]);
+            xml.tag("syllabic", sl[int(_syllabic)]);
             }
       if (_ticks)
             xml.tag("ticks", _ticks);
@@ -110,13 +110,13 @@ void Lyrics::read(XmlReader& e)
             else if (tag == "syllabic") {
                   QString val(e.readElementText());
                   if (val == "single")
-                        _syllabic = SINGLE;
+                        _syllabic = Syllabic::SINGLE;
                   else if (val == "begin")
-                        _syllabic = BEGIN;
+                        _syllabic = Syllabic::BEGIN;
                   else if (val == "end")
-                        _syllabic = END;
+                        _syllabic = Syllabic::END;
                   else if (val == "middle")
-                        _syllabic = MIDDLE;
+                        _syllabic = Syllabic::MIDDLE;
                   else
                         qDebug("bad syllabic property");
                   }

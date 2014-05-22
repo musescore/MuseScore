@@ -3206,13 +3206,13 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
             if (l) {
                   if ((l)->track() == trk) {
                         xml.stag(QString("lyric number=\"%1\"").arg((l)->no() + 1));
-                        int syl   = (l)->syllabic();
+                        Lyrics::Syllabic syl = (l)->syllabic();
                         QString s = "";
                         switch (syl) {
-                              case Lyrics::SINGLE: s = "single"; break;
-                              case Lyrics::BEGIN:  s = "begin";  break;
-                              case Lyrics::END:    s = "end";    break;
-                              case Lyrics::MIDDLE: s = "middle"; break;
+                              case Lyrics::Syllabic::SINGLE: s = "single"; break;
+                              case Lyrics::Syllabic::BEGIN:  s = "begin";  break;
+                              case Lyrics::Syllabic::END:    s = "end";    break;
+                              case Lyrics::Syllabic::MIDDLE: s = "middle"; break;
                               default:
                                     qDebug("unknown syllabic %d", syl);
                               }
