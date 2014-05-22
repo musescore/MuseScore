@@ -212,7 +212,7 @@ class Text : public Element {
       ~Text() {}
 
       virtual Text* clone() const override         { return new Text(*this); }
-      virtual ElementType type() const override    { return TEXT; }
+      virtual ElementType type() const override    { return ElementType::TEXT; }
       virtual bool mousePress(const QPointF&, QMouseEvent* ev) override;
 
       Text &operator=(const Text&);

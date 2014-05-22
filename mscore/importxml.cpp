@@ -2012,7 +2012,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
       Measure* measure = 0;
       Measure* lastMeasure = 0;
       for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
-            if (mb->type() != Element::MEASURE)
+            if (mb->type() != Element::ElementType::MEASURE)
                   continue;
             Measure* m = (Measure*)mb;
             lastMeasure = m;
@@ -2301,7 +2301,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
       for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
             for (int track = 0; track < staves * VOICES; ++track) {
                    Element* e = segment->element(track);
-                   if (!e || e->type() != Ms::Element::CHORD)
+                   if (!e || e->type() != Ms::Element::ElementType::CHORD)
                          continue;
                    Chord* chord = static_cast<Chord*>(e);
                    foreach (Note* nt, chord->notes()){
@@ -2366,15 +2366,15 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
       const qreal stafflines = 5; // assume five line staff, but works OK-ish for other sizes too
       qreal offsAbove = 0;
       qreal offsBelow = 0;
-      if (sli->type() == Element::PEDAL || sli->type() == Element::HAIRPIN) {
+      if (sli->type() == Element::ElementType::PEDAL || sli->type() == Element::ElementType::HAIRPIN) {
             offsAbove = -6 - (stafflines - 1);
             offsBelow = -1;
             }
-      else if (sli->type() == Element::TEXTLINE) {
+      else if (sli->type() == Element::ElementType::TEXTLINE) {
             offsAbove = -3;
             offsBelow =  3 + (stafflines - 1);
             }
-      else if (sli->type() == Element::OTTAVA) {
+      else if (sli->type() == Element::ElementType::OTTAVA) {
             // ignore
             }
       else
@@ -2410,19 +2410,19 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
       const qreal stafflines = 5; // assume five line staff, but works OK-ish for other sizes too
       qreal offsAbove = 0;
       qreal offsBelow = 0;
-      if (el->type() == Element::TEMPO_TEXT || el->type() == Element::REHEARSAL_MARK) {
+      if (el->type() == Element::ElementType::TEMPO_TEXT || el->type() == Element::ElementType::REHEARSAL_MARK) {
             offsAbove = 0;
             offsBelow = 8 + (stafflines - 1);
             }
-      else if (el->type() == Element::TEXT) {
+      else if (el->type() == Element::ElementType::TEXT) {
             offsAbove = 0;
             offsBelow = 6 + (stafflines - 1);
             }
-      else if (el->type() == Element::SYMBOL) {
+      else if (el->type() == Element::ElementType::SYMBOL) {
             offsAbove = -2;
             offsBelow =  4 + (stafflines - 1);
             }
-      else if (el->type() == Element::DYNAMIC) {
+      else if (el->type() == Element::ElementType::DYNAMIC) {
             offsAbove = -5.75 - (stafflines - 1);
             offsBelow = -0.75;
             }
@@ -3604,7 +3604,7 @@ static void determineTupletTypeAndCount(Tuplet* t, int& tupletType, int& tupletC
       int elemCount   = 0; // number of tuplet elements handled
 
       foreach (DurationElement* de, t->elements()) {
-            if (de->type() == Element::CHORD || de->type() == Element::REST) {
+            if (de->type() == Element::ElementType::CHORD || de->type() == Element::ElementType::REST) {
                   ChordRest* cr = static_cast<ChordRest*>(de);
                   if (elemCount == 0) {
                         // first note: init variables
@@ -3846,7 +3846,7 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
                   // TODO determine usefulness of following check
                   int totalDuration = 0;
                   foreach (DurationElement* de, tuplet->elements()) {
-                        if (de->type() == Element::CHORD || de->type() == Element::REST) {
+                        if (de->type() == Element::ElementType::CHORD || de->type() == Element::ElementType::REST) {
                               totalDuration+=de->globalDuration().ticks();
                               }
                         }
@@ -4525,7 +4525,7 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
       while ((seg = seg->prev1(Segment::SegChordRest))) {
             // qDebug("findLastFiguredBass seg %p", seg);
             foreach(Element* e, seg->annotations()) {
-                  if (e->track() == track && e->type() == Element::FIGURED_BASS) {
+                  if (e->track() == track && e->type() == Element::ElementType::FIGURED_BASS) {
                         FiguredBass* fb = static_cast<FiguredBass*>(e);
                         // qDebug("findLastFiguredBass found fb %p at seg %p", fb, seg);
                         return fb;

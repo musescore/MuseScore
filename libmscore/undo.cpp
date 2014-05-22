@@ -95,7 +95,7 @@ void updateNoteLines(Segment* segment, int track)
                   continue;
             for (int t = track; t < track + VOICES; ++t) {
                   Chord* chord = static_cast<Chord*>(s->element(t));
-                  if (chord && chord->type() == Element::CHORD) {
+                  if (chord && chord->type() == Element::ElementType::CHORD) {
                         for (Note* n : chord->notes())
                               n->updateLine();
                         chord->sortNotes();
@@ -793,11 +793,11 @@ void Score::undoAddElement(Element* element)
       // linking:
       //
 
-      if ((et == Element::REHEARSAL_MARK)
-         || ((et == Element::STAFF_TEXT) && static_cast<StaffText*>(element)->systemFlag())
-         || (et == Element::JUMP)
-         || (et == Element::MARKER)
-         || (et == Element::TEMPO_TEXT)
+      if ((et == Element::ElementType::REHEARSAL_MARK)
+         || ((et == Element::ElementType::STAFF_TEXT) && static_cast<StaffText*>(element)->systemFlag())
+         || (et == Element::ElementType::JUMP)
+         || (et == Element::ElementType::MARKER)
+         || (et == Element::ElementType::TEMPO_TEXT)
          ) {
             foreach(Score* s, scoreList())
                   staffList.append(s->staff(0));
@@ -814,11 +814,11 @@ void Score::undoAddElement(Element* element)
                         ne->setSelected(false);
                         ne->setTrack(staffIdx * VOICES + element->voice());
                         }
-                  if (et == Element::REHEARSAL_MARK
-                     || et == Element::STAFF_TEXT
-                     || (et == Element::JUMP)
-                     || (et == Element::MARKER)
-                     || (et == Element::TEMPO_TEXT)
+                  if (et == Element::ElementType::REHEARSAL_MARK
+                     || et == Element::ElementType::STAFF_TEXT
+                     || (et == Element::ElementType::JUMP)
+                     || (et == Element::ElementType::MARKER)
+                     || (et == Element::ElementType::TEMPO_TEXT)
                      ) {
                         Segment* segment  = static_cast<Segment*>(element->parent());
                         int tick          = segment->tick();
@@ -833,21 +833,21 @@ void Score::undoAddElement(Element* element)
             return;
             }
 
-      if (et == Element::FINGERING
-         || (et == Element::IMAGE  && element->parent()->type() != Element::SEGMENT)
-         || (et == Element::SYMBOL && element->parent()->type() != Element::SEGMENT)
-         || et == Element::NOTE
-         || et == Element::GLISSANDO
-         || (et == Element::SLUR && element->parent() && element->parent()->type() == Element::CHORD)
-         || (et == Element::CHORD && static_cast<Chord*>(element)->isGrace())
+      if (et == Element::ElementType::FINGERING
+         || (et == Element::ElementType::IMAGE  && element->parent()->type() != Element::ElementType::SEGMENT)
+         || (et == Element::ElementType::SYMBOL && element->parent()->type() != Element::ElementType::SEGMENT)
+         || et == Element::ElementType::NOTE
+         || et == Element::ElementType::GLISSANDO
+         || (et == Element::ElementType::SLUR && element->parent() && element->parent()->type() == Element::ElementType::CHORD)
+         || (et == Element::ElementType::CHORD && static_cast<Chord*>(element)->isGrace())
             ) {
             Element* parent       = element->parent();
             const LinkedElements* links = parent->links();
             if (links == 0) {
                   undo(new AddElement(element));
-                  if (element->type() == Element::FINGERING)
+                  if (element->type() == Element::ElementType::FINGERING)
                         element->score()->layoutFingering(static_cast<Fingering*>(element));
-                  else if (element->type() == Element::CHORD) {
+                  else if (element->type() == Element::ElementType::CHORD) {
                         for (Note* n : static_cast<Chord*>(element)->notes()) {
                         //      if(n->tpc() == INVALID_TPC)
                         //            n->setTpcFromPitch();
@@ -863,16 +863,16 @@ void Score::undoAddElement(Element* element)
                   ne->setSelected(false);
                   ne->setParent(e);
                   undo(new AddElement(ne));
-                  if (ne->type() == Element::FINGERING)
+                  if (ne->type() == Element::ElementType::FINGERING)
                         e->score()->layoutFingering(static_cast<Fingering*>(ne));
-                  else if (ne->type() == Element::CHORD) {
+                  else if (ne->type() == Element::ElementType::CHORD) {
                         for (Note* n : static_cast<Chord*>(ne)->notes()) {
                               Q_ASSERT(n->tpc() != INVALID_TPC);
                         //      n->setTpcFromPitch();
                               }
                         ne->score()->updateNotes();
                         }
-                  else if (ne->type() == Element::SLUR) {
+                  else if (ne->type() == Element::ElementType::SLUR) {
                         Slur* slur = static_cast<Slur*>(ne);
                         slur->setStartElement(e);
                         slur->setEndElement(e->parent());
@@ -882,25 +882,25 @@ void Score::undoAddElement(Element* element)
             }
 
       if (ostaff == 0 || (
-         et    != Element::ARTICULATION
-         && et != Element::CHORDLINE
-         && et != Element::SLUR
-         && et != Element::TIE
-         && et != Element::NOTE
-         && et != Element::INSTRUMENT_CHANGE
-         && et != Element::HAIRPIN
-         && et != Element::OTTAVA
-         && et != Element::TRILL
-         && et != Element::TEXTLINE
-         && et != Element::VOLTA
-         && et != Element::PEDAL
-         && et != Element::BREATH
-         && et != Element::DYNAMIC
-         && et != Element::STAFF_TEXT
-         && et != Element::TREMOLO
-         && et != Element::ARPEGGIO
-         && et != Element::SYMBOL
-         && et != Element::HARMONY)
+         et    != Element::ElementType::ARTICULATION
+         && et != Element::ElementType::CHORDLINE
+         && et != Element::ElementType::SLUR
+         && et != Element::ElementType::TIE
+         && et != Element::ElementType::NOTE
+         && et != Element::ElementType::INSTRUMENT_CHANGE
+         && et != Element::ElementType::HAIRPIN
+         && et != Element::ElementType::OTTAVA
+         && et != Element::ElementType::TRILL
+         && et != Element::ElementType::TEXTLINE
+         && et != Element::ElementType::VOLTA
+         && et != Element::ElementType::PEDAL
+         && et != Element::ElementType::BREATH
+         && et != Element::ElementType::DYNAMIC
+         && et != Element::ElementType::STAFF_TEXT
+         && et != Element::ElementType::TREMOLO
+         && et != Element::ElementType::ARPEGGIO
+         && et != Element::ElementType::SYMBOL
+         && et != Element::ElementType::HARMONY)
             ) {
             undo(new AddElement(element));
             return;
@@ -917,11 +917,11 @@ void Score::undoAddElement(Element* element)
                         switch (element->type()) {
                               // exclude certain element types except on corresponding staff in part
                               // this should be same list excluded in cloneStaff()
-                              case Element::STAFF_TEXT:
-                              case Element::HARMONY:
-                              case Element::FIGURED_BASS:
-                              case Element::LYRICS:
-                              case Element::DYNAMIC:
+                              case Element::ElementType::STAFF_TEXT:
+                              case Element::ElementType::HARMONY:
+                              case Element::ElementType::FIGURED_BASS:
+                              case Element::ElementType::LYRICS:
+                              case Element::ElementType::DYNAMIC:
                                     continue;
                               default:
                                     break;
@@ -932,7 +932,7 @@ void Score::undoAddElement(Element* element)
                   ne->setSelected(false);
                   ne->setTrack(staffIdx * VOICES + element->voice());
                   }
-            if (element->type() == Element::ARTICULATION) {
+            if (element->type() == Element::ElementType::ARTICULATION) {
                   Articulation* a  = static_cast<Articulation*>(element);
                   Segment* segment;
                   Segment::SegmentType st;
@@ -971,7 +971,7 @@ void Score::undoAddElement(Element* element)
                         }
                   undo(new AddElement(na));
                   }
-            else if (element->type() == Element::CHORDLINE) {
+            else if (element->type() == Element::ElementType::CHORDLINE) {
                   ChordLine* a     = static_cast<ChordLine*>(element);
                   Segment* segment = a->chord()->segment();
                   int tick         = segment->tick();
@@ -990,11 +990,11 @@ void Score::undoAddElement(Element* element)
             //
             // elements with Segment as parent
             //
-            else if (element->type() == Element::SYMBOL
-               || element->type() == Element::IMAGE
-               || element->type() == Element::DYNAMIC
-               || element->type() == Element::STAFF_TEXT
-               || element->type() == Element::HARMONY) {
+            else if (element->type() == Element::ElementType::SYMBOL
+               || element->type() == Element::ElementType::IMAGE
+               || element->type() == Element::ElementType::DYNAMIC
+               || element->type() == Element::ElementType::STAFF_TEXT
+               || element->type() == Element::ElementType::HARMONY) {
                   Segment* segment = static_cast<Segment*>(element->parent());
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
@@ -1004,13 +1004,13 @@ void Score::undoAddElement(Element* element)
                   ne->setParent(seg);
                   undo(new AddElement(ne));
                   }
-            else if (element->type() == Element::SLUR
-               || element->type() == Element::HAIRPIN
-               || element->type() == Element::OTTAVA
-               || element->type() == Element::TRILL
-               || element->type() == Element::TEXTLINE
-               || element->type() == Element::PEDAL
-               || element->type() == Element::VOLTA) {
+            else if (element->type() == Element::ElementType::SLUR
+               || element->type() == Element::ElementType::HAIRPIN
+               || element->type() == Element::ElementType::OTTAVA
+               || element->type() == Element::ElementType::TRILL
+               || element->type() == Element::ElementType::TEXTLINE
+               || element->type() == Element::ElementType::PEDAL
+               || element->type() == Element::ElementType::VOLTA) {
                   // ne->setParent(0);  ???
                   Spanner* nsp = static_cast<Spanner*>(ne);
                   Spanner* sp = static_cast<Spanner*>(element);
@@ -1020,7 +1020,7 @@ void Score::undoAddElement(Element* element)
                   nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
                   undo(new AddElement(nsp));
                   }
-            else if (element->type() == Element::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {
+            else if (element->type() == Element::ElementType::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {
                   Tremolo* tremolo = static_cast<Tremolo*>(element);
                   ChordRest* cr1 = static_cast<ChordRest*>(tremolo->chord1());
                   ChordRest* cr2 = static_cast<ChordRest*>(tremolo->chord2());
@@ -1040,8 +1040,8 @@ void Score::undoAddElement(Element* element)
                   undo(new AddElement(ntremolo));
                   }
             else if (
-               (element->type() == Element::TREMOLO && !static_cast<Tremolo*>(element)->twoNotes())
-               || (element->type() == Element::ARPEGGIO))
+               (element->type() == Element::ElementType::TREMOLO && !static_cast<Tremolo*>(element)->twoNotes())
+               || (element->type() == Element::ElementType::ARPEGGIO))
                   {
                   ChordRest* cr = static_cast<ChordRest*>(element->parent());
                   Segment* s    = cr->segment();
@@ -1052,7 +1052,7 @@ void Score::undoAddElement(Element* element)
                   ne->setParent(c1);
                   undo(new AddElement(ne));
                   }
-            else if (element->type() == Element::TIE) {
+            else if (element->type() == Element::ElementType::TIE) {
                   Tie* tie       = static_cast<Tie*>(element);
                   Note* n1       = tie->startNote();
                   Note* n2       = tie->endNote();
@@ -1074,7 +1074,7 @@ void Score::undoAddElement(Element* element)
                   Chord* c2 = 0;
                   if (ns2) {
                         Element* e = ns2->element((staffIdx + sm) * VOICES + cr2->voice());
-                        if (e->type() == Element::CHORD)
+                        if (e->type() == Element::ElementType::CHORD)
                               c2 = static_cast<Chord*>(e);
                         }
 
@@ -1090,7 +1090,7 @@ void Score::undoAddElement(Element* element)
                   ntie->setEndNote(nn2);
                   undo(new AddElement(ntie));
                   }
-            else if (element->type() == Element::INSTRUMENT_CHANGE) {
+            else if (element->type() == Element::ElementType::INSTRUMENT_CHANGE) {
                   InstrumentChange* is = static_cast<InstrumentChange*>(element);
                   Segment* s1    = is->segment();
                   Measure* m1    = s1->measure();
@@ -1105,7 +1105,7 @@ void Score::undoAddElement(Element* element)
                   undo(new AddElement(nis));
                   undo(new ChangeInstrument(nis, nis->instrument()));
                   }
-            else if (element->type() == Element::BREATH) {
+            else if (element->type() == Element::ElementType::BREATH) {
                   Breath* breath   = static_cast<Breath*>(element);
                   int tick         = breath->segment()->tick();
                   Measure* m       = score->tick2measure(tick);
@@ -1128,7 +1128,7 @@ void Score::undoAddElement(Element* element)
 
 void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       {
-      Q_ASSERT(cr->type() != Element::CHORD || !(static_cast<Chord*>(cr)->notes()).isEmpty());
+      Q_ASSERT(cr->type() != Element::ElementType::CHORD || !(static_cast<Chord*>(cr)->notes()).isEmpty());
 
       QList<Staff*> staffList;
       Staff* ostaff = cr->staff();
@@ -1152,7 +1152,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
             newcr->setTrack(ntrack);
             newcr->setParent(seg);
 
-            if (newcr->type() == Element::CHORD) {
+            if (newcr->type() == Element::ElementType::CHORD) {
                   Chord* chord = static_cast<Chord*>(newcr);
                   // setTpcFromPitch needs to know the note tick position
                   foreach(Note* note, chord->notes()) {
@@ -1200,7 +1200,7 @@ void Score::undoRemoveElement(Element* element)
       for (Element* e : element->linkList()) {
             undo(new RemoveElement(e));
 //            if (!e->isChordRest() && e->parent() && (e->parent()->type() == Element::SEGMENT)) {
-            if (e->parent() && (e->parent()->type() == Element::SEGMENT)) {
+            if (e->parent() && (e->parent()->type() == Element::ElementType::SEGMENT)) {
                   Segment* s = static_cast<Segment*>(e->parent());
                   if (!segments.contains(s))
                         segments.append(s);
@@ -1286,7 +1286,7 @@ static void undoAddTuplet(DurationElement* cr)
 
 void AddElement::endUndoRedo(bool isUndo) const
       {
-      if (element->type() == Element::TIE) {
+      if (element->type() == Element::ElementType::TIE) {
             Tie* tie = static_cast<Tie*>(element);
             Measure* m1 = tie->startNote()->chord()->measure();
             Measure* m2 = 0;
@@ -1308,7 +1308,7 @@ void AddElement::endUndoRedo(bool isUndo) const
             else
                   undoAddTuplet(static_cast<ChordRest*>(element));
             }
-      else if (element->type() == Element::NOTE) {
+      else if (element->type() == Element::ElementType::NOTE) {
             Measure* m = static_cast<Note*>(element)->chord()->measure();
             m->cmdUpdateNotes(element->staffIdx());
             }
@@ -1368,7 +1368,7 @@ RemoveElement::RemoveElement(Element* e)
             ChordRest* cr = static_cast<ChordRest*>(element);
             if (cr->tuplet() && cr->tuplet()->elements().empty())
                   score->undoRemoveElement(cr->tuplet());
-            if (e->type() == Element::CHORD) {
+            if (e->type() == Element::ElementType::CHORD) {
                   Chord* chord = static_cast<Chord*>(e);
                   // remove tremolo between 2 notes
                   if (chord->tremolo()) {
@@ -1394,7 +1394,7 @@ void RemoveElement::undo()
       {
       element->score()->addElement(element);
       if (element->isChordRest()) {
-            if (element->type() == Element::CHORD) {
+            if (element->type() == Element::ElementType::CHORD) {
                   Chord* chord = static_cast<Chord*>(element);
                   foreach(Note* note, chord->notes()) {
                         if (note->tieBack())
@@ -1416,7 +1416,7 @@ void RemoveElement::redo()
       element->score()->removeElement(element);
       if (element->isChordRest()) {
             undoRemoveTuplet(static_cast<ChordRest*>(element));
-            if (element->type() == Element::CHORD) {
+            if (element->type() == Element::ElementType::CHORD) {
                   Chord* chord = static_cast<Chord*>(element);
                   Note* endNote = 0; // find one instance of endNote
                   foreach(Note* note, chord->notes()) {
@@ -1705,7 +1705,7 @@ void ChangeElement::flip()
             oldElement->parent()->change(oldElement, newElement);
             }
 
-      if (newElement->type() == Element::KEYSIG) {
+      if (newElement->type() == Element::ElementType::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(newElement);
             if (!ks->generated()) {
                   ks->staff()->setKey(ks->tick(),ks->keySigEvent());
@@ -1713,9 +1713,9 @@ void ChangeElement::flip()
                   newElement->staff()->setUpdateKeymap(true);
                   }
             }
-      else if (newElement->type() == Element::DYNAMIC)
+      else if (newElement->type() == Element::ElementType::DYNAMIC)
             newElement->score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
-      else if (newElement->type() == Element::TEMPO_TEXT) {
+      else if (newElement->type() == Element::ElementType::TEMPO_TEXT) {
             TempoText* t = static_cast<TempoText*>(oldElement);
             score->setTempo(t->segment(), t->tempo());
             }
@@ -1978,7 +1978,7 @@ void ChangeSingleBarLineSpan::flip()
       spanTo      = nspanTo;
       barLine->layout();                              // update bbox
       // re-create bar lines for other staves, if span of this bar line changed
-      if (respan && barLine->parent() && barLine->parent()->type() == Element::SEGMENT) {
+      if (respan && barLine->parent() && barLine->parent()->type() == Element::ElementType::SEGMENT) {
             Segment * segm = (static_cast<Segment*>(barLine->parent()));
             Measure * meas = segm->measure();
             // if it is a start-reapeat bar line at the beginning of a measure, redo measure start bar lines
@@ -2144,7 +2144,7 @@ void MoveElement::flip()
       QPointF po = element->userOff();
       element->score()->addRefresh(element->canvasBoundingRect());
       element->setUserOff(offset);
-      if (element->type() == Element::REST)
+      if (element->type() == Element::ElementType::REST)
             element->layout();            // ledgerline could change
       element->score()->addRefresh(element->canvasBoundingRect());
       offset = po;
@@ -2314,7 +2314,7 @@ ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible, qreal _use
 
 static void notifyTimeSigs(void*, Element* e)
       {
-      if (e->type() == Element::TIMESIG)
+      if (e->type() == Element::ElementType::TIMESIG)
             static_cast<TimeSig*>(e)->setNeedLayout(true);
       }
 
@@ -2485,7 +2485,7 @@ ChangeStyle::ChangeStyle(Score* s, const MStyle& st)
 
 static void updateTimeSigs(void*, Element* e)
       {
-      if (e->type() == Element::TIMESIG) {
+      if (e->type() == Element::ElementType::TIMESIG) {
             TimeSig* ts = static_cast<TimeSig*>(e);
             ts->setNeedLayout(true);
             }
@@ -2659,7 +2659,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
                   continue;
             for (int track = 0; track < ntracks(); ++track) {
                   Chord* c = static_cast<Chord*>(s->element(track));
-                  if (c == 0 || c->type() != Element::CHORD)
+                  if (c == 0 || c->type() != Element::ElementType::CHORD)
                         continue;
                   for (Note* n : c->notes()) {
                         Tie* t = n->tieBack();
@@ -2964,12 +2964,12 @@ void ChangeBoxProperties::flip()
 
       // according to box type, flip either height or width (or none)
       Spatium val;
-      if (_box->type() == Element::VBOX) {
+      if (_box->type() == Element::ElementType::VBOX) {
             val = _box->boxHeight();
             _box->setBoxHeight(_height);
             _height = val;
             }
-      if (_box->type() == Element::HBOX) {
+      if (_box->type() == Element::ElementType::HBOX) {
             val = _box->boxWidth();
             _box->setBoxWidth(_width);
             _width = val;
@@ -3207,7 +3207,7 @@ void ChangeSpannerElements::flip()
       spanner->setEndElement(endElement);
       startElement = se;
       endElement   = ee;
-      if (spanner->type() == Element::TIE) {
+      if (spanner->type() == Element::ElementType::TIE) {
             Tie* tie = static_cast<Tie*>(spanner);
             static_cast<Note*>(endElement)->setTieBack(0);
             tie->endNote()->setTieBack(tie);

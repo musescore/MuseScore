@@ -40,7 +40,7 @@ class Stem : public Element {
       Stem &operator=(const Stem&);
 
       virtual Stem* clone() const      { return new Stem(*this); }
-      virtual ElementType type() const { return STEM; }
+      virtual ElementType type() const { return ElementType::STEM; }
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const  { return true; }
       virtual void layout();

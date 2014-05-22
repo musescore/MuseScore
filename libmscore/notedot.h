@@ -31,7 +31,7 @@ class NoteDot : public Element {
    public:
       NoteDot(Score* =0);
       virtual NoteDot* clone() const   { return new NoteDot(*this); }
-      virtual ElementType type() const { return NOTEDOT; }
+      virtual ElementType type() const { return ElementType::NOTEDOT; }
       int idx() const                  { return _idx; }
       void setIdx(int val)             { _idx = val; }
       virtual qreal mag() const;

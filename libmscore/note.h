@@ -105,7 +105,7 @@ class NoteHead : public Symbol {
       NoteHead(Score* s) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&);
       virtual NoteHead* clone() const  { return new NoteHead(*this); }
-      virtual ElementType type() const { return NOTEHEAD; }
+      virtual ElementType type() const { return ElementType::NOTEHEAD; }
 
       virtual void write(Xml& xml) const;
 
@@ -229,7 +229,7 @@ class Note : public Element {
       Note& operator=(const Note&);
       ~Note();
       Note* clone() const      { return new Note(*this); }
-      ElementType type() const { return NOTE; }
+      ElementType type() const { return ElementType::NOTE; }
 
       virtual qreal mag() const;
 

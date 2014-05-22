@@ -42,7 +42,7 @@ class VoltaSegment : public TextLineSegment {
 
    public:
       VoltaSegment(Score* s) : TextLineSegment(s) {}
-      virtual ElementType type() const     { return VOLTA_SEGMENT; }
+      virtual ElementType type() const     { return ElementType::VOLTA_SEGMENT; }
       virtual VoltaSegment* clone() const  { return new VoltaSegment(*this); }
       Volta* volta() const                 { return (Volta*)spanner(); }
       virtual void layout();
@@ -73,7 +73,7 @@ class Volta : public TextLine {
    public:
       Volta(Score* s);
       virtual Volta* clone()     const { return new Volta(*this); }
-      virtual ElementType type() const { return VOLTA; }
+      virtual ElementType type() const { return ElementType::VOLTA; }
       virtual LineSegment* createLineSegment();
       virtual void layout();
 

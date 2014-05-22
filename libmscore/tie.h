@@ -39,7 +39,7 @@ class Tie : public SlurTie {
    public:
       Tie(Score* = 0);
       virtual Tie* clone() const override       { return new Tie(*this);  }
-      virtual ElementType type() const override { return TIE;             }
+      virtual ElementType type() const override { return ElementType::TIE;             }
       void setStartNote(Note* note);
       void setEndNote(Note* note)         { setEndElement((Element*)note);      }
       Note* startNote() const             { return (Note*) startElement();      }

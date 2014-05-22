@@ -131,7 +131,7 @@ AveragePitch findAverageSegPitch(const Segment *seg, int strack)
       AveragePitch averagePitch;
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
-            if (cr && cr->type() == Element::CHORD) {
+            if (cr && cr->type() == Element::ElementType::CHORD) {
                   Chord *chord = static_cast<Chord *>(cr);
                   const auto &notes = chord->notes();
                   for (const Note *note: notes)
@@ -146,7 +146,7 @@ MinMaxPitch findMinMaxSegPitch(const Segment *seg, int strack)
       MinMaxPitch minMaxPitch;
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
-            if (cr && cr->type() == Element::CHORD) {
+            if (cr && cr->type() == Element::ElementType::CHORD) {
                   Chord *chord = static_cast<Chord *>(cr);
                   const auto &notes = chord->notes();
                   for (const Note *note: notes)
@@ -223,18 +223,18 @@ int findPitchPenaltyForClef(int pitch, int clefIndex)
 std::pair<Element::ElementType, ReducedFraction>
 findChordRest(const Segment *seg, int strack)
       {
-      Element::ElementType elType = Element::INVALID;
+      Element::ElementType elType = Element::ElementType::INVALID;
       ReducedFraction newRestLen(0, 1);
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
             if (!cr)
                   continue;
-            if (cr->type() == Element::CHORD) {
-                  elType = Element::CHORD;
+            if (cr->type() == Element::ElementType::CHORD) {
+                  elType = Element::ElementType::CHORD;
                   break;
                   }
-            else if (cr->type() == Element::REST) {
-                  elType = Element::REST;
+            else if (cr->type() == Element::ElementType::REST) {
+                  elType = Element::ElementType::REST;
                   newRestLen = qMax(newRestLen, ReducedFraction(cr->globalDuration()));
                   }
             }
@@ -271,7 +271,7 @@ int findClefChangePenalty(
                   break;
                   }
             const auto el = findChordRest(segPrev, strack);
-            if (el.first == Element::CHORD) {
+            if (el.first == Element::ElementType::CHORD) {
                   --j;
                   if (j == pos - notesBetweenClefs)
                         break;
@@ -281,7 +281,7 @@ int findClefChangePenalty(
                         }
                   totalRestLen = {0, 1};
                   }
-            else if (el.first == Element::REST) {
+            else if (el.first == Element::ElementType::REST) {
                   totalRestLen += el.second;
                   if (totalRestLen >= beatLen) {
                         if (j != pos)
@@ -298,13 +298,13 @@ int findClefChangePenalty(
                   break;
                   }
             const auto el = findChordRest(seg, strack);
-            if (el.first == Element::CHORD) {
+            if (el.first == Element::ElementType::CHORD) {
                   ++chordCounter;
                   if (chordCounter == notesBetweenClefs)
                         break;
                   totalRestLen = {0, 1};
                   }
-            else if (el.first == Element::REST) {
+            else if (el.first == Element::ElementType::REST) {
                   totalRestLen += el.second;
                   if (totalRestLen >= beatLen) {
                         penalty += orphanChordPenalty;

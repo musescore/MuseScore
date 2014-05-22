@@ -37,7 +37,7 @@ class ShadowNote : public Element {
    public:
       ShadowNote(Score*);
       virtual ShadowNote* clone() const { return new ShadowNote(*this); }
-      virtual ElementType type() const  { return SHADOW_NOTE; }
+      virtual ElementType type() const  { return ElementType::SHADOW_NOTE; }
       virtual void layout();
       int line() const                  { return _line;   }
       void setLine(int n)               { _line = n;      }

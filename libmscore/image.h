@@ -55,7 +55,7 @@ class Image : public BSymbol {
       Image(const Image&);
       ~Image();
       virtual Image* clone() const     { return new Image(*this); }
-      virtual ElementType type() const { return IMAGE; }
+      virtual ElementType type() const { return ElementType::IMAGE; }
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       bool load(const QString& s);
