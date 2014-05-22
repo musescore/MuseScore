@@ -615,20 +615,22 @@ void Measure::layout2()
                   MStaff* ms = staves.at(staffIdx);
                   Text* t = ms->noText();
                   if (smn) {
-                        if (t == 0 && (staffIdx == nn || score()->styleB(ST_measureNumberAllStaffs))) {
-                              t = new Text(score());
-                              t->setFlag(ELEMENT_ON_STAFF, true);
-                              // t->setFlag(ELEMENT_MOVABLE, false); ??
-                              t->setTrack(staffIdx * VOICES);
-                              t->setGenerated(true);
-                              t->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
-                              t->setParent(this);
-                              score()->undoAddElement(t);
-                              }
-                        if(t) {
-                              t->setText(s);
-                              t->layout();
-                              smn = score()->styleB(ST_measureNumberAllStaffs);
+                        if ((staffIdx == nn || score()->styleB(ST_measureNumberAllStaffs))) {
+                              if (t == 0) {
+                                    t = new Text(score());
+                                    t->setFlag(ELEMENT_ON_STAFF, true);
+                                    // t->setFlag(ELEMENT_MOVABLE, false); ??
+                                    t->setTrack(staffIdx * VOICES);
+                                    t->setGenerated(true);
+                                    t->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
+                                    t->setParent(this);
+                                    score()->undoAddElement(t);
+                                    }
+                              if(t) {
+                                    t->setText(s);
+                                    t->layout();
+                                    smn = score()->styleB(ST_measureNumberAllStaffs);
+                                    }
                               }
                         }
                   else {
