@@ -838,7 +838,7 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
 
 void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
       {
-      if ((l->syllabic() == Lyrics::SINGLE || l->syllabic() == Lyrics::END) && (l->ticks() == 0)) {
+      if ((l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END) && (l->ticks() == 0)) {
             l->clearSeparator();
             return;
             }

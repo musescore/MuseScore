@@ -3460,13 +3460,13 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "syllabic") {
                   if (e.text() == "single")
-                        l->setSyllabic(Lyrics::SINGLE);
+                        l->setSyllabic(Lyrics::Syllabic::SINGLE);
                   else if (e.text() == "begin")
-                        l->setSyllabic(Lyrics::BEGIN);
+                        l->setSyllabic(Lyrics::Syllabic::BEGIN);
                   else if (e.text() == "end")
-                        l->setSyllabic(Lyrics::END);
+                        l->setSyllabic(Lyrics::Syllabic::END);
                   else if (e.text() == "middle")
-                        l->setSyllabic(Lyrics::MIDDLE);
+                        l->setSyllabic(Lyrics::Syllabic::MIDDLE);
                   else
                         qDebug("unknown syllabic %s", qPrintable(e.text()));
                   }

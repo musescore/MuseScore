@@ -2156,7 +2156,7 @@ void LyricsView::setElement(Element* e)
 
       lb.row->setValue(l->no());
       lb.endTick->setValue(l->endTick());
-      lb.syllabic->setCurrentIndex(l->syllabic());
+      lb.syllabic->setCurrentIndex(int(l->syllabic()));
       }
 
 //---------------------------------------------------------
