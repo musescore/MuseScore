@@ -737,7 +737,7 @@ void Note::write(Xml& xml) const
             bool hasUserModifiedDots = false;
             for (int i = 0; i < dots; ++i) {
                   if (_dots[i] && (!_dots[i]->userOff().isNull() || !_dots[i]->visible()
-                     || _dots[i]->color() != Qt::black)) {
+                     || _dots[i]->color() != Qt::black || _dots[i]->visible() != visible())) {
                         hasUserModifiedDots = true;
                         break;
                         }
@@ -1488,6 +1488,7 @@ void Note::setDotY(Direction pos)
                         dot->setIdx(i);
                         dot->setParent(this);
                         dot->setTrack(track());  // needed to know the staff it belongs to (and detect tablature)
+                        dot->setVisible(visible());
                         score()->undoAddElement(dot); // move dot to _dots[i]
                         }
                   _dots[i]->layout();
