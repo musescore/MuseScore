@@ -123,15 +123,11 @@ void ClefList::setClef(int tick, ClefTypeList ctl)
                   Measure* m = _staff->score()->tick2measure(tick);
                   if (m) {
 //                        bool small = false;
-                        // if new clef is at the beginning of measure
-                        // check if it has to be moved to previous measure
+                        // if new clef is at the beginning of measure,
+                        // move to previous measure (if any)
                         if (tick == m->tick()) {
                               Measure* m2;
-                              // if there is previous measure and it is not end-repeat
-                              // nor section-end measure, move clef to previous measure
-                              if ( (m2=m->prevMeasure()) != nullptr
-                                          && !(m2->repeatFlags() & RepeatEnd)
-                                          && m2->sectionBreak() == nullptr)
+                              if ( (m2=m->prevMeasure()) != nullptr)
                                     m = m2;
                               }
                         Segment* seg = m->getSegment(Segment::SegClef, tick);
