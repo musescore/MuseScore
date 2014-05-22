@@ -951,6 +951,8 @@ class Score : public QObject {
       qreal noteHeadWidth() const     { return _noteHeadWidth; }
       void setNoteHeadWidth( qreal n) { _noteHeadWidth = n; }
 
+      QList<int> uniqueStaves() const;
+
       friend class ChangeSynthesizerState;
       friend class Chord;
       };
