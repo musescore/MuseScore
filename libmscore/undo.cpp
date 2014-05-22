@@ -905,13 +905,8 @@ void Score::undoAddElement(Element* element)
             undo(new AddElement(element));
             return;
             }
-      LinkedStaves* linkedStaves = ostaff->linkedStaves();
-      if (linkedStaves)
-            staffList = linkedStaves->staves();
-      else
-            staffList.append(ostaff);
 
-      foreach(Staff* staff, staffList) {
+      foreach(Staff* staff, ostaff->staffList()) {
             Score* score = staff->score();
             int staffIdx = score->staffIdx(staff);
             Element* ne;
@@ -1071,12 +1066,12 @@ void Score::undoAddElement(Element* element)
                   Segment* ns2;
                   ns1 = nm1->findSegment(s1->segmentType(), s1->tick());
                   ns2 = nm2 ? nm2->findSegment(s2->segmentType(), s2->tick()) : 0;
-                  Chord* c1      = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
+                  Chord* c1 = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
                   int sm = 0;
                   if (cr1->staffIdx() != cr2->staffIdx())
                         sm = cr1->staffMove() + cr2->staffMove();
 
-                  Chord* c2      = 0;
+                  Chord* c2 = 0;
                   if (ns2) {
                         Element* e = ns2->element((staffIdx + sm) * VOICES + cr2->voice());
                         if (e->type() == Element::CHORD)
