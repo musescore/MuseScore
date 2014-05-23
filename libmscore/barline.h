@@ -65,7 +65,7 @@ class BarLine : public Element {
       BarLine &operator=(const BarLine&);
 
       virtual BarLine* clone() const   { return new BarLine(*this); }
-      virtual ElementType type() const { return BAR_LINE; }
+      virtual ElementType type() const { return ElementType::BAR_LINE; }
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       virtual void draw(QPainter*) const;
@@ -91,7 +91,7 @@ class BarLine : public Element {
       int spanFrom() const            { return _spanFrom;     }
       int spanTo() const              { return _spanTo;       }
 
-      virtual bool isEditable() const { return parent()->type() == SEGMENT; }
+      virtual bool isEditable() const { return parent()->type() == ElementType::SEGMENT; }
       virtual void startEdit(MuseScoreView*, const QPointF&);
       virtual void endEdit();
       virtual void editDrag(const EditData&);

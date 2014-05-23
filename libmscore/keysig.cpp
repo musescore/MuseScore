@@ -47,7 +47,7 @@ const char* keyNames[] = {
 KeySig::KeySig(Score* s)
   : Element(s)
       {
-      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
+      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _showCourtesy = true;
       }
 
@@ -259,7 +259,7 @@ void KeySig::draw(QPainter* p) const
 
 bool KeySig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == KEYSIG;
+      return e->type() == ElementType::KEYSIG;
       }
 
 //---------------------------------------------------------
@@ -269,7 +269,7 @@ bool KeySig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* KeySig::drop(const DropData& data)
       {
       Element* e = data.element;
-      if (e->type() != KEYSIG) {
+      if (e->type() != ElementType::KEYSIG) {
             delete e;
             return 0;
             }

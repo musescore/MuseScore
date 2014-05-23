@@ -21,7 +21,7 @@ namespace Ms {
 
 class Chord;
 
-enum class ArpeggioType {
+enum class ArpeggioType : char {
       NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
       };
 
@@ -50,7 +50,7 @@ class Arpeggio : public Element {
    public:
       Arpeggio(Score* s);
       virtual Arpeggio* clone() const      { return new Arpeggio(*this); }
-      virtual ElementType type() const     { return ARPEGGIO; }
+      virtual ElementType type() const     { return ElementType::ARPEGGIO; }
       ArpeggioType arpeggioType() const    { return _arpeggioType; }
       void setArpeggioType(ArpeggioType v) { _arpeggioType = v;    }
 

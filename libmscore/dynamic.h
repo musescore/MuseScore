@@ -25,7 +25,7 @@ class Segment;
 //   @@ Dynamic
 ///    dynamics marker; determines midi velocity
 //
-//   @P range  Ms::Element::DynamicRange (DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM)
+//   @P range  Ms::Element::DynamicRange (STAFF, PART, SYSTEM)
 //-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
@@ -33,36 +33,36 @@ class Dynamic : public Text {
       Q_PROPERTY(DynamicRange range READ dynRange  WRITE undoSetDynRange)
 
    public:
-      enum DynamicType {
-            DYNAMIC_OTHER,
-            DYNAMIC_pppppp,
-            DYNAMIC_ppppp,
-            DYNAMIC_pppp,
-            DYNAMIC_ppp,
-            DYNAMIC_pp,
-            DYNAMIC_p,
-            DYNAMIC_mp,
-            DYNAMIC_mf,
-            DYNAMIC_f,
-            DYNAMIC_ff,
-            DYNAMIC_fff,
-            DYNAMIC_ffff,
-            DYNAMIC_fffff,
-            DYNAMIC_ffffff,
-            DYNAMIC_fp,
-            DYNAMIC_sf,
-            DYNAMIC_sfz,
-            DYNAMIC_sff,
-            DYNAMIC_sffz,
-            DYNAMIC_sfp,
-            DYNAMIC_sfpp,
-            DYNAMIC_rfz,
-            DYNAMIC_rf,
-            DYNAMIC_fz,
-            DYNAMIC_m,
-            DYNAMIC_r,
-            DYNAMIC_s,
-            DYNAMIC_z
+      enum class DynamicType : char {
+            OTHER,
+            PPPPPP,
+            PPPPP,
+            PPPP,
+            PPP,
+            PP,
+            P,
+            MP,
+            MF,
+            F,
+            FF,
+            FFF,
+            FFFF,
+            FFFFF,
+            FFFFFF,
+            FP,
+            SF,
+            SFZ,
+            SFF,
+            SFFZ,
+            SFP,
+            SFPP,
+            RFZ,
+            RF,
+            FZ,
+            M,
+            R,
+            S,
+            Z
             };
 
    private:
@@ -70,7 +70,7 @@ class Dynamic : public Text {
 
       mutable QPointF dragOffset;
       int _velocity;          // associated midi velocity 0-127
-      DynamicRange _dynRange;   // DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM
+      DynamicRange _dynRange;   // STAFF, PART, SYSTEM
 
       virtual QRectF drag(EditData*) override;
 
@@ -78,7 +78,7 @@ class Dynamic : public Text {
       Dynamic(Score*);
       Dynamic(const Dynamic&);
       virtual Dynamic* clone() const override   { return new Dynamic(*this); }
-      virtual ElementType type() const override { return DYNAMIC; }
+      virtual ElementType type() const override { return ElementType::DYNAMIC; }
       Segment* segment() const                  { return (Segment*)parent(); }
       Measure* measure() const                  { return (Measure*)parent()->parent(); }
 

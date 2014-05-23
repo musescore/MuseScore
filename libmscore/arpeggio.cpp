@@ -30,7 +30,7 @@ namespace Ms {
 Arpeggio::Arpeggio(Score* s)
   : Element(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _arpeggioType = ArpeggioType::NORMAL;
       setHeight(spatium() * 4);      // for use in palettes
       _span     = 1;
@@ -295,7 +295,7 @@ QPointF Arpeggio::gripAnchor(int n) const
             Note* dnote = c->downNote();
             int btrack  = track() + (_span - 1) * VOICES;
             ChordRest* bchord = static_cast<ChordRest*>(c->segment()->element(btrack));
-            if (bchord && bchord->type() == CHORD)
+            if (bchord && bchord->type() == ElementType::CHORD)
                   dnote = static_cast<Chord*>(bchord)->downNote();
             return dnote->pagePos();
             }
@@ -360,7 +360,7 @@ void Arpeggio::spatiumChanged(qreal oldValue, qreal newValue)
 
 bool Arpeggio::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == ARPEGGIO;
+      return e->type() == ElementType::ARPEGGIO;
       }
 
 //---------------------------------------------------------
@@ -371,7 +371,7 @@ Element* Arpeggio::drop(const DropData& data)
       {
       Element* e = data.element;
       switch(e->type()) {
-            case ARPEGGIO:
+            case ElementType::ARPEGGIO:
                   {
                   Arpeggio* a = static_cast<Arpeggio*>(e);
                   if (parent())

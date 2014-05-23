@@ -83,7 +83,7 @@ void SwingDetector::reset()
 
 void SwingDetector::append(ChordRest *cr)
       {
-      if (cr->type() == Element::CHORD || cr->type() == Element::REST) {
+      if (cr->type() == Element::ElementType::CHORD || cr->type() == Element::ElementType::REST) {
             elements.push_back(cr);
             sumLen += ReducedFraction(cr->globalDuration());
             }
@@ -93,8 +93,8 @@ void SwingDetector::checkNormalSwing()
       {
       if (elements.size() == 2
                   && areAllTuplets()
-                  && (elements[0]->type() == Element::CHORD
-                      || elements[1]->type() == Element::CHORD)
+                  && (elements[0]->type() == Element::ElementType::CHORD
+                      || elements[1]->type() == Element::ElementType::CHORD)
                   && elements[0]->duration().reduced() == Fraction(1, 4)
                   && elements[1]->duration().reduced() == Fraction(1, 8))
             {
@@ -104,9 +104,9 @@ void SwingDetector::checkNormalSwing()
             applySwing();
             }
       else if (elements.size() == 3
-               && elements[0]->type() == Element::CHORD
-               && elements[1]->type() == Element::REST
-               && elements[2]->type() == Element::CHORD
+               && elements[0]->type() == Element::ElementType::CHORD
+               && elements[1]->type() == Element::ElementType::REST
+               && elements[2]->type() == Element::ElementType::CHORD
                && elements[0]->duration().reduced() == Fraction(1, 8)
                && elements[1]->duration().reduced() == Fraction(1, 8)
                && elements[2]->duration().reduced() == Fraction(1, 8))
@@ -120,9 +120,9 @@ void SwingDetector::checkShuffle()
       {
       if (elements.size() == 2
                   && areAllNonTuplets()
-                  && elements[0]->type() == Element::CHORD
-                  && (elements[1]->type() == Element::CHORD
-                      || elements[1]->type() == Element::REST)
+                  && elements[0]->type() == Element::ElementType::CHORD
+                  && (elements[1]->type() == Element::ElementType::CHORD
+                      || elements[1]->type() == Element::ElementType::REST)
                   && elements[0]->duration().reduced() == Fraction(3, 16)  // dotted 8th
                   && elements[1]->duration().reduced() == Fraction(1, 16))
             {
@@ -139,7 +139,7 @@ void SwingDetector::applySwing()
 
       Tuplet *tuplet = nullptr;
       for (ChordRest *el: elements) {
-            el->setDurationType(TDuration::V_EIGHT);
+            el->setDurationType(TDuration::DurationType::V_EIGHT);
             el->setDuration(Fraction(1, 8));
             el->setDots(0);
             if (el->tuplet()) {

@@ -32,7 +32,7 @@ namespace Ms {
 TimeSig::TimeSig(Score* s)
   : Element(s)
       {
-      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
+      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _showCourtesySig = true;
       customText = false;
       _stretch.set(1, 1);
@@ -82,7 +82,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
 
 bool TimeSig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == TIMESIG;
+      return e->type() == ElementType::TIMESIG;
       }
 
 //---------------------------------------------------------
@@ -92,7 +92,7 @@ bool TimeSig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* TimeSig::drop(const DropData& data)
       {
       Element* e = data.element;
-      if (e->type() == TIMESIG) {
+      if (e->type() == ElementType::TIMESIG) {
             // change timesig applies to all staves, can't simply set subtype
             // for this one only
             // ownership of e is transferred to cmdAddTimeSig

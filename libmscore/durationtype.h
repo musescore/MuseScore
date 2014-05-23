@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-enum class NoteHeadType : char;
+enum class NoteHeadType : signed char;
 
 static const int MAX_DOTS = 3;
 
@@ -27,7 +27,7 @@ static const int MAX_DOTS = 3;
 
 class TDuration {
    public:
-      enum DurationType {
+      enum class DurationType : char {
             V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHT, V_16TH,
             V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,
             V_ZERO, V_MEASURE,  V_INVALID
@@ -37,13 +37,13 @@ class TDuration {
       int _dots;
 
    public:
-      TDuration() : _val(V_INVALID), _dots(0) {}
+      TDuration() : _val(DurationType::V_INVALID), _dots(0) {}
       TDuration(const Fraction&);
       TDuration(const QString&);
       TDuration(DurationType t) : _val(t), _dots(0) {}
       DurationType type() const             { return _val; }
-      bool isValid() const                  { return _val != V_INVALID; }
-      bool isZero() const                   { return _val == V_ZERO; }
+      bool isValid() const                  { return _val != DurationType::V_INVALID; }
+      bool isZero() const                   { return _val == DurationType::V_ZERO; }
       void setVal(int tick);
       void setType(DurationType t);
       void setType(const QString&);

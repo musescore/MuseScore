@@ -36,7 +36,7 @@ Stem::Stem(Score* s)
       {
       _len     = 0.0;
       _userLen = 0.0;
-      setFlags(ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------
@@ -137,7 +137,7 @@ void Stem::spatiumChanged(qreal oldValue, qreal newValue)
 void Stem::draw(QPainter* painter) const
       {
       // hide if second chord of a cross-measure pair
-      if (chord() && chord()->crossMeasure() == CROSSMEASURE_SECOND)
+      if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
 
       Staff* st = staff();
@@ -157,7 +157,7 @@ void Stem::draw(QPainter* painter) const
       bool _up = up();
 
       // slashed half note stem
-      if (chord()->durationType().type() == TDuration::V_HALF && stt->minimStyle() == TAB_MINIM_SLASHED) {
+      if (chord()->durationType().type() == TDuration::DurationType::V_HALF && stt->minimStyle() == TAB_MINIM_SLASHED) {
             // position slashes onto stem
             qreal y = _up ? -(_len+_userLen) + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp : (_len+_userLen) - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp;
             // if stems through, try to align slashes within or across lines
@@ -278,7 +278,7 @@ void Stem::reset()
 
 bool Stem::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      if ((e->type() == TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TREMOLO_R64)) {
+      if ((e->type() == ElementType::TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TREMOLO_R64)) {
             return true;
             }
       return false;
@@ -293,7 +293,7 @@ Element* Stem::drop(const DropData& data)
       Element* e = data.element;
       Chord* ch = chord();
       switch(e->type()) {
-            case TREMOLO:
+            case ElementType::TREMOLO:
                   e->setParent(ch);
                   score()->setLayoutAll(true);
                   score()->undoAddElement(e);

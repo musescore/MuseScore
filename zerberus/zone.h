@@ -20,7 +20,7 @@ class Channel;
 //   Trigger
 //---------------------------------------------------------
 
-enum class Trigger {
+enum class Trigger : char {
       ATTACK, RELEASE, FIRST, LEGATO, CC
       };
 
@@ -28,7 +28,7 @@ enum class Trigger {
 //   LoopMode
 //---------------------------------------------------------
 
-enum class LoopMode {
+enum class LoopMode : char {
       NO_LOOP, ONE_SHOT, CONTINUOUS, SUSTAIN
       };
 
@@ -36,7 +36,7 @@ enum class LoopMode {
 //   OffMode
 //---------------------------------------------------------
 
-enum class OffMode {
+enum class OffMode : char {
       FAST, NORMAL
       };
 

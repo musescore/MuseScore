@@ -73,11 +73,11 @@ struct MStaff {
       void setNoText(Text* t)      { _noText = t;        }
       };
 
-enum {
-      RepeatEnd         = 1,
-      RepeatStart       = 2,
-      RepeatMeasureFlag = 4,
-      RepeatJump        = 8
+enum Repeat : char {
+      END         = 1,
+      START       = 2,
+      MEASUREFLAG = 4,
+      JUMP        = 8
       };
 
 //---------------------------------------------------------
@@ -143,7 +143,7 @@ class Measure : public MeasureBase {
       Measure(const Measure&);
       ~Measure();
       virtual Measure* clone() const override   { return new Measure(*this); }
-      virtual ElementType type() const override { return MEASURE; }
+      virtual ElementType type() const override { return ElementType::MEASURE; }
       virtual void setScore(Score* s) override;
       Measure* cloneMeasure(Score*, TieMap*);
 

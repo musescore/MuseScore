@@ -26,9 +26,9 @@ namespace Ms {
 ChordLine::ChordLine(Score* s)
    : Element(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       modified = false;
-      _chordLineType = CHORDLINE_NOTYPE;
+      _chordLineType = ChordLineType::NOTYPE;
       }
 
 ChordLine::ChordLine(const ChordLine& cl)
@@ -48,33 +48,33 @@ void ChordLine::setChordLineType(ChordLineType st)
       qreal x2 = 0;
       qreal y2 = 0;
       switch(st) {
-            case CHORDLINE_NOTYPE:
+            case ChordLineType::NOTYPE:
                   break;
-            case CHORDLINE_FALL:
+            case ChordLineType::FALL:
                   x2 = 2;
                   y2 = 2;
                   break;
-            case CHORDLINE_PLOP:
+            case ChordLineType::PLOP:
                   x2 = -2;
                   y2 = -2;
                   break;
-            case CHORDLINE_SCOOP:
+            case ChordLineType::SCOOP:
                   x2 = -2;
                   y2 = 2;
                   break;
             default:
-            case CHORDLINE_DOIT:
+            case ChordLineType::DOIT:
                   x2 = 2;
                   y2 = -2;
                   break;
             }
-      if (st) {
+      if (st != ChordLineType::NOTYPE) {
             path = QPainterPath();
             // chordlines to the right of the note
-            if (st == CHORDLINE_FALL || st == CHORDLINE_DOIT)
+            if (st == ChordLineType::FALL || st == ChordLineType::DOIT)
                   path.cubicTo(x2/2, 0.0, x2, y2/2, x2, y2);
             // chordlines to the left of the note
-            if (st == CHORDLINE_PLOP || st == CHORDLINE_SCOOP)
+            if (st == ChordLineType::PLOP || st == ChordLineType::SCOOP)
                   path.cubicTo(0.0, y2/2, x2/2, y2, x2, y2);
             }
       _chordLineType = st;
@@ -91,12 +91,12 @@ void ChordLine::layout()
             Note* note = chord()->upNote();
             QPointF p(note->pos());
             // chordlines to the right of the note
-            if (_chordLineType == CHORDLINE_FALL || _chordLineType == CHORDLINE_DOIT)
+            if (_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT)
                   setPos(p.x() + note->headWidth() + _spatium * .2, p.y());
             // chordlines to the left of the note
-            if (_chordLineType == CHORDLINE_PLOP)
+            if (_chordLineType == ChordLineType::PLOP)
                   setPos(p.x() + note->headWidth() * .25, p.y() - note->headHeight() * .75);
-            if (_chordLineType == CHORDLINE_SCOOP)
+            if (_chordLineType == ChordLineType::SCOOP)
                   setPos(p.x() + note->headWidth() * .25, p.y() + note->headHeight() * .75);
             }
       else
@@ -170,7 +170,7 @@ void ChordLine::read(XmlReader& e)
 void ChordLine::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("subtype", _chordLineType);
+      xml.tag("subtype", int(_chordLineType));
       Element::writeProperties(xml);
       if (modified) {
             int n = path.elementCount();

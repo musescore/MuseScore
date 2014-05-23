@@ -227,12 +227,12 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
 
       if (basic) {
             static Accidental::AccidentalType types[] = {
-                  Accidental::ACC_NONE,
-                  Accidental::ACC_SHARP,
-                  Accidental::ACC_FLAT,
-                  Accidental::ACC_SHARP2,
-                  Accidental::ACC_FLAT2,
-                  Accidental::ACC_NATURAL
+                  Accidental::AccidentalType::NONE,
+                  Accidental::AccidentalType::SHARP,
+                  Accidental::AccidentalType::FLAT,
+                  Accidental::AccidentalType::SHARP2,
+                  Accidental::AccidentalType::FLAT2,
+                  Accidental::AccidentalType::NATURAL
                   };
             for (auto i : types) {
                   Accidental* s = new Accidental(gscore);
@@ -241,7 +241,7 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
                   }
             }
       else {
-            for (int i = Accidental::ACC_SHARP; i < Accidental::ACC_END; ++i) {
+            for (int i = int(Accidental::AccidentalType::SHARP); i < int(Accidental::AccidentalType::END); ++i) {
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(Accidental::AccidentalType(i));
                   if (s->symbol() != SymId::noSym)
@@ -389,17 +389,17 @@ Palette* MuseScore::newBreaksPalette()
       sp->setDrawGrid(true);
 
       LayoutBreak* lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LayoutBreak::LINE);
+      lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
       PaletteCell* cell = sp->append(lb, tr("Line break"));
       cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LayoutBreak::PAGE);
+      lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::PAGE);
       cell = sp->append(lb, tr("Page break"));
       cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LayoutBreak::SECTION);
+      lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::SECTION);
       cell = sp->append(lb, tr("Section break"));
       cell->mag = 1.2;
 
@@ -621,19 +621,19 @@ Palette* MuseScore::newArpeggioPalette()
             };
 
       ChordLine* cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_FALL);
+      cl->setChordLineType(ChordLineType::FALL);
       sp->append(cl, tr(scorelineNames[0]));
 
       cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_DOIT);
+      cl->setChordLineType(ChordLineType::DOIT);
       sp->append(cl, tr(scorelineNames[1]));
 
       cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_PLOP);
+      cl->setChordLineType(ChordLineType::PLOP);
       sp->append(cl, tr(scorelineNames[2]));
 
       cl = new ChordLine(gscore);
-      cl->setChordLineType(CHORDLINE_SCOOP);
+      cl->setChordLineType(ChordLineType::SCOOP);
       sp->append(cl, tr(scorelineNames[3]));
 
       return sp;
@@ -651,13 +651,13 @@ Palette* MuseScore::newClefsPalette()
       sp->setGrid(33, 60);
       sp->setYOffset(1.0);
       // Up to ClefType::MAX-1, because ClefType::PERC2 is no longer supported
-      static const ClefType clefs[(int)(ClefType::MAX)-1] = {
+      static const ClefType clefs[int(ClefType::MAX)-1] = {
             ClefType::G, ClefType::G1, ClefType::G2, ClefType::G3, ClefType::G4,
             ClefType::C1, ClefType::C2, ClefType::C3, ClefType::C4, ClefType::C5,
             ClefType::F, ClefType::F_8VA, ClefType::F_15MA, ClefType::F8, ClefType::F15, ClefType::F_B, ClefType::F_C,
             ClefType::PERC, ClefType::TAB, ClefType::TAB2
             };
-      for (int i = 0; i < (int)(ClefType::MAX)-1; ++i) {
+      for (int i = 0; i < int(ClefType::MAX)-1; ++i) {
             ClefType j = clefs[i];
             Clef* k = new Ms::Clef(gscore);
             k->setClefType(ClefTypeList(j, j));
@@ -731,12 +731,12 @@ Palette* MuseScore::newLinesPalette()
       sp->append(slur, qApp->translate("lines", "Slur"));
 
       Hairpin* gabel0 = new Hairpin(gscore);
-      gabel0->setHairpinType(Hairpin::CRESCENDO);
+      gabel0->setHairpinType(Hairpin::HairpinType::CRESCENDO);
       gabel0->setLen(w);
       sp->append(gabel0, qApp->translate("lines", "Crescendo"));
 
       Hairpin* gabel1 = new Hairpin(gscore);
-      gabel1->setHairpinType(Hairpin::DECRESCENDO);
+      gabel1->setHairpinType(Hairpin::HairpinType::DECRESCENDO);
       gabel1->setLen(w);
       sp->append(gabel1, QT_TRANSLATE_NOOP("Palette", "Diminuendo"));
 
@@ -784,7 +784,7 @@ Palette* MuseScore::newLinesPalette()
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_8VB);
       ottava->setLen(w);
-      ottava->setPlacement(Element::BELOW);
+      ottava->setPlacement(Element::Placement::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8vb"));
 
       ottava = new Ottava(gscore);
@@ -795,7 +795,7 @@ Palette* MuseScore::newLinesPalette()
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_15MB);
       ottava->setLen(w);
-      ottava->setPlacement(Element::BELOW);
+      ottava->setPlacement(Element::Placement::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15mb"));
 
       ottava = new Ottava(gscore);

@@ -22,9 +22,9 @@ namespace Ms {
 class MuseScoreView;
 struct SymCode;
 
-enum class CharFormatType { TEXT, SYMBOL };
-enum class VerticalAlignment { AlignNormal, AlignSuperScript, AlignSubScript };
-enum class FormatId { Bold, Italic, Underline, Valign, FontSize, FontFamily };
+enum class CharFormatType : char { TEXT, SYMBOL };
+enum class VerticalAlignment : char { AlignNormal, AlignSuperScript, AlignSubScript };
+enum class FormatId : char { Bold, Italic, Underline, Valign, FontSize, FontFamily };
 
 //---------------------------------------------------------
 //   CharFormat
@@ -212,7 +212,7 @@ class Text : public Element {
       ~Text() {}
 
       virtual Text* clone() const override         { return new Text(*this); }
-      virtual ElementType type() const override    { return TEXT; }
+      virtual ElementType type() const override    { return ElementType::TEXT; }
       virtual bool mousePress(const QPointF&, QMouseEvent* ev) override;
 
       Text &operator=(const Text&);

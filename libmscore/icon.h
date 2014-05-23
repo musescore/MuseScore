@@ -32,7 +32,7 @@ class Icon : public Element {
    public:
       Icon(Score* s) : Element(s), _iconType(0), _action(0) { }
       virtual Icon* clone() const        { return new Icon(*this);    }
-      virtual ElementType type() const   { return ICON;               }
+      virtual ElementType type() const   { return ElementType::ICON;               }
       int iconType() const               { return _iconType;          }
       void setIconType(int val)          { _iconType = val;           }
       void setAction(const char* s, const QIcon& i)   { _action = s; _icon = i;  }

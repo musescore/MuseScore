@@ -310,8 +310,8 @@ void System::layout2()
                   MeasureBase* mb = ml.last();
                   bool nextMeasureIsVBOX = false;
                   if (mb->next()) {
-                        int type = mb->next()->type();
-                        if (type == VBOX || type == TBOX || type == FBOX)
+                        ElementType type = mb->next()->type();
+                        if (type == ElementType::VBOX || type == ElementType::TBOX || type == ElementType::FBOX)
                               nextMeasureIsVBOX = true;
                         }
                   downDistance = nextMeasureIsVBOX ? ST_systemFrameDistance : ST_minSystemDistance;
@@ -361,12 +361,12 @@ void System::layout2()
       int n = ml.size();
       for (int i = 0; i < n; ++i) {
             MeasureBase* m = ml.at(i);
-            if (m->type() == MEASURE) {
+            if (m->type() == ElementType::MEASURE) {
                   // note that the factor 2 * _spatium must be corrected for when exporting
                   // system distance in MusicXML (issue #24733)
                   m->bbox().setRect(0.0, -_spatium, m->width(), systemHeight + 2 * _spatium);
                   }
-            else if (m->type() == HBOX) {
+            else if (m->type() == ElementType::HBOX) {
                   m->bbox().setRect(0.0, 0.0, m->width(), systemHeight);
                   static_cast<HBox*>(m)->layout2();
                   }
@@ -531,7 +531,7 @@ void System::setInstrumentNames(bool longName)
                         iname->setGenerated(true);
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
-                        iname->setInstrumentNameType(longName ? INSTRUMENT_NAME_LONG : INSTRUMENT_NAME_SHORT);
+                        iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                         // score()->undoAddElement(iname);
                         score()->addElement(iname);
                         }
@@ -584,16 +584,16 @@ void System::add(Element* el)
 
       el->setParent(this);
       switch(el->type()) {
-            case INSTRUMENT_NAME:
+            case ElementType::INSTRUMENT_NAME:
 // qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
                   _staves[el->staffIdx()]->instrumentNames.append(static_cast<InstrumentName*>(el));
                   break;
 
-            case BEAM:
+            case ElementType::BEAM:
                   score()->add(el);
                   break;
 
-            case BRACKET:
+            case ElementType::BRACKET:
                   {
                   Bracket* b   = static_cast<Bracket*>(el);
                   int staffIdx = b->staffIdx();
@@ -613,20 +613,20 @@ void System::add(Element* el)
                   }
                   break;
 
-            case MEASURE:
-            case HBOX:
-            case VBOX:
-            case TBOX:
-            case FBOX:
+            case ElementType::MEASURE:
+            case ElementType::HBOX:
+            case ElementType::VBOX:
+            case ElementType::TBOX:
+            case ElementType::FBOX:
                   score()->add(static_cast<MeasureBase*>(el));
                   break;
-            case TEXTLINE_SEGMENT:
-            case HAIRPIN_SEGMENT:
-            case OTTAVA_SEGMENT:
-            case TRILL_SEGMENT:
-            case VOLTA_SEGMENT:
-            case SLUR_SEGMENT:
-            case PEDAL_SEGMENT:
+            case ElementType::TEXTLINE_SEGMENT:
+            case ElementType::HAIRPIN_SEGMENT:
+            case ElementType::OTTAVA_SEGMENT:
+            case ElementType::TRILL_SEGMENT:
+            case ElementType::VOLTA_SEGMENT:
+            case ElementType::SLUR_SEGMENT:
+            case ElementType::PEDAL_SEGMENT:
                   {
                   SpannerSegment* ss = static_cast<SpannerSegment*>(el);
 #ifndef NDEBUG
@@ -637,7 +637,7 @@ void System::add(Element* el)
                   _spannerSegments.append(ss);
                   }
                   break;
-            case BAR_LINE:
+            case ElementType::BAR_LINE:
                   if (_barLine)
                         qDebug("%p System::add(%s, %p): there is already a barline %p", this, el->name(), el, _barLine);
                   _barLine = static_cast<BarLine*>(el);
@@ -658,13 +658,13 @@ void System::remove(Element* el)
 
 //no!      el->setParent(0);
       switch (el->type()) {
-            case INSTRUMENT_NAME:
+            case ElementType::INSTRUMENT_NAME:
                   _staves[el->staffIdx()]->instrumentNames.removeOne(static_cast<InstrumentName*>(el));
                   break;
-            case BEAM:
+            case ElementType::BEAM:
                   score()->remove(el);
                   break;
-            case BRACKET:
+            case ElementType::BRACKET:
                   {
                   Bracket* b = static_cast<Bracket*>(el);
                   if (!_brackets.removeOne(b))
@@ -672,20 +672,20 @@ void System::remove(Element* el)
 //                  b->staff()->setBracket(b->level(), NO_BRACKET);
                   }
                   break;
-            case MEASURE:
-            case HBOX:
-            case VBOX:
-            case TBOX:
-            case FBOX:
+            case ElementType::MEASURE:
+            case ElementType::HBOX:
+            case ElementType::VBOX:
+            case ElementType::TBOX:
+            case ElementType::FBOX:
                   score()->remove(el);
                   break;
-            case TEXTLINE_SEGMENT:
-            case HAIRPIN_SEGMENT:
-            case OTTAVA_SEGMENT:
-            case TRILL_SEGMENT:
-            case VOLTA_SEGMENT:
-            case SLUR_SEGMENT:
-            case PEDAL_SEGMENT:
+            case ElementType::TEXTLINE_SEGMENT:
+            case ElementType::HAIRPIN_SEGMENT:
+            case ElementType::OTTAVA_SEGMENT:
+            case ElementType::TRILL_SEGMENT:
+            case ElementType::VOLTA_SEGMENT:
+            case ElementType::SLUR_SEGMENT:
+            case ElementType::PEDAL_SEGMENT:
 // qDebug("System::remove: %p %s spanner %p %s", el, el->name(),
 //            ((SpannerSegment*)el)->spanner(), ((SpannerSegment*)el)->spanner()->name());
 
@@ -694,7 +694,7 @@ void System::remove(Element* el)
                         Q_ASSERT(score() == el->score());
                         }
                   break;
-            case BAR_LINE:
+            case ElementType::BAR_LINE:
                   if (_barLine == 0)
                         qDebug("System::remove(%s): there is no barline", el->name());
                   _barLine = 0;
@@ -711,7 +711,7 @@ void System::remove(Element* el)
 
 void System::change(Element* o, Element* n)
       {
-      if (o->type() == VBOX || o->type() == HBOX || o->type() == TBOX || o->type() == FBOX) {
+      if (o->type() == ElementType::VBOX || o->type() == ElementType::HBOX || o->type() == ElementType::TBOX || o->type() == ElementType::FBOX) {
             int idx = ml.indexOf((MeasureBase*)o);
             if (idx != -1)
                   ml.removeAt(idx);
@@ -759,7 +759,7 @@ Measure* System::firstMeasure() const
       if (ml.isEmpty())
             return 0;
       for (MeasureBase* mb = ml.front(); mb; mb = mb->nextMM()) {
-            if (mb->type() != MEASURE)
+            if (mb->type() != ElementType::MEASURE)
                   continue;
             return static_cast<Measure*>(mb);
             }
@@ -775,7 +775,7 @@ Measure* System::lastMeasure() const
       if (ml.isEmpty())
             return 0;
       for (MeasureBase* mb = ml.back(); mb; mb = mb->prev()) {
-            if (mb->type() != MEASURE)
+            if (mb->type() != ElementType::MEASURE)
                   continue;
             return static_cast<Measure*>(mb);
             }
@@ -838,7 +838,7 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
 
 void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
       {
-      if ((l->syllabic() == Lyrics::SINGLE || l->syllabic() == Lyrics::END) && (l->ticks() == 0)) {
+      if ((l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END) && (l->ticks() == 0)) {
             l->clearSeparator();
             return;
             }
@@ -1003,14 +1003,14 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   Element* se = spanner->startElement();
                   Element* ee = spanner->endElement();
                   bool v1 = true;
-                  if (se && (se->type() == Element::CHORD || se->type() == Element::REST)) {
+                  if (se && (se->type() == Element::ElementType::CHORD || se->type() == Element::ElementType::REST)) {
                         ChordRest* cr = static_cast<ChordRest*>(se);
                         Measure* m    = cr->measure();
                         MStaff* mstaff = m->mstaff(cr->staffIdx());
                         v1 = mstaff->visible();
                         }
                   bool v2 = true;
-                  if(!v1 && ee && (ee->type() == Element::CHORD || ee->type() == Element::REST)) {
+                  if(!v1 && ee && (ee->type() == Element::ElementType::CHORD || ee->type() == Element::ElementType::REST)) {
                         ChordRest* cr = static_cast<ChordRest*>(ee);
                         Measure* m    = cr->measure();
                         MStaff* mstaff = m->mstaff(cr->staffIdx());
@@ -1018,7 +1018,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                         }
                   v = v1 || v2; // hide spanner if both chords are hidden
                   }
-            if (all || (score()->staff(staffIdx)->show() && v) || (spanner->type() == Element::VOLTA))
+            if (all || (score()->staff(staffIdx)->show() && v) || (spanner->type() == Element::ElementType::VOLTA))
                   ss->scanElements(data, func, all);
             }
       }

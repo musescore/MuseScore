@@ -32,7 +32,7 @@ namespace Ms {
 Glissando::Glissando(Score* s)
   : Element(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
 
       _glissandoType = GlissandoType::STRAIGHT;
       _text          = "gliss.";
@@ -72,7 +72,7 @@ void Glissando::layout()
             return;
             }
       ChordRest* cr = static_cast<ChordRest*>(s->element(track()));
-      if (cr == 0 || cr->type() != CHORD) {
+      if (cr == 0 || cr->type() != ElementType::CHORD) {
             qDebug("no first note for glissando found, track %d", track());
             return;
             }

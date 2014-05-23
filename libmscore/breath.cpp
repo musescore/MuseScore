@@ -35,7 +35,7 @@ Breath::Breath(Score* s)
   : Element(s)
       {
       _breathType = 0;
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------

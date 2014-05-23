@@ -38,11 +38,11 @@ BoxProperties::BoxProperties(Box* b, QWidget* parent)
 
       qreal _spatium = b->spatium();
 
-      if (b->type() == Element::HBOX) {     // enable width and set it to box width
+      if (b->type() == Element::ElementType::HBOX) {     // enable width and set it to box width
             frameWidth->setEnabled(true);
             frameWidth->setValue(b->boxWidth().val());
             }
-      if(b->type() == Element::VBOX) {     // enable height and set it to box height
+      if(b->type() == Element::ElementType::VBOX) {     // enable height and set it to box height
             frameHeight->setEnabled(true);
             frameHeight->setValue(b->boxHeight().val());
             }

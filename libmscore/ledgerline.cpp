@@ -25,7 +25,7 @@ namespace Ms {
 LedgerLine::LedgerLine(Score* s)
    : Line(s, false)
       {
-      setZ(NOTE * 100 - 50);
+      setZ(int(ElementType::NOTE) * 100 - 50);
       setSelectable(false);
       _next = 0;
       }
@@ -69,7 +69,7 @@ void LedgerLine::layout()
 
 void LedgerLine::draw(QPainter* painter) const
       {
-      if(chord()->crossMeasure() == CROSSMEASURE_SECOND)
+      if(chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
       Line::draw(painter);
       }

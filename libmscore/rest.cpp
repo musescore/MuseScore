@@ -39,7 +39,7 @@ namespace Ms {
 Rest::Rest(Score* s)
   : ChordRest(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _beamMode  = BeamMode::NONE;
       dotline    = -1;
       _sym       = SymId::restQuarter;
@@ -48,7 +48,7 @@ Rest::Rest(Score* s)
 Rest::Rest(Score* s, const TDuration& d)
   : ChordRest(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _beamMode  = BeamMode::NONE;
       dotline    = -1;
       _sym       = SymId::restQuarter;
@@ -166,33 +166,33 @@ QRectF Rest::drag(EditData* data)
 
 bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      int type = e->type();
+      ElementType type = e->type();
       if (
-         (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
-         || (type == ARTICULATION && static_cast<Articulation*>(e)->articulationType() == Articulation_Fermata)
-         || (type == CLEF)
-         || (type == STAFF_TEXT)
-         || (type == BAR_LINE)
-         || (type == BREATH)
-         || (type == CHORD)
-         || (type == STAFF_STATE)
-         || (type == INSTRUMENT_CHANGE)
-         || (type == DYNAMIC)
-         || (type == HARMONY)
-         || (type == TEMPO_TEXT)
-         || (type == STAFF_TEXT)
-         || (type == REHEARSAL_MARK)
-         || (type == FRET_DIAGRAM)
-         || (type == SYMBOL)
+         (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
+         || (type == ElementType::ARTICULATION && static_cast<Articulation*>(e)->articulationType() == Articulation_Fermata)
+         || (type == ElementType::CLEF)
+         || (type == ElementType::STAFF_TEXT)
+         || (type == ElementType::BAR_LINE)
+         || (type == ElementType::BREATH)
+         || (type == ElementType::CHORD)
+         || (type == ElementType::STAFF_STATE)
+         || (type == ElementType::INSTRUMENT_CHANGE)
+         || (type == ElementType::DYNAMIC)
+         || (type == ElementType::HARMONY)
+         || (type == ElementType::TEMPO_TEXT)
+         || (type == ElementType::STAFF_TEXT)
+         || (type == ElementType::REHEARSAL_MARK)
+         || (type == ElementType::FRET_DIAGRAM)
+         || (type == ElementType::SYMBOL)
          ) {
             return true;
             }
-      if(type == REPEAT_MEASURE && durationType().type() == TDuration::V_MEASURE)
+      if(type == ElementType::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
             return true;
       return false;
       }
@@ -205,7 +205,7 @@ Element* Rest::drop(const DropData& data)
       {
       Element* e = data.element;
       switch (e->type()) {
-            case ARTICULATION:
+            case ElementType::ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
                   if (a->articulationType() != Articulation_Fermata
@@ -216,7 +216,7 @@ Element* Rest::drop(const DropData& data)
                   }
                   return e;
 
-            case CHORD:
+            case ElementType::CHORD:
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
@@ -237,9 +237,9 @@ Element* Rest::drop(const DropData& data)
                   delete e;
                   }
                   break;
-            case REPEAT_MEASURE:
+            case ElementType::REPEAT_MEASURE:
                   delete e;
-                  if (durationType().type() == TDuration::V_MEASURE) {
+                  if (durationType().type() == TDuration::DurationType::V_MEASURE) {
                         measure()->cmdInsertRepeatMeasure(staffIdx());
                         }
                   break;
@@ -257,36 +257,36 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
       {
       *yoffset = 2;
       switch(type) {
-            case TDuration::V_LONG:
+            case TDuration::DurationType::V_LONG:
                   return SymId::restLonga;
-            case TDuration::V_BREVE:
+            case TDuration::DurationType::V_BREVE:
                   return SymId::restDoubleWhole;
-            case TDuration::V_MEASURE:
+            case TDuration::DurationType::V_MEASURE:
                   if (duration() >= Fraction(2, 1))
                         return SymId::restDoubleWhole;
                   // fall trough
-            case TDuration::V_WHOLE:
+            case TDuration::DurationType::V_WHOLE:
                   *yoffset = 1;
                   return (line <= -2 || line >= (lines - 1)) ? SymId::restWholeLegerLine : SymId::restWhole;
-            case TDuration::V_HALF:
+            case TDuration::DurationType::V_HALF:
                   return (line <= -3 || line >= (lines - 2)) ? SymId::restHalfLegerLine : SymId::restHalf;
-            case TDuration::V_QUARTER:
+            case TDuration::DurationType::V_QUARTER:
                   return SymId::restQuarter;
-            case TDuration::V_EIGHT:
+            case TDuration::DurationType::V_EIGHT:
                   return SymId::rest8th;
-            case TDuration::V_16TH:
+            case TDuration::DurationType::V_16TH:
                   return SymId::rest16th;
-            case TDuration::V_32ND:
+            case TDuration::DurationType::V_32ND:
                   return SymId::rest32nd;
-            case TDuration::V_64TH:
+            case TDuration::DurationType::V_64TH:
                   return SymId::rest64th;
-            case TDuration::V_128TH:
+            case TDuration::DurationType::V_128TH:
                   return SymId::rest128th;
-            case TDuration::V_256TH:
+            case TDuration::DurationType::V_256TH:
                   return SymId::rest256th;
-            case TDuration::V_512TH:
+            case TDuration::DurationType::V_512TH:
                   return SymId::rest512th;
-            case TDuration::V_1024TH:
+            case TDuration::DurationType::V_1024TH:
                   return SymId::rest1024th;
             default:
                   qDebug("unknown rest type %d", type);
@@ -325,7 +325,7 @@ void Rest::layout()
                   TDuration::DurationType type = durationType().type();
                   int                     dots = durationType().dots();
                   // if rest is whole measure, convert into actual type and dot values
-                  if (type == TDuration::V_MEASURE) {
+                  if (type == TDuration::DurationType::V_MEASURE) {
                         int       ticks = measure()->ticks();
                         TDuration dur   = TDuration(Fraction::fromTicks(ticks)).type();
                         type = dur.type();
@@ -355,14 +355,14 @@ void Rest::layout()
             }
 
       switch(durationType().type()) {
-            case TDuration::V_64TH:
-            case TDuration::V_32ND:
+            case TDuration::DurationType::V_64TH:
+            case TDuration::DurationType::V_32ND:
                   dotline = -3;
                   break;
-            case TDuration::V_1024TH:
-            case TDuration::V_512TH:
-            case TDuration::V_256TH:
-            case TDuration::V_128TH:
+            case TDuration::DurationType::V_1024TH:
+            case TDuration::DurationType::V_512TH:
+            case TDuration::DurationType::V_256TH:
+            case TDuration::DurationType::V_128TH:
                   dotline = -5;
                   break;
             default:
@@ -409,43 +409,43 @@ int Rest::computeLineOffset()
             // move rests in a multi voice context
             bool up = (voice() == 0) || (voice() == 2);       // TODO: use style values
             switch(durationType().type()) {
-                  case TDuration::V_LONG:
+                  case TDuration::DurationType::V_LONG:
                         lineOffset = up ? -3 : 5;
                         break;
-                  case TDuration::V_BREVE:
+                  case TDuration::DurationType::V_BREVE:
                         lineOffset = up ? -3 : 5;
                         break;
-                  case TDuration::V_MEASURE:
+                  case TDuration::DurationType::V_MEASURE:
                         if (duration() >= Fraction(2, 1))    // breve symbol
                               lineOffset = up ? -3 : 5;
                         // fall through
-                  case TDuration::V_WHOLE:
+                  case TDuration::DurationType::V_WHOLE:
                         lineOffset = up ? -4 : 6;
                         break;
-                  case TDuration::V_HALF:
+                  case TDuration::DurationType::V_HALF:
                         lineOffset = up ? -4 : 4;
                         break;
-                  case TDuration::V_QUARTER:
+                  case TDuration::DurationType::V_QUARTER:
                         lineOffset = up ? -4 : 4;
                         break;
-                  case TDuration::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHT:
                         lineOffset = up ? -4 : 4;
                         break;
-                  case TDuration::V_16TH:
+                  case TDuration::DurationType::V_16TH:
                         lineOffset = up ? -6 : 4;
                         break;
-                  case TDuration::V_32ND:
+                  case TDuration::DurationType::V_32ND:
                         lineOffset = up ? -6 : 6;
                         break;
-                  case TDuration::V_64TH:
+                  case TDuration::DurationType::V_64TH:
                         lineOffset = up ? -8 : 6;
                         break;
-                  case TDuration::V_128TH:
+                  case TDuration::DurationType::V_128TH:
                         lineOffset = up ? -8 : 8;
                         break;
-                  case TDuration::V_1024TH:
-                  case TDuration::V_512TH:
-                  case TDuration::V_256TH:
+                  case TDuration::DurationType::V_1024TH:
+                  case TDuration::DurationType::V_512TH:
+                  case TDuration::DurationType::V_256TH:
                         lineOffset = up ? -10 : 6;
                         break;
                   default:
@@ -454,23 +454,23 @@ int Rest::computeLineOffset()
             }
       else {
             switch(durationType().type()) {
-                  case TDuration::V_LONG:
-                  case TDuration::V_BREVE:
-                  case TDuration::V_MEASURE:
-                  case TDuration::V_WHOLE:
+                  case TDuration::DurationType::V_LONG:
+                  case TDuration::DurationType::V_BREVE:
+                  case TDuration::DurationType::V_MEASURE:
+                  case TDuration::DurationType::V_WHOLE:
                         if (lines == 1)
                               lineOffset = -2;
                         break;
-                  case TDuration::V_HALF:
-                  case TDuration::V_QUARTER:
-                  case TDuration::V_EIGHT:
-                  case TDuration::V_16TH:
-                  case TDuration::V_32ND:
-                  case TDuration::V_64TH:
-                  case TDuration::V_128TH:
-                  case TDuration::V_256TH:
-                  case TDuration::V_512TH:
-                  case TDuration::V_1024TH:
+                  case TDuration::DurationType::V_HALF:
+                  case TDuration::DurationType::V_QUARTER:
+                  case TDuration::DurationType::V_EIGHT:
+                  case TDuration::DurationType::V_16TH:
+                  case TDuration::DurationType::V_32ND:
+                  case TDuration::DurationType::V_64TH:
+                  case TDuration::DurationType::V_128TH:
+                  case TDuration::DurationType::V_256TH:
+                  case TDuration::DurationType::V_512TH:
+                  case TDuration::DurationType::V_1024TH:
                         if (lines == 1)
                               lineOffset = -4;
                         break;

@@ -23,21 +23,21 @@ class ChordList;
 //   class HDegree
 //---------------------------------------------------------
 
-enum HDegreeType {
+enum class HDegreeType : char {
       UNDEF, ADD, ALTER, SUBTRACT
       };
 
 class HDegree {
       int _value;
       int _alter;       // -1, 0, 1  (b - - #)
-      int _type;
+      HDegreeType _type;
 
    public:
-      HDegree() { _value = 0; _alter = 0; _type = UNDEF; }
-      HDegree(int v, int a, int t) { _value = v; _alter = a; _type = t; }
+      HDegree() { _value = 0; _alter = 0; _type = HDegreeType::UNDEF; }
+      HDegree(int v, int a, HDegreeType t) { _value = v; _alter = a; _type = t; }
       int value() const { return _value; }
       int alter() const { return _alter; }
-      int type() const  { return _type; }
+      HDegreeType type() const  { return _type; }
       QString text() const;
       };
 
@@ -87,14 +87,14 @@ class HChord {
 //---------------------------------------------------------
 
 struct RenderAction {
-      enum RenderActionType {
-            RENDER_SET, RENDER_MOVE, RENDER_PUSH, RENDER_POP,
-            RENDER_NOTE, RENDER_ACCIDENTAL
+      enum class RenderActionType : char {
+            SET, MOVE, PUSH, POP,
+            NOTE, ACCIDENTAL
             };
 
       RenderActionType type;
-      qreal movex, movey;          // RENDER_MOVE
-      QString text;                 // RENDER_SET
+      qreal movex, movey;          // MOVE
+      QString text;                 // SET
 
       RenderAction() {}
       RenderAction(RenderActionType t) : type(t) {}
@@ -104,7 +104,7 @@ struct RenderAction {
 //   ChordToken
 //---------------------------------------------------------
 
-enum ChordTokenClass {
+enum class ChordTokenClass : char {
       ALL, QUALITY, EXTENSION, MODIFIER, ALTERATION, ADJUST, MODE, SUSPENSION, ADDITION, SUBTRACTION
       };
 

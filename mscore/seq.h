@@ -41,7 +41,7 @@ struct Channel;
 class ScoreView;
 class MasterSynthesizer;
 class Segment;
-enum class POS;
+enum class POS : char;
 
 //---------------------------------------------------------
 //   SeqMsg

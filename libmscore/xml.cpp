@@ -435,13 +435,13 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   break;
             case T_LAYOUT_BREAK:
                   switch(LayoutBreak::LayoutBreakType(data.toInt())) {
-                        case LayoutBreak::LINE:
+                        case LayoutBreak::LayoutBreakType::LINE:
                               tag(name, QVariant("line"));
                               break;
-                        case LayoutBreak::PAGE:
+                        case LayoutBreak::LayoutBreakType::PAGE:
                               tag(name, QVariant("page"));
                               break;
-                        case LayoutBreak::SECTION:
+                        case LayoutBreak::LayoutBreakType::SECTION:
                               tag(name, QVariant("section"));
                               break;
                         }
@@ -458,10 +458,10 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   break;
             case T_PLACEMENT:
                   switch(Element::Placement(data.toInt())) {
-                        case Element::ABOVE:
+                        case Element::Placement::ABOVE:
                               tag(name, QVariant("above"));
                               break;
-                        case Element::BELOW:
+                        case Element::Placement::BELOW:
                               tag(name, QVariant("below"));
                               break;
                         }

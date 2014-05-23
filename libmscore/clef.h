@@ -136,7 +136,7 @@ class Clef : public Element {
       Clef(Score*);
       Clef(const Clef&);
       virtual Clef* clone() const      { return new Clef(*this); }
-      virtual ElementType type() const { return CLEF; }
+      virtual ElementType type() const { return ElementType::CLEF; }
       virtual void setSelected(bool f);
       virtual qreal mag() const;
 

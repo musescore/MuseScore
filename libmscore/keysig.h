@@ -22,7 +22,7 @@ namespace Ms {
 
 class Sym;
 class Segment;
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   KeySym
@@ -56,7 +56,7 @@ class KeySig : public Element {
       KeySig(const KeySig&);
       virtual KeySig* clone() const { return new KeySig(*this); }
       virtual void draw(QPainter*) const;
-      virtual ElementType type() const { return KEYSIG; }
+      virtual ElementType type() const { return ElementType::KEYSIG; }
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
       virtual void layout();

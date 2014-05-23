@@ -21,7 +21,7 @@ namespace Ms {
 //   JumpType
 //---------------------------------------------------------
 
-enum class JumpType {
+enum class JumpType : char {
       DC,
       DC_AL_FINE,
       DC_AL_CODA,
@@ -58,7 +58,7 @@ class Jump : public Text {
       JumpType jumpType() const;
 
       virtual Jump* clone() const      { return new Jump(*this); }
-      virtual ElementType type() const { return JUMP; }
+      virtual ElementType type() const { return ElementType::JUMP; }
 
       virtual void read(XmlReader&);
       virtual void write(Xml& xml) const;

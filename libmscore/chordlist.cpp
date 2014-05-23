@@ -258,21 +258,21 @@ void HChord::add(const QList<HDegree>& degreeList)
                   dv -= 1;
                   }
 
-            if (d.type() == ADD)
+            if (d.type() == HDegreeType::ADD)
                   *this += dv;
-            else if (d.type() == ALTER) {
+            else if (d.type() == HDegreeType::ALTER) {
                   if (contains(dv1)) {
                         *this -= dv1;
                         *this += dv;
                         }
                   else {
-//                        qDebug("ALTER: chord does not contain degree %d(%d):",
+//                        qDebug("HDegreeType::ALTER: chord does not contain degree %d(%d):",
 //                           d.value(), d.alter());
 //                        print();
                         *this += dv;      // DEBUG: default to add
                         }
                   }
-            else if (d.type() == SUBTRACT) {
+            else if (d.type() == HDegreeType::SUBTRACT) {
                   if (contains(dv1))
                         *this -= dv1;
                   else {
@@ -300,22 +300,22 @@ static void readRenderList(QString val, QList<RenderAction>& renderList)
                   QStringList ssl = s.split(":", QString::SkipEmptyParts);
                   if (ssl.size() == 3) {
                         RenderAction a;
-                        a.type = RenderAction::RENDER_MOVE;
+                        a.type = RenderAction::RenderActionType::MOVE;
                         a.movex = ssl[1].toDouble();
                         a.movey = ssl[2].toDouble();
                         renderList.append(a);
                         }
                   }
             else if (s == ":push")
-                  renderList.append(RenderAction(RenderAction::RENDER_PUSH));
+                  renderList.append(RenderAction(RenderAction::RenderActionType::PUSH));
             else if (s == ":pop")
-                  renderList.append(RenderAction(RenderAction::RENDER_POP));
+                  renderList.append(RenderAction(RenderAction::RenderActionType::POP));
             else if (s == ":n")
-                  renderList.append(RenderAction(RenderAction::RENDER_NOTE));
+                  renderList.append(RenderAction(RenderAction::RenderActionType::NOTE));
             else if (s == ":a")
-                  renderList.append(RenderAction(RenderAction::RENDER_ACCIDENTAL));
+                  renderList.append(RenderAction(RenderAction::RenderActionType::ACCIDENTAL));
             else {
-                  RenderAction a(RenderAction::RENDER_SET);
+                  RenderAction a(RenderAction::RenderActionType::SET);
                   a.text = s;
                   renderList.append(a);
                   }
@@ -336,23 +336,23 @@ static void writeRenderList(Xml& xml, const QList<RenderAction>* al, const QStri
                   s += " ";
             const RenderAction& a = (*al)[i];
             switch(a.type) {
-                  case RenderAction::RENDER_SET:
+                  case RenderAction::RenderActionType::SET:
                         s += a.text;
                         break;
-                  case RenderAction::RENDER_MOVE:
+                  case RenderAction::RenderActionType::MOVE:
                         if (a.movex != 0.0 || a.movey != 0.0)
                               s += QString("m:%1:%2").arg(a.movex).arg(a.movey);
                         break;
-                  case RenderAction::RENDER_PUSH:
+                  case RenderAction::RenderActionType::PUSH:
                         s += ":push";
                         break;
-                  case RenderAction::RENDER_POP:
+                  case RenderAction::RenderActionType::POP:
                         s += ":pop";
                         break;
-                  case RenderAction::RENDER_NOTE:
+                  case RenderAction::RenderActionType::NOTE:
                         s += ":n";
                         break;
-                  case RenderAction::RENDER_ACCIDENTAL:
+                  case RenderAction::RenderActionType::ACCIDENTAL:
                         s += ":a";
                         break;
                   }
@@ -368,13 +368,13 @@ void ChordToken::read(XmlReader& e)
       {
       QString c = e.attribute("class");
       if (c == "quality")
-            tokenClass = QUALITY;
+            tokenClass = ChordTokenClass::QUALITY;
       else if (c == "extension")
-            tokenClass = EXTENSION;
+            tokenClass = ChordTokenClass::EXTENSION;
       else if (c == "modifier")
-            tokenClass = MODIFIER;
+            tokenClass = ChordTokenClass::MODIFIER;
       else
-            tokenClass = ALL;
+            tokenClass = ChordTokenClass::ALL;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
@@ -392,13 +392,13 @@ void ChordToken::write(Xml& xml) const
       {
       QString t = "token";
       switch (tokenClass) {
-            case QUALITY:
+            case ChordTokenClass::QUALITY:
                   t += " class=\"quality\"";
                   break;
-            case EXTENSION:
+            case ChordTokenClass::EXTENSION:
                   t += " class=\"extension\"";
                   break;
-            case MODIFIER:
+            case ChordTokenClass::MODIFIER:
                   t += " class=\"modifier\"";
                   break;
             default:
@@ -496,7 +496,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
       // eat leading parens
       firstLeadingToken = _tokenList.size();
       while (i < len && leading.contains(s[i]))
-           addToken(QString(s[i++]),QUALITY);
+           addToken(QString(s[i++]),ChordTokenClass::QUALITY);
 #endif
       lastLeadingToken = _tokenList.size();
       // get quality
@@ -572,14 +572,14 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             tok1L = "";
             }
       if (tok1 != "")
-            addToken(tok1,QUALITY);
+            addToken(tok1,ChordTokenClass::QUALITY);
 #if 0
 // enable this code to allow quality to be parenthesized
 // otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
       else {
-            // leading tokens were not really QUALITY
+            // leading tokens were not really ChordTokenClass::QUALITY
             for (int t = firstLeadingToken; t < lastLeadingToken; ++t)
-                  _tokenList[t].tokenClass = EXTENSION;
+                  _tokenList[t].tokenClass = ChordTokenClass::EXTENSION;
             }
 #endif
       if (!syntaxOnly) {
@@ -596,7 +596,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             }
       // eat trailing parens and commas
       while (i < len && trailing.contains(s[i]))
-           addToken(QString(s[i++]),QUALITY);
+           addToken(QString(s[i++]),ChordTokenClass::QUALITY);
 
 #if 0
 // enable this code to allow extensions to be parenthesized
@@ -604,7 +604,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
       // eat leading parens
       firstLeadingToken = _tokenList.size();
       while (i < len && leading.contains(s[i]))
-            addToken(QString(s[i++]),EXTENSION);
+            addToken(QString(s[i++]),ChordTokenClass::EXTENSION);
 #endif
       lastLeadingToken = _tokenList.size();
       // get extension - up to first non-digit
@@ -629,14 +629,14 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   }
             }
       if (tok1 != "")
-            addToken(tok1,EXTENSION);
+            addToken(tok1,ChordTokenClass::EXTENSION);
 #if 0
 // enable this code to allow extensions to be parenthesized
 // otherwise, parentheses will automatically cause contents to be interpreted as modifier
       else {
-            // leading tokens were not really EXTENSION
+            // leading tokens were not really ChordTokenClass::EXTENSION
             for (int t = firstLeadingToken; t < lastLeadingToken; ++t) {
-                  _tokenList[t].tokenClass = MODIFIER;
+                  _tokenList[t].tokenClass = ChordTokenClass::MODIFIER;
                   if (!syntaxOnly)
                         _xmlParens = "yes";
                   }
@@ -767,7 +767,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             }
       // eat trailing parens and commas
       while (i < len && trailing.contains(s[i]))
-           addToken(QString(s[i++]),EXTENSION);
+           addToken(QString(s[i++]),ChordTokenClass::EXTENSION);
 
       // get modifiers
       bool addPending = false;
@@ -775,7 +775,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
       while (i < len) {
             // eat leading parens
             while (i < len && leading.contains(s[i])) {
-                  addToken(QString(s[i++]),MODIFIER);
+                  addToken(QString(s[i++]),ChordTokenClass::MODIFIER);
                   _xmlParens = "yes";
                   }
             // get first token - up to first digit, paren, or comma
@@ -802,7 +802,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             // this allows the argument to itself be a two-part string
             // thus allowing addb9 -> add;b,9
             if (tok1L == "add") {
-                  addToken(tok1,MODIFIER);
+                  addToken(tok1,ChordTokenClass::MODIFIER);
                   addPending = true;
                   continue;
                   }
@@ -878,9 +878,9 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             if (m != "")
                   _modifierList += m;
             if (tok1 != "")
-                  addToken(tok1,MODIFIER);
+                  addToken(tok1,ChordTokenClass::MODIFIER);
             if (tok2 != "")
-                  addToken(tok2,MODIFIER);
+                  addToken(tok2,ChordTokenClass::MODIFIER);
             if (!syntaxOnly) {
                   int d;
                   if (tok2L == "")
@@ -891,7 +891,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   bool alter = false;
                   if (tok1L == "add") {
                         if (d)
-                              hdl += HDegree(d, 0, ADD);
+                              hdl += HDegree(d, 0, HDegreeType::ADD);
                         else if (tok2L != "") {
                               // this was result of addPending
                               // alteration; tok1 = alter, tok2 = value
@@ -902,23 +902,23 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                                           tok2L = "#7";
                                           }
                                     else if (raise.contains(tok1))
-                                          hdl += HDegree(d, 1, ADD);
+                                          hdl += HDegree(d, 1, HDegreeType::ADD);
                                     }
                               else if (lower.contains(tok1)) {
                                     if (d == 7)
                                           chord += 10;
                                     else
-                                          hdl += HDegree(d, -1, ADD);
+                                          hdl += HDegree(d, -1, HDegreeType::ADD);
                                     }
                               else if (d)
-                                    hdl += HDegree(d, 0, ADD);
+                                    hdl += HDegree(d, 0, HDegreeType::ADD);
                               }
                         degree = "add" + tok2L;
                         }
                   else if (tok1L == "no") {
                         degree = "sub" + tok2L;
                         if (d)
-                              hdl += HDegree(d, 0, SUBTRACT);
+                              hdl += HDegree(d, 0, HDegreeType::SUBTRACT);
                         }
                   else if (tok1L == "sus") {
 #if 0
@@ -990,7 +990,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                         chord -= 10;
                         chord += 11;
                         if (d && d != 7)
-                              hdl += HDegree(d, 0, ADD);
+                              hdl += HDegree(d, 0, HDegreeType::ADD);
                         }
                   else if (tok1L == "alt") {
                         _xmlDegrees += "altb5";
@@ -1036,15 +1036,15 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   else if (addPending) {
                         degree = "add" + tok1L + tok2L;
                         if (raise.contains(tok1L))
-                              hdl += HDegree(d, 1, ADD);
+                              hdl += HDegree(d, 1, HDegreeType::ADD);
                         else if (lower.contains(tok1L))
-                              hdl += HDegree(d, -1, ADD);
+                              hdl += HDegree(d, -1, HDegreeType::ADD);
                         else
-                              hdl += HDegree(d, 0, ADD);
+                              hdl += HDegree(d, 0, HDegreeType::ADD);
                         }
                   else if (tok1L == "" && tok2L != "") {
                         degree = "add" + tok2L;
-                        hdl += HDegree(d, 0, ADD);
+                        hdl += HDegree(d, 0, HDegreeType::ADD);
                         }
                   else if (lower.contains(tok1L)) {
                         tok1L = "b";
@@ -1075,18 +1075,18 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                               degree = "add";
                         degree += tok1L + tok2L;
                         if (chord.contains(key[d]) && !(susChord && (d == 11)))
-                              hdl += HDegree(d, 0, SUBTRACT);
+                              hdl += HDegree(d, 0, HDegreeType::SUBTRACT);
                         if (tok1L == "#")
-                              hdl += HDegree(d, 1, ADD);
+                              hdl += HDegree(d, 1, HDegreeType::ADD);
                         else if (tok1L == "b")
-                              hdl += HDegree(d, -1, ADD);
+                              hdl += HDegree(d, -1, HDegreeType::ADD);
                         }
                   if (degree != "")
                         _xmlDegrees += degree;
                   }
             // eat trailing parens and commas
             while (i < len && trailing.contains(s[i]))
-                  addToken(QString(s[i++]),MODIFIER);
+                  addToken(QString(s[i++]),ChordTokenClass::MODIFIER);
             addPending = false;
             }
       if (!syntaxOnly) {
@@ -1218,18 +1218,18 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             QString mod;
             int v = d.value();
             switch (d.type()) {
-                  case ADD:
-                  case ALTER:
+                  case HDegreeType::ADD:
+                  case HDegreeType::ALTER:
                         switch (d.alter()) {
                               case -1:    mod = "b"; break;
                               case 1:     mod = "#"; break;
                               case 0:     mod = "add"; break;
                               }
                         break;
-                  case SUBTRACT:
+                  case HDegreeType::SUBTRACT:
                         mod = "no";
                         break;
-                  case UNDEF:
+                  case HDegreeType::UNDEF:
                   default:
                         break;
                   }
@@ -1352,7 +1352,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
       _xmlSymbols = useSymbols;
       _xmlParens = useParens;
       foreach (const HDegree& d, dl) {
-            if (kind == "half-diminished" && d.type() == ALTER && d.alter() == -1 && d.value() == 5)
+            if (kind == "half-diminished" && d.type() == HDegreeType::ALTER && d.alter() == -1 && d.value() == 5)
                   continue;
             _xmlDegrees += d.text();
             }
@@ -1384,14 +1384,14 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
                               }
                         }
                   }
-            // find matching class, fallback on ALL
+            // find matching class, fallback on ChordTokenClass::ALL
             foreach (ChordToken matchingTok, definedTokens) {
                   if (tok.tokenClass == matchingTok.tokenClass) {
                         rl = matchingTok.renderList;
                         found = true;
                         break;
                         }
-                  else if (matchingTok.tokenClass == ALL) {
+                  else if (matchingTok.tokenClass == ChordTokenClass::ALL) {
                         rl = matchingTok.renderList;
                         found = true;
                         }
@@ -1400,7 +1400,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
                   _renderList.append(rl);
             else {
                   // no definition for token, so render as literal
-                  RenderAction a(RenderAction::RENDER_SET);
+                  RenderAction a(RenderAction::RenderActionType::SET);
                   a.text = tok.names.first();
                   _renderList.append(a);
                   }

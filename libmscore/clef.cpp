@@ -77,8 +77,8 @@ ClefType ClefInfo::tag2type(const QString& s)
 Clef::Clef(Score* s)
   : Element(s)
       {
-//      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF | ELEMENT_MOVABLE);
-      setFlags(ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
+//      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
 
       _showCourtesy               = true;
       _small                      = false;
@@ -193,7 +193,7 @@ void Clef::layout()
                               // if courtesy clef: show if score has courtesy clefs on
                               || ( score()->styleB(ST_genCourtesyClef)
                               // AND measure is not at the end of a repeat or of a section
-                              && !( (meas->repeatFlags() & RepeatEnd) || meas->sectionBreak() )
+                              && !( (meas->repeatFlags() & Repeat::END) || meas->sectionBreak() )
                               // AND this clef has courtesy clef turned on
                               && showCourtesy() );
                         if (!showClef)    {     // if no clef, set empty bbox and do nothing
@@ -360,7 +360,7 @@ void Clef::draw(QPainter* painter) const
 
 bool Clef::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return (e->type() == CLEF || (/*!generated() &&*/ e->type() == AMBITUS) );
+      return (e->type() == ElementType::CLEF || (/*!generated() &&*/ e->type() == ElementType::AMBITUS) );
       }
 
 //---------------------------------------------------------
@@ -371,7 +371,7 @@ Element* Clef::drop(const DropData& data)
       {
       Element* e = data.element;
       Clef* c = 0;
-      if (e->type() == CLEF) {
+      if (e->type() == ElementType::CLEF) {
             Clef* clef = static_cast<Clef*>(e);
             ClefType stype  = clef->clefType();
             if (clefType() != stype) {
@@ -379,7 +379,7 @@ Element* Clef::drop(const DropData& data)
                   c = this;
                   }
             }
-      else if (e->type() == AMBITUS) {
+      else if (e->type() == ElementType::AMBITUS) {
             /*if (!generated())*/ {
                   Measure*    meas  = measure();
                   Segment*    segm  = meas->getSegment(Segment::SegAmbitus, meas->tick());

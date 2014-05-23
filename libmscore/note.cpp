@@ -163,7 +163,7 @@ NoteHeadGroup NoteHead::headGroup() const
 Note::Note(Score* s)
    : Element(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       dragMode           = false;
       _pitch             = 0;
       _play              = true;
@@ -550,20 +550,20 @@ void Note::add(Element* e)
       e->setTrack(track());
 
       switch(e->type()) {
-            case NOTEDOT:
+            case ElementType::NOTEDOT:
                   {
                   NoteDot* dot = static_cast<NoteDot*>(e);
                   _dots[dot->idx()] = dot;
                   }
                   break;
-            case SYMBOL:
-            case IMAGE:
-            case FINGERING:
-            case TEXT:
-            case BEND:
+            case ElementType::SYMBOL:
+            case ElementType::IMAGE:
+            case ElementType::FINGERING:
+            case ElementType::TEXT:
+            case ElementType::BEND:
                   _el.push_back(e);
                   break;
-            case TIE:
+            case ElementType::TIE:
                   {
                   Tie* tie = static_cast<Tie*>(e);
 	      	tie->setStartNote(this);
@@ -579,10 +579,10 @@ void Note::add(Element* e)
                         }
                   }
                   break;
-            case ACCIDENTAL:
+            case ElementType::ACCIDENTAL:
                   _accidental = static_cast<Accidental*>(e);
                   break;
-            case TEXTLINE:
+            case ElementType::TEXTLINE:
                   addSpanner(static_cast<Spanner*>(e));
                   break;
             default:
@@ -598,7 +598,7 @@ void Note::add(Element* e)
 void Note::remove(Element* e)
       {
       switch(e->type()) {
-            case NOTEDOT:
+            case ElementType::NOTEDOT:
                   for (int i = 0; i < 3; ++i) {
                         if (_dots[i] == e) {
                               _dots[i] = 0;
@@ -607,15 +607,15 @@ void Note::remove(Element* e)
                         }
                   break;
 
-            case TEXT:
-            case SYMBOL:
-            case IMAGE:
-            case FINGERING:
-            case BEND:
+            case ElementType::TEXT:
+            case ElementType::SYMBOL:
+            case ElementType::IMAGE:
+            case ElementType::FINGERING:
+            case ElementType::BEND:
                   if (!_el.remove(e))
                         qDebug("Note::remove(): cannot find %s", e->name());
                   break;
-              case TIE:
+            case ElementType::TIE:
                   {
                   Tie* tie = static_cast<Tie*>(e);
                   setTieFor(0);
@@ -636,11 +636,11 @@ void Note::remove(Element* e)
                   }
                   break;
 
-            case ACCIDENTAL:
+            case ElementType::ACCIDENTAL:
                   _accidental = 0;
                   break;
 
-            case TEXTLINE:
+            case ElementType::TEXTLINE:
                   removeSpanner(static_cast<Spanner*>(e));
                   break;
 
@@ -701,7 +701,7 @@ void Note::draw(QPainter* painter) const
 
       else {
             // skip drawing, if second note of a cross-measure value
-            if (chord()->crossMeasure() == CROSSMEASURE_SECOND)
+            if (chord()->crossMeasure() == CrossMeasure::SECOND)
                   return;
             //
             // warn if pitch extends usable range of instrument
@@ -911,42 +911,42 @@ void Note::read(XmlReader& e)
                         // TODO: for backward compatibility
                         bool bracket = k & 0x8000;
                         k &= 0xfff;
-                        Accidental::AccidentalType at = Accidental::ACC_NONE;
+                        Accidental::AccidentalType at = Accidental::AccidentalType::NONE;
                         switch(k) {
-                              case 0: at = Accidental::ACC_NONE; break;
-                              case 1: at = Accidental::ACC_SHARP; break;
-                              case 2: at = Accidental::ACC_FLAT; break;
-                              case 3: at = Accidental::ACC_SHARP2; break;
-                              case 4: at = Accidental::ACC_FLAT2; break;
-                              case 5: at = Accidental::ACC_NATURAL; break;
+                              case 0: at = Accidental::AccidentalType::NONE; break;
+                              case 1: at = Accidental::AccidentalType::SHARP; break;
+                              case 2: at = Accidental::AccidentalType::FLAT; break;
+                              case 3: at = Accidental::AccidentalType::SHARP2; break;
+                              case 4: at = Accidental::AccidentalType::FLAT2; break;
+                              case 5: at = Accidental::AccidentalType::NATURAL; break;
 
-                              case 6: at = Accidental::ACC_FLAT_SLASH; break;
-                              case 7: at = Accidental::ACC_FLAT_SLASH2; break;
-                              case 8: at = Accidental::ACC_MIRRORED_FLAT2; break;
-                              case 9: at = Accidental::ACC_MIRRORED_FLAT; break;
-                              case 10: at = Accidental::ACC_MIRRIRED_FLAT_SLASH; break;
-                              case 11: at = Accidental::ACC_FLAT_FLAT_SLASH; break;
+                              case 6: at = Accidental::AccidentalType::FLAT_SLASH; break;
+                              case 7: at = Accidental::AccidentalType::FLAT_SLASH2; break;
+                              case 8: at = Accidental::AccidentalType::MIRRORED_FLAT2; break;
+                              case 9: at = Accidental::AccidentalType::MIRRORED_FLAT; break;
+                              case 10: at = Accidental::AccidentalType::MIRRIRED_FLAT_SLASH; break;
+                              case 11: at = Accidental::AccidentalType::FLAT_FLAT_SLASH; break;
 
-                              case 12: at = Accidental::ACC_SHARP_SLASH; break;
-                              case 13: at = Accidental::ACC_SHARP_SLASH2; break;
-                              case 14: at = Accidental::ACC_SHARP_SLASH3; break;
-                              case 15: at = Accidental::ACC_SHARP_SLASH4; break;
+                              case 12: at = Accidental::AccidentalType::SHARP_SLASH; break;
+                              case 13: at = Accidental::AccidentalType::SHARP_SLASH2; break;
+                              case 14: at = Accidental::AccidentalType::SHARP_SLASH3; break;
+                              case 15: at = Accidental::AccidentalType::SHARP_SLASH4; break;
 
-                              case 16: at = Accidental::ACC_SHARP_ARROW_UP; break;
-                              case 17: at = Accidental::ACC_SHARP_ARROW_DOWN; break;
-                              case 18: at = Accidental::ACC_SHARP_ARROW_BOTH; break;
-                              case 19: at = Accidental::ACC_FLAT_ARROW_UP; break;
-                              case 20: at = Accidental::ACC_FLAT_ARROW_DOWN; break;
-                              case 21: at = Accidental::ACC_FLAT_ARROW_BOTH; break;
-                              case 22: at = Accidental::ACC_NATURAL_ARROW_UP; break;
-                              case 23: at = Accidental::ACC_NATURAL_ARROW_DOWN; break;
-                              case 24: at = Accidental::ACC_NATURAL_ARROW_BOTH; break;
-                              case 25: at = Accidental::ACC_SORI; break;
-                              case 26: at = Accidental::ACC_KORON; break;
+                              case 16: at = Accidental::AccidentalType::SHARP_ARROW_UP; break;
+                              case 17: at = Accidental::AccidentalType::SHARP_ARROW_DOWN; break;
+                              case 18: at = Accidental::AccidentalType::SHARP_ARROW_BOTH; break;
+                              case 19: at = Accidental::AccidentalType::FLAT_ARROW_UP; break;
+                              case 20: at = Accidental::AccidentalType::FLAT_ARROW_DOWN; break;
+                              case 21: at = Accidental::AccidentalType::FLAT_ARROW_BOTH; break;
+                              case 22: at = Accidental::AccidentalType::NATURAL_ARROW_UP; break;
+                              case 23: at = Accidental::AccidentalType::NATURAL_ARROW_DOWN; break;
+                              case 24: at = Accidental::AccidentalType::NATURAL_ARROW_BOTH; break;
+                              case 25: at = Accidental::AccidentalType::SORI; break;
+                              case 26: at = Accidental::AccidentalType::KORON; break;
                               }
                         _accidental->setAccidentalType(at);
                         _accidental->setHasBracket(bracket);
-                        _accidental->setRole(Accidental::ACC_USER);
+                        _accidental->setRole(Accidental::AccidentalRole::USER);
                         hasAccidental = true;   // we now have an accidental
                         }
                   }
@@ -1011,7 +1011,7 @@ void Note::read(XmlReader& e)
                   Spanner* sp = score()->findSpanner(id);
                   if (sp) {
                         sp->setEndElement(this);
-                        if (sp->type() == TIE)
+                        if (sp->type() == ElementType::TIE)
                               _tieBack = static_cast<Tie*>(sp);
                         else
                               addSpannerBack(sp);
@@ -1170,49 +1170,49 @@ void Note::endDrag()
 
 bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      int type = e->type();
-      return (type == ARTICULATION
-         || type == CHORDLINE
-         || type == TEXT
-         || type == REHEARSAL_MARK
-         || type == FINGERING
-         || type == ACCIDENTAL
-         || type == BREATH
-         || type == ARPEGGIO
-         || type == NOTEHEAD
-         || type == NOTE
-         || type == TREMOLO
-         || type == STAFF_STATE
-         || type == INSTRUMENT_CHANGE
-         || type == IMAGE
-         || type == CHORD
-         || type == HARMONY
-         || type == DYNAMIC
-         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_ACCIACCATURA)
-         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_APPOGGIATURA)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE4)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
-	   || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
-         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8_AFTER)
-         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16_AFTER)
-         || (noteType() == NOTE_NORMAL && type == ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32_AFTER)
-         || (noteType() == NOTE_NORMAL && type == BAGPIPE_EMBELLISHMENT)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
-         || (type == ICON && static_cast<Icon*>(e)->iconType() == ICON_BRACKETS)
-         || (type == SYMBOL)
-         || (type == CLEF)
-         || (type == BAR_LINE)
-         || (type == GLISSANDO)
-         || (type == SLUR)
-         || (type == STAFF_TEXT)
-         || (type == TEMPO_TEXT)
-         || (type == BEND && (staff()->isTabStaff()))
-         || (type == FRET_DIAGRAM));
+      ElementType type = e->type();
+      return (type == ElementType::ARTICULATION
+         || type == ElementType::CHORDLINE
+         || type == ElementType::TEXT
+         || type == ElementType::REHEARSAL_MARK
+         || type == ElementType::FINGERING
+         || type == ElementType::ACCIDENTAL
+         || type == ElementType::BREATH
+         || type == ElementType::ARPEGGIO
+         || type == ElementType::NOTEHEAD
+         || type == ElementType::NOTE
+         || type == ElementType::TREMOLO
+         || type == ElementType::STAFF_STATE
+         || type == ElementType::INSTRUMENT_CHANGE
+         || type == ElementType::IMAGE
+         || type == ElementType::CHORD
+         || type == ElementType::HARMONY
+         || type == ElementType::DYNAMIC
+         || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_ACCIACCATURA)
+         || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_APPOGGIATURA)
+      || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE4)
+      || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
+      || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
+         || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8_AFTER)
+         || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16_AFTER)
+         || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32_AFTER)
+         || (noteType() == NOTE_NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BRACKETS)
+         || (type == ElementType::SYMBOL)
+         || (type == ElementType::CLEF)
+         || (type == ElementType::BAR_LINE)
+         || (type == ElementType::GLISSANDO)
+         || (type == ElementType::SLUR)
+         || (type == ElementType::STAFF_TEXT)
+         || (type == ElementType::TEMPO_TEXT)
+         || (type == ElementType::BEND && (staff()->isTabStaff()))
+         || (type == ElementType::FRET_DIAGRAM));
       }
 
 //---------------------------------------------------------
@@ -1225,16 +1225,16 @@ Element* Note::drop(const DropData& data)
 
       Chord* ch = chord();
       switch(e->type()) {
-            case REHEARSAL_MARK:
+            case ElementType::REHEARSAL_MARK:
                   return ch->drop(data);
 
-            case SYMBOL:
-            case IMAGE:
+            case ElementType::SYMBOL:
+            case ElementType::IMAGE:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   return e;
 
-            case FINGERING:
+            case ElementType::FINGERING:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   {
@@ -1245,22 +1245,22 @@ Element* Note::drop(const DropData& data)
                   }
                   return e;
 
-            case SLUR:
+            case ElementType::SLUR:
                   delete e;
                   data.view->cmdAddSlur(this, 0);
                   return 0;
 
-            case LYRICS:
+            case ElementType::LYRICS:
                   e->setParent(ch);
                   e->setTrack(track());
                   score()->undoAddElement(e);
                   return e;
 
-            case ACCIDENTAL:
+            case ElementType::ACCIDENTAL:
                   score()->changeAccidental(this, static_cast<Accidental*>(e)->accidentalType());
                   break;
 
-            case BEND:
+            case ElementType::BEND:
                   {
                   Bend* b = static_cast<Bend*>(e);
                   b->setParent(this);
@@ -1269,7 +1269,7 @@ Element* Note::drop(const DropData& data)
                   }
                   return e;
 
-            case NOTEHEAD:
+            case ElementType::NOTEHEAD:
                   {
                   NoteHead* s = static_cast<NoteHead*>(e);
                   NoteHeadGroup group = s->headGroup();
@@ -1297,7 +1297,7 @@ Element* Note::drop(const DropData& data)
                   }
                   break;
 
-            case ICON:
+            case ElementType::ICON:
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_ACCIACCATURA:
@@ -1349,7 +1349,7 @@ Element* Note::drop(const DropData& data)
                   delete e;
                   break;
 
-            case BAGPIPE_EMBELLISHMENT:
+            case ElementType::BAGPIPE_EMBELLISHMENT:
                   {
                   BagpipeEmbellishment* b = static_cast<BagpipeEmbellishment*>(e);
                   noteList nl = b->getNoteList();
@@ -1363,7 +1363,7 @@ Element* Note::drop(const DropData& data)
                   delete e;
                   break;
 
-            case NOTE:
+            case ElementType::NOTE:
                   {
                   Chord* ch = chord();
                   if (ch->noteType() != NOTE_NORMAL) {
@@ -1376,7 +1376,7 @@ Element* Note::drop(const DropData& data)
                   }
                   break;
 
-            case GLISSANDO:
+            case ElementType::GLISSANDO:
                   {
                   Segment* s = ch->segment();
                   s = s->next1();
@@ -1391,7 +1391,7 @@ Element* Note::drop(const DropData& data)
                         return 0;
                         }
                   ChordRest* cr1 = static_cast<ChordRest*>(s->element(track()));
-                  if (cr1 == 0 || cr1->type() != CHORD) {
+                  if (cr1 == 0 || cr1->type() != ElementType::CHORD) {
                         qDebug("no second note for glissando found, track %d", track());
                         delete e;
                         return 0;
@@ -1407,7 +1407,7 @@ Element* Note::drop(const DropData& data)
                   }
                   break;
 
-            case CHORD:
+            case ElementType::CHORD:
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
@@ -1562,7 +1562,7 @@ void Note::layout2()
                   continue;
             e->setMag(mag());
             e->layout();
-            if (e->type() == SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
+            if (e->type() == ElementType::SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
                   qreal w = headWidth();
                   if (staff()->isTabStaff()) {
                         StaffType* tab = staff()->staffType();
@@ -1613,13 +1613,13 @@ void Note::layout10(AccidentalState* as)
 
             // calculate accidental
 
-            Accidental::AccidentalType acci = Accidental::ACC_NONE;
-            if (_accidental && _accidental->role() == Accidental::ACC_USER) {
+            Accidental::AccidentalType acci = Accidental::AccidentalType::NONE;
+            if (_accidental && _accidental->role() == Accidental::AccidentalRole::USER) {
                   acci = _accidental->accidentalType();
-                  if (acci == Accidental::ACC_SHARP || acci == Accidental::ACC_FLAT) {
+                  if (acci == Accidental::AccidentalType::SHARP || acci == Accidental::AccidentalType::FLAT) {
                         // TODO - what about double flat and double sharp?
                         KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
-                        int ntpc = pitch2tpc(epitch(), key.accidentalType(), acci == Accidental::ACC_SHARP ? PREFER_SHARPS : PREFER_FLATS);
+                        int ntpc = pitch2tpc(epitch(), key.accidentalType(), acci == Accidental::AccidentalType::SHARP ? PREFER_SHARPS : PREFER_FLATS);
                         if (ntpc != tpc()) {
 //not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), tpc(), ntpc, acci);
 //                              setColor(QColor(255, 0, 0));
@@ -1635,12 +1635,12 @@ void Note::layout10(AccidentalState* as)
                         as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                         if (!_tieBack) {
                               acci = Accidental::value2subtype(accVal);
-                              if (acci == Accidental::ACC_NONE)
-                                    acci = Accidental::ACC_NATURAL;
+                              if (acci == Accidental::AccidentalType::NONE)
+                                    acci = Accidental::AccidentalType::NATURAL;
                               }
                         }
                   }
-            if (acci != Accidental::ACC_NONE && !_tieBack && !_hidden) {
+            if (acci != Accidental::AccidentalType::NONE && !_tieBack && !_hidden) {
                   if (_accidental == 0) {
                         _accidental = new Accidental(score());
                         _accidental->setGenerated(true);
@@ -1868,22 +1868,22 @@ void Note::updateAccidental(AccidentalState* as)
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
-      if (!(_accidental && _accidental->accidentalType() > Accidental::ACC_NATURAL)) {
+      if (!(_accidental && _accidental->accidentalType() > Accidental::AccidentalType::NATURAL)) {
             // calculate accidental
-            Accidental::AccidentalType acci = Accidental::ACC_NONE;
+            Accidental::AccidentalType acci = Accidental::AccidentalType::NONE;
 
             AccidentalVal accVal = tpc2alter(tpc());
             if ((accVal != as->accidentalVal(relLine)) || hidden() || as->tieContext(relLine)) {
                   as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                   if (_tieBack)
-                        acci = Accidental::ACC_NONE;
+                        acci = Accidental::AccidentalType::NONE;
                   else {
                         acci = Accidental::value2subtype(accVal);
-                        if (acci == Accidental::ACC_NONE)
-                              acci = Accidental::ACC_NATURAL;
+                        if (acci == Accidental::AccidentalType::NONE)
+                              acci = Accidental::AccidentalType::NATURAL;
                         }
                   }
-            if (acci != Accidental::ACC_NONE && !_tieBack && !_hidden) {
+            if (acci != Accidental::AccidentalType::NONE && !_tieBack && !_hidden) {
                   if (_accidental == 0) {
                         Accidental* a = new Accidental(score());
                         a->setParent(this);
@@ -1899,14 +1899,14 @@ void Note::updateAccidental(AccidentalState* as)
                   }
             else {
                   if (_accidental) {
-                        // remove this if it was ACC_AUTO:
-                        if (_accidental->role() == Accidental::ACC_AUTO)
+                        // remove this if it was AUTO:
+                        if (_accidental->role() == Accidental::AccidentalRole::AUTO)
                               score()->undoRemoveElement(_accidental);
                         else {
                               // keep it, but update type if needed
                               acci = Accidental::value2subtype(accVal);
-                              if (acci == Accidental::ACC_NONE)
-                                    acci = Accidental::ACC_NATURAL;
+                              if (acci == Accidental::AccidentalType::NONE)
+                                    acci = Accidental::AccidentalType::NATURAL;
                               if (_accidental->accidentalType() != acci) {
                                     Accidental* a = _accidental->clone();
                                     a->setParent(this);

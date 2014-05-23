@@ -42,7 +42,7 @@ class HairpinSegment : public LineSegment {
       HairpinSegment(Score* s) : LineSegment(s) {}
       Hairpin* hairpin() const                  { return (Hairpin*)spanner(); }
       virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
-      virtual ElementType type() const override { return HAIRPIN_SEGMENT; }
+      virtual ElementType type() const override { return ElementType::HAIRPIN_SEGMENT; }
       virtual void draw(QPainter*) const override;
       virtual void updateGrips(int*, int*, QRectF*) const override;
       virtual void editDrag(const EditData&) override;
@@ -59,7 +59,7 @@ class HairpinSegment : public LineSegment {
 //   @@ Hairpin
 //   @P hairpinType  Ms::Hairpin::HairpinType  (CRESCENDO, DECRESCENDO)
 //   @P veloChange   int
-//   @P dynRange     Ms::Element::DynamicRange (DYNAMIC_STAFF, DYNAMIC_PART, DYNAMIC_SYSTEM)
+//   @P dynRange     Ms::Element::DynamicRange (STAFF, PART, SYSTEM)
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
@@ -67,7 +67,7 @@ class Hairpin : public SLine {
       Q_ENUMS(HairpinType)
 
    public:
-      enum HairpinType { CRESCENDO, DECRESCENDO };
+      enum class HairpinType : char { CRESCENDO, DECRESCENDO };
 
    private:
       Q_PROPERTY(HairpinType                 hairpinType READ hairpinType WRITE undoSetHairpinType)
@@ -89,7 +89,7 @@ class Hairpin : public SLine {
    public:
       Hairpin(Score* s);
       virtual Hairpin* clone() const override   { return new Hairpin(*this); }
-      virtual ElementType type() const override { return HAIRPIN;  }
+      virtual ElementType type() const override { return ElementType::HAIRPIN;  }
 
       HairpinType hairpinType() const      { return _hairpinType; }
       void setHairpinType(HairpinType val) { _hairpinType = val;  }

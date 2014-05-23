@@ -62,14 +62,14 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
       // special case multi measure rest
       //
       Measure* mm = 0;
-      if (m->score()->styleB(ST_createMultiMeasureRests) && m->type() == Element::MEASURE) {
+      if (m->score()->styleB(ST_createMultiMeasureRests) && m->type() == Element::ElementType::MEASURE) {
             mm = static_cast<Measure*>(m);
             Segment* s = mm->findSegment(Segment::SegEndBarLine, mm->endTick());
             if (s == 0)
                   mm->createEndBarLines();
             }
 
-      if (m->type() == Element::MEASURE || staffIdx == 0)
+      if (m->type() == Element::ElementType::MEASURE || staffIdx == 0)
             m->write(xml, staffIdx, writeSystemElements);
 
       if (mm) {
@@ -78,7 +78,7 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
                   xml.tag("tick", mm->tick() + mm->ticks());         // rewind tick
                   }
             }
-      if (m->type() == Element::MEASURE)
+      if (m->type() == Element::ElementType::MEASURE)
             xml.curTick = m->tick() + m->ticks();
       }
 
@@ -1317,7 +1317,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
 
                   if (e->generated()) {
                         if ((xml.curTick - xml.tickDiff) == 0) {
-                              if (e->type() == Element::CLEF) {
+                              if (e->type() == Element::ElementType::CLEF) {
                                     if (needTick) {
                                           xml.tag("tick", segment->tick() - xml.tickDiff);
                                           xml.curTick = segment->tick();

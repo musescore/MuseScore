@@ -23,7 +23,7 @@ class Note;
 //   GlissandoType
 //---------------------------------------------------------
 
-enum class GlissandoType {
+enum class GlissandoType : char {
       STRAIGHT, WAVY
       };
 
@@ -51,7 +51,7 @@ class Glissando : public Element {
       Glissando(const Glissando&);
 
       virtual Glissando* clone() const       { return new Glissando(*this); }
-      virtual ElementType type() const       { return GLISSANDO; }
+      virtual ElementType type() const       { return ElementType::GLISSANDO; }
       GlissandoType glissandoType() const    { return _glissandoType; }
       void setGlissandoType(GlissandoType v) { _glissandoType = v;    }
       virtual Space space() const;

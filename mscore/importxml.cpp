@@ -1619,9 +1619,9 @@ static void fillGap(Measure* measure, int track, int tstart, int tend)
       // MScore::division / 64 (#ticks in a 256th note) uequals 7.5 but is rounded down to 7
       while (restLen > MScore::division / 64) {
             int len = restLen;
-            TDuration d(TDuration::V_INVALID);
+            TDuration d(TDuration::DurationType::V_INVALID);
             if (measure->ticks() == restLen)
-                  d.setType(TDuration::V_MEASURE);
+                  d.setType(TDuration::DurationType::V_MEASURE);
             else
                   d.setVal(len);
             Rest* rest = new Rest(measure->score(), d);
@@ -1836,19 +1836,19 @@ static void readFiguredBassItem(FiguredBassItem* fgi, const QDomElement& de,
       // set parentheses
       if (paren) {
             // parenthesis open
-            if (fgi->prefix() != FiguredBassItem::ModifierNone)
-                  fgi->setParenth1(FiguredBassItem::ParenthesisRoundOpen);  // before prefix
+            if (fgi->prefix() != FiguredBassItem::Modifier::NONE)
+                  fgi->setParenth1(FiguredBassItem::Parenthesis::ROUNDOPEN);  // before prefix
             else if (fgi->digit() != FBIDigitNone)
-                  fgi->setParenth2(FiguredBassItem::ParenthesisRoundOpen);  // before digit
-            else if (fgi->suffix() != FiguredBassItem::ModifierNone)
-                  fgi->setParenth3(FiguredBassItem::ParenthesisRoundOpen);  // before suffix
+                  fgi->setParenth2(FiguredBassItem::Parenthesis::ROUNDOPEN);  // before digit
+            else if (fgi->suffix() != FiguredBassItem::Modifier::NONE)
+                  fgi->setParenth3(FiguredBassItem::Parenthesis::ROUNDOPEN);  // before suffix
             // parenthesis close
-            if (fgi->suffix() != FiguredBassItem::ModifierNone)
-                  fgi->setParenth4(FiguredBassItem::ParenthesisRoundClosed);  // after suffix
+            if (fgi->suffix() != FiguredBassItem::Modifier::NONE)
+                  fgi->setParenth4(FiguredBassItem::Parenthesis::ROUNDCLOSED);  // after suffix
             else if (fgi->digit() != FBIDigitNone)
-                  fgi->setParenth3(FiguredBassItem::ParenthesisRoundClosed);  // after digit
-            else if (fgi->prefix() != FiguredBassItem::ModifierNone)
-                  fgi->setParenth2(FiguredBassItem::ParenthesisRoundClosed);  // after prefix
+                  fgi->setParenth3(FiguredBassItem::Parenthesis::ROUNDCLOSED);  // after digit
+            else if (fgi->prefix() != FiguredBassItem::Modifier::NONE)
+                  fgi->setParenth2(FiguredBassItem::Parenthesis::ROUNDCLOSED);  // after prefix
             }
       }
 
@@ -2012,7 +2012,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
       Measure* measure = 0;
       Measure* lastMeasure = 0;
       for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
-            if (mb->type() != Element::MEASURE)
+            if (mb->type() != Element::ElementType::MEASURE)
                   continue;
             Measure* m = (Measure*)mb;
             lastMeasure = m;
@@ -2054,7 +2054,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                   note = xmlNote(measure, staff, part->id(), beam, cv, e, graceNotes, alt);
                   if(note) {
                         if(note->accidental()){
-                              if(note->accidental()->accidentalType() != Accidental::ACC_NONE){
+                              if(note->accidental()->accidentalType() != Accidental::AccidentalType::NONE){
                                     courtAccNotes.append(note);
                                     alterList.append(alt);
                                     }
@@ -2088,7 +2088,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                               LayoutBreak* lb = new LayoutBreak(score);
                               lb->setTrack(staff * VOICES);
                               lb->setLayoutBreakType(
-                                    newSystem == "yes" ? LayoutBreak::LINE : LayoutBreak::PAGE
+                                    newSystem == "yes" ? LayoutBreak::LayoutBreakType::LINE : LayoutBreak::LayoutBreakType::PAGE
                                     );
                               pm->add(lb);
                               }
@@ -2170,10 +2170,10 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                               qDebug("unsupported bar type <%s>", barStyle.toLatin1().data());
                         barLine->setTrack(staff * VOICES);
                         if (barLine->barLineType() == START_REPEAT) {
-                              measure->setRepeatFlags(RepeatStart);
+                              measure->setRepeatFlags(Repeat::START);
                               }
                         else if (barLine->barLineType() == END_REPEAT) {
-                              measure->setRepeatFlags(RepeatEnd);
+                              measure->setRepeatFlags(Repeat::END);
                               }
                         else {
                               if (loc == "right")
@@ -2301,7 +2301,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
       for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
             for (int track = 0; track < staves * VOICES; ++track) {
                    Element* e = segment->element(track);
-                   if (!e || e->type() != Ms::Element::CHORD)
+                   if (!e || e->type() != Ms::Element::ElementType::CHORD)
                          continue;
                    Chord* chord = static_cast<Chord*>(e);
                    foreach (Note* nt, chord->notes()){
@@ -2310,10 +2310,10 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                                int alter = alterList.value(i);
                                int ln  = absStep(nt->tpc(), nt->pitch());
                                AccidentalVal currAccVal = currAcc.accidentalVal(ln);
-                               if ((alter == -1 && currAccVal == AccidentalVal::FLAT && nt->accidental()->accidentalType() == Accidental::ACC_FLAT    && !accTmp.value(ln))
-                                     || (alter ==  0 && currAccVal == AccidentalVal::NATURAL && nt->accidental()->accidentalType() == Accidental::ACC_NATURAL && !accTmp.value(ln))
-                                     || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == Accidental::ACC_SHARP   && !accTmp.value(ln))) {
-                                     nt->accidental()->setRole(Accidental::ACC_USER);
+                               if ((alter == -1 && currAccVal == AccidentalVal::FLAT && nt->accidental()->accidentalType() == Accidental::AccidentalType::FLAT    && !accTmp.value(ln))
+                                     || (alter ==  0 && currAccVal == AccidentalVal::NATURAL && nt->accidental()->accidentalType() == Accidental::AccidentalType::NATURAL && !accTmp.value(ln))
+                                     || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == Accidental::AccidentalType::SHARP   && !accTmp.value(ln))) {
+                                     nt->accidental()->setRole(Accidental::AccidentalRole::USER);
                                      }
                                else {
                                      accTmp.replace(ln, true);
@@ -2366,15 +2366,15 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
       const qreal stafflines = 5; // assume five line staff, but works OK-ish for other sizes too
       qreal offsAbove = 0;
       qreal offsBelow = 0;
-      if (sli->type() == Element::PEDAL || sli->type() == Element::HAIRPIN) {
+      if (sli->type() == Element::ElementType::PEDAL || sli->type() == Element::ElementType::HAIRPIN) {
             offsAbove = -6 - (stafflines - 1);
             offsBelow = -1;
             }
-      else if (sli->type() == Element::TEXTLINE) {
+      else if (sli->type() == Element::ElementType::TEXTLINE) {
             offsAbove = -3;
             offsBelow =  3 + (stafflines - 1);
             }
-      else if (sli->type() == Element::OTTAVA) {
+      else if (sli->type() == Element::ElementType::OTTAVA) {
             // ignore
             }
       else
@@ -2410,19 +2410,19 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
       const qreal stafflines = 5; // assume five line staff, but works OK-ish for other sizes too
       qreal offsAbove = 0;
       qreal offsBelow = 0;
-      if (el->type() == Element::TEMPO_TEXT || el->type() == Element::REHEARSAL_MARK) {
+      if (el->type() == Element::ElementType::TEMPO_TEXT || el->type() == Element::ElementType::REHEARSAL_MARK) {
             offsAbove = 0;
             offsBelow = 8 + (stafflines - 1);
             }
-      else if (el->type() == Element::TEXT) {
+      else if (el->type() == Element::ElementType::TEXT) {
             offsAbove = 0;
             offsBelow = 6 + (stafflines - 1);
             }
-      else if (el->type() == Element::SYMBOL) {
+      else if (el->type() == Element::ElementType::SYMBOL) {
             offsAbove = -2;
             offsBelow =  4 + (stafflines - 1);
             }
-      else if (el->type() == Element::DYNAMIC) {
+      else if (el->type() == Element::ElementType::DYNAMIC) {
             offsAbove = -5.75 - (stafflines - 1);
             offsBelow = -0.75;
             }
@@ -2836,7 +2836,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             Text* t = new RehearsalMark(score);
             t->setPlainText(rehearsal);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
-            else t->setPlacement(placement == "above" ? Element::ABOVE : Element::BELOW);
+            else t->setPlacement(placement == "above" ? Element::Placement::ABOVE : Element::Placement::BELOW);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             addElem(t, hasYoffset, staff, rstaff, score, placement,
                        rx, ry, offset, measure, tick);
@@ -2915,7 +2915,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else {
                         hairpin = new Hairpin(score);
                         hairpin->setHairpinType(type == "crescendo"
-                                                ? Hairpin::CRESCENDO : Hairpin::DECRESCENDO);
+                                                ? Hairpin::HairpinType::CRESCENDO : Hairpin::HairpinType::DECRESCENDO);
                         setSLinePlacement(hairpin,
                                           score->spatium(), placement,
                                           hasYoffset, yoffset);
@@ -3460,13 +3460,13 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "syllabic") {
                   if (e.text() == "single")
-                        l->setSyllabic(Lyrics::SINGLE);
+                        l->setSyllabic(Lyrics::Syllabic::SINGLE);
                   else if (e.text() == "begin")
-                        l->setSyllabic(Lyrics::BEGIN);
+                        l->setSyllabic(Lyrics::Syllabic::BEGIN);
                   else if (e.text() == "end")
-                        l->setSyllabic(Lyrics::END);
+                        l->setSyllabic(Lyrics::Syllabic::END);
                   else if (e.text() == "middle")
-                        l->setSyllabic(Lyrics::MIDDLE);
+                        l->setSyllabic(Lyrics::Syllabic::MIDDLE);
                   else
                         qDebug("unknown syllabic %s", qPrintable(e.text()));
                   }
@@ -3517,16 +3517,16 @@ static bool hasElem(const QDomElement e, const QString& tagname)
 
 static void tupletAssert()
       {
-      if (!(TDuration::V_BREVE      == TDuration::V_LONG + 1
-            && TDuration::V_WHOLE   == TDuration::V_BREVE + 1
-            && TDuration::V_HALF    == TDuration::V_WHOLE + 1
-            && TDuration::V_QUARTER == TDuration::V_HALF + 1
-            && TDuration::V_EIGHT   == TDuration::V_QUARTER + 1
-            && TDuration::V_16TH    == TDuration::V_EIGHT + 1
-            && TDuration::V_32ND    == TDuration::V_16TH + 1
-            && TDuration::V_64TH    == TDuration::V_32ND + 1
-            && TDuration::V_128TH   == TDuration::V_64TH + 1
-            && TDuration::V_256TH   == TDuration::V_128TH + 1
+      if (!(int(TDuration::DurationType::V_BREVE)      == int(TDuration::DurationType::V_LONG)    + 1
+            && int(TDuration::DurationType::V_WHOLE)   == int(TDuration::DurationType::V_BREVE)   + 1
+            && int(TDuration::DurationType::V_HALF)    == int(TDuration::DurationType::V_WHOLE)   + 1
+            && int(TDuration::DurationType::V_QUARTER) == int(TDuration::DurationType::V_HALF)    + 1
+            && int(TDuration::DurationType::V_EIGHT)   == int(TDuration::DurationType::V_QUARTER) + 1
+            && int(TDuration::DurationType::V_16TH)    == int(TDuration::DurationType::V_EIGHT)   + 1
+            && int(TDuration::DurationType::V_32ND)    == int(TDuration::DurationType::V_16TH)    + 1
+            && int(TDuration::DurationType::V_64TH)    == int(TDuration::DurationType::V_32ND)    + 1
+            && int(TDuration::DurationType::V_128TH)   == int(TDuration::DurationType::V_64TH)    + 1
+            && int(TDuration::DurationType::V_256TH)   == int(TDuration::DurationType::V_128TH)   + 1
             )) {
             qFatal("tupletAssert() failed");
             }
@@ -3550,7 +3550,7 @@ static void tupletAssert()
 
 static void smallestTypeAndCount(ChordRest const* const cr, int& type, int& count)
       {
-      type = cr->durationType().type();
+      type = int(cr->durationType().type());
       count = 1;
       switch (cr->durationType().dots()) {
             case 0:
@@ -3604,7 +3604,7 @@ static void determineTupletTypeAndCount(Tuplet* t, int& tupletType, int& tupletC
       int elemCount   = 0; // number of tuplet elements handled
 
       foreach (DurationElement* de, t->elements()) {
-            if (de->type() == Element::CHORD || de->type() == Element::REST) {
+            if (de->type() == Element::ElementType::CHORD || de->type() == Element::ElementType::REST) {
                   ChordRest* cr = static_cast<ChordRest*>(de);
                   if (elemCount == 0) {
                         // first note: init variables
@@ -3693,7 +3693,7 @@ bool isTupletFilled(Tuplet* t, TDuration normalType)
 
       // then compare ...
       if (normalType.isValid()) {
-            int matchedNormalType  = normalType.type();
+            int matchedNormalType  = int(normalType.type());
             int matchedNormalCount = t->ratio().numerator();
             // match the types
             matchTypeAndCount(tupletType, tupletCount, matchedNormalType, matchedNormalCount);
@@ -3846,7 +3846,7 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
                   // TODO determine usefulness of following check
                   int totalDuration = 0;
                   foreach (DurationElement* de, tuplet->elements()) {
-                        if (de->type() == Element::CHORD || de->type() == Element::REST) {
+                        if (de->type() == Element::ElementType::CHORD || de->type() == Element::ElementType::REST) {
                               totalDuration+=de->globalDuration().ticks();
                               }
                         }
@@ -3872,11 +3872,11 @@ static void addArticulationToChord(ChordRest* cr, ArticulationType articSym, QSt
       na->setArticulationType(articSym);
       if (dir == "up") {
             na->setUp(true);
-            na->setAnchor(A_TOP_STAFF);
+            na->setAnchor(ArticulationAnchor::TOP_STAFF);
             }
       else if (dir == "down") {
             na->setUp(false);
-            na->setAnchor(A_BOTTOM_STAFF);
+            na->setAnchor(ArticulationAnchor::BOTTOM_STAFF);
             }
       cr->add(na);
       }
@@ -3969,43 +3969,43 @@ static bool readArticulations(ChordRest* cr, QString mxmlName)
 static Accidental::AccidentalType convertAccidental(QString mxmlName)
       {
       QMap<QString, Accidental::AccidentalType> map; // map MusicXML accidental name to MuseScore enum Accidental::Type
-      map["natural"] = Accidental::ACC_NATURAL;
-      map["flat"] = Accidental::ACC_FLAT;
-      map["sharp"] = Accidental::ACC_SHARP;
-      map["double-sharp"] = Accidental::ACC_SHARP2;
-      map["sharp-sharp"] = Accidental::ACC_SHARP2;
-      map["flat-flat"] = Accidental::ACC_FLAT2;
-      map["double-flat"] = Accidental::ACC_FLAT2;
-      map["natural-flat"] = Accidental::ACC_NONE;
+      map["natural"] = Accidental::AccidentalType::NATURAL;
+      map["flat"] = Accidental::AccidentalType::FLAT;
+      map["sharp"] = Accidental::AccidentalType::SHARP;
+      map["double-sharp"] = Accidental::AccidentalType::SHARP2;
+      map["sharp-sharp"] = Accidental::AccidentalType::SHARP2;
+      map["flat-flat"] = Accidental::AccidentalType::FLAT2;
+      map["double-flat"] = Accidental::AccidentalType::FLAT2;
+      map["natural-flat"] = Accidental::AccidentalType::NONE;
 
-      map["quarter-flat"] = Accidental::ACC_MIRRORED_FLAT;
-      map["quarter-sharp"] = Accidental::ACC_SHARP_SLASH;
-      map["three-quarters-flat"] = Accidental::ACC_MIRRORED_FLAT2;
-      map["three-quarters-sharp"] = Accidental::ACC_SHARP_SLASH4;
+      map["quarter-flat"] = Accidental::AccidentalType::MIRRORED_FLAT;
+      map["quarter-sharp"] = Accidental::AccidentalType::SHARP_SLASH;
+      map["three-quarters-flat"] = Accidental::AccidentalType::MIRRORED_FLAT2;
+      map["three-quarters-sharp"] = Accidental::AccidentalType::SHARP_SLASH4;
 
-      map["sharp-down"] = Accidental::ACC_SHARP_ARROW_DOWN;
-      map["sharp-up"] = Accidental::ACC_SHARP_ARROW_UP;
-      map["natural-down"] = Accidental::ACC_NATURAL_ARROW_DOWN;
-      map["natural-up"] = Accidental::ACC_NATURAL_ARROW_UP;
-      map["flat-down"] = Accidental::ACC_FLAT_ARROW_DOWN;
-      map["flat-up"] = Accidental::ACC_FLAT_ARROW_UP;
+      map["sharp-down"] = Accidental::AccidentalType::SHARP_ARROW_DOWN;
+      map["sharp-up"] = Accidental::AccidentalType::SHARP_ARROW_UP;
+      map["natural-down"] = Accidental::AccidentalType::NATURAL_ARROW_DOWN;
+      map["natural-up"] = Accidental::AccidentalType::NATURAL_ARROW_UP;
+      map["flat-down"] = Accidental::AccidentalType::FLAT_ARROW_DOWN;
+      map["flat-up"] = Accidental::AccidentalType::FLAT_ARROW_UP;
 
-      map["slash-quarter-sharp"] = Accidental::ACC_MIRRIRED_FLAT_SLASH;
-      map["slash-sharp"] = Accidental::ACC_SHARP_SLASH;
-      map["slash-flat"] = Accidental::ACC_FLAT_SLASH;
-      map["double-slash-flat"] = Accidental::ACC_FLAT_SLASH2;
+      map["slash-quarter-sharp"] = Accidental::AccidentalType::MIRRIRED_FLAT_SLASH;
+      map["slash-sharp"] = Accidental::AccidentalType::SHARP_SLASH;
+      map["slash-flat"] = Accidental::AccidentalType::FLAT_SLASH;
+      map["double-slash-flat"] = Accidental::AccidentalType::FLAT_SLASH2;
 
-      map["sori"] = Accidental::ACC_SORI;
-      map["koron"] = Accidental::ACC_KORON;
+      map["sori"] = Accidental::AccidentalType::SORI;
+      map["koron"] = Accidental::AccidentalType::KORON;
 
-      map["natural-sharp"] = Accidental::ACC_NONE;
+      map["natural-sharp"] = Accidental::AccidentalType::NONE;
 
       if (map.contains(mxmlName))
             return map.value(mxmlName);
       else
             qDebug("unknown accidental %s", qPrintable(mxmlName));
-      // default: return Accidental::ACC_NONE
-      return Accidental::ACC_NONE;
+      // default: return Accidental::AccidentalType::NONE
+      return Accidental::AccidentalType::NONE;
       }
 
 //---------------------------------------------------------
@@ -4487,13 +4487,13 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
       if (chordLineType != "") {
             ChordLine* cl = new ChordLine(score);
             if (chordLineType == "falloff")
-                  cl->setChordLineType(CHORDLINE_FALL);
+                  cl->setChordLineType(ChordLineType::FALL);
             if (chordLineType == "doit")
-                  cl->setChordLineType(CHORDLINE_DOIT);
+                  cl->setChordLineType(ChordLineType::DOIT);
             if (chordLineType == "plop")
-                  cl->setChordLineType(CHORDLINE_PLOP);
+                  cl->setChordLineType(ChordLineType::PLOP);
             if (chordLineType == "scoop")
-                  cl->setChordLineType(CHORDLINE_SCOOP);
+                  cl->setChordLineType(ChordLineType::SCOOP);
             note->chord()->add(cl);
             }
 
@@ -4525,7 +4525,7 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
       while ((seg = seg->prev1(Segment::SegChordRest))) {
             // qDebug("findLastFiguredBass seg %p", seg);
             foreach(Element* e, seg->annotations()) {
-                  if (e->track() == track && e->type() == Element::FIGURED_BASS) {
+                  if (e->track() == track && e->type() == Element::ElementType::FIGURED_BASS) {
                         FiguredBass* fb = static_cast<FiguredBass*>(e);
                         // qDebug("findLastFiguredBass found fb %p at seg %p", fb, seg);
                         return fb;
@@ -4548,13 +4548,13 @@ NoteType graceNoteType(TDuration duration, QString graceSlash)
             NoteType nt = NOTE_APPOGGIATURA;
             if (graceSlash == "yes")
                   nt = NOTE_ACCIACCATURA;
-            if (duration.type() == TDuration::V_QUARTER) {
+            if (duration.type() == TDuration::DurationType::V_QUARTER) {
                   nt = NOTE_GRACE4;
             }
-            else if (duration.type() == TDuration::V_16TH) {
+            else if (duration.type() == TDuration::DurationType::V_16TH) {
                   nt = NOTE_GRACE16;
             }
-            else if (duration.type() == TDuration::V_32ND) {
+            else if (duration.type() == TDuration::DurationType::V_32ND) {
                   nt = NOTE_GRACE32;
             }
             return nt;
@@ -4603,9 +4603,9 @@ static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration d
             // By convention, whole measure rests do not have a "type" element
             // As of MusicXML 3.0, this can be indicated by an attribute "measure",
             // but for backwards compatibility the "old" convention still has to be supported.
-            if (duration.type() == TDuration::V_INVALID) {
+            if (duration.type() == TDuration::DurationType::V_INVALID) {
                   if (wholeMeasure)
-                        duration.setType(TDuration::V_MEASURE);
+                        duration.setType(TDuration::DurationType::V_MEASURE);
                   else
                         duration.setVal(ticks);
                   cr->setDurationType(duration);
@@ -4617,8 +4617,8 @@ static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration d
             }
       }
       else {
-            if (duration.type() == TDuration::V_INVALID)
-                  duration.setType(TDuration::V_QUARTER);
+            if (duration.type() == TDuration::DurationType::V_INVALID)
+                  duration.setType(TDuration::DurationType::V_QUARTER);
             cr->setDurationType(duration);
             cr->setDuration(cr->durationType().fraction());
             }
@@ -4655,11 +4655,11 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       QString step;
       int alter  = 0;
       int octave = 4;
-      Accidental::AccidentalType accidental = Accidental::ACC_NONE;
+      Accidental::AccidentalType accidental = Accidental::AccidentalType::NONE;
       bool parentheses = false;
       bool editorial = false;
       bool cautionary = false;
-      TDuration duration(TDuration::V_INVALID);
+      TDuration duration(TDuration::DurationType::V_INVALID);
       NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
       bool noStem = false;
       QColor noteheadColor = QColor::Invalid;
@@ -5086,12 +5086,12 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             // qDebug("staff for new note: %p (staff=%d, relStaff=%d)",
             //        score->staff(staff + relStaff), staff, relStaff);
 
-            if(accidental != Accidental::ACC_NONE){
+            if(accidental != Accidental::AccidentalType::NONE){
                   Accidental* a = new Accidental(score);
                   a->setAccidentalType(accidental);
                    if (editorial || cautionary || parentheses) {
                           a->setHasBracket(cautionary || parentheses);
-                          a->setRole(Accidental::ACC_USER);
+                          a->setRole(Accidental::AccidentalRole::USER);
                           }
                     else {
                           alt = alter;
@@ -5372,11 +5372,11 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                         }
                   else {
                         if (degreeType == "add")
-                              degreeList << HDegree(degreeValue, degreeAlter, ADD);
+                              degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::ADD);
                         else if (degreeType == "alter")
-                              degreeList << HDegree(degreeValue, degreeAlter, ALTER);
+                              degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::ALTER);
                         else if (degreeType == "subtract")
-                              degreeList << HDegree(degreeValue, degreeAlter, SUBTRACT);
+                              degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT);
                         }
                   }
             else if (tag == "frame") {

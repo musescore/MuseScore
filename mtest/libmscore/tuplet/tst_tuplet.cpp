@@ -53,7 +53,7 @@ void TestTuplet::initTestCase()
 
 bool TestTuplet::createTuplet(int n, ChordRest* cr)
       {
-      if (cr->durationType() < TDuration(TDuration::V_128TH))
+      if (cr->durationType() < TDuration(TDuration::DurationType::V_128TH))
             return false;
 
       Fraction f(cr->duration());

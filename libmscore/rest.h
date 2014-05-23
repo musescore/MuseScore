@@ -18,7 +18,7 @@
 namespace Ms {
 
 class TDuration;
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //    @@ Rest
@@ -43,7 +43,7 @@ class Rest : public ChordRest {
       Rest(Score* s = 0);
       Rest(Score*, const TDuration&);
       virtual Rest* clone() const override      { return new Rest(*this); }
-      virtual ElementType type() const override { return REST; }
+      virtual ElementType type() const override { return ElementType::REST; }
 
       virtual Measure* measure() const override { return parent() ? (Measure*)(parent()->parent()) : 0; }
       virtual qreal mag() const override;
@@ -63,7 +63,7 @@ class Rest : public ChordRest {
       int getDotline() const { return dotline; }
       SymId sym() const        { return _sym;    }
       int computeLineOffset();
-      bool isFullMeasureRest() const { return durationType() == TDuration::V_MEASURE; }
+      bool isFullMeasureRest() const { return durationType() == TDuration::DurationType::V_MEASURE; }
 
       virtual int upLine() const;
       virtual int downLine() const;

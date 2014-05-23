@@ -21,7 +21,7 @@ class ScoreView;
 //   CursorType
 //---------------------------------------------------------
 
-enum class CursorType {
+enum class CursorType : char {
       LOOP_IN,
       LOOP_OUT,
       POS

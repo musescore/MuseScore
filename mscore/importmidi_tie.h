@@ -20,7 +20,7 @@ bool isTiedBack(const Segment *seg, int strack, int voice);
 class TieStateMachine
       {
    public:
-      enum class State
+      enum class State : char
             {
             UNTIED, TIED_FOR, TIED_BOTH, TIED_BACK
             };

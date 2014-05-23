@@ -69,9 +69,9 @@ void SlurSegment::move(const QPointF& s)
 void SlurSegment::draw(QPainter* painter) const
       {
       // hide tie toward the second chord of a cross-measure value
-      if ((slurTie()->type() == TIE)
+      if ((slurTie()->type() == ElementType::TIE)
          && (static_cast<Tie*>(slurTie())->endNote())
-         && (static_cast<Tie*>(slurTie())->endNote()->chord()->crossMeasure() == CROSSMEASURE_SECOND))
+         && (static_cast<Tie*>(slurTie())->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND))
             return;
 
       QPen pen(curColor());
@@ -154,7 +154,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             sl->layout();
             return true;
             }
-      if (slurTie()->type() != SLUR)
+      if (slurTie()->type() != ElementType::SLUR)
             return false;
 
       if (!((modifiers & Qt::ShiftModifier)
@@ -336,11 +336,11 @@ void SlurSegment::editDrag(const EditData& ed)
                   Spanner* spanner = slurTie();
                   Qt::KeyboardModifiers km = qApp->keyboardModifiers();
                   Note* note = static_cast<Note*>(ed.view->elementNear(ed.pos));
-                  if (note && note->type() == NOTE &&
+                  if (note && note->type() == ElementType::NOTE &&
                      ((ed.curGrip == GRIP_END && note->chord()->tick() > slurTie()->tick())
                       || (ed.curGrip == GRIP_START && note->chord()->tick() < slurTie()->tick2()))
                      ) {
-                        if (ed.curGrip == GRIP_END && spanner->type() == TIE) {
+                        if (ed.curGrip == GRIP_END && spanner->type() == ElementType::TIE) {
                               Tie* tie = static_cast<Tie*>(spanner);
                               if (tie->startNote()->pitch() == note->pitch()) {
                                     ed.view->setDropTarget(note);
@@ -350,7 +350,7 @@ void SlurSegment::editDrag(const EditData& ed)
                                           }
                                     }
                               }
-                        else if (spanner->type() != TIE && km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+                        else if (spanner->type() != ElementType::TIE && km != (Qt::ShiftModifier | Qt::ControlModifier)) {
                               Chord* c = note->chord();
                               ed.view->setDropTarget(note);
                               if (c != spanner->endCR()) {
@@ -762,13 +762,13 @@ void Slur::slurPos(SlurPos* sp)
       ChordRest* ecr   = endCR();
       Chord* sc   = 0;
       Note* note1 = 0;
-      if (startCR()->type() == CHORD) {
+      if (startCR()->type() == ElementType::CHORD) {
             sc = static_cast<Chord*>(startCR());
             note1 = _up ? sc->upNote() : sc->downNote();
             }
       Chord* ec = 0;
       Note* note2 = 0;
-      if (endCR()->type() == CHORD) {
+      if (endCR()->type() == ElementType::CHORD) {
             ec   = static_cast<Chord*>(endCR());
             note2 = _up ? ec->upNote() : ec->downNote();
             }
@@ -1201,7 +1201,7 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
       bool up = c1->up();
       for (Segment* seg = c1->segment(); seg; seg = seg->next(Segment::SegChordRest)) {
             Chord* c = static_cast<Chord*>(seg->element(c1->track()));
-            if (!c || c->type() != Element::CHORD)
+            if (!c || c->type() != Element::ElementType::CHORD)
                   continue;
             if (c->up() != up)
                   return true;
@@ -1276,8 +1276,8 @@ void Slur::layout()
                         }
                   Measure* m1    = startCR()->measure();
 
-                  Chord* c1 = (startCR()->type() == CHORD) ? static_cast<Chord*>(startCR()) : 0;
-                  Chord* c2 = (endCR()->type() == CHORD) ? static_cast<Chord*>(endCR()) : 0;
+                  Chord* c1 = (startCR()->type() == ElementType::CHORD) ? static_cast<Chord*>(startCR()) : 0;
+                  Chord* c2 = (endCR()->type() == ElementType::CHORD) ? static_cast<Chord*>(endCR()) : 0;
 
                   _up = !(startCR()->up());
 
@@ -1383,7 +1383,7 @@ void Slur::layout()
 qreal SlurTie::firstNoteRestSegmentX(System* system)
       {
       foreach(const MeasureBase* mb, system->measures()) {
-            if (mb->type() == MEASURE) {
+            if (mb->type() == ElementType::MEASURE) {
                   const Measure* measure = static_cast<const Measure*>(mb);
                   for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
                         if (seg->segmentType() == Segment::SegChordRest) {

@@ -33,7 +33,7 @@ QList<QPointF> Spanner::userOffsets;
 SpannerSegment::SpannerSegment(Score* s)
    : Element(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_SEGMENT);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::SEGMENT);
       setSpannerSegmentType(SEGMENT_SINGLE);
       _spanner = 0;
       }
@@ -414,7 +414,7 @@ void Spanner::computeEndElement()
       {
       switch (_anchor) {
             case ANCHOR_SEGMENT:
-                  if (type() == SLUR) {
+                  if (type() == ElementType::SLUR) {
                         Segment* s = score()->tick2segmentMM(tick2(), false, Segment::SegChordRest);
                         _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
                         }

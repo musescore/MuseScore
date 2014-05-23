@@ -705,7 +705,7 @@ void OveToMScore::convertTrackElements(int track) {
 
 void OveToMScore::convertLineBreak(){
     for (MeasureBase* mb = score_->measures()->first(); mb; mb = mb->next()) {
-		if (mb->type() != Element::MEASURE)
+		if (mb->type() != Element::ElementType::MEASURE)
 			continue;
 		Measure* measure = static_cast<Measure*> (mb);
 
@@ -715,7 +715,7 @@ void OveToMScore::convertLineBreak(){
 				if ((int)line->getBeginBar() + (int)line->getBarCount()-1 == measure->no()) {
 					LayoutBreak* lb = new LayoutBreak(score_);
 					lb->setTrack(0);
-					lb->setLayoutBreakType(LayoutBreak::LINE);
+               lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
 					measure->add(lb);
 				}
 			}
@@ -941,47 +941,47 @@ TDuration OveNoteType_To_Duration(OVE::NoteType noteType){
 	TDuration d;
 	switch(noteType){
 	case OVE::Note_DoubleWhole: {
-		d.setType(TDuration::V_BREVE);
+		d.setType(TDuration::DurationType::V_BREVE);
 		break;
 	}
 	case OVE::Note_Whole: {
-		d.setType(TDuration::V_WHOLE);
+		d.setType(TDuration::DurationType::V_WHOLE);
 		break;
 	}
 	case OVE::Note_Half: {
-		d.setType(TDuration::V_HALF);
+		d.setType(TDuration::DurationType::V_HALF);
 		break;
 	}
 	case OVE::Note_Quarter: {
-		d.setType(TDuration::V_QUARTER);
+		d.setType(TDuration::DurationType::V_QUARTER);
 		break;
 	}
 	case OVE::Note_Eight: {
-		d.setType(TDuration::V_EIGHT);
+		d.setType(TDuration::DurationType::V_EIGHT);
 		break;
 	}
 	case OVE::Note_Sixteen: {
-		d.setType(TDuration::V_16TH);
+		d.setType(TDuration::DurationType::V_16TH);
 		break;
 	}
 	case OVE::Note_32: {
-		d.setType(TDuration::V_32ND);
+		d.setType(TDuration::DurationType::V_32ND);
 		break;
 	}
 	case OVE::Note_64: {
-		d.setType(TDuration::V_64TH);
+		d.setType(TDuration::DurationType::V_64TH);
 		break;
 	}
 	case OVE::Note_128: {
-		d.setType(TDuration::V_128TH);
+		d.setType(TDuration::DurationType::V_128TH);
 		break;
 	}
 	case OVE::Note_256: {
-		d.setType(TDuration::V_256TH);
+		d.setType(TDuration::DurationType::V_256TH);
 		break;
 	}
 	default:
-		d.setType(TDuration::V_QUARTER);
+		d.setType(TDuration::DurationType::V_QUARTER);
 		break;
 	}
 
@@ -1122,7 +1122,7 @@ OVE::ClefType getClefType(OVE::MeasureData* measure, int tick) {
 
 void OveToMScore::convertMeasures() {
     for (MeasureBase* mb = score_->measures()->first(); mb; mb = mb->next()) {
-          if (mb->type() != Element::MEASURE)
+          if (mb->type() != Element::ElementType::MEASURE)
                 continue;
           Measure* measure = static_cast<Measure*>(mb);
 
@@ -1131,7 +1131,7 @@ void OveToMScore::convertMeasures() {
 
     //  convert based on notes
     for (MeasureBase* mb = score_->measures()->first(); mb; mb = mb->next()) {
-          if (mb->type() != Element::MEASURE)
+          if (mb->type() != Element::ElementType::MEASURE)
                 continue;
           Measure* measure = static_cast<Measure*>(mb);
 
@@ -1227,12 +1227,12 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 		}
 	case OVE::Barline_RepeatLeft:{
 			bartype = START_REPEAT;
-			measure->setRepeatFlags(RepeatStart);
+			measure->setRepeatFlags(Repeat::START);
 			break;
 		}
 	case OVE::Barline_RepeatRight:{
 			bartype = END_REPEAT;
-			measure->setRepeatFlags(RepeatEnd);
+			measure->setRepeatFlags(Repeat::END);
 			break;
 		}
 	case OVE::Barline_Dashed:{
@@ -1251,7 +1251,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 
 	if(measurePtr->getLeftBarline() == OVE::Barline_RepeatLeft){
 		//bartype = START_REPEAT;
-		measure->setRepeatFlags(measure->repeatFlags()|RepeatStart);
+		measure->setRepeatFlags(measure->repeatFlags()|Repeat::START);
 	}
 
 	// rehearsal
@@ -1368,11 +1368,11 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 	int partStaffCount = ove_->getStaffCount(part);
 
 	if(containers.empty()){
-		TDuration duration(TDuration::V_MEASURE);
+		TDuration duration(TDuration::DurationType::V_MEASURE);
 		int absTick = mtt_->getTick(measure->no(), 0);
 
 		cr = new Rest(score_, duration);
-            cr->setDuration(measure->len());
+		cr->setDuration(measure->len());
 		cr->setTrack(track);
 		Segment* s = measure->getSegment(cr, absTick);
 		s->add(cr);
@@ -1420,17 +1420,17 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 					duration.setDots(container->getDot());
 					((Ms::Chord*) cr)->setNoteType(NOTE_APPOGGIATURA);
 
-					if (duration.type() == TDuration::V_QUARTER) {
+					if (duration.type() == TDuration::DurationType::V_QUARTER) {
 						((Ms::Chord*) cr)->setNoteType(NOTE_GRACE4);
-						cr->setDurationType(TDuration::V_QUARTER);
-					} else if (duration.type() == TDuration::V_16TH) {
+						cr->setDurationType(TDuration::DurationType::V_QUARTER);
+					} else if (duration.type() == TDuration::DurationType::V_16TH) {
 						((Ms::Chord*) cr)->setNoteType(NOTE_GRACE16);
-						cr->setDurationType(TDuration::V_16TH);
-					} else if (duration.type() == TDuration::V_32ND) {
+						cr->setDurationType(TDuration::DurationType::V_16TH);
+					} else if (duration.type() == TDuration::DurationType::V_32ND) {
 						((Ms::Chord*) cr)->setNoteType(NOTE_GRACE32);
-						cr->setDurationType(TDuration::V_32ND);
+						cr->setDurationType(TDuration::DurationType::V_32ND);
 					} else {
-						cr->setDurationType(TDuration::V_EIGHT);
+						cr->setDurationType(TDuration::DurationType::V_EIGHT);
 					}
 
 					// st = Segment::SegGrace;
@@ -1438,8 +1438,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 					TDuration duration = OveNoteType_To_Duration(container->getNoteType());
 					duration.setDots(container->getDot());
 
-					if (duration.type() == TDuration::V_INVALID)
-						duration.setType(TDuration::V_QUARTER);
+					if (duration.type() == TDuration::DurationType::V_INVALID)
+						duration.setType(TDuration::DurationType::V_QUARTER);
 					cr->setDurationType(duration);
 				}
 				cr->setDuration(cr->durationType().fraction());
@@ -2313,26 +2313,26 @@ void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int t
 }
 
 static Hairpin::HairpinType OveWedgeType_To_Type(OVE::WedgeType type) {
-	Hairpin::HairpinType subtype = Hairpin::CRESCENDO;
+	Hairpin::HairpinType subtype = Hairpin::HairpinType::CRESCENDO;
 	switch(type) {
 	case OVE::Wedge_Cres_Line: {
-		subtype = Hairpin::CRESCENDO;
+		subtype = Hairpin::HairpinType::CRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Double_Line: {
-		subtype = Hairpin::CRESCENDO;
+		subtype = Hairpin::HairpinType::CRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Decresc_Line: {
-		subtype = Hairpin::DECRESCENDO;
+		subtype = Hairpin::HairpinType::DECRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Cres: {
-		subtype = Hairpin::CRESCENDO;
+		subtype = Hairpin::HairpinType::CRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Decresc: {
-		subtype = Hairpin::DECRESCENDO;
+		subtype = Hairpin::HairpinType::DECRESCENDO;
 		break;
 	}
 	default:

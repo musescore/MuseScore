@@ -31,7 +31,7 @@ class Score;
 
 class InputState {
       Score*      _score;
-      TDuration   _duration = TDuration::V_INVALID;        // currently duration
+      TDuration   _duration = TDuration::DurationType::V_INVALID;        // currently duration
       int         _drumNote = -1;
       Drumset*    _drumset = 0;
       int         _track = 0;

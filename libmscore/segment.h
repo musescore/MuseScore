@@ -99,7 +99,7 @@ class Segment : public Element {
       ~Segment();
 
       virtual Segment* clone() const    { return new Segment(*this); }
-      virtual ElementType type() const  { return SEGMENT; }
+      virtual ElementType type() const  { return ElementType::SEGMENT; }
 
       virtual void setScore(Score*);
 

@@ -71,7 +71,7 @@ ChordRest::ChordRest(Score* s)
       _beamMode    = BeamMode::AUTO;
       _up          = true;
       _small       = false;
-      _crossMeasure = CROSSMEASURE_UNKNOWN;
+      _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
 ChordRest::ChordRest(const ChordRest& cr)
@@ -157,8 +157,8 @@ void ChordRest::writeProperties(Xml& xml) const
       //    REST  - BeamMode::NONE
       //    CHORD - BeamMode::AUTO
       //
-      if ((type() == REST && _beamMode != BeamMode::NONE)
-         || (type() == CHORD && _beamMode != BeamMode::AUTO)) {
+      if ((type() == ElementType::REST && _beamMode != BeamMode::NONE)
+         || (type() == ElementType::CHORD && _beamMode != BeamMode::AUTO)) {
             QString s;
             switch(_beamMode) {
                   case BeamMode::AUTO:    s = "auto"; break;
@@ -214,8 +214,8 @@ bool ChordRest::readProperties(XmlReader& e)
 
       if (tag == "durationType") {
             setDurationType(e.readElementText());
-            if (actualDurationType().type() != TDuration::V_MEASURE) {
-                  if ((type() == REST) &&
+            if (actualDurationType().type() != TDuration::DurationType::V_MEASURE) {
+                  if ((type() == ElementType::REST) &&
                               // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
                               // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
@@ -225,9 +225,9 @@ bool ChordRest::readProperties(XmlReader& e)
                               // rest durations are initialized to full measure duration when
                               // created upon reading the <Rest> tag (see Measure::read() )
                               // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                              (actualDurationType()==TDuration::V_WHOLE && duration() <= Fraction(4, 4)) ) {
+                              (actualDurationType()==TDuration::DurationType::V_WHOLE && duration() <= Fraction(4, 4)) ) {
                         // old pre 2.0 scores: convert
-                        setDurationType(TDuration::V_MEASURE);
+                        setDurationType(TDuration::DurationType::V_MEASURE);
                         }
                   else  // not from old score: set duration fraction from duration type
                         setDuration(actualDurationType().fraction());
@@ -307,7 +307,7 @@ bool ChordRest::readProperties(XmlReader& e)
                         if (start)
                               slur->setTrack(start->track());
                         slur->setTrack2(track());
-                        if (start && start->type() == CHORD && start->noteType() != NOTE_NORMAL) {
+                        if (start && start->type() == ElementType::CHORD && start->noteType() != NOTE_NORMAL) {
                               start->add(slur);
                               slur->setAnchor(Spanner::ANCHOR_CHORD);
                               score()->removeSpanner(slur);
@@ -325,8 +325,8 @@ bool ChordRest::readProperties(XmlReader& e)
             int i = e.readInt();
             if (i == 0)
                   i = mticks;
-            if ((type() == REST) && (mticks == i)) {
-                  setDurationType(TDuration::V_MEASURE);
+            if ((type() == ElementType::REST) && (mticks == i)) {
+                  setDurationType(TDuration::DurationType::V_MEASURE);
                   setDuration(Fraction::fromTicks(i));
                   }
             else {
@@ -353,7 +353,7 @@ bool ChordRest::readProperties(XmlReader& e)
       else if (tag == "offset") {
             if (score()->mscVersion() > 114) // || voice() >= 2) {
                   DurationElement::readProperties(e);
-            else if (type() == REST) {
+            else if (type() == ElementType::REST) {
                   DurationElement::readProperties(e);
                   setUserXoffset(0.0); // honor Y offset but not X for rests in older scores
                   }
@@ -397,7 +397,7 @@ void ChordRest::layoutArticulations()
       qreal _spatium  = spatium();
       qreal _spStaff  = _spatium * staff()->lineDistance(); // scaled to staff line distance for vert. pos. within a staff
 
-      if (type() == CHORD) {
+      if (type() == ElementType::CHORD) {
             if (_articulations.size() == 1) {
                   static_cast<Chord*>(this)->layoutArticulation(_articulations[0]);
                   return;
@@ -461,7 +461,7 @@ void ChordRest::layoutArticulations()
       // avoid collisions of staff articulations with chord notes:
       // gap between note and staff articulation is distance0 + 0.5 spatium
 
-      if (type() == CHORD) {
+      if (type() == ElementType::CHORD) {
             Chord* chord = static_cast<Chord*>(this);
             Stem* stem   = chord->stem();
             if (stem) {
@@ -497,10 +497,10 @@ void ChordRest::layoutArticulations()
                   a->setUp(a->direction() == Direction::UP);
                   }
             else {
-                  if (a->anchor() == A_CHORD)
+                  if (a->anchor() == ArticulationAnchor::CHORD)
                         a->setUp(!up());
                   else
-                        a->setUp(a->anchor() == A_TOP_STAFF || a->anchor() == A_TOP_CHORD);
+                        a->setUp(a->anchor() == ArticulationAnchor::TOP_STAFF || a->anchor() == ArticulationAnchor::TOP_CHORD);
                   }
             }
 
@@ -518,14 +518,14 @@ void ChordRest::layoutArticulations()
                && (a->articulationType() != Articulation_Staccato))
                   continue;
 
-            if (aa != A_CHORD && aa != A_TOP_CHORD && aa != A_BOTTOM_CHORD)
+            if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
                   continue;
 
             bool bottom;
-            if ((aa == A_CHORD) && measure()->hasVoices(a->staffIdx()))
+            if ((aa == ArticulationAnchor::CHORD) && measure()->hasVoices(a->staffIdx()))
                   bottom = !up();
             else
-                  bottom = (aa == A_BOTTOM_CHORD) || (aa == A_CHORD && up());
+                  bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
             bool headSide = bottom == up();
 
             dy += distance1;
@@ -534,7 +534,7 @@ void ChordRest::layoutArticulations()
             if (bottom) {
                   int line = downLine();
                   y = chordBotY + dy;
-                  if (!headSide && type() == CHORD && chord->stem()) {
+                  if (!headSide && type() == ElementType::CHORD && chord->stem()) {
                         Stem* stem = chord->stem();
                         y          = chordTopY + stem->stemLen();
                         if (chord->beam())
@@ -558,7 +558,7 @@ void ChordRest::layoutArticulations()
             else {
                   int line = upLine();
                   y = chordTopY - dy;
-                  if (!headSide && type() == CHORD && chord->stem()) {
+                  if (!headSide && type() == ElementType::CHORD && chord->stem()) {
                         Stem* stem = chord->stem();
                         y          = chordBotY + stem->stemLen();
                         if (chord->beam())
@@ -624,7 +624,7 @@ void ChordRest::layoutArticulations()
                || (a->articulationType() == Articulation_Staccato))
                   continue;
 
-            if (aa != A_CHORD && aa != A_TOP_CHORD && aa != A_BOTTOM_CHORD)
+            if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
                   continue;
 
             // for tenuto and staccate check for staff line collision
@@ -632,7 +632,7 @@ void ChordRest::layoutArticulations()
                                || a->articulationType() == Articulation_Staccato;
 
 //            qreal sh = a->bbox().height() * mag();
-            bool bottom = (aa == A_BOTTOM_CHORD) || (aa == A_CHORD && up());
+            bool bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
 
             dy += distance1;
             if (bottom) {
@@ -676,7 +676,7 @@ void ChordRest::layoutArticulations()
       for (int i = 0; i < n; ++i) {
             Articulation* a = _articulations.at(i);
             ArticulationAnchor aa = a->anchor();
-            if (aa == A_TOP_STAFF || aa == A_BOTTOM_STAFF) {
+            if (aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
                   if (a->up()) {
                         a->setPos(x, dyTop);
                         dyTop -= distance0;
@@ -699,7 +699,7 @@ Element* ChordRest::drop(const DropData& data)
       Element* e = data.element;
       Measure* m  = measure();
       switch (e->type()) {
-            case BREATH:
+            case ElementType::BREATH:
                   {
                   Breath* b = static_cast<Breath*>(e);
                   b->setTrack(staffIdx() * VOICES);
@@ -712,7 +712,7 @@ Element* ChordRest::drop(const DropData& data)
                   }
                   return e;
 
-            case BAR_LINE:
+            case ElementType::BAR_LINE:
                   {
                   BarLine* bl = static_cast<BarLine*>(e);
                   bl->setTrack(staffIdx() * VOICES);
@@ -726,12 +726,12 @@ Element* ChordRest::drop(const DropData& data)
                   }
                   return e;
 
-            case CLEF:
+            case ElementType::CLEF:
                   score()->undoChangeClef(staff(), segment(), static_cast<Clef*>(e)->clefType());
                   delete e;
                   break;
 
-            case TEMPO_TEXT:
+            case ElementType::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(e);
                   tt->setParent(segment());
@@ -741,15 +741,15 @@ Element* ChordRest::drop(const DropData& data)
                   }
                   return e;
 
-            case DYNAMIC:
-            case FRET_DIAGRAM:
-            case SYMBOL:
+            case ElementType::DYNAMIC:
+            case ElementType::FRET_DIAGRAM:
+            case ElementType::SYMBOL:
                   e->setTrack(track());
                   e->setParent(segment());
                   score()->undoAddElement(e);
                   return e;
 
-            case NOTE:
+            case ElementType::NOTE:
                   {
                   Note* note = static_cast<Note*>(e);
                   NoteVal nval;
@@ -760,14 +760,14 @@ Element* ChordRest::drop(const DropData& data)
                   }
                   break;
 
-            case HARMONY:
+            case ElementType::HARMONY:
                   static_cast<Harmony*>(e)->render();
                   // fall through
-            case TEXT:
-            case STAFF_TEXT:
-            case STAFF_STATE:
-            case INSTRUMENT_CHANGE:
-            case REHEARSAL_MARK:
+            case ElementType::TEXT:
+            case ElementType::STAFF_TEXT:
+            case ElementType::STAFF_STATE:
+            case ElementType::INSTRUMENT_CHANGE:
+            case ElementType::REHEARSAL_MARK:
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
                   {
@@ -779,7 +779,7 @@ Element* ChordRest::drop(const DropData& data)
                   score()->undoAddElement(e);
                   return e;
 
-            case FIGURED_BASS:
+            case ElementType::FIGURED_BASS:
                   {
                   bool bNew;
                   FiguredBass * fb = static_cast<FiguredBass *>(e);
@@ -794,12 +794,12 @@ Element* ChordRest::drop(const DropData& data)
                   return e;
                   }
 
-            case IMAGE:
+            case ElementType::IMAGE:
                   e->setParent(segment());
                   score()->undoAddElement(e);
                   return e;
 
-            case ICON:
+            case ElementType::ICON:
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_SBEAM:
@@ -849,25 +849,25 @@ void ChordRest::setBeam(Beam* b)
 void ChordRest::setDurationType(TDuration::DurationType t)
       {
       _durationType.setType(t);
-      _crossMeasure = CROSSMEASURE_UNKNOWN;
+      _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
 void ChordRest::setDurationType(const QString& s)
       {
       _durationType.setType(s);
-      _crossMeasure = CROSSMEASURE_UNKNOWN;
+      _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
 void ChordRest::setDurationType(int ticks)
       {
       _durationType.setVal(ticks);
-      _crossMeasure = CROSSMEASURE_UNKNOWN;
+      _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
 void ChordRest::setDurationType(const TDuration& v)
       {
       _durationType = v;
-      _crossMeasure = CROSSMEASURE_UNKNOWN;
+      _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
 //---------------------------------------------------------
@@ -879,7 +879,7 @@ void ChordRest::setTrack(int val)
       foreach(Articulation* a, _articulations)
             a->setTrack(val);
       Element::setTrack(val);
-      if (type() == CHORD) {
+      if (type() == ElementType::CHORD) {
             foreach(Note* n, static_cast<Chord*>(this)->notes())
                   n->setTrack(val);
             }
@@ -920,7 +920,7 @@ void ChordRest::add(Element* e)
       e->setParent(this);
       e->setTrack(track());
       switch(e->type()) {
-            case ARTICULATION:
+            case ElementType::ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
                   _articulations.push_back(a);
@@ -928,7 +928,7 @@ void ChordRest::add(Element* e)
                         score()->fixTicks();          // update tempo map
                   }
                   break;
-            case LYRICS:
+            case ElementType::LYRICS:
                   {
                   Lyrics* l = static_cast<Lyrics*>(e);
                   int size = _lyricsList.size();
@@ -952,7 +952,7 @@ void ChordRest::add(Element* e)
 void ChordRest::remove(Element* e)
       {
       switch (e->type()) {
-            case ARTICULATION:
+            case ElementType::ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
                   if (!_articulations.removeOne(a))
@@ -961,7 +961,7 @@ void ChordRest::remove(Element* e)
                         score()->fixTicks();           // update tempo map
                   }
                   break;
-            case LYRICS:
+            case ElementType::LYRICS:
                   {
                   for (int i = 0; i < _lyricsList.size(); ++i) {
                         if (_lyricsList[i] != e)
@@ -994,7 +994,7 @@ void ChordRest::removeDeleteBeam(bool beamed)
             if (b->isEmpty())
                   score()->undoRemoveElement(b);
             }
-      if (!beamed && type() == CHORD)
+      if (!beamed && type() == ElementType::CHORD)
             static_cast<Chord*>(this)->layoutHook1();
       }
 
@@ -1055,7 +1055,7 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
 
 bool ChordRest::isGrace() const
       {
-      return type() == Element::CHORD && ((Chord*)this)->noteType() != NOTE_NORMAL;
+      return type() == Element::ElementType::CHORD && ((Chord*)this)->noteType() != NOTE_NORMAL;
       }
 
 //---------------------------------------------------------
@@ -1064,7 +1064,7 @@ bool ChordRest::isGrace() const
 
 bool ChordRest::isGraceBefore() const
       {
-      return (type() == Element::CHORD && (((Chord*)this)->noteType() == NOTE_ACCIACCATURA
+      return (type() == Element::ElementType::CHORD && (((Chord*)this)->noteType() == NOTE_ACCIACCATURA
                                           || ((Chord*)this)->noteType() == NOTE_APPOGGIATURA
                                           || ((Chord*)this)->noteType() == NOTE_GRACE4
                                           || ((Chord*)this)->noteType() == NOTE_GRACE16
@@ -1077,7 +1077,7 @@ bool ChordRest::isGraceBefore() const
 
 bool ChordRest::isGraceAfter() const
       {
-      return (type() == Element::CHORD && (((Chord*)this)->noteType() == NOTE_GRACE8_AFTER
+      return (type() == Element::ElementType::CHORD && (((Chord*)this)->noteType() == NOTE_GRACE8_AFTER
                                           || ((Chord*)this)->noteType() == NOTE_GRACE16_AFTER
                                           || ((Chord*)this)->noteType() == NOTE_GRACE32_AFTER));
       }
