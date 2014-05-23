@@ -988,7 +988,7 @@ void MuseScore::editInstrList()
             else {
                   part = pli->part;
                   if (part->show() != pli->visible()) {
-                        part->score()->undo()->push(new ChangePartProperty(part, Part::SHOW, pli->visible()));
+                        part->score()->undo()->push(new ChangePartProperty(part, 0, pli->visible()));
                         }
                   QTreeWidgetItem* ci = 0;
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
