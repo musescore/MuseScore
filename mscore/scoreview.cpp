@@ -1627,13 +1627,13 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       if (grips) {
             if (grips == 6) {       // HACK: this are grips of a slur
                   QPolygonF polygon(grips+1);
-                  polygon[0] = QPointF(grip[GRIP_START].center());
-                  polygon[1] = QPointF(grip[GRIP_BEZIER1].center());
-                  polygon[2] = QPointF(grip[GRIP_SHOULDER].center());
-                  polygon[3] = QPointF(grip[GRIP_BEZIER2].center());
-                  polygon[4] = QPointF(grip[GRIP_END].center());
-                  polygon[5] = QPointF(grip[GRIP_DRAG].center());
-                  polygon[6] = QPointF(grip[GRIP_START].center());
+                  polygon[0] = QPointF(grip[int(GripSlurSegment::START)].center());
+                  polygon[1] = QPointF(grip[int(GripSlurSegment::BEZIER1)].center());
+                  polygon[2] = QPointF(grip[int(GripSlurSegment::SHOULDER)].center());
+                  polygon[3] = QPointF(grip[int(GripSlurSegment::BEZIER2)].center());
+                  polygon[4] = QPointF(grip[int(GripSlurSegment::END)].center());
+                  polygon[5] = QPointF(grip[int(GripSlurSegment::DRAG)].center());
+                  polygon[6] = QPointF(grip[int(GripSlurSegment::START)].center());
                   QPen pen(MScore::frameMarginColor, 0.0);
                   vp.setPen(pen);
                   vp.drawPolyline(polygon);

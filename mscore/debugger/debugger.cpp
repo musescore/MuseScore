@@ -2334,25 +2334,25 @@ void SlurSegmentView::setElement(Element* e)
       {
       SlurSegment* s = static_cast<SlurSegment*>(e);
       ShowElementBase::setElement(e);
-      ss.up1px->setValue(s->getUps(GRIP_START)->p.x());
-      ss.up1py->setValue(s->getUps(GRIP_START)->p.y());
-      ss.up1ox->setValue(s->getUps(GRIP_START)->off.x());
-      ss.up1oy->setValue(s->getUps(GRIP_START)->off.y());
+      ss.up1px->setValue(s->getUps(int(GripSlurSegment::START))->p.x());
+      ss.up1py->setValue(s->getUps(int(GripSlurSegment::START))->p.y());
+      ss.up1ox->setValue(s->getUps(int(GripSlurSegment::START))->off.x());
+      ss.up1oy->setValue(s->getUps(int(GripSlurSegment::START))->off.y());
 
-      ss.up2px->setValue(s->getUps(GRIP_BEZIER1)->p.x());
-      ss.up2py->setValue(s->getUps(GRIP_BEZIER1)->p.y());
-      ss.up2ox->setValue(s->getUps(GRIP_BEZIER1)->off.x());
-      ss.up2oy->setValue(s->getUps(GRIP_BEZIER1)->off.y());
+      ss.up2px->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->p.x());
+      ss.up2py->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->p.y());
+      ss.up2ox->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->off.x());
+      ss.up2oy->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->off.y());
 
-      ss.up3px->setValue(s->getUps(GRIP_BEZIER2)->p.x());
-      ss.up3py->setValue(s->getUps(GRIP_BEZIER2)->p.y());
-      ss.up3ox->setValue(s->getUps(GRIP_BEZIER2)->off.x());
-      ss.up3oy->setValue(s->getUps(GRIP_BEZIER2)->off.y());
+      ss.up3px->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->p.x());
+      ss.up3py->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->p.y());
+      ss.up3ox->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->off.x());
+      ss.up3oy->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->off.y());
 
-      ss.up4px->setValue(s->getUps(GRIP_END)->p.x());
-      ss.up4py->setValue(s->getUps(GRIP_END)->p.y());
-      ss.up4ox->setValue(s->getUps(GRIP_END)->off.x());
-      ss.up4oy->setValue(s->getUps(GRIP_END)->off.y());
+      ss.up4px->setValue(s->getUps(int(GripSlurSegment::END))->p.x());
+      ss.up4py->setValue(s->getUps(int(GripSlurSegment::END))->p.y());
+      ss.up4ox->setValue(s->getUps(int(GripSlurSegment::END))->off.x());
+      ss.up4oy->setValue(s->getUps(int(GripSlurSegment::END))->off.y());
 
       }
 
