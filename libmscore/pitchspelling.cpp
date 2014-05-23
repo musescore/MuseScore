@@ -749,8 +749,8 @@ void Score::spellNotelist(QList<Note*>& notes)
 //   pitch2tpc2
 //---------------------------------------------------------
 
-// pitch2tpc2(pitch, false) replaced by pitch2tpc(pitch, KEY_C, PREFER_FLATS)
-// pitch2tpc2(pitch, true) replaced by pitch2tpc(pitch, KEY_C, PREFER_SHARPS)
+// pitch2tpc2(pitch, false) replaced by pitch2tpc(pitch, KEY_C, Prefer::FLATS)
+// pitch2tpc2(pitch, true) replaced by pitch2tpc(pitch, KEY_C, Prefer::SHARPS)
 
 //---------------------------------------------------------
 //   pitch2tpc
@@ -762,11 +762,11 @@ void Score::spellNotelist(QList<Note*>& notes)
 // positioning the window along the tpc sequence.
 //
 // Scale tones are the range shown in [ ].
-// A value of 8 (PREFER_FLATS) specifies 5b 2b 6b 3b 7b [4 1 5 2 6 3 7]
-// A value of 11 (PREFER_NEAREST) specifies 3b 7b [4 1 5 2 6 3 7] 4# 1# 5#
-// A value of 13 (PREFER_SHARPS) specifies [4 1 5 2 6 3 7] 4# 1# 5# 2# 6#
+// A value of 8 (Prefer::FLATS) specifies 5b 2b 6b 3b 7b [4 1 5 2 6 3 7]
+// A value of 11 (Prefer::NEAREST) specifies 3b 7b [4 1 5 2 6 3 7] 4# 1# 5#
+// A value of 13 (Prefer::SHARPS) specifies [4 1 5 2 6 3 7] 4# 1# 5# 2# 6#
 //
-// Examples for PREFER_NEAREST (n indicates explicit natural):
+// Examples for Prefer::NEAREST (n indicates explicit natural):
 // C major will use Eb Bb [F C G D A E B] F# C# G#.
 // E major will use Gn Dn [A E B F# C# G# D#] A# E# B#.
 // F# major will use An En [B F# C# G# D# A# E#] B# Fx Cx.
@@ -774,9 +774,9 @@ void Score::spellNotelist(QList<Note*>& notes)
 // Gb major will use Bbb Fb [Cb Gb Db Ab Eb Bb F] Cn Gn Dn.
 //---------------------------------------------------------
 
-int pitch2tpc(int pitch, int key, int prefer)
+int pitch2tpc(int pitch, int key, Prefer prefer)
       {
-      return (pitch * 7 + 26 - (prefer + key)) % 12 + (prefer + key);
+      return (pitch * 7 + 26 - (int(prefer) + key)) % 12 + (int(prefer) + key);
       }
 
 //---------------------------------------------------------
