@@ -769,7 +769,7 @@ int absStep(int tpc, int pitch)
 int absStep(int pitch)
       {
       // TODO - does this need to be key-aware?
-      int tpc = pitch2tpc(pitch, KEY_C, PREFER_NEAREST);
+      int tpc = pitch2tpc(pitch, KEY_C, Prefer::NEAREST);
       return absStep(tpc, pitch);
       }
 

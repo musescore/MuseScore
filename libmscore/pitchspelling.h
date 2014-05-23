@@ -48,12 +48,12 @@ const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (
 //    Midi pitch 60 is middle C.
 //---------------------------------------------------------
 
-// pitch2tpc(pitch) replaced by pitch2tpc(pitch, KEY_C, PREFER_NEAREST)
+// pitch2tpc(pitch) replaced by pitch2tpc(pitch, KEY_C, Prefer::NEAREST)
 
-enum { PREFER_FLATS=8, PREFER_NEAREST=11, PREFER_SHARPS=13 };
+enum class Prefer : char { FLATS=8, NEAREST=11, SHARPS=13 };
 enum class NoteSpellingType : char { STANDARD = 0, GERMAN, SOLFEGGIO };
 
-extern int pitch2tpc(int pitch, int key, int prefer);
+extern int pitch2tpc(int pitch, int key, Prefer prefer);
 
 extern void spell(QList<Event>& notes, int);
 extern void spell(QList<Note*>& notes);

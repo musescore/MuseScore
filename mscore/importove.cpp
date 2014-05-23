@@ -1975,9 +1975,9 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
 
 		// TODO - does this need to be key-aware?
 		harmony->setTrack(track);
-		harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot(), KEY_C, PREFER_NEAREST));
+		harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot(), KEY_C, Prefer::NEAREST));
 		if(harmonyPtr->getBass() != OVE::INVALID_NOTE && harmonyPtr->getBass() != harmonyPtr->getRoot()){
-			harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass(), KEY_C, PREFER_NEAREST));
+			harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass(), KEY_C, Prefer::NEAREST));
 		}
 		const ChordDescription* d = harmony->fromXml(OveHarmony_To_String(harmonyPtr->getHarmonyType()));
 		if(d != 0){

@@ -464,7 +464,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   int key       = estaff->key(tick).accidentalType();
                   npitch        = line2pitch(line, clef, key);
 
-                  int ntpc   = pitch2tpc(npitch, key, PREFER_NEAREST);
+                  int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
                   Interval v = on->staff()->part()->instr()->transpose();
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
@@ -1210,7 +1210,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                           qDebug("upDown tab chromatic: getPitch(%d,%d) returns -1", string, fret);
                                           newPitch = oNote->pitch();
                                           }
-                                    int nTpc = pitch2tpc(newPitch, key, up ? PREFER_SHARPS : PREFER_FLATS);
+                                    int nTpc = pitch2tpc(newPitch, key, up ? Prefer::SHARPS : Prefer::FLATS);
                                     if (oNote->concertPitch()) {
                                           newTpc1 = nTpc;
                                           newTpc2 = oNote->tpc2default(newPitch);
