@@ -62,6 +62,11 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       // fall back to standard
       else
             groupCombo->addItem(StaffType::groupName(STANDARD_STAFF_GROUP), STANDARD_STAFF_GROUP);
+      int idx = int(staffType.group());
+      groupCombo->setCurrentIndex(0);
+      int comboIdx = groupCombo->findData(idx);
+      if (comboIdx != -1)
+            groupCombo->setCurrentIndex(comboIdx);
 
       // tab page configuration
       QList<QString> fontNames = StaffType::fontNames(false);
