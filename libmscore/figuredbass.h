@@ -67,7 +67,7 @@ and it is edited (via the normalized text); so it is derived from Text.
 //   @P prefix             Ms::FiguredBassItem::Modifier     (NONE, DOUBLEFLAT, FLAT, NATURAL, SHARP, DOUBLESHARP, PLUS, BACKSLASH, SLASH, NUMOF)  accidental before the digit
 //   @P digit              int                               main digit (0 - 9)
 //   @P suffix             Ms::FiguredBassItem::Modifier     (NONE, DOUBLEFLAT, FLAT, NATURAL, SHARP, DOUBLESHARP, PLUS, BACKSLASH, SLASH, NUMOF)  accidental/diacritic after the digit
-//   @P continuationLine   bool                              whether item has continuation line or not
+//   @P continuationLine   MS::FiguredBassItem::ContLine     (NONE, SIMPLE, EXTENDED)  whether item has continuation line or not, and which
 //   @P parenthesis1       Ms::FiguredBassItem::Parenthesis  (NONE, ROUNDOPEN, ROUNDCLOSED, SQUAREDOPEN, SQUAREDCLOSED)  parentesis before the prefix
 //   @P parenthesis2       Ms::FiguredBassItem::Parenthesis  (NONE, ROUNDOPEN, ROUNDCLOSED, SQUAREDOPEN, SQUAREDCLOSED)  parentesis after the prefix / before the digit
 //   @P parenthesis3       Ms::FiguredBassItem::Parenthesis  (NONE, ROUNDOPEN, ROUNDCLOSED, SQUAREDOPEN, SQUAREDCLOSED)  parentesis after the digit / before the suffix
@@ -123,10 +123,10 @@ class FiguredBassItem : public Element {
             EXTENDED                    // cont. line joins with next element, if possible
       };
 
-      enum Styles {
-            StyleModern = 0,
-            StyleHistoric,
-                  NumOfStyles
+      enum class Style : char {
+            MODERN = 0,
+            HISTORIC,
+                  NUMOF
             };
       enum Combinations {
             CombSimple = 0,
@@ -233,7 +233,7 @@ struct FiguredBassFont {
       qreal             defLineHeight;
       QChar             displayAccidental[int(FiguredBassItem::Modifier::NUMOF)];
       QChar             displayParenthesis[int(FiguredBassItem::Parenthesis::NUMOF)];
-      QChar             displayDigit[FiguredBassItem::NumOfStyles][10][FiguredBassItem::NumOfCombinations];
+      QChar             displayDigit[int(FiguredBassItem::Style::NUMOF)][10][FiguredBassItem::NumOfCombinations];
 
       bool read(XmlReader&);
 };

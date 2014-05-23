@@ -1454,21 +1454,21 @@ bool FiguredBassFont::read(XmlReader& e)
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "simple")
-                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombSimple]      = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][FiguredBassItem::CombSimple]      = e.readElementText()[0];
                         else if (tag == "crossed")
-                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombCrossed]     = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][FiguredBassItem::CombCrossed]     = e.readElementText()[0];
                         else if (tag == "backslashed")
-                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombBackslashed] = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][FiguredBassItem::CombBackslashed] = e.readElementText()[0];
                         else if (tag == "slashed")
-                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombSlashed]     = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][FiguredBassItem::CombSlashed]     = e.readElementText()[0];
                         else if (tag == "simpleHistoric")
-                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombSimple]      = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][FiguredBassItem::CombSimple]      = e.readElementText()[0];
                         else if (tag == "crossedHistoric")
-                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombCrossed]     = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][FiguredBassItem::CombCrossed]     = e.readElementText()[0];
                         else if (tag == "backslashedHistoric")
-                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombBackslashed] = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][FiguredBassItem::CombBackslashed] = e.readElementText()[0];
                         else if (tag == "slashedHistoric")
-                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombSlashed]     = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][FiguredBassItem::CombSlashed]     = e.readElementText()[0];
                         else {
                               e.unknown();
                               return false;
