@@ -1693,8 +1693,10 @@ void Chord::layoutPitched()
             c->layoutPitched();
 
       qreal _spatium  = spatium();
-      qreal minNoteDistance = score()->styleS(ST_dotNoteDistance).val() * _spatium;
+      qreal dotNoteDistance = score()->styleS(ST_dotNoteDistance).val() * _spatium;
+      qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
       qreal minTieLength = score()->styleS(ST_MinTieLength).val() * _spatium;
+      qreal chordX = (_noteType == NOTE_NORMAL) ? ipos().x() : 0.0;
 
       while (_ledgerLines) {
             LedgerLine* l = _ledgerLines->next();
@@ -1734,19 +1736,17 @@ void Chord::layoutPitched()
             Note* note = _notes.at(i);
             note->layout();
 
-            qreal x1 = note->pos().x();
-            if (_noteType == NOTE_NORMAL)
-                  x1 += ipos().x();
+            qreal x1 = note->pos().x() + chordX;
             qreal x2 = x1 + note->headWidth();
             lll = qMax(lll, -x1);
             rrr = qMax(rrr, x2);
 
             Accidental* accidental = note->accidental();
             if (accidental) {
-                  qreal x = accidental->x() + note->x();
                   // convert x position of accidental to segment coordinate system
-                  if (_noteType == NOTE_NORMAL)
-                        x += note->chord()->x();
+                  qreal x = accidental->pos().x() + note->pos().x() + chordX;
+                  // distance from accidental to note already taken into account
+                  // but here perhaps we create more padding in *front* of accidental?
                   x -= score()->styleS(ST_accidentalDistance).val() * _spatium;
                   lll = qMax(lll, -x);
                   }
@@ -1820,7 +1820,7 @@ void Chord::layoutPitched()
 
       if (_arpeggio) {
             _arpeggio->layout();    // only for width() !
-            lll        += _arpeggio->width() + _spatium * .5;
+            lll        += _arpeggio->width() + _spatium * .5 + chordX;
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
             _arpeggio->setPos(-lll, y1);
             _arpeggio->adjustReadPos();
@@ -1835,7 +1835,7 @@ void Chord::layoutPitched()
             lll += _spatium * .5;
 
       if (dots()) {
-            qreal x = dotPosX() + minNoteDistance
+            qreal x = dotPosX() + dotNoteDistance
                + (dots()-1) * score()->styleS(ST_dotDotDistance).val() * _spatium;
             x += symWidth(SymId::augmentationDot);
             rrr = qMax(rrr, x);
@@ -1848,7 +1848,7 @@ void Chord::layoutPitched()
                   _hook->layout();
                   if (up() && stem()) {
                         // hook position is not set yet
-                        qreal x = _hook->bbox().right() + stem()->hookPos().x();
+                        qreal x = _hook->bbox().right() + stem()->hookPos().x() + chordX;
                         rrr = qMax(rrr, x);
                         }
                   }
@@ -1863,7 +1863,7 @@ void Chord::layoutPitched()
             s = s->prev(Segment::SegChordRest);
             if (s && s->element(track()) && s->element(track())->type() == CHORD
                && static_cast<Chord*>(s->element(track()))->ledgerLines()) {
-                  // TODO: detect case were one chord is above staff, the other below
+                  // TODO: detect case where one chord is above staff, the other below
                   lll = qMax(_spatium * 0.8f, lll);
                   }
             }
@@ -1875,7 +1875,7 @@ void Chord::layoutPitched()
       qreal graceMag = score()->styleD(ST_graceNoteMag);
       int nb = getGraceNotesBefore(&graceNotesBefore);
       if (nb){
-              qreal xl = -(_space.lw() + minNoteDistance);
+              qreal xl = -(_space.lw() + minNoteDistance) - chordX;
               for (int i = nb-1; i >= 0; --i) {
                     Chord* c = graceNotesBefore.value(i);
                     xl -= c->space().rw()/* * 1.2*/;
@@ -1917,9 +1917,13 @@ void Chord::layoutPitched()
                   continue;
             e->layout();
             if (e->type() == CHORDLINE) {
-                  int x = e->bbox().translated(e->pos()).right();
-                  if (x > _space.rw())
-                        _space.setRw(x);
+                  QRectF tbbox = e->bbox().translated(e->pos());
+                  qreal lx = tbbox.left() + chordX;
+                  qreal rx = tbbox.right() + chordX;
+                  if (-lx > _space.lw())
+                        _space.setLw(-lx);
+                  if (rx > _space.rw())
+                        _space.setRw(rx);
                   }
             }
       for (int i = 0; i < _notes.size(); ++i)
@@ -1936,7 +1940,8 @@ void Chord::layoutPitched()
 void Chord::layoutTablature()
       {
       qreal _spatium  = spatium();
-      qreal minNoteDistance = score()->styleS(ST_dotNoteDistance).val() * _spatium;
+      qreal dotNoteDistance = score()->styleS(ST_dotNoteDistance).val() * _spatium;
+      qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
 
       for (Chord* c : _graceNotes)
             c->layoutTablature();
@@ -2059,7 +2064,7 @@ void Chord::layoutTablature()
             lll += _spatium * .5;
 
       if (dots()) {
-            qreal x = dotPosX() + minNoteDistance
+            qreal x = dotPosX() + dotNoteDistance
                + (dots()-1) * score()->styleS(ST_dotDotDistance).val() * _spatium;
             x += symWidth(SymId::augmentationDot);
             if (x > rrr)
@@ -2639,7 +2644,8 @@ int Chord::getGraceNotesBefore(QList<Chord*>* graceNotesBefore)
                || c->noteType() == NOTE_GRACE4
                || c->noteType() == NOTE_GRACE16
                || c->noteType() == NOTE_GRACE32){
-                    graceNotesBefore->append(c);
+                    if (graceNotesBefore)
+                          graceNotesBefore->append(c);
                     i++;
                     }
               }
@@ -2660,7 +2666,8 @@ int Chord::getGraceNotesAfter(QList<Chord*>* graceNotesAfter)
             if (c->noteType() == NOTE_GRACE8_AFTER
              || c->noteType() == NOTE_GRACE16_AFTER
              || c->noteType() == NOTE_GRACE32_AFTER){
-                  graceNotesAfter->append(c);
+                  if (graceNotesAfter)
+                        graceNotesAfter->append(c);
                   i++;
                   }
             }
