@@ -24,7 +24,7 @@ class SLine;
 class System;
 class MuseScoreView;
 
-enum { GRIP_LINE_START, GRIP_LINE_MIDDLE, GRIP_LINE_END, GRIP_LINE_APERTURE };
+enum class GripLine : char { START, MIDDLE, END, APERTURE };
 
 //---------------------------------------------------------
 //   LineStyle
@@ -102,7 +102,7 @@ class SLine : public Spanner {
       void setLen(qreal l);
       virtual const QRectF& bbox() const override;
 
-      virtual QPointF linePos(int grip, System** system);
+      virtual QPointF linePos(GripLine grip, System** system);
 
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
