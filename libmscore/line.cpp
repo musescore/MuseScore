@@ -88,9 +88,9 @@ void LineSegment::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       *grips = 3;
       *defaultGrip = 2;
       QPointF pp(pagePos());
-      grip[GRIP_LINE_START].translate(pp);
-      grip[GRIP_LINE_END].translate(pos2() + pp);
-      grip[GRIP_LINE_MIDDLE].translate(pos2() * .5 + pp);
+      grip[int(GripLine::START)].translate(pp);
+      grip[int(GripLine::END)].translate(pos2() + pp);
+      grip[int(GripLine::MIDDLE)].translate(pos2() * .5 + pp);
       }
 
 //---------------------------------------------------------
@@ -101,18 +101,20 @@ void LineSegment::setGrip(int grip, const QPointF& p)
       {
       QPointF pt(p * spatium());
 
-      switch (grip) {
-            case GRIP_LINE_START: {
+      switch ((GripLine)grip) {
+            case GripLine::START: {
                   QPointF delta(pt - userOff());
                   setUserOff(pt);
                   setUserOff2(userOff2() - delta);
                   }
                   break;
-            case GRIP_LINE_END:
+            case GripLine::END:
                   setUserOff2(pt);
                   break;
-            case GRIP_LINE_MIDDLE:
+            case GripLine::MIDDLE:
                   setUserOff(pt);
+                  break;
+            default:
                   break;
             }
       layout();   // needed?
@@ -125,15 +127,17 @@ void LineSegment::setGrip(int grip, const QPointF& p)
 QPointF LineSegment::getGrip(int grip) const
       {
       QPointF p;
-      switch(grip) {
-            case GRIP_LINE_START:
+      switch((GripLine)grip) {
+            case GripLine::START:
                   p = userOff();
                   break;
-            case GRIP_LINE_END:
+            case GripLine::END:
                   p = userOff2();
                   break;
-            case GRIP_LINE_MIDDLE:
+            case GripLine::MIDDLE:
                   p = userOff();
+                  break;
+            default:
                   break;
             }
       p /= spatium();
@@ -163,16 +167,16 @@ QPointF LineSegment::gripAnchor(int grip) const
       if (spannerSegmentType() == SEGMENT_MIDDLE) {
             qreal y = system()->staffYpage(staffIdx());
             qreal x;
-            switch(grip) {
-                  case GRIP_LINE_START:
+            switch((GripLine)grip) {
+                  case GripLine::START:
                         x = system()->firstMeasure()->abbox().left();
                         break;
-                  case GRIP_LINE_END:
+                  case GripLine::END:
                         x = system()->lastMeasure()->abbox().right();
                         break;
                   default:
-                  case GRIP_LINE_MIDDLE:
-                  case GRIP_LINE_APERTURE:
+                  case GripLine::MIDDLE:
+                  case GripLine::APERTURE:
                         x = 0; // No Anchor
                         y = 0;
                         break;
@@ -180,11 +184,11 @@ QPointF LineSegment::gripAnchor(int grip) const
             return QPointF(x, y);
             }
       else {
-            if (grip == GRIP_LINE_MIDDLE || grip == GRIP_LINE_APERTURE) // center grip or aperture grip
+            if (grip == int(GripLine::MIDDLE) || grip == int(GripLine::APERTURE)) // center grip or aperture grip
                   return QPointF(0, 0);
             else {
                   System* s;
-                  QPointF p(line()->linePos(grip, &s));
+                  QPointF p(line()->linePos((GripLine)grip, &s));
                   if (s)
                         p += s->pos();
                   return p;
@@ -201,8 +205,8 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
       {
       if (!((modifiers & Qt::ShiftModifier)
          && ((spannerSegmentType() == SEGMENT_SINGLE)
-              || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == GRIP_LINE_START)
-              || (spannerSegmentType() == SEGMENT_END && curGrip == GRIP_LINE_END))))
+              || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == int(GripLine::START))
+              || (spannerSegmentType() == SEGMENT_END && curGrip == int(GripLine::END)))))
             return false;
 
       LineSegment* ls = 0;
@@ -219,15 +223,15 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                   return true;
                   }
             if (key == Qt::Key_Left) {
-                  if (curGrip == GRIP_LINE_START)
+                  if (curGrip == int(GripLine::START))
                         s1 = prevSeg1(s1, track);
-                  else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE)
+                  else if (curGrip == int(GripLine::END) || curGrip == int(GripLine::MIDDLE))
                         s2 = prevSeg1(s2, track);
                   }
             else if (key == Qt::Key_Right) {
-                  if (curGrip == GRIP_LINE_START)
+                  if (curGrip == int(GripLine::START))
                         s1 = nextSeg1(s1, track);
-                  else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE) {
+                  else if (curGrip == int(GripLine::END) || curGrip == int(GripLine::MIDDLE)) {
                         if ((s2->system()->firstMeasure() == s2->measure())
                            && (s2->tick() == s2->measure()->tick()))
                               bspDirty = true;
@@ -248,11 +252,11 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
             bool removeSegment = false;
 
             if (key == Qt::Key_Left) {
-                  if (curGrip == GRIP_LINE_START) {
+                  if (curGrip == int(GripLine::START)) {
                         if (m1->prevMeasure())
                               m1 = m1->prevMeasure();
                         }
-                  else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE) {
+                  else if (curGrip == int(GripLine::END) || curGrip == int(GripLine::MIDDLE)) {
                         if (m2 && (m2->system()->firstMeasure() == m2))
                               removeSegment = true;
                         Measure* m = m2->prevMeasure();
@@ -261,11 +265,11 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                         }
                   }
             else if (key == Qt::Key_Right) {
-                  if (curGrip == GRIP_LINE_START) {
+                  if (curGrip == int(GripLine::START)) {
                         if (m1->nextMeasure())
                               m1 = m1->nextMeasure();
                         }
-                  else if (curGrip == GRIP_LINE_END || curGrip == GRIP_LINE_MIDDLE) {
+                  else if (curGrip == int(GripLine::END) || curGrip == int(GripLine::MIDDLE)) {
                         if (m2->nextMeasure())
                               m2 = m2->nextMeasure();
                         if (m2->system()->firstMeasure() == m2)
@@ -298,9 +302,9 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
 
       LineSegment* nls = 0;
       if (st == SEGMENT_SINGLE) {
-            if (curGrip == GRIP_LINE_START)
+            if (curGrip == int(GripLine::START))
                   nls = l->frontSegment();
-            else if (curGrip == GRIP_LINE_END)
+            else if (curGrip == int(GripLine::END))
                   nls = l->backSegment();
             }
       else if (st == SEGMENT_BEGIN)
@@ -329,27 +333,29 @@ void LineSegment::editDrag(const EditData& ed)
       // Only for moving, no y limitaion
       QPointF deltaMove(ed.delta.x(), ed.delta.y());
 
-      switch (ed.curGrip) {
-            case GRIP_LINE_START: // Resize the begin of element (left grip)
+      switch ((GripLine)ed.curGrip) {
+            case GripLine::START: // Resize the begin of element (left grip)
                   setUserOff(userOff() + deltaResize);
                   _userOff2 -= deltaResize;
                   break;
-            case GRIP_LINE_END: // Resize the end of element (rigth grip)
+            case GripLine::END: // Resize the end of element (rigth grip)
                   _userOff2 += deltaResize;
                   break;
-            case GRIP_LINE_MIDDLE: // Move the element (middle grip)
+            case GripLine::MIDDLE: // Move the element (middle grip)
                   setUserOff(userOff() + deltaMove);
+                  break;
+            default:
                   break;
             }
       if ((line()->anchor() == Spanner::ANCHOR_NOTE)
-         && (ed.curGrip == GRIP_LINE_START || ed.curGrip == GRIP_LINE_END)) {
+         && (ed.curGrip == int(GripLine::START) || ed.curGrip == int(GripLine::END))) {
             //
             // if we touch a different note, change anchor
             //
             Element* e = ed.view->elementNear(ed.pos);
             if (e && e->type() == ElementType::NOTE) {
                   SLine* l = line();
-                  if (ed.curGrip == GRIP_LINE_END && e != line()->endElement()) {
+                  if (ed.curGrip == int(GripLine::END) && e != line()->endElement()) {
                         qDebug("LineSegment: move end anchor");
                         Note* noteOld = static_cast<Note*>(l->endElement());
                         Note* noteNew = static_cast<Note*>(e);
@@ -360,7 +366,7 @@ void LineSegment::editDrag(const EditData& ed)
 
                         _userOff2 += noteOld->canvasPos() - noteNew->canvasPos();
                         }
-                  else if (ed.curGrip == GRIP_LINE_START && e != l->startElement()) {
+                  else if (ed.curGrip == int(GripLine::START) && e != l->startElement()) {
                         qDebug("LineSegment: move start anchor (not impl.)");
                         }
                   }
@@ -449,7 +455,7 @@ SLine::SLine(const SLine& s)
 //    return System() coordinates
 //---------------------------------------------------------
 
-QPointF SLine::linePos(int grip, System** sys)
+QPointF SLine::linePos(GripLine grip, System** sys)
       {
       qreal _spatium = spatium();
       qreal x = 0.0;
@@ -458,7 +464,7 @@ QPointF SLine::linePos(int grip, System** sys)
                   {
                   Measure* m;
                   int t;
-                  if (grip == GRIP_LINE_START)
+                  if (grip == GripLine::START)
                         t = tick();
                   else
                         t = tick2() - 1;
@@ -472,7 +478,7 @@ QPointF SLine::linePos(int grip, System** sys)
                   {
                   // anchor() == ANCHOR_MEASURE
                   Measure* m;
-                  if (grip == GRIP_LINE_START) {
+                  if (grip == GripLine::START) {
                         Q_ASSERT(startElement()->type() == ElementType::MEASURE);
                         m = static_cast<Measure*>(startElement());
                         x = m->pos().x();
@@ -518,7 +524,7 @@ QPointF SLine::linePos(int grip, System** sys)
                   {
                   System* s = static_cast<Note*>(startElement())->chord()->segment()->system();
                   *sys = s;
-                  if (grip == GRIP_LINE_START)
+                  if (grip == GripLine::START)
                         return startElement()->pagePos() - s->pagePos();
                   else
                         return endElement()->pagePos() - s->pagePos();
@@ -562,8 +568,8 @@ void SLine::layout()
 
       System* s1;
       System* s2;
-      QPointF p1(linePos(GRIP_LINE_START, &s1));
-      QPointF p2(linePos(GRIP_LINE_END,   &s2));
+      QPointF p1(linePos(GripLine::START, &s1));
+      QPointF p2(linePos(GripLine::END,   &s2));
 
       QList<System*>* systems = score()->systems();
       int sysIdx1 = systems->indexOf(s1);

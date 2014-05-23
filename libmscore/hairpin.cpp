@@ -136,10 +136,10 @@ void HairpinSegment::updateGrips(int* grips, int* defaultGrip, QRectF* grip) con
       gripLineAperturePoint = doRotation.map( gripLineAperturePoint );
 // End calc position grip aperture
 
-      grip[GRIP_LINE_START].translate( pp );
-      grip[GRIP_LINE_END].translate( p + pp );
-      grip[GRIP_LINE_MIDDLE].translate( p * .5 + pp );
-      grip[GRIP_LINE_APERTURE].translate( gripLineAperturePoint + pp );
+      grip[int(GripLine::START)].translate( pp );
+      grip[int(GripLine::END)].translate( p + pp );
+      grip[int(GripLine::MIDDLE)].translate( p * .5 + pp );
+      grip[int(GripLine::APERTURE)].translate( gripLineAperturePoint + pp );
       }
 //---------------------------------------------------------
 //   editDrag
@@ -148,7 +148,7 @@ void HairpinSegment::updateGrips(int* grips, int* defaultGrip, QRectF* grip) con
 void HairpinSegment::editDrag(const EditData& ed)
       {
 
-    if( ed.curGrip == GRIP_LINE_APERTURE ){
+    if( ed.curGrip == int(GripLine::APERTURE) ){
           qreal newHeight = hairpin()->hairpinHeight().val() + ed.delta.y()/spatium()/.5;
           if( newHeight < 0.5 )
               newHeight = 0.5;
