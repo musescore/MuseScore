@@ -128,12 +128,12 @@ class FiguredBassItem : public Element {
             HISTORIC,
                   NUMOF
             };
-      enum Combinations {
-            CombSimple = 0,
-            CombCrossed,
-            CombBackslashed,
-            CombSlashed,
-                  NumOfCombinations
+      enum class Combination : char {
+            SIMPLE = 0,
+            CROSSED,
+            BACKSLASHED,
+            SLASHED,
+                  NUMOF
             };
 
    private:
@@ -233,7 +233,7 @@ struct FiguredBassFont {
       qreal             defLineHeight;
       QChar             displayAccidental[int(FiguredBassItem::Modifier::NUMOF)];
       QChar             displayParenthesis[int(FiguredBassItem::Parenthesis::NUMOF)];
-      QChar             displayDigit[int(FiguredBassItem::Style::NUMOF)][10][FiguredBassItem::NumOfCombinations];
+      QChar             displayDigit[int(FiguredBassItem::Style::NUMOF)][10][int(FiguredBassItem::Combination::NUMOF)];
 
       bool read(XmlReader&);
 };
