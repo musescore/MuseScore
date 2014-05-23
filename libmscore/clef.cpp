@@ -145,68 +145,93 @@ void Clef::setSelected(bool f)
 void Clef::layout()
       {
       // determine current number of lines and line distance
-      int lines      = 5;                       // assume a resonable default
-      qreal lineDist = 1.0;
+      int         lines       = 5;              // assume resonable defaults
+      qreal       lineDist    = 1.0;
+      ClefType    clfType    = clefType();
 
       Staff* stf = staff();
       StaffType* staffType = nullptr;
       if (stf && stf->staffType()) {
             staffType = staff()->staffType();
-            if (!staffType->genClef()) {        // if no clef, set empty bbox and do nothing
-                  qDeleteAll(elements);
+
+            // determine tick position of this clef
+            Segment* clefSeg = static_cast<Segment*>(parent());
+            int tick = 0;
+            if (clefSeg)
+                  tick = clefSeg->tick();
+
+            // TO DO / NOTE: detection of clefs not (or no longer) present in staff clef map
+            // could also go in Score::computeMinWidth() (layout.cpp, line 3563 ca.)
+
+            // if no clef display OR (no clef change in map AND not generated)...
+            if (!staffType->genClef()
+                        || !(stf->clefList()->isClefChangeAt(tick) || generated()) ) {
+                  qDeleteAll(elements);               // ...remove everything to an empty box and do nothing
                   elements.clear();
                   setbbox(QRectF());
                   return;
                   }
 
-            // tablatures:
-            if (staffType->group() == TAB_STAFF_GROUP) {
-                  // if current clef type not compatible with tablature,
-                  // set tab clef according to score style
-                  if (ClefInfo::staffGroup(clefType()) != TAB_STAFF_GROUP)
-                        setClefType( ClefType(score()->styleI(ST_tabClef)) );
+            // retrieve clef type as stored in staff clef map
+            clfType = stf->clef(tick);
+#if (0)
+// CURRENTLY DISABLED: let any inconsistency to show up!
+            // check the clef type in map is compatible with the staff group
+            if (ClefInfo::staffGroup(clfType) != staffType->group()) {
+                  switch (staffType->group()) {
+                        case STANDARD_STAFF_GROUP:    // TODO: use default clef for instrument, needs access
+                              clfType = ClefType::G; // to the IntrumentTemplate as default pitched clef(s)
+                              break;                  // are not stored in Instrument, Part or Staff.
+                        case PERCUSSION_STAFF_GROUP:
+                              clefs.clear();
+                              clfType = ClefType::PERC;
+                              break;
+                        case TAB_STAFF_GROUP:
+                              clefs.clear();
+                              clfType = ClefType(score()->styleI(ST_tabClef));
+                              break;
+                        }
                   }
-
-            //
-            // all staff types
+#endif
             //
             // courtesy clef
             //
             bool showClef = true;
-            Segment* clefSeg = static_cast<Segment*>(parent());
-            if (clefSeg) {
-                  int tick = clefSeg->tick();
-                  // only if there is a clef change
-                  if (stf->clef(tick) != stf->clef(tick-1)) {
-                        // locate clef at the begining of next measure, if any
-                        Clef*       clefNext    = nullptr;
-                        Segment*    clefSegNext = nullptr;
-                        Measure*    meas        = static_cast<Measure*>(clefSeg->parent());
-                        Measure*    measNext    = meas->nextMeasure();
-                        if (measNext) {
-                              clefSegNext = measNext->findSegment(Segment::SegClef, tick);
-                              if (clefSegNext)
-                                    clefNext = static_cast<Clef*>(clefSegNext->element(track()));
-                              }
-                        // show this clef if: it is not a courtesy clef (no next clef or not at the end of the measure)
-                        showClef = !clefNext || (clefSeg->tick() != meas->tick() + meas->ticks())
-                              // if courtesy clef: show if score has courtesy clefs on
-                              || ( score()->styleB(ST_genCourtesyClef)
-                              // AND measure is not at the end of a repeat or of a section
-                              && !( (meas->repeatFlags() & RepeatEnd) || meas->sectionBreak() )
-                              // AND this clef has courtesy clef turned on
-                              && showCourtesy() );
-                        if (!showClef)    {     // if no clef, set empty bbox and do nothing
-                              qDeleteAll(elements);
-                              elements.clear();
-                              setbbox(QRectF());
-                              return;
-                              }
+            // only if there is a clef change
+            if (clefSeg && tick > 0  && clfType != stf->clef(tick-1)) {
+                  // locate clef at the begining of next measure, if any
+                  Clef*       clefNext    = nullptr;
+                  Segment*    clefSegNext = nullptr;
+                  Measure*    meas        = static_cast<Measure*>(clefSeg->parent());
+                  Measure*    measNext    = meas->nextMeasure();
+                  if (measNext) {
+                        clefSegNext = measNext->findSegment(Segment::SegClef, tick);
+                        if (clefSegNext)
+                              clefNext = static_cast<Clef*>(clefSegNext->element(track()));
                         }
+                  // courtesy clef? If there is a next clef and it is at the end of the measure
+                  bool courtClef = clefNext && (tick == meas->tick() + meas->ticks());
+                  // show this clef if: it is not a courtesy clef
+                  showClef = !courtClef
+                        // if courtesy clef: show if score has courtesy clefs on
+                        || ( score()->styleB(ST_genCourtesyClef)
+                        // AND measure is not at the end of a repeat or of a section
+                        && !( (meas->repeatFlags() & RepeatEnd) || meas->sectionBreak() )
+                        // AND this clef has courtesy clef turned on
+                        && showCourtesy() );
+                  if (!showClef)    {     // if no clef, set empty bbox and do nothing
+                        qDeleteAll(elements);
+                        elements.clear();
+                        setbbox(QRectF());
+                        return;
+                        }
+                  else
+                        setSmall(tick != meas->tick());
                   }
 
-            lines = staffType->lines();         // init values from staff type
+            lines = staffType->lines();
             lineDist = staffType->lineDistance().val();
+            setClefType(clfType);
             }
 
       // if nothing changed since last layout, do nothing

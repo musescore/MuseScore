@@ -2188,12 +2188,13 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                   m->mmRest()->cmdAddStaves(staffIdx+1, staffIdx+2, false);
             }
 
-      Clef* clef = new Clef(this);
-      clef->setClefType(ClefType::F);
-      clef->setTrack((staffIdx+1) * VOICES);
+//      Clef* clef = new Clef(this);
+//      clef->setClefType(ClefType::F);
+//      clef->setTrack((staffIdx+1) * VOICES);
       Segment* seg = firstMeasure()->getSegment(Segment::SegClef, 0);
-      clef->setParent(seg);
-      undoAddElement(clef);
+//      clef->setParent(seg);
+//      undoAddElement(clef);
+      undoChangeClef(ns, seg, ClefType::F);
 
       undoChangeKeySig(ns, 0, s->key(0));
 

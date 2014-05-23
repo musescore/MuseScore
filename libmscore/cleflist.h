@@ -19,17 +19,32 @@
 namespace Ms {
 
 class Score;
+class Staff;
 
 //---------------------------------------------------------
 //   ClefList
 //---------------------------------------------------------
 
-class ClefList : public std::map<int, ClefTypeList> {
+class ClefList {
+
+   protected:
+      std::map<int, ClefTypeList>   _list;
+      Staff*                        _staff;
+
    public:
-      ClefList() {}
+      ClefList(Staff* staff);
+//      ClefList(const ClefList& other);
+      ClefList& operator=(const ClefList& other);
+      ~ClefList();
+
+      void         clear();
       ClefTypeList clef(int tick) const;
-      void setClef(int tick, ClefTypeList);
-      void read(XmlReader&, Score*);
+      bool         empty()                      { return _list.empty(); }
+      void         insertTime(int tick, int len);
+      bool         isClefChangeAt(int tick) const;
+      void         setClef(int tick, ClefTypeList);
+      void         read114(XmlReader&, Score*);
+      void         alignScore114();
       };
 
 
