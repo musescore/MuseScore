@@ -4567,8 +4567,8 @@
                   <shortName>Drs.</shortName>
                   <description>Drumset</description>
                   <musicXMLid>drum.group.set</musicXMLid>
-                  <clef>PERC2</clef>
-                  <stafftype>percussion</stafftype>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Channel>
@@ -4701,7 +4701,7 @@
                   <description>Tom Toms</description>
                   <musicXMLid>drum.tom-tom</musicXMLid>
                   <clef>PERC</clef>
-                  <stafflines>5</stafflines>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Drum pitch="41">
@@ -4812,7 +4812,7 @@
                   <description>Congas</description>
                   <musicXMLid>drum.conga</musicXMLid>
                   <clef>PERC</clef>
-                  <stafflines>1</stafflines>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Drum pitch="62">
@@ -4987,7 +4987,7 @@
                   <description>Hi-hat</description>
                   <musicXMLid>metal.hi-hat</musicXMLid>
                   <clef>PERC</clef>
-                  <stafflines>1</stafflines>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Drum pitch="42">
@@ -6017,12 +6017,12 @@
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup name="Marching Percussion">
-            <Instrument id="marchineg-snare">
+            <Instrument id="marching-snare">
                   <longName>Snare Drum</longName>
                   <shortName>SD</shortName>
                   <description>Marching Snare Drum</description>
                   <musicXMLid>drum.snare-drum</musicXMLid>
-                  <stafflines>1</stafflines>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
                   <Drum pitch="52">
@@ -6110,7 +6110,7 @@
                   <shortName>TD</shortName>
                   <description>Marching Tenor Drums</description>
                   <musicXMLid>drum.tenor-drum</musicXMLid>
-                  <stafflines>5</stafflines>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
                   <Drum pitch="120">
@@ -6264,7 +6264,7 @@
                   <shortName>BD</shortName>
                   <description>Marching Bass Drums</description>
                   <musicXMLid>drum.bass-drum</musicXMLid>
-                  <stafflines>5</stafflines>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
                   <Drum pitch="1">
@@ -6346,7 +6346,7 @@
                   <shortName>Cy</shortName>
                   <description>Marching Cymbals</description>
                   <musicXMLid>metal.cymbal.crash</musicXMLid>
-                  <stafflines>1</stafflines>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
                   <Drum pitch="72">
@@ -7795,7 +7795,7 @@
                   <description>Percussion Synthesizer</description>
                   <musicXMLid>&quot;drum.snare-drum.electric&quot;</musicXMLid>
                   <clef>PERC</clef>
-                  <stafflines>1</stafflines>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Drum pitch="40">
