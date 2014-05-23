@@ -494,7 +494,7 @@ Score::FileError importBB(Score* score, const QString& name)
             if (c.bass > 0)
                   h->setBaseTpc(table[c.bass-1]);
             else
-                  h->setBaseTpc(INVALID_TPC);
+                  h->setBaseTpc(Tpc::INVALID);
             h->setId(c.extension);
             h->getDescription();
             h->render();

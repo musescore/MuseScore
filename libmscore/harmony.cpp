@@ -41,7 +41,7 @@ QString Harmony::harmonyName()
       if (_leftParen)
             s = "(";
 
-      if (_rootTpc != INVALID_TPC)
+      if (_rootTpc != Tpc::INVALID)
             r = tpc2name(_rootTpc, _rootSpelling, _rootLowerCase);
 
       if (_textName != "")
@@ -67,7 +67,7 @@ QString Harmony::harmonyName()
                   }
             }
 
-      if (_baseTpc != INVALID_TPC)
+      if (_baseTpc != Tpc::INVALID)
             b = "/" + tpc2name(_baseTpc, _baseSpelling, _baseLowerCase);
 
       s += r + e + b;
@@ -137,8 +137,8 @@ qDebug("ResolveDegreeList: not found in table");
 Harmony::Harmony(Score* s)
    : Text(s)
       {
-      _rootTpc    = INVALID_TPC;
-      _baseTpc    = INVALID_TPC;
+      _rootTpc    = Tpc::INVALID;
+      _baseTpc    = Tpc::INVALID;
       _id         = -1;
       _parsedForm = 0;
       _leftParen  = false;
@@ -186,7 +186,7 @@ void Harmony::write(Xml& xml) const
       xml.stag("Harmony");
       if (_leftParen)
             xml.tagE("leftParen");
-      if (_rootTpc != INVALID_TPC || _baseTpc != INVALID_TPC) {
+      if (_rootTpc != Tpc::INVALID || _baseTpc != Tpc::INVALID) {
             int rRootTpc = _rootTpc;
             int rBaseTpc = _baseTpc;
             if (staff()) {
@@ -196,13 +196,13 @@ void Harmony::write(Xml& xml) const
                         rBaseTpc = transposeTpc(_baseTpc, interval, false);
                         }
                   }
-            if (rRootTpc != INVALID_TPC)
+            if (rRootTpc != Tpc::INVALID)
                   xml.tag("root", rRootTpc);
             if (_id > 0)
                   xml.tag("extension", _id);
             if (_textName != "")
                   xml.tag("name", _textName);
-            if (rBaseTpc != INVALID_TPC)
+            if (rBaseTpc != Tpc::INVALID)
                   xml.tag("base", rBaseTpc);
             foreach(const HDegree& hd, _degreeList) {
                   HDegreeType tp = hd.type();
@@ -311,7 +311,7 @@ void Harmony::read(XmlReader& e)
       // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
       // or constructed in the Chord Symbol Properties dialog.
 
-      if (_rootTpc != INVALID_TPC) {
+      if (_rootTpc != Tpc::INVALID) {
             if (_id > 0)
                   // lookup id in chord list and generate new description if necessary
                   getDescription();
@@ -390,7 +390,7 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
             5, 12, 19, 26, 33,  // B
             };
       if (s == "")
-            return INVALID_TPC;
+            return Tpc::INVALID;
       int acci;
       switch (spelling) {
             case NoteSpellingType::GERMAN:      acci = 1; break;
@@ -435,12 +435,12 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                   case 'h':   r = 6; break;
                   case 'b':
                         if (alter)
-                              return INVALID_TPC;
+                              return Tpc::INVALID;
                         r = 6;
                         alter = -1;
                         break;
                   default:
-                        return INVALID_TPC;
+                        return Tpc::INVALID;
                   }
             }
       else if (spelling == NoteSpellingType::SOLFEGGIO) {
@@ -460,7 +460,7 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
             else if (ss == "si")
                   r = 6;
             else
-                  return INVALID_TPC;
+                  return Tpc::INVALID;
             }
       else {
             switch(s[0].toLower().toLatin1()) {
@@ -471,7 +471,7 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                   case 'g':   r = 4; break;
                   case 'a':   r = 5; break;
                   case 'b':   r = 6; break;
-                  default:    return INVALID_TPC;
+                  default:    return Tpc::INVALID;
                   }
             }
       r = spellings[r * 5 + alter + 2];
@@ -513,7 +513,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
       determineRootBaseSpelling();
       int idx;
       int r = convertRoot(s, _rootSpelling, idx);
-      if (r == INVALID_TPC) {
+      if (r == Tpc::INVALID) {
             if (s[0] == '/')
                   idx = 0;
             else {
@@ -529,7 +529,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             preferMinor = true;
       else
             preferMinor = false;
-      *base = INVALID_TPC;
+      *base = Tpc::INVALID;
       int slash = s.lastIndexOf('/');
       if (slash != -1) {
             QString bs = s.mid(slash+1);
@@ -537,8 +537,8 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             int idx2;
             *base = convertRoot(bs, _baseSpelling, idx2);
             if (idx2 != bs.size())
-                  *base = INVALID_TPC;
-            if (*base == INVALID_TPC) {
+                  *base = Tpc::INVALID;
+            if (*base == Tpc::INVALID) {
                   // if what follows after slash is not (just) a TPC
                   // then reassemble chord and try to parse with the slash
                   s = s + "/" + bs;
@@ -651,8 +651,8 @@ void Harmony::setHarmony(const QString& s)
             foreach(const TextSegment* s, textList)
                   delete s;
             textList.clear();
-            setRootTpc(INVALID_TPC);
-            setBaseTpc(INVALID_TPC);
+            setRootTpc(Tpc::INVALID);
+            setBaseTpc(Tpc::INVALID);
             _id = -1;
             render();
             }
@@ -1211,7 +1211,7 @@ void Harmony::render(const TextStyle* st)
       if (_leftParen)
             render("( ", x, y);
 
-      if (_rootTpc != INVALID_TPC) {
+      if (_rootTpc != Tpc::INVALID) {
             // render root
             render(chordList->renderListRoot, x, y, _rootTpc, _rootSpelling, _rootLowerCase);
             // render extension
@@ -1223,29 +1223,29 @@ void Harmony::render(const TextStyle* st)
             render(_textName, x, y);
 
       // render bass
-      if (_baseTpc != INVALID_TPC)
+      if (_baseTpc != Tpc::INVALID)
             render(chordList->renderListBase, x, y, _baseTpc, _baseSpelling, _baseLowerCase);
 
-      if (_rootTpc != INVALID_TPC && capo > 0 && capo < 12) {
+      if (_rootTpc != Tpc::INVALID && capo > 0 && capo < 12) {
             int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
             int capoRootTpc = _rootTpc + tpcOffset[capo];
             int capoBassTpc = _baseTpc;
 
-            if (capoBassTpc != INVALID_TPC)
+            if (capoBassTpc != Tpc::INVALID)
                   capoBassTpc += tpcOffset[capo];
 
             /*
              * For guitarists, avoid x and bb in Root or Bass,
              * and also avoid E#, B#, Cb and Fb in Root.
              */
-            if (capoRootTpc < 8 || (capoBassTpc != INVALID_TPC && capoBassTpc < 6)) {
+            if (capoRootTpc < 8 || (capoBassTpc != Tpc::INVALID && capoBassTpc < 6)) {
                   capoRootTpc += 12;
-                  if (capoBassTpc != INVALID_TPC)
+                  if (capoBassTpc != Tpc::INVALID)
                         capoBassTpc += 12;
                   }
-            else if (capoRootTpc > 24 || (capoBassTpc != INVALID_TPC && capoBassTpc > 26)) {
+            else if (capoRootTpc > 24 || (capoBassTpc != Tpc::INVALID && capoBassTpc > 26)) {
                   capoRootTpc -= 12;
-                  if (capoBassTpc != INVALID_TPC)
+                  if (capoBassTpc != Tpc::INVALID)
                         capoBassTpc -= 12;
                   }
 
@@ -1257,7 +1257,7 @@ void Harmony::render(const TextStyle* st)
             if (cd)
                   render(cd->renderList, x, y, 0);
 
-            if (capoBassTpc != INVALID_TPC)
+            if (capoBassTpc != Tpc::INVALID)
                   render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseLowerCase);
             render(")", x, y);
             }

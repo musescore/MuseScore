@@ -116,7 +116,7 @@ void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval inte
 
 int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
       {
-      if (tpc == INVALID_TPC) // perfect unison & perfect octave
+      if (tpc == Tpc::INVALID) // perfect unison & perfect octave
             return tpc;
 
       int minAlter;
@@ -177,7 +177,7 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
 
 int transposeTpcDiatonicByKey(int tpc, int steps, int key, bool keepAlteredDegrees, bool useDoubleSharpsFlats)
       {
-      if (tpc == INVALID_TPC)
+      if (tpc == Tpc::INVALID)
             return tpc;
 
       // get step for tpc with alteration for key
@@ -193,13 +193,13 @@ int transposeTpcDiatonicByKey(int tpc, int steps, int key, bool keepAlteredDegre
             newTpc += alter * TPC_DELTA_SEMITONE;
 
       // check results are in ranges
-      while (newTpc > TPC_MAX)      newTpc   -= TPC_DELTA_ENHARMONIC;
-      while (newTpc < TPC_MIN)      newTpc   += TPC_DELTA_ENHARMONIC;
+      while (newTpc > Tpc::MAX)      newTpc   -= TPC_DELTA_ENHARMONIC;
+      while (newTpc < Tpc::MIN)      newTpc   += TPC_DELTA_ENHARMONIC;
 
       // if required, reduce double alterations
       if(!useDoubleSharpsFlats) {
-            if(newTpc >= TPC_F_SS)  newTpc   -= TPC_DELTA_ENHARMONIC;
-            if(newTpc <= TPC_B_BB)  newTpc   += TPC_DELTA_ENHARMONIC;
+            if(newTpc >= Tpc::F_SS)  newTpc   -= TPC_DELTA_ENHARMONIC;
+            if(newTpc <= Tpc::B_BB)  newTpc   += TPC_DELTA_ENHARMONIC;
             }
 
       return newTpc;
@@ -547,24 +547,24 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
             newPitch -= PITCH_DELTA_OCTAVE;
       while (newPitch < 0)
             newPitch += PITCH_DELTA_OCTAVE;
-      while (newTpc1 > TPC_MAX)
+      while (newTpc1 > Tpc::MAX)
             newTpc1 -= TPC_DELTA_ENHARMONIC;
-      while (newTpc1 < TPC_MIN)
+      while (newTpc1 < Tpc::MIN)
             newTpc1 += TPC_DELTA_ENHARMONIC;
-      while (newTpc2 > TPC_MAX)
+      while (newTpc2 > Tpc::MAX)
             newTpc2 -= TPC_DELTA_ENHARMONIC;
-      while (newTpc2 < TPC_MIN)
+      while (newTpc2 < Tpc::MIN)
             newTpc2 += TPC_DELTA_ENHARMONIC;
 
       // if required, reduce double alterations
       if (!useDoubleAccidentals) {
-            if (newTpc1 >= TPC_F_SS)
+            if (newTpc1 >= Tpc::F_SS)
                   newTpc1 -= TPC_DELTA_ENHARMONIC;
-            if (newTpc1 <= TPC_B_BB)
+            if (newTpc1 <= Tpc::B_BB)
                   newTpc1 += TPC_DELTA_ENHARMONIC;
-            if (newTpc2 >= TPC_F_SS)
+            if (newTpc2 >= Tpc::F_SS)
                   newTpc2 -= TPC_DELTA_ENHARMONIC;
-            if (newTpc2 <= TPC_B_BB)
+            if (newTpc2 <= Tpc::B_BB)
                   newTpc2 += TPC_DELTA_ENHARMONIC;
             }
 

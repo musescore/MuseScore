@@ -181,8 +181,8 @@ Note::Note(Score* s)
       _lineOffset        = 0;
       _tieFor            = 0;
       _tieBack           = 0;
-      _tpc[0]            = INVALID_TPC;
-      _tpc[1]            = INVALID_TPC;
+      _tpc[0]            = Tpc::INVALID;
+      _tpc[1]            = Tpc::INVALID;
       _headGroup         = NoteHeadGroup::HEAD_NORMAL;
       _headType          = NoteHeadType::HEAD_AUTO;
 
@@ -795,8 +795,8 @@ void Note::read(XmlReader& e)
       {
       bool hasAccidental = false;                     // used for userAccidental backward compatibility
 
-      _tpc[0] = INVALID_TPC;
-      _tpc[1] = INVALID_TPC;
+      _tpc[0] = Tpc::INVALID;
+      _tpc[1] = Tpc::INVALID;
 
       if (e.hasAttribute("pitch"))                   // obsolete
             _pitch = e.intAttribute("pitch");
@@ -1055,7 +1055,7 @@ void Note::read(XmlReader& e)
       if (score()->mscVersion() < 117 && !concertPitch()) {
             _pitch += transposition();
             _tpc[1] = _tpc[0];
-            _tpc[0] = INVALID_TPC;
+            _tpc[0] = Tpc::INVALID;
             }
       if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
             KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
@@ -1958,7 +1958,7 @@ void Note::setNval(NoteVal nval)
       setPitch(nval.pitch);
       _fret      = nval.fret;
       _string    = nval.string;
-      if (nval.tpc == INVALID_TPC) {
+      if (nval.tpc == Tpc::INVALID) {
             int key = staff()->key(chord()->tick()).accidentalType();
             _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
             Interval v = staff()->part()->instr()->transpose();
