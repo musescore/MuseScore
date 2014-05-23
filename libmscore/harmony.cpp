@@ -340,11 +340,11 @@ void Harmony::read(XmlReader& e)
 void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& rootLowerCase, NoteSpellingType& baseSpelling, bool& baseLowerCase)
       {
       if (score()->styleB(ST_useStandardNoteNames))
-            rootSpelling = STANDARD;
+            rootSpelling = NoteSpellingType::STANDARD;
       else if (score()->styleB(ST_useGermanNoteNames))
-            rootSpelling = GERMAN;
+            rootSpelling = NoteSpellingType::GERMAN;
       else if (score()->styleB(ST_useSolfeggioNoteNames))
-            rootSpelling = SOLFEGGIO;
+            rootSpelling = NoteSpellingType::SOLFEGGIO;
       baseSpelling = rootSpelling;
       const ChordDescription* cd = descr();
       if (cd) {
@@ -357,7 +357,7 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& ro
             }
       else
             rootLowerCase = score()->styleB(ST_lowerCaseMinorChords);
-      if (baseSpelling == GERMAN)
+      if (baseSpelling == NoteSpellingType::GERMAN)
             baseLowerCase = true;
       else
             baseLowerCase = false;
@@ -393,9 +393,9 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
             return INVALID_TPC;
       int acci;
       switch (spelling) {
-            case GERMAN:      acci = 1; break;
-            case SOLFEGGIO:   acci = 2; break;
-            default:          acci = 1; break;
+            case NoteSpellingType::GERMAN:      acci = 1; break;
+            case NoteSpellingType::SOLFEGGIO:   acci = 2; break;
+            default:                            acci = 1; break;
             }
       idx = acci;
       int alter = 0;
@@ -406,11 +406,11 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                   alter = -1;
                   idx += 1;
                   }
-            else if (spelling == GERMAN && acc.startsWith("es")) {
+            else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("es")) {
                   alter = -1;
                   idx += 2;
                   }
-            else if (spelling == GERMAN && acc.startsWith("s") && !acc.startsWith("su")) {
+            else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("s") && !acc.startsWith("su")) {
                   alter = -1;
                   idx += 1;
                   }
@@ -418,13 +418,13 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                   alter = 1;
                   idx += 1;
                   }
-            else if (spelling == GERMAN && acc.startsWith("is")) {
+            else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("is")) {
                   alter = 1;
                   idx += 2;
                   }
             }
       int r;
-      if (spelling == GERMAN) {
+      if (spelling == NoteSpellingType::GERMAN) {
             switch(s[0].toLower().toLatin1()) {
                   case 'c':   r = 0; break;
                   case 'd':   r = 1; break;
@@ -443,7 +443,7 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                         return INVALID_TPC;
                   }
             }
-      else if (spelling == SOLFEGGIO) {
+      else if (spelling == NoteSpellingType::SOLFEGGIO) {
             QString ss = s.toLower().left(2);
             if (ss == "do")
                   r = 0;
