@@ -43,7 +43,8 @@ class ClefList {
       void         insertTime(int tick, int len);
       bool         isClefChangeAt(int tick) const;
       void         setClef(int tick, ClefTypeList);
-      void         read(XmlReader&, Score*);
+      void         read114(XmlReader&, Score*);
+      void         alignScore114();
       };
 
 

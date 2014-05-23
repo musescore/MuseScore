@@ -79,8 +79,8 @@ ClefList::~ClefList()
 
 ClefTypeList ClefList::clef(int tick) const
       {
-      if (_list.empty())
-            return ClefTypeList();
+      if (_list.empty() || tick < 0)
+            return ClefTypeList(ClefType::INVALID, ClefType::INVALID);
       auto i = _list.upper_bound(tick);
       if (i == _list.begin())
             return ClefTypeList();
@@ -203,20 +203,51 @@ void ClefList::insertTime(int tick, int len)
 //    only used for 1.3 scores
 //---------------------------------------------------------
 
-void ClefList::read(XmlReader& e, Score* cs)
+void ClefList::read114(XmlReader& e, Score* cs)
       {
       _list.clear();
       while (e.readNextStartElement()) {
             if (e.name() == "clef") {
                   int tick    = e.intAttribute("tick", 0);
                   ClefType ct = Clef::clefType(e.attribute("idx", "0"));
-//                  _list.insert(std::pair<int, ClefTypeList>(cs->fileDivision(tick), ClefTypeList(ct, ct)));
-                  setClef(cs->fileDivision(tick), ClefTypeList(ct, ct));
+                  _list.insert(std::pair<int, ClefTypeList>(cs->fileDivision(tick), ClefTypeList(ct, ct)));
                   e.readNext();
                   }
             else
                   e.unknown();
             }
       }
-}
 
+//---------------------------------------------------------
+//   ClefList::alignScore
+//    sets into the score the clef changes stored in the _list
+//    only used for 1.3 scores
+//---------------------------------------------------------
+
+void ClefList::alignScore114()
+      {
+      Score* score = _staff->score();
+      int    track = _staff->idx() * VOICES;
+
+      for (auto i = _list.cbegin(); i != _list.cend(); ++i) {
+          int tick = i->first;
+          ClefType clefId = i->second._concertClef;
+          Measure* m = score->tick2measure(tick);
+          if (!m)
+                continue;
+          if ((tick == m->tick()) && m->prevMeasure())
+                m = m->prevMeasure();
+          Segment* seg = m->getSegment(Segment::SegClef, tick);
+          if (seg->element(track))
+                static_cast<Clef*>(seg->element(track))->setGenerated(false);
+          else {
+                Clef* clef = new Clef(score);
+                clef->setClefType(clefId);
+                clef->setTrack(track);
+                clef->setParent(seg);
+                clef->setGenerated(false);
+                seg->add(clef);
+                }
+          }
+      }
+}
