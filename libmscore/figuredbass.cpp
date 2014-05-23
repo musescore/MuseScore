@@ -43,7 +43,7 @@ FiguredBassItem::FiguredBassItem(Score* s, int l)
       _prefix     = _suffix = Modifier::NONE;
       _digit      = FBIDigitNone;
       parenth[0]  = parenth[1] = parenth[2] = parenth[3] = parenth[4] = Parenthesis::NONE;
-      _contLine   = ContLineNone;
+      _contLine   = ContLine::NONE;
       }
 
 FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
@@ -92,13 +92,13 @@ bool FiguredBassItem::parse(QString& str)
             return false;
       parseParenthesis(str, 3);
       // check for a possible cont. line symbol(s)
-      _contLine = ContLineNone;                       // contLine
+      _contLine = ContLine::NONE;                       // contLine
       if(str[0] == '-' || str[0] == '_') {            // 1 symbol: simple continuation
-            _contLine = ContLineSimple;
+            _contLine = ContLine::SIMPLE;
             str.remove(0, 1);
       }
       while(str[0] == '-' || str[0] == '_') {         // more than 1 symbol: extended continuation
-            _contLine = ContLineExtended;
+            _contLine = ContLine::EXTENDED;
             str.remove(0, 1);
       }
       parseParenthesis(str, 4);
@@ -112,7 +112,7 @@ bool FiguredBassItem::parse(QString& str)
             parenth[2] = parenth[1];
             parenth[1] = Parenthesis::NONE;
             }
-      if(_contLine == ContLineNone && parenth[3] == Parenthesis::NONE) {
+      if(_contLine == ContLine::NONE && parenth[3] == Parenthesis::NONE) {
             parenth[3] = parenth[4];
             parenth[4] = Parenthesis::NONE;
             }
@@ -129,7 +129,7 @@ bool FiguredBassItem::parse(QString& str)
       // prefix, digit, suffix and cont.line cannot be ALL empty
       // suffix cannot combine with empty digit
       if( (_prefix != Modifier::NONE && _suffix != Modifier::NONE)
-            || (_prefix == Modifier::NONE && _digit == FBIDigitNone && _suffix == Modifier::NONE && _contLine == ContLineNone)
+            || (_prefix == Modifier::NONE && _digit == FBIDigitNone && _suffix == Modifier::NONE && _contLine == ContLine::NONE)
             || ( (_suffix == Modifier::CROSS || _suffix == Modifier::BACKSLASH || _suffix == Modifier::SLASH)
                   && _digit == FBIDigitNone) )
             return false;
@@ -367,9 +367,9 @@ QString FiguredBassItem::normalizedText() const
 
       if(parenth[3] != Parenthesis::NONE)
             str.append(normParenthToChar[int(parenth[3])]);
-      if(_contLine > ContLineNone) {
+      if(_contLine > ContLine::NONE) {
             str.append('_');
-            if (_contLine > ContLineSimple)
+            if (_contLine > ContLine::SIMPLE)
                   str.append('_');
             }
       if(parenth[4] != Parenthesis::NONE)
@@ -393,8 +393,8 @@ void FiguredBassItem::write(Xml& xml) const
             xml.tag(QString("digit"), _digit);
       if(_suffix != Modifier::NONE)
             xml.tag(QString("suffix"), int(_suffix));
-      if(_contLine)
-            xml.tag("continuationLine", _contLine);
+      if(_contLine != ContLine::NONE)
+            xml.tag("continuationLine", int(_contLine));
       xml.etag();
 }
 
@@ -520,7 +520,7 @@ void FiguredBassItem::layout()
       textWidth = w;
       // if there is a cont.line, extend width to cover the whole FB element duration line
       int lineLen;
-      if(_contLine != ContLineNone && (lineLen=figuredBass()->lineLength(0)) > w)
+      if(_contLine != ContLine::NONE && (lineLen=figuredBass()->lineLength(0)) > w)
             w = lineLen;
       bbox().setRect(0, 0, w, h);
       }
@@ -549,7 +549,7 @@ void FiguredBassItem::draw(QPainter* painter) const
 
       // continuation line
       qreal lineEndX = 0.0;
-      if (_contLine > ContLineNone) {
+      if (_contLine > ContLine::NONE) {
             qreal _spatium = spatium();
             qreal lineStartX   = textWidth;                       // by default, line starts right after text
             if (lineStartX > 0.0)
@@ -559,7 +559,7 @@ void FiguredBassItem::draw(QPainter* painter) const
                   lineEndX = 0.0;
 
             // if extended cont.line and no closing parenthesis: look at next FB element
-            if (_contLine > ContLineSimple && parenth[4] == Parenthesis::NONE) {
+            if (_contLine > ContLine::SIMPLE && parenth[4] == Parenthesis::NONE) {
                   FiguredBass * nextFB;
                   // if there is a contiguous FB element
                   if ( (nextFB=figuredBass()->nextFiguredBass()) != 0) {
@@ -603,7 +603,7 @@ QVariant FiguredBassItem::getProperty(P_ID propertyId) const
             case P_FBSUFFIX:
                   return int(_suffix);
             case P_FBCONTINUATIONLINE:
-                  return _contLine;
+                  return int(_contLine);
             case P_FBPARENTHESIS1:
                   return int(parenth[0]);
             case P_FBPARENTHESIS2:
@@ -721,9 +721,9 @@ void FiguredBassItem::undoSetSuffix(Modifier suff)
       layout();                     // re-generate displayText
       }
 
-void FiguredBassItem::undoSetContLine(bool val)
+void FiguredBassItem::undoSetContLine(ContLine val)
       {
-      score()->undoChangeProperty(this, P_FBCONTINUATIONLINE, val);
+      score()->undoChangeProperty(this, P_FBCONTINUATIONLINE, int(val));
       layout();                     // re-generate displayText
       }
 
@@ -1269,7 +1269,7 @@ qreal FiguredBass::additionalContLineX(qreal pagePosY) const
       for (FiguredBassItem* fbi : items)
             // if item has cont.line but nothing before it
             // and item Y coord near enough to pagePosY
-            if(fbi->contLine()
+            if(fbi->contLine() != FiguredBassItem::ContLine::NONE
                   && fbi->digit() == FBIDigitNone
                      && fbi->prefix() == FiguredBassItem::Modifier::NONE
                         && fbi->suffix() == FiguredBassItem::Modifier::NONE

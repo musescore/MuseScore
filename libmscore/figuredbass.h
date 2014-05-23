@@ -117,10 +117,10 @@ class FiguredBassItem : public Element {
             SQUAREDCLOSED,
                   NUMOF
       };
-      enum ContLine {
-            ContLineNone = 0,
-            ContLineSimple,                     // cont. line stops at f.b. element end
-            ContLineExtended                    // cont. line joins with next element, if possible
+      enum class ContLine : char {
+            NONE = 0,
+            SIMPLE,                     // cont. line stops at f.b. element end
+            EXTENDED                    // cont. line joins with next element, if possible
       };
 
       enum Styles {
@@ -196,7 +196,7 @@ class FiguredBassItem : public Element {
       void              setSuffix(const Modifier& v)  { _suffix = v;          }
       void              undoSetSuffix(Modifier suff);
       ContLine          contLine() const              { return _contLine;     }
-      void              undoSetContLine(bool val);
+      void              undoSetContLine(ContLine val);
       Parenthesis       parenth1()                    { return parenth[0];    }
       Parenthesis       parenth2()                    { return parenth[1];    }
       Parenthesis       parenth3()                    { return parenth[2];    }
