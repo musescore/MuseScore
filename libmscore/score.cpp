@@ -2477,7 +2477,7 @@ void Score::cmdRemoveStaff(int staffIdx)
       QList<Spanner*> sl;
       for (auto i = _spanner.cbegin(); i != _spanner.cend(); ++i) {
             Spanner* s = i->second;
-            if (s->staffIdx() == staffIdx && (staffIdx != 0 || s->type() != Element::VOLTA))
+            if (s->staffIdx() == staffIdx && (staffIdx != 0 || s->type() != Element::ElementType::VOLTA))
                   sl.append(s);
             }
       for (auto i : sl)
