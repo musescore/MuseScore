@@ -5306,7 +5306,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                               domError(ee);
                         }
                   if (invalidRoot)
-                        ha->setRootTpc(INVALID_TPC);
+                        ha->setRootTpc(Tpc::INVALID);
                   else
                         ha->setRootTpc(step2tpc(step, AccidentalVal(alter)));
                   }
@@ -5397,7 +5397,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
             }
 
       const ChordDescription* d = 0;
-      if (ha->rootTpc() != INVALID_TPC)
+      if (ha->rootTpc() != Tpc::INVALID)
             d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
       if (d) {
             ha->setId(d->id);

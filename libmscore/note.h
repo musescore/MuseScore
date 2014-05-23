@@ -85,7 +85,7 @@ enum class NoteHeadType : signed char {
 
 struct NoteVal {
       int pitch = -1;
-      int tpc = INVALID_TPC;
+      int tpc = Tpc::INVALID;
       int fret = FRET_NONE;
       int string = STRING_NONE;
       NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;

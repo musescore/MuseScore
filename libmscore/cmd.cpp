@@ -1091,14 +1091,14 @@ static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int 
       if (up && pitch < 127) {
             newPitch = pitch + 1;
             if (n->concertPitch()) {
-                  if (tpc1 > TPC_A + key)
+                  if (tpc1 > Tpc::A + key)
                         newTpc1 = tpc1 - 5;   // up semitone diatonic
                   else
                         newTpc1 = tpc1 + 7;   // up semitone chromatic
                   newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
-                  if (tpc2 > TPC_A + key)
+                  if (tpc2 > Tpc::A + key)
                         newTpc2 = tpc2 - 5;   // up semitone diatonic
                   else
                         newTpc2 = tpc2 + 7;   // up semitone chromatic
@@ -1108,14 +1108,14 @@ static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int 
       else if (!up && pitch > 0) {
             newPitch = pitch - 1;
             if (n->concertPitch()) {
-                  if (tpc1 > TPC_C + key)
+                  if (tpc1 > Tpc::C + key)
                         newTpc1 = tpc1 - 7;   // down semitone chromatic
                   else
                         newTpc1 = tpc1 + 5;   // down semitone diatonic
                   newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
-                  if (tpc2 > TPC_C + key)
+                  if (tpc2 > Tpc::C + key)
                         newTpc2 = tpc2 - 7;   // down semitone chromatic
                   else
                         newTpc2 = tpc2 + 5;   // down semitone diatonic
@@ -1251,7 +1251,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                     {
                                     int tpc = oNote->tpc();
                                     if (up) {
-                                          if (tpc > TPC_A + key) {
+                                          if (tpc > Tpc::A + key) {
                                                 if (pitch < 127) {
                                                       newPitch = pitch + 1;
                                                       setTpc(oNote, tpc - 5, newTpc1, newTpc2);
@@ -1265,7 +1265,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                                 }
                                           }
                                     else {
-                                          if (tpc > TPC_C + key) {
+                                          if (tpc > Tpc::C + key) {
                                                 if (pitch > 1) {
                                                       newPitch = pitch - 2;
                                                       setTpc(oNote, tpc - 2, newTpc1, newTpc2);
