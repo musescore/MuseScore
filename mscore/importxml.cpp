@@ -1837,18 +1837,18 @@ static void readFiguredBassItem(FiguredBassItem* fgi, const QDomElement& de,
       if (paren) {
             // parenthesis open
             if (fgi->prefix() != FiguredBassItem::Modifier::NONE)
-                  fgi->setParenth1(FiguredBassItem::ParenthesisRoundOpen);  // before prefix
+                  fgi->setParenth1(FiguredBassItem::Parenthesis::ROUNDOPEN);  // before prefix
             else if (fgi->digit() != FBIDigitNone)
-                  fgi->setParenth2(FiguredBassItem::ParenthesisRoundOpen);  // before digit
+                  fgi->setParenth2(FiguredBassItem::Parenthesis::ROUNDOPEN);  // before digit
             else if (fgi->suffix() != FiguredBassItem::Modifier::NONE)
-                  fgi->setParenth3(FiguredBassItem::ParenthesisRoundOpen);  // before suffix
+                  fgi->setParenth3(FiguredBassItem::Parenthesis::ROUNDOPEN);  // before suffix
             // parenthesis close
             if (fgi->suffix() != FiguredBassItem::Modifier::NONE)
-                  fgi->setParenth4(FiguredBassItem::ParenthesisRoundClosed);  // after suffix
+                  fgi->setParenth4(FiguredBassItem::Parenthesis::ROUNDCLOSED);  // after suffix
             else if (fgi->digit() != FBIDigitNone)
-                  fgi->setParenth3(FiguredBassItem::ParenthesisRoundClosed);  // after digit
+                  fgi->setParenth3(FiguredBassItem::Parenthesis::ROUNDCLOSED);  // after digit
             else if (fgi->prefix() != FiguredBassItem::Modifier::NONE)
-                  fgi->setParenth2(FiguredBassItem::ParenthesisRoundClosed);  // after prefix
+                  fgi->setParenth2(FiguredBassItem::Parenthesis::ROUNDCLOSED);  // after prefix
             }
       }
 
