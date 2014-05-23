@@ -124,11 +124,11 @@ static Dyn dynList[] = {
 Dynamic::Dynamic(Score* s)
    : Text(s)
       {
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE | ELEMENT_ON_STAFF);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _velocity = -1;
-      _dynRange = DYNAMIC_PART;
+      _dynRange = DynamicRange::PART;
       setTextStyleType(TEXT_STYLE_DYNAMICS);
-      _dynamicType  = DYNAMIC_OTHER;
+      _dynamicType  = DynamicType::OTHER;
       }
 
 Dynamic::Dynamic(const Dynamic& d)
@@ -154,7 +154,7 @@ void Dynamic::setVelocity(int v)
 
 int Dynamic::velocity() const
       {
-      return _velocity <= 0 ? dynList[dynamicType()].velocity : _velocity;
+      return _velocity <= 0 ? dynList[int(dynamicType())].velocity : _velocity;
       }
 
 //---------------------------------------------------------
@@ -167,7 +167,7 @@ void Dynamic::write(Xml& xml) const
       xml.tag("subtype", dynamicTypeName());
       writeProperty(xml, P_VELOCITY);
       writeProperty(xml, P_DYNAMIC_RANGE);
-      Text::writeProperties(xml, dynamicType() == 0);
+      Text::writeProperties(xml, dynamicType() == DynamicType::OTHER);
       xml.etag();
       }
 
@@ -218,7 +218,7 @@ void Dynamic::layout()
             Chord* c = static_cast<Chord*>(s->element(t));
             if (!c)
                   continue;
-            if (c->type() == CHORD) {
+            if (c->type() == ElementType::CHORD) {
                   qreal noteHeadWidth = score()->noteHeadWidth() * c->mag();
                   if (c->stem() && !c->up())  // stem down
                         rxpos() += noteHeadWidth * .25;  // center on stem + optical correction
@@ -247,7 +247,7 @@ void Dynamic::setDynamicType(const QString& tag)
                   }
             }
       qDebug("setDynamicType: other <%s>", qPrintable(tag));
-      setDynamicType(DYNAMIC_OTHER);
+      setDynamicType(DynamicType::OTHER);
       setText(tag);
       }
 
@@ -257,7 +257,7 @@ void Dynamic::setDynamicType(const QString& tag)
 
 QString Dynamic::dynamicTypeName() const
       {
-      return dynList[dynamicType()].tag;
+      return dynList[int(dynamicType())].tag;
       }
 
 //---------------------------------------------------------
@@ -276,8 +276,8 @@ void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
 void Dynamic::endEdit()
       {
       Text::endEdit();
-      if (text() != QString::fromUtf8(dynList[_dynamicType].text))
-            _dynamicType = DYNAMIC_OTHER;
+      if (text() != QString::fromUtf8(dynList[int(_dynamicType)].text))
+            _dynamicType = DynamicType::OTHER;
       }
 
 //---------------------------------------------------------
@@ -340,7 +340,7 @@ QRectF Dynamic::drag(EditData* ed)
 
 void Dynamic::undoSetDynRange(DynamicRange v)
       {
-      score()->undoChangeProperty(this, P_DYNAMIC_RANGE, v);
+      score()->undoChangeProperty(this, P_DYNAMIC_RANGE, int(v));
       }
 
 //---------------------------------------------------------
@@ -352,7 +352,7 @@ QVariant Dynamic::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_DYNAMIC_RANGE:     return int(_dynRange);
             case P_VELOCITY:          return velocity();
-            case P_SUBTYPE:           return _dynamicType;
+            case P_SUBTYPE:           return int(_dynamicType);
             default:
                   return Text::getProperty(propertyId);
             }
@@ -391,7 +391,7 @@ QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_TEXT_STYLE_TYPE: return TEXT_STYLE_DYNAMICS;
-            case P_DYNAMIC_RANGE:   return DYNAMIC_PART;
+            case P_DYNAMIC_RANGE:   return int(DynamicRange::PART);
             case P_VELOCITY:        return -1;
             default:                return Text::propertyDefault(id);
             }

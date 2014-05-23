@@ -53,7 +53,7 @@ struct BeamFragment {
 Beam::Beam(Score* s)
    : Element(s)
       {
-      setFlags(ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::SELECTABLE);
       _direction       = Direction::AUTO;
       _up              = true;
       _distribute      = false;
@@ -216,8 +216,8 @@ bool Beam::twoBeamedNotes()
       {
       // if not two elements or elements are not chords or chords have more than 1 note, return failure
       if ((_elements.size() != 2)
-         || (_elements[0]->type() != CHORD)
-         || _elements[1]->type() != CHORD) {
+         || (_elements[0]->type() != ElementType::CHORD)
+         || _elements[1]->type() != ElementType::CHORD) {
             return false;
             }
       const Chord* c1 = static_cast<const Chord*>(_elements[0]);
@@ -234,7 +234,7 @@ bool Beam::twoBeamedNotes()
             s = s->prev1(Segment::SegChordRest);
             if (s && s->element(c1->track())) {
                   Chord* c = static_cast<Chord*>(s->element(c1->track()));
-                  if ((c->type() == CHORD) && c->beam())
+                  if ((c->type() == ElementType::CHORD) && c->beam())
                         _up = c->beam()->up();
                   }
             }
@@ -255,7 +255,7 @@ void Beam::layout1()
       qDeleteAll(beamSegments);
       beamSegments.clear();
 
-      maxDuration.setType(TDuration::V_INVALID);
+      maxDuration.setType(TDuration::DurationType::V_INVALID);
       Chord* c1 = 0;
       Chord* c2 = 0;
 
@@ -269,7 +269,7 @@ void Beam::layout1()
             cross = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
             foreach(ChordRest* cr, _elements) {
-                  if (cr->type() == CHORD) {
+                  if (cr->type() == ElementType::CHORD) {
                         // set members maxDuration, c1, c2
                         if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
                               maxDuration = cr->durationType();
@@ -285,7 +285,7 @@ void Beam::layout1()
                   }
             else {
                   foreach (ChordRest* cr, _elements) {
-                        if (cr->type() == CHORD) {
+                        if (cr->type() == ElementType::CHORD) {
                               c2 = static_cast<Chord*>(cr);
                               _up = c2->up();
                               break;
@@ -306,7 +306,7 @@ void Beam::layout1()
             int upDnLimit = staff()->lines() - 1;           // was '4' hard-coded in following code
 
             foreach (ChordRest* cr, _elements) {
-                  if (cr->type() == CHORD) {
+                  if (cr->type() == ElementType::CHORD) {
                         c2 = static_cast<Chord*>(cr);
                         if (c1 == 0)
                               c1 = c2;
@@ -368,7 +368,7 @@ void Beam::layoutGraceNotes()
       qDeleteAll(beamSegments);
       beamSegments.clear();
 
-      maxDuration.setType(TDuration::V_INVALID);
+      maxDuration.setType(TDuration::DurationType::V_INVALID);
       Chord* c1 = 0;
       Chord* c2 = 0;
 
@@ -529,7 +529,7 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
       // return true if beam spans a rest
       //
       for(const ChordRest* cr : cl) {
-            if (cr->type() != CHORD)
+            if (cr->type() != ElementType::CHORD)
                   return true;
             }
       int l1 = cl.front()->line();
@@ -1464,7 +1464,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
-                        if (c->type() == REST)
+                        if (c->type() == ElementType::REST)
                               continue;
                         QPointF p = c->upNote()->pagePos();
                         qreal y1  = beamY + (p.x() - px1) * slope;
@@ -1484,7 +1484,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
                         qreal y;
-                        if (c->type() == REST)
+                        if (c->type() == ElementType::REST)
                               continue;   //y = c->pagePos().y();
                         else
                               y  = c->upNote()->pagePos().y();
@@ -1502,7 +1502,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
-                        if (c->type() != CHORD)
+                        if (c->type() != ElementType::CHORD)
                               continue;
                         qreal y  = c->upNote()->pagePos().y();
                         bool nup = beamY < y;
@@ -1518,7 +1518,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
-                        if (c->type() != CHORD)
+                        if (c->type() != ElementType::CHORD)
                               continue;
                         bool _up = c->up();
                         qreal y = (_up ? c->upNote() : c->downNote())->pagePos().y();
@@ -1556,7 +1556,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   ChordRest* cr1 = crl[i];
                   int l = cr1->durationType().hooks() - 1;
 
-                  if ((cr1->type() == REST && i) || l < beamLevel) {
+                  if ((cr1->type() == ElementType::REST && i) || l < beamLevel) {
                         ++i;
                         continue;
                         }
@@ -1571,7 +1571,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         bool b64 = (beamLevel >= 2) && (bm == BeamMode::BEGIN64);
 
                         if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel)) {
-                              if (i && crl[i-1]->type() == REST) {
+                              if (i && crl[i-1]->type() == ElementType::REST) {
                                     --i;
                                     }
                               break;
@@ -1616,7 +1616,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   else {
                         // create broken segment
-                        if (cr1->type() == REST)
+                        if (cr1->type() == ElementType::REST)
                               continue;
 
                         int n = crl.size();
@@ -1693,7 +1693,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       //
       for (int i = 0; i < n; ++i) {
             Chord* c = static_cast<Chord*>(crl[i]);
-            if (c->type() != CHORD)
+            if (c->type() != ElementType::CHORD)
                   continue;
             Stem* stem = c->stem();
             if (!stem) {
@@ -1931,13 +1931,13 @@ void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       Chord* c2;
       int n = _elements.size();
       for (int i = 0; i < n; ++i) {
-            if (_elements[i]->type() == CHORD) {
+            if (_elements[i]->type() == ElementType::CHORD) {
                   c1 = static_cast<Chord*>(_elements[i]);
                   break;
                   }
             }
       for (int i = n-1; i >= 0; --i) {
-            if (_elements[i]->type() == CHORD) {
+            if (_elements[i]->type() == ElementType::CHORD) {
                   c2 = static_cast<Chord*>(_elements[i]);
                   break;
                   }
@@ -2011,7 +2011,7 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
 
 bool Beam::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return (e->type() == ICON) && ((static_cast<Icon*>(e)->iconType() == ICON_FBEAM1)
+      return (e->type() == ElementType::ICON) && ((static_cast<Icon*>(e)->iconType() == ICON_FBEAM1)
          || (static_cast<Icon*>(e)->iconType() == ICON_FBEAM2));
       }
 
@@ -2022,7 +2022,7 @@ bool Beam::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* Beam::drop(const DropData& data)
       {
       Icon* e = static_cast<Icon*>(data.element);
-      if (e->type() != ICON)
+      if (e->type() != ElementType::ICON)
             return 0;
       qreal g1;
       qreal g2;

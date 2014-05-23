@@ -109,7 +109,7 @@ class Chord : public ChordRest {
       virtual Chord* linkedClone();
 
       virtual void setScore(Score* s);
-      virtual ElementType type() const { return CHORD; }
+      virtual ElementType type() const { return ElementType::CHORD; }
       virtual qreal mag() const;
 
       virtual void write(Xml& xml) const;

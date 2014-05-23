@@ -34,14 +34,14 @@ static bool defaultSizeIsSpatium    = true;
 Image::Image(Score* s)
    : BSymbol(s)
       {
-      imageType        = IMAGE_NONE;
+      imageType        = ImageType::NONE;
       _size            = QSizeF(0, 0);
       _storeItem       = 0;
       _dirty           = false;
       _lockAspectRatio = defaultLockAspectRatio;
       _autoScale       = defaultAutoScale;
       _sizeIsSpatium   = defaultSizeIsSpatium;
-      setZ(IMAGE * 100);
+      setZ(int(ElementType::IMAGE) * 100);
       _linkIsValid     = false;
       }
 
@@ -60,9 +60,9 @@ Image::Image(const Image& img)
             _storeItem->reference(this);
       _linkPath        = img._linkPath;
       _linkIsValid     = img._linkIsValid;
-      if (imageType == IMAGE_RASTER)
+      if (imageType == ImageType::RASTER)
             rasterDoc = img.rasterDoc;
-      else if (imageType == IMAGE_SVG)
+      else if (imageType == ImageType::SVG)
             svgDoc = img.svgDoc;
       }
 
@@ -74,9 +74,9 @@ Image::~Image()
       {
       if (_storeItem)
             _storeItem->dereference(this);
-      if (imageType == IMAGE_SVG)
+      if (imageType == ImageType::SVG)
             delete svgDoc;
-      else if (imageType == IMAGE_RASTER)
+      else if (imageType == ImageType::RASTER)
             delete rasterDoc;
       }
 
@@ -87,9 +87,9 @@ Image::~Image()
 void Image::setImageType(ImageType t)
       {
       imageType = t;
-      if (imageType == IMAGE_SVG)
+      if (imageType == ImageType::SVG)
             svgDoc = 0;
-      else if (imageType == IMAGE_RASTER)
+      else if (imageType == ImageType::RASTER)
             rasterDoc = 0;
       else
             qDebug("illegal image type");
@@ -101,7 +101,7 @@ void Image::setImageType(ImageType t)
 
 QSizeF Image::imageSize() const
       {
-      if (imageType == IMAGE_RASTER)
+      if (imageType == ImageType::RASTER)
             return rasterDoc->size();
       else
             return svgDoc->defaultSize();
@@ -113,7 +113,7 @@ QSizeF Image::imageSize() const
 
 qreal Image::scaleFactor() const
       {
-      if (imageType == IMAGE_RASTER)
+      if (imageType == ImageType::RASTER)
             return ( (_sizeIsSpatium ? spatium() : MScore::DPMM) / 0.4 );
       else
             return (_sizeIsSpatium ? 10.0 : MScore::DPMM);
@@ -244,13 +244,13 @@ QVariant Image::propertyDefault(P_ID id) const
 void Image::draw(QPainter* painter) const
       {
       bool emptyImage = false;
-      if (imageType == IMAGE_SVG) {
+      if (imageType == ImageType::SVG) {
             if (!svgDoc)
                   emptyImage = true;
             else
                   svgDoc->render(painter, bbox());
             }
-      else if (imageType == IMAGE_RASTER) {
+      else if (imageType == ImageType::RASTER) {
             if (rasterDoc == nullptr)
                   emptyImage = true;
             else {
@@ -415,9 +415,9 @@ void Image::read(XmlReader& e)
             }
 
       if (path.endsWith(".svg"))
-            setImageType(IMAGE_SVG);
+            setImageType(ImageType::SVG);
       else
-            setImageType(IMAGE_RASTER);
+            setImageType(ImageType::RASTER);
       }
 
 //---------------------------------------------------------
@@ -451,9 +451,9 @@ bool Image::load(const QString& ss)
       _storeItem = imageStore.add(_linkPath, ba);
       _storeItem->reference(this);
       if (path.endsWith(".svg"))
-            setImageType(IMAGE_SVG);
+            setImageType(ImageType::SVG);
       else
-            setImageType(IMAGE_RASTER);
+            setImageType(ImageType::RASTER);
       return true;
       }
 
@@ -507,7 +507,7 @@ void Image::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 
 void Image::layout()
       {
-      if (imageType == IMAGE_SVG && !svgDoc) {
+      if (imageType == ImageType::SVG && !svgDoc) {
             if (_storeItem) {
                   svgDoc = new QSvgRenderer(_storeItem->buffer());
                   if (svgDoc->isValid()) {
@@ -519,7 +519,7 @@ void Image::layout()
                         }
                   }
             }
-      else if (imageType == IMAGE_RASTER && !rasterDoc) {
+      else if (imageType == ImageType::RASTER && !rasterDoc) {
             if (_storeItem) {
                   rasterDoc = new QImage;
                   rasterDoc->loadFromData(_storeItem->buffer());
@@ -538,7 +538,7 @@ void Image::layout()
 
       qreal f = _sizeIsSpatium ? spatium() : MScore::DPMM;
       // if autoscale && inside a box, scale to box relevant size
-      if (autoScale() && parent() && ((parent()->type() == HBOX || parent()->type() == VBOX))) {
+      if (autoScale() && parent() && ((parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX))) {
             if (_lockAspectRatio) {
                   QSizeF size(imageSize());
                   qreal ratio = size.width() / size.height();

@@ -97,13 +97,13 @@ class Bracket;
 class KeyList;
 class ScoreFont;
 
-enum class OttavaType;
+enum class OttavaType : char;
 enum class ClefType : signed char;
-enum class SymId;
+enum class SymId : short;
 
 extern bool showRubberBand;
 
-enum class POS { CURRENT, LEFT, RIGHT };
+enum class POS : char { CURRENT, LEFT, RIGHT };
 
 enum {
       PAD_NOTE00,

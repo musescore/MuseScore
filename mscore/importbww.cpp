@@ -240,7 +240,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
       score->measures()->add(currentMeasure);
 
       if (mbf.repeatBegin)
-            currentMeasure->setRepeatFlags(Ms::RepeatStart);
+            currentMeasure->setRepeatFlags(Ms::Repeat::START);
 
       if (mbf.irregular)
             currentMeasure->setIrregular(true);
@@ -297,7 +297,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
       {
       qDebug() << "MsScWriter::endMeasure()";
       if (mef.repeatEnd)
-            currentMeasure->setRepeatFlags(Ms::RepeatEnd);
+            currentMeasure->setRepeatFlags(Ms::Repeat::END);
 
       if (mef.endingEnd) {
             if (lastVolta) {
@@ -318,7 +318,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
       if (mef.lastOfSystem) {
             Ms::LayoutBreak* lb = new Ms::LayoutBreak(score);
             lb->setTrack(0);
-            lb->setLayoutBreakType(Ms::LayoutBreak::LINE);
+            lb->setLayoutBreakType(Ms::LayoutBreak::LayoutBreakType::LINE);
             currentMeasure->add(lb);
             }
 
@@ -361,7 +361,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
       int ticks = 4 * Ms::MScore::division / type.toInt();
       if (dots) ticks = 3 * ticks / 2;
       qDebug() << "ticks:" << ticks;
-      Ms::TDuration durationType(Ms::TDuration::V_INVALID);
+      Ms::TDuration durationType(Ms::TDuration::DurationType::V_INVALID);
       durationType.setVal(ticks);
       qDebug() << "duration:" << durationType.name();
       if (triplet != ST_NONE) ticks = 2 * ticks / 3;
@@ -376,12 +376,12 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
       cr->setTrack(0);
       if (grace) {
             cr->setNoteType(Ms::NOTE_GRACE32);
-            cr->setDurationType(Ms::TDuration::V_32ND);
+            cr->setDurationType(Ms::TDuration::DurationType::V_32ND);
             sd = Ms::Direction::UP;
             }
       else {
-            if (durationType.type() == Ms::TDuration::V_INVALID)
-                  durationType.setType(Ms::TDuration::V_QUARTER);
+            if (durationType.type() == Ms::TDuration::DurationType::V_INVALID)
+                  durationType.setType(Ms::TDuration::DurationType::V_QUARTER);
             cr->setDurationType(durationType);
             sd = Ms::Direction::DOWN;
             }

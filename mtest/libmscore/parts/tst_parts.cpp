@@ -181,7 +181,7 @@ void TestParts::appendMeasure()
       createParts(score);
 
       score->startCmd();
-      score->insertMeasure(Element::MEASURE, 0);
+      score->insertMeasure(Element::ElementType::MEASURE, 0);
       score->endCmd();
 
       QVERIFY(saveCompareScore(score, "part-all-appendmeasures.mscx", DIR + "part-all-appendmeasures.mscx"));
@@ -206,7 +206,7 @@ void TestParts::insertMeasure()
 
       score->startCmd();
       Measure* m = score->firstMeasure();
-      score->insertMeasure(Element::MEASURE, m);
+      score->insertMeasure(Element::ElementType::MEASURE, m);
       score->endCmd();
 
       // QVERIFY(saveCompareScore(score, "part-all-insertmeasures.mscx", DIR + "part-all-insertmeasures.mscx"));
@@ -542,7 +542,7 @@ Score* TestParts::doRemoveFingering()
       Note* note   = chord->upNote();
       Element* fingering = 0;
       foreach(Element* e, note->el()) {
-            if (e->type() == Element::FINGERING) {
+            if (e->type() == Element::ElementType::FINGERING) {
                   fingering = e;
                   break;
                   }
@@ -678,7 +678,7 @@ Score* TestParts::doRemoveSymbol()
       Note* note   = chord->upNote();
       Element* se = 0;
       foreach(Element* e, note->el()) {
-            if (e->type() == Element::SYMBOL) {
+            if (e->type() == Element::ElementType::SYMBOL) {
                   se = e;
                   break;
                   }
@@ -749,7 +749,7 @@ Score* TestParts::doAddChordline()
       DropData dd;
       dd.view = 0;
       ChordLine* b  = new ChordLine(score);
-      b->setChordLineType(ChordLineType::CHORDLINE_FALL);
+      b->setChordLineType(ChordLineType::FALL);
       dd.element = b;
 
       score->startCmd();
@@ -815,7 +815,7 @@ Score* TestParts::doRemoveChordline()
 
       Element* se = 0;
       foreach(Element* e, chord->el()) {
-            if (e->type() == Element::CHORDLINE) {
+            if (e->type() == Element::ElementType::CHORDLINE) {
                   se = e;
                   break;
                   }

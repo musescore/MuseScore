@@ -64,19 +64,19 @@ static void collectMatch(void* data, Element* e)
 /*      if (p->type == e->type() && p->subtype != e->subtype())
             qDebug("%s subtype %d does not match", e->name(), e->subtype());
       */
-//TODO      if ((p->type != e->type()) || (p->subtypeValid && p->subtype != e->subtype()))
-      if (p->type != e->type())
+//TODO      if ((p->type != int(e->type())) || (p->subtypeValid && p->subtype != int(e->subtype())))
+      if (p->type != int(e->type()))
             return;
       if ((p->staff != -1) && (p->staff != e->staffIdx()))
             return;
-      if (e->type() == Element::CHORD || e->type() == Element::REST || e->type() == Element::NOTE || e->type() == Element::LYRICS) {
+      if (e->type() == Element::ElementType::CHORD || e->type() == Element::ElementType::REST || e->type() == Element::ElementType::NOTE || e->type() == Element::ElementType::LYRICS) {
             if (p->voice != -1 && p->voice != e->voice())
                   return;
             }
       if (p->system) {
             Element* ee = e;
             do {
-                  if (ee->type() == Element::SYSTEM) {
+                  if (ee->type() == Element::ElementType::SYSTEM) {
                         if (p->system != ee)
                               return;
                         break;
@@ -101,20 +101,20 @@ void TestCopyPasteSymbolList::copypaste(const char* name, const char* idx)
       // MuseScore::selectSimilar(Element* e, bool sameStaff) in file mscore/musescore.cpp
       ElementPattern pattern;
       pattern.subtypeValid = true;
-//TODO      if (type == VOLTA_SEGMENT) {
+//TODO      if (type == int(Element::ElementType::VOLTA_SEGMENT)) {
             // Volta* volta = static_cast<VoltaSegment*>(e)->volta();
             // type    = volta->type();
             // subtype = volta->subtype();
             pattern.subtypeValid = false;
 //            }
       if (!strcmp(idx, "articulation"))
-            pattern.type = Element::ARTICULATION;
+            pattern.type = int(Element::ElementType::ARTICULATION);
       else if (!strcmp(idx, "chordnames"))
-            pattern.type = Element::HARMONY;
+            pattern.type = int(Element::ElementType::HARMONY);
       else if (!strcmp(idx, "figuredbass"))
-            pattern.type = Element::FIGURED_BASS;
+            pattern.type = int(Element::ElementType::FIGURED_BASS);
       else if (!strcmp(idx, "lyrics"))
-            pattern.type = Element::LYRICS;
+            pattern.type = int(Element::ElementType::LYRICS);
       else
             return;
       pattern.subtype = 0; // TODO subtype;
@@ -153,11 +153,11 @@ void TestCopyPasteSymbolList::copypaste(const char* name, const char* idx)
             cr = score->selection().firstChordRest();
       else if (score->selection().isSingle()) {
             Element* e = score->selection().element();
-            if (e->type() != Element::NOTE && e->type() != Element::CHORD && e->type() != Element::REST) {
+            if (e->type() != Element::ElementType::NOTE && e->type() != Element::ElementType::CHORD && e->type() != Element::ElementType::REST) {
                   qDebug("cannot paste to %s", e->name());
                   return;
                   }
-            if (e->type() == Element::NOTE)
+            if (e->type() == Element::ElementType::NOTE)
                   e = static_cast<Note*>(e)->chord();
             cr  = static_cast<ChordRest*>(e);
             }

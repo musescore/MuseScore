@@ -205,19 +205,19 @@ void Harmony::write(Xml& xml) const
             if (rBaseTpc != INVALID_TPC)
                   xml.tag("base", rBaseTpc);
             foreach(const HDegree& hd, _degreeList) {
-                  int tp = hd.type();
-                  if (tp == ADD || tp == ALTER || tp == SUBTRACT) {
+                  HDegreeType tp = hd.type();
+                  if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
                         xml.stag("degree");
                         xml.tag("degree-value", hd.value());
                         xml.tag("degree-alter", hd.alter());
                         switch (tp) {
-                              case ADD:
+                              case HDegreeType::ADD:
                                     xml.tag("degree-type", "add");
                                     break;
-                              case ALTER:
+                              case HDegreeType::ALTER:
                                     xml.tag("degree-type", "alter");
                                     break;
-                              case SUBTRACT:
+                              case HDegreeType::SUBTRACT:
                                     xml.tag("degree-type", "subtract");
                                     break;
                               default:
@@ -287,11 +287,11 @@ void Harmony::read(XmlReader& e)
                         }
                   else {
                         if (degreeType == "add")
-                              addDegree(HDegree(degreeValue, degreeAlter, ADD));
+                              addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
                         else if (degreeType == "alter")
-                              addDegree(HDegree(degreeValue, degreeAlter, ALTER));
+                              addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
                         else if (degreeType == "subtract")
-                              addDegree(HDegree(degreeValue, degreeAlter, SUBTRACT));
+                              addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
                         }
                   }
             else if (tag == "leftParen") {
@@ -673,14 +673,14 @@ qreal Harmony::baseLine() const
 
 QString HDegree::text() const
       {
-      if (_type == UNDEF)
+      if (_type == HDegreeType::UNDEF)
             return QString();
       const char* d = 0;
       switch(_type) {
-            case UNDEF: break;
-            case ADD:         d= "add"; break;
-            case ALTER:       d= "alt"; break;
-            case SUBTRACT:    d= "sub"; break;
+            case HDegreeType::UNDEF: break;
+            case HDegreeType::ADD:         d= "add"; break;
+            case HDegreeType::ALTER:       d= "alt"; break;
+            case HDegreeType::SUBTRACT:    d= "sub"; break;
             }
       QString degree(d);
       switch(_alter) {
@@ -872,13 +872,13 @@ void Harmony::layout()
 
       qreal yy = 0.0;
       qreal _spatium  = spatium();
-      if (parent()->type() == SEGMENT) {
+      if (parent()->type() == ElementType::SEGMENT) {
             Measure* m = static_cast<Measure*>(parent()->parent());
             yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
             yy -= score()->styleP(ST_harmonyY);
             Segment* s = static_cast<Segment*>(parent());
             for (Element* e : s->annotations()) {
-                  if (e != this && e->type() == FRET_DIAGRAM && e->track() == track()) {
+                  if (e != this && e->type() == ElementType::FRET_DIAGRAM && e->track() == track()) {
                         yy += score()->styleP(ST_harmonyY);
                         yy -= score()->styleP(ST_fretY);
                         yy -= _spatium * 2;
@@ -887,7 +887,7 @@ void Harmony::layout()
                         }
                   }
             }
-      else if (parent()->type() == FRET_DIAGRAM)
+      else if (parent()->type() == ElementType::FRET_DIAGRAM)
             yy = score()->styleP(ST_harmonyFretDist);
       yy += textStyle().offset(_spatium).y();
       if (!editMode()) {
@@ -930,7 +930,7 @@ void Harmony::layout()
             setUserOff(readPos() - ipos());
             setReadPos(QPointF());
             }
-      if (parent()->type() == FRET_DIAGRAM && parent()->parent()->type() == SEGMENT) {
+      if (parent()->type() == ElementType::FRET_DIAGRAM && parent()->parent()->type() == ElementType::SEGMENT) {
             MStaff* mstaff = static_cast<Segment*>(parent()->parent())->measure()->mstaff(staffIdx());
             qreal dist = -(bbox().top());
             mstaff->distanceUp = qMax(mstaff->distanceUp, dist + _spatium);
@@ -1108,7 +1108,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
       qreal mag = (MScore::DPI / PPI) * (_spatium / (SPATIUM20 * MScore::DPI));
 
       foreach(const RenderAction& a, renderList) {
-            if (a.type == RenderAction::RENDER_SET) {
+            if (a.type == RenderAction::RenderActionType::SET) {
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   ChordSymbol cs = chordList->symbol(a.text);
                   if (cs.isValid()) {
@@ -1120,22 +1120,22 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   textList.append(ts);
                   x += ts->width();
                   }
-            else if (a.type == RenderAction::RENDER_MOVE) {
+            else if (a.type == RenderAction::RenderActionType::MOVE) {
                   x += a.movex * mag;
                   y += a.movey * mag;
                   }
-            else if (a.type == RenderAction::RENDER_PUSH)
+            else if (a.type == RenderAction::RenderActionType::PUSH)
                   stack.push(QPointF(x,y));
-            else if (a.type == RenderAction::RENDER_POP) {
+            else if (a.type == RenderAction::RenderActionType::POP) {
                   if (!stack.isEmpty()) {
                         QPointF pt = stack.pop();
                         x = pt.x();
                         y = pt.y();
                         }
                   else
-                        qDebug("RenderAction::RENDER_POP: stack empty");
+                        qDebug("RenderAction::RenderActionType::POP: stack empty");
                   }
-            else if (a.type == RenderAction::RENDER_NOTE) {
+            else if (a.type == RenderAction::RenderActionType::NOTE) {
                   QString c;
                   int acc;
                   tpc2name(tpc, spelling, lowerCase, c, acc);
@@ -1153,7 +1153,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   textList.append(ts);
                   x += ts->width();
                   }
-            else if (a.type == RenderAction::RENDER_ACCIDENTAL) {
+            else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
                   QString c;
                   QString acc;
                   tpc2name(tpc, spelling, lowerCase, c, acc);
@@ -1296,7 +1296,7 @@ QLineF Harmony::dragAnchor() const
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
       qreal yp;
-      if (parent()->type() == SEGMENT)
+      if (parent()->type() == ElementType::SEGMENT)
             yp = static_cast<Segment*>(parent())->measure()->system()->staffYpage(staffIdx());
       else
             yp = parent()->canvasPos().y();

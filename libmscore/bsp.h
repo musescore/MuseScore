@@ -34,7 +34,7 @@ class BspTree
       {
    public:
       struct Node {
-            enum Type { Horizontal, Vertical, Leaf };
+            enum class Type : char { HORIZONTAL, VERTICAL, LEAF };
             union {
                   qreal offset;
                   int leafIndex;

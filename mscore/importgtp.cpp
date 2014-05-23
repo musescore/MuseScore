@@ -485,10 +485,10 @@ qDebug("staff %d group %d timesig %d", staffIdx, int(staffType->group()), staffT
             m->setRepeatCount(bars[i].repeats);       // supported in gp5
 
             // reset the volta sequence if we have an opening repeat
-            if (bars[i].repeatFlags == RepeatStart)
+            if (bars[i].repeatFlags == Repeat::START)
                   voltaSequence = 1;
             // otherwise, if we see an end repeat symbol, only reset if the bar after it does not contain a volta
-            else if (bars[i].repeatFlags == RepeatEnd && i < bars.length() - 1) {
+            else if (bars[i].repeatFlags == Repeat::END && i < bars.length() - 1) {
                   if (bars[i+1].volta.voltaInfo.length() == 0) {
                     voltaSequence = 1;      // reset  the volta count
                         }
@@ -1191,7 +1191,7 @@ void GuitarPro1::readNote(int string, Note* note)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == Element::CHORD) {
+                        if (e->type() == Element::ElementType::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -1329,9 +1329,9 @@ void GuitarPro3::read(QFile* fp)
             if (barBits & 0x2)
                   tdenominator = readUChar();
             if (barBits & 0x4)
-                  bar.repeatFlags |= RepeatStart;
+                  bar.repeatFlags |= Repeat::START;
             if (barBits & 0x8) {                // number of repeats
-                  bar.repeatFlags |= RepeatEnd;
+                  bar.repeatFlags |= Repeat::END;
                   bar.repeats = readUChar();
                   }
             if (barBits & 0x10) {                      // a volta
@@ -1401,10 +1401,10 @@ void GuitarPro3::read(QFile* fp)
             m->setRepeatCount(bars[i].repeats);
 
             // reset the volta sequence if we have an opening repeat
-            if (bars[i].repeatFlags == RepeatStart)
+            if (bars[i].repeatFlags == Repeat::START)
                   voltaSequence = 1;
             // otherwise, if we see an end repeat symbol, only reset if the bar after it does not contain a volta
-            else if (bars[i].repeatFlags == RepeatEnd && i < bars.length() - 1) {
+            else if (bars[i].repeatFlags == Repeat::END && i < bars.length() - 1) {
                   if (bars[i+1].volta.voltaInfo.length() == 0) {
                         voltaSequence = 1;
                         }
@@ -1968,7 +1968,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == Element::CHORD) {
+                        if (e->type() == Element::ElementType::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -2081,9 +2081,9 @@ void GuitarPro4::read(QFile* fp)
             if (barBits & 0x2)
                   tdenominator = readUChar();
             if (barBits & 0x4)
-                  bar.repeatFlags |= RepeatStart;
+                  bar.repeatFlags |= Repeat::START;
             if (barBits & 0x8) {                // number of repeats
-                  bar.repeatFlags |= RepeatEnd;
+                  bar.repeatFlags |= Repeat::END;
                   bar.repeats = readUChar();
                   }
             if (barBits & 0x10) {                      // a volta
@@ -2285,8 +2285,8 @@ void GuitarPro4::read(QFile* fp)
                         if (dotted)
                               l = l + (l/2);
                         cr->setDuration(l);
-                        if (cr->type() == Element::REST && (pause == 0 || l == measure->len()))
-                              cr->setDurationType(TDuration::V_MEASURE);
+                        if (cr->type() == Element::ElementType::REST && (pause == 0 || l == measure->len()))
+                              cr->setDurationType(TDuration::DurationType::V_MEASURE);
                         else
                               cr->setDurationType(d);
                         if(!segment->cr(staffIdx * VOICES))
@@ -2605,7 +2605,7 @@ void GuitarPro5::readNote(int string, Note* note)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == Element::CHORD) {
+                        if (e->type() == Element::ElementType::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -2845,8 +2845,8 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             if (dotted)
                   l = l + (l/2);
             cr->setDuration(l);
-            if (cr->type() == Element::REST && pause == 0)
-                  cr->setDurationType(TDuration::V_MEASURE);
+            if (cr->type() == Element::ElementType::REST && pause == 0)
+                  cr->setDurationType(TDuration::DurationType::V_MEASURE);
             else
                   cr->setDurationType(d);
 
@@ -2868,7 +2868,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   cr->add(lyrics);
             }
       int rr = readChar();
-      if (cr && (cr->type() == Element::CHORD)) {
+      if (cr && (cr->type() == Element::ElementType::CHORD)) {
             Chord* chord = static_cast<Chord*>(cr);
             applyBeatEffects(chord, beatEffects);
             if (rr == 0x2)
@@ -3132,9 +3132,9 @@ void GuitarPro5::read(QFile* fp)
             if (barBits & 0x2)
                   tdenominator = readUChar();
             if (barBits & 0x4)
-                  bar.repeatFlags |= RepeatStart;
+                  bar.repeatFlags |= Repeat::START;
             if (barBits & 0x8) {                // number of repeats
-                  bar.repeatFlags |= RepeatEnd;
+                  bar.repeatFlags |= Repeat::END;
                   bar.repeats = readUChar();
                   }
             if (barBits & 0x20) {
@@ -3252,7 +3252,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             }
       else  {
             m = score->measures()->first();
-            if (m->type() != Element::VBOX) {
+            if (m->type() != Element::ElementType::VBOX) {
                   MeasureBase* mb = new VBox(score);
                   mb->setTick(0);
                   score->addMeasure(mb, m);
@@ -3357,7 +3357,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             // create excerpt title
             //
             MeasureBase* measure = pscore->first();
-            if (!measure || (measure->type() != Element::VBOX)) {
+            if (!measure || (measure->type() != Element::ElementType::VBOX)) {
                   MeasureBase* mb = new VBox(pscore);
                   mb->setTick(0);
                   pscore->addMeasure(mb, measure);

@@ -83,7 +83,7 @@ static void paste(Score* _score)
                   QPointF dragOffset;
                   Fraction duration(1, 4);
                   Element::ElementType type = Element::readType(e, &dragOffset, &duration);
-                  if (type != Element::INVALID) {
+                  if (type != Element::ElementType::INVALID) {
                               Element* el = Element::create(type, _score);
                               if (el) {
                                           el->read(e);
@@ -107,11 +107,11 @@ static void paste(Score* _score)
                               cr = _score->selection().firstChordRest();
                   else if (_score->selection().isSingle()) {
                               Element* e = _score->selection().element();
-                              if (e->type() != Element::NOTE && e->type() != Element::REST) {
+                              if (e->type() != Element::ElementType::NOTE && e->type() != Element::ElementType::REST) {
                                           qDebug("cannot paste to %s", e->name());
                                           return;
                                           }
-                              if (e->type() == Element::NOTE)
+                              if (e->type() == Element::ElementType::NOTE)
                                           e = static_cast<Note*>(e)->chord();
                               cr  = static_cast<ChordRest*>(e);
                               }

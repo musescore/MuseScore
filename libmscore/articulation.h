@@ -21,23 +21,23 @@ class QPainter;
 namespace Ms {
 
 class ChordRest;
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   ArticulationInfo
 //    gives infos about note attributes
 //---------------------------------------------------------
 
-enum ArticulationAnchor {
-      A_TOP_STAFF,      // anchor is always placed at top of staff
-      A_BOTTOM_STAFF,   // anchor is always placed at bottom of staff
-      A_CHORD,          // anchor depends on chord direction, away from stem
-      A_TOP_CHORD,      // attribute is alway placed at top of chord
-      A_BOTTOM_CHORD,   // attribute is placed at bottom of chord
+enum class ArticulationAnchor : char {
+      TOP_STAFF,      // anchor is always placed at top of staff
+      BOTTOM_STAFF,   // anchor is always placed at bottom of staff
+      CHORD,          // anchor depends on chord direction, away from stem
+      TOP_CHORD,      // attribute is alway placed at top of chord
+      BOTTOM_CHORD,   // attribute is placed at bottom of chord
       };
 
 // flags:
-enum { ARTICULATION_SHOW_IN_PITCHED_STAFF = 1, ARTICULATION_SHOW_IN_TABLATURE = 2 };
+enum ArticulationShowIn : char { PITCHED_STAFF = 1, TABLATURE = 2 };
 
 struct ArticulationInfo {
       SymId upSym;
@@ -73,7 +73,7 @@ class Articulation : public Element {
       Articulation &operator=(const Articulation&);
 
       virtual Articulation* clone() const   { return new Articulation(*this); }
-      virtual ElementType type() const      { return ARTICULATION; }
+      virtual ElementType type() const      { return ElementType::ARTICULATION; }
 
       virtual qreal mag() const;
 

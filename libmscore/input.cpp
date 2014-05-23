@@ -71,11 +71,11 @@ void InputState::update(Element* e)
       {
       if (e == 0)
             return;
-      if (e && e->type() == Element::CHORD)
+      if (e && e->type() == Element::ElementType::CHORD)
             e = static_cast<Chord*>(e)->upNote();
 
       setDrumNote(-1);
-      if (e->type() == Element::NOTE) {
+      if (e->type() == Element::ElementType::NOTE) {
             Note* note    = static_cast<Note*>(e);
             Chord* chord  = note->chord();
             setDuration(chord->durationType());
@@ -84,10 +84,10 @@ void InputState::update(Element* e)
             setNoteType(note->noteType());
             setBeamMode(chord->beamMode());
             }
-      else if (e->type() == Element::REST) {
+      else if (e->type() == Element::ElementType::REST) {
             Rest* rest   = static_cast<Rest*>(e);
-            if (rest->durationType().type() == TDuration::V_MEASURE)
-                  setDuration(TDuration::V_QUARTER);
+            if (rest->durationType().type() == TDuration::DurationType::V_MEASURE)
+                  setDuration(TDuration::DurationType::V_QUARTER);
             else
                   setDuration(rest->durationType());
             setRest(true);
@@ -95,10 +95,10 @@ void InputState::update(Element* e)
             setBeamMode(rest->beamMode());
             setNoteType(NOTE_NORMAL);
             }
-      if (e->type() == Element::NOTE || e->type() == Element::REST) {
+      if (e->type() == Element::ElementType::NOTE || e->type() == Element::ElementType::REST) {
             const Instrument* instr = e->staff()->part()->instr();
             if (instr->useDrumset()) {
-                  if (e->type() == Element::NOTE)
+                  if (e->type() == Element::ElementType::NOTE)
                         setDrumNote(static_cast<Note*>(e)->pitch());
                   else
                         setDrumNote(-1);
@@ -120,7 +120,7 @@ void InputState::moveInputPos(Element* e)
             s = static_cast<ChordRest*>(e)->segment();
       else
             s = static_cast<Segment*>(e);
-      if (s->type() == Element::SEGMENT) {
+      if (s->type() == Element::ElementType::SEGMENT) {
             if (s->measure()->isMMRest()) {
                   Measure* m = s->measure()->mmRestFirst();
                   s = m->findSegment(Segment::SegChordRest, m->tick());

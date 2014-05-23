@@ -32,146 +32,146 @@ namespace Ms {
 ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
       { SymId::fermataAbove, SymId::fermataBelow,
             "fermata", QT_TRANSLATE_NOOP("articulation", "fermata"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::fermataShortAbove, SymId::fermataShortBelow,
             "shortfermata", QT_TRANSLATE_NOOP("articulation", "short fermata"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::fermataLongAbove, SymId::fermataLongBelow,
             "longfermata", QT_TRANSLATE_NOOP("articulation", "long fermata"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::fermataVeryLongAbove, SymId::fermataVeryLongBelow,
             "verylongfermata", QT_TRANSLATE_NOOP("articulation", "very long fermata"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::stringsThumbPosition, SymId::stringsThumbPosition,
             "thumb", QT_TRANSLATE_NOOP("articulation", "thumb"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::articAccentAbove,   SymId::articAccentBelow,
             "sforzato", QT_TRANSLATE_NOOP("articulation", "sforzato"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 // <> not available in smufl?
 //      { esprSym, esprSym             ,
 //            "espressivo", QT_TRANSLATE_NOOP("articulation", "espressivo"),
-//            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+//            1.0,ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
 //            },
       { SymId::articStaccatoAbove, SymId::articStaccatoBelow,
             "staccato", QT_TRANSLATE_NOOP("articulation", "staccato"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::articStaccatissimoAbove,   SymId::articStaccatissimoBelow,
             "staccatissimo", QT_TRANSLATE_NOOP("articulation", "staccatissimo"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::articTenutoAbove, SymId::articTenutoBelow,
             "tenuto", QT_TRANSLATE_NOOP("articulation", "tenuto"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::articTenutoStaccatoAbove, SymId::articTenutoStaccatoBelow,
             "portato", QT_TRANSLATE_NOOP("articulation", "portato"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::articMarcatoAbove, SymId::articMarcatoBelow,
             "marcato", QT_TRANSLATE_NOOP("articulation", "marcato"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::brassMuteOpen, SymId::brassMuteOpen,
             "ouvert", QT_TRANSLATE_NOOP("articulation", "ouvert"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::brassMuteClosed, SymId::brassMuteClosed,
             "plusstop", QT_TRANSLATE_NOOP("articulation", "stopped/pizzicato left hand"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::stringsUpBow, SymId::stringsUpBow,
             "upbow", QT_TRANSLATE_NOOP("articulation", "up bow"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::stringsDownBow, SymId::stringsDownBow,
             "downbow", QT_TRANSLATE_NOOP("articulation", "down bow"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentTurnInverted, SymId::ornamentTurnInverted,
             "reverseturn", QT_TRANSLATE_NOOP("articulation", "reverse turn"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentTurn, SymId::ornamentTurn,
             "turn", QT_TRANSLATE_NOOP("articulation", "turn"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentTrill, SymId::ornamentTrill,
             "trill", QT_TRANSLATE_NOOP("articulation", "trill"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentMordent, SymId::ornamentMordent,
             "prall", QT_TRANSLATE_NOOP("articulation", "prall"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentMordentInverted, SymId::ornamentMordentInverted,
             "mordent", QT_TRANSLATE_NOOP("articulation", "mordent"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentTremblement, SymId::ornamentTremblement,
             "prallprall", QT_TRANSLATE_NOOP("articulation", "prall prall"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentPrallMordent, SymId::ornamentPrallMordent,
             "prallmordent", QT_TRANSLATE_NOOP("articulation", "prall mordent"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentUpPrall, SymId::ornamentUpPrall,
             "upprall", QT_TRANSLATE_NOOP("articulation", "up prall"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 	{ SymId::ornamentDownPrall, SymId::ornamentDownPrall,
             "downprall", QT_TRANSLATE_NOOP("articulation", "down prall"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 	{ SymId::ornamentUpMordent, SymId::ornamentUpMordent,
             "upmordent", QT_TRANSLATE_NOOP("articulation", "up mordent"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 	{ SymId::ornamentDownMordent, SymId::ornamentDownMordent,
             "downmordent", QT_TRANSLATE_NOOP("articulation", "down mordent"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 	{ SymId::ornamentPrallDown, SymId::ornamentPrallDown,
             "pralldown", QT_TRANSLATE_NOOP("articulation", "prall down"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 	{ SymId::ornamentPrallUp, SymId::ornamentPrallUp,
             "prallup", QT_TRANSLATE_NOOP("articulation", "prall up"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 	{ SymId::ornamentLinePrall, SymId::ornamentLinePrall,
             "lineprall", QT_TRANSLATE_NOOP("articulation", "line prall"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 	{ SymId::ornamentPrecompSlide, SymId::ornamentPrecompSlide,
             "schleifer", QT_TRANSLATE_NOOP("articulation", "schleifer"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::pluckedSnapPizzicatoAbove, SymId::pluckedSnapPizzicatoBelow,
             "snappizzicato", QT_TRANSLATE_NOOP("articulation", "snap pizzicato"),
-            1.0, ARTICULATION_SHOW_IN_PITCHED_STAFF | ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 
 #if 0
       { letterTSym, letterTSym,
             "tapping", QT_TRANSLATE_NOOP("articulation", "tapping"),
-            1.0, ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::TABLATURE
             },
       { letterSSym, letterSSym,
             "slapping", QT_TRANSLATE_NOOP("articulation", "slapping"),
-            1.0, ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::TABLATURE
             },
       { letterPSym, letterPSym,
             "popping", QT_TRANSLATE_NOOP("articulation", "popping"),
-            1.0, ARTICULATION_SHOW_IN_TABLATURE
+            1.0, ArticulationShowIn::TABLATURE
             },
 #endif
 	};
@@ -185,7 +185,7 @@ Articulation::Articulation(Score* s)
       {
       _direction = Direction::AUTO;
       _up = true;
-      setFlags(ELEMENT_MOVABLE | ELEMENT_SELECTABLE);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setArticulationType(Articulation_Fermata);
        }
 
@@ -367,11 +367,11 @@ void Articulation::draw(QPainter* painter) const
       int flags = articulationList[articulationType()].flags;
       if (staff()) {
             if (staff()->staffGroup() == TAB_STAFF_GROUP) {
-                  if (!(flags & ARTICULATION_SHOW_IN_TABLATURE))
+                  if (!(flags & ArticulationShowIn::TABLATURE))
                         return;
                   }
             else {
-                  if (!(flags & ARTICULATION_SHOW_IN_PITCHED_STAFF))
+                  if (!(flags & ArticulationShowIn::PITCHED_STAFF))
                         return;
                   }
             }
@@ -491,7 +491,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       // layout:
       if (chordRest())
             chordRest()->layoutArticulations();
-      else if (parent() && parent()->type() == BAR_LINE)
+      else if (parent() && parent()->type() == ElementType::BAR_LINE)
             static_cast<BarLine*>(parent())->layout();
 
       score()->addRefresh(canvasBoundingRect());

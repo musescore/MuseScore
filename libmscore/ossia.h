@@ -30,7 +30,7 @@ class Ossia : public Element {
       Ossia(Score*);
       Ossia(const Ossia&);
       virtual Ossia* clone() const     { return new Ossia(*this); }
-      virtual ElementType type() const { return OSSIA; }
+      virtual ElementType type() const { return ElementType::OSSIA; }
       };
 
 

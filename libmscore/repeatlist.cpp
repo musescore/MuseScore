@@ -30,7 +30,7 @@ Volta* Score::searchVolta(int tick) const
       {
       for (const std::pair<int,Spanner*>& p : _spanner.map()) {
             Spanner* s = p.second;
-            if (s->type() != Element::VOLTA)
+            if (s->type() != Element::ElementType::VOLTA)
                   continue;
             Volta* volta = static_cast<Volta*>(s);
             int tick1 = volta->tick();
@@ -60,7 +60,7 @@ Measure* Score::searchLabel(const QString& s)
             }
       for (Segment* segment = firstMeasure()->first(); segment; segment = segment->next1()) {
             foreach(const Element* e, segment->annotations()) {
-                  if (e->type() == Element::MARKER) {
+                  if (e->type() == Element::ElementType::MARKER) {
                         const Marker* marker = static_cast<const Marker*>(e);
                         if (marker->label() == s) {
 // qDebug("   found %p", segment->measure());
@@ -304,11 +304,11 @@ void RepeatList::unwind()
                   }
             else {
                   // Jumps are only accepted outside of other repeats
-                  if (flags & RepeatJump) {
+                  if (flags & Repeat::JUMP) {
                         Jump* s = 0;
                         for (Segment* seg = m->first(); seg; seg = seg->next()) {
                               foreach(Element* e, seg->annotations()) {
-                                    if (e->type() == Element::JUMP) {
+                                    if (e->type() == Element::ElementType::JUMP) {
                                           s = static_cast<Jump*>(e);
                                           break;
                                           }
@@ -356,7 +356,7 @@ void RepeatList::unwind()
                   isGoto   = false;
                   continue;
                   }
-            else if (flags & RepeatEnd) {
+            else if (flags & Repeat::END) {
                   if (endRepeat == m) {
                         ++loop;
                         if (loop >= repeatCount) {
@@ -402,7 +402,7 @@ Measure* RepeatList::jumpToStartRepeat(Measure* m)
       // handle special case of end repeat (Measure m) has a section break
       //
       for (nm = m; nm && nm != _score->firstMeasure(); nm = nm->prevMeasure()) {
-            if (nm->repeatFlags() & RepeatStart || (nm->sectionBreak() && m != nm)) {
+            if (nm->repeatFlags() & Repeat::START || (nm->sectionBreak() && m != nm)) {
                   if (nm->sectionBreak() && nm->nextMeasure())
                         nm = nm->nextMeasure();
                   break;

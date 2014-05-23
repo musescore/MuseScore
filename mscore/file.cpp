@@ -482,7 +482,7 @@ void MuseScore::newFile()
 
             int m = 0;
             for (Measure* mb = score->firstMeasure(); mb; mb = mb->nextMeasure()) {
-                  if (mb->type() == Element::MEASURE)
+                  if (mb->type() == Element::ElementType::MEASURE)
                         ++m;
                   }
             //
@@ -578,7 +578,7 @@ void MuseScore::newFile()
       int tick = 0;
       for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
             mb->setTick(tick);
-            if (mb->type() != Element::MEASURE)
+            if (mb->type() != Element::ElementType::MEASURE)
                   continue;
             Measure* measure = static_cast<Measure*>(mb);
             int ticks = measure->ticks();
@@ -638,7 +638,7 @@ void MuseScore::newFile()
                                     if (rest)
                                           rest = static_cast<Rest*>(rest->linkedClone());
                                     else
-                                          rest = new Rest(score, TDuration(TDuration::V_MEASURE));
+                                          rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                                     rest->setDuration(measure->len());
                                     rest->setTrack(s->idx() * VOICES);
                                     Segment* seg = measure->getSegment(rest, tick);
@@ -700,7 +700,7 @@ void MuseScore::newFile()
 
       if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
             MeasureBase* measure = score->measures()->first();
-            if (measure->type() != Element::VBOX) {
+            if (measure->type() != Element::ElementType::VBOX) {
                   MeasureBase* nm = new VBox(score);
                   nm->setTick(0);
                   nm->setNext(measure);
@@ -2022,9 +2022,9 @@ void MuseScore::addImage(Score* score, Element* e)
       QString suffix(fi.suffix().toLower());
 
       if (suffix == "svg")
-            s->setImageType(IMAGE_SVG);
+            s->setImageType(ImageType::SVG);
       else if (suffix == "jpg" || suffix == "jpeg" || suffix == "png")
-            s->setImageType(IMAGE_RASTER);
+            s->setImageType(ImageType::RASTER);
       else
             return;
       s->load(fn);

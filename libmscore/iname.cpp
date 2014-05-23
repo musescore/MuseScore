@@ -22,7 +22,7 @@ namespace Ms {
 InstrumentName::InstrumentName(Score* s)
    : Text(s)
       {
-      setInstrumentNameType(INSTRUMENT_NAME_SHORT);
+      setInstrumentNameType(InstrumentNameType::SHORT);
       _layoutPos = 0;
       }
 
@@ -32,7 +32,7 @@ InstrumentName::InstrumentName(Score* s)
 
 QString InstrumentName::instrumentNameTypeName() const
       {
-      if (instrumentNameType() == INSTRUMENT_NAME_SHORT)
+      if (instrumentNameType() == InstrumentNameType::SHORT)
             return QString("short");
       return QString("long");
       }
@@ -44,9 +44,9 @@ QString InstrumentName::instrumentNameTypeName() const
 void InstrumentName::setInstrumentNameType(const QString& s)
       {
       if (s == "short")
-            setInstrumentNameType(INSTRUMENT_NAME_SHORT);
+            setInstrumentNameType(InstrumentNameType::SHORT);
       if (s == "long")
-            setInstrumentNameType(INSTRUMENT_NAME_LONG);
+            setInstrumentNameType(InstrumentNameType::LONG);
       else
             qDebug("InstrumentName::setSubtype: unknown <%s>", qPrintable(s));
       }
@@ -54,7 +54,7 @@ void InstrumentName::setInstrumentNameType(const QString& s)
 void InstrumentName::setInstrumentNameType(InstrumentNameType st)
       {
       _instrumentNameType = st;
-      if (st == INSTRUMENT_NAME_SHORT)
+      if (st == InstrumentNameType::SHORT)
             setTextStyleType(TEXT_STYLE_INSTRUMENT_SHORT);
       else
             setTextStyleType(TEXT_STYLE_INSTRUMENT_LONG);

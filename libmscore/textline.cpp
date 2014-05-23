@@ -171,7 +171,7 @@ void TextLineSegment::layout1()
                   if (tl->_beginText) {
                         if (_text == 0) {
                               _text = new Text(*tl->_beginText);
-                              _text->setFlag(ELEMENT_MOVABLE, false);
+                              _text->setFlag(ElementFlag::MOVABLE, false);
                               _text->setParent(this);
                               }
                         else {
@@ -189,7 +189,7 @@ void TextLineSegment::layout1()
                   if (tl->_continueText) {
                         if (_text == 0) {
                               _text = new Text(*tl->_continueText);
-                              _text->setFlag(ELEMENT_MOVABLE, false);
+                              _text->setFlag(ElementFlag::MOVABLE, false);
                               _text->setParent(this);
                               }
                         else {

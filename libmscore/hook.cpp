@@ -25,7 +25,7 @@ namespace Ms {
 Hook::Hook(Score* s)
   : Symbol(s)
       {
-      setFlag(ELEMENT_MOVABLE, false);
+      setFlag(ElementFlag::MOVABLE, false);
       }
 
 //---------------------------------------------------------
@@ -75,7 +75,7 @@ void Hook::layout()
 void Hook::draw(QPainter* painter) const
       {
       // hide if belonging to the second chord of a cross-measure pair
-      if (chord() && chord()->crossMeasure() == CROSSMEASURE_SECOND)
+      if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
       Symbol::draw(painter);
       }

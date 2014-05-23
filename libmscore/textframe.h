@@ -29,7 +29,7 @@ class TBox : public VBox {
       TBox(Score* score);
       ~TBox() {}
       virtual TBox* clone() const      { return new TBox(*this); }
-      virtual ElementType type() const { return TBOX;       }
+      virtual ElementType type() const { return ElementType::TBOX;       }
 
       virtual void layout();
       virtual void add(Element*);

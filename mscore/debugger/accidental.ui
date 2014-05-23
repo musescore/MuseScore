@@ -41,7 +41,7 @@
       <item row="0" column="0">
        <widget class="QRadioButton" name="accAuto">
         <property name="text">
-         <string notr="true">ACC_AUTO</string>
+         <string notr="true">AUTO</string>
         </property>
        </widget>
       </item>
@@ -55,7 +55,7 @@
       <item row="1" column="0">
        <widget class="QRadioButton" name="accUser">
         <property name="text">
-         <string notr="true">ACC_USER</string>
+         <string notr="true">USER</string>
         </property>
        </widget>
       </item>

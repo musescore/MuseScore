@@ -76,7 +76,7 @@ class TimeSig : public Element {
       void setSSig(const QString&);
 
       virtual TimeSig* clone() const override;
-      virtual ElementType type() const override          { return TIMESIG; }
+      virtual ElementType type() const override          { return ElementType::TIMESIG; }
 
       TimeSigType timeSigType() const    { return _timeSigType; }
 

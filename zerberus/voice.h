@@ -21,8 +21,8 @@ struct Zone;
 class Sample;
 class Zerberus;
 
-enum class LoopMode;
-enum class OffMode;
+enum class LoopMode : char;
+enum class OffMode : char;
 
 static const int INTERP_MAX = 256;
 static const int EG_SIZE    = 256;
@@ -80,7 +80,7 @@ struct Phase {
       Phase(int64_t v) : data(v) {}
       };
 
-enum class VoiceState {
+enum class VoiceState : char {
       OFF,
       ATTACK,
       PLAYING,

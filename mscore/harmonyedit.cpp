@@ -275,7 +275,7 @@ void HarmonyCanvas::paintEvent(QPaintEvent* event)
             p.drawText(ts->x, ts->y, ts->text);
             }
 
-      if (dragElement && dragElement->type() == Element::FSYMBOL) {
+      if (dragElement && dragElement->type() == Element::ElementType::FSYMBOL) {
             FSymbol* sb = static_cast<FSymbol*>(dragElement);
 
             double _spatium = 2.0 * PALETTE_SPATIUM / extraMag;
@@ -325,7 +325,7 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
             fontList.append(st->fontPx(_spatium));
 
       foreach(const RenderAction& a, renderList) {
-            if (a.type == RenderAction::RENDER_SET) {
+            if (a.type == RenderAction::RenderActionType::SET) {
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   ChordSymbol cs = chordList->symbol(a.text);
                   if (cs.isValid()) {
@@ -337,22 +337,22 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
                   textList.append(ts);
                   x += ts->width();
                   }
-            else if (a.type == RenderAction::RENDER_MOVE) {
+            else if (a.type == RenderAction::RenderActionType::MOVE) {
                   x += a.movex;//  * mag;
                   y += a.movey; //  * mag;
                   }
-            else if (a.type == RenderAction::RENDER_PUSH)
+            else if (a.type == RenderAction::RenderActionType::PUSH)
                   stack.push(QPointF(x,y));
-            else if (a.type == RenderAction::RENDER_POP) {
+            else if (a.type == RenderAction::RenderActionType::POP) {
                   if (!stack.isEmpty()) {
                         QPointF pt = stack.pop();
                         x = pt.x();
                         y = pt.y();
                         }
                   else
-                        qDebug("RenderAction::RENDER_POP: stack empty");
+                        qDebug("RenderAction::RenderActionType::POP: stack empty");
                   }
-            else if (a.type == RenderAction::RENDER_NOTE) {
+            else if (a.type == RenderAction::RenderActionType::NOTE) {
                   QString c;
                   int acc;
                   tpc2name(tpc, spelling, lowerCase, c, acc);
@@ -370,7 +370,7 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
                   textList.append(ts);
                   x += ts->width();
                   }
-            else if (a.type == RenderAction::RENDER_ACCIDENTAL) {
+            else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
                   QString c;
                   QString acc;
                   tpc2name(tpc, spelling, lowerCase, c, acc);
@@ -465,7 +465,7 @@ void HarmonyCanvas::setChordDescription(ChordDescription* sd, ChordList* sl)
 
 void HarmonyCanvas::dropEvent(QDropEvent* event)
       {
-      if (dragElement && dragElement->type() == Element::FSYMBOL) {
+      if (dragElement && dragElement->type() == Element::ElementType::FSYMBOL) {
             FSymbol* sb = static_cast<FSymbol*>(dragElement);
 
             double _spatium = 2.0 * PALETTE_SPATIUM / extraMag;
@@ -509,7 +509,7 @@ void HarmonyCanvas::dragEnterEvent(QDragEnterEvent* event)
             QPointF dragOffset;
             Fraction duration;
             Element::ElementType type = Element::readType(e, &dragOffset, &duration);
-            if (type == Element::FSYMBOL) {
+            if (type == Element::ElementType::FSYMBOL) {
                   event->acceptProposedAction();
                   dragElement = Element::create(type, gscore);
                   dragElement->read(e);
@@ -536,7 +536,7 @@ void HarmonyCanvas::dragLeaveEvent(QDragLeaveEvent*)
 void HarmonyCanvas::dragMoveEvent(QDragMoveEvent* event)
       {
       event->acceptProposedAction();
-      if (dragElement && dragElement->type() == Element::FSYMBOL) {
+      if (dragElement && dragElement->type() == Element::ElementType::FSYMBOL) {
             dragElement->setPos(imatrix.map(event->pos()));
             update();
             }
@@ -560,7 +560,7 @@ void HarmonyCanvas::deleteAction()
 
 static void updateHarmony(void*, Element* e)
       {
-      if (e->type() == Element::HARMONY)
+      if (e->type() == Element::ElementType::HARMONY)
             static_cast<Harmony*>(e)->render();
       }
 
@@ -599,12 +599,12 @@ void HarmonyCanvas::updateChordDescription()
                   continue;
                   }
             if (ts->x != x || ts->y != y) {
-                  RenderAction ra(RenderAction::RENDER_MOVE);
+                  RenderAction ra(RenderAction::RenderActionType::MOVE);
                   ra.movex = ts->x - x;
                   ra.movey = ts->y - y;
                   chordDescription->renderList.append(ra);
                   }
-            RenderAction ra(RenderAction::RENDER_SET);
+            RenderAction ra(RenderAction::RenderActionType::SET);
             ra.text  = ts->text;
             chordDescription->renderList.append(ra);
             x = ts->x + ts->width();

@@ -51,24 +51,24 @@ void TestDynamic::test1()
       Dynamic* dynamic = new Dynamic(score);
       dynamic->setDynamicType(Dynamic::DynamicType(1));
 
-      dynamic->setPlacement(Element::ABOVE);
+      dynamic->setPlacement(Element::Placement::ABOVE);
       Dynamic* d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->placement(), Element::ABOVE);
+      QCOMPARE(d->placement(), Element::Placement::ABOVE);
       delete d;
 
-      dynamic->setPlacement(Element::BELOW);
+      dynamic->setPlacement(Element::Placement::BELOW);
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->placement(), Element::BELOW);
+      QCOMPARE(d->placement(), Element::Placement::BELOW);
       delete d;
 
-      dynamic->setProperty(P_PLACEMENT, Element::ABOVE);
+      dynamic->setProperty(P_PLACEMENT, int(Element::Placement::ABOVE));
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->placement(), Element::ABOVE);
+      QCOMPARE(d->placement(), Element::Placement::ABOVE);
       delete d;
 
-      dynamic->setProperty(P_PLACEMENT, Element::BELOW);
+      dynamic->setProperty(P_PLACEMENT, int(Element::Placement::BELOW));
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->placement(), Element::BELOW);
+      QCOMPARE(d->placement(), Element::Placement::BELOW);
       delete d;
 
       dynamic->setVelocity(23);
@@ -91,34 +91,34 @@ void TestDynamic::test1()
       QCOMPARE(d->velocity(), 57);
       delete d;
 
-      dynamic->setDynRange(Element::DYNAMIC_STAFF);
+      dynamic->setDynRange(Element::DynamicRange::STAFF);
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->dynRange(), Element::DYNAMIC_STAFF);
+      QCOMPARE(d->dynRange(), Element::DynamicRange::STAFF);
       delete d;
 
-      dynamic->setDynRange(Element::DYNAMIC_PART);
+      dynamic->setDynRange(Element::DynamicRange::PART);
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->dynRange(), Element::DYNAMIC_PART);
+      QCOMPARE(d->dynRange(), Element::DynamicRange::PART);
       delete d;
 
-      dynamic->setDynRange(Element::DYNAMIC_SYSTEM);
+      dynamic->setDynRange(Element::DynamicRange::SYSTEM);
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->dynRange(), Element::DYNAMIC_SYSTEM);
+      QCOMPARE(d->dynRange(), Element::DynamicRange::SYSTEM);
       delete d;
 
-      dynamic->setProperty(P_DYNAMIC_RANGE, Element::DYNAMIC_STAFF);
+      dynamic->setProperty(P_DYNAMIC_RANGE, int(Element::DynamicRange::STAFF));
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->dynRange(), Element::DYNAMIC_STAFF);
+      QCOMPARE(d->dynRange(), Element::DynamicRange::STAFF);
       delete d;
 
-      dynamic->setProperty(P_DYNAMIC_RANGE, Element::DYNAMIC_PART);
+      dynamic->setProperty(P_DYNAMIC_RANGE, int(Element::DynamicRange::PART));
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->dynRange(), Element::DYNAMIC_PART);
+      QCOMPARE(d->dynRange(), Element::DynamicRange::PART);
       delete d;
 
-      dynamic->setDynRange(Element::DYNAMIC_SYSTEM);
+      dynamic->setDynRange(Element::DynamicRange::SYSTEM);
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->dynRange(), Element::DYNAMIC_SYSTEM);
+      QCOMPARE(d->dynRange(), Element::DynamicRange::SYSTEM);
       delete d;
 
 

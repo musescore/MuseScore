@@ -33,17 +33,17 @@ static QList<FiguredBassFont> g_FBFonts;
 
 // used for indexed access to parenthesis chars
 // (these is no normAccidToChar[], as accidentals may use mult. chars in normalized display):
-const QChar FiguredBassItem::normParenthToChar[NumOfParentheses] =
+const QChar FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis::NUMOF)] =
 { 0, '(', ')', '[', ']'};
 
 
 FiguredBassItem::FiguredBassItem(Score* s, int l)
       : Element(s), ord(l)
       {
-      _prefix     = _suffix = ModifierNone;
+      _prefix     = _suffix = Modifier::NONE;
       _digit      = FBIDigitNone;
-      parenth[0]  = parenth[1] = parenth[2] = parenth[3] = parenth[4] = ParenthesisNone;
-      _contLine   = ContLineNone;
+      parenth[0]  = parenth[1] = parenth[2] = parenth[3] = parenth[4] = Parenthesis::NONE;
+      _contLine   = ContLine::NONE;
       }
 
 FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
@@ -92,33 +92,33 @@ bool FiguredBassItem::parse(QString& str)
             return false;
       parseParenthesis(str, 3);
       // check for a possible cont. line symbol(s)
-      _contLine = ContLineNone;                       // contLine
+      _contLine = ContLine::NONE;                       // contLine
       if(str[0] == '-' || str[0] == '_') {            // 1 symbol: simple continuation
-            _contLine = ContLineSimple;
+            _contLine = ContLine::SIMPLE;
             str.remove(0, 1);
       }
       while(str[0] == '-' || str[0] == '_') {         // more than 1 symbol: extended continuation
-            _contLine = ContLineExtended;
+            _contLine = ContLine::EXTENDED;
             str.remove(0, 1);
       }
       parseParenthesis(str, 4);
 
       // remove useless parentheses, moving external parentheses toward central digit element
-      if(_prefix == ModifierNone && parenth[1] == ParenthesisNone) {
+      if(_prefix == Modifier::NONE && parenth[1] == Parenthesis::NONE) {
             parenth[1] = parenth[0];
-            parenth[0] = ParenthesisNone;
+            parenth[0] = Parenthesis::NONE;
             }
-      if(_digit == FBIDigitNone && parenth[2] == ParenthesisNone) {
+      if(_digit == FBIDigitNone && parenth[2] == Parenthesis::NONE) {
             parenth[2] = parenth[1];
-            parenth[1] = ParenthesisNone;
+            parenth[1] = Parenthesis::NONE;
             }
-      if(_contLine == ContLineNone && parenth[3] == ParenthesisNone) {
+      if(_contLine == ContLine::NONE && parenth[3] == Parenthesis::NONE) {
             parenth[3] = parenth[4];
-            parenth[4] = ParenthesisNone;
+            parenth[4] = Parenthesis::NONE;
             }
-      if(_suffix == ModifierNone && parenth[2] == ParenthesisNone) {
+      if(_suffix == Modifier::NONE && parenth[2] == Parenthesis::NONE) {
             parenth[2] = parenth[3];
-            parenth[3] = ParenthesisNone;
+            parenth[3] = Parenthesis::NONE;
             }
 
       // some checks:
@@ -128,9 +128,9 @@ bool FiguredBassItem::parse(QString& str)
       // can't have BOTH prefix and suffix
       // prefix, digit, suffix and cont.line cannot be ALL empty
       // suffix cannot combine with empty digit
-      if( (_prefix != ModifierNone && _suffix != ModifierNone)
-            || (_prefix == ModifierNone && _digit == FBIDigitNone && _suffix == ModifierNone && _contLine == ContLineNone)
-            || ( (_suffix == ModifierCross || _suffix == ModifierBackslash || _suffix == ModifierSlash)
+      if( (_prefix != Modifier::NONE && _suffix != Modifier::NONE)
+            || (_prefix == Modifier::NONE && _digit == FBIDigitNone && _suffix == Modifier::NONE && _contLine == ContLine::NONE)
+            || ( (_suffix == Modifier::CROSS || _suffix == Modifier::BACKSLASH || _suffix == Modifier::SLASH)
                   && _digit == FBIDigitNone) )
             return false;
       return true;
@@ -153,50 +153,50 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
       int         size  = str.size();
       str = str.trimmed();
 
-      *dest       = ModifierNone;
+      *dest       = Modifier::NONE;
 
       while(str.size()) {
             switch(str.at(0).unicode())
             {
             case 'b':
-                  if(*dest != ModifierNone) {
-                        if(*dest == ModifierFlat)     // FLAT may double a previous FLAT
-                              *dest = ModifierDoubleFlat;
+                  if(*dest != Modifier::NONE) {
+                        if(*dest == Modifier::FLAT)     // FLAT may double a previous FLAT
+                              *dest = Modifier::DOUBLEFLAT;
                         else
                               return -1;              // but no other combination is acceptable
                         }
-                  *dest = ModifierFlat;
+                  *dest = Modifier::FLAT;
                   break;
             case 'h':
-                  if(*dest != ModifierNone)           // cannot combine with any other accidental
+                  if(*dest != Modifier::NONE)           // cannot combine with any other accidental
                         return -1;
-                  *dest = ModifierNatural;
+                  *dest = Modifier::NATURAL;
                   break;
             case '#':
-                  if(*dest != ModifierNone) {
-                        if(*dest == ModifierSharp)    // SHARP may double a preivous SHARP
-                              *dest = ModifierDoubleSharp;
+                  if(*dest != Modifier::NONE) {
+                        if(*dest == Modifier::SHARP)    // SHARP may double a preivous SHARP
+                              *dest = Modifier::DOUBLESHARP;
                         else
                               return -1;              // but no other combination is acceptable
                         }
-                  *dest = ModifierSharp;
+                  *dest = Modifier::SHARP;
                   break;
             case '+':
                   // accept '+' as both a prefix and a suffix for harmony notation
-                  if(*dest != ModifierNone)           // cannot combine with any other accidental
+                  if(*dest != Modifier::NONE)           // cannot combine with any other accidental
                         return -1;
-                  *dest = ModifierCross;
+                  *dest = Modifier::CROSS;
                   break;
             // '\\' and '/' go into the suffix
             case '\\':
-                  if(_suffix != ModifierNone)         // cannot combine with any other accidental
+                  if(_suffix != Modifier::NONE)         // cannot combine with any other accidental
                         return -1;
-                  _suffix = ModifierBackslash;
+                  _suffix = Modifier::BACKSLASH;
                   break;
             case '/':
-                  if(_suffix != ModifierNone)         // cannot combine with any other accidental
+                  if(_suffix != Modifier::NONE)         // cannot combine with any other accidental
                         return -1;
-                  _suffix = ModifierSlash;
+                  _suffix = Modifier::SLASH;
                   break;
             default:                                 // any other char: no longer in prefix/suffix
                   done = true;
@@ -257,26 +257,26 @@ int FiguredBassItem::parseDigit(QString& str)
 int FiguredBassItem::parseParenthesis(QString& str, int parenthIdx)
       {
       int c = str[0].unicode();
-      Parenthesis code = ParenthesisNone;
+      Parenthesis code = Parenthesis::NONE;
       switch(c)
       {
       case '(':
-            code =ParenthesisRoundOpen;
+            code = Parenthesis::ROUNDOPEN;
             break;
       case ')':
-            code =ParenthesisRoundClosed;
+            code = Parenthesis::ROUNDCLOSED;
             break;
       case '[':
-            code =ParenthesisSquaredOpen;
+            code =Parenthesis::SQUAREDOPEN;
             break;
       case ']':
-            code =ParenthesisSquaredClosed;
+            code = Parenthesis::SQUAREDCLOSED;
             break;
       default:
             break;
             }
       parenth[parenthIdx] = code;
-      if(code != ParenthesisNone) {
+      if(code != Parenthesis::NONE) {
             str.remove(0, 1);
             return 1;
             }
@@ -293,28 +293,28 @@ int FiguredBassItem::parseParenthesis(QString& str, int parenthIdx)
 QString FiguredBassItem::normalizedText() const
       {
       QString str = QString();
-      if(parenth[0] != ParenthesisNone)
-            str.append(normParenthToChar[parenth[0]]);
+      if(parenth[0] != Parenthesis::NONE)
+            str.append(normParenthToChar[int(parenth[0])]);
 
-      if(_prefix != ModifierNone) {
+      if(_prefix != Modifier::NONE) {
             switch(_prefix)
             {
-            case ModifierFlat:
+            case Modifier::FLAT:
                   str.append('b');
                   break;
-            case ModifierNatural:
+            case Modifier::NATURAL:
                   str.append('h');
                   break;
-            case ModifierSharp:
+            case Modifier::SHARP:
                   str.append('#');
                   break;
-            case ModifierCross:
+            case Modifier::CROSS:
                   str.append('+');
                   break;
-            case ModifierDoubleFlat:
+            case Modifier::DOUBLEFLAT:
                   str.append("bb");
                   break;
-            case ModifierDoubleSharp:
+            case Modifier::DOUBLESHARP:
                   str.append("##");
                   break;
             default:
@@ -322,42 +322,42 @@ QString FiguredBassItem::normalizedText() const
             }
             }
 
-      if(parenth[1] != ParenthesisNone)
-            str.append(normParenthToChar[parenth[1]]);
+      if(parenth[1] != Parenthesis::NONE)
+            str.append(normParenthToChar[int(parenth[1])]);
 
       // digit
       if(_digit != FBIDigitNone)
             str.append(QChar('0' + _digit));
 
-      if(parenth[2] != ParenthesisNone)
-            str.append(normParenthToChar[parenth[2]]);
+      if(parenth[2] != Parenthesis::NONE)
+            str.append(normParenthToChar[int(parenth[2])]);
 
       // suffix
-      if(_suffix != ModifierNone) {
+      if(_suffix != Modifier::NONE) {
             switch(_suffix)
             {
-            case ModifierFlat:
+            case Modifier::FLAT:
                   str.append('b');
                   break;
-            case ModifierNatural:
+            case Modifier::NATURAL:
                   str.append('h');
                   break;
-            case ModifierSharp:
+            case Modifier::SHARP:
                   str.append('#');
                   break;
-            case ModifierCross:
+            case Modifier::CROSS:
                   str.append('+');
                   break;
-            case ModifierBackslash:
+            case Modifier::BACKSLASH:
                   str.append('\\');
                   break;
-            case ModifierSlash:
+            case Modifier::SLASH:
                   str.append('/');
                   break;
-            case ModifierDoubleFlat:
+            case Modifier::DOUBLEFLAT:
                   str.append("bb");
                   break;
-            case ModifierDoubleSharp:
+            case Modifier::DOUBLESHARP:
                   str.append("##");
                   break;
             default:
@@ -365,15 +365,15 @@ QString FiguredBassItem::normalizedText() const
             }
             }
 
-      if(parenth[3] != ParenthesisNone)
-            str.append(normParenthToChar[parenth[3]]);
-      if(_contLine > ContLineNone) {
+      if(parenth[3] != Parenthesis::NONE)
+            str.append(normParenthToChar[int(parenth[3])]);
+      if(_contLine > ContLine::NONE) {
             str.append('_');
-            if (_contLine > ContLineSimple)
+            if (_contLine > ContLine::SIMPLE)
                   str.append('_');
             }
-      if(parenth[4] != ParenthesisNone)
-            str.append(normParenthToChar[parenth[4]]);
+      if(parenth[4] != Parenthesis::NONE)
+            str.append(normParenthToChar[int(parenth[4])]);
 
       return str;
       }
@@ -386,15 +386,15 @@ void FiguredBassItem::write(Xml& xml) const
 {
       xml.stag("FiguredBassItem");
       xml.tagE(QString("brackets b0=\"%1\" b1=\"%2\" b2=\"%3\" b3=\"%4\" b4=\"%5\"")
-                    .arg(parenth[0]) .arg(parenth[1]) .arg(parenth[2]) .arg(parenth[3]) .arg(parenth[4]) );
-      if(_prefix != ModifierNone)
-            xml.tag(QString("prefix"), _prefix);
+                    .arg(int(parenth[0])) .arg(int(parenth[1])) .arg(int(parenth[2])) .arg(int(parenth[3])) .arg(int(parenth[4])) );
+      if(_prefix != Modifier::NONE)
+            xml.tag(QString("prefix"), int(_prefix));
       if(_digit != FBIDigitNone)
             xml.tag(QString("digit"), _digit);
-      if(_suffix != ModifierNone)
-            xml.tag(QString("suffix"), _suffix);
-      if(_contLine)
-            xml.tag("continuationLine", _contLine);
+      if(_suffix != Modifier::NONE)
+            xml.tag(QString("suffix"), int(_suffix));
+      if(_contLine != ContLine::NONE)
+            xml.tag("continuationLine", int(_contLine));
       xml.etag();
 }
 
@@ -454,22 +454,22 @@ void FiguredBassItem::layout()
       int font = 0;
       int style = score()->styleI(ST_figuredBassStyle);
 
-      if(parenth[0] != ParenthesisNone)
-            str.append(g_FBFonts.at(font).displayParenthesis[parenth[0]]);
+      if(parenth[0] != Parenthesis::NONE)
+            str.append(g_FBFonts.at(font).displayParenthesis[int(parenth[0])]);
 
       // prefix
-      if(_prefix != ModifierNone) {
+      if(_prefix != Modifier::NONE) {
             // if no digit, the string created so far 'hangs' to the left of the note
             if(_digit == FBIDigitNone)
                   x1 = fm.width(str);
-            str.append(g_FBFonts.at(font).displayAccidental[_prefix]);
+            str.append(g_FBFonts.at(font).displayAccidental[int(_prefix)]);
             // if no digit, the string from here onward 'hangs' to the right of the note
             if(_digit == FBIDigitNone)
                   x2 = fm.width(str);
             }
 
-      if(parenth[1] != ParenthesisNone)
-            str.append(g_FBFonts.at(font).displayParenthesis[parenth[1]]);
+      if(parenth[1] != Parenthesis::NONE)
+            str.append(g_FBFonts.at(font).displayParenthesis[int(parenth[1])]);
 
       // digit
       if(_digit != FBIDigitNone) {
@@ -477,28 +477,28 @@ void FiguredBassItem::layout()
             x1 = fm.width(str);
             // if suffix is a combining shape, combine it with digit
             // unless there is a parenthesis in between
-            if( (_suffix == ModifierCross || _suffix == ModifierBackslash || _suffix == ModifierSlash)
-                        && parenth[2] == ParenthesisNone)
-                  str.append(g_FBFonts.at(font).displayDigit[style][_digit][_suffix-(ModifierCross-1)]);
+            if( (_suffix == Modifier::CROSS || _suffix == Modifier::BACKSLASH || _suffix == Modifier::SLASH)
+                        && parenth[2] == Parenthesis::NONE)
+                  str.append(g_FBFonts.at(font).displayDigit[style][_digit][int(_suffix)-(int(Modifier::CROSS)-1)]);
             else
                   str.append(g_FBFonts.at(font).displayDigit[style][_digit][0]);
             // if some digit, the string from here onward 'hangs' to the right of the note
             x2 = fm.width(str);
             }
 
-      if(parenth[2] != ParenthesisNone)
-            str.append(g_FBFonts.at(font).displayParenthesis[parenth[2]]);
+      if(parenth[2] != Parenthesis::NONE)
+            str.append(g_FBFonts.at(font).displayParenthesis[int(parenth[2])]);
 
       // suffix
       // append only if non-combining shape or cannot combine (no digit or parenthesis in between)
-      if( _suffix != ModifierNone
-                  && ( (_suffix != ModifierCross && _suffix != ModifierBackslash && _suffix != ModifierSlash)
+      if( _suffix != Modifier::NONE
+                  && ( (_suffix != Modifier::CROSS && _suffix != Modifier::BACKSLASH && _suffix != Modifier::SLASH)
                         || _digit == FBIDigitNone
-                        || parenth[2] != ParenthesisNone) )
-            str.append(g_FBFonts.at(font).displayAccidental[_suffix]);
+                        || parenth[2] != Parenthesis::NONE) )
+            str.append(g_FBFonts.at(font).displayAccidental[int(_suffix)]);
 
-      if(parenth[3] != ParenthesisNone)
-            str.append(g_FBFonts.at(font).displayParenthesis[parenth[3]]);
+      if(parenth[3] != Parenthesis::NONE)
+            str.append(g_FBFonts.at(font).displayParenthesis[int(parenth[3])]);
 
       setDisplayText(str);                // this text will be displayed
 
@@ -520,7 +520,7 @@ void FiguredBassItem::layout()
       textWidth = w;
       // if there is a cont.line, extend width to cover the whole FB element duration line
       int lineLen;
-      if(_contLine != ContLineNone && (lineLen=figuredBass()->lineLength(0)) > w)
+      if(_contLine != ContLine::NONE && (lineLen=figuredBass()->lineLength(0)) > w)
             w = lineLen;
       bbox().setRect(0, 0, w, h);
       }
@@ -549,7 +549,7 @@ void FiguredBassItem::draw(QPainter* painter) const
 
       // continuation line
       qreal lineEndX = 0.0;
-      if (_contLine > ContLineNone) {
+      if (_contLine > ContLine::NONE) {
             qreal _spatium = spatium();
             qreal lineStartX   = textWidth;                       // by default, line starts right after text
             if (lineStartX > 0.0)
@@ -559,7 +559,7 @@ void FiguredBassItem::draw(QPainter* painter) const
                   lineEndX = 0.0;
 
             // if extended cont.line and no closing parenthesis: look at next FB element
-            if (_contLine > ContLineSimple && parenth[4] == ParenthesisNone) {
+            if (_contLine > ContLine::SIMPLE && parenth[4] == Parenthesis::NONE) {
                   FiguredBass * nextFB;
                   // if there is a contiguous FB element
                   if ( (nextFB=figuredBass()->nextFiguredBass()) != 0) {
@@ -582,10 +582,10 @@ void FiguredBassItem::draw(QPainter* painter) const
             }
 
       // closing cont.line parenthesis
-      if(parenth[4] != ParenthesisNone) {
+      if(parenth[4] != Parenthesis::NONE) {
             int x = lineEndX > 0.0 ? lineEndX : textWidth;
             painter->drawText(QRectF(x, 0, bbox().width(), bbox().height()), Qt::AlignLeft | Qt::AlignTop,
-                  g_FBFonts.at(font).displayParenthesis[parenth[4]]);
+                  g_FBFonts.at(font).displayParenthesis[int(parenth[4])]);
             }
       }
 
@@ -597,23 +597,23 @@ QVariant FiguredBassItem::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_FBPREFIX:
-                  return _prefix;
+                  return int(_prefix);
             case P_FBDIGIT:
                   return _digit;
             case P_FBSUFFIX:
-                  return _suffix;
+                  return int(_suffix);
             case P_FBCONTINUATIONLINE:
-                  return _contLine;
+                  return int(_contLine);
             case P_FBPARENTHESIS1:
-                  return parenth[0];
+                  return int(parenth[0]);
             case P_FBPARENTHESIS2:
-                  return parenth[1];
+                  return int(parenth[1]);
             case P_FBPARENTHESIS3:
-                  return parenth[2];
+                  return int(parenth[2]);
             case P_FBPARENTHESIS4:
-                  return parenth[3];
+                  return int(parenth[3]);
             case P_FBPARENTHESIS5:
-                  return parenth[4];
+                  return int(parenth[4]);
             default:
                   return Element::getProperty(propertyId);
             }
@@ -625,7 +625,7 @@ bool FiguredBassItem::setProperty(P_ID propertyId, const QVariant& v)
       int   val = v.toInt();
       switch(propertyId) {
             case P_FBPREFIX:
-                  if(val < ModifierNone || val > ModifierCross)
+                  if(val < int(Modifier::NONE) || val >= int(Modifier::NUMOF))
                         return false;
                   _prefix = (Modifier)val;
                   break;
@@ -635,7 +635,7 @@ bool FiguredBassItem::setProperty(P_ID propertyId, const QVariant& v)
                   _digit = val;
                   break;
             case P_FBSUFFIX:
-                  if(val < ModifierNone || val >= NumOfModifiers)
+                  if(val < int(Modifier::NONE) || val >= int(Modifier::NUMOF))
                         return false;
                   _suffix = (Modifier)val;
                   break;
@@ -643,27 +643,27 @@ bool FiguredBassItem::setProperty(P_ID propertyId, const QVariant& v)
                   _contLine = (ContLine)val;
                   break;
             case P_FBPARENTHESIS1:
-                  if(val < ParenthesisNone || val > ParenthesisSquaredClosed)
+                  if(val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF))
                         return false;
                   parenth[0] = (Parenthesis)val;
                   break;
             case P_FBPARENTHESIS2:
-                  if(val < ParenthesisNone || val > ParenthesisSquaredClosed)
+                  if(val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF))
                         return false;
                   parenth[1] = (Parenthesis)val;
                   break;
             case P_FBPARENTHESIS3:
-                  if(val < ParenthesisNone || val > ParenthesisSquaredClosed)
+                  if(val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF))
                         return false;
                   parenth[2] = (Parenthesis)val;
                   break;
             case P_FBPARENTHESIS4:
-                  if(val < ParenthesisNone || val > ParenthesisSquaredClosed)
+                  if(val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF))
                         return false;
                   parenth[3] = (Parenthesis)val;
                   break;
             case P_FBPARENTHESIS5:
-                  if(val < ParenthesisNone || val > ParenthesisSquaredClosed)
+                  if(val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF))
                         return false;
                   parenth[4] = (Parenthesis)val;
                   break;
@@ -679,7 +679,7 @@ QVariant FiguredBassItem::propertyDefault(P_ID id) const
       switch(id) {
             case P_FBPREFIX:
             case P_FBSUFFIX:
-                  return ModifierNone;
+                  return int(Modifier::NONE);
             case P_FBDIGIT:
                   return FBIDigitNone;
             case P_FBCONTINUATIONLINE:
@@ -695,11 +695,11 @@ QVariant FiguredBassItem::propertyDefault(P_ID id) const
 
 void FiguredBassItem::undoSetPrefix(Modifier pref)
       {
-      if(pref <= ModifierCross) {
+      if(pref <= Modifier::CROSS) {
             score()->undoChangeProperty(this, P_FBPREFIX, (int)pref);
             // if setting some prefix and there is a suffix already, clear suffix
-            if(pref != ModifierNone && _suffix != ModifierNone)
-                  score()->undoChangeProperty(this, P_FBSUFFIX, ModifierNone);
+            if(pref != Modifier::NONE && _suffix != Modifier::NONE)
+                  score()->undoChangeProperty(this, P_FBSUFFIX, int(Modifier::NONE));
             layout();                     // re-generate displayText
             }
       }
@@ -714,42 +714,42 @@ void FiguredBassItem::undoSetDigit(int digit)
 
 void FiguredBassItem::undoSetSuffix(Modifier suff)
       {
-      score()->undoChangeProperty(this, P_FBSUFFIX, suff);
+      score()->undoChangeProperty(this, P_FBSUFFIX, int(suff));
       // if setting some suffix and there is a prefix already, clear prefix
-      if(suff != ModifierNone && _prefix != ModifierNone)
-            score()->undoChangeProperty(this, P_FBPREFIX, ModifierNone);
+      if(suff != Modifier::NONE && _prefix != Modifier::NONE)
+            score()->undoChangeProperty(this, P_FBPREFIX, int(Modifier::NONE));
       layout();                     // re-generate displayText
       }
 
-void FiguredBassItem::undoSetContLine(bool val)
+void FiguredBassItem::undoSetContLine(ContLine val)
       {
-      score()->undoChangeProperty(this, P_FBCONTINUATIONLINE, val);
+      score()->undoChangeProperty(this, P_FBCONTINUATIONLINE, int(val));
       layout();                     // re-generate displayText
       }
 
 void FiguredBassItem::undoSetParenth1(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_FBPARENTHESIS1, par);
+      score()->undoChangeProperty(this, P_FBPARENTHESIS1, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth2(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_FBPARENTHESIS2, par);
+      score()->undoChangeProperty(this, P_FBPARENTHESIS2, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth3(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_FBPARENTHESIS3, par);
+      score()->undoChangeProperty(this, P_FBPARENTHESIS3, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth4(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_FBPARENTHESIS4, par);
+      score()->undoChangeProperty(this, P_FBPARENTHESIS4, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth5(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_FBPARENTHESIS5, par);
+      score()->undoChangeProperty(this, P_FBPARENTHESIS5, int(par));
       layout();                     // re-generate displayText
       }
 
@@ -768,21 +768,21 @@ void FiguredBassItem::undoSetParenth5(Parenthesis par)
 FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const QString prefix) const
       {
       if (prefix == "sharp")
-            return ModifierSharp;
+            return Modifier::SHARP;
       else if (prefix == "flat")
-            return ModifierFlat;
+            return Modifier::FLAT;
       else if (prefix == "natural")
-            return ModifierNatural;
+            return Modifier::NATURAL;
       else if (prefix == "double-sharp")
-            return ModifierDoubleSharp;
+            return Modifier::DOUBLESHARP;
       else if (prefix == "flat-flat")
-            return ModifierDoubleFlat;
+            return Modifier::DOUBLEFLAT;
       else if (prefix == "sharp-sharp")
-            return ModifierDoubleSharp;
+            return Modifier::DOUBLESHARP;
       else if (prefix == "slash")
-            return ModifierSlash;
+            return Modifier::SLASH;
       else
-            return ModifierNone;
+            return Modifier::NONE;
       }
 
 //---------------------------------------------------------
@@ -794,16 +794,16 @@ FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const QString prefi
 QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) const
       {
       switch (prefix) {
-            case ModifierNone:        return "";
-            case ModifierDoubleFlat:  return "flat-flat";
-            case ModifierFlat:        return "flat";
-            case ModifierNatural:     return "natural";
-            case ModifierSharp:       return "sharp";
-            case ModifierDoubleSharp: return "double-sharp";
-            case ModifierCross:       return ""; // TODO TBD
-            case ModifierBackslash:   return ""; // TODO TBD
-            case ModifierSlash:       return "slash";
-            case NumOfModifiers:      return ""; // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
+            case Modifier::NONE:        return "";
+            case Modifier::DOUBLEFLAT:  return "flat-flat";
+            case Modifier::FLAT:        return "flat";
+            case Modifier::NATURAL:     return "natural";
+            case Modifier::SHARP:       return "sharp";
+            case Modifier::DOUBLESHARP: return "double-sharp";
+            case Modifier::CROSS:       return ""; // TODO TBD
+            case Modifier::BACKSLASH:   return ""; // TODO TBD
+            case Modifier::SLASH:       return "slash";
+            case Modifier::NUMOF:       return ""; // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
             }
       return "";
       }
@@ -841,19 +841,19 @@ void FiguredBassItem::readMusicXML(XmlReader& e, bool paren, bool& extend)
       // set parentheses
       if (paren) {
             // parenthesis open
-            if (_prefix != ModifierNone)
-                  parenth[0] = ParenthesisRoundOpen; // before prefix
+            if (_prefix != Modifier::NONE)
+                  parenth[0] = Parenthesis::ROUNDOPEN; // before prefix
             else if (_digit != FBIDigitNone)
-                  parenth[1] = ParenthesisRoundOpen; // before digit
-            else if (_suffix != ModifierNone)
-                  parenth[2] = ParenthesisRoundOpen; // before suffix
+                  parenth[1] = Parenthesis::ROUNDOPEN; // before digit
+            else if (_suffix != Modifier::NONE)
+                  parenth[2] = Parenthesis::ROUNDOPEN; // before suffix
             // parenthesis close
-            if (_suffix != ModifierNone)
-                  parenth[3] = ParenthesisRoundClosed; // after suffix
+            if (_suffix != Modifier::NONE)
+                  parenth[3] = Parenthesis::ROUNDCLOSED; // after suffix
             else if (_digit != FBIDigitNone)
-                  parenth[2] = ParenthesisRoundClosed; // after digit
-            else if (_prefix != ModifierNone)
-                  parenth[1] = ParenthesisRoundClosed; // after prefix
+                  parenth[2] = Parenthesis::ROUNDCLOSED; // after digit
+            else if (_prefix != Modifier::NONE)
+                  parenth[1] = Parenthesis::ROUNDCLOSED; // after prefix
             }
       }
 #endif
@@ -887,12 +887,12 @@ void FiguredBassItem::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) cons
 
 bool FiguredBassItem::startsWithParenthesis() const
       {
-      if (_prefix != ModifierNone)
-            return (parenth[0] != ParenthesisNone);
+      if (_prefix != Modifier::NONE)
+            return (parenth[0] != Parenthesis::NONE);
       if (_digit != FBIDigitNone)
-            return (parenth[1] != ParenthesisNone);
-      if (_suffix != ModifierNone)
-            return (parenth[2] != ParenthesisNone);
+            return (parenth[1] != Parenthesis::NONE);
+      if (_suffix != Modifier::NONE)
+            return (parenth[2] != Parenthesis::NONE);
       return false;
       }
 
@@ -903,7 +903,7 @@ bool FiguredBassItem::startsWithParenthesis() const
 FiguredBass::FiguredBass(Score* s)
    : Text(s)
       {
-      setFlag(ELEMENT_ON_STAFF, true);
+      setFlag(ElementFlag::ON_STAFF, true);
       setOnNote(true);
       setTextStyleType(TEXT_STYLE_FIGURED_BASS);
       TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
@@ -1245,7 +1245,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
 
       // scan segment annotations for an existing FB element in the this' staff
       for (Element* e : nextSegm->annotations())
-            if (e->type() == FIGURED_BASS && e->track() == track())
+            if (e->type() == ElementType::FIGURED_BASS && e->track() == track())
                   return static_cast<FiguredBass*>(e);
 
       return 0;
@@ -1269,11 +1269,11 @@ qreal FiguredBass::additionalContLineX(qreal pagePosY) const
       for (FiguredBassItem* fbi : items)
             // if item has cont.line but nothing before it
             // and item Y coord near enough to pagePosY
-            if(fbi->contLine()
+            if(fbi->contLine() != FiguredBassItem::ContLine::NONE
                   && fbi->digit() == FBIDigitNone
-                     && fbi->prefix() == FiguredBassItem::ModifierNone
-                        && fbi->suffix() == FiguredBassItem::ModifierNone
-                           && fbi->parenth4() == FiguredBassItem::ParenthesisNone
+                     && fbi->prefix() == FiguredBassItem::Modifier::NONE
+                        && fbi->suffix() == FiguredBassItem::Modifier::NONE
+                           && fbi->parenth4() == FiguredBassItem::Parenthesis::NONE
                               && qAbs(pgPos.y() + fbi->ipos().y() - pagePosY) < 0.05)
                   return pgPos.x() + fbi->ipos().x();
 
@@ -1345,7 +1345,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
       // scan segment annotations for an existing FB element in the same staff
       FiguredBass* fb = 0;
       for (Element* e : seg->annotations()) {
-            if (e->type() == FIGURED_BASS && (e->track() / VOICES) == staff) {
+            if (e->type() == ElementType::FIGURED_BASS && (e->track() / VOICES) == staff) {
                   // an FB already exists in segment: re-use it
                   fb = static_cast<FiguredBass*>(e);
                   *pNew = false;
@@ -1375,7 +1375,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
             // set onNote status
             fb->setOnNote(false);               // assume not onNote
             for (int i = track; i < track + VOICES; i++)         // if segment has chord in staff, set onNote
-                  if (seg->element(i) && seg->element(i)->type() == CHORD) {
+                  if (seg->element(i) && seg->element(i)->type() == ElementType::CHORD) {
                         fb->setOnNote(true);
                         break;
                   }
@@ -1389,7 +1389,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
             FiguredBass*      prevFB = 0;
             for(prevSegm = seg->prev1(Segment::SegChordRest); prevSegm; prevSegm = prevSegm->prev1(Segment::SegChordRest)) {
                   for (Element* e : prevSegm->annotations()) {
-                        if (e->type() == FIGURED_BASS && (e->track() ) == track) {
+                        if (e->type() == ElementType::FIGURED_BASS && (e->track() ) == track) {
                               prevFB = static_cast<FiguredBass*>(e);   // previous FB found
                               break;
                               }
@@ -1432,21 +1432,21 @@ bool FiguredBassFont::read(XmlReader& e)
             else if (tag == "parenthesisSquareClosed")
                   displayParenthesis[4] = e.readElementText()[0];
             else if (tag == "doubleflat")
-                  displayAccidental[FiguredBassItem::ModifierDoubleFlat]= e.readElementText()[0];
+                  displayAccidental[int(FiguredBassItem::Modifier::DOUBLEFLAT)]= e.readElementText()[0];
             else if (tag == "flat")
-                  displayAccidental[FiguredBassItem::ModifierFlat]      = e.readElementText()[0];
+                  displayAccidental[int(FiguredBassItem::Modifier::FLAT)]      = e.readElementText()[0];
             else if (tag == "natural")
-                  displayAccidental[FiguredBassItem::ModifierNatural]   = e.readElementText()[0];
+                  displayAccidental[int(FiguredBassItem::Modifier::NATURAL)]   = e.readElementText()[0];
             else if (tag == "sharp")
-                  displayAccidental[FiguredBassItem::ModifierSharp]     = e.readElementText()[0];
+                  displayAccidental[int(FiguredBassItem::Modifier::SHARP)]     = e.readElementText()[0];
             else if (tag == "doublesharp")
-                  displayAccidental[FiguredBassItem::ModifierDoubleSharp]= e.readElementText()[0];
+                  displayAccidental[int(FiguredBassItem::Modifier::DOUBLESHARP)]= e.readElementText()[0];
             else if (tag == "cross")
-                  displayAccidental[FiguredBassItem::ModifierCross]     = e.readElementText()[0];
+                  displayAccidental[int(FiguredBassItem::Modifier::CROSS)]     = e.readElementText()[0];
             else if (tag == "backslash")
-                  displayAccidental[FiguredBassItem::ModifierBackslash] = e.readElementText()[0];
+                  displayAccidental[int(FiguredBassItem::Modifier::BACKSLASH)] = e.readElementText()[0];
             else if (tag == "slash")
-                  displayAccidental[FiguredBassItem::ModifierSlash]     = e.readElementText()[0];
+                  displayAccidental[int(FiguredBassItem::Modifier::SLASH)]     = e.readElementText()[0];
             else if (tag == "digit") {
                   int digit = e.intAttribute("value");
                   if (digit < 0 || digit > 9)
@@ -1454,21 +1454,21 @@ bool FiguredBassFont::read(XmlReader& e)
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "simple")
-                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombSimple]      = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SIMPLE)]      = e.readElementText()[0];
                         else if (tag == "crossed")
-                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombCrossed]     = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::CROSSED)]     = e.readElementText()[0];
                         else if (tag == "backslashed")
-                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombBackslashed] = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::BACKSLASHED)] = e.readElementText()[0];
                         else if (tag == "slashed")
-                              displayDigit[FiguredBassItem::StyleModern]  [digit][FiguredBassItem::CombSlashed]     = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SLASHED)]     = e.readElementText()[0];
                         else if (tag == "simpleHistoric")
-                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombSimple]      = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SIMPLE)]      = e.readElementText()[0];
                         else if (tag == "crossedHistoric")
-                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombCrossed]     = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::CROSSED)]     = e.readElementText()[0];
                         else if (tag == "backslashedHistoric")
-                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombBackslashed] = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::BACKSLASHED)] = e.readElementText()[0];
                         else if (tag == "slashedHistoric")
-                              displayDigit[FiguredBassItem::StyleHistoric][digit][FiguredBassItem::CombSlashed]     = e.readElementText()[0];
+                              displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SLASHED)]     = e.readElementText()[0];
                         else {
                               e.unknown();
                               return false;
@@ -1480,7 +1480,7 @@ bool FiguredBassFont::read(XmlReader& e)
                   return false;
                   }
             }
-      displayParenthesis[0] = displayAccidental[FiguredBassItem::ModifierNone] = ' ';
+      displayParenthesis[0] = displayAccidental[int(FiguredBassItem::Modifier::NONE)] = ' ';
       return true;
       }
 
@@ -1691,7 +1691,7 @@ void FiguredBass::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const
 FiguredBass* Score::addFiguredBass()
       {
       Element* el = selection().element();
-      if (el == 0 || (el->type() != Element::NOTE && el->type() != Element::FIGURED_BASS)) {
+      if (el == 0 || (el->type() != Element::ElementType::NOTE && el->type() != Element::ElementType::FIGURED_BASS)) {
             if (!MScore::noGui)
                   QMessageBox::information(0,
                      QMessageBox::tr("MuseScore"),
@@ -1703,12 +1703,12 @@ FiguredBass* Score::addFiguredBass()
 
       FiguredBass * fb;
       bool bNew;
-      if (el->type() == Element::NOTE) {
+      if (el->type() == Element::ElementType::NOTE) {
             ChordRest * cr = static_cast<Note*>(el)->chord();
             fb = FiguredBass::addFiguredBassToSegment(cr->segment(),
                         (cr->track() / VOICES) * VOICES, 0, &bNew);
             }
-      else if (el->type() == Element::FIGURED_BASS) {
+      else if (el->type() == Element::ElementType::FIGURED_BASS) {
             fb = static_cast<FiguredBass*>(el);
             bNew = false;
             }

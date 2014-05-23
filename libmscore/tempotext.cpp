@@ -28,7 +28,7 @@ TempoText::TempoText(Score* s)
       {
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
-      setPlacement(ABOVE);
+      setPlacement(Placement::ABOVE);
       setTextStyleType(TEXT_STYLE_TEMPO);
       }
 
@@ -87,12 +87,12 @@ struct TempoPattern {
 // note: findTempoDuration requires the longer patterns to be before the shorter patterns in tp
 
 static const TempoPattern tp[] = {
-      TempoPattern("<sym>noteHalfUp</sym>\\s*<sym>textAugmentationDot</sym>",    1.5/30.0,  TDuration::V_HALF, 1),    // dotted 1/2
-      TempoPattern("<sym>noteQuarterUp</sym>\\s*<sym>textAugmentationDot</sym>", 1.5/60.0,  TDuration::V_QUARTER, 1), // dotted 1/4
-      TempoPattern("<sym>note8thUp</sym>\\s*<sym>textAugmentationDot</sym>",     1.5/120.0, TDuration::V_EIGHT, 1),   // dotted 1/8
-      TempoPattern("<sym>noteHalfUp</sym>",                                      1.0/30.0,  TDuration::V_HALF),       // 1/2
-      TempoPattern("<sym>noteQuarterUp</sym>",                                   1.0/60.0,  TDuration::V_QUARTER),    // 1/4
-      TempoPattern("<sym>note8thUp</sym>",                                       1.0/120.0, TDuration::V_EIGHT),      // 1/8
+      TempoPattern("<sym>noteHalfUp</sym>\\s*<sym>textAugmentationDot</sym>",    1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
+      TempoPattern("<sym>noteQuarterUp</sym>\\s*<sym>textAugmentationDot</sym>", 1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
+      TempoPattern("<sym>note8thUp</sym>\\s*<sym>textAugmentationDot</sym>",     1.5/120.0, TDuration::DurationType::V_EIGHT, 1),   // dotted 1/8
+      TempoPattern("<sym>noteHalfUp</sym>",                                      1.0/30.0,  TDuration::DurationType::V_HALF),       // 1/2
+      TempoPattern("<sym>noteQuarterUp</sym>",                                   1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
+      TempoPattern("<sym>note8thUp</sym>",                                       1.0/120.0, TDuration::DurationType::V_EIGHT),      // 1/8
       };
       
 //---------------------------------------------------------
@@ -230,7 +230,7 @@ QVariant TempoText::propertyDefault(P_ID id) const
       switch(id) {
             case P_TEMPO:             return 120;
             case P_TEMPO_FOLLOW_TEXT: return false;
-            case P_PLACEMENT:         return ABOVE;
+            case P_PLACEMENT:         return int(Placement::ABOVE);
             default:                  return Text::propertyDefault(id);
             }
       }
@@ -242,7 +242,7 @@ QVariant TempoText::propertyDefault(P_ID id) const
 void TempoText::layout()
       {
       Text::layout();
-      if (placement() == BELOW) {
+      if (placement() == Placement::BELOW) {
             rypos() = -rypos() + 4 * spatium();
             // rUserYoffset() *= -1;
             // text height ?

@@ -21,8 +21,8 @@ class QPainter;
 
 namespace Ms {
 
-enum class NoteHeadGroup : char;
-enum class NoteHeadType : char;
+enum class NoteHeadGroup : signed char;
+enum class NoteHeadType : signed char;
 
 //---------------------------------------------------------
 //   @@ Ambitus
@@ -53,7 +53,7 @@ class Ambitus : public Element {
       virtual Ambitus* clone() const                    { return new Ambitus(*this); }
 
       // getters and setters
-      virtual ElementType type() const                { return AMBITUS;    }
+      virtual ElementType type() const                { return ElementType::AMBITUS;    }
       NoteHeadGroup noteHeadGroup() const             { return _noteHeadGroup;}
       NoteHeadType noteHeadType() const               { return _noteHeadType; }
       DirectionH direction() const                    { return _dir;          }

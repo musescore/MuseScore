@@ -26,7 +26,7 @@ class QPainter;
 namespace Ms {
 
 class Note;
-enum class SymId;
+enum class SymId : short;
 
 //---------------------------------------------------------
 //   SymElement
@@ -42,57 +42,57 @@ struct SymElement {
 //   @@ Accidental
 //   @P hasBracket  bool
 //   @P small       bool
-//   @P acctype     Ms::Accidental::AccidentalType  (ACC_NONE, ACC_SHARP, ACC_FLAT, ACC_SHARP2, ACC_FLAT2, ACC_NATURAL, ...) (read only)
-//   @P role        Ms::Accidental::AccidentalRole  (ACC_AUTO, ACC_USER) (read only)
+//   @P acctype     Ms::Accidental::AccidentalType  (NONE, SHARP, FLAT, SHARP2, FLAT2, NATURAL, ...) (read only)
+//   @P role        Ms::Accidental::AccidentalRole  (AUTO, USER) (read only)
 //---------------------------------------------------------
 
 class Accidental : public Element {
    public:
-      enum AccidentalRole {
-            ACC_AUTO,               // layout created accidental
-            ACC_USER                // user created accidental
+      enum class AccidentalRole : char {
+            AUTO,               // layout created accidental
+            USER                // user created accidental
             };
-      enum AccidentalType {
-            ACC_NONE,
-            ACC_SHARP,
-            ACC_FLAT,
-            ACC_SHARP2,
-            ACC_FLAT2,
-            ACC_NATURAL,
+      enum class AccidentalType : char {
+            NONE,
+            SHARP,
+            FLAT,
+            SHARP2,
+            FLAT2,
+            NATURAL,
 
-            ACC_FLAT_SLASH,
-            ACC_FLAT_SLASH2,
-            ACC_MIRRORED_FLAT2,
-            ACC_MIRRORED_FLAT,
-            ACC_MIRRIRED_FLAT_SLASH,
-            ACC_FLAT_FLAT_SLASH,
+            FLAT_SLASH,
+            FLAT_SLASH2,
+            MIRRORED_FLAT2,
+            MIRRORED_FLAT,
+            MIRRIRED_FLAT_SLASH,
+            FLAT_FLAT_SLASH,
 
-            ACC_SHARP_SLASH,
-            ACC_SHARP_SLASH2,
-            ACC_SHARP_SLASH3,
-            ACC_SHARP_SLASH4,
+            SHARP_SLASH,
+            SHARP_SLASH2,
+            SHARP_SLASH3,
+            SHARP_SLASH4,
 
-            ACC_SHARP_ARROW_UP,
-            ACC_SHARP_ARROW_DOWN,
-            ACC_SHARP_ARROW_BOTH,
-            ACC_FLAT_ARROW_UP,
-            ACC_FLAT_ARROW_DOWN,
-            ACC_FLAT_ARROW_BOTH,
-            ACC_NATURAL_ARROW_UP,
-            ACC_NATURAL_ARROW_DOWN,
-            ACC_NATURAL_ARROW_BOTH,
-            ACC_SORI,
-            ACC_KORON,
-            ACC_END
+            SHARP_ARROW_UP,
+            SHARP_ARROW_DOWN,
+            SHARP_ARROW_BOTH,
+            FLAT_ARROW_UP,
+            FLAT_ARROW_DOWN,
+            FLAT_ARROW_BOTH,
+            NATURAL_ARROW_UP,
+            NATURAL_ARROW_DOWN,
+            NATURAL_ARROW_BOTH,
+            SORI,
+            KORON,
+            END
             };
 
 
    private:
       Q_OBJECT
-      Q_PROPERTY(bool               hasBracket READ hasBracket WRITE undoSetHasBracket)
-      Q_PROPERTY(bool               small      READ small      WRITE undoSetSmall)
-      Q_PROPERTY(AccidentalType     accType    READ accidentalType)
-      Q_PROPERTY(AccidentalRole     role       READ role)
+      Q_PROPERTY(bool           hasBracket  READ hasBracket  WRITE undoSetHasBracket)
+      Q_PROPERTY(bool           small       READ small       WRITE undoSetSmall)
+      Q_PROPERTY(AccidentalType accType     READ accidentalType)
+      Q_PROPERTY(AccidentalRole role        READ role)
       Q_ENUMS(AccidentalType)
       Q_ENUMS(AccidentalRole)
 
@@ -105,7 +105,7 @@ class Accidental : public Element {
    public:
       Accidental(Score* s = 0);
       virtual Accidental* clone() const     { return new Accidental(*this); }
-      virtual ElementType type() const      { return ACCIDENTAL; }
+      virtual ElementType type() const      { return ElementType::ACCIDENTAL; }
 
       const char* subtypeUserName() const;
       void setSubtype(const QString& s);
@@ -156,7 +156,7 @@ class AccidentalBracket : public Compound {
    public:
       AccidentalBracket(Score*);
       virtual AccidentalBracket* clone() const { return new AccidentalBracket(*this); }
-      virtual ElementType type() const         { return ACCIDENTAL_BRACKET; }
+      virtual ElementType type() const         { return ElementType::ACCIDENTAL_BRACKET; }
       };
 
 

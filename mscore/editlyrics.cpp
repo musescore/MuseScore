@@ -80,7 +80,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             // search prev chord
             while ((nextSegment = nextSegment->prev1(Segment::SegChordRest))) {
                   Element* el = nextSegment->element(track);
-                  if (el &&  el->type() == Element::CHORD)
+                  if (el &&  el->type() == Element::ElementType::CHORD)
                         break;
                   }
             }
@@ -88,7 +88,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             // search next chord
             while ((nextSegment = nextSegment->next1(Segment::SegChordRest))) {
                   Element* el = nextSegment->element(track);
-                  if (el &&  el->type() == Element::CHORD)
+                  if (el &&  el->type() == Element::ElementType::CHORD)
                         break;
                   }
             }
@@ -125,7 +125,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             ChordRest* cr = static_cast<ChordRest*>(nextSegment->element(track));
             lyrics->setParent(cr);
             lyrics->setNo(verse);
-            lyrics->setSyllabic(Lyrics::SINGLE);
+            lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
             newLyrics = true;
             }
 
@@ -133,25 +133,25 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
       if (oldLyrics && !moveOnly) {
             switch(lyrics->syllabic()) {
-                  case Lyrics::SINGLE:
-                  case Lyrics::BEGIN:
+                  case Lyrics::Syllabic::SINGLE:
+                  case Lyrics::Syllabic::BEGIN:
                         break;
-                  case Lyrics::END:
-                        lyrics->setSyllabic(Lyrics::SINGLE);
+                  case Lyrics::Syllabic::END:
+                        lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
                         break;
-                  case Lyrics::MIDDLE:
-                        lyrics->setSyllabic(Lyrics::BEGIN);
+                  case Lyrics::Syllabic::MIDDLE:
+                        lyrics->setSyllabic(Lyrics::Syllabic::BEGIN);
                         break;
                   }
             switch(oldLyrics->syllabic()) {
-                  case Lyrics::SINGLE:
-                  case Lyrics::END:
+                  case Lyrics::Syllabic::SINGLE:
+                  case Lyrics::Syllabic::END:
                         break;
-                  case Lyrics::BEGIN:
-                        oldLyrics->setSyllabic(Lyrics::SINGLE);
+                  case Lyrics::Syllabic::BEGIN:
+                        oldLyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
                         break;
-                  case Lyrics::MIDDLE:
-                        oldLyrics->setSyllabic(Lyrics::END);
+                  case Lyrics::Syllabic::MIDDLE:
+                        oldLyrics->setSyllabic(Lyrics::Syllabic::END);
                         break;
                   }
             }
@@ -190,7 +190,7 @@ void ScoreView::lyricsMinus()
       Segment* nextSegment = segment;
       while ((nextSegment = nextSegment->next1(Segment::SegChordRest))) {
             Element* el = nextSegment->element(track);
-            if (el &&  el->type() == Element::CHORD)
+            if (el &&  el->type() == Element::ElementType::CHORD)
                   break;
             }
       if (nextSegment == 0) {
@@ -221,26 +221,26 @@ void ScoreView::lyricsMinus()
             lyrics->setTrack(track);
             lyrics->setParent(nextSegment->element(track));
             lyrics->setNo(verse);
-            lyrics->setSyllabic(Lyrics::END);
+            lyrics->setSyllabic(Lyrics::Syllabic::END);
             }
 
-      if(lyrics->syllabic()==Lyrics::BEGIN) {
-            lyrics->setSyllabic(Lyrics::MIDDLE);
+      if(lyrics->syllabic()==Lyrics::Syllabic::BEGIN) {
+            lyrics->setSyllabic(Lyrics::Syllabic::MIDDLE);
             }
-      else if(lyrics->syllabic()==Lyrics::SINGLE) {
-            lyrics->setSyllabic(Lyrics::END);
+      else if(lyrics->syllabic()==Lyrics::Syllabic::SINGLE) {
+            lyrics->setSyllabic(Lyrics::Syllabic::END);
             }
 
       if (oldLyrics) {
             switch(oldLyrics->syllabic()) {
-                  case Lyrics::BEGIN:
-                  case Lyrics::MIDDLE:
+                  case Lyrics::Syllabic::BEGIN:
+                  case Lyrics::Syllabic::MIDDLE:
                         break;
-                  case Lyrics::SINGLE:
-                        oldLyrics->setSyllabic(Lyrics::BEGIN);
+                  case Lyrics::Syllabic::SINGLE:
+                        oldLyrics->setSyllabic(Lyrics::Syllabic::BEGIN);
                         break;
-                  case Lyrics::END:
-                        oldLyrics->setSyllabic(Lyrics::MIDDLE);
+                  case Lyrics::Syllabic::END:
+                        oldLyrics->setSyllabic(Lyrics::Syllabic::MIDDLE);
                         break;
                   }
             }
@@ -277,7 +277,7 @@ void ScoreView::lyricsUnderscore()
       Segment* nextSegment = segment;
       while ((nextSegment = nextSegment->next1(Segment::SegChordRest))) {
             Element* el = nextSegment->element(track);
-            if (el &&  el->type() == Element::CHORD)
+            if (el &&  el->type() == Element::ElementType::CHORD)
                   break;
             }
 
@@ -296,11 +296,11 @@ void ScoreView::lyricsUnderscore()
       if (nextSegment == 0) {
             if (oldLyrics) {
                   switch(oldLyrics->syllabic()) {
-                        case Lyrics::SINGLE:
-                        case Lyrics::END:
+                        case Lyrics::Syllabic::SINGLE:
+                        case Lyrics::Syllabic::END:
                               break;
                         default:
-                              oldLyrics->setSyllabic(Lyrics::END);
+                              oldLyrics->setSyllabic(Lyrics::Syllabic::END);
                               break;
                         }
                   if (oldLyrics->segment()->tick() < endTick)
@@ -320,15 +320,15 @@ void ScoreView::lyricsUnderscore()
             lyrics->setNo(verse);
             }
 
-      lyrics->setSyllabic(Lyrics::SINGLE);
+      lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
 
       if (oldLyrics) {
             switch(oldLyrics->syllabic()) {
-                  case Lyrics::SINGLE:
-                  case Lyrics::END:
+                  case Lyrics::Syllabic::SINGLE:
+                  case Lyrics::Syllabic::END:
                         break;
                   default:
-                        oldLyrics->setSyllabic(Lyrics::END);
+                        oldLyrics->setSyllabic(Lyrics::Syllabic::END);
                         break;
                   }
             if (oldLyrics->segment()->tick() < endTick)
@@ -407,7 +407,7 @@ void ScoreView::lyricsEndEdit()
       if (lyrics->isEmpty())
             lyrics->parent()->remove(lyrics);
       else {
-            if (oldLyrics && oldLyrics->syllabic() == Lyrics::END) {
+            if (oldLyrics && oldLyrics->syllabic() == Lyrics::Syllabic::END) {
                   if (oldLyrics->endTick() >= endTick)
                         oldLyrics->setTicks(0);
                   }

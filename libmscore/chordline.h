@@ -22,9 +22,9 @@ namespace Ms {
 class Chord;
 
 // subtypes:
-enum ChordLineType {
-      CHORDLINE_NOTYPE, CHORDLINE_FALL, CHORDLINE_DOIT,
-      CHORDLINE_PLOP, CHORDLINE_SCOOP
+enum class ChordLineType : char {
+      NOTYPE, FALL, DOIT,
+      PLOP, SCOOP
       };
 
 //---------------------------------------------------------
@@ -45,7 +45,7 @@ class ChordLine : public Element {
       ChordLine(const ChordLine&);
 
       virtual ChordLine* clone() const { return new ChordLine(*this); }
-      virtual ElementType type() const { return CHORDLINE; }
+      virtual ElementType type() const { return ElementType::CHORDLINE; }
       virtual void setChordLineType(ChordLineType);
       ChordLineType chordLineType() const { return _chordLineType; }
       Chord* chord() const                { return (Chord*)(parent()); }
