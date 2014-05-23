@@ -89,7 +89,7 @@ void MeasureProperties::setMeasure(Measure* _m)
       breakMultiMeasureRest->setChecked(m->getBreakMultiMeasureRest());
       int n  = m->repeatCount();
       count->setValue(n);
-      count->setEnabled(m->repeatFlags() & RepeatEnd);
+      count->setEnabled(m->repeatFlags() & Repeat::END);
       layoutStretch->setValue(m->userStretch());
       measureNumberMode->setCurrentIndex(int(m->measureNumberMode()));
       measureNumberOffset->setValue(m->noOffset());

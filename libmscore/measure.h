@@ -73,11 +73,11 @@ struct MStaff {
       void setNoText(Text* t)      { _noText = t;        }
       };
 
-enum {
-      RepeatEnd         = 1,
-      RepeatStart       = 2,
-      RepeatMeasureFlag = 4,
-      RepeatJump        = 8
+enum Repeat : char {
+      END         = 1,
+      START       = 2,
+      MEASUREFLAG = 4,
+      JUMP        = 8
       };
 
 //---------------------------------------------------------

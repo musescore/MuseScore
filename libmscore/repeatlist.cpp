@@ -304,7 +304,7 @@ void RepeatList::unwind()
                   }
             else {
                   // Jumps are only accepted outside of other repeats
-                  if (flags & RepeatJump) {
+                  if (flags & Repeat::JUMP) {
                         Jump* s = 0;
                         for (Segment* seg = m->first(); seg; seg = seg->next()) {
                               foreach(Element* e, seg->annotations()) {
@@ -356,7 +356,7 @@ void RepeatList::unwind()
                   isGoto   = false;
                   continue;
                   }
-            else if (flags & RepeatEnd) {
+            else if (flags & Repeat::END) {
                   if (endRepeat == m) {
                         ++loop;
                         if (loop >= repeatCount) {
@@ -402,7 +402,7 @@ Measure* RepeatList::jumpToStartRepeat(Measure* m)
       // handle special case of end repeat (Measure m) has a section break
       //
       for (nm = m; nm && nm != _score->firstMeasure(); nm = nm->prevMeasure()) {
-            if (nm->repeatFlags() & RepeatStart || (nm->sectionBreak() && m != nm)) {
+            if (nm->repeatFlags() & Repeat::START || (nm->sectionBreak() && m != nm)) {
                   if (nm->sectionBreak() && nm->nextMeasure())
                         nm = nm->nextMeasure();
                   break;

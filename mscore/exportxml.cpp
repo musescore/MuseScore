@@ -1312,7 +1312,7 @@ static void ending(Xml& xml, Volta* v, bool left)
 
 void ExportMusicXml::barlineLeft(Measure* m)
       {
-      bool rs = m->repeatFlags() & RepeatStart;
+      bool rs = m->repeatFlags() & Repeat::START;
       Volta* volta = findVolta(m, true);
       if (!rs && !volta) return;
       attr.doAttr(xml, false);
@@ -4509,7 +4509,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   moveToTick(m->tick() + m->ticks());
                   if (idx == 0)
                         repeatAtMeasureStop(xml, m, strack, etrack, strack);
-                  // note: don't use "m->repeatFlags() & RepeatEnd" here, because more
+                  // note: don't use "m->repeatFlags() & Repeat::END" here, because more
                   // barline types need to be handled besides repeat end ("light-heavy")
                   barlineRight(m);
                   xml.etag();

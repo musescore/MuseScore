@@ -877,7 +877,7 @@ void Measure::add(Element* el)
                   break;
 
             case ElementType::JUMP:
-                  _repeatFlags |= RepeatJump;
+                  _repeatFlags |= Repeat::JUMP;
                   _el.push_back(el);
                   break;
 
@@ -923,7 +923,7 @@ void Measure::remove(Element* el)
                   break;
 
             case ElementType::JUMP:
-                  _repeatFlags &= ~RepeatJump;
+                  _repeatFlags &= ~Repeat::JUMP;
                   // fall through
 
             case ElementType::HBOX:
@@ -1678,9 +1678,9 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
       if (_mmRestCount > 0)
             xml.tag("multiMeasureRest", _mmRestCount);
       if (writeSystemElements) {
-            if (_repeatFlags & RepeatStart)
+            if (_repeatFlags & Repeat::START)
                   xml.tagE("startRepeat");
-            if (_repeatFlags & RepeatEnd)
+            if (_repeatFlags & Repeat::END)
                   xml.tag("endRepeat", _repeatCount);
             if (_irregular)
                   xml.tagE("irregular");
@@ -2179,12 +2179,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.addTuplet(tuplet);
                   }
             else if (tag == "startRepeat") {
-                  _repeatFlags |= RepeatStart;
+                  _repeatFlags |= Repeat::START;
                   e.readNext();
                   }
             else if (tag == "endRepeat") {
                   _repeatCount = e.readInt();
-                  _repeatFlags |= RepeatEnd;
+                  _repeatFlags |= Repeat::END;
                   }
             else if (tag == "vspacer" || tag == "vspacerDown") {
                   if (staves[staffIdx]->_vspacerDown == 0) {
@@ -3584,7 +3584,7 @@ void Measure::layoutStage1()
 
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             if (score()->styleB(ST_createMultiMeasureRests)) {
-                  if ((repeatFlags() & RepeatStart) || (prevMeasure() && (prevMeasure()->repeatFlags() & RepeatEnd)))
+                  if ((repeatFlags() & Repeat::START) || (prevMeasure() && (prevMeasure()->repeatFlags() & Repeat::END)))
                         setBreakMMRest(true);
                   else if (!breakMultiMeasureRest()) {
                         for (Segment* s = first(); s; s = s->next()) {

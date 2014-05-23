@@ -1556,7 +1556,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   }
             ++i;
             }
-      m->setStartRepeatBarLine(m->repeatFlags() & RepeatStart);
+      m->setStartRepeatBarLine(m->repeatFlags() & Repeat::START);
       }
 
 //---------------------------------------------------------
@@ -1989,11 +1989,11 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                         BarLineType ot = bl->barLineType();
                         BarLineType nt = m->endBarLineType();
 
-                        if (m->repeatFlags() & RepeatEnd)
+                        if (m->repeatFlags() & Repeat::END)
                               nt = END_REPEAT;
                         else {
                               Measure* nm = m->nextMeasureMM();
-                              if (nm && (nm->repeatFlags() & RepeatStart))
+                              if (nm && (nm->repeatFlags() & Repeat::START))
                                     nt = START_REPEAT;
                               }
                         if (ot != nt) {
@@ -2670,7 +2670,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         continue;
                   Measure* m = static_cast<Measure*>(mb);
                   // first measure repeat?
-                  bool fmr = firstMeasure && (m->repeatFlags() & RepeatStart);
+                  bool fmr = firstMeasure && (m->repeatFlags() & Repeat::START);
 
                   if (mb == lmb) {       // last measure in system?
                         //
@@ -2678,7 +2678,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         // create a double bar line as end bar line
                         //
                         BarLineType bl = hasCourtesyKeysig ? DOUBLE_BAR : NORMAL_BAR;
-                        if (m->repeatFlags() & RepeatEnd)
+                        if (m->repeatFlags() & Repeat::END)
                               m->setEndBarLineType(END_REPEAT, m->endBarLineGenerated());
                         else if (m->endBarLineGenerated())
                               m->setEndBarLineType(bl, true);
@@ -2695,13 +2695,13 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               nm = static_cast<Measure*>(mb);
 
                         needRelayout |= m->setStartRepeatBarLine(fmr);
-                        if (m->repeatFlags() & RepeatEnd) {
-                              if (nm && (nm->repeatFlags() & RepeatStart))
+                        if (m->repeatFlags() & Repeat::END) {
+                              if (nm && (nm->repeatFlags() & Repeat::START))
                                     m->setEndBarLineType(END_START_REPEAT, m->endBarLineGenerated());
                               else
                                     m->setEndBarLineType(END_REPEAT, m->endBarLineGenerated());
                               }
-                        else if (nm && (nm->repeatFlags() & RepeatStart))
+                        else if (nm && (nm->repeatFlags() & Repeat::START))
                               m->setEndBarLineType(START_REPEAT, m->endBarLineGenerated());
                         else if (m->endBarLineGenerated())
                               m->setEndBarLineType(NORMAL_BAR, m->endBarLineGenerated());
@@ -2913,13 +2913,13 @@ void Score::layoutLinear()
                         }
                   Measure* m = static_cast<Measure*>(mb);
                   Measure* nm = m->nextMeasure();
-                 if (m->repeatFlags() & RepeatEnd) {
-                        if (nm && (nm->repeatFlags() & RepeatStart))
+                 if (m->repeatFlags() & Repeat::END) {
+                        if (nm && (nm->repeatFlags() & Repeat::START))
                               m->setEndBarLineType(END_START_REPEAT, m->endBarLineGenerated());
                         else
                               m->setEndBarLineType(END_REPEAT, m->endBarLineGenerated());
                         }
-                  else if (nm && (nm->repeatFlags() & RepeatStart))
+                  else if (nm && (nm->repeatFlags() & Repeat::START))
                         m->setEndBarLineType(START_REPEAT, m->endBarLineGenerated());
                   m->createEndBarLines();
                   w = m->minWidth1() * styleD(ST_linearStretch);

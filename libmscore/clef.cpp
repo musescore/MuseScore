@@ -193,7 +193,7 @@ void Clef::layout()
                               // if courtesy clef: show if score has courtesy clefs on
                               || ( score()->styleB(ST_genCourtesyClef)
                               // AND measure is not at the end of a repeat or of a section
-                              && !( (meas->repeatFlags() & RepeatEnd) || meas->sectionBreak() )
+                              && !( (meas->repeatFlags() & Repeat::END) || meas->sectionBreak() )
                               // AND this clef has courtesy clef turned on
                               && showCourtesy() );
                         if (!showClef)    {     // if no clef, set empty bbox and do nothing

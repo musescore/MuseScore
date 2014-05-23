@@ -485,10 +485,10 @@ qDebug("staff %d group %d timesig %d", staffIdx, int(staffType->group()), staffT
             m->setRepeatCount(bars[i].repeats);       // supported in gp5
 
             // reset the volta sequence if we have an opening repeat
-            if (bars[i].repeatFlags == RepeatStart)
+            if (bars[i].repeatFlags == Repeat::START)
                   voltaSequence = 1;
             // otherwise, if we see an end repeat symbol, only reset if the bar after it does not contain a volta
-            else if (bars[i].repeatFlags == RepeatEnd && i < bars.length() - 1) {
+            else if (bars[i].repeatFlags == Repeat::END && i < bars.length() - 1) {
                   if (bars[i+1].volta.voltaInfo.length() == 0) {
                     voltaSequence = 1;      // reset  the volta count
                         }
@@ -1329,9 +1329,9 @@ void GuitarPro3::read(QFile* fp)
             if (barBits & 0x2)
                   tdenominator = readUChar();
             if (barBits & 0x4)
-                  bar.repeatFlags |= RepeatStart;
+                  bar.repeatFlags |= Repeat::START;
             if (barBits & 0x8) {                // number of repeats
-                  bar.repeatFlags |= RepeatEnd;
+                  bar.repeatFlags |= Repeat::END;
                   bar.repeats = readUChar();
                   }
             if (barBits & 0x10) {                      // a volta
@@ -1401,10 +1401,10 @@ void GuitarPro3::read(QFile* fp)
             m->setRepeatCount(bars[i].repeats);
 
             // reset the volta sequence if we have an opening repeat
-            if (bars[i].repeatFlags == RepeatStart)
+            if (bars[i].repeatFlags == Repeat::START)
                   voltaSequence = 1;
             // otherwise, if we see an end repeat symbol, only reset if the bar after it does not contain a volta
-            else if (bars[i].repeatFlags == RepeatEnd && i < bars.length() - 1) {
+            else if (bars[i].repeatFlags == Repeat::END && i < bars.length() - 1) {
                   if (bars[i+1].volta.voltaInfo.length() == 0) {
                         voltaSequence = 1;
                         }
@@ -2081,9 +2081,9 @@ void GuitarPro4::read(QFile* fp)
             if (barBits & 0x2)
                   tdenominator = readUChar();
             if (barBits & 0x4)
-                  bar.repeatFlags |= RepeatStart;
+                  bar.repeatFlags |= Repeat::START;
             if (barBits & 0x8) {                // number of repeats
-                  bar.repeatFlags |= RepeatEnd;
+                  bar.repeatFlags |= Repeat::END;
                   bar.repeats = readUChar();
                   }
             if (barBits & 0x10) {                      // a volta
@@ -3132,9 +3132,9 @@ void GuitarPro5::read(QFile* fp)
             if (barBits & 0x2)
                   tdenominator = readUChar();
             if (barBits & 0x4)
-                  bar.repeatFlags |= RepeatStart;
+                  bar.repeatFlags |= Repeat::START;
             if (barBits & 0x8) {                // number of repeats
-                  bar.repeatFlags |= RepeatEnd;
+                  bar.repeatFlags |= Repeat::END;
                   bar.repeats = readUChar();
                   }
             if (barBits & 0x20) {
