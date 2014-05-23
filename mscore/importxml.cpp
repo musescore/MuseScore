@@ -5492,22 +5492,25 @@ int MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
                   clef = ClefType::C1;
             }
       else if (c == "percussion") {
-            clef = ClefType::PERC2;
+            clef = ClefType::PERC;
             res = PERC_DEFAULT_STAFF_TYPE;
             }
       else if (c == "TAB") {
-            clef = ClefType::TAB2;
+            clef = ClefType::TAB;
             res = TAB_DEFAULT_STAFF_TYPE;
             }
       else
             qDebug("ImportMusicXML: unknown clef <sign=%s line=%d oct ch=%d>", qPrintable(c), line, i);
-      // note: also generate symbol for tick 0
+/*      // note: also generate symbol for tick 0
       // was not necessary before 0.9.6
       Clef* clefs = new Clef(score);
       clefs->setClefType(clef);
       clefs->setTrack((staffIdx + clefno) * VOICES);
       Segment* s = measure->getSegment(clefs, tick);
-      s->add(clefs);
+      s->add(clefs); */
+      Staff* staff = score->staff(staffIdx + clefno);
+      if (staff)
+            staff->setClef(tick, clef);
       return res;
       }
 

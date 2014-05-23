@@ -105,34 +105,63 @@ bool ClefList::isClefChangeAt(int tick) const
 
 void ClefList::setClef(int tick, ClefTypeList ctl)
       {
+      // locate the clef position in the score
+      Measure* m = _staff->score()->tick2measure(tick);
+      Segment* seg = nullptr;
+      if (m) {
+            // if new clef is at the beginning of measure,
+            // move to previous measure (if any)
+            if (tick == m->tick()) {
+                  Measure* m2;
+                  if ( (m2=m->prevMeasure()) != nullptr)
+                        m = m2;
+                  }
+            seg = m->findSegment(Segment::SegClef, tick);
+            }
+      bool bAdd = true;                         // true = add or set clef into score
+                                                // false = remove clef from score
+      // if no clef change do nothing to list
       if (clef(tick) == ctl)
-            return;
-      if (tick > 0 && clef(tick-1) == ctl)
+            ;
+      // if clef would be the same as the clef in effect,
+      // remove from list and from score
+      else if (tick > 0 && clef(tick-1) == ctl) {
             _list.erase(tick);
+            bAdd = false;
+            }
+      // if clef is really new
       else  {
-            int track = _staff->idx() * VOICES;
-            // if no clef change at this tick in map yet
+            // add to map if not already there at this tick
             auto i = _list.find(tick);
-            if (i == _list.end()) {
+            if (i == _list.end())
                   // insert in list
                   _list.insert(std::pair<int, ClefTypeList>(tick, ctl));
-                  // and insert in score
-                  // (it is not executed during score file reading
-                  // as the measure being read is not inserted
-                  // into the score linked chain of measures yet)
-                  Measure* m = _staff->score()->tick2measure(tick);
-                  if (m) {
-//                        bool small = false;
-                        // if new clef is at the beginning of measure,
-                        // move to previous measure (if any)
-                        if (tick == m->tick()) {
-                              Measure* m2;
-                              if ( (m2=m->prevMeasure()) != nullptr)
-                                    m = m2;
+            // if clef change there already, update clef type
+            else {
+// DEBUG
+if (i->second == ctl)
+      qDebug("ClefList::setClef(): same clef already set.");
+                  i->second = ctl;
+                  }
+            }
+
+      // adjust score
+      // (it is not executed during score file reading as the measure being read
+      // is not inserted into the score linked chain of measures yet)
+      if (m) {
+            int track = _staff->idx() * VOICES;
+            if (bAdd && seg == nullptr)
+                  seg = m->getSegment(Segment::SegClef, tick);
+            if (seg) {
+                  Clef* clef = static_cast<Clef*>(seg->element(track));
+                  // if adding/setting clef
+                  if (bAdd) {
+                        // if clef already there, set type and generated flag
+                        if (seg->element(track)) {
+                              clef->setClefType(ctl);
+                              clef->setGenerated(false);
                               }
-                        Segment* seg = m->getSegment(Segment::SegClef, tick);
-                        if (seg->element(track))
-                              static_cast<Clef*>(seg->element(track))->setGenerated(false);
+                        // if clef not there, add
                         else {
                               Clef* clef = new Clef(_staff->score());
                               clef->setClefType(ctl);
@@ -142,13 +171,11 @@ void ClefList::setClef(int tick, ClefTypeList ctl)
                               seg->add(clef);
                               }
                         }
-                  }
-            // if clef change there already, update clef type
-            else {
-// DEBUG
-if (i->second == ctl)
-      qDebug("ClefList::setClef(): same clef already set.");
-                  i->second = ctl;
+                  // if removing clef
+                  else {
+                        if (clef != nullptr)
+                              seg->removeElement(track);
+                        }
                   }
             }
       }
