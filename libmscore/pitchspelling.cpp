@@ -241,14 +241,14 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QS
       switch (n) {
             case -2: acc = "bb" ; break;
             case -1:
-                  if (spelling != GERMAN)
+                  if (spelling != NoteSpellingType::GERMAN)
                         acc = "b";
                   else
                         // render flats as "es" except for A and E, which get "s"
                         acc = (tpc == 10 || tpc == 11) ? "s" : "es";
                   break;
             case  0: acc = ""; break;
-            case  1: acc = (spelling != GERMAN) ? "#" : "is"; break;
+            case  1: acc = (spelling != NoteSpellingType::GERMAN) ? "#" : "is"; break;
             case  2: acc = "##"; break;
             default:
                   qDebug("tpc2name(%d): acc %d", tpc, n);
@@ -270,14 +270,14 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, in
       acc = ((tpc+1) / 7) - 2;
       int idx = (tpc + 1) % 7;
       switch (spelling) {
-            case GERMAN:
+            case NoteSpellingType::GERMAN:
                   s = gnames[idx];
                   if (s == "H" && acc == -1) {
                         s = "B";
                         acc = 0;
                         }
                   break;
-            case SOLFEGGIO:   s = inames[idx]; break;
+            case NoteSpellingType::SOLFEGGIO:   s = inames[idx]; break;
             default:          s = names[idx]; break;
             }
       if (lowerCase)
