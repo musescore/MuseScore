@@ -109,7 +109,7 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       _staffTypeCombo->setAutoFillBackground(true);
       int idx = 0;
       for (const StaffType& st : StaffType::presets()) {
-            if (st.group() == STANDARD_STAFF_GROUP
+            if ( (st.group() == STANDARD_STAFF_GROUP && !canUsePerc)    // percussion excludes standard
                         || (st.group() == PERCUSSION_STAFF_GROUP && canUsePerc)
                         || (st.group() == TAB_STAFF_GROUP && canUseTabs))
                   _staffTypeCombo->addItem(st.name(), idx);

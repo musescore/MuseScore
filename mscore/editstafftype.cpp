@@ -50,15 +50,18 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       Instrument* instr = staff->part()->instr();
 
       groupCombo->clear();
-      // standard group is always present
-      groupCombo->addItem(StaffType::groupName(STANDARD_STAFF_GROUP), STANDARD_STAFF_GROUP);
       // only add percussion and tab groups if the instrument supports them
       if (instr != nullptr) {
-            if (instr->drumset() != nullptr)
+            if (instr->drumset() != nullptr)          // percussion excludes standard
                   groupCombo->addItem(StaffType::groupName(PERCUSSION_STAFF_GROUP), PERCUSSION_STAFF_GROUP);
+            else
+                  groupCombo->addItem(StaffType::groupName(STANDARD_STAFF_GROUP), STANDARD_STAFF_GROUP);
             if (instr->stringData() != nullptr && instr->stringData()->strings() > 0)
                   groupCombo->addItem(StaffType::groupName(TAB_STAFF_GROUP), TAB_STAFF_GROUP);
             }
+      // fall back to standard
+      else
+            groupCombo->addItem(StaffType::groupName(STANDARD_STAFF_GROUP), STANDARD_STAFF_GROUP);
 
       // tab page configuration
       QList<QString> fontNames = StaffType::fontNames(false);
