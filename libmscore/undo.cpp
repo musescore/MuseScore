@@ -2875,25 +2875,25 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                   case BROKEN_BAR:
                   case DOTTED_BAR:
                         {
-                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() & ~RepeatEnd);
+                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() & ~Repeat::END);
                         if (nm)
-                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~RepeatStart);
+                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
                         s->undoChangeEndBarLineType(measure, barType);
                         measure->setEndBarLineGenerated (false);
                         }
                         break;
                   case START_REPEAT:
-                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | RepeatStart);
+                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | Repeat::START);
                         break;
                   case END_REPEAT:
-                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | RepeatEnd);
+                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
                         if (nm)
-                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~RepeatStart);
+                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
                         break;
                   case END_START_REPEAT:
-                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | RepeatEnd);
+                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
                         if (nm)
-                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() | RepeatStart);
+                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() | Repeat::START);
                         break;
                   }
             }

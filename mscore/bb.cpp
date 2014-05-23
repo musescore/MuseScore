@@ -520,9 +520,9 @@ Score::FileError importBB(Score* score, const QString& name)
                   measure->add(lb);
                   }
             if (startChorus == n)
-                  measure->setRepeatFlags(RepeatStart);
+                  measure->setRepeatFlags(Repeat::START);
             else if (endChorus == n) {
-                  measure->setRepeatFlags(RepeatEnd);
+                  measure->setRepeatFlags(Repeat::END);
                   measure->setRepeatCount(bb.repeats());
                   }
             ++n;

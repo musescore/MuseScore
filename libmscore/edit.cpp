@@ -1236,7 +1236,7 @@ void Score::deleteItem(Element* el)
                   foreach(Score* score, scoreList()) {
                         Measure* m   = score->tick2measure(tick);
                         if (segType == Segment::SegStartRepeatBarLine)
-                              undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~RepeatStart);
+                              undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~Repeat::START);
                         else if (segType == Segment::SegBarLine)
                               undoRemoveElement(el);
                         else if (segType == Segment::SegEndBarLine) {
@@ -1248,10 +1248,10 @@ void Score::deleteItem(Element* el)
                               else if (!normalBar) {
                                     if (m->tick() >= tick)
                                           m = m->prevMeasure();
-                                    undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~RepeatEnd);
+                                    undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~Repeat::END);
                                     Measure* nm = m->nextMeasure();
                                     if (nm)
-                                          undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~RepeatStart);
+                                          undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
                                     undoChangeEndBarLineType(m, NORMAL_BAR);
                                     m->setEndBarLineGenerated(true);
                                     }

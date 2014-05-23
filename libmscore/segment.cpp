@@ -411,7 +411,7 @@ void Segment::add(Element* el)
 
       switch (el->type()) {
             case ElementType::REPEAT_MEASURE:
-                  measure()->setRepeatFlags(measure()->repeatFlags() | RepeatMeasureFlag);
+                  measure()->setRepeatFlags(measure()->repeatFlags() | Repeat::MEASUREFLAG);
                   _elist[track] = el;
                   empty = false;
                   break;
@@ -431,7 +431,7 @@ void Segment::add(Element* el)
                   _annotations.push_back(el);
                   break;
             case ElementType::JUMP:
-                  measure()->setRepeatFlags(measure()->repeatFlags() | RepeatJump);
+                  measure()->setRepeatFlags(measure()->repeatFlags() | Repeat::JUMP);
                   _annotations.push_back(el);
                   break;
 
@@ -539,7 +539,7 @@ void Segment::remove(Element* el)
                   break;
 
             case ElementType::REPEAT_MEASURE:
-                  measure()->setRepeatFlags(measure()->repeatFlags() & ~RepeatMeasureFlag);
+                  measure()->setRepeatFlags(measure()->repeatFlags() & ~Repeat::MEASUREFLAG);
                   _elist[track] = 0;
                   break;
 
@@ -559,7 +559,7 @@ void Segment::remove(Element* el)
                   break;
 
             case ElementType::JUMP:
-                  measure()->setRepeatFlags(measure()->repeatFlags() & ~RepeatJump);
+                  measure()->setRepeatFlags(measure()->repeatFlags() & ~Repeat::JUMP);
                   removeAnnotation(el);
                   break;
 

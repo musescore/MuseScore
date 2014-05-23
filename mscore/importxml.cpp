@@ -2170,10 +2170,10 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                               qDebug("unsupported bar type <%s>", barStyle.toLatin1().data());
                         barLine->setTrack(staff * VOICES);
                         if (barLine->barLineType() == START_REPEAT) {
-                              measure->setRepeatFlags(RepeatStart);
+                              measure->setRepeatFlags(Repeat::START);
                               }
                         else if (barLine->barLineType() == END_REPEAT) {
-                              measure->setRepeatFlags(RepeatEnd);
+                              measure->setRepeatFlags(Repeat::END);
                               }
                         else {
                               if (loc == "right")

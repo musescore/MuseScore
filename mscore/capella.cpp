@@ -654,12 +654,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               nm = score->getCreateMeasure(tick);
                               // qDebug("nm %p", nm);
                               if (nm)
-                                    nm->setRepeatFlags(nm->repeatFlags() | RepeatStart);
+                                    nm->setRepeatFlags(nm->repeatFlags() | Repeat::START);
                               }
 
                         if (st == END_REPEAT || st == END_START_REPEAT) {
                               if (pm)
-                                    pm->setRepeatFlags(pm->repeatFlags() | RepeatEnd);
+                                    pm->setRepeatFlags(pm->repeatFlags() | Repeat::END);
                               }
                         }
                         break;
