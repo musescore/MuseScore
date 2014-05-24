@@ -34,7 +34,7 @@
 #include "sym.h"
 #include "xml.h"
 #include "tempo.h"
-#include "tempotext.cpp"
+#include "tempotext.h"
 
 namespace Ms {
 
