@@ -304,7 +304,6 @@ Score::FileError Score::read114(XmlReader& e)
                   // store the tempo list to create invisible tempo text later
                   qreal tempo = e.attribute("fix","2.0").toDouble();
                   tm.setRelTempo(tempo);
-                  qreal _relTempo;
                   while (e.readNextStartElement()) {
                         if (e.name() == "tempo") {
                               int tick = e.attribute("tick").toInt();
@@ -316,7 +315,7 @@ Score::FileError Score::read114(XmlReader& e)
                               tm.setTempo(tick, tmp);
                         }
                         else if (e.name() == "relTempo")
-                              _relTempo = e.readElementText().toInt();
+                              e.readElementText();
                         else
                               e.unknown();
                   }
