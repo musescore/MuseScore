@@ -21,7 +21,7 @@ class Xml;
 class Score;
 class XmlReader;
 
-enum {
+enum Key : signed char {
       KEY_C_B=-7,
       KEY_G_B, KEY_D_B, KEY_A_B, KEY_E_B, KEY_B_B, KEY_F,   KEY_C,
       KEY_G,   KEY_D,   KEY_A,   KEY_E,   KEY_B,   KEY_F_S, KEY_C_S,

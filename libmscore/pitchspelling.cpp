@@ -58,7 +58,7 @@ int step2tpc(int step, AccidentalVal alter)
       return spellings[i];
       }
 
-static const int tpcByStepAndKey[NUM_OF_KEYS][STEP_DELTA_OCTAVE] = {
+static const int tpcByStepAndKey[Key::NUM_OF_KEYS][STEP_DELTA_OCTAVE] = {
 // step C    D    E    F    G    A    B        Key
       { C_B, D_B, E_B, F_B, G_B, A_B, B_B}, // Cb
       { C_B, D_B, E_B, F,   G_B, A_B, B_B}, // Gb
@@ -80,9 +80,9 @@ static const int tpcByStepAndKey[NUM_OF_KEYS][STEP_DELTA_OCTAVE] = {
 int step2tpcByKey(int step, int key)
       {
       while (step < 0)        step+= STEP_DELTA_OCTAVE;
-      while (key < KEY_MIN)   key += KEY_DELTA_ENHARMONIC;
-      while (key > KEY_MAX)   key -= KEY_DELTA_ENHARMONIC;
-      return tpcByStepAndKey[key-KEY_MIN][step % STEP_DELTA_OCTAVE];
+      while (key < Key::KEY_MIN)   key += KEY_DELTA_ENHARMONIC;
+      while (key > Key::KEY_MAX)   key -= KEY_DELTA_ENHARMONIC;
+      return tpcByStepAndKey[key-Key::KEY_MIN][step % STEP_DELTA_OCTAVE];
       }
 
 //---------------------------------------------------------
@@ -143,7 +143,7 @@ int step2tpc(const QString& stepName, AccidentalVal alter)
 // key: -7 - +7
 //---------------------------------------------------------
 
-static const int pitchByStepAndKey[NUM_OF_KEYS][STEP_DELTA_OCTAVE] = {
+static const int pitchByStepAndKey[Key::NUM_OF_KEYS][STEP_DELTA_OCTAVE] = {
 // step  C   D   E   F   G   A   B           Key
       { -1,  1,  3,  4,  6,  8, 10},      // Cb
       { -1,  1,  3,  5,  6,  8, 10},      // Gb
@@ -166,11 +166,11 @@ int step2deltaPitchByKey(int step, int key)
       {
       while (step < 0)
             step+= STEP_DELTA_OCTAVE;
-      while (key < KEY_MIN)
+      while (key < Key::KEY_MIN)
             key += KEY_DELTA_ENHARMONIC;
-      while (key > KEY_MAX)
+      while (key > Key::KEY_MAX)
             key -= KEY_DELTA_ENHARMONIC;
-      return pitchByStepAndKey[key-KEY_MIN][step % STEP_DELTA_OCTAVE];
+      return pitchByStepAndKey[key-Key::KEY_MIN][step % STEP_DELTA_OCTAVE];
       }
 
 //---------------------------------------------------------
@@ -204,17 +204,17 @@ int tpc2pitch(int tpc)
 // (1)      (tpc-Tpc::MIN) - 0         =  0 to 34 (for tcp-TCP_MIN from 0 to 34)
 // (2)      (tpc-Tpc::MIN) - 0) / 7    =  0 to 4  (for each settuple of tcp's) and finally
 // (3)      (tcp-Tpc::MIN) - 0) / 7 -3 = -3 to 1  (for each settuple of tcp's)
-//          where 0 = KEY_C_S - KEY_MAX
+//          where 0 = Key::KEY_C_S - Key::KEY_MAX
 //    for each previous key, the result of (1) increases by 1 and the classes of alter are shifted 1 TPC 'up':
 //          F#Maj: Fbb-Ebb => -3, Bbb to Eb => -2 and so on
 //          BMaj:  Fbb-Abb => -3, Ebb to Ab => -2 and so on
 //          and so on
 //    thus, for any 'key', the formula is:
-//          ((tcp-TCP_MIN) - (key-KEY_MAX)) / TCP_DELTA_SEMITONE - 3
+//          ((tcp-Tpc::MIN) - (key-Key::KEY_MAX)) / TCP_DELTA_SEMITONE - 3
 //---------------------------------------------------------
 
 int tpc2alterByKey(int tpc, int key) {
-      return (tpc - key - Tpc::MIN+KEY_MAX) / TPC_DELTA_SEMITONE - 3;
+      return (tpc - key - Tpc::MIN+Key::KEY_MAX) / TPC_DELTA_SEMITONE - 3;
       }
 
 //---------------------------------------------------------
@@ -749,8 +749,8 @@ void Score::spellNotelist(QList<Note*>& notes)
 //   pitch2tpc2
 //---------------------------------------------------------
 
-// pitch2tpc2(pitch, false) replaced by pitch2tpc(pitch, KEY_C, Prefer::FLATS)
-// pitch2tpc2(pitch, true) replaced by pitch2tpc(pitch, KEY_C, Prefer::SHARPS)
+// pitch2tpc2(pitch, false) replaced by pitch2tpc(pitch, Key::KEY_C, Prefer::FLATS)
+// pitch2tpc2(pitch, true) replaced by pitch2tpc(pitch, Key::KEY_C, Prefer::SHARPS)
 
 //---------------------------------------------------------
 //   pitch2tpc
@@ -784,7 +784,7 @@ int pitch2tpc(int pitch, int key, Prefer prefer)
 //    absolute step (C0 = 0, D0 = 1, ... C1 = 7, D2 = 8, ...) for a pitch/tpc according to key
 //    if pAlter not null, returns in it the alteration with respect to the corresponding key degree (-3 to 3)
 //    (for instance, an F in GMaj yields alteration -1 i.e. 1 semitone below corresp. deg. of GMaj which is F#)
-//    key: between KEY_MIN and KEY_MAX
+//    key: between Key::KEY_MIN and Key::KEY_MAX
 //---------------------------------------------------------
 
 int pitch2absStepByKey(int pitch, int tpc, int key, int *pAlter)
@@ -794,8 +794,8 @@ int pitch2absStepByKey(int pitch, int tpc, int key, int *pAlter)
       if(pitch > 127)         pitch -= PITCH_DELTA_OCTAVE;
       if(tpc < Tpc::MIN)      tpc   += TPC_DELTA_ENHARMONIC;
       if(tpc > Tpc::MAX)      tpc   -= TPC_DELTA_ENHARMONIC;
-      if(key < KEY_MIN)       key   += KEY_DELTA_ENHARMONIC;
-      if(key > KEY_MAX)       key   -= KEY_DELTA_ENHARMONIC;
+      if(key < Key::KEY_MIN)  key   += KEY_DELTA_ENHARMONIC;
+      if(key > Key::KEY_MAX)  key   -= KEY_DELTA_ENHARMONIC;
 
       int octave = pitch / PITCH_DELTA_OCTAVE;
       if (tpc == Tpc::C_BB || tpc == Tpc::C_B)
@@ -818,8 +818,8 @@ int absStep2pitchByKey(int step, int key)
       // sanitize input data
       if(step < 0)           step += STEP_DELTA_OCTAVE;
       if(step > 74)          step -= STEP_DELTA_OCTAVE;
-      if(key < KEY_MIN)      key  += KEY_DELTA_ENHARMONIC;
-      if(key > KEY_MAX)      key  -= KEY_DELTA_ENHARMONIC;
+      if(key < Key::KEY_MIN) key  += KEY_DELTA_ENHARMONIC;
+      if(key > Key::KEY_MAX) key  -= KEY_DELTA_ENHARMONIC;
 
       int octave = step / STEP_DELTA_OCTAVE;
       int deltaPitch = step2deltaPitchByKey(step % STEP_DELTA_OCTAVE, key);
