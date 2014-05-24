@@ -745,7 +745,7 @@ bool Element::readProperties(XmlReader& e)
             }
       else if (tag == "tick") {
             int val = e.readInt();
-            if (val >= 0 && type() != ElementType::SYMBOL  && ((type() != ElementType::GLISSANDO && type() != ElementType::FINGERING && (type() != ElementType::STAFF_TEXT || val == 0)) || score()->mscVersion() > 114))   // hack for 1.2
+            if (val >= 0 && type() != ElementType::SYMBOL  && ((type() != ElementType::GLISSANDO && type() != ElementType::FINGERING && (type() != ElementType::STAFF_TEXT || val == 0)) || score()->mscVersion() > 114))   // hack for 1.2, see #25572
                   e.setTick(score()->fileDivision(val));
             }
       else if (tag == "offset")
