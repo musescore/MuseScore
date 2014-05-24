@@ -112,7 +112,7 @@ int findPitchWidthPenalty(const QList<MidiNote> &notes, int splitPoint)
             if (lowPitchWidth <= octave)
                   penalty += 0;
             else if (lowPitchWidth <= maxPitchWidth)
-                  penalty += 10;
+                  penalty += 20;
             else
                   penalty += 100;
             }
@@ -123,32 +123,9 @@ int findPitchWidthPenalty(const QList<MidiNote> &notes, int splitPoint)
             if (highPitchWidth <= octave)
                   penalty += 0;
             else if (highPitchWidth <= maxPitchWidth)
-                  penalty += 10;
+                  penalty += 20;
             else
                   penalty += 100;
-            }
-
-      return penalty;
-      }
-
-int findAveragePitchPenalty(
-            const QList<MidiNote> &notes,
-            const QList<MidiNote> &prevNotes,
-            int splitPoint,
-            int prevSplitPoint)
-      {
-      int penalty = 0;
-
-      if (splitPoint > 0 && prevSplitPoint > 0) {
-            const int avgLowPitch = MChord::chordAveragePitch(notes, 0, splitPoint);
-            const int prevAvgLowPitch = MChord::chordAveragePitch(prevNotes, 0, prevSplitPoint);
-            penalty += qAbs(avgLowPitch - prevAvgLowPitch);
-            }
-      if (splitPoint < notes.size() && prevSplitPoint < prevNotes.size()) {
-            const int avgHighPitch = MChord::chordAveragePitch(notes, splitPoint, notes.size());
-            const int prevAvgHighPitch = MChord::chordAveragePitch(
-                                                prevNotes, prevSplitPoint, prevNotes.size());
-            penalty += qAbs(avgHighPitch - prevAvgHighPitch);
             }
 
       return penalty;
@@ -169,24 +146,30 @@ int findSimilarityPenalty(
             int prevSplitPoint)
       {
       int penalty = 0;
-
+                  // check for octaves and accompaniment
       if (splitPoint > 0 && prevSplitPoint > 0) {
             const bool isLowOctave = isOctave(notes, 0, splitPoint);
             const bool isPrevLowOctave = isOctave(prevNotes, 0, prevSplitPoint);
-            if (isLowOctave && isPrevLowOctave)
-                  penalty -= 10;
+
+            if (isLowOctave && isPrevLowOctave)             // octaves
+                  penalty -= 12;
+            else if (splitPoint > 1 && prevSplitPoint > 1)  // accompaniment
+                  penalty -= 5;
             }
       if (splitPoint < notes.size() && prevSplitPoint < prevNotes.size()) {
             const bool isHighOctave = isOctave(notes, splitPoint, notes.size());
             const bool isPrevHighOctave = isOctave(prevNotes, prevSplitPoint, prevNotes.size());
+
             if (isHighOctave && isPrevHighOctave)
-                  penalty -= 10;
+                  penalty -= 12;
+            else if (notes.size() - splitPoint > 1 && prevNotes.size() - prevSplitPoint > 1)
+                  penalty -= 5;
             }
-                  // check if it is a one-note melody
+                  // check for one-note melody
       if (splitPoint - 0 == 1 && prevSplitPoint - 0 == 1)
-            penalty -= 10;
+            penalty -= 12;
       if (notes.size() - splitPoint == 1 && prevNotes.size() - prevSplitPoint == 1)
-            penalty -= 10;
+            penalty -= 12;
 
       return penalty;
       }
@@ -217,11 +200,15 @@ int findDurationPenalty(const QList<MidiNote> &notes, int splitPoint)
       return penalty;
       }
 
-// prefer to assign more notes to the left hand than to the right
-
 int findNoteCountPenalty(const QList<MidiNote> &notes, int splitPoint)
       {
-      return (splitPoint - 0 > notes.size() - splitPoint) ? 0 : 10;
+      const int leftHandCount = splitPoint;
+      const int rightHandCount = notes.size() - splitPoint;
+      if (rightHandCount > 0 && leftHandCount > 0 && leftHandCount < rightHandCount)
+            return 5;
+      if (rightHandCount == 0 && leftHandCount > 1)
+            return 10;
+      return 0;
       }
 
 std::vector<ChordSplitData> findSplits(std::multimap<ReducedFraction, MidiChord> &chords)
@@ -257,8 +244,6 @@ std::vector<ChordSplitData> findSplits(std::multimap<ReducedFraction, MidiChord>
 
                               const int prevPenalty
                                           = splits[pos - 1].possibleSplits[prevSplitPoint].penalty
-                                          + findAveragePitchPenalty(
-                                                    notes, prevNotes, splitPoint, prevSplitPoint);
                                           + findSimilarityPenalty(
                                                     notes, prevNotes, splitPoint, prevSplitPoint);
 
