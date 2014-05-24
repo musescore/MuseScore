@@ -836,7 +836,7 @@ bool Selection::canCopy() const
 
 bool Selection::measureRange(Measure** m1, Measure** m2) const
       {
-      if (state() != SelState::RANGE)
+      if (!isRange())
             return false;
       *m1 = startSegment()->measure();
       *m2 = endSegment()->measure();

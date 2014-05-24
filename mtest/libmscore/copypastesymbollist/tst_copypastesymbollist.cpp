@@ -149,7 +149,7 @@ void TestCopyPasteSymbolList::copypaste(const char* name, const char* idx)
             return;
             }
       ChordRest* cr = 0;
-      if (score->selection().state() == SelState::RANGE)
+      if (score->selection().isRange())
             cr = score->selection().firstChordRest();
       else if (score->selection().isSingle()) {
             Element* e = score->selection().element();

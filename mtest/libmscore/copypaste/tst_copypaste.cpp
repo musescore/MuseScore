@@ -100,10 +100,10 @@ static void paste(Score* _score)
                   else
                               qDebug("cannot read type");
                   }
-      else if ((_score->selection().state() == SelState::RANGE || _score->selection().state() == SelState::LIST)
+      else if ((_score->selection().isRange() || _score->selection().isList())
                && ms->hasFormat(mimeStaffListFormat)) {
                   ChordRest* cr = 0;
-                  if (_score->selection().state() == SelState::RANGE)
+                  if (_score->selection().isRange())
                               cr = _score->selection().firstChordRest();
                   else if (_score->selection().isSingle()) {
                               Element* e = _score->selection().element();
