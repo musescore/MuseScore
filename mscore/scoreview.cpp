@@ -1992,12 +1992,30 @@ bool ScoreView::gestureEvent(QGestureEvent *event)
 //---------------------------------------------------------
 
 void ScoreView::wheelEvent(QWheelEvent* event)
-      {
-      static int deltaSum = 0;
-      deltaSum += event->delta();
-      int n = deltaSum / 120;
-      deltaSum %= 120;
+       {
 
+      #define PIXELSSTEPSFACTOR 5
+
+      QPoint pixelsScrolled = event->pixelDelta();
+      QPoint stepsScrolled = event->angleDelta();
+
+      int dx = 0, dy = 0, n = 0;
+      qreal nReal = 0.0;
+
+      if (!pixelsScrolled.isNull()) {
+            dx = pixelsScrolled.x();
+            dy = pixelsScrolled.y();
+            nReal = static_cast<qreal>(dx) / PIXELSSTEPSFACTOR;
+            }
+      else if (!stepsScrolled.isNull()) {
+            dx = static_cast<qreal>(stepsScrolled.x()) * qMax(2, width() / 10) / 120;
+            dy = static_cast<qreal>(stepsScrolled.y()) * qMax(2, height() / 10) / 120;
+            nReal = static_cast<qreal>(stepsScrolled.y()) / 120;
+            }
+
+      n = (int) nReal;
+
+      //this functionality seems currently blocked by the context menu
       if (event->buttons() & Qt::RightButton) {
             bool up = n > 0;
             if (!up)
@@ -2008,24 +2026,17 @@ void ScoreView::wheelEvent(QWheelEvent* event)
             score()->endCmd();
             return;
             }
+
       if (event->modifiers() & Qt::ControlModifier) {
             QApplication::sendPostedEvents(this, 0);
-            zoomStep(n, event->pos());
+            zoomStep(nReal, event->pos());
             return;
             }
-      int dx = 0;
-      int dy = 0;
-      if (event->modifiers() & Qt::ShiftModifier || event->orientation() == Qt::Horizontal) {
-            //
-            //    scroll horizontal
-            //
-            dx = n * qMax(2, width() / 10);
-            }
-      else {
-            //
-            //    scroll vertical
-            //
-            dy = n * qMax(2, height() / 10);
+
+      //make shift+scroll go horizontally
+      if (event->modifiers() & Qt::ShiftModifier && dx == 0) {
+            dx = dy;
+            dy = 0;
             }
 
       if (dx == 0 && dy == 0)
@@ -5578,4 +5589,3 @@ void ScoreView::cmdMoveCR(bool left)
             }
       }
 }
-
