@@ -1585,7 +1585,7 @@ void Score::moveDown(Chord* chord)
 
 void Score::cmdAddStretch(qreal val)
       {
-      if (selection().state() != SelState::RANGE)
+      if (!selection().isRange())
             return;
       int startTick = selection().tickStart();
       int endTick   = selection().tickEnd();
@@ -1618,7 +1618,7 @@ void Score::cmdInsertClef(ClefType type)
 
 void Score::cmdResetBeamMode()
       {
-      if (selection().state() != SelState::RANGE) {
+      if (!selection().isRange()) {
             qDebug("no system or staff selected");
             return;
             }

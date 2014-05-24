@@ -325,7 +325,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                   _selection.updateSelectedElements();
                   foreach(MuseScoreView* v, viewer)
                         v->adjustCanvasPosition(s1, false);
-                  if (selection().state() != SelState::RANGE)
+                  if (!selection().isRange())
                         _selection.setState(SelState::RANGE);
                   }
             }

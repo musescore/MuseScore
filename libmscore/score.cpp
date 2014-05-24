@@ -2770,7 +2770,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   Measure* m = static_cast<Measure*>(e);
                   int tick  = m->tick();
                   // int etick = tick + m->ticks();
-                  if (_selection.state() == SelState::NONE) {
+                  if (_selection.isNone()) {
                         _selection.setStartSegment(m->tick2segment(tick));
                         // _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
                         _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
@@ -2786,7 +2786,9 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   _selection.updateSelectedElements();
                   }
             else {
-                  if (_selection.state() == SelState::RANGE) {
+                        
+
+                  if (_selection.isRange()) {
                         select(0, SelectType::SINGLE, 0);
                         return;
                         }
@@ -2809,17 +2811,19 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   int tick  = m->tick();
                   int etick = tick + m->ticks();
                   activeTrack = staffIdx * VOICES;
-                  if (_selection.state() == SelState::NONE
-                      || (_selection.state() == SelState::LIST && !_selection.isSingle())) {
-                        if (_selection.state() == SelState::LIST)
+
+                  if (_selection.isNone()
+                      || (_selection.isList() && !_selection.isSingle())) {
+                        if (_selection.isList())
                               deselectAll();
+
                         _selection.setStaffStart(staffIdx);
                         _selection.setStaffEnd(staffIdx + 1);
                         _selection.setStartSegment(m->tick2segment(tick));
                         // _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
                         _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                         }
-                  else if (_selection.state() == SelState::RANGE) {
+                  else if (_selection.isRange()) {
                         if (staffIdx < _selection.staffStart())
                               _selection.setStaffStart(staffIdx);
                         else if (staffIdx >= _selection.staffEnd())
@@ -2885,9 +2889,10 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         e = e->parent();
                   ChordRest* cr = static_cast<ChordRest*>(e);
 
-                  if (_selection.state() == SelState::NONE
-                      || (_selection.state() == SelState::LIST && !_selection.isSingle())) {
-                        if (_selection.state() == SelState::LIST)
+
+                  if (_selection.isNone()
+                      || (_selection.isList() && !_selection.isSingle())) {
+                        if (_selection.isList())
                               deselectAll();
                         _selection.setStaffStart(e->staffIdx());
                         _selection.setStaffEnd(_selection.staffStart() + 1);
@@ -2934,7 +2939,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               return;
                               }
                         }
-                  else if (_selection.state() == SelState::RANGE) {
+                  else if (_selection.isRange()) {
                         staffIdx = cr->staffIdx();
                         int tick = cr->tick();
                         if (staffIdx < _selection.staffStart())
@@ -3058,7 +3063,7 @@ void Score::lassoSelectEnd()
       if (noteRestCount > 0) {
             endSegment = endSegment->nextCR(endStaff * VOICES);
             _selection.setRange(startSegment, endSegment, startStaff, endStaff+1);
-            if (_selection.state() != SelState::RANGE)
+            if (!_selection.isRange())
                   _selection.setState(SelState::RANGE);
             }
       _updateAll = true;
