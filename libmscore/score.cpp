@@ -2809,7 +2809,10 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   int tick  = m->tick();
                   int etick = tick + m->ticks();
                   activeTrack = staffIdx * VOICES;
-                  if (_selection.state() == SEL_NONE) {
+                  if (_selection.state() == SEL_NONE
+                      || (_selection.state() == SEL_LIST && !_selection.isSingle())) {
+                        if (_selection.state() == SEL_LIST)
+                              deselectAll();
                         _selection.setStaffStart(staffIdx);
                         _selection.setStaffEnd(staffIdx + 1);
                         _selection.setStartSegment(m->tick2segment(tick));
@@ -2882,7 +2885,10 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         e = e->parent();
                   ChordRest* cr = static_cast<ChordRest*>(e);
 
-                  if (_selection.state() == SEL_NONE) {
+                  if (_selection.state() == SEL_NONE
+                      || (_selection.state() == SEL_LIST && !_selection.isSingle())) {
+                        if (_selection.state() == SEL_LIST)
+                              deselectAll();
                         _selection.setStaffStart(e->staffIdx());
                         _selection.setStaffEnd(_selection.staffStart() + 1);
                         _selection.setStartSegment(cr->segment());
@@ -2959,6 +2965,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         }
                   else {
                         qDebug("sel state %d", _selection.state());
+                        return;
                         }
                   selState = SEL_RANGE;
                   if (!_selection.endSegment())
