@@ -48,7 +48,7 @@ const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (
 //    Midi pitch 60 is middle C.
 //---------------------------------------------------------
 
-// pitch2tpc(pitch) replaced by pitch2tpc(pitch, KEY_C, Prefer::NEAREST)
+// pitch2tpc(pitch) replaced by pitch2tpc(pitch, Key::KEY_C, Prefer::NEAREST)
 
 enum class Prefer : char { FLATS=8, NEAREST=11, SHARPS=13 };
 enum class NoteSpellingType : char { STANDARD = 0, GERMAN, SOLFEGGIO };

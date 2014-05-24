@@ -322,7 +322,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                                  && h->parent()->parent()->type() == Element::ElementType::SEGMENT) {
                                     tick = static_cast<Segment*>(h->parent()->parent())->tick();
                                     }
-                              int key = !h->staff() ? KEY_C : h->staff()->keymap()->key(tick).accidentalType();
+                              int key = !h->staff() ? Key::KEY_C : h->staff()->keymap()->key(tick).accidentalType();
                               rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
                                           transposeInterval, key, trKeys, useDoubleSharpsFlats);
                               baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
@@ -406,7 +406,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                         int rootTpc, baseTpc;
                         if (mode == TRANSPOSE_DIATONICALLY) {
                               int tick = segment->tick();
-                              int key = !h->staff() ? KEY_C : h->staff()->keymap()->key(tick).accidentalType();
+                              int key = !h->staff() ? Key::KEY_C : h->staff()->keymap()->key(tick).accidentalType();
                               rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
                                           transposeInterval, key, trKeys, useDoubleSharpsFlats);
                               baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
@@ -526,7 +526,7 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
       int alter1;
       int alter2;
       int tick     = chord()->segment()->tick();
-      int key      = !staff() ? KEY_C : staff()->keymap()->key(tick).accidentalType();
+      int key      = !staff() ? Key::KEY_C : staff()->keymap()->key(tick).accidentalType();
       int absStep1 = pitch2absStepByKey(pitch(),                 tpc1(), key, &alter1);
       int absStep2 = pitch2absStepByKey(pitch()-transposition(), tpc2(), key, &alter2);
 

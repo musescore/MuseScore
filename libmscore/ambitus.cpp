@@ -273,7 +273,7 @@ void Ambitus::layout()
       if (stf)
             key = stf->key(segm->tick()).accidentalType();
       else
-            key = KEY_C;
+            key = Key::KEY_C;
 
       // top note head
       if (_topPitch == INVALID_PITCH || _topTpc == Tpc::INVALID)

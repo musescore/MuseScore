@@ -5074,7 +5074,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   int pitch = drumsets[partId][instrId].pitch;
                   note->setPitch(pitch);
                   // TODO - does this need to be key-aware?
-                  note->setTpc(pitch2tpc(pitch, KEY_C, Prefer::NEAREST)); // TODO: necessary ?
+                  note->setTpc(pitch2tpc(pitch, Key::KEY_C, Prefer::NEAREST)); // TODO: necessary ?
                   }
             else
                   xmlSetPitch(note, c, alter, octave, ottava, track);
