@@ -332,7 +332,7 @@ NamedEventList* InstrumentData::midiAction(const QString& s, int channelIdx) con
 
 Channel::Channel()
       {
-      for(int i = 0; i < A_INIT_COUNT; ++i)
+      for(int i = 0; i < int(A::INIT_COUNT); ++i)
             init.push_back(MidiCoreEvent());
       synti    = "Fluid";     // default synthesizer
       channel  = -1;
@@ -484,26 +484,26 @@ void Channel::updateInitList() const
             e.setType(ME_CONTROLLER);
             e.setDataA(CTRL_PROGRAM);
             e.setDataB(program);
-            init[A_PROGRAM] = e;
+            init[int(A::PROGRAM)] = e;
             }
 
       e.setData(ME_CONTROLLER, CTRL_HBANK, (bank >> 7) & 0x7f);
-      init[A_HBANK] = e;
+      init[int(A::HBANK)] = e;
 
       e.setData(ME_CONTROLLER, CTRL_LBANK, bank & 0x7f);
-      init[A_LBANK] = e;
+      init[int(A::LBANK)] = e;
 
       e.setData(ME_CONTROLLER, CTRL_VOLUME, volume);
-      init[A_VOLUME] = e;
+      init[int(A::VOLUME)] = e;
 
       e.setData(ME_CONTROLLER, CTRL_PANPOT, pan);
-      init[A_PAN] = e;
+      init[int(A::PAN)] = e;
 
       e.setData(ME_CONTROLLER, CTRL_CHORUS_SEND, chorus);
-      init[A_CHORUS] = e;
+      init[int(A::CHORUS)] = e;
 
       e.setData(ME_CONTROLLER, CTRL_REVERB_SEND, reverb);
-      init[A_REVERB] = e;
+      init[int(A::REVERB)] = e;
       }
 
 //---------------------------------------------------------

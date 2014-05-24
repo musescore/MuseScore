@@ -74,10 +74,10 @@ struct MStaff {
       };
 
 enum Repeat : char {
-      END         = 1,
-      START       = 2,
-      MEASUREFLAG = 4,
-      JUMP        = 8
+      END     = 1,
+      START   = 2,
+      MEASURE = 4,
+      JUMP    = 8
       };
 
 //---------------------------------------------------------
@@ -104,7 +104,7 @@ class Measure : public MeasureBase {
       Fraction _len;          ///< actual length of measure
 
       int _repeatCount;       ///< end repeat marker und repeat count
-      int _repeatFlags;       ///< or'd RepeatType's
+      int _repeatFlags;       ///< or'd Repeat's
 
       QList<MStaff*>  staves;
 
