@@ -13,6 +13,7 @@
 #include <fenv.h>
 #include <QToolBar>
 #include <QWidget>
+#include <QMenuBar>
 
 #include "palettebox.h"
 #include "config.h"
@@ -763,7 +764,6 @@ MuseScore::MuseScore()
       //---------------------
 
       QMenuBar* mb = menuBar();
-      mb->setFocusPolicy(Qt::ClickFocus);
 
       //---------------------
       //    Menu File
@@ -1108,9 +1108,12 @@ MuseScore::MuseScore()
 
       setCentralWidget(envelope);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       envelope->setFocusPolicy(Qt::ClickFocus);
 >>>>>>> Removed most of the unaccessible objects from tabbing order, 5 more remaining.
+=======
+>>>>>>> Removed 4 more objects from the tabbing order. 1 remaining.
       // load cascading instrument templates
       loadInstrumentTemplates(preferences.instrumentList1);
       if (!preferences.instrumentList2.isEmpty())
