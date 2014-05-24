@@ -225,7 +225,9 @@ Shortcut* Shortcut::getShortcut(const char* id)
 QAction* getAction(const char* id)
       {
       Shortcut* s = Shortcut::getShortcut(id);
-      return s->action();
+      if (s)
+            return s->action();
+      else return nullptr;
       }
 
 //---------------------------------------------------------
