@@ -34,24 +34,28 @@ class TestGuitarPro : public QObject, public MTest
 private slots:
       void initTestCase();
       void gpTestIrrTuplet() { gpReadTest("testIrrTuplet", "gp4"); }
-      void gpSlur() { gpReadTest("slur", "gp4"); }
-      void gpSforzato() { gpReadTest("sforzato", "gp4"); }
-      void gpHeavyAccent() { gpReadTest("heavy-accent", "gp5"); }
-      void gpTremolos() { gpReadTest("tremolos", "gp5"); }
-      void gpTrill() { gpReadTest("trill", "gp4"); }
-      void gpDynamic() { gpReadTest("dynamic", "gp5"); }
-      void gpArpeggio() { gpReadTest("arpeggio_up_down", "gp4"); }
-      void gpGhostNote() { gpReadTest("ghost_note", "gp3"); }
-      void gpGraceNote() { gpReadTest("grace", "gp5"); }
-      void gp5Volta() { gpReadTest("volta", "gp5"); }
-      void gp4Volta() { gpReadTest("volta", "gp4"); }
-      void gp3Volta() { gpReadTest("volta", "gp3"); }
-      void gp5copyright() { gpReadTest("copyright", "gp5"); }
-      void gp4copyright() { gpReadTest("copyright", "gp4"); }
-      void gp3copyright() { gpReadTest("copyright", "gp3"); }
-      void gp5Tempo() { gpReadTest("tempo", "gp5"); }
-      void gp4Tempo() { gpReadTest("tempo", "gp4"); }
-      void gp3Tempo() { gpReadTest("tempo", "gp3"); }
+      void gpSlur()          { gpReadTest("slur", "gp4"); }
+      void gpSforzato()      { gpReadTest("sforzato", "gp4"); }
+      void gpHeavyAccent()   { gpReadTest("heavy-accent", "gp5"); }
+      void gpTremolos()      { gpReadTest("tremolos", "gp5"); }
+      void gpTrill()         { gpReadTest("trill", "gp4"); }
+      void gpDynamic()       { gpReadTest("dynamic", "gp5"); }
+      void gpArpeggio()      { gpReadTest("arpeggio_up_down", "gp4"); }
+      void gpGhostNote()     { gpReadTest("ghost_note", "gp3"); }
+      void gpGraceNote()     { gpReadTest("grace", "gp5"); }
+      void gp5Volta()        { gpReadTest("volta", "gp5"); }
+      void gp4Volta()        { gpReadTest("volta", "gp4"); }
+      void gp3Volta()        { gpReadTest("volta", "gp3"); }
+      void gp5copyright()    { gpReadTest("copyright", "gp5"); }
+      void gp4copyright()    { gpReadTest("copyright", "gp4"); }
+      void gp3copyright()    { gpReadTest("copyright", "gp3"); }
+      void gp5Tempo()        { gpReadTest("tempo", "gp5"); }
+      void gp4Tempo()        { gpReadTest("tempo", "gp4"); }
+      void gp3Tempo()        { gpReadTest("tempo", "gp3"); }
+      void gp5BasicBend()    { gpReadTest("basic-bend", "gp5"); }
+      void gp5Bend()         { gpReadTest("bend", "gp5"); }
+      void gp4Bend()         { gpReadTest("bend", "gp4"); }
+      void gp3Bend()         { gpReadTest("bend", "gp3"); }
       };
 
 //---------------------------------------------------------
