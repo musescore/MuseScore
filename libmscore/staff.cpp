@@ -732,7 +732,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
             pst = StaffType::getDefaultPreset(t->staffGroup);
 
       setStaffType(pst);
-//      if (pst->group() == PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
+//      if (pst->group() == ArticulationShowIn::PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
 //            setLines(t->staffLines[cidx]);      // use number of lines from instr. template
       }
 
