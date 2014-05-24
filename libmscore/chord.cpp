@@ -1889,7 +1889,7 @@ void Chord::layoutPitched()
                   else if (rtick()) {
                         // if this is not first chord of measure, get previous chord
                         Segment* s = segment()->prev(Segment::SegChordRest);
-                        if (s && s->element(track()) && s->element(track())->type() == CHORD)
+                        if (s && s->element(track()) && s->element(track())->type() == ElementType::CHORD)
                               pc = static_cast<Chord*>(s->element(track()));
                         }
                   if (pc && !pc->graceNotes().isEmpty()) {
@@ -1927,7 +1927,7 @@ void Chord::layoutPitched()
                         else if (mainChord->rtick()) {
                               // grace note before - use previous normal note of measure
                               Segment* s = mainChord->segment()->prev(Segment::SegChordRest);
-                              if (s && s->element(track()) && s->element(track())->type() == CHORD)
+                              if (s && s->element(track()) && s->element(track())->type() == ElementType::CHORD)
                                     pc = static_cast<Chord*>(s->element(track()));
                               }
                         }
