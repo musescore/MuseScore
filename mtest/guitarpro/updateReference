@@ -21,3 +21,7 @@ cp   $MSCORE/copyright.gp3.mscx copyright.gp3-ref.mscx
 cp   $MSCORE/tempo.gp5.mscx tempo.gp5-ref.mscx
 cp   $MSCORE/tempo.gp4.mscx tempo.gp4-ref.mscx
 cp   $MSCORE/tempo.gp3.mscx tempo.gp3-ref.mscx
+cp   $MSCORE/basic-bend.gp5.mscx basic-bend.gp5-ref.mscx
+cp   $MSCORE/bend.gp5.mscx bend.gp5-ref.mscx
+cp   $MSCORE/bend.gp4.mscx bend.gp4-ref.mscx
+cp   $MSCORE/bend.gp3.mscx bend.gp3-ref.mscx
