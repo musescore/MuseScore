@@ -17,7 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-
+#include <QStackedLayout>
+#include <QTabBar>
 #include "config.h"
 #include "scoretab.h"
 #include "scoreview.h"
@@ -48,13 +49,13 @@ ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
       tab = new QTabBar;
       tab->setExpanding(false);
       tab->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
-      tab->setFocusPolicy(Qt::StrongFocus);
+      tab->setFocusPolicy(Qt::ClickFocus);
       tab->setTabsClosable(true);
 
       tab2 = new QTabBar;
       tab2->setExpanding(false);
       tab2->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
-      tab2->setFocusPolicy(Qt::StrongFocus);
+      tab2->setFocusPolicy(Qt::ClickFocus);
       tab2->setVisible(false);
       tab2->setTabsClosable(false);
 
