@@ -13,7 +13,9 @@
 #include <fenv.h>
 #include <QToolBar>
 #include <QWidget>
+#include <QMenuBar>
 
+#include "palettebox.h"
 #include "config.h"
 #include "musescore.h"
 #include "scoreview.h"
@@ -463,7 +465,6 @@ MuseScore::MuseScore()
       _modeText->setAutoFillBackground(false);
       _modeText->setObjectName("modeLabel");
       _statusBar = new QStatusBar;
-
       hRasterAction = getAction("hraster");
       hRasterAction->setCheckable(true);
       vRasterAction = getAction("vraster");
@@ -542,6 +543,7 @@ MuseScore::MuseScore()
       mainScore->setLayout(layout);
 
       _navigator = new NScrollArea;
+      _navigator->setFocusPolicy(Qt::ClickFocus);
       mainWindow->addWidget(_navigator);
       showNavigator(preferences.showNavigator);
 
@@ -569,6 +571,7 @@ MuseScore::MuseScore()
       hl->setSpacing(0);
       importmidiShowPanel->setLayout(hl);
       QPushButton *b = new QPushButton("Show MIDI import panel");
+      b->setFocusPolicy(Qt::ClickFocus);
       importmidiShowPanel->setVisible(false);
       connect(b, SIGNAL(clicked()), SLOT(showMidiImportPanel()));
       connect(importmidiPanel, SIGNAL(closeClicked()), importmidiShowPanel, SLOT(show()));
@@ -585,7 +588,6 @@ MuseScore::MuseScore()
       }
 
       splitter = new QSplitter;
-
       tab1 = new ScoreTab(&scoreList);
       tab1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       connect(tab1, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
@@ -762,7 +764,6 @@ MuseScore::MuseScore()
       //---------------------
 
       QMenuBar* mb = menuBar();
-      mb->setFocusPolicy(Qt::ClickFocus);
 
       //---------------------
       //    Menu File
@@ -1106,7 +1107,6 @@ MuseScore::MuseScore()
       menuHelp->addAction(getAction("resource-manager"));
 
       setCentralWidget(envelope);
-      envelope->setFocusPolicy(Qt::ClickFocus);
       // load cascading instrument templates
       loadInstrumentTemplates(preferences.instrumentList1);
       if (!preferences.instrumentList2.isEmpty())
