@@ -46,6 +46,7 @@ JackAudio::JackAudio(Seq* s)
 JackAudio::~JackAudio()
       {
       if (client) {
+            stop();
             if (jack_client_close(client)) {
                   qDebug("jack_client_close() failed: %s",
                      strerror(errno));
@@ -226,7 +227,7 @@ bool JackAudio::stop()
       {
       if (preferences.useJackMidi && preferences.rememberLastMidiConnections) {
             QSettings settings;
-            settings.setValue("midiPorts", midiOutputPorts.size());
+            //settings.setValue("midiPorts", midiOutputPorts.size());
             int port = 0;
             foreach(jack_port_t* mp, midiOutputPorts) {
                   const char** cc = jack_port_get_connections(mp);
@@ -243,7 +244,8 @@ bool JackAudio::stop()
                   free((void*)cc);
                   ++port;
                   }
-            settings.setValue("midiInputPorts", midiInputPorts.size());
+            // We don't use it now
+            //settings.setValue("midiInputPorts", midiInputPorts.size());
             port = 0;
             foreach(jack_port_t* mp, midiInputPorts) {
                   const char** cc = jack_port_get_connections(mp);
@@ -374,6 +376,11 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
                   *r++ = *sp++;
                   }
             }
+      else {
+            // JACK MIDI only
+            float buffer[frames * 2];
+            audio->seq->process((unsigned)frames, buffer);
+            }
       return 0;
       }
 
@@ -390,8 +397,9 @@ static void jackError(const char *s)
 //   noJackError
 //---------------------------------------------------------
 
-static void noJackError(const char* /* s */)
+static void noJackError(const char*  s )
       {
+      qDebug("noJACK ERROR: %s", s);
       }
 
 //---------------------------------------------------------
@@ -504,7 +512,7 @@ int JackAudio::getState()
 //   putEvent
 //---------------------------------------------------------
 
-void JackAudio::putEvent(const Event& e, unsigned framePos)
+void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
       {
       if (!preferences.useJackMidi)
             return;
@@ -562,7 +570,8 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
                   p[1] = e.dataA();
                   }
                   break;
-            case ME_SYSEX:
+          // Do we really need to handle ME_SYSEX?
+          /*  case ME_SYSEX:
                   {
                   const unsigned char* data = e.edata();
                   int len = e.len();
@@ -575,7 +584,7 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
                   p[len+1] = 0xf7;
                   memcpy(p+1, data, len);
                   }
-                  break;
+                  break;*/
             case ME_SONGPOS:
             case ME_CLOCK:
             case ME_START:

@@ -650,20 +650,43 @@ void Seq::process(unsigned n, float* buffer)
       int driverState = _driver->getState();
 
       if (driverState != state) {
+            // Got a message from JACK Transport panel: Play
             if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY) {
+
+                  if((preferences.useJackMidi || preferences.useJackAudio) && !getAction("play")->isChecked()) {
+                        // Do not play while editing elements
+                        if(mscore->state()==STATE_NORMAL && isRunning() && canStart()) {
+                              if (playlistChanged)
+                                          collectEvents();
+                              getAction("play")->setChecked(true);
+                              getAction("play")->triggered(true);
+                              }
+                        else {
+                              return;
+                              }
+                        }
+                  // Need to change state after calling collectEvents()
                   state = TRANSPORT_PLAY;
-                  if (mscore->countIn() && cs->playMode() == PlayMode::SYNTHESIZER) {
+                  if (mscore->countIn() && cs->playMode() == PLAYMODE_SYNTHESIZER) {
                         countInEvents.clear();
                         inCountIn = true;
                         }
                   emit toGui('1');
                   }
+            // Got a message from JACK Transport panel: Stop
             else if (state == TRANSPORT_PLAY && driverState == TRANSPORT_STOP) {
                   state = TRANSPORT_STOP;
-                  stopNotes();
-                  // send sustain off
-                  // TODO: channel?
-                  putEvent(NPlayEvent(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0));
+                  // Muting all notes
+                  if(preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio || preferences.useOsc)
+                        stopNotes();
+                  if(preferences.useJackMidi)
+                        for(int ch=0; ch<cs->midiMapping()->size();ch++) {
+                              // send sustain off
+                              putEvent(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
+                              for(int i=0; i<128; i++)
+                                    putEvent(NPlayEvent(ME_NOTEOFF,ch,i,0));
+                              }
+
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
                               qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
@@ -1237,6 +1260,8 @@ void Seq::putEvent(const NPlayEvent& event)
             }
       int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
       _synti->play(event, syntiIdx);
+      if (preferences.useJackMidi)
+            driver()->putEvent(event,0);
       }
 
 //---------------------------------------------------------
