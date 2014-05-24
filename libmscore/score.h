@@ -425,6 +425,10 @@ class Score : public QObject {
       qreal cautionaryWidth(Measure* m);
       void createPlayEvents();
 
+      void selectSingle(Element* e, int staffIdx);
+      void selectAdd(Element* e);
+      void selectRange(Element* e, int staffIdx);
+
    protected:
       void createPlayEvents(Chord*);
       SynthesizerState _synthesizerState;

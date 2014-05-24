@@ -347,15 +347,15 @@ void Selection::updateSelectedElements()
 //   setRange
 //---------------------------------------------------------
 
-void Selection::setRange(Segment* a, Segment* b, int c, int d)
+void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd)
       {
-      Q_ASSERT(d > c && c >= 0 && d >= 0 && d <= _score->nstaves());
+      Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
 
-      _startSegment  = a;
-      _endSegment    = b;
-      _activeSegment = b;
-      _staffStart    = c;
-      _staffEnd      = d;
+      _startSegment  = startSegment;
+      _endSegment    = endSegment;
+      _activeSegment = endSegment;
+      _staffStart    = staffStart;
+      _staffEnd      = staffEnd;
       setState(SelState::RANGE);
       }
 

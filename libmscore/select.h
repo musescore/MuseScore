@@ -107,7 +107,7 @@ class Selection {
       Segment* endSegment() const       { return _endSegment;   }
       void setStartSegment(Segment* s)  { _startSegment = s; }
       void setEndSegment(Segment* s)    { _endSegment = s; }
-      void setRange(Segment* a, Segment* b, int c, int d);
+      void setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd);
       Segment* activeSegment() const    { return _activeSegment; }
       void setActiveSegment(Segment* s) { _activeSegment = s; }
       ChordRest* activeCR() const;
