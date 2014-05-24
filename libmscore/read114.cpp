@@ -33,6 +33,8 @@
 #include "style.h"
 #include "sym.h"
 #include "xml.h"
+#include "tempo.h"
+#include "tempotext.cpp"
 
 namespace Ms {
 
@@ -272,7 +274,7 @@ Score::FileError Score::read114(XmlReader& e)
       TextStyle ts = style()->textStyle("Chord Symbol");
       ts.setYoff(-4.0);
       style()->setTextStyle(ts);
-
+      TempoMap tm;
       while (e.readNextStartElement()) {
             e.setTrack(-1);
             const QStringRef& tag(e.name());
@@ -294,11 +296,31 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "Mag"
                || tag == "MagIdx"
                || tag == "xoff"
-               || tag == "tempolist"
                || tag == "Symbols"
                || tag == "cursorTrack"
                || tag == "yoff")
                   e.skipCurrentElement();       // obsolete
+            else if (tag == "tempolist") {
+                  // store the tempo list to create invisible tempo text later
+                  qreal tempo = e.attribute("fix","2.0").toDouble();
+                  tm.setRelTempo(tempo);
+                  qreal _relTempo;
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "tempo") {
+                              int tick = e.attribute("tick").toInt();
+                              double tmp = e.readElementText().toDouble();
+                              tick = (tick * MScore::division + _fileDivision/2) / _fileDivision;
+                              auto pos = tm.find(tick);
+                              if (pos != tm.end())
+                                    tm.erase(pos);
+                              tm.setTempo(tick, tmp);
+                        }
+                        else if (e.name() == "relTempo")
+                              _relTempo = e.readElementText().toInt();
+                        else
+                              e.unknown();
+                  }
+            }
             else if (tag == "playMode")
                   _playMode = PlayMode(e.readInt());
             else if (tag == "SyntiSettings")
@@ -642,6 +664,30 @@ Score::FileError Score::read114(XmlReader& e)
       style()->set(ST_measureSpacing, adjustedSpacing);
 
       _showOmr = false;
+      
+      // add invisible tempo text if necessary
+      // some 1.3 scores have tempolist but no tempo text
+      fixTicks();
+      for (auto i = tm.begin(); i != tm.end(); ++i) {
+            int tick = i->first;
+            qreal tempo = i->second.tempo;
+            if (tempomap()->tempo(tick) != tempo) {
+                  TempoText* tt = new TempoText(this);
+                  tt->setText(QString("<sym>noteQuarterUp</sym> = %1").arg(qRound(tempo*60)));
+                  tt->setTempo(tempo);
+                  tt->setTrack(0);
+                  tt->setVisible(false);
+                  Measure* m = tick2measure(tick);
+                  if (m) {
+                        Segment* seg = m->getSegment(Segment::SegChordRest, tick);
+                        seg->add(tt);
+                        setTempo(tick, tempo);
+                        }
+                  else {
+                        delete tt;
+                        }
+                  }
+            }
 
       // create excerpts
       foreach (Excerpt* excerpt, _excerpts) {
