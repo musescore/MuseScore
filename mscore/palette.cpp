@@ -1154,6 +1154,7 @@ void Palette::read(XmlReader& e)
             else if (t == "Cell") {
                   PaletteCell* cell = new PaletteCell;
                   cell->name = e.attribute("name");
+                  bool add = true;
                   while (e.readNextStartElement()) {
                         const QStringRef& t(e.name());
                         if (t == "staff")
@@ -1177,14 +1178,22 @@ void Palette::read(XmlReader& e)
                                     cell->element->read(e);
                                     if (cell->element->type() == Element::ElementType::ICON) {
                                           Icon* icon = static_cast<Icon*>(cell->element);
-                                          QIcon qicon(getAction(icon->action())->icon());
-                                          icon->setAction(icon->action(), qicon);
+                                          QAction* ac = getAction(icon->action());
+                                          if (ac) {
+                                                QIcon qicon(ac->icon());
+                                                icon->setAction(icon->action(), qicon);
+                                                }
+                                          else {
+                                                add = false; // action is not valid, don't add it to the palette.
+                                                }
                                           }
                                     }
                               }
                         }
-                  int idx = _moreElements ? cells.size() - 1 : cells.size();
-                  cells.insert(idx, cell);
+                  if (add) {
+                        int idx = _moreElements ? cells.size() - 1 : cells.size();
+                        cells.insert(idx, cell);
+                        }
                   }
             else
                   e.unknown();
