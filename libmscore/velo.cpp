@@ -32,7 +32,7 @@ int VeloList::velo(int tick) const
       if (i == constBegin())
             return 80;
       VeloList::const_iterator ii = i - 1;
-      if (ii.value().type == VELO_FIX)
+      if (ii.value().type == VeloType::FIX)
             return ii.value().val;
       int tickDelta = i.key() - ii.key();
       int veloDelta = i.value().val - ii.value().val;
@@ -63,7 +63,7 @@ void VeloList::setVelo(int tick, VeloEvent ve)
 
 void VeloList::setVelo(int tick, int velo)
       {
-      insert(tick, VeloEvent(VELO_FIX, velo));
+      insert(tick, VeloEvent(VeloType::FIX, velo));
       }
 
 }
