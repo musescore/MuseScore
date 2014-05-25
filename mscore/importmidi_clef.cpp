@@ -193,29 +193,36 @@ bool doesClefBreakTie(const Staff *staff)
 int findPitchPenaltyForClef(int pitch, int clefIndex)
       {
       const int farPitchPenalty = 10000;
+      const int veryFarPitchPenalty = 20000;
       const int approxPitchPenalty = 1;
       const int dx = 5;
 
-      const int midPitch = clefMidPitch();    // all notes equal or upper - better in G clef
-      const int highPitch = midPitch + dx;    // all notes equal or upper - in G clef
-      const int lowPitch = midPitch - dx;     // all notes lower - in F clef
+      const int midPitch = clefMidPitch();      // all notes equal or upper - better in G clef
+      const int highPitch = midPitch + dx;      // almost all notes equal or upper - in G clef
+      const int lowPitch = midPitch - dx;       // almost all notes lower - in F clef
+      const int highestPitch = highPitch + dx;  // all notes equal or upper - in G clef
+      const int lowestPitch = lowPitch - dx;    // all notes lower - in F clef
 
       switch (clefIndex) {
-      case 0:
-            if (pitch < lowPitch)
-                  return farPitchPenalty;
-            else if (pitch < midPitch)
-                  return approxPitchPenalty;
-            break;
-      case 1:
-            if (pitch >= highPitch)
-                  return farPitchPenalty;
-            else if (pitch >= midPitch)
-                  return approxPitchPenalty;
-            break;
-      default:
-            Q_ASSERT_X(false, "MidiClef::pitchPenalty", "Unknown clef type");
-            break;
+            case 0:
+                  if (pitch < lowestPitch)
+                        return veryFarPitchPenalty;
+                  else if (pitch < lowPitch)
+                        return farPitchPenalty;
+                  else if (pitch < midPitch)
+                        return approxPitchPenalty;
+                  break;
+            case 1:
+                  if (pitch >= highestPitch)
+                        return veryFarPitchPenalty;
+                  else if (pitch >= highPitch)
+                        return farPitchPenalty;
+                  else if (pitch >= midPitch)
+                        return approxPitchPenalty;
+                  break;
+            default:
+                  Q_ASSERT_X(false, "MidiClef::pitchPenalty", "Unknown clef type");
+                  break;
             }
       return 0;
       }
@@ -252,6 +259,7 @@ int findClefChangePenalty(
             return 0;
 
       const int clefChangePenalty = 1000;
+      const int prevClefChangePenalty = 10001;
       const int orphanChordPenalty = 2;
       const int notesBetweenClefs = 5;       // should be >= 2
 
@@ -276,7 +284,10 @@ int findClefChangePenalty(
                   if (j == pos - notesBetweenClefs)
                         break;
                   if (j == 0 || trebleBassPath[clefIndex][j] != clefIndex) {
-                        penalty += clefChangePenalty;
+                        if (j == pos - 1)
+                              penalty += prevClefChangePenalty;
+                        else
+                              penalty += clefChangePenalty;
                         break;
                         }
                   totalRestLen = {0, 1};
@@ -342,7 +353,7 @@ void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
                   int penalty = pitchPenalty;
                   if (prevClef != curClef) {
                         if (tieState == MidiTie::TieStateMachine::State::TIED_BACK
-                                || tieState == MidiTie::TieStateMachine::State::TIED_BOTH) {
+                                    || tieState == MidiTie::TieStateMachine::State::TIED_BOTH) {
                               continue;   // there is a tie breakage that is incorrect
                               }
                         penalty += findClefChangePenalty(pos, prevClef, optimalPaths, seg, staff);
@@ -394,6 +405,7 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
 
                         // find optimal clef changes via dynamic programming
             std::vector<std::vector<int>> penalties(2);         // 0 - treble, 1 - bass
+                        // remember only 2 last positions to save memory
             for (size_t i = 0; i != penalties.size(); ++i)
                   penalties[i].resize(2);                       // 2 = current + prev
             std::vector<std::vector<int>> optimalPaths(2);      // first col is unused
