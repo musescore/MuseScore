@@ -21,7 +21,7 @@ namespace Ms {
 
 TEvent::TEvent()
       {
-      type     = TEMPO_INVALID;
+      type     = TempoType::INVALID;
       tempo    = 0.0;
       pause    = 0.0;
       }
@@ -64,7 +64,7 @@ void TempoMap::setPause(int tick, qreal pause)
             e->second.pause = pause;
       else {
             qreal t = tempo(tick);
-            insert(std::pair<const int, TEvent> (tick, TEvent(t, pause, TEMPO_FIX)));
+            insert(std::pair<const int, TEvent> (tick, TEvent(t, pause, TempoType::FIX)));
             }
       normalize();
       }
@@ -78,10 +78,10 @@ void TempoMap::setTempo(int tick, qreal tempo)
       auto e = find(tick);
       if (e != end()) {
             e->second.tempo = tempo;
-            e->second.type = TEMPO_FIX;
+            e->second.type = TempoType::FIX;
             }
       else
-            insert(std::pair<const int, TEvent> (tick, TEvent(tempo, 0.0, TEMPO_FIX)));
+            insert(std::pair<const int, TEvent> (tick, TEvent(tempo, 0.0, TempoType::FIX)));
       normalize();
       }
 
