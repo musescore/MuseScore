@@ -201,6 +201,24 @@ class TestImportMidi : public QObject, public MTest
             mf("split_tuplet");
             preferences.midiImportOperations.clear();
             }
+      void LHRH_2melodies()
+            {
+            TrackOperations opers;
+            opers.LHRH.doIt = true;
+            opers.simplifyNotation = false;
+            preferences.midiImportOperations.setDefaults(opers);
+            mf("split_2_melodies");
+            preferences.midiImportOperations.clear();
+            }
+      void LHRH_octave()
+            {
+            TrackOperations opers;
+            opers.LHRH.doIt = true;
+            opers.simplifyNotation = false;
+            preferences.midiImportOperations.setDefaults(opers);
+            mf("split_octave");
+            preferences.midiImportOperations.clear();
+            }
 
       // swing
       void swingTriplets()
