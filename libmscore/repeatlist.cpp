@@ -78,10 +78,10 @@ Measure* Score::searchLabel(const QString& s)
 //---------------------------------------------------------
 
 struct RepeatLoop {
-      enum LoopType { LOOP_REPEAT, LOOP_JUMP };
+      enum class LoopType : char { REPEAT, JUMP };
 
       LoopType type;
-      Measure* m;   // start measure of LOOP_REPEAT
+      Measure* m;   // start measure of LoopType::REPEAT
       int count;
       QString stop, cont;
 
@@ -89,13 +89,13 @@ struct RepeatLoop {
       RepeatLoop(Measure* _m)  {
             m     = _m;
             count = 0;
-            type  = LOOP_REPEAT;
+            type  = LoopType::REPEAT;
             }
       RepeatLoop(const QString s, const QString c)
          : stop(s), cont(c)
             {
             m    = 0;
-            type = LOOP_JUMP;
+            type = LoopType::JUMP;
             }
       };
 
