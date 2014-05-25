@@ -120,14 +120,14 @@ void TrillSegment::layout()
                   a->adjustReadPos();
                   }
             switch (trill()->trillType()) {
-                  case Trill::TRILL_LINE:
+                  case Trill::TrillType::TRILL_LINE:
                         symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
                         break;
-                  case Trill::PRALLPRALL_LINE:
-                  case Trill::PURE_LINE:
+                  case Trill::TrillType::PRALLPRALL_LINE:
+                  case Trill::TrillType::PURE_LINE:
                         symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
                         break;
-                  case Trill::UPPRALL_LINE:
+                  case Trill::TrillType::UPPRALL_LINE:
                         if (score()->scoreFont()->isValid(SymId::ornamentBottomLeftConcaveStroke))
                               symbolLine(SymId::ornamentBottomLeftConcaveStroke,
                                  SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
@@ -136,7 +136,7 @@ void TrillSegment::layout()
                                  // SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
                                  SymId::ornamentZigZagLineNoRightEnd);
                         break;
-                  case Trill::DOWNPRALL_LINE:
+                  case Trill::TrillType::DOWNPRALL_LINE:
                         if (score()->scoreFont()->isValid(SymId::ornamentLeftVerticalStroke))
                               symbolLine(SymId::ornamentLeftVerticalStroke,
                                  SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
@@ -247,7 +247,7 @@ void TrillSegment::scanElements(void* data, void (*func)(void*, Element*), bool 
 Trill::Trill(Score* s)
   : SLine(s)
       {
-      _trillType = TRILL_LINE;
+      _trillType = TrillType::TRILL_LINE;
       _accidental = 0;
       }
 
@@ -375,15 +375,15 @@ void Trill::read(XmlReader& e)
 void Trill::setTrillType(const QString& s)
       {
       if (s == "trill" || s == "0")
-            _trillType = TRILL_LINE;
+            _trillType = TrillType::TRILL_LINE;
       else if (s == "upprall")
-            _trillType = UPPRALL_LINE;
+            _trillType = TrillType::UPPRALL_LINE;
       else if (s == "downprall")
-            _trillType = DOWNPRALL_LINE;
+            _trillType = TrillType::DOWNPRALL_LINE;
       else if (s == "prallprall")
-            _trillType = PRALLPRALL_LINE;
+            _trillType = TrillType::PRALLPRALL_LINE;
       else if (s == "pure")
-            _trillType = PURE_LINE;
+            _trillType = TrillType::PURE_LINE;
       else
             qDebug("Trill::setSubtype: unknown <%s>", qPrintable(s));
       }
@@ -395,15 +395,15 @@ void Trill::setTrillType(const QString& s)
 QString Trill::trillTypeName() const
       {
       switch(trillType()) {
-            case TRILL_LINE:
+            case TrillType::TRILL_LINE:
                   return "trill";
-            case UPPRALL_LINE:
+            case TrillType::UPPRALL_LINE:
                   return "upprall";
-            case DOWNPRALL_LINE:
+            case TrillType::DOWNPRALL_LINE:
                   return "downprall";
-            case PRALLPRALL_LINE:
+            case TrillType::PRALLPRALL_LINE:
                   return "prallprall";
-            case PURE_LINE:
+            case TrillType::PURE_LINE:
                   return "pure";
             default:
                   qDebug("unknown Trill subtype %d", trillType());
@@ -431,7 +431,7 @@ QVariant Trill::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_TRILL_TYPE:
-                  return trillType();
+                  return int(trillType());
             default:
                   break;
             }
@@ -478,7 +478,7 @@ QVariant Trill::propertyDefault(P_ID propertyId) const
 
 void Trill::undoSetTrillType(TrillType val)
       {
-      score()->undoChangeProperty(this, P_TRILL_TYPE, val);
+      score()->undoChangeProperty(this, P_TRILL_TYPE, int(val));
       }
 
 //---------------------------------------------------------
