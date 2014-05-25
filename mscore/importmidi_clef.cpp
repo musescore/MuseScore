@@ -192,13 +192,13 @@ bool doesClefBreakTie(const Staff *staff)
 
 int findPitchPenaltyForClef(int pitch, int clefIndex)
       {
-      static const int farPitchPenalty = 10000;
-      static const int approxPitchPenalty = 1;
-      static const int dx = 5;
+      const int farPitchPenalty = 10000;
+      const int approxPitchPenalty = 1;
+      const int dx = 5;
 
-      static const int midPitch = clefMidPitch();    // all notes equal or upper - better in G clef
-      static const int highPitch = midPitch + dx;    // all notes equal or upper - in G clef
-      static const int lowPitch = midPitch - dx;     // all notes lower - in F clef
+      const int midPitch = clefMidPitch();    // all notes equal or upper - better in G clef
+      const int highPitch = midPitch + dx;    // all notes equal or upper - in G clef
+      const int lowPitch = midPitch - dx;     // all notes lower - in F clef
 
       switch (clefIndex) {
       case 0:
@@ -251,9 +251,9 @@ int findClefChangePenalty(
       if (pos == 0)
             return 0;
 
-      static const int clefChangePenalty = 1000;
-      static const int orphanChordPenalty = 2;
-      static const int notesBetweenClefs = 5;       // should be >= 2
+      const int clefChangePenalty = 1000;
+      const int orphanChordPenalty = 2;
+      const int notesBetweenClefs = 5;       // should be >= 2
 
       int j = pos;
       ReducedFraction totalRestLen(0, 1);
