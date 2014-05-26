@@ -79,8 +79,13 @@ class Selection {
       void setState(SelState s);
 
       const QList<Element*>& elements() const { return _el; }
-      bool isSingle() const                   { return (_state == SEL_LIST) && (_el.size() == 1); }
       QList<Note*> noteList(int track = -1) const;
+
+      const QList<Element*> uniqueElements() const;
+      QList<Note*> uniqueNotes(int track = -1) const;
+
+      bool isSingle() const                   { return (_state == SEL_LIST) && (_el.size() == 1); }
+
       void add(Element*);
       void deselectAll();
       void remove(Element*);

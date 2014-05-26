@@ -263,8 +263,7 @@ void Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
 //---------------------------------------------------------
 
 void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
-  int transposeInterval,
-   bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
+  int transposeInterval, bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
       {
       bool rangeSelection = selection().state() == SEL_RANGE;
       int startStaffIdx = 0;
@@ -302,7 +301,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                   transposeInterval *= -1;
 
       if (_selection.state() == SEL_LIST) {
-            foreach(Element* e, _selection.elements()) {
+            foreach(Element* e, _selection.uniqueElements()) {
                   if (e->staff()->staffType()->group() == PERCUSSION_STAFF_GROUP)
                         continue;
                   if (e->type() == Element::ElementType::NOTE) {
@@ -347,11 +346,36 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
             return;
             }
 
-      int startTrack = _selection.staffStart() * VOICES;
-      int endTrack   = _selection.staffEnd() * VOICES;
+      //--------------------------
+      // process range selection
+      //--------------------------
+
+      QList<Staff*> sl;
+      for (int staffIdx = _selection.staffStart(); staffIdx < _selection.staffEnd(); ++staffIdx) {
+            Staff* s = staff(staffIdx);
+            if (s->staffType()->group() == PERCUSSION_STAFF_GROUP)      // ignore percussion staff
+                  continue;
+            if (sl.contains(s))
+                  continue;
+            bool alreadyThere = false;
+            for (Staff* s2 : sl) {
+                  if (s2 == s || (s2->linkedStaves() && s2->linkedStaves()->staves().contains(s))) {
+                        alreadyThere = true;
+                        break;
+                        }
+                  }
+            if (!alreadyThere)
+                  sl.append(s);
+            }
+      QList<int> tracks;
+      for (Staff* s : sl) {
+            int idx = s->idx() * VOICES;
+            for (int i = 0; i < VOICES; ++i)
+                  tracks.append(idx + i);
+            }
 
       for (Segment* segment = _selection.startSegment(); segment && segment != _selection.endSegment(); segment = segment->next1()) {
-            for (int st = startTrack; st < endTrack; ++st) {
+            for (int st : tracks) {
                   if (staff(st/VOICES)->staffType()->group() == PERCUSSION_STAFF_GROUP)
                         continue;
                   Element* e = segment->element(st);
@@ -376,7 +400,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                   }
             if (transposeChordNames) {
                   foreach (Element* e, segment->annotations()) {
-                        if ((e->type() != Element::ElementType::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
+                        if ((e->type() != Element::ElementType::HARMONY) || (!tracks.contains(e->track())))
                               continue;
                         Harmony* h  = static_cast<Harmony*>(e);
                         int rootTpc, baseTpc;

@@ -1147,16 +1147,7 @@ static void setTpc(Note* oNote, int tpc, int& newTpc1, int& newTpc2)
 
 void Score::upDown(bool up, UpDownMode mode)
       {
-      QList<Note*> el;
-      for (Note* note : selection().noteList()) {
-            while (note->tieBack())
-                  note = note->tieBack()->startNote();
-            for (; note; note = note->tieFor() ? note->tieFor()->endNote() : 0) {
-                  if (!el.contains(note))
-                        el.append(note);
-                  }
-            }
-
+      QList<Note*> el = selection().uniqueNotes();
       if (el.empty())
             return;
 
@@ -1207,12 +1198,18 @@ void Score::upDown(bool up, UpDownMode mode)
 
                               case UP_DOWN_CHROMATIC:       // increase / decrease the fret
                                     {                       // without changing the string
+                                    if (!stringData->frets())
+                                          qDebug("upDown tab chromatic: no frets?");
                                     fret += (up ? 1 : -1);
                                     if (fret < 0)
                                           fret = 0;
                                     else if (fret >= stringData->frets())
                                           fret = stringData->frets() - 1;
                                     newPitch    = stringData->getPitch(string, fret);
+                                    if (newPitch == -1) {
+                                          qDebug("upDown tab chromatic: getPitch(%d,%d) returns -1", string, fret);
+                                          newPitch = oNote->pitch();
+                                          }
                                     int nTpc = pitch2tpc(newPitch, key, up ? PREFER_SHARPS : PREFER_FLATS);
                                     if (oNote->concertPitch()) {
                                           newTpc1 = nTpc;
