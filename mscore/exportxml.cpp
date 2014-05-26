@@ -1556,36 +1556,36 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
       if (chord->tremolo()) {
             Tremolo* tr = chord->tremolo();
             int count = 0;
-            int st = tr->tremoloType();
+            TremoloType st = tr->tremoloType();
             QString type = "";
 
             if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
                   type = "single";
                   switch (st) {
-                        case TREMOLO_R8:  count = 1; break;
-                        case TREMOLO_R16: count = 2; break;
-                        case TREMOLO_R32: count = 3; break;
-                        case TREMOLO_R64: count = 4; break;
+                        case TremoloType::R8:  count = 1; break;
+                        case TremoloType::R16: count = 2; break;
+                        case TremoloType::R32: count = 3; break;
+                        case TremoloType::R64: count = 4; break;
                         default: qDebug("unknown tremolo single %d", st); break;
                         }
                   }
             else if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
                   type = "start";
                   switch (st) {
-                        case TREMOLO_C8:  count = 1; break;
-                        case TREMOLO_C16: count = 2; break;
-                        case TREMOLO_C32: count = 3; break;
-                        case TREMOLO_C64: count = 4; break;
+                        case TremoloType::C8:  count = 1; break;
+                        case TremoloType::C16: count = 2; break;
+                        case TremoloType::C32: count = 3; break;
+                        case TremoloType::C64: count = 4; break;
                         default: qDebug("unknown tremolo double %d", st); break;
                         }
                   }
             else if (chord->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
                   type = "stop";
                   switch (st) {
-                        case TREMOLO_C8:  count = 1; break;
-                        case TREMOLO_C16: count = 2; break;
-                        case TREMOLO_C32: count = 3; break;
-                        case TREMOLO_C64: count = 4; break;
+                        case TremoloType::C8:  count = 1; break;
+                        case TremoloType::C16: count = 2; break;
+                        case TremoloType::C32: count = 3; break;
+                        case TremoloType::C64: count = 4; break;
                         default: qDebug("unknown tremolo double %d", st); break;
                         }
                   }

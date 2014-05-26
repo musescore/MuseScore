@@ -22,16 +22,16 @@ namespace Ms {
 class Chord;
 
 // Tremolo subtypes:
-enum TremoloType {
-      OLD_TREMOLO_R8 = 0,
-      OLD_TREMOLO_R16,
-      OLD_TREMOLO_R32,
-      OLD_TREMOLO_C8,
-      OLD_TREMOLO_C16,
-      OLD_TREMOLO_C32,
+enum class TremoloType : char {
+      OLD_R8 = 0,
+      OLD_R16,
+      OLD_R32,
+      OLD_C8,
+      OLD_C16,
+      OLD_C32,
 
-      TREMOLO_R8=6, TREMOLO_R16, TREMOLO_R32, TREMOLO_R64,    // one note tremolo (repeat)
-      TREMOLO_C8, TREMOLO_C16, TREMOLO_C32, TREMOLO_C64     // two note tremolo (change)
+      R8=6, R16, R32, R64,  // one note tremolo (repeat)
+      C8, C16, C32, C64     // two note tremolo (change)
       };
 
 //---------------------------------------------------------
@@ -74,7 +74,7 @@ class Tremolo : public Element {
             _chord2 = c2;
             }
       Fraction tremoloLen() const;
-      bool twoNotes() const { return tremoloType() > TREMOLO_R64; } // is it a two note tremolo?
+      bool twoNotes() const { return tremoloType() > TremoloType::R64; } // is it a two note tremolo?
       int lines() const { return _lines; }
       };
 

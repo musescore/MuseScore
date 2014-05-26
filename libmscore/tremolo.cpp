@@ -29,7 +29,7 @@ namespace Ms {
 Tremolo::Tremolo(Score* score)
    : Element(score)
       {
-      setTremoloType(TREMOLO_R8);
+      setTremoloType(TremoloType::R8);
       _chord1  = 0;
       _chord2  = 0;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
@@ -70,16 +70,16 @@ void Tremolo::setTremoloType(TremoloType t)
       {
       _tremoloType = t;
       switch (tremoloType()) {
-            case TREMOLO_R16:
-            case TREMOLO_C16:
+            case TremoloType::R16:
+            case TremoloType::C16:
                   _lines = 2;
                   break;
-            case TREMOLO_R32:
-            case TREMOLO_C32:
+            case TremoloType::R32:
+            case TremoloType::C32:
                   _lines = 3;
                   break;
-            case TREMOLO_R64:
-            case TREMOLO_C64:
+            case TremoloType::R64:
+            case TremoloType::C64:
                   _lines = 4;
                   break;
             default:
@@ -267,14 +267,14 @@ void Tremolo::read(XmlReader& e)
 QString Tremolo::tremoloTypeName() const
       {
       switch(tremoloType()) {
-            case TREMOLO_R8:  return QString("r8");
-            case TREMOLO_R16: return QString("r16");
-            case TREMOLO_R32: return QString("r32");
-            case TREMOLO_R64: return QString("r64");
-            case TREMOLO_C8:  return QString("c8");
-            case TREMOLO_C16: return QString("c16");
-            case TREMOLO_C32: return QString("c32");
-            case TREMOLO_C64: return QString("c64");
+            case TremoloType::R8:  return QString("r8");
+            case TremoloType::R16: return QString("r16");
+            case TremoloType::R32: return QString("r32");
+            case TremoloType::R64: return QString("r64");
+            case TremoloType::C8:  return QString("c8");
+            case TremoloType::C16: return QString("c16");
+            case TremoloType::C32: return QString("c32");
+            case TremoloType::C64: return QString("c64");
             default:
                   break;
             }
@@ -289,21 +289,21 @@ void Tremolo::setTremoloType(const QString& s)
       {
       TremoloType t;
       if (s == "r8")
-            t = TREMOLO_R8;
+            t = TremoloType::R8;
       else if (s == "r16")
-            t = TREMOLO_R16;
+            t = TremoloType::R16;
       else if (s == "r32")
-            t = TREMOLO_R32;
+            t = TremoloType::R32;
       else if (s == "r64")
-            t = TREMOLO_R64;
+            t = TremoloType::R64;
       else if (s == "c8")
-            t = TREMOLO_C8;
+            t = TremoloType::C8;
       else if (s == "c16")
-            t = TREMOLO_C16;
+            t = TremoloType::C16;
       else if (s == "c32")
-            t = TREMOLO_C32;
+            t = TremoloType::C32;
       else if (s == "c64")
-            t = TREMOLO_C64;
+            t = TremoloType::C64;
       else
             t = TremoloType(s.toInt());    // for compatibility with old tremolo type
       setTremoloType(t);

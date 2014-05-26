@@ -1849,7 +1849,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         Fraction ts(timeStretch * chord->globalDuration());
                         int crticks = ts.ticks();
 
-                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TREMOLO_R8) {
+                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
                               //
                               // old style tremolo found
                               //
@@ -1857,12 +1857,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                               TremoloType st;
                               switch (tremolo->tremoloType()) {
                                     default:
-                                    case OLD_TREMOLO_R8:  st = TREMOLO_R8;  break;
-                                    case OLD_TREMOLO_R16: st = TREMOLO_R16; break;
-                                    case OLD_TREMOLO_R32: st = TREMOLO_R32; break;
-                                    case OLD_TREMOLO_C8:  st = TREMOLO_C8;  break;
-                                    case OLD_TREMOLO_C16: st = TREMOLO_C16; break;
-                                    case OLD_TREMOLO_C32: st = TREMOLO_C32; break;
+                                    case TremoloType::OLD_R8:  st = TremoloType::R8;  break;
+                                    case TremoloType::OLD_R16: st = TremoloType::R16; break;
+                                    case TremoloType::OLD_R32: st = TremoloType::R32; break;
+                                    case TremoloType::OLD_C8:  st = TremoloType::C8;  break;
+                                    case TremoloType::OLD_C16: st = TremoloType::C16; break;
+                                    case TremoloType::OLD_C32: st = TremoloType::C32; break;
                                     }
                               tremolo->setTremoloType(st);
                               if (tremolo->twoNotes()) {
