@@ -986,17 +986,17 @@ Palette* MuseScore::newTimePalette()
             };
 
       TS tsList[] = {
-            { 2,  4, TSIG_NORMAL, "2/4" },
-            { 3,  4, TSIG_NORMAL, "3/4" },
-            { 4,  4, TSIG_NORMAL, "4/4" },
-            { 5,  4, TSIG_NORMAL, "5/4" },
-            { 6,  4, TSIG_NORMAL, "6/4" },
-            { 3,  8, TSIG_NORMAL, "3/8" },
-            { 6,  8, TSIG_NORMAL, "6/8" },
-            { 9,  8, TSIG_NORMAL, "9/8" },
-            { 12, 8, TSIG_NORMAL, "12/8" },
-            { 4,  4, TSIG_FOUR_FOUR,  tr("4/4 common time") },
-            { 2,  2, TSIG_ALLA_BREVE, tr("2/2 alla breve") }
+            { 2,  4, TimeSigType::NORMAL, "2/4" },
+            { 3,  4, TimeSigType::NORMAL, "3/4" },
+            { 4,  4, TimeSigType::NORMAL, "4/4" },
+            { 5,  4, TimeSigType::NORMAL, "5/4" },
+            { 6,  4, TimeSigType::NORMAL, "6/4" },
+            { 3,  8, TimeSigType::NORMAL, "3/8" },
+            { 6,  8, TimeSigType::NORMAL, "6/8" },
+            { 9,  8, TimeSigType::NORMAL, "9/8" },
+            { 12, 8, TimeSigType::NORMAL, "12/8" },
+            { 4,  4, TimeSigType::FOUR_FOUR,  tr("4/4 common time") },
+            { 2,  2, TimeSigType::ALLA_BREVE, tr("2/2 alla breve") }
             };
 
       Palette* sp = new Palette;

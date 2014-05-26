@@ -580,10 +580,10 @@ bool TimesigWizard::pickup(int* z, int* n) const
 TimeSigType TimesigWizard::type() const
       {
       if (tsFraction->isChecked())
-            return TSIG_NORMAL;
+            return TimeSigType::NORMAL;
       if (tsCommonTime->isChecked())
-            return TSIG_FOUR_FOUR;
-      return TSIG_ALLA_BREVE;
+            return TimeSigType::FOUR_FOUR;
+      return TimeSigType::ALLA_BREVE;
       }
 
 //---------------------------------------------------------

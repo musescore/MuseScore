@@ -740,11 +740,11 @@ void OveToMScore::convertSignatures(){
 		Measure* measure  = score_->tick2measure(tt.tick_);
 		if(measure){
 			for(int staffIdx = 0; staffIdx < score_->nstaves(); ++staffIdx) {
-				TimeSigType subtype = TSIG_NORMAL;
+				TimeSigType subtype = TimeSigType::NORMAL;
 				if(tt.numerator_ == 4 && tt.denominator_ == 4 && tt.isSymbol_ ){
-					subtype = TSIG_FOUR_FOUR;
+					subtype = TimeSigType::FOUR_FOUR;
 				} else if(tt.numerator_ == 2 && tt.denominator_ == 2 && tt.isSymbol_ ){
-					subtype = TSIG_ALLA_BREVE;
+					subtype = TimeSigType::ALLA_BREVE;
 				}
 
 					TimeSig* ts = new TimeSig(score_);

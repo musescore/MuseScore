@@ -962,18 +962,18 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
                              TimeSigType& st, int& bts, int& btp)
       {
       // initialize
-      st  = TSIG_NORMAL;
+      st  = TimeSigType::NORMAL;
       bts = 0;       // the beats (max 4 separated by "+") as integer
       btp = 0;       // beat-type as integer
       // determine if timesig is valid
       if (beats == "2" && beatType == "2" && timeSymbol == "cut") {
-            st = TSIG_ALLA_BREVE;
+            st = TimeSigType::ALLA_BREVE;
             bts = 2;
             btp = 2;
             return true;
             }
       else if (beats == "4" && beatType == "4" && timeSymbol == "common") {
-            st = TSIG_FOUR_FOUR;
+            st = TimeSigType::FOUR_FOUR;
             bts = 4;
             btp = 4;
             return true;
@@ -3345,7 +3345,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
             }
       if (beats != "" && beatType != "") {
             // determine if timesig is valid
-            TimeSigType st  = TSIG_NORMAL;
+            TimeSigType st  = TimeSigType::NORMAL;
             int bts = 0; // total beats as integer (beats may contain multiple numbers, separated by "+")
             int btp = 0; // beat-type as integer
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {

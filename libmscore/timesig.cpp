@@ -37,7 +37,7 @@ TimeSig::TimeSig(Score* s)
       customText = false;
       _stretch.set(1, 1);
       _sig.set(0, 1);               // initialize to invalid
-      _timeSigType   = TSIG_NORMAL;
+      _timeSigType   = TimeSigType::NORMAL;
       customText = false;
       _needLayout = true;
       }
@@ -70,7 +70,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
       {
       if (_sig != f)
             _sig = f;
-      if (st == TSIG_FOUR_FOUR || st == TSIG_ALLA_BREVE)
+      if (st == TimeSigType::FOUR_FOUR || st == TimeSigType::ALLA_BREVE)
             customText = false;
       _timeSigType = st;
       _needLayout = true;
@@ -138,8 +138,8 @@ void TimeSig::setDenominatorString(const QString& a)
 void TimeSig::write(Xml& xml) const
       {
       xml.stag("TimeSig");
-      if (timeSigType() != TSIG_NORMAL)
-            xml.tag("subtype", timeSigType());
+      if (timeSigType() != TimeSigType::NORMAL)
+            xml.tag("subtype", int(timeSigType()));
       Element::writeProperties(xml);
 
       xml.tag("sigN",  _sig.numerator());
@@ -193,16 +193,24 @@ void TimeSig::read(XmlReader& e)
                   z4 = e.readInt();
                   }
             else if (tag == "subtype") {
-                  TimeSigType i = TimeSigType(e.readInt());
+                  int i = e.readInt();
                   if (score()->mscVersion() < 122 && score()->mscVersion() > 114) {
                         setSig(Fraction(
                              ((i >> 24) & 0x3f)
                            + ((i >> 18) & 0x3f)
                            + ((i >> 12) & 0x3f)
-                           + ((i >>  6) & 0x3f), i & 0x3f), TSIG_NORMAL);
+                           + ((i >>  6) & 0x3f), i & 0x3f), TimeSigType::NORMAL);
+                        }
+                  else if (score()->mscVersion() <= 114) {
+                        if (i == 0x40000104)
+                              _timeSigType = TimeSigType::FOUR_FOUR;
+                        else if (i == 0x40002084)
+                              _timeSigType = TimeSigType::ALLA_BREVE;
+                        else
+                              _timeSigType = TimeSigType::NORMAL;
                         }
                   else
-                        _timeSigType = i;
+                        _timeSigType = TimeSigType(i);
                   }
             else if (tag == "showCourtesySig")
                   _showCourtesySig = e.readInt();
@@ -226,12 +234,6 @@ void TimeSig::read(XmlReader& e)
       if (old) {
             _sig.set(z1+z2+z3+z4, n);
             customText = false;
-            if (timeSigType() == 0x40000104)
-                  _timeSigType = TSIG_FOUR_FOUR;
-            else if (timeSigType() == 0x40002084)
-                  _timeSigType = TSIG_ALLA_BREVE;
-            else
-                  _timeSigType = TSIG_NORMAL;
             }
       _needLayout = true;
       }
@@ -276,13 +278,13 @@ void TimeSig::layout1()
       qreal yoff = _spatium * (numOfLines-1) *.5 * lineDist;
 
       // C and Ccut are placed at the middle of the staff: use yoff directly
-      if (sigType ==  TSIG_FOUR_FOUR) {
+      if (sigType ==  TimeSigType::FOUR_FOUR) {
             pz = QPointF(0.0, yoff);
             setbbox(symBbox(SymId::timeSigCommon).translated(pz));
             _numeratorString = score()->scoreFont()->toString(SymId::timeSigCommon);
             _denominatorString.clear();
             }
-      else if (sigType == TSIG_ALLA_BREVE) {
+      else if (sigType == TimeSigType::ALLA_BREVE) {
             pz = QPointF(0.0, yoff);
             setbbox(symBbox(SymId::timeSigCutCommon).translated(pz));
             _numeratorString = score()->scoreFont()->toString(SymId::timeSigCutCommon);
