@@ -55,7 +55,7 @@ void Tremolo::draw(QPainter* painter) const
       painter->drawPath(path);
       if ((parent() == 0) && !twoNotes()) {
             qreal x = 0.0; // bbox().width() * .25;
-            QPen pen(curColor(), point(score()->styleS(ST_stemWidth)));
+            QPen pen(curColor(), point(score()->styleS(StyleIdx::stemWidth)));
             painter->setPen(pen);
             qreal _spatium = spatium();
             painter->drawLine(QLineF(x, -_spatium*.5, x, path.boundingRect().height() + _spatium));
@@ -96,10 +96,10 @@ void Tremolo::layout()
       {
       qreal _spatium  = spatium();
 
-      qreal w2  = _spatium * score()->styleS(ST_tremoloWidth).val() * .5;
-      qreal h2  = _spatium * score()->styleS(ST_tremoloBoxHeight).val()  * .5;
-      qreal lw  = _spatium * score()->styleS(ST_tremoloStrokeWidth).val();
-      qreal td  = _spatium * score()->styleS(ST_tremoloDistance).val();
+      qreal w2  = _spatium * score()->styleS(StyleIdx::tremoloWidth).val() * .5;
+      qreal h2  = _spatium * score()->styleS(StyleIdx::tremoloBoxHeight).val()  * .5;
+      qreal lw  = _spatium * score()->styleS(StyleIdx::tremoloStrokeWidth).val();
+      qreal td  = _spatium * score()->styleS(StyleIdx::tremoloDistance).val();
       path      = QPainterPath();
 
       qreal ty   = 0.0;

@@ -331,7 +331,7 @@ void Ambitus::layout()
       //
       // Note: manages colliding accidentals
       //
-      qreal accNoteDist = point(score()->styleS(ST_accidentalNoteDistance));
+      qreal accNoteDist = point(score()->styleS(StyleIdx::accidentalNoteDistance));
       xAccidOffTop      = _topAccid.width() + accNoteDist;
       xAccidOffBottom   = _bottomAccid.width() + accNoteDist;
 
@@ -418,8 +418,8 @@ void Ambitus::draw(QPainter* p) const
             int numOfLines    = stf->lines();
             qreal step        = lineDist * _spatium;
             qreal stepTolerance = step * 0.1;
-            qreal ledgerOffset = score()->styleS(ST_ledgerLineLength).val() * 0.5 * _spatium;
-            p->setPen(QPen(curColor(), score()->styleS(ST_ledgerLineWidth).val() * _spatium,
+            qreal ledgerOffset = score()->styleS(StyleIdx::ledgerLineLength).val() * 0.5 * _spatium;
+            p->setPen(QPen(curColor(), score()->styleS(StyleIdx::ledgerLineWidth).val() * _spatium,
                         Qt::SolidLine, Qt::RoundCap) );
             if (_topPos.y()-stepTolerance <= -step) {
                   qreal xMin = _topPos.x() - ledgerOffset;

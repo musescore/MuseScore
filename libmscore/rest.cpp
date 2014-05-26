@@ -110,7 +110,7 @@ void Rest::draw(QPainter* painter) const
             if (dots) {
                   qreal y = dotline * _spatium * .5;
                   for (int i = 1; i <= dots; ++i) {
-                        qreal x = symWidth(_sym) + point(score()->styleS(ST_dotNoteDistance)) * i;
+                        qreal x = symWidth(_sym) + point(score()->styleS(StyleIdx::dotNoteDistance)) * i;
                         drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
                         }
                   }
@@ -303,7 +303,7 @@ void Rest::layout()
       _space.setLw(0.0);
 
       if (parent() && measure() && measure()->isMMRest()) {
-            _space.setRw(point(score()->styleS(ST_minMMRestWidth)));
+            _space.setRw(point(score()->styleS(StyleIdx::minMMRestWidth)));
 
             static const qreal verticalLineWidth = .2;
             qreal _spatium = spatium();
@@ -386,12 +386,12 @@ void Rest::layout()
 
       Spatium rs;
       if (dots()) {
-            rs = Spatium(score()->styleS(ST_dotNoteDistance)
-               + dots() * score()->styleS(ST_dotDotDistance));
+            rs = Spatium(score()->styleS(StyleIdx::dotNoteDistance)
+               + dots() * score()->styleS(StyleIdx::dotDotDistance));
             }
       if (dots()) {
-            rs = Spatium(score()->styleS(ST_dotNoteDistance)
-               + dots() * score()->styleS(ST_dotDotDistance));
+            rs = Spatium(score()->styleS(StyleIdx::dotNoteDistance)
+               + dots() * score()->styleS(StyleIdx::dotDotDistance));
             }
       setbbox(symBbox(_sym));
       _space.setRw(width() + point(rs));
@@ -546,7 +546,7 @@ qreal Rest::mag() const
       {
       qreal m = staff()->mag();
       if (small())
-            m *= score()->styleD(ST_smallNoteMag);
+            m *= score()->styleD(StyleIdx::smallNoteMag);
       return m;
       }
 

@@ -109,7 +109,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 void TrillSegment::layout()
       {
       if (parent())
-            rypos() += score()->styleS(ST_trillY).val() * spatium();
+            rypos() += score()->styleS(StyleIdx::trillY).val() * spatium();
       if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
             Accidental* a = trill()->accidental();
             if (a) {
@@ -487,7 +487,7 @@ void Trill::undoSetTrillType(TrillType val)
 
 void Trill::setYoff(qreal val)
       {
-      rUserYoffset() += (val - score()->styleS(ST_trillY).val()) * spatium();
+      rUserYoffset() += (val - score()->styleS(StyleIdx::trillY).val()) * spatium();
       }
 }
 

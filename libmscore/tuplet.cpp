@@ -204,14 +204,14 @@ void Tuplet::layout()
       //
       //    calculate bracket start and end point p1 p2
       //
-      qreal maxSlope = score()->styleD(ST_tupletMaxSlope);
-      bool outOfStaff = score()->styleB(ST_tupletOufOfStaff);
-      qreal vHeadDistance = score()->styleS(ST_tupletVHeadDistance).val() * _spatium;
-      qreal vStemDistance = score()->styleS(ST_tupletVStemDistance).val() * _spatium;
-      qreal stemLeft = score()->styleS(ST_tupletStemLeftDistance).val() * _spatium;
-      qreal stemRight = score()->styleS(ST_tupletStemRightDistance).val() * _spatium;
-      qreal noteLeft = score()->styleS(ST_tupletNoteLeftDistance).val() * _spatium;
-      qreal noteRight = score()->styleS(ST_tupletNoteRightDistance).val() * _spatium;
+      qreal maxSlope = score()->styleD(StyleIdx::tupletMaxSlope);
+      bool outOfStaff = score()->styleB(StyleIdx::tupletOufOfStaff);
+      qreal vHeadDistance = score()->styleS(StyleIdx::tupletVHeadDistance).val() * _spatium;
+      qreal vStemDistance = score()->styleS(StyleIdx::tupletVStemDistance).val() * _spatium;
+      qreal stemLeft = score()->styleS(StyleIdx::tupletStemLeftDistance).val() * _spatium;
+      qreal stemRight = score()->styleS(StyleIdx::tupletStemRightDistance).val() * _spatium;
+      qreal noteLeft = score()->styleS(StyleIdx::tupletNoteLeftDistance).val() * _spatium;
+      qreal noteRight = score()->styleS(StyleIdx::tupletNoteRightDistance).val() * _spatium;
 
       qreal l1 = _spatium;          // bracket tip height
       qreal l2l = vHeadDistance;     // left bracket vertical distance

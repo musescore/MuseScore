@@ -348,7 +348,7 @@ void TimeSig::draw(QPainter* painter) const
 
 Space TimeSig::space() const
       {
-      return Space(point(score()->styleS(ST_timesigLeftMargin)), width());
+      return Space(point(score()->styleS(StyleIdx::timesigLeftMargin)), width());
       }
 
 //---------------------------------------------------------

@@ -1368,7 +1368,7 @@ void ScoreView::moveCursor()
       {
       const InputState& is = _score->inputState();
       Segment* segment = is.segment();
-      if (segment && score()->styleB(ST_createMultiMeasureRests) && segment->measure()->hasMMRest()) {
+      if (segment && score()->styleB(StyleIdx::createMultiMeasureRests) && segment->measure()->hasMMRest()) {
             Measure* m = segment->measure()->mmRest();
             segment = m->findSegment(Segment::SegChordRest, m->tick());
             }
@@ -5053,7 +5053,7 @@ void ScoreView::cmdInsertMeasures(int n, Element::ElementType type)
             _score->insertMeasure(type, mb);
 
       // measure may be part of mm rest:
-      if (!_score->styleB(ST_createMultiMeasureRests) && type == Element::ElementType::MEASURE)
+      if (!_score->styleB(StyleIdx::createMultiMeasureRests) && type == Element::ElementType::MEASURE)
             _score->select(mb, SELECT_SINGLE, 0);
       _score->endCmd();
       }
@@ -5241,7 +5241,7 @@ void ScoreView::searchMeasure(int n)
       int i = 0;
       Measure* measure;
       for (measure = _score->firstMeasureMM(); measure; measure = measure->nextMeasureMM()) {
-            int nn = _score->styleB(ST_createMultiMeasureRests) && measure->isMMRest()
+            int nn = _score->styleB(StyleIdx::createMultiMeasureRests) && measure->isMMRest()
                ? measure->mmRestCount() : 1;
             if (n >= i && n < (i+nn))
                   break;

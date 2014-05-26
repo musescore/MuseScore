@@ -914,7 +914,7 @@ void StaffLines::layout()
 
       setColor(staff() ? staff()->color() : MScore::defaultColor);
 
-      lw = score()->styleS(ST_staffLineWidth).val() * _spatium;
+      lw = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium;
       bbox().setRect(0.0, -lw*.5, width(), lines * dist + lw);
       }
 
@@ -1817,7 +1817,7 @@ QString Element::toTimeSigString(const QString& s) const
 
 bool Element::concertPitch() const
       {
-      return score()->styleB(ST_concertPitch);
+      return score()->styleB(StyleIdx::concertPitch);
       }
 }
 

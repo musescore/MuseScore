@@ -63,7 +63,7 @@ qreal Stem::stemLen() const
 
 qreal Stem::lineWidth() const
       {
-      return point(score()->styleS(ST_stemWidth));
+      return point(score()->styleS(StyleIdx::stemWidth));
       }
 
 //---------------------------------------------------------

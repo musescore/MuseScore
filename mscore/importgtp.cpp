@@ -1117,7 +1117,7 @@ void GuitarPro1::readNote(int string, Note* note)
                   gc->setDurationType(d);
                   gc->setDuration(d.fraction());
                   gc->setNoteType(NOTE_ACCIACCATURA);
-                  gc->setMag(note->chord()->staff()->mag() * score->styleD(ST_graceNoteMag));
+                  gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
 
                   if (transition == 0) {
                         // no transition
@@ -1861,7 +1861,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                   gc->setDurationType(d);
                   gc->setDuration(d.fraction());
                   gc->setNoteType(NOTE_ACCIACCATURA);
-                  gc->setMag(note->chord()->staff()->mag() * score->styleD(ST_graceNoteMag));
+                  gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
 
                   if (transition == 0) {
                         // no transition
@@ -2409,7 +2409,7 @@ void GuitarPro5::readNoteEffects(Note* note)
             gc->setDurationType(d);
             gc->setDuration(d.fraction());
             gc->setNoteType(note_type);
-            gc->setMag(note->chord()->staff()->mag() * score->styleD(ST_graceNoteMag));
+            gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
             if (transition == 0) {
                   // no transition
                   }
@@ -3273,7 +3273,7 @@ Score::FileError importGTP(Score* score, const QString& name)
       //
       foreach(Part* part, score->parts()) {
             Score* pscore = new Score(score);
-            pscore->style()->set(ST_createMultiMeasureRests, true);
+            pscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
             QList<int> stavesMap;
             Part*   p = new Part(pscore);

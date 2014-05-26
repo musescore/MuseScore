@@ -304,7 +304,7 @@ void Accidental::layout()
 
       qreal m = parent() ? parent()->mag() : 1.0;
       if (_small)
-            m *= score()->styleD(ST_smallNoteMag);
+            m *= score()->styleD(StyleIdx::smallNoteMag);
       setMag(m);
 
       m = magS();

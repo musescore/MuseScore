@@ -327,7 +327,7 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
 
       qreal m = mm;
       if (cr->small())
-            m *= score()->styleD(ST_smallNoteMag);
+            m *= score()->styleD(StyleIdx::smallNoteMag);
 
       if (cr->type() == ElementType::CHORD) {
             Chord* chord = static_cast<Chord*>(cr);
@@ -335,7 +335,7 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
                   layoutCR0(c, mm);
 
             if (chord->noteType() != NOTE_NORMAL)
-                  m *= score()->styleD(ST_graceNoteMag);
+                  m *= score()->styleD(StyleIdx::graceNoteMag);
             if (drumset) {
                   for (Note* note : chord->notes()) {
                         int pitch = note->pitch();
@@ -584,14 +584,14 @@ void Measure::layout2()
             else if (_noMode == MeasureNumberMode::HIDE)
                   smn = false;
             else {
-                  if (score()->styleB(ST_showMeasureNumber)
+                  if (score()->styleB(StyleIdx::showMeasureNumber)
                      && !_irregular
-                     && (_no || score()->styleB(ST_showMeasureNumberOne))) {
-                        if (score()->styleB(ST_measureNumberSystem))
+                     && (_no || score()->styleB(StyleIdx::showMeasureNumberOne))) {
+                        if (score()->styleB(StyleIdx::measureNumberSystem))
                               smn = system()->firstMeasure() == this;
                         else {
-                              smn = (_no == 0 && score()->styleB(ST_showMeasureNumberOne)) ||
-                                    ( ((_no+1) % score()->style(ST_measureNumberInterval).toInt()) == 0 );
+                              smn = (_no == 0 && score()->styleB(StyleIdx::showMeasureNumberOne)) ||
+                                    ( ((_no+1) % score()->style(StyleIdx::measureNumberInterval).toInt()) == 0 );
                               }
                         }
                   }
@@ -599,7 +599,7 @@ void Measure::layout2()
             if (smn)
                   s = QString("%1").arg(_no + 1);
             int nn = 1;
-            if (!score()->styleB(ST_measureNumberAllStaffs)) {
+            if (!score()->styleB(StyleIdx::measureNumberAllStaffs)) {
                   //find first non invisible staff
                   for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx) {
                         MStaff* ms = staves.at(staffIdx);
@@ -615,7 +615,7 @@ void Measure::layout2()
                   MStaff* ms = staves.at(staffIdx);
                   Text* t = ms->noText();
                   if (smn) {
-                        if ((staffIdx == nn || score()->styleB(ST_measureNumberAllStaffs))) {
+                        if ((staffIdx == nn || score()->styleB(StyleIdx::measureNumberAllStaffs))) {
                               if (t == 0) {
                                     t = new Text(score());
                                     t->setFlag(ElementFlag::ON_STAFF, true);
@@ -629,7 +629,7 @@ void Measure::layout2()
                               if(t) {
                                     t->setText(s);
                                     t->layout();
-                                    smn = score()->styleB(ST_measureNumberAllStaffs);
+                                    smn = score()->styleB(StyleIdx::measureNumberAllStaffs);
                                     }
                               }
                         }
@@ -1182,7 +1182,7 @@ void Measure::insertStaff(Staff* staff, int staffIdx)
       ms->lines->setParent(this);
       ms->lines->setTrack(staffIdx * VOICES);
 //      ms->distanceUp   = 0.0;
-//      ms->distanceDown = 0.0; // TODO point(staffIdx == 0 ? score()->styleS(ST_minSystemDistance) : score()->styleS(ST_staffDistance));
+//      ms->distanceDown = 0.0; // TODO point(staffIdx == 0 ? score()->styleS(StyleIdx::minSystemDistance) : score()->styleS(StyleIdx::staffDistance));
       ms->lines->setVisible(!staff->invisible());
       insertMStaff(ms, staffIdx);
       }
@@ -3026,9 +3026,9 @@ void Measure::layoutX(qreal stretch)
 
       qreal _spatium           = spatium();
       int tracks               = nstaves * VOICES;
-      qreal clefKeyRightMargin = score()->styleS(ST_clefKeyRightMargin).val() * _spatium;
-      qreal minHarmonyDistance = score()->styleS(ST_minHarmonyDistance).val() * _spatium;
-      qreal maxHarmonyBarDistance = score()->styleS(ST_maxHarmonyBarDistance).val() * _spatium;
+      qreal clefKeyRightMargin = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
+      qreal minHarmonyDistance = score()->styleS(StyleIdx::minHarmonyDistance).val() * _spatium;
+      qreal maxHarmonyBarDistance = score()->styleS(StyleIdx::maxHarmonyBarDistance).val() * _spatium;
 
       qreal rest[nstaves];    // fixed space needed from previous segment
       memset(rest, 0, nstaves * sizeof(qreal));
@@ -3056,7 +3056,7 @@ void Measure::layoutX(qreal stretch)
             x += BarLine::layoutWidth(score(), bl->barLineType(), bl->magS());
             }
 
-      qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
+      qreal minNoteDistance = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
 
       qreal clefWidth[nstaves];
       memset(clefWidth, 0, nstaves * sizeof(qreal));
@@ -3152,14 +3152,14 @@ void Measure::layoutX(qreal stretch)
                                     if (!(cr->type() == ElementType::REST && static_cast<Rest*>(cr)->durationType() == TDuration::DurationType::V_MEASURE)) {
                                           accidentalStaff = true;
                                           qreal sp;
-                                          qreal bnd = score()->styleS(ST_barNoteDistance).val() * _spatium;
+                                          qreal bnd = score()->styleS(StyleIdx::barNoteDistance).val() * _spatium;
                                           if (accidental) {
-                                                qreal bad = score()->styleS(ST_barAccidentalDistance).val() * _spatium;
+                                                qreal bad = score()->styleS(StyleIdx::barAccidentalDistance).val() * _spatium;
                                                 qreal diff = qMax(noteX - accidentalX, 0.0);
                                                 sp = qMax(bad, bnd - diff);
                                                 }
                                           else if (grace)
-                                                sp = score()->styleS(ST_barAccidentalDistance).val() * _spatium;
+                                                sp = score()->styleS(StyleIdx::barAccidentalDistance).val() * _spatium;
                                           else
                                                 sp = bnd;
                                           if (pt & Segment::SegTimeSig)
@@ -3192,7 +3192,7 @@ void Measure::layoutX(qreal stretch)
                                     }
                               }
                         if (lyrics) {
-                              qreal y = lyrics->ipos().y() + score()->styleS(ST_lyricsMinBottomDistance).val() * _spatium;
+                              qreal y = lyrics->ipos().y() + score()->styleS(StyleIdx::lyricsMinBottomDistance).val() * _spatium;
                               if (y > staves[staffIdx]->distanceDown)
                                  staves[staffIdx]->distanceDown = y;
                               space.max(Space(llw, rrw));
@@ -3237,14 +3237,14 @@ void Measure::layoutX(qreal stretch)
                         // current segment (s) is not a ChordRest
                         Element* e = s->element(track);
                         if ((segType == Segment::SegClef) && (pt != Segment::SegChordRest))
-                              minDistance = score()->styleS(ST_clefLeftMargin).val() * _spatium;
+                              minDistance = score()->styleS(StyleIdx::clefLeftMargin).val() * _spatium;
                         else if (segType == Segment::SegStartRepeatBarLine)
                               minDistance = .5 * _spatium;
                         else if ((segType == Segment::SegEndBarLine) && segmentIdx) {
                               if (pt == Segment::SegClef)
-                                    minDistance = score()->styleS(ST_clefBarlineDistance).val() * _spatium;
+                                    minDistance = score()->styleS(StyleIdx::clefBarlineDistance).val() * _spatium;
                               else
-                                    stretchDistance = score()->styleS(ST_noteBarDistance).val() * _spatium;
+                                    stretchDistance = score()->styleS(StyleIdx::noteBarDistance).val() * _spatium;
                               if (e == 0) {
                                     // look for barline
                                     for (int i = track - VOICES; i >= 0; i -= VOICES) {
@@ -3510,7 +3510,7 @@ void Measure::layoutX(qreal stretch)
                                           }
                                     }
 
-                              qreal d  = point(score()->styleS(ST_multiMeasureRestMargin));
+                              qreal d  = point(score()->styleS(StyleIdx::multiMeasureRestMargin));
                               qreal w = x2 - x1 - 2 * d;
 
                               rest->setMMWidth(w);
@@ -3583,7 +3583,7 @@ void Measure::layoutStage1()
       setDirty();
 
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-            if (score()->styleB(ST_createMultiMeasureRests)) {
+            if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
                   if ((repeatFlags() & Repeat::START) || (prevMeasure() && (prevMeasure()->repeatFlags() & Repeat::END)))
                         setBreakMMRest(true);
                   else if (!breakMultiMeasureRest()) {
@@ -3637,7 +3637,7 @@ void Measure::layoutStage1()
                   }
             }
 
-      if (!score()->styleB(ST_createMultiMeasureRests) || breakMultiMeasureRest())
+      if (!score()->styleB(StyleIdx::createMultiMeasureRests) || breakMultiMeasureRest())
             return;
 
       // break mm rest on any spanner

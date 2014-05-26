@@ -89,7 +89,7 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF p3(c1, -shoulderH);
       QPointF p4(c2, -shoulderH);
 
-      qreal w = (score()->styleS(ST_SlurMidWidth).val() - score()->styleS(ST_SlurEndWidth).val()) * _spatium;
+      qreal w = (score()->styleS(StyleIdx::SlurMidWidth).val() - score()->styleS(StyleIdx::SlurEndWidth).val()) * _spatium;
       QPointF th(0.0, w);    // thickness of slur
 
       QPointF p3o = p6o + t.map(ss->ups[int(GripSlurSegment::BEZIER1)].off * _spatium);

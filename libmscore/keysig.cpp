@@ -171,12 +171,12 @@ void KeySig::layout()
       Measure* prevMeas = measure() != nullptr ? measure()->prevMeasure() : nullptr;
       bool naturalsOn =
             t2 != 0 && ( prevMeas != nullptr && prevMeas->sectionBreak() == nullptr
-            && (score()->styleI(ST_keySigNaturals) != NAT_NONE || t1 == 0) );
+            && (score()->styleI(StyleIdx::keySigNaturals) != NAT_NONE || t1 == 0) );
       // naturals shoud go BEFORE accidentals if style says so
       // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
       bool prefixNaturals =
             naturalsOn
-            && (score()->styleI(ST_keySigNaturals) == NAT_BEFORE || t1 * t2 < 0);
+            && (score()->styleI(StyleIdx::keySigNaturals) == NAT_BEFORE || t1 * t2 < 0);
       // naturals should go AFTER accidentals if they should not go before!
       bool suffixNaturals = naturalsOn && !prefixNaturals;
 
@@ -320,7 +320,7 @@ void KeySig::setOldSig(int old)
 
 Space KeySig::space() const
       {
-      return Space(point(score()->styleS(ST_keysigLeftMargin)), width());
+      return Space(point(score()->styleS(StyleIdx::keysigLeftMargin)), width());
       }
 
 //---------------------------------------------------------

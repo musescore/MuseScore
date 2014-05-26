@@ -82,7 +82,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       if (dragElement->type() == Element::ElementType::MEASURE) {
             qreal dist      = dragStaff->userDist() + delta.y();
             int partStaves  = dragStaff->part()->nstaves();
-            StyleIdx i      = (partStaves > 1) ? ST_akkoladeDistance : ST_staffDistance;
+            StyleIdx i      = (partStaves > 1) ? StyleIdx::akkoladeDistance : StyleIdx::staffDistance;
             qreal _spatium  = _score->spatium();
             qreal styleDist = _score->styleS(i).val() * _spatium;
 

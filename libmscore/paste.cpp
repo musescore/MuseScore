@@ -225,7 +225,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                               // transpose
                               Part* partDest = staff(dstStaffIdx)->part();
                               Interval interval = partDest->instr()->transpose();
-                              if (!styleB(ST_concertPitch) && !interval.isZero()) {
+                              if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
                                     int rootTpc = transposeTpc(harmony->rootTpc(), interval, false);
                                     int baseTpc = transposeTpc(harmony->baseTpc(), interval, false);
@@ -514,7 +514,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                               // transpose
                               Part* partDest = staff(track2staff(destTrack))->part();
                               Interval interval = partDest->instr()->transpose();
-                              if (!styleB(ST_concertPitch) && !interval.isZero()) {
+                              if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
                                     int rootTpc = transposeTpc(el->rootTpc(), interval, false);
                                     int baseTpc = transposeTpc(el->baseTpc(), interval, false);

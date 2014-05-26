@@ -220,7 +220,7 @@ ClefTypeList Staff::clefTypeList(int tick) const
 ClefType Staff::clef(int tick) const
       {
       ClefTypeList c = clefTypeList(tick);
-      return score()->styleB(ST_concertPitch) ? c._concertClef : c._transposingClef;
+      return score()->styleB(StyleIdx::concertPitch) ? c._concertClef : c._transposingClef;
       }
 
 //---------------------------------------------------------
@@ -495,7 +495,7 @@ qreal Staff::spatium() const
 
 qreal Staff::mag() const
       {
-      return _small ? score()->styleD(ST_smallStaffMag) : 1.0;
+      return _small ? score()->styleD(StyleIdx::smallStaffMag) : 1.0;
       }
 
 //---------------------------------------------------------
@@ -701,7 +701,7 @@ void Staff::setStaffType(const StaffType* st)
 
       if (_staffType.group() != csg) {
             switch(_staffType.group()) {
-                  case TAB_STAFF_GROUP:        ct = ClefType(score()->styleI(ST_tabClef)); break;
+                  case TAB_STAFF_GROUP:        ct = ClefType(score()->styleI(StyleIdx::tabClef)); break;
                   case STANDARD_STAFF_GROUP:   ct = ClefType::G; break;      // TODO: use preferred clef for instrument
                   case PERCUSSION_STAFF_GROUP: ct = ClefType::PERC; break;
                   }
