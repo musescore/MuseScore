@@ -29,7 +29,7 @@ class TimeSigMap;
 class Xml;
 class XmlReader;
 
-enum TType { TICKS, FRAMES };
+enum class TType : char { TICKS, FRAMES };
 
 //---------------------------------------------------------
 //   Pos
@@ -55,13 +55,13 @@ class Pos {
       Pos(TempoMap*, TimeSigMap*);
       Pos(TempoMap*, TimeSigMap*, int measure, int beat, int tick);
       Pos(TempoMap*, TimeSigMap*, int minute, int sec, int frame, int subframe);
-      Pos(TempoMap*, TimeSigMap*, unsigned, TType type = TICKS);
+      Pos(TempoMap*, TimeSigMap*, unsigned, TType type = TType::TICKS);
       Pos(TempoMap*, TimeSigMap*, const QString&);
 
       void setContext(TempoMap* t, TimeSigMap* s) { tempo = t; sig = s; }
       void dump(int n = 0) const;
 
-      unsigned time(TType t) const { return t == TICKS ? tick() : frame(); }
+      unsigned time(TType t) const { return t == TType::TICKS ? tick() : frame(); }
       void mbt(int* measure, int* beat, int* tick) const;
       void msf(int* minute, int* sec, int* frame, int* subframe) const;
       SigEvent timesig() const;

@@ -111,7 +111,7 @@ Ruler::Ruler(QWidget* parent)
       magStep = 0;
       _xpos   = 0;
       _xmag   = 0.1;
-      _timeType = TICKS;
+      _timeType = TType::TICKS;
       _font2.setPixelSize(14);
       _font2.setBold(true);
       _font1.setPixelSize(10);
