@@ -37,6 +37,8 @@ class Note;
 class Ruler;
 class Seq;
 
+enum class SelState : char;
+
 //---------------------------------------------------------
 //   DrumrollEditor
 //---------------------------------------------------------
@@ -67,7 +69,7 @@ class DrumrollEditor : public QMainWindow {
       void cmd(QAction*);
 
    public slots:
-      void changeSelection(int);
+      void changeSelection(SelState);
 
    public:
       DrumrollEditor(QWidget* parent = 0);

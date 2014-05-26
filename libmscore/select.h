@@ -42,7 +42,7 @@ struct ElementPattern {
 //   SelState
 //---------------------------------------------------------
 
-enum SelState : char {
+enum class SelState : char {
       NONE,   // nothing is selected
       LIST,   // disjoint selection
       RANGE,  // adjacent selection, a range in one or more staves

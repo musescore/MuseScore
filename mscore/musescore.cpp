@@ -1289,7 +1289,7 @@ void MuseScore::selectScore(QAction* action)
 //   selectionChanged
 //---------------------------------------------------------
 
-void MuseScore::selectionChanged(int selectionState)
+void MuseScore::selectionChanged(SelState selectionState)
       {
       bool enable = selectionState != SelState::NONE;
       getAction("cut")->setEnabled(enable);
@@ -2526,9 +2526,9 @@ void MuseScore::changeState(ScoreState val)
             else if (enable && strcmp(s->key(), "redo") == 0)
                   a->setEnabled((s->state() & val) && (cs ? cs->undo()->canRedo() : false));
             else if (enable && strcmp(s->key(), "cut") == 0)
-                  a->setEnabled(cs && cs->selection().state());
+                  a->setEnabled(cs && cs->selection().state() != SelState::NONE);
             else if (enable && strcmp(s->key(), "copy") == 0)
-                  a->setEnabled(cs && cs->selection().state());
+                  a->setEnabled(cs && cs->selection().state() != SelState::NONE);
             else if (enable && strcmp(s->key(), "synth-control") == 0) {
                   Driver* driver = seq ? seq->driver() : 0;
                   // a->setEnabled(driver && driver->getSynth());

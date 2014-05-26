@@ -88,6 +88,7 @@ class Seq;
 class ImportMidiPanel;
 
 struct PluginDescription;
+enum class SelState : char;
 
 extern QString mscoreGlobalShare;
 static const int PROJECT_LIST_LEN = 6;
@@ -466,7 +467,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void midiNoteReceived(int pitch, bool ctrl);
       void instrumentChanged();
       void showMasterPalette(const QString& = 0);
-      void selectionChanged(int);
+      void selectionChanged(SelState);
 
    public:
       MuseScore();
