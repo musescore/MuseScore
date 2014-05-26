@@ -383,7 +383,7 @@ void StaffType::setDurationMetrics()
             return;
 
       QFontMetricsF fm(durationFont());
-      QString txt(_durationFonts[_durationFontIdx].displayValue, NUM_OF_TAB_VALS);
+      QString txt(_durationFonts[_durationFontIdx].displayValue, int(TabVal::NUM_OF));
       QRectF bb( fm.tightBoundingRect(txt) );
       // move symbols so that the lowest margin 'sits' on the base line:
       // move down by the whole part above (negative) the base line
@@ -793,27 +793,27 @@ bool TablatureDurationFont::read(XmlReader& e)
                   QString txt(e.readElementText());
                   QChar chr = txt[0];
                   if (val == "longa")
-                        displayValue[TAB_VAL_LONGA] = chr;
+                        displayValue[int(TabVal::VAL_LONGA)] = chr;
                   else if (val == "brevis")
-                        displayValue[TAB_VAL_BREVIS] = chr;
+                        displayValue[int(TabVal::VAL_BREVIS)] = chr;
                   else if (val == "semibrevis")
-                        displayValue[TAB_VAL_SEMIBREVIS] = chr;
+                        displayValue[int(TabVal::VAL_SEMIBREVIS)] = chr;
                   else if (val == "minima")
-                        displayValue[TAB_VAL_MINIMA] = chr;
+                        displayValue[int(TabVal::VAL_MINIMA)] = chr;
                   else if (val == "semiminima")
-                        displayValue[TAB_VAL_SEMIMINIMA] = chr;
+                        displayValue[int(TabVal::VAL_SEMIMINIMA)] = chr;
                   else if (val == "fusa")
-                        displayValue[TAB_VAL_FUSA] = chr;
+                        displayValue[int(TabVal::VAL_FUSA)] = chr;
                   else if (val == "semifusa")
-                        displayValue[TAB_VAL_SEMIFUSA] = chr;
+                        displayValue[int(TabVal::VAL_SEMIFUSA)] = chr;
                   else if (val == "32")
-                        displayValue[TAB_VAL_32] = chr;
+                        displayValue[int(TabVal::VAL_32)] = chr;
                   else if (val == "64")
-                        displayValue[TAB_VAL_64] = chr;
+                        displayValue[int(TabVal::VAL_64)] = chr;
                   else if (val == "128")
-                        displayValue[TAB_VAL_128] = chr;
+                        displayValue[int(TabVal::VAL_128)] = chr;
                   else if (val == "256")
-                        displayValue[TAB_VAL_256] = chr;
+                        displayValue[int(TabVal::VAL_256)] = chr;
                   else if (val == "dot")
                         displayDot = chr;
                   else
