@@ -33,9 +33,9 @@ static void setTextPlace(PlaceText place, QComboBox* cb)
       {
       int idx = 0;
       switch (place) {
-            case PLACE_ABOVE: idx = 0; break;
-            case PLACE_BELOW: idx = 1; break;
-            case PLACE_LEFT:  idx = 2; break;
+            case PlaceText::ABOVE: idx = 0; break;
+            case PlaceText::BELOW: idx = 1; break;
+            case PlaceText::LEFT:  idx = 2; break;
             default:
                   qDebug("illegal text placement");
             }
@@ -90,11 +90,11 @@ LineProperties::~LineProperties()
 
 static PlaceText getPlaceText(QComboBox* cb)
       {
-      PlaceText p = PLACE_ABOVE;
+      PlaceText p = PlaceText::ABOVE;
       switch(cb->currentIndex()) {
-            case 0: p = PLACE_ABOVE; break;
-            case 1: p = PLACE_BELOW; break;
-            case 2: p = PLACE_LEFT; break;
+            case 0: p = PlaceText::ABOVE; break;
+            case 1: p = PlaceText::BELOW; break;
+            case 2: p = PlaceText::LEFT; break;
             }
       return p;
       }
@@ -127,14 +127,14 @@ void LineProperties::accept()
       PlaceText pt = getPlaceText(beginTextPlace);
       if (pt != otl->beginTextPlace()) {
             qDebug("change ottava, links %p", otl->links());
-            otl->undoChangeProperty(P_ID::BEGIN_TEXT_PLACE, pt);
+            otl->undoChangeProperty(P_ID::BEGIN_TEXT_PLACE, int(pt));
             }
       pt = getPlaceText(continueTextPlace);
       if (pt != otl->continueTextPlace())
-            otl->undoChangeProperty(P_ID::CONTINUE_TEXT_PLACE, pt);
+            otl->undoChangeProperty(P_ID::CONTINUE_TEXT_PLACE, int(pt));
       pt = getPlaceText(endTextPlace);
       if (pt != otl->endTextPlace())
-            otl->undoChangeProperty(P_ID::END_TEXT_PLACE, pt);
+            otl->undoChangeProperty(P_ID::END_TEXT_PLACE, int(pt));
 
       if ((tl->beginTextElement() && !tl->beginTextElement()) || (beginText->text() != otl->beginText()))
             otl->undoChangeProperty(P_ID::BEGIN_TEXT, beginText->text());
