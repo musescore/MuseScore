@@ -279,7 +279,7 @@ void DrumrollEditor::selectionChanged()
 //   changeSelection
 //---------------------------------------------------------
 
-void DrumrollEditor::changeSelection(int)
+void DrumrollEditor::changeSelection(SelState)
       {
 //      gv->scene()->blockSignals(true);
       gv->scene()->clearSelection();

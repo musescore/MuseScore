@@ -369,7 +369,7 @@ void PianorollEditor::timerEvent(QTimerEvent* event)
 //   changeSelection
 //---------------------------------------------------------
 
-void PianorollEditor::changeSelection(int)
+void PianorollEditor::changeSelection(SelState)
       {
       gv->scene()->blockSignals(true);
       gv->scene()->clearSelection();
