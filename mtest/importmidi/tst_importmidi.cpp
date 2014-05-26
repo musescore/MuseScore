@@ -56,7 +56,7 @@ class TestImportMidi : public QObject, public MTest
             {
             TrackOperations opers;
             opers.simplifyNotation = false;
-            preferences.midiImportOperations.setDefaults(opers);
+            preferences.midiImportOperations.resetDefaults(opers);
             mf(file);
             preferences.midiImportOperations.clear();
             }
@@ -131,7 +131,7 @@ class TestImportMidi : public QObject, public MTest
             TrackOperations opers;
             opers.changeClef = false;
             opers.simplifyNotation = false;
-            preferences.midiImportOperations.setDefaults(opers);
+            preferences.midiImportOperations.resetDefaults(opers);
             mf("tuplet_3_5_7_tuplets");
             preferences.midiImportOperations.clear();
             }
@@ -188,7 +188,7 @@ class TestImportMidi : public QObject, public MTest
             TrackOperations opers;
             opers.LHRH.doIt = true;
             opers.simplifyNotation = false;
-            preferences.midiImportOperations.setDefaults(opers);
+            preferences.midiImportOperations.resetDefaults(opers);
             mf("split_nontuplet");
             preferences.midiImportOperations.clear();
             }
@@ -197,7 +197,7 @@ class TestImportMidi : public QObject, public MTest
             TrackOperations opers;
             opers.LHRH.doIt = true;
             opers.simplifyNotation = false;
-            preferences.midiImportOperations.setDefaults(opers);
+            preferences.midiImportOperations.resetDefaults(opers);
             mf("split_tuplet");
             preferences.midiImportOperations.clear();
             }
@@ -206,7 +206,7 @@ class TestImportMidi : public QObject, public MTest
             TrackOperations opers;
             opers.LHRH.doIt = true;
             opers.simplifyNotation = false;
-            preferences.midiImportOperations.setDefaults(opers);
+            preferences.midiImportOperations.resetDefaults(opers);
             mf("split_2_melodies");
             preferences.midiImportOperations.clear();
             }
@@ -215,7 +215,7 @@ class TestImportMidi : public QObject, public MTest
             TrackOperations opers;
             opers.LHRH.doIt = true;
             opers.simplifyNotation = false;
-            preferences.midiImportOperations.setDefaults(opers);
+            preferences.midiImportOperations.resetDefaults(opers);
             mf("split_octave");
             preferences.midiImportOperations.clear();
             }
@@ -226,7 +226,7 @@ class TestImportMidi : public QObject, public MTest
             TrackOperations opers;
             opers.swing = MidiOperation::Swing::SWING;
             opers.simplifyNotation = false;
-            preferences.midiImportOperations.setDefaults(opers);
+            preferences.midiImportOperations.resetDefaults(opers);
             mf("swing_triplets");
             preferences.midiImportOperations.clear();
             }
@@ -235,7 +235,7 @@ class TestImportMidi : public QObject, public MTest
             TrackOperations opers;
             opers.swing = MidiOperation::Swing::SHUFFLE;
             opers.simplifyNotation = false;
-            preferences.midiImportOperations.setDefaults(opers);
+            preferences.midiImportOperations.resetDefaults(opers);
             mf("swing_shuffle");
             preferences.midiImportOperations.clear();
             }
@@ -245,7 +245,7 @@ class TestImportMidi : public QObject, public MTest
             opers.swing = MidiOperation::Swing::SWING;
             opers.changeClef = true;
             opers.simplifyNotation = false;
-            preferences.midiImportOperations.setDefaults(opers);
+            preferences.midiImportOperations.resetDefaults(opers);
             mf("swing_clef");
             preferences.midiImportOperations.clear();
             }

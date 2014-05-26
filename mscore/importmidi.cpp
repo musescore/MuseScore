@@ -662,29 +662,8 @@ Measure* barFromIndex(const Score *score, int barIndex)
 
 bool isGrandStaff(const MTrack &t1, const MTrack &t2)
       {
-      const static std::set<int> grandStaffPrograms = {
-                  // Piano
-              0, 1, 2, 3, 4, 5, 6, 7
-                  // Chromatic Percussion
-            , 8, 10, 11, 12, 13, 15
-                  // Organ
-            , 16, 17, 18, 19, 20, 21, 23
-                  // Strings
-            , 46
-                  // Ensemble
-            , 50, 51, 54
-                  // Brass
-            , 62, 63
-                  // Synth Lead
-            , 80, 81, 82, 83, 84, 85, 86, 87
-                  // Synth Pad
-            , 88, 89, 90, 91, 92, 93, 94, 95
-                  // Synth Effects
-            , 96, 97, 98, 99, 100, 101, 102, 103
-            };
-
       return t1.mtrack->outChannel() == t2.mtrack->outChannel()
-                  && grandStaffPrograms.find(t1.program) != grandStaffPrograms.end();
+                  && MChord::isGrandStaffProgram(t1.program);
       }
 
 bool isSameChannel(const MTrack &t1, const MTrack &t2)
@@ -921,6 +900,18 @@ QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
       return tracksMeta;
       }
 
+void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
+      {
+      for (const auto &track: tracks) {
+            int trackIndex = track.first;
+            const MTrack &mtrack = track.second;
+            bool needToSplit = false;
+            if (LRHand::needToSplit(mtrack.chords, mtrack.program))
+                  needToSplit = true;
+            preferences.midiImportOperations.setNeedToSplit(trackIndex, needToSplit);
+            }
+      }
+
 void convertMidi(Score *score, const MidiFile *mf)
       {
       ReducedFraction lastTick;
@@ -931,9 +922,13 @@ void convertMidi(Score *score, const MidiFile *mf)
 
       if (preferences.midiImportOperations.count() == 0)        // newly opened MIDI file
             Quantize::setIfHumanPerformance(tracks, sigmap);
+
       MChord::collectChords(tracks);
       MidiBeat::adjustChordsToBeats(tracks, lastTick);
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
+
+      if (preferences.midiImportOperations.count() == 0)        // newly opened MIDI file
+            setLeftRightHandSplit(tracks);
 
       MChord::removeOverlappingNotes(tracks);
 

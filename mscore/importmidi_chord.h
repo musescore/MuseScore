@@ -50,6 +50,8 @@ class MTrack;
 
 namespace MChord {
 
+bool isGrandStaffProgram(int program);
+
 std::multimap<ReducedFraction, MidiChord>::iterator
 findFirstChordInRange(std::multimap<ReducedFraction, MidiChord> &chords,
                       const ReducedFraction &startRangeTick,

@@ -10,6 +10,31 @@
 namespace Ms {
 namespace MChord {
 
+bool isGrandStaffProgram(int program)
+      {
+      const static std::set<int> grandStaffPrograms = {
+                  // Piano
+              0, 1, 2, 3, 4, 5, 6, 7
+                  // Chromatic Percussion
+            , 8, 10, 11, 12, 13, 15
+                  // Organ
+            , 16, 17, 18, 19, 20, 21, 23
+                  // Strings
+            , 46
+                  // Ensemble
+            , 50, 51, 54
+                  // Brass
+            , 62, 63
+                  // Synth Lead
+            , 80, 81, 82, 83, 84, 85, 86, 87
+                  // Synth Pad
+            , 88, 89, 90, 91, 92, 93, 94, 95
+                  // Synth Effects
+            , 96, 97, 98, 99, 100, 101, 102, 103
+            };
+
+      return grandStaffPrograms.find(program) != grandStaffPrograms.end();
+      }
 
 std::multimap<ReducedFraction, MidiChord>::iterator
 findFirstChordInRange(std::multimap<ReducedFraction, MidiChord> &chords,

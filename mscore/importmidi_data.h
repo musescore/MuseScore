@@ -49,6 +49,10 @@ class MidiData
       MidiOperation::QuantValue quantValue(const QString &fileName) const;
       void setQuantValue(const QString &fileName, MidiOperation::QuantValue value);
 
+                  // left/right hand separation
+      bool needToSplit(const QString &fileName, int trackIndex) const;
+      void setNeedToSplit(const QString &fileName, int trackIndex, bool value);
+
    private:
       static MidiOperation::QuantValue defaultQuantValue();
 
@@ -64,6 +68,7 @@ class MidiData
             MidiFile midiFile;
             QString charset = MidiCharset::defaultCharset();
             bool isHumanPerformance = false;
+            std::map<int, bool> needLRhandSplit;      // <track index, value = false by default>
             MidiOperation::QuantValue quantValue = defaultQuantValue();
             std::set<ReducedFraction> humanBeats;
             };
