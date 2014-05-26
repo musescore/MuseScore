@@ -125,8 +125,8 @@ class TextStyle {
 //   StyleValueType
 //---------------------------------------------------------
 
-enum StyleValueType {
-      ST_SPATIUM, ST_DOUBLE, ST_BOOL, ST_INT, ST_DIRECTION, ST_STRING
+enum class StyleValueType : char {
+      SPATIUM, DOUBLE, BOOL, INT, DIRECTION, STRING
       };
 
 //---------------------------------------------------------
