@@ -79,19 +79,19 @@ struct TablatureFretFont {
       bool read(XmlReader&);
       };
 
-enum {
-      TAB_VAL_LONGA = 0,
-      TAB_VAL_BREVIS,
-      TAB_VAL_SEMIBREVIS,
-      TAB_VAL_MINIMA,
-      TAB_VAL_SEMIMINIMA,
-      TAB_VAL_FUSA,
-      TAB_VAL_SEMIFUSA,
-      TAB_VAL_32,
-      TAB_VAL_64,
-      TAB_VAL_128,
-      TAB_VAL_256,
-      NUM_OF_TAB_VALS
+enum class TabVal : char {
+      VAL_LONGA = 0,
+      VAL_BREVIS,
+      VAL_SEMIBREVIS,
+      VAL_MINIMA,
+      VAL_SEMIMINIMA,
+      VAL_FUSA,
+      VAL_SEMIFUSA,
+      VAL_32,
+      VAL_64,
+      VAL_128,
+      VAL_256,
+      NUM_OF
       };
 
 enum class TablatureMinimStyle : char {
@@ -106,7 +106,7 @@ struct TablatureDurationFont {
       qreal   defPitch;               // the default size of the font
       qreal   defYOffset;             // the default Y displacement
       QChar   displayDot;             // the char to use to draw a dot
-      QChar   displayValue[NUM_OF_TAB_VALS];       // the char to use to draw a duration value
+      QChar   displayValue[int(TabVal::NUM_OF)];       // the char to use to draw a duration value
 
       bool read(XmlReader&);
       };
