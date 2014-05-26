@@ -50,15 +50,15 @@ void HairpinSegment::layout()
       if (hairpin()->hairpinType() == Hairpin::HairpinType::CRESCENDO) {
             // crescendo
             switch (spannerSegmentType()) {
-                  case SEGMENT_SINGLE:
-                  case SEGMENT_BEGIN:
+                  case SpannerSegmentType::SINGLE:
+                  case SpannerSegmentType::BEGIN:
                         l1.setLine(.0 + circledTipRadius*2, .0, len, h1);
                         l2.setLine(.0 + circledTipRadius*2, .0, len, -h1);
                         circledTip.setX( 0 + circledTipRadius );
                         circledTip.setY( 0 );
                         break;
-                  case SEGMENT_MIDDLE:
-                  case SEGMENT_END:
+                  case SpannerSegmentType::MIDDLE:
+                  case SpannerSegmentType::END:
                         drawCircledTip = false;
                         l1.setLine(.0,  h2, len, h1);
                         l2.setLine(.0, -h2, len, -h1);
@@ -68,15 +68,15 @@ void HairpinSegment::layout()
       else {
             // decrescendo
             switch(spannerSegmentType()) {
-                  case SEGMENT_SINGLE:
-                  case SEGMENT_END:
+                  case SpannerSegmentType::SINGLE:
+                  case SpannerSegmentType::END:
                         l1.setLine(.0,  h1, len - circledTipRadius*2, 0.0);
                         l2.setLine(.0, -h1, len - circledTipRadius*2, 0.0);
                         circledTip.setX( len - circledTipRadius );
                         circledTip.setY( 0 );
                         break;
-                  case SEGMENT_BEGIN:
-                  case SEGMENT_MIDDLE:
+                  case SpannerSegmentType::BEGIN:
+                  case SpannerSegmentType::MIDDLE:
                         drawCircledTip = false;
                         l1.setLine(.0,  h1, len, + h2);
                         l2.setLine(.0, -h1, len, - h2);

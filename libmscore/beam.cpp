@@ -429,9 +429,9 @@ void Beam::layout()
             if (cr->measure()->system() != system) {
                   SpannerSegmentType st;
                   if (n == 0)
-                        st = SEGMENT_BEGIN;
+                        st = SpannerSegmentType::BEGIN;
                   else
-                        st = SEGMENT_MIDDLE;
+                        st = SpannerSegmentType::MIDDLE;
                   ++n;
                   if (fragments.size() < n)
                         fragments.append(new BeamFragment);
@@ -444,9 +444,9 @@ void Beam::layout()
       if (!crl.isEmpty()) {
             SpannerSegmentType st;
             if (n == 0)
-                  st = SEGMENT_SINGLE;
+                  st = SpannerSegmentType::SINGLE;
             else
-                  st = SEGMENT_END;
+                  st = SpannerSegmentType::END;
             if (fragments.size() < (n+1))
                   fragments.append(new BeamFragment);
             layout2(crl, st, n);

@@ -2102,7 +2102,7 @@ void VoltaSegmentView::setElement(Element* e)
       VoltaSegment* vs = (VoltaSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
+      lb.segmentType->setCurrentIndex(int(vs->spannerSegmentType()));
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
@@ -2128,7 +2128,7 @@ void LineSegmentView::setElement(Element* e)
       LineSegment* vs = (LineSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
+      lb.segmentType->setCurrentIndex(int(vs->spannerSegmentType()));
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
@@ -2596,7 +2596,7 @@ void TextLineSegmentView::setElement(Element* e)
       VoltaSegment* vs = (VoltaSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
+      lb.segmentType->setCurrentIndex(int(vs->spannerSegmentType()));
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());

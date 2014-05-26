@@ -27,8 +27,8 @@ class ChordRest;
 //   SpannerSegmentType
 //---------------------------------------------------------
 
-enum SpannerSegmentType {
-      SEGMENT_SINGLE, SEGMENT_BEGIN, SEGMENT_MIDDLE, SEGMENT_END
+enum class SpannerSegmentType : char {
+      SINGLE, BEGIN, MIDDLE, END
       };
 
 //---------------------------------------------------------
