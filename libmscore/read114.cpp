@@ -259,7 +259,7 @@ void Part::read114(XmlReader& e)
 
 //---------------------------------------------------------
 //   read114
-//    import old version 1.2 files
+//    import old version <= 1.3 files
 //---------------------------------------------------------
 
 Score::FileError Score::read114(XmlReader& e)

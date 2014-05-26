@@ -47,7 +47,7 @@ void TestTimesig::timesig01()
       QVERIFY(score);
       Measure* m = score->firstMeasure()->nextMeasure();
       TimeSig* ts = new TimeSig(score);
-      ts->setSig(Fraction(3, 4), TSIG_NORMAL);
+      ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
       score->cmdAddTimeSig(m, 0, ts, false);
       score->doLayout();
@@ -68,7 +68,7 @@ void TestTimesig::timesig02()
       QVERIFY(score);
       Measure* m = score->firstMeasure();
       TimeSig* ts = new TimeSig(score);
-      ts->setSig(Fraction(3, 4), TSIG_NORMAL);
+      ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
       score->cmdAddTimeSig(m, 0, ts, false);
       score->doLayout();
@@ -93,7 +93,7 @@ void TestTimesig::timesig03()
       QVERIFY(score);
       Measure* m = score->firstMeasure()->nextMeasure();
       TimeSig* ts = new TimeSig(score);
-      ts->setSig(Fraction(3, 4), TSIG_NORMAL);
+      ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
       score->cmdAddTimeSig(m, 0, ts, false);
       score->doLayout();

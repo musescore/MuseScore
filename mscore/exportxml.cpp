@@ -1414,16 +1414,16 @@ void ExportMusicXml::moveToTick(int t)
 
 void ExportMusicXml::timesig(TimeSig* tsig)
       {
-      int st = tsig->timeSigType();
+      TimeSigType st = tsig->timeSigType();
       Fraction ts = tsig->sig();
       int z = ts.numerator();
       int n = ts.denominator();
       QString ns = tsig->numeratorString();
 
       attr.doAttr(xml, true);
-      if (st == TSIG_FOUR_FOUR)
+      if (st == TimeSigType::FOUR_FOUR)
             xml.stag("time symbol=\"common\"");
-      else if (st == TSIG_ALLA_BREVE)
+      else if (st == TimeSigType::ALLA_BREVE)
             xml.stag("time symbol=\"cut\"");
       else
             xml.stag("time");
