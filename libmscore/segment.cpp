@@ -436,7 +436,7 @@ void Segment::add(Element* el)
                   break;
 
             case ElementType::STAFF_STATE:
-                  if (static_cast<StaffState*>(el)->staffStateType() == STAFF_STATE_INSTRUMENT) {
+                  if (static_cast<StaffState*>(el)->staffStateType() == StaffStateType::INSTRUMENT) {
                         StaffState* ss = static_cast<StaffState*>(el);
                         Part* part = el->staff()->part();
                         part->setInstrument(ss->instrument(), tick());
@@ -564,7 +564,7 @@ void Segment::remove(Element* el)
                   break;
 
             case ElementType::STAFF_STATE:
-                  if (static_cast<StaffState*>(el)->staffStateType() == STAFF_STATE_INSTRUMENT) {
+                  if (static_cast<StaffState*>(el)->staffStateType() == StaffStateType::INSTRUMENT) {
                         Part* part = el->staff()->part();
                         part->removeInstrument(tick());
                         }

@@ -1054,19 +1054,19 @@ void MuseScore::setAdvancedPalette()
       sp->setDrawGrid(true);
 
       StaffState* st = new StaffState(gscore);
-      st->setSubtype(STAFF_STATE_VISIBLE);
+      st->setSubtype(StaffStateType::VISIBLE);
       sp->append(st, tr("set visible"));
 
       st = new StaffState(gscore);
-      st->setSubtype(STAFF_STATE_INVISIBLE);
+      st->setSubtype(StaffStateType::INVISIBLE);
       sp->append(st, tr("set invisible"));
 
       st = new StaffState(gscore);
-      st->setSubtype(STAFF_STATE_TYPE);
+      st->setSubtype(StaffStateType::TYPE);
       sp->append(st, tr("change staff type"));
 
       st = new StaffState(gscore);
-      st->setSubtype(STAFF_STATE_INSTRUMENT);
+      st->setSubtype(StaffStateType::INSTRUMENT);
       sp->append(st, tr("change instrument"));
 
       paletteBox->addPalette(sp);
