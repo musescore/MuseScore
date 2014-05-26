@@ -551,13 +551,13 @@ Palette* MuseScore::newBracketsPalette()
       sp->setDrawGrid(true);
 
       Bracket* b1 = new Bracket(gscore);
-      b1->setBracketType(BRACKET_NORMAL);
+      b1->setBracketType(BracketType::NORMAL);
       Bracket* b2 = new Bracket(gscore);
-      b2->setBracketType(BRACKET_BRACE);
+      b2->setBracketType(BracketType::BRACE);
       Bracket* b3 = new Bracket(gscore);
-      b3->setBracketType(BRACKET_SQUARE);
+      b3->setBracketType(BracketType::SQUARE);
       Bracket* b4 = new Bracket(gscore);
-      b4->setBracketType(BRACKET_LINE);
+      b4->setBracketType(BracketType::LINE);
 
       sp->append(b1, tr("Bracket"));
       sp->append(b2, tr("Brace"));

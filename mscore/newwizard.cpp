@@ -476,7 +476,7 @@ void InstrumentWizard::createInstruments(Score* cs)
             // if a staff was removed from instrument:
             if (part->staves()->at(0)->barLineSpan() > rstaff) {
                   part->staves()->at(0)->setBarLineSpan(rstaff);
-                  part->staves()->at(0)->setBracket(0, NO_BRACKET);
+                  part->staves()->at(0)->setBracket(0, BracketType::NO_BRACKET);
                   }
 
             // insert part

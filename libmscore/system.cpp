@@ -150,7 +150,7 @@ void System::layout(qreal xo1)
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* s = score()->staff(staffIdx);
             for (int i = 0; i < bracketLevels; ++i) {
-                  if (s->bracket(i) == NO_BRACKET)
+                  if (s->bracket(i) == BracketType::NO_BRACKET)
                         continue;
                   int firstStaff = staffIdx;
                   int lastStaff  = staffIdx + s->bracketSpan(i) - 1;

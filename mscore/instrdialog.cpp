@@ -1102,7 +1102,7 @@ void MuseScore::editInstrList()
             QList<BracketItem> brackets = staff->brackets();
             int nn = brackets.size();
             for (int ii = 0; ii < nn; ++ii) {
-                  if ((brackets[ii]._bracket != -1) && (brackets[ii]._bracketSpan > (n - i)))
+                  if ((brackets[ii]._bracket != BracketType::NO_BRACKET) && (brackets[ii]._bracketSpan > (n - i)))
                         rootScore->undoChangeBracketSpan(staff, ii, n - i);
                   }
             }

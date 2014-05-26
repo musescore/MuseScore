@@ -686,7 +686,7 @@ bool MuseData::read(const QString& name)
                         mpart->insertStaff(staff);
                         score->staves().push_back(staff);
                         if ((staves == 2) && (i == 0)) {
-                              staff->setBracket(0, BRACKET_BRACE);
+                              staff->setBracket(0, BracketType::BRACE);
                               staff->setBracketSpan(0, 2);
                               }
                         }

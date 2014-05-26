@@ -1272,8 +1272,8 @@ void MusicXml::scorePartwise(QDomElement ee)
                   stavesSpan += il.at(pg->start + j)->nstaves();
             // add bracket and set the span
             // TODO: use group-symbol default-x to determine horizontal order of brackets
-            if (pg->type == NO_BRACKET)
-                  il.at(pg->start)->staff(0)->setBracket(0, NO_BRACKET);
+            if (pg->type == BracketType::NO_BRACKET)
+                  il.at(pg->start)->staff(0)->setBracket(0, BracketType::NO_BRACKET);
             else
                   il.at(pg->start)->staff(0)->addBracket(BracketItem(pg->type, stavesSpan));
             if (pg->barlineSpan)
@@ -1284,7 +1284,7 @@ void MusicXml::scorePartwise(QDomElement ee)
       // multi-staff parts w/o explicit brackets get a brace
       foreach(Part const* const p, il) {
             if (p->nstaves() > 1 && !partSet.contains(p)) {
-                  p->staff(0)->addBracket(BracketItem(BRACKET_BRACE, p->nstaves()));
+                  p->staff(0)->addBracket(BracketItem(BracketType::BRACE, p->nstaves()));
                   p->staff(0)->setBarLineSpan(p->nstaves());
                   }
             }
@@ -1329,19 +1329,19 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, b
             return;
             }
 
-      BracketType bracketType = NO_BRACKET;
+      BracketType bracketType = BracketType::NO_BRACKET;
       if (s == "")
             ;  // ignore (handle as NO_BRACKET)
       else if (s == "none")
             ;  // already set to NO_BRACKET
       else if (s == "brace")
-            bracketType = BRACKET_BRACE;
+            bracketType = BracketType::BRACE;
       else if (s == "bracket")
-            bracketType = BRACKET_NORMAL;
+            bracketType = BracketType::NORMAL;
       else if (s == "line")
-            bracketType = BRACKET_LINE;
+            bracketType = BracketType::LINE;
       else if (s == "square")
-            bracketType = BRACKET_SQUARE;
+            bracketType = BracketType::SQUARE;
       else {
             qDebug("part-group symbol=%s not supported", s.toLatin1().data());
             return;
