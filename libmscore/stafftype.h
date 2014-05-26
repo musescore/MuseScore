@@ -94,10 +94,10 @@ enum {
       NUM_OF_TAB_VALS
       };
 
-enum TablatureMinimStyle {
-      TAB_MINIM_NONE = 0,                       // do not draw half notes at all
-      TAB_MINIM_SHORTER,                        // draw half notes with a shorter stem
-      TAB_MINIM_SLASHED                         // draw half notes with stem with two slashes
+enum class TablatureMinimStyle : char {
+      NONE = 0,                       // do not draw half notes at all
+      SHORTER,                        // draw half notes with a shorter stem
+      SLASHED                         // draw half notes with stem with two slashes
       };
 
 struct TablatureDurationFont {
@@ -155,7 +155,7 @@ class StaffType {
                                           // the string line (spatium unit); user configurable
       bool  _genDurations = false;        // whether duration symbols are drawn or not
       bool  _linesThrough = false;        // whether lines for strings and stems may pass through fret marks or not
-      TablatureMinimStyle _minimStyle = TAB_MINIM_NONE;    // how to draw minim stems (stem-and-beam durations only)
+      TablatureMinimStyle _minimStyle = TablatureMinimStyle::NONE;    // how to draw minim stems (stem-and-beam durations only)
       bool  _onLines      = true;         // whether fret marks are drawn on the string lines or between them
       bool  _showRests    = false;        // whether to draw rests or not
       bool  _stemsDown    = true;         // stems are drawn downward (stem-and-beam durations only)

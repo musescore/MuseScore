@@ -182,9 +182,9 @@ void EditStaffType::setValues()
                   stemBesideRadio->setChecked(!staffType.stemThrough());
                   stemThroughRadio->setChecked(staffType.stemThrough());
                   TablatureMinimStyle minimStyle = staffType.minimStyle();
-                  minimNoneRadio->setChecked(minimStyle == TAB_MINIM_NONE);
-                  minimShortRadio->setChecked(minimStyle == TAB_MINIM_SHORTER);
-                  minimSlashedRadio->setChecked(minimStyle == TAB_MINIM_SLASHED);
+                  minimNoneRadio->setChecked(minimStyle == TablatureMinimStyle::NONE);
+                  minimShortRadio->setChecked(minimStyle == TablatureMinimStyle::SHORTER);
+                  minimSlashedRadio->setChecked(minimStyle == TablatureMinimStyle::SLASHED);
                   if (staffType.genDurations()) {
                         noteValuesNone->setChecked(false);
                         noteValuesSymb->setChecked(true);
@@ -329,8 +329,8 @@ void EditStaffType::setFromDlg()
       staffType.setFretFontSize(fretFontSize->value());
       staffType.setFretFontUserY(fretY->value());
       staffType.setLinesThrough(linesThroughRadio->isChecked());
-      staffType.setMinimStyle(minimNoneRadio->isChecked() ? TAB_MINIM_NONE :
-            (minimShortRadio->isChecked() ? TAB_MINIM_SHORTER : TAB_MINIM_SLASHED));
+      staffType.setMinimStyle(minimNoneRadio->isChecked() ? TablatureMinimStyle::NONE :
+            (minimShortRadio->isChecked() ? TablatureMinimStyle::SHORTER : TablatureMinimStyle::SLASHED));
       staffType.setOnLines(onLinesRadio->isChecked());
       staffType.setShowRests(showRests->isChecked());
       staffType.setUpsideDown(upsideDown->isChecked());

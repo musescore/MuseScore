@@ -1977,7 +1977,7 @@ void Chord::layoutTablature()
       // or duration longer than half (if halves have stems) or duration longer than crochet
       // remove stems
       if (tab->slashStyle() || _noStem || durationType().type() <
-         (tab->minimStyle() != TAB_MINIM_NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
+         (tab->minimStyle() != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
             delete _stem;
             delete _hook;
             _stem = 0;
