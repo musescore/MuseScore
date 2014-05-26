@@ -117,7 +117,7 @@ void Tuplet::layout()
             return;
 
       qreal _spatium = spatium();
-      if (_numberType != NO_TEXT) {
+      if (_numberType != NumberType::NO_TEXT) {
             if (_number == 0) {
                   _number = new Text(score());
                   _number->setTextStyleType(TEXT_STYLE_TUPLET);
@@ -178,7 +178,7 @@ void Tuplet::layout()
       //
       //   shall we draw a bracket?
       //
-      if (_bracketType == AUTO_BRACKET) {
+      if (_bracketType == BracketType::AUTO_BRACKET) {
             _hasBracket = false;
             foreach (DurationElement* e, _elements) {
                   if (e->type() == ElementType::TUPLET || e->type() == ElementType::REST) {
@@ -198,7 +198,7 @@ void Tuplet::layout()
                   }
             }
       else
-            _hasBracket = _bracketType != SHOW_NO_BRACKET;
+            _hasBracket = _bracketType != BracketType::SHOW_NO_BRACKET;
 
 
       //
@@ -860,9 +860,9 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
             case P_ID::DIRECTION:
                   return int(_direction);
             case P_ID::NUMBER_TYPE:
-                  return _numberType;
+                  return int(_numberType);
             case P_ID::BRACKET_TYPE:
-                  return _bracketType;
+                  return int(_bracketType);
             case P_ID::NORMAL_NOTES:
                   return _ratio.denominator();
             case P_ID::ACTUAL_NOTES:
@@ -924,9 +924,9 @@ QVariant Tuplet::propertyDefault(P_ID id) const
             case P_ID::DIRECTION:
                   return int(Direction::AUTO);
             case P_ID::NUMBER_TYPE:
-                  return Tuplet::SHOW_NUMBER;
+                  return int(Tuplet::NumberType::SHOW_NUMBER);
             case P_ID::BRACKET_TYPE:
-                  return Tuplet::AUTO_BRACKET;
+                  return int(Tuplet::BracketType::AUTO_BRACKET);
             case P_ID::NORMAL_NOTES:
             case P_ID::ACTUAL_NOTES:
                   return 1;
