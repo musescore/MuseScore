@@ -53,7 +53,7 @@ void TextLineSegment::setSelected(bool f)
       {
       Element::setSelected(f);
       if (_text) {
-            if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
+            if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
                   if (textLine()->_beginText)
                         _text->setSelected(f);
                   }
@@ -90,8 +90,8 @@ void TextLineSegment::draw(QPainter* painter) const
       if (_text) {
             SpannerSegmentType st = spannerSegmentType();
             if (
-               ((st == SEGMENT_SINGLE || st == SEGMENT_BEGIN) && (tl->beginTextPlace() == PLACE_LEFT))
-               || ((st == SEGMENT_MIDDLE || st == SEGMENT_END) && (tl->continueTextPlace() == PLACE_LEFT))
+               ((st == SpannerSegmentType::SINGLE || st == SpannerSegmentType::BEGIN) && (tl->beginTextPlace() == PLACE_LEFT))
+               || ((st == SpannerSegmentType::MIDDLE || st == SpannerSegmentType::END) && (tl->continueTextPlace() == PLACE_LEFT))
                ) {
                   QRectF bb(_text->bbox());
                   l = _text->pos().x() + bb.width() + textlineTextDistance;
@@ -104,7 +104,7 @@ void TextLineSegment::draw(QPainter* painter) const
 
       QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth, tl->lineStyle());
       painter->setPen(pen);
-      if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END) {
+      if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END) {
             if (tl->_endText) {
 #if 0 // TODO
                   SymId sym = tl->endSymbol();
@@ -128,7 +128,7 @@ void TextLineSegment::draw(QPainter* painter) const
 
       if (tl->beginHook()) {
             qreal hh = tl->beginHookHeight().val() * _spatium;
-            if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
+            if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
                   if (tl->beginHookType() == HookType::HOOK_45)
                         painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x() - fabs(hh * .4), pp1.y() + hh));
                   else
@@ -137,7 +137,7 @@ void TextLineSegment::draw(QPainter* painter) const
             }
       if (tl->endHook()) {
             qreal hh = tl->endHookHeight().val() * _spatium;
-            if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END) {
+            if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END) {
                   if (tl->endHookType() == HookType::HOOK_45)
                         painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x() + fabs(hh * .4), pp2.y() + hh));
                   else
@@ -166,8 +166,8 @@ void TextLineSegment::layout1()
       if (!tl->diagonal())
             _userOff2.setY(0);
       switch (spannerSegmentType()) {
-            case SEGMENT_SINGLE:
-            case SEGMENT_BEGIN:
+            case SpannerSegmentType::SINGLE:
+            case SpannerSegmentType::BEGIN:
                   if (tl->_beginText) {
                         if (_text == 0) {
                               _text = new Text(*tl->_beginText);
@@ -184,8 +184,8 @@ void TextLineSegment::layout1()
                         _text = 0;
                         }
                   break;
-            case SEGMENT_MIDDLE:
-            case SEGMENT_END:
+            case SpannerSegmentType::MIDDLE:
+            case SpannerSegmentType::END:
                   if (tl->_continueText) {
                         if (_text == 0) {
                               _text = new Text(*tl->_continueText);

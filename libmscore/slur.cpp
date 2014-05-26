@@ -158,9 +158,9 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             return false;
 
       if (!((modifiers & Qt::ShiftModifier)
-         && ((spannerSegmentType() == SEGMENT_SINGLE)
-              || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == int(GripSlurSegment::START))
-              || (spannerSegmentType() == SEGMENT_END && curGrip == int(GripSlurSegment::END))
+         && ((spannerSegmentType() == SpannerSegmentType::SINGLE)
+              || (spannerSegmentType() == SpannerSegmentType::BEGIN && curGrip == int(GripSlurSegment::START))
+              || (spannerSegmentType() == SpannerSegmentType::END && curGrip == int(GripSlurSegment::END))
             )))
             return false;
 
@@ -250,28 +250,28 @@ QPointF SlurSegment::gripAnchor(int grip) const
       QPointF p1(spos.p1 + spos.system1->pagePos());
       QPointF p2(spos.p2 + spos.system2->pagePos());
       switch (spannerSegmentType()) {
-            case SEGMENT_SINGLE:
+            case SpannerSegmentType::SINGLE:
                   if (grip == int(GripSlurSegment::START))
                         return p1;
                   else if (grip == int(GripSlurSegment::END))
                         return p2;
                   break;
 
-            case SEGMENT_BEGIN:
+            case SpannerSegmentType::BEGIN:
                   if (grip == int(GripSlurSegment::START))
                         return p1;
                   else if (grip == int(GripSlurSegment::END))
                         return system()->abbox().topRight();
                   break;
 
-            case SEGMENT_MIDDLE:
+            case SpannerSegmentType::MIDDLE:
                   if (grip == int(GripSlurSegment::START))
                         return sp;
                   else if (grip == int(GripSlurSegment::END))
                         return system()->abbox().topRight();
                   break;
 
-            case SEGMENT_END:
+            case SpannerSegmentType::END:
                   if (grip == int(GripSlurSegment::START))
                         return sp;
                   else if (grip == int(GripSlurSegment::END))
@@ -330,8 +330,8 @@ void SlurSegment::editDrag(const EditData& ed)
             //
             SpannerSegmentType st = spannerSegmentType();
             if (
-               (ed.curGrip == int(GripSlurSegment::START)  && (st == SEGMENT_SINGLE || st == SEGMENT_BEGIN))
-               || (ed.curGrip == int(GripSlurSegment::END) && (st == SEGMENT_SINGLE || st == SEGMENT_END))
+               (ed.curGrip == int(GripSlurSegment::START)  && (st == SpannerSegmentType::SINGLE || st == SpannerSegmentType::BEGIN))
+               || (ed.curGrip == int(GripSlurSegment::END) && (st == SpannerSegmentType::SINGLE || st == SpannerSegmentType::END))
                ) {
                   Spanner* spanner = slurTie();
                   Qt::KeyboardModifiers km = qApp->keyboardModifiers();
@@ -1241,7 +1241,7 @@ void Slur::layout()
             else {
                   s = frontSegment();
                   }
-            s->setSpannerSegmentType(SEGMENT_SINGLE);
+            s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
             s->layout(QPointF(0, 0), QPointF(_spatium * 6, 0));
             setbbox(frontSegment()->bbox());
             return;
@@ -1346,18 +1346,18 @@ void Slur::layout()
 
             // case 1: one segment
             if (sPos.system1 == sPos.system2) {
-                  segment->setSpannerSegmentType(SEGMENT_SINGLE);
+                  segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
                   segment->layout(sPos.p1, sPos.p2);
                   }
             // case 2: start segment
             else if (i == 0) {
-                  segment->setSpannerSegmentType(SEGMENT_BEGIN);
+                  segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
                   qreal x = system->bbox().width();
                   segment->layout(sPos.p1, QPointF(x, sPos.p1.y()));
                   }
             // case 3: middle segment
             else if (i != 0 && system != sPos.system2) {
-                  segment->setSpannerSegmentType(SEGMENT_MIDDLE);
+                  segment->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
                   qreal x1 = firstNoteRestSegmentX(system) - _spatium;
                   qreal x2 = system->bbox().width();
                   qreal y  = system->staff(staffIdx())->y();
@@ -1365,7 +1365,7 @@ void Slur::layout()
                   }
             // case 4: end segment
             else {
-                  segment->setSpannerSegmentType(SEGMENT_END);
+                  segment->setSpannerSegmentType(SpannerSegmentType::END);
                   qreal x = firstNoteRestSegmentX(system) - _spatium;
                   segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
                   }
@@ -1512,20 +1512,20 @@ void Slur::layoutChord()
             // case 1: one segment
             if (sPos.system1 == sPos.system2) {
                   segment->layout(sPos.p1, sPos.p2);
-                  segment->setSpannerSegmentType(SEGMENT_SINGLE);
+                  segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
                   }
             // case 2: start segment
             else if (i == 0) {
                   qreal x = system->bbox().width();
                   segment->layout(sPos.p1, QPointF(x, sPos.p1.y()));
-                  segment->setSpannerSegmentType(SEGMENT_BEGIN);
+                  segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
                   }
             // case 4: end segment
             else {
                   qreal x = firstNoteRestSegmentX(system) - 2 * _spatium;
 
                   segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
-                  segment->setSpannerSegmentType(SEGMENT_END);
+                  segment->setSpannerSegmentType(SpannerSegmentType::END);
                   }
             ++i;
             }

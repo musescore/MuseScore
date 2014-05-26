@@ -34,7 +34,7 @@ SpannerSegment::SpannerSegment(Score* s)
    : Element(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::SEGMENT);
-      setSpannerSegmentType(SEGMENT_SINGLE);
+      setSpannerSegmentType(SpannerSegmentType::SINGLE);
       _spanner = 0;
       }
 

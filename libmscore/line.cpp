@@ -164,7 +164,7 @@ QPointF LineSegment::pagePos() const
 
 QPointF LineSegment::gripAnchor(int grip) const
       {
-      if (spannerSegmentType() == SEGMENT_MIDDLE) {
+      if (spannerSegmentType() == SpannerSegmentType::MIDDLE) {
             qreal y = system()->staffYpage(staffIdx());
             qreal x;
             switch((GripLine)grip) {
@@ -204,9 +204,9 @@ QPointF LineSegment::gripAnchor(int grip) const
 bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
       {
       if (!((modifiers & Qt::ShiftModifier)
-         && ((spannerSegmentType() == SEGMENT_SINGLE)
-              || (spannerSegmentType() == SEGMENT_BEGIN && curGrip == int(GripLine::START))
-              || (spannerSegmentType() == SEGMENT_END && curGrip == int(GripLine::END)))))
+         && ((spannerSegmentType() == SpannerSegmentType::SINGLE)
+              || (spannerSegmentType() == SpannerSegmentType::BEGIN && curGrip == int(GripLine::START))
+              || (spannerSegmentType() == SpannerSegmentType::END && curGrip == int(GripLine::END)))))
             return false;
 
       LineSegment* ls = 0;
@@ -301,15 +301,15 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
       l->layout();
 
       LineSegment* nls = 0;
-      if (st == SEGMENT_SINGLE) {
+      if (st == SpannerSegmentType::SINGLE) {
             if (curGrip == int(GripLine::START))
                   nls = l->frontSegment();
             else if (curGrip == int(GripLine::END))
                   nls = l->backSegment();
             }
-      else if (st == SEGMENT_BEGIN)
+      else if (st == SpannerSegmentType::BEGIN)
             nls = l->frontSegment();
-      else if (st == SEGMENT_END)
+      else if (st == SpannerSegmentType::END)
             nls = l->backSegment();
 
       if (nls && (nls != this))
@@ -628,7 +628,7 @@ void SLine::layout()
 
             if (sysIdx1 == sysIdx2) {
                   // single segment
-                  seg->setSpannerSegmentType(SEGMENT_SINGLE);
+                  seg->setSpannerSegmentType(SpannerSegmentType::SINGLE);
                   qreal len = p2.x() - p1.x();
                   if (anchor() == ANCHOR_SEGMENT)
                         len = qMax(3 * spatium(), len);
@@ -637,14 +637,14 @@ void SLine::layout()
                   }
             else if (i == sysIdx1) {
                   // start segment
-                  seg->setSpannerSegmentType(SEGMENT_BEGIN);
+                  seg->setSpannerSegmentType(SpannerSegmentType::BEGIN);
                   seg->setPos(p1);
                   qreal x2 = system->bbox().right();
                   seg->setPos2(QPointF(x2 - p1.x(), 0.0));
                   }
             else if (i > 0 && i != sysIdx2) {
                   // middle segment
-                  seg->setSpannerSegmentType(SEGMENT_MIDDLE);
+                  seg->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
                   qreal x1 = (mseg ? mseg->pos().x() : 0) + m->pos().x();
                   qreal x2 = system->bbox().right();
                   seg->setPos(QPointF(x1, p1.y()));
@@ -656,7 +656,7 @@ void SLine::layout()
                   qreal len = p2.x() - x1;
                   if (anchor() == ANCHOR_SEGMENT)
                         len = qMax(3 * spatium(), len);
-                  seg->setSpannerSegmentType(SEGMENT_END);
+                  seg->setSpannerSegmentType(SpannerSegmentType::END);
                   seg->setPos(QPointF(x1, p1.y()));
                   seg->setPos2(QPointF(len, 0.0));    // p2 is relative to p1
                   }
@@ -720,7 +720,7 @@ void SLine::writeProperties(Xml& xml) const
       for (int i = 0; i < n; ++i) {
             const LineSegment* seg = segmentAt(i);
             xml.stag("Segment");
-            xml.tag("subtype", seg->spannerSegmentType());
+            xml.tag("subtype", int(seg->spannerSegmentType()));
             xml.tag("off2", seg->userOff2() / _spatium);
             seg->Element::writeProperties(xml);
             xml.etag();

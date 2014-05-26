@@ -110,7 +110,7 @@ void TrillSegment::layout()
       {
       if (parent())
             rypos() += score()->styleS(StyleIdx::trillY).val() * spatium();
-      if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
+      if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
             Accidental* a = trill()->accidental();
             if (a) {
                   a->layout();
@@ -233,7 +233,7 @@ QVariant TrillSegment::propertyDefault(P_ID id) const
 void TrillSegment::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
       {
       func(data, this);
-      if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
+      if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
             Accidental* a = trill()->accidental();
             if (a)
                   func(data, a);
