@@ -71,7 +71,7 @@ void Fingering::reset()
       score()->layoutFingering(this);
       QPointF no(userOff());
       setUserOff(o);
-      score()->undoChangeProperty(this, P_USER_OFF, no);
+      score()->undoChangeProperty(this, P_ID::USER_OFF, no);
       }
 
 }

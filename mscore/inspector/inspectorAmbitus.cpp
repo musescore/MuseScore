@@ -86,23 +86,23 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 
       iList = {
-            { P_COLOR,          0, 0, b.color,         b.resetColor         },
-            { P_VISIBLE,        0, 0, b.visible,       b.resetVisible       },
-            { P_USER_OFF,       0, 0, b.offsetX,       b.resetX             },
-            { P_USER_OFF,       1, 0, b.offsetY,       b.resetY             },
+            { P_ID::COLOR,          0, 0, b.color,         b.resetColor         },
+            { P_ID::VISIBLE,        0, 0, b.visible,       b.resetVisible       },
+            { P_ID::USER_OFF,       0, 0, b.offsetX,       b.resetX             },
+            { P_ID::USER_OFF,       1, 0, b.offsetY,       b.resetY             },
 
-            { P_HEAD_GROUP,     0, 0, r.noteHeadGroup, r.resetNoteHeadGroup },
-            { P_HEAD_TYPE,      0, 0, r.noteHeadType,  r.resetNoteHeadType  },
-            { P_MIRROR_HEAD,    0, 0, r.direction,     r.resetDirection     },
-            { P_GHOST,          0, 0, r.hasLine,       r.resetHasLine       },      // recycled property
-            { P_LINE_WIDTH,     0, 0, r.lineWidth,     r.resetLineWidth     },
-            { P_TPC1,           0, 0, r.topTpc,        nullptr              },
-            { P_FBPARENTHESIS1, 0, 0, r.bottomTpc,     nullptr              },      // recycled property
-            { P_FBPARENTHESIS3, 0, 0, r.topOctave,     nullptr              },      // recycled property
-            { P_FBPARENTHESIS4, 0, 0, r.bottomOctave,  nullptr              },      // recycled property
+            { P_ID::HEAD_GROUP,     0, 0, r.noteHeadGroup, r.resetNoteHeadGroup },
+            { P_ID::HEAD_TYPE,      0, 0, r.noteHeadType,  r.resetNoteHeadType  },
+            { P_ID::MIRROR_HEAD,    0, 0, r.direction,     r.resetDirection     },
+            { P_ID::GHOST,          0, 0, r.hasLine,       r.resetHasLine       },      // recycled property
+            { P_ID::LINE_WIDTH,     0, 0, r.lineWidth,     r.resetLineWidth     },
+            { P_ID::TPC1,           0, 0, r.topTpc,        nullptr              },
+            { P_ID::FBPARENTHESIS1, 0, 0, r.bottomTpc,     nullptr              },      // recycled property
+            { P_ID::FBPARENTHESIS3, 0, 0, r.topOctave,     nullptr              },      // recycled property
+            { P_ID::FBPARENTHESIS4, 0, 0, r.bottomOctave,  nullptr              },      // recycled property
 
-            { P_LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace }
+            { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
+            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace }
             };
 
       mapSignals();

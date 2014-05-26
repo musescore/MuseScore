@@ -589,7 +589,7 @@ void Clef::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Clef::undoSetShowCourtesy(bool v)
       {
-      score()->undoChangeProperty(this, P_SHOW_COURTESY, v);
+      score()->undoChangeProperty(this, P_ID::SHOW_COURTESY, v);
       }
 
 //---------------------------------------------------------
@@ -599,8 +599,8 @@ void Clef::undoSetShowCourtesy(bool v)
 QVariant Clef::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY: return showCourtesy();
-            case P_SMALL:         return small();
+            case P_ID::SHOW_COURTESY: return showCourtesy();
+            case P_ID::SMALL:         return small();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -613,8 +613,8 @@ QVariant Clef::getProperty(P_ID propertyId) const
 bool Clef::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY: _showCourtesy = v.toBool(); break;
-            case P_SMALL:         setSmall(v.toBool()); break;
+            case P_ID::SHOW_COURTESY: _showCourtesy = v.toBool(); break;
+            case P_ID::SMALL:         setSmall(v.toBool()); break;
             default:
                   return Element::setProperty(propertyId, v);
             }
@@ -628,8 +628,8 @@ bool Clef::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Clef::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_SHOW_COURTESY: return true;
-            case P_SMALL:         return false;
+            case P_ID::SHOW_COURTESY: return true;
+            case P_ID::SMALL:         return false;
             default:              return Element::propertyDefault(id);
             }
       }

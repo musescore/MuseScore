@@ -180,7 +180,7 @@ void Spacer::read(XmlReader& e)
 QVariant Spacer::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SPACE: return gap();
+            case P_ID::SPACE: return gap();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -193,7 +193,7 @@ QVariant Spacer::getProperty(P_ID propertyId) const
 bool Spacer::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SPACE:
+            case P_ID::SPACE:
                   setGap(v.toDouble());
                   break;
             default:
@@ -214,7 +214,7 @@ bool Spacer::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Spacer::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_SPACE: return QVariant(0.0);
+            case P_ID::SPACE: return QVariant(0.0);
             default:
                   return Element::propertyDefault(id);
             }

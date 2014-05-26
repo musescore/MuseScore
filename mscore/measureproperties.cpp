@@ -207,12 +207,12 @@ void MeasureProperties::apply()
                   score->undo(new ChangeMStaffProperties(ms, v, s));
             }
 
-      m->undoChangeProperty(P_REPEAT_COUNT, repeatCount());
-      m->undoChangeProperty(P_BREAK_MMR, breakMultiMeasureRest->isChecked());
-      m->undoChangeProperty(P_USER_STRETCH, layoutStretch->value());
-      m->undoChangeProperty(P_MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
-      m->undoChangeProperty(P_NO_OFFSET, measureNumberOffset->value());
-      m->undoChangeProperty(P_IRREGULAR, isIrregular());
+      m->undoChangeProperty(P_ID::REPEAT_COUNT, repeatCount());
+      m->undoChangeProperty(P_ID::BREAK_MMR, breakMultiMeasureRest->isChecked());
+      m->undoChangeProperty(P_ID::USER_STRETCH, layoutStretch->value());
+      m->undoChangeProperty(P_ID::MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
+      m->undoChangeProperty(P_ID::NO_OFFSET, measureNumberOffset->value());
+      m->undoChangeProperty(P_ID::IRREGULAR, isIrregular());
 
       if (m->len() != len())
             m->adjustToLen(len());

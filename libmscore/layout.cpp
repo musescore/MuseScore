@@ -2062,8 +2062,8 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       int n = system->measures().size() - 1;
       if (n >= 0) {
             for (int i = 0; i < n; ++i)
-                  undoChangeProperty(system->measure(i), P_BREAK_HINT, false);
-            undoChangeProperty(system->measures().last(), P_BREAK_HINT, true);
+                  undoChangeProperty(system->measure(i), P_ID::BREAK_HINT, false);
+            undoChangeProperty(system->measures().last(), P_ID::BREAK_HINT, true);
             }
 
       if (!undoRedo() && firstMeasure && lastMeasure && firstMeasure != lastMeasure)

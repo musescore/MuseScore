@@ -3428,7 +3428,7 @@ void Score::undoInsertTime(int tick, int len)
                         //  +----spanner--------+
                         //    +---add---
                         //
-                        undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() + len);
+                        undoChangeProperty(s, P_ID::SPANNER_TICK2, s->tick2() + len);
                        }
                   else if (tick <= s->tick()) {
                         //
@@ -3438,8 +3438,8 @@ void Score::undoInsertTime(int tick, int len)
                         // and
                         //            +----spanner--------
                         //  +---add---+
-                        undoChangeProperty(s, P_SPANNER_TICK, s->tick() + len);
-                        undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() + len);
+                        undoChangeProperty(s, P_ID::SPANNER_TICK, s->tick() + len);
+                        undoChangeProperty(s, P_ID::SPANNER_TICK2, s->tick2() + len);
                         }
                   }
             else {
@@ -3452,8 +3452,8 @@ void Score::undoInsertTime(int tick, int len)
                         int t = s->tick() + len;
                         if (t < 0)
                               t = 0;
-                        undoChangeProperty(s, P_SPANNER_TICK, t);
-                        undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() + len);
+                        undoChangeProperty(s, P_ID::SPANNER_TICK, t);
+                        undoChangeProperty(s, P_ID::SPANNER_TICK2, s->tick2() + len);
                         }
                   else if ((s->tick() < tick) && (s->tick2() > tick2)) {
                         //
@@ -3463,7 +3463,7 @@ void Score::undoInsertTime(int tick, int len)
                         //
                         int t2 = s->tick2() + len;
                         if (t2 > s->tick())
-                              undoChangeProperty(s, P_SPANNER_TICK2, t2);
+                              undoChangeProperty(s, P_ID::SPANNER_TICK2, t2);
                         }
                   else if (s->tick() >= tick && s->tick2() < tick2) {
                         //
@@ -3485,8 +3485,8 @@ void Score::undoInsertTime(int tick, int len)
                         if (len == 0)
                              undoRemoveElement(s);
                         else {
-                              undoChangeProperty(s, P_SPANNER_TICK, s->tick() - d1);
-                              undoChangeProperty(s, P_SPANNER_TICK2, s->tick2() - (tick2-tick));
+                              undoChangeProperty(s, P_ID::SPANNER_TICK, s->tick() - d1);
+                              undoChangeProperty(s, P_ID::SPANNER_TICK2, s->tick2() - (tick2-tick));
                               }
                         }
                   }

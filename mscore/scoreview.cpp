@@ -2841,21 +2841,21 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "toggle-visible") {
             _score->startCmd();
             foreach(Element* e, _score->selection().elements())
-                  _score->undo(new ChangeProperty(e, P_VISIBLE, !e->getProperty(P_VISIBLE).toBool()));
+                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool()));
             _score->endCmd();
             mscore->endCmd();
             }
       else if (cmd == "set-visible") {
             _score->startCmd();
             foreach(Element* e, _score->selection().elements())
-                  _score->undo(new ChangeProperty(e, P_VISIBLE, true));
+                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, true));
             _score->endCmd();
             mscore->endCmd();
             }
       else if (cmd == "unset-visible") {
             _score->startCmd();
             foreach(Element* e, _score->selection().elements())
-                  _score->undo(new ChangeProperty(e, P_VISIBLE, false));
+                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, false));
             _score->endCmd();
             mscore->endCmd();
             }
@@ -4129,8 +4129,8 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                   int string = n->line() + (up ? 1 : -1);
                   int fret   = staff->part()->instr()->stringData()->fret(n->pitch(), string);
                   if (fret != -1) {
-                        score()->undoChangeProperty(n, P_FRET, fret);
-                        score()->undoChangeProperty(n, P_STRING, string);
+                        score()->undoChangeProperty(n, P_ID::FRET, fret);
+                        score()->undoChangeProperty(n, P_ID::STRING, string);
                         }
                   }
             else {

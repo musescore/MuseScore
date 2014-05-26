@@ -2335,9 +2335,9 @@ qreal Chord::dotPosX() const
 QVariant Chord::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_NO_STEM:        return noStem();
-            case P_SMALL:          return small();
-            case P_STEM_DIRECTION: return int(stemDirection());
+            case P_ID::NO_STEM:        return noStem();
+            case P_ID::SMALL:          return small();
+            case P_ID::STEM_DIRECTION: return int(stemDirection());
             default:
                   return ChordRest::getProperty(propertyId);
             }
@@ -2350,9 +2350,9 @@ QVariant Chord::getProperty(P_ID propertyId) const
 QVariant Chord::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_NO_STEM:        return false;
-            case P_SMALL:          return false;
-            case P_STEM_DIRECTION: return int(Direction::AUTO);
+            case P_ID::NO_STEM:        return false;
+            case P_ID::SMALL:          return false;
+            case P_ID::STEM_DIRECTION: return int(Direction::AUTO);
             default:
                   return ChordRest::getProperty(propertyId);
             }
@@ -2365,15 +2365,15 @@ QVariant Chord::propertyDefault(P_ID propertyId) const
 bool Chord::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_NO_STEM:
+            case P_ID::NO_STEM:
                   setNoStem(v.toBool());
                   score()->setLayoutAll(true);
                   break;
-            case P_SMALL:
+            case P_ID::SMALL:
                   setSmall(v.toBool());
                   score()->setLayoutAll(true);
                   break;
-            case P_STEM_DIRECTION:
+            case P_ID::STEM_DIRECTION:
                   setStemDirection(Direction(v.toInt()));
                   score()->setLayoutAll(true);
                   break;
@@ -2572,8 +2572,8 @@ QPointF Chord::layoutArticulation(Articulation* a)
 
 void Chord::reset()
       {
-      score()->undoChangeProperty(this, P_STEM_DIRECTION, int(Direction::AUTO));
-      score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::AUTO));
+      score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(Direction::AUTO));
+      score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::AUTO));
       score()->createPlayEvents(this);
       ChordRest::reset();
       }

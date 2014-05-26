@@ -191,7 +191,7 @@ Element* TrillSegment::drop(const DropData& data)
 QVariant TrillSegment::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_TRILL_TYPE:
+            case P_ID::TRILL_TYPE:
                   return trill()->getProperty(id);
             default:
                   return LineSegment::getProperty(id);
@@ -205,7 +205,7 @@ QVariant TrillSegment::getProperty(P_ID id) const
 bool TrillSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case P_TRILL_TYPE:
+            case P_ID::TRILL_TYPE:
                   return trill()->setProperty(id, v);
             default:
                   return LineSegment::setProperty(id, v);
@@ -219,7 +219,7 @@ bool TrillSegment::setProperty(P_ID id, const QVariant& v)
 QVariant TrillSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_TRILL_TYPE:
+            case P_ID::TRILL_TYPE:
                   return trill()->propertyDefault(id);
             default:
                   return LineSegment::propertyDefault(id);
@@ -430,7 +430,7 @@ void Trill::scanElements(void* data, void (*func)(void*, Element*), bool all)
 QVariant Trill::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_TRILL_TYPE:
+            case P_ID::TRILL_TYPE:
                   return int(trillType());
             default:
                   break;
@@ -445,7 +445,7 @@ QVariant Trill::getProperty(P_ID propertyId) const
 bool Trill::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch(propertyId) {
-            case P_TRILL_TYPE:
+            case P_ID::TRILL_TYPE:
                   setTrillType(TrillType(val.toInt()));
                   break;
             default:
@@ -464,7 +464,7 @@ bool Trill::setProperty(P_ID propertyId, const QVariant& val)
 QVariant Trill::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_TRILL_TYPE:
+            case P_ID::TRILL_TYPE:
                   return 0;
             default:
                   return SLine::propertyDefault(propertyId);
@@ -478,7 +478,7 @@ QVariant Trill::propertyDefault(P_ID propertyId) const
 
 void Trill::undoSetTrillType(TrillType val)
       {
-      score()->undoChangeProperty(this, P_TRILL_TYPE, int(val));
+      score()->undoChangeProperty(this, P_ID::TRILL_TYPE, int(val));
       }
 
 //---------------------------------------------------------

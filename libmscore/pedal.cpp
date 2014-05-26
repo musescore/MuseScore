@@ -38,8 +38,8 @@ void PedalSegment::layout()
 bool PedalSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case P_LINE_WIDTH:
-            case P_LINE_STYLE:
+            case P_ID::LINE_WIDTH:
+            case P_ID::LINE_STYLE:
                   return pedal()->setProperty(id, v);
             default:
                   return TextLineSegment::setProperty(id, v);
@@ -53,8 +53,8 @@ bool PedalSegment::setProperty(P_ID id, const QVariant& v)
 QVariant PedalSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_LINE_WIDTH:
-            case P_LINE_STYLE:
+            case P_ID::LINE_WIDTH:
+            case P_ID::LINE_STYLE:
                   return pedal()->propertyDefault(id);
             default:
                   return TextLineSegment::propertyDefault(id);
@@ -68,8 +68,8 @@ QVariant PedalSegment::propertyDefault(P_ID id) const
 PropertyStyle PedalSegment::propertyStyle(P_ID id) const
       {
       switch (id) {
-            case P_LINE_WIDTH:
-            case P_LINE_STYLE:
+            case P_ID::LINE_WIDTH:
+            case P_ID::LINE_STYLE:
                   return pedal()->propertyStyle(id);
 
             default:
@@ -84,8 +84,8 @@ PropertyStyle PedalSegment::propertyStyle(P_ID id) const
 void PedalSegment::resetProperty(P_ID id)
       {
       switch (id) {
-            case P_LINE_WIDTH:
-            case P_LINE_STYLE:
+            case P_ID::LINE_WIDTH:
+            case P_ID::LINE_STYLE:
                   return pedal()->resetProperty(id);
 
             default:
@@ -174,12 +174,12 @@ void Pedal::setYoff(qreal val)
 bool Pedal::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch (propertyId) {
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   lineWidthStyle = PropertyStyle::UNSTYLED;
                   TextLine::setProperty(propertyId, val);
                   break;
 
-            case P_LINE_STYLE:
+            case P_ID::LINE_STYLE:
                   lineStyleStyle = PropertyStyle::UNSTYLED;
                   TextLine::setProperty(propertyId, val);
                   break;
@@ -200,10 +200,10 @@ bool Pedal::setProperty(P_ID propertyId, const QVariant& val)
 QVariant Pedal::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   return score()->styleS(StyleIdx::pedalLineWidth).val();
 
-            case P_LINE_STYLE:
+            case P_ID::LINE_STYLE:
                   return int(score()->styleI(StyleIdx::pedalLineStyle));
 
             default:
@@ -218,10 +218,10 @@ QVariant Pedal::propertyDefault(P_ID propertyId) const
 PropertyStyle Pedal::propertyStyle(P_ID id) const
       {
       switch (id) {
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   return lineWidthStyle;
 
-            case P_LINE_STYLE:
+            case P_ID::LINE_STYLE:
                   return lineStyleStyle;
 
             default:
@@ -236,12 +236,12 @@ PropertyStyle Pedal::propertyStyle(P_ID id) const
 void Pedal::resetProperty(P_ID id)
       {
       switch (id) {
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   setLineWidth(score()->styleS(StyleIdx::pedalLineWidth));
                   lineWidthStyle = PropertyStyle::STYLED;
                   break;
 
-            case P_LINE_STYLE:
+            case P_ID::LINE_STYLE:
                   setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::pedalLineStyle)));
                   lineStyleStyle = PropertyStyle::STYLED;
                   break;

@@ -534,7 +534,7 @@ void Rest::setMMWidth(qreal val)
 
 void Rest::reset()
       {
-      score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::NONE));
+      score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::NONE));
       ChordRest::reset();
       }
 

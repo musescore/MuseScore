@@ -391,10 +391,10 @@ void LineSegment::spatiumChanged(qreal ov, qreal nv)
 QVariant LineSegment::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_DIAGONAL:
-            case P_LINE_COLOR:
-            case P_LINE_WIDTH:
-            case P_LINE_STYLE:
+            case P_ID::DIAGONAL:
+            case P_ID::LINE_COLOR:
+            case P_ID::LINE_WIDTH:
+            case P_ID::LINE_STYLE:
                   return line()->getProperty(id);
             default:
                   return SpannerSegment::getProperty(id);
@@ -408,10 +408,10 @@ QVariant LineSegment::getProperty(P_ID id) const
 bool LineSegment::setProperty(P_ID id, const QVariant& val)
       {
       switch (id) {
-            case P_DIAGONAL:
-            case P_LINE_COLOR:
-            case P_LINE_WIDTH:
-            case P_LINE_STYLE:
+            case P_ID::DIAGONAL:
+            case P_ID::LINE_COLOR:
+            case P_ID::LINE_WIDTH:
+            case P_ID::LINE_STYLE:
                   return line()->setProperty(id, val);
             default:
                   return SpannerSegment::setProperty(id, val);
@@ -676,12 +676,12 @@ void SLine::writeProperties(Xml& xml) const
       Element::writeProperties(xml);
       if (_diagonal)
             xml.tag("diagonal", _diagonal);
-      if (propertyStyle(P_LINE_WIDTH) != PropertyStyle::STYLED)
+      if (propertyStyle(P_ID::LINE_WIDTH) != PropertyStyle::STYLED)
             xml.tag("lineWidth", lineWidth().val());
-      if (propertyStyle(P_LINE_STYLE) == PropertyStyle::UNSTYLED || (lineStyle() != Qt::SolidLine))
-            if (propertyStyle(P_LINE_STYLE) != PropertyStyle::STYLED)
+      if (propertyStyle(P_ID::LINE_STYLE) == PropertyStyle::UNSTYLED || (lineStyle() != Qt::SolidLine))
+            if (propertyStyle(P_ID::LINE_STYLE) != PropertyStyle::STYLED)
                   xml.tag("lineStyle", int(lineStyle()));
-      if (propertyStyle(P_LINE_COLOR) == PropertyStyle::UNSTYLED || (lineColor() != MScore::defaultColor))
+      if (propertyStyle(P_ID::LINE_COLOR) == PropertyStyle::UNSTYLED || (lineColor() != MScore::defaultColor))
             xml.tag("lineColor", lineColor());
 
       if (anchor() != Spanner::ANCHOR_SEGMENT)
@@ -827,13 +827,13 @@ void SLine::read(XmlReader& e)
 QVariant SLine::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_DIAGONAL:
+            case P_ID::DIAGONAL:
                   return _diagonal;
-            case P_LINE_COLOR:
+            case P_ID::LINE_COLOR:
                   return _lineColor;
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   return _lineWidth.val();
-            case P_LINE_STYLE:
+            case P_ID::LINE_STYLE:
                   return QVariant(int(_lineStyle));
             default:
                   return Spanner::getProperty(id);
@@ -847,16 +847,16 @@ QVariant SLine::getProperty(P_ID id) const
 bool SLine::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case P_DIAGONAL:
+            case P_ID::DIAGONAL:
                   _diagonal = v.toBool();
                   break;
-            case P_LINE_COLOR:
+            case P_ID::LINE_COLOR:
                   _lineColor = v.value<QColor>();
                   break;
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   _lineWidth = Spatium(v.toDouble());
                   break;
-            case P_LINE_STYLE:
+            case P_ID::LINE_STYLE:
                   _lineStyle = Qt::PenStyle(v.toInt());
                   break;
             default:
@@ -872,13 +872,13 @@ bool SLine::setProperty(P_ID id, const QVariant& v)
 QVariant SLine::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_DIAGONAL:
+            case P_ID::DIAGONAL:
                   return false;
-            case P_LINE_COLOR:
+            case P_ID::LINE_COLOR:
                   return MScore::defaultColor;
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   return 0.15;
-            case P_LINE_STYLE:
+            case P_ID::LINE_STYLE:
                   return int(Qt::SolidLine);
             default:
                   return Spanner::propertyDefault(id);

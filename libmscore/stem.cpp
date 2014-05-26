@@ -245,7 +245,7 @@ void Stem::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 
 void Stem::startEdit(MuseScoreView*, const QPointF&)
       {
-      undoPushProperty(P_USER_LEN);
+      undoPushProperty(P_ID::USER_LEN);
       }
 
 //---------------------------------------------------------
@@ -268,7 +268,7 @@ void Stem::editDrag(const EditData& ed)
 
 void Stem::reset()
       {
-      score()->undoChangeProperty(this, P_USER_LEN, 0.0);
+      score()->undoChangeProperty(this, P_ID::USER_LEN, 0.0);
       Element::reset();
       }
 
@@ -312,7 +312,7 @@ Element* Stem::drop(const DropData& data)
 QVariant Stem::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_USER_LEN: return userLen();
+            case P_ID::USER_LEN: return userLen();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -326,7 +326,7 @@ bool Stem::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
-            case P_USER_LEN:  setUserLen(v.toDouble()); break;
+            case P_ID::USER_LEN:  setUserLen(v.toDouble()); break;
             default:
                   return Element::setProperty(propertyId, v);
             }

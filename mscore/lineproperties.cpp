@@ -106,42 +106,42 @@ static PlaceText getPlaceText(QComboBox* cb)
 void LineProperties::accept()
       {
       if (beginHook->isChecked() != otl->beginHook())
-            otl->undoChangeProperty(P_BEGIN_HOOK, beginHook->isChecked());
+            otl->undoChangeProperty(P_ID::BEGIN_HOOK, beginHook->isChecked());
       if (endHook->isChecked() != otl->endHook())
-            otl->undoChangeProperty(P_END_HOOK, endHook->isChecked());
+            otl->undoChangeProperty(P_ID::END_HOOK, endHook->isChecked());
 
       HookType ht = beginHookType90->isChecked() ? HookType::HOOK_90 : HookType::HOOK_45;
       if (ht != otl->beginHookType())
-            otl->undoChangeProperty(P_BEGIN_HOOK_TYPE, int(ht));
+            otl->undoChangeProperty(P_ID::BEGIN_HOOK_TYPE, int(ht));
       ht = endHookType90->isChecked() ? HookType::HOOK_90 : HookType::HOOK_45;
       if (ht != otl->endHookType())
-            otl->undoChangeProperty(P_END_HOOK_TYPE, int(ht));
+            otl->undoChangeProperty(P_ID::END_HOOK_TYPE, int(ht));
 
       Spatium val = Spatium(beginHookHeight->value());
       if (val != otl->beginHookHeight())
-            otl->undoChangeProperty(P_BEGIN_HOOK_HEIGHT, QVariant(double(val.val())));
+            otl->undoChangeProperty(P_ID::BEGIN_HOOK_HEIGHT, QVariant(double(val.val())));
       val = Spatium(endHookHeight->value());
       if (val != otl->endHookHeight())
-            otl->undoChangeProperty(P_END_HOOK_HEIGHT, QVariant(double(val.val())));
+            otl->undoChangeProperty(P_ID::END_HOOK_HEIGHT, QVariant(double(val.val())));
 
       PlaceText pt = getPlaceText(beginTextPlace);
       if (pt != otl->beginTextPlace()) {
             qDebug("change ottava, links %p", otl->links());
-            otl->undoChangeProperty(P_BEGIN_TEXT_PLACE, pt);
+            otl->undoChangeProperty(P_ID::BEGIN_TEXT_PLACE, pt);
             }
       pt = getPlaceText(continueTextPlace);
       if (pt != otl->continueTextPlace())
-            otl->undoChangeProperty(P_CONTINUE_TEXT_PLACE, pt);
+            otl->undoChangeProperty(P_ID::CONTINUE_TEXT_PLACE, pt);
       pt = getPlaceText(endTextPlace);
       if (pt != otl->endTextPlace())
-            otl->undoChangeProperty(P_END_TEXT_PLACE, pt);
+            otl->undoChangeProperty(P_ID::END_TEXT_PLACE, pt);
 
       if ((tl->beginTextElement() && !tl->beginTextElement()) || (beginText->text() != otl->beginText()))
-            otl->undoChangeProperty(P_BEGIN_TEXT, beginText->text());
+            otl->undoChangeProperty(P_ID::BEGIN_TEXT, beginText->text());
       if ((tl->continueTextElement() && !tl->continueTextElement()) || (continueText->text() != otl->continueText()))
-            otl->undoChangeProperty(P_CONTINUE_TEXT, continueText->text());
+            otl->undoChangeProperty(P_ID::CONTINUE_TEXT, continueText->text());
       if ((tl->endTextElement() && !tl->endTextElement()) || (endText->text() != otl->endText()))
-            otl->undoChangeProperty(P_END_TEXT, endText->text());
+            otl->undoChangeProperty(P_ID::END_TEXT, endText->text());
 
       // TODO: apply text style changes
 
@@ -149,10 +149,10 @@ void LineProperties::accept()
       if (t) {
             Text* ot = otl->beginTextElement();
             if (t->textStyleType() != ot->textStyleType())
-                  ot->undoChangeProperty(P_TEXT_STYLE_TYPE, t->textStyleType());
+                  ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, t->textStyleType());
             // TODO: only save style difference
             if (t->textStyle() != ot->textStyle())
-                  ot->undoChangeProperty(P_TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+                  ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
             }
 
       // ...

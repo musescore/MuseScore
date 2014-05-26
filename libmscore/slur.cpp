@@ -994,7 +994,7 @@ bool SlurTie::readProperties(XmlReader& e)
 
 void SlurTie::undoSetLineType(int t)
       {
-      score()->undoChangeProperty(this, P_LINE_TYPE, t);
+      score()->undoChangeProperty(this, P_ID::LINE_TYPE, t);
       }
 
 //---------------------------------------------------------
@@ -1003,7 +1003,7 @@ void SlurTie::undoSetLineType(int t)
 
 void SlurTie::undoSetSlurDirection(Direction d)
       {
-      score()->undoChangeProperty(this, P_SLUR_DIRECTION, int(d));
+      score()->undoChangeProperty(this, P_ID::SLUR_DIRECTION, int(d));
       }
 
 //---------------------------------------------------------
@@ -1012,7 +1012,7 @@ void SlurTie::undoSetSlurDirection(Direction d)
 
 void SlurTie::reset()
       {
-      score()->undoChangeProperty(this, P_USER_OFF, QPointF());
+      score()->undoChangeProperty(this, P_ID::USER_OFF, QPointF());
       }
 
 //---------------------------------------------------------
@@ -1022,8 +1022,8 @@ void SlurTie::reset()
 QVariant SlurTie::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_LINE_TYPE:      return lineType();
-            case P_SLUR_DIRECTION: return int(slurDirection());
+            case P_ID::LINE_TYPE:      return lineType();
+            case P_ID::SLUR_DIRECTION: return int(slurDirection());
             default:
                   return Spanner::getProperty(propertyId);
             }
@@ -1036,8 +1036,8 @@ QVariant SlurTie::getProperty(P_ID propertyId) const
 bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_LINE_TYPE:      setLineType(v.toInt()); break;
-            case P_SLUR_DIRECTION: setSlurDirection(Direction(v.toInt())); break;
+            case P_ID::LINE_TYPE:      setLineType(v.toInt()); break;
+            case P_ID::SLUR_DIRECTION: setSlurDirection(Direction(v.toInt())); break;
             default:
                   return Spanner::setProperty(propertyId, v);
             }
@@ -1051,9 +1051,9 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
 QVariant SlurTie::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_LINE_TYPE:
+            case P_ID::LINE_TYPE:
                   return 0;
-            case P_SLUR_DIRECTION:
+            case P_ID::SLUR_DIRECTION:
                   return int(Direction::AUTO);
             default:
                   return Spanner::propertyDefault(id);
@@ -1067,8 +1067,8 @@ QVariant SlurTie::propertyDefault(P_ID id) const
 QVariant SlurSegment::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_LINE_TYPE:
-            case P_SLUR_DIRECTION:
+            case P_ID::LINE_TYPE:
+            case P_ID::SLUR_DIRECTION:
                   return slurTie()->getProperty(propertyId);
             default:
                   return SpannerSegment::getProperty(propertyId);
@@ -1082,8 +1082,8 @@ QVariant SlurSegment::getProperty(P_ID propertyId) const
 bool SlurSegment::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_LINE_TYPE:
-            case P_SLUR_DIRECTION:
+            case P_ID::LINE_TYPE:
+            case P_ID::SLUR_DIRECTION:
                   return slurTie()->setProperty(propertyId, v);
             default:
                   return SpannerSegment::setProperty(propertyId, v);
@@ -1098,8 +1098,8 @@ bool SlurSegment::setProperty(P_ID propertyId, const QVariant& v)
 QVariant SlurSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_LINE_TYPE:
-            case P_SLUR_DIRECTION:
+            case P_ID::LINE_TYPE:
+            case P_ID::SLUR_DIRECTION:
                   return slurTie()->propertyDefault(id);
             default:
                   return SpannerSegment::propertyDefault(id);
@@ -1112,7 +1112,7 @@ QVariant SlurSegment::propertyDefault(P_ID id) const
 
 void SlurSegment::reset()
       {
-      score()->undoChangeProperty(this, P_USER_OFF, QPointF());
+      score()->undoChangeProperty(this, P_ID::USER_OFF, QPointF());
       score()->undo(new ChangeSlurOffsets(this, QPointF(), QPointF(), QPointF(), QPointF()));
       for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i)
             ups[i].off = QPointF();
