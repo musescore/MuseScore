@@ -517,41 +517,41 @@ StyleData::StyleData()
 
 // _textStyles.append(TextStyle(defaultTextStyles[i]));
       _spatium = SPATIUM20 * MScore::DPI;
-      _articulationAnchor[Articulation_Fermata]         = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Shortfermata]    = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Longfermata]     = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Verylongfermata] = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Thumb]           = ArticulationAnchor::CHORD;
-      _articulationAnchor[Articulation_Sforzatoaccent]  = ArticulationAnchor::CHORD;
-//      _articulationAnchor[Articulation_Espressivo]      = ArticulationAnchor::CHORD;
-      _articulationAnchor[Articulation_Staccato]        = ArticulationAnchor::CHORD;
-      _articulationAnchor[Articulation_Staccatissimo]   = ArticulationAnchor::CHORD;
-      _articulationAnchor[Articulation_Tenuto]          = ArticulationAnchor::CHORD;
-      _articulationAnchor[Articulation_Portato]         = ArticulationAnchor::CHORD;
-      _articulationAnchor[Articulation_Marcato]         = ArticulationAnchor::CHORD;
-//      _articulationAnchor[Articulation_Ouvert]          = ArticulationAnchor::CHORD;
-//      _articulationAnchor[Articulation_Plusstop]        = ArticulationAnchor::CHORD;
-      _articulationAnchor[Articulation_Upbow]           = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Downbow]         = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Reverseturn]     = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Turn]            = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Trill]           = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Prall]           = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Mordent]         = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_PrallPrall]      = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_PrallMordent]    = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_UpPrall]         = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_DownPrall]       = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_UpMordent]       = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_DownMordent]     = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_PrallDown]       = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_PrallUp]         = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_LinePrall]       = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Schleifer]       = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[Articulation_Snappizzicato]   = ArticulationAnchor::TOP_STAFF;
-//      _articulationAnchor[Articulation_Tapping]         = ArticulationAnchor::TOP_STAFF;
-//      _articulationAnchor[Articulation_Slapping]        = ArticulationAnchor::TOP_STAFF;
-//      _articulationAnchor[Articulation_Popping]         = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Fermata)]         = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Shortfermata)]    = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Longfermata)]     = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Verylongfermata)] = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Thumb)]           = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::Sforzatoaccent)]  = ArticulationAnchor::CHORD;
+//      _articulationAnchor[int(ArticulationType::Espressivo)]      = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::Staccato)]        = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::Staccatissimo)]   = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::Tenuto)]          = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::Portato)]         = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::Marcato)]         = ArticulationAnchor::CHORD;
+//      _articulationAnchor[int(ArticulationType::Ouvert)]          = ArticulationAnchor::CHORD;
+//      _articulationAnchor[int(ArticulationType::Plusstop)]        = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::Upbow)]           = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Downbow)]         = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Reverseturn)]     = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Turn)]            = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Trill)]           = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Prall)]           = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Mordent)]         = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::PrallPrall)]      = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::PrallMordent)]    = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::UpPrall)]         = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::DownPrall)]       = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::UpMordent)]       = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::DownMordent)]     = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::PrallDown)]       = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::PrallUp)]         = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::LinePrall)]       = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Schleifer)]       = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Snappizzicato)]   = ArticulationAnchor::TOP_STAFF;
+//      _articulationAnchor[int(ArticulationType::Tapping)]         = ArticulationAnchor::TOP_STAFF;
+//      _articulationAnchor[int(ArticulationType::Slapping)]        = ArticulationAnchor::TOP_STAFF;
+//      _articulationAnchor[int(ArticulationType::Popping)]         = ArticulationAnchor::TOP_STAFF;
       _spatium = SPATIUM20 * MScore::DPI;
       };
 
@@ -564,7 +564,7 @@ StyleData::StyleData(const StyleData& s)
       _textStyles      = s._textStyles;
       _pageFormat.copy(s._pageFormat);
       _spatium         = s._spatium;
-      for (int i = 0; i < (int)ARTICULATIONS; ++i)
+      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i)
             _articulationAnchor[i] = s._articulationAnchor[i];
       }
 
@@ -1017,7 +1017,7 @@ void StyleData::load(XmlReader& e)
                               ;
                         else {
                               int idx2;
-                              for (idx2 = 0; idx2 < ARTICULATIONS; ++idx2) {
+                              for (idx2 = 0; idx2 < int(ArticulationType::ARTICULATIONS); ++idx2) {
                                     ArticulationInfo& ai =  Articulation::articulationList[idx2];
                                     if (tag == ai.name + "Anchor"
                                        || (tag == "U" + ai.name + "Anchor")
@@ -1027,7 +1027,7 @@ void StyleData::load(XmlReader& e)
                                           break;
                                           }
                                     }
-                              if (idx2 == ARTICULATIONS)
+                              if (idx2 == int(ArticulationType::ARTICULATIONS))
                                     e.unknown();
                               }
                         }
@@ -1119,7 +1119,7 @@ void StyleData::save(Xml& xml, bool optimize) const
             _chordList.write(xml);
             xml.etag();
             }
-      for (int i = 0; i < ARTICULATIONS; ++i) {
+      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             if (optimize && _articulationAnchor[i] == MScore::baseStyle()->articulationAnchor(i))
                   continue;
             const ArticulationInfo& ai = Articulation::articulationList[i];

@@ -29,7 +29,7 @@ namespace Ms {
 //   Articulation::articulationList
 //---------------------------------------------------------
 
-ArticulationInfo Articulation::articulationList[ARTICULATIONS] = {
+ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATIONS)] = {
       { SymId::fermataAbove, SymId::fermataBelow,
             "fermata", QT_TRANSLATE_NOOP("articulation", "fermata"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
@@ -186,7 +186,7 @@ Articulation::Articulation(Score* s)
       _direction = Direction::AUTO;
       _up = true;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      setArticulationType(Articulation_Fermata);
+      setArticulationType(ArticulationType::Fermata);
        }
 
 //---------------------------------------------------------
@@ -196,9 +196,9 @@ Articulation::Articulation(Score* s)
 void Articulation::setArticulationType(ArticulationType idx)
       {
       _articulationType = idx;
-      _anchor           = score()->style()->articulationAnchor(_articulationType);
+      _anchor           = score()->style()->articulationAnchor(int(_articulationType));
       anchorStyle       = PropertyStyle::STYLED;
-      _timeStretch      = articulationList[articulationType()].timeStretch;
+      _timeStretch      = articulationList[int(articulationType())].timeStretch;
       }
 
 //---------------------------------------------------------
@@ -207,7 +207,7 @@ void Articulation::setArticulationType(ArticulationType idx)
 
 void Articulation::read(XmlReader& e)
       {
-      setArticulationType(Articulation_Fermata);    // default // backward compatibility (no type = ufermata in 1.2)
+      setArticulationType(ArticulationType::Fermata);    // default // backward compatibility (no type = ufermata in 1.2)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
@@ -261,7 +261,7 @@ void Articulation::write(Xml& xml) const
 
 QString Articulation::subtypeName() const
       {
-      return articulationList[articulationType()].name;
+      return articulationList[int(articulationType())].name;
       }
 
 //---------------------------------------------------------
@@ -272,7 +272,7 @@ void Articulation::setSubtype(const QString& s)
       {
       if (s.isEmpty()) {
             qDebug("Articulation::setSubtype: empty subtype");
-            setArticulationType(Articulation_Fermata);            // something to debug...
+            setArticulationType(ArticulationType::Fermata);            // something to debug...
             return;
             }
 
@@ -281,31 +281,31 @@ void Articulation::setSubtype(const QString& s)
             return;
             }
       int st;
-      for (st = 0; st < ARTICULATIONS; ++st) {
+      for (st = 0; st < int(ArticulationType::ARTICULATIONS); ++st) {
             if (articulationList[st].name == s)
                   break;
             }
-      if (st == ARTICULATIONS) {
+      if (st == int(ArticulationType::ARTICULATIONS)) {
             struct {
                   const char* name;
                   bool up;
                   ArticulationType type;
                   } al[] = {
-                  { "umarcato",         true,  Articulation_Marcato },
-                  { "dmarcato",         false, Articulation_Marcato },
-                  { "ufermata",         true,  Articulation_Fermata },
-                  { "dfermata",         false, Articulation_Fermata },
-                  { "ushortfermata",    true,  Articulation_Shortfermata },
-                  { "dshortfermata",    false, Articulation_Shortfermata },
-                  { "ulongfermata",     true,  Articulation_Longfermata },
-                  { "dlongfermata",     false, Articulation_Longfermata },
-                  { "uverylongfermata", true,  Articulation_Verylongfermata },
-                  { "dverylongfermata", false, Articulation_Verylongfermata },
+                  { "umarcato",         true,  ArticulationType::Marcato },
+                  { "dmarcato",         false, ArticulationType::Marcato },
+                  { "ufermata",         true,  ArticulationType::Fermata },
+                  { "dfermata",         false, ArticulationType::Fermata },
+                  { "ushortfermata",    true,  ArticulationType::Shortfermata },
+                  { "dshortfermata",    false, ArticulationType::Shortfermata },
+                  { "ulongfermata",     true,  ArticulationType::Longfermata },
+                  { "dlongfermata",     false, ArticulationType::Longfermata },
+                  { "uverylongfermata", true,  ArticulationType::Verylongfermata },
+                  { "dverylongfermata", false, ArticulationType::Verylongfermata },
                   // watch out, bug in 1.2 uportato and dportato are reversed
-                  { "dportato",         true,  Articulation_Portato },
-                  { "uportato",         false, Articulation_Portato },
-                  { "ustaccatissimo",   true,  Articulation_Staccatissimo },
-                  { "dstaccatissimo",   false, Articulation_Staccatissimo }
+                  { "dportato",         true,  ArticulationType::Portato },
+                  { "uportato",         false, ArticulationType::Portato },
+                  { "ustaccatissimo",   true,  ArticulationType::Staccatissimo },
+                  { "dstaccatissimo",   false, ArticulationType::Staccatissimo }
                   };
 
             int i;
@@ -363,8 +363,8 @@ QPointF Articulation::canvasPos() const
 
 void Articulation::draw(QPainter* painter) const
       {
-      SymId sym = _up ? articulationList[articulationType()].upSym : articulationList[articulationType()].downSym;
-      int flags = articulationList[articulationType()].flags;
+      SymId sym = _up ? articulationList[int(articulationType())].upSym : articulationList[int(articulationType())].downSym;
+      int flags = articulationList[int(articulationType())].flags;
       if (staff()) {
             if (staff()->staffGroup() == TAB_STAFF_GROUP) {
                   if (!(flags & ArticulationShowIn::TABLATURE))
@@ -396,7 +396,7 @@ ChordRest* Articulation::chordRest() const
 
 QString Articulation::subtypeUserName() const
       {
-      return articulationList[articulationType()].description;
+      return articulationList[int(articulationType())].description;
       }
 
 //---------------------------------------------------------
@@ -407,7 +407,7 @@ QString Articulation::subtypeUserName() const
 
 void Articulation::layout()
       {
-      SymId sym = _up ? articulationList[articulationType()].upSym : articulationList[articulationType()].downSym;
+      SymId sym = _up ? articulationList[int(articulationType())].upSym : articulationList[int(articulationType())].downSym;
       QRectF b(symBbox(sym));
       setbbox(b.translated(-0.5 * b.width(), 0.0));
       }
@@ -431,7 +431,7 @@ void Articulation::reset()
       {
       if (_direction != Direction::AUTO)
             score()->undoChangeProperty(this, P_ID::DIRECTION, int(Direction::AUTO));
-      ArticulationAnchor a = score()->style()->articulationAnchor(articulationType());
+      ArticulationAnchor a = score()->style()->articulationAnchor(int(articulationType()));
       if (_anchor != a)
             score()->undoChangeProperty(this, P_ID::ARTICULATION_ANCHOR, int(a));
       Element::reset();
@@ -510,10 +510,10 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
                   return int(Direction::AUTO);
 
             case P_ID::ARTICULATION_ANCHOR:
-                  return int(score()->style()->articulationAnchor(_articulationType));
+                  return int(score()->style()->articulationAnchor(int(_articulationType)));
 
             case P_ID::TIME_STRETCH:
-                  return articulationList[articulationType()].timeStretch;
+                  return articulationList[int(articulationType())].timeStretch;
 
             default:
                   break;
@@ -571,7 +571,7 @@ void Articulation::resetProperty(P_ID id)
 void Articulation::styleChanged()
       {
       if (anchorStyle == PropertyStyle::STYLED)
-            _anchor = score()->style()->articulationAnchor(_articulationType);
+            _anchor = score()->style()->articulationAnchor(int(_articulationType));
       }
 
 //---------------------------------------------------------

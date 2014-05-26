@@ -3891,22 +3891,22 @@ static void addArticulationToChord(ChordRest* cr, ArticulationType articSym, QSt
 
 static void addMordentToChord(ChordRest* cr, QString name, QString attrLong, QString attrAppr, QString attrDep)
       {
-      ArticulationType articSym = ARTICULATIONS; // legal but impossible ArticulationType value here indicating "not found"
+      ArticulationType articSym = ArticulationType::ARTICULATIONS; // legal but impossible ArticulationType value here indicating "not found"
       if (name == "inverted-mordent") {
-            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = Articulation_Prall;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = Articulation_PrallPrall;
-            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = Articulation_UpPrall;
-            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = Articulation_DownPrall;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "below") articSym = Articulation_PrallDown;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "above") articSym = Articulation_PrallUp;
+            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = ArticulationType::Prall;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = ArticulationType::PrallPrall;
+            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = ArticulationType::UpPrall;
+            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = ArticulationType::DownPrall;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "below") articSym = ArticulationType::PrallDown;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "above") articSym = ArticulationType::PrallUp;
             }
       else if (name == "mordent") {
-            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = Articulation_Mordent;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = Articulation_PrallMordent;
-            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = Articulation_UpMordent;
-            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = Articulation_DownMordent;
+            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = ArticulationType::Mordent;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = ArticulationType::PrallMordent;
+            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = ArticulationType::UpMordent;
+            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = ArticulationType::DownMordent;
             }
-      if (articSym != ARTICULATIONS) {
+      if (articSym != ArticulationType::ARTICULATIONS) {
             Articulation* na = new Articulation(cr->score());
             na->setArticulationType(articSym);
             cr->add(na);
@@ -3934,21 +3934,21 @@ static void addMordentToChord(ChordRest* cr, QString name, QString attrLong, QSt
 static bool readArticulations(ChordRest* cr, QString mxmlName)
       {
       QMap<QString, ArticulationType> map; // map MusicXML articulation name to MuseScore symbol
-      map["accent"]           = Articulation_Sforzatoaccent;
-      map["staccatissimo"]    = Articulation_Staccatissimo;
-      map["staccato"]         = Articulation_Staccato;
-      map["tenuto"]           = Articulation_Tenuto;
-      map["turn"]             = Articulation_Turn;
-      map["inverted-turn"]    = Articulation_Reverseturn;
-      map["stopped"]          = Articulation_Plusstop;
-      map["up-bow"]           = Articulation_Upbow;
-      map["down-bow"]         = Articulation_Downbow;
-      map["detached-legato"]  = Articulation_Portato;
-      map["spiccato"]         = Articulation_Staccatissimo;
-      map["snap-pizzicato"]   = Articulation_Snappizzicato;
-      map["schleifer"]        = Articulation_Schleifer;
-      map["open-string"]      = Articulation_Ouvert;
-      map["thumb-position"]   = Articulation_Thumb;
+      map["accent"]           = ArticulationType::Sforzatoaccent;
+      map["staccatissimo"]    = ArticulationType::Staccatissimo;
+      map["staccato"]         = ArticulationType::Staccato;
+      map["tenuto"]           = ArticulationType::Tenuto;
+      map["turn"]             = ArticulationType::Turn;
+      map["inverted-turn"]    = ArticulationType::Reverseturn;
+      map["stopped"]          = ArticulationType::Plusstop;
+      map["up-bow"]           = ArticulationType::Upbow;
+      map["down-bow"]         = ArticulationType::Downbow;
+      map["detached-legato"]  = ArticulationType::Portato;
+      map["spiccato"]         = ArticulationType::Staccatissimo;
+      map["snap-pizzicato"]   = ArticulationType::Snappizzicato;
+      map["schleifer"]        = ArticulationType::Schleifer;
+      map["open-string"]      = ArticulationType::Ouvert;
+      map["thumb-position"]   = ArticulationType::Thumb;
 
       if (map.contains(mxmlName)) {
             addArticulationToChord(cr, map.value(mxmlName), "");
@@ -4093,11 +4093,11 @@ static void xmlFermata(ChordRest* cr, QDomElement e)
       QString fermataType = e.attribute(QString("type"));
 
       if (fermata == "normal" || fermata == "")
-            addFermata(cr, fermataType, Articulation_Fermata);
+            addFermata(cr, fermataType, ArticulationType::Fermata);
       else if (fermata == "angled")
-            addFermata(cr, fermataType, Articulation_Shortfermata);
+            addFermata(cr, fermataType, ArticulationType::Shortfermata);
       else if (fermata == "square")
-            addFermata(cr, fermataType, Articulation_Longfermata);
+            addFermata(cr, fermataType, ArticulationType::Longfermata);
       else
             qDebug("unknown fermata '%s'", qPrintable(fermata));
       }
@@ -4278,9 +4278,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         else if (eee.tagName() == "strong-accent") {
                               QString strongAccentType = eee.attribute(QString("type"));
                               if (strongAccentType == "up" || strongAccentType == "")
-                                    addArticulationToChord(cr, Articulation_Marcato, "up");
+                                    addArticulationToChord(cr, ArticulationType::Marcato, "up");
                               else if (strongAccentType == "down")
-                                    addArticulationToChord(cr, Articulation_Marcato, "down");
+                                    addArticulationToChord(cr, ArticulationType::Marcato, "down");
                               else
                                     qDebug("unknown mercato type %s", strongAccentType.toLatin1().data());
                               }
@@ -4308,7 +4308,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               domNotImplemented(eee);
                         else if (eee.tagName() == "delayed-turn")
                               // TODO: actually this should be offset a bit to the right
-                              addArticulationToChord(cr, Articulation_Turn, "");
+                              addArticulationToChord(cr, ArticulationType::Turn, "");
                         else if (eee.tagName() == "inverted-mordent"
                                  || eee.tagName() == "mordent")
                               addMordentToChord(cr, eee.tagName(), eee.attribute("long"), eee.attribute("approach"), eee.attribute("departure"));
@@ -4318,7 +4318,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                   // note that mscore wavy line already implicitly includes a trillsym
                   // so don't add an additional one
                   if (trillMark && wavyLineType != "start")
-                        addArticulationToChord(cr, Articulation_Trill, "");
+                        addArticulationToChord(cr, ArticulationType::Trill, "");
                   }
             else if (ee.tagName() == "technical") {
                   for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {

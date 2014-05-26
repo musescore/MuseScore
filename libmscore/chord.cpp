@@ -2403,7 +2403,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       ArticulationType st = a->articulationType();
 
       // TENUTO and STACCATO: always near the note head (or stem end if beyond a stem)
-      if ((st == Articulation_Tenuto || st == Articulation_Staccato) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
+      if ((st == ArticulationType::Tenuto || st == ArticulationType::Staccato) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
             // if there area voices, articulation is on stem side
             if ((aa == ArticulationAnchor::CHORD) && measure()->hasVoices(a->staffIdx()))
@@ -2544,8 +2544,8 @@ QPointF Chord::layoutArticulation(Articulation* a)
 
       qreal dist;                               // distance between occupied area and articulation
       switch(st) {
-            case Articulation_Marcato:        dist = 1.0 * _spStaff; break;
-            case Articulation_Sforzatoaccent: dist = 1.5 * _spStaff; break;
+            case ArticulationType::Marcato:        dist = 1.0 * _spStaff; break;
+            case ArticulationType::Sforzatoaccent: dist = 1.5 * _spStaff; break;
             default: dist = score()->styleS(StyleIdx::propertyDistance).val() * _spStaff;
             }
 

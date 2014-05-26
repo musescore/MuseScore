@@ -632,7 +632,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                         NoteEventList* events = &ell[k];
 
                         switch (type) {
-                              case Articulation_Mordent: {
+                              case ArticulationType::Mordent: {
                                     //
                                     // create default playback for Mordent
                                     //
@@ -645,7 +645,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                                     events->append(NoteEvent(0, 250, 750));
                                     }
                                     break;
-                              case Articulation_Prall:
+                              case ArticulationType::Prall:
                                     //
                                     // create default playback events for PrallSym
                                     //

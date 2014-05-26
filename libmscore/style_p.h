@@ -94,7 +94,7 @@ class StyleData : public QSharedData {
       QList<TextStyle> _textStyles;
       PageFormat _pageFormat;
       qreal _spatium;
-      ArticulationAnchor _articulationAnchor[ARTICULATIONS];
+      ArticulationAnchor _articulationAnchor[int(ArticulationType::ARTICULATIONS)];
 
       bool _customChordList;        // if true, chordlist will be saved as part of score
 

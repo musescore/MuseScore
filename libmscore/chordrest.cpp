@@ -411,13 +411,13 @@ void ChordRest::layoutArticulations()
                   ArticulationType st1 = a1->articulationType();
                   ArticulationType st2 = a2->articulationType();
 
-                  if ((st2 == Articulation_Tenuto || st2 == Articulation_Staccato)
-                     && (st1 == Articulation_Marcato)) {
+                  if ((st2 == ArticulationType::Tenuto || st2 == ArticulationType::Staccato)
+                     && (st1 == ArticulationType::Marcato)) {
                         qSwap(a1, a2);
                         qSwap(st1, st2);
                         }
-                  if ((st1 == Articulation_Tenuto || st1 == Articulation_Staccato)
-                     && (st2 == Articulation_Marcato)) {
+                  if ((st1 == ArticulationType::Tenuto || st1 == ArticulationType::Staccato)
+                     && (st2 == ArticulationType::Marcato)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
                         pt.ry() += a1->up() ? -_spStaff * .5 : _spStaff * .5;
                         a2->layout();
@@ -429,13 +429,13 @@ void ChordRest::layoutArticulations()
                   //
                   // staccato | tenuto + sforzato
                   //
-                  if ((st2 == Articulation_Tenuto || st2 == Articulation_Staccato)
-                     && (st1 == Articulation_Sforzatoaccent)) {
+                  if ((st2 == ArticulationType::Tenuto || st2 == ArticulationType::Staccato)
+                     && (st1 == ArticulationType::Sforzatoaccent)) {
                         qSwap(a1, a2);
                         qSwap(st1, st2);
                         }
-                  if ((st1 == Articulation_Tenuto || st1 == Articulation_Staccato)
-                     && (st2 == Articulation_Sforzatoaccent)) {
+                  if ((st1 == ArticulationType::Tenuto || st1 == ArticulationType::Staccato)
+                     && (st2 == ArticulationType::Sforzatoaccent)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
                         pt.ry() += a1->up() ? -_spStaff * .7 : _spStaff * .7;
                         a2->layout();
@@ -514,8 +514,8 @@ void ChordRest::layoutArticulations()
             a->layout();
             ArticulationAnchor aa = a->anchor();
 
-            if ((a->articulationType() != Articulation_Tenuto)
-               && (a->articulationType() != Articulation_Staccato))
+            if ((a->articulationType() != ArticulationType::Tenuto)
+               && (a->articulationType() != ArticulationType::Staccato))
                   continue;
 
             if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
@@ -620,16 +620,16 @@ void ChordRest::layoutArticulations()
             Articulation* a = _articulations.at(i);
             a->layout();
             ArticulationAnchor aa = a->anchor();
-            if ((a->articulationType() == Articulation_Tenuto)
-               || (a->articulationType() == Articulation_Staccato))
+            if ((a->articulationType() == ArticulationType::Tenuto)
+               || (a->articulationType() == ArticulationType::Staccato))
                   continue;
 
             if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
                   continue;
 
             // for tenuto and staccate check for staff line collision
-            bool staffLineCT = a->articulationType() == Articulation_Tenuto
-                               || a->articulationType() == Articulation_Staccato;
+            bool staffLineCT = a->articulationType() == ArticulationType::Tenuto
+                               || a->articulationType() == ArticulationType::Staccato;
 
 //            qreal sh = a->bbox().height() * mag();
             bool bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());

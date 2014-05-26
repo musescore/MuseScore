@@ -519,7 +519,7 @@ Palette* MuseScore::newArticulationsPalette()
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
-      for (int i = 0; i < ARTICULATIONS; ++i) {
+      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             Articulation* s = new Articulation(gscore);
             s->setArticulationType(ArticulationType(i));
             sp->append(s, qApp->translate("articulation", qPrintable(s->subtypeUserName())));
