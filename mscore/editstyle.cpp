@@ -59,7 +59,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       articulationTable->setHorizontalHeaderLabels(headers);
       articulationTable->setColumnWidth(0, 200);
       articulationTable->setColumnWidth(1, 180);
-      articulationTable->setRowCount(ARTICULATIONS);
+      articulationTable->setRowCount(int(ArticulationType::ARTICULATIONS));
 
       accidentalsGroup->setVisible(false); // disable, not yet implemented
 
@@ -70,7 +70,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             ++idx;
             }
 
-      for (int i = 0; i < ARTICULATIONS; ++i) {
+      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             ArticulationInfo* ai = &Articulation::articulationList[i];
 
             QPixmap ct = cs->scoreFont()->sym2pixmap(ai->upSym, 3.0);
@@ -441,7 +441,7 @@ void EditStyle::getValues()
             lstyle.setTextStyle(fbNew);
             }
 
-      for (int i = 0; i < ARTICULATIONS; ++i) {
+      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             QComboBox* cb = static_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
             lstyle.setArticulationAnchor(i, ArticulationAnchor(cb->itemData(cb->currentIndex()).toInt()));
             }
@@ -631,7 +631,7 @@ void EditStyle::setValues()
       radioFBModern->setChecked(lstyle.value(StyleIdx::figuredBassStyle).toInt() == 0);
       radioFBHistoric->setChecked(lstyle.value(StyleIdx::figuredBassStyle).toInt() == 1);
 
-      for (int i = 0; i < ARTICULATIONS; ++i) {
+      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             QComboBox* cb = static_cast<QComboBox*>(articulationTable->cellWidget(i, 1));
             if (cb == 0)
                   continue;

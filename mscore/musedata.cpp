@@ -317,44 +317,44 @@ void MuseData::readNote(Part* part, const QString& s)
                   closeSlur(3, tick, staff, voice);
             else if (an[i] == '.') {
                   Articulation* atr = new Articulation(score);
-                  atr->setArticulationType(Articulation_Staccato);
+                  atr->setArticulationType(ArticulationType::Staccato);
                   chord->add(atr);
                   }
             else if (an[i] == '_') {
                   Articulation* atr = new Articulation(score);
-                  atr->setArticulationType(Articulation_Tenuto);
+                  atr->setArticulationType(ArticulationType::Tenuto);
                   chord->add(atr);
                   }
             else if (an[i] == 'v') {
                   Articulation* atr = new Articulation(score);
-                  atr->setArticulationType(Articulation_Upbow);
+                  atr->setArticulationType(ArticulationType::Upbow);
                   chord->add(atr);
                   }
             else if (an[i] == 'n') {
                   Articulation* atr = new Articulation(score);
-                  atr->setArticulationType(Articulation_Downbow);
+                  atr->setArticulationType(ArticulationType::Downbow);
                   chord->add(atr);
                   }
             else if (an[i] == 't') {
                   Articulation* atr = new Articulation(score);
-                  atr->setArticulationType(Articulation_Trill);
+                  atr->setArticulationType(ArticulationType::Trill);
                   chord->add(atr);
                   }
             else if (an[i] == 'F') {
                   Articulation* atr = new Articulation(score);
                   atr->setUp(true);
-                  atr->setArticulationType(Articulation_Fermata);
+                  atr->setArticulationType(ArticulationType::Fermata);
                   chord->add(atr);
                   }
             else if (an[i] == 'E') {
                   Articulation* atr = new Articulation(score);
                   atr->setUp(false);
-                  atr->setArticulationType(Articulation_Fermata);
+                  atr->setArticulationType(ArticulationType::Fermata);
                   chord->add(atr);
                   }
             else if (an[i] == 'O') {
                   // Articulation* atr = new Articulation(score);
-                  // atr->setArticulationType(Articulation_Downbow);
+                  // atr->setArticulationType(ArticulationType::Downbow);
                   // chord->add(atr);
                   qDebug("%06d: open string '%c' not implemented", tick, an[i].toLatin1());
                   }

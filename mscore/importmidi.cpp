@@ -463,7 +463,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
             if (startChordTick == startChordTickFrac   // first chord in tied chord sequence
                         && midiChords.begin()->isStaccato()) {
                   Articulation* a = new Articulation(chord->score());
-                  a->setArticulationType(Articulation_Staccato);
+                  a->setArticulationType(ArticulationType::Staccato);
                   chord->add(a);
                   }
 

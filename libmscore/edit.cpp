@@ -1060,9 +1060,9 @@ void Score::cmdFlip()
                   }
             else if (e->type() == Element::ElementType::ARTICULATION) {
                   Articulation* a = static_cast<Articulation*>(e);
-                  if (a->articulationType() == Articulation_Staccato
-                     || a->articulationType() == Articulation_Tenuto
-                     || a->articulationType() == Articulation_Sforzatoaccent) {
+                  if (a->articulationType() == ArticulationType::Staccato
+                     || a->articulationType() == ArticulationType::Tenuto
+                     || a->articulationType() == ArticulationType::Sforzatoaccent) {
                         ArticulationAnchor aa = a->anchor();
                         if (aa == ArticulationAnchor::TOP_CHORD)
                               aa = ArticulationAnchor::BOTTOM_CHORD;

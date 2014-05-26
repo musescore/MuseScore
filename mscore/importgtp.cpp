@@ -522,13 +522,13 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
       switch (beatEffect) {
 #if 0 // TODO-smufl
             case 1:
-                  a->setArticulationType(Articulation_Tapping);
+                  a->setArticulationType(ArticulationType::Tapping);
                   break;
             case 2:
-                  a->setArticulationType(Articulation_Slapping);
+                  a->setArticulationType(ArticulationType::Slapping);
                   break;
             case 3:
-                  a->setArticulationType(Articulation_Popping);
+                  a->setArticulationType(ArticulationType::Popping);
                   break;
 #endif
             default:
@@ -1798,7 +1798,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       // check if a note is supposed to be accented, and give it the sforzato type
       if (noteBits & 0x40) {
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(Articulation_Sforzatoaccent);
+            art->setArticulationType(ArticulationType::Sforzatoaccent);
             if (!note->score()->addArticulation(note, art))
                   delete art;
             }
@@ -1932,7 +1932,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
 
                   // add the trill articulation to the note
                   Articulation* art = new Articulation(note->score());
-                  art->setArticulationType(Articulation_Trill);
+                  art->setArticulationType(ArticulationType::Trill);
                   if (!note->score()->addArticulation(note, art))
                         delete art;
 
@@ -2449,7 +2449,7 @@ void GuitarPro5::readNoteEffects(Note* note)
       if (modMask2 & 0x1) {   // staccato - palm mute
             Chord* chord = note->chord();
             Articulation* a = new Articulation(chord->score());
-            a->setArticulationType(Articulation_Staccato);
+            a->setArticulationType(ArticulationType::Staccato);
             chord->add(a);
             }
       if (modMask2 & 0x2) {   // palm mute - mute the whole column
@@ -2483,7 +2483,7 @@ void GuitarPro5::readNoteEffects(Note* note)
 
             // add the trill articulation to the note
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(Articulation_Trill);
+            art->setArticulationType(ArticulationType::Trill);
             if (!note->score()->addArticulation(note, art))
                   delete art;
 
@@ -2559,7 +2559,7 @@ void GuitarPro5::readNote(int string, Note* note)
       // check if a note is supposed to be accented, and give it the marcato type
       if (noteBits & 0x02) {
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(Articulation_Marcato);
+            art->setArticulationType(ArticulationType::Marcato);
             if (!note->score()->addArticulation(note, art))
                   delete art;
       }
@@ -2567,7 +2567,7 @@ void GuitarPro5::readNote(int string, Note* note)
       // check if a note is supposed to be accented, and give it the sforzato type
       if (noteBits & 0x40) {
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(Articulation_Sforzatoaccent);
+            art->setArticulationType(ArticulationType::Sforzatoaccent);
             if (!note->score()->addArticulation(note, art))
                   delete art;
             }
