@@ -2743,7 +2743,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
       if (type == SELECT_SINGLE) {
             deselectAll();
             if (e == 0) {
-                  selState = SEL_NONE;
+                  selState = SelState::NONE;
                   _updateAll = true;
                   }
             else {
@@ -2754,7 +2754,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   refresh |= e->abbox();
                   _selection.add(e);
                   _is.setTrack(e->track());
-                  selState = SEL_LIST;
+                  selState = SelState::LIST;
                   if (e->type() == Element::ElementType::NOTE)
                         e = e->parent();
                   if (e->type() == Element::ElementType::REST || e->type() == Element::ElementType::CHORD) {
@@ -2770,7 +2770,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   Measure* m = static_cast<Measure*>(e);
                   int tick  = m->tick();
                   // int etick = tick + m->ticks();
-                  if (_selection.state() == SEL_NONE) {
+                  if (_selection.state() == SelState::NONE) {
                         _selection.setStartSegment(m->tick2segment(tick));
                         // _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
                         _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
@@ -2780,13 +2780,13 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         return;
                         }
                   _updateAll = true;
-                  selState = SEL_RANGE;
+                  selState = SelState::RANGE;
                   _selection.setStaffStart(0);
                   _selection.setStaffEnd(nstaves());
                   _selection.updateSelectedElements();
                   }
             else {
-                  if (_selection.state() == SEL_RANGE) {
+                  if (_selection.state() == SelState::RANGE) {
                         select(0, SELECT_SINGLE, 0);
                         return;
                         }
@@ -2796,7 +2796,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               _selection.remove(e);
                         else {
                             _selection.add(e);
-                            selState = SEL_LIST;
+                            selState = SelState::LIST;
                             }
                         }
                   }
@@ -2809,9 +2809,9 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   int tick  = m->tick();
                   int etick = tick + m->ticks();
                   activeTrack = staffIdx * VOICES;
-                  if (_selection.state() == SEL_NONE
-                      || (_selection.state() == SEL_LIST && !_selection.isSingle())) {
-                        if (_selection.state() == SEL_LIST)
+                  if (_selection.state() == SelState::NONE
+                      || (_selection.state() == SelState::LIST && !_selection.isSingle())) {
+                        if (_selection.state() == SelState::LIST)
                               deselectAll();
                         _selection.setStaffStart(staffIdx);
                         _selection.setStaffEnd(staffIdx + 1);
@@ -2819,7 +2819,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         // _selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
                         _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                         }
-                  else if (_selection.state() == SEL_RANGE) {
+                  else if (_selection.state() == SelState::RANGE) {
                         if (staffIdx < _selection.staffStart())
                               _selection.setStaffStart(staffIdx);
                         else if (staffIdx >= _selection.staffEnd())
@@ -2885,9 +2885,9 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         e = e->parent();
                   ChordRest* cr = static_cast<ChordRest*>(e);
 
-                  if (_selection.state() == SEL_NONE
-                      || (_selection.state() == SEL_LIST && !_selection.isSingle())) {
-                        if (_selection.state() == SEL_LIST)
+                  if (_selection.state() == SelState::NONE
+                      || (_selection.state() == SelState::LIST && !_selection.isSingle())) {
+                        if (_selection.state() == SelState::LIST)
                               deselectAll();
                         _selection.setStaffStart(e->staffIdx());
                         _selection.setStaffEnd(_selection.staffStart() + 1);
@@ -2934,7 +2934,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                               return;
                               }
                         }
-                  else if (_selection.state() == SEL_RANGE) {
+                  else if (_selection.state() == SelState::RANGE) {
                         staffIdx = cr->staffIdx();
                         int tick = cr->tick();
                         if (staffIdx < _selection.staffStart())
@@ -2967,7 +2967,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         qDebug("sel state %d", _selection.state());
                         return;
                         }
-                  selState = SEL_RANGE;
+                  selState = SelState::RANGE;
                   if (!_selection.endSegment())
                         _selection.setEndSegment(cr->segment()->nextCR());
                   if (!_selection.startSegment())
@@ -2985,7 +2985,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
 
             _selection.setActiveTrack(activeTrack);
 
-            selState = SEL_RANGE;
+            selState = SelState::RANGE;
             _selection.updateSelectedElements();
             }
       _selection.setState(selState);
@@ -3031,11 +3031,11 @@ void Score::lassoSelectEnd()
       int endStaff          = 0;
 
       if (_selection.elements().isEmpty()) {
-            _selection.setState(SEL_NONE);
+            _selection.setState(SelState::NONE);
             _updateAll = true;
             return;
             }
-      _selection.setState(SEL_LIST);
+      _selection.setState(SelState::LIST);
 
       foreach(const Element* e, _selection.elements()) {
             if (e->type() != Element::ElementType::NOTE && e->type() != Element::ElementType::REST)
@@ -3058,8 +3058,8 @@ void Score::lassoSelectEnd()
       if (noteRestCount > 0) {
             endSegment = endSegment->nextCR(endStaff * VOICES);
             _selection.setRange(startSegment, endSegment, startStaff, endStaff+1);
-            if (_selection.state() != SEL_RANGE)
-                  _selection.setState(SEL_RANGE);
+            if (_selection.state() != SelState::RANGE)
+                  _selection.setState(SelState::RANGE);
             }
       _updateAll = true;
       }
@@ -3164,7 +3164,7 @@ void Score::cmdSelectAll()
       {
       if (_measures.size() == 0)
             return;
-      _selection.setState(SEL_RANGE);
+      _selection.setState(SelState::RANGE);
       Segment* s1 = firstMeasureMM()->first();
       Segment* s2 = lastMeasureMM()->last();
       _selection.setRange(s1, s2, 0, nstaves());

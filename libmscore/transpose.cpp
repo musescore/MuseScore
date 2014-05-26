@@ -265,7 +265,7 @@ void Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
 void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
   int transposeInterval, bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
       {
-      bool rangeSelection = selection().state() == SEL_RANGE;
+      bool rangeSelection = selection().state() == SelState::RANGE;
       int startStaffIdx = 0;
       int startTick     = 0;
       if (rangeSelection) {
@@ -300,7 +300,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
             if (direction == TRANSPOSE_DOWN)
                   transposeInterval *= -1;
 
-      if (_selection.state() == SEL_LIST) {
+      if (_selection.state() == SelState::LIST) {
             foreach(Element* e, _selection.uniqueElements()) {
                   if (e->staff()->staffType()->group() == PERCUSSION_STAFF_GROUP)
                         continue;
