@@ -33,11 +33,11 @@ class TextStyleData;
 
 class TextStyle {
    public:
-      enum Hidden {
-            HIDE_NEVER     = 0,
-            HIDE_IN_EDITOR = 1,
-            HIDE_IN_LISTS  = 2,
-            HIDE_ALWAYS    = 0xFFFF
+      enum Hidden : unsigned char {
+            NEVER     = 0,
+            IN_EDITOR = 1,
+            IN_LISTS  = 2,
+            ALWAYS    = 0xFF
             };
 
    private:
@@ -54,7 +54,7 @@ class TextStyle {
          bool sd = false,
          bool hasFrame = false, Spatium fw = Spatium(0.2), Spatium pw = Spatium(0.5), int fr = 25,
          QColor co = QColor(Qt::black), bool circle = false, bool systemFlag = false,
-         QColor fg = QColor(Qt::black), QColor bg = QColor(255, 255, 255, 0), Hidden hidden = HIDE_NEVER);
+         QColor fg = QColor(Qt::black), QColor bg = QColor(255, 255, 255, 0), Hidden hidden = Hidden::NEVER);
 
       TextStyle(const TextStyle&);
       ~TextStyle();
