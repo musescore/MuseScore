@@ -715,7 +715,7 @@ void OveToMScore::convertLineBreak(){
 				if ((int)line->getBeginBar() + (int)line->getBarCount()-1 == measure->no()) {
 					LayoutBreak* lb = new LayoutBreak(score_);
 					lb->setTrack(0);
-               lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
+					lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
 					measure->add(lb);
 				}
 			}
@@ -1632,25 +1632,25 @@ void OveToMScore::convertArticulation(
 //	case OVE::Articulation_Natural_Accidental_For_Trill :
 	case OVE::Articulation_Tremolo_Eighth :{
 		Tremolo* t = new Tremolo(score_);
-		t->setTremoloType(TREMOLO_R8);
+ 		t->setTremoloType(TremoloType::R8);
 		cr->add(t);
 		break;
 	}
 	case OVE::Articulation_Tremolo_Sixteenth :{
 		Tremolo* t = new Tremolo(score_);
-		t->setTremoloType(TREMOLO_R16);
+		t->setTremoloType(TremoloType::R16);
 		cr->add(t);
 		break;
 	}
 	case OVE::Articulation_Tremolo_Thirty_Second :{
 		Tremolo* t = new Tremolo(score_);
-		t->setTremoloType(TREMOLO_R32);
+		t->setTremoloType(TremoloType::R32);
 		cr->add(t);
 		break;
 	}
 	case OVE::Articulation_Tremolo_Sixty_Fourth :{
 		Tremolo* t = new Tremolo(score_);
-		t->setTremoloType(TREMOLO_R64);
+		t->setTremoloType(TremoloType::R64);
 		cr->add(t);
 		break;
 	}
@@ -1975,9 +1975,9 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
 
 		// TODO - does this need to be key-aware?
 		harmony->setTrack(track);
-      harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot(), Key::KEY_C, Prefer::NEAREST));
+		harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot(), Key::KEY_C, Prefer::NEAREST));
 		if(harmonyPtr->getBass() != OVE::INVALID_NOTE && harmonyPtr->getBass() != harmonyPtr->getRoot()){
-         harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass(), Key::KEY_C, Prefer::NEAREST));
+			harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass(), Key::KEY_C, Prefer::NEAREST));
 		}
 		const ChordDescription* d = harmony->fromXml(OveHarmony_To_String(harmonyPtr->getHarmonyType()));
 		if(d != 0){

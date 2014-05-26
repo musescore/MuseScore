@@ -469,10 +469,10 @@ Palette* MuseScore::newTremoloPalette()
             QT_TR_NOOP("64th between notes")
             };
 
-      for (int i = TREMOLO_R8; i <= TREMOLO_C64; ++i) {
+      for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
             Tremolo* tremolo = new Tremolo(gscore);
             tremolo->setTremoloType(TremoloType(i));
-            sp->append(tremolo, tr(tremoloName[i - TREMOLO_R8]));
+            sp->append(tremolo, tr(tremoloName[i - int(TremoloType::R8)]));
             }
       return sp;
       }

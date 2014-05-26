@@ -4447,10 +4447,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                   if (tremoloType == "" || tremoloType == "single") {
                         Tremolo* t = new Tremolo(score);
                         switch (tremolo) {
-                              case 1: t->setTremoloType(TREMOLO_R8); break;
-                              case 2: t->setTremoloType(TREMOLO_R16); break;
-                              case 3: t->setTremoloType(TREMOLO_R32); break;
-                              case 4: t->setTremoloType(TREMOLO_R64); break;
+                              case 1: t->setTremoloType(TremoloType::R8); break;
+                              case 2: t->setTremoloType(TremoloType::R16); break;
+                              case 3: t->setTremoloType(TremoloType::R32); break;
+                              case 4: t->setTremoloType(TremoloType::R64); break;
                               }
                         cr->add(t);
                         }
@@ -4462,10 +4462,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         if (tremStart) {
                               Tremolo* t = new Tremolo(score);
                               switch (tremolo) {
-                                    case 1: t->setTremoloType(TREMOLO_C8); break;
-                                    case 2: t->setTremoloType(TREMOLO_C16); break;
-                                    case 3: t->setTremoloType(TREMOLO_C32); break;
-                                    case 4: t->setTremoloType(TREMOLO_C64); break;
+                                    case 1: t->setTremoloType(TremoloType::C8); break;
+                                    case 2: t->setTremoloType(TremoloType::C16); break;
+                                    case 3: t->setTremoloType(TremoloType::C32); break;
+                                    case 4: t->setTremoloType(TremoloType::C64); break;
                                     }
                               t->setChords(tremStart, static_cast<Chord*>(cr));
                               // fixup chord duration and type

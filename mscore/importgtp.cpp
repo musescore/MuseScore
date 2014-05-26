@@ -1908,15 +1908,15 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                   Chord* chord = note->chord();
                   Tremolo* t = new Tremolo(chord->score());
                   if (tremoloDivision == 1) {
-                        t->setTremoloType(TREMOLO_R8);
+                        t->setTremoloType(TremoloType::R8);
                         chord->add(t);
                         }
                   else if (tremoloDivision == 2) {
-                        t->setTremoloType(TREMOLO_R16);
+                        t->setTremoloType(TremoloType::R16);
                         chord->add(t);
                         }
                   else if (tremoloDivision == 3) {
-                        t->setTremoloType(TREMOLO_R32);
+                        t->setTremoloType(TremoloType::R32);
                         chord->add(t);
                         }
                   else
@@ -2459,15 +2459,15 @@ void GuitarPro5::readNoteEffects(Note* note)
             Chord* chord = note->chord();
             Tremolo* t = new Tremolo(chord->score());
             if (tremoloDivision == 1) {
-                  t->setTremoloType(TREMOLO_R8);
+                  t->setTremoloType(TremoloType::R8);
                   chord->add(t);
                   }
             else if (tremoloDivision == 2) {
-                  t->setTremoloType(TREMOLO_R16);
+                  t->setTremoloType(TremoloType::R16);
                   chord->add(t);
                   }
             else if (tremoloDivision == 3) {
-                  t->setTremoloType(TREMOLO_R32);
+                  t->setTremoloType(TremoloType::R32);
                   chord->add(t);
                   }
             else
