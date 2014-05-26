@@ -55,7 +55,7 @@ class Segment : public Element {
       Q_ENUMS(SegmentType)
 
    public:
-      enum SegmentType {
+      enum SegmentType : unsigned short {
             SegInvalid            = 0x0,
             SegClef               = 0x1,        // type from SegClef to SegTimeSig
             SegKeySig             = 0x2,        // need to be in the order in which they
