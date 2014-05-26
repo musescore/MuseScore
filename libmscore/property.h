@@ -196,31 +196,31 @@ enum P_ID {
       P_END
       };
 
-enum P_TYPE {
-      T_SUBTYPE,
-      T_BOOL,
-      T_INT,
-      T_REAL,
-      T_SPATIUM,
-      T_SP_REAL,
-      T_FRACTION,
-      T_POINT,
-      T_POINT_MM,
-      T_SIZE,
-      T_SIZE_MM,
-      T_STRING,
-      T_SCALE,
-      T_COLOR,
-      T_DIRECTION,      // enum Direction
-      T_DIRECTION_H,    // enum DirectionH
-      T_LAYOUT_BREAK,
-      T_VALUE_TYPE,
-      T_BEAM_MODE,
-      T_PLACEMENT,
-      T_TEMPO,
-      T_GROUPS,
-      T_SYMID,
-      T_TEXT_STYLE,
+enum class P_TYPE : char {
+      SUBTYPE,
+      BOOL,
+      INT,
+      REAL,
+      SPATIUM,
+      SP_REAL,
+      FRACTION,
+      POINT,
+      POINT_MM,
+      SIZE,
+      SIZE_MM,
+      STRING,
+      SCALE,
+      COLOR,
+      DIRECTION,      // enum class Direction
+      DIRECTION_H,    // enum class DirectionH
+      LAYOUT_BREAK,
+      VALUE_TYPE,
+      BEAM_MODE,
+      PLACEMENT,
+      TEMPO,
+      GROUPS,
+      SYMID,
+      TEXT_STYLE,
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);
