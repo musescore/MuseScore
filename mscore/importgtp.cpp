@@ -3304,7 +3304,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                   s1->setStaffType(&st);
                   s1->linkTo(s);
                   cloneStaff(s,s1);
-                  p->staves()->front()->addBracket(BracketItem(BRACKET_NORMAL, 2));
+                  p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }
             pscore->appendPart(p);
 

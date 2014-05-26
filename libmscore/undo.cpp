@@ -3177,14 +3177,14 @@ void AddBracket::redo()
 
 void AddBracket::undo()
       {
-      staff->setBracket(level, NO_BRACKET);
+      staff->setBracket(level, BracketType::NO_BRACKET);
       staff->score()->setLayoutAll(true);
       }
 
 
 void RemoveBracket::redo()
       {
-      staff->setBracket(level, NO_BRACKET);
+      staff->setBracket(level, BracketType::NO_BRACKET);
       staff->score()->setLayoutAll(true);
       }
 

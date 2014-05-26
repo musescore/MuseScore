@@ -379,7 +379,7 @@ void OveToMScore::convertGroups() {
 
 			// brace
 	        if( j == 0 && partStaffCount == 2 ) {
-	        	staff->setBracket(0, BRACKET_BRACE);
+	        	staff->setBracket(0, BracketType::BRACE);
 	        	staff->setBracketSpan(0, 2);
 	        	staff->setBarLineSpan(2);
 	        }
@@ -390,7 +390,7 @@ void OveToMScore::convertGroups() {
 	        	int span = staffPtr->getGroupStaffCount() + 1;
 	        	int endStaff = staffIndex + span;
 	        	if(span > 0 && endStaff >= staffIndex && endStaff <= ove_->getTrackCount()) {
-	        		staff->addBracket(BracketItem(BRACKET_NORMAL, span));
+	        		staff->addBracket(BracketItem(BracketType::NORMAL, span));
 					staff->setBarLineSpan(span);
 	            }
 	        }

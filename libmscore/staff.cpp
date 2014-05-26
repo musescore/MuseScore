@@ -49,7 +49,7 @@ BracketType Staff::bracket(int idx) const
       {
       if (idx < _brackets.size())
             return _brackets[idx]._bracket;
-      return NO_BRACKET;
+      return BracketType::NO_BRACKET;
       }
 
 //---------------------------------------------------------
@@ -72,7 +72,7 @@ void Staff::setBracket(int idx, BracketType val)
       for (int i = _brackets.size(); i <= idx; ++i)
             _brackets.append(BracketItem());
       _brackets[idx]._bracket = val;
-      while (!_brackets.isEmpty() && (_brackets.last()._bracket == NO_BRACKET))
+      while (!_brackets.isEmpty() && (_brackets.last()._bracket == BracketType::NO_BRACKET))
             _brackets.removeLast();
       }
 
@@ -95,7 +95,7 @@ void Staff::setBracketSpan(int idx, int val)
 
 void Staff::addBracket(BracketItem b)
       {
-      if (!_brackets.isEmpty() && _brackets[0]._bracket == NO_BRACKET) {
+      if (!_brackets.isEmpty() && _brackets[0]._bracket == BracketType::NO_BRACKET) {
             _brackets[0] = b;
             }
       else {
@@ -120,7 +120,7 @@ void Staff::cleanupBrackets()
       int index = idx();
       int n = _score->nstaves();
       for (int i = 0; i < _brackets.size(); ++i) {
-            if (_brackets[i]._bracket == NO_BRACKET)
+            if (_brackets[i]._bracket == BracketType::NO_BRACKET)
                   continue;
             int span = _brackets[i]._bracketSpan;
             if (span > (n - index)) {
@@ -129,7 +129,7 @@ void Staff::cleanupBrackets()
                   }
             }
       for (int i = 0; i < _brackets.size(); ++i) {
-            if (_brackets[i]._bracket == NO_BRACKET)
+            if (_brackets[i]._bracket == BracketType::NO_BRACKET)
                   continue;
             int span = _brackets[i]._bracketSpan;
             if (span <= 1)

@@ -2665,24 +2665,24 @@ static void directionETag(Xml& xml, int staff, int offs = 0)
 //   partGroupStart
 //---------------------------------------------------------
 
-static void partGroupStart(Xml& xml, int number, int bracket)
+static void partGroupStart(Xml& xml, int number, BracketType bracket)
       {
       xml.stag(QString("part-group type=\"start\" number=\"%1\"").arg(number));
       QString br = "";
       switch (bracket) {
-            case NO_BRACKET:
+            case BracketType::NO_BRACKET:
                   br = "none";
                   break;
-            case BRACKET_NORMAL:
+            case BracketType::NORMAL:
                   br = "bracket";
                   break;
-            case BRACKET_BRACE:
+            case BracketType::BRACE:
                   br = "brace";
                   break;
-            case BRACKET_LINE:
+            case BracketType::LINE:
                   br = "line";
                   break;
-            case BRACKET_SQUARE:
+            case BracketType::SQUARE:
                   br = "square";
                   break;
             default:
@@ -4015,13 +4015,13 @@ void ExportMusicXml::write(QIODevice* dev)
                   Staff* st = part->staff(i);
                   if (st) {
                         for (int j = 0; j < st->bracketLevels(); j++) {
-                              if (st->bracket(j) != NO_BRACKET) {
+                              if (st->bracket(j) != BracketType::NO_BRACKET) {
                                     bracketFound = true;
                                     if (i == 0) {
                                           // OK, found bracket in first staff of part
                                           // filter out implicit brackets
                                           if (!(st->bracketSpan(j) == part->nstaves()
-                                                && st->bracket(j) == BRACKET_BRACE)) {
+                                                && st->bracket(j) == BracketType::BRACE)) {
                                                 // add others
                                                 int number = findPartGroupNumber(partGroupEnd);
                                                 if (number < MAX_PART_GROUPS) {
@@ -4042,7 +4042,7 @@ void ExportMusicXml::write(QIODevice* dev)
             if (!bracketFound && part->nstaves() > 1) {
                   int number = findPartGroupNumber(partGroupEnd);
                   if (number < MAX_PART_GROUPS) {
-                        partGroupStart(xml, number + 1, NO_BRACKET);
+                        partGroupStart(xml, number + 1, BracketType::NO_BRACKET);
                         partGroupEnd[number] = idx + part->nstaves();
                         }
                   }

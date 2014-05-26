@@ -125,8 +125,8 @@ enum class ArticulationType : char {
 //    System Brackets
 //---------------------------------------------------------
 
-enum BracketType {
-      BRACKET_NORMAL, BRACKET_BRACE, BRACKET_SQUARE, BRACKET_LINE, NO_BRACKET = -1
+enum class BracketType : signed char {
+      NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
       };
 
 //---------------------------------------------------------
