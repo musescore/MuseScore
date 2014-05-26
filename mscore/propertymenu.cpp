@@ -257,7 +257,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   a->setData("key-courtesy");
                   }
             }
-      else if (e->type() == Element::ElementType::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == STAFF_STATE_INSTRUMENT) {
+      else if (e->type() == Element::ElementType::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == StaffStateType::INSTRUMENT) {
             popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
             }

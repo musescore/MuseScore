@@ -28,7 +28,7 @@ namespace Ms {
 StaffState::StaffState(Score* score)
    : Element(score)
       {
-      _staffStateType = STAFF_STATE_INSTRUMENT;
+      _staffStateType = StaffStateType::INSTRUMENT;
       }
 
 //---------------------------------------------------------
@@ -38,8 +38,8 @@ StaffState::StaffState(Score* score)
 void StaffState::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("subtype", _staffStateType);
-      if (staffStateType() == STAFF_STATE_INSTRUMENT)
+      xml.tag("subtype", int(_staffStateType));
+      if (staffStateType() == StaffStateType::INSTRUMENT)
             _instrument.write(xml);
       Element::writeProperties(xml);
       xml.etag();
@@ -91,7 +91,7 @@ void StaffState::layout()
 //      qreal w1 = w * .6;
 
       switch(staffStateType()) {
-            case STAFF_STATE_INSTRUMENT:
+            case StaffStateType::INSTRUMENT:
                   path.lineTo(w, 0.0);
                   path.lineTo(w, h);
                   path.lineTo(0.0, h);
@@ -102,21 +102,21 @@ void StaffState::layout()
                   path.lineTo(w * .5, _spatium * 1.0);
                   break;
 
-            case STAFF_STATE_TYPE:
+            case StaffStateType::TYPE:
                   path.lineTo(w, 0.0);
                   path.lineTo(w, h);
                   path.lineTo(0.0, h);
                   path.lineTo(0.0, 0.0);
                   break;
 
-            case STAFF_STATE_VISIBLE:
+            case StaffStateType::VISIBLE:
                   path.lineTo(w, 0.0);
                   path.lineTo(w, h);
                   path.lineTo(0.0, h);
                   path.lineTo(0.0, 0.0);
                   break;
 
-            case STAFF_STATE_INVISIBLE:
+            case StaffStateType::INVISIBLE:
                   path.lineTo(w, 0.0);
                   path.lineTo(w, h);
                   path.lineTo(0.0, h);
@@ -140,13 +140,13 @@ void StaffState::layout()
 void StaffState::setStaffStateType(const QString& s)
       {
       if (s == "instrument")
-            setStaffStateType(STAFF_STATE_INSTRUMENT);
+            setStaffStateType(StaffStateType::INSTRUMENT);
       else if (s == "type")
-            setStaffStateType(STAFF_STATE_TYPE);
+            setStaffStateType(StaffStateType::TYPE);
       else if (s == "visible")
-            setStaffStateType(STAFF_STATE_VISIBLE);
+            setStaffStateType(StaffStateType::VISIBLE);
       else if (s == "invisible")
-            setStaffStateType(STAFF_STATE_INVISIBLE);
+            setStaffStateType(StaffStateType::INVISIBLE);
       }
 
 //---------------------------------------------------------
@@ -156,13 +156,13 @@ void StaffState::setStaffStateType(const QString& s)
 QString StaffState::staffStateTypeName() const
       {
       switch(staffStateType()) {
-            case STAFF_STATE_INSTRUMENT:
+            case StaffStateType::INSTRUMENT:
                   return "instrument";
-            case STAFF_STATE_TYPE:
+            case StaffStateType::TYPE:
                   return "type";
-            case STAFF_STATE_VISIBLE:
+            case StaffStateType::VISIBLE:
                   return "visible";
-            case STAFF_STATE_INVISIBLE:
+            case StaffStateType::INVISIBLE:
                   return "invisible";
             default:
                   return "??";
