@@ -798,8 +798,8 @@ void Segment::read(XmlReader& e)
 QVariant Segment::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_LEADING_SPACE:   return extraLeadingSpace().val();
-            case P_TRAILING_SPACE:  return extraTrailingSpace().val();
+            case P_ID::LEADING_SPACE:   return extraLeadingSpace().val();
+            case P_ID::TRAILING_SPACE:  return extraTrailingSpace().val();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -812,8 +812,8 @@ QVariant Segment::getProperty(P_ID propertyId) const
 QVariant Segment::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_LEADING_SPACE:   return 0.0;
-            case P_TRAILING_SPACE:  return 0.0;
+            case P_ID::LEADING_SPACE:   return 0.0;
+            case P_ID::TRAILING_SPACE:  return 0.0;
             default:
                   return Element::getProperty(propertyId);
             }
@@ -826,8 +826,8 @@ QVariant Segment::propertyDefault(P_ID propertyId) const
 bool Segment::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_LEADING_SPACE: setExtraLeadingSpace(Spatium(v.toDouble())); break;
-            case P_TRAILING_SPACE: setExtraTrailingSpace(Spatium(v.toDouble())); break;
+            case P_ID::LEADING_SPACE: setExtraLeadingSpace(Spatium(v.toDouble())); break;
+            case P_ID::TRAILING_SPACE: setExtraTrailingSpace(Spatium(v.toDouble())); break;
             default:
                   return Element::setProperty(propertyId, v);
             }

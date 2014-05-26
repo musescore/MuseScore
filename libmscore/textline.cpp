@@ -261,20 +261,20 @@ void TextLineSegment::clearText()
 QVariant TextLineSegment::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_BEGIN_TEXT_PLACE:
-            case P_CONTINUE_TEXT_PLACE:
-            case P_END_TEXT_PLACE:
-            case P_BEGIN_HOOK:
-            case P_END_HOOK:
-            case P_BEGIN_HOOK_HEIGHT:
-            case P_END_HOOK_HEIGHT:
-            case P_BEGIN_HOOK_TYPE:
-            case P_END_HOOK_TYPE:
-            case P_BEGIN_TEXT:
-            case P_CONTINUE_TEXT:
-            case P_END_TEXT:
-            case P_LINE_COLOR:
-            case P_LINE_WIDTH:
+            case P_ID::BEGIN_TEXT_PLACE:
+            case P_ID::CONTINUE_TEXT_PLACE:
+            case P_ID::END_TEXT_PLACE:
+            case P_ID::BEGIN_HOOK:
+            case P_ID::END_HOOK:
+            case P_ID::BEGIN_HOOK_HEIGHT:
+            case P_ID::END_HOOK_HEIGHT:
+            case P_ID::BEGIN_HOOK_TYPE:
+            case P_ID::END_HOOK_TYPE:
+            case P_ID::BEGIN_TEXT:
+            case P_ID::CONTINUE_TEXT:
+            case P_ID::END_TEXT:
+            case P_ID::LINE_COLOR:
+            case P_ID::LINE_WIDTH:
                   return textLine()->getProperty(id);
             default:
                   return LineSegment::getProperty(id);
@@ -288,20 +288,20 @@ QVariant TextLineSegment::getProperty(P_ID id) const
 bool TextLineSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case P_BEGIN_TEXT_PLACE:
-            case P_CONTINUE_TEXT_PLACE:
-            case P_END_TEXT_PLACE:
-            case P_BEGIN_HOOK:
-            case P_END_HOOK:
-            case P_BEGIN_HOOK_HEIGHT:
-            case P_END_HOOK_HEIGHT:
-            case P_BEGIN_HOOK_TYPE:
-            case P_END_HOOK_TYPE:
-            case P_BEGIN_TEXT:
-            case P_CONTINUE_TEXT:
-            case P_END_TEXT:
-            case P_LINE_COLOR:
-            case P_LINE_WIDTH:
+            case P_ID::BEGIN_TEXT_PLACE:
+            case P_ID::CONTINUE_TEXT_PLACE:
+            case P_ID::END_TEXT_PLACE:
+            case P_ID::BEGIN_HOOK:
+            case P_ID::END_HOOK:
+            case P_ID::BEGIN_HOOK_HEIGHT:
+            case P_ID::END_HOOK_HEIGHT:
+            case P_ID::BEGIN_HOOK_TYPE:
+            case P_ID::END_HOOK_TYPE:
+            case P_ID::BEGIN_TEXT:
+            case P_ID::CONTINUE_TEXT:
+            case P_ID::END_TEXT:
+            case P_ID::LINE_COLOR:
+            case P_ID::LINE_WIDTH:
                   return textLine()->setProperty(id, v);
             default:
                   return LineSegment::setProperty(id, v);
@@ -315,20 +315,20 @@ bool TextLineSegment::setProperty(P_ID id, const QVariant& v)
 QVariant TextLineSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_BEGIN_TEXT_PLACE:
-            case P_CONTINUE_TEXT_PLACE:
-            case P_END_TEXT_PLACE:
-            case P_BEGIN_HOOK:
-            case P_END_HOOK:
-            case P_BEGIN_HOOK_HEIGHT:
-            case P_END_HOOK_HEIGHT:
-            case P_BEGIN_HOOK_TYPE:
-            case P_END_HOOK_TYPE:
-            case P_BEGIN_TEXT:
-            case P_CONTINUE_TEXT:
-            case P_END_TEXT:
-            case P_LINE_COLOR:
-            case P_LINE_WIDTH:
+            case P_ID::BEGIN_TEXT_PLACE:
+            case P_ID::CONTINUE_TEXT_PLACE:
+            case P_ID::END_TEXT_PLACE:
+            case P_ID::BEGIN_HOOK:
+            case P_ID::END_HOOK:
+            case P_ID::BEGIN_HOOK_HEIGHT:
+            case P_ID::END_HOOK_HEIGHT:
+            case P_ID::BEGIN_HOOK_TYPE:
+            case P_ID::END_HOOK_TYPE:
+            case P_ID::BEGIN_TEXT:
+            case P_ID::CONTINUE_TEXT:
+            case P_ID::END_TEXT:
+            case P_ID::LINE_COLOR:
+            case P_ID::LINE_WIDTH:
                   return textLine()->propertyDefault(id);
             default:
                   return LineSegment::propertyDefault(id);
@@ -577,25 +577,25 @@ QString TextLine::endText() const
 void TextLine::writeProperties(Xml& xml) const
       {
       if (_beginHook) {
-            writeProperty(xml, P_BEGIN_HOOK);
-            writeProperty(xml, P_BEGIN_HOOK_HEIGHT);
-            writeProperty(xml, P_BEGIN_HOOK_TYPE);
+            writeProperty(xml, P_ID::BEGIN_HOOK);
+            writeProperty(xml, P_ID::BEGIN_HOOK_HEIGHT);
+            writeProperty(xml, P_ID::BEGIN_HOOK_TYPE);
             }
       if (_endHook) {
-            writeProperty(xml, P_END_HOOK);
-            writeProperty(xml, P_END_HOOK_HEIGHT);
-            writeProperty(xml, P_END_HOOK_TYPE);
+            writeProperty(xml, P_ID::END_HOOK);
+            writeProperty(xml, P_ID::END_HOOK_HEIGHT);
+            writeProperty(xml, P_ID::END_HOOK_TYPE);
             }
 
-      writeProperty(xml, P_BEGIN_TEXT_PLACE);
-      writeProperty(xml, P_CONTINUE_TEXT_PLACE);
-      writeProperty(xml, P_END_TEXT_PLACE);
+      writeProperty(xml, P_ID::BEGIN_TEXT_PLACE);
+      writeProperty(xml, P_ID::CONTINUE_TEXT_PLACE);
+      writeProperty(xml, P_ID::END_TEXT_PLACE);
 
       SLine::writeProperties(xml);
 
       if (_beginText) {
-            bool textDiff  = _beginText->text() != propertyDefault(P_BEGIN_TEXT).toString();
-            bool styleDiff = _beginText->textStyle() != propertyDefault(P_BEGIN_TEXT_STYLE).value<TextStyle>();
+            bool textDiff  = _beginText->text() != propertyDefault(P_ID::BEGIN_TEXT).toString();
+            bool styleDiff = _beginText->textStyle() != propertyDefault(P_ID::BEGIN_TEXT_STYLE).value<TextStyle>();
             if (textDiff || styleDiff) {
                   xml.stag("beginText");
                   _beginText->writeProperties(xml, textDiff, styleDiff);
@@ -603,8 +603,8 @@ void TextLine::writeProperties(Xml& xml) const
                   }
             }
       if (_continueText) {
-            bool textDiff  = _continueText->text() != propertyDefault(P_CONTINUE_TEXT).toString();
-            bool styleDiff = _continueText->textStyle() != propertyDefault(P_CONTINUE_TEXT_STYLE).value<TextStyle>();
+            bool textDiff  = _continueText->text() != propertyDefault(P_ID::CONTINUE_TEXT).toString();
+            bool styleDiff = _continueText->textStyle() != propertyDefault(P_ID::CONTINUE_TEXT_STYLE).value<TextStyle>();
             if (textDiff || styleDiff) {
                   xml.stag("continueText");
                   _continueText->writeProperties(xml, textDiff, styleDiff);
@@ -612,8 +612,8 @@ void TextLine::writeProperties(Xml& xml) const
                   }
             }
       if (_endText) {
-            bool textDiff  = _endText->text() != propertyDefault(P_END_TEXT).toString();
-            bool styleDiff = _endText->textStyle() != propertyDefault(P_END_TEXT_STYLE).value<TextStyle>();
+            bool textDiff  = _endText->text() != propertyDefault(P_ID::END_TEXT).toString();
+            bool styleDiff = _endText->textStyle() != propertyDefault(P_ID::END_TEXT_STYLE).value<TextStyle>();
             if (textDiff || styleDiff) {
                   xml.stag("endText");
                   _endText->writeProperties(xml, textDiff, styleDiff);
@@ -731,29 +731,29 @@ bool TextLine::readProperties(XmlReader& e)
 QVariant TextLine::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_BEGIN_TEXT_PLACE:
+            case P_ID::BEGIN_TEXT_PLACE:
                   return _beginTextPlace;
-            case P_CONTINUE_TEXT_PLACE:
+            case P_ID::CONTINUE_TEXT_PLACE:
                   return _continueTextPlace;
-            case P_END_TEXT_PLACE:
+            case P_ID::END_TEXT_PLACE:
                   return _endTextPlace;
-            case P_BEGIN_HOOK:
+            case P_ID::BEGIN_HOOK:
                   return _beginHook;
-            case P_END_HOOK:
+            case P_ID::END_HOOK:
                   return _endHook;
-            case P_BEGIN_HOOK_HEIGHT:
+            case P_ID::BEGIN_HOOK_HEIGHT:
                   return _beginHookHeight.val();
-            case P_END_HOOK_HEIGHT:
+            case P_ID::END_HOOK_HEIGHT:
                   return _endHookHeight.val();
-            case P_BEGIN_HOOK_TYPE:
+            case P_ID::BEGIN_HOOK_TYPE:
                   return int(_beginHookType);
-            case P_END_HOOK_TYPE:
+            case P_ID::END_HOOK_TYPE:
                   return int(_endHookType);
-            case P_BEGIN_TEXT:
+            case P_ID::BEGIN_TEXT:
                   return beginText();
-            case P_CONTINUE_TEXT:
+            case P_ID::CONTINUE_TEXT:
                   return continueText();
-            case P_END_TEXT:
+            case P_ID::END_TEXT:
                   return endText();
             default:
                   return SLine::getProperty(id);
@@ -767,40 +767,40 @@ QVariant TextLine::getProperty(P_ID id) const
 bool TextLine::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case P_BEGIN_TEXT_PLACE:
+            case P_ID::BEGIN_TEXT_PLACE:
                   _beginTextPlace = PlaceText(v.toInt());
                   break;
-            case P_CONTINUE_TEXT_PLACE:
+            case P_ID::CONTINUE_TEXT_PLACE:
                   _continueTextPlace = PlaceText(v.toInt());
                   break;
-            case P_END_TEXT_PLACE:
+            case P_ID::END_TEXT_PLACE:
                   _endTextPlace = PlaceText(v.toInt());
                   break;
-            case P_BEGIN_HOOK:
+            case P_ID::BEGIN_HOOK:
                   _beginHook = v.toBool();
                   break;
-            case P_END_HOOK:
+            case P_ID::END_HOOK:
                   _endHook = v.toBool();
                   break;
-            case P_BEGIN_HOOK_HEIGHT:
+            case P_ID::BEGIN_HOOK_HEIGHT:
                   _beginHookHeight = Spatium(v.toDouble());
                   break;
-            case P_END_HOOK_HEIGHT:
+            case P_ID::END_HOOK_HEIGHT:
                   _endHookHeight = Spatium(v.toDouble());
                   break;
-            case P_BEGIN_HOOK_TYPE:
+            case P_ID::BEGIN_HOOK_TYPE:
                   _beginHookType = HookType(v.toInt());
                   break;
-            case P_END_HOOK_TYPE:
+            case P_ID::END_HOOK_TYPE:
                   _endHookType = HookType(v.toInt());
                   break;
-            case P_BEGIN_TEXT:
+            case P_ID::BEGIN_TEXT:
                   setBeginText(v.toString());
                   break;
-            case P_CONTINUE_TEXT:
+            case P_ID::CONTINUE_TEXT:
                   setContinueText(v.toString());
                   break;
-            case P_END_TEXT:
+            case P_ID::END_TEXT:
                   setEndText(v.toString());
                   break;
             default:
@@ -816,22 +816,22 @@ bool TextLine::setProperty(P_ID id, const QVariant& v)
 QVariant TextLine::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_BEGIN_TEXT_PLACE:
-            case P_CONTINUE_TEXT_PLACE:
-            case P_END_TEXT_PLACE:
+            case P_ID::BEGIN_TEXT_PLACE:
+            case P_ID::CONTINUE_TEXT_PLACE:
+            case P_ID::END_TEXT_PLACE:
                   return PLACE_LEFT;
-            case P_BEGIN_HOOK:
-            case P_END_HOOK:
+            case P_ID::BEGIN_HOOK:
+            case P_ID::END_HOOK:
                   return false;
-            case P_BEGIN_HOOK_HEIGHT:
-            case P_END_HOOK_HEIGHT:
+            case P_ID::BEGIN_HOOK_HEIGHT:
+            case P_ID::END_HOOK_HEIGHT:
                   return 1.5;
-            case P_BEGIN_HOOK_TYPE:
-            case P_END_HOOK_TYPE:
+            case P_ID::BEGIN_HOOK_TYPE:
+            case P_ID::END_HOOK_TYPE:
                   return int(HookType::HOOK_90);
-            case P_BEGIN_TEXT:
-            case P_CONTINUE_TEXT:
-            case P_END_TEXT:
+            case P_ID::BEGIN_TEXT:
+            case P_ID::CONTINUE_TEXT:
+            case P_ID::END_TEXT:
                   return QString("");
 
             default:

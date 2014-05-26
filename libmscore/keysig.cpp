@@ -521,7 +521,7 @@ void KeySig::removeFromKeySigChain()
 
 void KeySig::undoSetShowCourtesy(bool v)
       {
-      score()->undoChangeProperty(this, P_SHOW_COURTESY, v);
+      score()->undoChangeProperty(this, P_ID::SHOW_COURTESY, v);
       }
 
 //---------------------------------------------------------
@@ -531,7 +531,7 @@ void KeySig::undoSetShowCourtesy(bool v)
 QVariant KeySig::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY: return int(showCourtesy());
+            case P_ID::SHOW_COURTESY: return int(showCourtesy());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -544,7 +544,7 @@ QVariant KeySig::getProperty(P_ID propertyId) const
 bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY:
+            case P_ID::SHOW_COURTESY:
                   setShowCourtesy(v.toBool());
                   break;
             default:
@@ -564,7 +564,7 @@ bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
 QVariant KeySig::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_SHOW_COURTESY:      return true;
+            case P_ID::SHOW_COURTESY:      return true;
             default:                   return Element::propertyDefault(id);
             }
       }

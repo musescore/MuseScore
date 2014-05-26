@@ -467,7 +467,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns)
                               if (m->first(Segment::SegTimeSig))
                                     break;
                               Fraction fr(ns);
-                              undoChangeProperty(m, P_TIMESIG_NOMINAL, QVariant::fromValue(fr));
+                              undoChangeProperty(m, P_ID::TIMESIG_NOMINAL, QVariant::fromValue(fr));
                               }
                         return false;
                         }
@@ -542,9 +542,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         if ((m != fm) && m->first(Segment::SegTimeSig))
                               break;
                         bool changeActual = m->len() == m->timesig();
-                        undoChangeProperty(m, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                        undoChangeProperty(m, P_ID::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                         if (changeActual)
-                              undoChangeProperty(m, P_TIMESIG_ACTUAL,  QVariant::fromValue(ns));
+                              undoChangeProperty(m, P_ID::TIMESIG_ACTUAL,  QVariant::fromValue(ns));
                         }
                   }
             }
@@ -556,7 +556,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //
             if (fm == score->firstMeasure() && (fm->len() != fm->timesig())) {
                   // handle upbeat
-                  undoChangeProperty(fm, P_TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                  undoChangeProperty(fm, P_ID::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                   Measure* m = fm->nextMeasure();
                   Segment* s = m->findSegment(Segment::SegTimeSig, m->tick());
                   fm = s ? 0 : fm->nextMeasure();
@@ -761,10 +761,10 @@ void Score::putNote(const Position& p, bool replace)
                                           nval.tpc = linkedNote->tpc1default(nval.pitch);
                                           Staff* staff = linkedNote->staff();
                                           if (staff->isTabStaff()) {
-                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_PITCH, nval.pitch);
-                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_TPC1,  nval.tpc);
-                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_FRET,  nval.fret);
-                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_STRING,nval.string);
+                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_ID::PITCH, nval.pitch);
+                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_ID::TPC1,  nval.tpc);
+                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_ID::FRET,  nval.fret);
+                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_ID::STRING,nval.string);
                                                 }
                                           else if (staff->isPitchedStaff()) {
                                                 // TODO: check tpc2
@@ -1039,24 +1039,24 @@ void Score::cmdFlip()
                         e = chord->beam();  // fall trough
                   else {
                         Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
-                        undoChangeProperty(chord, P_STEM_DIRECTION, int(dir));
+                        undoChangeProperty(chord, P_ID::STEM_DIRECTION, int(dir));
                         }
                   }
 
             if (e->type() == Element::ElementType::BEAM) {
                   Beam* beam = static_cast<Beam*>(e);
                   Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(beam, P_STEM_DIRECTION, int(dir));
+                  undoChangeProperty(beam, P_ID::STEM_DIRECTION, int(dir));
                   }
             else if (e->type() == Element::ElementType::SLUR_SEGMENT) {
                   SlurTie* slur = static_cast<SlurSegment*>(e)->slurTie();
                   Direction dir = slur->up() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(slur, P_SLUR_DIRECTION, int(dir));
+                  undoChangeProperty(slur, P_ID::SLUR_DIRECTION, int(dir));
                   }
             else if (e->type() == Element::ElementType::HAIRPIN_SEGMENT) {
                   Hairpin* h = static_cast<HairpinSegment*>(e)->hairpin();
                   Hairpin::HairpinType st = h->hairpinType() == Hairpin::HairpinType::CRESCENDO ? Hairpin::HairpinType::CRESCENDO : Hairpin::HairpinType::DECRESCENDO;
-                  undoChangeProperty(h, P_HAIRPIN_TYPE, int(st));
+                  undoChangeProperty(h, P_ID::HAIRPIN_TYPE, int(st));
                   }
             else if (e->type() == Element::ElementType::ARTICULATION) {
                   Articulation* a = static_cast<Articulation*>(e);
@@ -1071,23 +1071,23 @@ void Score::cmdFlip()
                         else if (aa == ArticulationAnchor::CHORD)
                               aa = a->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
                         if (aa != a->anchor())
-                              undoChangeProperty(a, P_ARTICULATION_ANCHOR, int(aa));
+                              undoChangeProperty(a, P_ID::ARTICULATION_ANCHOR, int(aa));
                         }
                   else {
                         Direction d = a->up() ? Direction::DOWN : Direction::UP;
-                        undoChangeProperty(a, P_DIRECTION, int(d));
+                        undoChangeProperty(a, P_ID::DIRECTION, int(d));
                         }
                   return;   // no layoutAll
                   }
             else if (e->type() == Element::ElementType::TUPLET) {
                   Tuplet* tuplet = static_cast<Tuplet*>(e);
                   Direction d = tuplet->isUp() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(tuplet, P_DIRECTION, int(d));
+                  undoChangeProperty(tuplet, P_ID::DIRECTION, int(d));
                   }
             else if (e->type() == Element::ElementType::NOTEDOT) {
                   Note* note = static_cast<Note*>(e->parent());
                   Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
-                  undoChangeProperty(note, P_DOT_POSITION, int(d));
+                  undoChangeProperty(note, P_ID::DOT_POSITION, int(d));
                   // undo(new FlipNoteDotDirection(static_cast<Note*>(e->parent())));
                   }
             else if (
@@ -1097,7 +1097,7 @@ void Score::cmdFlip()
                | (e->type() == Element::ElementType::DYNAMIC)
                ) {
                   Element::Placement p = e->placement() == Element::Placement::ABOVE ? Element::Placement::BELOW : Element::Placement::ABOVE;
-                  undoChangeProperty(e, P_PLACEMENT, int(p));
+                  undoChangeProperty(e, P_ID::PLACEMENT, int(p));
                   }
             }
       _layoutAll = true;      // must be set in und/redo
@@ -1236,22 +1236,22 @@ void Score::deleteItem(Element* el)
                   foreach(Score* score, scoreList()) {
                         Measure* m   = score->tick2measure(tick);
                         if (segType == Segment::SegStartRepeatBarLine)
-                              undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~Repeat::START);
+                              undoChangeProperty(m, P_ID::REPEAT_FLAGS, m->repeatFlags() & ~Repeat::START);
                         else if (segType == Segment::SegBarLine)
                               undoRemoveElement(el);
                         else if (segType == Segment::SegEndBarLine) {
                               // if bar line has custom barLineType, change to barLineType of the whole measure
                               if (bl->customSubtype()) {
-                                    undoChangeProperty(bl, P_SUBTYPE, seg->measure()->endBarLineType());
+                                    undoChangeProperty(bl, P_ID::SUBTYPE, seg->measure()->endBarLineType());
                                     }
                               // otherwise, if whole measure has special end bar line, change to normal
                               else if (!normalBar) {
                                     if (m->tick() >= tick)
                                           m = m->prevMeasure();
-                                    undoChangeProperty(m, P_REPEAT_FLAGS, m->repeatFlags() & ~Repeat::END);
+                                    undoChangeProperty(m, P_ID::REPEAT_FLAGS, m->repeatFlags() & ~Repeat::END);
                                     Measure* nm = m->nextMeasure();
                                     if (nm)
-                                          undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
+                                          undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
                                     undoChangeEndBarLineType(m, NORMAL_BAR);
                                     m->setEndBarLineGenerated(true);
                                     }
@@ -1768,7 +1768,7 @@ void Score::colorItem(Element* element)
 
       foreach(Element* e, selection().elements()) {
             if (e->color() != c) {
-                  undoChangeProperty(e, P_COLOR, c);
+                  undoChangeProperty(e, P_ID::COLOR, c);
                   e->setGenerated(false);
                   refresh |= e->abbox();
                   if (e->type() == Element::ElementType::BAR_LINE) {

@@ -587,13 +587,13 @@ void Tuplet::write(Xml& xml) const
             xml.tag("Tuplet", tuplet()->id());
       Element::writeProperties(xml);
 
-      writeProperty(xml, P_DIRECTION);
-      writeProperty(xml, P_NUMBER_TYPE);
-      writeProperty(xml, P_BRACKET_TYPE);
-      writeProperty(xml, P_NORMAL_NOTES);
-      writeProperty(xml, P_ACTUAL_NOTES);
-      writeProperty(xml, P_P1);
-      writeProperty(xml, P_P2);
+      writeProperty(xml, P_ID::DIRECTION);
+      writeProperty(xml, P_ID::NUMBER_TYPE);
+      writeProperty(xml, P_ID::BRACKET_TYPE);
+      writeProperty(xml, P_ID::NORMAL_NOTES);
+      writeProperty(xml, P_ID::ACTUAL_NOTES);
+      writeProperty(xml, P_ID::P1);
+      writeProperty(xml, P_ID::P2);
 
       xml.tag("baseNote", _baseLen.name());
 
@@ -620,7 +620,7 @@ void Tuplet::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "direction")
-                  setProperty(P_DIRECTION, Ms::getProperty(P_DIRECTION, e));
+                  setProperty(P_ID::DIRECTION, Ms::getProperty(P_ID::DIRECTION, e));
             else if (tag == "numberType")
                   _numberType = NumberType(e.readInt());
             else if (tag == "bracketType")
@@ -787,9 +787,9 @@ void Tuplet::reset()
       {
       score()->addRefresh(canvasBoundingRect());
 
-      undoChangeProperty(P_P1,        QPointF());
-      undoChangeProperty(P_P2,        QPointF());
-      undoChangeProperty(P_DIRECTION, propertyDefault(P_DIRECTION));
+      undoChangeProperty(P_ID::P1,        QPointF());
+      undoChangeProperty(P_ID::P2,        QPointF());
+      undoChangeProperty(P_ID::DIRECTION, propertyDefault(P_ID::DIRECTION));
 
       Element::reset();
       layout();
@@ -857,19 +857,19 @@ Fraction Tuplet::elementsDuration()
 QVariant Tuplet::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_DIRECTION:
+            case P_ID::DIRECTION:
                   return int(_direction);
-            case P_NUMBER_TYPE:
+            case P_ID::NUMBER_TYPE:
                   return _numberType;
-            case P_BRACKET_TYPE:
+            case P_ID::BRACKET_TYPE:
                   return _bracketType;
-            case P_NORMAL_NOTES:
+            case P_ID::NORMAL_NOTES:
                   return _ratio.denominator();
-            case P_ACTUAL_NOTES:
+            case P_ID::ACTUAL_NOTES:
                   return _ratio.numerator();
-            case P_P1:
+            case P_ID::P1:
                   return _p1;
-            case P_P2:
+            case P_ID::P2:
                   return _p2;
             default:
                   break;
@@ -885,25 +885,25 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
-            case P_DIRECTION:
+            case P_ID::DIRECTION:
                   setDirection(Direction(v.toInt()));
                   break;
-            case P_NUMBER_TYPE:
+            case P_ID::NUMBER_TYPE:
                   setNumberType(NumberType(v.toInt()));
                   break;
-            case P_BRACKET_TYPE:
+            case P_ID::BRACKET_TYPE:
                   setBracketType(BracketType(v.toInt()));
                   break;
-            case P_NORMAL_NOTES:
+            case P_ID::NORMAL_NOTES:
                   _ratio.setDenominator(v.toInt());
                   break;
-            case P_ACTUAL_NOTES:
+            case P_ID::ACTUAL_NOTES:
                   _ratio.setNumerator(v.toInt());
                   break;
-            case P_P1:
+            case P_ID::P1:
                   _p1 = v.toPointF();
                   break;
-            case P_P2:
+            case P_ID::P2:
                   _p2 = v.toPointF();
                   break;
             default:
@@ -921,17 +921,17 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Tuplet::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_DIRECTION:
+            case P_ID::DIRECTION:
                   return int(Direction::AUTO);
-            case P_NUMBER_TYPE:
+            case P_ID::NUMBER_TYPE:
                   return Tuplet::SHOW_NUMBER;
-            case P_BRACKET_TYPE:
+            case P_ID::BRACKET_TYPE:
                   return Tuplet::AUTO_BRACKET;
-            case P_NORMAL_NOTES:
-            case P_ACTUAL_NOTES:
+            case P_ID::NORMAL_NOTES:
+            case P_ID::ACTUAL_NOTES:
                   return 1;
-            case P_P1:
-            case P_P2:
+            case P_ID::P1:
+            case P_ID::P2:
                   return QPointF();
             default:
                   return DurationElement::propertyDefault(id);

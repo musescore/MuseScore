@@ -38,7 +38,7 @@ void VoltaSegment::layout()
 QVariant VoltaSegment::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_VOLTA_TYPE:
+            case P_ID::VOLTA_TYPE:
                   return volta()->getProperty(id);
             default:
                   return TextLineSegment::getProperty(id);
@@ -52,8 +52,8 @@ QVariant VoltaSegment::getProperty(P_ID id) const
 bool VoltaSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case P_LINE_WIDTH:
-            case P_VOLTA_TYPE:
+            case P_ID::LINE_WIDTH:
+            case P_ID::VOLTA_TYPE:
                   return volta()->setProperty(id, v);
             default:
                   return TextLineSegment::setProperty(id, v);
@@ -67,8 +67,8 @@ bool VoltaSegment::setProperty(P_ID id, const QVariant& v)
 QVariant VoltaSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case P_LINE_WIDTH:
-            case P_VOLTA_TYPE:
+            case P_ID::LINE_WIDTH:
+            case P_ID::VOLTA_TYPE:
                   return volta()->propertyDefault(id);
             default:
                   return TextLineSegment::propertyDefault(id);
@@ -82,10 +82,10 @@ QVariant VoltaSegment::propertyDefault(P_ID id) const
 PropertyStyle VoltaSegment::propertyStyle(P_ID id) const
       {
       switch (id) {
-            case P_VOLTA_TYPE:
+            case P_ID::VOLTA_TYPE:
                   return PropertyStyle::NOSTYLE;
 
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   return volta()->propertyStyle(id);
 
             default:
@@ -100,10 +100,10 @@ PropertyStyle VoltaSegment::propertyStyle(P_ID id) const
 void VoltaSegment::resetProperty(P_ID id)
       {
       switch (id) {
-            case P_VOLTA_TYPE:
+            case P_ID::VOLTA_TYPE:
                   return;
 
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   return volta()->resetProperty(id);
 
             default:
@@ -271,7 +271,7 @@ bool Volta::hasEnding(int repeat) const
 QVariant Volta::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_VOLTA_TYPE:
+            case P_ID::VOLTA_TYPE:
                   return int(voltaType());
             default:
                   break;
@@ -287,10 +287,10 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
       {
       score()->addRefresh(pageBoundingRect());
       switch (propertyId) {
-            case P_VOLTA_TYPE:
+            case P_ID::VOLTA_TYPE:
                   setVoltaType(VoltaType(val.toInt()));
                   break;
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   lineWidthStyle = PropertyStyle::UNSTYLED;
                   // fall through
             default:
@@ -310,10 +310,10 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
 QVariant Volta::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_VOLTA_TYPE:
+            case P_ID::VOLTA_TYPE:
                   return 0;
 
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   return score()->styleS(StyleIdx::voltaLineWidth).val();
 
             default:
@@ -328,7 +328,7 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
 
 void Volta::undoSetVoltaType(VoltaType val)
       {
-      score()->undoChangeProperty(this, P_VOLTA_TYPE, int(val));
+      score()->undoChangeProperty(this, P_ID::VOLTA_TYPE, int(val));
       }
 
 //---------------------------------------------------------
@@ -347,10 +347,10 @@ void Volta::setYoff(qreal val)
 PropertyStyle Volta::propertyStyle(P_ID id) const
       {
       switch (id) {
-            case P_VOLTA_TYPE:
+            case P_ID::VOLTA_TYPE:
                   return PropertyStyle::NOSTYLE;
 
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   return lineWidthStyle;
 
             default:
@@ -365,10 +365,10 @@ PropertyStyle Volta::propertyStyle(P_ID id) const
 void Volta::resetProperty(P_ID id)
       {
       switch (id) {
-            case P_VOLTA_TYPE:
+            case P_ID::VOLTA_TYPE:
                   return;
 
-            case P_LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   setLineWidth(score()->styleS(StyleIdx::voltaLineWidth));
                   lineWidthStyle = PropertyStyle::STYLED;
                   break;
@@ -396,7 +396,7 @@ void Volta::styleChanged()
 void Volta::reset()
       {
       if (lineWidthStyle == PropertyStyle::UNSTYLED)
-            score()->undoChangeProperty(this, P_LINE_WIDTH, propertyDefault(P_LINE_WIDTH), PropertyStyle::STYLED);
+            score()->undoChangeProperty(this, P_ID::LINE_WIDTH, propertyDefault(P_ID::LINE_WIDTH), PropertyStyle::STYLED);
       TextLine::reset();
       }
 

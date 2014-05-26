@@ -308,8 +308,8 @@ QPointF Arpeggio::gripAnchor(int n) const
 
 void Arpeggio::startEdit(MuseScoreView*, const QPointF&)
       {
-      undoPushProperty(P_ARP_USER_LEN1);
-      undoPushProperty(P_ARP_USER_LEN2);
+      undoPushProperty(P_ID::ARP_USER_LEN1);
+      undoPushProperty(P_ID::ARP_USER_LEN2);
       }
 
 //---------------------------------------------------------
@@ -395,9 +395,9 @@ Element* Arpeggio::drop(const DropData& data)
 QVariant Arpeggio::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_ARP_USER_LEN1:
+            case P_ID::ARP_USER_LEN1:
                   return userLen1();
-            case P_ARP_USER_LEN2:
+            case P_ID::ARP_USER_LEN2:
                   return userLen2();
             default:
                   break;
@@ -412,10 +412,10 @@ QVariant Arpeggio::getProperty(P_ID propertyId) const
 bool Arpeggio::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch(propertyId) {
-            case P_ARP_USER_LEN1:
+            case P_ID::ARP_USER_LEN1:
                   setUserLen1(val.toDouble());
                   break;
-            case P_ARP_USER_LEN2:
+            case P_ID::ARP_USER_LEN2:
                   setUserLen2(val.toDouble());
                   break;
             default:

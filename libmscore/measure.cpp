@@ -2575,7 +2575,7 @@ bool Measure::createEndBarLines()
                         // a bar line is there (either existing or newly created):
                         // adjust subtype, if not fitting
                         if (bl->barLineType() != _endBarLineType && !bl->customSubtype()) {
-                              score()->undoChangeProperty(bl, P_SUBTYPE, _endBarLineType);
+                              score()->undoChangeProperty(bl, P_ID::SUBTYPE, _endBarLineType);
                               bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
                               changed = true;
                               }
@@ -3877,23 +3877,23 @@ int Measure::snapNote(int /*tick*/, const QPointF p, int staff) const
 QVariant Measure::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_TIMESIG_NOMINAL:
+            case P_ID::TIMESIG_NOMINAL:
                   return QVariant::fromValue(_timesig);
-            case P_TIMESIG_ACTUAL:
+            case P_ID::TIMESIG_ACTUAL:
                   return QVariant::fromValue(_len);
-            case P_REPEAT_FLAGS:
+            case P_ID::REPEAT_FLAGS:
                   return repeatFlags();
-            case P_MEASURE_NUMBER_MODE:
+            case P_ID::MEASURE_NUMBER_MODE:
                   return int(measureNumberMode());
-            case P_BREAK_MMR:
+            case P_ID::BREAK_MMR:
                   return breakMultiMeasureRest();
-            case P_REPEAT_COUNT:
+            case P_ID::REPEAT_COUNT:
                   return repeatCount();
-            case P_USER_STRETCH:
+            case P_ID::USER_STRETCH:
                   return userStretch();
-            case P_NO_OFFSET:
+            case P_ID::NO_OFFSET:
                   return noOffset();
-            case P_IRREGULAR:
+            case P_ID::IRREGULAR:
                   return irregular();
             default:
                   return MeasureBase::getProperty(propertyId);
@@ -3907,31 +3907,31 @@ QVariant Measure::getProperty(P_ID propertyId) const
 bool Measure::setProperty(P_ID propertyId, const QVariant& value)
       {
       switch(propertyId) {
-            case P_TIMESIG_NOMINAL:
+            case P_ID::TIMESIG_NOMINAL:
                   _timesig = value.value<Fraction>();
                   break;
-            case P_TIMESIG_ACTUAL:
+            case P_ID::TIMESIG_ACTUAL:
                   _len = value.value<Fraction>();
                   break;
-            case P_REPEAT_FLAGS:
+            case P_ID::REPEAT_FLAGS:
                   setRepeatFlags(value.toInt());
                   break;
-            case P_MEASURE_NUMBER_MODE:
+            case P_ID::MEASURE_NUMBER_MODE:
                   setMeasureNumberMode(MeasureNumberMode(value.toInt()));
                   break;
-            case P_BREAK_MMR:
+            case P_ID::BREAK_MMR:
                   setBreakMultiMeasureRest(value.toBool());
                   break;
-            case P_REPEAT_COUNT:
+            case P_ID::REPEAT_COUNT:
                   setRepeatCount(value.toInt());
                   break;
-            case P_USER_STRETCH:
+            case P_ID::USER_STRETCH:
                   setUserStretch(value.toDouble());
                   break;
-            case P_NO_OFFSET:
+            case P_ID::NO_OFFSET:
                   setNoOffset(value.toInt());
                   break;
-            case P_IRREGULAR:
+            case P_ID::IRREGULAR:
                   setIrregular(value.toBool());
                   break;
             default:
@@ -3948,22 +3948,22 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
 QVariant Measure::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_TIMESIG_NOMINAL:
-            case P_TIMESIG_ACTUAL:
+            case P_ID::TIMESIG_NOMINAL:
+            case P_ID::TIMESIG_ACTUAL:
                   return QVariant();
-            case P_REPEAT_FLAGS:
+            case P_ID::REPEAT_FLAGS:
                   return 0;
-            case P_MEASURE_NUMBER_MODE:
+            case P_ID::MEASURE_NUMBER_MODE:
                   return int(MeasureNumberMode::AUTO);
-            case P_BREAK_MMR:
+            case P_ID::BREAK_MMR:
                   return false;
-            case P_REPEAT_COUNT:
+            case P_ID::REPEAT_COUNT:
                   return 2;
-            case P_USER_STRETCH:
+            case P_ID::USER_STRETCH:
                   return 1.0;
-            case P_NO_OFFSET:
+            case P_ID::NO_OFFSET:
                   return 0;
-            case P_IRREGULAR:
+            case P_ID::IRREGULAR:
                   return false;
             default:
                   break;

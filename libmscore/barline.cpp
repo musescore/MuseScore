@@ -540,7 +540,7 @@ Element* BarLine::drop(const DropData& data)
             // system left-side bar line
             if (parent()->type() == ElementType::SYSTEM) {
                   BarLine* b = static_cast<System*>(parent())->barLine();
-                  score()->undoChangeProperty(b, P_SUBTYPE, int(bl->barLineType()));
+                  score()->undoChangeProperty(b, P_ID::SUBTYPE, int(bl->barLineType()));
                   delete e;
                   return 0;
                   }
@@ -568,7 +568,7 @@ Element* BarLine::drop(const DropData& data)
                   // if drop refer to subtype, update this bar line subtype
                   else {
 //                        score()->undoChangeBarLine(m, bl->barLineType());
-                        score()->undoChangeProperty(this, P_SUBTYPE, int(bl->barLineType()));
+                        score()->undoChangeProperty(this, P_ID::SUBTYPE, int(bl->barLineType()));
                         }
                   delete e;
                   return 0;
@@ -1054,13 +1054,13 @@ void BarLine::updateCustomSpan()
 QVariant BarLine::getProperty(P_ID id) const
       {
       switch (id) {
-            case P_SUBTYPE:
+            case P_ID::SUBTYPE:
                   return int(_barLineType);
-            case P_BARLINE_SPAN:
+            case P_ID::BARLINE_SPAN:
                   return span();
-            case P_BARLINE_SPAN_FROM:
+            case P_ID::BARLINE_SPAN_FROM:
                   return spanFrom();
-            case P_BARLINE_SPAN_TO:
+            case P_ID::BARLINE_SPAN_TO:
                   return spanTo();
             default:
                   break;
@@ -1075,17 +1075,17 @@ QVariant BarLine::getProperty(P_ID id) const
 bool BarLine::setProperty(P_ID id, const QVariant& v)
       {
       switch(id) {
-            case P_SUBTYPE:
+            case P_ID::SUBTYPE:
                   _barLineType = BarLineType(v.toInt());
                   _customSubtype = parent() && (static_cast<Segment*>(parent())->measure())->endBarLineType() != _barLineType;
                   break;
-            case P_BARLINE_SPAN:
+            case P_ID::BARLINE_SPAN:
                   setSpan(v.toInt());
                   break;
-            case P_BARLINE_SPAN_FROM:
+            case P_ID::BARLINE_SPAN_FROM:
                   setSpanFrom(v.toInt());
                   break;
-            case P_BARLINE_SPAN_TO:
+            case P_ID::BARLINE_SPAN_TO:
                   setSpanTo(v.toInt());
                   break;
             default:
@@ -1102,24 +1102,24 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
 QVariant BarLine::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SUBTYPE:
+            case P_ID::SUBTYPE:
                   // default subtype is the subtype of the measure, if any
                   if (parent() && parent()->type() == Element::ElementType::SEGMENT && static_cast<Segment*>(parent())->measure() )
                       return static_cast<Segment*>(parent())->measure()->endBarLineType();
                   return NORMAL_BAR;
-            case P_BARLINE_SPAN:
+            case P_ID::BARLINE_SPAN:
                   // if there is a staff, default span is staff span
                   if (staff())
                         return staff()->barLineSpan();
                   // if no staff, default span is 1
                   return 1;
-            case P_BARLINE_SPAN_FROM:
+            case P_ID::BARLINE_SPAN_FROM:
                   // if there is a staff, default From span is staff From span
                   if (staff())
                         return staff()->barLineFrom();
                   // if no staff, default From is from top
                   return 0;
-            case P_BARLINE_SPAN_TO:
+            case P_ID::BARLINE_SPAN_TO:
                   // if there is a staff, default To span is staff To span
                   if (staff())
                         return staff()->barLineTo();

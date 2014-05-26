@@ -596,23 +596,23 @@ void FiguredBassItem::draw(QPainter* painter) const
 QVariant FiguredBassItem::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_FBPREFIX:
+            case P_ID::FBPREFIX:
                   return int(_prefix);
-            case P_FBDIGIT:
+            case P_ID::FBDIGIT:
                   return _digit;
-            case P_FBSUFFIX:
+            case P_ID::FBSUFFIX:
                   return int(_suffix);
-            case P_FBCONTINUATIONLINE:
+            case P_ID::FBCONTINUATIONLINE:
                   return int(_contLine);
-            case P_FBPARENTHESIS1:
+            case P_ID::FBPARENTHESIS1:
                   return int(parenth[0]);
-            case P_FBPARENTHESIS2:
+            case P_ID::FBPARENTHESIS2:
                   return int(parenth[1]);
-            case P_FBPARENTHESIS3:
+            case P_ID::FBPARENTHESIS3:
                   return int(parenth[2]);
-            case P_FBPARENTHESIS4:
+            case P_ID::FBPARENTHESIS4:
                   return int(parenth[3]);
-            case P_FBPARENTHESIS5:
+            case P_ID::FBPARENTHESIS5:
                   return int(parenth[4]);
             default:
                   return Element::getProperty(propertyId);
@@ -624,45 +624,45 @@ bool FiguredBassItem::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       int   val = v.toInt();
       switch(propertyId) {
-            case P_FBPREFIX:
+            case P_ID::FBPREFIX:
                   if(val < int(Modifier::NONE) || val >= int(Modifier::NUMOF))
                         return false;
                   _prefix = (Modifier)val;
                   break;
-            case P_FBDIGIT:
+            case P_ID::FBDIGIT:
                   if(val < 1 || val > 9)
                         return false;
                   _digit = val;
                   break;
-            case P_FBSUFFIX:
+            case P_ID::FBSUFFIX:
                   if(val < int(Modifier::NONE) || val >= int(Modifier::NUMOF))
                         return false;
                   _suffix = (Modifier)val;
                   break;
-            case P_FBCONTINUATIONLINE:
+            case P_ID::FBCONTINUATIONLINE:
                   _contLine = (ContLine)val;
                   break;
-            case P_FBPARENTHESIS1:
+            case P_ID::FBPARENTHESIS1:
                   if(val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF))
                         return false;
                   parenth[0] = (Parenthesis)val;
                   break;
-            case P_FBPARENTHESIS2:
+            case P_ID::FBPARENTHESIS2:
                   if(val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF))
                         return false;
                   parenth[1] = (Parenthesis)val;
                   break;
-            case P_FBPARENTHESIS3:
+            case P_ID::FBPARENTHESIS3:
                   if(val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF))
                         return false;
                   parenth[2] = (Parenthesis)val;
                   break;
-            case P_FBPARENTHESIS4:
+            case P_ID::FBPARENTHESIS4:
                   if(val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF))
                         return false;
                   parenth[3] = (Parenthesis)val;
                   break;
-            case P_FBPARENTHESIS5:
+            case P_ID::FBPARENTHESIS5:
                   if(val < int(Parenthesis::NONE) || val >= int(Parenthesis::NUMOF))
                         return false;
                   parenth[4] = (Parenthesis)val;
@@ -677,12 +677,12 @@ bool FiguredBassItem::setProperty(P_ID propertyId, const QVariant& v)
 QVariant FiguredBassItem::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_FBPREFIX:
-            case P_FBSUFFIX:
+            case P_ID::FBPREFIX:
+            case P_ID::FBSUFFIX:
                   return int(Modifier::NONE);
-            case P_FBDIGIT:
+            case P_ID::FBDIGIT:
                   return FBIDigitNone;
-            case P_FBCONTINUATIONLINE:
+            case P_ID::FBCONTINUATIONLINE:
                   return false;
             default:
                   return Element::propertyDefault(id);
@@ -696,10 +696,10 @@ QVariant FiguredBassItem::propertyDefault(P_ID id) const
 void FiguredBassItem::undoSetPrefix(Modifier pref)
       {
       if(pref <= Modifier::CROSS) {
-            score()->undoChangeProperty(this, P_FBPREFIX, (int)pref);
+            score()->undoChangeProperty(this, P_ID::FBPREFIX, (int)pref);
             // if setting some prefix and there is a suffix already, clear suffix
             if(pref != Modifier::NONE && _suffix != Modifier::NONE)
-                  score()->undoChangeProperty(this, P_FBSUFFIX, int(Modifier::NONE));
+                  score()->undoChangeProperty(this, P_ID::FBSUFFIX, int(Modifier::NONE));
             layout();                     // re-generate displayText
             }
       }
@@ -707,49 +707,49 @@ void FiguredBassItem::undoSetPrefix(Modifier pref)
 void FiguredBassItem::undoSetDigit(int digit)
       {
       if(digit >= 0 && digit <= 9) {
-            score()->undoChangeProperty(this, P_FBDIGIT, digit);
+            score()->undoChangeProperty(this, P_ID::FBDIGIT, digit);
             layout();                     // re-generate displayText
             }
       }
 
 void FiguredBassItem::undoSetSuffix(Modifier suff)
       {
-      score()->undoChangeProperty(this, P_FBSUFFIX, int(suff));
+      score()->undoChangeProperty(this, P_ID::FBSUFFIX, int(suff));
       // if setting some suffix and there is a prefix already, clear prefix
       if(suff != Modifier::NONE && _prefix != Modifier::NONE)
-            score()->undoChangeProperty(this, P_FBPREFIX, int(Modifier::NONE));
+            score()->undoChangeProperty(this, P_ID::FBPREFIX, int(Modifier::NONE));
       layout();                     // re-generate displayText
       }
 
 void FiguredBassItem::undoSetContLine(ContLine val)
       {
-      score()->undoChangeProperty(this, P_FBCONTINUATIONLINE, int(val));
+      score()->undoChangeProperty(this, P_ID::FBCONTINUATIONLINE, int(val));
       layout();                     // re-generate displayText
       }
 
 void FiguredBassItem::undoSetParenth1(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_FBPARENTHESIS1, int(par));
+      score()->undoChangeProperty(this, P_ID::FBPARENTHESIS1, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth2(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_FBPARENTHESIS2, int(par));
+      score()->undoChangeProperty(this, P_ID::FBPARENTHESIS2, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth3(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_FBPARENTHESIS3, int(par));
+      score()->undoChangeProperty(this, P_ID::FBPARENTHESIS3, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth4(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_FBPARENTHESIS4, int(par));
+      score()->undoChangeProperty(this, P_ID::FBPARENTHESIS4, int(par));
       layout();                     // re-generate displayText
       }
 void FiguredBassItem::undoSetParenth5(Parenthesis par)
       {
-      score()->undoChangeProperty(this, P_FBPARENTHESIS5, int(par));
+      score()->undoChangeProperty(this, P_ID::FBPARENTHESIS5, int(par));
       layout();                     // re-generate displayText
       }
 

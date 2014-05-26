@@ -324,7 +324,7 @@ MeasureBase* Score::last()  const
 QVariant MeasureBase::getProperty(P_ID id) const
       {
       switch(id) {
-            case P_BREAK_HINT:
+            case P_ID::BREAK_HINT:
                   return QVariant(_breakHint);
             default:
                   return Element::getProperty(id);
@@ -338,7 +338,7 @@ QVariant MeasureBase::getProperty(P_ID id) const
 bool MeasureBase::setProperty(P_ID id, const QVariant& property)
       {
       switch(id) {
-            case P_BREAK_HINT:
+            case P_ID::BREAK_HINT:
                   setBreakHint(property.toBool());
                   break;
             default:

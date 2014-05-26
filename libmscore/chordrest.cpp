@@ -172,7 +172,7 @@ void ChordRest::writeProperties(Xml& xml) const
                   }
             xml.tag("BeamMode", s);
             }
-      writeProperty(xml, P_SMALL);
+      writeProperty(xml, P_ID::SMALL);
       if (actualDurationType().dots())
             xml.tag("dots", actualDurationType().dots());
       if (_staffMove)
@@ -382,7 +382,7 @@ void ChordRest::setSmall(bool val)
 
 void ChordRest::undoSetSmall(bool val)
       {
-      undoChangeProperty(P_SMALL, val);
+      undoChangeProperty(P_ID::SMALL, val);
       }
 
 //---------------------------------------------------------
@@ -803,22 +803,22 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_SBEAM:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::BEGIN));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN));
                               break;
                         case ICON_MBEAM:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::MID));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::MID));
                               break;
                         case ICON_NBEAM:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::NONE));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::NONE));
                               break;
                         case ICON_BEAM32:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::BEGIN32));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN32));
                               break;
                         case ICON_BEAM64:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::BEGIN64));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN64));
                               break;
                         case ICON_AUTOBEAM:
-                              score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::AUTO));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::AUTO));
                               break;
                         }
                   }
@@ -1004,7 +1004,7 @@ void ChordRest::removeDeleteBeam(bool beamed)
 
 void ChordRest::undoSetBeamMode(BeamMode mode)
       {
-      undoChangeProperty(P_BEAM_MODE, int(mode));
+      undoChangeProperty(P_ID::BEAM_MODE, int(mode));
       }
 
 //---------------------------------------------------------
@@ -1014,8 +1014,8 @@ void ChordRest::undoSetBeamMode(BeamMode mode)
 QVariant ChordRest::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SMALL:     return QVariant(small());
-            case P_BEAM_MODE: return int(beamMode());
+            case P_ID::SMALL:     return QVariant(small());
+            case P_ID::BEAM_MODE: return int(beamMode());
             default:          return DurationElement::getProperty(propertyId);
             }
       }
@@ -1027,8 +1027,8 @@ QVariant ChordRest::getProperty(P_ID propertyId) const
 bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SMALL:     setSmall(v.toBool()); break;
-            case P_BEAM_MODE: setBeamMode(BeamMode(v.toInt())); break;
+            case P_ID::SMALL:     setSmall(v.toBool()); break;
+            case P_ID::BEAM_MODE: setBeamMode(BeamMode(v.toInt())); break;
             default:          return DurationElement::setProperty(propertyId, v);
             }
       score()->setLayoutAll(true);
@@ -1042,8 +1042,8 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
 QVariant ChordRest::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SMALL:     return false;
-            case P_BEAM_MODE: return int(BeamMode::AUTO);
+            case P_ID::SMALL:     return false;
+            case P_ID::BEAM_MODE: return int(BeamMode::AUTO);
             default:          return DurationElement::propertyDefault(propertyId);
             }
       score()->setLayoutAll(true);

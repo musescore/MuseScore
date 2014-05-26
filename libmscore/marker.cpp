@@ -177,7 +177,7 @@ void Marker::write(Xml& xml) const
 
 void Marker::undoSetLabel(const QString& s)
       {
-      score()->undoChangeProperty(this, P_LABEL, s);
+      score()->undoChangeProperty(this, P_ID::LABEL, s);
       }
 
 //---------------------------------------------------------
@@ -186,7 +186,7 @@ void Marker::undoSetLabel(const QString& s)
 
 void Marker::undoSetMarkerType(MarkerType t)
       {
-      score()->undoChangeProperty(this, P_MARKER_TYPE, int(t));
+      score()->undoChangeProperty(this, P_ID::MARKER_TYPE, int(t));
       }
 
 //---------------------------------------------------------
@@ -196,9 +196,9 @@ void Marker::undoSetMarkerType(MarkerType t)
 QVariant Marker::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_LABEL:
+            case P_ID::LABEL:
                   return label();
-            case P_MARKER_TYPE:
+            case P_ID::MARKER_TYPE:
                   return int(markerType());
             default:
                   break;
@@ -213,10 +213,10 @@ QVariant Marker::getProperty(P_ID propertyId) const
 bool Marker::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_LABEL:
+            case P_ID::LABEL:
                   setLabel(v.toString());
                   break;
-            case P_MARKER_TYPE:
+            case P_ID::MARKER_TYPE:
                   setMarkerType(MarkerType(v.toInt()));
                   break;
             default:
@@ -235,10 +235,10 @@ bool Marker::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Marker::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_LABEL:
+            case P_ID::LABEL:
                   return QString();
 
-            case P_MARKER_TYPE:
+            case P_ID::MARKER_TYPE:
                   return int(MarkerType::FINE);
 
             default:

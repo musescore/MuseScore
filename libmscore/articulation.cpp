@@ -221,7 +221,7 @@ void Articulation::read(XmlReader& e)
                   anchorStyle = PropertyStyle::UNSTYLED;
                   }
             else if (tag == "direction") {
-                  setProperty(P_DIRECTION, Ms::getProperty(P_DIRECTION, e));
+                  setProperty(P_ID::DIRECTION, Ms::getProperty(P_ID::DIRECTION, e));
                   }
             else if (tag == "timeStretch")
                   _timeStretch = e.readDouble();
@@ -245,7 +245,7 @@ void Articulation::write(Xml& xml) const
       xml.stag("Articulation");
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
-      writeProperty(xml, P_DIRECTION);
+      writeProperty(xml, P_ID::DIRECTION);
       xml.tag("subtype", subtypeName());
       if (_timeStretch != 1.0)
             xml.tag("timeStretch", _timeStretch);
@@ -430,10 +430,10 @@ void Articulation::setDirection(Direction d)
 void Articulation::reset()
       {
       if (_direction != Direction::AUTO)
-            score()->undoChangeProperty(this, P_DIRECTION, int(Direction::AUTO));
+            score()->undoChangeProperty(this, P_ID::DIRECTION, int(Direction::AUTO));
       ArticulationAnchor a = score()->style()->articulationAnchor(articulationType());
       if (_anchor != a)
-            score()->undoChangeProperty(this, P_ARTICULATION_ANCHOR, int(a));
+            score()->undoChangeProperty(this, P_ID::ARTICULATION_ANCHOR, int(a));
       Element::reset();
       if (chordRest())
             chordRest()->layoutArticulations();
@@ -456,9 +456,9 @@ QLineF Articulation::dragAnchor() const
 QVariant Articulation::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_DIRECTION:           return int(direction());
-            case P_ARTICULATION_ANCHOR: return int(anchor());
-            case P_TIME_STRETCH:        return timeStretch();
+            case P_ID::DIRECTION:           return int(direction());
+            case P_ID::ARTICULATION_ANCHOR: return int(anchor());
+            case P_ID::TIME_STRETCH:        return timeStretch();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -472,14 +472,14 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
       switch (propertyId) {
-            case P_DIRECTION:
+            case P_ID::DIRECTION:
                   setDirection(Direction(v.toInt()));
                   break;
-            case P_ARTICULATION_ANCHOR:
+            case P_ID::ARTICULATION_ANCHOR:
                   anchorStyle = PropertyStyle::UNSTYLED;
                   setAnchor(ArticulationAnchor(v.toInt()));
                   break;
-            case P_TIME_STRETCH:
+            case P_ID::TIME_STRETCH:
                   setTimeStretch(v.toDouble());
                   score()->fixTicks();
                   break;
@@ -506,13 +506,13 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Articulation::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_DIRECTION:
+            case P_ID::DIRECTION:
                   return int(Direction::AUTO);
 
-            case P_ARTICULATION_ANCHOR:
+            case P_ID::ARTICULATION_ANCHOR:
                   return int(score()->style()->articulationAnchor(_articulationType));
 
-            case P_TIME_STRETCH:
+            case P_ID::TIME_STRETCH:
                   return articulationList[articulationType()].timeStretch;
 
             default:
@@ -528,11 +528,11 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
 PropertyStyle Articulation::propertyStyle(P_ID id) const
       {
       switch (id) {
-            case P_DIRECTION:
-            case P_TIME_STRETCH:
+            case P_ID::DIRECTION:
+            case P_ID::TIME_STRETCH:
                   return PropertyStyle::NOSTYLE;
 
-            case P_ARTICULATION_ANCHOR:
+            case P_ID::ARTICULATION_ANCHOR:
                   return anchorStyle;
 
             default:
@@ -548,11 +548,11 @@ PropertyStyle Articulation::propertyStyle(P_ID id) const
 void Articulation::resetProperty(P_ID id)
       {
       switch (id) {
-            case P_DIRECTION:
-            case P_TIME_STRETCH:
+            case P_ID::DIRECTION:
+            case P_ID::TIME_STRETCH:
                   return;
 
-            case P_ARTICULATION_ANCHOR:
+            case P_ID::ARTICULATION_ANCHOR:
                   setProperty(id, propertyDefault(id));
                   anchorStyle = PropertyStyle::STYLED;
                   return;

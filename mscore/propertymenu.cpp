@@ -458,10 +458,10 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   }
             }
       else if (cmd == "smallNote")
-            score()->undoChangeProperty(e, P_SMALL, !static_cast<Note*>(e)->small());
+            score()->undoChangeProperty(e, P_ID::SMALL, !static_cast<Note*>(e)->small());
       else if (cmd == "clef-courtesy") {
             bool show = !static_cast<Clef*>(e)->showCourtesy();
-            score()->undoChangeProperty(e, P_SHOW_COURTESY, show);
+            score()->undoChangeProperty(e, P_ID::SHOW_COURTESY, show);
             }
       else if (cmd == "st-props") {
             StaffTextProperties rp(static_cast<StaffText*>(e));
@@ -483,12 +483,12 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   qDebug("text-props %d %d", int(ot->textStyleType()), int(nText->textStyleType()));
                   if (ot->textStyleType() != nText->textStyleType()) {
                         nText->restyle(ot->textStyleType());
-                        ot->undoChangeProperty(P_TEXT_STYLE_TYPE, nText->textStyleType());
+                        ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, nText->textStyleType());
                         }
                   if (ot->textStyle() != nText->textStyle())
-                        ot->undoChangeProperty(P_TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
+                        ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
                   if (ot->text() != nText->text())
-                        ot->undoChangeProperty(P_TEXT, nText->text());
+                        ot->undoChangeProperty(P_ID::TEXT, nText->text());
                   }
             delete nText;
             }

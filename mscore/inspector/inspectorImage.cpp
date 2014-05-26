@@ -35,17 +35,17 @@ InspectorImage::InspectorImage(QWidget* parent)
       b.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,         0, 0, e.color,       e.resetColor       },
-            { P_VISIBLE,       0, 0, e.visible,     e.resetVisible     },
-            { P_USER_OFF,      0, 0, e.offsetX,     e.resetX           },
-            { P_USER_OFF,      1, 0, e.offsetY,     e.resetY           },
-            { P_AUTOSCALE,         0, false, b.autoscale,       b.resetAutoscale       },
-            { P_SIZE,              0, false, b.sizeWidth,       0                      },
-            { P_SIZE,              1, false, b.sizeHeight,      0                      },
-            { P_SCALE,             0, false, b.scaleWidth,      0                      },
-            { P_SCALE,             1, false, b.scaleHeight,     0                      },
-            { P_LOCK_ASPECT_RATIO, 0, false, b.lockAspectRatio, b.resetLockAspectRatio },
-            { P_SIZE_IS_SPATIUM,   0, false, b.sizeIsSpatium,   b.resetSizeIsSpatium   }
+            { P_ID::COLOR,         0, 0, e.color,       e.resetColor       },
+            { P_ID::VISIBLE,       0, 0, e.visible,     e.resetVisible     },
+            { P_ID::USER_OFF,      0, 0, e.offsetX,     e.resetX           },
+            { P_ID::USER_OFF,      1, 0, e.offsetY,     e.resetY           },
+            { P_ID::AUTOSCALE,         0, false, b.autoscale,       b.resetAutoscale       },
+            { P_ID::SIZE,              0, false, b.sizeWidth,       0                      },
+            { P_ID::SIZE,              1, false, b.sizeHeight,      0                      },
+            { P_ID::SCALE,             0, false, b.scaleWidth,      0                      },
+            { P_ID::SCALE,             1, false, b.scaleHeight,     0                      },
+            { P_ID::LOCK_ASPECT_RATIO, 0, false, b.lockAspectRatio, b.resetLockAspectRatio },
+            { P_ID::SIZE_IS_SPATIUM,   0, false, b.sizeIsSpatium,   b.resetSizeIsSpatium   }
             };
 
       mapSignals();
@@ -113,7 +113,7 @@ void InspectorImage::valueChanged(int idx)
             }
       if (idx == SIZE_W) {
             if (b.lockAspectRatio->isChecked()) {
-                  QSizeF sz = image->getProperty(P_SIZE).toSizeF();
+                  QSizeF sz = image->getProperty(P_ID::SIZE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
                   qreal h     = b1->value() / ratio;
                   b2->blockSignals(true);
@@ -125,7 +125,7 @@ void InspectorImage::valueChanged(int idx)
             }
       else if (idx == SIZE_H) {
             if (b.lockAspectRatio->isChecked()) {
-                  QSizeF sz   = image->getProperty(P_SIZE).toSizeF();
+                  QSizeF sz   = image->getProperty(P_ID::SIZE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
                   qreal w     = b2->value() * ratio;
                   b1->blockSignals(true);
@@ -143,7 +143,7 @@ void InspectorImage::valueChanged(int idx)
                   b4->setValue(b3->value());
                   b4->blockSignals(false);*/
 /* LOCK_RATIO keeps current ratio: */
-                  QSizeF sz   = inspector->element()->getProperty(P_SCALE).toSizeF();
+                  QSizeF sz   = inspector->element()->getProperty(P_ID::SCALE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
                   qreal w     = b3->value() / ratio;
                   b4->blockSignals(true);
@@ -161,7 +161,7 @@ void InspectorImage::valueChanged(int idx)
                   b3->setValue(b4->value());
                   b3->blockSignals(false);*/
 /* LOCK_RATIO keeps current ratio: */
-                  QSizeF sz   = inspector->element()->getProperty(P_SCALE).toSizeF();
+                  QSizeF sz   = inspector->element()->getProperty(P_ID::SCALE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
                   qreal w     = b4->value() * ratio;
                   b3->blockSignals(true);
