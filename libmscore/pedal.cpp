@@ -27,7 +27,7 @@ void PedalSegment::layout()
       {
       TextLineSegment::layout1();
       if (parent())     // for palette
-            rypos() += score()->styleS(ST_pedalY).val() * spatium();
+            rypos() += score()->styleS(StyleIdx::pedalY).val() * spatium();
       adjustReadPos();
       }
 
@@ -115,9 +115,9 @@ Pedal::Pedal(Score* s)
       setBeginHookHeight(Spatium(-1.2));
       setEndHookHeight(Spatium(-1.2));
 
-      setLineWidth(score()->styleS(ST_pedalLineWidth));
+      setLineWidth(score()->styleS(StyleIdx::pedalLineWidth));
       lineWidthStyle = PropertyStyle::STYLED;
-      setLineStyle(Qt::PenStyle(score()->styleI(ST_pedalLineStyle)));
+      setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::pedalLineStyle)));
       lineStyleStyle = PropertyStyle::STYLED;
       }
 
@@ -164,7 +164,7 @@ LineSegment* Pedal::createLineSegment()
 
 void Pedal::setYoff(qreal val)
       {
-      rUserYoffset() += (val - score()->styleS(ST_pedalY).val()) * spatium();
+      rUserYoffset() += (val - score()->styleS(StyleIdx::pedalY).val()) * spatium();
       }
 
 //---------------------------------------------------------
@@ -201,10 +201,10 @@ QVariant Pedal::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_LINE_WIDTH:
-                  return score()->styleS(ST_pedalLineWidth).val();
+                  return score()->styleS(StyleIdx::pedalLineWidth).val();
 
             case P_LINE_STYLE:
-                  return int(score()->styleI(ST_pedalLineStyle));
+                  return int(score()->styleI(StyleIdx::pedalLineStyle));
 
             default:
                   return TextLine::propertyDefault(propertyId);
@@ -237,12 +237,12 @@ void Pedal::resetProperty(P_ID id)
       {
       switch (id) {
             case P_LINE_WIDTH:
-                  setLineWidth(score()->styleS(ST_pedalLineWidth));
+                  setLineWidth(score()->styleS(StyleIdx::pedalLineWidth));
                   lineWidthStyle = PropertyStyle::STYLED;
                   break;
 
             case P_LINE_STYLE:
-                  setLineStyle(Qt::PenStyle(score()->styleI(ST_pedalLineStyle)));
+                  setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::pedalLineStyle)));
                   lineStyleStyle = PropertyStyle::STYLED;
                   break;
 
@@ -259,9 +259,9 @@ void Pedal::resetProperty(P_ID id)
 void Pedal::styleChanged()
       {
       if (lineWidthStyle == PropertyStyle::STYLED)
-            setLineWidth(score()->styleS(ST_pedalLineWidth));
+            setLineWidth(score()->styleS(StyleIdx::pedalLineWidth));
       if (lineStyleStyle == PropertyStyle::STYLED)
-            setLineStyle(Qt::PenStyle(score()->styleI(ST_pedalLineStyle)));
+            setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::pedalLineStyle)));
       }
 
 }

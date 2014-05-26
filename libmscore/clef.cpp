@@ -110,7 +110,7 @@ qreal Clef::mag() const
       {
       qreal mag = staff() ? staff()->mag() : 1.0;
       if (_small)
-            mag *= score()->style(ST_smallClefMag).toDouble();
+            mag *= score()->style(StyleIdx::smallClefMag).toDouble();
       return mag;
       }
 
@@ -164,7 +164,7 @@ void Clef::layout()
                   // if current clef type not compatible with tablature,
                   // set tab clef according to score style
                   if (ClefInfo::staffGroup(clefType()) != TAB_STAFF_GROUP)
-                        setClefType( ClefType(score()->styleI(ST_tabClef)) );
+                        setClefType( ClefType(score()->styleI(StyleIdx::tabClef)) );
                   }
 
             //
@@ -191,7 +191,7 @@ void Clef::layout()
                         // show this clef if: it is not a courtesy clef (no next clef or not at the end of the measure)
                         showClef = !clefNext || (clefSeg->tick() != meas->tick() + meas->ticks())
                               // if courtesy clef: show if score has courtesy clefs on
-                              || ( score()->styleB(ST_genCourtesyClef)
+                              || ( score()->styleB(StyleIdx::genCourtesyClef)
                               // AND measure is not at the end of a repeat or of a section
                               && !( (meas->repeatFlags() & Repeat::END) || meas->sectionBreak() )
                               // AND this clef has courtesy clef turned on

@@ -195,7 +195,7 @@ Measure* MeasureBase::nextMeasureMM() const
             m = m->_next;
             }
       Measure* mm = static_cast<Measure*>(m);
-      if (mm && score()->styleB(ST_createMultiMeasureRests) && mm->hasMMRest())
+      if (mm && score()->styleB(StyleIdx::createMultiMeasureRests) && mm->hasMMRest())
             return mm->mmRest();
       return mm;
       }
@@ -225,7 +225,7 @@ Measure* MeasureBase::prevMeasureMM() const
       while (m) {
             if (m->type() == ElementType::MEASURE) {
                   Measure* mm = static_cast<Measure*>(m);
-                  if (score()->styleB(ST_createMultiMeasureRests)) {
+                  if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
                         if (mm->mmRestCount() >= 0) {
                               if (mm->hasMMRest())
                                     return mm->mmRest();
@@ -381,7 +381,7 @@ MeasureBase* MeasureBase::nextMM() const
       {
       if (_next
          && _next->type() == ElementType::MEASURE
-         && score()->styleB(ST_createMultiMeasureRests)
+         && score()->styleB(StyleIdx::createMultiMeasureRests)
          && static_cast<Measure*>(_next)->hasMMRest()) {
             return static_cast<Measure*>(_next)->mmRest();
             }

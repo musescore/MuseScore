@@ -469,7 +469,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
                   else {
-                        if (styleB(ST_concertPitch)) {
+                        if (styleB(StyleIdx::concertPitch)) {
                               v.flip();
                               ntpc1 = ntpc;
                               ntpc2 = Ms::transposeTpc(ntpc, v, false);
@@ -528,7 +528,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       chord->setDurationType(d);
       chord->setDuration(d.fraction());
       chord->setNoteType(type);
-      chord->setMag(ch->staff()->mag() * styleD(ST_graceNoteMag));
+      chord->setMag(ch->staff()->mag() * styleD(StyleIdx::graceNoteMag));
 
       undoAddElement(chord);
       select(note, SELECT_SINGLE, 0);
@@ -1375,7 +1375,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             }
       int tpc1;
       int tpc2 = n->transposeTpc(tpc);
-      if (score->styleB(ST_concertPitch))
+      if (score->styleB(StyleIdx::concertPitch))
             tpc1 = tpc;
       else {
             tpc1 = tpc2;
@@ -2300,7 +2300,7 @@ void Score::cmd(const QAction* a)
       else if (cmd == "select-section")
             cmdSelectSection();
       else if (cmd == "concert-pitch") {
-            if (styleB(ST_concertPitch) != a->isChecked())
+            if (styleB(StyleIdx::concertPitch) != a->isChecked())
                   cmdConcertPitchChanged(a->isChecked(), true);
             }
       else if (cmd == "reset-beammode")
@@ -2361,8 +2361,8 @@ void Score::cmd(const QAction* a)
       else if (cmd == "transpose-down")
             transposeSemitone(-1);
       else if (cmd == "toggle-mmrest") {
-            bool val = !styleB(ST_createMultiMeasureRests);
-            undo(new ChangeStyleVal(this, ST_createMultiMeasureRests, val));
+            bool val = !styleB(StyleIdx::createMultiMeasureRests);
+            undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
             }
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));

@@ -390,10 +390,10 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         }
                   qreal dotWidth = segment->symWidth(SymId::augmentationDot);
                   // first dot
-                  dotAdjust = point(styleS(ST_dotNoteDistance)) + dotWidth;
+                  dotAdjust = point(styleS(StyleIdx::dotNoteDistance)) + dotWidth;
                   // additional dots
                   if (dots > 1)
-                        dotAdjust += point(styleS(ST_dotDotDistance)) * (dots - 1);
+                        dotAdjust += point(styleS(StyleIdx::dotDotDistance)) * (dots - 1);
                   dotAdjust *= mag;
                   }
             if (separation == 1)
@@ -751,7 +751,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   overlapMirror = stemWidth;
                   }
             else if (chord->durationType().headType() == NoteHeadType::HEAD_WHOLE)
-                  overlapMirror = styleD(ST_stemWidth) * chord->mag() * sp;
+                  overlapMirror = styleD(StyleIdx::stemWidth) * chord->mag() * sp;
             else
                   overlapMirror = 0.0;
 
@@ -855,8 +855,8 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             return;
 
       QList<int> umi;
-      qreal pd  = point(styleS(ST_accidentalDistance));
-      qreal pnd = point(styleS(ST_accidentalNoteDistance));
+      qreal pd  = point(styleS(StyleIdx::accidentalDistance));
+      qreal pnd = point(styleS(StyleIdx::accidentalNoteDistance));
       qreal colOffset = 0.0;
 
       if (nAcc >= 2 && aclist[nAcc-1].line - aclist[0].line >= 7) {
@@ -1106,7 +1106,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
 void Score::layoutStage2()
       {
       int tracks = nstaves() * VOICES;
-      bool crossMeasure = styleB(ST_crossMeasureValues);
+      bool crossMeasure = styleB(StyleIdx::crossMeasureValues);
 
       for (int track = 0; track < tracks; ++track) {
             if (!staff(track2staff(track))->show())
@@ -1244,7 +1244,7 @@ void Score::layoutStage3()
 
 void Score::doLayout()
       {
-      _scoreFont = ScoreFont::fontFactory(_style.value(ST_MusicalSymbolFont).toString());
+      _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / (MScore::DPI * SPATIUM20));
 
       if (layoutFlags & LAYOUT_FIX_TICKS)
@@ -1314,7 +1314,7 @@ void Score::doLayout()
 
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
             m->layoutStage1();
-      if (styleB(ST_createMultiMeasureRests))
+      if (styleB(StyleIdx::createMultiMeasureRests))
             createMMRests();
 
       layoutStage2();   // beam notes, finally decide if chord is up/down
@@ -1502,7 +1502,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   }
             bool needKeysig = /* !staff->isTabStaff()       // keep key sigs in TABs: TABs themselves should hide them
                && */ keyIdx.isValid()
-               && (isFirstSystem || styleB(ST_genKeysig));
+               && (isFirstSystem || styleB(StyleIdx::genKeysig));
 
             if (needKeysig && !keysig) {
                   //
@@ -1527,7 +1527,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             else if (keysig && keysig->keySigEvent() != keyIdx)
                   undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy() /*, keysig->showNaturals()*/));
 
-            bool needClef = isFirstSystem || styleB(ST_genClef);
+            bool needClef = isFirstSystem || styleB(StyleIdx::genClef);
             if (needClef) {
                   if (!clef) {
                         //
@@ -1671,7 +1671,7 @@ void Score::createMMRests()
                         break;
                   }
 
-            if (n >= styleI(ST_minEmptyMeasures)) {
+            if (n >= styleI(StyleIdx::minEmptyMeasures)) {
                   //
                   // create a multi measure rest from m to lm (inclusive)
                   // attach the measure to m
@@ -1870,7 +1870,7 @@ qreal Score::cautionaryWidth(Measure* m)
 
       Segment* ns       = nm->findSegment(Segment::SegTimeSig, tick);
       TimeSig* ts       = 0;
-      bool showCourtesy = styleB(ST_genCourtesyTimesig) && ns;
+      bool showCourtesy = styleB(StyleIdx::genCourtesyTimesig) && ns;
       if (showCourtesy) {
             ts = static_cast<TimeSig*>(ns->element(0));
             if (ts && !ts->showCourtesySig())
@@ -1892,7 +1892,7 @@ qreal Score::cautionaryWidth(Measure* m)
             ns               = nm->findSegment(Segment::SegKeySig, tick);
             KeySig* ks       = 0;
 
-            showCourtesy = styleB(ST_genCourtesyKeysig) && ns;
+            showCourtesy = styleB(StyleIdx::genCourtesyKeysig) && ns;
             if (showCourtesy) {
                   ks = static_cast<KeySig*>(ns->element(track));
                   if (ks && !ks->showCourtesy())
@@ -1931,7 +1931,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       system->setInstrumentNames(longName);
       system->layout(xo);
 
-      qreal minMeasureWidth = point(styleS(ST_minMeasureWidth));
+      qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
       minWidth              = system->leftMargin();
       qreal systemWidth     = w;
       bool continueFlag     = false;
@@ -1939,7 +1939,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       Measure* firstMeasure = 0;
       Measure* lastMeasure  = 0;
 
-      qreal measureSpacing = styleD(ST_measureSpacing);
+      qreal measureSpacing = styleD(StyleIdx::measureSpacing);
 
       for (; curMeasure;) {
             MeasureBase* nextMeasure;
@@ -2027,7 +2027,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   nt = curMeasure->nextMM() ? curMeasure->nextMM()->type() : Element::ElementType::INVALID;
             else
                   nt = curMeasure->nextMeasureMM() ? curMeasure->nextMeasureMM()->type() : Element::ElementType::INVALID;
-            int n = styleI(ST_FixMeasureNumbers);
+            int n = styleI(StyleIdx::FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
                   case LayoutPage:
@@ -2085,9 +2085,9 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       foreach (Staff* staff, _staves) {
             SysStaff* s  = system->staff(staffIdx);
             bool oldShow = s->show();
-            if (styleB(ST_hideEmptyStaves)
+            if (styleB(StyleIdx::hideEmptyStaves)
                && (staves > 1)
-               && !(isFirstSystem && styleB(ST_dontHideStavesInFirstSystem))
+               && !(isFirstSystem && styleB(StyleIdx::dontHideStavesInFirstSystem))
                ) {
                   bool hideStaff = true;
                   foreach(MeasureBase* m, system->measures()) {
@@ -2164,7 +2164,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
       system->setInstrumentNames(longName);
       system->layout(xo);
 
-      qreal minMeasureWidth = point(styleS(ST_minMeasureWidth));
+      qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
       minWidth              = system->leftMargin();
       bool continueFlag     = false;
       bool isFirstMeasure   = true;
@@ -2206,7 +2206,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                   else
                         ww = m->minWidth1();
 
-                  ww *= m->userStretch() * styleD(ST_measureSpacing);
+                  ww *= m->userStretch() * styleD(StyleIdx::measureSpacing);
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
                   isFirstMeasure = false;
@@ -2216,7 +2216,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
 
             system->measures().append(curMeasure);
             Element::ElementType nt = curMeasure->next() ? curMeasure->next()->type() : Element::ElementType::INVALID;
-            int n = styleI(ST_FixMeasureNumbers);
+            int n = styleI(StyleIdx::FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
                   case LayoutPage:
@@ -2538,7 +2538,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
       //
       // dont stretch last system row, if minWidth is <= lastSystemFillLimit
       //
-      if (curMeasure == 0 && ((minWidth / rowWidth) <= styleD(ST_lastSystemFillLimit)))
+      if (curMeasure == 0 && ((minWidth / rowWidth) <= styleD(StyleIdx::lastSystemFillLimit)))
             raggedRight = true;
 
       //-------------------------------------------------------
@@ -2569,7 +2569,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   // check if it has cout. sig. turned off
                   TimeSig* ts;
                   Segment* tss         = nm->findSegment(Segment::SegTimeSig, tick);
-                  bool showCourtesySig = tss && styleB(ST_genCourtesyTimesig);
+                  bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig);
                   if (showCourtesySig) {
                         ts = static_cast<TimeSig*>(tss->element(0));
                         if (ts && !ts->showCourtesySig())
@@ -2612,7 +2612,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
                         KeySigEvent key1 = staff->key(tick - 1);
                         KeySigEvent key2 = staff->key(tick);
-                        if (styleB(ST_genCourtesyKeysig) && (key1 != key2)) {
+                        if (styleB(StyleIdx::genCourtesyKeysig) && (key1 != key2)) {
                               // locate a key sig. in next measure and, if found,
                               // check if it has court. sig turned off
                               s = nm->findSegment(Segment::SegKeySig, tick);
@@ -2760,7 +2760,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         mb->setPos(pos);
                         Measure* m    = static_cast<Measure*>(mb);
-                        if (styleB(ST_FixMeasureWidth)) {
+                        if (styleB(StyleIdx::FixMeasureWidth)) {
                               ww = rowWidth / system->measures().size();
                               }
                         else {
@@ -2889,7 +2889,7 @@ void Score::layoutLinear()
                   curMeasure = curMeasure->next();
                   continue;
                   }
-            if (styleB(ST_createMultiMeasureRests) && t == Element::ElementType::MEASURE) {
+            if (styleB(StyleIdx::createMultiMeasureRests) && t == Element::ElementType::MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
                   if (m->hasMMRest())
                         mb = m->mmRest();
@@ -2922,7 +2922,7 @@ void Score::layoutLinear()
                   else if (nm && (nm->repeatFlags() & Repeat::START))
                         m->setEndBarLineType(START_REPEAT, m->endBarLineGenerated());
                   m->createEndBarLines();
-                  w = m->minWidth1() * styleD(ST_linearStretch);
+                  w = m->minWidth1() * styleD(StyleIdx::linearStretch);
                   m->layout(w);
                   }
             else {
@@ -3023,7 +3023,7 @@ struct PageContext {
 
       PageContext(Score* s) : score(s) {
             _spatium = score->spatium();
-            slb      = score->styleS(ST_staffLowerBorder).val() * _spatium;
+            slb      = score->styleS(StyleIdx::staffLowerBorder).val() * _spatium;
             }
       void newPage() {
             page       = score->getEmptyPage();
@@ -3049,11 +3049,11 @@ struct PageContext {
 void Score::layoutPages()
       {
       const qreal _spatium            = spatium();
-      const qreal slb                 = styleS(ST_staffLowerBorder).val()    * _spatium;
-      const qreal sub                 = styleS(ST_staffUpperBorder).val()    * _spatium;
-      const qreal systemDist          = styleS(ST_minSystemDistance).val()   * _spatium;
-      const qreal systemFrameDistance = styleS(ST_systemFrameDistance).val() * _spatium;
-      const qreal frameSystemDistance = styleS(ST_frameSystemDistance).val() * _spatium;
+      const qreal slb                 = styleS(StyleIdx::staffLowerBorder).val()    * _spatium;
+      const qreal sub                 = styleS(StyleIdx::staffUpperBorder).val()    * _spatium;
+      const qreal systemDist          = styleS(StyleIdx::minSystemDistance).val()   * _spatium;
+      const qreal systemFrameDistance = styleS(StyleIdx::systemFrameDistance).val() * _spatium;
+      const qreal frameSystemDistance = styleS(StyleIdx::frameSystemDistance).val() * _spatium;
 
       curPage = 0;
 
@@ -3191,7 +3191,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
             return;
             }
 
-      const qreal maxStretch = styleP(ST_maxSystemDistance) - styleP(ST_minSystemDistance);
+      const qreal maxStretch = styleP(StyleIdx::maxSystemDistance) - styleP(StyleIdx::minSystemDistance);
 
       QList<System*> slist;
       int n = page->systems()->size();
@@ -3383,10 +3383,10 @@ qreal Score::computeMinWidth(Segment* fs)
             return 1.0;
 
       qreal _spatium           = spatium();
-      qreal clefKeyRightMargin = styleS(ST_clefKeyRightMargin).val() * _spatium;
-      qreal minNoteDistance    = styleS(ST_minNoteDistance).val()    * _spatium;
-      qreal minHarmonyDistance = styleS(ST_minHarmonyDistance).val() * _spatium;
-      qreal maxHarmonyBarDistance = styleS(ST_maxHarmonyBarDistance).val() * _spatium;
+      qreal clefKeyRightMargin = styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
+      qreal minNoteDistance    = styleS(StyleIdx::minNoteDistance).val()    * _spatium;
+      qreal minHarmonyDistance = styleS(StyleIdx::minHarmonyDistance).val() * _spatium;
+      qreal maxHarmonyBarDistance = styleS(StyleIdx::maxHarmonyBarDistance).val() * _spatium;
 
       qreal rest[_nstaves];    // fixed space needed from previous segment
       memset(rest, 0, _nstaves * sizeof(qreal));
@@ -3473,14 +3473,14 @@ qreal Score::computeMinWidth(Segment* fs)
                                                 }
                                           }
                                     qreal sp;
-                                    qreal bnd = styleS(ST_barNoteDistance).val() * _spatium;
+                                    qreal bnd = styleS(StyleIdx::barNoteDistance).val() * _spatium;
                                     if (accidental) {
-                                          qreal bad = styleS(ST_barAccidentalDistance).val() * _spatium;
+                                          qreal bad = styleS(StyleIdx::barAccidentalDistance).val() * _spatium;
                                           qreal diff = qMax(noteX - accidentalX, 0.0);
                                           sp = qMax(bad, bnd - diff);
                                           }
                                     else if (grace)
-                                          sp = styleS(ST_barAccidentalDistance).val() * _spatium;
+                                          sp = styleS(StyleIdx::barAccidentalDistance).val() * _spatium;
                                     else
                                           sp = bnd;
                                     if (pt & Segment::SegTimeSig)
@@ -3542,14 +3542,14 @@ qreal Score::computeMinWidth(Segment* fs)
                         // current segment (s) is not a ChordRest
                         Element* e = s->element(track);
                         if ((segType == Segment::SegClef) && (pt != Segment::SegChordRest))
-                              minDistance = styleP(ST_clefLeftMargin);
+                              minDistance = styleP(StyleIdx::clefLeftMargin);
                         else if (segType == Segment::SegStartRepeatBarLine)
                               minDistance = .5 * _spatium;
                         else if ((segType == Segment::SegEndBarLine) && segmentIdx) {
                               if (pt == Segment::SegClef)
-                                    minDistance = styleP(ST_clefBarlineDistance);
+                                    minDistance = styleP(StyleIdx::clefBarlineDistance);
                               else
-                                    stretchDistance = styleP(ST_noteBarDistance);
+                                    stretchDistance = styleP(StyleIdx::noteBarDistance);
                               if (e == 0) {
                                     // look for barline
                                     for (int i = track - VOICES; i >= 0; i -= VOICES) {

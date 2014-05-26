@@ -115,7 +115,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
       painter.fillRect(background, Qt::white);
 
       QPen pen(Qt::black);
-      pen.setWidthF(MScore::defaultStyle()->value(ST_staffLineWidth).toDouble() * spatium);
+      pen.setWidthF(MScore::defaultStyle()->value(StyleIdx::staffLineWidth).toDouble() * spatium);
       painter.setPen(pen);
 
       for (int i = 0; i < 5; ++i) {

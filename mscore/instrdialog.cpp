@@ -432,7 +432,7 @@ void InstrumentsDialog::genPartList()
                   sli->setPartIdx(s->rstaff());
                   sli->staffIdx = s->idx();
                   if (s->isTabStaff()) {
-                        ClefType ct(ClefType(cs->styleI(ST_tabClef)));
+                        ClefType ct(ClefType(cs->styleI(StyleIdx::tabClef)));
                         sli->setClef(ClefTypeList(ct, ct));
                         }
                   else
@@ -882,7 +882,7 @@ void MuseScore::editInstrList()
                   }
             }
       //normalize the keyevent to concert pitch if necessary
-      if (firstStaff && !rootScore->styleB(ST_concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
+      if (firstStaff && !rootScore->styleB(StyleIdx::concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
             int interval = firstStaff->part()->instr()->transpose().chromatic;
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
                   int tick = i->first;

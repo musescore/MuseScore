@@ -91,10 +91,10 @@ void HairpinSegment::layout()
 
 
       QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
-      qreal w = point(score()->styleS(ST_hairpinLineWidth));
+      qreal w = point(score()->styleS(StyleIdx::hairpinLineWidth));
       setbbox(r.adjusted(-w*.5, -w*.5, w, w));
       if (parent())
-            rypos() += score()->styleS(ST_hairpinY).val() * _spatium;
+            rypos() += score()->styleS(StyleIdx::hairpinY).val() * _spatium;
       adjustReadPos();
       }
 
@@ -291,11 +291,11 @@ Hairpin::Hairpin(Score* s)
       _hairpinCircledTip = false;
       _veloChange  = 10;
       _dynRange    = DynamicRange::PART;
-      setLineWidth(score()->styleS(ST_hairpinLineWidth));
+      setLineWidth(score()->styleS(StyleIdx::hairpinLineWidth));
       lineWidthStyle         = PropertyStyle::STYLED;
-      _hairpinHeight         = score()->styleS(ST_hairpinHeight);
+      _hairpinHeight         = score()->styleS(StyleIdx::hairpinHeight);
       hairpinHeightStyle     = PropertyStyle::STYLED;
-      _hairpinContHeight     = score()->styleS(ST_hairpinContHeight);
+      _hairpinContHeight     = score()->styleS(StyleIdx::hairpinContHeight);
       hairpinContHeightStyle = PropertyStyle::STYLED;
       }
 
@@ -475,9 +475,9 @@ QVariant Hairpin::propertyDefault(P_ID id) const
             case P_HAIRPIN_TYPE:        return int(HairpinType::CRESCENDO);
             case P_VELO_CHANGE:         return 10;
             case P_DYNAMIC_RANGE:       return int(DynamicRange::PART);
-            case P_LINE_WIDTH:          return score()->styleS(ST_hairpinLineWidth).val();
-            case P_HAIRPIN_HEIGHT:      return score()->styleS(ST_hairpinHeight).val();
-            case P_HAIRPIN_CONT_HEIGHT: return score()->styleS(ST_hairpinContHeight).val();
+            case P_LINE_WIDTH:          return score()->styleS(StyleIdx::hairpinLineWidth).val();
+            case P_HAIRPIN_HEIGHT:      return score()->styleS(StyleIdx::hairpinHeight).val();
+            case P_HAIRPIN_CONT_HEIGHT: return score()->styleS(StyleIdx::hairpinContHeight).val();
 
             default:
                   return SLine::propertyDefault(id);
@@ -507,17 +507,17 @@ void Hairpin::resetProperty(P_ID id)
       {
       switch (id) {
             case P_LINE_WIDTH:
-                  setLineWidth(score()->styleS(ST_hairpinLineWidth));
+                  setLineWidth(score()->styleS(StyleIdx::hairpinLineWidth));
                   lineWidthStyle = PropertyStyle::STYLED;
                   break;
 
             case P_HAIRPIN_HEIGHT:
-                  setHairpinHeight(score()->styleS(ST_hairpinHeight));
+                  setHairpinHeight(score()->styleS(StyleIdx::hairpinHeight));
                   hairpinHeightStyle = PropertyStyle::STYLED;
                   break;
 
             case P_HAIRPIN_CONT_HEIGHT:
-                  setHairpinContHeight(score()->styleS(ST_hairpinContHeight));
+                  setHairpinContHeight(score()->styleS(StyleIdx::hairpinContHeight));
                   hairpinContHeightStyle = PropertyStyle::STYLED;
                   break;
 
@@ -534,7 +534,7 @@ void Hairpin::resetProperty(P_ID id)
 
 void Hairpin::setYoff(qreal val)
       {
-      rUserYoffset() += (val - score()->styleS(ST_hairpinY).val()) * spatium();
+      rUserYoffset() += (val - score()->styleS(StyleIdx::hairpinY).val()) * spatium();
       }
 
 //---------------------------------------------------------
@@ -545,11 +545,11 @@ void Hairpin::setYoff(qreal val)
 void Hairpin::styleChanged()
       {
       if (lineWidthStyle == PropertyStyle::STYLED)
-            setLineWidth(score()->styleS(ST_hairpinLineWidth));
+            setLineWidth(score()->styleS(StyleIdx::hairpinLineWidth));
       if (hairpinHeightStyle == PropertyStyle::STYLED)
-            setHairpinHeight(score()->styleS(ST_hairpinHeight));
+            setHairpinHeight(score()->styleS(StyleIdx::hairpinHeight));
       if (hairpinContHeightStyle == PropertyStyle::STYLED)
-            setHairpinContHeight(score()->styleS(ST_hairpinContHeight));
+            setHairpinContHeight(score()->styleS(StyleIdx::hairpinContHeight));
       }
 
 //---------------------------------------------------------

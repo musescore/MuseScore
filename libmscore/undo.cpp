@@ -434,7 +434,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
             int diff = -staff->part()->instr()->transpose().chromatic;
-            if (diff && !score->styleB(ST_concertPitch))
+            if (diff && !score->styleB(StyleIdx::concertPitch))
                   st.setAccidentalType(transposeKey(st.accidentalType(), diff));
 
             if (ks)
@@ -1465,8 +1465,8 @@ ChangeConcertPitch::ChangeConcertPitch(Score* s, bool v)
 
 void ChangeConcertPitch::flip()
       {
-      int oval = int(score->styleB(ST_concertPitch));
-      score->style()->set(ST_concertPitch, val);
+      int oval = int(score->styleB(StyleIdx::concertPitch));
+      score->style()->set(StyleIdx::concertPitch, val);
       score->setLayoutAll(true);
       val = oval;
       }
@@ -2504,10 +2504,10 @@ void ChangeStyle::flip()
       {
       MStyle tmp = *score->style();
 
-      if (score->style(ST_concertPitch) != style.value(ST_concertPitch))
-            score->cmdConcertPitchChanged(style.value(ST_concertPitch).toBool(), true);
-      if (score->style(ST_MusicalSymbolFont) != style.value(ST_MusicalSymbolFont)) {
-            score->setScoreFont(ScoreFont::fontFactory(style.value(ST_MusicalSymbolFont).toString()));
+      if (score->style(StyleIdx::concertPitch) != style.value(StyleIdx::concertPitch))
+            score->cmdConcertPitchChanged(style.value(StyleIdx::concertPitch).toBool(), true);
+      if (score->style(StyleIdx::MusicalSymbolFont) != style.value(StyleIdx::MusicalSymbolFont)) {
+            score->setScoreFont(ScoreFont::fontFactory(style.value(StyleIdx::MusicalSymbolFont).toString()));
             score->scanElements(0, updateTimeSigs);
             }
       if (score->style()->spatium() != style.spatium())

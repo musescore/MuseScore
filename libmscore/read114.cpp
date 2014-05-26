@@ -48,107 +48,107 @@ struct StyleVal2 {
       };
 
 static const StyleVal2 style114[] = {
-      { ST_staffUpperBorder,             QVariant(7.0) },
-      { ST_staffLowerBorder,             QVariant(7.0) },
-      { ST_staffDistance,                QVariant(6.5) },
-      { ST_akkoladeDistance,             QVariant(6.5) },
-      { ST_lyricsDistance,               QVariant(2) },
-      { ST_lyricsMinBottomDistance,      QVariant(2) },
-      { ST_systemFrameDistance,          QVariant(7.0) },
-      { ST_frameSystemDistance,          QVariant(1.0) },
-      { ST_minMeasureWidth,              QVariant(4.0) },
-      { ST_barWidth,                     QVariant(0.16) },
-      { ST_doubleBarWidth,               QVariant(0.16) },
-      { ST_endBarWidth,                  QVariant(0.5) },
-      { ST_doubleBarDistance,            QVariant(0.30) },
-      { ST_endBarDistance,               QVariant(0.30) },
-      { ST_repeatBarTips,                QVariant(false) },
-      { ST_startBarlineSingle,           QVariant(false) },
-      { ST_startBarlineMultiple,         QVariant(true) },
-      { ST_bracketWidth,                 QVariant(0.35) },
-      { ST_bracketDistance,              QVariant(0.25) },
-      { ST_clefLeftMargin,               QVariant(0.5) },
-      { ST_keysigLeftMargin,             QVariant(0.5) },
-      { ST_timesigLeftMargin,            QVariant(0.5) },
-      { ST_clefKeyRightMargin,           QVariant(1.75) },
-      { ST_clefBarlineDistance,          QVariant(0.18) },
-      { ST_stemWidth,                    QVariant(0.13) },
-      { ST_shortenStem,                  QVariant(true) },
-      { ST_shortStemProgression,         QVariant(0.25) },
-      { ST_shortestStem,                 QVariant(2.25) },
-      { ST_beginRepeatLeftMargin,        QVariant(1.0) },
-      { ST_minNoteDistance,              QVariant(0.4) },
-      { ST_barNoteDistance,              QVariant(1.2) },
-      { ST_noteBarDistance,              QVariant(1.0) },
-      { ST_measureSpacing,               QVariant(1.2) },
-      { ST_staffLineWidth,               QVariant(0.08) },
-      { ST_ledgerLineWidth,              QVariant(0.12) },
-      { ST_akkoladeWidth,                QVariant(1.6) },
-      { ST_accidentalDistance,           QVariant(0.22) },
-      { ST_accidentalNoteDistance,       QVariant(0.22) },
-      { ST_beamWidth,                    QVariant(0.48) },
-      { ST_beamDistance,                 QVariant(0.5) },
-      { ST_beamMinLen,                   QVariant(1.25) },
-      { ST_dotNoteDistance,              QVariant(0.35) },
-      { ST_dotRestDistance,              QVariant(0.25) },
-      { ST_dotDotDistance,               QVariant(0.5) },
-      { ST_propertyDistanceHead,         QVariant(1.0) },
-      { ST_propertyDistanceStem,         QVariant(0.5) },
-      { ST_propertyDistance,             QVariant(1.0) },
-      { ST_articulationMag,              QVariant(qreal(1.0)) },
-      { ST_lastSystemFillLimit,          QVariant(0.3) },
-//      { ST_MinTieLength,                 QVariant(1.0) }, // use default value
-      { ST_hairpinHeight,                QVariant(1.2) },
-      { ST_hairpinContHeight,            QVariant(0.5) },
-      { ST_hairpinLineWidth,             QVariant(0.13) },
-      { ST_showPageNumber,               QVariant(true) },
-      { ST_showPageNumberOne,            QVariant(false) },
-      { ST_pageNumberOddEven,            QVariant(true) },
-      { ST_showMeasureNumber,            QVariant(true) },
-      { ST_showMeasureNumberOne,         QVariant(false) },
-      { ST_measureNumberInterval,        QVariant(5) },
-      { ST_measureNumberSystem,          QVariant(true) },
-      { ST_measureNumberAllStaffs,       QVariant(false) },
-      { ST_smallNoteMag,                 QVariant(qreal(0.7)) },
-      { ST_graceNoteMag,                 QVariant(qreal(0.7)) },
-      { ST_smallStaffMag,                QVariant(qreal(0.7)) },
-      { ST_smallClefMag,                 QVariant(qreal(0.8)) },
-      { ST_genClef,                      QVariant(true) },
-      { ST_genKeysig,                    QVariant(true) },
-      { ST_genTimesig,                   QVariant(true) },
-      { ST_genCourtesyTimesig,           QVariant(true) },
-      { ST_genCourtesyKeysig,            QVariant(true) },
-      { ST_useStandardNoteNames,         QVariant(true) },
-      { ST_useGermanNoteNames,           QVariant(false) },
-      { ST_useSolfeggioNoteNames,        QVariant(false) },
-      { ST_chordDescriptionFile,         QVariant(QString("stdchords.xml")) },
-      { ST_chordStyle,                   QVariant(QString("custom")) },
-      { ST_chordsXmlFile,                QVariant(true) },
-      { ST_harmonyY,                     QVariant(0.0) },
-      { ST_concertPitch,                 QVariant(false) },
-      { ST_createMultiMeasureRests,      QVariant(false) },
-      { ST_minEmptyMeasures,             QVariant(2) },
-      { ST_minMMRestWidth,               QVariant(4.0) },
-      { ST_hideEmptyStaves,              QVariant(false) },
-      { ST_gateTime,                     QVariant(100) },
-      { ST_tenutoGateTime,               QVariant(100) },
-      { ST_staccatoGateTime,             QVariant(50) },
-      { ST_slurGateTime,                 QVariant(100) },
-      { ST_ArpeggioNoteDistance,         QVariant(.5) },
-      { ST_ArpeggioLineWidth,            QVariant(.18) },
-      { ST_ArpeggioHookLen,              QVariant(.8) },
-      { ST_FixMeasureNumbers,            QVariant(0) },
-      { ST_FixMeasureWidth,              QVariant(false) },
-      { ST_keySigNaturals,               QVariant(NAT_BEFORE) },
-      { ST_tupletMaxSlope,               QVariant(qreal(0.5)) },
-      { ST_tupletOufOfStaff,             QVariant(false) },
-      { ST_tupletVHeadDistance,          QVariant(.5) },
-      { ST_tupletVStemDistance,          QVariant(.25) },
-      { ST_tupletStemLeftDistance,       QVariant(.5) },
-      { ST_tupletStemRightDistance,      QVariant(.5) },
-      { ST_tupletNoteLeftDistance,       QVariant(0.0) },
-      { ST_tupletNoteRightDistance,      QVariant(0.0) },
-      { ST_hideInstrumentNameIfOneInstrument, QVariant(false) }
+      { StyleIdx::staffUpperBorder,             QVariant(7.0) },
+      { StyleIdx::staffLowerBorder,             QVariant(7.0) },
+      { StyleIdx::staffDistance,                QVariant(6.5) },
+      { StyleIdx::akkoladeDistance,             QVariant(6.5) },
+      { StyleIdx::lyricsDistance,               QVariant(2) },
+      { StyleIdx::lyricsMinBottomDistance,      QVariant(2) },
+      { StyleIdx::systemFrameDistance,          QVariant(7.0) },
+      { StyleIdx::frameSystemDistance,          QVariant(1.0) },
+      { StyleIdx::minMeasureWidth,              QVariant(4.0) },
+      { StyleIdx::barWidth,                     QVariant(0.16) },
+      { StyleIdx::doubleBarWidth,               QVariant(0.16) },
+      { StyleIdx::endBarWidth,                  QVariant(0.5) },
+      { StyleIdx::doubleBarDistance,            QVariant(0.30) },
+      { StyleIdx::endBarDistance,               QVariant(0.30) },
+      { StyleIdx::repeatBarTips,                QVariant(false) },
+      { StyleIdx::startBarlineSingle,           QVariant(false) },
+      { StyleIdx::startBarlineMultiple,         QVariant(true) },
+      { StyleIdx::bracketWidth,                 QVariant(0.35) },
+      { StyleIdx::bracketDistance,              QVariant(0.25) },
+      { StyleIdx::clefLeftMargin,               QVariant(0.5) },
+      { StyleIdx::keysigLeftMargin,             QVariant(0.5) },
+      { StyleIdx::timesigLeftMargin,            QVariant(0.5) },
+      { StyleIdx::clefKeyRightMargin,           QVariant(1.75) },
+      { StyleIdx::clefBarlineDistance,          QVariant(0.18) },
+      { StyleIdx::stemWidth,                    QVariant(0.13) },
+      { StyleIdx::shortenStem,                  QVariant(true) },
+      { StyleIdx::shortStemProgression,         QVariant(0.25) },
+      { StyleIdx::shortestStem,                 QVariant(2.25) },
+      { StyleIdx::beginRepeatLeftMargin,        QVariant(1.0) },
+      { StyleIdx::minNoteDistance,              QVariant(0.4) },
+      { StyleIdx::barNoteDistance,              QVariant(1.2) },
+      { StyleIdx::noteBarDistance,              QVariant(1.0) },
+      { StyleIdx::measureSpacing,               QVariant(1.2) },
+      { StyleIdx::staffLineWidth,               QVariant(0.08) },
+      { StyleIdx::ledgerLineWidth,              QVariant(0.12) },
+      { StyleIdx::akkoladeWidth,                QVariant(1.6) },
+      { StyleIdx::accidentalDistance,           QVariant(0.22) },
+      { StyleIdx::accidentalNoteDistance,       QVariant(0.22) },
+      { StyleIdx::beamWidth,                    QVariant(0.48) },
+      { StyleIdx::beamDistance,                 QVariant(0.5) },
+      { StyleIdx::beamMinLen,                   QVariant(1.25) },
+      { StyleIdx::dotNoteDistance,              QVariant(0.35) },
+      { StyleIdx::dotRestDistance,              QVariant(0.25) },
+      { StyleIdx::dotDotDistance,               QVariant(0.5) },
+      { StyleIdx::propertyDistanceHead,         QVariant(1.0) },
+      { StyleIdx::propertyDistanceStem,         QVariant(0.5) },
+      { StyleIdx::propertyDistance,             QVariant(1.0) },
+      { StyleIdx::articulationMag,              QVariant(qreal(1.0)) },
+      { StyleIdx::lastSystemFillLimit,          QVariant(0.3) },
+//      { StyleIdx::MinTieLength,                 QVariant(1.0) }, // use default value
+      { StyleIdx::hairpinHeight,                QVariant(1.2) },
+      { StyleIdx::hairpinContHeight,            QVariant(0.5) },
+      { StyleIdx::hairpinLineWidth,             QVariant(0.13) },
+      { StyleIdx::showPageNumber,               QVariant(true) },
+      { StyleIdx::showPageNumberOne,            QVariant(false) },
+      { StyleIdx::pageNumberOddEven,            QVariant(true) },
+      { StyleIdx::showMeasureNumber,            QVariant(true) },
+      { StyleIdx::showMeasureNumberOne,         QVariant(false) },
+      { StyleIdx::measureNumberInterval,        QVariant(5) },
+      { StyleIdx::measureNumberSystem,          QVariant(true) },
+      { StyleIdx::measureNumberAllStaffs,       QVariant(false) },
+      { StyleIdx::smallNoteMag,                 QVariant(qreal(0.7)) },
+      { StyleIdx::graceNoteMag,                 QVariant(qreal(0.7)) },
+      { StyleIdx::smallStaffMag,                QVariant(qreal(0.7)) },
+      { StyleIdx::smallClefMag,                 QVariant(qreal(0.8)) },
+      { StyleIdx::genClef,                      QVariant(true) },
+      { StyleIdx::genKeysig,                    QVariant(true) },
+      { StyleIdx::genTimesig,                   QVariant(true) },
+      { StyleIdx::genCourtesyTimesig,           QVariant(true) },
+      { StyleIdx::genCourtesyKeysig,            QVariant(true) },
+      { StyleIdx::useStandardNoteNames,         QVariant(true) },
+      { StyleIdx::useGermanNoteNames,           QVariant(false) },
+      { StyleIdx::useSolfeggioNoteNames,        QVariant(false) },
+      { StyleIdx::chordDescriptionFile,         QVariant(QString("stdchords.xml")) },
+      { StyleIdx::chordStyle,                   QVariant(QString("custom")) },
+      { StyleIdx::chordsXmlFile,                QVariant(true) },
+      { StyleIdx::harmonyY,                     QVariant(0.0) },
+      { StyleIdx::concertPitch,                 QVariant(false) },
+      { StyleIdx::createMultiMeasureRests,      QVariant(false) },
+      { StyleIdx::minEmptyMeasures,             QVariant(2) },
+      { StyleIdx::minMMRestWidth,               QVariant(4.0) },
+      { StyleIdx::hideEmptyStaves,              QVariant(false) },
+      { StyleIdx::gateTime,                     QVariant(100) },
+      { StyleIdx::tenutoGateTime,               QVariant(100) },
+      { StyleIdx::staccatoGateTime,             QVariant(50) },
+      { StyleIdx::slurGateTime,                 QVariant(100) },
+      { StyleIdx::ArpeggioNoteDistance,         QVariant(.5) },
+      { StyleIdx::ArpeggioLineWidth,            QVariant(.18) },
+      { StyleIdx::ArpeggioHookLen,              QVariant(.8) },
+      { StyleIdx::FixMeasureNumbers,            QVariant(0) },
+      { StyleIdx::FixMeasureWidth,              QVariant(false) },
+      { StyleIdx::keySigNaturals,               QVariant(NAT_BEFORE) },
+      { StyleIdx::tupletMaxSlope,               QVariant(qreal(0.5)) },
+      { StyleIdx::tupletOufOfStaff,             QVariant(false) },
+      { StyleIdx::tupletVHeadDistance,          QVariant(.5) },
+      { StyleIdx::tupletVStemDistance,          QVariant(.25) },
+      { StyleIdx::tupletStemLeftDistance,       QVariant(.5) },
+      { StyleIdx::tupletStemRightDistance,      QVariant(.5) },
+      { StyleIdx::tupletNoteLeftDistance,       QVariant(0.0) },
+      { StyleIdx::tupletNoteRightDistance,      QVariant(0.0) },
+      { StyleIdx::hideInstrumentNameIfOneInstrument, QVariant(false) }
       };
 
 
@@ -555,15 +555,15 @@ Score::FileError Score::read114(XmlReader& e)
                       // fix ottava position
                       Ottava* ottava = static_cast<Ottava*>(s);
                       ottava->staff()->updateOttava(ottava);
-                      yo = styleS(ST_ottavaY).val() * spatium();
+                      yo = styleS(StyleIdx::ottavaY).val() * spatium();
                       if (s->placement() == Element::Placement::BELOW)
                             yo = -yo + s->staff()->height();
                       }
                   else if (s->type() == Element::ElementType::PEDAL) {
-                        yo = styleS(ST_pedalY).val() * spatium();
+                        yo = styleS(StyleIdx::pedalY).val() * spatium();
                         }
                   else if (s->type() == Element::ElementType::TRILL) {
-                        yo = styleS(ST_trillY).val() * spatium();
+                        yo = styleS(StyleIdx::trillY).val() * spatium();
                         }
                   for (SpannerSegment* seg : s->spannerSegments()) {
                         if (!seg->userOff().isNull())
@@ -623,7 +623,7 @@ Score::FileError Score::read114(XmlReader& e)
       for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
             if (mb->type() == Element::ElementType::VBOX) {
                   Box* b  = static_cast<Box*>(mb);
-                  qreal y = point(styleS(ST_staffUpperBorder));
+                  qreal y = point(styleS(StyleIdx::staffUpperBorder));
                   b->setBottomGap(y);
                   }
             }
@@ -644,23 +644,23 @@ Score::FileError Score::read114(XmlReader& e)
             }
 
       // adjust some styles
-      if (style(ST_lyricsDistance) == MScore::baseStyle()->value(ST_lyricsDistance))
-            style()->set(ST_lyricsDistance, 2.0f);
-      if (style(ST_voltaY) == MScore::baseStyle()->value(ST_voltaY))
-            style()->set(ST_voltaY, -2.0f);
-      if (style(ST_hideEmptyStaves).toBool()) // http://musescore.org/en/node/16228
-            style()->set(ST_dontHideStavesInFirstSystem, false);
-      if (style(ST_useGermanNoteNames).toBool())
-            style()->set(ST_useStandardNoteNames, false);
-      if (style(ST_showPageNumberOne).toBool()) { // http://musescore.org/en/node/21207
-            style()->set(ST_evenFooterL, QString("$P"));
-            style()->set(ST_oddFooterR, QString("$P"));
+      if (style(StyleIdx::lyricsDistance) == MScore::baseStyle()->value(StyleIdx::lyricsDistance))
+            style()->set(StyleIdx::lyricsDistance, 2.0f);
+      if (style(StyleIdx::voltaY) == MScore::baseStyle()->value(StyleIdx::voltaY))
+            style()->set(StyleIdx::voltaY, -2.0f);
+      if (style(StyleIdx::hideEmptyStaves).toBool()) // http://musescore.org/en/node/16228
+            style()->set(StyleIdx::dontHideStavesInFirstSystem, false);
+      if (style(StyleIdx::useGermanNoteNames).toBool())
+            style()->set(StyleIdx::useStandardNoteNames, false);
+      if (style(StyleIdx::showPageNumberOne).toBool()) { // http://musescore.org/en/node/21207
+            style()->set(StyleIdx::evenFooterL, QString("$P"));
+            style()->set(StyleIdx::oddFooterR, QString("$P"));
             }
-      if (style(ST_minEmptyMeasures).toInt() == 0)
-            style()->set(ST_minEmptyMeasures, 1);
+      if (style(StyleIdx::minEmptyMeasures).toInt() == 0)
+            style()->set(StyleIdx::minEmptyMeasures, 1);
       // hack: net overall effect of layout changes has been for things to take slightly more room
-      qreal adjustedSpacing = qMax(styleD(ST_measureSpacing) * 0.95, 1.0);
-      style()->set(ST_measureSpacing, adjustedSpacing);
+      qreal adjustedSpacing = qMax(styleD(StyleIdx::measureSpacing) * 0.95, 1.0);
+      style()->set(StyleIdx::measureSpacing, adjustedSpacing);
 
       _showOmr = false;
       

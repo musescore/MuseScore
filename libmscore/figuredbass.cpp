@@ -442,7 +442,7 @@ void FiguredBassItem::layout()
       int   fontIdx = 0;
       QFont f(g_FBFonts.at(fontIdx).family);
       // font size in points, scaled according to spatium()
-      qreal m = score()->styleD(ST_figuredBassFontSize) * spatium() / ( SPATIUM20 * MScore::DPI);
+      qreal m = score()->styleD(StyleIdx::figuredBassFontSize) * spatium() / ( SPATIUM20 * MScore::DPI);
       f.setPointSizeF(m);
       QFontMetrics      fm(f);
 
@@ -452,7 +452,7 @@ void FiguredBassItem::layout()
 
       // create display text
       int font = 0;
-      int style = score()->styleI(ST_figuredBassStyle);
+      int style = score()->styleI(StyleIdx::figuredBassStyle);
 
       if(parenth[0] != Parenthesis::NONE)
             str.append(g_FBFonts.at(font).displayParenthesis[int(parenth[0])]);
@@ -508,8 +508,8 @@ void FiguredBassItem::layout()
             x = 0;                        // start at note left margin
       // vertical position
       h = fm.lineSpacing();
-      h *= score()->styleD(ST_figuredBassLineHeight);
-      if (score()->styleI(ST_figuredBassAlignment) == 0)          // top alignment: stack down from first item
+      h *= score()->styleD(StyleIdx::figuredBassLineHeight);
+      if (score()->styleI(StyleIdx::figuredBassAlignment) == 0)          // top alignment: stack down from first item
             y = h * ord;
       else                                                        // bottom alignment: stack up from last item
             y = -h * (figuredBass()->numOfItems() - ord);
@@ -538,7 +538,7 @@ void FiguredBassItem::draw(QPainter* painter) const
       f.setHintingPreference(QFont::PreferVerticalHinting);
 #endif
       // font size in pixels, scaled according to spatium()
-      qreal m = score()->styleD(ST_figuredBassFontSize) * MScore::DPI / PPI;
+      qreal m = score()->styleD(StyleIdx::figuredBassFontSize) * MScore::DPI / PPI;
       m *= spatium() / (SPATIUM20 * MScore::DPI);     // make spatium dependent
       f.setPixelSize(lrint(m));
 
@@ -906,8 +906,8 @@ FiguredBass::FiguredBass(Score* s)
       setFlag(ElementFlag::ON_STAFF, true);
       setOnNote(true);
       setTextStyleType(TEXT_STYLE_FIGURED_BASS);
-      TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
-                  false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, score()->styleD(ST_figuredBassYOffset)), OFFSET_SPATIUM);
+      TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(StyleIdx::figuredBassFontSize),
+                  false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, score()->styleD(StyleIdx::figuredBassYOffset)), OFFSET_SPATIUM);
       st.setSizeIsSpatiumDependent(true);
       setTextStyle(st);
       setTicks(0);
@@ -993,11 +993,11 @@ void FiguredBass::read(XmlReader& e)
 
 void FiguredBass::layout()
       {
-      qreal yOff  = score()->styleD(ST_figuredBassYOffset);
+      qreal yOff  = score()->styleD(StyleIdx::figuredBassYOffset);
       qreal _sp   = spatium();
       // if 'our' style, force 'our' style data from FiguredBass parameters
       if(textStyleType() == TEXT_STYLE_FIGURED_BASS) {
-            TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(ST_figuredBassFontSize),
+            TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(StyleIdx::figuredBassFontSize),
                         false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, yOff),
                         OFFSET_SPATIUM);
             st.setSizeIsSpatiumDependent(true);

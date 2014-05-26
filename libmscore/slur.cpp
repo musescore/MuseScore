@@ -80,16 +80,16 @@ void SlurSegment::draw(QPainter* painter) const
                   painter->setBrush(QBrush(pen.color()));
                   pen.setCapStyle(Qt::RoundCap);
                   pen.setJoinStyle(Qt::RoundJoin);
-                  pen.setWidthF(point(score()->styleS(ST_SlurEndWidth)));
+                  pen.setWidthF(point(score()->styleS(StyleIdx::SlurEndWidth)));
                   break;
             case 1:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(point(score()->styleS(ST_SlurDottedWidth)));
+                  pen.setWidthF(point(score()->styleS(StyleIdx::SlurDottedWidth)));
                   pen.setStyle(Qt::DotLine);
                   break;
             case 2:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(point(score()->styleS(ST_SlurDottedWidth)));
+                  pen.setWidthF(point(score()->styleS(StyleIdx::SlurDottedWidth)));
                   pen.setStyle(Qt::DashLine);
                   break;
             }
@@ -500,7 +500,7 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF p3(c1, -shoulderH);
       QPointF p4(c2, -shoulderH);
 
-      qreal w = (score()->styleS(ST_SlurMidWidth).val() - score()->styleS(ST_SlurEndWidth).val()) * _spatium;
+      qreal w = (score()->styleS(StyleIdx::SlurMidWidth).val() - score()->styleS(StyleIdx::SlurEndWidth).val()) * _spatium;
       if (((c2 - c1) / _spatium) <= _spatium)
             w *= .5;
       QPointF th(0.0, w);    // thickness of slur

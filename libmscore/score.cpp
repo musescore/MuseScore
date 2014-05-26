@@ -379,7 +379,7 @@ Score::Score(Score* parent)
             _style.setSpatium(sp);
 
             //concert pitch is off for parts
-            _style.set(ST_concertPitch, false);
+            _style.set(StyleIdx::concertPitch, false);
             }
 
       _synthesizerState = parent->_synthesizerState;
@@ -1588,7 +1588,7 @@ Measure* Score::firstMeasureMM() const
       while (mb && mb->type() != Element::ElementType::MEASURE)
             mb = mb->next();
       Measure* m = static_cast<Measure*>(mb);
-      if (m && styleB(ST_createMultiMeasureRests) && m->hasMMRest())
+      if (m && styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest())
             return m->mmRest();
       return m;
       }
@@ -1602,7 +1602,7 @@ MeasureBase* Score::firstMM() const
       MeasureBase* m = _measures.first();
       if (m
          && m->type() == Element::ElementType::MEASURE
-         && styleB(ST_createMultiMeasureRests)
+         && styleB(StyleIdx::createMultiMeasureRests)
          && static_cast<Measure*>(m)->hasMMRest()) {
             return static_cast<Measure*>(m)->mmRest();
             }
@@ -1663,7 +1663,7 @@ Measure* Score::lastMeasureMM() const
       for (; mb; mb = mb->prev()) {
             if (mb->type() != Element::ElementType::MEASURE)
                   continue;
-            if (!styleB(ST_createMultiMeasureRests))
+            if (!styleB(StyleIdx::createMultiMeasureRests))
                   break;
             Measure* m = static_cast<Measure*>(mb);
             if (m->mmRestCount() < 0)
@@ -2452,7 +2452,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                         KeySigEvent oKey = i->second;
                         KeySigEvent nKey = oKey;
                         int diff = -staff->part()->instr()->transpose().chromatic;
-                        if (diff != 0 && !styleB(ST_concertPitch))
+                        if (diff != 0 && !styleB(StyleIdx::concertPitch))
                               nKey.setAccidentalType(transposeKey(nKey.accidentalType(), diff));
                         (*(staff->keymap()))[tick] = nKey;
                         KeySig* keysig = new KeySig(this);

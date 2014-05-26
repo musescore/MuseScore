@@ -482,7 +482,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                         Q_ASSERT(startElement()->type() == ElementType::MEASURE);
                         m = static_cast<Measure*>(startElement());
                         x = m->pos().x();
-                        if(score()->styleB(ST_createMultiMeasureRests) && m->hasMMRest()) {
+                        if(score()->styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest()) {
                               x = m->mmRest()->pos().x();
                               }
                         }
@@ -491,7 +491,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                         m = static_cast<Measure*>(endElement());
                         x = m->pos().x() + m->bbox().right();
 
-                        if (score()->styleB(ST_createMultiMeasureRests)) {
+                        if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
                               //find the actual measure where the volta should stop
                               Measure* sm = static_cast<Measure*>(startElement());
                               Measure* m = sm;
@@ -513,7 +513,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                                     }
                               }
                         }
-                  if (score()->styleB(ST_createMultiMeasureRests))
+                  if (score()->styleB(StyleIdx::createMultiMeasureRests))
                         m = m->mmRest1();
                   Q_ASSERT(m->system());
                   *sys = m->system();

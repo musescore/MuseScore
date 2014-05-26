@@ -25,7 +25,7 @@ LayoutBreak::LayoutBreak(Score* score)
    : Element(score)
       {
       _layoutBreakType     = LayoutBreakType(propertyDefault(P_LAYOUT_BREAK).toInt());
-      _pause               = score->styleD(ST_SectionPause);
+      _pause               = score->styleD(StyleIdx::SectionPause);
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
       lw                   = spatium() * 0.3;
@@ -251,7 +251,7 @@ QVariant LayoutBreak::propertyDefault(P_ID id) const
             case P_LAYOUT_BREAK:
                   return QVariant(); // LAYOUT_BREAK_LINE;
             case P_PAUSE:
-                  return 0.0; // score()->styleD(ST_SectionPause);
+                  return 0.0; // score()->styleD(StyleIdx::SectionPause);
             default:
                   return Element::propertyDefault(id);
             }

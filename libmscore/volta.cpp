@@ -27,7 +27,7 @@ void VoltaSegment::layout()
       rypos() = 0.0;
       TextLineSegment::layout1();
       if (parent())     // for palette
-            rypos() += score()->styleS(ST_voltaY).val() * spatium();
+            rypos() += score()->styleS(StyleIdx::voltaY).val() * spatium();
       adjustReadPos();
       }
 
@@ -134,12 +134,12 @@ Volta::Volta(Score* s)
       setContinueTextPlace(PLACE_BELOW);
 
       setBeginHook(true);
-      Spatium hook(s->styleS(ST_voltaHook));
+      Spatium hook(s->styleS(StyleIdx::voltaHook));
       setBeginHookHeight(hook);
       setEndHookHeight(hook);
       setAnchor(ANCHOR_MEASURE);
 
-      setLineWidth(score()->styleS(ST_voltaLineWidth));
+      setLineWidth(score()->styleS(StyleIdx::voltaLineWidth));
       lineWidthStyle = PropertyStyle::STYLED;
       }
 
@@ -314,7 +314,7 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
                   return 0;
 
             case P_LINE_WIDTH:
-                  return score()->styleS(ST_voltaLineWidth).val();
+                  return score()->styleS(StyleIdx::voltaLineWidth).val();
 
             default:
                   return TextLine::propertyDefault(propertyId);
@@ -337,7 +337,7 @@ void Volta::undoSetVoltaType(VoltaType val)
 
 void Volta::setYoff(qreal val)
       {
-      rUserYoffset() += (val - score()->styleS(ST_voltaY).val()) * spatium();
+      rUserYoffset() += (val - score()->styleS(StyleIdx::voltaY).val()) * spatium();
       }
 
 //---------------------------------------------------------
@@ -369,7 +369,7 @@ void Volta::resetProperty(P_ID id)
                   return;
 
             case P_LINE_WIDTH:
-                  setLineWidth(score()->styleS(ST_voltaLineWidth));
+                  setLineWidth(score()->styleS(StyleIdx::voltaLineWidth));
                   lineWidthStyle = PropertyStyle::STYLED;
                   break;
 
@@ -386,7 +386,7 @@ void Volta::resetProperty(P_ID id)
 void Volta::styleChanged()
       {
       if (lineWidthStyle == PropertyStyle::STYLED)
-            setLineWidth(score()->styleS(ST_voltaLineWidth));
+            setLineWidth(score()->styleS(StyleIdx::voltaLineWidth));
       }
 
 //---------------------------------------------------------

@@ -1570,7 +1570,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       setWindowTitle("MuseScore: " + cs->name());
 
       QAction* a = getAction("concert-pitch");
-      a->setChecked(cs->styleB(ST_concertPitch));
+      a->setChecked(cs->styleB(StyleIdx::concertPitch));
 
       setPos(cs->inputPos());
       showMessage(cs->filePath(), 2000);
@@ -3989,7 +3989,7 @@ void MuseScore::endCmd()
                   SelState ss = cs->selection().state();
                   selectionChanged(ss);
                   }
-            getAction("concert-pitch")->setChecked(cs->styleB(ST_concertPitch));
+            getAction("concert-pitch")->setChecked(cs->styleB(StyleIdx::concertPitch));
 
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();

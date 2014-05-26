@@ -55,13 +55,13 @@ qreal Bracket::width() const
       {
       qreal w = 0;
       if (bracketType() == BRACKET_BRACE)
-            w = point(score()->styleS(ST_akkoladeWidth) + score()->styleS(ST_akkoladeBarDistance));
+            w = point(score()->styleS(StyleIdx::akkoladeWidth) + score()->styleS(StyleIdx::akkoladeBarDistance));
       else if (bracketType() == BRACKET_NORMAL)
-            w = point(score()->styleS(ST_bracketWidth) + score()->styleS(ST_bracketDistance));
+            w = point(score()->styleS(StyleIdx::bracketWidth) + score()->styleS(StyleIdx::bracketDistance));
       else if (bracketType() == BRACKET_SQUARE)
-            w = point(score()->styleS(ST_staffLineWidth) + Spatium(0.5));
+            w = point(score()->styleS(StyleIdx::staffLineWidth) + Spatium(0.5));
       else if (bracketType() == BRACKET_LINE)
-            w = point(0.67f * score()->styleS(ST_bracketWidth) + score()->styleS(ST_bracketDistance));
+            w = point(0.67f * score()->styleS(StyleIdx::bracketWidth) + score()->styleS(StyleIdx::bracketDistance));
       return w;
       }
 
@@ -76,7 +76,7 @@ void Bracket::layout()
             return;
 
       if (bracketType() == BRACKET_BRACE) {
-            qreal w = point(score()->styleS(ST_akkoladeWidth));
+            qreal w = point(score()->styleS(StyleIdx::akkoladeWidth));
 
 #define XM(a) (a+700)*w/700
 #define YM(a) (a+7100)*h2/7100
@@ -106,7 +106,7 @@ void Bracket::layout()
             }
       else if (bracketType() == BRACKET_NORMAL) {
             qreal _spatium = spatium();
-            qreal w = score()->styleS(ST_bracketWidth).val() * _spatium * .5;
+            qreal w = score()->styleS(StyleIdx::bracketWidth).val() * _spatium * .5;
             qreal x = -w;
             w      += symWidth(SymId::bracketTop);
             qreal bd = _spatium * .25;
@@ -116,7 +116,7 @@ void Bracket::layout()
             }
       else if (bracketType() == BRACKET_SQUARE) {
             qreal _spatium = spatium();
-            qreal w = score()->styleS(ST_staffLineWidth).val() * _spatium * .5;
+            qreal w = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium * .5;
             qreal x = -w;
             qreal y = -w;
             qreal h = (h2 + w) * 2 ;
@@ -125,7 +125,7 @@ void Bracket::layout()
             }
       else if (bracketType() == BRACKET_LINE) {
             qreal _spatium = spatium();
-            qreal w = 0.67 * score()->styleS(ST_bracketWidth).val() * _spatium * .5;
+            qreal w = 0.67 * score()->styleS(StyleIdx::bracketWidth).val() * _spatium * .5;
             qreal x = -w;
             qreal bd = _spatium * .25;
             qreal y = -bd;
@@ -150,7 +150,7 @@ void Bracket::draw(QPainter* painter) const
       else if (bracketType() == BRACKET_NORMAL) {
             qreal h = 2 * h2;
             qreal _spatium = spatium();
-            qreal w = score()->styleS(ST_bracketWidth).val() * _spatium;
+            qreal w = score()->styleS(StyleIdx::bracketWidth).val() * _spatium;
             QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
             painter->setPen(pen);
             qreal bd   = _spatium * .25;
@@ -164,7 +164,7 @@ void Bracket::draw(QPainter* painter) const
       else if (bracketType() == BRACKET_SQUARE) {
             qreal h = 2 * h2;
             qreal _spatium = spatium();
-            qreal w = score()->styleS(ST_staffLineWidth).val() * _spatium;
+            qreal w = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium;
             QPen pen(curColor(), w, Qt::SolidLine, Qt::SquareCap);
             painter->setPen(pen);
             painter->drawLine(QLineF(0.0, 0.0, 0.0, h));
@@ -174,7 +174,7 @@ void Bracket::draw(QPainter* painter) const
       else if (bracketType() == BRACKET_LINE) {
             qreal h = 2 * h2;
             qreal _spatium = spatium();
-            qreal w = 0.67 * score()->styleS(ST_bracketWidth).val() * _spatium;
+            qreal w = 0.67 * score()->styleS(StyleIdx::bracketWidth).val() * _spatium;
             QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
             painter->setPen(pen);
             qreal bd   = _spatium * .25;

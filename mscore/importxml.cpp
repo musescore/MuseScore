@@ -739,7 +739,7 @@ void MusicXml::import(Score* s)
       figBassExtend = false;
 
       // TODO only if multi-measure rests used ???
-      // score->style()->set(ST_createMultiMeasureRests, true);
+      // score->style()->set(StyleIdx::createMultiMeasureRests, true);
 
       for (QDomElement e = doc->documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "score-partwise")
@@ -1158,7 +1158,7 @@ void MusicXml::scorePartwise(QDomElement ee)
                                           ;
                                     else if (tag == "system-distance") {
                                           if (preferences.musicxmlImportLayout) {
-                                                score->style()->set(ST_minSystemDistance, val);
+                                                score->style()->set(StyleIdx::minSystemDistance, val);
                                                 qDebug("system distance %f", val.val());
                                                 }
                                           }
@@ -1174,7 +1174,7 @@ void MusicXml::scorePartwise(QDomElement ee)
                                     Spatium val(eee.text().toDouble() / 10.0);
                                     if (tag == "staff-distance") {
                                           if (preferences.musicxmlImportLayout)
-                                                score->style()->set(ST_staffDistance, val);
+                                                score->style()->set(StyleIdx::staffDistance, val);
                                           }
                                     else
                                           domError(eee);

@@ -253,13 +253,13 @@ void Part::setInstrument(const Instrument& i, int tick)
 
       //CHECK: ??
 
-      if (!_score->styleB(ST_concertPitch) && i.transpose().chromatic) {
+      if (!_score->styleB(StyleIdx::concertPitch) && i.transpose().chromatic) {
             foreach(Staff* staff, _staves) {
                   if (staff->staffType()->group() != PERCUSSION_STAFF_GROUP)
                         _score->cmdTransposeStaff(staff->idx(), i.transpose(), false);
                   }
             }
-      if (!_score->styleB(ST_concertPitch) && i.transpose().chromatic) {
+      if (!_score->styleB(StyleIdx::concertPitch) && i.transpose().chromatic) {
             foreach(Staff* staff, _staves) {
                   Interval iv(i.transpose());
                   iv.flip();

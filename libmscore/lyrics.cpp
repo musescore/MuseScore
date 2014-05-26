@@ -218,9 +218,9 @@ void Lyrics::layout1()
 
       const QList<Lyrics*>* ll = &(chordRest()->lyricsList());
 
-      qreal lh = lineSpacing() * score()->styleD(ST_lyricsLineHeight);
+      qreal lh = lineSpacing() * score()->styleD(StyleIdx::lyricsLineHeight);
       int line = ll->indexOf(this);
-      qreal y  = lh * line + point(score()->styleS(ST_lyricsDistance));
+      qreal y  = lh * line + point(score()->styleS(StyleIdx::lyricsDistance));
       qreal x  = 0.0;
       //
       // left align if syllable has a number or is a melisma

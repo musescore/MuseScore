@@ -448,9 +448,9 @@ void ChordRest::layoutArticulations()
             }
 
       qreal x         = centerX();
-      qreal distance0 = score()->styleS(ST_propertyDistance).val()     * _spatium;
-      qreal distance1 = score()->styleS(ST_propertyDistanceHead).val() * _spatium;
-      qreal distance2 = score()->styleS(ST_propertyDistanceStem).val() * _spatium;
+      qreal distance0 = score()->styleS(StyleIdx::propertyDistance).val()     * _spatium;
+      qreal distance1 = score()->styleS(StyleIdx::propertyDistanceHead).val() * _spatium;
+      qreal distance2 = score()->styleS(StyleIdx::propertyDistanceStem).val() * _spatium;
 
       qreal chordTopY = upPos();    // note position of highest note
       qreal chordBotY = downPos();  // note position of lowest note
@@ -472,7 +472,7 @@ void ChordRest::layoutArticulations()
                         y -= stem->stemLen();
 
                   if (beam()) {
-                        qreal bw = score()->styleS(ST_beamWidth).val() * _spatium;
+                        qreal bw = score()->styleS(StyleIdx::beamWidth).val() * _spatium;
                         y += up() ? -bw : bw;
                         }
                   if (up())
@@ -538,7 +538,7 @@ void ChordRest::layoutArticulations()
                         Stem* stem = chord->stem();
                         y          = chordTopY + stem->stemLen();
                         if (chord->beam())
-                              y += score()->styleS(ST_beamWidth).val() * _spatium * .5;
+                              y += score()->styleS(StyleIdx::beamWidth).val() * _spatium * .5;
                         x          = stem->pos().x();
                         int line   = lrint((y+0.5*_spatium) / _spatium);
                         if (line <= 4)    // align between staff lines
@@ -562,7 +562,7 @@ void ChordRest::layoutArticulations()
                         Stem* stem = chord->stem();
                         y          = chordBotY + stem->stemLen();
                         if (chord->beam())
-                              y -= score()->styleS(ST_beamWidth).val() * _spatium * .5;
+                              y -= score()->styleS(StyleIdx::beamWidth).val() * _spatium * .5;
                         x          = stem->pos().x();
                         int line   = lrint((y-0.5*_spatium) / _spatium);
                         if (line >= 0)    // align between staff lines

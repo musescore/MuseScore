@@ -580,7 +580,7 @@ void Articulation::styleChanged()
 
 qreal Articulation::mag() const
       {
-      return parent() ? parent()->mag() * score()->styleD(ST_articulationMag): 1.0;
+      return parent() ? parent()->mag() * score()->styleD(StyleIdx::articulationMag): 1.0;
       }
 }
 

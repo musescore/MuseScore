@@ -191,7 +191,7 @@ void Harmony::write(Xml& xml) const
             int rBaseTpc = _baseTpc;
             if (staff()) {
                   const Interval& interval = staff()->part()->instr()->transpose();
-                  if (xml.clipboardmode && !score()->styleB(ST_concertPitch) && interval.chromatic) {
+                  if (xml.clipboardmode && !score()->styleB(StyleIdx::concertPitch) && interval.chromatic) {
                         rRootTpc = transposeTpc(_rootTpc, interval, false);
                         rBaseTpc = transposeTpc(_baseTpc, interval, false);
                         }
@@ -339,24 +339,24 @@ void Harmony::read(XmlReader& e)
 
 void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& rootLowerCase, NoteSpellingType& baseSpelling, bool& baseLowerCase)
       {
-      if (score()->styleB(ST_useStandardNoteNames))
+      if (score()->styleB(StyleIdx::useStandardNoteNames))
             rootSpelling = NoteSpellingType::STANDARD;
-      else if (score()->styleB(ST_useGermanNoteNames))
+      else if (score()->styleB(StyleIdx::useGermanNoteNames))
             rootSpelling = NoteSpellingType::GERMAN;
-      else if (score()->styleB(ST_useSolfeggioNoteNames))
+      else if (score()->styleB(StyleIdx::useSolfeggioNoteNames))
             rootSpelling = NoteSpellingType::SOLFEGGIO;
       baseSpelling = rootSpelling;
       const ChordDescription* cd = descr();
       if (cd) {
             QString quality;
             quality = cd->quality();
-            if (score()->styleB(ST_lowerCaseMinorChords) && (quality == "minor" || quality == "diminished" || quality == "half-diminished"))
+            if (score()->styleB(StyleIdx::lowerCaseMinorChords) && (quality == "minor" || quality == "diminished" || quality == "half-diminished"))
                   rootLowerCase = true;
             else
                   rootLowerCase = false;
             }
       else
-            rootLowerCase = score()->styleB(ST_lowerCaseMinorChords);
+            rootLowerCase = score()->styleB(StyleIdx::lowerCaseMinorChords);
       if (baseSpelling == NoteSpellingType::GERMAN)
             baseLowerCase = true;
       else
@@ -525,7 +525,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             }
       *root = r;
       bool preferMinor;
-      if (score()->styleB(ST_lowerCaseMinorChords) && s[0].isLower())
+      if (score()->styleB(StyleIdx::lowerCaseMinorChords) && s[0].isLower())
             preferMinor = true;
       else
             preferMinor = false;
@@ -875,20 +875,20 @@ void Harmony::layout()
       if (parent()->type() == ElementType::SEGMENT) {
             Measure* m = static_cast<Measure*>(parent()->parent());
             yy = track() < 0 ? 0.0 : m->system()->staff(staffIdx())->y();
-            yy -= score()->styleP(ST_harmonyY);
+            yy -= score()->styleP(StyleIdx::harmonyY);
             Segment* s = static_cast<Segment*>(parent());
             for (Element* e : s->annotations()) {
                   if (e != this && e->type() == ElementType::FRET_DIAGRAM && e->track() == track()) {
-                        yy += score()->styleP(ST_harmonyY);
-                        yy -= score()->styleP(ST_fretY);
+                        yy += score()->styleP(StyleIdx::harmonyY);
+                        yy -= score()->styleP(StyleIdx::fretY);
                         yy -= _spatium * 2;
-                        yy -= score()->styleP(ST_harmonyFretDist);
+                        yy -= score()->styleP(StyleIdx::harmonyFretDist);
                         break;
                         }
                   }
             }
       else if (parent()->type() == ElementType::FRET_DIAGRAM)
-            yy = score()->styleP(ST_harmonyFretDist);
+            yy = score()->styleP(StyleIdx::harmonyFretDist);
       yy += textStyle().offset(_spatium).y();
       if (!editMode()) {
             qreal hb = lineHeight() - Text::baseLine();
@@ -1182,7 +1182,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
 
 void Harmony::render(const TextStyle* st)
       {
-      int capo = score()->styleI(ST_capoPosition);
+      int capo = score()->styleI(StyleIdx::capoPosition);
 
       if (st == 0)
             st = &textStyle();

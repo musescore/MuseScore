@@ -64,7 +64,7 @@ Beam::Beam(Score* s)
       editFragment     = 0;
       isGrace          = false;
       cross            = false;
-      _noSlope         = score()->styleB(ST_beamNoSlope);
+      _noSlope         = score()->styleB(StyleIdx::beamNoSlope);
       noSlopeStyle     = PropertyStyle::STYLED;
       }
 
@@ -184,7 +184,7 @@ void Beam::draw(QPainter* painter) const
       {
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
-      qreal lw2 = point(score()->styleS(ST_beamWidth)) * .5 * mag();
+      qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
       foreach (const QLineF* bs, beamSegments) {
             QPolygonF pg;
                pg << QPointF(bs->x1(), bs->y1()-lw2)
@@ -453,7 +453,7 @@ void Beam::layout()
             }
 
       setbbox(QRectF());
-      qreal lw2 = point(score()->styleS(ST_beamWidth)) * .5 * mag();
+      qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
       foreach(const QLineF* bs, beamSegments) {
             QPolygonF a(4);
             a[0] = QPointF(bs->x1(), bs->y1()-lw2);
@@ -471,7 +471,7 @@ void Beam::layout()
 QPainterPath Beam::shape() const
       {
       QPainterPath pp;
-      qreal lw2 = point(score()->styleS(ST_beamWidth)) * .5 * mag();
+      qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
       foreach(const QLineF* bs, beamSegments) {
             QPolygonF a(5);
             a[0] = QPointF(bs->x1(), bs->y1()-lw2);
@@ -1414,13 +1414,13 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
       qreal _spatium   = spatium();
       QPointF _pagePos(pagePos());
-      qreal beamMinLen = point(score()->styleS(ST_beamMinLen));
-      qreal graceMag   = score()->styleD(ST_graceNoteMag);
+      qreal beamMinLen = point(score()->styleS(StyleIdx::beamMinLen));
+      qreal graceMag   = score()->styleD(StyleIdx::graceNoteMag);
 
       if (beamLevels == 4)
-            _beamDist = score()->styleP(ST_beamWidth) * (1 + score()->styleD(ST_beamDistance)*4/3);
+            _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance)*4/3);
       else
-            _beamDist = score()->styleP(ST_beamWidth) * (1 + score()->styleD(ST_beamDistance));
+            _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance));
 
       if (isGrace) {
             _beamDist *= graceMag;
@@ -1594,7 +1594,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   if (c1 == 0 && c2 == n)
                         ++baseLevel;
 
-                  qreal stemWidth  = point(score()->styleS(ST_stemWidth));
+                  qreal stemWidth  = point(score()->styleS(StyleIdx::stemWidth));
                   qreal x2   = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
                   qreal x3;
 
@@ -2168,7 +2168,7 @@ QVariant Beam::propertyDefault(P_ID id) const
             case P_GROW_RIGHT:     return 1.0;
             case P_USER_MODIFIED:  return false;
             case P_BEAM_POS:       return beamPos();
-            case P_BEAM_NO_SLOPE:  return score()->styleB(ST_beamNoSlope);
+            case P_BEAM_NO_SLOPE:  return score()->styleB(StyleIdx::beamNoSlope);
             default:               return Element::propertyDefault(id);
             }
       }
@@ -2196,7 +2196,7 @@ void Beam::resetProperty(P_ID id)
       {
       switch (id) {
             case P_BEAM_NO_SLOPE:
-                  setNoSlope(score()->styleB(ST_beamNoSlope));
+                  setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
                   noSlopeStyle = PropertyStyle::STYLED;
                   break;
 
@@ -2213,7 +2213,7 @@ void Beam::resetProperty(P_ID id)
 void Beam::styleChanged()
       {
       if (noSlopeStyle == PropertyStyle::STYLED)
-            setNoSlope(score()->styleB(ST_beamNoSlope));
+            setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
       }
 
 }
