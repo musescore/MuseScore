@@ -200,24 +200,24 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
       {
       if (curGrip == int(GripSlurSegment::START)) {
             spanner()->setStartElement(element);
-            if (spanner()->anchor() == Spanner::ANCHOR_NOTE) {
+            if (spanner()->anchor() == Spanner::Anchor::NOTE) {
                   Tie* tie = static_cast<Tie*>(spanner());
                   tie->startNote()->setTieFor(0);
                   tie->setStartNote(static_cast<Note*>(element));
                   static_cast<Note*>(element)->setTieFor(tie);
                   }
-            else if (spanner()->anchor() == Spanner::ANCHOR_SEGMENT)
+            else if (spanner()->anchor() == Spanner::Anchor::SEGMENT)
                   spanner()->setTick(static_cast<Chord*>(element)->tick());
             }
       else {
             spanner()->setEndElement(element);
-            if (spanner()->anchor() == Spanner::ANCHOR_NOTE) {
+            if (spanner()->anchor() == Spanner::Anchor::NOTE) {
                   Tie* tie = static_cast<Tie*>(spanner());
                   tie->endNote()->setTieBack(0);
                   tie->setEndNote(static_cast<Note*>(element));
                   static_cast<Note*>(element)->setTieBack(tie);
                   }
-            else if (spanner()->anchor() == Spanner::ANCHOR_SEGMENT) {
+            else if (spanner()->anchor() == Spanner::Anchor::SEGMENT) {
                   spanner()->setTick2(static_cast<Chord*>(element)->tick());
                   spanner()->setTrack2(element->track());
                   }
@@ -742,7 +742,7 @@ void Slur::slurPosChord(SlurPos* sp)
 
 void Slur::slurPos(SlurPos* sp)
       {
-      if (anchor() == ANCHOR_CHORD) {
+      if (anchor() == Anchor::CHORD) {
             slurPosChord(sp);
             return;
             }
@@ -1128,7 +1128,7 @@ Slur::Slur(Score* s)
    : SlurTie(s)
       {
       setId(-1);
-      setAnchor(ANCHOR_SEGMENT);
+      setAnchor(Anchor::SEGMENT);
       }
 
 //---------------------------------------------------------
@@ -1217,7 +1217,7 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 
 void Slur::layout()
       {
-      if (anchor() == ANCHOR_CHORD) {
+      if (anchor() == Anchor::CHORD) {
             layoutChord();
             return;
             }
@@ -1247,7 +1247,7 @@ void Slur::layout()
             return;
             }
 
-      if (anchor() == Spanner::ANCHOR_SEGMENT) {
+      if (anchor() == Spanner::Anchor::SEGMENT) {
             computeStartElement();
             computeEndElement();
             }

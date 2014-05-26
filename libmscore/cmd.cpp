@@ -231,13 +231,13 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
       spanner->setTrack(track);
       spanner->setTrack2(track);
 
-      if (spanner->anchor() == Spanner::ANCHOR_SEGMENT) {
+      if (spanner->anchor() == Spanner::Anchor::SEGMENT) {
             spanner->setTick(segment->tick());
             int lastTick = lastMeasure()->tick() + lastMeasure()->ticks();
             int tick2 = qMin(segment->tick() + segment->measure()->ticks(), lastTick);
             spanner->setTick2(tick2);
             }
-      else {      // ANCHOR_MEASURE
+      else {      // Anchor::MEASURE
             Measure* m = static_cast<Measure*>(mb);
             QRectF b(m->canvasBoundingRect());
 

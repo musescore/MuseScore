@@ -545,7 +545,7 @@ Score::FileError Score::read114(XmlReader& e)
             if (s->type() != Element::ElementType::SLUR) {
                   if (s->type() == Element::ElementType::VOLTA) {
                         Volta* volta = static_cast<Volta*>(s);
-                        volta->setAnchor(Spanner::ANCHOR_MEASURE);
+                        volta->setAnchor(Spanner::Anchor::MEASURE);
                         }
                   }
 

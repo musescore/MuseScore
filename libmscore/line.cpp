@@ -215,7 +215,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
       SpannerSegmentType st = spannerSegmentType();
       int track   = l->track();
 
-      if (l->anchor() == Spanner::ANCHOR_SEGMENT) {
+      if (l->anchor() == Spanner::Anchor::SEGMENT) {
             Segment* s1 = spanner()->startSegment();
             Segment* s2 = spanner()->endSegment();
             if (!s1 && !s2) {
@@ -347,7 +347,7 @@ void LineSegment::editDrag(const EditData& ed)
             default:
                   break;
             }
-      if ((line()->anchor() == Spanner::ANCHOR_NOTE)
+      if ((line()->anchor() == Spanner::Anchor::NOTE)
          && (ed.curGrip == int(GripLine::START) || ed.curGrip == int(GripLine::END))) {
             //
             // if we touch a different note, change anchor
@@ -460,7 +460,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
       qreal _spatium = spatium();
       qreal x = 0.0;
       switch (anchor()) {
-            case Spanner::ANCHOR_SEGMENT:
+            case Spanner::Anchor::SEGMENT:
                   {
                   Measure* m;
                   int t;
@@ -474,9 +474,9 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                   }
                   break;
 
-            case Spanner::ANCHOR_MEASURE:
+            case Spanner::Anchor::MEASURE:
                   {
-                  // anchor() == ANCHOR_MEASURE
+                  // anchor() == Anchor::MEASURE
                   Measure* m;
                   if (grip == GripLine::START) {
                         Q_ASSERT(startElement()->type() == ElementType::MEASURE);
@@ -520,7 +520,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                   }
                   break;
 
-            case Spanner::ANCHOR_NOTE:
+            case Spanner::Anchor::NOTE:
                   {
                   System* s = static_cast<Note*>(startElement())->chord()->segment()->system();
                   *sys = s;
@@ -530,7 +530,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                         return endElement()->pagePos() - s->pagePos();
                   }
 
-            case Spanner::ANCHOR_CHORD:
+            case Spanner::Anchor::CHORD:
                   qFatal("Sline::linePos(): anchor not implemented\n");
                   break;
             }
@@ -630,7 +630,7 @@ void SLine::layout()
                   // single segment
                   seg->setSpannerSegmentType(SpannerSegmentType::SINGLE);
                   qreal len = p2.x() - p1.x();
-                  if (anchor() == ANCHOR_SEGMENT)
+                  if (anchor() == Anchor::SEGMENT)
                         len = qMax(3 * spatium(), len);
                   seg->setPos(p1);
                   seg->setPos2(QPointF(len, p2.y() - p1.y()));
@@ -654,7 +654,7 @@ void SLine::layout()
                   // end segment
                   qreal x1 = (mseg ? mseg->pos().x() : 0) + m->pos().x();
                   qreal len = p2.x() - x1;
-                  if (anchor() == ANCHOR_SEGMENT)
+                  if (anchor() == Anchor::SEGMENT)
                         len = qMax(3 * spatium(), len);
                   seg->setSpannerSegmentType(SpannerSegmentType::END);
                   seg->setPos(QPointF(x1, p1.y()));
@@ -684,8 +684,8 @@ void SLine::writeProperties(Xml& xml) const
       if (propertyStyle(P_ID::LINE_COLOR) == PropertyStyle::UNSTYLED || (lineColor() != MScore::defaultColor))
             xml.tag("lineColor", lineColor());
 
-      if (anchor() != Spanner::ANCHOR_SEGMENT)
-            xml.tag("anchor", anchor());
+      if (anchor() != Spanner::Anchor::SEGMENT)
+            xml.tag("anchor", int(anchor()));
       if (score() == gscore) {
             // when used as icon
             if (!spannerSegments().isEmpty()) {

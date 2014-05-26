@@ -2412,7 +2412,7 @@ void Score::add(Element* el)
                   }
                   break;
             case Element::ElementType::TEXTLINE:
-                  if (static_cast<Spanner*>(el)->anchor() == Spanner::ANCHOR_NOTE)
+                  if (static_cast<Spanner*>(el)->anchor() == Spanner::Anchor::NOTE)
                         break;
                   // fall through
 

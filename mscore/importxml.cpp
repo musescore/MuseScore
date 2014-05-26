@@ -4151,7 +4151,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
                                     if(cr->isGrace()){
-                                          slur[slurNo]->setAnchor(Spanner::ANCHOR_CHORD);
+                                          slur[slurNo]->setAnchor(Spanner::Anchor::CHORD);
                                           slur[slurNo]->setParent(cr);
                                           }
                                     if (lineType == "dotted")
@@ -4188,7 +4188,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     }
                               else {
                                     if(cr->isGrace()){
-                                          slur[slurNo]->setAnchor(Spanner::ANCHOR_CHORD);
+                                          slur[slurNo]->setAnchor(Spanner::Anchor::CHORD);
                                           slur[slurNo]->setEndElement(slur[slurNo]->startElement());
                                           slur[slurNo]->setStartElement(cr);
                                           }

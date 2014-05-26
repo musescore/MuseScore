@@ -999,7 +999,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   }
             bool v = true;
             Spanner* spanner = ss->spanner();
-            if (spanner->anchor() == Spanner::ANCHOR_SEGMENT || spanner->anchor() == Spanner::ANCHOR_CHORD) {
+            if (spanner->anchor() == Spanner::Anchor::SEGMENT || spanner->anchor() == Spanner::Anchor::CHORD) {
                   Element* se = spanner->startElement();
                   Element* ee = spanner->endElement();
                   bool v1 = true;

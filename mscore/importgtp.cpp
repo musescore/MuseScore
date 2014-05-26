@@ -1144,7 +1144,7 @@ void GuitarPro1::readNote(int string, Note* note)
                          ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                          Slur* slur = new Slur(score);
-                         slur->setAnchor(Spanner::ANCHOR_CHORD);
+                         slur->setAnchor(Spanner::Anchor::CHORD);
                          slur->setStartChord(static_cast<Chord*>(cr1));
                          slur->setEndChord(static_cast<Chord*>(cr2));
                          slur->setTick(cr1->tick());
@@ -1888,7 +1888,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                          ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                          Slur* slur = new Slur(score);
-                         slur->setAnchor(Spanner::ANCHOR_CHORD);
+                         slur->setAnchor(Spanner::Anchor::CHORD);
                          slur->setStartChord(static_cast<Chord*>(cr1));
                          slur->setEndChord(static_cast<Chord*>(cr2));
                          slur->setTick(cr1->tick());
@@ -2435,7 +2435,7 @@ void GuitarPro5::readNoteEffects(Note* note)
                    ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                    Slur* slur = new Slur(score);
-                   slur->setAnchor(Spanner::ANCHOR_CHORD);
+                   slur->setAnchor(Spanner::Anchor::CHORD);
                    slur->setStartChord(static_cast<Chord*>(cr1));
                    slur->setEndChord(static_cast<Chord*>(cr2));
                    slur->setTick(cr1->tick());
