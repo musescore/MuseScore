@@ -1025,7 +1025,7 @@ void Note::read(XmlReader& e)
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(track());
                   sp->read(e);
-                  sp->setAnchor(Spanner::ANCHOR_NOTE);
+                  sp->setAnchor(Spanner::Anchor::NOTE);
                   sp->setStartElement(this);
                   sp->setTick(e.tick());
                   addSpannerFor(sp);

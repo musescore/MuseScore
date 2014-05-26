@@ -137,7 +137,7 @@ Volta::Volta(Score* s)
       Spatium hook(s->styleS(StyleIdx::voltaHook));
       setBeginHookHeight(hook);
       setEndHookHeight(hook);
-      setAnchor(ANCHOR_MEASURE);
+      setAnchor(Anchor::MEASURE);
 
       setLineWidth(score()->styleS(StyleIdx::voltaLineWidth));
       lineWidthStyle = PropertyStyle::STYLED;

@@ -4024,7 +4024,7 @@ void ScoreView::cmdAddNoteLine()
       tl->setStartElement(firstNote);
       tl->setEndElement(lastNote);
       tl->setDiagonal(true);
-      tl->setAnchor(Spanner::ANCHOR_NOTE);
+      tl->setAnchor(Spanner::Anchor::NOTE);
       tl->setTick(firstNote->chord()->tick());
       _score->startCmd();
       _score->undoAddElement(tl);
@@ -4052,7 +4052,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
             Q_ASSERT(cr1->type() == Element::ElementType::CHORD);
             Q_ASSERT(cr2->type() == Element::ElementType::CHORD);
             Slur* slur = new Slur(score());
-            slur->setAnchor(Spanner::ANCHOR_CHORD);
+            slur->setAnchor(Spanner::Anchor::CHORD);
 
             slur->setStartChord(static_cast<Chord*>(cr1));
             slur->setEndChord(static_cast<Chord*>(cr2));

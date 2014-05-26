@@ -392,16 +392,16 @@ ChordRest* Score::findCR(int tick, int track) const
 void Spanner::computeStartElement()
       {
       switch (_anchor) {
-            case ANCHOR_SEGMENT:
+            case Anchor::SEGMENT:
                   _startElement = score()->findCR(tick(), track());
                   break;
 
-            case ANCHOR_MEASURE:
+            case Anchor::MEASURE:
                   _startElement = score()->tick2measure(tick());
                   break;
 
-            case ANCHOR_CHORD:
-            case ANCHOR_NOTE:
+            case Anchor::CHORD:
+            case Anchor::NOTE:
                   return;
             }
       }
@@ -413,7 +413,7 @@ void Spanner::computeStartElement()
 void Spanner::computeEndElement()
       {
       switch (_anchor) {
-            case ANCHOR_SEGMENT:
+            case Anchor::SEGMENT:
                   if (type() == ElementType::SLUR) {
                         Segment* s = score()->tick2segmentMM(tick2(), false, Segment::SegChordRest);
                         _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
@@ -422,14 +422,14 @@ void Spanner::computeEndElement()
                         _endElement = score()->findCR(tick2() - 1, track2());
                   break;
 
-            case ANCHOR_MEASURE:
+            case Anchor::MEASURE:
                   _endElement = score()->tick2measure(tick2() - 1);
                   if (!_endElement)
                         _endElement = score()->lastMeasure();
                   break;
 
-            case ANCHOR_CHORD:
-            case ANCHOR_NOTE:
+            case Anchor::CHORD:
+            case Anchor::NOTE:
                   break;
             }
       }
@@ -440,7 +440,7 @@ void Spanner::computeEndElement()
 
 void Spanner::setStartChord(Chord* c)
       {
-      _anchor = ANCHOR_CHORD;
+      _anchor = Anchor::CHORD;
       _startElement = c;
       }
 
@@ -450,7 +450,7 @@ void Spanner::setStartChord(Chord* c)
 
 Chord* Spanner::startChord() const
       {
-      Q_ASSERT(_anchor == ANCHOR_CHORD);
+      Q_ASSERT(_anchor == Anchor::CHORD);
       return static_cast<Chord*>(_startElement);
       }
 
@@ -469,7 +469,7 @@ void Spanner::setEndChord(Chord* c)
 
 Chord* Spanner::endChord() const
       {
-      Q_ASSERT(_anchor == ANCHOR_CHORD);
+      Q_ASSERT(_anchor == Anchor::CHORD);
       return static_cast<Chord*>(_endElement);
       }
 
@@ -479,7 +479,7 @@ Chord* Spanner::endChord() const
 
 ChordRest* Spanner::startCR() const
       {
-      Q_ASSERT(_anchor == ANCHOR_SEGMENT || _anchor == ANCHOR_CHORD);
+      Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
       return static_cast<ChordRest*>(_startElement);
       }
 
@@ -489,7 +489,7 @@ ChordRest* Spanner::startCR() const
 
 ChordRest* Spanner::endCR() const
       {
-      Q_ASSERT(_anchor == ANCHOR_SEGMENT || _anchor == ANCHOR_CHORD);
+      Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
       return static_cast<ChordRest*>(_endElement);
       }
 

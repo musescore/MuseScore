@@ -2367,7 +2367,7 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
 
 		    hp->setTick(absTick);
                 hp->setTick2(absTick2);
-                hp->setAnchor(Spanner::ANCHOR_SEGMENT);
+                hp->setAnchor(Spanner::Anchor::SEGMENT);
                 score_->addSpanner(hp);
 		    score_->updateHairpin(hp);
 		}
