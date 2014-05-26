@@ -807,9 +807,9 @@ void Measure::add(Element* el)
             case ElementType::SPACER:
                   {
                   Spacer* sp = static_cast<Spacer*>(el);
-                  if (sp->spacerType() == SPACER_UP)
+                  if (sp->spacerType() == SpacerType::UP)
                         staves[el->staffIdx()]->_vspacerUp = sp;
-                  else if (sp->spacerType() == SPACER_DOWN)
+                  else if (sp->spacerType() == SpacerType::DOWN)
                         staves[el->staffIdx()]->_vspacerDown = sp;
                   }
                   break;
@@ -912,9 +912,9 @@ void Measure::remove(Element* el)
                   break;
 
             case ElementType::SPACER:
-                  if (static_cast<Spacer*>(el)->spacerType() == SPACER_DOWN)
+                  if (static_cast<Spacer*>(el)->spacerType() == SpacerType::DOWN)
                         staves[el->staffIdx()]->_vspacerDown = 0;
-                  else if (static_cast<Spacer*>(el)->spacerType() == SPACER_UP)
+                  else if (static_cast<Spacer*>(el)->spacerType() == SpacerType::UP)
                         staves[el->staffIdx()]->_vspacerUp = 0;
                   break;
 
@@ -2189,7 +2189,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "vspacer" || tag == "vspacerDown") {
                   if (staves[staffIdx]->_vspacerDown == 0) {
                         Spacer* spacer = new Spacer(score());
-                        spacer->setSpacerType(SPACER_DOWN);
+                        spacer->setSpacerType(SpacerType::DOWN);
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
@@ -2198,7 +2198,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "vspacer" || tag == "vspacerUp") {
                   if (staves[staffIdx]->_vspacerUp == 0) {
                         Spacer* spacer = new Spacer(score());
-                        spacer->setSpacerType(SPACER_UP);
+                        spacer->setSpacerType(SpacerType::UP);
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }

@@ -404,13 +404,13 @@ Palette* MuseScore::newBreaksPalette()
       cell->mag = 1.2;
 
       Spacer* spacer = new Spacer(gscore);
-      spacer->setSpacerType(SPACER_DOWN);
+      spacer->setSpacerType(SpacerType::DOWN);
       spacer->setGap(3 * _spatium);
       cell = sp->append(spacer, tr("Staff spacer down"));
       cell->mag = .7;
 
       spacer = new Spacer(gscore);
-      spacer->setSpacerType(SPACER_UP);
+      spacer->setSpacerType(SpacerType::UP);
       spacer->setGap(3 * _spatium);
       cell = sp->append(spacer, tr("Staff spacer up"));
       cell->mag = .7;

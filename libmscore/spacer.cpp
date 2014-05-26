@@ -24,7 +24,7 @@ namespace Ms {
 Spacer::Spacer(Score* score)
    : Element(score)
       {
-      _spacerType = SPACER_UP;
+      _spacerType = SpacerType::UP;
       _gap = 0.0;
       }
 
@@ -64,7 +64,7 @@ void Spacer::layout0()
       qreal b = w * .5;
       qreal h = _gap;
 
-      if (spacerType() == SPACER_DOWN) {
+      if (spacerType() == SpacerType::DOWN) {
             path.lineTo(w, 0.0);
             path.moveTo(b, 0.0);
             path.lineTo(b, h);
@@ -72,7 +72,7 @@ void Spacer::layout0()
             path.moveTo(b, h);
             path.lineTo(w, h-b);
             }
-      else if (spacerType() == SPACER_UP) {
+      else if (spacerType() == SpacerType::UP) {
             path.moveTo(b, 0.0);
             path.lineTo(0.0, b);
             path.moveTo(b, 0.0);
@@ -115,9 +115,9 @@ void Spacer::spatiumChanged(qreal ov, qreal nv)
 void Spacer::editDrag(const EditData& ed)
       {
       qreal s = ed.delta.y();
-      if (spacerType() == SPACER_DOWN)
+      if (spacerType() == SpacerType::DOWN)
             _gap += s;
-      else if (spacerType() == SPACER_UP)
+      else if (spacerType() == SpacerType::UP)
             _gap -= s;
       if (_gap < spatium() * 2.0)
             _gap = spatium() * 2;
@@ -135,9 +135,9 @@ void Spacer::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       *defaultGrip   = 0;
       qreal _spatium = spatium();
       QPointF p;
-      if (spacerType() == SPACER_DOWN)
+      if (spacerType() == SpacerType::DOWN)
             p = QPointF(_spatium * .5, _gap);
-      else if (spacerType() == SPACER_UP)
+      else if (spacerType() == SpacerType::UP)
             p = QPointF(_spatium * .5, 0.0);
       grip[0].translate(pagePos() + p);
       }
@@ -149,7 +149,7 @@ void Spacer::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 void Spacer::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("subtype", _spacerType);
+      xml.tag("subtype", int(_spacerType));
       Element::writeProperties(xml);
       xml.tag("space", _gap / spatium());
       xml.etag();
