@@ -879,7 +879,7 @@ qDebug("BeginRepeat=============================================");
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -894,7 +894,7 @@ qDebug("BeginRepeat=============================================");
             clef->staff()->setClef(0, clef->clefTypeList());
 
             Channel& ch = instr->channel(0);
-            if (midiChannel == PERC_DEFAULT_STAFF_TYPE) {
+            if (midiChannel == int(StaffTypes::PERC_DEFAULT)) {
                   ch.program = 0;
                   ch.bank    = 128;
                   }
@@ -1466,7 +1466,7 @@ void GuitarPro3::read(QFile* fp)
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -2158,7 +2158,7 @@ void GuitarPro4::read(QFile* fp)
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -2997,7 +2997,7 @@ void GuitarPro5::readTracks()
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -3299,7 +3299,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                   Staff* s1 = p->staff(1);
                   s1->setUpdateKeymap(true);
 
-                  StaffType st = *StaffType::preset(TAB_DEFAULT_STAFF_TYPE);
+                  StaffType st = *StaffType::preset(StaffTypes::TAB_DEFAULT);
                   st.setSlashStyle(true);
                   s1->setStaffType(&st);
                   s1->linkTo(s);
@@ -3316,7 +3316,7 @@ Score::FileError importGTP(Score* score, const QString& name)
 
             if (part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
                   Staff* staff2 = pscore->staff(1);
-                  staff2->setStaffType(StaffType::preset(TAB_DEFAULT_STAFF_TYPE));
+                  staff2->setStaffType(StaffType::preset(StaffTypes::TAB_DEFAULT));
                   }
 
             //

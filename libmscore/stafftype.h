@@ -113,16 +113,16 @@ struct TablatureDurationFont {
 
 // ready-made staff types:
 
-enum {
-      STANDARD_STAFF_TYPE,
-      PERC_1LINE_STAFF_TYPE, PERC_3LINE_STAFF_TYPE, PERC_5LINE_STAFF_TYPE,
-      TAB_6SIMPLE_STAFF_TYPE, TAB_6COMMON_STAFF_TYPE, TAB_6FULL_STAFF_TYPE,
-            TAB_4SIMPLE_STAFF_TYPE, TAB_4COMMON_STAFF_TYPE, TAB_4FULL_STAFF_TYPE,
-            TAB_UKULELE_STAFF_TYPE, TAB_BALALAJKA_STAFF_TYPE, TAB_ITALIAN_STAFF_TYPE, TAB_FRENCH_STAFF_TYPE,
+enum class StaffTypes : char {
+      STANDARD,
+      PERC_1LINE, PERC_3LINE, PERC_5LINE,
+      TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
+            TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
+            TAB_UKULELE, TAB_BALALAJKA, TAB_ITALIAN, TAB_FRENCH,
       STAFF_TYPES,
       // some usefull shorthands:
-            PERC_DEFAULT_STAFF_TYPE = PERC_5LINE_STAFF_TYPE,
-            TAB_DEFAULT_STAFF_TYPE = TAB_6COMMON_STAFF_TYPE
+            PERC_DEFAULT = StaffTypes::PERC_5LINE,
+            TAB_DEFAULT = StaffTypes::TAB_6COMMON
       };
 
 //---------------------------------------------------------
@@ -242,7 +242,7 @@ class StaffType {
 
       // static function to deal with presets
       static const StaffType* getDefaultPreset(StaffGroup grp);
-      static const StaffType* preset(int idx);
+      static const StaffType* preset(StaffTypes idx);
       static const StaffType* presetFromXmlName(QString& xmlName);
 
       void setGenKeysig(bool val)              { _genKeysig = val;        }

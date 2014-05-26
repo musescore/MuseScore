@@ -160,7 +160,7 @@ void StaffListItem::setStaffType(const StaffType* st)
       else {
             // if staff type given, look into combo box item data for a preset equal to staff type
             for (int i = 0; i < _staffTypeCombo->count(); ++i) {
-                  const StaffType* _st = StaffType::preset(_staffTypeCombo->itemData(i).toInt());
+                  const StaffType* _st = StaffType::preset(StaffTypes(_staffTypeCombo->itemData(i).toInt()));
                   if (*_st == *st) {
                         _staffTypeCombo->setCurrentIndex(i);
                         return;
@@ -185,7 +185,7 @@ void StaffListItem::setStaffType(int idx)
 
 const StaffType* StaffListItem::staffType() const
       {
-      return StaffType::preset(staffTypeIdx());
+      return StaffType::preset(StaffTypes((staffTypeIdx())));
       }
 
 //---------------------------------------------------------
@@ -205,7 +205,7 @@ void StaffListItem::staffTypeChanged(int idx)
       {
       // check current clef matches new staff type
       int staffTypeIdx = _staffTypeCombo->itemData(idx).toInt();
-      const StaffType* stfType = StaffType::preset(staffTypeIdx);
+      const StaffType* stfType = StaffType::preset(StaffTypes(staffTypeIdx));
       if (stfType->group() != ClefInfo::staffGroup(_clef._transposingClef)) {
             ClefType clefType;
             switch (stfType->group()) {

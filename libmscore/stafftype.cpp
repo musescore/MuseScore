@@ -963,16 +963,16 @@ static const QString _emptyString = QString();
 //   Static functions for StaffType presets
 //---------------------------------------------------------
 
-const StaffType* StaffType::preset(int idx)
+const StaffType* StaffType::preset(StaffTypes idx)
       {
-      if (idx < 0 || idx >= (int)_presets.size())
+      if (int(idx) < 0 || int(idx) >= int(_presets.size()))
             return &_presets[0];
-      return &_presets[idx];
+      return &_presets[int(idx)];
       }
 
 const StaffType* StaffType::presetFromXmlName(QString& xmlName)
       {
-      for (int i = 0; i < (int)_presets.size(); ++i) {
+      for (int i = 0; i < int(_presets.size()); ++i) {
             if (_presets[i].xmlName() == xmlName)
                   return &_presets[i];
             }
@@ -990,7 +990,7 @@ const StaffType* StaffType::presetFromName(QString& name)
 #endif
 const StaffType* StaffType::getDefaultPreset(StaffGroup grp)
       {
-      int _idx = _defaultPreset[(int)grp];
+      int _idx = _defaultPreset[int(grp)];
       return &_presets[_idx];
       }
 
