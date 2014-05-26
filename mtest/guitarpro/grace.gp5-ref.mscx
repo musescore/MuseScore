@@ -763,7 +763,7 @@
       <Staff id="2">
         <Measure number="1">
           <Clef>
-            <concertClefType>G</concertClefType>
+            <concertClefType>TAB2</concertClefType>
             <transposingClefType>TAB2</transposingClefType>
             </Clef>
           <KeySig>

@@ -752,13 +752,14 @@ class ChangeStaff : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeStaffType : public UndoCommand {
-      Staff*     staff;
-      StaffType  staffType;
-
-      void flip();
+      ClefTypeList initialClef;
+      Staff*       staff;
+      StaffType    staffType;
 
    public:
       ChangeStaffType(Staff* s, const StaffType& t) : staff(s), staffType(t) {}
+      virtual void undo();
+      virtual void redo();
       UNDO_NAME("ChangeStaffType")
       };
 
