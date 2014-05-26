@@ -3806,16 +3806,16 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
                   tuplet->setTick(cr->tick());
                   // set bracket, leave at default if unspecified
                   if (tupletBracket == "yes")
-                        tuplet->setBracketType(Tuplet::SHOW_BRACKET);
+                        tuplet->setBracketType(Tuplet::BracketType::SHOW_BRACKET);
                   else if (tupletBracket == "no")
-                        tuplet->setBracketType(Tuplet::SHOW_NO_BRACKET);
-                  // set number, default is "actual" (=SHOW_NUMBER)
+                        tuplet->setBracketType(Tuplet::BracketType::SHOW_NO_BRACKET);
+                  // set number, default is "actual" (=NumberType::SHOW_NUMBER)
                   if (tupletShowNumber == "both")
-                        tuplet->setNumberType(Tuplet::SHOW_RELATION);
+                        tuplet->setNumberType(Tuplet::NumberType::SHOW_RELATION);
                   else if (tupletShowNumber == "none")
-                        tuplet->setNumberType(Tuplet::NO_TEXT);
+                        tuplet->setNumberType(Tuplet::NumberType::NO_TEXT);
                   else
-                        tuplet->setNumberType(Tuplet::SHOW_NUMBER);
+                        tuplet->setNumberType(Tuplet::NumberType::SHOW_NUMBER);
                   // TODO type, placement, bracket
                   tuplet->setParent(cr->measure());
                   }

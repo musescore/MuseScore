@@ -39,13 +39,13 @@ class Tuplet : public DurationElement {
       int _tick;
 
    public:
-      enum { SHOW_NUMBER, SHOW_RELATION, NO_TEXT };
-      enum { AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET };
+      enum NumberType : char { SHOW_NUMBER, SHOW_RELATION, NO_TEXT };
+      enum BracketType : char { AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET };
 
    private:
       QList<DurationElement*> _elements;
-      int _numberType;
-      int _bracketType;
+      NumberType _numberType;
+      BracketType _bracketType;
       bool _hasBracket;
 
       Fraction _ratio;
@@ -81,11 +81,11 @@ class Tuplet : public DurationElement {
 
       virtual Measure* measure() const { return (Measure*)parent(); }
 
-      int numberType() const        { return _numberType;       }
-      int bracketType() const       { return _bracketType;      }
-      void setNumberType(int val)   { _numberType = val;        }
-      void setBracketType(int val)  { _bracketType = val;       }
-      bool hasBracket() const       { return _hasBracket;       }
+      NumberType numberType() const        { return _numberType;       }
+      BracketType bracketType() const      { return _bracketType;      }
+      void setNumberType(NumberType val)   { _numberType = val;        }
+      void setBracketType(BracketType val) { _bracketType = val;       }
+      bool hasBracket() const              { return _hasBracket;       }
 
       Fraction ratio() const           { return _ratio;         }
       void setRatio(const Fraction& r) { _ratio = r;            }

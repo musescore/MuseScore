@@ -34,8 +34,8 @@ Tuplet::Tuplet(Score* s)
   : DurationElement(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      _numberType   = Tuplet::SHOW_NUMBER;
-      _bracketType  = Tuplet::AUTO_BRACKET;
+      _numberType   = Tuplet::NumberType::SHOW_NUMBER;
+      _bracketType  = Tuplet::BracketType::AUTO_BRACKET;
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
@@ -125,7 +125,7 @@ void Tuplet::layout()
                   _number->setParent(this);
                   _number->setVisible(visible());
                   }
-            if (_numberType == SHOW_NUMBER)
+            if (_numberType == NumberType::SHOW_NUMBER)
                   _number->setText(QString("%1").arg(_ratio.numerator()));
             else
                   _number->setText(QString("%1:%2").arg(_ratio.numerator()).arg(_ratio.denominator()));
@@ -622,9 +622,9 @@ void Tuplet::read(XmlReader& e)
             if (tag == "direction")
                   setProperty(P_DIRECTION, Ms::getProperty(P_DIRECTION, e));
             else if (tag == "numberType")
-                  _numberType = e.readInt();
+                  _numberType = NumberType(e.readInt());
             else if (tag == "bracketType")
-                  _bracketType = e.readInt();
+                  _bracketType = BracketType(e.readInt());
             else if (tag == "normalNotes")
                   _ratio.setDenominator(e.readInt());
             else if (tag == "actualNotes")
@@ -646,10 +646,10 @@ void Tuplet::read(XmlReader& e)
             else if (tag == "subtype")    // obsolete
                   e.skipCurrentElement();
             else if (tag == "hasNumber")             // obsolete
-                  _numberType = e.readInt() ? SHOW_NUMBER : NO_TEXT;
+                  _numberType = e.readInt() ? NumberType::SHOW_NUMBER : NumberType::NO_TEXT;
             else if (tag == "hasLine") {          // obsolete
                   _hasBracket = e.readInt();
-                  _bracketType = AUTO_BRACKET;
+                  _bracketType = BracketType::AUTO_BRACKET;
                   }
             else if (tag == "baseLen")            // obsolete
                   bl = e.readInt();
@@ -889,10 +889,10 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
                   setDirection(Direction(v.toInt()));
                   break;
             case P_NUMBER_TYPE:
-                  setNumberType(v.toInt());
+                  setNumberType(NumberType(v.toInt()));
                   break;
             case P_BRACKET_TYPE:
-                  setBracketType(v.toInt());
+                  setBracketType(BracketType(v.toInt()));
                   break;
             case P_NORMAL_NOTES:
                   _ratio.setDenominator(v.toInt());
