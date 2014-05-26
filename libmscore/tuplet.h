@@ -39,8 +39,8 @@ class Tuplet : public DurationElement {
       int _tick;
 
    public:
-      enum NumberType : char { SHOW_NUMBER, SHOW_RELATION, NO_TEXT };
-      enum BracketType : char { AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET };
+      enum class NumberType : char { SHOW_NUMBER, SHOW_RELATION, NO_TEXT };
+      enum class BracketType : char { AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET };
 
    private:
       QList<DurationElement*> _elements;
