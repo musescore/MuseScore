@@ -66,10 +66,10 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       endHook->setChecked(otl->endHook());
       beginHookHeight->setValue(otl->beginHookHeight().val());
       endHookHeight->setValue(otl->endHookHeight().val());
-      beginHookType90->setChecked(otl->beginHookType() == HOOK_90);
-      beginHookType45->setChecked(otl->beginHookType() == HOOK_45);
-      endHookType90->setChecked(otl->endHookType() == HOOK_90);
-      endHookType45->setChecked(otl->endHookType() == HOOK_45);
+      beginHookType90->setChecked(otl->beginHookType() == HookType::HOOK_90);
+      beginHookType45->setChecked(otl->beginHookType() == HookType::HOOK_45);
+      endHookType90->setChecked(otl->endHookType() == HookType::HOOK_90);
+      endHookType45->setChecked(otl->endHookType() == HookType::HOOK_45);
 
       connect(beginTextTb, SIGNAL(clicked()),    SLOT(beginTextProperties()));
       connect(continueTextTb, SIGNAL(clicked()), SLOT(continueTextProperties()));
@@ -110,12 +110,12 @@ void LineProperties::accept()
       if (endHook->isChecked() != otl->endHook())
             otl->undoChangeProperty(P_END_HOOK, endHook->isChecked());
 
-      HookType ht = beginHookType90->isChecked() ? HOOK_90 : HOOK_45;
+      HookType ht = beginHookType90->isChecked() ? HookType::HOOK_90 : HookType::HOOK_45;
       if (ht != otl->beginHookType())
-            otl->undoChangeProperty(P_BEGIN_HOOK_TYPE, ht);
-      ht = endHookType90->isChecked() ? HOOK_90 : HOOK_45;
+            otl->undoChangeProperty(P_BEGIN_HOOK_TYPE, int(ht));
+      ht = endHookType90->isChecked() ? HookType::HOOK_90 : HookType::HOOK_45;
       if (ht != otl->endHookType())
-            otl->undoChangeProperty(P_END_HOOK_TYPE, ht);
+            otl->undoChangeProperty(P_END_HOOK_TYPE, int(ht));
 
       Spatium val = Spatium(beginHookHeight->value());
       if (val != otl->beginHookHeight())
