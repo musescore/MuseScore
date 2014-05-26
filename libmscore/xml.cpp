@@ -271,15 +271,15 @@ PlaceText readPlacement(XmlReader& e)
       {
       const QString& s(e.readElementText());
       if (s == "auto" || s == "0")
-            return PLACE_AUTO;
+            return PlaceText::AUTO;
       if (s == "above" || s == "1")
-            return PLACE_ABOVE;
+            return PlaceText::ABOVE;
       if (s == "below" || s == "2")
-            return PLACE_BELOW;
+            return PlaceText::BELOW;
       if (s == "left" || s == "3")
-            return PLACE_LEFT;
+            return PlaceText::LEFT;
       qDebug("unknown placement value <%s>", qPrintable(s));
-      return PLACE_AUTO;
+      return PlaceText::AUTO;
       }
 
 //---------------------------------------------------------

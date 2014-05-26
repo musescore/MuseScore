@@ -130,8 +130,8 @@ Volta::Volta(Score* s)
       _voltaType = VoltaType::OPEN;
       setBeginText("1.", TEXT_STYLE_VOLTA);
 
-      setBeginTextPlace(PLACE_BELOW);
-      setContinueTextPlace(PLACE_BELOW);
+      setBeginTextPlace(PlaceText::BELOW);
+      setContinueTextPlace(PlaceText::BELOW);
 
       setBeginHook(true);
       Spatium hook(s->styleS(StyleIdx::voltaHook));

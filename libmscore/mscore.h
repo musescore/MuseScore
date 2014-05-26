@@ -133,15 +133,15 @@ enum class BracketType : signed char {
 //   PlaceText
 //---------------------------------------------------------
 
-enum PlaceText {
-      PLACE_AUTO, PLACE_ABOVE, PLACE_BELOW, PLACE_LEFT
+enum class PlaceText : char {
+      AUTO, ABOVE, BELOW, LEFT
       };
 
 //---------------------------------------------------------
 //   AlignmentFlags
 //---------------------------------------------------------
 
-enum AlignmentFlags {
+enum AlignmentFlags : char {
       ALIGN_LEFT     = 0,
       ALIGN_RIGHT    = 1,
       ALIGN_HCENTER  = 2,
@@ -167,7 +167,7 @@ enum OffsetType {
 //   BeamMode
 //---------------------------------------------------------
 
-enum class BeamMode : char {
+enum class BeamMode : signed char {
       AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
       };
 

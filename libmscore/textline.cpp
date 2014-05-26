@@ -90,8 +90,8 @@ void TextLineSegment::draw(QPainter* painter) const
       if (_text) {
             SpannerSegmentType st = spannerSegmentType();
             if (
-               ((st == SpannerSegmentType::SINGLE || st == SpannerSegmentType::BEGIN) && (tl->beginTextPlace() == PLACE_LEFT))
-               || ((st == SpannerSegmentType::MIDDLE || st == SpannerSegmentType::END) && (tl->continueTextPlace() == PLACE_LEFT))
+               ((st == SpannerSegmentType::SINGLE || st == SpannerSegmentType::BEGIN) && (tl->beginTextPlace() == PlaceText::LEFT))
+               || ((st == SpannerSegmentType::MIDDLE || st == SpannerSegmentType::END) && (tl->continueTextPlace() == PlaceText::LEFT))
                ) {
                   QRectF bb(_text->bbox());
                   l = _text->pos().x() + bb.width() + textlineTextDistance;
@@ -218,9 +218,9 @@ void TextLineSegment::layout1()
 
       if (_text) {
             qreal h = _text->height();
-            if (textLine()->beginTextPlace() == PLACE_ABOVE)
+            if (textLine()->beginTextPlace() == PlaceText::ABOVE)
                   y1 = -h;
-            else if (textLine()->beginTextPlace() == PLACE_BELOW)
+            else if (textLine()->beginTextPlace() == PlaceText::BELOW)
                   y2 = h;
             else {
                   y1 = -h * .5;
@@ -353,9 +353,9 @@ TextLine::TextLine(Score* s)
       _beginHookType     = HookType::HOOK_90;
       _endHookType       = HookType::HOOK_90;
 
-      _beginTextPlace    = PLACE_LEFT;
-      _continueTextPlace = PLACE_LEFT;
-      _endTextPlace      = PLACE_LEFT;
+      _beginTextPlace    = PlaceText::LEFT;
+      _continueTextPlace = PlaceText::LEFT;
+      _endTextPlace      = PlaceText::LEFT;
       }
 
 TextLine::TextLine(const TextLine& e)
@@ -732,11 +732,11 @@ QVariant TextLine::getProperty(P_ID id) const
       {
       switch (id) {
             case P_ID::BEGIN_TEXT_PLACE:
-                  return _beginTextPlace;
+                  return int(_beginTextPlace);
             case P_ID::CONTINUE_TEXT_PLACE:
-                  return _continueTextPlace;
+                  return int(_continueTextPlace);
             case P_ID::END_TEXT_PLACE:
-                  return _endTextPlace;
+                  return int(_endTextPlace);
             case P_ID::BEGIN_HOOK:
                   return _beginHook;
             case P_ID::END_HOOK:
@@ -819,7 +819,7 @@ QVariant TextLine::propertyDefault(P_ID id) const
             case P_ID::BEGIN_TEXT_PLACE:
             case P_ID::CONTINUE_TEXT_PLACE:
             case P_ID::END_TEXT_PLACE:
-                  return PLACE_LEFT;
+                  return int(PlaceText::LEFT);
             case P_ID::BEGIN_HOOK:
             case P_ID::END_HOOK:
                   return false;
