@@ -119,9 +119,9 @@ void TextLineSegment::draw(QPainter* painter) const
 
       QPointF pp1(l, 0.0);
 
-      if (tl->beginHook() && tl->beginHookType() == HOOK_45)
+      if (tl->beginHook() && tl->beginHookType() == HookType::HOOK_45)
             pp1.rx() += fabs(tl->beginHookHeight().val() * _spatium * .4);
-      if (tl->endHook() && tl->endHookType() == HOOK_45)
+      if (tl->endHook() && tl->endHookType() == HookType::HOOK_45)
             pp2.rx() -= fabs(tl->endHookHeight().val() * _spatium * .4);
 
       painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
@@ -129,7 +129,7 @@ void TextLineSegment::draw(QPainter* painter) const
       if (tl->beginHook()) {
             qreal hh = tl->beginHookHeight().val() * _spatium;
             if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_BEGIN) {
-                  if (tl->beginHookType() == HOOK_45)
+                  if (tl->beginHookType() == HookType::HOOK_45)
                         painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x() - fabs(hh * .4), pp1.y() + hh));
                   else
                         painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x(), pp1.y() + hh));
@@ -138,7 +138,7 @@ void TextLineSegment::draw(QPainter* painter) const
       if (tl->endHook()) {
             qreal hh = tl->endHookHeight().val() * _spatium;
             if (spannerSegmentType() == SEGMENT_SINGLE || spannerSegmentType() == SEGMENT_END) {
-                  if (tl->endHookType() == HOOK_45)
+                  if (tl->endHookType() == HookType::HOOK_45)
                         painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x() + fabs(hh * .4), pp2.y() + hh));
                   else
                         painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x(), pp2.y() + hh));
@@ -350,8 +350,8 @@ TextLine::TextLine(Score* s)
       _endHookHeight     = Spatium(1.5);
       _beginHook         = false;
       _endHook           = false;
-      _beginHookType     = HOOK_90;
-      _endHookType       = HOOK_90;
+      _beginHookType     = HookType::HOOK_90;
+      _endHookType       = HookType::HOOK_90;
 
       _beginTextPlace    = PLACE_LEFT;
       _continueTextPlace = PLACE_LEFT;
@@ -746,9 +746,9 @@ QVariant TextLine::getProperty(P_ID id) const
             case P_END_HOOK_HEIGHT:
                   return _endHookHeight.val();
             case P_BEGIN_HOOK_TYPE:
-                  return _beginHookType;
+                  return int(_beginHookType);
             case P_END_HOOK_TYPE:
-                  return _endHookType;
+                  return int(_endHookType);
             case P_BEGIN_TEXT:
                   return beginText();
             case P_CONTINUE_TEXT:
@@ -828,7 +828,7 @@ QVariant TextLine::propertyDefault(P_ID id) const
                   return 1.5;
             case P_BEGIN_HOOK_TYPE:
             case P_END_HOOK_TYPE:
-                  return HOOK_90;
+                  return int(HookType::HOOK_90);
             case P_BEGIN_TEXT:
             case P_CONTINUE_TEXT:
             case P_END_TEXT:

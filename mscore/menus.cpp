@@ -815,20 +815,20 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setEndHookType(HOOK_45);
+      pedal->setEndHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
       pedal->setBeginHook(true);
-      pedal->setBeginHookType(HOOK_45);
-      pedal->setEndHookType(HOOK_45);
+      pedal->setBeginHookType(HookType::HOOK_45);
+      pedal->setEndHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
       pedal->setBeginHook(true);
-      pedal->setBeginHookType(HOOK_45);
+      pedal->setBeginHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       Trill* trill = new Trill(gscore);
