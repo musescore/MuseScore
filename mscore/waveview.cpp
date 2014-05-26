@@ -98,7 +98,7 @@ WaveView::WaveView(QWidget* parent)
       {
       _xpos   = 0;
       _xmag   = 0.1;
-      _timeType = TICKS;      // FRAMES
+      _timeType = TType::TICKS;      // TType::FRAMES
       setMinimumHeight(50);
       }
 
