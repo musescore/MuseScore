@@ -137,6 +137,25 @@ void MidiData::setQuantValue(const QString &fileName, MidiOperation::QuantValue 
       it.value().quantValue = value;
       }
 
+bool MidiData::needToSplit(const QString &fileName, int trackIndex) const
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return false;
+      const auto fit = it.value().needLRhandSplit.find(trackIndex);
+      if (fit == it.value().needLRhandSplit.end())
+            return false;
+      return fit->second;
+      }
+
+void MidiData::setNeedToSplit(const QString &fileName, int trackIndex, bool value)
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return;
+      it.value().needLRhandSplit[trackIndex] = value;
+      }
+
 MidiOperation::QuantValue MidiData::defaultQuantValue()
       {
       return Quantization().value;

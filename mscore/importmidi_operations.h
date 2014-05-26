@@ -94,7 +94,7 @@ class MidiImportOperations
    public:
       void appendTrackOperations(const TrackOperations& operations);
       void clear();
-      void setDefaults(const TrackOperations& operations);
+      void resetDefaults(const TrackOperations& operations);
       void setCurrentTrack(int trackIndex);
       void setCurrentMidiFile(const QString &fileName);
       int currentTrack() const { return currentTrack_; }
@@ -119,8 +119,16 @@ class MidiImportOperations
       MidiOperation::QuantValue quantValue() const;
       void setQuantValue(MidiOperation::QuantValue value);
 
+                  // left/right hand split
+      bool needToSplit(int trackIndex) const;
+      void setNeedToSplit(int trackIndex, bool value);
+
    private:
+      TrackOperations& defaultOperations(int trackIndex);
+      const TrackOperations& defaultOperations(int trackIndex) const;
+
       QList<TrackOperations> operations_;
+      std::map<int, TrackOperations> defaultOpersMap;       // <track index, operations>
       TrackOperations defaultOpers;
       int currentTrack_ = -1;
       QString currentMidiFile_;

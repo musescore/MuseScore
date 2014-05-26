@@ -8,6 +8,22 @@ bool MidiImportOperations::isValidIndex(int index) const
       return index >= 0 && index < operations_.size();
       }
 
+TrackOperations& MidiImportOperations::defaultOperations(int trackIndex)
+      {
+      const auto it = defaultOpersMap.find(trackIndex);
+      if (it != defaultOpersMap.end())
+            return it->second;
+      return defaultOpers;
+      }
+
+const TrackOperations& MidiImportOperations::defaultOperations(int trackIndex) const
+      {
+      const auto it = defaultOpersMap.find(trackIndex);
+      if (it != defaultOpersMap.end())
+            return it->second;
+      return defaultOpers;
+      }
+
 void MidiImportOperations::appendTrackOperations(const TrackOperations &operations)
       {
       operations_.push_back(operations);
@@ -20,11 +36,13 @@ void MidiImportOperations::clear()
       operations_.clear();
       currentTrack_ = -1;
       defaultOpers = TrackOperations();
+      defaultOpersMap.clear();
       }
 
-void MidiImportOperations::setDefaults(const TrackOperations &operations)
+void MidiImportOperations::resetDefaults(const TrackOperations &operations)
       {
       defaultOpers = operations;
+      defaultOpersMap.clear();
       }
 
 void MidiImportOperations::setCurrentTrack(int trackIndex)
@@ -42,14 +60,14 @@ void MidiImportOperations::setCurrentMidiFile(const QString &fileName)
 TrackOperations MidiImportOperations::currentTrackOperations() const
       {
       if (!isValidIndex(currentTrack_))
-            return defaultOpers;
+            return defaultOperations(currentTrack_);
       return operations_[currentTrack_];
       }
 
 TrackOperations MidiImportOperations::trackOperations(int trackIndex) const
       {
       if (!isValidIndex(trackIndex))
-            return defaultOpers;
+            return defaultOperations(trackIndex);
       return operations_[trackIndex];
       }
 
@@ -66,7 +84,8 @@ void MidiImportOperations::adaptForPercussion(int trackIndex, bool isDrumTrack)
                   operations_[trackIndex].allowedVoices = MidiOperation::AllowedVoices::V_1;
             }
       else {
-            defaultOpers.allowedVoices = isDrumTrack
+            auto &def = defaultOperations(trackIndex);
+            def.allowedVoices = (isDrumTrack)
                         ? MidiOperation::AllowedVoices::V_1 : TrackOperations().allowedVoices;
             }
       }
@@ -91,7 +110,7 @@ bool MidiImportOperations::isHumanPerformance() const
 void MidiImportOperations::setHumanPerformance(bool value)
       {
       midiData_.setHumanPerformance(currentMidiFile_, value);
-      defaultOpers.quantize.humanPerformance = value;
+      defaultOperations(currentTrack_).quantize.humanPerformance = value;
       }
 
 MidiOperation::QuantValue MidiImportOperations::quantValue() const
@@ -102,7 +121,18 @@ MidiOperation::QuantValue MidiImportOperations::quantValue() const
 void MidiImportOperations::setQuantValue(MidiOperation::QuantValue value)
       {
       midiData_.setQuantValue(currentMidiFile_, value);
-      defaultOpers.quantize.value = value;
+      defaultOperations(currentTrack_).quantize.value = value;
+      }
+
+bool MidiImportOperations::needToSplit(int trackIndex) const
+      {
+      return midiData_.needToSplit(currentMidiFile_, trackIndex);
+      }
+
+void MidiImportOperations::setNeedToSplit(int trackIndex, bool value)
+      {
+      midiData_.setNeedToSplit(currentMidiFile_, trackIndex, value);
+      defaultOperations(currentTrack_).LHRH.doIt = value;
       }
 
 const std::set<ReducedFraction>*

@@ -358,6 +358,14 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                   tracksModel->setOperation(row, MidiOperation::Type::QUANT_VALUE,
                                             QVariant((int)quantValue));
 
+                  for (int i = 0; i != tracksModel->trackCount(); ++i) {
+                        const bool needSplit = midiData.needToSplit(fileName, i);
+                        tracksModel->setOperation(
+                                          tracksModel->rowFromTrackIndex(i),
+                                          MidiOperation::Type::DO_LHRH_SEPARATION,
+                                          QVariant(needSplit));
+                        }
+
                   showOrHideStaffNameCol(tracksMeta);
                   for (int i = 0; i != tracksModel->trackCount(); ++i)
                         trackData.push_back(tracksModel->trackData(i));

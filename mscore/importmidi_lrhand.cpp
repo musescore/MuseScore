@@ -12,6 +12,29 @@ extern Preferences preferences;
 
 namespace LRHand {
 
+bool needToSplit(const std::multimap<ReducedFraction, MidiChord> &chords, int midiProgram)
+      {
+      if (!MChord::isGrandStaffProgram(midiProgram))
+            return false;
+
+      const int octave = 12;
+      for (const auto &chord: chords) {
+            const MidiChord &c = chord.second;
+            int minPitch = std::numeric_limits<int>::max();
+            int maxPitch = 0;
+            for (const auto &note: c.notes) {
+                  if (note.pitch < minPitch)
+                        minPitch = note.pitch;
+                  if (note.pitch > maxPitch)
+                        maxPitch = note.pitch;
+                  }
+            if (maxPitch - minPitch > octave)
+                  return true;
+            }
+
+      return false;
+      }
+
 
 #ifdef QT_DEBUG
 
