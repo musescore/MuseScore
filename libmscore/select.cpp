@@ -33,6 +33,7 @@
 #include "select.h"
 #include "sig.h"
 #include "slur.h"
+#include "tie.h"
 #include "system.h"
 #include "text.h"
 #include "textline.h"
@@ -844,6 +845,60 @@ bool Selection::measureRange(Measure** m1, Measure** m2) const
       if (*m2 && (*m2)->tick() == endSegment()->tick())
             *m2 = (*m2)->prevMeasure();
       return true;
+      }
+
+//---------------------------------------------------------
+//   uniqueElements
+//    Return list of selected elements.
+//    If some elements are linked, only one of the linked
+//    elements show up in the list.
+//---------------------------------------------------------
+
+const QList<Element*> Selection::uniqueElements() const
+      {
+      QList<Element*> l;
+
+      for (Element* e : elements()) {
+            bool alreadyThere = false;
+            for (Element* ee : l) {
+                  if ((ee->links() && ee->links()->contains(e)) || e == ee) {
+                        alreadyThere = true;
+                        break;
+                        }
+                  }
+            if (!alreadyThere)
+                  l.append(e);
+            }
+      return l;
+      }
+
+//---------------------------------------------------------
+//   uniqueNotes
+//    Return list of selected notes.
+//    If some notes are linked, only one of the linked
+//    elements show up in the list.
+//---------------------------------------------------------
+
+QList<Note*> Selection::uniqueNotes(int track) const
+      {
+      QList<Note*> l;
+
+      for (Note* note : noteList(track)) {
+            while (note->tieBack())
+                  note = note->tieBack()->startNote();
+            for (; note; note = note->tieFor() ? note->tieFor()->endNote() : 0) {
+                  bool alreadyThere = false;
+                  for (Note* n : l) {
+                        if ((n->links() && n->links()->contains(note)) || n == note) {
+                              alreadyThere = true;
+                              break;
+                              }
+                        }
+                  if (!alreadyThere)
+                        l.append(note);
+                  }
+            }
+      return l;
       }
 
 
