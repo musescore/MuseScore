@@ -306,7 +306,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
       qDebug("    read voice: tick %d track: %d)", tick, track);
       foreach(NoteObj* no, cvoice->objects) {
             switch (no->type()) {
-                  case T_REST:
+                  case CapellaNoteObjectType::REST:
                         {
                         qDebug("     <Rest>");
                         Measure* m = score->getCreateMeasure(tick);
@@ -389,7 +389,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               tick += ticks;
                         }
                         break;
-                  case T_CHORD:
+                  case CapellaNoteObjectType::CHORD:
                         {
                         qDebug("     <Chord>");
                         ChordObj* o = static_cast<ChordObj*>(no);
@@ -555,7 +555,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               tick += ticks;
                         }
                         break;
-                  case T_CLEF:
+                  case CapellaNoteObjectType::CLEF:
                         {
                         qDebug("     <Clef>");
                         CapClef* o = static_cast<CapClef*>(no);
@@ -573,7 +573,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         clef->staff()->setClef(tick, clef->clefTypeList());
                         }
                         break;
-                  case T_KEY:
+                  case CapellaNoteObjectType::KEY:
                         {
                         qDebug("   <Key>");
                         CapKey* o = static_cast<CapKey*>(no);
@@ -589,7 +589,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         }
                         break;
-                  case T_METER:
+                  case CapellaNoteObjectType::METER:
                         {
                         CapMeter* o = static_cast<CapMeter*>(no);
                         qDebug("     <Meter> tick %d %d/%d", tick, o->numerator, 1 << o->log2Denom);
@@ -608,8 +608,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         s->add(ts);
                         }
                         break;
-                  case T_EXPL_BARLINE:
-                  case T_IMPL_BARLINE:    // does not exist?
+                  case CapellaNoteObjectType::EXPL_BARLINE:
+                  case CapellaNoteObjectType::IMPL_BARLINE:    // does not exist?
                         {
                         CapExplicitBarline* o = static_cast<CapExplicitBarline*>(no);
                         qDebug("     <Barline>");
@@ -663,7 +663,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         }
                         break;
-                  case T_PAGE_BKGR:
+                  case CapellaNoteObjectType::PAGE_BKGR:
                         qDebug("     <PageBreak>");
                         break;
                   }
@@ -677,9 +677,9 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
       tick = startTick;
       foreach(NoteObj* no, cvoice->objects) {
             BasicDurationalObj* d = 0;
-            if (no->type() == T_REST)
+            if (no->type() == CapellaNoteObjectType::REST)
                   d = static_cast<BasicDurationalObj*>(static_cast<RestObj*>(no));
-            else if (no->type() == T_CHORD)
+            else if (no->type() == CapellaNoteObjectType::CHORD)
                   d = static_cast<BasicDurationalObj*>(static_cast<ChordObj*>(no));
             if (!d)
                   continue;
@@ -766,7 +766,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                   }
             // TODO: tick is wrong wg. tuplets
             int ticks = d->ticks();
-            if (no->type() == T_REST) {
+            if (no->type() == CapellaNoteObjectType::REST) {
                   RestObj* o = static_cast<RestObj*>(no);
                   if (o->fullMeasures) {
                         Measure* m = score->getCreateMeasure(tick);
@@ -1485,7 +1485,7 @@ void BasicDurationalObj::read()
 //---------------------------------------------------------
 
 RestObj::RestObj(Capella* c)
-      : BasicDurationalObj(c), NoteObj(T_REST)
+      : BasicDurationalObj(c), NoteObj(CapellaNoteObjectType::REST)
       {
       cap          = c;
       fullMeasures = 0;
@@ -1514,7 +1514,7 @@ void RestObj::read()
 //---------------------------------------------------------
 
 ChordObj::ChordObj(Capella* c)
-      : BasicDurationalObj(c), NoteObj(T_CHORD)
+      : BasicDurationalObj(c), NoteObj(CapellaNoteObjectType::CHORD)
       {
       cap      = c;
       beamMode = AUTO_BEAM;
@@ -2101,48 +2101,48 @@ void Capella::readVoice(CapStaff* cs, int idx)
             uchar type = readByte();
             // qDebug("         Voice %d read object idx %d(%d) type %d", idx,  i, nNoteObjs, type);
             readExtra();
-            if ((type != T_REST) && (type != T_CHORD) && (type != T_PAGE_BKGR))
+            if ((type != uchar(CapellaNoteObjectType::REST)) && (type != uchar(CapellaNoteObjectType::CHORD)) && (type != uchar(CapellaNoteObjectType::PAGE_BKGR)))
                   color = readColor();
 
             // Die anderen Objekttypen haben eine komprimierte Farbcodierung
-            switch (type) {
-                  case T_REST:
+            switch (CapellaNoteObjectType(type)) {
+                  case CapellaNoteObjectType::REST:
                         {
                         RestObj* rest = new RestObj(this);
                         rest->read();
                         v->objects.append(rest);
                         }
                         break;
-                  case T_CHORD:
-                  case T_PAGE_BKGR:
+                  case CapellaNoteObjectType::CHORD:
+                  case CapellaNoteObjectType::PAGE_BKGR:
                         {
                         ChordObj* chord = new ChordObj(this);
                         chord->read();
                         v->objects.append(chord);
                         }
                         break;
-                  case T_CLEF:
+                  case CapellaNoteObjectType::CLEF:
                         {
                         CapClef* clef = new CapClef(this);
                         clef->read();
                         v->objects.append(clef);
                         }
                         break;
-                  case T_KEY:
+                  case CapellaNoteObjectType::KEY:
                         {
                         CapKey* key = new CapKey(this);
                         key->read();
                         v->objects.append(key);
                         }
                         break;
-                  case T_METER:
+                  case CapellaNoteObjectType::METER:
                         {
                         CapMeter* meter = new CapMeter(this);
                         meter->read();
                         v->objects.append(meter);
                         }
                         break;
-                  case T_EXPL_BARLINE:
+                  case CapellaNoteObjectType::EXPL_BARLINE:
                         {
                         CapExplicitBarline* bl = new CapExplicitBarline(this);
                         bl->read();
