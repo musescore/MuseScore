@@ -50,7 +50,7 @@ namespace Ms {
 Selection::Selection(Score* s)
       {
       _score         = s;
-      _state         = SEL_NONE;
+      _state         = SelState::NONE;
       _startSegment  = 0;
       _endSegment    = 0;
       _activeSegment = 0;
@@ -115,7 +115,7 @@ Element* Selection::element() const
 
 ChordRest* Selection::activeCR() const
       {
-      if ((_state != SEL_RANGE) || !_activeSegment)
+      if ((_state != SelState::RANGE) || !_activeSegment)
             return 0;
       if (_activeSegment == _startSegment)
             return firstChordRest(_activeTrack);
@@ -208,7 +208,7 @@ Measure* Selection::findMeasure() const
 
 void Selection::deselectAll()
       {
-      if (_state == SEL_RANGE)
+      if (_state == SelState::RANGE)
             _score->setUpdateAll();
       clear();
       updateState();
@@ -232,7 +232,7 @@ void Selection::clear()
       _staffStart     = 0;
       _staffEnd       = 0;
       _activeTrack    = 0;
-      setState(SEL_NONE);
+      setState(SelState::NONE);
       }
 
 //---------------------------------------------------------
@@ -356,7 +356,7 @@ void Selection::setRange(Segment* a, Segment* b, int c, int d)
       _activeSegment = b;
       _staffStart    = c;
       _staffEnd      = d;
-      setState(SEL_RANGE);
+      setState(SelState::RANGE);
       }
 
 //---------------------------------------------------------
@@ -379,9 +379,9 @@ void Selection::dump()
       {
       qDebug("Selection dump: ");
       switch(_state) {
-            case SEL_NONE:   qDebug("NONE"); return;
-            case SEL_RANGE:  qDebug("RANGE"); break;
-            case SEL_LIST:   qDebug("LIST"); break;
+            case SelState::NONE:   qDebug("NONE"); return;
+            case SelState::RANGE:  qDebug("RANGE"); break;
+            case SelState::LIST:   qDebug("LIST"); break;
             }
       foreach(const Element* e, _el)
             qDebug("  %p %s", e, e->name());
@@ -397,9 +397,9 @@ void Selection::updateState()
       int n = _el.size();
       Element* e = element();
       if (n == 0)
-            setState(SEL_NONE);
-      else if (_state == SEL_NONE)
-            setState(SEL_LIST);
+            setState(SelState::NONE);
+      else if (_state == SelState::NONE)
+            setState(SelState::LIST);
       if (!_score->noteEntryMode())
              _score->inputState().update(e);
       }
@@ -424,11 +424,11 @@ QString Selection::mimeType() const
       {
       switch (_state) {
             default:
-            case SEL_NONE:
+            case SelState::NONE:
                   return QString();
-            case SEL_LIST:
+            case SelState::LIST:
                   return isSingle() ? mimeSymbolFormat : mimeSymbolListFormat;
-            case SEL_RANGE:
+            case SelState::RANGE:
                   return mimeStaffListFormat;
             }
       }
@@ -441,7 +441,7 @@ QByteArray Selection::mimeData() const
       {
       QByteArray a;
       switch (_state) {
-            case SEL_LIST:
+            case SelState::LIST:
                   if (isSingle()) {
                         Element* e = element();
                         if (e->type() == Element::ElementType::TEXTLINE_SEGMENT)
@@ -451,9 +451,9 @@ QByteArray Selection::mimeData() const
                   else
                         a = symbolListMimeData();
                   break;
-            case SEL_NONE:
+            case SelState::NONE:
                   break;
-            case SEL_RANGE:
+            case SelState::RANGE:
                   a = staffMimeData();
                   break;
             }
@@ -723,13 +723,13 @@ QList<Note*> Selection::noteList(int selTrack) const
       {
       QList<Note*>nl;
 
-      if (_state == SEL_LIST) {
+      if (_state == SelState::LIST) {
             foreach(Element* e, _el) {
                   if (e->type() == Element::ElementType::NOTE)
                         nl.append(static_cast<Note*>(e));
                   }
             }
-      else if (_state == SEL_RANGE) {
+      else if (_state == SelState::RANGE) {
             for (int staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {
                   int startTrack = staffIdx * VOICES;
                   int endTrack   = startTrack + VOICES;
@@ -804,7 +804,7 @@ static bool checkEnd(Element* e)
 
 bool Selection::canCopy() const
       {
-      if (_state != SEL_RANGE)
+      if (_state != SelState::RANGE)
             return true;
 
       for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx)
@@ -836,7 +836,7 @@ bool Selection::canCopy() const
 
 bool Selection::measureRange(Measure** m1, Measure** m2) const
       {
-      if (state() != SEL_RANGE)
+      if (state() != SelState::RANGE)
             return false;
       *m1 = startSegment()->measure();
       *m2 = endSegment()->measure();
