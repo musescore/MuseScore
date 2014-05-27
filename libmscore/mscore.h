@@ -177,16 +177,16 @@ enum class BeamMode : signed char {
 //   TransposeDirection
 //---------------------------------------------------------
 
-enum TransposeDirection {
-      TRANSPOSE_UP, TRANSPOSE_DOWN, TRANSPOSE_CLOSEST
+enum class TransposeDirection : char {
+      UP, DOWN, CLOSEST
       };
 
 //---------------------------------------------------------
 //   TransposeMode
 //---------------------------------------------------------
 
-enum TransposeMode {
-      TRANSPOSE_BY_KEY, TRANSPOSE_BY_INTERVAL, TRANSPOSE_DIATONICALLY
+enum class TransposeMode : char {
+      BY_KEY, BY_INTERVAL, DIATONICALLY
       };
 
 //---------------------------------------------------------
