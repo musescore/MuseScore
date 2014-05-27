@@ -240,8 +240,8 @@ enum class KeySigNatural : char {
 //   UpDownMode
 //---------------------------------------------------------
 
-enum UpDownMode {
-      UP_DOWN_CHROMATIC, UP_DOWN_OCTAVE, UP_DOWN_DIATONIC
+enum class UpDownMode : char {
+      CHROMATIC, OCTAVE, DIATONIC
       };
 
 //---------------------------------------------------------

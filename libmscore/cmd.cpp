@@ -1176,7 +1176,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         {
                         const StringData* stringData = part->instr()->stringData();
                         switch (mode) {
-                              case UP_DOWN_OCTAVE:          // move same note to next string, if possible
+                              case UpDownMode::OCTAVE:          // move same note to next string, if possible
                                     {
                                     StaffType* stt = oNote->staff()->staffType();
                                     string = stt->physStringToVisual(string);
@@ -1191,12 +1191,12 @@ void Score::upDown(bool up, UpDownMode mode)
                                     }
                                     break;
 
-                              case UP_DOWN_DIATONIC:        // increase / decrease the pitch,
+                              case UpDownMode::DIATONIC:        // increase / decrease the pitch,
                                                             // letting the algorithm to choose fret & string
                                     upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
                                     break;
 
-                              case UP_DOWN_CHROMATIC:       // increase / decrease the fret
+                              case UpDownMode::CHROMATIC:       // increase / decrease the fret
                                     {                       // without changing the string
                                     if (!stringData->frets())
                                           qDebug("upDown tab chromatic: no frets?");
@@ -1231,7 +1231,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         break;
                   case STANDARD_STAFF_GROUP:
                         switch(mode) {
-                              case UP_DOWN_OCTAVE:
+                              case UpDownMode::OCTAVE:
                                     if (up) {
                                           if (pitch < 116)
                                                 newPitch = pitch + 12;
@@ -1243,11 +1243,11 @@ void Score::upDown(bool up, UpDownMode mode)
                                     // newTpc remains unchanged
                                     break;
 
-                              case UP_DOWN_CHROMATIC:
+                              case UpDownMode::CHROMATIC:
                                     upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
                                     break;
 
-                              case UP_DOWN_DIATONIC:
+                              case UpDownMode::DIATONIC:
                                     {
                                     int tpc = oNote->tpc();
                                     if (up) {
@@ -2054,7 +2054,7 @@ void Score::cmd(const QAction* a)
             else if (el && el->type() == Element::ElementType::LYRICS)
                   cmdMoveLyrics(static_cast<Lyrics*>(el), Direction::UP);
             else
-                  upDown(true, UP_DOWN_CHROMATIC);
+                  upDown(true, UpDownMode::CHROMATIC);
             }
       else if (cmd == "pitch-down") {
             if (el && (el->type() == Element::ElementType::ARTICULATION || el->isText()))
@@ -2064,7 +2064,7 @@ void Score::cmd(const QAction* a)
             else if (el && el->type() == Element::ElementType::LYRICS)
                   cmdMoveLyrics(static_cast<Lyrics*>(el), Direction::DOWN);
             else
-                  upDown(false, UP_DOWN_CHROMATIC);
+                  upDown(false, UpDownMode::CHROMATIC);
             }
 	else if (cmd == "add-staccato")
             addArticulation(ArticulationType::Staccato);
@@ -2093,18 +2093,18 @@ void Score::cmd(const QAction* a)
             if (el && (el->type() == Element::ElementType::ARTICULATION || el->isText()))
                   undoMove(el, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
             else
-                  upDown(true, UP_DOWN_OCTAVE);
+                  upDown(true, UpDownMode::OCTAVE);
             }
       else if (cmd == "pitch-down-octave") {
             if (el && (el->type() == Element::ElementType::ARTICULATION || el->isText()))
                   undoMove(el, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
             else
-                  upDown(false, UP_DOWN_OCTAVE);
+                  upDown(false, UpDownMode::OCTAVE);
             }
       else if (cmd == "pitch-up-diatonic")
-            upDown(true, UP_DOWN_DIATONIC);
+            upDown(true, UpDownMode::DIATONIC);
       else if (cmd == "pitch-down-diatonic")
-            upDown(false, UP_DOWN_DIATONIC);
+            upDown(false, UpDownMode::DIATONIC);
       else if (cmd == "move-up") {
             setLayoutAll(false);
             if (el && el->type() == Element::ElementType::NOTE) {

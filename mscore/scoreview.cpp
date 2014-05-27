@@ -2022,7 +2022,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
                   n = -n;
             score()->startCmd();
             for (int i = 0; i < n; ++i)
-                  score()->upDown(up, UP_DOWN_CHROMATIC);
+                  score()->upDown(up, UpDownMode::CHROMATIC);
             score()->endCmd();
             return;
             }
