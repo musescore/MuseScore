@@ -61,7 +61,7 @@ StaffListItem::StaffListItem(PartListItem* li)
       setPartIdx(0);
       staffIdx = 0;
       setLinked(false);
-      setClef(ClefTypeList(ClefType::G, ClefType::G));
+      setDefaultClef(ClefTypeList(ClefType::G, ClefType::G));
       _staffTypeCombo = 0;
       initStaffTypeCombo();
       }
@@ -73,7 +73,7 @@ StaffListItem::StaffListItem()
       staff    = 0;
       setPartIdx(0);
       staffIdx = 0;
-      setClef(ClefTypeList(ClefType::G, ClefType::G));
+      setDefaultClef(ClefTypeList(ClefType::G, ClefType::G));
       setLinked(false);
       _staffTypeCombo = 0;
       }
@@ -109,7 +109,7 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       _staffTypeCombo->setAutoFillBackground(true);
       int idx = 0;
       for (const StaffType& st : StaffType::presets()) {
-            if (st.group() == STANDARD_STAFF_GROUP
+            if ( (st.group() == STANDARD_STAFF_GROUP && !canUsePerc)    // percussion excludes standard
                         || (st.group() == PERCUSSION_STAFF_GROUP && canUsePerc)
                         || (st.group() == TAB_STAFF_GROUP && canUseTabs))
                   _staffTypeCombo->addItem(st.name(), idx);
@@ -127,6 +127,16 @@ void StaffListItem::setPartIdx(int val)
       {
       _partIdx = val;
       setText(0, InstrumentsDialog::tr("Staff %1").arg(_partIdx + 1));
+      }
+
+//---------------------------------------------------------
+//   setDefaultClef
+//---------------------------------------------------------
+
+void StaffListItem::setDefaultClef(const ClefTypeList& val)
+      {
+      _defaultClef = val;
+      setClef(val);
       }
 
 //---------------------------------------------------------
@@ -210,10 +220,10 @@ void StaffListItem::staffTypeChanged(int idx)
             ClefType clefType;
             switch (stfType->group()) {
                   case STANDARD_STAFF_GROUP:
-                        clefType = ClefType::G3;
+                        clefType = _defaultClef._transposingClef;
                         break;
                   case TAB_STAFF_GROUP:
-                        clefType = ClefType::TAB2;
+                        clefType = ClefType::TAB;
                         break;
                   case PERCUSSION_STAFF_GROUP:
                         clefType = ClefType::PERC;
@@ -548,7 +558,7 @@ void InstrumentsDialog::on_addButton_clicked()
                   sli->staff    = 0;
                   sli->setPartIdx(i);
                   sli->staffIdx = -1;
-                  sli->setClef(it->clefTypes[i]);
+                  sli->setDefaultClef(it->clefTypes[i]);
                   sli->setStaffType(it->staffTypePreset);
                   }
             partiturList->setItemExpanded(pli, true);
@@ -795,7 +805,7 @@ void InstrumentsDialog::on_belowButton_clicked()
       PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
-      nsli->setClef(sli->clef());
+      nsli->setDefaultClef(sli->clef());
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
@@ -823,7 +833,7 @@ void InstrumentsDialog::on_linkedButton_clicked()
       PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
-      nsli->setClef(sli->clef());
+      nsli->setDefaultClef(sli->clef());
       nsli->setLinked(true);
       if (staff)
             nsli->op = ITEM_ADD;
