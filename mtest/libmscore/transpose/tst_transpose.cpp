@@ -62,7 +62,7 @@ void TestTranspose::undoTranspose()
       
       // transpose major second up
       score->startCmd();
-      score->transpose(TRANSPOSE_BY_INTERVAL, TRANSPOSE_UP, 0, 4,
+      score->transpose(TransposeMode::INTERVAL, TransposeDirection::UP, 0, 4,
                        true, true, true);
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
@@ -89,7 +89,7 @@ void TestTranspose::undoDiatonicTranspose()
 
       // transpose diatonic fourth down
       score->startCmd();
-      score->transpose(TRANSPOSE_DIATONICALLY, TRANSPOSE_DOWN, 0, 3,
+      score->transpose(TransposeMode::DIATONICALLY, TransposeDirection::DOWN, 0, 3,
                        true, false, false);
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
