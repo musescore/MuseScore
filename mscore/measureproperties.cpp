@@ -217,7 +217,7 @@ void MeasureProperties::apply()
       if (m->len() != len())
             m->adjustToLen(len());
 
-      score->select(0, SELECT_SINGLE, 0);
+      score->select(0, SelectType::SINGLE, 0);
       score->end();
       }
 }

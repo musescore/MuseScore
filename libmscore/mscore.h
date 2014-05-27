@@ -193,8 +193,8 @@ enum class TransposeMode : char {
 //   SelectType
 //---------------------------------------------------------
 
-enum SelectType {
-      SELECT_SINGLE, SELECT_RANGE, SELECT_ADD
+enum class SelectType : char {
+      SINGLE, RANGE, ADD
       };
 
 //---------------------------------------------------------
