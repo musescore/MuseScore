@@ -145,13 +145,18 @@ void Clef::setSelected(bool f)
 void Clef::layout()
       {
       // determine current number of lines and line distance
-      int lines      = 5;                       // assume a resonable default
-      qreal lineDist = 1.0;
+      int   lines       = 5;              // assume resonable defaults
+      qreal lineDist    = 1.0;
 
-      Staff* stf = staff();
-      StaffType* staffType = nullptr;
-      if (stf && stf->staffType()) {
+      Staff*      stf         = staff();
+      StaffType*  staffType   = nullptr;
+      Segment*    clefSeg     = static_cast<Segment*>(parent());
+      // check clef visibility and type compatibility
+      if (clefSeg && stf && stf->staffType()) {
+            bool        bHide;
+            // check staff type allows clef display
             staffType = staff()->staffType();
+#if 0 // <<<<<<< HEAD
             if (!staffType->genClef()) {        // if no clef, set empty bbox and do nothing
                   qDeleteAll(elements);
                   elements.clear();
@@ -165,14 +170,26 @@ void Clef::layout()
                   // set tab clef according to score style
                   if (ClefInfo::staffGroup(clefType()) != TAB_STAFF_GROUP)
                         setClefType( ClefType(score()->styleI(StyleIdx::tabClef)) );
+#else
+            bHide = !staffType->genClef();
+
+            // check clef is compatible with staff type group
+            int tick = clefSeg->tick();
+            if (ClefInfo::staffGroup(clefType()) != staffType->group()) {
+                  if (tick > 0 && !generated()) // if clef is not generated, hide it
+                        bHide = true;
+                  else                          // if generated, replace with initial clef type
+                        // TODO : instead of initial staff clef (which is assumed to be compatible)
+                        // use the last compatible clef previously found in staff
+                        _clefTypes = stf->clefTypeList(0);
+#endif      // >>>>>>> 38c666fa91f5bdaaa6d9ca0645c437c799be8c79
                   }
 
-            //
-            // all staff types
             //
             // courtesy clef
             //
             bool showClef = true;
+#if 0 // <<<<<<< HEAD
             Segment* clefSeg = static_cast<Segment*>(parent());
             if (clefSeg) {
                   int tick = clefSeg->tick();
@@ -202,7 +219,37 @@ void Clef::layout()
                               setbbox(QRectF());
                               return;
                               }
+#else
+            // only if there is a clef change
+            if (!bHide && tick > 0 && stf->clef(tick) != stf->clef(tick-1)) {
+                  // locate clef at the begining of next measure, if any
+                  Clef*       clefNext    = nullptr;
+                  Segment*    clefSegNext = nullptr;
+                  Measure*    meas        = static_cast<Measure*>(clefSeg->parent());
+                  Measure*    measNext    = meas->nextMeasure();
+                  if (measNext) {
+                        clefSegNext = measNext->findSegment(Segment::SegClef, tick);
+                        if (clefSegNext)
+                              clefNext = static_cast<Clef*>(clefSegNext->element(track()));
+#endif      // >>>>>>> 38c666fa91f5bdaaa6d9ca0645c437c799be8c79
                         }
+                  // show this clef if: it is not a courtesy clef (no next clef or not at the end of the measure)
+                  showClef = !clefNext || (clefSeg->tick() != meas->tick() + meas->ticks())
+                        // if courtesy clef: show if score has courtesy clefs on
+                        || ( score()->styleB(StyleIdx::genCourtesyClef)
+                        // AND measure is not at the end of a repeat or of a section
+                        && !( (meas->repeatFlags() & Repeat::END) || meas->sectionBreak() )
+                        // AND this clef has courtesy clef turned on
+                        && showCourtesy() );
+                  bHide |= !showClef;
+                  }
+
+            // if clef not to show or not compatible with staff group
+            if (bHide) {
+                  qDeleteAll(elements);         // set empty bbox and do nothing
+                  elements.clear();
+                  setbbox(QRectF());
+                  return;
                   }
 
             lines = staffType->lines();         // init values from staff type

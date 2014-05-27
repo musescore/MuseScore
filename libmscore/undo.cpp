@@ -2357,14 +2357,51 @@ void ChangeStaff::flip()
       }
 
 //---------------------------------------------------------
-//   flip
+//   ChangeStaffType::undo / redo
 //---------------------------------------------------------
 
-void ChangeStaffType::flip()
+void ChangeStaffType::redo()
+      {
+      initialClef = staff->clefTypeList(0);
+      StaffType st = *staff->staffType();
+      staff->setStaffType(&staffType);
+      staffType = st;
+      }
+
+void ChangeStaffType::undo()
       {
       StaffType st = *staff->staffType();
       staff->setStaffType(&staffType);
       staffType = st;
+
+      // restore initial clef, both in the staff clef map...
+      staff->setClef(0, initialClef);
+
+      // ...and in the score itself (code mostly copied from undoChangeClef() )
+      // TODO : add a single function adding/setting a clef change in score?
+      // possibly directly in ClefList?
+      int tick = 0;
+      Score* score = staff->score();
+      Measure* measure = score->tick2measure(tick);
+      if (!measure) {
+            qDebug("measure for tick %d not found!", tick);
+            return;
+            }
+      Segment* seg = measure->findSegment(Segment::SegClef, tick);
+      int track    = staff->idx() * VOICES;
+      Clef* clef   = static_cast<Clef*>(seg->element(track));
+      if (clef) {
+            clef->setGenerated(false);
+            clef->setClefType(initialClef);
+            }
+      else {
+            clef = new Clef(score);
+            clef->setTrack(track);
+            clef->setClefType(initialClef);
+            clef->setParent(seg);
+            seg->add(clef);
+            }
+//      cmdUpdateNotes();                         // needed?
       }
 
 //---------------------------------------------------------
