@@ -1852,8 +1852,12 @@ void Chord::layoutPitched()
             // know the y position of the next staves
             }
 
-      if (_glissando)
-            lll += _spatium * .5;
+      // allocate enough room for glissandi
+      if (_glissando) {
+            lll += _spatium * 0.5;
+            if (rtick())
+                  lll += minTieLength;
+            }
 
       if (dots()) {
             qreal x = dotPosX() + dotNoteDistance
