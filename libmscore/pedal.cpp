@@ -14,6 +14,9 @@
 #include "textline.h"
 #include "sym.h"
 #include "xml.h"
+#include "system.h"
+#include "measure.h"
+#include "chordrest.h"
 
 #include "score.h"
 
@@ -109,8 +112,7 @@ void PedalSegment::styleChanged()
 Pedal::Pedal(Score* s)
    : TextLine(s)
       {
-      setBeginText("<sym>keyboardPedalPed</sym>");
-
+      setBeginHook(true);
       setEndHook(true);
       setBeginHookHeight(Spatium(-1.2));
       setEndHookHeight(Spatium(-1.2));
@@ -262,6 +264,44 @@ void Pedal::styleChanged()
             setLineWidth(score()->styleS(StyleIdx::pedalLineWidth));
       if (lineStyleStyle == PropertyStyle::STYLED)
             setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::pedalLineStyle)));
+      }
+
+//---------------------------------------------------------
+//   linePos
+//    return System() coordinates
+//---------------------------------------------------------
+
+QPointF Pedal::linePos(GripLine grip, System** sys)
+      {
+      qreal x;
+      qreal nhw = score()->noteHeadWidth();
+      System* s;
+      if (grip == GripLine::START) {
+            ChordRest* c = static_cast<ChordRest*>(startElement());
+            s = c->segment()->system();
+            x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
+            if (beginHook() && beginHookType() == HookType::HOOK_45)
+                  x += nhw * .5;
+            }
+      else {
+            ChordRest* c = static_cast<ChordRest*>(endElement());
+            if (c) {
+                  s = c->segment()->system();
+                  x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
+                  }
+            else {
+                  int t = tick2();
+                  Measure* m = score()->tick2measure(t);
+                  s = m->system();
+                  x = m->tick2pos(t);
+                  }
+            if (endHook() && endHookType() == HookType::HOOK_45)
+                  x += nhw * .5;
+            else
+                  x += nhw;
+            }
+      *sys = s;
+      return QPointF(x, s->staffYpage(staffIdx()) - s->pos().y());
       }
 
 }

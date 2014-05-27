@@ -811,6 +811,13 @@ Palette* MuseScore::newLinesPalette()
 
       Pedal* pedal = new Pedal(gscore);
       pedal->setLen(w);
+      pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+      pedal->setBeginHook(false);
+      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
+
+      pedal = new Pedal(gscore);
+      pedal->setLen(w);
+      pedal->setBeginHook(true);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
@@ -820,14 +827,12 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginHook(true);
       pedal->setBeginHookType(HookType::HOOK_45);
       pedal->setEndHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setBeginHook(true);
       pedal->setBeginHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 

@@ -119,30 +119,38 @@ void TextLineSegment::draw(QPainter* painter) const
 
       QPointF pp1(l, 0.0);
 
-      if (tl->beginHook() && tl->beginHookType() == HookType::HOOK_45)
-            pp1.rx() += fabs(tl->beginHookHeight().val() * _spatium * .4);
-      if (tl->endHook() && tl->endHookType() == HookType::HOOK_45)
-            pp2.rx() -= fabs(tl->endHookHeight().val() * _spatium * .4);
+      qreal beginHookWidth;
+      qreal endHookWidth;
+
+      if (tl->beginHook() && tl->beginHookType() == HookType::HOOK_45) {
+            beginHookWidth = fabs(tl->beginHookHeight().val() * _spatium * .4);
+            pp1.rx() += beginHookWidth;
+            }
+      else
+            beginHookWidth = 0;
+
+      if (tl->endHook() && tl->endHookType() == HookType::HOOK_45) {
+            endHookWidth = fabs(tl->endHookHeight().val() * _spatium * .4);
+            pp2.rx() -= endHookWidth;
+            }
+      else
+            endHookWidth = 0;
 
       painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
 
-      if (tl->beginHook()) {
+      if (tl->beginHook()
+         && (spannerSegmentType() == SpannerSegmentType::SINGLE
+             || spannerSegmentType() == SpannerSegmentType::BEGIN)
+         ) {
             qreal hh = tl->beginHookHeight().val() * _spatium;
-            if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
-                  if (tl->beginHookType() == HookType::HOOK_45)
-                        painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x() - fabs(hh * .4), pp1.y() + hh));
-                  else
-                        painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x(), pp1.y() + hh));
-                  }
+            painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x() - beginHookWidth, pp1.y() + hh));
             }
-      if (tl->endHook()) {
+      if (tl->endHook()
+         && (spannerSegmentType() == SpannerSegmentType::SINGLE
+             || spannerSegmentType() == SpannerSegmentType::END)
+         ) {
             qreal hh = tl->endHookHeight().val() * _spatium;
-            if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END) {
-                  if (tl->endHookType() == HookType::HOOK_45)
-                        painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x() + fabs(hh * .4), pp2.y() + hh));
-                  else
-                        painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x(), pp2.y() + hh));
-                  }
+            painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x() + endHookWidth, pp2.y() + hh));
             }
       }
 
@@ -417,6 +425,11 @@ void TextLine::setBeginText(const QString& s, int textStyle)
 
 void TextLine::setBeginText(const QString& s)
       {
+      if (s.isEmpty()) {
+            delete _beginText;
+            _beginText = 0;
+            return;
+            }
       if (!_beginText) {
             _beginText = new Text(score());
             _beginText->setParent(this);
@@ -441,6 +454,11 @@ void TextLine::setContinueText(const QString& s, int textStyle)
 
 void TextLine::setContinueText(const QString& s)
       {
+      if (s.isEmpty()) {
+            delete _continueText;
+            _continueText = 0;
+            return;
+            }
       if (!_continueText) {
             _continueText = new Text(score());
             _continueText->setParent(this);
@@ -455,6 +473,11 @@ void TextLine::setContinueText(const QString& s)
 
 void TextLine::setEndText(const QString& s, int textStyle)
       {
+      if (s.isEmpty()) {
+            delete _endText;
+            _endText = 0;
+            return;
+            }
       if (!_endText) {
             _endText = new Text(score());
             _endText->setParent(this);
