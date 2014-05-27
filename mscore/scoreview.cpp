@@ -4667,7 +4667,7 @@ void ScoreView::cmdTuplet(int n)
             foreach(Element* e, _score->selection().elements()) {
                   if (e->type() == Element::ElementType::NOTE) {
                         Note* note = static_cast<Note*>(e);
-                        if(note->noteType() != NOTE_NORMAL) { //no tuplet on grace notes
+                        if(note->noteType() != NoteType::NORMAL) { //no tuplet on grace notes
                               _score->endCmd();
                               return;
                               }

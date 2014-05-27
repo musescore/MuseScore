@@ -201,17 +201,17 @@ enum class SelectType : char {
 //   NoteType
 //---------------------------------------------------------
 
-enum NoteType {
-      NOTE_NORMAL,
-      NOTE_ACCIACCATURA,
-      NOTE_APPOGGIATURA,       // grace notes
-      NOTE_GRACE4,
-      NOTE_GRACE16,
-      NOTE_GRACE32,
-      NOTE_GRACE8_AFTER,
-      NOTE_GRACE16_AFTER,
-      NOTE_GRACE32_AFTER,
-      NOTE_INVALID
+enum class NoteType : char {
+      NORMAL,
+      ACCIACCATURA,
+      APPOGGIATURA,       // grace notes
+      GRACE4,
+      GRACE16,
+      GRACE32,
+      GRACE8_AFTER,
+      GRACE16_AFTER,
+      GRACE32_AFTER,
+      INVALID
       };
 
 //---------------------------------------------------------

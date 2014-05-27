@@ -307,7 +307,7 @@ bool ChordRest::readProperties(XmlReader& e)
                         if (start)
                               slur->setTrack(start->track());
                         slur->setTrack2(track());
-                        if (start && start->type() == ElementType::CHORD && start->noteType() != NOTE_NORMAL) {
+                        if (start && start->type() == ElementType::CHORD && start->noteType() != NoteType::NORMAL) {
                               start->add(slur);
                               slur->setAnchor(Spanner::Anchor::CHORD);
                               score()->removeSpanner(slur);
@@ -1055,7 +1055,7 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
 
 bool ChordRest::isGrace() const
       {
-      return type() == Element::ElementType::CHORD && ((Chord*)this)->noteType() != NOTE_NORMAL;
+      return type() == Element::ElementType::CHORD && ((Chord*)this)->noteType() != NoteType::NORMAL;
       }
 
 //---------------------------------------------------------
@@ -1064,11 +1064,11 @@ bool ChordRest::isGrace() const
 
 bool ChordRest::isGraceBefore() const
       {
-      return (type() == Element::ElementType::CHORD && (((Chord*)this)->noteType() == NOTE_ACCIACCATURA
-                                          || ((Chord*)this)->noteType() == NOTE_APPOGGIATURA
-                                          || ((Chord*)this)->noteType() == NOTE_GRACE4
-                                          || ((Chord*)this)->noteType() == NOTE_GRACE16
-                                          || ((Chord*)this)->noteType() == NOTE_GRACE32));
+      return (type() == Element::ElementType::CHORD && (((Chord*)this)->noteType() == NoteType::ACCIACCATURA
+                                          || ((Chord*)this)->noteType() == NoteType::APPOGGIATURA
+                                          || ((Chord*)this)->noteType() == NoteType::GRACE4
+                                          || ((Chord*)this)->noteType() == NoteType::GRACE16
+                                          || ((Chord*)this)->noteType() == NoteType::GRACE32));
       }
 
 //---------------------------------------------------------
@@ -1077,9 +1077,9 @@ bool ChordRest::isGraceBefore() const
 
 bool ChordRest::isGraceAfter() const
       {
-      return (type() == Element::ElementType::CHORD && (((Chord*)this)->noteType() == NOTE_GRACE8_AFTER
-                                          || ((Chord*)this)->noteType() == NOTE_GRACE16_AFTER
-                                          || ((Chord*)this)->noteType() == NOTE_GRACE32_AFTER));
+      return (type() == Element::ElementType::CHORD && (((Chord*)this)->noteType() == NoteType::GRACE8_AFTER
+                                          || ((Chord*)this)->noteType() == NoteType::GRACE16_AFTER
+                                          || ((Chord*)this)->noteType() == NoteType::GRACE32_AFTER));
       }
 
 //---------------------------------------------------------

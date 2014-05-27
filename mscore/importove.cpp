@@ -1418,16 +1418,16 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				if (container->getIsGrace()) {
 					TDuration duration = OveNoteType_To_Duration(container->getGraceNoteType());
 					duration.setDots(container->getDot());
-					((Ms::Chord*) cr)->setNoteType(NOTE_APPOGGIATURA);
+					((Ms::Chord*) cr)->setNoteType(NoteType::APPOGGIATURA);
 
 					if (duration.type() == TDuration::DurationType::V_QUARTER) {
-						((Ms::Chord*) cr)->setNoteType(NOTE_GRACE4);
+						((Ms::Chord*) cr)->setNoteType(NoteType::GRACE4);
 						cr->setDurationType(TDuration::DurationType::V_QUARTER);
 					} else if (duration.type() == TDuration::DurationType::V_16TH) {
-						((Ms::Chord*) cr)->setNoteType(NOTE_GRACE16);
+						((Ms::Chord*) cr)->setNoteType(NoteType::GRACE16);
 						cr->setDurationType(TDuration::DurationType::V_16TH);
 					} else if (duration.type() == TDuration::DurationType::V_32ND) {
-						((Ms::Chord*) cr)->setNoteType(NOTE_GRACE32);
+						((Ms::Chord*) cr)->setNoteType(NoteType::GRACE32);
 						cr->setDurationType(TDuration::DurationType::V_32ND);
 					} else {
 						cr->setDurationType(TDuration::DurationType::V_EIGHT);

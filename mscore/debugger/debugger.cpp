@@ -933,7 +933,7 @@ void ChordDebug::setElement(Element* e)
 
       cb.hookButton->setEnabled(chord->hook());
       cb.stemButton->setEnabled(chord->stem());
-      cb.graceNote->setChecked(chord->noteType() != NOTE_NORMAL);
+      cb.graceNote->setChecked(chord->noteType() != NoteType::NORMAL);
       cb.stemDirection->setCurrentIndex(int(chord->stemDirection()));
 
       cb.stemSlashButton->setEnabled(chord->stemSlash());

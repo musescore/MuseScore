@@ -727,7 +727,7 @@ void Score::createPlayEvents(Chord* chord)
             //  - the grace note duration as notated does not matter
             //
             Chord* graceChord = chord->graceNotes()[0];
-            ontime      = (graceChord->noteType() ==  NOTE_ACCIACCATURA) ? 128 : 500;
+            ontime      = (graceChord->noteType() ==  NoteType::ACCIACCATURA) ? 128 : 500;
             int graceDuration = ontime / n;
 
             int on = 0;
