@@ -125,6 +125,8 @@ enum class StaffTypes : char {
             TAB_DEFAULT = StaffTypes::TAB_6COMMON
       };
 
+static const int  STAFF_GROUP_NAME_MAX_LENGTH   = 32;
+
 //---------------------------------------------------------
 //   StaffType
 //---------------------------------------------------------
@@ -194,6 +196,7 @@ class StaffType {
       void  setFretMetrics();
 
       static bool readConfigFile(const QString& fileName);
+      static const char    groupNames[STAFF_GROUP_MAX][STAFF_GROUP_NAME_MAX_LENGTH];
 
    public:
       StaffType();
