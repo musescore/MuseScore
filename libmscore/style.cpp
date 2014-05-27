@@ -502,7 +502,7 @@ StyleData::StyleData()
             { StyleIdx::tremoloDistance,             QVariant(0.8) },
             { StyleIdx::linearStretch,               QVariant(qreal(1.5)) },
             { StyleIdx::crossMeasureValues,          QVariant(false) },
-            { StyleIdx::keySigNaturals,              QVariant(NAT_NONE) },
+            { StyleIdx::keySigNaturals,              QVariant(int(KeySigNatural::NONE)) },
             { StyleIdx::tupletMaxSlope,              QVariant(qreal(0.5)) },
             { StyleIdx::tupletOufOfStaff,            QVariant(true) },
             { StyleIdx::tupletVHeadDistance,         QVariant(.5) },

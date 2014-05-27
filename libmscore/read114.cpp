@@ -139,7 +139,7 @@ static const StyleVal2 style114[] = {
       { StyleIdx::ArpeggioHookLen,              QVariant(.8) },
       { StyleIdx::FixMeasureNumbers,            QVariant(0) },
       { StyleIdx::FixMeasureWidth,              QVariant(false) },
-      { StyleIdx::keySigNaturals,               QVariant(NAT_BEFORE) },
+      { StyleIdx::keySigNaturals,               QVariant(int(KeySigNatural::BEFORE)) },
       { StyleIdx::tupletMaxSlope,               QVariant(qreal(0.5)) },
       { StyleIdx::tupletOufOfStaff,             QVariant(false) },
       { StyleIdx::tupletVHeadDistance,          QVariant(.5) },

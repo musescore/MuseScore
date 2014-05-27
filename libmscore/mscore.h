@@ -230,10 +230,10 @@ enum class AccidentalVal : signed char {
 //    KeySigNaturals (positions of naturals in key sig. changes)
 //---------------------------------------------------------
 
-enum KeySigNatural {
-      NAT_NONE   = 0,             // no naturals, except for change to CMaj/Amin
-      NAT_BEFORE = 1,             // naturals before accidentals
-      NAT_AFTER  = 2              // naturals after accidentals (but always before if going sharps <=> flats)
+enum class KeySigNatural : char {
+      NONE   = 0,             // no naturals, except for change to CMaj/Amin
+      BEFORE = 1,             // naturals before accidentals
+      AFTER  = 2              // naturals after accidentals (but always before if going sharps <=> flats)
       };
 
 //---------------------------------------------------------
