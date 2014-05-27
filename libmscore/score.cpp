@@ -2700,7 +2700,7 @@ void Score::padToggle(int n)
             return;
 
       ChordRest* cr = static_cast<ChordRest*>(el);
-      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NOTE_NORMAL)) {
+      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
             //

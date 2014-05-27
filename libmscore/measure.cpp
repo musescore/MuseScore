@@ -334,7 +334,7 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
             for (Chord* c : chord->graceNotes())
                   layoutCR0(c, mm);
 
-            if (chord->noteType() != NOTE_NORMAL)
+            if (chord->noteType() != NoteType::NORMAL)
                   m *= score()->styleD(StyleIdx::graceNoteMag);
             if (drumset) {
                   for (Note* note : chord->notes()) {
@@ -1833,7 +1833,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   chord->read(e);
                   segment = getSegment(Segment::SegChordRest, e.tick());
 
-                  if (chord->noteType() != NOTE_NORMAL)
+                  if (chord->noteType() != NoteType::NORMAL)
                         graceNotes.push_back(chord);
                   else {
                         segment->add(chord);

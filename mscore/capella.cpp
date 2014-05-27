@@ -101,10 +101,10 @@ static int levelofGraceSeg(Measure* m,int tick)
 
 static void SetCapGraceDuration(Chord* chord,ChordObj* o)
       {
-      NoteType nt = NOTE_APPOGGIATURA;
+      NoteType nt = NoteType::APPOGGIATURA;
       ((Chord*)chord)->setNoteType(nt);
       if (o->t == D4) {
-            ((Chord*)chord)->setNoteType(NOTE_GRACE4);
+            ((Chord*)chord)->setNoteType(NoteType::GRACE4);
             chord->setDurationType(TDuration::DurationType::V_QUARTER);
             }
       else if (o->t == D_BREVE)
@@ -114,11 +114,11 @@ static void SetCapGraceDuration(Chord* chord,ChordObj* o)
       else if (o->t == D2)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_HALF);
       else if (o->t == D16) {
-            ((Chord*)chord)->setNoteType(NOTE_GRACE16);
+            ((Chord*)chord)->setNoteType(NoteType::GRACE16);
             chord->setDurationType(TDuration::DurationType::V_16TH);
             }
       else if (o->t == D32) {
-            ((Chord*)chord)->setNoteType(NOTE_GRACE32);
+            ((Chord*)chord)->setNoteType(NoteType::GRACE32);
             chord->setDurationType(TDuration::DurationType::V_32ND);
             }
       else if (o->t == D64)

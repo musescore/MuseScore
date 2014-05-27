@@ -375,7 +375,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
             return;
 
       int measureEnd = measure->endTick();
-      bool isGrace = (cr->type() == Element::ElementType::CHORD) && (((Chord*)cr)->noteType() != NOTE_NORMAL);
+      bool isGrace = (cr->type() == Element::ElementType::CHORD) && (((Chord*)cr)->noteType() != NoteType::NORMAL);
       if (!isGrace && (tick + cr->actualTicks() > measureEnd)) {
             if (cr->type() == Element::ElementType::CHORD) {
                   // split Chord

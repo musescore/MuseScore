@@ -645,7 +645,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
 
 //---------------------------------------------------------
 //   putNote
-//    mouse click in state NOTE_ENTRY
+//    mouse click in state NoteType::ENTRY
 //---------------------------------------------------------
 
 void Score::putNote(const QPointF& pos, bool replace)
@@ -1161,8 +1161,8 @@ void Score::deleteItem(Element* el)
 
                   // replace with rest if voice 0 or if in tuplet
                   Tuplet* tuplet = chord->tuplet();
-                  // if ((el->voice() == 0 || tuplet) && (chord->noteType() == NOTE_NORMAL)) {
-                  if (chord->noteType() == NOTE_NORMAL) {
+                  // if ((el->voice() == 0 || tuplet) && (chord->noteType() == NoteType::NORMAL)) {
+                  if (chord->noteType() == NoteType::NORMAL) {
                         Rest* rest = new Rest(this, chord->durationType());
                         rest->setDurationType(chord->durationType());
                         rest->setDuration(chord->duration());

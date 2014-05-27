@@ -2141,7 +2141,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             xml.stag(noteTag);
 
             if (grace) {
-                  if (note->noteType() == NOTE_ACCIACCATURA)
+                  if (note->noteType() == NoteType::ACCIACCATURA)
                         xml.tagE("grace slash=\"yes\"");
                   else
                         xml.tagE("grace");

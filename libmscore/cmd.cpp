@@ -1943,7 +1943,7 @@ void Score::cmdHalfDuration()
       TDuration d = _is.duration().shift(1);
       if (!d.isValid() || (d.type() > TDuration::DurationType::V_64TH))
             return;
-      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NOTE_NORMAL)) {
+      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
             //
@@ -1973,7 +1973,7 @@ void Score::cmdDoubleDuration()
       TDuration d = _is.duration().shift(-1);
       if (!d.isValid() || (d.type() < TDuration::DurationType::V_WHOLE))
             return;
-      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NOTE_NORMAL)) {
+      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
             //
