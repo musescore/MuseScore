@@ -76,8 +76,8 @@ void TransposeDialog::transposeByIntervalToggled(bool val)
 TransposeMode TransposeDialog::mode() const
       {
       return chromaticBox->isChecked()
-                  ? (transposeByKey->isChecked() ? TRANSPOSE_BY_KEY : TRANSPOSE_BY_INTERVAL)
-                  : TRANSPOSE_DIATONICALLY;
+                  ? (transposeByKey->isChecked() ? TransposeMode::BY_KEY : TransposeMode::BY_INTERVAL)
+                  : TransposeMode::DIATONICALLY;
       }
 
 //---------------------------------------------------------
@@ -99,16 +99,16 @@ TransposeDirection TransposeDialog::direction() const
       {
       switch(mode())
       {
-      case TRANSPOSE_BY_KEY:
+      case TransposeMode::BY_KEY:
             if (closestKey->isChecked())
-                  return TRANSPOSE_CLOSEST;
-            return upKey->isChecked() ? TRANSPOSE_UP : TRANSPOSE_DOWN;
-      case TRANSPOSE_BY_INTERVAL:
-            return upInterval->isChecked() ? TRANSPOSE_UP : TRANSPOSE_DOWN;
-      case TRANSPOSE_DIATONICALLY:
-            return upDiatonic->isChecked() ? TRANSPOSE_UP : TRANSPOSE_DOWN;
+                  return TransposeDirection::CLOSEST;
+            return upKey->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
+      case TransposeMode::BY_INTERVAL:
+            return upInterval->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
+      case TransposeMode::DIATONICALLY:
+            return upDiatonic->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
       }
-      return TRANSPOSE_UP;
+      return TransposeDirection::UP;
       }
 
 

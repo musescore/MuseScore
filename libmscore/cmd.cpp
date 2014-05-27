@@ -231,13 +231,13 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
       spanner->setTrack(track);
       spanner->setTrack2(track);
 
-      if (spanner->anchor() == Spanner::ANCHOR_SEGMENT) {
+      if (spanner->anchor() == Spanner::Anchor::SEGMENT) {
             spanner->setTick(segment->tick());
             int lastTick = lastMeasure()->tick() + lastMeasure()->ticks();
             int tick2 = qMin(segment->tick() + segment->measure()->ticks(), lastTick);
             spanner->setTick2(tick2);
             }
-      else {      // ANCHOR_MEASURE
+      else {      // Anchor::MEASURE
             Measure* m = static_cast<Measure*>(mb);
             QRectF b(m->canvasBoundingRect());
 
@@ -464,12 +464,12 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   int key       = estaff->key(tick).accidentalType();
                   npitch        = line2pitch(line, clef, key);
 
-                  int ntpc   = pitch2tpc(npitch, key, PREFER_NEAREST);
+                  int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
                   Interval v = on->staff()->part()->instr()->transpose();
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
                   else {
-                        if (styleB(ST_concertPitch)) {
+                        if (styleB(StyleIdx::concertPitch)) {
                               v.flip();
                               ntpc1 = ntpc;
                               ntpc2 = Ms::transposeTpc(ntpc, v, false);
@@ -528,7 +528,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       chord->setDurationType(d);
       chord->setDuration(d.fraction());
       chord->setNoteType(type);
-      chord->setMag(ch->staff()->mag() * styleD(ST_graceNoteMag));
+      chord->setMag(ch->staff()->mag() * styleD(StyleIdx::graceNoteMag));
 
       undoAddElement(chord);
       select(note, SELECT_SINGLE, 0);
@@ -1091,14 +1091,14 @@ static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int 
       if (up && pitch < 127) {
             newPitch = pitch + 1;
             if (n->concertPitch()) {
-                  if (tpc1 > TPC_A + key)
+                  if (tpc1 > Tpc::A + key)
                         newTpc1 = tpc1 - 5;   // up semitone diatonic
                   else
                         newTpc1 = tpc1 + 7;   // up semitone chromatic
                   newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
-                  if (tpc2 > TPC_A + key)
+                  if (tpc2 > Tpc::A + key)
                         newTpc2 = tpc2 - 5;   // up semitone diatonic
                   else
                         newTpc2 = tpc2 + 7;   // up semitone chromatic
@@ -1108,14 +1108,14 @@ static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int 
       else if (!up && pitch > 0) {
             newPitch = pitch - 1;
             if (n->concertPitch()) {
-                  if (tpc1 > TPC_C + key)
+                  if (tpc1 > Tpc::C + key)
                         newTpc1 = tpc1 - 7;   // down semitone chromatic
                   else
                         newTpc1 = tpc1 + 5;   // down semitone diatonic
                   newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
-                  if (tpc2 > TPC_C + key)
+                  if (tpc2 > Tpc::C + key)
                         newTpc2 = tpc2 - 7;   // down semitone chromatic
                   else
                         newTpc2 = tpc2 + 5;   // down semitone diatonic
@@ -1210,7 +1210,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                           qDebug("upDown tab chromatic: getPitch(%d,%d) returns -1", string, fret);
                                           newPitch = oNote->pitch();
                                           }
-                                    int nTpc = pitch2tpc(newPitch, key, up ? PREFER_SHARPS : PREFER_FLATS);
+                                    int nTpc = pitch2tpc(newPitch, key, up ? Prefer::SHARPS : Prefer::FLATS);
                                     if (oNote->concertPitch()) {
                                           newTpc1 = nTpc;
                                           newTpc2 = oNote->tpc2default(newPitch);
@@ -1222,8 +1222,8 @@ void Score::upDown(bool up, UpDownMode mode)
 
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
-                                    undoChangeProperty(oNote, P_FRET, fret);
-                                    undoChangeProperty(oNote, P_STRING, string);
+                                    undoChangeProperty(oNote, P_ID::FRET, fret);
+                                    undoChangeProperty(oNote, P_ID::STRING, string);
                                     }
                                     break;
                               }
@@ -1251,7 +1251,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                     {
                                     int tpc = oNote->tpc();
                                     if (up) {
-                                          if (tpc > TPC_A + key) {
+                                          if (tpc > Tpc::A + key) {
                                                 if (pitch < 127) {
                                                       newPitch = pitch + 1;
                                                       setTpc(oNote, tpc - 5, newTpc1, newTpc2);
@@ -1265,7 +1265,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                                 }
                                           }
                                     else {
-                                          if (tpc > TPC_C + key) {
+                                          if (tpc > Tpc::C + key) {
                                                 if (pitch > 1) {
                                                       newPitch = pitch - 2;
                                                       setTpc(oNote, tpc - 2, newTpc1, newTpc2);
@@ -1296,11 +1296,11 @@ void Score::upDown(bool up, UpDownMode mode)
             else if (oNote->staff()->staffType()->group() == TAB_STAFF_GROUP) {
                   bool refret = false;
                   if (oNote->string() != string) {
-                        undoChangeProperty(oNote, P_STRING, string);
+                        undoChangeProperty(oNote, P_ID::STRING, string);
                         refret = true;
                         }
                   if (oNote->fret() != fret) {
-                        undoChangeProperty(oNote, P_FRET, fret);
+                        undoChangeProperty(oNote, P_ID::FRET, fret);
                         refret = true;
                         }
                   if (refret) {
@@ -1375,7 +1375,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             }
       int tpc1;
       int tpc2 = n->transposeTpc(tpc);
-      if (score->styleB(ST_concertPitch))
+      if (score->styleB(StyleIdx::concertPitch))
             tpc1 = tpc;
       else {
             tpc1 = tpc2;
@@ -1585,7 +1585,7 @@ void Score::moveDown(Chord* chord)
 
 void Score::cmdAddStretch(qreal val)
       {
-      if (selection().state() != SEL_RANGE)
+      if (selection().state() != SelState::RANGE)
             return;
       int startTick = selection().tickStart();
       int endTick   = selection().tickEnd();
@@ -1618,7 +1618,7 @@ void Score::cmdInsertClef(ClefType type)
 
 void Score::cmdResetBeamMode()
       {
-      if (selection().state() != SEL_RANGE) {
+      if (selection().state() != SelState::RANGE) {
             qDebug("no system or staff selected");
             return;
             }
@@ -1637,11 +1637,11 @@ void Score::cmdResetBeamMode()
                         continue;
                   if (cr->type() == Element::ElementType::CHORD) {
                         if (cr->beamMode() != BeamMode::AUTO)
-                              undoChangeProperty(cr, P_BEAM_MODE, int(BeamMode::AUTO));
+                              undoChangeProperty(cr, P_ID::BEAM_MODE, int(BeamMode::AUTO));
                         }
                   else if (cr->type() == Element::ElementType::REST) {
                         if (cr->beamMode() != BeamMode::NONE)
-                              undoChangeProperty(cr, P_BEAM_MODE, int(BeamMode::NONE));
+                              undoChangeProperty(cr, P_ID::BEAM_MODE, int(BeamMode::NONE));
                         }
                   }
             }
@@ -1912,7 +1912,7 @@ void Score::cmdMirrorNoteHead()
             if (e->type() == Element::ElementType::NOTE) {
                   Note* note = static_cast<Note*>(e);
                   if (note->staff() && note->staff()->isTabStaff())
-                        note->score()->undoChangeProperty(e, P_GHOST, true);
+                        note->score()->undoChangeProperty(e, P_ID::GHOST, true);
                   else {
                         DirectionH d = note->userMirror();
                         if (d == DirectionH::DH_AUTO)
@@ -1996,7 +1996,7 @@ void Score::cmdMoveRest(Rest* rest, Direction dir)
             pos.ry() -= spatium();
       else if (dir == Direction::DOWN)
             pos.ry() += spatium();
-      undoChangeProperty(rest, P_USER_OFF, pos);
+      undoChangeProperty(rest, P_ID::USER_OFF, pos);
       setLayoutAll(rest->beam() != nullptr);    // layout all if rest is beamed
       }
 
@@ -2067,13 +2067,13 @@ void Score::cmd(const QAction* a)
                   upDown(false, UP_DOWN_CHROMATIC);
             }
 	else if (cmd == "add-staccato")
-            addArticulation(Articulation_Staccato);
+            addArticulation(ArticulationType::Staccato);
 	else if (cmd == "add-tenuto")
-            addArticulation(Articulation_Tenuto);
+            addArticulation(ArticulationType::Tenuto);
       else if (cmd == "add-marcato")
-            addArticulation(Articulation_Marcato);
+            addArticulation(ArticulationType::Marcato);
 	else if (cmd == "add-trill")
-            addArticulation(Articulation_Trill);
+            addArticulation(ArticulationType::Trill);
       else if (cmd == "add-hairpin")
             cmdAddHairpin(false);
       else if (cmd == "add-hairpin-reverse")
@@ -2300,7 +2300,7 @@ void Score::cmd(const QAction* a)
       else if (cmd == "select-section")
             cmdSelectSection();
       else if (cmd == "concert-pitch") {
-            if (styleB(ST_concertPitch) != a->isChecked())
+            if (styleB(StyleIdx::concertPitch) != a->isChecked())
                   cmdConcertPitchChanged(a->isChecked(), true);
             }
       else if (cmd == "reset-beammode")
@@ -2361,8 +2361,8 @@ void Score::cmd(const QAction* a)
       else if (cmd == "transpose-down")
             transposeSemitone(-1);
       else if (cmd == "toggle-mmrest") {
-            bool val = !styleB(ST_createMultiMeasureRests);
-            undo(new ChangeStyleVal(this, ST_createMultiMeasureRests, val));
+            bool val = !styleB(StyleIdx::createMultiMeasureRests);
+            undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
             }
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));

@@ -293,7 +293,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       score->startCmd();
       score->undo(new AddExcerpt(nscore));
       score->endCmd();
-      nscore->style()->set(ST_createMultiMeasureRests, true);
+      nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
       partList->setEnabled(false);
       title->setEnabled(false);

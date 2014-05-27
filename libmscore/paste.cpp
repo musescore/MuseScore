@@ -172,7 +172,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                            || tag == "Slur"
                            || tag == "Volta") {
                               Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
-                              sp->setAnchor(Spanner::ANCHOR_SEGMENT);
+                              sp->setAnchor(Spanner::Anchor::SEGMENT);
                               sp->read(e);
                               sp->setTrack(dstStaffIdx * VOICES);
                               sp->setTrack2(dstStaffIdx * VOICES);
@@ -225,7 +225,7 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                               // transpose
                               Part* partDest = staff(dstStaffIdx)->part();
                               Interval interval = partDest->instr()->transpose();
-                              if (!styleB(ST_concertPitch) && !interval.isZero()) {
+                              if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
                                     int rootTpc = transposeTpc(harmony->rootTpc(), interval, false);
                                     int baseTpc = transposeTpc(harmony->baseTpc(), interval, false);
@@ -325,8 +325,8 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                   _selection.updateSelectedElements();
                   foreach(MuseScoreView* v, viewer)
                         v->adjustCanvasPosition(s1, false);
-                  if (selection().state() != SEL_RANGE)
-                        _selection.setState(SEL_RANGE);
+                  if (selection().state() != SelState::RANGE)
+                        _selection.setState(SelState::RANGE);
                   }
             }
       foreach (Score* s, scoreList())     // for all parts
@@ -514,7 +514,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                               // transpose
                               Part* partDest = staff(track2staff(destTrack))->part();
                               Interval interval = partDest->instr()->transpose();
-                              if (!styleB(ST_concertPitch) && !interval.isZero()) {
+                              if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
                                     int rootTpc = transposeTpc(el->rootTpc(), interval, false);
                                     int baseTpc = transposeTpc(el->baseTpc(), interval, false);

@@ -463,7 +463,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
             if (startChordTick == startChordTickFrac   // first chord in tied chord sequence
                         && midiChords.begin()->isStaccato()) {
                   Articulation* a = new Articulation(chord->score());
-                  a->setArticulationType(Articulation_Staccato);
+                  a->setArticulationType(ArticulationType::Staccato);
                   chord->add(a);
                   }
 
@@ -718,7 +718,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                               && isGrandStaff(tracks[idx], tracks[idx + 1])) {
                                     // assume that the current track and the next track
                                     // form a piano part
-                        s->setBracket(0, BRACKET_BRACE);
+                        s->setBracket(0, BracketType::BRACE);
                         s->setBracketSpan(0, 2);
 
                         Staff* ss = new Staff(score, part, 1);

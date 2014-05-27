@@ -110,7 +110,7 @@ void Rest::draw(QPainter* painter) const
             if (dots) {
                   qreal y = dotline * _spatium * .5;
                   for (int i = 1; i <= dots; ++i) {
-                        qreal x = symWidth(_sym) + point(score()->styleS(ST_dotNoteDistance)) * i;
+                        qreal x = symWidth(_sym) + point(score()->styleS(StyleIdx::dotNoteDistance)) * i;
                         drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
                         }
                   }
@@ -174,7 +174,7 @@ bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
-         || (type == ElementType::ARTICULATION && static_cast<Articulation*>(e)->articulationType() == Articulation_Fermata)
+         || (type == ElementType::ARTICULATION && static_cast<Articulation*>(e)->articulationType() == ArticulationType::Fermata)
          || (type == ElementType::CLEF)
          || (type == ElementType::STAFF_TEXT)
          || (type == ElementType::BAR_LINE)
@@ -208,7 +208,7 @@ Element* Rest::drop(const DropData& data)
             case ElementType::ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
-                  if (a->articulationType() != Articulation_Fermata
+                  if (a->articulationType() != ArticulationType::Fermata
                      || !score()->addArticulation(this, a)) {
                         delete e;
                         e = 0;
@@ -303,7 +303,7 @@ void Rest::layout()
       _space.setLw(0.0);
 
       if (parent() && measure() && measure()->isMMRest()) {
-            _space.setRw(point(score()->styleS(ST_minMMRestWidth)));
+            _space.setRw(point(score()->styleS(StyleIdx::minMMRestWidth)));
 
             static const qreal verticalLineWidth = .2;
             qreal _spatium = spatium();
@@ -386,12 +386,12 @@ void Rest::layout()
 
       Spatium rs;
       if (dots()) {
-            rs = Spatium(score()->styleS(ST_dotNoteDistance)
-               + dots() * score()->styleS(ST_dotDotDistance));
+            rs = Spatium(score()->styleS(StyleIdx::dotNoteDistance)
+               + dots() * score()->styleS(StyleIdx::dotDotDistance));
             }
       if (dots()) {
-            rs = Spatium(score()->styleS(ST_dotNoteDistance)
-               + dots() * score()->styleS(ST_dotDotDistance));
+            rs = Spatium(score()->styleS(StyleIdx::dotNoteDistance)
+               + dots() * score()->styleS(StyleIdx::dotDotDistance));
             }
       setbbox(symBbox(_sym));
       _space.setRw(width() + point(rs));
@@ -534,7 +534,7 @@ void Rest::setMMWidth(qreal val)
 
 void Rest::reset()
       {
-      score()->undoChangeProperty(this, P_BEAM_MODE, int(BeamMode::NONE));
+      score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::NONE));
       ChordRest::reset();
       }
 
@@ -546,7 +546,7 @@ qreal Rest::mag() const
       {
       qreal m = staff()->mag();
       if (small())
-            m *= score()->styleD(ST_smallNoteMag);
+            m *= score()->styleD(StyleIdx::smallNoteMag);
       return m;
       }
 

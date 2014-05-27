@@ -522,13 +522,13 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
       switch (beatEffect) {
 #if 0 // TODO-smufl
             case 1:
-                  a->setArticulationType(Articulation_Tapping);
+                  a->setArticulationType(ArticulationType::Tapping);
                   break;
             case 2:
-                  a->setArticulationType(Articulation_Slapping);
+                  a->setArticulationType(ArticulationType::Slapping);
                   break;
             case 3:
-                  a->setArticulationType(Articulation_Popping);
+                  a->setArticulationType(ArticulationType::Popping);
                   break;
 #endif
             default:
@@ -879,7 +879,7 @@ qDebug("BeginRepeat=============================================");
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -894,7 +894,7 @@ qDebug("BeginRepeat=============================================");
             clef->staff()->setClef(0, clef->clefTypeList());
 
             Channel& ch = instr->channel(0);
-            if (midiChannel == PERC_DEFAULT_STAFF_TYPE) {
+            if (midiChannel == int(StaffTypes::PERC_DEFAULT)) {
                   ch.program = 0;
                   ch.bank    = 128;
                   }
@@ -1117,7 +1117,7 @@ void GuitarPro1::readNote(int string, Note* note)
                   gc->setDurationType(d);
                   gc->setDuration(d.fraction());
                   gc->setNoteType(NOTE_ACCIACCATURA);
-                  gc->setMag(note->chord()->staff()->mag() * score->styleD(ST_graceNoteMag));
+                  gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
 
                   if (transition == 0) {
                         // no transition
@@ -1144,7 +1144,7 @@ void GuitarPro1::readNote(int string, Note* note)
                          ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                          Slur* slur = new Slur(score);
-                         slur->setAnchor(Spanner::ANCHOR_CHORD);
+                         slur->setAnchor(Spanner::Anchor::CHORD);
                          slur->setStartChord(static_cast<Chord*>(cr1));
                          slur->setEndChord(static_cast<Chord*>(cr2));
                          slur->setTick(cr1->tick());
@@ -1466,7 +1466,7 @@ void GuitarPro3::read(QFile* fp)
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -1798,7 +1798,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       // check if a note is supposed to be accented, and give it the sforzato type
       if (noteBits & 0x40) {
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(Articulation_Sforzatoaccent);
+            art->setArticulationType(ArticulationType::Sforzatoaccent);
             if (!note->score()->addArticulation(note, art))
                   delete art;
             }
@@ -1861,7 +1861,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                   gc->setDurationType(d);
                   gc->setDuration(d.fraction());
                   gc->setNoteType(NOTE_ACCIACCATURA);
-                  gc->setMag(note->chord()->staff()->mag() * score->styleD(ST_graceNoteMag));
+                  gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
 
                   if (transition == 0) {
                         // no transition
@@ -1888,7 +1888,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                          ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                          Slur* slur = new Slur(score);
-                         slur->setAnchor(Spanner::ANCHOR_CHORD);
+                         slur->setAnchor(Spanner::Anchor::CHORD);
                          slur->setStartChord(static_cast<Chord*>(cr1));
                          slur->setEndChord(static_cast<Chord*>(cr2));
                          slur->setTick(cr1->tick());
@@ -1908,15 +1908,15 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                   Chord* chord = note->chord();
                   Tremolo* t = new Tremolo(chord->score());
                   if (tremoloDivision == 1) {
-                        t->setTremoloType(TREMOLO_R8);
+                        t->setTremoloType(TremoloType::R8);
                         chord->add(t);
                         }
                   else if (tremoloDivision == 2) {
-                        t->setTremoloType(TREMOLO_R16);
+                        t->setTremoloType(TremoloType::R16);
                         chord->add(t);
                         }
                   else if (tremoloDivision == 3) {
-                        t->setTremoloType(TREMOLO_R32);
+                        t->setTremoloType(TremoloType::R32);
                         chord->add(t);
                         }
                   else
@@ -1932,7 +1932,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
 
                   // add the trill articulation to the note
                   Articulation* art = new Articulation(note->score());
-                  art->setArticulationType(Articulation_Trill);
+                  art->setArticulationType(ArticulationType::Trill);
                   if (!note->score()->addArticulation(note, art))
                         delete art;
 
@@ -2158,7 +2158,7 @@ void GuitarPro4::read(QFile* fp)
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -2409,7 +2409,7 @@ void GuitarPro5::readNoteEffects(Note* note)
             gc->setDurationType(d);
             gc->setDuration(d.fraction());
             gc->setNoteType(note_type);
-            gc->setMag(note->chord()->staff()->mag() * score->styleD(ST_graceNoteMag));
+            gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
             if (transition == 0) {
                   // no transition
                   }
@@ -2435,7 +2435,7 @@ void GuitarPro5::readNoteEffects(Note* note)
                    ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                    Slur* slur = new Slur(score);
-                   slur->setAnchor(Spanner::ANCHOR_CHORD);
+                   slur->setAnchor(Spanner::Anchor::CHORD);
                    slur->setStartChord(static_cast<Chord*>(cr1));
                    slur->setEndChord(static_cast<Chord*>(cr2));
                    slur->setTick(cr1->tick());
@@ -2449,7 +2449,7 @@ void GuitarPro5::readNoteEffects(Note* note)
       if (modMask2 & 0x1) {   // staccato - palm mute
             Chord* chord = note->chord();
             Articulation* a = new Articulation(chord->score());
-            a->setArticulationType(Articulation_Staccato);
+            a->setArticulationType(ArticulationType::Staccato);
             chord->add(a);
             }
       if (modMask2 & 0x2) {   // palm mute - mute the whole column
@@ -2459,15 +2459,15 @@ void GuitarPro5::readNoteEffects(Note* note)
             Chord* chord = note->chord();
             Tremolo* t = new Tremolo(chord->score());
             if (tremoloDivision == 1) {
-                  t->setTremoloType(TREMOLO_R8);
+                  t->setTremoloType(TremoloType::R8);
                   chord->add(t);
                   }
             else if (tremoloDivision == 2) {
-                  t->setTremoloType(TREMOLO_R16);
+                  t->setTremoloType(TremoloType::R16);
                   chord->add(t);
                   }
             else if (tremoloDivision == 3) {
-                  t->setTremoloType(TREMOLO_R32);
+                  t->setTremoloType(TremoloType::R32);
                   chord->add(t);
                   }
             else
@@ -2483,7 +2483,7 @@ void GuitarPro5::readNoteEffects(Note* note)
 
             // add the trill articulation to the note
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(Articulation_Trill);
+            art->setArticulationType(ArticulationType::Trill);
             if (!note->score()->addArticulation(note, art))
                   delete art;
 
@@ -2559,7 +2559,7 @@ void GuitarPro5::readNote(int string, Note* note)
       // check if a note is supposed to be accented, and give it the marcato type
       if (noteBits & 0x02) {
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(Articulation_Marcato);
+            art->setArticulationType(ArticulationType::Marcato);
             if (!note->score()->addArticulation(note, art))
                   delete art;
       }
@@ -2567,7 +2567,7 @@ void GuitarPro5::readNote(int string, Note* note)
       // check if a note is supposed to be accented, and give it the sforzato type
       if (noteBits & 0x40) {
             Articulation* art = new Articulation(note->score());
-            art->setArticulationType(Articulation_Sforzatoaccent);
+            art->setArticulationType(ArticulationType::Sforzatoaccent);
             if (!note->score()->addArticulation(note, art))
                   delete art;
             }
@@ -2997,7 +2997,7 @@ void GuitarPro5::readTracks()
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
                   instr->setUseDrumset(true);
-                        staff->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
+                        staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -3273,7 +3273,7 @@ Score::FileError importGTP(Score* score, const QString& name)
       //
       foreach(Part* part, score->parts()) {
             Score* pscore = new Score(score);
-            pscore->style()->set(ST_createMultiMeasureRests, true);
+            pscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
             QList<int> stavesMap;
             Part*   p = new Part(pscore);
@@ -3299,12 +3299,12 @@ Score::FileError importGTP(Score* score, const QString& name)
                   Staff* s1 = p->staff(1);
                   s1->setUpdateKeymap(true);
 
-                  StaffType st = *StaffType::preset(TAB_DEFAULT_STAFF_TYPE);
+                  StaffType st = *StaffType::preset(StaffTypes::TAB_DEFAULT);
                   st.setSlashStyle(true);
                   s1->setStaffType(&st);
                   s1->linkTo(s);
                   cloneStaff(s,s1);
-                  p->staves()->front()->addBracket(BracketItem(BRACKET_NORMAL, 2));
+                  p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }
             pscore->appendPart(p);
 
@@ -3316,7 +3316,7 @@ Score::FileError importGTP(Score* score, const QString& name)
 
             if (part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
                   Staff* staff2 = pscore->staff(1);
-                  staff2->setStaffType(StaffType::preset(TAB_DEFAULT_STAFF_TYPE));
+                  staff2->setStaffType(StaffType::preset(StaffTypes::TAB_DEFAULT));
                   }
 
             //

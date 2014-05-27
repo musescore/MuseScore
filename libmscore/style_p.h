@@ -94,12 +94,12 @@ class StyleData : public QSharedData {
       QList<TextStyle> _textStyles;
       PageFormat _pageFormat;
       qreal _spatium;
-      ArticulationAnchor _articulationAnchor[ARTICULATIONS];
+      ArticulationAnchor _articulationAnchor[int(ArticulationType::ARTICULATIONS)];
 
       bool _customChordList;        // if true, chordlist will be saved as part of score
 
-      void set(StyleIdx id, const QVariant& v)            { _values[id] = v; }
-      QVariant value(StyleIdx idx) const                  { return _values[idx];     }
+      void set(StyleIdx id, const QVariant& v)            { _values[int(id)] = v; }
+      QVariant value(StyleIdx idx) const                  { return _values[int(idx)];     }
       const TextStyle& textStyle(int idx) const;
       const TextStyle& textStyle(const QString&) const;
       int textStyleType(const QString&) const;

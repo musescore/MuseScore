@@ -117,7 +117,7 @@ TimeSig* MCursor::addTimeSig(const Fraction& f)
       TimeSig* ts = 0;
       for (int i = 0; i < _score->nstaves(); ++i) {
             ts = new TimeSig(_score);
-            ts->setSig(f, TSIG_NORMAL);
+            ts->setSig(f, TimeSigType::NORMAL);
             ts->setTrack(i * VOICES);
             segment->add(ts);
             }

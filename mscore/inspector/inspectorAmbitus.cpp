@@ -53,15 +53,15 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
             NoteHeadGroup::HEAD_TI,
             NoteHeadGroup::HEAD_BREVIS_ALT
             };
-      static const int tpcs[] = {
-            INVALID_TPC,
-            TPC_C_BB, TPC_C_B, TPC_C, TPC_C_S, TPC_C_SS,
-            TPC_D_BB, TPC_D_B, TPC_D, TPC_D_S, TPC_D_SS,
-            TPC_E_BB, TPC_E_B, TPC_E, TPC_E_S, TPC_E_SS,
-            TPC_F_BB, TPC_F_B, TPC_F, TPC_F_S, TPC_F_SS,
-            TPC_G_BB, TPC_G_B, TPC_G, TPC_G_S, TPC_G_SS,
-            TPC_A_BB, TPC_A_B, TPC_A, TPC_A_S, TPC_A_SS,
-            TPC_B_BB, TPC_B_B, TPC_B, TPC_B_S, TPC_B_SS,
+      static const Tpc tpcs[] = {
+            INVALID,
+            C_BB, C_B, C, C_S, C_SS,
+            D_BB, D_B, D, D_S, D_SS,
+            E_BB, E_B, E, E_S, E_SS,
+            F_BB, F_B, F, F_S, F_SS,
+            G_BB, G_B, G, G_S, G_SS,
+            A_BB, A_B, A, A_S, A_SS,
+            B_BB, B_B, B, B_S, B_SS,
       };
 
       //
@@ -73,7 +73,7 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       for (int i = 0; i < 5; ++i)
             r.noteHeadType->setItemData(i, i-1);
       // set proper itemdata for TPC combos
-      for (int i = 0; i < TPC_MAX-TPC_MIN+2; ++i) {
+      for (int i = 0; i < Tpc::MAX-Tpc::MIN+2; ++i) {
             r.topTpc->   setItemData(i, tpcs[i]);
             r.bottomTpc->setItemData(i, tpcs[i]);
             }
@@ -86,23 +86,23 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 
       iList = {
-            { P_COLOR,          0, 0, b.color,         b.resetColor         },
-            { P_VISIBLE,        0, 0, b.visible,       b.resetVisible       },
-            { P_USER_OFF,       0, 0, b.offsetX,       b.resetX             },
-            { P_USER_OFF,       1, 0, b.offsetY,       b.resetY             },
+            { P_ID::COLOR,          0, 0, b.color,         b.resetColor         },
+            { P_ID::VISIBLE,        0, 0, b.visible,       b.resetVisible       },
+            { P_ID::USER_OFF,       0, 0, b.offsetX,       b.resetX             },
+            { P_ID::USER_OFF,       1, 0, b.offsetY,       b.resetY             },
 
-            { P_HEAD_GROUP,     0, 0, r.noteHeadGroup, r.resetNoteHeadGroup },
-            { P_HEAD_TYPE,      0, 0, r.noteHeadType,  r.resetNoteHeadType  },
-            { P_MIRROR_HEAD,    0, 0, r.direction,     r.resetDirection     },
-            { P_GHOST,          0, 0, r.hasLine,       r.resetHasLine       },      // recycled property
-            { P_LINE_WIDTH,     0, 0, r.lineWidth,     r.resetLineWidth     },
-            { P_TPC1,           0, 0, r.topTpc,        nullptr              },
-            { P_FBPARENTHESIS1, 0, 0, r.bottomTpc,     nullptr              },      // recycled property
-            { P_FBPARENTHESIS3, 0, 0, r.topOctave,     nullptr              },      // recycled property
-            { P_FBPARENTHESIS4, 0, 0, r.bottomOctave,  nullptr              },      // recycled property
+            { P_ID::HEAD_GROUP,     0, 0, r.noteHeadGroup, r.resetNoteHeadGroup },
+            { P_ID::HEAD_TYPE,      0, 0, r.noteHeadType,  r.resetNoteHeadType  },
+            { P_ID::MIRROR_HEAD,    0, 0, r.direction,     r.resetDirection     },
+            { P_ID::GHOST,          0, 0, r.hasLine,       r.resetHasLine       },      // recycled property
+            { P_ID::LINE_WIDTH,     0, 0, r.lineWidth,     r.resetLineWidth     },
+            { P_ID::TPC1,           0, 0, r.topTpc,        nullptr              },
+            { P_ID::FBPARENTHESIS1, 0, 0, r.bottomTpc,     nullptr              },      // recycled property
+            { P_ID::FBPARENTHESIS3, 0, 0, r.topOctave,     nullptr              },      // recycled property
+            { P_ID::FBPARENTHESIS4, 0, 0, r.bottomOctave,  nullptr              },      // recycled property
 
-            { P_LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace }
+            { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
+            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace }
             };
 
       mapSignals();

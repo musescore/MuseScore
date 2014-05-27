@@ -255,7 +255,7 @@ void Glissando::setSize(const QSizeF& s)
 
 void Glissando::undoSetGlissandoType(GlissandoType t)
       {
-      score()->undoChangeProperty(this, P_GLISS_TYPE, int(t));
+      score()->undoChangeProperty(this, P_ID::GLISS_TYPE, int(t));
       }
 
 //---------------------------------------------------------
@@ -264,7 +264,7 @@ void Glissando::undoSetGlissandoType(GlissandoType t)
 
 void Glissando::undoSetText(const QString& s)
       {
-      score()->undoChangeProperty(this, P_GLISS_TEXT, s);
+      score()->undoChangeProperty(this, P_ID::GLISS_TEXT, s);
       }
 
 //---------------------------------------------------------
@@ -273,7 +273,7 @@ void Glissando::undoSetText(const QString& s)
 
 void Glissando::undoSetShowText(bool f)
       {
-      score()->undoChangeProperty(this, P_GLISS_SHOW_TEXT, f);
+      score()->undoChangeProperty(this, P_ID::GLISS_SHOW_TEXT, f);
       }
 
 //---------------------------------------------------------
@@ -283,11 +283,11 @@ void Glissando::undoSetShowText(bool f)
 QVariant Glissando::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_GLISS_TYPE:
+            case P_ID::GLISS_TYPE:
                   return int(glissandoType());
-            case P_GLISS_TEXT:
+            case P_ID::GLISS_TEXT:
                   return text();
-            case P_GLISS_SHOW_TEXT:
+            case P_ID::GLISS_SHOW_TEXT:
                   return showText();
             default:
                   break;
@@ -302,13 +302,13 @@ QVariant Glissando::getProperty(P_ID propertyId) const
 bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_GLISS_TYPE:
+            case P_ID::GLISS_TYPE:
                   setGlissandoType(GlissandoType(v.toInt()));
                   break;
-            case P_GLISS_TEXT:
+            case P_ID::GLISS_TEXT:
                   setText(v.toString());
                   break;
-            case P_GLISS_SHOW_TEXT:
+            case P_ID::GLISS_SHOW_TEXT:
                   setShowText(v.toBool());
                   break;
             default:
@@ -327,11 +327,11 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Glissando::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_GLISS_TYPE:
+            case P_ID::GLISS_TYPE:
                   return int(GlissandoType::STRAIGHT);
-            case P_GLISS_TEXT:
+            case P_ID::GLISS_TEXT:
                   return "gliss.";
-            case P_GLISS_SHOW_TEXT:
+            case P_ID::GLISS_SHOW_TEXT:
                   return true;
             default:
                   break;

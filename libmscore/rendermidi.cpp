@@ -390,19 +390,19 @@ void Score::updateHairpin(Hairpin* h)
 
       switch (h->dynRange()) {
             case Element::DynamicRange::STAFF:
-                  st->velocities().setVelo(tick,  VeloEvent(VELO_RAMP, velo));
-                  st->velocities().setVelo(tick2, VeloEvent(VELO_FIX, endVelo));
+                  st->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
+                  st->velocities().setVelo(tick2, VeloEvent(VeloType::FIX, endVelo));
                   break;
             case Element::DynamicRange::PART:
                   foreach(Staff* s, *st->part()->staves()) {
-                        s->velocities().setVelo(tick,  VeloEvent(VELO_RAMP, velo));
-                        s->velocities().setVelo(tick2, VeloEvent(VELO_FIX, endVelo));
+                        s->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
+                        s->velocities().setVelo(tick2, VeloEvent(VeloType::FIX, endVelo));
                         }
                   break;
             case Element::DynamicRange::SYSTEM:
                   foreach(Staff* s, _staves) {
-                        s->velocities().setVelo(tick,  VeloEvent(VELO_RAMP, velo));
-                        s->velocities().setVelo(tick2, VeloEvent(VELO_FIX, endVelo));
+                        s->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
+                        s->velocities().setVelo(tick2, VeloEvent(VeloType::FIX, endVelo));
                         }
                   break;
             }
@@ -632,7 +632,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                         NoteEventList* events = &ell[k];
 
                         switch (type) {
-                              case Articulation_Mordent: {
+                              case ArticulationType::Mordent: {
                                     //
                                     // create default playback for Mordent
                                     //
@@ -645,7 +645,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                                     events->append(NoteEvent(0, 250, 750));
                                     }
                                     break;
-                              case Articulation_Prall:
+                              case ArticulationType::Prall:
                                     //
                                     // create default playback events for PrallSym
                                     //

@@ -1414,16 +1414,16 @@ void ExportMusicXml::moveToTick(int t)
 
 void ExportMusicXml::timesig(TimeSig* tsig)
       {
-      int st = tsig->timeSigType();
+      TimeSigType st = tsig->timeSigType();
       Fraction ts = tsig->sig();
       int z = ts.numerator();
       int n = ts.denominator();
       QString ns = tsig->numeratorString();
 
       attr.doAttr(xml, true);
-      if (st == TSIG_FOUR_FOUR)
+      if (st == TimeSigType::FOUR_FOUR)
             xml.stag("time symbol=\"common\"");
-      else if (st == TSIG_ALLA_BREVE)
+      else if (st == TimeSigType::ALLA_BREVE)
             xml.stag("time symbol=\"cut\"");
       else
             xml.stag("time");
@@ -1497,9 +1497,9 @@ static void tupletStartStop(ChordRest* cr, Notations& notations, Xml& xml)
             QString tupletTag = "tuplet type=\"start\"";
             tupletTag += " bracket=";
             tupletTag += t->hasBracket() ? "\"yes\"" : "\"no\"";
-            if (t->numberType() == Tuplet::SHOW_RELATION)
+            if (t->numberType() == Tuplet::NumberType::SHOW_RELATION)
                   tupletTag += " show-number=\"both\"";
-            if (t->numberType() == Tuplet::NO_TEXT)
+            if (t->numberType() == Tuplet::NumberType::NO_TEXT)
                   tupletTag += " show-number=\"none\"";
             xml.tagE(tupletTag);
             }
@@ -1556,36 +1556,36 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
       if (chord->tremolo()) {
             Tremolo* tr = chord->tremolo();
             int count = 0;
-            int st = tr->tremoloType();
+            TremoloType st = tr->tremoloType();
             QString type = "";
 
             if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
                   type = "single";
                   switch (st) {
-                        case TREMOLO_R8:  count = 1; break;
-                        case TREMOLO_R16: count = 2; break;
-                        case TREMOLO_R32: count = 3; break;
-                        case TREMOLO_R64: count = 4; break;
+                        case TremoloType::R8:  count = 1; break;
+                        case TremoloType::R16: count = 2; break;
+                        case TremoloType::R32: count = 3; break;
+                        case TremoloType::R64: count = 4; break;
                         default: qDebug("unknown tremolo single %d", st); break;
                         }
                   }
             else if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
                   type = "start";
                   switch (st) {
-                        case TREMOLO_C8:  count = 1; break;
-                        case TREMOLO_C16: count = 2; break;
-                        case TREMOLO_C32: count = 3; break;
-                        case TREMOLO_C64: count = 4; break;
+                        case TremoloType::C8:  count = 1; break;
+                        case TremoloType::C16: count = 2; break;
+                        case TremoloType::C32: count = 3; break;
+                        case TremoloType::C64: count = 4; break;
                         default: qDebug("unknown tremolo double %d", st); break;
                         }
                   }
             else if (chord->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
                   type = "stop";
                   switch (st) {
-                        case TREMOLO_C8:  count = 1; break;
-                        case TREMOLO_C16: count = 2; break;
-                        case TREMOLO_C32: count = 3; break;
-                        case TREMOLO_C64: count = 4; break;
+                        case TremoloType::C8:  count = 1; break;
+                        case TremoloType::C16: count = 2; break;
+                        case TremoloType::C32: count = 3; break;
+                        case TremoloType::C64: count = 4; break;
                         default: qDebug("unknown tremolo double %d", st); break;
                         }
                   }
@@ -1612,20 +1612,20 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
       // first output the fermatas
       foreach (const Articulation* a, na) {
             ArticulationType at = a->articulationType();
-            if (at == Articulation_Fermata
-                || at == Articulation_Shortfermata
-                || at == Articulation_Longfermata
-                || at == Articulation_Verylongfermata) {
+            if (at == ArticulationType::Fermata
+                || at == ArticulationType::Shortfermata
+                || at == ArticulationType::Longfermata
+                || at == ArticulationType::Verylongfermata) {
                   notations.tag(xml);
                   QString type = a->up() ? "upright" : "inverted";
-                  if (at == Articulation_Fermata)
+                  if (at == ArticulationType::Fermata)
                         xml.tagE(QString("fermata type=\"%1\"").arg(type));
-                  else if (at == Articulation_Shortfermata)
+                  else if (at == ArticulationType::Shortfermata)
                         xml.tag(QString("fermata type=\"%1\"").arg(type), "angled");
                   // MusicXML does not support the very long fermata,
                   // export as long fermata (better than not exporting at all)
-                  else if (at == Articulation_Longfermata
-                           || at == Articulation_Verylongfermata)
+                  else if (at == ArticulationType::Longfermata
+                           || at == ArticulationType::Verylongfermata)
                         xml.tag(QString("fermata type=\"%1\"").arg(type), "square");
                   }
             }
@@ -1634,41 +1634,41 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
       Articulations articulations;
       foreach (const Articulation* a, na) {
             switch (a->articulationType()) {
-                  case Articulation_Fermata:
-                  case Articulation_Shortfermata:
-                  case Articulation_Longfermata:
-                  case Articulation_Verylongfermata:
+                  case ArticulationType::Fermata:
+                  case ArticulationType::Shortfermata:
+                  case ArticulationType::Longfermata:
+                  case ArticulationType::Verylongfermata:
                         // ignore, already handled
                         break;
-                  case Articulation_Sforzatoaccent:
+                  case ArticulationType::Sforzatoaccent:
                         {
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("accent");
                         }
                         break;
-                  case Articulation_Staccato:
+                  case ArticulationType::Staccato:
                         {
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("staccato");
                         }
                         break;
-                  case Articulation_Staccatissimo:
+                  case ArticulationType::Staccatissimo:
                         {
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("staccatissimo");
                         }
                         break;
-                  case Articulation_Tenuto:
+                  case ArticulationType::Tenuto:
                         {
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("tenuto");
                         }
                         break;
-                  case Articulation_Marcato:
+                  case ArticulationType::Marcato:
                         {
                         notations.tag(xml);
                         articulations.tag(xml);
@@ -1678,34 +1678,34 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                               xml.tagE("strong-accent type=\"down\"");
                         }
                         break;
-                  case Articulation_Portato:
+                  case ArticulationType::Portato:
                         {
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE("detached-legato");
                         }
                         break;
-                  case Articulation_Reverseturn:
-                  case Articulation_Turn:
-                  case Articulation_Trill:
-                  case Articulation_Prall:
-                  case Articulation_Mordent:
-                  case Articulation_PrallPrall:
-                  case Articulation_PrallMordent:
-                  case Articulation_UpPrall:
-                  case Articulation_DownPrall:
-                  case Articulation_UpMordent:
-                  case Articulation_DownMordent:
-                  case Articulation_PrallDown:
-                  case Articulation_PrallUp:
-                  case Articulation_LinePrall:
+                  case ArticulationType::Reverseturn:
+                  case ArticulationType::Turn:
+                  case ArticulationType::Trill:
+                  case ArticulationType::Prall:
+                  case ArticulationType::Mordent:
+                  case ArticulationType::PrallPrall:
+                  case ArticulationType::PrallMordent:
+                  case ArticulationType::UpPrall:
+                  case ArticulationType::DownPrall:
+                  case ArticulationType::UpMordent:
+                  case ArticulationType::DownMordent:
+                  case ArticulationType::PrallDown:
+                  case ArticulationType::PrallUp:
+                  case ArticulationType::LinePrall:
                         // ignore, handled with ornaments
                         break;
-                  case Articulation_Plusstop:
-                  case Articulation_Upbow:
-                  case Articulation_Downbow:
-                  case Articulation_Snappizzicato:
-                  case Articulation_Thumb:
+                  case ArticulationType::Plusstop:
+                  case ArticulationType::Upbow:
+                  case ArticulationType::Downbow:
+                  case ArticulationType::Snappizzicato:
+                  case ArticulationType::Thumb:
                         // ignore, handled with technical
                         break;
                   default:
@@ -1759,110 +1759,110 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
       Ornaments ornaments;
       foreach (const Articulation* a, na) {
             switch (a->articulationType()) {
-                  case Articulation_Fermata:
-                  case Articulation_Shortfermata:
-                  case Articulation_Longfermata:
-                  case Articulation_Verylongfermata:
-                  case Articulation_Sforzatoaccent:
-                  case Articulation_Staccato:
-                  case Articulation_Staccatissimo:
-                  case Articulation_Tenuto:
-                  case Articulation_Marcato:
-                  case Articulation_Portato:
+                  case ArticulationType::Fermata:
+                  case ArticulationType::Shortfermata:
+                  case ArticulationType::Longfermata:
+                  case ArticulationType::Verylongfermata:
+                  case ArticulationType::Sforzatoaccent:
+                  case ArticulationType::Staccato:
+                  case ArticulationType::Staccatissimo:
+                  case ArticulationType::Tenuto:
+                  case ArticulationType::Marcato:
+                  case ArticulationType::Portato:
                         // ignore, already handled
                         break;
-                  case Articulation_Reverseturn:
+                  case ArticulationType::Reverseturn:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-turn");
                         }
                         break;
-                  case Articulation_Turn:
+                  case ArticulationType::Turn:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("turn");
                         }
                         break;
-                  case Articulation_Trill:
+                  case ArticulationType::Trill:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("trill-mark");
                         }
                         break;
-                  case Articulation_Prall:
+                  case ArticulationType::Prall:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent");
                         }
                         break;
-                  case Articulation_Mordent:
+                  case ArticulationType::Mordent:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("mordent");
                         }
                         break;
-                  case Articulation_PrallPrall:
+                  case ArticulationType::PrallPrall:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\"");
                         }
                         break;
-                  case Articulation_PrallMordent:
+                  case ArticulationType::PrallMordent:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("mordent long=\"yes\"");
                         }
                         break;
-                  case Articulation_UpPrall:
+                  case ArticulationType::UpPrall:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" approach=\"below\"");
                         }
                         break;
-                  case Articulation_DownPrall:
+                  case ArticulationType::DownPrall:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" approach=\"above\"");
                         }
                         break;
-                  case Articulation_UpMordent:
+                  case ArticulationType::UpMordent:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("mordent long=\"yes\" approach=\"below\"");
                         }
                         break;
-                  case Articulation_DownMordent:
+                  case ArticulationType::DownMordent:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("mordent long=\"yes\" approach=\"above\"");
                         }
                         break;
-                  case Articulation_PrallDown:
+                  case ArticulationType::PrallDown:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" departure=\"below\"");
                         }
                         break;
-                  case Articulation_PrallUp:
+                  case ArticulationType::PrallUp:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("inverted-mordent long=\"yes\" departure=\"above\"");
                         }
                         break;
-                  case Articulation_LinePrall:
+                  case ArticulationType::LinePrall:
                         {
                         // MusicXML 3.0 does not distinguish between downprall and lineprall
                         notations.tag(xml);
@@ -1870,18 +1870,18 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                         xml.tagE("inverted-mordent long=\"yes\" approach=\"above\"");
                         }
                         break;
-                  case Articulation_Schleifer:
+                  case ArticulationType::Schleifer:
                         {
                         notations.tag(xml);
                         ornaments.tag(xml);
                         xml.tagE("schleifer");
                         }
                         break;
-                  case Articulation_Plusstop:
-                  case Articulation_Upbow:
-                  case Articulation_Downbow:
-                  case Articulation_Snappizzicato:
-                  case Articulation_Thumb:
+                  case ArticulationType::Plusstop:
+                  case ArticulationType::Upbow:
+                  case ArticulationType::Downbow:
+                  case ArticulationType::Snappizzicato:
+                  case ArticulationType::Thumb:
                         // ignore, handled with technical
                         break;
                   default:
@@ -1896,42 +1896,42 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
       // and finally the attributes whose elements are children of <technical>
       foreach (const Articulation* a, na) {
             switch (a->articulationType()) {
-                  case Articulation_Plusstop:
+                  case ArticulationType::Plusstop:
                         {
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("stopped");
                         }
                         break;
-                  case Articulation_Upbow:
+                  case ArticulationType::Upbow:
                         {
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("up-bow");
                         }
                         break;
-                  case Articulation_Downbow:
+                  case ArticulationType::Downbow:
                         {
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("down-bow");
                         }
                         break;
-                  case Articulation_Snappizzicato:
+                  case ArticulationType::Snappizzicato:
                         {
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("snap-pizzicato");
                         }
                         break;
-                  case Articulation_Ouvert:
+                  case ArticulationType::Ouvert:
                         {
                         notations.tag(xml);
                         technical.tag(xml);
                         xml.tagE("open-string");
                         }
                         break;
-                  case Articulation_Thumb:
+                  case ArticulationType::Thumb:
                         {
                         notations.tag(xml);
                         technical.tag(xml);
@@ -2665,24 +2665,24 @@ static void directionETag(Xml& xml, int staff, int offs = 0)
 //   partGroupStart
 //---------------------------------------------------------
 
-static void partGroupStart(Xml& xml, int number, int bracket)
+static void partGroupStart(Xml& xml, int number, BracketType bracket)
       {
       xml.stag(QString("part-group type=\"start\" number=\"%1\"").arg(number));
       QString br = "";
       switch (bracket) {
-            case NO_BRACKET:
+            case BracketType::NO_BRACKET:
                   br = "none";
                   break;
-            case BRACKET_NORMAL:
+            case BracketType::NORMAL:
                   br = "bracket";
                   break;
-            case BRACKET_BRACE:
+            case BracketType::BRACE:
                   br = "brace";
                   break;
-            case BRACKET_LINE:
+            case BracketType::LINE:
                   br = "line";
                   break;
-            case BRACKET_SQUARE:
+            case BracketType::SQUARE:
                   br = "square";
                   break;
             default:
@@ -4015,13 +4015,13 @@ void ExportMusicXml::write(QIODevice* dev)
                   Staff* st = part->staff(i);
                   if (st) {
                         for (int j = 0; j < st->bracketLevels(); j++) {
-                              if (st->bracket(j) != NO_BRACKET) {
+                              if (st->bracket(j) != BracketType::NO_BRACKET) {
                                     bracketFound = true;
                                     if (i == 0) {
                                           // OK, found bracket in first staff of part
                                           // filter out implicit brackets
                                           if (!(st->bracketSpan(j) == part->nstaves()
-                                                && st->bracket(j) == BRACKET_BRACE)) {
+                                                && st->bracket(j) == BracketType::BRACE)) {
                                                 // add others
                                                 int number = findPartGroupNumber(partGroupEnd);
                                                 if (number < MAX_PART_GROUPS) {
@@ -4042,7 +4042,7 @@ void ExportMusicXml::write(QIODevice* dev)
             if (!bracketFound && part->nstaves() > 1) {
                   int number = findPartGroupNumber(partGroupEnd);
                   if (number < MAX_PART_GROUPS) {
-                        partGroupStart(xml, number + 1, NO_BRACKET);
+                        partGroupStart(xml, number + 1, BracketType::NO_BRACKET);
                         partGroupEnd[number] = idx + part->nstaves();
                         }
                   }
@@ -4642,7 +4642,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
             }
       int rootTpc = h->rootTpc();
-      if (rootTpc != INVALID_TPC) {
+      if (rootTpc != Tpc::INVALID) {
             if (h->textStyle().hasFrame())
                   xml.stag(QString("harmony print-frame=\"yes\"").append(relative));
             else
@@ -4697,7 +4697,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   }
 
             int baseTpc = h->baseTpc();
-            if (baseTpc != INVALID_TPC) {
+            if (baseTpc != Tpc::INVALID) {
                   xml.stag("bass");
                   xml.tag("bass-step", tpc2stepName(baseTpc));
                   int alter = tpc2alter(baseTpc);

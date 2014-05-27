@@ -889,7 +889,7 @@ class Score : public QObject {
       const QList<Layer>& layer() const     { return _layer;       }
       bool tagIsValid(uint tag) const       { return tag & _layer[_currentLayer].tags; }
 
-      void transpose(int mode, TransposeDirection, int transposeKey, int transposeInterval,
+      void transpose(TransposeMode mode, TransposeDirection, int transposeKey, int transposeInterval,
          bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
       void addViewer(MuseScoreView* v)      { viewer.append(v);    }
       void removeViewer(MuseScoreView* v)   { viewer.removeAll(v); }

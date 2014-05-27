@@ -62,7 +62,7 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
       // special case multi measure rest
       //
       Measure* mm = 0;
-      if (m->score()->styleB(ST_createMultiMeasureRests) && m->type() == Element::ElementType::MEASURE) {
+      if (m->score()->styleB(StyleIdx::createMultiMeasureRests) && m->type() == Element::ElementType::MEASURE) {
             mm = static_cast<Measure*>(m);
             Segment* s = mm->findSegment(Segment::SegEndBarLine, mm->endTick());
             if (s == 0)

@@ -271,15 +271,15 @@ PlaceText readPlacement(XmlReader& e)
       {
       const QString& s(e.readElementText());
       if (s == "auto" || s == "0")
-            return PLACE_AUTO;
+            return PlaceText::AUTO;
       if (s == "above" || s == "1")
-            return PLACE_ABOVE;
+            return PlaceText::ABOVE;
       if (s == "below" || s == "2")
-            return PLACE_BELOW;
+            return PlaceText::BELOW;
       if (s == "left" || s == "3")
-            return PLACE_LEFT;
+            return PlaceText::LEFT;
       qDebug("unknown placement value <%s>", qPrintable(s));
-      return PLACE_AUTO;
+      return PlaceText::AUTO;
       }
 
 //---------------------------------------------------------
@@ -396,20 +396,20 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
             return;
 
       switch(propertyType(id)) {
-            case T_BOOL:
-            case T_SUBTYPE:
-            case T_INT:
-            case T_SPATIUM:
-            case T_SP_REAL:
-            case T_REAL:
-            case T_SCALE:
-            case T_POINT:
-            case T_SIZE:
-            case T_COLOR:
+            case P_TYPE::BOOL:
+            case P_TYPE::SUBTYPE:
+            case P_TYPE::INT:
+            case P_TYPE::SPATIUM:
+            case P_TYPE::SP_REAL:
+            case P_TYPE::REAL:
+            case P_TYPE::SCALE:
+            case P_TYPE::POINT:
+            case P_TYPE::SIZE:
+            case P_TYPE::COLOR:
                   tag(name, data);
                   break;
 
-            case T_DIRECTION:
+            case P_TYPE::DIRECTION:
                   switch(Direction(data.toInt())) {
                         case Direction::UP:
                               tag(name, QVariant("up"));
@@ -421,7 +421,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                               break;
                         }
                   break;
-            case T_DIRECTION_H:
+            case P_TYPE::DIRECTION_H:
                   switch(DirectionH(data.toInt())) {
                         case DirectionH::DH_LEFT:
                               tag(name, QVariant("left"));
@@ -433,7 +433,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                               break;
                         }
                   break;
-            case T_LAYOUT_BREAK:
+            case P_TYPE::LAYOUT_BREAK:
                   switch(LayoutBreak::LayoutBreakType(data.toInt())) {
                         case LayoutBreak::LayoutBreakType::LINE:
                               tag(name, QVariant("line"));
@@ -446,7 +446,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                               break;
                         }
                   break;
-            case T_VALUE_TYPE:
+            case P_TYPE::VALUE_TYPE:
                   switch(ValueType(data.toInt())) {
                         case ValueType::OFFSET_VAL:
                               tag(name, QVariant("offset"));
@@ -456,7 +456,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                               break;
                         }
                   break;
-            case T_PLACEMENT:
+            case P_TYPE::PLACEMENT:
                   switch(Element::Placement(data.toInt())) {
                         case Element::Placement::ABOVE:
                               tag(name, QVariant("above"));
@@ -466,7 +466,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                               break;
                         }
                   break;
-            case T_SYMID:
+            case P_TYPE::SYMID:
                   tag(name, Sym::id2name(SymId(data.toInt())));
                   break;
             default:

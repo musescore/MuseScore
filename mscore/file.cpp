@@ -543,9 +543,9 @@ void MuseScore::newFile()
             newWizard->createInstruments(score);
             }
       if (!score->style()->chordList()->loaded()) {
-            if (score->style()->value(ST_chordsXmlFile).toBool())
+            if (score->style()->value(StyleIdx::chordsXmlFile).toBool())
                   score->style()->chordList()->read("chords.xml");
-            score->style()->chordList()->read(score->style()->value(ST_chordDescriptionFile).toString());
+            score->style()->chordList()->read(score->style()->value(StyleIdx::chordDescriptionFile).toString());
             }
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
@@ -599,7 +599,7 @@ void MuseScore::newFile()
                               // transpose key
                               //
                               KeySigEvent nKey = ks;
-                              if (part->instr()->transpose().chromatic && !score->styleB(ST_concertPitch)) {
+                              if (part->instr()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
                                     int diff = -part->instr()->transpose().chromatic;
                                     nKey.setAccidentalType(transposeKey(nKey.accidentalType(), diff));
                                     }
@@ -1837,9 +1837,9 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                         score->style()->load(&f);
                   }
             else {
-                  if (score->style()->value(ST_chordsXmlFile).toBool())
+                  if (score->style()->value(StyleIdx::chordsXmlFile).toBool())
                         score->style()->chordList()->read("chords.xml");
-                  score->style()->chordList()->read(score->styleSt(ST_chordDescriptionFile));
+                  score->style()->chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
                   }
             uint n = sizeof(imports)/sizeof(*imports);
             uint i;
@@ -1955,7 +1955,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
 
 bool MuseScore::saveSelection(Score* cs)
       {
-      if (cs->selection().state() != SEL_RANGE) {
+      if (cs->selection().state() != SelState::RANGE) {
             if(!MScore::noGui) QMessageBox::warning(mscore, tr("MuseScore: Save Selection"), tr("Please select one or more measures"));
             return false;
             }

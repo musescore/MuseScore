@@ -304,7 +304,7 @@ void Accidental::layout()
 
       qreal m = parent() ? parent()->mag() : 1.0;
       if (_small)
-            m *= score()->styleD(ST_smallNoteMag);
+            m *= score()->styleD(StyleIdx::smallNoteMag);
       setMag(m);
 
       m = magS();
@@ -428,7 +428,7 @@ Element* Accidental::drop(const DropData& data)
 
 void Accidental::undoSetHasBracket(bool val)
       {
-      score()->undoChangeProperty(this, P_ACCIDENTAL_BRACKET, val);
+      score()->undoChangeProperty(this, P_ID::ACCIDENTAL_BRACKET, val);
       }
 
 //---------------------------------------------------------
@@ -437,7 +437,7 @@ void Accidental::undoSetHasBracket(bool val)
 
 void Accidental::undoSetSmall(bool val)
       {
-      score()->undoChangeProperty(this, P_SMALL, val);
+      score()->undoChangeProperty(this, P_ID::SMALL, val);
       }
 
 //---------------------------------------------------------
@@ -447,8 +447,8 @@ void Accidental::undoSetSmall(bool val)
 QVariant Accidental::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SMALL:              return _small;
-            case P_ACCIDENTAL_BRACKET: return _hasBracket;
+            case P_ID::SMALL:              return _small;
+            case P_ID::ACCIDENTAL_BRACKET: return _hasBracket;
             default:
                   return Element::getProperty(propertyId);
             }
@@ -461,10 +461,10 @@ QVariant Accidental::getProperty(P_ID propertyId) const
 bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SMALL:
+            case P_ID::SMALL:
                   _small = v.toBool();
                   break;
-            case P_ACCIDENTAL_BRACKET:
+            case P_ID::ACCIDENTAL_BRACKET:
                   _hasBracket = v.toBool();
                   break;
             default:

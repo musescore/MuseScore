@@ -29,18 +29,18 @@ InspectorBeam::InspectorBeam(QWidget* parent)
       b.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,          0, false, e.color,        e.resetColor        },
-            { P_VISIBLE,        0, false, e.visible,      e.resetVisible      },
-            { P_USER_OFF,       0, false, e.offsetX,      e.resetX            },
-            { P_USER_OFF,       1, false, e.offsetY,      e.resetY            },
-            { P_STEM_DIRECTION, 0, false, b.direction,    b.resetDirection    },
-            { P_DISTRIBUTE,     0, false, b.distribute,   b.resetDistribute   },
-            { P_GROW_LEFT,      0, false, b.growLeft,     b.resetGrowLeft     },
-            { P_GROW_RIGHT,     0, false, b.growRight,    b.resetGrowRight    },
-            { P_BEAM_NO_SLOPE,  0, false, b.noSlope,      b.resetNoSlope      },
-            { P_USER_MODIFIED,  0, false, b.userPosition, b.resetUserPosition },
-            { P_BEAM_POS,       0, false, b.y1,           0                   },
-            { P_BEAM_POS,       1, false, b.y2,           0                   }
+            { P_ID::COLOR,          0, false, e.color,        e.resetColor        },
+            { P_ID::VISIBLE,        0, false, e.visible,      e.resetVisible      },
+            { P_ID::USER_OFF,       0, false, e.offsetX,      e.resetX            },
+            { P_ID::USER_OFF,       1, false, e.offsetY,      e.resetY            },
+            { P_ID::STEM_DIRECTION, 0, false, b.direction,    b.resetDirection    },
+            { P_ID::DISTRIBUTE,     0, false, b.distribute,   b.resetDistribute   },
+            { P_ID::GROW_LEFT,      0, false, b.growLeft,     b.resetGrowLeft     },
+            { P_ID::GROW_RIGHT,     0, false, b.growRight,    b.resetGrowRight    },
+            { P_ID::BEAM_NO_SLOPE,  0, false, b.noSlope,      b.resetNoSlope      },
+            { P_ID::USER_MODIFIED,  0, false, b.userPosition, b.resetUserPosition },
+            { P_ID::BEAM_POS,       0, false, b.y1,           0                   },
+            { P_ID::BEAM_POS,       1, false, b.y2,           0                   }
             };
       mapSignals();
       }
@@ -51,7 +51,7 @@ InspectorBeam::InspectorBeam(QWidget* parent)
 
 void InspectorBeam::valueChanged(int idx)
       {
-      if (iList[idx].t == P_USER_MODIFIED) {
+      if (iList[idx].t == P_ID::USER_MODIFIED) {
             bool val = getValue(iList[idx]).toBool();
             iList[8].w->setEnabled(!val);
             iList[10].w->setEnabled(val);

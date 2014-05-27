@@ -739,7 +739,7 @@ void MusicXml::import(Score* s)
       figBassExtend = false;
 
       // TODO only if multi-measure rests used ???
-      // score->style()->set(ST_createMultiMeasureRests, true);
+      // score->style()->set(StyleIdx::createMultiMeasureRests, true);
 
       for (QDomElement e = doc->documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "score-partwise")
@@ -962,18 +962,18 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
                              TimeSigType& st, int& bts, int& btp)
       {
       // initialize
-      st  = TSIG_NORMAL;
+      st  = TimeSigType::NORMAL;
       bts = 0;       // the beats (max 4 separated by "+") as integer
       btp = 0;       // beat-type as integer
       // determine if timesig is valid
       if (beats == "2" && beatType == "2" && timeSymbol == "cut") {
-            st = TSIG_ALLA_BREVE;
+            st = TimeSigType::ALLA_BREVE;
             bts = 2;
             btp = 2;
             return true;
             }
       else if (beats == "4" && beatType == "4" && timeSymbol == "common") {
-            st = TSIG_FOUR_FOUR;
+            st = TimeSigType::FOUR_FOUR;
             bts = 4;
             btp = 4;
             return true;
@@ -1158,7 +1158,7 @@ void MusicXml::scorePartwise(QDomElement ee)
                                           ;
                                     else if (tag == "system-distance") {
                                           if (preferences.musicxmlImportLayout) {
-                                                score->style()->set(ST_minSystemDistance, val);
+                                                score->style()->set(StyleIdx::minSystemDistance, val);
                                                 qDebug("system distance %f", val.val());
                                                 }
                                           }
@@ -1174,7 +1174,7 @@ void MusicXml::scorePartwise(QDomElement ee)
                                     Spatium val(eee.text().toDouble() / 10.0);
                                     if (tag == "staff-distance") {
                                           if (preferences.musicxmlImportLayout)
-                                                score->style()->set(ST_staffDistance, val);
+                                                score->style()->set(StyleIdx::staffDistance, val);
                                           }
                                     else
                                           domError(eee);
@@ -1272,8 +1272,8 @@ void MusicXml::scorePartwise(QDomElement ee)
                   stavesSpan += il.at(pg->start + j)->nstaves();
             // add bracket and set the span
             // TODO: use group-symbol default-x to determine horizontal order of brackets
-            if (pg->type == NO_BRACKET)
-                  il.at(pg->start)->staff(0)->setBracket(0, NO_BRACKET);
+            if (pg->type == BracketType::NO_BRACKET)
+                  il.at(pg->start)->staff(0)->setBracket(0, BracketType::NO_BRACKET);
             else
                   il.at(pg->start)->staff(0)->addBracket(BracketItem(pg->type, stavesSpan));
             if (pg->barlineSpan)
@@ -1284,7 +1284,7 @@ void MusicXml::scorePartwise(QDomElement ee)
       // multi-staff parts w/o explicit brackets get a brace
       foreach(Part const* const p, il) {
             if (p->nstaves() > 1 && !partSet.contains(p)) {
-                  p->staff(0)->addBracket(BracketItem(BRACKET_BRACE, p->nstaves()));
+                  p->staff(0)->addBracket(BracketItem(BracketType::BRACE, p->nstaves()));
                   p->staff(0)->setBarLineSpan(p->nstaves());
                   }
             }
@@ -1329,19 +1329,19 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, b
             return;
             }
 
-      BracketType bracketType = NO_BRACKET;
+      BracketType bracketType = BracketType::NO_BRACKET;
       if (s == "")
             ;  // ignore (handle as NO_BRACKET)
       else if (s == "none")
             ;  // already set to NO_BRACKET
       else if (s == "brace")
-            bracketType = BRACKET_BRACE;
+            bracketType = BracketType::BRACE;
       else if (s == "bracket")
-            bracketType = BRACKET_NORMAL;
+            bracketType = BracketType::NORMAL;
       else if (s == "line")
-            bracketType = BRACKET_LINE;
+            bracketType = BracketType::LINE;
       else if (s == "square")
-            bracketType = BRACKET_SQUARE;
+            bracketType = BracketType::SQUARE;
       else {
             qDebug("part-group symbol=%s not supported", s.toLatin1().data());
             return;
@@ -1795,7 +1795,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             // but may be incorrect for a percussion staff that does not use a percussion clef
             for (int j = 0; j < part->nstaves(); ++j)
                   if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
-                        part->staff(j)->setStaffType(StaffType::preset(PERC_DEFAULT_STAFF_TYPE));
+                        part->staff(j)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
             // set drumset for instrument
             part->instr()->setUseDrumset(true);
             part->instr()->setDrumset(drumset);
@@ -2874,7 +2874,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             else {
                   Symbol* s = new Symbol(score);
                   s->setAlign(ALIGN_LEFT | ALIGN_BASELINE);
-                  s->setOffsetType(OFFSET_SPATIUM);
+                  s->setOffsetType(OffsetType::SPATIUM);
                   if (type == "start")
                         s->setSym(SymId::keyboardPedalPed);
                   else if (type == "stop")
@@ -3284,14 +3284,14 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         }
                   }
             else if (e.tagName() == "clef") {
-                  int st = xmlClef(e, staff, measure);
+                  StaffTypes st = xmlClef(e, staff, measure);
                   int number = e.attribute(QString("number"), "-1").toInt();
                   int staffIdx = staff;
                   if (number != -1)
                         staffIdx += number - 1;
                   // qDebug("xmlAttributes clef score->staff(0) %p staffIdx %d score->staff(%d) %p",
                   //       score->staff(0), staffIdx, staffIdx, score->staff(staffIdx));
-                  if (st != STANDARD_STAFF_TYPE)
+                  if (st != StaffTypes::STANDARD)
                         score->staff(staffIdx)->setStaffType(StaffType::preset(st));
                   }
             else if (e.tagName() == "staves")
@@ -3345,7 +3345,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
             }
       if (beats != "" && beatType != "") {
             // determine if timesig is valid
-            TimeSigType st  = TSIG_NORMAL;
+            TimeSigType st  = TimeSigType::NORMAL;
             int bts = 0; // total beats as integer (beats may contain multiple numbers, separated by "+")
             int btp = 0; // beat-type as integer
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
@@ -3806,16 +3806,16 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
                   tuplet->setTick(cr->tick());
                   // set bracket, leave at default if unspecified
                   if (tupletBracket == "yes")
-                        tuplet->setBracketType(Tuplet::SHOW_BRACKET);
+                        tuplet->setBracketType(Tuplet::BracketType::SHOW_BRACKET);
                   else if (tupletBracket == "no")
-                        tuplet->setBracketType(Tuplet::SHOW_NO_BRACKET);
-                  // set number, default is "actual" (=SHOW_NUMBER)
+                        tuplet->setBracketType(Tuplet::BracketType::SHOW_NO_BRACKET);
+                  // set number, default is "actual" (=NumberType::SHOW_NUMBER)
                   if (tupletShowNumber == "both")
-                        tuplet->setNumberType(Tuplet::SHOW_RELATION);
+                        tuplet->setNumberType(Tuplet::NumberType::SHOW_RELATION);
                   else if (tupletShowNumber == "none")
-                        tuplet->setNumberType(Tuplet::NO_TEXT);
+                        tuplet->setNumberType(Tuplet::NumberType::NO_TEXT);
                   else
-                        tuplet->setNumberType(Tuplet::SHOW_NUMBER);
+                        tuplet->setNumberType(Tuplet::NumberType::SHOW_NUMBER);
                   // TODO type, placement, bracket
                   tuplet->setParent(cr->measure());
                   }
@@ -3891,22 +3891,22 @@ static void addArticulationToChord(ChordRest* cr, ArticulationType articSym, QSt
 
 static void addMordentToChord(ChordRest* cr, QString name, QString attrLong, QString attrAppr, QString attrDep)
       {
-      ArticulationType articSym = ARTICULATIONS; // legal but impossible ArticulationType value here indicating "not found"
+      ArticulationType articSym = ArticulationType::ARTICULATIONS; // legal but impossible ArticulationType value here indicating "not found"
       if (name == "inverted-mordent") {
-            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = Articulation_Prall;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = Articulation_PrallPrall;
-            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = Articulation_UpPrall;
-            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = Articulation_DownPrall;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "below") articSym = Articulation_PrallDown;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "above") articSym = Articulation_PrallUp;
+            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = ArticulationType::Prall;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = ArticulationType::PrallPrall;
+            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = ArticulationType::UpPrall;
+            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = ArticulationType::DownPrall;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "below") articSym = ArticulationType::PrallDown;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "above") articSym = ArticulationType::PrallUp;
             }
       else if (name == "mordent") {
-            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = Articulation_Mordent;
-            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = Articulation_PrallMordent;
-            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = Articulation_UpMordent;
-            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = Articulation_DownMordent;
+            if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") articSym = ArticulationType::Mordent;
+            else if (attrLong == "yes" && attrAppr == "" && attrDep == "") articSym = ArticulationType::PrallMordent;
+            else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") articSym = ArticulationType::UpMordent;
+            else if (attrLong == "yes" && attrAppr == "above" && attrDep == "") articSym = ArticulationType::DownMordent;
             }
-      if (articSym != ARTICULATIONS) {
+      if (articSym != ArticulationType::ARTICULATIONS) {
             Articulation* na = new Articulation(cr->score());
             na->setArticulationType(articSym);
             cr->add(na);
@@ -3934,21 +3934,21 @@ static void addMordentToChord(ChordRest* cr, QString name, QString attrLong, QSt
 static bool readArticulations(ChordRest* cr, QString mxmlName)
       {
       QMap<QString, ArticulationType> map; // map MusicXML articulation name to MuseScore symbol
-      map["accent"]           = Articulation_Sforzatoaccent;
-      map["staccatissimo"]    = Articulation_Staccatissimo;
-      map["staccato"]         = Articulation_Staccato;
-      map["tenuto"]           = Articulation_Tenuto;
-      map["turn"]             = Articulation_Turn;
-      map["inverted-turn"]    = Articulation_Reverseturn;
-      map["stopped"]          = Articulation_Plusstop;
-      map["up-bow"]           = Articulation_Upbow;
-      map["down-bow"]         = Articulation_Downbow;
-      map["detached-legato"]  = Articulation_Portato;
-      map["spiccato"]         = Articulation_Staccatissimo;
-      map["snap-pizzicato"]   = Articulation_Snappizzicato;
-      map["schleifer"]        = Articulation_Schleifer;
-      map["open-string"]      = Articulation_Ouvert;
-      map["thumb-position"]   = Articulation_Thumb;
+      map["accent"]           = ArticulationType::Sforzatoaccent;
+      map["staccatissimo"]    = ArticulationType::Staccatissimo;
+      map["staccato"]         = ArticulationType::Staccato;
+      map["tenuto"]           = ArticulationType::Tenuto;
+      map["turn"]             = ArticulationType::Turn;
+      map["inverted-turn"]    = ArticulationType::Reverseturn;
+      map["stopped"]          = ArticulationType::Plusstop;
+      map["up-bow"]           = ArticulationType::Upbow;
+      map["down-bow"]         = ArticulationType::Downbow;
+      map["detached-legato"]  = ArticulationType::Portato;
+      map["spiccato"]         = ArticulationType::Staccatissimo;
+      map["snap-pizzicato"]   = ArticulationType::Snappizzicato;
+      map["schleifer"]        = ArticulationType::Schleifer;
+      map["open-string"]      = ArticulationType::Ouvert;
+      map["thumb-position"]   = ArticulationType::Thumb;
 
       if (map.contains(mxmlName)) {
             addArticulationToChord(cr, map.value(mxmlName), "");
@@ -4093,11 +4093,11 @@ static void xmlFermata(ChordRest* cr, QDomElement e)
       QString fermataType = e.attribute(QString("type"));
 
       if (fermata == "normal" || fermata == "")
-            addFermata(cr, fermataType, Articulation_Fermata);
+            addFermata(cr, fermataType, ArticulationType::Fermata);
       else if (fermata == "angled")
-            addFermata(cr, fermataType, Articulation_Shortfermata);
+            addFermata(cr, fermataType, ArticulationType::Shortfermata);
       else if (fermata == "square")
-            addFermata(cr, fermataType, Articulation_Longfermata);
+            addFermata(cr, fermataType, ArticulationType::Longfermata);
       else
             qDebug("unknown fermata '%s'", qPrintable(fermata));
       }
@@ -4151,7 +4151,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
                                     if(cr->isGrace()){
-                                          slur[slurNo]->setAnchor(Spanner::ANCHOR_CHORD);
+                                          slur[slurNo]->setAnchor(Spanner::Anchor::CHORD);
                                           slur[slurNo]->setParent(cr);
                                           }
                                     if (lineType == "dotted")
@@ -4188,7 +4188,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     }
                               else {
                                     if(cr->isGrace()){
-                                          slur[slurNo]->setAnchor(Spanner::ANCHOR_CHORD);
+                                          slur[slurNo]->setAnchor(Spanner::Anchor::CHORD);
                                           slur[slurNo]->setEndElement(slur[slurNo]->startElement());
                                           slur[slurNo]->setStartElement(cr);
                                           }
@@ -4278,9 +4278,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         else if (eee.tagName() == "strong-accent") {
                               QString strongAccentType = eee.attribute(QString("type"));
                               if (strongAccentType == "up" || strongAccentType == "")
-                                    addArticulationToChord(cr, Articulation_Marcato, "up");
+                                    addArticulationToChord(cr, ArticulationType::Marcato, "up");
                               else if (strongAccentType == "down")
-                                    addArticulationToChord(cr, Articulation_Marcato, "down");
+                                    addArticulationToChord(cr, ArticulationType::Marcato, "down");
                               else
                                     qDebug("unknown mercato type %s", strongAccentType.toLatin1().data());
                               }
@@ -4308,7 +4308,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               domNotImplemented(eee);
                         else if (eee.tagName() == "delayed-turn")
                               // TODO: actually this should be offset a bit to the right
-                              addArticulationToChord(cr, Articulation_Turn, "");
+                              addArticulationToChord(cr, ArticulationType::Turn, "");
                         else if (eee.tagName() == "inverted-mordent"
                                  || eee.tagName() == "mordent")
                               addMordentToChord(cr, eee.tagName(), eee.attribute("long"), eee.attribute("approach"), eee.attribute("departure"));
@@ -4318,7 +4318,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                   // note that mscore wavy line already implicitly includes a trillsym
                   // so don't add an additional one
                   if (trillMark && wavyLineType != "start")
-                        addArticulationToChord(cr, Articulation_Trill, "");
+                        addArticulationToChord(cr, ArticulationType::Trill, "");
                   }
             else if (ee.tagName() == "technical") {
                   for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
@@ -4447,10 +4447,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                   if (tremoloType == "" || tremoloType == "single") {
                         Tremolo* t = new Tremolo(score);
                         switch (tremolo) {
-                              case 1: t->setTremoloType(TREMOLO_R8); break;
-                              case 2: t->setTremoloType(TREMOLO_R16); break;
-                              case 3: t->setTremoloType(TREMOLO_R32); break;
-                              case 4: t->setTremoloType(TREMOLO_R64); break;
+                              case 1: t->setTremoloType(TremoloType::R8); break;
+                              case 2: t->setTremoloType(TremoloType::R16); break;
+                              case 3: t->setTremoloType(TremoloType::R32); break;
+                              case 4: t->setTremoloType(TremoloType::R64); break;
                               }
                         cr->add(t);
                         }
@@ -4462,10 +4462,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         if (tremStart) {
                               Tremolo* t = new Tremolo(score);
                               switch (tremolo) {
-                                    case 1: t->setTremoloType(TREMOLO_C8); break;
-                                    case 2: t->setTremoloType(TREMOLO_C16); break;
-                                    case 3: t->setTremoloType(TREMOLO_C32); break;
-                                    case 4: t->setTremoloType(TREMOLO_C64); break;
+                                    case 1: t->setTremoloType(TremoloType::C8); break;
+                                    case 2: t->setTremoloType(TremoloType::C16); break;
+                                    case 3: t->setTremoloType(TremoloType::C32); break;
+                                    case 4: t->setTremoloType(TremoloType::C64); break;
                                     }
                               t->setChords(tremStart, static_cast<Chord*>(cr));
                               // fixup chord duration and type
@@ -5074,7 +5074,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   int pitch = drumsets[partId][instrId].pitch;
                   note->setPitch(pitch);
                   // TODO - does this need to be key-aware?
-                  note->setTpc(pitch2tpc(pitch, KEY_C, PREFER_NEAREST)); // TODO: necessary ?
+                  note->setTpc(pitch2tpc(pitch, Key::KEY_C, Prefer::NEAREST)); // TODO: necessary ?
                   }
             else
                   xmlSetPitch(note, c, alter, octave, ottava, track);
@@ -5258,7 +5258,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
 
       double styleYOff = score->textStyle(TEXT_STYLE_HARMONY).offset().y();
       OffsetType offsetType = score->textStyle(TEXT_STYLE_HARMONY).offsetType();
-      if (offsetType == OFFSET_ABS) {
+      if (offsetType == OffsetType::ABS) {
             styleYOff = styleYOff * MScore::DPMM / score->spatium();
             }
 
@@ -5306,7 +5306,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                               domError(ee);
                         }
                   if (invalidRoot)
-                        ha->setRootTpc(INVALID_TPC);
+                        ha->setRootTpc(Tpc::INVALID);
                   else
                         ha->setRootTpc(step2tpc(step, AccidentalVal(alter)));
                   }
@@ -5397,7 +5397,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
             }
 
       const ChordDescription* d = 0;
-      if (ha->rootTpc() != INVALID_TPC)
+      if (ha->rootTpc() != Tpc::INVALID)
             d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
       if (d) {
             ha->setId(d->id);
@@ -5422,10 +5422,10 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
 //   xmlClef
 //---------------------------------------------------------
 
-int MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
+StaffTypes MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
       {
       ClefType clef   = ClefType::G;
-      int res = STANDARD_STAFF_TYPE;
+      StaffTypes res = StaffTypes::STANDARD;
       int clefno = e.attribute(QString("number"), "1").toInt() - 1;
       QString c;
       int i = 0;
@@ -5493,11 +5493,11 @@ int MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
             }
       else if (c == "percussion") {
             clef = ClefType::PERC2;
-            res = PERC_DEFAULT_STAFF_TYPE;
+            res = StaffTypes::PERC_DEFAULT;
             }
       else if (c == "TAB") {
             clef = ClefType::TAB2;
-            res = TAB_DEFAULT_STAFF_TYPE;
+            res = StaffTypes::TAB_DEFAULT;
             }
       else
             qDebug("ImportMusicXML: unknown clef <sign=%s line=%d oct ch=%d>", qPrintable(c), line, i);

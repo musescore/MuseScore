@@ -25,10 +25,10 @@ namespace Ms {
 class MuseScoreView;
 class Segment;
 
-enum TimeSigType {
-      TSIG_NORMAL,            // use sz/sn text
-      TSIG_FOUR_FOUR,         // common time (4/4)
-      TSIG_ALLA_BREVE         // cut time (2/2)
+enum class TimeSigType : char {
+      NORMAL,            // use sz/sn text
+      FOUR_FOUR,         // common time (4/4)
+      ALLA_BREVE,         // cut time (2/2)
       };
 
 //---------------------------------------------------------------------------------------
@@ -88,8 +88,8 @@ class TimeSig : public Element {
       Space space() const;
 
       Fraction sig() const               { return _sig; }
-      void setSig(const Fraction& f, TimeSigType st = TSIG_NORMAL);
-      Q_INVOKABLE void setSig(int z, int n, TimeSigType st = TSIG_NORMAL) { setSig(Fraction(z, n), st); }
+      void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
+      Q_INVOKABLE void setSig(int z, int n, TimeSigType st = TimeSigType::NORMAL) { setSig(Fraction(z, n), st); }
       int numerator() const              { return _sig.numerator(); }
       int denominator() const            { return _sig.denominator(); }
 

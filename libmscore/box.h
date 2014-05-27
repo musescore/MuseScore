@@ -38,9 +38,9 @@ class Box : public MeasureBase {
       Spatium _boxWidth;   // only valid for HBox
       Spatium _boxHeight;  // only valid for VBox
       qreal _topGap;       // distance from previous system (left border for hbox)
-                           // initialized with ST_systemFrameDistance
+                           // initialized with StyleIdx::systemFrameDistance
       qreal _bottomGap;    // distance to next system (right border for hbox)
-                           // initialized with ST_frameSystemDistance
+                           // initialized with StyleIdx::frameSystemDistance
       qreal _leftMargin, _rightMargin;   // inner margins in metric mm
       qreal _topMargin, _bottomMargin;
       bool editMode;

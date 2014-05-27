@@ -327,7 +327,7 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
 
       qreal m = mm;
       if (cr->small())
-            m *= score()->styleD(ST_smallNoteMag);
+            m *= score()->styleD(StyleIdx::smallNoteMag);
 
       if (cr->type() == ElementType::CHORD) {
             Chord* chord = static_cast<Chord*>(cr);
@@ -335,7 +335,7 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
                   layoutCR0(c, mm);
 
             if (chord->noteType() != NOTE_NORMAL)
-                  m *= score()->styleD(ST_graceNoteMag);
+                  m *= score()->styleD(StyleIdx::graceNoteMag);
             if (drumset) {
                   for (Note* note : chord->notes()) {
                         int pitch = note->pitch();
@@ -584,14 +584,14 @@ void Measure::layout2()
             else if (_noMode == MeasureNumberMode::HIDE)
                   smn = false;
             else {
-                  if (score()->styleB(ST_showMeasureNumber)
+                  if (score()->styleB(StyleIdx::showMeasureNumber)
                      && !_irregular
-                     && (_no || score()->styleB(ST_showMeasureNumberOne))) {
-                        if (score()->styleB(ST_measureNumberSystem))
+                     && (_no || score()->styleB(StyleIdx::showMeasureNumberOne))) {
+                        if (score()->styleB(StyleIdx::measureNumberSystem))
                               smn = system()->firstMeasure() == this;
                         else {
-                              smn = (_no == 0 && score()->styleB(ST_showMeasureNumberOne)) ||
-                                    ( ((_no+1) % score()->style(ST_measureNumberInterval).toInt()) == 0 );
+                              smn = (_no == 0 && score()->styleB(StyleIdx::showMeasureNumberOne)) ||
+                                    ( ((_no+1) % score()->style(StyleIdx::measureNumberInterval).toInt()) == 0 );
                               }
                         }
                   }
@@ -599,7 +599,7 @@ void Measure::layout2()
             if (smn)
                   s = QString("%1").arg(_no + 1);
             int nn = 1;
-            if (!score()->styleB(ST_measureNumberAllStaffs)) {
+            if (!score()->styleB(StyleIdx::measureNumberAllStaffs)) {
                   //find first non invisible staff
                   for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx) {
                         MStaff* ms = staves.at(staffIdx);
@@ -615,7 +615,7 @@ void Measure::layout2()
                   MStaff* ms = staves.at(staffIdx);
                   Text* t = ms->noText();
                   if (smn) {
-                        if ((staffIdx == nn || score()->styleB(ST_measureNumberAllStaffs))) {
+                        if ((staffIdx == nn || score()->styleB(StyleIdx::measureNumberAllStaffs))) {
                               if (t == 0) {
                                     t = new Text(score());
                                     t->setFlag(ElementFlag::ON_STAFF, true);
@@ -629,7 +629,7 @@ void Measure::layout2()
                               if(t) {
                                     t->setText(s);
                                     t->layout();
-                                    smn = score()->styleB(ST_measureNumberAllStaffs);
+                                    smn = score()->styleB(StyleIdx::measureNumberAllStaffs);
                                     }
                               }
                         }
@@ -807,9 +807,9 @@ void Measure::add(Element* el)
             case ElementType::SPACER:
                   {
                   Spacer* sp = static_cast<Spacer*>(el);
-                  if (sp->spacerType() == SPACER_UP)
+                  if (sp->spacerType() == SpacerType::UP)
                         staves[el->staffIdx()]->_vspacerUp = sp;
-                  else if (sp->spacerType() == SPACER_DOWN)
+                  else if (sp->spacerType() == SpacerType::DOWN)
                         staves[el->staffIdx()]->_vspacerDown = sp;
                   }
                   break;
@@ -912,9 +912,9 @@ void Measure::remove(Element* el)
                   break;
 
             case ElementType::SPACER:
-                  if (static_cast<Spacer*>(el)->spacerType() == SPACER_DOWN)
+                  if (static_cast<Spacer*>(el)->spacerType() == SpacerType::DOWN)
                         staves[el->staffIdx()]->_vspacerDown = 0;
-                  else if (static_cast<Spacer*>(el)->spacerType() == SPACER_UP)
+                  else if (static_cast<Spacer*>(el)->spacerType() == SpacerType::UP)
                         staves[el->staffIdx()]->_vspacerUp = 0;
                   break;
 
@@ -1182,7 +1182,7 @@ void Measure::insertStaff(Staff* staff, int staffIdx)
       ms->lines->setParent(this);
       ms->lines->setTrack(staffIdx * VOICES);
 //      ms->distanceUp   = 0.0;
-//      ms->distanceDown = 0.0; // TODO point(staffIdx == 0 ? score()->styleS(ST_minSystemDistance) : score()->styleS(ST_staffDistance));
+//      ms->distanceDown = 0.0; // TODO point(staffIdx == 0 ? score()->styleS(StyleIdx::minSystemDistance) : score()->styleS(StyleIdx::staffDistance));
       ms->lines->setVisible(!staff->invisible());
       insertMStaff(ms, staffIdx);
       }
@@ -1849,7 +1849,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         Fraction ts(timeStretch * chord->globalDuration());
                         int crticks = ts.ticks();
 
-                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TREMOLO_R8) {
+                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
                               //
                               // old style tremolo found
                               //
@@ -1857,12 +1857,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                               TremoloType st;
                               switch (tremolo->tremoloType()) {
                                     default:
-                                    case OLD_TREMOLO_R8:  st = TREMOLO_R8;  break;
-                                    case OLD_TREMOLO_R16: st = TREMOLO_R16; break;
-                                    case OLD_TREMOLO_R32: st = TREMOLO_R32; break;
-                                    case OLD_TREMOLO_C8:  st = TREMOLO_C8;  break;
-                                    case OLD_TREMOLO_C16: st = TREMOLO_C16; break;
-                                    case OLD_TREMOLO_C32: st = TREMOLO_C32; break;
+                                    case TremoloType::OLD_R8:  st = TremoloType::R8;  break;
+                                    case TremoloType::OLD_R16: st = TremoloType::R16; break;
+                                    case TremoloType::OLD_R32: st = TremoloType::R32; break;
+                                    case TremoloType::OLD_C8:  st = TremoloType::C8;  break;
+                                    case TremoloType::OLD_C16: st = TremoloType::C16; break;
+                                    case TremoloType::OLD_C32: st = TremoloType::C32; break;
                                     }
                               tremolo->setTremoloType(st);
                               if (tremolo->twoNotes()) {
@@ -1975,7 +1975,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());
-                  sp->setAnchor(Spanner::ANCHOR_SEGMENT);
+                  sp->setAnchor(Spanner::Anchor::SEGMENT);
                   sp->read(e);
                   score()->addSpanner(sp);
                   //
@@ -2189,7 +2189,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "vspacer" || tag == "vspacerDown") {
                   if (staves[staffIdx]->_vspacerDown == 0) {
                         Spacer* spacer = new Spacer(score());
-                        spacer->setSpacerType(SPACER_DOWN);
+                        spacer->setSpacerType(SpacerType::DOWN);
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
@@ -2198,7 +2198,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "vspacer" || tag == "vspacerUp") {
                   if (staves[staffIdx]->_vspacerUp == 0) {
                         Spacer* spacer = new Spacer(score());
-                        spacer->setSpacerType(SPACER_UP);
+                        spacer->setSpacerType(SpacerType::UP);
                         spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
@@ -2575,7 +2575,7 @@ bool Measure::createEndBarLines()
                         // a bar line is there (either existing or newly created):
                         // adjust subtype, if not fitting
                         if (bl->barLineType() != _endBarLineType && !bl->customSubtype()) {
-                              score()->undoChangeProperty(bl, P_SUBTYPE, _endBarLineType);
+                              score()->undoChangeProperty(bl, P_ID::SUBTYPE, _endBarLineType);
                               bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
                               changed = true;
                               }
@@ -3026,9 +3026,9 @@ void Measure::layoutX(qreal stretch)
 
       qreal _spatium           = spatium();
       int tracks               = nstaves * VOICES;
-      qreal clefKeyRightMargin = score()->styleS(ST_clefKeyRightMargin).val() * _spatium;
-      qreal minHarmonyDistance = score()->styleS(ST_minHarmonyDistance).val() * _spatium;
-      qreal maxHarmonyBarDistance = score()->styleS(ST_maxHarmonyBarDistance).val() * _spatium;
+      qreal clefKeyRightMargin = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
+      qreal minHarmonyDistance = score()->styleS(StyleIdx::minHarmonyDistance).val() * _spatium;
+      qreal maxHarmonyBarDistance = score()->styleS(StyleIdx::maxHarmonyBarDistance).val() * _spatium;
 
       qreal rest[nstaves];    // fixed space needed from previous segment
       memset(rest, 0, nstaves * sizeof(qreal));
@@ -3056,7 +3056,7 @@ void Measure::layoutX(qreal stretch)
             x += BarLine::layoutWidth(score(), bl->barLineType(), bl->magS());
             }
 
-      qreal minNoteDistance = score()->styleS(ST_minNoteDistance).val() * _spatium;
+      qreal minNoteDistance = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
 
       qreal clefWidth[nstaves];
       memset(clefWidth, 0, nstaves * sizeof(qreal));
@@ -3152,14 +3152,14 @@ void Measure::layoutX(qreal stretch)
                                     if (!(cr->type() == ElementType::REST && static_cast<Rest*>(cr)->durationType() == TDuration::DurationType::V_MEASURE)) {
                                           accidentalStaff = true;
                                           qreal sp;
-                                          qreal bnd = score()->styleS(ST_barNoteDistance).val() * _spatium;
+                                          qreal bnd = score()->styleS(StyleIdx::barNoteDistance).val() * _spatium;
                                           if (accidental) {
-                                                qreal bad = score()->styleS(ST_barAccidentalDistance).val() * _spatium;
+                                                qreal bad = score()->styleS(StyleIdx::barAccidentalDistance).val() * _spatium;
                                                 qreal diff = qMax(noteX - accidentalX, 0.0);
                                                 sp = qMax(bad, bnd - diff);
                                                 }
                                           else if (grace)
-                                                sp = score()->styleS(ST_barAccidentalDistance).val() * _spatium;
+                                                sp = score()->styleS(StyleIdx::barAccidentalDistance).val() * _spatium;
                                           else
                                                 sp = bnd;
                                           if (pt & Segment::SegTimeSig)
@@ -3192,7 +3192,7 @@ void Measure::layoutX(qreal stretch)
                                     }
                               }
                         if (lyrics) {
-                              qreal y = lyrics->ipos().y() + score()->styleS(ST_lyricsMinBottomDistance).val() * _spatium;
+                              qreal y = lyrics->ipos().y() + score()->styleS(StyleIdx::lyricsMinBottomDistance).val() * _spatium;
                               if (y > staves[staffIdx]->distanceDown)
                                  staves[staffIdx]->distanceDown = y;
                               space.max(Space(llw, rrw));
@@ -3237,14 +3237,14 @@ void Measure::layoutX(qreal stretch)
                         // current segment (s) is not a ChordRest
                         Element* e = s->element(track);
                         if ((segType == Segment::SegClef) && (pt != Segment::SegChordRest))
-                              minDistance = score()->styleS(ST_clefLeftMargin).val() * _spatium;
+                              minDistance = score()->styleS(StyleIdx::clefLeftMargin).val() * _spatium;
                         else if (segType == Segment::SegStartRepeatBarLine)
                               minDistance = .5 * _spatium;
                         else if ((segType == Segment::SegEndBarLine) && segmentIdx) {
                               if (pt == Segment::SegClef)
-                                    minDistance = score()->styleS(ST_clefBarlineDistance).val() * _spatium;
+                                    minDistance = score()->styleS(StyleIdx::clefBarlineDistance).val() * _spatium;
                               else
-                                    stretchDistance = score()->styleS(ST_noteBarDistance).val() * _spatium;
+                                    stretchDistance = score()->styleS(StyleIdx::noteBarDistance).val() * _spatium;
                               if (e == 0) {
                                     // look for barline
                                     for (int i = track - VOICES; i >= 0; i -= VOICES) {
@@ -3510,7 +3510,7 @@ void Measure::layoutX(qreal stretch)
                                           }
                                     }
 
-                              qreal d  = point(score()->styleS(ST_multiMeasureRestMargin));
+                              qreal d  = point(score()->styleS(StyleIdx::multiMeasureRestMargin));
                               qreal w = x2 - x1 - 2 * d;
 
                               rest->setMMWidth(w);
@@ -3583,7 +3583,7 @@ void Measure::layoutStage1()
       setDirty();
 
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-            if (score()->styleB(ST_createMultiMeasureRests)) {
+            if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
                   if ((repeatFlags() & Repeat::START) || (prevMeasure() && (prevMeasure()->repeatFlags() & Repeat::END)))
                         setBreakMMRest(true);
                   else if (!breakMultiMeasureRest()) {
@@ -3637,7 +3637,7 @@ void Measure::layoutStage1()
                   }
             }
 
-      if (!score()->styleB(ST_createMultiMeasureRests) || breakMultiMeasureRest())
+      if (!score()->styleB(StyleIdx::createMultiMeasureRests) || breakMultiMeasureRest())
             return;
 
       // break mm rest on any spanner
@@ -3877,23 +3877,23 @@ int Measure::snapNote(int /*tick*/, const QPointF p, int staff) const
 QVariant Measure::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_TIMESIG_NOMINAL:
+            case P_ID::TIMESIG_NOMINAL:
                   return QVariant::fromValue(_timesig);
-            case P_TIMESIG_ACTUAL:
+            case P_ID::TIMESIG_ACTUAL:
                   return QVariant::fromValue(_len);
-            case P_REPEAT_FLAGS:
+            case P_ID::REPEAT_FLAGS:
                   return repeatFlags();
-            case P_MEASURE_NUMBER_MODE:
+            case P_ID::MEASURE_NUMBER_MODE:
                   return int(measureNumberMode());
-            case P_BREAK_MMR:
+            case P_ID::BREAK_MMR:
                   return breakMultiMeasureRest();
-            case P_REPEAT_COUNT:
+            case P_ID::REPEAT_COUNT:
                   return repeatCount();
-            case P_USER_STRETCH:
+            case P_ID::USER_STRETCH:
                   return userStretch();
-            case P_NO_OFFSET:
+            case P_ID::NO_OFFSET:
                   return noOffset();
-            case P_IRREGULAR:
+            case P_ID::IRREGULAR:
                   return irregular();
             default:
                   return MeasureBase::getProperty(propertyId);
@@ -3907,31 +3907,31 @@ QVariant Measure::getProperty(P_ID propertyId) const
 bool Measure::setProperty(P_ID propertyId, const QVariant& value)
       {
       switch(propertyId) {
-            case P_TIMESIG_NOMINAL:
+            case P_ID::TIMESIG_NOMINAL:
                   _timesig = value.value<Fraction>();
                   break;
-            case P_TIMESIG_ACTUAL:
+            case P_ID::TIMESIG_ACTUAL:
                   _len = value.value<Fraction>();
                   break;
-            case P_REPEAT_FLAGS:
+            case P_ID::REPEAT_FLAGS:
                   setRepeatFlags(value.toInt());
                   break;
-            case P_MEASURE_NUMBER_MODE:
+            case P_ID::MEASURE_NUMBER_MODE:
                   setMeasureNumberMode(MeasureNumberMode(value.toInt()));
                   break;
-            case P_BREAK_MMR:
+            case P_ID::BREAK_MMR:
                   setBreakMultiMeasureRest(value.toBool());
                   break;
-            case P_REPEAT_COUNT:
+            case P_ID::REPEAT_COUNT:
                   setRepeatCount(value.toInt());
                   break;
-            case P_USER_STRETCH:
+            case P_ID::USER_STRETCH:
                   setUserStretch(value.toDouble());
                   break;
-            case P_NO_OFFSET:
+            case P_ID::NO_OFFSET:
                   setNoOffset(value.toInt());
                   break;
-            case P_IRREGULAR:
+            case P_ID::IRREGULAR:
                   setIrregular(value.toBool());
                   break;
             default:
@@ -3948,22 +3948,22 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
 QVariant Measure::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_TIMESIG_NOMINAL:
-            case P_TIMESIG_ACTUAL:
+            case P_ID::TIMESIG_NOMINAL:
+            case P_ID::TIMESIG_ACTUAL:
                   return QVariant();
-            case P_REPEAT_FLAGS:
+            case P_ID::REPEAT_FLAGS:
                   return 0;
-            case P_MEASURE_NUMBER_MODE:
+            case P_ID::MEASURE_NUMBER_MODE:
                   return int(MeasureNumberMode::AUTO);
-            case P_BREAK_MMR:
+            case P_ID::BREAK_MMR:
                   return false;
-            case P_REPEAT_COUNT:
+            case P_ID::REPEAT_COUNT:
                   return 2;
-            case P_USER_STRETCH:
+            case P_ID::USER_STRETCH:
                   return 1.0;
-            case P_NO_OFFSET:
+            case P_ID::NO_OFFSET:
                   return 0;
-            case P_IRREGULAR:
+            case P_ID::IRREGULAR:
                   return false;
             default:
                   break;

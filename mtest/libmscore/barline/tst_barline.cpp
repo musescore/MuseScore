@@ -138,7 +138,7 @@ void TestBarline::barline02()
       QVERIFY(score);
       Measure* msr = score->firstMeasure()->nextMeasure();
       TimeSig* ts = new TimeSig(score);
-      ts->setSig(Fraction(3, 4), TSIG_NORMAL);
+      ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
       score->cmdAddTimeSig(msr, 0, ts, false);
       score->doLayout();

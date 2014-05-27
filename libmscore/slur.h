@@ -29,9 +29,9 @@ class MuseScoreView;
 class ChordRest;
 struct SlurPos;
 
-enum {
-      GRIP_START, GRIP_BEZIER1, GRIP_SHOULDER, GRIP_BEZIER2, GRIP_DRAG, GRIP_END,
-      SLUR_GRIPS
+enum class GripSlurSegment : char {
+      START, BEZIER1, SHOULDER, BEZIER2, DRAG, END,
+      GRIPS
       };
 
 //---------------------------------------------------------
@@ -67,7 +67,7 @@ class SlurSegment : public SpannerSegment {
       Q_OBJECT
 
    protected:
-      struct UP ups[SLUR_GRIPS];
+      struct UP ups[int(GripSlurSegment::GRIPS)];
       QPainterPath path;
       QPainterPath shapePath;
       QPointF autoAdjustOffset;

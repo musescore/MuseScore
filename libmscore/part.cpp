@@ -253,13 +253,13 @@ void Part::setInstrument(const Instrument& i, int tick)
 
       //CHECK: ??
 
-      if (!_score->styleB(ST_concertPitch) && i.transpose().chromatic) {
+      if (!_score->styleB(StyleIdx::concertPitch) && i.transpose().chromatic) {
             foreach(Staff* staff, _staves) {
                   if (staff->staffType()->group() != PERCUSSION_STAFF_GROUP)
                         _score->cmdTransposeStaff(staff->idx(), i.transpose(), false);
                   }
             }
-      if (!_score->styleB(ST_concertPitch) && i.transpose().chromatic) {
+      if (!_score->styleB(StyleIdx::concertPitch) && i.transpose().chromatic) {
             foreach(Staff* staff, _staves) {
                   Interval iv(i.transpose());
                   iv.flip();
@@ -349,12 +349,10 @@ void Part::setShortName(const QString& s)
 
 QVariant Part::getProperty(int id) const
       {
-      switch(id) {
-            case SHOW:
-                  return QVariant(_show);
-            default:
-                  return QVariant();
-            }
+      if (id)
+            return QVariant();
+      else
+            return QVariant(_show);
       }
 
 //---------------------------------------------------------
@@ -363,17 +361,14 @@ QVariant Part::getProperty(int id) const
 
 void Part::setProperty(int id, const QVariant& property)
       {
-      switch(id) {
-            case SHOW:
-                  setShow(property.toBool());
-                  for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
-                        m->setDirty();
-                        if (m->mmRest())
-                              m->mmRest()->setDirty();
-                        }
-                  break;
-            default:
-                  qDebug("Part::setProperty: unknown id %d", id);
+      if (id)
+            qDebug("Part::setProperty: unknown id %d", id);
+      else
+            setShow(property.toBool());
+            for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
+                  m->setDirty();
+                  if (m->mmRest())
+                        m->mmRest()->setDirty();
                   break;
             }
       score()->setLayoutAll(true);

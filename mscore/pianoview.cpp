@@ -261,7 +261,7 @@ PianoView::PianoView()
       setMouseTracking(true);
       setRubberBandSelectionMode(Qt::IntersectsItemBoundingRect);
       setDragMode(QGraphicsView::RubberBandDrag);
-      _timeType = TICKS;
+      _timeType = TType::TICKS;
       magStep   = 0;
       staff     = 0;
       chord     = 0;

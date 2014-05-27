@@ -118,7 +118,7 @@ void Jump::write(Xml& xml) const
 
 void Jump::undoSetJumpTo(const QString& s)
       {
-      score()->undoChangeProperty(this, P_JUMP_TO, s);
+      score()->undoChangeProperty(this, P_ID::JUMP_TO, s);
       }
 
 //---------------------------------------------------------
@@ -127,7 +127,7 @@ void Jump::undoSetJumpTo(const QString& s)
 
 void Jump::undoSetPlayUntil(const QString& s)
       {
-      score()->undoChangeProperty(this, P_PLAY_UNTIL, s);
+      score()->undoChangeProperty(this, P_ID::PLAY_UNTIL, s);
       }
 
 //---------------------------------------------------------
@@ -136,7 +136,7 @@ void Jump::undoSetPlayUntil(const QString& s)
 
 void Jump::undoSetContinueAt(const QString& s)
       {
-      score()->undoChangeProperty(this, P_CONTINUE_AT, s);
+      score()->undoChangeProperty(this, P_ID::CONTINUE_AT, s);
       }
 
 //---------------------------------------------------------
@@ -146,11 +146,11 @@ void Jump::undoSetContinueAt(const QString& s)
 QVariant Jump::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_JUMP_TO:
+            case P_ID::JUMP_TO:
                   return jumpTo();
-            case P_PLAY_UNTIL:
+            case P_ID::PLAY_UNTIL:
                   return playUntil();
-            case P_CONTINUE_AT:
+            case P_ID::CONTINUE_AT:
                   return continueAt();
             default:
                   break;
@@ -165,13 +165,13 @@ QVariant Jump::getProperty(P_ID propertyId) const
 bool Jump::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_JUMP_TO:
+            case P_ID::JUMP_TO:
                   setJumpTo(v.toString());
                   break;
-            case P_PLAY_UNTIL:
+            case P_ID::PLAY_UNTIL:
                   setPlayUntil(v.toString());
                   break;
-            case P_CONTINUE_AT:
+            case P_ID::CONTINUE_AT:
                   setContinueAt(v.toString());
                   break;
             default:
@@ -190,9 +190,9 @@ bool Jump::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Jump::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_JUMP_TO:
-            case P_PLAY_UNTIL:
-            case P_CONTINUE_AT:
+            case P_ID::JUMP_TO:
+            case P_ID::PLAY_UNTIL:
+            case P_ID::CONTINUE_AT:
                   return QString("");
 
             default:

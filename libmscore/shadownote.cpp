@@ -42,7 +42,7 @@ void ShadowNote::draw(QPainter* painter) const
       QRect r(abbox().toRect());
 
       painter->translate(ap);
-      qreal lw = point(score()->styleS(ST_ledgerLineWidth));
+      qreal lw = point(score()->styleS(StyleIdx::ledgerLineWidth));
       InputState ps = score()->inputState();
       int voice;
       if (ps.drumNote() != -1 && ps.drumset() && ps.drumset()->isValid(ps.drumNote()))
@@ -86,7 +86,7 @@ void ShadowNote::layout()
             }
       QRectF b(symBbox(sym));
       qreal _spatium = spatium();
-      qreal lw = point(score()->styleS(ST_ledgerLineWidth));
+      qreal lw = point(score()->styleS(StyleIdx::ledgerLineWidth));
 
       qreal x1 = symWidth(sym) * .5 - (_spatium * mag()) - lw * .5;
       qreal x2 = x1 + 2 * _spatium * mag() + lw * .5;

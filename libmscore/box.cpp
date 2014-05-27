@@ -97,9 +97,9 @@ void Box::startEdit(MuseScoreView*, const QPointF&)
       {
       editMode = true;
       if (type() == ElementType::HBOX)
-            undoPushProperty(P_BOX_WIDTH);
+            undoPushProperty(P_ID::BOX_WIDTH);
       else
-            undoPushProperty(P_BOX_HEIGHT);
+            undoPushProperty(P_ID::BOX_HEIGHT);
       }
 
 //---------------------------------------------------------
@@ -172,14 +172,14 @@ void Box::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 void Box::write(Xml& xml) const
       {
       xml.stag(name());
-      writeProperty(xml, P_BOX_HEIGHT);
-      writeProperty(xml, P_BOX_WIDTH);
-      writeProperty(xml, P_TOP_GAP);
-      writeProperty(xml, P_BOTTOM_GAP);
-      writeProperty(xml, P_LEFT_MARGIN);
-      writeProperty(xml, P_RIGHT_MARGIN);
-      writeProperty(xml, P_TOP_MARGIN);
-      writeProperty(xml, P_BOTTOM_MARGIN);
+      writeProperty(xml, P_ID::BOX_HEIGHT);
+      writeProperty(xml, P_ID::BOX_WIDTH);
+      writeProperty(xml, P_ID::TOP_GAP);
+      writeProperty(xml, P_ID::BOTTOM_GAP);
+      writeProperty(xml, P_ID::LEFT_MARGIN);
+      writeProperty(xml, P_ID::RIGHT_MARGIN);
+      writeProperty(xml, P_ID::TOP_MARGIN);
+      writeProperty(xml, P_ID::BOTTOM_MARGIN);
 
       Element::writeProperties(xml);
       foreach (const Element* el, _el)
@@ -298,21 +298,21 @@ void Box::add(Element* e)
 QVariant Box::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_BOX_HEIGHT:
+            case P_ID::BOX_HEIGHT:
                   return _boxHeight.val();
-            case P_BOX_WIDTH:
+            case P_ID::BOX_WIDTH:
                   return _boxWidth.val();
-            case P_TOP_GAP:
+            case P_ID::TOP_GAP:
                   return _topGap;
-            case P_BOTTOM_GAP:
+            case P_ID::BOTTOM_GAP:
                   return _bottomGap;
-            case P_LEFT_MARGIN:
+            case P_ID::LEFT_MARGIN:
                   return _leftMargin;
-            case P_RIGHT_MARGIN:
+            case P_ID::RIGHT_MARGIN:
                   return _rightMargin;
-            case P_TOP_MARGIN:
+            case P_ID::TOP_MARGIN:
                   return _topMargin;
-            case P_BOTTOM_MARGIN:
+            case P_ID::BOTTOM_MARGIN:
                   return _bottomMargin;
             default:
                   return MeasureBase::getProperty(propertyId);
@@ -327,28 +327,28 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
-            case P_BOX_HEIGHT:
+            case P_ID::BOX_HEIGHT:
                   _boxHeight = Spatium(v.toDouble());
                   break;
-            case P_BOX_WIDTH:
+            case P_ID::BOX_WIDTH:
                   _boxWidth = Spatium(v.toDouble());
                   break;
-            case P_TOP_GAP:
+            case P_ID::TOP_GAP:
                   _topGap = v.toDouble();
                   break;
-            case P_BOTTOM_GAP:
+            case P_ID::BOTTOM_GAP:
                   _bottomGap = v.toDouble();
                   break;
-            case P_LEFT_MARGIN:
+            case P_ID::LEFT_MARGIN:
                   _leftMargin = v.toDouble();
                   break;
-            case P_RIGHT_MARGIN:
+            case P_ID::RIGHT_MARGIN:
                   _rightMargin = v.toDouble();
                   break;
-            case P_TOP_MARGIN:
+            case P_ID::TOP_MARGIN:
                   _topMargin = v.toDouble();
                   break;
-            case P_BOTTOM_MARGIN:
+            case P_ID::BOTTOM_MARGIN:
                   _bottomMargin = v.toDouble();
                   break;
             default:
@@ -365,16 +365,16 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Box::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_BOX_HEIGHT:
-            case P_BOX_WIDTH:
-            case P_TOP_GAP:
-            case P_BOTTOM_GAP:
+            case P_ID::BOX_HEIGHT:
+            case P_ID::BOX_WIDTH:
+            case P_ID::TOP_GAP:
+            case P_ID::BOTTOM_GAP:
                   return 0.0;
 
-            case P_LEFT_MARGIN:
-            case P_RIGHT_MARGIN:
-            case P_TOP_MARGIN:
-            case P_BOTTOM_MARGIN:
+            case P_ID::LEFT_MARGIN:
+            case P_ID::RIGHT_MARGIN:
+            case P_ID::TOP_MARGIN:
+            case P_ID::BOTTOM_MARGIN:
                   return BOX_MARGIN;
             default:
                   return MeasureBase::propertyDefault(id);

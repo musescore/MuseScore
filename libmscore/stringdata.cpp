@@ -206,9 +206,9 @@ void StringData::fretChords(Chord * chord) const
                         note->setFretConflict(true);
                         // store fretting change without affecting chord context
                         if (nFret != nNewFret)
-                              note->score()->undoChangeProperty(note, P_FRET, nNewFret);
+                              note->score()->undoChangeProperty(note, P_ID::FRET, nNewFret);
                         if (nString != nNewString)
-                              note->score()->undoChangeProperty(note, P_STRING, nNewString);
+                              note->score()->undoChangeProperty(note, P_ID::STRING, nNewString);
                         continue;
                         }
 
@@ -250,9 +250,9 @@ void StringData::fretChords(Chord * chord) const
 
             // if fretting did change, store as a fret change
             if (nFret != nNewFret)
-                  note->score()->undoChangeProperty(note, P_FRET, nNewFret);
+                  note->score()->undoChangeProperty(note, P_ID::FRET, nNewFret);
             if (nString != nNewString)
-                  note->score()->undoChangeProperty(note, P_STRING, nNewString);
+                  note->score()->undoChangeProperty(note, P_ID::STRING, nNewString);
 
             bUsed[nNewString] = true;           // string is used
             }

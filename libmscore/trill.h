@@ -65,7 +65,7 @@ class Trill : public SLine {
       Q_ENUMS(TrillType)
 
    public:
-      enum TrillType {
+      enum class TrillType : char {
             TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE
             };
 

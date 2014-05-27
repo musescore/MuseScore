@@ -49,7 +49,7 @@ BracketType Staff::bracket(int idx) const
       {
       if (idx < _brackets.size())
             return _brackets[idx]._bracket;
-      return NO_BRACKET;
+      return BracketType::NO_BRACKET;
       }
 
 //---------------------------------------------------------
@@ -72,7 +72,7 @@ void Staff::setBracket(int idx, BracketType val)
       for (int i = _brackets.size(); i <= idx; ++i)
             _brackets.append(BracketItem());
       _brackets[idx]._bracket = val;
-      while (!_brackets.isEmpty() && (_brackets.last()._bracket == NO_BRACKET))
+      while (!_brackets.isEmpty() && (_brackets.last()._bracket == BracketType::NO_BRACKET))
             _brackets.removeLast();
       }
 
@@ -95,7 +95,7 @@ void Staff::setBracketSpan(int idx, int val)
 
 void Staff::addBracket(BracketItem b)
       {
-      if (!_brackets.isEmpty() && _brackets[0]._bracket == NO_BRACKET) {
+      if (!_brackets.isEmpty() && _brackets[0]._bracket == BracketType::NO_BRACKET) {
             _brackets[0] = b;
             }
       else {
@@ -120,7 +120,7 @@ void Staff::cleanupBrackets()
       int index = idx();
       int n = _score->nstaves();
       for (int i = 0; i < _brackets.size(); ++i) {
-            if (_brackets[i]._bracket == NO_BRACKET)
+            if (_brackets[i]._bracket == BracketType::NO_BRACKET)
                   continue;
             int span = _brackets[i]._bracketSpan;
             if (span > (n - index)) {
@@ -129,7 +129,7 @@ void Staff::cleanupBrackets()
                   }
             }
       for (int i = 0; i < _brackets.size(); ++i) {
-            if (_brackets[i]._bracket == NO_BRACKET)
+            if (_brackets[i]._bracket == BracketType::NO_BRACKET)
                   continue;
             int span = _brackets[i]._bracketSpan;
             if (span <= 1)
@@ -220,7 +220,7 @@ ClefTypeList Staff::clefTypeList(int tick) const
 ClefType Staff::clef(int tick) const
       {
       ClefTypeList c = clefTypeList(tick);
-      return score()->styleB(ST_concertPitch) ? c._concertClef : c._transposingClef;
+      return score()->styleB(StyleIdx::concertPitch) ? c._concertClef : c._transposingClef;
       }
 
 //---------------------------------------------------------
@@ -395,7 +395,7 @@ void Staff::read(XmlReader& e)
             if (tag == "type") {    // obsolete
                   int staffTypeIdx = e.readInt();
                   qDebug("Staff::read staffTypeIdx %d", staffTypeIdx);
-                  _staffType = *StaffType::preset(staffTypeIdx);
+                  _staffType = *StaffType::preset(StaffTypes(staffTypeIdx));
                   // set default barLineFrom and barLineTo according to staff type num. of lines
                   // (1-line staff bar lines are special)
                   _barLineFrom = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
@@ -495,7 +495,7 @@ qreal Staff::spatium() const
 
 qreal Staff::mag() const
       {
-      return _small ? score()->styleD(ST_smallStaffMag) : 1.0;
+      return _small ? score()->styleD(StyleIdx::smallStaffMag) : 1.0;
       }
 
 //---------------------------------------------------------
@@ -701,7 +701,7 @@ void Staff::setStaffType(const StaffType* st)
 
       if (_staffType.group() != csg) {
             switch(_staffType.group()) {
-                  case TAB_STAFF_GROUP:        ct = ClefType(score()->styleI(ST_tabClef)); break;
+                  case TAB_STAFF_GROUP:        ct = ClefType(score()->styleI(StyleIdx::tabClef)); break;
                   case STANDARD_STAFF_GROUP:   ct = ClefType::G; break;      // TODO: use preferred clef for instrument
                   case PERCUSSION_STAFF_GROUP: ct = ClefType::PERC; break;
                   }
@@ -732,7 +732,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
             pst = StaffType::getDefaultPreset(t->staffGroup);
 
       setStaffType(pst);
-//      if (pst->group() == PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
+//      if (pst->group() == ArticulationShowIn::PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
 //            setLines(t->staffLines[cidx]);      // use number of lines from instr. template
       }
 
@@ -808,7 +808,7 @@ void Staff::updateOttava(Ottava* o)
 
 void Staff::undoSetColor(const QColor& /*val*/)
       {
-//      score()->undoChangeProperty(this, P_COLOR, val);
+//      score()->undoChangeProperty(this, P_ID::COLOR, val);
       }
 
 //---------------------------------------------------------

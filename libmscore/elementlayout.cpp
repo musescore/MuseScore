@@ -25,7 +25,7 @@ namespace Ms {
 ElementLayout::ElementLayout()
       {
       _align      = ALIGN_LEFT | ALIGN_BASELINE;
-      _offsetType = OFFSET_SPATIUM;
+      _offsetType = OffsetType::SPATIUM;
       }
 
 //---------------------------------------------------------
@@ -35,7 +35,7 @@ ElementLayout::ElementLayout()
 QPointF ElementLayout::offset(qreal spatium) const
       {
       QPointF o(_offset);
-      if (_offsetType == OFFSET_SPATIUM)
+      if (_offsetType == OffsetType::SPATIUM)
             o *= spatium;
       else
             o *= MScore::DPI;
@@ -108,7 +108,7 @@ void ElementLayout::writeProperties(Xml& xml, const ElementLayout& l) const
 
       if (l._offset != _offset) {
             QPointF pt(_offset);
-            if (offsetType() == OFFSET_ABS)
+            if (offsetType() == OffsetType::ABS)
                   pt *= INCH;
             xml.tag("xoffset", pt.x());         // save in spatium or metric mm
             xml.tag("yoffset", pt.y());
@@ -117,8 +117,8 @@ void ElementLayout::writeProperties(Xml& xml, const ElementLayout& l) const
       if (_offsetType != l._offsetType) {
             const char* p = 0;
             switch(_offsetType) {
-                  case OFFSET_SPATIUM: p = "spatium"; break;
-                  case OFFSET_ABS:     p = "absolute"; break;
+                  case OffsetType::SPATIUM: p = "spatium"; break;
+                  case OffsetType::ABS:     p = "absolute"; break;
                   }
             xml.tag("offsetType", p);
             }
@@ -147,7 +147,7 @@ void ElementLayout::writeProperties(Xml& xml) const
 
       if (!_offset.isNull()) {
             QPointF pt(_offset);
-            if (offsetType() == OFFSET_ABS)
+            if (offsetType() == OffsetType::ABS)
                   pt *= INCH;
             xml.tag("xoffset", pt.x());         // save in spatium or metric mm
             xml.tag("yoffset", pt.y());
@@ -155,8 +155,8 @@ void ElementLayout::writeProperties(Xml& xml) const
 
       const char* p = 0;
       switch(_offsetType) {
-            case OFFSET_SPATIUM: p = "spatium"; break;
-            case OFFSET_ABS:     p = "absolute"; break;
+            case OffsetType::SPATIUM: p = "spatium"; break;
+            case OffsetType::ABS:     p = "absolute"; break;
             }
       xml.tag("offsetType", p);
       }
@@ -197,13 +197,13 @@ bool ElementLayout::readProperties(XmlReader& e)
             }
       else if (tag == "xoffset") {
             qreal xo = e.readDouble();
-            if (offsetType() == OFFSET_ABS)
+            if (offsetType() == OffsetType::ABS)
                   xo /= INCH;
             setXoff(xo);
             }
       else if (tag == "yoffset") {
             qreal yo = e.readDouble();
-            if (offsetType() == OFFSET_ABS)
+            if (offsetType() == OffsetType::ABS)
                   yo /= INCH;
             setYoff(yo);
             }
@@ -213,12 +213,12 @@ bool ElementLayout::readProperties(XmlReader& e)
             e.readDouble();
       else if (tag == "offsetType") {
             const QString& val(e.readElementText());
-            OffsetType ot = OFFSET_ABS;
+            OffsetType ot = OffsetType::ABS;
             if (val == "spatium" || val == "1")
-                  ot = OFFSET_SPATIUM;
+                  ot = OffsetType::SPATIUM;
             if (ot != offsetType()) {
                   setOffsetType(ot);
-                  if (ot == OFFSET_ABS)
+                  if (ot == OffsetType::ABS)
                         _offset /= INCH;  // convert spatium -> inch
                   else
                         _offset *= INCH;  // convert inch -> spatium
