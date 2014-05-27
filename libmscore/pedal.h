@@ -32,13 +32,15 @@ class PedalSegment : public TextLineSegment {
       PedalSegment(Score* s) : TextLineSegment(s) {}
       virtual ElementType type() const override     { return ElementType::PEDAL_SEGMENT; }
       virtual PedalSegment* clone() const override  { return new PedalSegment(*this); }
-      Pedal* pedal() const               { return (Pedal*)spanner(); }
+      Pedal* pedal() const                          { return (Pedal*)spanner(); }
       virtual void layout() override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
       virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
+
+      friend class Pedal;
       };
 
 //---------------------------------------------------------
@@ -50,6 +52,9 @@ class Pedal : public TextLine {
 
       PropertyStyle lineWidthStyle;
       PropertyStyle lineStyleStyle;
+
+   protected:
+      QPointF linePos(GripLine, System**) override;
 
    public:
       Pedal(Score* s);
@@ -63,6 +68,8 @@ class Pedal : public TextLine {
       virtual PropertyStyle propertyStyle(P_ID id) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
+
+      friend class PedalLine;
       };
 
 }     // namespace Ms
