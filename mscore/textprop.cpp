@@ -83,7 +83,7 @@ void TextProp::setScore(bool onlyStyle, Score* score)
       int n = scoreStyles.size();
       for (int i = 0; i < n; ++i) {
             // if style not hidden in this context, add to combo with index in score style list as userData
-            if ( !(scoreStyles.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+            if ( !(scoreStyles.at(i).hidden() & TextStyle::Hidden::IN_LISTS) )
                   styles->addItem(scoreStyles.at(i).name(), i);
             }
       }
@@ -153,13 +153,13 @@ void TextProp::setTextStyle(const TextStyle& s)
       else
             alignTop->setChecked(true);
 
-      if (s.offsetType() == OFFSET_ABS) {
+      if (s.offsetType() == OffsetType::ABS) {
             xOffset->setValue(s.offset().x() * INCH);
             yOffset->setValue(s.offset().y() * INCH);
             mmUnit->setChecked(true);
             curUnit = 0;
             }
-      else if (s.offsetType() == OFFSET_SPATIUM) {
+      else if (s.offsetType() == OffsetType::SPATIUM) {
             xOffset->setValue(s.offset().x());
             yOffset->setValue(s.offset().y());
             spatiumUnit->setChecked(true);
@@ -190,17 +190,17 @@ void TextProp::setTextStyle(const TextStyle& s)
 TextStyle TextProp::textStyle() const
       {
       if (curUnit == 0)
-            ts.setOffsetType(OFFSET_ABS);
+            ts.setOffsetType(OffsetType::ABS);
       else if (curUnit == 1)
-            ts.setOffsetType(OFFSET_SPATIUM);
+            ts.setOffsetType(OffsetType::SPATIUM);
       ts.setBold(fontBold->isChecked());
       ts.setItalic(fontItalic->isChecked());
       ts.setUnderline(fontUnderline->isChecked());
       ts.setSize(fontSize->value());
       QFont f = fontSelect->currentFont();
       ts.setFamily(f.family());
-      ts.setXoff(xOffset->value() / ((ts.offsetType() == OFFSET_ABS) ? INCH : 1.0));
-      ts.setYoff(yOffset->value() / ((ts.offsetType() == OFFSET_ABS) ? INCH : 1.0));
+      ts.setXoff(xOffset->value() / ((ts.offsetType() == OffsetType::ABS) ? INCH : 1.0));
+      ts.setYoff(yOffset->value() / ((ts.offsetType() == OffsetType::ABS) ? INCH : 1.0));
       ts.setFrameColor(frameColor->color());
       ts.setForegroundColor(color->color());
       ts.setBackgroundColor(bgColor->color());

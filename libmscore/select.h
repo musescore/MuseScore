@@ -42,25 +42,25 @@ struct ElementPattern {
 //   SelState
 //---------------------------------------------------------
 
-enum SelState {
-      SEL_NONE,   // nothing is selected
-      SEL_LIST,   // disjoint selection
-      SEL_RANGE,  // adjacent selection, a range in one or more staves
+enum class SelState : char {
+      NONE,   // nothing is selected
+      LIST,   // disjoint selection
+      RANGE,  // adjacent selection, a range in one or more staves
                   // is selected
       };
 
 //-------------------------------------------------------------------
 //   Selection
-//    For SEL_LIST state only visible elements can be selected
+//    For SelState::LIST state only visible elements can be selected
 //    (no Chord element etc.).
 //-------------------------------------------------------------------
 
 class Selection {
       Score* _score;
       SelState _state;
-      QList<Element*> _el;          // valid in mode SEL_LIST
+      QList<Element*> _el;          // valid in mode SelState::LIST
 
-      int _staffStart;              // valid if selState is SEL_RANGE
+      int _staffStart;              // valid if selState is SelState::RANGE
       int _staffEnd;
       Segment* _startSegment;
       Segment* _endSegment;         // next segment after selection
@@ -72,7 +72,7 @@ class Selection {
       QByteArray symbolListMimeData() const;
 
    public:
-      Selection()                      { _score = 0; _state = SEL_NONE; }
+      Selection()                      { _score = 0; _state = SelState::NONE; }
       Selection(Score*);
       Score* score() const             { return _score; }
       SelState state() const           { return _state; }
@@ -84,7 +84,7 @@ class Selection {
       const QList<Element*> uniqueElements() const;
       QList<Note*> uniqueNotes(int track = -1) const;
 
-      bool isSingle() const                   { return (_state == SEL_LIST) && (_el.size() == 1); }
+      bool isSingle() const                   { return (_state == SelState::LIST) && (_el.size() == 1); }
 
       void add(Element*);
       void deselectAll();

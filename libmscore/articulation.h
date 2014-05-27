@@ -120,7 +120,7 @@ class Articulation : public Element {
       QString channelName() const           { return _channelName; }
       void setChannelName(const QString& s) { _channelName = s;    }
 
-      const ArticulationInfo* articulationInfo() const { return &articulationList[articulationType()]; }
+      const ArticulationInfo* articulationInfo() const { return &articulationList[int(articulationType())]; }
 
       static QString idx2name(int idx);
       };

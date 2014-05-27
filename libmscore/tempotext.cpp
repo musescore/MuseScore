@@ -172,7 +172,7 @@ void TempoText::textChanged()
 
 void TempoText::undoSetTempo(qreal v)
       {
-      score()->undoChangeProperty(this, P_TEMPO, v);
+      score()->undoChangeProperty(this, P_ID::TEMPO, v);
       }
 
 //---------------------------------------------------------
@@ -181,7 +181,7 @@ void TempoText::undoSetTempo(qreal v)
 
 void TempoText::undoSetFollowText(bool v)
       {
-      score()->undoChangeProperty(this, P_TEMPO_FOLLOW_TEXT, v);
+      score()->undoChangeProperty(this, P_ID::TEMPO_FOLLOW_TEXT, v);
       }
 
 //---------------------------------------------------------
@@ -191,8 +191,8 @@ void TempoText::undoSetFollowText(bool v)
 QVariant TempoText::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_TEMPO:             return _tempo;
-            case P_TEMPO_FOLLOW_TEXT: return _followText;
+            case P_ID::TEMPO:             return _tempo;
+            case P_ID::TEMPO_FOLLOW_TEXT: return _followText;
             default:
                   return Text::getProperty(propertyId);
             }
@@ -205,11 +205,11 @@ QVariant TempoText::getProperty(P_ID propertyId) const
 bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_TEMPO:
+            case P_ID::TEMPO:
                   _tempo = v.toDouble();
                   score()->setTempo(segment(), _tempo);
                   break;
-            case P_TEMPO_FOLLOW_TEXT:
+            case P_ID::TEMPO_FOLLOW_TEXT:
                   _followText = v.toBool();
                   break;
             default:
@@ -228,9 +228,9 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
 QVariant TempoText::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_TEMPO:             return 120;
-            case P_TEMPO_FOLLOW_TEXT: return false;
-            case P_PLACEMENT:         return int(Placement::ABOVE);
+            case P_ID::TEMPO:             return 120;
+            case P_ID::TEMPO_FOLLOW_TEXT: return false;
+            case P_ID::PLACEMENT:         return int(Placement::ABOVE);
             default:                  return Text::propertyDefault(id);
             }
       }

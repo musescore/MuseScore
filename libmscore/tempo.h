@@ -17,7 +17,7 @@ namespace Ms {
 
 class Xml;
 
-enum TempoType { TEMPO_INVALID, TEMPO_FIX, TEMPO_RAMP };
+enum class TempoType : char { INVALID, FIX, RAMP };
 
 //---------------------------------------------------------
 //   Tempo Event
@@ -32,7 +32,7 @@ struct TEvent {
       TEvent();
       TEvent(const TEvent& e);
       TEvent(qreal bps, qreal seconds, TempoType t);
-      bool valid() const { return type != TEMPO_INVALID; }
+      bool valid() const { return type != TempoType::INVALID; }
       };
 
 //---------------------------------------------------------

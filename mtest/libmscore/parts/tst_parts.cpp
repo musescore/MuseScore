@@ -138,7 +138,7 @@ void TestParts::createParts(Score* score)
 
       nscore->setName(parts.front()->partName());
       score->undo(new AddExcerpt(nscore));
-      nscore->style()->set(ST_createMultiMeasureRests, true);
+      nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
       //
       // create second part
@@ -150,7 +150,7 @@ void TestParts::createParts(Score* score)
 
       nscore->setName(parts.front()->partName());
       score->undo(new AddExcerpt(nscore));
-      nscore->style()->set(ST_createMultiMeasureRests, true);
+      nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
       }
 
 //---------------------------------------------------------
@@ -228,7 +228,7 @@ void TestParts::styleScore()
       score->doLayout();
       QVERIFY(score);
       createParts(score);
-      score->style()->set(ST_clefLeftMargin, 4.0);
+      score->style()->set(StyleIdx::clefLeftMargin, 4.0);
       QVERIFY(saveCompareScore(score, "partStyle-score-test.mscx", DIR + "partStyle-score-ref.mscx"));
       delete score;
       }

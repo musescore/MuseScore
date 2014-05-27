@@ -407,7 +407,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                               Element* dropElement = el->drop(dropData);
                               _score->addRefresh(el->canvasBoundingRect());
                               if (dropElement) {
-                                    _score->select(dropElement, SELECT_SINGLE, 0);
+                                    _score->select(dropElement, SelectType::SINGLE, 0);
                                     _score->addRefresh(dropElement->canvasBoundingRect());
                                     }
                               }
@@ -475,7 +475,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                         _score->addRefresh(el->canvasBoundingRect());
                         if (dropElement) {
                               if (!_score->noteEntryMode())
-                                    _score->select(dropElement, SELECT_SINGLE, 0);
+                                    _score->select(dropElement, SelectType::SINGLE, 0);
                               _score->addRefresh(dropElement->canvasBoundingRect());
                               }
                         event->acceptProposedAction();

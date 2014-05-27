@@ -27,7 +27,7 @@ class Element;
 
 struct InspectorItem {
       P_ID t;           // property id
-      int sv;           // subvalue; example for T_SIZE: 0 - width 1 - height
+      int sv;           // subvalue; example for P_TYPE::SIZE: 0 - width 1 - height
       int parent;       // apply to parent() element level
       QWidget* w;
       QToolButton* r;   // reset to default button (if any)

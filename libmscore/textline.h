@@ -56,7 +56,7 @@ class TextLineSegment : public LineSegment {
       virtual QVariant propertyDefault(P_ID id) const;
       };
 
-enum HookType { HOOK_90, HOOK_45 };
+enum class HookType : char { HOOK_90, HOOK_45 };
 
 //---------------------------------------------------------
 //   @@ TextLine

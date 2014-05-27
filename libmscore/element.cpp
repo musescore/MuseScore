@@ -429,7 +429,7 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
 void Element::reset()
       {
       if (!_userOff.isNull())
-            score()->undoChangeProperty(this, P_USER_OFF, QPointF());
+            score()->undoChangeProperty(this, P_ID::USER_OFF, QPointF());
       }
 
 //---------------------------------------------------------
@@ -700,7 +700,7 @@ void Element::writeProperties(Xml& xml) const
             xml.tag("color", color());
       if (!visible())
             xml.tag("visible", visible());
-      writeProperty(xml, P_PLACEMENT);
+      writeProperty(xml, P_ID::PLACEMENT);
       }
 
 //---------------------------------------------------------
@@ -767,7 +767,7 @@ bool Element::readProperties(XmlReader& e)
                   }
             }
       else if (tag == "placement")
-            _placement = Placement(Ms::getProperty(P_PLACEMENT, e).toInt());
+            _placement = Placement(Ms::getProperty(P_ID::PLACEMENT, e).toInt());
       else
             return false;
       return true;
@@ -811,7 +811,7 @@ void Element::read(XmlReader& e)
 
 void Element::startEdit(MuseScoreView*, const QPointF&)
       {
-      undoPushProperty(P_USER_OFF);
+      undoPushProperty(P_ID::USER_OFF);
       }
 
 //---------------------------------------------------------
@@ -914,7 +914,7 @@ void StaffLines::layout()
 
       setColor(staff() ? staff()->color() : MScore::defaultColor);
 
-      lw = score()->styleS(ST_staffLineWidth).val() * _spatium;
+      lw = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium;
       bbox().setRect(0.0, -lw*.5, width(), lines * dist + lw);
       }
 
@@ -1486,7 +1486,7 @@ Space& Space::operator+=(const Space& s)
 
 void Element::undoSetPlacement(Placement v)
       {
-      score()->undoChangeProperty(this, P_PLACEMENT, int(v));
+      score()->undoChangeProperty(this, P_ID::PLACEMENT, int(v));
       }
 
 //---------------------------------------------------------
@@ -1496,11 +1496,11 @@ void Element::undoSetPlacement(Placement v)
 QVariant Element::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_COLOR:     return _color;
-            case P_VISIBLE:   return _visible;
-            case P_SELECTED:  return _selected;
-            case P_USER_OFF:  return _userOff;
-            case P_PLACEMENT: return int(_placement);
+            case P_ID::COLOR:     return _color;
+            case P_ID::VISIBLE:   return _visible;
+            case P_ID::SELECTED:  return _selected;
+            case P_ID::USER_OFF:  return _userOff;
+            case P_ID::PLACEMENT: return int(_placement);
             default:
                   return QVariant();
             }
@@ -1513,19 +1513,19 @@ QVariant Element::getProperty(P_ID propertyId) const
 bool Element::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_COLOR:
+            case P_ID::COLOR:
                   _color = v.value<QColor>();
                   break;
-            case P_VISIBLE:
+            case P_ID::VISIBLE:
                   setVisible(v.toBool());
                   break;
-            case P_SELECTED:
+            case P_ID::SELECTED:
                   setSelected(v.toBool());
                   break;
-            case P_USER_OFF:
+            case P_ID::USER_OFF:
                   _userOff = v.toPointF();
                   break;
-            case P_PLACEMENT:
+            case P_ID::PLACEMENT:
                   _placement = Placement(v.toInt());
                   break;
             default:
@@ -1545,15 +1545,15 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Element::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_VISIBLE:
+            case P_ID::VISIBLE:
                   return true;
-            case P_COLOR:
+            case P_ID::COLOR:
                   return MScore::defaultColor;
-            case P_PLACEMENT:
+            case P_ID::PLACEMENT:
                   return int(Placement::BELOW);
-            case P_SELECTED:
+            case P_ID::SELECTED:
                   return false;
-            case P_USER_OFF:
+            case P_ID::USER_OFF:
                   return QPointF();
             default:    // not all properties have a default
                   break;
@@ -1648,7 +1648,7 @@ Element* Element::findMeasure()
 
 void Element::undoSetColor(const QColor& c)
       {
-      score()->undoChangeProperty(this, P_COLOR, c);
+      score()->undoChangeProperty(this, P_ID::COLOR, c);
       }
 
 //---------------------------------------------------------
@@ -1666,7 +1666,7 @@ QPointF Element::scriptPos() const
 
 void Element::scriptSetPos(const QPointF& p)
       {
-      score()->undoChangeProperty(this, P_USER_OFF, p*spatium() - ipos());
+      score()->undoChangeProperty(this, P_ID::USER_OFF, p*spatium() - ipos());
       }
 
 QPointF Element::scriptUserOff() const
@@ -1676,7 +1676,7 @@ QPointF Element::scriptUserOff() const
 
 void Element::scriptSetUserOff(const QPointF& o)
       {
-      score()->undoChangeProperty(this, P_USER_OFF, o * spatium());
+      score()->undoChangeProperty(this, P_ID::USER_OFF, o * spatium());
       }
 
 //void Element::draw(SymId id, QPainter* p) const { score()->scoreFont()->draw(id, p, magS()); }
@@ -1817,7 +1817,7 @@ QString Element::toTimeSigString(const QString& s) const
 
 bool Element::concertPitch() const
       {
-      return score()->styleB(ST_concertPitch);
+      return score()->styleB(StyleIdx::concertPitch);
       }
 }
 

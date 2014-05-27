@@ -434,7 +434,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
             int diff = -staff->part()->instr()->transpose().chromatic;
-            if (diff && !score->styleB(ST_concertPitch))
+            if (diff && !score->styleB(StyleIdx::concertPitch))
                   st.setAccidentalType(transposeKey(st.accidentalType(), diff));
 
             if (ks)
@@ -773,7 +773,7 @@ void Score::undoChangeBracketSpan(Staff* staff, int column, int span)
 
 void Score::undoChangeInvisible(Element* e, bool v)
       {
-      undoChangeProperty(e, P_VISIBLE, v);
+      undoChangeProperty(e, P_ID::VISIBLE, v);
       e->setGenerated(false);
       }
 
@@ -849,9 +849,9 @@ void Score::undoAddElement(Element* element)
                         element->score()->layoutFingering(static_cast<Fingering*>(element));
                   else if (element->type() == Element::ElementType::CHORD) {
                         for (Note* n : static_cast<Chord*>(element)->notes()) {
-                        //      if(n->tpc() == INVALID_TPC)
+                        //      if(n->tpc() == Tpc::INVALID)
                         //            n->setTpcFromPitch();
-                              Q_ASSERT(n->tpc() != INVALID_TPC);
+                              Q_ASSERT(n->tpc() != Tpc::INVALID);
                               }
                         element->score()->updateNotes();
                         }
@@ -867,7 +867,7 @@ void Score::undoAddElement(Element* element)
                         e->score()->layoutFingering(static_cast<Fingering*>(ne));
                   else if (ne->type() == Element::ElementType::CHORD) {
                         for (Note* n : static_cast<Chord*>(ne)->notes()) {
-                              Q_ASSERT(n->tpc() != INVALID_TPC);
+                              Q_ASSERT(n->tpc() != Tpc::INVALID);
                         //      n->setTpcFromPitch();
                               }
                         ne->score()->updateNotes();
@@ -1156,9 +1156,9 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                   Chord* chord = static_cast<Chord*>(newcr);
                   // setTpcFromPitch needs to know the note tick position
                   foreach(Note* note, chord->notes()) {
-                        // if (note->tpc() == INVALID_TPC)
+                        // if (note->tpc() == Tpc::INVALID)
                         //      note->setTpcFromPitch();
-                        Q_ASSERT(note->tpc() != INVALID_TPC);
+                        Q_ASSERT(note->tpc() != Tpc::INVALID);
                         }
                   }
             if (t) {
@@ -1218,12 +1218,12 @@ void Score::undoRemoveElement(Element* element)
 
 void Score::undoChangeTuning(Note* n, qreal v)
       {
-      undoChangeProperty(n, P_TUNING, v);
+      undoChangeProperty(n, P_ID::TUNING, v);
       }
 
 void Score::undoChangeUserMirror(Note* n, DirectionH d)
       {
-      undoChangeProperty(n, P_MIRROR_HEAD, int(d));
+      undoChangeProperty(n, P_ID::MIRROR_HEAD, int(d));
       }
 
 //---------------------------------------------------------
@@ -1242,7 +1242,7 @@ void Score::undoChangePageFormat(PageFormat* p, qreal v, int pageOffset)
 
 void Score::undoChangeTpc(Note* note, int v)
       {
-      note->undoChangeProperty(P_TPC1, v);
+      note->undoChangeProperty(P_ID::TPC1, v);
       }
 
 //---------------------------------------------------------
@@ -1465,8 +1465,8 @@ ChangeConcertPitch::ChangeConcertPitch(Score* s, bool v)
 
 void ChangeConcertPitch::flip()
       {
-      int oval = int(score->styleB(ST_concertPitch));
-      score->style()->set(ST_concertPitch, val);
+      int oval = int(score->styleB(StyleIdx::concertPitch));
+      score->style()->set(StyleIdx::concertPitch, val);
       score->setLayoutAll(true);
       val = oval;
       }
@@ -2504,10 +2504,10 @@ void ChangeStyle::flip()
       {
       MStyle tmp = *score->style();
 
-      if (score->style(ST_concertPitch) != style.value(ST_concertPitch))
-            score->cmdConcertPitchChanged(style.value(ST_concertPitch).toBool(), true);
-      if (score->style(ST_MusicalSymbolFont) != style.value(ST_MusicalSymbolFont)) {
-            score->setScoreFont(ScoreFont::fontFactory(style.value(ST_MusicalSymbolFont).toString()));
+      if (score->style(StyleIdx::concertPitch) != style.value(StyleIdx::concertPitch))
+            score->cmdConcertPitchChanged(style.value(StyleIdx::concertPitch).toBool(), true);
+      if (score->style(StyleIdx::MusicalSymbolFont) != style.value(StyleIdx::MusicalSymbolFont)) {
+            score->setScoreFont(ScoreFont::fontFactory(style.value(StyleIdx::MusicalSymbolFont).toString()));
             score->scanElements(0, updateTimeSigs);
             }
       if (score->style()->spatium() != style.spatium())
@@ -2875,25 +2875,25 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                   case BROKEN_BAR:
                   case DOTTED_BAR:
                         {
-                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() & ~Repeat::END);
+                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() & ~Repeat::END);
                         if (nm)
-                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
+                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
                         s->undoChangeEndBarLineType(measure, barType);
                         measure->setEndBarLineGenerated (false);
                         }
                         break;
                   case START_REPEAT:
-                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | Repeat::START);
+                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::START);
                         break;
                   case END_REPEAT:
-                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
+                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
                         if (nm)
-                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
+                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
                         break;
                   case END_START_REPEAT:
-                        s->undoChangeProperty(measure, P_REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
+                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
                         if (nm)
-                              s->undoChangeProperty(nm, P_REPEAT_FLAGS, nm->repeatFlags() | Repeat::START);
+                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() | Repeat::START);
                         break;
                   }
             }
@@ -3177,14 +3177,14 @@ void AddBracket::redo()
 
 void AddBracket::undo()
       {
-      staff->setBracket(level, NO_BRACKET);
+      staff->setBracket(level, BracketType::NO_BRACKET);
       staff->score()->setLayoutAll(true);
       }
 
 
 void RemoveBracket::redo()
       {
-      staff->setBracket(level, NO_BRACKET);
+      staff->setBracket(level, BracketType::NO_BRACKET);
       staff->score()->setLayoutAll(true);
       }
 

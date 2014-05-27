@@ -55,6 +55,7 @@ class Lyrics;
 class ChordRest;
 class Beam;
 class FiguredBass;
+enum class StaffTypes : char;
 
 //---------------------------------------------------------
 //   MusicXmlWedge
@@ -210,7 +211,7 @@ class MusicXml {
       void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement node);
       Note* xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement node, QList<Chord*>& graceNotes, int& alt);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
-      int xmlClef(QDomElement, int staffIdx, Measure*);
+      StaffTypes xmlClef(QDomElement, int staffIdx, Measure*);
       void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion);
       QList<QDomElement> findSlurElements(QDomElement);
       void addGraceNoteAfter(Chord*, Segment*);

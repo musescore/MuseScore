@@ -1260,7 +1260,7 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
             updateCursorFormat(&_cursor);
       else
             _cursor.initFromStyle(textStyle());
-      undoPushProperty(P_TEXT);
+      undoPushProperty(P_ID::TEXT);
       }
 
 //---------------------------------------------------------
@@ -1436,7 +1436,7 @@ void Text::endEdit()
       if (links()) {
             foreach (Element* e, *links()) {
                   if (e != this)
-                        e->undoChangeProperty(P_TEXT, _text);
+                        e->undoChangeProperty(P_ID::TEXT, _text);
                   }
             }
       textChanged();
@@ -1889,7 +1889,7 @@ void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
       {
       Element::writeProperties(xml);
       if (writeStyle) {
-            if (getProperty(P_TEXT_STYLE_TYPE)  != propertyDefault(P_TEXT_STYLE_TYPE))
+            if (getProperty(P_ID::TEXT_STYLE_TYPE)  != propertyDefault(P_ID::TEXT_STYLE_TYPE))
                   xml.tag("style", textStyle().name());
             _textStyle.writeProperties(xml, score()->textStyle(_styleIndex));
             }
@@ -2097,11 +2097,11 @@ void Text::dragTo(const QPointF& p)
 QVariant Text::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_TEXT_STYLE:
+            case P_ID::TEXT_STYLE:
                   return QVariant::fromValue(_textStyle);
-            case P_TEXT_STYLE_TYPE:
+            case P_ID::TEXT_STYLE_TYPE:
                   return QVariant(_styleIndex);
-            case P_TEXT:
+            case P_ID::TEXT:
                   return text();
             default:
                   return Element::getProperty(propertyId);
@@ -2117,14 +2117,14 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       bool rv = true;
       switch (propertyId) {
-            case P_TEXT_STYLE:
+            case P_ID::TEXT_STYLE:
                   setTextStyle(v.value<TextStyle>());
                   break;
-            case P_TEXT_STYLE_TYPE:
+            case P_ID::TEXT_STYLE_TYPE:
                   setTextStyleType(v.toInt());
                   setGenerated(false);
                   break;
-            case P_TEXT:
+            case P_ID::TEXT:
                   setText(v.toString());
                   break;
             default:
@@ -2161,11 +2161,11 @@ QVariant Text::propertyDefault(P_ID id) const
                   return Element::propertyDefault(id);
             }
       switch (id) {
-            case P_TEXT_STYLE_TYPE:
+            case P_ID::TEXT_STYLE_TYPE:
                   return idx;
-            case P_TEXT_STYLE:
+            case P_ID::TEXT_STYLE:
                   return score()->textStyle(idx).name();
-            case P_TEXT:
+            case P_ID::TEXT:
                   return QString("");
             default:
                   return Element::propertyDefault(id);

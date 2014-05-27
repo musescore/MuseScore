@@ -219,24 +219,24 @@ void Page::draw(QPainter* painter) const
 
       QString s1, s2, s3;
 
-      if (_score->styleB(ST_showHeader) && (no() || _score->styleB(ST_headerFirstPage))) {
+      if (_score->styleB(StyleIdx::showHeader) && (no() || _score->styleB(StyleIdx::headerFirstPage))) {
             TextStyle ts = score()->textStyle(TEXT_STYLE_HEADER);
             QPointF o(ts.offset(spatium()));
 
-            bool odd = (n & 1) || !_score->styleB(ST_headerOddEven);
+            bool odd = (n & 1) || !_score->styleB(StyleIdx::headerOddEven);
             if (odd) {
                   o.setX(-o.x());
-                  s1 = _score->styleSt(ST_oddHeaderL);
-                  s2 = _score->styleSt(ST_oddHeaderC);
-                  s3 = _score->styleSt(ST_oddHeaderR);
+                  s1 = _score->styleSt(StyleIdx::oddHeaderL);
+                  s2 = _score->styleSt(StyleIdx::oddHeaderC);
+                  s3 = _score->styleSt(StyleIdx::oddHeaderR);
                   }
             else {
-                  s1 = _score->styleSt(ST_evenHeaderL);
-                  s2 = _score->styleSt(ST_evenHeaderC);
-                  s3 = _score->styleSt(ST_evenHeaderR);
+                  s1 = _score->styleSt(StyleIdx::evenHeaderL);
+                  s2 = _score->styleSt(StyleIdx::evenHeaderC);
+                  s3 = _score->styleSt(StyleIdx::evenHeaderR);
                   }
 
-            if (_score->styleB(ST_headerStyled)) {
+            if (_score->styleB(StyleIdx::headerStyled)) {
                   drawStyledHeaderFooter(painter, 0, o, s1);
                   drawStyledHeaderFooter(painter, 1, o, s2);
                   drawStyledHeaderFooter(painter, 2, o, s3);
@@ -248,17 +248,17 @@ void Page::draw(QPainter* painter) const
                   c.cursorPosition = -1;
                   c.palette.setColor(QPalette::Text, ts.foregroundColor());
                   painter->translate(o);
-                  QString s = _score->styleSt(odd ? ST_oddHeaderL : ST_evenHeaderL);
+                  QString s = _score->styleSt(odd ? StyleIdx::oddHeaderL : StyleIdx::evenHeaderL);
                   if (!s.isEmpty()) {
                         d.setHtml(replaceTextMacros(s));
                         d.documentLayout()->draw(painter, c);
                         }
-                  s = replaceTextMacros(_score->styleSt(odd ? ST_oddHeaderC : ST_evenHeaderC));
+                  s = replaceTextMacros(_score->styleSt(odd ? StyleIdx::oddHeaderC : StyleIdx::evenHeaderC));
                   if (!s.isEmpty()) {
                         d.setHtml(s);
                         d.documentLayout()->draw(painter, c);
                         }
-                  s = replaceTextMacros(_score->styleSt(odd ? ST_oddHeaderR : ST_evenHeaderR));
+                  s = replaceTextMacros(_score->styleSt(odd ? StyleIdx::oddHeaderR : StyleIdx::evenHeaderR));
                   if (!s.isEmpty()) {
                         d.setHtml(s);
                         d.documentLayout()->draw(painter, c);
@@ -267,25 +267,25 @@ void Page::draw(QPainter* painter) const
                   }
             }
 
-      if (_score->styleB(ST_showFooter) && (no() || _score->styleB(ST_footerFirstPage))) {
+      if (_score->styleB(StyleIdx::showFooter) && (no() || _score->styleB(StyleIdx::footerFirstPage))) {
             TextStyle ts = score()->textStyle(TEXT_STYLE_FOOTER);
 
             QPointF o(ts.offset(spatium()));
 
-            bool odd = (n & 1) || !_score->styleB(ST_footerOddEven);
+            bool odd = (n & 1) || !_score->styleB(StyleIdx::footerOddEven);
             if (odd) {
                   o.setX(-o.x());
-                  s1 = _score->styleSt(ST_oddFooterL);
-                  s2 = _score->styleSt(ST_oddFooterC);
-                  s3 = _score->styleSt(ST_oddFooterR);
+                  s1 = _score->styleSt(StyleIdx::oddFooterL);
+                  s2 = _score->styleSt(StyleIdx::oddFooterC);
+                  s3 = _score->styleSt(StyleIdx::oddFooterR);
                   }
             else {
-                  s1 = _score->styleSt(ST_evenFooterL);
-                  s2 = _score->styleSt(ST_evenFooterC);
-                  s3 = _score->styleSt(ST_evenFooterR);
+                  s1 = _score->styleSt(StyleIdx::evenFooterL);
+                  s2 = _score->styleSt(StyleIdx::evenFooterC);
+                  s3 = _score->styleSt(StyleIdx::evenFooterR);
                   }
 
-            if (_score->styleB(ST_footerStyled)) {
+            if (_score->styleB(StyleIdx::footerStyled)) {
                   drawStyledHeaderFooter(painter, 3, o, s1);
                   drawStyledHeaderFooter(painter, 4, o, s2);
                   drawStyledHeaderFooter(painter, 5, o, s3);

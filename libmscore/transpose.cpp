@@ -52,10 +52,10 @@ static Interval keydiff2Interval(int oKey, int nKey, TransposeDirection dir)
       int chromatic = (cofSteps * 7) % 12;
 
 
-      if ((dir == TRANSPOSE_CLOSEST) && (chromatic > 6))
-            dir = TRANSPOSE_DOWN;
+      if ((dir == TransposeDirection::CLOSEST) && (chromatic > 6))
+            dir = TransposeDirection::DOWN;
 
-      if (dir == TRANSPOSE_DOWN) {
+      if (dir == TransposeDirection::DOWN) {
             chromatic = chromatic - 12;
             diatonic  = diatonic - 7;
             if (diatonic == -7)
@@ -116,7 +116,7 @@ void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval inte
 
 int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
       {
-      if (tpc == INVALID_TPC) // perfect unison & perfect octave
+      if (tpc == Tpc::INVALID) // perfect unison & perfect octave
             return tpc;
 
       int minAlter;
@@ -177,7 +177,7 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
 
 int transposeTpcDiatonicByKey(int tpc, int steps, int key, bool keepAlteredDegrees, bool useDoubleSharpsFlats)
       {
-      if (tpc == INVALID_TPC)
+      if (tpc == Tpc::INVALID)
             return tpc;
 
       // get step for tpc with alteration for key
@@ -193,13 +193,13 @@ int transposeTpcDiatonicByKey(int tpc, int steps, int key, bool keepAlteredDegre
             newTpc += alter * TPC_DELTA_SEMITONE;
 
       // check results are in ranges
-      while (newTpc > TPC_MAX)      newTpc   -= TPC_DELTA_ENHARMONIC;
-      while (newTpc < TPC_MIN)      newTpc   += TPC_DELTA_ENHARMONIC;
+      while (newTpc > Tpc::MAX)      newTpc   -= TPC_DELTA_ENHARMONIC;
+      while (newTpc < Tpc::MIN)      newTpc   += TPC_DELTA_ENHARMONIC;
 
       // if required, reduce double alterations
       if(!useDoubleSharpsFlats) {
-            if(newTpc >= TPC_F_SS)  newTpc   -= TPC_DELTA_ENHARMONIC;
-            if(newTpc <= TPC_B_BB)  newTpc   += TPC_DELTA_ENHARMONIC;
+            if(newTpc >= Tpc::F_SS)  newTpc   -= TPC_DELTA_ENHARMONIC;
+            if(newTpc <= Tpc::B_BB)  newTpc   += TPC_DELTA_ENHARMONIC;
             }
 
       return newTpc;
@@ -262,10 +262,10 @@ void Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
 //   transpose
 //---------------------------------------------------------
 
-void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
+void Score::transpose(TransposeMode mode, TransposeDirection direction, int transposeKey,
   int transposeInterval, bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
       {
-      bool rangeSelection = selection().state() == SEL_RANGE;
+      bool rangeSelection = selection().state() == SelState::RANGE;
       int startStaffIdx = 0;
       int startTick     = 0;
       if (rangeSelection) {
@@ -275,15 +275,15 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
       KeyList* km = staff(startStaffIdx)->keymap();
 
       Interval interval;
-      if (mode != TRANSPOSE_DIATONICALLY) {
-            if (mode == TRANSPOSE_BY_KEY) {
+      if (mode != TransposeMode::DIATONICALLY) {
+            if (mode == TransposeMode::BY_KEY) {
                   // calculate interval from "transpose by key"
                   int oKey = km->key(startTick).accidentalType();
                   interval = keydiff2Interval(oKey, transposeKey, direction);
                   }
             else {
                   interval = intervalList[transposeInterval];
-                  if (direction == TRANSPOSE_DOWN)
+                  if (direction == TransposeDirection::DOWN)
                         interval.flip();
                   }
 
@@ -291,22 +291,22 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                   trKeys = false;
                   }
             bool fullOctave = (interval.chromatic % 12) == 0;
-            if (fullOctave && (mode != TRANSPOSE_BY_KEY)) {
+            if (fullOctave && (mode != TransposeMode::BY_KEY)) {
                   trKeys = false;
                   transposeChordNames = false;
                   }
             }
       else                          // diatonic transposition
-            if (direction == TRANSPOSE_DOWN)
+            if (direction == TransposeDirection::DOWN)
                   transposeInterval *= -1;
 
-      if (_selection.state() == SEL_LIST) {
+      if (_selection.state() == SelState::LIST) {
             foreach(Element* e, _selection.uniqueElements()) {
                   if (e->staff()->staffType()->group() == PERCUSSION_STAFF_GROUP)
                         continue;
                   if (e->type() == Element::ElementType::NOTE) {
                         Note* note = static_cast<Note*>(e);
-                        if (mode == TRANSPOSE_DIATONICALLY)
+                        if (mode == TransposeMode::DIATONICALLY)
                               note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                         else
                               transpose(note, interval, useDoubleSharpsFlats);
@@ -314,7 +314,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                   else if ((e->type() == Element::ElementType::HARMONY) && transposeChordNames) {
                         Harmony* h  = static_cast<Harmony*>(e);
                         int rootTpc, baseTpc;
-                        if (mode == TRANSPOSE_DIATONICALLY) {
+                        if (mode == TransposeMode::DIATONICALLY) {
                               int tick = 0;
                               if (h->parent()->type() == Element::ElementType::SEGMENT)
                                     tick = static_cast<Segment*>(h->parent())->tick();
@@ -322,7 +322,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                                  && h->parent()->parent()->type() == Element::ElementType::SEGMENT) {
                                     tick = static_cast<Segment*>(h->parent()->parent())->tick();
                                     }
-                              int key = !h->staff() ? KEY_C : h->staff()->keymap()->key(tick).accidentalType();
+                              int key = !h->staff() ? Key::KEY_C : h->staff()->keymap()->key(tick).accidentalType();
                               rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
                                           transposeInterval, key, trKeys, useDoubleSharpsFlats);
                               baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
@@ -334,7 +334,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                               }
                         undoTransposeHarmony(h, rootTpc, baseTpc);
                         }
-                  else if ((e->type() == Element::ElementType::KEYSIG) && mode != TRANSPOSE_DIATONICALLY && trKeys) {
+                  else if ((e->type() == Element::ElementType::KEYSIG) && mode != TransposeMode::DIATONICALLY && trKeys) {
                         KeySig* ks = static_cast<KeySig*>(e);
                         KeySigEvent key  = km->key(ks->tick());
                         KeySigEvent okey = km->key(ks->tick() - 1);
@@ -384,14 +384,14 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                   Chord* chord = static_cast<Chord*>(e);
                   QList<Note*> nl = chord->notes();
                   for (Note* n : nl) {
-                        if (mode == TRANSPOSE_DIATONICALLY)
+                        if (mode == TransposeMode::DIATONICALLY)
                               n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                         else
                               transpose(n, interval, useDoubleSharpsFlats);
                         }
                   for (Chord* g : chord->graceNotes()) {
                         for (Note* n : g->notes()) {
-                              if (mode == TRANSPOSE_DIATONICALLY)
+                              if (mode == TransposeMode::DIATONICALLY)
                                     n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                               else
                                     transpose(n, interval, useDoubleSharpsFlats);
@@ -404,9 +404,9 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                               continue;
                         Harmony* h  = static_cast<Harmony*>(e);
                         int rootTpc, baseTpc;
-                        if (mode == TRANSPOSE_DIATONICALLY) {
+                        if (mode == TransposeMode::DIATONICALLY) {
                               int tick = segment->tick();
-                              int key = !h->staff() ? KEY_C : h->staff()->keymap()->key(tick).accidentalType();
+                              int key = !h->staff() ? Key::KEY_C : h->staff()->keymap()->key(tick).accidentalType();
                               rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
                                           transposeInterval, key, trKeys, useDoubleSharpsFlats);
                               baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
@@ -420,7 +420,7 @@ void Score::transpose(int mode, TransposeDirection direction, int transposeKey,
                         }
                   }
             }
-      if (trKeys && mode != TRANSPOSE_DIATONICALLY) {
+      if (trKeys && mode != TransposeMode::DIATONICALLY) {
             transposeKeys(_selection.staffStart(), _selection.staffEnd(),
                _selection.tickStart(), _selection.tickEnd(), interval);
             }
@@ -480,7 +480,7 @@ void Score::transposeSemitone(int step)
       if (step < -1)
             step = -1;
 
-      TransposeDirection dir = step > 0 ? TRANSPOSE_UP : TRANSPOSE_DOWN;
+      TransposeDirection dir = step > 0 ? TransposeDirection::UP : TransposeDirection::DOWN;
 
 
       KeyList* km = staff(0)->keymap();
@@ -510,7 +510,7 @@ void Score::transposeSemitone(int step)
 
       cmdSelectAll();
       startCmd();
-      transpose(TRANSPOSE_BY_INTERVAL, dir, 0, interval, true, true, false);
+      transpose(TransposeMode::BY_INTERVAL, dir, 0, interval, true, true, false);
       deselectAll();
       setLayoutAll(true);
       endCmd();
@@ -526,7 +526,7 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
       int alter1;
       int alter2;
       int tick     = chord()->segment()->tick();
-      int key      = !staff() ? KEY_C : staff()->keymap()->key(tick).accidentalType();
+      int key      = !staff() ? Key::KEY_C : staff()->keymap()->key(tick).accidentalType();
       int absStep1 = pitch2absStepByKey(pitch(),                 tpc1(), key, &alter1);
       int absStep2 = pitch2absStepByKey(pitch()-transposition(), tpc2(), key, &alter2);
 
@@ -547,24 +547,24 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
             newPitch -= PITCH_DELTA_OCTAVE;
       while (newPitch < 0)
             newPitch += PITCH_DELTA_OCTAVE;
-      while (newTpc1 > TPC_MAX)
+      while (newTpc1 > Tpc::MAX)
             newTpc1 -= TPC_DELTA_ENHARMONIC;
-      while (newTpc1 < TPC_MIN)
+      while (newTpc1 < Tpc::MIN)
             newTpc1 += TPC_DELTA_ENHARMONIC;
-      while (newTpc2 > TPC_MAX)
+      while (newTpc2 > Tpc::MAX)
             newTpc2 -= TPC_DELTA_ENHARMONIC;
-      while (newTpc2 < TPC_MIN)
+      while (newTpc2 < Tpc::MIN)
             newTpc2 += TPC_DELTA_ENHARMONIC;
 
       // if required, reduce double alterations
       if (!useDoubleAccidentals) {
-            if (newTpc1 >= TPC_F_SS)
+            if (newTpc1 >= Tpc::F_SS)
                   newTpc1 -= TPC_DELTA_ENHARMONIC;
-            if (newTpc1 <= TPC_B_BB)
+            if (newTpc1 <= Tpc::B_BB)
                   newTpc1 += TPC_DELTA_ENHARMONIC;
-            if (newTpc2 >= TPC_F_SS)
+            if (newTpc2 >= Tpc::F_SS)
                   newTpc2 -= TPC_DELTA_ENHARMONIC;
-            if (newTpc2 <= TPC_B_BB)
+            if (newTpc2 <= Tpc::B_BB)
                   newTpc2 += TPC_DELTA_ENHARMONIC;
             }
 

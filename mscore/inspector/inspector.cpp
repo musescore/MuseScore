@@ -272,10 +272,10 @@ InspectorElement::InspectorElement(QWidget* parent)
       b.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,    0, 0, b.color,      b.resetColor   },
-            { P_VISIBLE,  0, 0, b.visible,    b.resetVisible },
-            { P_USER_OFF, 0, 0, b.offsetX,    b.resetX       },
-            { P_USER_OFF, 1, 0, b.offsetY,    b.resetY       }
+            { P_ID::COLOR,    0, 0, b.color,      b.resetColor   },
+            { P_ID::VISIBLE,  0, 0, b.visible,    b.resetVisible },
+            { P_ID::USER_OFF, 0, 0, b.offsetX,    b.resetX       },
+            { P_ID::USER_OFF, 1, 0, b.offsetY,    b.resetY       }
             };
 
       mapSignals();
@@ -291,13 +291,13 @@ InspectorVBox::InspectorVBox(QWidget* parent)
       vb.setupUi(addWidget());
 
       iList = {
-            { P_TOP_GAP,       0, 0, vb.topGap,       vb.resetTopGap       },
-            { P_BOTTOM_GAP,    0, 0, vb.bottomGap,    vb.resetBottomGap    },
-            { P_LEFT_MARGIN,   0, 0, vb.leftMargin,   vb.resetLeftMargin   },
-            { P_RIGHT_MARGIN,  0, 0, vb.rightMargin,  vb.resetRightMargin  },
-            { P_TOP_MARGIN,    0, 0, vb.topMargin,    vb.resetTopMargin    },
-            { P_BOTTOM_MARGIN, 0, 0, vb.bottomMargin, vb.resetBottomMargin },
-            { P_BOX_HEIGHT,    0, 0, vb.height,       0                    }
+            { P_ID::TOP_GAP,       0, 0, vb.topGap,       vb.resetTopGap       },
+            { P_ID::BOTTOM_GAP,    0, 0, vb.bottomGap,    vb.resetBottomGap    },
+            { P_ID::LEFT_MARGIN,   0, 0, vb.leftMargin,   vb.resetLeftMargin   },
+            { P_ID::RIGHT_MARGIN,  0, 0, vb.rightMargin,  vb.resetRightMargin  },
+            { P_ID::TOP_MARGIN,    0, 0, vb.topMargin,    vb.resetTopMargin    },
+            { P_ID::BOTTOM_MARGIN, 0, 0, vb.bottomMargin, vb.resetBottomMargin },
+            { P_ID::BOX_HEIGHT,    0, 0, vb.height,       0                    }
             };
       mapSignals();
       }
@@ -312,9 +312,9 @@ InspectorHBox::InspectorHBox(QWidget* parent)
       hb.setupUi(addWidget());
 
       iList = {
-            { P_TOP_GAP,    0, 0, hb.leftGap,  hb.resetLeftGap  },
-            { P_BOTTOM_GAP, 0, 0, hb.rightGap, hb.resetRightGap },
-            { P_BOX_WIDTH,  0, 0, hb.width,    0                }
+            { P_ID::TOP_GAP,    0, 0, hb.leftGap,  hb.resetLeftGap  },
+            { P_ID::BOTTOM_GAP, 0, 0, hb.rightGap, hb.resetRightGap },
+            { P_ID::BOX_WIDTH,  0, 0, hb.width,    0                }
             };
 
       mapSignals();
@@ -331,13 +331,13 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
       ar.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,               0, 0, e.color,        e.resetColor      },
-            { P_VISIBLE,             0, 0, e.visible,      e.resetVisible    },
-            { P_USER_OFF,            0, 0, e.offsetX,      e.resetX          },
-            { P_USER_OFF,            1, 0, e.offsetY,      e.resetY          },
-            { P_ARTICULATION_ANCHOR, 0, 0, ar.anchor,      ar.resetAnchor    },
-            { P_DIRECTION,           0, 0, ar.direction,   ar.resetDirection },
-            { P_TIME_STRETCH,        0, 0, ar.timeStretch, ar.resetTimeStretch }
+            { P_ID::COLOR,               0, 0, e.color,        e.resetColor      },
+            { P_ID::VISIBLE,             0, 0, e.visible,      e.resetVisible    },
+            { P_ID::USER_OFF,            0, 0, e.offsetX,      e.resetX          },
+            { P_ID::USER_OFF,            1, 0, e.offsetY,      e.resetY          },
+            { P_ID::ARTICULATION_ANCHOR, 0, 0, ar.anchor,      ar.resetAnchor    },
+            { P_ID::DIRECTION,           0, 0, ar.direction,   ar.resetDirection },
+            { P_ID::TIME_STRETCH,        0, 0, ar.timeStretch, ar.resetTimeStretch }
             };
       mapSignals();
       }
@@ -352,7 +352,7 @@ InspectorSpacer::InspectorSpacer(QWidget* parent)
       sp.setupUi(addWidget());
 
       iList = {
-            { P_SPACE, 0, false, sp.height, sp.resetHeight  }
+            { P_ID::SPACE, 0, false, sp.height, sp.resetHeight  }
             };
       mapSignals();
       }
@@ -369,13 +369,13 @@ InspectorRest::InspectorRest(QWidget* parent)
       r.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,          0, 0, e.color,         e.resetColor         },
-            { P_VISIBLE,        0, 0, e.visible,       e.resetVisible       },
-            { P_USER_OFF,       0, 0, e.offsetX,       e.resetX             },
-            { P_USER_OFF,       1, 0, e.offsetY,       e.resetY             },
-            { P_SMALL,          0, 0, r.small,         r.resetSmall         },
-            { P_LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace }
+            { P_ID::COLOR,          0, 0, e.color,         e.resetColor         },
+            { P_ID::VISIBLE,        0, 0, e.visible,       e.resetVisible       },
+            { P_ID::USER_OFF,       0, 0, e.offsetX,       e.resetX             },
+            { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
+            { P_ID::SMALL,          0, 0, r.small,         r.resetSmall         },
+            { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
+            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace }
             };
       mapSignals();
       }
@@ -392,17 +392,17 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
       t.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,          0, 0, e.color,          e.resetColor         },
-            { P_VISIBLE,        0, 0, e.visible,        e.resetVisible       },
-            { P_USER_OFF,       0, 0, e.offsetX,        e.resetX             },
-            { P_USER_OFF,       1, 0, e.offsetY,        e.resetY             },
-            { P_LEADING_SPACE,  0, 1, s.leadingSpace,   s.resetLeadingSpace  },
-            { P_TRAILING_SPACE, 0, 1, s.trailingSpace,  s.resetTrailingSpace },
-            { P_SHOW_COURTESY,  0, 0, t.showCourtesy,   t.resetShowCourtesy  },
-//            { P_TIMESIG,        0, 0, t.timesigZ,       t.resetTimesig       },
-//            { P_TIMESIG,        1, 0, t.timesigN,       t.resetTimesig       },
-//            { P_TIMESIG_GLOBAL, 0, 0, t.globalTimesigZ, t.resetGlobalTimesig },
-//            { P_TIMESIG_GLOBAL, 1, 0, t.globalTimesigN, t.resetGlobalTimesig }
+            { P_ID::COLOR,          0, 0, e.color,          e.resetColor         },
+            { P_ID::VISIBLE,        0, 0, e.visible,        e.resetVisible       },
+            { P_ID::USER_OFF,       0, 0, e.offsetX,        e.resetX             },
+            { P_ID::USER_OFF,       1, 0, e.offsetY,        e.resetY             },
+            { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,   s.resetLeadingSpace  },
+            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace,  s.resetTrailingSpace },
+            { P_ID::SHOW_COURTESY,  0, 0, t.showCourtesy,   t.resetShowCourtesy  },
+//            { P_ID::TIMESIG,        0, 0, t.timesigZ,       t.resetTimesig       },
+//            { P_ID::TIMESIG,        1, 0, t.timesigN,       t.resetTimesig       },
+//            { P_ID::TIMESIG_GLOBAL, 0, 0, t.globalTimesigZ, t.resetGlobalTimesig },
+//            { P_ID::TIMESIG_GLOBAL, 1, 0, t.globalTimesigN, t.resetGlobalTimesig }
             };
       mapSignals();
       }
@@ -419,14 +419,14 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
       k.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,          0, 0, e.color,         e.resetColor         },
-            { P_VISIBLE,        0, 0, e.visible,       e.resetVisible       },
-            { P_USER_OFF,       0, 0, e.offsetX,       e.resetX             },
-            { P_USER_OFF,       1, 0, e.offsetY,       e.resetY             },
-            { P_LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace },
-            { P_SHOW_COURTESY,  0, 0, k.showCourtesy,  k.resetShowCourtesy  },
-//            { P_SHOW_NATURALS,  0, 0, k.showNaturals,  k.resetShowNaturals  }
+            { P_ID::COLOR,          0, 0, e.color,         e.resetColor         },
+            { P_ID::VISIBLE,        0, 0, e.visible,       e.resetVisible       },
+            { P_ID::USER_OFF,       0, 0, e.offsetX,       e.resetX             },
+            { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
+            { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
+            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace },
+            { P_ID::SHOW_COURTESY,  0, 0, k.showCourtesy,  k.resetShowCourtesy  },
+//            { P_ID::SHOW_NATURALS,  0, 0, k.showNaturals,  k.resetShowNaturals  }
             };
       mapSignals();
       }
@@ -442,13 +442,13 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
       t.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,        0, 0, e.color,       e.resetColor       },
-            { P_VISIBLE,      0, 0, e.visible,     e.resetVisible     },
-            { P_USER_OFF,     0, 0, e.offsetX,     e.resetX           },
-            { P_USER_OFF,     1, 0, e.offsetY,     e.resetY           },
-            { P_DIRECTION,    0, 0, t.direction,   t.resetDirection   },
-            { P_NUMBER_TYPE,  0, 0, t.numberType,  t.resetNumberType  },
-            { P_BRACKET_TYPE, 0, 0, t.bracketType, t.resetBracketType }
+            { P_ID::COLOR,        0, 0, e.color,       e.resetColor       },
+            { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible     },
+            { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX           },
+            { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY           },
+            { P_ID::DIRECTION,    0, 0, t.direction,   t.resetDirection   },
+            { P_ID::NUMBER_TYPE,  0, 0, t.numberType,  t.resetNumberType  },
+            { P_ID::BRACKET_TYPE, 0, 0, t.bracketType, t.resetBracketType }
             };
       mapSignals();
       }
@@ -464,11 +464,11 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
       a.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,        0, 0, e.color,       e.resetColor       },
-            { P_VISIBLE,      0, 0, e.visible,     e.resetVisible     },
-            { P_USER_OFF,     0, 0, e.offsetX,     e.resetX           },
-            { P_USER_OFF,     1, 0, e.offsetY,     e.resetY           },
-            { P_SMALL,        0, 0, a.small,       a.resetSmall       }
+            { P_ID::COLOR,        0, 0, e.color,       e.resetColor       },
+            { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible     },
+            { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX           },
+            { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY           },
+            { P_ID::SMALL,        0, 0, a.small,       a.resetSmall       }
             };
       mapSignals();
       }
@@ -485,13 +485,13 @@ InspectorClef::InspectorClef(QWidget* parent)
       c.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,          0, 0, e.color,         e.resetColor         },
-            { P_VISIBLE,        0, 0, e.visible,       e.resetVisible       },
-            { P_USER_OFF,       0, 0, e.offsetX,       e.resetX             },
-            { P_USER_OFF,       1, 0, e.offsetY,       e.resetY             },
-            { P_LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace },
-            { P_SHOW_COURTESY,  0, 0, c.showCourtesy,  c.resetShowCourtesy  }
+            { P_ID::COLOR,          0, 0, e.color,         e.resetColor         },
+            { P_ID::VISIBLE,        0, 0, e.visible,       e.resetVisible       },
+            { P_ID::USER_OFF,       0, 0, e.offsetX,       e.resetX             },
+            { P_ID::USER_OFF,       1, 0, e.offsetY,       e.resetY             },
+            { P_ID::LEADING_SPACE,  0, 1, s.leadingSpace,  s.resetLeadingSpace  },
+            { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace },
+            { P_ID::SHOW_COURTESY,  0, 0, c.showCourtesy,  c.resetShowCourtesy  }
             };
       mapSignals();
       }
@@ -549,11 +549,11 @@ InspectorText::InspectorText(QWidget* parent)
       t.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,              0, 0, e.color,    e.resetColor    },
-            { P_VISIBLE,            0, 0, e.visible,  e.resetVisible  },
-            { P_USER_OFF,           0, 0, e.offsetX,  e.resetX        },
-            { P_USER_OFF,           1, 0, e.offsetY,  e.resetY        },
-            { P_TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    }
+            { P_ID::COLOR,              0, 0, e.color,    e.resetColor    },
+            { P_ID::VISIBLE,            0, 0, e.visible,  e.resetVisible  },
+            { P_ID::USER_OFF,           0, 0, e.offsetX,  e.resetX        },
+            { P_ID::USER_OFF,           1, 0, e.offsetY,  e.resetY        },
+            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    }
             };
       mapSignals();
       }
@@ -572,7 +572,7 @@ void InspectorText::setElement()
       const QList<TextStyle>& ts = score->style()->textStyles();
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+            if (!(ts.at(i).hidden() & TextStyle::Hidden::IN_LISTS) )
                   t.style->addItem(ts.at(i).name(), i);
             }
       t.style->blockSignals(false);
@@ -591,13 +591,13 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       tt.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,             0, 0, e.color,       e.resetColor       },
-            { P_VISIBLE,           0, 0, e.visible,     e.resetVisible     },
-            { P_USER_OFF,          0, 0, e.offsetX,     e.resetX           },
-            { P_USER_OFF,          1, 0, e.offsetY,     e.resetY           },
-            { P_TEXT_STYLE_TYPE,   0, 0, t.style,       t.resetStyle       },
-            { P_TEMPO,             0, 0, tt.tempo,      tt.resetTempo      },
-            { P_TEMPO_FOLLOW_TEXT, 0, 0, tt.followText, tt.resetFollowText }
+            { P_ID::COLOR,             0, 0, e.color,       e.resetColor       },
+            { P_ID::VISIBLE,           0, 0, e.visible,     e.resetVisible     },
+            { P_ID::USER_OFF,          0, 0, e.offsetX,     e.resetX           },
+            { P_ID::USER_OFF,          1, 0, e.offsetY,     e.resetY           },
+            { P_ID::TEXT_STYLE_TYPE,   0, 0, t.style,       t.resetStyle       },
+            { P_ID::TEMPO,             0, 0, tt.tempo,      tt.resetTempo      },
+            { P_ID::TEMPO_FOLLOW_TEXT, 0, 0, tt.followText, tt.resetFollowText }
             };
       mapSignals();
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
@@ -617,7 +617,7 @@ void InspectorTempoText::setElement()
       const QList<TextStyle>& ts = score->style()->textStyles();
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+            if (!(ts.at(i).hidden() & TextStyle::Hidden::IN_LISTS) )
                   t.style->addItem(ts.at(i).name(), i);
             }
       t.style->blockSignals(false);
@@ -645,13 +645,13 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
       d.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,              0, 0, e.color,    e.resetColor    },
-            { P_VISIBLE,            0, 0, e.visible,  e.resetVisible  },
-            { P_USER_OFF,           0, 0, e.offsetX,  e.resetX        },
-            { P_USER_OFF,           1, 0, e.offsetY,  e.resetY        },
-            { P_TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    },
-            { P_DYNAMIC_RANGE,      0, 0, d.dynRange, d.resetDynRange },
-            { P_VELOCITY,           0, 0, d.velocity, d.resetVelocity }
+            { P_ID::COLOR,              0, 0, e.color,    e.resetColor    },
+            { P_ID::VISIBLE,            0, 0, e.visible,  e.resetVisible  },
+            { P_ID::USER_OFF,           0, 0, e.offsetX,  e.resetX        },
+            { P_ID::USER_OFF,           1, 0, e.offsetY,  e.resetY        },
+            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    },
+            { P_ID::DYNAMIC_RANGE,      0, 0, d.dynRange, d.resetDynRange },
+            { P_ID::VELOCITY,           0, 0, d.velocity, d.resetVelocity }
             };
       mapSignals();
       }
@@ -670,7 +670,7 @@ void InspectorDynamic::setElement()
       const QList<TextStyle>& ts = score->style()->textStyles();
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyle::HIDE_IN_LISTS) )
+            if (!(ts.at(i).hidden() & TextStyle::Hidden::IN_LISTS) )
                   t.style->addItem(ts.at(i).name(), i);
             }
       t.style->blockSignals(false);
@@ -688,11 +688,11 @@ InspectorSlur::InspectorSlur(QWidget* parent)
       s.setupUi(addWidget());
 
       iList = {
-            { P_COLOR,      0, 0, e.color,    e.resetColor    },
-            { P_VISIBLE,    0, 0, e.visible,  e.resetVisible  },
-            { P_USER_OFF,   0, 0, e.offsetX,  e.resetX        },
-            { P_USER_OFF,   1, 0, e.offsetY,  e.resetY        },
-            { P_LINE_TYPE,  0, 0, s.lineType, s.resetLineType }
+            { P_ID::COLOR,      0, 0, e.color,    e.resetColor    },
+            { P_ID::VISIBLE,    0, 0, e.visible,  e.resetVisible  },
+            { P_ID::USER_OFF,   0, 0, e.offsetX,  e.resetX        },
+            { P_ID::USER_OFF,   1, 0, e.offsetY,  e.resetY        },
+            { P_ID::LINE_TYPE,  0, 0, s.lineType, s.resetLineType }
             };
       mapSignals();
       }
@@ -742,14 +742,14 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
             b.type->addItem(BarLine::userTypeName(t), int(t));
 
       iList = {
-            { P_COLOR,             0, 0, e.color,    e.resetColor    },
-            { P_VISIBLE,           0, 0, e.visible,  e.resetVisible  },
-            { P_USER_OFF,          0, 0, e.offsetX,  e.resetX        },
-            { P_USER_OFF,          1, 0, e.offsetY,  e.resetY        },
-            { P_SUBTYPE,           0, 0, b.type,     b.resetType     },
-            { P_BARLINE_SPAN,      0, 0, b.span,     b.resetSpan     },
-            { P_BARLINE_SPAN_FROM, 0, 0, b.spanFrom, b.resetSpanFrom },
-            { P_BARLINE_SPAN_TO,   0, 0, b.spanTo,   b.resetSpanTo   },
+            { P_ID::COLOR,             0, 0, e.color,    e.resetColor    },
+            { P_ID::VISIBLE,           0, 0, e.visible,  e.resetVisible  },
+            { P_ID::USER_OFF,          0, 0, e.offsetX,  e.resetX        },
+            { P_ID::USER_OFF,          1, 0, e.offsetY,  e.resetY        },
+            { P_ID::SUBTYPE,           0, 0, b.type,     b.resetType     },
+            { P_ID::BARLINE_SPAN,      0, 0, b.span,     b.resetSpan     },
+            { P_ID::BARLINE_SPAN_FROM, 0, 0, b.spanFrom, b.resetSpanFrom },
+            { P_ID::BARLINE_SPAN_TO,   0, 0, b.spanTo,   b.resetSpanTo   },
             };
       mapSignals();
       connect(b.spanType, SIGNAL(activated(int)), SLOT(spanTypeActivated(int)));
@@ -876,7 +876,7 @@ void InspectorBarLine::apply()
       if (currType == BARLINE_TYPE_DEFAULT)
             currType = measureBarLineType;
       if (currType != bl->barLineType())
-            score->undoChangeProperty(bl, P_SUBTYPE, currType);
+            score->undoChangeProperty(bl, P_ID::SUBTYPE, currType);
       // if value reverted to measure default, update combo box
       if (!bl->customSubtype())
             type->setCurrentIndex(0);

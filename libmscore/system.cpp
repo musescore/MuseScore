@@ -150,7 +150,7 @@ void System::layout(qreal xo1)
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* s = score()->staff(staffIdx);
             for (int i = 0; i < bracketLevels; ++i) {
-                  if (s->bracket(i) == NO_BRACKET)
+                  if (s->bracket(i) == BracketType::NO_BRACKET)
                         continue;
                   int firstStaff = staffIdx;
                   int lastStaff  = staffIdx + s->bracketSpan(i) - 1;
@@ -220,7 +220,7 @@ void System::layout(qreal xo1)
       // xoff2 += xo1;
       _leftMargin = xoff2;
 
-      qreal bd = point(score()->styleS(ST_bracketDistance));
+      qreal bd = point(score()->styleS(StyleIdx::bracketDistance));
       if ( _brackets.size() > 0) {
             for (int i = 0; i < bracketLevels; ++i)
                   _leftMargin += bracketWidth[i] + bd;
@@ -239,7 +239,7 @@ void System::layout(qreal xo1)
                (staff->lines()-1) * staff->lineDistance() * spatium() * staffMag);
             }
 
-      if ((nstaves > 1 && score()->styleB(ST_startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(ST_startBarlineSingle))) {
+      if ((nstaves > 1 && score()->styleB(StyleIdx::startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(StyleIdx::startBarlineSingle))) {
             if (_barLine == 0) {
                   BarLine* bl = new BarLine(score());
                   bl->setParent(this);
@@ -314,17 +314,17 @@ void System::layout2()
                         if (type == ElementType::VBOX || type == ElementType::TBOX || type == ElementType::FBOX)
                               nextMeasureIsVBOX = true;
                         }
-                  downDistance = nextMeasureIsVBOX ? ST_systemFrameDistance : ST_minSystemDistance;
+                  downDistance = nextMeasureIsVBOX ? StyleIdx::systemFrameDistance : StyleIdx::minSystemDistance;
                   }
             else if (staff->rstaff() < (staff->part()->staves()->size()-1)) {
                   //
                   // staff is not last staff in a part
                   //
-                  downDistance = ST_akkoladeDistance;
+                  downDistance = StyleIdx::akkoladeDistance;
                   userDist = score()->staff(staffIdx + 1)->userDist();
                   }
             else {
-                  downDistance = ST_staffDistance;
+                  downDistance = StyleIdx::staffDistance;
                   userDist = score()->staff(staffIdx + 1)->userDist();
                   }
 
@@ -499,7 +499,7 @@ void System::setInstrumentNames(bool longName)
       if (isVbox())                 // ignore vbox
             return;
       if (!score()->showInstrumentNames()
-              || (score()->styleB(ST_hideInstrumentNameIfOneInstrument) && _staves.size() == 1)) {
+              || (score()->styleB(StyleIdx::hideInstrumentNameIfOneInstrument) && _staves.size() == 1)) {
             for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                   SysStaff* staff = _staves[staffIdx];
                   foreach(InstrumentName* t, staff->instrumentNames)
@@ -999,7 +999,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   }
             bool v = true;
             Spanner* spanner = ss->spanner();
-            if (spanner->anchor() == Spanner::ANCHOR_SEGMENT || spanner->anchor() == Spanner::ANCHOR_CHORD) {
+            if (spanner->anchor() == Spanner::Anchor::SEGMENT || spanner->anchor() == Spanner::Anchor::CHORD) {
                   Element* se = spanner->startElement();
                   Element* ee = spanner->endElement();
                   bool v1 = true;

@@ -224,7 +224,7 @@ void StaffType::write(Xml& xml) const
             xml.tag("fretFontSize",     _fretFontSize);
             xml.tag("fretFontY",        _fretFontUserY);
             xml.tag("linesThrough",     _linesThrough);
-            xml.tag("minimStyle",       _minimStyle);
+            xml.tag("minimStyle",       int(_minimStyle));
             xml.tag("onLines",          _onLines);
             xml.tag("showRests",        _showRests);
             xml.tag("stemsDown",        _stemsDown);
@@ -383,7 +383,7 @@ void StaffType::setDurationMetrics()
             return;
 
       QFontMetricsF fm(durationFont());
-      QString txt(_durationFonts[_durationFontIdx].displayValue, NUM_OF_TAB_VALS);
+      QString txt(_durationFonts[_durationFontIdx].displayValue, int(TabVal::NUM_OF));
       QRectF bb( fm.tightBoundingRect(txt) );
       // move symbols so that the lowest margin 'sits' on the base line:
       // move down by the whole part above (negative) the base line
@@ -526,7 +526,7 @@ qreal StaffType::chordRestStemPosY(const ChordRest *chordRest) const
       // if stems beside staff, position are fixed, but take into account delta for half notes
       qreal delta =                             // displacement for half note stems (if used)
             // if half notes have not a short stem OR not a half note => 0
-            (minimStyle() != TAB_MINIM_SHORTER || chordRest->durationType().type() != TDuration::DurationType::V_HALF) ?
+            (minimStyle() != TablatureMinimStyle::SHORTER || chordRest->durationType().type() != TDuration::DurationType::V_HALF) ?
                   0.0 :
                   // if stem is up, displace of half stem length down (positive)
                   // if stem is down, displace of half stem length up (negative)
@@ -584,7 +584,7 @@ qreal StaffType::chordStemLength(const Chord* chord) const
             return STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU * _lineDistance.val();
       // if stems beside staff, length is fixed, but take into account shorter half note stems
       else {
-            bool shrt = (minimStyle() == TAB_MINIM_SHORTER) && (chord->durationType().type() == TDuration::DurationType::V_HALF);
+            bool shrt = (minimStyle() == TablatureMinimStyle::SHORTER) && (chord->durationType().type() == TDuration::DurationType::V_HALF);
             stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
                         * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * chord->mag();
             }
@@ -793,27 +793,27 @@ bool TablatureDurationFont::read(XmlReader& e)
                   QString txt(e.readElementText());
                   QChar chr = txt[0];
                   if (val == "longa")
-                        displayValue[TAB_VAL_LONGA] = chr;
+                        displayValue[int(TabVal::VAL_LONGA)] = chr;
                   else if (val == "brevis")
-                        displayValue[TAB_VAL_BREVIS] = chr;
+                        displayValue[int(TabVal::VAL_BREVIS)] = chr;
                   else if (val == "semibrevis")
-                        displayValue[TAB_VAL_SEMIBREVIS] = chr;
+                        displayValue[int(TabVal::VAL_SEMIBREVIS)] = chr;
                   else if (val == "minima")
-                        displayValue[TAB_VAL_MINIMA] = chr;
+                        displayValue[int(TabVal::VAL_MINIMA)] = chr;
                   else if (val == "semiminima")
-                        displayValue[TAB_VAL_SEMIMINIMA] = chr;
+                        displayValue[int(TabVal::VAL_SEMIMINIMA)] = chr;
                   else if (val == "fusa")
-                        displayValue[TAB_VAL_FUSA] = chr;
+                        displayValue[int(TabVal::VAL_FUSA)] = chr;
                   else if (val == "semifusa")
-                        displayValue[TAB_VAL_SEMIFUSA] = chr;
+                        displayValue[int(TabVal::VAL_SEMIFUSA)] = chr;
                   else if (val == "32")
-                        displayValue[TAB_VAL_32] = chr;
+                        displayValue[int(TabVal::VAL_32)] = chr;
                   else if (val == "64")
-                        displayValue[TAB_VAL_64] = chr;
+                        displayValue[int(TabVal::VAL_64)] = chr;
                   else if (val == "128")
-                        displayValue[TAB_VAL_128] = chr;
+                        displayValue[int(TabVal::VAL_128)] = chr;
                   else if (val == "256")
-                        displayValue[TAB_VAL_256] = chr;
+                        displayValue[int(TabVal::VAL_256)] = chr;
                   else if (val == "dot")
                         displayDot = chr;
                   else
@@ -963,16 +963,16 @@ static const QString _emptyString = QString();
 //   Static functions for StaffType presets
 //---------------------------------------------------------
 
-const StaffType* StaffType::preset(int idx)
+const StaffType* StaffType::preset(StaffTypes idx)
       {
-      if (idx < 0 || idx >= (int)_presets.size())
+      if (int(idx) < 0 || int(idx) >= int(_presets.size()))
             return &_presets[0];
-      return &_presets[idx];
+      return &_presets[int(idx)];
       }
 
 const StaffType* StaffType::presetFromXmlName(QString& xmlName)
       {
-      for (int i = 0; i < (int)_presets.size(); ++i) {
+      for (int i = 0; i < int(_presets.size()); ++i) {
             if (_presets[i].xmlName() == xmlName)
                   return &_presets[i];
             }
@@ -990,7 +990,7 @@ const StaffType* StaffType::presetFromName(QString& name)
 #endif
 const StaffType* StaffType::getDefaultPreset(StaffGroup grp)
       {
-      int _idx = _defaultPreset[(int)grp];
+      int _idx = _defaultPreset[int(grp)];
       return &_presets[_idx];
       }
 
@@ -1011,16 +1011,16 @@ void StaffType::initStaffTypes()
          StaffType(PERCUSSION_STAFF_GROUP, "perc3Line", QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, false, true),
          StaffType(PERCUSSION_STAFF_GROUP, "perc5Line", QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, false, true),
 //                 group               xml-name,         human-readable-name         lin dist  clef   bars stemless time      duration font     size off genDur     fret font         size off  thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
-         StaffType(TAB_STAFF_GROUP, "tab6StrSimple", QObject::tr("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tab6StrCommon", QObject::tr("Tab. 6-str common"), 6, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tab6StrFull",   QObject::tr("Tab. 6-str full"),   6, 1.5, true,  true, false, true,  "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true),
-         StaffType(TAB_STAFF_GROUP, "tab4StrSimple", QObject::tr("Tab. 4-str simple"), 4, 1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, false, TAB_MINIM_NONE,   true,  false, true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tab4StrCommon", QObject::tr("Tab. 4-str common"), 4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TAB_MINIM_SHORTER,true,  false, true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tab4StrFull",   QObject::tr("Tab. 4-str full"),   4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TAB_MINIM_SLASHED,true,  true,  true,  true,  false, true),
-         StaffType(TAB_STAFF_GROUP, "tabUkulele",    QObject::tr("Tab. ukulele"),      4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tabBalajka",    QObject::tr("Tab. balalajka"),    3, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TAB_MINIM_SHORTER,true,  true,  true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tab6StrItalian",QObject::tr("Tab. 6-str Italian"),6, 1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, true,  TAB_MINIM_NONE,   true,  true,  false, false, true,  true),
-         StaffType(TAB_STAFF_GROUP, "tab6StrFrench", QObject::tr("Tab. 6-str French"), 6, 1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, true,  TAB_MINIM_NONE,   false, false, false, false, false, false)
+         StaffType(TAB_STAFF_GROUP, "tab6StrSimple", QObject::tr("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, true),
+         StaffType(TAB_STAFF_GROUP, "tab6StrCommon", QObject::tr("Tab. 6-str common"), 6, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, true),
+         StaffType(TAB_STAFF_GROUP, "tab6StrFull",   QObject::tr("Tab. 6-str full"),   6, 1.5, true,  true, false, true,  "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, true),
+         StaffType(TAB_STAFF_GROUP, "tab4StrSimple", QObject::tr("Tab. 4-str simple"), 4, 1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, true),
+         StaffType(TAB_STAFF_GROUP, "tab4StrCommon", QObject::tr("Tab. 4-str common"), 4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, true),
+         StaffType(TAB_STAFF_GROUP, "tab4StrFull",   QObject::tr("Tab. 4-str full"),   4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, true),
+         StaffType(TAB_STAFF_GROUP, "tabUkulele",    QObject::tr("Tab. ukulele"),      4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, true),
+         StaffType(TAB_STAFF_GROUP, "tabBalajka",    QObject::tr("Tab. balalajka"),    3, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, true),
+         StaffType(TAB_STAFF_GROUP, "tab6StrItalian",QObject::tr("Tab. 6-str Italian"),6, 1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  true),
+         StaffType(TAB_STAFF_GROUP, "tab6StrFrench", QObject::tr("Tab. 6-str French"), 6, 1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false)
          };
       }
 }                 // namespace Ms

@@ -36,9 +36,9 @@ static const char* timeNames[] = { "1/1", "1/2", "1/4", "1/8", "1/16", "1/32", "
 class Capella;
 enum class ClefType : signed char;
 
-enum CapellaNoteObjectType {
-      T_REST, T_CHORD, T_CLEF, T_KEY, T_METER, T_EXPL_BARLINE, T_IMPL_BARLINE,
-      T_PAGE_BKGR
+enum class CapellaNoteObjectType : char {
+      REST, CHORD, CLEF, KEY, METER, EXPL_BARLINE, IMPL_BARLINE,
+      PAGE_BKGR
       };
 
 enum BEAM_MODE { AUTO_BEAM, FORCE_BEAM, SPLIT_BEAM };
@@ -88,7 +88,7 @@ class CapClef : public NoteObj, public CapellaObj {
       FORM form;
 
    public:
-      CapClef(Capella* c) : NoteObj(T_CLEF), CapellaObj(c) {}
+      CapClef(Capella* c) : NoteObj(CapellaNoteObjectType::CLEF), CapellaObj(c) {}
       void read();
       void readCapx(XmlReader& e);
       const char* name() {
@@ -109,7 +109,7 @@ class CapClef : public NoteObj, public CapellaObj {
 class CapKey : public NoteObj, public CapellaObj {
 
    public:
-      CapKey(Capella* c) : NoteObj(T_KEY), CapellaObj(c) {}
+      CapKey(Capella* c) : NoteObj(CapellaNoteObjectType::KEY), CapellaObj(c) {}
       void read();
       void readCapx(XmlReader& e);
       int signature;    // -7 - +7
@@ -125,7 +125,7 @@ class CapMeter : public NoteObj, public CapellaObj {
       int log2Denom;
       bool allaBreve;
 
-      CapMeter(Capella* c) : NoteObj(T_METER), CapellaObj(c) {}
+      CapMeter(Capella* c) : NoteObj(CapellaNoteObjectType::METER), CapellaObj(c) {}
       void read();
       void readCapx(XmlReader& e);
       };
@@ -139,7 +139,7 @@ class CapExplicitBarline : public NoteObj, public CapellaObj {
       int _barMode;      // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
 
    public:
-      CapExplicitBarline(Capella* c) : NoteObj(T_EXPL_BARLINE), CapellaObj(c) {}
+      CapExplicitBarline(Capella* c) : NoteObj(CapellaNoteObjectType::EXPL_BARLINE), CapellaObj(c) {}
       void read();
       void readCapx(XmlReader& e);
       int type() const    { return _type; }

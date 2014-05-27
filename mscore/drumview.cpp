@@ -251,7 +251,7 @@ DrumView::DrumView()
       setMouseTracking(true);
       setRubberBandSelectionMode(Qt::IntersectsItemBoundingRect);
       setDragMode(QGraphicsView::RubberBandDrag);
-      _timeType = TICKS;
+      _timeType = TType::TICKS;
       magStep   = 0;
       }
 

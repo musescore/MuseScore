@@ -27,8 +27,8 @@ class ChordRest;
 //   SpannerSegmentType
 //---------------------------------------------------------
 
-enum SpannerSegmentType {
-      SEGMENT_SINGLE, SEGMENT_BEGIN, SEGMENT_MIDDLE, SEGMENT_END
+enum class SpannerSegmentType : char {
+      SINGLE, BEGIN, MIDDLE, END
       };
 
 //---------------------------------------------------------
@@ -85,7 +85,7 @@ class SpannerSegment : public Element {
 //
 //    @P tick      int                  tick start position
 //    @P tick2     int                  tick end position
-//    @P anchor    Ms::Spanner::Anchor  (ANCHOR_SEGMENT ANCHOR_MEASURE ANCHOR_CHORD ANCHOR_NOTE)
+//    @P anchor    Ms::Spanner::Anchor  (SEGMENT, MEASURE, CHORD, NOTE)
 //----------------------------------------------------------------------------------
 
 class Spanner : public Element {
@@ -93,8 +93,8 @@ class Spanner : public Element {
       Q_ENUMS(Anchor)
 
    public:
-      enum Anchor {
-            ANCHOR_SEGMENT, ANCHOR_MEASURE, ANCHOR_CHORD, ANCHOR_NOTE
+      enum class Anchor : char {
+            SEGMENT, MEASURE, CHORD, NOTE
             };
    private:
       Q_PROPERTY(int    tick    READ tick    WRITE setTick)
@@ -102,7 +102,7 @@ class Spanner : public Element {
       Q_PROPERTY(Anchor anchor  READ anchor  WRITE setAnchor)
 
       QList<SpannerSegment*> segments;
-      Anchor _anchor = ANCHOR_SEGMENT;
+      Anchor _anchor = Anchor::SEGMENT;
       Element* _startElement = 0;
       Element* _endElement = 0;
       int _tick = -1;
@@ -147,7 +147,7 @@ class Spanner : public Element {
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
       bool removeSpannerBack();
-      virtual void setYoff(qreal) {};    // used in musicxml import
+      virtual void setYoff(qreal) {}    // used in musicxml import
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant& v);

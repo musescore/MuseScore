@@ -476,7 +476,7 @@ void InstrumentWizard::createInstruments(Score* cs)
             // if a staff was removed from instrument:
             if (part->staves()->at(0)->barLineSpan() > rstaff) {
                   part->staves()->at(0)->setBarLineSpan(rstaff);
-                  part->staves()->at(0)->setBracket(0, NO_BRACKET);
+                  part->staves()->at(0)->setBracket(0, BracketType::NO_BRACKET);
                   }
 
             // insert part
@@ -580,10 +580,10 @@ bool TimesigWizard::pickup(int* z, int* n) const
 TimeSigType TimesigWizard::type() const
       {
       if (tsFraction->isChecked())
-            return TSIG_NORMAL;
+            return TimeSigType::NORMAL;
       if (tsCommonTime->isChecked())
-            return TSIG_FOUR_FOUR;
-      return TSIG_ALLA_BREVE;
+            return TimeSigType::FOUR_FOUR;
+      return TimeSigType::ALLA_BREVE;
       }
 
 //---------------------------------------------------------

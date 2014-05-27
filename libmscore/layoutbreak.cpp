@@ -24,8 +24,8 @@ namespace Ms {
 LayoutBreak::LayoutBreak(Score* score)
    : Element(score)
       {
-      _layoutBreakType     = LayoutBreakType(propertyDefault(P_LAYOUT_BREAK).toInt());
-      _pause               = score->styleD(ST_SectionPause);
+      _layoutBreakType     = LayoutBreakType(propertyDefault(P_ID::LAYOUT_BREAK).toInt());
+      _pause               = score->styleD(StyleIdx::SectionPause);
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
       lw                   = spatium() * 0.3;
@@ -41,8 +41,8 @@ void LayoutBreak::write(Xml& xml) const
       xml.stag(name());
       Element::writeProperties(xml);
 
-      writeProperty(xml, P_LAYOUT_BREAK);
-      writeProperty(xml, P_PAUSE);
+      writeProperty(xml, P_ID::LAYOUT_BREAK);
+      writeProperty(xml, P_ID::PAUSE);
 
       if (!_startWithLongNames)
             xml.tag("startWithLongNames", _startWithLongNames);
@@ -60,7 +60,7 @@ void LayoutBreak::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setProperty(P_LAYOUT_BREAK, Ms::getProperty(P_LAYOUT_BREAK, e));
+                  setProperty(P_ID::LAYOUT_BREAK, Ms::getProperty(P_ID::LAYOUT_BREAK, e));
             else if (tag == "pause")
                   _pause = e.readDouble();
             else if (tag == "startWithLongNames")
@@ -209,9 +209,9 @@ Element* LayoutBreak::drop(const DropData& data)
 QVariant LayoutBreak::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_LAYOUT_BREAK:
+            case P_ID::LAYOUT_BREAK:
                   return int(_layoutBreakType);
-            case P_PAUSE:
+            case P_ID::PAUSE:
                   return _pause;
             default:
                   return Element::getProperty(propertyId);
@@ -225,10 +225,10 @@ QVariant LayoutBreak::getProperty(P_ID propertyId) const
 bool LayoutBreak::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_LAYOUT_BREAK:
+            case P_ID::LAYOUT_BREAK:
                   setLayoutBreakType(LayoutBreakType(v.toInt()));
                   break;
-            case P_PAUSE:
+            case P_ID::PAUSE:
                   setPause(v.toDouble());
                   break;
             default:
@@ -248,10 +248,10 @@ bool LayoutBreak::setProperty(P_ID propertyId, const QVariant& v)
 QVariant LayoutBreak::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_LAYOUT_BREAK:
+            case P_ID::LAYOUT_BREAK:
                   return QVariant(); // LAYOUT_BREAK_LINE;
-            case P_PAUSE:
-                  return 0.0; // score()->styleD(ST_SectionPause);
+            case P_ID::PAUSE:
+                  return 0.0; // score()->styleD(StyleIdx::SectionPause);
             default:
                   return Element::propertyDefault(id);
             }
@@ -263,7 +263,7 @@ QVariant LayoutBreak::propertyDefault(P_ID id) const
 
 void LayoutBreak::undoSetLayoutBreakType(LayoutBreakType t)
       {
-      undoChangeProperty(P_LAYOUT_BREAK, int(t));
+      undoChangeProperty(P_ID::LAYOUT_BREAK, int(t));
       }
 
 }

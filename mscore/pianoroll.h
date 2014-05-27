@@ -24,6 +24,7 @@ namespace Awl {
 namespace Ms {
 
 enum class POS : char;
+enum class SelState : char;
 
 class Score;
 class Staff;
@@ -77,7 +78,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual void timerEvent(QTimerEvent*) override;
 
    public slots:
-      void changeSelection(int);
+      void changeSelection(SelState);
 
    public:
       PianorollEditor(QWidget* parent = 0);

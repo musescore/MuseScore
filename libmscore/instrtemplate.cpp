@@ -130,7 +130,7 @@ InstrumentTemplate::InstrumentTemplate()
             clefTypes[i]._transposingClef = ClefType::G;
             staffLines[i]  = 5;
             smallStaff[i]  = false;
-            bracket[i]     = NO_BRACKET;
+            bracket[i]     = BracketType::NO_BRACKET;
             bracketSpan[i] = 0;
             barlineSpan[i] = 0;
             }
@@ -246,11 +246,11 @@ void InstrumentTemplate::write(Xml& xml) const
                         xml.tag("smallStaff", smallStaff[i]);
                   }
 
-            if (bracket[i] != NO_BRACKET) {
+            if (bracket[i] != BracketType::NO_BRACKET) {
                   if (i)
-                        xml.tag(QString("bracket staff=\"%1\"").arg(i+1), bracket[i]);
+                        xml.tag(QString("bracket staff=\"%1\"").arg(i+1), int(bracket[i]));
                   else
-                        xml.tag("bracket", bracket[i]);
+                        xml.tag("bracket", int(bracket[i]));
                   }
             if (bracketSpan[i] != 0) {
                   if (i)

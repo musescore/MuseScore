@@ -171,12 +171,12 @@ void KeySig::layout()
       Measure* prevMeas = measure() != nullptr ? measure()->prevMeasure() : nullptr;
       bool naturalsOn =
             t2 != 0 && ( prevMeas != nullptr && prevMeas->sectionBreak() == nullptr
-            && (score()->styleI(ST_keySigNaturals) != NAT_NONE || t1 == 0) );
+            && (score()->styleI(StyleIdx::keySigNaturals) != NAT_NONE || t1 == 0) );
       // naturals shoud go BEFORE accidentals if style says so
       // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
       bool prefixNaturals =
             naturalsOn
-            && (score()->styleI(ST_keySigNaturals) == NAT_BEFORE || t1 * t2 < 0);
+            && (score()->styleI(StyleIdx::keySigNaturals) == NAT_BEFORE || t1 * t2 < 0);
       // naturals should go AFTER accidentals if they should not go before!
       bool suffixNaturals = naturalsOn && !prefixNaturals;
 
@@ -320,7 +320,7 @@ void KeySig::setOldSig(int old)
 
 Space KeySig::space() const
       {
-      return Space(point(score()->styleS(ST_keysigLeftMargin)), width());
+      return Space(point(score()->styleS(StyleIdx::keysigLeftMargin)), width());
       }
 
 //---------------------------------------------------------
@@ -521,7 +521,7 @@ void KeySig::removeFromKeySigChain()
 
 void KeySig::undoSetShowCourtesy(bool v)
       {
-      score()->undoChangeProperty(this, P_SHOW_COURTESY, v);
+      score()->undoChangeProperty(this, P_ID::SHOW_COURTESY, v);
       }
 
 //---------------------------------------------------------
@@ -531,7 +531,7 @@ void KeySig::undoSetShowCourtesy(bool v)
 QVariant KeySig::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY: return int(showCourtesy());
+            case P_ID::SHOW_COURTESY: return int(showCourtesy());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -544,7 +544,7 @@ QVariant KeySig::getProperty(P_ID propertyId) const
 bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_SHOW_COURTESY:
+            case P_ID::SHOW_COURTESY:
                   setShowCourtesy(v.toBool());
                   break;
             default:
@@ -564,7 +564,7 @@ bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
 QVariant KeySig::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_SHOW_COURTESY:      return true;
+            case P_ID::SHOW_COURTESY:      return true;
             default:                   return Element::propertyDefault(id);
             }
       }

@@ -454,7 +454,7 @@ void MsScWriter::header(const QString title, const QString type,
             score->measures()->add(vbox);
             }
       if (!footer.isEmpty())
-            score->style()->set(Ms::ST_oddFooterC, footer);
+            score->style()->set(Ms::StyleIdx::oddFooterC, footer);
 
       Ms::Part* part = score->staff(0)->part();
       part->setLongName(instrumentName());

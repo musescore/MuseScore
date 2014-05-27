@@ -68,7 +68,7 @@ struct BracketItem {
       int _bracketSpan;
 
       BracketItem() {
-            _bracket = NO_BRACKET;
+            _bracket = BracketType::NO_BRACKET;
             _bracketSpan = 0;
             }
       BracketItem(BracketType a, int b) {

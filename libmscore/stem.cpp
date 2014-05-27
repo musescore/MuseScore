@@ -63,7 +63,7 @@ qreal Stem::stemLen() const
 
 qreal Stem::lineWidth() const
       {
-      return point(score()->styleS(ST_stemWidth));
+      return point(score()->styleS(StyleIdx::stemWidth));
       }
 
 //---------------------------------------------------------
@@ -157,7 +157,7 @@ void Stem::draw(QPainter* painter) const
       bool _up = up();
 
       // slashed half note stem
-      if (chord()->durationType().type() == TDuration::DurationType::V_HALF && stt->minimStyle() == TAB_MINIM_SLASHED) {
+      if (chord()->durationType().type() == TDuration::DurationType::V_HALF && stt->minimStyle() == TablatureMinimStyle::SLASHED) {
             // position slashes onto stem
             qreal y = _up ? -(_len+_userLen) + STAFFTYPE_TAB_SLASH_2STARTY_UP*sp : (_len+_userLen) - STAFFTYPE_TAB_SLASH_2STARTY_DN*sp;
             // if stems through, try to align slashes within or across lines
@@ -245,7 +245,7 @@ void Stem::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 
 void Stem::startEdit(MuseScoreView*, const QPointF&)
       {
-      undoPushProperty(P_USER_LEN);
+      undoPushProperty(P_ID::USER_LEN);
       }
 
 //---------------------------------------------------------
@@ -268,7 +268,7 @@ void Stem::editDrag(const EditData& ed)
 
 void Stem::reset()
       {
-      score()->undoChangeProperty(this, P_USER_LEN, 0.0);
+      score()->undoChangeProperty(this, P_ID::USER_LEN, 0.0);
       Element::reset();
       }
 
@@ -278,7 +278,7 @@ void Stem::reset()
 
 bool Stem::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      if ((e->type() == ElementType::TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TREMOLO_R64)) {
+      if ((e->type() == ElementType::TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TremoloType::R64)) {
             return true;
             }
       return false;
@@ -312,7 +312,7 @@ Element* Stem::drop(const DropData& data)
 QVariant Stem::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_USER_LEN: return userLen();
+            case P_ID::USER_LEN: return userLen();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -326,7 +326,7 @@ bool Stem::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
-            case P_USER_LEN:  setUserLen(v.toDouble()); break;
+            case P_ID::USER_LEN:  setUserLen(v.toDouble()); break;
             default:
                   return Element::setProperty(propertyId, v);
             }

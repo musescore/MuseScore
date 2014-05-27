@@ -257,7 +257,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   a->setData("key-courtesy");
                   }
             }
-      else if (e->type() == Element::ElementType::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == STAFF_STATE_INSTRUMENT) {
+      else if (e->type() == Element::ElementType::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == StaffStateType::INSTRUMENT) {
             popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
             }
@@ -346,7 +346,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             s->setTextStyleType(TEXT_STYLE_FRAME);
             s->setParent(e);
             score()->undoAddElement(s);
-            score()->select(s, SELECT_SINGLE, 0);
+            score()->select(s, SelectType::SINGLE, 0);
             startEdit(s);
             score()->setLayoutAll(true);
             }
@@ -358,7 +358,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setTextStyleType(TEXT_STYLE_FRAME);
             t->setParent(e);
             score()->undoAddElement(t);
-            score()->select(t, SELECT_SINGLE, 0);
+            score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "title-text") {
@@ -366,7 +366,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setTextStyleType(TEXT_STYLE_TITLE);
             t->setParent(e);
             score()->undoAddElement(t);
-            score()->select(t, SELECT_SINGLE, 0);
+            score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "subtitle-text") {
@@ -374,7 +374,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setTextStyleType(TEXT_STYLE_SUBTITLE);
             t->setParent(e);
             score()->undoAddElement(t);
-            score()->select(t, SELECT_SINGLE, 0);
+            score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "composer-text") {
@@ -382,7 +382,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setTextStyleType(TEXT_STYLE_COMPOSER);
             t->setParent(e);
             score()->undoAddElement(t);
-            score()->select(t, SELECT_SINGLE, 0);
+            score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "poet-text") {
@@ -390,7 +390,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setTextStyleType(TEXT_STYLE_POET);
             t->setParent(e);
             score()->undoAddElement(t);
-            score()->select(t, SELECT_SINGLE, 0);
+            score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "insert-hbox") {
@@ -399,7 +399,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             s->setBoxWidth(Spatium(w / s->spatium()));
             s->setParent(e);
             score()->undoAddElement(s);
-            score()->select(s, SELECT_SINGLE, 0);
+            score()->select(s, SelectType::SINGLE, 0);
             startEdit(s);
             }
       else if (cmd == "picture")
@@ -458,10 +458,10 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   }
             }
       else if (cmd == "smallNote")
-            score()->undoChangeProperty(e, P_SMALL, !static_cast<Note*>(e)->small());
+            score()->undoChangeProperty(e, P_ID::SMALL, !static_cast<Note*>(e)->small());
       else if (cmd == "clef-courtesy") {
             bool show = !static_cast<Clef*>(e)->showCourtesy();
-            score()->undoChangeProperty(e, P_SHOW_COURTESY, show);
+            score()->undoChangeProperty(e, P_ID::SHOW_COURTESY, show);
             }
       else if (cmd == "st-props") {
             StaffTextProperties rp(static_cast<StaffText*>(e));
@@ -483,12 +483,12 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   qDebug("text-props %d %d", int(ot->textStyleType()), int(nText->textStyleType()));
                   if (ot->textStyleType() != nText->textStyleType()) {
                         nText->restyle(ot->textStyleType());
-                        ot->undoChangeProperty(P_TEXT_STYLE_TYPE, nText->textStyleType());
+                        ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, nText->textStyleType());
                         }
                   if (ot->textStyle() != nText->textStyle())
-                        ot->undoChangeProperty(P_TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
+                        ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
                   if (ot->text() != nText->text())
-                        ot->undoChangeProperty(P_TEXT, nText->text());
+                        ot->undoChangeProperty(P_ID::TEXT, nText->text());
                   }
             delete nText;
             }

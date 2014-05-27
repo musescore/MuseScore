@@ -94,7 +94,7 @@ class Harmony : public Text {
       void determineRootBaseSpelling();
       virtual void draw(QPainter*) const;
       void render(const QString&, qreal&, qreal&);
-      void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType spelling = STANDARD, bool lowerCase = false);
+      void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType spelling = NoteSpellingType::STANDARD, bool lowerCase = false);
       virtual void styleChanged() override     { render(); }
       virtual void setTextStyle(const TextStyle& st) override;
 

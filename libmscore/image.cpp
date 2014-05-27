@@ -173,15 +173,15 @@ QSizeF Image::sizeForScale(const QSizeF& scale) const
 QVariant Image::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_AUTOSCALE:
+            case P_ID::AUTOSCALE:
                   return autoScale();
-            case P_SIZE:
+            case P_ID::SIZE:
                   return size();
-            case P_SCALE:
+            case P_ID::SCALE:
                   return scale();
-            case P_LOCK_ASPECT_RATIO:
+            case P_ID::LOCK_ASPECT_RATIO:
                   return lockAspectRatio();
-            case P_SIZE_IS_SPATIUM:
+            case P_ID::SIZE_IS_SPATIUM:
                   return sizeIsSpatium();
             default:
                   return Element::getProperty(propertyId);
@@ -197,19 +197,19 @@ bool Image::setProperty(P_ID propertyId, const QVariant& v)
       bool rv = true;
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
-            case P_AUTOSCALE:
+            case P_ID::AUTOSCALE:
                   setAutoScale(v.toBool());
                   break;
-            case P_SIZE:
+            case P_ID::SIZE:
                   setSize(v.toSizeF());
                   break;
-            case P_SCALE:
+            case P_ID::SCALE:
                   setScale(v.toSizeF());
                   break;
-            case P_LOCK_ASPECT_RATIO:
+            case P_ID::LOCK_ASPECT_RATIO:
                   setLockAspectRatio(v.toBool());
                   break;
-            case P_SIZE_IS_SPATIUM:
+            case P_ID::SIZE_IS_SPATIUM:
                   setSizeIsSpatium(v.toBool());
                   break;
             default:
@@ -228,10 +228,10 @@ bool Image::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Image::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_AUTOSCALE:             return defaultAutoScale;
-            case P_SIZE:                  break;
-            case P_LOCK_ASPECT_RATIO:     return defaultLockAspectRatio;
-            case P_SIZE_IS_SPATIUM:       return defaultSizeIsSpatium;
+            case P_ID::AUTOSCALE:             return defaultAutoScale;
+            case P_ID::SIZE:                  break;
+            case P_ID::LOCK_ASPECT_RATIO:     return defaultLockAspectRatio;
+            case P_ID::SIZE_IS_SPATIUM:       return defaultSizeIsSpatium;
             default:                      return Element::propertyDefault(id);
             }
       return QVariant();
@@ -351,10 +351,10 @@ void Image::write(Xml& xml) const
       xml.tag("path", _storeItem ? _storeItem->hashName() : relativeFilePath);
       xml.tag("linkPath", relativeFilePath);
 
-      writeProperty(xml, P_AUTOSCALE);
-      writeProperty(xml, P_SIZE);
-      writeProperty(xml, P_LOCK_ASPECT_RATIO);
-      writeProperty(xml, P_SIZE_IS_SPATIUM);
+      writeProperty(xml, P_ID::AUTOSCALE);
+      writeProperty(xml, P_ID::SIZE);
+      writeProperty(xml, P_ID::LOCK_ASPECT_RATIO);
+      writeProperty(xml, P_ID::SIZE_IS_SPATIUM);
 
       xml.etag();
       }
@@ -371,13 +371,13 @@ void Image::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "autoScale")
-                  setProperty(P_AUTOSCALE, Ms::getProperty(P_AUTOSCALE, e));
+                  setProperty(P_ID::AUTOSCALE, Ms::getProperty(P_ID::AUTOSCALE, e));
             else if (tag == "size")
-                  setProperty(P_SIZE, Ms::getProperty(P_SIZE, e));
+                  setProperty(P_ID::SIZE, Ms::getProperty(P_ID::SIZE, e));
             else if (tag == "lockAspectRatio")
-                  setProperty(P_LOCK_ASPECT_RATIO, Ms::getProperty(P_LOCK_ASPECT_RATIO, e));
+                  setProperty(P_ID::LOCK_ASPECT_RATIO, Ms::getProperty(P_ID::LOCK_ASPECT_RATIO, e));
             else if (tag == "sizeIsSpatium")
-                  setProperty(P_SIZE_IS_SPATIUM, Ms::getProperty(P_SIZE_IS_SPATIUM, e));
+                  setProperty(P_ID::SIZE_IS_SPATIUM, Ms::getProperty(P_ID::SIZE_IS_SPATIUM, e));
             else if (tag == "path")
                   _storePath = e.readElementText();
             else if (tag == "linkPath")

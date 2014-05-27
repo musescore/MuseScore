@@ -257,17 +257,17 @@ void DrumrollEditor::selectionChanged()
             QGraphicsItem* item = items[0];
             Note* note = static_cast<Note*>(item->data(0).value<void*>());
             if (note)
-                  _score->select(note, SELECT_SINGLE, 0);
+                  _score->select(note, SelectType::SINGLE, 0);
             }
       else if (items.size() == 0) {
-            _score->select(0, SELECT_SINGLE, 0);
+            _score->select(0, SelectType::SINGLE, 0);
             }
       else {
-            _score->select(0, SELECT_SINGLE, 0);
+            _score->select(0, SelectType::SINGLE, 0);
             foreach(QGraphicsItem* item, items) {
                   Note* note = static_cast<Note*>(item->data(0).value<void*>());
                   if (note)
-                        _score->select(note, SELECT_ADD, 0);
+                        _score->select(note, SelectType::ADD, 0);
                   }
             }
       _score->setUpdateAll();
@@ -279,7 +279,7 @@ void DrumrollEditor::selectionChanged()
 //   changeSelection
 //---------------------------------------------------------
 
-void DrumrollEditor::changeSelection(int)
+void DrumrollEditor::changeSelection(SelState)
       {
 //      gv->scene()->blockSignals(true);
       gv->scene()->clearSelection();
