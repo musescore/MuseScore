@@ -1884,7 +1884,7 @@ void Chord::layoutPitched()
             // we may need to increase distance to previous chord
             Chord* pc = 0;
 
-            if (_noteType == NOTE_NORMAL) {
+            if (_noteType == NoteType::NORMAL) {
                   // normal note
                   if (gnb) {
                         // if there are grace notes before, get last
