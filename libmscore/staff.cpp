@@ -701,9 +701,9 @@ void Staff::setStaffType(const StaffType* st)
 
       if (_staffType.group() != csg) {
             switch(_staffType.group()) {
-                  case TAB_STAFF_GROUP:        ct = ClefType(score()->styleI(StyleIdx::tabClef)); break;
-                  case STANDARD_STAFF_GROUP:   ct = ClefType::G; break;      // TODO: use preferred clef for instrument
-                  case PERCUSSION_STAFF_GROUP: ct = ClefType::PERC; break;
+                  case StaffGroup::TAB:        ct = ClefType(score()->styleI(StyleIdx::tabClef)); break;
+                  case StaffGroup::STANDARD:   ct = ClefType::G; break;      // TODO: use preferred clef for instrument
+                  case StaffGroup::PERCUSSION: ct = ClefType::PERC; break;
                   }
             clefs.setClef(0, ClefTypeList(ct, ct));
             }
@@ -744,7 +744,7 @@ void Staff::initFromStaffType(const StaffType* staffType)
       {
       // get staff type if given (if none, get default preset for default staff group)
       if (!staffType)
-            staffType = StaffType::getDefaultPreset(STANDARD_STAFF_GROUP);
+            staffType = StaffType::getDefaultPreset(StaffGroup::STANDARD);
 
       // use selected staff type
       setStaffType(staffType);
@@ -774,7 +774,7 @@ bool Staff::show() const
 
 bool Staff::genKeySig()
       {
-      if (_staffType.group() == TAB_STAFF_GROUP)
+      if (_staffType.group() == StaffGroup::TAB)
             return false;
       else
             return _staffType.genKeysig();
@@ -786,7 +786,7 @@ bool Staff::genKeySig()
 
 bool Staff::showLedgerLines()
       {
-      if (_staffType.group() == TAB_STAFF_GROUP)
+      if (_staffType.group() == StaffGroup::TAB)
             return false;
       else
             return _staffType.showLedgerLines();

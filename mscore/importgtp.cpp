@@ -3983,7 +3983,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             stavesMap.append(score->staffIdx(staff));
             cloneStaves(score, pscore, stavesMap);
 
-            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
+            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   p->setStaves(2);
                   Staff* s1 = p->staff(1);
                   s1->setUpdateKeymap(true);
@@ -4003,7 +4003,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             excerpt->parts().append(part);
             score->excerpts().append(excerpt);
 
-            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
+            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   Staff* staff2 = pscore->staff(1);
                   staff2->setStaffType(StaffType::preset(StaffTypes::TAB_DEFAULT));
                   }

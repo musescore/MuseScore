@@ -292,13 +292,13 @@ void MuseScore::updateInputState(Score* score)
       if (is.noteEntryMode()) {
             Staff* staff = score->staff(is.track() / VOICES);
             switch (staff->staffType()->group()) {
-                  case STANDARD_STAFF_GROUP:
+                  case StaffGroup::STANDARD:
                         changeState(STATE_NOTE_ENTRY_PITCHED);
                         break;
-                  case TAB_STAFF_GROUP:
+                  case StaffGroup::TAB:
                         changeState(STATE_NOTE_ENTRY_TAB);
                         break;
-                  case PERCUSSION_STAFF_GROUP:
+                  case StaffGroup::PERCUSSION:
                         changeState(STATE_NOTE_ENTRY_DRUM);
                         break;
                   }

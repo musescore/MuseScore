@@ -248,10 +248,10 @@ enum class UpDownMode : char {
 //   StaffGroup
 //---------------------------------------------------------
 
-enum StaffGroup {
-      STANDARD_STAFF_GROUP, PERCUSSION_STAFF_GROUP, TAB_STAFF_GROUP
+enum class StaffGroup : char {
+      STANDARD, PERCUSSION, TAB
       };
-const int STAFF_GROUP_MAX = TAB_STAFF_GROUP + 1;      // out of enum to avoid compiler complains about not handled switch cases
+const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avoid compiler complains about not handled switch cases
 
 //---------------------------------------------------------
 //   Text Style Type

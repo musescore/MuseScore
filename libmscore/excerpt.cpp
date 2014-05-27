@@ -163,7 +163,7 @@ Score* createExcerpt(const QList<Part*>& parts)
       //
       if (oscore->styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch)) {
             for (Staff* staff : score->staves()) {
-                  if (staff->staffType()->group() == PERCUSSION_STAFF_GROUP)
+                  if (staff->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
                   Interval interval = staff->part()->instr()->transpose();
                   if (interval.isZero())

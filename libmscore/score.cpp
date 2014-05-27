@@ -2578,7 +2578,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       undo(new ChangeConcertPitch(this, flag));       // change style flag
 
       for (Staff* staff : _staves) {
-            if (staff->staffType()->group() == PERCUSSION_STAFF_GROUP)
+            if (staff->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
             Interval interval = staff->part()->instr()->transpose();
             if (interval.isZero())

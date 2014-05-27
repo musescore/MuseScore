@@ -1165,14 +1165,14 @@ void Score::upDown(bool up, UpDownMode mode)
             int fret     = oNote->fret();
 
             switch (oNote->staff()->staffType()->group()) {
-                  case PERCUSSION_STAFF_GROUP:
+                  case StaffGroup::PERCUSSION:
                         {
                         Drumset* ds = part->instr()->drumset();
                         if (ds)
                               newPitch = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
                         }
                         break;
-                  case TAB_STAFF_GROUP:
+                  case StaffGroup::TAB:
                         {
                         const StringData* stringData = part->instr()->stringData();
                         switch (mode) {
@@ -1229,7 +1229,7 @@ void Score::upDown(bool up, UpDownMode mode)
                               }
                         }
                         break;
-                  case STANDARD_STAFF_GROUP:
+                  case StaffGroup::STANDARD:
                         switch(mode) {
                               case UpDownMode::OCTAVE:
                                     if (up) {
@@ -1293,7 +1293,7 @@ void Score::upDown(bool up, UpDownMode mode)
                   }
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
-            else if (oNote->staff()->staffType()->group() == TAB_STAFF_GROUP) {
+            else if (oNote->staff()->staffType()->group() == StaffGroup::TAB) {
                   bool refret = false;
                   if (oNote->string() != string) {
                         undoChangeProperty(oNote, P_ID::STRING, string);
@@ -1540,8 +1540,8 @@ void Score::moveUp(Chord* chord)
 
       QList<Staff*>* staves = part->staves();
       // we know that staffMove+rstaff-1 index exists due to the previous condition.
-      if (staff->staffType()->group() != STANDARD_STAFF_GROUP ||
-          staves->at(rstaff+staffMove-1)->staffType()->group() != STANDARD_STAFF_GROUP) {
+      if (staff->staffType()->group() != StaffGroup::STANDARD ||
+          staves->at(rstaff+staffMove-1)->staffType()->group() != StaffGroup::STANDARD) {
             qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
             }
       else  {
@@ -1569,8 +1569,8 @@ void Score::moveDown(Chord* chord)
 
       QList<Staff*>* staves = part->staves();
       // we know that staffMove+rstaff+1 index exists due to the previous condition.
-      if (staff->staffType()->group() != STANDARD_STAFF_GROUP ||
-          staves->at(staffMove+rstaff+1)->staffType()->group() != STANDARD_STAFF_GROUP) {
+      if (staff->staffType()->group() != StaffGroup::STANDARD ||
+          staves->at(staffMove+rstaff+1)->staffType()->group() != StaffGroup::STANDARD) {
             qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
             }
       else  {

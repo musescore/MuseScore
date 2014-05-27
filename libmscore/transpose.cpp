@@ -211,7 +211,7 @@ int transposeTpcDiatonicByKey(int tpc, int steps, int key, bool keepAlteredDegre
 
 void Score::cmdTransposeStaff(int staffIdx, Interval interval, bool useDoubleSharpsFlats)
       {
-      if (staff(staffIdx)->staffType()->group() == PERCUSSION_STAFF_GROUP)
+      if (staff(staffIdx)->staffType()->group() == StaffGroup::PERCUSSION)
             return;
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
@@ -302,7 +302,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
 
       if (_selection.isList()) {
             foreach(Element* e, _selection.uniqueElements()) {
-                  if (e->staff()->staffType()->group() == PERCUSSION_STAFF_GROUP)
+                  if (e->staff()->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
                   if (e->type() == Element::ElementType::NOTE) {
                         Note* note = static_cast<Note*>(e);
@@ -353,7 +353,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
       QList<Staff*> sl;
       for (int staffIdx = _selection.staffStart(); staffIdx < _selection.staffEnd(); ++staffIdx) {
             Staff* s = staff(staffIdx);
-            if (s->staffType()->group() == PERCUSSION_STAFF_GROUP)      // ignore percussion staff
+            if (s->staffType()->group() == StaffGroup::PERCUSSION)      // ignore percussion staff
                   continue;
             if (sl.contains(s))
                   continue;
@@ -376,7 +376,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
 
       for (Segment* segment = _selection.startSegment(); segment && segment != _selection.endSegment(); segment = segment->next1()) {
             for (int st : tracks) {
-                  if (staff(st/VOICES)->staffType()->group() == PERCUSSION_STAFF_GROUP)
+                  if (staff(st/VOICES)->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
                   Element* e = segment->element(st);
                   if (!e || e->type() != Element::ElementType::CHORD)
@@ -435,7 +435,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
 void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval& interval)
       {
       for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
-            if (staff(staffIdx)->staffType()->group() == PERCUSSION_STAFF_GROUP)
+            if (staff(staffIdx)->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
 
             KeyList* km = staff(staffIdx)->keymap();
