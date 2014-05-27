@@ -30,6 +30,12 @@ namespace Ms {
 QList<TablatureFretFont>     StaffType::_fretFonts      = QList<TablatureFretFont>();
 QList<TablatureDurationFont> StaffType::_durationFonts  = QList<TablatureDurationFont>();
 
+const char StaffType::groupNames[STAFF_GROUP_MAX][STAFF_GROUP_NAME_MAX_LENGTH] = {
+      QT_TRANSLATE_NOOP("Staff type group name", "Standard"),
+      QT_TRANSLATE_NOOP("Staff type group name", "Percussion"),
+      QT_TRANSLATE_NOOP("Staff type group name", "Tablature")
+      };
+
 //---------------------------------------------------------
 //   StaffType
 //---------------------------------------------------------
@@ -95,15 +101,9 @@ const char* StaffType::groupName() const
 
 const char* StaffType::groupName(StaffGroup r)
       {
-      switch (r) {
-            default:
-            case StaffGroup::STANDARD:
-                  return "pitched";
-            case StaffGroup::PERCUSSION:
-                  return "percussion";
-            case StaffGroup::TAB:
-                  return "tablature";
-            }
+      if (r < STANDARD_STAFF_GROUP || r >= STAFF_GROUP_MAX)
+            r = STANDARD_STAFF_GROUP;
+      return groupNames[r];
       }
 
 //---------------------------------------------------------

@@ -24,6 +24,7 @@
 #include "ui_editstaff.h"
 #include "ui_selectinstr.h"
 #include "libmscore/instrument.h"
+#include "libmscore/stafftype.h"
 
 namespace Ms {
 
@@ -39,6 +40,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       Q_OBJECT
 
       Staff*      staff;
+      Staff*      orgStaff;
       Instrument  instrument;
       int         _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
 
@@ -51,7 +53,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
 
    private slots:
       void bboxClicked(QAbstractButton* button);
-      void editDrumsetClicked();
+//      void editDrumsetClicked();        UNUSED?
       void editStringDataClicked();
       void showInstrumentDialog();
       void showStaffTypeDialog();
@@ -61,6 +63,11 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       void maxPitchAClicked();
       void minPitchPClicked();
       void maxPitchPClicked();
+      void lineDistanceChanged();
+      void numOfLinesChanged();
+      void showClefChanged();
+      void showTimeSigChanged();
+      void showBarlinesChanged();
 
    signals:
       void instrumentChanged();
