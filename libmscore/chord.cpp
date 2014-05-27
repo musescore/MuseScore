@@ -2257,7 +2257,7 @@ Element* Chord::drop(const DropData& data)
                         atr = 0;
                         // if attribute is already there, remove
                         // score()->cmdRemove(oa); // unexpected behaviour?
-                        score()->select(oa, SELECT_SINGLE, 0);
+                        score()->select(oa, SelectType::SINGLE, 0);
                         }
                   else {
                         atr->setParent(this);

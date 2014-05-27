@@ -188,7 +188,7 @@ void TestCopyPaste::copypastestaff(const char* idx)
       QVERIFY(m1 != 0);
       QVERIFY(m2 != 0);
 
-      score->select(m2, SELECT_RANGE, 0);
+      score->select(m2, SelectType::RANGE, 0);
       QVERIFY(score->selection().canCopy());
       QString mimeType = score->selection().mimeType();
       QVERIFY(!mimeType.isEmpty());
@@ -198,7 +198,7 @@ void TestCopyPaste::copypastestaff(const char* idx)
 
       score->deselectAll();
 
-      score->select(m2, SELECT_RANGE, 1);
+      score->select(m2, SelectType::RANGE, 1);
       paste(score);
       score->doLayout();
 
@@ -217,7 +217,7 @@ void TestCopyPaste::copyPastePartial() {
       s = s->next(Segment::SegChordRest);
       score->select(s->element(0));
       s = s->next(Segment::SegChordRest);
-      score->select(s->element(4), SelectType::SELECT_RANGE);
+      score->select(s->element(4), SelectType::RANGE);
 
       QVERIFY(score->selection().canCopy());
       QString mimeType = score->selection().mimeType();
