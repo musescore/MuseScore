@@ -383,7 +383,7 @@ Score::FileError importBB(Score* score, const QString& name)
             qDebug("Cannot open file <%s>", qPrintable(name));
             return Score::FILE_OPEN_ERROR;
             }
-      score->style()->set(ST_chordsXmlFile, true);
+      score->style()->set(StyleIdx::chordsXmlFile, true);
       score->style()->chordList()->read("chords.xml");
       *(score->sigmap()) = bb.siglist();
 
@@ -494,7 +494,7 @@ Score::FileError importBB(Score* score, const QString& name)
             if (c.bass > 0)
                   h->setBaseTpc(table[c.bass-1]);
             else
-                  h->setBaseTpc(INVALID_TPC);
+                  h->setBaseTpc(Tpc::INVALID);
             h->setId(c.extension);
             h->getDescription();
             h->render();

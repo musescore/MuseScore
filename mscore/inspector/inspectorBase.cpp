@@ -70,15 +70,15 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             qFatal("not supported widget %s", w->metaObject()->className());
 
       switch(propertyType(ii.t)) {
-            case T_POINT:
-            case T_SP_REAL:
+            case P_TYPE::POINT:
+            case P_TYPE::SP_REAL:
                   v = v.toDouble() * inspector->element()->score()->spatium();
                   break;
-            case T_TEMPO:
+            case P_TYPE::TEMPO:
                   v = v.toDouble() / 60.0;
                   break;
-            case T_POINT_MM:
-            case T_SIZE_MM:
+            case P_TYPE::POINT_MM:
+            case P_TYPE::SIZE_MM:
                   v = v.toDouble() * MScore::DPMM;
                   break;
             default:
@@ -99,13 +99,13 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       P_ID id  = ii.t;
 
       P_TYPE t = propertyType(id);
-      if (t == T_POINT || t == T_SP_REAL)
+      if (t == P_TYPE::POINT || t == P_TYPE::SP_REAL)
             val = val.toDouble() / inspector->element()->score()->spatium();
-      else if (t == T_TEMPO)
+      else if (t == P_TYPE::TEMPO)
             val = val.toDouble() * 60.0;
-      else if (t == T_POINT_MM)
+      else if (t == P_TYPE::POINT_MM)
             val = val.toDouble() / MScore::DPMM;
-      else if (t == T_SIZE_MM)
+      else if (t == P_TYPE::SIZE_MM)
             val = val.toDouble() / MScore::DPMM;
 
       if (qobject_cast<QDoubleSpinBox*>(w))
@@ -149,17 +149,17 @@ bool InspectorBase::isDefault(const InspectorItem& ii)
       P_TYPE t     = propertyType(id);
       QVariant val = getValue(ii);
       QVariant def = e->propertyDefault(id);
-      if (t == T_SIZE || t == T_SCALE || t == T_SIZE_MM) {
+      if (t == P_TYPE::SIZE || t == P_TYPE::SCALE || t == P_TYPE::SIZE_MM) {
             QSizeF sz = def.toSizeF();
             qreal v = ii.sv == 0 ? sz.width() : sz.height();
             return val.toDouble() == v;
             }
-      if (t == T_POINT || t == T_POINT_MM) {
+      if (t == P_TYPE::POINT || t == P_TYPE::POINT_MM) {
             QPointF sz = def.toPointF();
             qreal v = ii.sv == 0 ? sz.x() : sz.y();
             return val.toDouble() == v;
             }
-      if (t == T_FRACTION) {
+      if (t == P_TYPE::FRACTION) {
             Fraction f = def.value<Fraction>();
             int v = ii.sv == 0 ? f.numerator() : f.denominator();
             return val.toInt() == v;
@@ -198,21 +198,21 @@ void InspectorBase::setElement()
             for (int k = 0; k < ii.parent; ++k)
                   e = e->parent();
             QVariant val = e->getProperty(id);
-            if (pt == T_SIZE || pt == T_SCALE || pt == T_SIZE_MM) {
+            if (pt == P_TYPE::SIZE || pt == P_TYPE::SCALE || pt == P_TYPE::SIZE_MM) {
                   QSizeF sz = val.toSizeF();
                   if (ii.sv == 0)
                         val = QVariant(sz.width());
                   else
                         val = QVariant(sz.height());
                   }
-            else if (pt == T_POINT || pt == T_POINT_MM) {
+            else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_MM) {
                   QPointF sz = val.toPointF();
                   if (ii.sv == 0)
                         val = QVariant(sz.x());
                   else
                         val = QVariant(sz.y());
                   }
-            else if (pt == T_FRACTION) {
+            else if (pt == P_TYPE::FRACTION) {
                   Fraction f = val.value<Fraction>();
                   if (ii.sv == 0)
                         val = QVariant(f.numerator());
@@ -245,21 +245,21 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
             foreach(Element* e, inspector->el()) {
                   for (int k = 0; k < ii.parent; ++k)
                         e = e->parent();
-                  if (pt == T_SIZE || pt == T_SCALE || pt == T_SIZE_MM) {
+                  if (pt == P_TYPE::SIZE || pt == P_TYPE::SCALE || pt == P_TYPE::SIZE_MM) {
                         QSizeF sz = e->getProperty(id).toSizeF();
                         if (ii.sv == 0)
                               valuesAreDifferent = sz.width() != val.toDouble();
                         else
                               valuesAreDifferent = sz.height() != val.toDouble();
                         }
-                  else if (pt == T_POINT || pt == T_POINT_MM) {
+                  else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_MM) {
                         QPointF sz = e->getProperty(id).toPointF();
                         if (ii.sv == 0)
                               valuesAreDifferent = sz.x() != val.toDouble();
                         else
                               valuesAreDifferent = sz.y() != val.toDouble();
                         }
-                  else if (pt == T_FRACTION) {
+                  else if (pt == P_TYPE::FRACTION) {
                         Fraction f = e->getProperty(id).value<Fraction>();
                         if (ii.sv == 0)
                               valuesAreDifferent = f.numerator() != val.toInt();
@@ -323,7 +323,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
                   ps = PropertyStyle::UNSTYLED;
 
             QVariant val1 = e->getProperty(id);
-            if (pt == T_SIZE || pt == T_SCALE || pt == T_SIZE_MM) {
+            if (pt == P_TYPE::SIZE || pt == P_TYPE::SCALE || pt == P_TYPE::SIZE_MM) {
                   qreal v   = val2.toDouble();
                   QSizeF sz = val1.toSizeF();
                   if (ii.sv == 0) {
@@ -335,7 +335,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
                               score->undoChangeProperty(e, id, QVariant(QSizeF(sz.width(), v)), ps);
                         }
                   }
-            else if (pt == T_POINT || pt == T_POINT_MM) {
+            else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_MM) {
                   qreal v    = val2.toDouble();
                   QPointF sz = val1.toPointF();
                   if (ii.sv == 0) {
@@ -347,7 +347,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
                               score->undoChangeProperty(e, id, QVariant(QPointF(sz.x(), v)), ps);
                         }
                   }
-            else if (pt == T_FRACTION) {
+            else if (pt == P_TYPE::FRACTION) {
                   int v      = val2.toInt();
                   Fraction f = val1.value<Fraction>();
                   if (ii.sv == 0) {

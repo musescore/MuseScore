@@ -147,7 +147,7 @@ void Arpeggio::layout()
                   qreal _spatium = spatium();
                   qreal x1 = _spatium * .5;
                   qreal w  = symBbox(SymId::arrowheadBlackUp).width();
-                  qreal lw = score()->styleS(ST_ArpeggioLineWidth).val() * _spatium;
+                  qreal lw = score()->styleS(StyleIdx::ArpeggioLineWidth).val() * _spatium;
                   setbbox(QRectF(x1 - w * .5, y1, w, y2 - y1 + lw * .5));
                   }
                   break;
@@ -156,15 +156,15 @@ void Arpeggio::layout()
                   qreal _spatium = spatium();
                   qreal x1 = _spatium * .5;
                   qreal w  = symBbox(SymId::arrowheadBlackDown).width();
-                  qreal lw = score()->styleS(ST_ArpeggioLineWidth).val() * _spatium;
+                  qreal lw = score()->styleS(StyleIdx::ArpeggioLineWidth).val() * _spatium;
                   setbbox(QRectF(x1 - w * .5, y1 - lw * .5, w, y2 - y1 + lw * .5));
                   }
                   break;
 
             case ArpeggioType::BRACKET: {
                   qreal _spatium = spatium();
-                  qreal lw = score()->styleS(ST_ArpeggioLineWidth).val() * _spatium * .5;
-                  qreal w  = score()->styleS(ST_ArpeggioHookLen).val() * _spatium;
+                  qreal lw = score()->styleS(StyleIdx::ArpeggioLineWidth).val() * _spatium * .5;
+                  qreal w  = score()->styleS(StyleIdx::ArpeggioHookLen).val() * _spatium;
                   setbbox(QRectF(0.0, y1, w, y2-y1).adjusted(-lw, -lw, lw, lw));
                   break;
                   }
@@ -185,7 +185,7 @@ void Arpeggio::draw(QPainter* p) const
       qreal y2 = _height + _userLen2;
 
       p->setPen(QPen(curColor(),
-         score()->styleS(ST_ArpeggioLineWidth).val() * _spatium,
+         score()->styleS(StyleIdx::ArpeggioLineWidth).val() * _spatium,
          Qt::SolidLine, Qt::RoundCap));
 
       switch (arpeggioType()) {
@@ -231,7 +231,7 @@ void Arpeggio::draw(QPainter* p) const
 
             case ArpeggioType::BRACKET:
                   {
-                  qreal w = score()->styleS(ST_ArpeggioHookLen).val() * _spatium;
+                  qreal w = score()->styleS(StyleIdx::ArpeggioHookLen).val() * _spatium;
                   p->drawLine(QLineF(0.0, y1, 0.0, y2));
                   p->drawLine(QLineF(0.0, y1, w, y1));
                   p->drawLine(QLineF(0.0, y2, w, y2));
@@ -308,8 +308,8 @@ QPointF Arpeggio::gripAnchor(int n) const
 
 void Arpeggio::startEdit(MuseScoreView*, const QPointF&)
       {
-      undoPushProperty(P_ARP_USER_LEN1);
-      undoPushProperty(P_ARP_USER_LEN2);
+      undoPushProperty(P_ID::ARP_USER_LEN1);
+      undoPushProperty(P_ID::ARP_USER_LEN2);
       }
 
 //---------------------------------------------------------
@@ -395,9 +395,9 @@ Element* Arpeggio::drop(const DropData& data)
 QVariant Arpeggio::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_ARP_USER_LEN1:
+            case P_ID::ARP_USER_LEN1:
                   return userLen1();
-            case P_ARP_USER_LEN2:
+            case P_ID::ARP_USER_LEN2:
                   return userLen2();
             default:
                   break;
@@ -412,10 +412,10 @@ QVariant Arpeggio::getProperty(P_ID propertyId) const
 bool Arpeggio::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch(propertyId) {
-            case P_ARP_USER_LEN1:
+            case P_ID::ARP_USER_LEN1:
                   setUserLen1(val.toDouble());
                   break;
-            case P_ARP_USER_LEN2:
+            case P_ID::ARP_USER_LEN2:
                   setUserLen2(val.toDouble());
                   break;
             default:

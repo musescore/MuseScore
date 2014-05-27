@@ -161,14 +161,14 @@ Score* createExcerpt(const QList<Part*>& parts)
       //
       // handle transposing instruments
       //
-      if (oscore->styleB(ST_concertPitch) != score->styleB(ST_concertPitch)) {
+      if (oscore->styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch)) {
             for (Staff* staff : score->staves()) {
                   if (staff->staffType()->group() == PERCUSSION_STAFF_GROUP)
                         continue;
                   Interval interval = staff->part()->instr()->transpose();
                   if (interval.isZero())
                         continue;
-                  if (oscore->styleB(ST_concertPitch))
+                  if (oscore->styleB(StyleIdx::concertPitch))
                         interval.flip();
 
                   int staffIdx   = staff->idx();

@@ -60,13 +60,13 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       zActual->setValue(timesig->sig().numerator());
       nActual->setValue(timesig->sig().denominator());
       switch (timesig->timeSigType()) {
-            case TSIG_NORMAL:
+            case TimeSigType::NORMAL:
                   textButton->setChecked(true);
                   break;
-            case TSIG_FOUR_FOUR:
+            case TimeSigType::FOUR_FOUR:
                   fourfourButton->setChecked(true);
                   break;
-            case TSIG_ALLA_BREVE:
+            case TimeSigType::ALLA_BREVE:
                   allaBreveButton->setChecked(true);
                   break;
             }
@@ -93,7 +93,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
             if (str.size() > 0) {
                   otherCombo->setItemData(idx, (int)symId);
                   // if time sig matches this symbol string, set as selected
-                  if (timesig->timeSigType() == TSIG_NORMAL && timesig->denominatorString().isEmpty()
+                  if (timesig->timeSigType() == TimeSigType::NORMAL && timesig->denominatorString().isEmpty()
                   && timesig->numeratorString() == str) {
                         textButton->setChecked(false);
                         otherButton->setChecked(true);
@@ -120,16 +120,16 @@ void TimeSigProperties::accept()
       if (nText->text() != timesig->denominatorString())
             timesig->setDenominatorString(nText->text());
 
-      TimeSigType ts = TSIG_NORMAL;
+      TimeSigType ts = TimeSigType::NORMAL;
       if (textButton->isChecked())
-            ts = TSIG_NORMAL;
+            ts = TimeSigType::NORMAL;
       else if (fourfourButton->isChecked())
-            ts = TSIG_FOUR_FOUR;
+            ts = TimeSigType::FOUR_FOUR;
       else if (allaBreveButton->isChecked())
-            ts = TSIG_ALLA_BREVE;
+            ts = TimeSigType::ALLA_BREVE;
       else if (otherButton->isChecked()) {
             // if other symbol, set as normal text...
-            ts = TSIG_NORMAL;
+            ts = TimeSigType::NORMAL;
             ScoreFont* scoreFont = timesig->score()->scoreFont();
             SymId symId = (SymId)( otherCombo->itemData(otherCombo->currentIndex()).toInt() );
             // ...and set numerator to font string for symbol and denominator to empty string

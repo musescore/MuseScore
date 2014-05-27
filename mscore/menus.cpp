@@ -404,13 +404,13 @@ Palette* MuseScore::newBreaksPalette()
       cell->mag = 1.2;
 
       Spacer* spacer = new Spacer(gscore);
-      spacer->setSpacerType(SPACER_DOWN);
+      spacer->setSpacerType(SpacerType::DOWN);
       spacer->setGap(3 * _spatium);
       cell = sp->append(spacer, tr("Staff spacer down"));
       cell->mag = .7;
 
       spacer = new Spacer(gscore);
-      spacer->setSpacerType(SPACER_UP);
+      spacer->setSpacerType(SpacerType::UP);
       spacer->setGap(3 * _spatium);
       cell = sp->append(spacer, tr("Staff spacer up"));
       cell->mag = .7;
@@ -469,10 +469,10 @@ Palette* MuseScore::newTremoloPalette()
             QT_TR_NOOP("64th between notes")
             };
 
-      for (int i = TREMOLO_R8; i <= TREMOLO_C64; ++i) {
+      for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
             Tremolo* tremolo = new Tremolo(gscore);
             tremolo->setTremoloType(TremoloType(i));
-            sp->append(tremolo, tr(tremoloName[i - TREMOLO_R8]));
+            sp->append(tremolo, tr(tremoloName[i - int(TremoloType::R8)]));
             }
       return sp;
       }
@@ -519,7 +519,7 @@ Palette* MuseScore::newArticulationsPalette()
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
-      for (int i = 0; i < ARTICULATIONS; ++i) {
+      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             Articulation* s = new Articulation(gscore);
             s->setArticulationType(ArticulationType(i));
             sp->append(s, qApp->translate("articulation", qPrintable(s->subtypeUserName())));
@@ -551,13 +551,13 @@ Palette* MuseScore::newBracketsPalette()
       sp->setDrawGrid(true);
 
       Bracket* b1 = new Bracket(gscore);
-      b1->setBracketType(BRACKET_NORMAL);
+      b1->setBracketType(BracketType::NORMAL);
       Bracket* b2 = new Bracket(gscore);
-      b2->setBracketType(BRACKET_BRACE);
+      b2->setBracketType(BracketType::BRACE);
       Bracket* b3 = new Bracket(gscore);
-      b3->setBracketType(BRACKET_SQUARE);
+      b3->setBracketType(BracketType::SQUARE);
       Bracket* b4 = new Bracket(gscore);
-      b4->setBracketType(BRACKET_LINE);
+      b4->setBracketType(BracketType::LINE);
 
       sp->append(b1, tr("Bracket"));
       sp->append(b2, tr("Brace"));
@@ -815,20 +815,20 @@ Palette* MuseScore::newLinesPalette()
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
-      pedal->setEndHookType(HOOK_45);
+      pedal->setEndHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
       pedal->setBeginHook(true);
-      pedal->setBeginHookType(HOOK_45);
-      pedal->setEndHookType(HOOK_45);
+      pedal->setBeginHookType(HookType::HOOK_45);
+      pedal->setEndHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
       pedal->setBeginHook(true);
-      pedal->setBeginHookType(HOOK_45);
+      pedal->setBeginHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       Trill* trill = new Trill(gscore);
@@ -986,17 +986,17 @@ Palette* MuseScore::newTimePalette()
             };
 
       TS tsList[] = {
-            { 2,  4, TSIG_NORMAL, "2/4" },
-            { 3,  4, TSIG_NORMAL, "3/4" },
-            { 4,  4, TSIG_NORMAL, "4/4" },
-            { 5,  4, TSIG_NORMAL, "5/4" },
-            { 6,  4, TSIG_NORMAL, "6/4" },
-            { 3,  8, TSIG_NORMAL, "3/8" },
-            { 6,  8, TSIG_NORMAL, "6/8" },
-            { 9,  8, TSIG_NORMAL, "9/8" },
-            { 12, 8, TSIG_NORMAL, "12/8" },
-            { 4,  4, TSIG_FOUR_FOUR,  tr("4/4 common time") },
-            { 2,  2, TSIG_ALLA_BREVE, tr("2/2 alla breve") }
+            { 2,  4, TimeSigType::NORMAL, "2/4" },
+            { 3,  4, TimeSigType::NORMAL, "3/4" },
+            { 4,  4, TimeSigType::NORMAL, "4/4" },
+            { 5,  4, TimeSigType::NORMAL, "5/4" },
+            { 6,  4, TimeSigType::NORMAL, "6/4" },
+            { 3,  8, TimeSigType::NORMAL, "3/8" },
+            { 6,  8, TimeSigType::NORMAL, "6/8" },
+            { 9,  8, TimeSigType::NORMAL, "9/8" },
+            { 12, 8, TimeSigType::NORMAL, "12/8" },
+            { 4,  4, TimeSigType::FOUR_FOUR,  tr("4/4 common time") },
+            { 2,  2, TimeSigType::ALLA_BREVE, tr("2/2 alla breve") }
             };
 
       Palette* sp = new Palette;
@@ -1054,19 +1054,19 @@ void MuseScore::setAdvancedPalette()
       sp->setDrawGrid(true);
 
       StaffState* st = new StaffState(gscore);
-      st->setSubtype(STAFF_STATE_VISIBLE);
+      st->setSubtype(StaffStateType::VISIBLE);
       sp->append(st, tr("set visible"));
 
       st = new StaffState(gscore);
-      st->setSubtype(STAFF_STATE_INVISIBLE);
+      st->setSubtype(StaffStateType::INVISIBLE);
       sp->append(st, tr("set invisible"));
 
       st = new StaffState(gscore);
-      st->setSubtype(STAFF_STATE_TYPE);
+      st->setSubtype(StaffStateType::TYPE);
       sp->append(st, tr("change staff type"));
 
       st = new StaffState(gscore);
-      st->setSubtype(STAFF_STATE_INSTRUMENT);
+      st->setSubtype(StaffStateType::INSTRUMENT);
       sp->append(st, tr("change instrument"));
 
       paletteBox->addPalette(sp);

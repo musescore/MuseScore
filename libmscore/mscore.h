@@ -80,42 +80,42 @@ enum class DirectionH : char { DH_AUTO, DH_LEFT, DH_RIGHT };
 //   ArticulationType
 //---------------------------------------------------------
 
-enum ArticulationType {
-      Articulation_Fermata,
-      Articulation_Shortfermata,
-      Articulation_Longfermata,
-      Articulation_Verylongfermata,
-      Articulation_Thumb,
-      Articulation_Sforzatoaccent,
-//      Articulation_Espressivo,
-      Articulation_Staccato,
-      Articulation_Staccatissimo,
-      Articulation_Tenuto,
-      Articulation_Portato,
-      Articulation_Marcato,
-      Articulation_Ouvert,              //TODO-smufl
-      Articulation_Plusstop,
-      Articulation_Upbow,
-      Articulation_Downbow,
-      Articulation_Reverseturn,
-      Articulation_Turn,
-      Articulation_Trill,
-      Articulation_Prall,
-      Articulation_Mordent,
-      Articulation_PrallPrall,
-      Articulation_PrallMordent,
-      Articulation_UpPrall,
-      Articulation_DownPrall,
-      Articulation_UpMordent,
-      Articulation_DownMordent,
-      Articulation_PrallDown,
-      Articulation_PrallUp,
-      Articulation_LinePrall,
-      Articulation_Schleifer,
-      Articulation_Snappizzicato,
-//      Articulation_Tapping,
-//      Articulation_Slapping,
-//      Articulation_Popping,
+enum class ArticulationType : char {
+      Fermata,
+      Shortfermata,
+      Longfermata,
+      Verylongfermata,
+      Thumb,
+      Sforzatoaccent,
+//      Espressivo,
+      Staccato,
+      Staccatissimo,
+      Tenuto,
+      Portato,
+      Marcato,
+      Ouvert,              //TODO-smufl
+      Plusstop,
+      Upbow,
+      Downbow,
+      Reverseturn,
+      Turn,
+      Trill,
+      Prall,
+      Mordent,
+      PrallPrall,
+      PrallMordent,
+      UpPrall,
+      DownPrall,
+      UpMordent,
+      DownMordent,
+      PrallDown,
+      PrallUp,
+      LinePrall,
+      Schleifer,
+      Snappizzicato,
+//      Tapping,
+//      Slapping,
+//      Popping,
       ARTICULATIONS
       };
 
@@ -125,23 +125,23 @@ enum ArticulationType {
 //    System Brackets
 //---------------------------------------------------------
 
-enum BracketType {
-      BRACKET_NORMAL, BRACKET_BRACE, BRACKET_SQUARE, BRACKET_LINE, NO_BRACKET = -1
+enum class BracketType : signed char {
+      NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
       };
 
 //---------------------------------------------------------
 //   PlaceText
 //---------------------------------------------------------
 
-enum PlaceText {
-      PLACE_AUTO, PLACE_ABOVE, PLACE_BELOW, PLACE_LEFT
+enum class PlaceText : char {
+      AUTO, ABOVE, BELOW, LEFT
       };
 
 //---------------------------------------------------------
 //   AlignmentFlags
 //---------------------------------------------------------
 
-enum AlignmentFlags {
+enum AlignmentFlags : char {
       ALIGN_LEFT     = 0,
       ALIGN_RIGHT    = 1,
       ALIGN_HCENTER  = 2,
@@ -158,16 +158,16 @@ enum AlignmentFlags {
 //   OffsetType
 //---------------------------------------------------------
 
-enum OffsetType {
-      OFFSET_ABS,       ///< offset in point units
-      OFFSET_SPATIUM    ///< offset in space units
+enum class OffsetType : char {
+      ABS,       ///< offset in point units
+      SPATIUM    ///< offset in space units
       };
 
 //---------------------------------------------------------
 //   BeamMode
 //---------------------------------------------------------
 
-enum class BeamMode : char {
+enum class BeamMode : signed char {
       AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
       };
 
@@ -177,16 +177,16 @@ enum class BeamMode : char {
 //   TransposeDirection
 //---------------------------------------------------------
 
-enum TransposeDirection {
-      TRANSPOSE_UP, TRANSPOSE_DOWN, TRANSPOSE_CLOSEST
+enum class TransposeDirection : char {
+      UP, DOWN, CLOSEST
       };
 
 //---------------------------------------------------------
 //   TransposeMode
 //---------------------------------------------------------
 
-enum TransposeMode {
-      TRANSPOSE_BY_KEY, TRANSPOSE_BY_INTERVAL, TRANSPOSE_DIATONICALLY
+enum class TransposeMode : char {
+      BY_KEY, BY_INTERVAL, DIATONICALLY
       };
 
 //---------------------------------------------------------

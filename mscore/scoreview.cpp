@@ -1368,7 +1368,7 @@ void ScoreView::moveCursor()
       {
       const InputState& is = _score->inputState();
       Segment* segment = is.segment();
-      if (segment && score()->styleB(ST_createMultiMeasureRests) && segment->measure()->hasMMRest()) {
+      if (segment && score()->styleB(StyleIdx::createMultiMeasureRests) && segment->measure()->hasMMRest()) {
             Measure* m = segment->measure()->mmRest();
             segment = m->findSegment(Segment::SegChordRest, m->tick());
             }
@@ -1627,13 +1627,13 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       if (grips) {
             if (grips == 6) {       // HACK: this are grips of a slur
                   QPolygonF polygon(grips+1);
-                  polygon[0] = QPointF(grip[GRIP_START].center());
-                  polygon[1] = QPointF(grip[GRIP_BEZIER1].center());
-                  polygon[2] = QPointF(grip[GRIP_SHOULDER].center());
-                  polygon[3] = QPointF(grip[GRIP_BEZIER2].center());
-                  polygon[4] = QPointF(grip[GRIP_END].center());
-                  polygon[5] = QPointF(grip[GRIP_DRAG].center());
-                  polygon[6] = QPointF(grip[GRIP_START].center());
+                  polygon[0] = QPointF(grip[int(GripSlurSegment::START)].center());
+                  polygon[1] = QPointF(grip[int(GripSlurSegment::BEZIER1)].center());
+                  polygon[2] = QPointF(grip[int(GripSlurSegment::SHOULDER)].center());
+                  polygon[3] = QPointF(grip[int(GripSlurSegment::BEZIER2)].center());
+                  polygon[4] = QPointF(grip[int(GripSlurSegment::END)].center());
+                  polygon[5] = QPointF(grip[int(GripSlurSegment::DRAG)].center());
+                  polygon[6] = QPointF(grip[int(GripSlurSegment::START)].center());
                   QPen pen(MScore::frameMarginColor, 0.0);
                   vp.setPen(pen);
                   vp.drawPolyline(polygon);
@@ -1832,7 +1832,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.drawRect(r);
             }
       const Selection& sel = _score->selection();
-      if (sel.state() == SEL_RANGE) {
+      if (sel.state() == SelState::RANGE) {
             Segment* ss = sel.startSegment();
             Segment* es = sel.endSegment();
             if (!ss)
@@ -2405,7 +2405,7 @@ void ScoreView::normalPaste()
             qDebug("no application mime data");
             return;
             }
-      if ((_score->selection().isSingle()|| _score->selection().state() == SEL_LIST) && ms->hasFormat(mimeSymbolFormat)) {
+      if ((_score->selection().isSingle()|| _score->selection().state() == SelState::LIST) && ms->hasFormat(mimeSymbolFormat)) {
             QByteArray data(ms->data(mimeSymbolFormat));
             XmlReader e(data);
             QPointF dragOffset;
@@ -2441,10 +2441,10 @@ void ScoreView::normalPaste()
             else
                   qDebug("cannot read type");
             }
-      else if ((_score->selection().state() == SEL_RANGE || _score->selection().state() == SEL_LIST)
+      else if ((_score->selection().state() == SelState::RANGE || _score->selection().state() == SelState::LIST)
          && ms->hasFormat(mimeStaffListFormat)) {
             ChordRest* cr = 0;
-            if (_score->selection().state() == SEL_RANGE)
+            if (_score->selection().state() == SelState::RANGE)
                   cr = _score->selection().firstChordRest();
             else if (_score->selection().isSingle()) {
                   Element* e = _score->selection().element();
@@ -2471,7 +2471,7 @@ void ScoreView::normalPaste()
 
       else if (ms->hasFormat(mimeSymbolListFormat)) {
             ChordRest* cr = 0;
-            if (_score->selection().state() == SEL_RANGE)
+            if (_score->selection().state() == SelState::RANGE)
                   cr = _score->selection().firstChordRest();
             else if (_score->selection().isSingle()) {
                   Element* e = _score->selection().element();
@@ -2841,21 +2841,21 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "toggle-visible") {
             _score->startCmd();
             foreach(Element* e, _score->selection().elements())
-                  _score->undo(new ChangeProperty(e, P_VISIBLE, !e->getProperty(P_VISIBLE).toBool()));
+                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool()));
             _score->endCmd();
             mscore->endCmd();
             }
       else if (cmd == "set-visible") {
             _score->startCmd();
             foreach(Element* e, _score->selection().elements())
-                  _score->undo(new ChangeProperty(e, P_VISIBLE, true));
+                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, true));
             _score->endCmd();
             mscore->endCmd();
             }
       else if (cmd == "unset-visible") {
             _score->startCmd();
             foreach(Element* e, _score->selection().elements())
-                  _score->undo(new ChangeProperty(e, P_VISIBLE, false));
+                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, false));
             _score->endCmd();
             mscore->endCmd();
             }
@@ -3934,7 +3934,7 @@ void ScoreView::cmdAddSlur()
             is.setSlur(nullptr);
             return;
             }
-      if (_score->selection().state() == SEL_RANGE) {
+      if (_score->selection().state() == SelState::RANGE) {
             _score->startCmd();
             int startTrack = _score->selection().staffStart() * VOICES;
             int endTrack   = _score->selection().staffEnd() * VOICES;
@@ -3993,7 +3993,7 @@ void ScoreView::cmdAddNoteLine()
       {
       Note* firstNote = 0;
       Note* lastNote  = 0;
-      if (_score->selection().state() == SEL_RANGE) {
+      if (_score->selection().state() == SelState::RANGE) {
             int startTrack = _score->selection().staffStart() * VOICES;
             int endTrack   = _score->selection().staffEnd() * VOICES;
             for (int track = startTrack; track < endTrack; ++track) {
@@ -4024,7 +4024,7 @@ void ScoreView::cmdAddNoteLine()
       tl->setStartElement(firstNote);
       tl->setEndElement(lastNote);
       tl->setDiagonal(true);
-      tl->setAnchor(Spanner::ANCHOR_NOTE);
+      tl->setAnchor(Spanner::Anchor::NOTE);
       tl->setTick(firstNote->chord()->tick());
       _score->startCmd();
       _score->undoAddElement(tl);
@@ -4052,7 +4052,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
             Q_ASSERT(cr1->type() == Element::ElementType::CHORD);
             Q_ASSERT(cr2->type() == Element::ElementType::CHORD);
             Slur* slur = new Slur(score());
-            slur->setAnchor(Spanner::ANCHOR_CHORD);
+            slur->setAnchor(Spanner::Anchor::CHORD);
 
             slur->setStartChord(static_cast<Chord*>(cr1));
             slur->setEndChord(static_cast<Chord*>(cr2));
@@ -4129,8 +4129,8 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                   int string = n->line() + (up ? 1 : -1);
                   int fret   = staff->part()->instr()->stringData()->fret(n->pitch(), string);
                   if (fret != -1) {
-                        score()->undoChangeProperty(n, P_FRET, fret);
-                        score()->undoChangeProperty(n, P_STRING, string);
+                        score()->undoChangeProperty(n, P_ID::FRET, fret);
+                        score()->undoChangeProperty(n, P_ID::STRING, string);
                         }
                   }
             else {
@@ -4382,7 +4382,7 @@ void ScoreView::modifyElement(Element* el)
             }
       Score* cs = el->score();
       if (!cs->selection().isSingle()) {
-            qDebug("modifyElement: cs->selection().state() != SEL_SINGLE");
+            qDebug("modifyElement: cs->selection().state() != SelState::SINGLE");
             delete el;
             return;
             }
@@ -5020,7 +5020,7 @@ void ScoreView::appendMeasures(int n, Element::ElementType type)
 MeasureBase* ScoreView::checkSelectionStateForInsertMeasure()
       {
       MeasureBase* mb = 0;
-      if (_score->selection().state() == SEL_RANGE) {
+      if (_score->selection().state() == SelState::RANGE) {
             mb = _score->selection().startSegment()->measure();
             return mb;
             }
@@ -5053,7 +5053,7 @@ void ScoreView::cmdInsertMeasures(int n, Element::ElementType type)
             _score->insertMeasure(type, mb);
 
       // measure may be part of mm rest:
-      if (!_score->styleB(ST_createMultiMeasureRests) && type == Element::ElementType::MEASURE)
+      if (!_score->styleB(StyleIdx::createMultiMeasureRests) && type == Element::ElementType::MEASURE)
             _score->select(mb, SELECT_SINGLE, 0);
       _score->endCmd();
       }
@@ -5107,7 +5107,7 @@ void ScoreView::cmdRepeatSelection()
                   }
             return;
             }
-      if (selection.state() != SEL_RANGE) {
+      if (selection.state() != SelState::RANGE) {
             qDebug("wrong selection type");
             return;
             }
@@ -5158,13 +5158,13 @@ void ScoreView::selectMeasure(int n)
       for (Measure* measure = _score->firstMeasure(); measure; measure = measure->nextMeasure()) {
             if (++i < n)
                   continue;
-            _score->selection().setState(SEL_RANGE);
+            _score->selection().setState(SelState::RANGE);
             _score->selection().setStartSegment(measure->first());
             _score->selection().setEndSegment(measure->last());
             _score->selection().setStaffStart(0);
             _score->selection().setStaffEnd(_score->nstaves());
             _score->selection().updateSelectedElements();
-            _score->selection().setState(SEL_RANGE);
+            _score->selection().setState(SelState::RANGE);
             _score->addRefresh(measure->canvasBoundingRect());
             adjustCanvasPosition(measure, true);
             _score->setUpdateAll(true);
@@ -5241,7 +5241,7 @@ void ScoreView::searchMeasure(int n)
       int i = 0;
       Measure* measure;
       for (measure = _score->firstMeasureMM(); measure; measure = measure->nextMeasureMM()) {
-            int nn = _score->styleB(ST_createMultiMeasureRests) && measure->isMMRest()
+            int nn = _score->styleB(StyleIdx::createMultiMeasureRests) && measure->isMMRest()
                ? measure->mmRestCount() : 1;
             if (n >= i && n < (i+nn))
                   break;

@@ -23,8 +23,8 @@ namespace Ms {
 //   SpacerType
 //---------------------------------------------------------
 
-enum SpacerType {
-      SPACER_UP, SPACER_DOWN
+enum class SpacerType : char {
+      UP, DOWN
       };
 
 //-------------------------------------------------------------------

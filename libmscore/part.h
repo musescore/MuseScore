@@ -108,7 +108,6 @@ class Part : public QObject {
       void setPartName(const QString& s)       { _partName = s; }
       InstrumentList* instrList()              { return &_instrList;       }
 
-      enum { SHOW };
       QVariant getProperty(int id) const;
       void setProperty(int id, const QVariant& property);
       };

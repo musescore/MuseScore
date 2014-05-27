@@ -165,8 +165,8 @@ void Dynamic::write(Xml& xml) const
       {
       xml.stag("Dynamic");
       xml.tag("subtype", dynamicTypeName());
-      writeProperty(xml, P_VELOCITY);
-      writeProperty(xml, P_DYNAMIC_RANGE);
+      writeProperty(xml, P_ID::VELOCITY);
+      writeProperty(xml, P_ID::DYNAMIC_RANGE);
       Text::writeProperties(xml, dynamicType() == DynamicType::OTHER);
       xml.etag();
       }
@@ -340,7 +340,7 @@ QRectF Dynamic::drag(EditData* ed)
 
 void Dynamic::undoSetDynRange(DynamicRange v)
       {
-      score()->undoChangeProperty(this, P_DYNAMIC_RANGE, int(v));
+      score()->undoChangeProperty(this, P_ID::DYNAMIC_RANGE, int(v));
       }
 
 //---------------------------------------------------------
@@ -350,9 +350,9 @@ void Dynamic::undoSetDynRange(DynamicRange v)
 QVariant Dynamic::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_DYNAMIC_RANGE:     return int(_dynRange);
-            case P_VELOCITY:          return velocity();
-            case P_SUBTYPE:           return int(_dynamicType);
+            case P_ID::DYNAMIC_RANGE:     return int(_dynRange);
+            case P_ID::VELOCITY:          return velocity();
+            case P_ID::SUBTYPE:           return int(_dynamicType);
             default:
                   return Text::getProperty(propertyId);
             }
@@ -365,13 +365,13 @@ QVariant Dynamic::getProperty(P_ID propertyId) const
 bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_DYNAMIC_RANGE:
+            case P_ID::DYNAMIC_RANGE:
                   _dynRange = DynamicRange(v.toInt());
                   break;
-            case P_VELOCITY:
+            case P_ID::VELOCITY:
                   _velocity = v.toInt();
                   break;
-            case P_SUBTYPE:
+            case P_ID::SUBTYPE:
                   _dynamicType = DynamicType(v.toInt());
                   break;
             default:
@@ -390,9 +390,9 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_TEXT_STYLE_TYPE: return TEXT_STYLE_DYNAMICS;
-            case P_DYNAMIC_RANGE:   return int(DynamicRange::PART);
-            case P_VELOCITY:        return -1;
+            case P_ID::TEXT_STYLE_TYPE: return TEXT_STYLE_DYNAMICS;
+            case P_ID::DYNAMIC_RANGE:   return int(DynamicRange::PART);
+            case P_ID::VELOCITY:        return -1;
             default:                return Text::propertyDefault(id);
             }
       }

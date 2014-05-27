@@ -34,8 +34,8 @@ Tuplet::Tuplet(Score* s)
   : DurationElement(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      _numberType   = Tuplet::SHOW_NUMBER;
-      _bracketType  = Tuplet::AUTO_BRACKET;
+      _numberType   = Tuplet::NumberType::SHOW_NUMBER;
+      _bracketType  = Tuplet::BracketType::AUTO_BRACKET;
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
@@ -117,7 +117,7 @@ void Tuplet::layout()
             return;
 
       qreal _spatium = spatium();
-      if (_numberType != NO_TEXT) {
+      if (_numberType != NumberType::NO_TEXT) {
             if (_number == 0) {
                   _number = new Text(score());
                   _number->setTextStyleType(TEXT_STYLE_TUPLET);
@@ -125,7 +125,7 @@ void Tuplet::layout()
                   _number->setParent(this);
                   _number->setVisible(visible());
                   }
-            if (_numberType == SHOW_NUMBER)
+            if (_numberType == NumberType::SHOW_NUMBER)
                   _number->setText(QString("%1").arg(_ratio.numerator()));
             else
                   _number->setText(QString("%1:%2").arg(_ratio.numerator()).arg(_ratio.denominator()));
@@ -178,7 +178,7 @@ void Tuplet::layout()
       //
       //   shall we draw a bracket?
       //
-      if (_bracketType == AUTO_BRACKET) {
+      if (_bracketType == BracketType::AUTO_BRACKET) {
             _hasBracket = false;
             foreach (DurationElement* e, _elements) {
                   if (e->type() == ElementType::TUPLET || e->type() == ElementType::REST) {
@@ -198,20 +198,20 @@ void Tuplet::layout()
                   }
             }
       else
-            _hasBracket = _bracketType != SHOW_NO_BRACKET;
+            _hasBracket = _bracketType != BracketType::SHOW_NO_BRACKET;
 
 
       //
       //    calculate bracket start and end point p1 p2
       //
-      qreal maxSlope = score()->styleD(ST_tupletMaxSlope);
-      bool outOfStaff = score()->styleB(ST_tupletOufOfStaff);
-      qreal vHeadDistance = score()->styleS(ST_tupletVHeadDistance).val() * _spatium;
-      qreal vStemDistance = score()->styleS(ST_tupletVStemDistance).val() * _spatium;
-      qreal stemLeft = score()->styleS(ST_tupletStemLeftDistance).val() * _spatium;
-      qreal stemRight = score()->styleS(ST_tupletStemRightDistance).val() * _spatium;
-      qreal noteLeft = score()->styleS(ST_tupletNoteLeftDistance).val() * _spatium;
-      qreal noteRight = score()->styleS(ST_tupletNoteRightDistance).val() * _spatium;
+      qreal maxSlope = score()->styleD(StyleIdx::tupletMaxSlope);
+      bool outOfStaff = score()->styleB(StyleIdx::tupletOufOfStaff);
+      qreal vHeadDistance = score()->styleS(StyleIdx::tupletVHeadDistance).val() * _spatium;
+      qreal vStemDistance = score()->styleS(StyleIdx::tupletVStemDistance).val() * _spatium;
+      qreal stemLeft = score()->styleS(StyleIdx::tupletStemLeftDistance).val() * _spatium;
+      qreal stemRight = score()->styleS(StyleIdx::tupletStemRightDistance).val() * _spatium;
+      qreal noteLeft = score()->styleS(StyleIdx::tupletNoteLeftDistance).val() * _spatium;
+      qreal noteRight = score()->styleS(StyleIdx::tupletNoteRightDistance).val() * _spatium;
 
       qreal l1 = _spatium;          // bracket tip height
       qreal l2l = vHeadDistance;     // left bracket vertical distance
@@ -587,13 +587,13 @@ void Tuplet::write(Xml& xml) const
             xml.tag("Tuplet", tuplet()->id());
       Element::writeProperties(xml);
 
-      writeProperty(xml, P_DIRECTION);
-      writeProperty(xml, P_NUMBER_TYPE);
-      writeProperty(xml, P_BRACKET_TYPE);
-      writeProperty(xml, P_NORMAL_NOTES);
-      writeProperty(xml, P_ACTUAL_NOTES);
-      writeProperty(xml, P_P1);
-      writeProperty(xml, P_P2);
+      writeProperty(xml, P_ID::DIRECTION);
+      writeProperty(xml, P_ID::NUMBER_TYPE);
+      writeProperty(xml, P_ID::BRACKET_TYPE);
+      writeProperty(xml, P_ID::NORMAL_NOTES);
+      writeProperty(xml, P_ID::ACTUAL_NOTES);
+      writeProperty(xml, P_ID::P1);
+      writeProperty(xml, P_ID::P2);
 
       xml.tag("baseNote", _baseLen.name());
 
@@ -620,11 +620,11 @@ void Tuplet::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "direction")
-                  setProperty(P_DIRECTION, Ms::getProperty(P_DIRECTION, e));
+                  setProperty(P_ID::DIRECTION, Ms::getProperty(P_ID::DIRECTION, e));
             else if (tag == "numberType")
-                  _numberType = e.readInt();
+                  _numberType = NumberType(e.readInt());
             else if (tag == "bracketType")
-                  _bracketType = e.readInt();
+                  _bracketType = BracketType(e.readInt());
             else if (tag == "normalNotes")
                   _ratio.setDenominator(e.readInt());
             else if (tag == "actualNotes")
@@ -646,10 +646,10 @@ void Tuplet::read(XmlReader& e)
             else if (tag == "subtype")    // obsolete
                   e.skipCurrentElement();
             else if (tag == "hasNumber")             // obsolete
-                  _numberType = e.readInt() ? SHOW_NUMBER : NO_TEXT;
+                  _numberType = e.readInt() ? NumberType::SHOW_NUMBER : NumberType::NO_TEXT;
             else if (tag == "hasLine") {          // obsolete
                   _hasBracket = e.readInt();
-                  _bracketType = AUTO_BRACKET;
+                  _bracketType = BracketType::AUTO_BRACKET;
                   }
             else if (tag == "baseLen")            // obsolete
                   bl = e.readInt();
@@ -787,9 +787,9 @@ void Tuplet::reset()
       {
       score()->addRefresh(canvasBoundingRect());
 
-      undoChangeProperty(P_P1,        QPointF());
-      undoChangeProperty(P_P2,        QPointF());
-      undoChangeProperty(P_DIRECTION, propertyDefault(P_DIRECTION));
+      undoChangeProperty(P_ID::P1,        QPointF());
+      undoChangeProperty(P_ID::P2,        QPointF());
+      undoChangeProperty(P_ID::DIRECTION, propertyDefault(P_ID::DIRECTION));
 
       Element::reset();
       layout();
@@ -857,19 +857,19 @@ Fraction Tuplet::elementsDuration()
 QVariant Tuplet::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_DIRECTION:
+            case P_ID::DIRECTION:
                   return int(_direction);
-            case P_NUMBER_TYPE:
-                  return _numberType;
-            case P_BRACKET_TYPE:
-                  return _bracketType;
-            case P_NORMAL_NOTES:
+            case P_ID::NUMBER_TYPE:
+                  return int(_numberType);
+            case P_ID::BRACKET_TYPE:
+                  return int(_bracketType);
+            case P_ID::NORMAL_NOTES:
                   return _ratio.denominator();
-            case P_ACTUAL_NOTES:
+            case P_ID::ACTUAL_NOTES:
                   return _ratio.numerator();
-            case P_P1:
+            case P_ID::P1:
                   return _p1;
-            case P_P2:
+            case P_ID::P2:
                   return _p2;
             default:
                   break;
@@ -885,25 +885,25 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
-            case P_DIRECTION:
+            case P_ID::DIRECTION:
                   setDirection(Direction(v.toInt()));
                   break;
-            case P_NUMBER_TYPE:
-                  setNumberType(v.toInt());
+            case P_ID::NUMBER_TYPE:
+                  setNumberType(NumberType(v.toInt()));
                   break;
-            case P_BRACKET_TYPE:
-                  setBracketType(v.toInt());
+            case P_ID::BRACKET_TYPE:
+                  setBracketType(BracketType(v.toInt()));
                   break;
-            case P_NORMAL_NOTES:
+            case P_ID::NORMAL_NOTES:
                   _ratio.setDenominator(v.toInt());
                   break;
-            case P_ACTUAL_NOTES:
+            case P_ID::ACTUAL_NOTES:
                   _ratio.setNumerator(v.toInt());
                   break;
-            case P_P1:
+            case P_ID::P1:
                   _p1 = v.toPointF();
                   break;
-            case P_P2:
+            case P_ID::P2:
                   _p2 = v.toPointF();
                   break;
             default:
@@ -921,17 +921,17 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Tuplet::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_DIRECTION:
+            case P_ID::DIRECTION:
                   return int(Direction::AUTO);
-            case P_NUMBER_TYPE:
-                  return Tuplet::SHOW_NUMBER;
-            case P_BRACKET_TYPE:
-                  return Tuplet::AUTO_BRACKET;
-            case P_NORMAL_NOTES:
-            case P_ACTUAL_NOTES:
+            case P_ID::NUMBER_TYPE:
+                  return int(Tuplet::NumberType::SHOW_NUMBER);
+            case P_ID::BRACKET_TYPE:
+                  return int(Tuplet::BracketType::AUTO_BRACKET);
+            case P_ID::NORMAL_NOTES:
+            case P_ID::ACTUAL_NOTES:
                   return 1;
-            case P_P1:
-            case P_P2:
+            case P_ID::P1:
+            case P_ID::P2:
                   return QPointF();
             default:
                   return DurationElement::propertyDefault(id);

@@ -79,25 +79,25 @@ struct TablatureFretFont {
       bool read(XmlReader&);
       };
 
-enum {
-      TAB_VAL_LONGA = 0,
-      TAB_VAL_BREVIS,
-      TAB_VAL_SEMIBREVIS,
-      TAB_VAL_MINIMA,
-      TAB_VAL_SEMIMINIMA,
-      TAB_VAL_FUSA,
-      TAB_VAL_SEMIFUSA,
-      TAB_VAL_32,
-      TAB_VAL_64,
-      TAB_VAL_128,
-      TAB_VAL_256,
-      NUM_OF_TAB_VALS
+enum class TabVal : char {
+      VAL_LONGA = 0,
+      VAL_BREVIS,
+      VAL_SEMIBREVIS,
+      VAL_MINIMA,
+      VAL_SEMIMINIMA,
+      VAL_FUSA,
+      VAL_SEMIFUSA,
+      VAL_32,
+      VAL_64,
+      VAL_128,
+      VAL_256,
+      NUM_OF
       };
 
-enum TablatureMinimStyle {
-      TAB_MINIM_NONE = 0,                       // do not draw half notes at all
-      TAB_MINIM_SHORTER,                        // draw half notes with a shorter stem
-      TAB_MINIM_SLASHED                         // draw half notes with stem with two slashes
+enum class TablatureMinimStyle : char {
+      NONE = 0,                       // do not draw half notes at all
+      SHORTER,                        // draw half notes with a shorter stem
+      SLASHED                         // draw half notes with stem with two slashes
       };
 
 struct TablatureDurationFont {
@@ -106,23 +106,23 @@ struct TablatureDurationFont {
       qreal   defPitch;               // the default size of the font
       qreal   defYOffset;             // the default Y displacement
       QChar   displayDot;             // the char to use to draw a dot
-      QChar   displayValue[NUM_OF_TAB_VALS];       // the char to use to draw a duration value
+      QChar   displayValue[int(TabVal::NUM_OF)];       // the char to use to draw a duration value
 
       bool read(XmlReader&);
       };
 
 // ready-made staff types:
 
-enum {
-      STANDARD_STAFF_TYPE,
-      PERC_1LINE_STAFF_TYPE, PERC_3LINE_STAFF_TYPE, PERC_5LINE_STAFF_TYPE,
-      TAB_6SIMPLE_STAFF_TYPE, TAB_6COMMON_STAFF_TYPE, TAB_6FULL_STAFF_TYPE,
-            TAB_4SIMPLE_STAFF_TYPE, TAB_4COMMON_STAFF_TYPE, TAB_4FULL_STAFF_TYPE,
-            TAB_UKULELE_STAFF_TYPE, TAB_BALALAJKA_STAFF_TYPE, TAB_ITALIAN_STAFF_TYPE, TAB_FRENCH_STAFF_TYPE,
+enum class StaffTypes : char {
+      STANDARD,
+      PERC_1LINE, PERC_3LINE, PERC_5LINE,
+      TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
+            TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
+            TAB_UKULELE, TAB_BALALAJKA, TAB_ITALIAN, TAB_FRENCH,
       STAFF_TYPES,
       // some usefull shorthands:
-            PERC_DEFAULT_STAFF_TYPE = PERC_5LINE_STAFF_TYPE,
-            TAB_DEFAULT_STAFF_TYPE = TAB_6COMMON_STAFF_TYPE
+            PERC_DEFAULT = StaffTypes::PERC_5LINE,
+            TAB_DEFAULT = StaffTypes::TAB_6COMMON
       };
 
 //---------------------------------------------------------
@@ -155,7 +155,7 @@ class StaffType {
                                           // the string line (spatium unit); user configurable
       bool  _genDurations = false;        // whether duration symbols are drawn or not
       bool  _linesThrough = false;        // whether lines for strings and stems may pass through fret marks or not
-      TablatureMinimStyle _minimStyle = TAB_MINIM_NONE;    // how to draw minim stems (stem-and-beam durations only)
+      TablatureMinimStyle _minimStyle = TablatureMinimStyle::NONE;    // how to draw minim stems (stem-and-beam durations only)
       bool  _onLines      = true;         // whether fret marks are drawn on the string lines or between them
       bool  _showRests    = false;        // whether to draw rests or not
       bool  _stemsDown    = true;         // stems are drawn downward (stem-and-beam durations only)
@@ -242,7 +242,7 @@ class StaffType {
 
       // static function to deal with presets
       static const StaffType* getDefaultPreset(StaffGroup grp);
-      static const StaffType* preset(int idx);
+      static const StaffType* preset(StaffTypes idx);
       static const StaffType* presetFromXmlName(QString& xmlName);
 
       void setGenKeysig(bool val)              { _genKeysig = val;        }

@@ -25,12 +25,11 @@ namespace Ms {
 ///   item in VeloList
 //---------------------------------------------------------
 
-enum VeloType { VELO_FIX, VELO_RAMP };
+enum class VeloType : char { FIX, RAMP };
 
 struct VeloEvent {
       VeloType type;
       char val;
-
       VeloEvent() {}
       VeloEvent(VeloType t, char v) : type(t), val(v) {}
       };

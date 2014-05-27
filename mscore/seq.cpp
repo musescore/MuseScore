@@ -307,7 +307,7 @@ void Seq::start()
                   }
             }
       if ((mscore->loop())) {
-            if(cs->selection().state() == SEL_RANGE)
+            if(cs->selection().state() == SelState::RANGE)
                   setLoopSelection();
             seek(cs->repeatList()->tick2utick(cs->loopInTick()));
             }

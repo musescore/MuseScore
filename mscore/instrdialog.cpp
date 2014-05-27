@@ -160,7 +160,7 @@ void StaffListItem::setStaffType(const StaffType* st)
       else {
             // if staff type given, look into combo box item data for a preset equal to staff type
             for (int i = 0; i < _staffTypeCombo->count(); ++i) {
-                  const StaffType* _st = StaffType::preset(_staffTypeCombo->itemData(i).toInt());
+                  const StaffType* _st = StaffType::preset(StaffTypes(_staffTypeCombo->itemData(i).toInt()));
                   if (*_st == *st) {
                         _staffTypeCombo->setCurrentIndex(i);
                         return;
@@ -185,7 +185,7 @@ void StaffListItem::setStaffType(int idx)
 
 const StaffType* StaffListItem::staffType() const
       {
-      return StaffType::preset(staffTypeIdx());
+      return StaffType::preset(StaffTypes((staffTypeIdx())));
       }
 
 //---------------------------------------------------------
@@ -205,7 +205,7 @@ void StaffListItem::staffTypeChanged(int idx)
       {
       // check current clef matches new staff type
       int staffTypeIdx = _staffTypeCombo->itemData(idx).toInt();
-      const StaffType* stfType = StaffType::preset(staffTypeIdx);
+      const StaffType* stfType = StaffType::preset(StaffTypes(staffTypeIdx));
       if (stfType->group() != ClefInfo::staffGroup(_clef._transposingClef)) {
             ClefType clefType;
             switch (stfType->group()) {
@@ -432,7 +432,7 @@ void InstrumentsDialog::genPartList()
                   sli->setPartIdx(s->rstaff());
                   sli->staffIdx = s->idx();
                   if (s->isTabStaff()) {
-                        ClefType ct(ClefType(cs->styleI(ST_tabClef)));
+                        ClefType ct(ClefType(cs->styleI(StyleIdx::tabClef)));
                         sli->setClef(ClefTypeList(ct, ct));
                         }
                   else
@@ -882,7 +882,7 @@ void MuseScore::editInstrList()
                   }
             }
       //normalize the keyevent to concert pitch if necessary
-      if (firstStaff && !rootScore->styleB(ST_concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
+      if (firstStaff && !rootScore->styleB(StyleIdx::concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
             int interval = firstStaff->part()->instr()->transpose().chromatic;
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
                   int tick = i->first;
@@ -988,7 +988,7 @@ void MuseScore::editInstrList()
             else {
                   part = pli->part;
                   if (part->show() != pli->visible()) {
-                        part->score()->undo()->push(new ChangePartProperty(part, Part::SHOW, pli->visible()));
+                        part->score()->undo()->push(new ChangePartProperty(part, 0, pli->visible()));
                         }
                   QTreeWidgetItem* ci = 0;
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
@@ -1102,7 +1102,7 @@ void MuseScore::editInstrList()
             QList<BracketItem> brackets = staff->brackets();
             int nn = brackets.size();
             for (int ii = 0; ii < nn; ++ii) {
-                  if ((brackets[ii]._bracket != -1) && (brackets[ii]._bracketSpan > (n - i)))
+                  if ((brackets[ii]._bracket != BracketType::NO_BRACKET) && (brackets[ii]._bracketSpan > (n - i)))
                         rootScore->undoChangeBracketSpan(staff, ii, n - i);
                   }
             }

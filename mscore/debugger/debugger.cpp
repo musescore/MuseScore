@@ -457,7 +457,7 @@ void Debugger::updateList(Score* s)
                         if (mb->type() != Element::ElementType::MEASURE)
                               continue;
                         Measure* measure = (Measure*) mb;
-                        if (cs->styleB(ST_concertPitch)) {
+                        if (cs->styleB(StyleIdx::concertPitch)) {
                               if (measure->mmRest()) {
                                     ElementItem* mmi = new ElementItem(mi, measure->mmRest());
                                     addMeasure(mmi, measure->mmRest());
@@ -1407,12 +1407,12 @@ void HarmonyView::setElement(Element* e)
       hb.leftParen->setChecked(harmony->leftParen());
       hb.rightParen->setChecked(harmony->rightParen());
       hb.rootTpc->setValue(harmony->rootTpc());
-      if (harmony->rootTpc() == INVALID_TPC)
+      if (harmony->rootTpc() == Tpc::INVALID)
             hb.rootName->setText("");
       else
             hb.rootName->setText(harmony->rootName());
       hb.bassTpc->setValue(harmony->baseTpc());
-      if (harmony->baseTpc() == INVALID_TPC)
+      if (harmony->baseTpc() == Tpc::INVALID)
             hb.bassName->setText("");
       else
             hb.bassName->setText(harmony->baseName());
@@ -2102,7 +2102,7 @@ void VoltaSegmentView::setElement(Element* e)
       VoltaSegment* vs = (VoltaSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
+      lb.segmentType->setCurrentIndex(int(vs->spannerSegmentType()));
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
@@ -2128,7 +2128,7 @@ void LineSegmentView::setElement(Element* e)
       LineSegment* vs = (LineSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
+      lb.segmentType->setCurrentIndex(int(vs->spannerSegmentType()));
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
@@ -2334,25 +2334,25 @@ void SlurSegmentView::setElement(Element* e)
       {
       SlurSegment* s = static_cast<SlurSegment*>(e);
       ShowElementBase::setElement(e);
-      ss.up1px->setValue(s->getUps(GRIP_START)->p.x());
-      ss.up1py->setValue(s->getUps(GRIP_START)->p.y());
-      ss.up1ox->setValue(s->getUps(GRIP_START)->off.x());
-      ss.up1oy->setValue(s->getUps(GRIP_START)->off.y());
+      ss.up1px->setValue(s->getUps(int(GripSlurSegment::START))->p.x());
+      ss.up1py->setValue(s->getUps(int(GripSlurSegment::START))->p.y());
+      ss.up1ox->setValue(s->getUps(int(GripSlurSegment::START))->off.x());
+      ss.up1oy->setValue(s->getUps(int(GripSlurSegment::START))->off.y());
 
-      ss.up2px->setValue(s->getUps(GRIP_BEZIER1)->p.x());
-      ss.up2py->setValue(s->getUps(GRIP_BEZIER1)->p.y());
-      ss.up2ox->setValue(s->getUps(GRIP_BEZIER1)->off.x());
-      ss.up2oy->setValue(s->getUps(GRIP_BEZIER1)->off.y());
+      ss.up2px->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->p.x());
+      ss.up2py->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->p.y());
+      ss.up2ox->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->off.x());
+      ss.up2oy->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->off.y());
 
-      ss.up3px->setValue(s->getUps(GRIP_BEZIER2)->p.x());
-      ss.up3py->setValue(s->getUps(GRIP_BEZIER2)->p.y());
-      ss.up3ox->setValue(s->getUps(GRIP_BEZIER2)->off.x());
-      ss.up3oy->setValue(s->getUps(GRIP_BEZIER2)->off.y());
+      ss.up3px->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->p.x());
+      ss.up3py->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->p.y());
+      ss.up3ox->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->off.x());
+      ss.up3oy->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->off.y());
 
-      ss.up4px->setValue(s->getUps(GRIP_END)->p.x());
-      ss.up4py->setValue(s->getUps(GRIP_END)->p.y());
-      ss.up4ox->setValue(s->getUps(GRIP_END)->off.x());
-      ss.up4oy->setValue(s->getUps(GRIP_END)->off.y());
+      ss.up4px->setValue(s->getUps(int(GripSlurSegment::END))->p.x());
+      ss.up4py->setValue(s->getUps(int(GripSlurSegment::END))->p.y());
+      ss.up4ox->setValue(s->getUps(int(GripSlurSegment::END))->off.x());
+      ss.up4oy->setValue(s->getUps(int(GripSlurSegment::END))->off.y());
 
       }
 
@@ -2596,7 +2596,7 @@ void TextLineSegmentView::setElement(Element* e)
       VoltaSegment* vs = (VoltaSegment*)e;
       ShowElementBase::setElement(e);
 
-      lb.segmentType->setCurrentIndex(vs->spannerSegmentType());
+      lb.segmentType->setCurrentIndex(int(vs->spannerSegmentType()));
       lb.pos2x->setValue(vs->pos2().x());
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());

@@ -86,7 +86,7 @@ void NoteDot::read(XmlReader& e)
 
 qreal NoteDot::mag() const
       {
-      return parent()->mag() * score()->styleD(ST_dotMag);
+      return parent()->mag() * score()->styleD(StyleIdx::dotMag);
       }
 }
 
