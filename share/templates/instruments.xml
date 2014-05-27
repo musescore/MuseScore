@@ -4567,8 +4567,8 @@
                   <shortName>Drs.</shortName>
                   <description>Drumset</description>
                   <musicXMLid>drum.group.set</musicXMLid>
-                  <clef>PERC2</clef>
-                  <stafftype>percussion</stafftype>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Channel>
@@ -4701,7 +4701,7 @@
                   <description>Tom Toms</description>
                   <musicXMLid>drum.tom-tom</musicXMLid>
                   <clef>PERC</clef>
-                  <stafflines>5</stafflines>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Drum pitch="41">
@@ -4812,7 +4812,7 @@
                   <description>Congas</description>
                   <musicXMLid>drum.conga</musicXMLid>
                   <clef>PERC</clef>
-                  <stafflines>1</stafflines>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Drum pitch="62">
@@ -4987,7 +4987,7 @@
                   <description>Hi-hat</description>
                   <musicXMLid>metal.hi-hat</musicXMLid>
                   <clef>PERC</clef>
-                  <stafflines>1</stafflines>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Drum pitch="42">
@@ -6017,12 +6017,12 @@
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup name="Marching Percussion">
-            <Instrument id="marchineg-snare">
+            <Instrument id="marching-snare">
                   <longName>Snare Drum</longName>
                   <shortName>SD</shortName>
                   <description>Marching Snare Drum</description>
                   <musicXMLid>drum.snare-drum</musicXMLid>
-                  <stafflines>1</stafflines>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
                   <Drum pitch="52">
@@ -6110,7 +6110,7 @@
                   <shortName>TD</shortName>
                   <description>Marching Tenor Drums</description>
                   <musicXMLid>drum.tenor-drum</musicXMLid>
-                  <stafflines>5</stafflines>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
                   <Drum pitch="120">
@@ -6264,7 +6264,7 @@
                   <shortName>BD</shortName>
                   <description>Marching Bass Drums</description>
                   <musicXMLid>drum.bass-drum</musicXMLid>
-                  <stafflines>5</stafflines>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
                   <Drum pitch="1">
@@ -6346,7 +6346,7 @@
                   <shortName>Cy</shortName>
                   <description>Marching Cymbals</description>
                   <musicXMLid>metal.cymbal.crash</musicXMLid>
-                  <stafflines>1</stafflines>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <clef>PERC</clef>
                   <drumset>1</drumset>
                   <Drum pitch="72">
@@ -7795,7 +7795,7 @@
                   <description>Percussion Synthesizer</description>
                   <musicXMLid>&quot;drum.snare-drum.electric&quot;</musicXMLid>
                   <clef>PERC</clef>
-                  <stafflines>1</stafflines>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Drum pitch="40">
@@ -7935,7 +7935,7 @@
                   <description>Acoustic Nylon Strung Guitar (Tablature)</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <clef>TAB</clef>
+<!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
             </Instrument>
             <Instrument id="guitar-steel">
@@ -7968,7 +7968,7 @@
                   <description>Acoustic Steel Strung Guitar (Tablature)</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <clef>TAB</clef>
+<!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
             </Instrument>
             <Instrument id="11-string-alto-guitar">
@@ -8043,7 +8043,7 @@
                   <init>electric-guitar</init>
                   <description>Electric Guitar (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <clef>TAB</clef>
+<!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
             </Instrument>
             <Instrument id="harp">
@@ -8108,7 +8108,7 @@
                   <description>Lute (Tablature)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
-                  <clef>TAB</clef>
+<!--                  <clef>TAB</clef> -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-5-course">
@@ -8488,7 +8488,7 @@
                   <description>Ukulele (4-str. TAB)</description>
                   <musicXMLid>pluck.ukulele</musicXMLid>
                   <stafftype staffTypePreset="tabUkulele">tablature</stafftype>
-                  <clef>TAB</clef>
+<!--                  <clef>TAB</clef> -->
             </Instrument>
             <Instrument id="tenor-ukulele">
                   <longName>Tenor Ukulele</longName>
@@ -8558,7 +8558,7 @@
                   <description>Bass Guitar (Tablature)</description>
                   <musicXMLid>pluck.bass</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
-                  <clef>TAB</clef>
+<!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
             </Instrument>
             <Instrument id="acoustic-bass">
@@ -8604,7 +8604,7 @@
                   <description>Electric Bass (Tablature)</description>
                   <musicXMLid>pluck.bass.electric</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
-                  <clef>TAB</clef>
+<!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
             </Instrument>
             <Instrument id="fretless-electric-bass">
@@ -8874,7 +8874,7 @@
                   <init>viola-da-gamba</init>
                   <description>Viola da gamba (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
-                  <clef>TAB</clef>
+<!--                  <clef>TAB</clef> -->
                   <genre>earlymusic</genre>
             </Instrument>
             <!-- Viola da Gamba (6 string) removed as a duplication -->

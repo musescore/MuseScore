@@ -57,7 +57,7 @@ void ClefList::setClef(int tick, ClefTypeList ctl)
       {
       if (clef(tick) == ctl)
             return;
-      if (clef(tick-1) == ctl)
+      if (tick > 0 && clef(tick-1) == ctl)
             erase(tick);
       else  {
             auto i = find(tick);
