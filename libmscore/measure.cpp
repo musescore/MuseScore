@@ -1506,7 +1506,7 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       //
       // see also cmdDeleteSelection()
       //
-      _score->select(0, SELECT_SINGLE, 0);
+      _score->select(0, SelectType::SINGLE, 0);
       for (Segment* s = first(); s; s = s->next()) {
             if (s->segmentType() & Segment::SegChordRest) {
                   int strack = staffIdx * VOICES;

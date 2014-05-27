@@ -346,7 +346,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             s->setTextStyleType(TEXT_STYLE_FRAME);
             s->setParent(e);
             score()->undoAddElement(s);
-            score()->select(s, SELECT_SINGLE, 0);
+            score()->select(s, SelectType::SINGLE, 0);
             startEdit(s);
             score()->setLayoutAll(true);
             }
@@ -358,7 +358,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setTextStyleType(TEXT_STYLE_FRAME);
             t->setParent(e);
             score()->undoAddElement(t);
-            score()->select(t, SELECT_SINGLE, 0);
+            score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "title-text") {
@@ -366,7 +366,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setTextStyleType(TEXT_STYLE_TITLE);
             t->setParent(e);
             score()->undoAddElement(t);
-            score()->select(t, SELECT_SINGLE, 0);
+            score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "subtitle-text") {
@@ -374,7 +374,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setTextStyleType(TEXT_STYLE_SUBTITLE);
             t->setParent(e);
             score()->undoAddElement(t);
-            score()->select(t, SELECT_SINGLE, 0);
+            score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "composer-text") {
@@ -382,7 +382,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setTextStyleType(TEXT_STYLE_COMPOSER);
             t->setParent(e);
             score()->undoAddElement(t);
-            score()->select(t, SELECT_SINGLE, 0);
+            score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "poet-text") {
@@ -390,7 +390,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             t->setTextStyleType(TEXT_STYLE_POET);
             t->setParent(e);
             score()->undoAddElement(t);
-            score()->select(t, SELECT_SINGLE, 0);
+            score()->select(t, SelectType::SINGLE, 0);
             startEdit(t);
             }
       else if (cmd == "insert-hbox") {
@@ -399,7 +399,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             s->setBoxWidth(Spatium(w / s->spatium()));
             s->setParent(e);
             score()->undoAddElement(s);
-            score()->select(s, SELECT_SINGLE, 0);
+            score()->select(s, SelectType::SINGLE, 0);
             startEdit(s);
             }
       else if (cmd == "picture")

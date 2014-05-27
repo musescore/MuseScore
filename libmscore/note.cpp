@@ -1161,7 +1161,7 @@ void Note::endDrag()
                         n->undoChangeProperty(P_ID::TPC2, tpc2);
                   }
             }
-      score()->select(this, SELECT_SINGLE, 0);
+      score()->select(this, SelectType::SINGLE, 0);
       }
 
 //---------------------------------------------------------
@@ -1413,7 +1413,7 @@ Element* Note::drop(const DropData& data)
                   Note* n       = c->upNote();
                   Direction dir = c->stemDirection();
                   int t         = (staff2track(staffIdx()) + n->voice());
-                  score()->select(0, SELECT_SINGLE, 0);
+                  score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;
                   nval.pitch = n->pitch();
                   nval.headGroup = n->headGroup();

@@ -3759,9 +3759,9 @@ void MuseScore::selectSimilar(Element* e, bool sameStaff)
 
       score->scanElements(&pattern, collectMatch);
 
-      score->select(0, SELECT_SINGLE, 0);
+      score->select(0, SelectType::SINGLE, 0);
       foreach(Element* e, pattern.el) {
-            score->select(e, SELECT_ADD, 0);
+            score->select(e, SelectType::ADD, 0);
             }
       if (score->selectionChanged()) {
             score->setSelectionChanged(false);
@@ -3783,23 +3783,23 @@ void MuseScore::selectElementDialog(Element* e)
             sd.setPattern(&pattern);
             score->scanElements(&pattern, collectMatch);
             if (sd.doReplace()) {
-                  score->select(0, SELECT_SINGLE, 0);
+                  score->select(0, SelectType::SINGLE, 0);
                   foreach(Element* ee, pattern.el)
-                        score->select(ee, SELECT_ADD, 0);
+                        score->select(ee, SelectType::ADD, 0);
                   }
             else if (sd.doSubtract()) {
                   QList<Element*> sl(score->selection().elements());
                   foreach(Element* ee, pattern.el)
                         sl.removeOne(ee);
-                  score->select(0, SELECT_SINGLE, 0);
+                  score->select(0, SelectType::SINGLE, 0);
                   foreach(Element* ee, sl)
-                        score->select(ee, SELECT_ADD, 0);
+                        score->select(ee, SelectType::ADD, 0);
                   }
             else if (sd.doAdd()) {
                   QList<Element*> sl(score->selection().elements());
                   foreach(Element* ee, pattern.el) {
                         if(!sl.contains(ee))
-                              score->select(ee, SELECT_ADD, 0);
+                              score->select(ee, SelectType::ADD, 0);
                         }
                   }
             if (score->selectionChanged()) {

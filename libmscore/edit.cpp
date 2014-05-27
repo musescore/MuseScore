@@ -358,7 +358,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       note->setNval(noteVal);
       undoAddElement(note);
       _playNote = true;
-      select(note, SELECT_SINGLE, 0);
+      select(note, SelectType::SINGLE, 0);
       if (!chord->staff()->isTabStaff())
             _is.moveToNextInputPos();
       return note;
@@ -974,7 +974,7 @@ void Score::cmdAddHairpin(bool decrescendo)
       pin->setTick2(cr2->segment()->tick());
       undoAddElement(pin);
       if (!noteEntryMode())
-            select(pin, SELECT_SINGLE, 0);
+            select(pin, SelectType::SINGLE, 0);
       }
 
 //---------------------------------------------------------
@@ -999,7 +999,7 @@ void Score::cmdAddOttava(OttavaType type)
       ottava->setTick2(cr2->tick());
       undoAddElement(ottava);
       if (!noteEntryMode())
-            select(ottava, SELECT_SINGLE, 0);
+            select(ottava, SelectType::SINGLE, 0);
       }
 
 //---------------------------------------------------------
@@ -1147,7 +1147,7 @@ void Score::deleteItem(Element* el)
                   Chord* chord = static_cast<Chord*>(el->parent());
                   if (chord->notes().size() > 1) {
                         undoRemoveElement(el);
-                        select(chord->downNote(), SELECT_SINGLE, 0);
+                        select(chord->downNote(), SelectType::SINGLE, 0);
                         break;
                         }
                   // else fall through
@@ -1178,7 +1178,7 @@ void Score::deleteItem(Element* el)
                               rest->setTuplet(tuplet);
                               rest->setDurationType(chord->durationType());
                               }
-                        select(rest, SELECT_SINGLE, 0);
+                        select(rest, SelectType::SINGLE, 0);
                         }
                   else  {
                         // remove segment if empty
@@ -1460,7 +1460,7 @@ void Score::cmdDeleteSelectedMeasures()
                   }
             }
 
-      select(0, SELECT_SINGLE, 0);
+      select(0, SelectType::SINGLE, 0);
       _is.setSegment(0);        // invalidate position
       }
 
@@ -1687,7 +1687,7 @@ Lyrics* Score::addLyrics()
       lyrics->setParent(cr);
       lyrics->setNo(no);
       undoAddElement(lyrics);
-      select(lyrics, SELECT_SINGLE, 0);
+      select(lyrics, SelectType::SINGLE, 0);
       return lyrics;
       }
 
@@ -1912,7 +1912,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
             }
       _is.setSegment(ncr ? ncr->segment() : 0);
       if (doSelect)
-            select(ncr, SELECT_SINGLE, 0);
+            select(ncr, SelectType::SINGLE, 0);
       if (ncr)
             setPlayPos(ncr->tick());
       }
