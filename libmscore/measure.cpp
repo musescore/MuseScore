@@ -408,7 +408,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                   }
             }
       qDebug("Measure::findAccidental: note not found");
-      return NATURAL;
+      return AccidentalVal::NATURAL;
       }
 
 //---------------------------------------------------------
@@ -457,7 +457,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
                   }
             }
       qDebug("segment not found");
-      return NATURAL;
+      return AccidentalVal::NATURAL;
       }
 
 //---------------------------------------------------------

@@ -1430,7 +1430,7 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
       AccidentalVal acc2 = measure->findAccidental(note);
       AccidentalVal acc = (accidental == Accidental::AccidentalType::NONE) ? acc2 : Accidental::subtype2value(accidental);
 
-      int pitch = line2pitch(note->line(), clef, 0) + acc;
+      int pitch = line2pitch(note->line(), clef, 0) + int(acc);
       if (!note->concertPitch())
             pitch += note->transposition();
 

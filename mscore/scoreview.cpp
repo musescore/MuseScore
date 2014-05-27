@@ -4816,7 +4816,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   AccidentalVal acci = s->measure()->findAccidental(s, chord->staffIdx(), pos.line);
                   int step           = absStep(pos.line, clef);
                   int octave         = step/7;
-                  val.pitch          = step2pitch(step) + octave * 12 + acci;
+                  val.pitch          = step2pitch(step) + octave * 12 + int(acci);
 
                   if (!chord->concertPitch())
                         val.pitch += chord->staff()->part()->instr()->transpose().chromatic;
