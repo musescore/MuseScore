@@ -50,7 +50,7 @@ class TextStyle {
          qreal _size,
          bool _bold, bool _italic, bool _underline,
          Align _align,
-         const QPointF& _off = QPointF(), OffsetType _ot = OFFSET_SPATIUM,
+         const QPointF& _off = QPointF(), OffsetType _ot = OffsetType::SPATIUM,
          bool sd = false,
          bool hasFrame = false, Spatium fw = Spatium(0.2), Spatium pw = Spatium(0.5), int fr = 25,
          QColor co = QColor(Qt::black), bool circle = false, bool systemFlag = false,

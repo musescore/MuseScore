@@ -2874,7 +2874,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             else {
                   Symbol* s = new Symbol(score);
                   s->setAlign(ALIGN_LEFT | ALIGN_BASELINE);
-                  s->setOffsetType(OFFSET_SPATIUM);
+                  s->setOffsetType(OffsetType::SPATIUM);
                   if (type == "start")
                         s->setSym(SymId::keyboardPedalPed);
                   else if (type == "stop")
@@ -5258,7 +5258,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
 
       double styleYOff = score->textStyle(TEXT_STYLE_HARMONY).offset().y();
       OffsetType offsetType = score->textStyle(TEXT_STYLE_HARMONY).offsetType();
-      if (offsetType == OFFSET_ABS) {
+      if (offsetType == OffsetType::ABS) {
             styleYOff = styleYOff * MScore::DPMM / score->spatium();
             }
 
