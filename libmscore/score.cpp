@@ -2204,7 +2204,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       //
       // move notes
       //
-      select(0, SELECT_SINGLE, 0);
+      select(0, SelectType::SINGLE, 0);
       int strack = staffIdx * VOICES;
       int dtrack = (staffIdx + 1) * VOICES;
 
@@ -2700,7 +2700,7 @@ void Score::padToggle(int n)
             return;
 
       ChordRest* cr = static_cast<ChordRest*>(el);
-      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NOTE_NORMAL)) {
+      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
             //
@@ -2740,7 +2740,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
 
       SelState selState = _selection.state();
 
-      if (type == SELECT_SINGLE) {
+      if (type == SelectType::SINGLE) {
             deselectAll();
             if (e == 0) {
                   selState = SelState::NONE;
@@ -2748,7 +2748,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   }
             else {
                   if (e->type() == Element::ElementType::MEASURE) {
-                        select(e, SELECT_RANGE, staffIdx);
+                        select(e, SelectType::RANGE, staffIdx);
                         return;
                         }
                   refresh |= e->abbox();
@@ -2765,7 +2765,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
             _selection.setActiveSegment(0);
             _selection.setActiveTrack(0);
             }
-      else if (type == SELECT_ADD) {
+      else if (type == SelectType::ADD) {
             if (e->type() == Element::ElementType::MEASURE) {
                   Measure* m = static_cast<Measure*>(e);
                   int tick  = m->tick();
@@ -2776,7 +2776,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
                         }
                   else {
-                        select(0, SELECT_SINGLE, 0);
+                        select(0, SelectType::SINGLE, 0);
                         return;
                         }
                   _updateAll = true;
@@ -2787,7 +2787,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                   }
             else {
                   if (_selection.state() == SelState::RANGE) {
-                        select(0, SELECT_SINGLE, 0);
+                        select(0, SelectType::SINGLE, 0);
                         return;
                         }
                   else {
@@ -2801,7 +2801,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         }
                   }
             }
-      else if (type == SELECT_RANGE) {
+      else if (type == SelectType::RANGE) {
             bool activeIsFirst = false;
             int activeTrack = e->track();
             if (e->type() == Element::ElementType::MEASURE) {
@@ -2872,11 +2872,11 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                                     break;
                               }
                         if (el)
-                              select(el, SELECT_RANGE, staffIdx);
+                              select(el, SelectType::RANGE, staffIdx);
                         return;
                         }
                   else {
-                        qDebug("SELECT_RANGE: measure: sel state %d", _selection.state());
+                        qDebug("SelectType::RANGE: measure: sel state %d", _selection.state());
                         return;
                         }
                   }
@@ -2930,7 +2930,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                                     }
                               }
                         else {
-                              select(e, SELECT_SINGLE, 0);
+                              select(e, SelectType::SINGLE, 0);
                               return;
                               }
                         }
@@ -2974,7 +2974,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
                         _selection.setStartSegment(cr->segment());
                   }
             else {
-                  select(e, SELECT_SINGLE, staffIdx);
+                  select(e, SelectType::SINGLE, staffIdx);
                   return;
                   }
 
@@ -2997,7 +2997,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
 
 void Score::lassoSelect(const QRectF& bbox)
       {
-      select(0, SELECT_SINGLE, 0);
+      select(0, SelectType::SINGLE, 0);
       QRectF fr(bbox.normalized());
       foreach(Page* page, _pages) {
             QRectF pr(page->bbox());
@@ -3012,7 +3012,7 @@ void Score::lassoSelect(const QRectF& bbox)
                   Element* e = el.at(i);
                   if (frr.contains(e->abbox())) {
                         if (e->type() != Element::ElementType::MEASURE && e->selectable())
-                              select(e, SELECT_ADD, 0);
+                              select(e, SelectType::ADD, 0);
                         }
                   }
             }

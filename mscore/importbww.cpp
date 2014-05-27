@@ -375,7 +375,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
       cr->setBeamMode(bm);
       cr->setTrack(0);
       if (grace) {
-            cr->setNoteType(Ms::NOTE_GRACE32);
+            cr->setNoteType(Ms::NoteType::GRACE32);
             cr->setDurationType(Ms::TDuration::DurationType::V_32ND);
             sd = Ms::Direction::UP;
             }

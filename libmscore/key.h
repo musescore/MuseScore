@@ -90,8 +90,8 @@ class AccidentalState {
             }
       void setAccidentalVal(int line, AccidentalVal val, bool tieContext = false) {
             Q_ASSERT(line >= 0 && line < 75);
-            Q_ASSERT(val >= -2 && val <= 2);
-            state[line] = (val + 2) | (tieContext ? TIE_CONTEXT : 0);
+            Q_ASSERT(val >= AccidentalVal::FLAT2 && val <= AccidentalVal::SHARP2);
+            state[line] = (int(val) + 2) | (tieContext ? TIE_CONTEXT : 0);
             }
       };
 

@@ -93,7 +93,7 @@ void InputState::update(Element* e)
             setRest(true);
             setTrack(rest->track());
             setBeamMode(rest->beamMode());
-            setNoteType(NOTE_NORMAL);
+            setNoteType(NoteType::NORMAL);
             }
       if (e->type() == Element::ElementType::NOTE || e->type() == Element::ElementType::REST) {
             const Instrument* instr = e->staff()->part()->instr();

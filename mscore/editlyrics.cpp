@@ -51,7 +51,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             _score->undoAddElement(lyrics);
             }
 
-      _score->select(lyrics, SELECT_SINGLE, 0);
+      _score->select(lyrics, SelectType::SINGLE, 0);
       startEdit(lyrics, -1);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(lyrics, false);
@@ -159,7 +159,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       if (newLyrics)
           _score->undoAddElement(lyrics);
 
-      _score->select(lyrics, SELECT_SINGLE, 0);
+      _score->select(lyrics, SelectType::SINGLE, 0);
       startEdit(lyrics, -1);
       mscore->changeState(mscoreState());
 
@@ -248,7 +248,7 @@ void ScoreView::lyricsMinus()
       if(newLyrics)
           _score->undoAddElement(lyrics);
 
-      _score->select(lyrics, SELECT_SINGLE, 0);
+      _score->select(lyrics, SelectType::SINGLE, 0);
       startEdit(lyrics, -1);
       mscore->changeState(mscoreState());
 
@@ -337,7 +337,7 @@ void ScoreView::lyricsUnderscore()
       if (newLyrics)
             _score->undoAddElement(lyrics);
 
-      _score->select(lyrics, SELECT_SINGLE, 0);
+      _score->select(lyrics, SelectType::SINGLE, 0);
       startEdit(lyrics, -1);
       mscore->changeState(mscoreState());
 
@@ -368,7 +368,7 @@ void ScoreView::lyricsReturn()
       lyrics->setParent(segment->element(oldLyrics->track()));
       lyrics->setNo(oldLyrics->no() + 1);
       _score->undoAddElement(lyrics);
-      _score->select(lyrics, SELECT_SINGLE, 0);
+      _score->select(lyrics, SelectType::SINGLE, 0);
       startEdit(lyrics, -1);
       mscore->changeState(mscoreState());
 

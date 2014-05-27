@@ -4545,17 +4545,17 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
 
 NoteType graceNoteType(TDuration duration, QString graceSlash)
       {
-            NoteType nt = NOTE_APPOGGIATURA;
+            NoteType nt = NoteType::APPOGGIATURA;
             if (graceSlash == "yes")
-                  nt = NOTE_ACCIACCATURA;
+                  nt = NoteType::ACCIACCATURA;
             if (duration.type() == TDuration::DurationType::V_QUARTER) {
-                  nt = NOTE_GRACE4;
+                  nt = NoteType::GRACE4;
             }
             else if (duration.type() == TDuration::DurationType::V_16TH) {
-                  nt = NOTE_GRACE16;
+                  nt = NoteType::GRACE16;
             }
             else if (duration.type() == TDuration::DurationType::V_32ND) {
-                  nt = NOTE_GRACE32;
+                  nt = NoteType::GRACE32;
             }
             return nt;
       }

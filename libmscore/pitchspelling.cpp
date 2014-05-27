@@ -53,7 +53,7 @@ int step2tpc(int step, AccidentalVal alter)
              5, 12, 19, 26, 33,  // B
              };
 
-      int i = step*5 + alter+2;
+      int i = step*5 + int(alter)+2;
       Q_ASSERT(i >= 0 && (i < int(sizeof(spellings)/sizeof(*spellings))));
       return spellings[i];
       }

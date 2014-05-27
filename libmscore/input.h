@@ -41,7 +41,7 @@ class InputState {
       bool        _repitchMode = false;
 
       bool _rest = false;              // rest mode
-      NoteType _noteType = NOTE_NORMAL;
+      NoteType _noteType = NoteType::NORMAL;
       BeamMode _beamMode = BeamMode::AUTO;
       bool _noteEntryMode = false;
       Slur* _slur = 0;

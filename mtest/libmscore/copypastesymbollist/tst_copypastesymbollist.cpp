@@ -123,7 +123,7 @@ void TestCopyPasteSymbolList::copypaste(const char* name, const char* idx)
       pattern.system  = nullptr;
       score->scanElements(&pattern, collectMatch);
       foreach(Element* e, pattern.el) {
-            score->select(e, SELECT_ADD, 0);
+            score->select(e, SelectType::ADD, 0);
             }
 
       // copy selection to clipboard

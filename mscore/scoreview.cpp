@@ -975,7 +975,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       if (obj->type() == Element::ElementType::TEXT && obj->parent() && obj->parent()->type() == Element::ElementType::TUPLET) {
             obj = obj->parent();
             if (!obj->selected())
-                  obj->score()->select(obj, SELECT_SINGLE, 0);
+                  obj->score()->select(obj, SelectType::SINGLE, 0);
             }
 
       QMenu* popup = new QMenu(this);
@@ -2746,11 +2746,11 @@ void ScoreView::cmd(const QAction* a)
           cmdInsertMeasures(1, Element::ElementType::VBOX);
       else if (cmd == "append-hbox") {
           MeasureBase* mb = appendMeasure(Element::ElementType::HBOX);
-            _score->select(mb, SELECT_SINGLE, 0);
+            _score->select(mb, SelectType::SINGLE, 0);
             }
       else if (cmd == "append-vbox") {
           MeasureBase* mb = appendMeasure(Element::ElementType::VBOX);
-            _score->select(mb, SELECT_SINGLE, 0);
+            _score->select(mb, SelectType::SINGLE, 0);
             }
       else if (cmd == "insert-textframe")
             cmdInsertMeasure(Element::ElementType::TBOX);
@@ -2766,7 +2766,7 @@ void ScoreView::cmd(const QAction* a)
                               }
                         }
                   if (text) {
-                        _score->select(text, SELECT_SINGLE, 0);
+                        _score->select(text, SelectType::SINGLE, 0);
                         startEdit(text);
                         }
                   }
@@ -3035,7 +3035,7 @@ void ScoreView::startNoteEntry()
       if (!d.isValid() || d.isZero() || d.type() == TDuration::DurationType::V_MEASURE)
             is.setDuration(TDuration(TDuration::DurationType::V_QUARTER));
 
-      _score->select(el, SELECT_SINGLE, 0);
+      _score->select(el, SelectType::SINGLE, 0);
       is.update(el);
 
       is.setNoteEntryMode(true);
@@ -3106,7 +3106,7 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
       if (e) {
             if (!e->selected()) {
                   // bool control = (ev->modifiers() & Qt::ControlModifier) ? true : false;
-                  // _score->select(e, control ? SELECT_ADD : SELECT_SINGLE, 0);
+                  // _score->select(e, control ? SelectType::ADD : SelectType::SINGLE, 0);
                   curElement = e;
 //TODO?                  select(ev);
                   }
@@ -3211,11 +3211,11 @@ void ScoreView::select(QMouseEvent* ev)
       // may not find the staff and return -1, which would cause
       // select() to crash
       if (dragStaffIdx >= 0) {
-            SelectType st = SELECT_SINGLE;
+            SelectType st = SelectType::SINGLE;
             if (keyState == Qt::NoModifier)
-                  st = SELECT_SINGLE;
+                  st = SelectType::SINGLE;
             else if (keyState & Qt::ShiftModifier)
-                  st = SELECT_RANGE;
+                  st = SelectType::RANGE;
             else if (keyState & Qt::ControlModifier) {
                   if (curElement->selected() && (ev->type() == QEvent::MouseButtonPress)) {
                         // do not deselect on ButtonPress, only on ButtonRelease
@@ -3223,7 +3223,7 @@ void ScoreView::select(QMouseEvent* ev)
                         return;
                         }
                   addSelect = true;
-                  st = SELECT_ADD;
+                  st = SelectType::ADD;
                   }
             _score->select(curElement, st, dragStaffIdx);
             if (curElement && curElement->type() == Element::ElementType::NOTE) {
@@ -4284,7 +4284,7 @@ void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
       else if (ne > 1)
             el = cl[1];
       if (el) {
-            _score->select(el, SELECT_SINGLE, 0);
+            _score->select(el, SelectType::SINGLE, 0);
             if (!noteEntryMode()) {
                   sm->postEvent(new CommandEvent("note-input"));
                   qApp->processEvents();
@@ -4351,7 +4351,7 @@ void ScoreView::changeVoice(int voice)
                   }
             score()->selection().clear();
             foreach(Element* e, el)
-                  score()->select(e, SELECT_ADD, -1);
+                  score()->select(e, SelectType::ADD, -1);
             score()->setLayoutAll(true);
             score()->endCmd();
             }
@@ -4469,7 +4469,7 @@ void ScoreView::harmonyTab(bool back)
             _score->undoAddElement(harmony);
             }
 
-      _score->select(harmony, SELECT_SINGLE, 0);
+      _score->select(harmony, SelectType::SINGLE, 0);
       startEdit(harmony, -1);
       mscore->changeState(mscoreState());
 
@@ -4567,7 +4567,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
             _score->undoAddElement(harmony);
             }
 
-      _score->select(harmony, SELECT_SINGLE, 0);
+      _score->select(harmony, SelectType::SINGLE, 0);
       startEdit(harmony, -1);
       mscore->changeState(mscoreState());
 
@@ -4638,7 +4638,7 @@ void ScoreView::harmonyTicksTab(int ticks)
             _score->undoAddElement(harmony);
             }
 
-      _score->select(harmony, SELECT_SINGLE, 0);
+      _score->select(harmony, SelectType::SINGLE, 0);
       startEdit(harmony, -1);
       mscore->changeState(mscoreState());
 
@@ -4667,7 +4667,7 @@ void ScoreView::cmdTuplet(int n)
             foreach(Element* e, _score->selection().elements()) {
                   if (e->type() == Element::ElementType::NOTE) {
                         Note* note = static_cast<Note*>(e);
-                        if(note->noteType() != NOTE_NORMAL) { //no tuplet on grace notes
+                        if(note->noteType() != NoteType::NORMAL) { //no tuplet on grace notes
                               _score->endCmd();
                               return;
                               }
@@ -4816,7 +4816,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   AccidentalVal acci = s->measure()->findAccidental(s, chord->staffIdx(), pos.line);
                   int step           = absStep(pos.line, clef);
                   int octave         = step/7;
-                  val.pitch          = step2pitch(step) + octave * 12 + acci;
+                  val.pitch          = step2pitch(step) + octave * 12 + int(acci);
 
                   if (!chord->concertPitch())
                         val.pitch += chord->staff()->part()->instr()->transpose().chromatic;
@@ -4891,7 +4891,7 @@ void ScoreView::cmdAddChordName()
       harmony->setParent(cr->segment());
       _score->undoAddElement(harmony);
 
-      _score->select(harmony, SELECT_SINGLE, 0);
+      _score->select(harmony, SelectType::SINGLE, 0);
       startEdit(harmony);
       _score->setLayoutAll(true);
       _score->update();
@@ -4960,7 +4960,7 @@ void ScoreView::cmdAddText(int type)
       if (s) {
             _score->undoAddElement(s);
             _score->setLayoutAll(true);
-            _score->select(s, SELECT_SINGLE, 0);
+            _score->select(s, SelectType::SINGLE, 0);
             _score->endCmd();
             startEdit(s);
             }
@@ -5054,7 +5054,7 @@ void ScoreView::cmdInsertMeasures(int n, Element::ElementType type)
 
       // measure may be part of mm rest:
       if (!_score->styleB(StyleIdx::createMultiMeasureRests) && type == Element::ElementType::MEASURE)
-            _score->select(mb, SELECT_SINGLE, 0);
+            _score->select(mb, SelectType::SINGLE, 0);
       _score->endCmd();
       }
 
@@ -5072,13 +5072,13 @@ void ScoreView::cmdInsertMeasure(Element::ElementType type)
       if (mb->type() == Element::ElementType::TBOX) {
             TBox* tbox = static_cast<TBox*>(mb);
             Text* s = tbox->getText();
-            _score->select(s, SELECT_SINGLE, 0);
+            _score->select(s, SelectType::SINGLE, 0);
             _score->endCmd();
             startEdit(s);
             return;
             }
       if (mb)
-           _score->select(mb, SELECT_SINGLE, 0);
+           _score->select(mb, SelectType::SINGLE, 0);
       _score->endCmd();
       }
 
@@ -5273,7 +5273,7 @@ void ScoreView::gotoMeasure(Measure* measure)
                         else //REST
                               e = cr;
 
-                        _score->select(e, SELECT_SINGLE, 0);
+                        _score->select(e, SelectType::SINGLE, 0);
                         break;
                         }
                   }
@@ -5377,7 +5377,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, 0, &bNew);
       if (bNew)
             _score->undoAddElement(fbNew);
-      _score->select(fbNew, SELECT_SINGLE, 0);
+      _score->select(fbNew, SelectType::SINGLE, 0);
       startEdit(fbNew, -1);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
@@ -5433,7 +5433,7 @@ void ScoreView::figuredBassTicksTab(int ticks)
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, ticks, &bNew);
       if (bNew)
             _score->undoAddElement(fbNew);
-      _score->select(fbNew, SELECT_SINGLE, 0);
+      _score->select(fbNew, SelectType::SINGLE, 0);
       startEdit(fbNew, -1);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);

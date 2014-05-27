@@ -1161,7 +1161,7 @@ void Note::endDrag()
                         n->undoChangeProperty(P_ID::TPC2, tpc2);
                   }
             }
-      score()->select(this, SELECT_SINGLE, 0);
+      score()->select(this, SelectType::SINGLE, 0);
       }
 
 //---------------------------------------------------------
@@ -1188,15 +1188,15 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || type == ElementType::CHORD
          || type == ElementType::HARMONY
          || type == ElementType::DYNAMIC
-         || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_ACCIACCATURA)
-         || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_APPOGGIATURA)
-      || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE4)
-      || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
-      || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
-         || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8_AFTER)
-         || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16_AFTER)
-         || (noteType() == NOTE_NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32_AFTER)
-         || (noteType() == NOTE_NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_ACCIACCATURA)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_APPOGGIATURA)
+      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE4)
+      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
+      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8_AFTER)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16_AFTER)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32_AFTER)
+         || (noteType() == NoteType::NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
@@ -1301,28 +1301,28 @@ Element* Note::drop(const DropData& data)
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case ICON_ACCIACCATURA:
-                              score()->setGraceNote(ch, pitch(), NOTE_ACCIACCATURA, MScore::division/2);
+                              score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, MScore::division/2);
                               break;
                         case ICON_APPOGGIATURA:
-                              score()->setGraceNote(ch, pitch(), NOTE_APPOGGIATURA, MScore::division/2);
+                              score()->setGraceNote(ch, pitch(), NoteType::APPOGGIATURA, MScore::division/2);
                               break;
                         case ICON_GRACE4:
-                              score()->setGraceNote(ch, pitch(), NOTE_GRACE4, MScore::division);
+                              score()->setGraceNote(ch, pitch(), NoteType::GRACE4, MScore::division);
                               break;
                         case ICON_GRACE16:
-                              score()->setGraceNote(ch, pitch(), NOTE_GRACE16,  MScore::division/4);
+                              score()->setGraceNote(ch, pitch(), NoteType::GRACE16,  MScore::division/4);
                               break;
                         case ICON_GRACE32:
-                              score()->setGraceNote(ch, pitch(), NOTE_GRACE32, MScore::division/8);
+                              score()->setGraceNote(ch, pitch(), NoteType::GRACE32, MScore::division/8);
                               break;
                         case ICON_GRACE8_AFTER:
-                              score()->setGraceNote(ch, pitch(), NOTE_GRACE8_AFTER, MScore::division/2);
+                              score()->setGraceNote(ch, pitch(), NoteType::GRACE8_AFTER, MScore::division/2);
                               break;
                         case ICON_GRACE16_AFTER:
-                              score()->setGraceNote(ch, pitch(), NOTE_GRACE16_AFTER, MScore::division/4);
+                              score()->setGraceNote(ch, pitch(), NoteType::GRACE16_AFTER, MScore::division/4);
                               break;
                         case ICON_GRACE32_AFTER:
-                              score()->setGraceNote(ch, pitch(), NOTE_GRACE32_AFTER, MScore::division/8);
+                              score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, MScore::division/8);
                               break;
                         case ICON_SBEAM:
                         case ICON_MBEAM:
@@ -1357,7 +1357,7 @@ Element* Note::drop(const DropData& data)
                   // before the current note
                   for (int i = nl.size() - 1; i >= 0; --i) {
                         int p = BagpipeEmbellishment::BagpipeNoteInfoList[nl.at(i)].pitch;
-                        score()->setGraceNote(ch, p, NOTE_GRACE32, MScore::division/8);
+                        score()->setGraceNote(ch, p, NoteType::GRACE32, MScore::division/8);
                         }
                   }
                   delete e;
@@ -1366,7 +1366,7 @@ Element* Note::drop(const DropData& data)
             case ElementType::NOTE:
                   {
                   Chord* ch = chord();
-                  if (ch->noteType() != NOTE_NORMAL) {
+                  if (ch->noteType() != NoteType::NORMAL) {
                         delete e;
                         return 0;
                         }
@@ -1413,7 +1413,7 @@ Element* Note::drop(const DropData& data)
                   Note* n       = c->upNote();
                   Direction dir = c->stemDirection();
                   int t         = (staff2track(staffIdx()) + n->voice());
-                  score()->select(0, SELECT_SINGLE, 0);
+                  score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;
                   nval.pitch = n->pitch();
                   nval.headGroup = n->headGroup();

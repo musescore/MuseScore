@@ -88,7 +88,7 @@ void TestChordSymbol::testClear()
       {
       Score* score = test_pre("clear");
       Measure* m = score->firstMeasure();
-      score->select(m, SELECT_SINGLE, 0);
+      score->select(m, SelectType::SINGLE, 0);
       score->cmdDeleteSelection();
       score->doLayout();
       test_post(score, "clear");
