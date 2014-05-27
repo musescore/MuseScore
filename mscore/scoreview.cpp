@@ -3050,9 +3050,9 @@ void ScoreView::startNoteEntry()
 
       Staff* staff = _score->staff(is.track() / VOICES);
       switch (staff->staffType()->group()) {
-            case STANDARD_STAFF_GROUP:
+            case StaffGroup::STANDARD:
                   break;
-            case TAB_STAFF_GROUP: {
+            case StaffGroup::TAB: {
                   int strg = 0;                 // assume topmost string as current string
                   // if entering note entry with a note selected and the note has a string
                   // set InputState::_string to note visual string
@@ -3063,7 +3063,7 @@ void ScoreView::startNoteEntry()
                   is.setString(strg);
                   break;
                   }
-            case PERCUSSION_STAFF_GROUP:
+            case StaffGroup::PERCUSSION:
                   break;
             }
 
@@ -3812,11 +3812,11 @@ ScoreState ScoreView::mscoreState() const
             const InputState is = _score->inputState();
             Staff* staff = _score->staff(is.track() / VOICES);
             switch( staff->staffType()->group()) {
-                  case STANDARD_STAFF_GROUP:
+                  case StaffGroup::STANDARD:
                         return STATE_NOTE_ENTRY_PITCHED;
-                  case TAB_STAFF_GROUP:
+                  case StaffGroup::TAB:
                         return STATE_NOTE_ENTRY_TAB;
-                  case PERCUSSION_STAFF_GROUP:
+                  case StaffGroup::PERCUSSION:
                         return STATE_NOTE_ENTRY_DRUM;
                   }
             }

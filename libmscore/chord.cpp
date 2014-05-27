@@ -1621,7 +1621,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       // in the context of the all of the chords of the whole segment
 
       StaffGroup staffGroup = staff()->staffType()->group();
-      if (staffGroup == TAB_STAFF_GROUP) {
+      if (staffGroup == StaffGroup::TAB) {
             const Instrument* instrument = staff()->part()->instr();
             for (Chord* ch : graceNotes())
                   instrument->stringData()->fretChords(ch);
@@ -1640,7 +1640,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
 
       QList<Note*> lnotes(notes());  // we need a copy!
       for (Note* note : lnotes) {
-            if (staffGroup == STANDARD_STAFF_GROUP) {
+            if (staffGroup == StaffGroup::STANDARD) {
                   if (note->tieBack()) {
                         if (note->accidental() && note->tpc() == note->tieBack()->startNote()->tpc()) {
                               // TODO: remove accidental only if note is not
@@ -1650,7 +1650,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         }
                   note->updateAccidental(as);
                   }
-            else if (staffGroup == PERCUSSION_STAFF_GROUP) {
+            else if (staffGroup == StaffGroup::PERCUSSION) {
                   const Instrument* instrument = staff()->part()->instr();
                   Drumset* drumset = instrument->drumset();
                   int pitch = note->pitch();

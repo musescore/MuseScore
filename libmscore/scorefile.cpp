@@ -897,11 +897,11 @@ bool Score::read(XmlReader& e)
                   // staff type numbering did change!
                   // attempt to keep some compatibility with existing 2.0 scores
                   if (groupName == "percussion")
-                        group = PERCUSSION_STAFF_GROUP;
+                        group = StaffGroup::PERCUSSION;
                   else if (groupName == "tablature")
-                        group = TAB_STAFF_GROUP;
+                        group = StaffGroup::TAB;
                   else
-                        group = STANDARD_STAFF_GROUP;
+                        group = StaffGroup::STANDARD;
 
                   StaffType* ost = staffType(idx);
                   StaffType* st;

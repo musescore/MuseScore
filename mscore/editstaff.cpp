@@ -369,9 +369,9 @@ void EditStaff::showStaffTypeDialog()
             const StaffType* nt = editor.getStaffType();
             StaffGroup og = staff->staffType()->group();
             StaffGroup ng = nt->group();
-            bool updateNeeded = (ng == TAB_STAFF_GROUP && og != TAB_STAFF_GROUP) ||
-                          (ng != TAB_STAFF_GROUP && og == TAB_STAFF_GROUP) ||
-                          (ng == TAB_STAFF_GROUP && og == TAB_STAFF_GROUP);
+            bool updateNeeded = (ng == StaffGroup::TAB && og != StaffGroup::TAB) ||
+                          (ng != StaffGroup::TAB && og == StaffGroup::TAB) ||
+                          (ng == StaffGroup::TAB && og == StaffGroup::TAB);
 
             staff->score()->undo()->push(new ChangeStaffType(staff, *nt));
             if (updateNeeded)
