@@ -431,13 +431,13 @@ void EditStyle::getValues()
       // offsetType is necessarily OFFSET_SPATIUM
       const TextStyle fbOld = lstyle.textStyle(TEXT_STYLE_FIGURED_BASS);
       if (family != fbOld.family() || size != fbOld.size()
-         || vPos != fbOld.offset().y() || fbOld.offsetType() != OFFSET_SPATIUM)
+         || vPos != fbOld.offset().y() || fbOld.offsetType() != OffsetType::SPATIUM)
             {
             TextStyle fbNew(fbOld);
             fbNew.setFamily(family);
             fbNew.setSize(size);
             fbNew.setYoff(vPos);
-            fbNew.setOffsetType(OFFSET_SPATIUM);
+            fbNew.setOffsetType(OffsetType::SPATIUM);
             lstyle.setTextStyle(fbNew);
             }
 

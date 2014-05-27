@@ -158,9 +158,9 @@ enum AlignmentFlags : char {
 //   OffsetType
 //---------------------------------------------------------
 
-enum OffsetType {
-      OFFSET_ABS,       ///< offset in point units
-      OFFSET_SPATIUM    ///< offset in space units
+enum class OffsetType : char {
+      ABS,       ///< offset in point units
+      SPATIUM    ///< offset in space units
       };
 
 //---------------------------------------------------------

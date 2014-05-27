@@ -234,8 +234,8 @@ static const StyleTypes styleTypes;
 static const QString ff("FreeSerif");
 
 #define MM(x) ((x)/INCH)
-#define OA     OFFSET_ABS
-#define OS     OFFSET_SPATIUM
+#define OA     OffsetType::ABS
+#define OS     OffsetType::SPATIUM
 #define TR(x)  QT_TRANSLATE_NOOP("MuseScore", x)
 #define AS(n, ...)  s->addTextStyle(TextStyle(TR(n), __VA_ARGS__))
 
