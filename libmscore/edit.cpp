@@ -717,7 +717,7 @@ void Score::putNote(const Position& p, bool replace)
                   AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);
                   int step   = absStep(line, clef);
                   int octave = step/7;
-                  nval.pitch = step2pitch(step) + octave * 12 + acci;
+                  nval.pitch = step2pitch(step) + octave * 12 + int(acci);
                   if (!styleB(StyleIdx::concertPitch))
                         nval.pitch += instr->transpose().chromatic;
                   nval.tpc = step2tpc(step % 7, acci);
@@ -819,7 +819,7 @@ void Score::repitchNote(const Position& p, bool replace)
       AccidentalVal acci = s->measure()->findAccidental(s, p.staffIdx, p.line);
       int step   = absStep(p.line, clef);
       int octave = step / 7;
-      nval.pitch = step2pitch(step) + octave * 12 + acci;
+      nval.pitch = step2pitch(step) + octave * 12 + int(acci);
       if (!styleB(StyleIdx::concertPitch))
             nval.pitch += st->part()->instr(s->tick())->transpose().chromatic;
       nval.tpc = step2tpc(step % 7, acci);

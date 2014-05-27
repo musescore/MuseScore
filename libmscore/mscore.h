@@ -218,7 +218,7 @@ enum class NoteType : char {
 //    AccidentalVal
 //---------------------------------------------------------
 
-enum AccidentalVal {
+enum class AccidentalVal : signed char {
       SHARP2  = 2,
       SHARP   = 1,
       NATURAL = 0,
