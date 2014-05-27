@@ -334,7 +334,7 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
             for (Chord* c : chord->graceNotes())
                   layoutCR0(c, mm);
 
-            if (chord->noteType() != NOTE_NORMAL)
+            if (chord->noteType() != NoteType::NORMAL)
                   m *= score()->styleD(StyleIdx::graceNoteMag);
             if (drumset) {
                   for (Note* note : chord->notes()) {
@@ -408,7 +408,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                   }
             }
       qDebug("Measure::findAccidental: note not found");
-      return NATURAL;
+      return AccidentalVal::NATURAL;
       }
 
 //---------------------------------------------------------
@@ -457,7 +457,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
                   }
             }
       qDebug("segment not found");
-      return NATURAL;
+      return AccidentalVal::NATURAL;
       }
 
 //---------------------------------------------------------
@@ -1506,7 +1506,7 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       //
       // see also cmdDeleteSelection()
       //
-      _score->select(0, SELECT_SINGLE, 0);
+      _score->select(0, SelectType::SINGLE, 0);
       for (Segment* s = first(); s; s = s->next()) {
             if (s->segmentType() & Segment::SegChordRest) {
                   int strack = staffIdx * VOICES;
@@ -1833,7 +1833,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   chord->read(e);
                   segment = getSegment(Segment::SegChordRest, e.tick());
 
-                  if (chord->noteType() != NOTE_NORMAL)
+                  if (chord->noteType() != NoteType::NORMAL)
                         graceNotes.push_back(chord);
                   else {
                         segment->add(chord);

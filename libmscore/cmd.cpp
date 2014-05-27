@@ -248,7 +248,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             }
 
       undoAddElement(spanner);
-      select(spanner, SELECT_SINGLE, 0);
+      select(spanner, SelectType::SINGLE, 0);
 
       if (spanner->type() == Element::ElementType::TRILL) {
             Element* e = segment->element(staffIdx * VOICES);
@@ -494,7 +494,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
             undoAddElement(note);
             _playNote = true;
 
-            select(note, SELECT_SINGLE, 0);
+            select(note, SelectType::SINGLE, 0);
             }
       Chord* c = nl.front()->chord();
       c->measure()->cmdUpdateNotes(c->staffIdx());
@@ -531,7 +531,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       chord->setMag(ch->staff()->mag() * styleD(StyleIdx::graceNoteMag));
 
       undoAddElement(chord);
-      select(note, SELECT_SINGLE, 0);
+      select(note, SelectType::SINGLE, 0);
       }
 
 //---------------------------------------------------------
@@ -641,7 +641,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
       if (tie)
             connectTies();
       if (nr)
-            select(nr, SELECT_SINGLE, 0);
+            select(nr, SelectType::SINGLE, 0);
       return segment;
       }
 
@@ -965,9 +965,9 @@ qDebug("  setRest at %d+%d, %d/%d",
    cr->tick(), cr->actualTicks(), (srcF-dstF).numerator(), (srcF-dstF).denominator());
             setRest(cr->tick() + cr->actualTicks(), track, srcF - dstF, false, tuplet);
             if(!selNote)
-                  select(cr, SELECT_SINGLE, 0);
+                  select(cr, SelectType::SINGLE, 0);
             else
-                  select(selNote, SELECT_SINGLE, 0);
+                  select(selNote, SelectType::SINGLE, 0);
             return;
             }
 
@@ -1010,7 +1010,7 @@ qDebug("  +ChangeCRLen::setRest %d/%d", f2.numerator(), f2.denominator());
                         r = setRest(tick, track, f2 * timeStretch, (d.dots() > 0), tuplet);
                         }
                   if (first) {
-                        select(r, SELECT_SINGLE, 0);
+                        select(r, SelectType::SINGLE, 0);
                         first = false;
                         }
 qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * timeStretch.numerator() / timeStretch.denominator());
@@ -1039,9 +1039,9 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
                                     }
                               if (oc && first) {
                                     if(!selNote)
-                                          select(oc, SELECT_SINGLE, 0);
+                                          select(oc, SelectType::SINGLE, 0);
                                     else
-                                          select(selNote, SELECT_SINGLE, 0);
+                                          select(selNote, SelectType::SINGLE, 0);
                                     first = false;
                                     }
                               if (oc)
@@ -1064,7 +1064,7 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
                                     oc = cc;
                                     }
                               if (first) {
-                                    select(oc, SELECT_SINGLE, 0);
+                                    select(oc, SelectType::SINGLE, 0);
                                     first = false;
                                     }
                               tick += oc->actualTicks();
@@ -1430,7 +1430,7 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
       AccidentalVal acc2 = measure->findAccidental(note);
       AccidentalVal acc = (accidental == Accidental::AccidentalType::NONE) ? acc2 : Accidental::subtype2value(accidental);
 
-      int pitch = line2pitch(note->line(), clef, 0) + acc;
+      int pitch = line2pitch(note->line(), clef, 0) + int(acc);
       if (!note->concertPitch())
             pitch += note->transposition();
 
@@ -1773,7 +1773,7 @@ Element* Score::move(const QString& cmd)
                   if (trg->type() == Element::ElementType::CHORD)
                         trg = static_cast<Chord*>(trg)->upNote();
                   _playNote = true;
-                  select(trg, SELECT_SINGLE, 0);
+                  select(trg, SelectType::SINGLE, 0);
                   return trg;
                   }
             // if no chordrest found, do nothing
@@ -1838,7 +1838,7 @@ Element* Score::move(const QString& cmd)
             if (el->type() == Element::ElementType::CHORD)
                   el = static_cast<Chord*>(el)->upNote();       // originally downNote
             _playNote = true;
-            select(el, SELECT_SINGLE, 0);
+            select(el, SelectType::SINGLE, 0);
             }
       return el;
       }
@@ -1897,7 +1897,7 @@ Element* Score::selectMove(const QString& cmd)
       else if (cmd == "select-staff-below")
             el = downStaff(cr);
       if (el)
-            select(el, SELECT_RANGE, el->staffIdx());
+            select(el, SelectType::RANGE, el->staffIdx());
       return el;
       }
 
@@ -1943,7 +1943,7 @@ void Score::cmdHalfDuration()
       TDuration d = _is.duration().shift(1);
       if (!d.isValid() || (d.type() > TDuration::DurationType::V_64TH))
             return;
-      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NOTE_NORMAL)) {
+      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
             //
@@ -1973,7 +1973,7 @@ void Score::cmdDoubleDuration()
       TDuration d = _is.duration().shift(-1);
       if (!d.isValid() || (d.type() < TDuration::DurationType::V_WHOLE))
             return;
-      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NOTE_NORMAL)) {
+      if (cr->type() == Element::ElementType::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
             //
@@ -2126,7 +2126,7 @@ void Score::cmd(const QAction* a)
                         if (e->type() == Element::ElementType::NOTE) {
                               _playNote = true;
                               }
-                        select(e, SELECT_SINGLE, 0);
+                        select(e, SelectType::SINGLE, 0);
                         }
                   }
             setLayoutAll(false);
@@ -2138,7 +2138,7 @@ void Score::cmd(const QAction* a)
                         if (e->type() == Element::ElementType::NOTE) {
                               _playNote = true;
                               }
-                        select(e, SELECT_SINGLE, 0);
+                        select(e, SelectType::SINGLE, 0);
                         }
                   }
             setLayoutAll(false);
@@ -2150,7 +2150,7 @@ void Score::cmd(const QAction* a)
                         if (e->type() == Element::ElementType::NOTE) {
                               _playNote = true;
                               }
-                        select(e, SELECT_SINGLE, 0);
+                        select(e, SelectType::SINGLE, 0);
                         }
                   }
             setLayoutAll(false);
@@ -2162,7 +2162,7 @@ void Score::cmd(const QAction* a)
                         if (e->type() == Element::ElementType::NOTE) {
                               _playNote = true;
                               }
-                        select(e, SELECT_SINGLE, 0);
+                        select(e, SelectType::SINGLE, 0);
                         }
                   }
             setLayoutAll(false);

@@ -2141,7 +2141,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             xml.stag(noteTag);
 
             if (grace) {
-                  if (note->noteType() == NOTE_ACCIACCATURA)
+                  if (note->noteType() == NoteType::ACCIACCATURA)
                         xml.tagE("grace slash=\"yes\"");
                   else
                         xml.tagE("grace");
@@ -4649,7 +4649,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   xml.stag(QString("harmony print-frame=\"no\"").append(relative));
             xml.stag("root");
             xml.tag("root-step", tpc2stepName(rootTpc));
-            int alter = tpc2alter(rootTpc);
+            int alter = int(tpc2alter(rootTpc));
             if (alter)
                   xml.tag("root-alter", alter);
             xml.etag();
@@ -4700,7 +4700,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             if (baseTpc != Tpc::INVALID) {
                   xml.stag("bass");
                   xml.tag("bass-step", tpc2stepName(baseTpc));
-                  int alter = tpc2alter(baseTpc);
+                  int alter = int(tpc2alter(baseTpc));
                   if (alter) {
                         xml.tag("bass-alter", alter);
                         }

@@ -1720,7 +1720,7 @@ FiguredBass* Score::addFiguredBass()
 
       if(bNew)
             undoAddElement(fb);
-      select(fb, SELECT_SINGLE, 0);
+      select(fb, SelectType::SINGLE, 0);
       return fb;
       }
 

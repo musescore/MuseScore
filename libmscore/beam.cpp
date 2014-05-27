@@ -1748,7 +1748,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             //
             // layout stem slash for acciacatura
             //
-            if ((i == 0) && c->noteType() == NOTE_ACCIACCATURA) {
+            if ((i == 0) && c->noteType() == NoteType::ACCIACCATURA) {
                   StemSlash* stemSlash = c->stemSlash();
                   if (!stemSlash) {
                         stemSlash = new StemSlash(score());

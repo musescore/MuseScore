@@ -37,37 +37,37 @@ struct Acc {
 
 #define TRA(x) QT_TRANSLATE_NOOP("accidental", x)
 static Acc accList[] = {
-      Acc("none",                TRA("none"),                NATURAL, 0,    SymId::noSym),
-      Acc("sharp",               TRA("sharp"),               SHARP,   0,    SymId::accidentalSharp),
-      Acc("flat",                TRA("flat"),                FLAT,    0,    SymId::accidentalFlat),
-      Acc("double sharp",        TRA("double sharp"),        SHARP2,  0,    SymId::accidentalDoubleSharp),
-      Acc("double flat",         TRA("double flat"),         FLAT2,   0,    SymId::accidentalDoubleFlat),
-      Acc("natural",             TRA("natural"),             NATURAL, 0,    SymId::accidentalNatural),
+      Acc("none",                TRA("none"),                AccidentalVal::NATURAL, 0,    SymId::noSym),
+      Acc("sharp",               TRA("sharp"),               AccidentalVal::SHARP,   0,    SymId::accidentalSharp),
+      Acc("flat",                TRA("flat"),                AccidentalVal::FLAT,    0,    SymId::accidentalFlat),
+      Acc("double sharp",        TRA("double sharp"),        AccidentalVal::SHARP2,  0,    SymId::accidentalDoubleSharp),
+      Acc("double flat",         TRA("double flat"),         AccidentalVal::FLAT2,   0,    SymId::accidentalDoubleFlat),
+      Acc("natural",             TRA("natural"),             AccidentalVal::NATURAL, 0,    SymId::accidentalNatural),
 
-      Acc("flat-slash",          TRA("flat-slash"),          NATURAL, -50,  SymId::accidentalBakiyeFlat),
-      Acc("flat-slash2",         TRA("flat-slash2"),         NATURAL, 0,    SymId::accidentalBuyukMucennebFlat),
-      Acc("mirrored-flat2",      TRA("mirrored-flat2"),      NATURAL, -150, SymId::accidentalThreeQuarterTonesFlatZimmermann),
-      Acc("mirrored-flat",       TRA("mirrored-flat"),       NATURAL, -50,  SymId::accidentalQuarterToneFlatStein),
-      Acc("mirrored-flat-slash", TRA("mirrored-flat-slash"), NATURAL, 0,    SymId::noSym), //TODO-smufl
-      Acc("flat-flat-slash",     TRA("flat-flat-slash"),     NATURAL, -150, SymId::noSym), //TODO-smufl
+      Acc("flat-slash",          TRA("flat-slash"),          AccidentalVal::NATURAL, -50,  SymId::accidentalBakiyeFlat),
+      Acc("flat-slash2",         TRA("flat-slash2"),         AccidentalVal::NATURAL, 0,    SymId::accidentalBuyukMucennebFlat),
+      Acc("mirrored-flat2",      TRA("mirrored-flat2"),      AccidentalVal::NATURAL, -150, SymId::accidentalThreeQuarterTonesFlatZimmermann),
+      Acc("mirrored-flat",       TRA("mirrored-flat"),       AccidentalVal::NATURAL, -50,  SymId::accidentalQuarterToneFlatStein),
+      Acc("mirrored-flat-slash", TRA("mirrored-flat-slash"), AccidentalVal::NATURAL, 0,    SymId::noSym), //TODO-smufl
+      Acc("flat-flat-slash",     TRA("flat-flat-slash"),     AccidentalVal::NATURAL, -150, SymId::noSym), //TODO-smufl
 
-      Acc("sharp-slash",         TRA("sharp-slash"),         NATURAL, 50,   SymId::accidentalQuarterToneSharpStein),
-      Acc("sharp-slash2",        TRA("sharp-slash2"),        NATURAL, 0,    SymId::accidentalBuyukMucennebSharp),
-      Acc("sharp-slash3",        TRA("sharp-slash3"),        NATURAL, 0,    SymId::accidentalKucukMucennebSharp),
-      Acc("sharp-slash4",        TRA("sharp-slash4"),        NATURAL, 150,  SymId::accidentalThreeQuarterTonesSharpStein),
+      Acc("sharp-slash",         TRA("sharp-slash"),         AccidentalVal::NATURAL, 50,   SymId::accidentalQuarterToneSharpStein),
+      Acc("sharp-slash2",        TRA("sharp-slash2"),        AccidentalVal::NATURAL, 0,    SymId::accidentalBuyukMucennebSharp),
+      Acc("sharp-slash3",        TRA("sharp-slash3"),        AccidentalVal::NATURAL, 0,    SymId::accidentalKucukMucennebSharp),
+      Acc("sharp-slash4",        TRA("sharp-slash4"),        AccidentalVal::NATURAL, 150,  SymId::accidentalThreeQuarterTonesSharpStein),
 
-      Acc("sharp arrow up",      TRA("sharp arrow up"),      NATURAL, 150,  SymId::accidentalThreeQuarterTonesSharpArrowUp),
-      Acc("sharp arrow down",    TRA("sharp arrow down"),    NATURAL, 50,   SymId::accidentalQuarterToneSharpArrowDown),
-      Acc("sharp arrow both",    TRA("sharp arrow both"),    NATURAL, 0,    SymId::noSym), //TODO-smufl
-      Acc("flat arrow up",       TRA("flat arrow up"),       NATURAL, -50,  SymId::accidentalQuarterToneFlatArrowUp),
-      Acc("flat arrow down",     TRA("flat arrow down"),     NATURAL, -150, SymId::accidentalThreeQuarterTonesFlatArrowDown),
-      Acc("flat arrow both",     TRA("flat arrow both"),     NATURAL, 0,    SymId::noSym), //TODO-smufl
-      Acc("natural arrow up",    TRA("natural arrow up"),    NATURAL, 50,   SymId::accidentalQuarterToneSharpNaturalArrowUp),
-      Acc("natural arrow down",  TRA("natural arrow down"),  NATURAL, -50,  SymId::accidentalQuarterToneFlatNaturalArrowDown),
-      Acc("natural arrow both",  TRA("natural arrow both"),  NATURAL, 0,    SymId::noSym), //TODO-smufl
+      Acc("sharp arrow up",      TRA("sharp arrow up"),      AccidentalVal::NATURAL, 150,  SymId::accidentalThreeQuarterTonesSharpArrowUp),
+      Acc("sharp arrow down",    TRA("sharp arrow down"),    AccidentalVal::NATURAL, 50,   SymId::accidentalQuarterToneSharpArrowDown),
+      Acc("sharp arrow both",    TRA("sharp arrow both"),    AccidentalVal::NATURAL, 0,    SymId::noSym), //TODO-smufl
+      Acc("flat arrow up",       TRA("flat arrow up"),       AccidentalVal::NATURAL, -50,  SymId::accidentalQuarterToneFlatArrowUp),
+      Acc("flat arrow down",     TRA("flat arrow down"),     AccidentalVal::NATURAL, -150, SymId::accidentalThreeQuarterTonesFlatArrowDown),
+      Acc("flat arrow both",     TRA("flat arrow both"),     AccidentalVal::NATURAL, 0,    SymId::noSym), //TODO-smufl
+      Acc("natural arrow up",    TRA("natural arrow up"),    AccidentalVal::NATURAL, 50,   SymId::accidentalQuarterToneSharpNaturalArrowUp),
+      Acc("natural arrow down",  TRA("natural arrow down"),  AccidentalVal::NATURAL, -50,  SymId::accidentalQuarterToneFlatNaturalArrowDown),
+      Acc("natural arrow both",  TRA("natural arrow both"),  AccidentalVal::NATURAL, 0,    SymId::noSym), //TODO-smufl
 
-      Acc("sori",                TRA("sori"),                NATURAL, 50,   SymId::accidentalSori),
-      Acc("koron",               TRA("koron"),               NATURAL, -50,  SymId::accidentalKoron)
+      Acc("sori",                TRA("sori"),                AccidentalVal::NATURAL, 50,   SymId::accidentalSori),
+      Acc("koron",               TRA("koron"),               AccidentalVal::NATURAL, -50,  SymId::accidentalKoron)
       };
 #undef TRA
 
@@ -355,11 +355,11 @@ const char* Accidental::subtype2name(AccidentalType st)
 Accidental::AccidentalType Accidental::value2subtype(AccidentalVal v)
       {
       switch(v) {
-            case NATURAL: return AccidentalType::NONE;
-            case SHARP:   return AccidentalType::SHARP;
-            case SHARP2:  return AccidentalType::SHARP2;
-            case FLAT:    return AccidentalType::FLAT;
-            case FLAT2:   return AccidentalType::FLAT2;
+            case AccidentalVal::NATURAL: return AccidentalType::NONE;
+            case AccidentalVal::SHARP:   return AccidentalType::SHARP;
+            case AccidentalVal::SHARP2:  return AccidentalType::SHARP2;
+            case AccidentalVal::FLAT:    return AccidentalType::FLAT;
+            case AccidentalVal::FLAT2:   return AccidentalType::FLAT2;
             default:
                   qFatal("value2subtype: illegal accidental val %d\n", v);
             }

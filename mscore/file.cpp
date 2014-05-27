@@ -686,7 +686,7 @@ void MuseScore::newFile()
       for (Segment* s = m->first(); s; s = s->next()) {
             if (s->segmentType() == Segment::SegChordRest) {
                   if (s->element(0)) {
-                        score->select(s->element(0), SELECT_SINGLE, 0);
+                        score->select(s->element(0), SelectType::SINGLE, 0);
                         break;
                         }
                   }

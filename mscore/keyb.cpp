@@ -326,14 +326,14 @@ void MuseScore::updateInputState(Score* score)
       getAction("voice-3")->setChecked(voice == 2);
       getAction("voice-4")->setChecked(voice == 3);
 
-      getAction("acciaccatura")->setChecked(is.noteType() == NOTE_ACCIACCATURA);
-      getAction("appoggiatura")->setChecked(is.noteType() == NOTE_APPOGGIATURA);
-      getAction("grace4")->setChecked(is.noteType()  == NOTE_GRACE4);
-      getAction("grace16")->setChecked(is.noteType() == NOTE_GRACE16);
-      getAction("grace32")->setChecked(is.noteType() == NOTE_GRACE32);
-      getAction("grace8after")->setChecked(is.noteType()  == NOTE_GRACE8_AFTER);
-      getAction("grace16after")->setChecked(is.noteType() == NOTE_GRACE16_AFTER);
-      getAction("grace32after")->setChecked(is.noteType() == NOTE_GRACE32_AFTER);
+      getAction("acciaccatura")->setChecked(is.noteType() == NoteType::ACCIACCATURA);
+      getAction("appoggiatura")->setChecked(is.noteType() == NoteType::APPOGGIATURA);
+      getAction("grace4")->setChecked(is.noteType()  == NoteType::GRACE4);
+      getAction("grace16")->setChecked(is.noteType() == NoteType::GRACE16);
+      getAction("grace32")->setChecked(is.noteType() == NoteType::GRACE32);
+      getAction("grace8after")->setChecked(is.noteType()  == NoteType::GRACE8_AFTER);
+      getAction("grace16after")->setChecked(is.noteType() == NoteType::GRACE16_AFTER);
+      getAction("grace32after")->setChecked(is.noteType() == NoteType::GRACE32_AFTER);
       getAction("beam-start")->setChecked(is.beamMode() == BeamMode::BEGIN);
       getAction("beam-mid")->setChecked(is.beamMode()   == BeamMode::MID);
       getAction("no-beam")->setChecked(is.beamMode()    == BeamMode::NONE);

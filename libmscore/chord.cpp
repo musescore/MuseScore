@@ -192,7 +192,7 @@ Chord::Chord(Score* s)
       _arpeggio         = 0;
       _tremolo          = 0;
       _glissando        = 0;
-      _noteType         = NOTE_NORMAL;
+      _noteType         = NoteType::NORMAL;
       _stemSlash        = 0;
       _noStem           = false;
       _playEventType    = PlayEventType::Auto;
@@ -321,7 +321,7 @@ qreal Chord::stemPosX() const
 
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
-            if (_noteType != NOTE_NORMAL)
+            if (_noteType != NoteType::NORMAL)
                  nhw *= score()->styleD(StyleIdx::graceNoteMag);
             nhw *= mag();
             return nhw;
@@ -344,7 +344,7 @@ QPointF Chord::stemPos() const
 
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
-            if (_noteType != NOTE_NORMAL)
+            if (_noteType != NoteType::NORMAL)
                   nhw *= score()->styleD(StyleIdx::graceNoteMag);
             nhw    *= mag();
             p.rx() += nhw;
@@ -369,7 +369,7 @@ QPointF Chord::stemPosBeam() const
       QPointF p(pagePos());
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
-            if (_noteType != NOTE_NORMAL)
+            if (_noteType != NoteType::NORMAL)
                  nhw *= score()->styleD(StyleIdx::graceNoteMag);
             p.rx() += nhw;
             p.ry() += upNote()->pos().y();
@@ -829,7 +829,7 @@ void Chord::computeUp()
       if (_stemDirection != Direction::AUTO) {
             _up = _stemDirection == Direction::UP;
             }
-      else if (_noteType != NOTE_NORMAL) {
+      else if (_noteType != NoteType::NORMAL) {
             //
             // stem direction for grace notes
             //
@@ -919,31 +919,31 @@ void Chord::write(Xml& xml) const
       xml.stag("Chord");
       ChordRest::writeProperties(xml);
       switch (_noteType) {
-            case NOTE_INVALID:
-            case NOTE_NORMAL:
+            case NoteType::INVALID:
+            case NoteType::NORMAL:
                   break;
-            case NOTE_ACCIACCATURA:
+            case NoteType::ACCIACCATURA:
                   xml.tagE("acciaccatura");
                   break;
-            case NOTE_APPOGGIATURA:
+            case NoteType::APPOGGIATURA:
                   xml.tagE("appoggiatura");
                   break;
-     	      case NOTE_GRACE4:
+     	      case NoteType::GRACE4:
                   xml.tagE("grace4");
                   break;
-            case NOTE_GRACE16:
+            case NoteType::GRACE16:
                   xml.tagE("grace16");
                   break;
-            case NOTE_GRACE32:
+            case NoteType::GRACE32:
                   xml.tagE("grace32");
                   break;
-            case NOTE_GRACE8_AFTER:
+            case NoteType::GRACE8_AFTER:
                   xml.tagE("grace8after");
                   break;
-            case NOTE_GRACE16_AFTER:
+            case NoteType::GRACE16_AFTER:
                   xml.tagE("grace16after");
                   break;
-            case NOTE_GRACE32_AFTER:
+            case NoteType::GRACE32_AFTER:
                   xml.tagE("grace32after");
                   break;
             }
@@ -1016,35 +1016,35 @@ void Chord::read(XmlReader& e)
                   add(_hook);
                   }
             else if (tag == "appoggiatura") {
-                  _noteType = NOTE_APPOGGIATURA;
+                  _noteType = NoteType::APPOGGIATURA;
                   e.readNext();
                   }
             else if (tag == "acciaccatura") {
-                  _noteType = NOTE_ACCIACCATURA;
+                  _noteType = NoteType::ACCIACCATURA;
                   e.readNext();
                   }
             else if (tag == "grace4") {
-                  _noteType = NOTE_GRACE4;
+                  _noteType = NoteType::GRACE4;
                   e.readNext();
                   }
             else if (tag == "grace16") {
-                  _noteType = NOTE_GRACE16;
+                  _noteType = NoteType::GRACE16;
                   e.readNext();
                   }
             else if (tag == "grace32") {
-                  _noteType = NOTE_GRACE32;
+                  _noteType = NoteType::GRACE32;
                   e.readNext();
                   }
             else if (tag == "grace8after") {
-                  _noteType = NOTE_GRACE8_AFTER;
+                  _noteType = NoteType::GRACE8_AFTER;
                   e.readNext();
                   }
             else if (tag == "grace16after") {
-                  _noteType = NOTE_GRACE16_AFTER;
+                  _noteType = NoteType::GRACE16_AFTER;
                   e.readNext();
                   }
             else if (tag == "grace32after") {
-                  _noteType = NOTE_GRACE32_AFTER;
+                  _noteType = NoteType::GRACE32_AFTER;
                   e.readNext();
                   }
             else if (tag == "StemDirection") {
@@ -1257,7 +1257,7 @@ void Chord::layoutStem1()
       else if (_stem)
             score()->undoRemoveElement(_stem);
 
-      if (hasStem && (_noteType == NOTE_ACCIACCATURA)) {
+      if (hasStem && (_noteType == NoteType::ACCIACCATURA)) {
             if (_stemSlash == 0) {
                   StemSlash* slash = new StemSlash(score());
                   add(slash);
@@ -1397,7 +1397,7 @@ void Chord::layoutStem()
                         }
                   }
 
-            if (_noteType != NOTE_NORMAL) {
+            if (_noteType != NoteType::NORMAL) {
                   // grace notes stems are not subject to normal
                   // stem rules
                   stemLen =  qAbs(ul - dl) * .5;
@@ -1499,7 +1499,7 @@ void Chord::layoutStem()
 
 bool Chord::underBeam() const
       {
-      if(_noteType == NOTE_NORMAL)
+      if(_noteType == NoteType::NORMAL)
           return false;
       const Chord* cr = static_cast<Chord*>(parent());
       Beam* beam = cr->beam();
@@ -1735,7 +1735,7 @@ void Chord::layoutPitched()
             note->layout();
 
             qreal x1 = note->pos().x();
-            if (_noteType == NOTE_NORMAL)
+            if (_noteType == NoteType::NORMAL)
                   x1 += ipos().x();
             qreal x2 = x1 + note->headWidth();
             lll = qMax(lll, -x1);
@@ -1745,7 +1745,7 @@ void Chord::layoutPitched()
             if (accidental) {
                   qreal x = accidental->x() + note->x();
                   // convert x position of accidental to segment coordinate system
-                  if (_noteType == NOTE_NORMAL)
+                  if (_noteType == NoteType::NORMAL)
                         x += note->chord()->x();
                   x -= score()->styleS(StyleIdx::accidentalDistance).val() * _spatium;
                   lll = qMax(lll, -x);
@@ -2257,7 +2257,7 @@ Element* Chord::drop(const DropData& data)
                         atr = 0;
                         // if attribute is already there, remove
                         // score()->cmdRemove(oa); // unexpected behaviour?
-                        score()->select(oa, SELECT_SINGLE, 0);
+                        score()->select(oa, SelectType::SINGLE, 0);
                         }
                   else {
                         atr->setParent(this);
@@ -2597,7 +2597,7 @@ qreal Chord::mag() const
       qreal m = staff() ? staff()->mag() : 1.0;
       if (small())
             m *= score()->styleD(StyleIdx::smallNoteMag);
-      if (_noteType != NOTE_NORMAL)
+      if (_noteType != NoteType::NORMAL)
             m *= score()->styleD(StyleIdx::graceNoteMag);
       return m;
       }
@@ -2634,11 +2634,11 @@ int Chord::getGraceNotesBefore(QList<Chord*>* graceNotesBefore)
       {
       int i = 0;
       foreach (Chord* c, _graceNotes){
-               if (c->noteType() == NOTE_ACCIACCATURA
-               || c->noteType() == NOTE_APPOGGIATURA
-               || c->noteType() == NOTE_GRACE4
-               || c->noteType() == NOTE_GRACE16
-               || c->noteType() == NOTE_GRACE32){
+               if (c->noteType() == NoteType::ACCIACCATURA
+               || c->noteType() == NoteType::APPOGGIATURA
+               || c->noteType() == NoteType::GRACE4
+               || c->noteType() == NoteType::GRACE16
+               || c->noteType() == NoteType::GRACE32){
                     graceNotesBefore->append(c);
                     i++;
                     }
@@ -2657,9 +2657,9 @@ int Chord::getGraceNotesAfter(QList<Chord*>* graceNotesAfter)
       int i = 0;
       for(int j = _graceNotes.length() - 1; j >= 0; --j){
             Chord* c = _graceNotes.at(j);
-            if (c->noteType() == NOTE_GRACE8_AFTER
-             || c->noteType() == NOTE_GRACE16_AFTER
-             || c->noteType() == NOTE_GRACE32_AFTER){
+            if (c->noteType() == NoteType::GRACE8_AFTER
+             || c->noteType() == NoteType::GRACE16_AFTER
+             || c->noteType() == NoteType::GRACE32_AFTER){
                   graceNotesAfter->append(c);
                   i++;
                   }
@@ -2686,9 +2686,9 @@ void Chord::sortNotes()
 void Chord::toGraceAfter()
       {
       switch (noteType()) {
-            case NOTE_APPOGGIATURA:  setNoteType(NOTE_GRACE8_AFTER); break;
-            case NOTE_GRACE16:  setNoteType(NOTE_GRACE16_AFTER); break;
-            case NOTE_GRACE32:  setNoteType(NOTE_GRACE32_AFTER); break;
+            case NoteType::APPOGGIATURA:  setNoteType(NoteType::GRACE8_AFTER); break;
+            case NoteType::GRACE16:  setNoteType(NoteType::GRACE16_AFTER); break;
+            case NoteType::GRACE32:  setNoteType(NoteType::GRACE32_AFTER); break;
             default: break;
             }
       }

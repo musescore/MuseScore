@@ -273,7 +273,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 
             ne = target->drop(dropData);
             if (ne)
-                  score->select(ne, SELECT_SINGLE, 0);
+                  score->select(ne, SelectType::SINGLE, 0);
             viewer->setDropTarget(0);     // acceptDrop sets dropTarget
             }
       }

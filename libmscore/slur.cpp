@@ -898,7 +898,7 @@ void Slur::slurPos(SlurPos* sp)
                  && (!beam2->elements().isEmpty())
                  && (beam2->elements().front() != ec)
                  && (ec->up() == _up)
-                 && sc && (sc->noteType() == NOTE_NORMAL)
+                 && sc && (sc->noteType() == NoteType::NORMAL)
                  )
                   ) {
                   qreal sh = stem2->height() + _spatium;
@@ -1288,12 +1288,12 @@ void Slur::layout()
                   else
                         _up = !(startCR()->up());
 
-                  if (c1 && c2 && isDirectionMixture(c1, c2) && (c1->noteType() == NOTE_NORMAL)) {
+                  if (c1 && c2 && isDirectionMixture(c1, c2) && (c1->noteType() == NoteType::NORMAL)) {
                         // slurs go above if start and end note have different stem directions,
                         // but grace notes are exceptions
                         _up = true;
                         }
-                  else if (m1->mstaff(startCR()->staffIdx())->hasVoices && c1 && c1->noteType() == NOTE_NORMAL) {
+                  else if (m1->mstaff(startCR()->staffIdx())->hasVoices && c1 && c1->noteType() == NoteType::NORMAL) {
                         // in polyphonic passage, slurs go on the stem side
                         _up = startCR()->up();
                         }

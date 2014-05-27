@@ -193,32 +193,32 @@ enum class TransposeMode : char {
 //   SelectType
 //---------------------------------------------------------
 
-enum SelectType {
-      SELECT_SINGLE, SELECT_RANGE, SELECT_ADD
+enum class SelectType : char {
+      SINGLE, RANGE, ADD
       };
 
 //---------------------------------------------------------
 //   NoteType
 //---------------------------------------------------------
 
-enum NoteType {
-      NOTE_NORMAL,
-      NOTE_ACCIACCATURA,
-      NOTE_APPOGGIATURA,       // grace notes
-      NOTE_GRACE4,
-      NOTE_GRACE16,
-      NOTE_GRACE32,
-      NOTE_GRACE8_AFTER,
-      NOTE_GRACE16_AFTER,
-      NOTE_GRACE32_AFTER,
-      NOTE_INVALID
+enum class NoteType : char {
+      NORMAL,
+      ACCIACCATURA,
+      APPOGGIATURA,       // grace notes
+      GRACE4,
+      GRACE16,
+      GRACE32,
+      GRACE8_AFTER,
+      GRACE16_AFTER,
+      GRACE32_AFTER,
+      INVALID
       };
 
 //---------------------------------------------------------
 //    AccidentalVal
 //---------------------------------------------------------
 
-enum AccidentalVal {
+enum class AccidentalVal : signed char {
       SHARP2  = 2,
       SHARP   = 1,
       NATURAL = 0,
@@ -230,10 +230,10 @@ enum AccidentalVal {
 //    KeySigNaturals (positions of naturals in key sig. changes)
 //---------------------------------------------------------
 
-enum KeySigNatural {
-      NAT_NONE   = 0,             // no naturals, except for change to CMaj/Amin
-      NAT_BEFORE = 1,             // naturals before accidentals
-      NAT_AFTER  = 2              // naturals after accidentals (but always before if going sharps <=> flats)
+enum class KeySigNatural : char {
+      NONE   = 0,             // no naturals, except for change to CMaj/Amin
+      BEFORE = 1,             // naturals before accidentals
+      AFTER  = 2              // naturals after accidentals (but always before if going sharps <=> flats)
       };
 
 //---------------------------------------------------------

@@ -1116,7 +1116,7 @@ void GuitarPro1::readNote(int string, Note* note)
                         d.setDots(1);
                   gc->setDurationType(d);
                   gc->setDuration(d.fraction());
-                  gc->setNoteType(NOTE_ACCIACCATURA);
+                  gc->setNoteType(NoteType::ACCIACCATURA);
                   gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
 
                   if (transition == 0) {
@@ -1860,7 +1860,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                         d.setDots(1);
                   gc->setDurationType(d);
                   gc->setDuration(d.fraction());
-                  gc->setNoteType(NOTE_ACCIACCATURA);
+                  gc->setNoteType(NoteType::ACCIACCATURA);
                   gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
 
                   if (transition == 0) {
@@ -2369,10 +2369,10 @@ void GuitarPro5::readNoteEffects(Note* note)
             int gflags = readUChar();
 
             int grace_len = MScore::division/8;
-            NoteType note_type =  NOTE_ACCIACCATURA;
+            NoteType note_type =  NoteType::ACCIACCATURA;
 
             if(gflags & 0x02) //on beat
-                  note_type = NOTE_APPOGGIATURA;
+                  note_type = NoteType::APPOGGIATURA;
 
             if (duration == 1)
                   grace_len = MScore::division/8; //32th

@@ -475,8 +475,8 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::tabClef, int(clefTab1->isChecked() ? ClefType::TAB : ClefType::TAB2));
 
       lstyle.set(StyleIdx::crossMeasureValues,      crossMeasureValues->isChecked());
-      lstyle.set(StyleIdx::keySigNaturals,          radioKeySigNatNone->isChecked() ? NAT_NONE :
-                  (radioKeySigNatBefore->isChecked() ? NAT_BEFORE : NAT_AFTER) );
+      lstyle.set(StyleIdx::keySigNaturals,          radioKeySigNatNone->isChecked() ? int(KeySigNatural::NONE) :
+                  (radioKeySigNatBefore->isChecked() ? int(KeySigNatural::BEFORE) : int(KeySigNatural::AFTER)) );
 
       lstyle.set(StyleIdx::tupletMaxSlope,           tupletMaxSlope->value());
       lstyle.set(StyleIdx::tupletOufOfStaff,         tupletOutOfStaff->isChecked());
@@ -738,9 +738,9 @@ void EditStyle::setValues()
 
       crossMeasureValues->setChecked(lstyle.value(StyleIdx::crossMeasureValues).toBool());
 
-      radioKeySigNatNone->setChecked  (lstyle.value(StyleIdx::keySigNaturals).toInt() == NAT_NONE);
-      radioKeySigNatBefore->setChecked(lstyle.value(StyleIdx::keySigNaturals).toInt() == NAT_BEFORE);
-      radioKeySigNatAfter->setChecked (lstyle.value(StyleIdx::keySigNaturals).toInt() == NAT_AFTER);
+      radioKeySigNatNone->setChecked  (lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::NONE));
+      radioKeySigNatBefore->setChecked(lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::BEFORE));
+      radioKeySigNatAfter->setChecked (lstyle.value(StyleIdx::keySigNaturals).toInt() == int(KeySigNatural::AFTER));
 
       tupletMaxSlope->setValue(lstyle.value(StyleIdx::tupletMaxSlope).toDouble());
       tupletOutOfStaff->setChecked(lstyle.value(StyleIdx::tupletOufOfStaff).toBool());

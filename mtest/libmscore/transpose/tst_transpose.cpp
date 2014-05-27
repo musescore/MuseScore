@@ -62,7 +62,7 @@ void TestTranspose::undoTranspose()
       
       // transpose major second up
       score->startCmd();
-      score->transpose(TransposeMode::INTERVAL, TransposeDirection::UP, 0, 4,
+      score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, 0, 4,
                        true, true, true);
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
