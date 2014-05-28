@@ -108,6 +108,10 @@ class TextLine : public SLine {
       Text* continueTextElement() const       { return _continueText; }
       Text* endTextElement() const            { return _endText; }
 
+      void createBeginTextElement();
+      void createContinueTextElement();
+      void createEndTextElement();
+
       void setBeginText(const QString& s, int style);
       void setContinueText(const QString& s, int style);
       void setEndText(const QString& s, int style);
@@ -115,6 +119,7 @@ class TextLine : public SLine {
       void setBeginText(const QString&);
       void setContinueText(const QString&);
       void setEndText(const QString&);
+
       QString beginText() const;
       QString continueText() const;
       QString endText() const;

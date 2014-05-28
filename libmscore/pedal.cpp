@@ -112,8 +112,6 @@ void PedalSegment::styleChanged()
 Pedal::Pedal(Score* s)
    : TextLine(s)
       {
-      setBeginHook(true);
-      setEndHook(true);
       setBeginHookHeight(Spatium(-1.2));
       setEndHookHeight(Spatium(-1.2));
 

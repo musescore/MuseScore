@@ -812,28 +812,35 @@ Palette* MuseScore::newLinesPalette()
       Pedal* pedal = new Pedal(gscore);
       pedal->setLen(w);
       pedal->setBeginText("<sym>keyboardPedalPed</sym>");
-      pedal->setBeginHook(false);
+      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
+      pedal->setEndHook(true);
+
+      pedal = new Pedal(gscore);
+      pedal->setLen(w);
+      pedal->setBeginHook(true);
+      pedal->setEndHook(true);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
       pedal->setBeginHook(true);
-      sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
-
-      pedal = new Pedal(gscore);
-      pedal->setLen(w);
+      pedal->setEndHook(true);
       pedal->setEndHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
+      pedal->setBeginHook(true);
       pedal->setBeginHookType(HookType::HOOK_45);
+      pedal->setEndHook(true);
       pedal->setEndHookType(HookType::HOOK_45);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       pedal = new Pedal(gscore);
       pedal->setLen(w);
+      pedal->setBeginHook(true);
       pedal->setBeginHookType(HookType::HOOK_45);
+      pedal->setEndHook(true);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
       Trill* trill = new Trill(gscore);

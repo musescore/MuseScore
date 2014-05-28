@@ -410,6 +410,45 @@ TextLine::~TextLine()
       }
 
 //---------------------------------------------------------
+//   createBeginTextElement
+//---------------------------------------------------------
+
+void TextLine::createBeginTextElement()
+      {
+      if (!_beginText) {
+            _beginText = new Text(score());
+            _beginText->setParent(this);
+            _beginText->setTextStyleType(TEXT_STYLE_TEXTLINE);
+            }
+      }
+
+//---------------------------------------------------------
+//   createContinueTextElement
+//---------------------------------------------------------
+
+void TextLine::createContinueTextElement()
+      {
+      if (!_continueText) {
+            _continueText = new Text(score());
+            _continueText->setParent(this);
+            _continueText->setTextStyleType(TEXT_STYLE_TEXTLINE);
+            }
+      }
+
+//---------------------------------------------------------
+//   createEndTextElement
+//---------------------------------------------------------
+
+void TextLine::createEndTextElement()
+      {
+      if (!_endText) {
+            _endText = new Text(score());
+            _endText->setParent(this);
+            _endText->setTextStyleType(TEXT_STYLE_TEXTLINE);
+            }
+      }
+
+//---------------------------------------------------------
 //   setBeginText
 //---------------------------------------------------------
 
@@ -430,11 +469,7 @@ void TextLine::setBeginText(const QString& s)
             _beginText = 0;
             return;
             }
-      if (!_beginText) {
-            _beginText = new Text(score());
-            _beginText->setParent(this);
-            _beginText->setTextStyleType(TEXT_STYLE_TEXTLINE);
-            }
+      createBeginTextElement();
       _beginText->setText(s);
       }
 
@@ -459,11 +494,7 @@ void TextLine::setContinueText(const QString& s)
             _continueText = 0;
             return;
             }
-      if (!_continueText) {
-            _continueText = new Text(score());
-            _continueText->setParent(this);
-            _continueText->setTextStyleType(TEXT_STYLE_TEXTLINE);
-            }
+      createContinueTextElement();
       _continueText->setText(s);
       }
 
@@ -488,11 +519,12 @@ void TextLine::setEndText(const QString& s, int textStyle)
 
 void TextLine::setEndText(const QString& s)
       {
-      if (!_endText) {
-            _endText = new Text(score());
-            _endText->setParent(this);
-            _endText->setTextStyleType(TEXT_STYLE_TEXTLINE);
+      if (s.isEmpty()) {
+            delete _endText;
+            _endText = 0;
+            return;
             }
+      createEndTextElement();
       _endText->setText(s);
       }
 
@@ -672,7 +704,7 @@ bool TextLine::readProperties(XmlReader& e)
       const QStringRef& tag(e.name());
 
       if (tag == "beginHook")
-            _beginHook = (e.readInt() != 0);
+            _beginHook = e.readBool();
       else if (tag == "beginHookHeight") {
             _beginHookHeight = Spatium(e.readDouble());
             _beginHook = true;
@@ -680,7 +712,7 @@ bool TextLine::readProperties(XmlReader& e)
       else if (tag == "beginHookType")
             _beginHookType = HookType(e.readInt());
       else if (tag == "endHook")
-            _endHook = (e.readInt() != 0);
+            _endHook = e.readBool();
       else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
             _endHookHeight = Spatium(e.readDouble());
             _endHook = true;

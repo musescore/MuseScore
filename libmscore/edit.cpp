@@ -1111,7 +1111,7 @@ void Score::deleteItem(Element* el)
       {
       if (!el)
             return;
-      qDebug("deleteItem %s", el->name());
+//      qDebug("deleteItem %s", el->name());
       switch (el->type()) {
             case Element::ElementType::INSTRUMENT_NAME: {
                   Part* part = el->staff()->part();
