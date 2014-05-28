@@ -612,10 +612,10 @@
     <key>clef-bass</key>
     <seq>Ctrl+Y,Ctrl+2</seq>
     </SC>
-  <SC>
+<!--   <SC>
     <key>system-break</key>
-    <seq>Return</seq>
-    </SC>
+   <seq>Return</seq>
+    </SC> -->
   <SC>
     <key>page-break</key>
     <seq>Ctrl+Return</seq>

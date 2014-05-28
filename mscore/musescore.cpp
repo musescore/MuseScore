@@ -588,14 +588,14 @@ MuseScore::MuseScore()
       }
 
       splitter = new QSplitter;
-      tab1 = new ScoreTab(&scoreList);
+      tab1 = new ScoreTab(&scoreList, this);
       tab1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       connect(tab1, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
       connect(tab1, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
       splitter->addWidget(tab1);
 
       if (splitScreen()) {
-            tab2 = new ScoreTab(&scoreList);
+            tab2 = new ScoreTab(&scoreList, this);
             tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
             connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
@@ -3433,7 +3433,7 @@ void MuseScore::splitWindow(bool horizontal)
       {
       if (!_splitScreen) {
             if (tab2 == 0) {
-                  tab2 = new ScoreTab(&scoreList);
+                  tab2 = new ScoreTab(&scoreList, this);
                   tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                   connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
                   connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
