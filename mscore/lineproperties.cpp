@@ -136,27 +136,36 @@ void LineProperties::accept()
       if (pt != otl->endTextPlace())
             otl->undoChangeProperty(P_ID::END_TEXT_PLACE, int(pt));
 
-      if ((tl->beginTextElement() && !tl->beginTextElement()) || (beginText->text() != otl->beginText()))
+      if (beginText->text() != otl->beginText())
             otl->undoChangeProperty(P_ID::BEGIN_TEXT, beginText->text());
-      if ((tl->continueTextElement() && !tl->continueTextElement()) || (continueText->text() != otl->continueText()))
+      else if (otl->beginText().isEmpty())
+            otl->setBeginText("");
+      if (continueText->text() != otl->continueText())
             otl->undoChangeProperty(P_ID::CONTINUE_TEXT, continueText->text());
-      if ((tl->endTextElement() && !tl->endTextElement()) || (endText->text() != otl->endText()))
+      else if (otl->continueText().isEmpty())
+            otl->setContinueText("");
+      if (endText->text() != otl->endText())
             otl->undoChangeProperty(P_ID::END_TEXT, endText->text());
+      else if (otl->endText().isEmpty())
+            otl->setEndText("");
 
-      // TODO: apply text style changes
 
-      Text* t = tl->beginTextElement();
-      if (t) {
-            Text* ot = otl->beginTextElement();
-            if (t->textStyleType() != ot->textStyleType())
-                  ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, t->textStyleType());
-            // TODO: only save style difference
-            if (t->textStyle() != ot->textStyle())
-                  ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+      if (otl->beginTextElement()) {
+            otl->beginTextElement()->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, tl->beginTextElement()->textStyleType());
+            otl->beginTextElement()->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(tl->beginTextElement()->textStyle()));
+            }
+
+      if (otl->continueTextElement()) {
+            otl->continueTextElement()->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, tl->continueTextElement()->textStyleType());
+            otl->continueTextElement()->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(tl->continueTextElement()->textStyle()));
+            }
+
+      if (otl->endTextElement()) {
+            otl->endTextElement()->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, tl->endTextElement()->textStyleType());
+            otl->endTextElement()->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(tl->endTextElement()->textStyle()));
             }
 
       // ...
-
       QDialog::accept();
       }
 
@@ -166,8 +175,7 @@ void LineProperties::accept()
 
 void LineProperties::beginTextProperties()
       {
-      if (!tl->beginTextElement())
-            tl->setBeginText("");         // create text element
+      tl->createBeginTextElement();
       TextProperties t(tl->beginTextElement(), this);
       t.exec();
       }
@@ -178,8 +186,7 @@ void LineProperties::beginTextProperties()
 
 void LineProperties::continueTextProperties()
       {
-      if (!tl->continueTextElement())
-            tl->setContinueText("");      // create Text element
+      tl->createContinueTextElement();
       TextProperties t(tl->continueTextElement(), this);
       t.exec();
       }
@@ -190,8 +197,7 @@ void LineProperties::continueTextProperties()
 
 void LineProperties::endTextProperties()
       {
-      if (!tl->endTextElement())
-            tl->setEndText("");     // create Text element
+      tl->createEndTextElement();
       TextProperties t(tl->endTextElement(), this);
       t.exec();
       }

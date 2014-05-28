@@ -274,7 +274,7 @@ void StaffType::read(XmlReader& e)
             else if (tag == "ledgerlines")
                   _showLedgerLines = e.readInt();
             else if (tag == "durations")
-                  setGenDurations(e.readInt() != 0);
+                  setGenDurations(e.readBool());
             else if (tag == "durationFontName")
                   setDurationFontName(e.readElementText());
             else if (tag == "durationFontSize")
@@ -288,21 +288,21 @@ void StaffType::read(XmlReader& e)
             else if (tag == "fretFontY")
                   setFretFontUserY(e.readDouble());
             else if (tag == "linesThrough")
-                  setLinesThrough(e.readInt() != 0);
+                  setLinesThrough(e.readBool());
             else if (tag == "minimStyle")
                   setMinimStyle( (TablatureMinimStyle) e.readInt() );
             else if (tag == "onLines")
-                  setOnLines(e.readInt() != 0);
+                  setOnLines(e.readBool());
             else if (tag == "showRests")
-                  setShowRests(e.readInt() != 0);
+                  setShowRests(e.readBool());
             else if (tag == "stemsDown")
-                  setStemsDown(e.readInt() != 0);
+                  setStemsDown(e.readBool());
             else if (tag == "stemsThrough")
-                  setStemsThrough(e.readInt() != 0);
+                  setStemsThrough(e.readBool());
             else if (tag == "upsideDown")
-                  setUpsideDown(e.readInt() != 0);
+                  setUpsideDown(e.readBool());
             else if (tag == "useNumbers")
-                  setUseNumbers(e.readInt() != 0);
+                  setUseNumbers(e.readBool());
             else
                   e.unknown();
             }
