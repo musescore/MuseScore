@@ -545,7 +545,7 @@ void EditStaffType::loadFromTemplateClicked()
 void EditStaffType::resetToTemplateClicked()
       {
       int idx = templateCombo->itemData(templateCombo->currentIndex()).toInt();
-      staffType = *(StaffType::preset(idx));
+      staffType = *(StaffType::preset(StaffTypes(idx)));
       setValues();
       }
 
