@@ -19,6 +19,9 @@
 //=============================================================================
 #include <QStackedLayout>
 #include <QTabBar>
+#include <QKeyEvent>
+#include "shortcut.h"
+#include "musescore.h"
 #include "config.h"
 #include "scoretab.h"
 #include "scoreview.h"
@@ -40,6 +43,7 @@ namespace Ms {
 ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
    : QWidget(parent)
       {
+      mainWindow = static_cast<MuseScore*>(parent);
       scoreList = sl;
       QVBoxLayout* layout = new QVBoxLayout;
       setLayout(layout);
@@ -402,5 +406,21 @@ void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset,
       v->setMag(magIdx, mag);
       v->setOffset(xoffset, yoffset);
       }
+//---------------------------------------------------------
+//   keyPressEvent
+//---------------------------------------------------------
+
+void ScoreTab::keyPressEvent(QKeyEvent* event){
+      if(event->key() == Qt::Key_Return){
+            QAction* a = getAction("system-break");
+            Shortcut* sc = Shortcut::getShortcut("system-break");
+            //checking if the state allows the system break action
+            if( (mainWindow->state() & sc->state()) != 0 ){
+                  a->trigger();
+                  }
+            }
+      QWidget::keyPressEvent(event);
+      }
+
 }
 
