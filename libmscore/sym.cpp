@@ -6078,7 +6078,9 @@ void ScoreFont::load()
       _font->setHintingPreference(QFont::PreferVerticalHinting);
 
       qreal size = 20.0 * MScore::DPI / PPI;
+      QFont font2(font());
       _font->setPixelSize(lrint(size));
+      font2.setPixelSize(lrint(size)*100);
 
       QFile fi(_fontPath + "glyphnames.json");
       if (!fi.open(QIODevice::ReadOnly))
@@ -6090,6 +6092,7 @@ void ScoreFont::load()
                error.offset, qPrintable(error.errorString()));
 
       _fm = new QFontMetricsF(font());
+      QFontMetrics fm2(font2);
       for (auto i : o.keys()) {
             bool ok;
             int code = o.value(i).toObject().value("codepoint").toString().mid(2).toInt(&ok, 16);
@@ -6099,7 +6102,7 @@ void ScoreFont::load()
                   SymId symId = Sym::lnhash.value(i);
                   Sym* sym = &_symbols[int(symId)];
                   sym->setString(codeToString(code));
-                  sym->setWidth(_fm->width(sym->string()));
+                  sym->setWidth((fm2.width(sym->string()))/100.0);
                   sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
                   }
             //else
