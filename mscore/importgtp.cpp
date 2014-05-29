@@ -3278,6 +3278,7 @@ void GuitarPro6::readGPX(QByteArray* buffer) {
                   }
              // recurse on the decompressed file stored as a byte array
              readGPX(bcfsBuffer);
+             delete bcfsBuffer;
             }
       else if (fileHeader == GPX_HEADER_UNCOMPRESSED) {
             // this is an uncompressed file - strip the header off
@@ -3306,6 +3307,7 @@ void GuitarPro6::readGPX(QByteArray* buffer) {
                               QByteArray data = getBytes(fileBytes, 0, fileSize);
                               parseFile(filename, &data);
                               }
+                        delete fileBytes;
                         }
                   }
             }
@@ -3812,6 +3814,7 @@ void GuitarPro6::read(QFile* fp)
       *(this->buffer) = fp->readAll();
       // decompress and read files contained within GPX file
       readGPX(this->buffer);
+      delete this->buffer;
       }
 
 //---------------------------------------------------------
@@ -3844,8 +3847,6 @@ Score::FileError importGTP(Score* score, const QString& name)
                   gp = new GuitarPro6(score);
                   gp->read(&fp);
                   fp.close();
-                  //delete gp;
-                  //                  return Score::FILE_NO_ERROR;
                   }
             // otherwise it's an older version - check the header
             else  {
