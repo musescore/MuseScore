@@ -919,15 +919,18 @@ void convertMidi(Score *score, const MidiFile *mf)
 
       auto tracks = createMTrackList(lastTick, sigmap, mf);
       cleanUpMidiEvents(tracks);
+      auto &opers = preferences.midiImportOperations;
 
-      if (preferences.midiImportOperations.count() == 0)        // newly opened MIDI file
+                  // for newly opened MIDI file
+      if (opers.count() == 0 && opers.defaultOperations().canRedefineDefaultsLater)
             Quantize::setIfHumanPerformance(tracks, sigmap);
 
       MChord::collectChords(tracks);
       MidiBeat::adjustChordsToBeats(tracks, lastTick);
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
 
-      if (preferences.midiImportOperations.count() == 0)        // newly opened MIDI file
+                  // for newly opened MIDI file
+      if (opers.count() == 0 && opers.defaultOperations().canRedefineDefaultsLater)
             setLeftRightHandSplit(tracks);
 
       MChord::removeOverlappingNotes(tracks);
@@ -961,9 +964,9 @@ void convertMidi(Score *score, const MidiFile *mf)
       score->connectTies();
       MidiLyrics::setLyricsToScore(mf, trackList);
 
-      if (preferences.midiImportOperations.count() == 0) {
+      if (opers.count() == 0) {
                   // clear defaults - they can be set during opening of this new MIDI file
-            preferences.midiImportOperations.clear();
+            opers.clear();
             }
       }
 

@@ -49,6 +49,7 @@ struct SplitDrums
       // bool and enum-like elementary operations (itself and inside structs) are allowed
 struct TrackOperations
       {
+      bool canRedefineDefaultsLater = true;    // can try to adapt defaults to the imported score
       int reorderedIndex = 0;
       bool doImport = true;
       Quantization quantize;
@@ -98,6 +99,7 @@ class MidiImportOperations
       void setCurrentTrack(int trackIndex);
       void setCurrentMidiFile(const QString &fileName);
       int currentTrack() const { return currentTrack_; }
+      TrackOperations defaultOperations() const { return defaultOpers; }
       TrackOperations currentTrackOperations() const;
       TrackOperations trackOperations(int trackIndex) const;
       int count() const { return operations_.size(); }
