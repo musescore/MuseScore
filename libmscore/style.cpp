@@ -495,7 +495,7 @@ StyleData::StyleData()
             { StyleIdx::ottavaLineWidth,             QVariant(.1) },
             { StyleIdx::ottavaLineStyle,             QVariant(int(Qt::DashLine)) },
             { StyleIdx::ottavaNumbersOnly,           true },
-            { StyleIdx::tabClef,                     QVariant(int(ClefType::TAB2)) },
+            { StyleIdx::tabClef,                     QVariant(int(ClefType::TAB)) },
             { StyleIdx::tremoloWidth,                QVariant(1.2) },  // tremolo stroke width: note head width
             { StyleIdx::tremoloBoxHeight,            QVariant(0.65) },
             { StyleIdx::tremoloStrokeWidth,          QVariant(0.35) },
