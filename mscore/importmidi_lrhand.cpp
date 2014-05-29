@@ -234,10 +234,56 @@ int findNoteCountPenalty(const QList<MidiNote> &notes, int splitPoint)
       return 0;
       }
 
+int findIntersectionPenalty(
+            const ReducedFraction &currentOnTime,
+            int prevPos,
+            int prevSplitPoint,
+            const ReducedFraction &maxChordLen,
+            const std::vector<ChordSplitData> &splits,
+            bool hasLowNotes,
+            bool hasHighNotes)
+      {
+      int penalty = 0;
+      int pos = prevPos;
+      int splitPoint = prevSplitPoint;
+
+      while (splits[pos].chord->first + maxChordLen > currentOnTime) {
+            const MidiChord &chord = splits[pos].chord->second;
+
+            if (hasLowNotes) {
+                  ReducedFraction maxNoteOffTime;
+                  for (int i = 0; i != splitPoint; ++i) {
+                        if (chord.notes[i].offTime > maxNoteOffTime)
+                              maxNoteOffTime = chord.notes[i].offTime;
+                        }
+                  if (maxNoteOffTime > currentOnTime)
+                        penalty += 10;
+                  }
+            if (hasHighNotes) {
+                  ReducedFraction maxNoteOffTime;
+                  for (int i = splitPoint; i != chord.notes.size(); ++i) {
+                        if (chord.notes[i].offTime > maxNoteOffTime)
+                              maxNoteOffTime = chord.notes[i].offTime;
+                        }
+                  if (maxNoteOffTime > currentOnTime)
+                        penalty += 10;
+                  }
+
+            if (pos == 0)
+                  break;
+            const SplitTry &splitTry = splits[pos].possibleSplits[splitPoint];
+            splitPoint = splitTry.prevSplitPoint;
+            --pos;
+            }
+
+      return penalty;
+      }
+
 std::vector<ChordSplitData> findSplits(std::multimap<ReducedFraction, MidiChord> &chords)
       {
       std::vector<ChordSplitData> splits;
       int pos = 0;
+      ReducedFraction maxChordLen;
 
       for (auto it = chords.begin(); it != chords.end(); ++it) {
             const auto &notes = it->second.notes;
@@ -247,6 +293,10 @@ std::vector<ChordSplitData> findSplits(std::multimap<ReducedFraction, MidiChord>
             Q_ASSERT_X(areNotesSortedByPitchInAscOrder(notes),
                        "LRHand::findSplits",
                        "Notes are not sorted by pitch in ascending order");
+
+            const auto len = MChord::maxNoteOffTime(notes) - it->first;
+            if (len > maxChordLen)
+                  maxChordLen = len;
 
             ChordSplitData split;
             split.chord = it;
@@ -260,15 +310,19 @@ std::vector<ChordSplitData> findSplits(std::multimap<ReducedFraction, MidiChord>
                   if (pos > 0) {
                         int bestPrevSplitPoint = -1;
                         int minPenalty = std::numeric_limits<int>::max();
-
                         const auto &prevNotes = std::prev(it)->second.notes;
+
                         for (int prevSplitPoint = 0;
                                  prevSplitPoint <= prevNotes.size(); ++prevSplitPoint) {
 
                               const int prevPenalty
-                                          = splits[pos - 1].possibleSplits[prevSplitPoint].penalty
-                                          + findSimilarityPenalty(
-                                                    notes, prevNotes, splitPoint, prevSplitPoint);
+                                    = splits[pos - 1].possibleSplits[prevSplitPoint].penalty
+                                    + findSimilarityPenalty(
+                                          notes, prevNotes, splitPoint, prevSplitPoint)
+                                    + findIntersectionPenalty(
+                                          it->first, pos - 1, prevSplitPoint,
+                                          maxChordLen, splits,
+                                          splitPoint > 0, splitPoint < notes.size());
 
                               if (prevPenalty < minPenalty) {
                                     minPenalty = prevPenalty;
