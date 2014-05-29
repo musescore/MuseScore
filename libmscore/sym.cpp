@@ -6236,7 +6236,26 @@ void ScoreFont::load()
                   sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
                   }
             }
-      
+
+      // access needed Bravura stylistic alternates
+
+      if (_family == "Bravura") {
+            struct StylisticAlternate {
+                  SymId id;
+                  int   code;
+                  } alternate[] = {
+                        {     SymId::sixStringTabClefSerif,
+                              0xf40c
+                        }
+                  };
+            for (const StylisticAlternate& c : alternate) {
+                  Sym* sym = &_symbols[int(c.id)];
+                  QString s = codeToString(c.code);
+                  sym->setString(s);
+                  sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
+                  }
+            }
+
       /*for (int i = 1; i < int(SymId::lastSym); ++i) {
             Sym sym = _symbols[i];
             if (!sym.isValid())
