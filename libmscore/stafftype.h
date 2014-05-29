@@ -196,7 +196,8 @@ class StaffType {
       void  setFretMetrics();
 
       static bool readConfigFile(const QString& fileName);
-      static const char    groupNames[STAFF_GROUP_MAX][STAFF_GROUP_NAME_MAX_LENGTH];
+      static const char    groupNames[STAFF_GROUP_MAX][STAFF_GROUP_NAME_MAX_LENGTH];      // used in UI
+      static const QString fileGroupNames[STAFF_GROUP_MAX];                               // used in .msc? files
 
    public:
       StaffType();
