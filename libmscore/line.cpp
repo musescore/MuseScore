@@ -238,7 +238,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                         s2 = nextSeg1(s2, track);
                         }
                   }
-            if (s1 == 0 || s2 == 0 || s1->tick() > s2->tick())
+            if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick())
                   return true;
             if (s1->tick() != spanner()->tick())
                   spanner()->setTick(s1->tick());
