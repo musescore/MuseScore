@@ -52,10 +52,12 @@ class TestImportMidi : public QObject, public MTest
 
       void mf(const char* name);
 
-      void noSimplification(const char *file)
+      void dontSimplify(const char *file)
             {
             TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
             opers.simplifyNotation = false;
+            opers.LHRH.doIt = false;
             preferences.midiImportOperations.resetDefaults(opers);
             mf(file);
             preferences.midiImportOperations.clear();
@@ -63,24 +65,32 @@ class TestImportMidi : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void im1() { noSimplification("m1"); }
-      void im2() { noSimplification("m2"); }     // tie across bar line
-      void im3() { noSimplification("m3"); }     // voices, typeA, resolve with tie
-      void im4() { noSimplification("m4"); }     // voices, typeB, resolve with tie
-      void im5() { noSimplification("m5"); }     // same as m1 with division 240
+      void im1() { dontSimplify("m1"); }
+      void im2() { dontSimplify("m2"); }     // tie across bar line
+      void im3() { dontSimplify("m3"); }     // voices, typeA, resolve with tie
+      void im4() { dontSimplify("m4"); }     // voices, typeB, resolve with tie
+      void im5() { dontSimplify("m5"); }     // same as m1 with division 240
 
       // quantization
       void quantDotted4th()
             {
                         // 1/4 quantization should preserve 4th dotted note
             const int defaultQuant = preferences.shortestNote;
-            preferences.shortestNote = MScore::division; // midi quantization: 1/4
-            noSimplification("quant_dotted_4th");
+            preferences.shortestNote = MScore::division;    // midi quantization: 1/4
+            dontSimplify("quant_dotted_4th");
             preferences.shortestNote = defaultQuant;        // restore default
             }
 
       // human-performed (unaligned) files
-      void human4_4() { noSimplification("human_4-4"); }
+      void human4_4()
+            {
+            TrackOperations opers;
+            opers.simplifyNotation = false;
+            opers.LHRH.doIt = false;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("human_4-4");
+            preferences.midiImportOperations.clear();
+            }
 
       // test tuplet recognition functions
       void findChordInBar();
@@ -97,95 +107,98 @@ class TestImportMidi : public QObject, public MTest
       void isSimpleDuration();
 
       // test scores for meter (duration subdivision)
-      void meterTimeSig4_4() { noSimplification("meter_4-4"); }
-      void metertimeSig9_8() { noSimplification("meter_9-8"); }
-      void metertimeSig12_8() { noSimplification("meter_12-8"); }
-      void metertimeSig15_8() { noSimplification("meter_15-8"); }
-      void meterCentralLongNote() { noSimplification("meter_central_long_note"); }
-      void meterCentralLongRest() { noSimplification("meter_central_long_rest"); }
-      void meterChordExample() { noSimplification("meter_chord_example"); }
-      void meterDotsExample1() { noSimplification("meter_dots_example1"); }
-      void meterDotsExample2() { noSimplification("meter_dots_example2"); }
-      void meterDotsExample3() { noSimplification("meter_dots_example3"); }
-      void meterHalfRest3_4() { noSimplification("meter_half_rest_3-4"); }
-      void meterFirst2_8thRestsCompound() { noSimplification("meter_first_2_8th_rests_compound"); }
-      void meterLastQuarterRestCompound() { noSimplification("meter_last_quarter_rest_compound"); }
-      void meterRests() { noSimplification("meter_rests"); }
-      void meterTwoBeatsOver() { noSimplification("meter_two_beats_over"); }
-      void meterDotTie() { noSimplification("meter_dot_tie"); }
+      void meterTimeSig4_4() { dontSimplify("meter_4-4"); }
+      void metertimeSig9_8() { dontSimplify("meter_9-8"); }
+      void metertimeSig12_8() { dontSimplify("meter_12-8"); }
+      void metertimeSig15_8() { dontSimplify("meter_15-8"); }
+      void meterCentralLongNote() { dontSimplify("meter_central_long_note"); }
+      void meterCentralLongRest() { dontSimplify("meter_central_long_rest"); }
+      void meterChordExample() { dontSimplify("meter_chord_example"); }
+      void meterDotsExample1() { dontSimplify("meter_dots_example1"); }
+      void meterDotsExample2() { dontSimplify("meter_dots_example2"); }
+      void meterDotsExample3() { dontSimplify("meter_dots_example3"); }
+      void meterHalfRest3_4() { dontSimplify("meter_half_rest_3-4"); }
+      void meterFirst2_8thRestsCompound() { dontSimplify("meter_first_2_8th_rests_compound"); }
+      void meterLastQuarterRestCompound() { dontSimplify("meter_last_quarter_rest_compound"); }
+      void meterRests() { dontSimplify("meter_rests"); }
+      void meterTwoBeatsOver() { dontSimplify("meter_two_beats_over"); }
+      void meterDotTie() { dontSimplify("meter_dot_tie"); }
 
       // time sig
-      void timesigChanges() { noSimplification("timesig_changes"); }
+      void timesigChanges() { dontSimplify("timesig_changes"); }
 
       // test scores for tuplets
       void tuplet2Voices3_5Tuplets()
             {
                         // requires 1/32 quantization
             const int defaultQuant = preferences.shortestNote;
-            noSimplification("tuplet_2_voices_3_5_tuplets");
+            dontSimplify("tuplet_2_voices_3_5_tuplets");
             preferences.shortestNote = defaultQuant;
             }
       void tuplet2VoicesTupletNon() { mf("tuplet_2_voices_tuplet_non"); }
       void tuplet3_5_7tuplets()
             {
             TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
             opers.changeClef = false;
             opers.simplifyNotation = false;
+            opers.LHRH.doIt = false;
             preferences.midiImportOperations.resetDefaults(opers);
             mf("tuplet_3_5_7_tuplets");
             preferences.midiImportOperations.clear();
             }
-      void tuplet5_5TupletsRests() { noSimplification("tuplet_5_5_tuplets_rests"); }
-      void tuplet3_4() { noSimplification("tuplet_3-4"); }
-      void tupletDuplet() { noSimplification("tuplet_duplet"); }
-      void tupletMars() { noSimplification("tuplet_mars"); }
+      void tuplet5_5TupletsRests() { dontSimplify("tuplet_5_5_tuplets_rests"); }
+      void tuplet3_4() { dontSimplify("tuplet_3-4"); }
+      void tupletDuplet() { dontSimplify("tuplet_duplet"); }
+      void tupletMars() { dontSimplify("tuplet_mars"); }
       void tupletNonuplet3_4()
             {
                         // requires 1/64 quantization
             const int defaultQuant = preferences.shortestNote;
-            noSimplification("tuplet_nonuplet_3-4");
+            dontSimplify("tuplet_nonuplet_3-4");
             preferences.shortestNote = defaultQuant;        // restore default
             }
       void tupletNonuplet4_4()
             {
                         // requires 1/64 quantization
             const int defaultQuant = preferences.shortestNote;
-            noSimplification("tuplet_nonuplet_4-4");
+            dontSimplify("tuplet_nonuplet_4-4");
             preferences.shortestNote = defaultQuant;        // restore default
             }
-      void tupletQuadruplet() { noSimplification("tuplet_quadruplet"); }
-      void tupletSeptuplet() { noSimplification("tuplet_septuplet"); }
-      void tupletTripletsMixed() { noSimplification("tuplet_triplets_mixed"); }
-      void tupletTriplet() { noSimplification("tuplet_triplet"); }
-      void tupletTripletFirstTied() { noSimplification("tuplet_triplet_first_tied"); }
-      void tupletTripletFirstTied2() { noSimplification("tuplet_triplet_first_tied2"); }
-      void tupletTripletLastTied() { noSimplification("tuplet_triplet_last_tied"); }
+      void tupletQuadruplet() { dontSimplify("tuplet_quadruplet"); }
+      void tupletSeptuplet() { dontSimplify("tuplet_septuplet"); }
+      void tupletTripletsMixed() { dontSimplify("tuplet_triplets_mixed"); }
+      void tupletTriplet() { dontSimplify("tuplet_triplet"); }
+      void tupletTripletFirstTied() { dontSimplify("tuplet_triplet_first_tied"); }
+      void tupletTripletFirstTied2() { dontSimplify("tuplet_triplet_first_tied2"); }
+      void tupletTripletLastTied() { dontSimplify("tuplet_triplet_last_tied"); }
       void tupletTied3_5()
             {
                         // requires 1/32 quantization
             const int defaultQuant = preferences.shortestNote;
-            noSimplification("tuplet_tied_3_5_tuplets");
+            dontSimplify("tuplet_tied_3_5_tuplets");
             preferences.shortestNote = defaultQuant;        // restore default
             }
       void tupletTied3_5_2()
             {
             // requires 1/32 quantization
             const int defaultQuant = preferences.shortestNote;
-            noSimplification("tuplet_tied_3_5_tuplets2");
+            dontSimplify("tuplet_tied_3_5_tuplets2");
             preferences.shortestNote = defaultQuant;        // restore default
             }
-      void tupletOffTimeOtherBar() { noSimplification("tuplet_off_time_other_bar"); }
-      void tupletOffTimeOtherBar2() { noSimplification("tuplet_off_time_other_bar2"); }
-      void tuplet16th8th() { noSimplification("tuplet_16th_8th"); }
-      void tuplet7Staccato() { noSimplification("tuplet_7_staccato"); }
-      void minDuration() { noSimplification("min_duration"); }
+      void tupletOffTimeOtherBar() { dontSimplify("tuplet_off_time_other_bar"); }
+      void tupletOffTimeOtherBar2() { dontSimplify("tuplet_off_time_other_bar2"); }
+      void tuplet16th8th() { dontSimplify("tuplet_16th_8th"); }
+      void tuplet7Staccato() { dontSimplify("tuplet_7_staccato"); }
+      void minDuration() { dontSimplify("min_duration"); }
 
-      void pickupMeasure() { noSimplification("pickup"); }
+      void pickupMeasure() { dontSimplify("pickup"); }
 
       // LH/RH separation
       void LHRH_Nontuplet()
             {
             TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
             opers.LHRH.doIt = true;
             opers.simplifyNotation = false;
             preferences.midiImportOperations.resetDefaults(opers);
@@ -195,6 +208,7 @@ class TestImportMidi : public QObject, public MTest
       void LHRH_Tuplet()
             {
             TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
             opers.LHRH.doIt = true;
             opers.simplifyNotation = false;
             preferences.midiImportOperations.resetDefaults(opers);
@@ -204,6 +218,7 @@ class TestImportMidi : public QObject, public MTest
       void LHRH_2melodies()
             {
             TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
             opers.LHRH.doIt = true;
             opers.simplifyNotation = false;
             preferences.midiImportOperations.resetDefaults(opers);
@@ -213,6 +228,7 @@ class TestImportMidi : public QObject, public MTest
       void LHRH_octave()
             {
             TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
             opers.LHRH.doIt = true;
             opers.simplifyNotation = false;
             preferences.midiImportOperations.resetDefaults(opers);
@@ -224,8 +240,10 @@ class TestImportMidi : public QObject, public MTest
       void swingTriplets()
             {
             TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
             opers.swing = MidiOperation::Swing::SWING;
             opers.simplifyNotation = false;
+            opers.LHRH.doIt = false;
             preferences.midiImportOperations.resetDefaults(opers);
             mf("swing_triplets");
             preferences.midiImportOperations.clear();
@@ -233,8 +251,10 @@ class TestImportMidi : public QObject, public MTest
       void swingShuffle()
             {
             TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
             opers.swing = MidiOperation::Swing::SHUFFLE;
             opers.simplifyNotation = false;
+            opers.LHRH.doIt = false;
             preferences.midiImportOperations.resetDefaults(opers);
             mf("swing_shuffle");
             preferences.midiImportOperations.clear();
@@ -242,31 +262,98 @@ class TestImportMidi : public QObject, public MTest
       void swingClef()
             {
             TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
             opers.swing = MidiOperation::Swing::SWING;
             opers.changeClef = true;
             opers.simplifyNotation = false;
+            opers.LHRH.doIt = false;
             preferences.midiImportOperations.resetDefaults(opers);
             mf("swing_clef");
             preferences.midiImportOperations.clear();
             }
 
       // percussion
-      void percDrums() { noSimplification("perc_drums"); }
-      void percRemoveTies() { noSimplification("perc_remove_ties"); }
+      void percDrums() { dontSimplify("perc_drums"); }
+      void percRemoveTies() { dontSimplify("perc_remove_ties"); }
 
       // clef changes along the score
-      void clefTied() { noSimplification("clef_tied"); }
-      void clefMelody() { noSimplification("clef_melody"); }
-      void clefPrev() { noSimplification("clef_prev"); }
+      void clefTied() { dontSimplify("clef_tied"); }
+      void clefMelody() { dontSimplify("clef_melody"); }
+      void clefPrev() { dontSimplify("clef_prev"); }
 
       // notation simplification
-      void simplify16thStaccato() { mf("simplify_16th_staccato"); }
-      void simplify8thDont() { mf("simplify_8th_dont"); }
-      void simplify32ndStaccato() { mf("simplify_32nd_staccato"); }
-      void simplify8thDottedNoStaccato() { mf("simplify_8th_dotted_no_staccato"); }
-      void simplify4thDottedTied() { mf("simplify_4th_dotted_tied"); }
-      void simplifyTripletStaccato() { mf("simplify_triplet_staccato"); }
-      void voiceSeparationAcid() { mf("voice_acid"); }
+      void simplify16thStaccato()
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyNotation = true;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("simplify_16th_staccato");
+            preferences.midiImportOperations.clear();
+            }
+      void simplify8thDont()
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyNotation = true;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("simplify_8th_dont");
+            preferences.midiImportOperations.clear();
+            }
+      void simplify32ndStaccato()
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyNotation = true;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("simplify_32nd_staccato");
+            preferences.midiImportOperations.clear();
+            }
+      void simplify8thDottedNoStaccato()
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyNotation = true;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("simplify_8th_dotted_no_staccato");
+            preferences.midiImportOperations.clear();
+            }
+      void simplify4thDottedTied()
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyNotation = true;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("simplify_4th_dotted_tied");
+            preferences.midiImportOperations.clear();
+            }
+      void simplifyTripletStaccato()
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyNotation = true;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("simplify_triplet_staccato");
+            preferences.midiImportOperations.clear();
+            }
+
+      // voice separation
+      void voiceSeparationAcid()
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyNotation = true;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("voice_acid");
+            preferences.midiImportOperations.clear();
+            }
       };
 
 //---------------------------------------------------------
