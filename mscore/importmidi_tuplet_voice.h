@@ -20,7 +20,6 @@ struct TiedTuplet
       };
 
 int tupletVoiceLimit();
-int voiceLimit();
 void resetTupletVoices(std::vector<TupletInfo> &tuplets);
 
 bool excludeExtraVoiceTuplets(

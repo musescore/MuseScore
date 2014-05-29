@@ -157,7 +157,7 @@ QT4_WRAP_CPP (mocs
           importmidi_tuplet_detect.h  importmidi_tuplet_filter.h importmidi_tuplet_tonotes.h
           importmidi_tuplet_voice.h importmidi_beat.h importmidi_simplify.h
           debugger/debugger.h importmidi_fraction.h importmidi_drum.h
-          importmidi_lrhand.h importmidi_lyrics.h importmidi_trview.h importmidi_tie.h
+          importmidi_lrhand.h importmidi_lyrics.h importmidi_trview.h importmidi_tie.h importmidi_voice.h
           resourceManager.h downloadUtils.h
           ${OMR_MOCS}
           ${SCRIPT_MOCS}
@@ -275,7 +275,7 @@ add_executable ( ${ExecutableName}
           importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp importmidi_trview.cpp
           importmidi_inner.cpp importmidi_tie.cpp importmidi_tuplet_voice.cpp importmidi_beat.cpp
           importmidi_tuplet_detect.cpp  importmidi_tuplet_filter.cpp importmidi_tuplet_tonotes.cpp
-          importmidi_simplify.cpp
+          importmidi_simplify.cpp importmidi_voice.cpp
           resourceManager.cpp downloadUtils.cpp
           textcursor.cpp
       continuouspanel.cpp

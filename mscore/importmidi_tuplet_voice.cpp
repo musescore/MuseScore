@@ -3,6 +3,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_quant.h"
 #include "importmidi_inner.h"
+#include "importmidi_voice.h"
 #include "libmscore/mscore.h"
 #include "preferences.h"
 
@@ -12,39 +13,10 @@
 namespace Ms {
 namespace MidiTuplet {
 
-// no more than VOICES
-
-int toIntVoices(MidiOperation::AllowedVoices value)
-      {
-      switch (value) {
-            case MidiOperation::AllowedVoices::V_1:
-                  return 1;
-            case MidiOperation::AllowedVoices::V_2:
-                  return 2;
-            case MidiOperation::AllowedVoices::V_3:
-                  return 3;
-            case MidiOperation::AllowedVoices::V_4:
-                  return 4;
-            }
-      return VOICES;
-      }
-
-int voiceLimit()
-      {
-      const auto operations = preferences.midiImportOperations.currentTrackOperations();
-      const int allowedVoices = toIntVoices(operations.allowedVoices);
-
-      Q_ASSERT_X(allowedVoices <= VOICES,
-                 "MidiTuplet::voiceLimit",
-                 "Allowed voice count exceeds MuseScore voice limit");
-
-      return allowedVoices;
-      }
-
 int tupletVoiceLimit()
       {
       const auto operations = preferences.midiImportOperations.currentTrackOperations();
-      const int allowedVoices = toIntVoices(operations.allowedVoices);
+      const int allowedVoices = MidiVoice::toIntVoices(operations.allowedVoices);
 
       Q_ASSERT_X(allowedVoices <= VOICES,
                  "MidiTuplet::tupletVoiceLimit",
@@ -132,7 +104,7 @@ void setNonTupletVoices(
             const std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> &tupletIntervals,
             const ReducedFraction &basicQuant)
       {
-      const int limit = voiceLimit();
+      const int limit = MidiVoice::voiceLimit();
       int voice = 0;
       while (!pendingNonTuplets.empty() && voice < limit) {
             for (auto it = pendingNonTuplets.begin(); it != pendingNonTuplets.end(); ) {
@@ -257,13 +229,13 @@ bool voiceDontExceedLimit(
       {
       for (const auto &tuplet: tuplets) {
             const int voice = tuplet.chords.begin()->second->second.voice;
-            if (voice >= voiceLimit())
+            if (voice >= MidiVoice::voiceLimit())
                   return true;
             }
 
       for (const auto &chord: nonTuplets) {
             const int voice = chord->second.voice;
-            if (voice >= voiceLimit())
+            if (voice >= MidiVoice::voiceLimit())
                   return true;
             }
 
@@ -344,7 +316,7 @@ bool excludeExtraVoiceTuplets(
             }
 
       Q_ASSERT_X(areAllElementsUnique(nonTuplets),
-                 "MIDI tuplets: excludeExtraVoiceTuplets", "non unique chords in non-tuplets");
+                 "MidiTuplet::excludeExtraVoiceTuplets", "Non unique chords in non-tuplets");
 
       bool excluded = (sz != tuplets.size());
       tuplets.resize(sz);
