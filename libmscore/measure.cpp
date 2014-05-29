@@ -1525,7 +1525,7 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       RepeatMeasure* rm = new RepeatMeasure(_score);
       rm->setTrack(staffIdx * VOICES);
       rm->setParent(seg);
-      _score->undoAddElement(rm);
+      _score->undoAddCR(rm, this, tick());
       foreach (Element* el, _el) {
             if (el->type() == ElementType::SLUR && el->staffIdx() == staffIdx)
                   _score->undoRemoveElement(el);

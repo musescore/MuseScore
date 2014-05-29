@@ -1802,21 +1802,23 @@ void Score::createMMRests()
                   // check for rehearsal mark and tempo text
                   //
                   cs = m->findSegment(Segment::SegChordRest, m->tick());
-                  for (Element* e : cs->annotations()) {
-                        if (e->type() != Element::ElementType::REHEARSAL_MARK && e->type() != Element::ElementType::TEMPO_TEXT && e->type() != Element::ElementType::STAFF_TEXT)
-                              continue;
+                  if (cs) {
+                        for (Element* e : cs->annotations()) {
+                              if (e->type() != Element::ElementType::REHEARSAL_MARK && e->type() != Element::ElementType::TEMPO_TEXT && e->type() != Element::ElementType::STAFF_TEXT)
+                                    continue;
 
-                        bool found = false;
-                        for (Element* ee : s->annotations()) {
-                              if (ee->type() == e->type() && ee->track() == e->track()) {
-                                    found = true;
-                                    break;
+                              bool found = false;
+                              for (Element* ee : s->annotations()) {
+                                    if (ee->type() == e->type() && ee->track() == e->track()) {
+                                          found = true;
+                                          break;
+                                          }
                                     }
-                              }
-                        if (!found) {
-                              Element* ne = e->linkedClone();
-                              ne->setParent(s);
-                              undo(new AddElement(ne));
+                              if (!found) {
+                                    Element* ne = e->linkedClone();
+                                    ne->setParent(s);
+                                    undo(new AddElement(ne));
+                                    }
                               }
                         }
                   for (Element* e : s->annotations()) {
