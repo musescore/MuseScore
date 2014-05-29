@@ -9,8 +9,7 @@ class ReducedFraction;
 class MidiChord;
 class MTrack;
 
-namespace MidiBeat
-{
+namespace MidiBeat {
 
 void findBeatLocations(
             const std::multimap<ReducedFraction, MidiChord> &allChords,

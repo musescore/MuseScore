@@ -1,5 +1,6 @@
 #include "importmidi_inner.h"
 #include "preferences.h"
+#include "libmscore/durationtype.h"
 
 
 namespace Ms {
@@ -75,4 +76,28 @@ double findBasicTempo(const std::multimap<int, MTrack> &tracks)
       }
 
 } // namespace MidiTempo
+
+namespace MidiBar {
+
+ReducedFraction findBarStart(const ReducedFraction &time, const TimeSigMap *sigmap)
+      {
+      int barIndex, beat, tick;
+      sigmap->tickValues(time.ticks(), &barIndex, &beat, &tick);
+      return ReducedFraction::fromTicks(sigmap->bar2tick(barIndex, 0));
+      }
+
+} // namespace MidiBar
+namespace MidiDuration {
+
+double durationCount(const QList<std::pair<ReducedFraction, TDuration> > &durations)
+      {
+      double count = durations.size();
+      for (const auto &d: durations) {
+            if (d.second.dots())
+                  count += 0.5;
+            }
+      return count;
+      }
+
+} // namespace MidiDuration
 } // namespace Ms

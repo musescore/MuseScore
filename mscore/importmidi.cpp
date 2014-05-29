@@ -57,6 +57,7 @@
 #include "importmidi_tie.h"
 #include "importmidi_beat.h"
 #include "importmidi_simplify.h"
+#include "importmidi_voice.h"
 
 #include <set>
 
@@ -950,6 +951,7 @@ void convertMidi(Score *score, const MidiFile *mf)
 
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
       Simplify::simplifyNotation(tracks, sigmap);
+      MidiVoice::separateVoices(tracks, sigmap);
       MidiDrum::splitDrumVoices(tracks);
       MidiDrum::splitDrumTracks(tracks);
       MidiDrum::removeRests(tracks, sigmap);
