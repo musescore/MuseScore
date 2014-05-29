@@ -112,6 +112,9 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::SIMPLIFY_DURATIONS:
                   trackData.opers.simplifyDurations = operValue.toBool();
                   break;
+            case MidiOperation::Type::SEPARATE_VOICES:
+                  trackData.opers.separateVoices = operValue.toBool();
+                  break;
             case MidiOperation::Type::SWING:
                   trackData.opers.swing = (MidiOperation::Swing)operValue.toInt();
                   break;
@@ -253,6 +256,14 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.simplifyDurations != opers.opers.simplifyDurations) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::SIMPLIFY_DURATIONS);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::SEPARATE_VOICES
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.separateVoices != opers.opers.separateVoices) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::SEPARATE_VOICES);
                         break;
                         }
                   }

@@ -109,6 +109,14 @@ OperationsModel::OperationsModel()
       root->children.push_back(std::unique_ptr<Node>(simplifyDurations));
 
 
+      Node *separateVoices = new Node;
+      separateVoices->name = QCoreApplication::translate("MIDI import operations", "Separate voices");
+      separateVoices->oper.type = MidiOperation::Type::SEPARATE_VOICES;
+      separateVoices->oper.value = TrackOperations().separateVoices;
+      separateVoices->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(separateVoices));
+
+
       // ------------- tuplets --------------
 
       Node *searchTuplets = new Node;
@@ -514,6 +522,9 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
 
                   case MidiOperation::Type::SIMPLIFY_DURATIONS:
                         node->oper.value = opers.opers.simplifyDurations; break;
+
+                  case MidiOperation::Type::SEPARATE_VOICES:
+                        node->oper.value = opers.opers.separateVoices; break;
 
                   case MidiOperation::Type::SWING:
                         node->oper.value = (int)opers.opers.swing; break;
