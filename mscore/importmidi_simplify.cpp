@@ -209,7 +209,7 @@ void minimizeNumberOfRests(
             }
       }
 
-void simplifyNotation(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap)
+void simplifyDurations(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap)
       {
       auto &opers = preferences.midiImportOperations;
 
@@ -224,7 +224,7 @@ void simplifyNotation(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigm
                         // for further usage
             opers.setCurrentTrack(mtrack.indexOfOperation);
 
-            if (opers.currentTrackOperations().simplifyNotation)
+            if (opers.currentTrackOperations().simplifyDurations)
                   minimizeNumberOfRests(chords, sigmap, mtrack.tuplets);
             }
       }

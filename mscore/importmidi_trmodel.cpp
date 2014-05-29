@@ -109,8 +109,8 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::USE_DOTS:
                   trackData.opers.useDots = operValue.toBool();
                   break;
-            case MidiOperation::Type::SIMPLIFY_NOTATION:
-                  trackData.opers.simplifyNotation = operValue.toBool();
+            case MidiOperation::Type::SIMPLIFY_DURATIONS:
+                  trackData.opers.simplifyDurations = operValue.toBool();
                   break;
             case MidiOperation::Type::SWING:
                   trackData.opers.swing = (MidiOperation::Swing)operValue.toInt();
@@ -249,10 +249,10 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
                         }
                   }
 
-            // MidiOperation::Type::SIMPLIFY_NOTATION
+            // MidiOperation::Type::SIMPLIFY_DURATIONS
             for (int i = 1; i != trackCount_; ++i) {
-                  if (tracksData_[i].opers.simplifyNotation != opers.opers.simplifyNotation) {
-                        opers.undefinedOpers.insert((int)MidiOperation::Type::SIMPLIFY_NOTATION);
+                  if (tracksData_[i].opers.simplifyDurations != opers.opers.simplifyDurations) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::SIMPLIFY_DURATIONS);
                         break;
                         }
                   }

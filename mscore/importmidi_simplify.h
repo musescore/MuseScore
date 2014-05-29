@@ -9,7 +9,7 @@ class TimeSigMap;
 
 namespace Simplify {
 
-void simplifyNotation(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap);
+void simplifyDurations(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap);
 
 } // Simplify
 } // Ms

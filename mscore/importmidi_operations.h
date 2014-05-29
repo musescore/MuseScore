@@ -54,7 +54,7 @@ struct TrackOperations
       bool doImport = true;
       Quantization quantize;
       bool useDots = true;
-      bool simplifyNotation = true;
+      bool simplifyDurations = true;
       LHRHSeparation LHRH;
       SearchTuplets tuplets;
       MidiOperation::AllowedVoices allowedVoices = MidiOperation::AllowedVoices::V_4;

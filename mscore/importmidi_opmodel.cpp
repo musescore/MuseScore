@@ -101,12 +101,12 @@ OperationsModel::OperationsModel()
       root->children.push_back(std::unique_ptr<Node>(useDots));
 
 
-      Node *simplifyNotation = new Node;
-      simplifyNotation->name = QCoreApplication::translate("MIDI import operations", "Simplify notation");
-      simplifyNotation->oper.type = MidiOperation::Type::SIMPLIFY_NOTATION;
-      simplifyNotation->oper.value = TrackOperations().simplifyNotation;
-      simplifyNotation->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(simplifyNotation));
+      Node *simplifyDurations = new Node;
+      simplifyDurations->name = QCoreApplication::translate("MIDI import operations", "Simplify durations");
+      simplifyDurations->oper.type = MidiOperation::Type::SIMPLIFY_DURATIONS;
+      simplifyDurations->oper.value = TrackOperations().simplifyDurations;
+      simplifyDurations->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(simplifyDurations));
 
 
       // ------------- tuplets --------------
@@ -512,8 +512,8 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
                   case MidiOperation::Type::USE_DOTS:
                         node->oper.value = opers.opers.useDots; break;
 
-                  case MidiOperation::Type::SIMPLIFY_NOTATION:
-                        node->oper.value = opers.opers.simplifyNotation; break;
+                  case MidiOperation::Type::SIMPLIFY_DURATIONS:
+                        node->oper.value = opers.opers.simplifyDurations; break;
 
                   case MidiOperation::Type::SWING:
                         node->oper.value = (int)opers.opers.swing; break;
