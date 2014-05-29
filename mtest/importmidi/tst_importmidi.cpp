@@ -205,6 +205,16 @@ class TestImportMidi : public QObject, public MTest
             mf("split_nontuplet");
             preferences.midiImportOperations.clear();
             }
+      void LHRH_Acid()
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = true;
+            opers.simplifyNotation = false;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("split_acid");
+            preferences.midiImportOperations.clear();
+            }
       void LHRH_Tuplet()
             {
             TrackOperations opers;
