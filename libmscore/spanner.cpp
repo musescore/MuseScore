@@ -357,35 +357,6 @@ QVariant Spanner::propertyDefault(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
-//   findCR
-//    find chord/rest <= tick in track
-//---------------------------------------------------------
-
-ChordRest* Score::findCR(int tick, int track) const
-      {
-      Measure* m = tick2measureMM(tick);
-      // attach to first rest all spanner when mmRest
-      if (m->isMMRest())
-            tick = m->tick();
-      if (m == 0) {
-            qDebug("findCR: no measure for tick %d", tick);
-            return 0;
-            }
-      Segment* s = m->first(Segment::SegChordRest);
-      for (;;) {
-            Segment* ns = s->next(Segment::SegChordRest);
-            if (ns == 0 || ns->tick() > tick)
-                  break;
-            s = ns;
-            if (ns->tick() == tick)
-                  break;
-            }
-      if (s)
-            return static_cast<ChordRest*>(s->element(track));
-      return nullptr;
-      }
-
-//---------------------------------------------------------
 //   computeStartElement
 //---------------------------------------------------------
 
