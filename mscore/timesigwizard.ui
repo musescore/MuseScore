@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Time Signature Wizard</string>
+  </property>
   <layout class="QVBoxLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
@@ -46,6 +49,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="timesigZ">
+          <property name="accessibleName">
+           <string>Beats in a bar</string>
+          </property>
           <property name="minimum">
            <number>1</number>
           </property>
@@ -75,6 +81,9 @@
         </item>
         <item>
          <widget class="QComboBox" name="timesigN">
+          <property name="accessibleName">
+           <string>Beat unit</string>
+          </property>
           <property name="currentIndex">
            <number>2</number>
           </property>
@@ -135,6 +144,9 @@
         <property name="toolTip">
          <string>Cut time</string>
         </property>
+        <property name="accessibleName">
+         <string>Cut Common Time</string>
+        </property>
         <property name="text">
          <string notr="true"/>
         </property>
@@ -148,6 +160,9 @@
        <widget class="QRadioButton" name="tsCommonTime">
         <property name="toolTip">
          <string>Common time</string>
+        </property>
+        <property name="accessibleName">
+         <string>Common Time</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -163,6 +178,9 @@
    </item>
    <item>
     <widget class="QGroupBox" name="pickupMeasure">
+     <property name="accessibleName">
+      <string>Pickup Measure</string>
+     </property>
      <property name="title">
       <string>Pickup Measure</string>
      </property>
@@ -185,6 +203,9 @@
       </item>
       <item>
        <widget class="QSpinBox" name="pickupTimesigZ">
+        <property name="accessibleName">
+         <string>Beats in a bar</string>
+        </property>
         <property name="minimum">
          <number>1</number>
         </property>
@@ -214,6 +235,9 @@
       </item>
       <item>
        <widget class="QComboBox" name="pickupTimesigN">
+        <property name="accessibleName">
+         <string>Beat unit</string>
+        </property>
         <property name="currentIndex">
          <number>2</number>
         </property>
@@ -272,6 +296,9 @@
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
+     <property name="accessibleName">
+      <string>Enter Number of Measures</string>
+     </property>
      <property name="title">
       <string>Enter Number of Measures:</string>
      </property>
@@ -297,6 +324,12 @@
       </item>
       <item row="1" column="1">
        <widget class="QSpinBox" name="measureCount">
+        <property name="accessibleName">
+         <string>Measures</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Hint: you can also add or remove measures after creation of the score.</string>
+        </property>
         <property name="minimum">
          <number>1</number>
         </property>
@@ -345,6 +378,17 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tsFraction</tabstop>
+  <tabstop>timesigZ</tabstop>
+  <tabstop>timesigN</tabstop>
+  <tabstop>tsCutTime</tabstop>
+  <tabstop>tsCommonTime</tabstop>
+  <tabstop>pickupMeasure</tabstop>
+  <tabstop>pickupTimesigZ</tabstop>
+  <tabstop>pickupTimesigN</tabstop>
+  <tabstop>measureCount</tabstop>
+ </tabstops>
  <resources>
   <include location="musescore.qrc"/>
  </resources>

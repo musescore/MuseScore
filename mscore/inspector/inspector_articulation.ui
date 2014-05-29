@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Articulation Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -97,6 +100,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Anchor</string>
+       </property>
        <item>
         <property name="text">
          <string>Above Staff</string>
@@ -132,6 +138,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Direction</string>
+       </property>
        <item>
         <property name="text">
          <string>Auto</string>
@@ -151,6 +160,9 @@
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetDirection">
+       <property name="accessibleName">
+        <string>Reset Direction value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -187,6 +199,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Time stretch</string>
+       </property>
        <property name="minimum">
         <double>0.100000000000000</double>
        </property>
@@ -194,6 +209,9 @@
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetAnchor">
+       <property name="accessibleName">
+        <string>Reset Anchor value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -211,6 +229,9 @@
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetTimeStretch">
+       <property name="accessibleName">
+        <string>Reset Time stretch value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>

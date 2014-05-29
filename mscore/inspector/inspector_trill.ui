@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Trill Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -78,6 +81,9 @@
      </item>
      <item row="0" column="1" colspan="2">
       <widget class="QComboBox" name="trillType">
+       <property name="accessibleName">
+        <string>Type</string>
+       </property>
        <item>
         <property name="text">
          <string>trill line</string>
@@ -109,6 +115,9 @@
       <widget class="QToolButton" name="resetTrillType">
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Trill type</string>
        </property>
        <property name="text">
         <string>...</string>

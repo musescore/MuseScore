@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Image Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -72,6 +75,9 @@
      </item>
      <item row="1" column="1" colspan="2">
       <widget class="QCheckBox" name="autoscale">
+       <property name="accessibleName">
+        <string>Scale to frame size</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -79,6 +85,9 @@
      </item>
      <item row="1" column="3">
       <widget class="QToolButton" name="resetAutoscale">
+       <property name="accessibleName">
+        <string>Reset Scale to Frame Size value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -102,6 +111,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Height</string>
+       </property>
        <property name="decimals">
         <number>1</number>
        </property>
@@ -117,6 +129,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Width</string>
        </property>
        <property name="decimals">
         <number>1</number>
@@ -151,6 +166,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Scale Width</string>
+       </property>
        <property name="suffix">
         <string notr="true">%</string>
        </property>
@@ -179,6 +197,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Scale Height</string>
+       </property>
        <property name="suffix">
         <string notr="true">%</string>
        </property>
@@ -201,6 +222,9 @@
      </item>
      <item row="4" column="3">
       <widget class="QToolButton" name="resetLockAspectRatio">
+       <property name="accessibleName">
+        <string>Reset Lock Aspect Ratio value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -218,6 +242,9 @@
      </item>
      <item row="5" column="3">
       <widget class="QToolButton" name="resetSizeIsSpatium">
+       <property name="accessibleName">
+        <string>Reset Size in Spatium Units value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -235,6 +262,12 @@
      </item>
      <item row="4" column="0" colspan="3">
       <widget class="QCheckBox" name="lockAspectRatio">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Lock Aspect Ratio</string>
+       </property>
        <property name="text">
         <string>Lock Aspect Ratio</string>
        </property>
@@ -242,6 +275,12 @@
      </item>
      <item row="5" column="0" colspan="3">
       <widget class="QCheckBox" name="sizeIsSpatium">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Size in Spatium Units</string>
+       </property>
        <property name="text">
         <string>Size in Spatium Units</string>
        </property>

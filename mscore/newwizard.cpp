@@ -160,6 +160,9 @@ NewWizardPage1::NewWizardPage1(QWidget* parent)
       {
       setTitle(tr("Create New Score"));
       setSubTitle(tr("This wizard creates a new score"));
+      //crash setAccessibleName(title());
+      setAccessibleName(tr("Create New Score"));
+      setAccessibleDescription(subTitle());
 
       w = new TitleWizard;
 
@@ -192,7 +195,8 @@ NewWizardPage2::NewWizardPage2(QWidget* parent)
       setTitle(tr("Create New Score"));
       setSubTitle(tr("Define a set of instruments. Each instrument"
                      " is represented by one or more staves"));
-
+      setAccessibleName(title());
+      setAccessibleDescription(subTitle());
       complete = false;
       w = new InstrumentsWidget;
       QGridLayout* grid = new QGridLayout;
@@ -240,6 +244,9 @@ NewWizardPage3::NewWizardPage3(QWidget* parent)
       {
       setTitle(tr("Create New Score"));
       setSubTitle(tr("Create Time Signature"));
+      setAccessibleName(title());
+      setAccessibleDescription(subTitle());
+
       w = new TimesigWizard;
       QGridLayout* grid = new QGridLayout;
       grid->addWidget(w, 0, 0);
@@ -255,6 +262,8 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       {
       setTitle(tr("Create New Score"));
       setSubTitle(tr("Select Template File:"));
+      setAccessibleName(title());
+      setAccessibleDescription(subTitle());
 
       templateFileDialog = new QFileDialog;
       templateFileDialog->setParent(this);
@@ -362,9 +371,12 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       {
       setTitle(tr("Create New Score"));
       setSubTitle(tr("Select Key Signature and Tempo:"));
+      setAccessibleName(title());
+      setAccessibleDescription(subTitle());
 
       QGroupBox* b1 = new QGroupBox;
       b1->setTitle(tr("Key Signature"));
+      b1->setAccessibleName(title());
       sp = MuseScore::newKeySigPalette();
       sp->setSelectable(true);
       sp->setSelected(14);
@@ -380,6 +392,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       QLabel* bpm = new QLabel;
       bpm->setText(tr("BPM:"));
       _tempo = new QDoubleSpinBox;
+      _tempo->setAccessibleName(tr("Beats per minute"));
       _tempo->setRange(20.0, 400.0);
       _tempo->setValue(100.0);
       QHBoxLayout* l2 = new QHBoxLayout;
