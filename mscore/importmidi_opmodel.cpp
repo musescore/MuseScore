@@ -80,19 +80,6 @@ OperationsModel::OperationsModel()
       controller->quantHuman = humanPerformance;
 
 
-      Node *allowedVoices = new Node;
-      allowedVoices->name = QCoreApplication::translate("MIDI import operations", "Max allowed voices");
-      allowedVoices->oper.type = MidiOperation::Type::ALLOWED_VOICES;
-      allowedVoices->oper.value = (int)TrackOperations().allowedVoices;
-      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "1"));
-      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
-      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "3"));
-      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "4"));
-      allowedVoices->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(allowedVoices));
-      controller->allowedVoices = allowedVoices;
-
-
       Node *useDots = new Node;
       useDots->name = QCoreApplication::translate("MIDI import operations", "Use dots");
       useDots->oper.type = MidiOperation::Type::USE_DOTS;
@@ -116,6 +103,18 @@ OperationsModel::OperationsModel()
       separateVoices->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(separateVoices));
 
+
+      Node *allowedVoices = new Node;
+      allowedVoices->name = QCoreApplication::translate("MIDI import operations", "Max allowed voices");
+      allowedVoices->oper.type = MidiOperation::Type::ALLOWED_VOICES;
+      allowedVoices->oper.value = (int)TrackOperations().allowedVoices;
+      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "1"));
+      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
+      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "3"));
+      allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "4"));
+      allowedVoices->parent = root.get();
+      root->children.push_back(std::unique_ptr<Node>(allowedVoices));
+      controller->allowedVoices = allowedVoices;
 
       // ------------- tuplets --------------
 
