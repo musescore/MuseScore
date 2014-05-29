@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Note Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -74,6 +77,12 @@
      </property>
      <item row="7" column="0" colspan="2">
       <widget class="QCheckBox" name="play">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Play</string>
+       </property>
        <property name="text">
         <string>Play</string>
        </property>
@@ -86,6 +95,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Tuning</string>
        </property>
        <property name="minimum">
         <double>-200.000000000000000</double>
@@ -154,6 +166,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Dot Position</string>
+       </property>
        <property name="sizeAdjustPolicy">
         <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
        </property>
@@ -188,6 +203,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Dot Position Value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -214,6 +232,9 @@
        <property name="maxVisibleItems">
         <number>14</number>
        </property>
+       <property name="accessibleName">
+        <string>Head group</string>
+       </property>
        <property name="frame">
         <bool>true</bool>
        </property>
@@ -229,6 +250,9 @@
        </property>
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Mirror head value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -256,6 +280,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Velocity type value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -282,6 +309,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Head type value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -305,6 +335,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Velocity</string>
+       </property>
        <property name="minimum">
         <number>-127</number>
        </property>
@@ -320,6 +353,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Head type</string>
        </property>
        <property name="frame">
         <bool>true</bool>
@@ -358,6 +394,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Velocity type</string>
        </property>
        <item>
         <property name="text">
@@ -446,6 +485,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Velocity value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -469,6 +511,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Mirror Head</string>
+       </property>
        <property name="frame">
         <bool>true</bool>
        </property>
@@ -491,6 +536,12 @@
      </item>
      <item row="1" column="0" colspan="2">
       <widget class="QCheckBox" name="small">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Small</string>
+       </property>
        <property name="text">
         <string>Small </string>
        </property>
@@ -506,6 +557,9 @@
        </property>
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Head group value</string>
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
@@ -529,6 +583,9 @@
        </property>
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Small value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -556,6 +613,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Tuning value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -581,6 +641,9 @@
        </property>
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Play value</string>
        </property>
        <property name="text">
         <string>...</string>

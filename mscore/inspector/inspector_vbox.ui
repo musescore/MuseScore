@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="whatsThis">
+   <string>Vertical Frame Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -75,6 +78,12 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="whatsThis">
+        <string/>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Top Gap value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -94,6 +103,9 @@
       <widget class="QToolButton" name="resetBottomGap">
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Bottom Gap value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -125,6 +137,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Left Margin</string>
+       </property>
        <property name="suffix">
         <string>mm</string>
        </property>
@@ -143,6 +158,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="whatsThis">
+        <string/>
+       </property>
+       <property name="accessibleName">
+        <string>Top Gap</string>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
@@ -173,6 +194,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Height</string>
+       </property>
        <property name="suffix">
         <string>sp</string>
        </property>
@@ -198,6 +222,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Bottom Gap</string>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
@@ -242,6 +269,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Top Margin</string>
+       </property>
        <property name="suffix">
         <string>mm</string>
        </property>
@@ -260,6 +290,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Right Margin</string>
        </property>
        <property name="suffix">
         <string>mm</string>
@@ -280,6 +313,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Bottom Margin</string>
+       </property>
        <property name="suffix">
         <string>mm</string>
        </property>
@@ -295,6 +331,9 @@
       <widget class="QToolButton" name="resetLeftMargin">
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Left Margin value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -316,6 +355,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Right Margin value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -336,6 +378,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Top Margin value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -355,6 +400,9 @@
       <widget class="QToolButton" name="resetBottomMargin">
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Bottom Margin value</string>
        </property>
        <property name="text">
         <string>...</string>

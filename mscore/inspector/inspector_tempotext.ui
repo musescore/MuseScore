@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Tempo Marking Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -68,6 +71,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset follow text value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -95,6 +101,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Tempo value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -112,6 +121,12 @@
      </item>
      <item row="0" column="0" colspan="2">
       <widget class="QCheckBox" name="followText">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Follow text</string>
+       </property>
        <property name="text">
         <string>Follow text</string>
        </property>
@@ -119,6 +134,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="tempo">
+       <property name="accessibleName">
+        <string>Tempo</string>
+       </property>
        <property name="suffix">
         <string>BPM</string>
        </property>

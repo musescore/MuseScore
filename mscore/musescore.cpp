@@ -3994,7 +3994,6 @@ void MuseScore::endCmd()
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
             cs->end();
-            currentScoreView()->setFocus();
             }
       else {
             if (inspector)
@@ -4308,7 +4307,11 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
 
       else {
             if (cv) {
-                  cv->setFocus();
+                  //isAncestorOf is called to see if a widget from inspector has focus
+                  //if so, the focus doesn't get shifted to the score, unless escape is
+                  //pressed, or the user clicks in the score
+                  if(!getInspector()->isAncestorOf(qApp->focusWidget()) || cmd == "escape")
+                        cv->setFocus();
                   cv->cmd(a);
                   }
             else
