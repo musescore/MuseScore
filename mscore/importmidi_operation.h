@@ -22,7 +22,7 @@ struct MidiOperation
 
             USE_DOTS,
 
-            SIMPLIFY_NOTATION,
+            SIMPLIFY_DURATIONS,
 
             ALLOWED_VOICES,
 

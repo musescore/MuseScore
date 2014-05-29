@@ -628,7 +628,7 @@ void separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
                         // for further usage
             opers.setCurrentTrack(mtrack.indexOfOperation);
 
-            if (opers.currentTrackOperations().simplifyNotation && voiceLimit() > 1) {
+            if (opers.currentTrackOperations().simplifyDurations && voiceLimit() > 1) {
 
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
                              "MidiVoice::doVoiceSeparation",
