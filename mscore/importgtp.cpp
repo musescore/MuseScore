@@ -670,6 +670,13 @@ void GuitarPro1::read(QFile* fp)
                         cr->setTrack(staffIdx * VOICES);
                         if (lyrics)
                               cr->add(lyrics);
+
+                        TDuration d(l);
+                        d.setDots(dotted ? 1 : 0);
+
+                        if (dotted)
+                              l = l + (l/2);
+
                         if (tuple) {
                               Tuplet* tuplet = tuplets[staffIdx];
                               if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
@@ -685,11 +692,6 @@ void GuitarPro1::read(QFile* fp)
                               tuplet->add(cr);  //TODOxxx
                               }
 
-                        TDuration d(l);
-                        d.setDots(dotted ? 1 : 0);
-
-                        if (dotted)
-                              l = l + (l/2);
                         cr->setDuration(l);
                         cr->setDurationType(d);
                         segment->add(cr);
@@ -964,6 +966,13 @@ qDebug("BeginRepeat=============================================");
                         cr->setTrack(staffIdx * VOICES);
                         if (lyrics)
                               cr->add(lyrics);
+
+                        TDuration d(l);
+                        d.setDots(dotted ? 1 : 0);
+
+                        if (dotted)
+                              l = l + (l/2);
+
                         if (tuple) {
                               Tuplet* tuplet = tuplets[staffIdx];
                               if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
@@ -979,11 +988,6 @@ qDebug("BeginRepeat=============================================");
                               tuplet->add(cr);
                               }
 
-                        TDuration d(l);
-                        d.setDots(dotted ? 1 : 0);
-
-                        if (dotted)
-                              l = l + (l/2);
                         cr->setDuration(l);
                         cr->setDurationType(d);
                         segment->add(cr);
@@ -1575,6 +1579,13 @@ void GuitarPro3::read(QFile* fp)
                         cr->setTrack(staffIdx * VOICES);
                         if (lyrics)
                               cr->add(lyrics);
+
+                        TDuration d(l);
+                        d.setDots(dotted ? 1 : 0);
+
+                        if (dotted)
+                              l = l + (l/2);
+
                         if (tuple) {
                               Tuplet* tuplet = tuplets[staffIdx];
                               if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
@@ -1590,11 +1601,6 @@ void GuitarPro3::read(QFile* fp)
                               tuplet->add(cr);
                               }
 
-                        TDuration d(l);
-                        d.setDots(dotted ? 1 : 0);
-
-                        if (dotted)
-                              l = l + (l/2);
                         cr->setDuration(l);
                         cr->setDurationType(d);
 
@@ -2275,6 +2281,13 @@ void GuitarPro4::read(QFile* fp)
                         cr->setTrack(staffIdx * VOICES);
                         if (lyrics)
                               cr->add(lyrics);
+
+                        TDuration d(l);
+                        d.setDots(dotted ? 1 : 0);
+
+                        if (dotted)
+                              l = l + (l/2);
+
                         if (tuple) {
                               Tuplet* tuplet = tuplets[staffIdx];
                               if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
@@ -2290,11 +2303,7 @@ void GuitarPro4::read(QFile* fp)
                               tuplet->add(cr);
                               }
 
-                        TDuration d(l);
-                        d.setDots(dotted ? 1 : 0);
 
-                        if (dotted)
-                              l = l + (l/2);
                         cr->setDuration(l);
                         if (cr->type() == ElementType::REST && (pause == 0 || l == measure->len()))
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
@@ -2812,6 +2821,14 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                         cr = new Chord(score);
                   }
             cr->setTrack(staffIdx * VOICES + voice);
+
+            TDuration d(l);
+            d.setDots(dotted ? 1 : 0);
+
+            if (dotted)
+                  l = l + (l/2);
+
+
             if (tuple) {
                   Tuplet* tuplet = tuplets[staffIdx * 2 + voice];
                   if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
@@ -2828,11 +2845,6 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   tuplet->add(cr);
                   }
 
-            TDuration d(l);
-            d.setDots(dotted ? 1 : 0);
-
-            if (dotted)
-                  l = l + (l/2);
             cr->setDuration(l);
             if (cr->type() == ElementType::REST && pause == 0)
                   cr->setDurationType(TDuration::DurationType::V_MEASURE);
