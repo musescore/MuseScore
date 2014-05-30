@@ -192,6 +192,9 @@
               <property name="text">
                <string>Musical symbols font: </string>
               </property>
+              <property name="buddy">
+               <cstring>musicalSymbolFont</cstring>
+              </property>
              </widget>
             </item>
             <item>
@@ -381,6 +384,9 @@
             <property name="text">
              <string>Music top margin:</string>
             </property>
+            <property name="buddy">
+             <cstring>staffUpperBorder</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -429,6 +435,9 @@
             <property name="text">
              <string>Music bottom margin:</string>
             </property>
+            <property name="buddy">
+             <cstring>staffLowerBorder</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="3">
@@ -463,6 +472,9 @@
             </property>
             <property name="text">
              <string>Staff distance:</string>
+            </property>
+            <property name="buddy">
+             <cstring>staffDistance</cstring>
             </property>
            </widget>
           </item>
@@ -502,6 +514,9 @@
             <property name="text">
              <string>Grand staff distance:</string>
             </property>
+            <property name="buddy">
+             <cstring>akkoladeDistance</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="3">
@@ -540,6 +555,9 @@
             <property name="text">
              <string>Min. system distance:</string>
             </property>
+            <property name="buddy">
+             <cstring>minSystemDistance</cstring>
+            </property>
            </widget>
           </item>
           <item row="2" column="1">
@@ -575,6 +593,9 @@
             <property name="text">
              <string>Lyrics top margin:</string>
             </property>
+            <property name="buddy">
+             <cstring>lyricsDistance</cstring>
+            </property>
            </widget>
           </item>
           <item row="4" column="1">
@@ -609,6 +630,9 @@
             </property>
             <property name="text">
              <string>Lyrics bottom margin:</string>
+            </property>
+            <property name="buddy">
+             <cstring>lyricsMinBottomDistance</cstring>
             </property>
            </widget>
           </item>
@@ -648,6 +672,9 @@
             <property name="text">
              <string>Vertical frame top margin:</string>
             </property>
+            <property name="buddy">
+             <cstring>systemFrameDistance</cstring>
+            </property>
            </widget>
           </item>
           <item row="7" column="1">
@@ -682,6 +709,9 @@
             </property>
             <property name="text">
              <string>Vertical frame bottom margin:</string>
+            </property>
+            <property name="buddy">
+             <cstring>frameSystemDistance</cstring>
             </property>
            </widget>
           </item>
@@ -801,6 +831,9 @@
             <property name="text">
              <string>Lyrics line height:</string>
             </property>
+            <property name="buddy">
+             <cstring>lyricsLineHeight</cstring>
+            </property>
            </widget>
           </item>
           <item row="5" column="1">
@@ -855,6 +888,9 @@
             <property name="text">
              <string>Max. system distance:</string>
             </property>
+            <property name="buddy">
+             <cstring>maxSystemDistance</cstring>
+            </property>
            </widget>
           </item>
           <item row="8" column="0">
@@ -867,6 +903,9 @@
             </property>
             <property name="text">
              <string>Last system fill threshold:</string>
+            </property>
+            <property name="buddy">
+             <cstring>lastSystemFillThreshold</cstring>
             </property>
            </widget>
           </item>
@@ -1552,6 +1591,9 @@
               <property name="text">
                <string>System bracket distance:</string>
               </property>
+              <property name="buddy">
+               <cstring>bracketDistance</cstring>
+              </property>
              </widget>
             </item>
             <item row="1" column="1">
@@ -1584,12 +1626,18 @@
               <property name="text">
                <string>Brace distance:</string>
               </property>
+              <property name="buddy">
+               <cstring>akkoladeBarDistance</cstring>
+              </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="label_29">
               <property name="text">
                <string>Fix number of measures/system:</string>
+              </property>
+              <property name="buddy">
+               <cstring>fixNumberMeasures</cstring>
               </property>
              </widget>
             </item>
@@ -1624,12 +1672,18 @@
               <property name="text">
                <string>System bracket width:</string>
               </property>
+              <property name="buddy">
+               <cstring>bracketWidth</cstring>
+              </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_92">
               <property name="text">
                <string>Brace width:</string>
+              </property>
+              <property name="buddy">
+               <cstring>akkoladeWidth</cstring>
               </property>
              </widget>
             </item>
@@ -2307,6 +2361,9 @@
               <property name="text">
                <string>Barline thickness:</string>
               </property>
+              <property name="buddy">
+               <cstring>barWidth</cstring>
+              </property>
              </widget>
             </item>
             <item row="0" column="1">
@@ -2323,6 +2380,9 @@
              <widget class="QLabel" name="label_83">
               <property name="text">
                <string>End barline thickness:</string>
+              </property>
+              <property name="buddy">
+               <cstring>endBarWidth</cstring>
               </property>
              </widget>
             </item>
@@ -2341,6 +2401,9 @@
               <property name="text">
                <string>End barline distance:</string>
               </property>
+              <property name="buddy">
+               <cstring>endBarDistance</cstring>
+              </property>
              </widget>
             </item>
             <item row="2" column="1">
@@ -2358,6 +2421,9 @@
               <property name="text">
                <string>Double barline thickness:</string>
               </property>
+              <property name="buddy">
+               <cstring>doubleBarWidth</cstring>
+              </property>
              </widget>
             </item>
             <item row="3" column="1">
@@ -2374,6 +2440,9 @@
              <widget class="QLabel" name="label_86">
               <property name="text">
                <string>Double barline distance:</string>
+              </property>
+              <property name="buddy">
+               <cstring>doubleBarDistance</cstring>
               </property>
              </widget>
             </item>
@@ -2443,6 +2512,9 @@
                  <property name="text">
                   <string>Progression:</string>
                  </property>
+                 <property name="buddy">
+                  <cstring>shortStemProgression</cstring>
+                 </property>
                 </widget>
                </item>
                <item row="0" column="1">
@@ -2472,6 +2544,9 @@
                 <widget class="QLabel" name="label_47">
                  <property name="text">
                   <string>Shortest stem:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>shortestStem</cstring>
                  </property>
                 </widget>
                </item>
@@ -2503,6 +2578,9 @@
               <property name="text">
                <string>Accidental note distance:</string>
               </property>
+              <property name="buddy">
+               <cstring>accidentalNoteDistance</cstring>
+              </property>
              </widget>
             </item>
             <item row="0" column="1">
@@ -2525,6 +2603,9 @@
              <widget class="QLabel" name="label_43">
               <property name="text">
                <string>Accidental distance:</string>
+              </property>
+              <property name="buddy">
+               <cstring>accidentalDistance</cstring>
               </property>
              </widget>
             </item>
@@ -2549,6 +2630,9 @@
               <property name="text">
                <string>Note dot distance:</string>
               </property>
+              <property name="buddy">
+               <cstring>noteDotDistance</cstring>
+              </property>
              </widget>
             </item>
             <item row="5" column="1">
@@ -2571,6 +2655,9 @@
              <widget class="QLabel" name="label_23">
               <property name="text">
                <string>Dot dot distance:</string>
+              </property>
+              <property name="buddy">
+               <cstring>dotDotDistance</cstring>
               </property>
              </widget>
             </item>
@@ -2595,6 +2682,9 @@
               <property name="text">
                <string>Ledger line thickness:</string>
               </property>
+              <property name="buddy">
+               <cstring>ledgerLineWidth</cstring>
+              </property>
              </widget>
             </item>
             <item row="8" column="1">
@@ -2617,6 +2707,9 @@
              <widget class="QLabel" name="label_34">
               <property name="text">
                <string>Ledger line length:</string>
+              </property>
+              <property name="buddy">
+               <cstring>ledgerLineLength</cstring>
               </property>
              </widget>
             </item>
@@ -2641,6 +2734,9 @@
               <property name="text">
                <string>Stem thickness:</string>
               </property>
+              <property name="buddy">
+               <cstring>stemWidth</cstring>
+              </property>
              </widget>
             </item>
             <item row="7" column="1">
@@ -2663,6 +2759,9 @@
              <widget class="QLabel" name="label_101">
               <property name="text">
                <string>Dot size:</string>
+              </property>
+              <property name="buddy">
+               <cstring>dotMag</cstring>
               </property>
              </widget>
             </item>
@@ -2725,14 +2824,14 @@
              <item>
               <widget class="QRadioButton" name="clefTab1">
                <property name="text">
-                <string>Clef 1</string>
+                <string>Standard TAB clef</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="clefTab2">
                <property name="text">
-                <string>Clef 2</string>
+                <string>Serif TAB clef</string>
                </property>
               </widget>
              </item>
@@ -2778,6 +2877,9 @@
               <property name="text">
                <string>Distance to note:</string>
               </property>
+              <property name="buddy">
+               <cstring>arpeggioNoteDistance</cstring>
+              </property>
              </widget>
             </item>
             <item row="0" column="1">
@@ -2798,6 +2900,9 @@
               <property name="text">
                <string>Line thickness:</string>
               </property>
+              <property name="buddy">
+               <cstring>arpeggioLineWidth</cstring>
+              </property>
              </widget>
             </item>
             <item row="1" column="1">
@@ -2817,6 +2922,9 @@
              <widget class="QLabel" name="label_28">
               <property name="text">
                <string>Hook length:</string>
+              </property>
+              <property name="buddy">
+               <cstring>arpeggioHookLen</cstring>
               </property>
              </widget>
             </item>
@@ -2872,6 +2980,9 @@
             <property name="text">
              <string>Beam thickness:</string>
             </property>
+            <property name="buddy">
+             <cstring>beamWidth</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -2888,6 +2999,9 @@
            <widget class="QLabel" name="label_57">
             <property name="text">
              <string>Beam distance (in beam thickness units):</string>
+            </property>
+            <property name="buddy">
+             <cstring>beamDistance</cstring>
             </property>
            </widget>
           </item>
@@ -2915,6 +3029,9 @@
            <widget class="QLabel" name="label_59">
             <property name="text">
              <string>Broken beam minimum length:</string>
+            </property>
+            <property name="buddy">
+             <cstring>beamMinLen</cstring>
             </property>
            </widget>
           </item>
@@ -3006,6 +3123,9 @@
               <property name="text">
                <string>Line thickness at end:</string>
               </property>
+              <property name="buddy">
+               <cstring>slurEndLineWidth</cstring>
+              </property>
              </widget>
             </item>
             <item row="0" column="1">
@@ -3028,6 +3148,9 @@
              <widget class="QLabel" name="label_31">
               <property name="text">
                <string>Line thickness middle:</string>
+              </property>
+              <property name="buddy">
+               <cstring>slurMidLineWidth</cstring>
               </property>
              </widget>
             </item>
@@ -3052,6 +3175,9 @@
               <property name="text">
                <string>Dotted line thickness:</string>
               </property>
+              <property name="buddy">
+               <cstring>slurDottedLineWidth</cstring>
+              </property>
              </widget>
             </item>
             <item row="2" column="1">
@@ -3074,6 +3200,9 @@
              <widget class="QLabel" name="minTieLengthLabel">
               <property name="text">
                <string>Minimum tie length:</string>
+              </property>
+              <property name="buddy">
+               <cstring>minTieLength</cstring>
               </property>
              </widget>
             </item>
@@ -3116,6 +3245,9 @@
             <property name="text">
              <string>Small staff size:</string>
             </property>
+            <property name="buddy">
+             <cstring>smallStaffSize</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -3154,6 +3286,9 @@
             <property name="text">
              <string>Small note size:</string>
             </property>
+            <property name="buddy">
+             <cstring>smallNoteSize</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="1">
@@ -3188,6 +3323,9 @@
             </property>
             <property name="text">
              <string>Grace note size:</string>
+            </property>
+            <property name="buddy">
+             <cstring>graceNoteSize</cstring>
             </property>
            </widget>
           </item>
@@ -3226,6 +3364,9 @@
             </property>
             <property name="text">
              <string>Small clef size:</string>
+            </property>
+            <property name="buddy">
+             <cstring>smallClefSize</cstring>
             </property>
            </widget>
           </item>
@@ -3288,6 +3429,9 @@
             <property name="text">
              <string>Line thickness:</string>
             </property>
+            <property name="buddy">
+             <cstring>hairpinLineWidth</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="1">
@@ -3318,6 +3462,9 @@
             <property name="text">
              <string>Height:</string>
             </property>
+            <property name="buddy">
+             <cstring>hairpinHeight</cstring>
+            </property>
            </widget>
           </item>
           <item row="2" column="1">
@@ -3334,6 +3481,9 @@
            <widget class="QLabel" name="label_10">
             <property name="text">
              <string>Line break height:</string>
+            </property>
+            <property name="buddy">
+             <cstring>hairpinContinueHeight</cstring>
             </property>
            </widget>
           </item>
@@ -3364,6 +3514,9 @@
            <widget class="QLabel" name="label_95">
             <property name="text">
              <string>Default vertical position:</string>
+            </property>
+            <property name="buddy">
+             <cstring>hairpinY</cstring>
             </property>
            </widget>
           </item>
@@ -3546,6 +3699,9 @@
             <property name="text">
              <string>Hook height:</string>
             </property>
+            <property name="buddy">
+             <cstring>voltaHook</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="1">
@@ -3559,6 +3715,9 @@
            <widget class="QLabel" name="label_64">
             <property name="text">
              <string>Line thickness:</string>
+            </property>
+            <property name="buddy">
+             <cstring>voltaLineWidth</cstring>
             </property>
            </widget>
           </item>
@@ -3603,12 +3762,18 @@
             <property name="text">
              <string>Line style:</string>
             </property>
+            <property name="buddy">
+             <cstring>voltaLineStyle</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_40">
             <property name="text">
              <string>Default vertical position:</string>
+            </property>
+            <property name="buddy">
+             <cstring>voltaY</cstring>
             </property>
            </widget>
           </item>
@@ -3765,6 +3930,9 @@
             <property name="text">
              <string>Line thickness:</string>
             </property>
+            <property name="buddy">
+             <cstring>ottavaLineWidth</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -3791,6 +3959,9 @@
            <widget class="QLabel" name="label_87">
             <property name="text">
              <string>Hook height:</string>
+            </property>
+            <property name="buddy">
+             <cstring>ottavaHook</cstring>
             </property>
            </widget>
           </item>
@@ -3835,6 +4006,9 @@
             <property name="text">
              <string>Default vertical position:</string>
             </property>
+            <property name="buddy">
+             <cstring>ottavaY</cstring>
+            </property>
            </widget>
           </item>
           <item row="4" column="0">
@@ -3854,6 +4028,9 @@
            <widget class="QLabel" name="label_105">
             <property name="text">
              <string>Line style:</string>
+            </property>
+            <property name="buddy">
+             <cstring>ottavaLineStyle</cstring>
             </property>
            </widget>
           </item>
@@ -4015,6 +4192,9 @@
             <property name="text">
              <string>Default vertical position:</string>
             </property>
+            <property name="buddy">
+             <cstring>pedalY</cstring>
+            </property>
            </widget>
           </item>
           <item row="2" column="1" colspan="2">
@@ -4071,12 +4251,18 @@
             <property name="text">
              <string>Line style:</string>
             </property>
+            <property name="buddy">
+             <cstring>pedalLineStyle</cstring>
+            </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_107">
             <property name="text">
              <string>Line thickness:</string>
+            </property>
+            <property name="buddy">
+             <cstring>pedalLineWidth</cstring>
             </property>
            </widget>
           </item>
@@ -4119,6 +4305,9 @@
            <widget class="QLabel" name="label_97">
             <property name="text">
              <string>Default vertical position:</string>
+            </property>
+            <property name="buddy">
+             <cstring>trillY</cstring>
             </property>
            </widget>
           </item>
@@ -4240,6 +4429,9 @@
                <property name="text">
                 <string>Chord symbols style file:</string>
                </property>
+               <property name="buddy">
+                <cstring>chordDescriptionFile</cstring>
+               </property>
               </widget>
              </item>
              <item row="1" column="1">
@@ -4326,6 +4518,9 @@
                <property name="text">
                 <string>Default vertical position:</string>
                </property>
+               <property name="buddy">
+                <cstring>harmonyY</cstring>
+               </property>
               </widget>
              </item>
              <item row="0" column="1">
@@ -4351,6 +4546,9 @@
               <widget class="QLabel" name="label_79">
                <property name="text">
                 <string>Distance to fretboard diagram:</string>
+               </property>
+               <property name="buddy">
+                <cstring>harmonyFretDist</cstring>
                </property>
               </widget>
              </item>
@@ -4381,6 +4579,9 @@
                <property name="text">
                 <string>Minimum chord spacing:</string>
                </property>
+               <property name="buddy">
+                <cstring>minHarmonyDistance</cstring>
+               </property>
               </widget>
              </item>
              <item row="2" column="1">
@@ -4406,6 +4607,9 @@
               <widget class="QLabel" name="label_1002">
                <property name="text">
                 <string>Maximum barline distance:</string>
+               </property>
+               <property name="buddy">
+                <cstring>maxHarmonyBarDistance</cstring>
                </property>
               </widget>
              </item>
@@ -4455,6 +4659,9 @@
                <property name="text">
                 <string>Capo fret position:</string>
                </property>
+               <property name="buddy">
+                <cstring>capoPosition</cstring>
+               </property>
               </widget>
              </item>
              <item row="0" column="1">
@@ -4497,6 +4704,9 @@
             <property name="text">
              <string>Default vertical position:</string>
             </property>
+            <property name="buddy">
+             <cstring>fretY</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -4525,6 +4735,9 @@
            <widget class="QLabel" name="label_601">
             <property name="text">
              <string>Fret offset number font size:</string>
+            </property>
+            <property name="buddy">
+             <cstring>fretNumMag</cstring>
             </property>
            </widget>
           </item>
@@ -4647,6 +4860,9 @@
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
+                <property name="buddy">
+                 <cstring>comboFBFont</cstring>
+                </property>
                </widget>
               </item>
               <item row="2" column="1">
@@ -4682,6 +4898,9 @@
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
+                <property name="buddy">
+                 <cstring>doubleSpinFBSize</cstring>
+                </property>
                </widget>
               </item>
               <item row="1" column="1">
@@ -4714,6 +4933,9 @@
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
+                <property name="buddy">
+                 <cstring>spinFBLineHeight</cstring>
+                </property>
                </widget>
               </item>
               <item row="2" column="0">
@@ -4726,6 +4948,9 @@
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>doubleSpinFBVertPos</cstring>
                 </property>
                </widget>
               </item>
@@ -4862,6 +5087,9 @@
               <property name="text">
                <string>Staff distance:</string>
               </property>
+              <property name="buddy">
+               <cstring>propertyDistanceStem</cstring>
+              </property>
              </widget>
             </item>
             <item row="1" column="1">
@@ -4879,6 +5107,9 @@
               <property name="text">
                <string>Articulation distance:</string>
               </property>
+              <property name="buddy">
+               <cstring>propertyDistance</cstring>
+              </property>
              </widget>
             </item>
             <item row="2" column="1">
@@ -4895,6 +5126,9 @@
              <widget class="QLabel" name="label_35">
               <property name="text">
                <string>Note head distance:</string>
+              </property>
+              <property name="buddy">
+               <cstring>propertyDistanceHead</cstring>
               </property>
              </widget>
             </item>
@@ -4928,6 +5162,9 @@
              <widget class="QLabel" name="label_32">
               <property name="text">
                <string>Articulation size:</string>
+              </property>
+              <property name="buddy">
+               <cstring>articulationMag</cstring>
               </property>
              </widget>
             </item>
@@ -5097,6 +5334,9 @@
                <property name="text">
                 <string>Maximum slope:</string>
                </property>
+               <property name="buddy">
+                <cstring>tupletMaxSlope</cstring>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
@@ -5104,12 +5344,18 @@
                <property name="text">
                 <string>Vertical distance from stem:</string>
                </property>
+               <property name="buddy">
+                <cstring>tupletVStemDistance</cstring>
+               </property>
               </widget>
              </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label_50">
                <property name="text">
                 <string>Vertical distance from note head:</string>
+               </property>
+               <property name="buddy">
+                <cstring>tupletVHeadDistance</cstring>
                </property>
               </widget>
              </item>
@@ -5191,12 +5437,18 @@
                <property name="text">
                 <string>Distance before the stem of the first note:</string>
                </property>
+               <property name="buddy">
+                <cstring>tupletStemLeftDistance</cstring>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_55">
                <property name="text">
                 <string>Distance before the head of the first note:</string>
+               </property>
+               <property name="buddy">
+                <cstring>tupletNoteLeftDistance</cstring>
                </property>
               </widget>
              </item>
@@ -5205,12 +5457,18 @@
                <property name="text">
                 <string>Distance after the stem of the last note:</string>
                </property>
+               <property name="buddy">
+                <cstring>tupletStemRightDistance</cstring>
+               </property>
               </widget>
              </item>
              <item row="3" column="0">
               <widget class="QLabel" name="label_58">
                <property name="text">
                 <string>Distance after the head of the last note:</string>
+               </property>
+               <property name="buddy">
+                <cstring>tupletNoteRightDistance</cstring>
                </property>
               </widget>
              </item>
@@ -5319,6 +5577,7 @@
   <tabstop>hideEmptyStaves</tabstop>
   <tabstop>dontHideStavesInFirstSystem</tabstop>
   <tabstop>crossMeasureValues</tabstop>
+  <tabstop>hideInstrumentNameIfOneInstrument</tabstop>
   <tabstop>staffUpperBorder</tabstop>
   <tabstop>staffLowerBorder</tabstop>
   <tabstop>staffDistance</tabstop>
@@ -5371,8 +5630,8 @@
   <tabstop>editOddFooterR</tabstop>
   <tabstop>showMeasureNumber</tabstop>
   <tabstop>showFirstMeasureNumber</tabstop>
-  <tabstop>showEverySystemMeasureNumber</tabstop>
   <tabstop>showAllStaffsMeasureNumber</tabstop>
+  <tabstop>showEverySystemMeasureNumber</tabstop>
   <tabstop>showIntervalMeasureNumber</tabstop>
   <tabstop>intervalMeasureNumber</tabstop>
   <tabstop>bracketWidth</tabstop>
