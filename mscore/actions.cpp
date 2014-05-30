@@ -1194,7 +1194,7 @@ Shortcut Shortcut::sc[] = {
          "grace8after",
          QT_TRANSLATE_NOOP("action","Grace: 8th after"),
          QT_TRANSLATE_NOOP("action","Add 8th grace note after"),
-         QT_TRANSLATE_NOOP("action","Grace: quarter"),
+         QT_TRANSLATE_NOOP("action","Grace: 8th after"),
           grace8after_ICON
          ),
       Shortcut(

@@ -771,18 +771,16 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
 
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
+            // we need to do this now
+            // or else note pos / readPos / userOff will be out of sync
+            // and we rely on note->x() throughout the layout process
+            note->adjustReadPos();
 
             // find leftmost non-mirrored note to set as X origin for accidental layout
             // a mirrored note that extends to left of segment X origin
             // will displace accidentals only if there is conflict
-
-            // currently, we ignore user note/chord offsets in setting X origin
-            // previous versions took these offsets into account
-            // replace chord->rxpos() with chord->x() + note->userOff().x()
-            // to restore previous behavior
-            qreal sx = x + chord->rxpos();      // segment-relative x position
-
-           if (note->mirror() && !chord->up() && sx < 0.0)
+            qreal sx = x + chord->x(); // segment-relative X position of note
+            if (note->mirror() && !chord->up() && sx < 0.0)
                   leftNotes.append(note);
             else if (sx < lx)
                   lx = sx;
@@ -1019,6 +1017,9 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             }
 
       for (const AcEl& e : aclist) {
+            // even though we initially calculate accidental position relative to segment
+            // we must record pos for accidental relative to note,
+            // since pos is always interpreted relative to parent
             Note* note = e.note;
             qreal x    = e.x + lx - (note->x() + note->chord()->x());
             note->accidental()->setPos(x, 0);
@@ -1037,7 +1038,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
       Beam* beam       = 0;      // current beam
       BeamMode bm = BeamMode::AUTO;
       QList<Chord*> graceNotes;
-      if(after)
+      if (after)
             mainNote->getGraceNotesAfter(&graceNotes);
       else
             mainNote->getGraceNotesBefore(&graceNotes);
@@ -3461,16 +3462,18 @@ qreal Score::computeMinWidth(Segment* fs)
                                     qreal noteX = 0.0;
                                     if (cr->type() == Element::ElementType::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
-                                          if (!c->graceNotes().empty())
+                                          if (c->getGraceNotesBefore(0))
                                                 grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
                                                       if (note->accidental()) {
                                                             accidental = true;
-                                                            accidentalX = qMin(accidentalX, note->accidental()->x() + note->x());
+                                                            // segment-relative
+                                                            accidentalX = qMin(accidentalX, note->accidental()->x() + note->x() + c->x());
                                                             }
                                                       else
-                                                            noteX = qMin(noteX, note->x());
+                                                            // segment-relative
+                                                            noteX = qMin(noteX, note->x() + c->x());
                                                       }
                                                 }
                                           }
@@ -3501,8 +3504,23 @@ qreal Score::computeMinWidth(Segment* fs)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
                               cr->layout();
-                              space.max(cr->space());
-                              foreach(Lyrics* l, cr->lyricsList()) {
+
+                              // calculate space needed for segment
+                              // take cr position into account
+                              // by converting to segment-relative space
+                              // chord space itself already has ipos offset built in
+                              // but lyrics do not
+                              // and neither have user offsets
+                              qreal cx = cr->ipos().x();
+                              qreal cxu = cr->userOff().x();
+                              qreal lx = qMax(cxu, 0.0); // nudge left shouldn't require more leading space
+                              qreal rx = qMin(cxu, 0.0); // nudge right shouldn't require more trailing space
+                              Space crSpace = cr->space();
+                              Space segRelSpace(crSpace.lw()-lx, crSpace.rw()+rx);
+                              space.max(segRelSpace);
+
+                              // lyrics
+                              foreach (Lyrics* l, cr->lyricsList()) {
                                     if (!l)
                                           continue;
                                     if (!l->isEmpty()) {
@@ -3510,8 +3528,8 @@ qreal Score::computeMinWidth(Segment* fs)
                                           lyrics = l;
                                           if (!lyrics->isMelisma()) {
                                                 QRectF b(l->bbox().translated(l->pos()));
-                                                llw = qMax(llw, -b.left());
-                                                rrw = qMax(rrw, b.right());
+                                                llw = qMax(llw, -(b.left()+lx+cx));
+                                                rrw = qMax(rrw, b.right()+rx+cx);
                                                 }
                                           }
                                     }
