@@ -849,9 +849,9 @@ void Score::undoAddElement(Element* element)
                         element->score()->layoutFingering(static_cast<Fingering*>(element));
                   else if (element->type() == Element::ElementType::CHORD) {
                         for (Note* n : static_cast<Chord*>(element)->notes()) {
-                        //      if(n->tpc() == Tpc::INVALID)
+                        //      if(n->tpc() == Tpc::TPC_INVALID)
                         //            n->setTpcFromPitch();
-                              Q_ASSERT(n->tpc() != Tpc::INVALID);
+                              Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
                               }
                         element->score()->updateNotes();
                         }
@@ -867,7 +867,7 @@ void Score::undoAddElement(Element* element)
                         e->score()->layoutFingering(static_cast<Fingering*>(ne));
                   else if (ne->type() == Element::ElementType::CHORD) {
                         for (Note* n : static_cast<Chord*>(ne)->notes()) {
-                              Q_ASSERT(n->tpc() != Tpc::INVALID);
+                              Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
                         //      n->setTpcFromPitch();
                               }
                         ne->score()->updateNotes();
@@ -1156,9 +1156,9 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                   Chord* chord = static_cast<Chord*>(newcr);
                   // setTpcFromPitch needs to know the note tick position
                   foreach(Note* note, chord->notes()) {
-                        // if (note->tpc() == Tpc::INVALID)
+                        // if (note->tpc() == Tpc::TPC_INVALID)
                         //      note->setTpcFromPitch();
-                        Q_ASSERT(note->tpc() != Tpc::INVALID);
+                        Q_ASSERT(note->tpc() != Tpc::TPC_INVALID);
                         }
                   }
             if (t) {

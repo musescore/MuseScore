@@ -54,14 +54,14 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
             NoteHeadGroup::HEAD_BREVIS_ALT
             };
       static const Tpc tpcs[] = {
-            INVALID,
-            C_BB, C_B, C, C_S, C_SS,
-            D_BB, D_B, D, D_S, D_SS,
-            E_BB, E_B, E, E_S, E_SS,
-            F_BB, F_B, F, F_S, F_SS,
-            G_BB, G_B, G, G_S, G_SS,
-            A_BB, A_B, A, A_S, A_SS,
-            B_BB, B_B, B, B_S, B_SS,
+            Tpc::TPC_INVALID,
+            Tpc::TPC_C_BB, Tpc::TPC_C_B, Tpc::TPC_C, Tpc::TPC_C_S, Tpc::TPC_C_SS,
+            Tpc::TPC_D_BB, Tpc::TPC_D_B, Tpc::TPC_D, Tpc::TPC_D_S, Tpc::TPC_D_SS,
+            Tpc::TPC_E_BB, Tpc::TPC_E_B, Tpc::TPC_E, Tpc::TPC_E_S, Tpc::TPC_E_SS,
+            Tpc::TPC_F_BB, Tpc::TPC_F_B, Tpc::TPC_F, Tpc::TPC_F_S, Tpc::TPC_F_SS,
+            Tpc::TPC_G_BB, Tpc::TPC_G_B, Tpc::TPC_G, Tpc::TPC_G_S, Tpc::TPC_G_SS,
+            Tpc::TPC_A_BB, Tpc::TPC_A_B, Tpc::TPC_A, Tpc::TPC_A_S, Tpc::TPC_A_SS,
+            Tpc::TPC_B_BB, Tpc::TPC_B_B, Tpc::TPC_B, Tpc::TPC_B_S, Tpc::TPC_B_SS,
       };
 
       //
@@ -73,7 +73,7 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       for (int i = 0; i < 5; ++i)
             r.noteHeadType->setItemData(i, i-1);
       // set proper itemdata for TPC combos
-      for (int i = 0; i < Tpc::MAX-Tpc::MIN+2; ++i) {
+      for (int i = 0; i < Tpc::TPC_MAX-Tpc::TPC_MIN+2; ++i) {
             r.topTpc->   setItemData(i, tpcs[i]);
             r.bottomTpc->setItemData(i, tpcs[i]);
             }

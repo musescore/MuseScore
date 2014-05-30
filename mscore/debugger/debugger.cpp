@@ -1407,12 +1407,12 @@ void HarmonyView::setElement(Element* e)
       hb.leftParen->setChecked(harmony->leftParen());
       hb.rightParen->setChecked(harmony->rightParen());
       hb.rootTpc->setValue(harmony->rootTpc());
-      if (harmony->rootTpc() == Tpc::INVALID)
+      if (harmony->rootTpc() == Tpc::TPC_INVALID)
             hb.rootName->setText("");
       else
             hb.rootName->setText(harmony->rootName());
       hb.bassTpc->setValue(harmony->baseTpc());
-      if (harmony->baseTpc() == Tpc::INVALID)
+      if (harmony->baseTpc() == Tpc::TPC_INVALID)
             hb.bassName->setText("");
       else
             hb.bassName->setText(harmony->baseName());

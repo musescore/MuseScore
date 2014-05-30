@@ -755,7 +755,7 @@ void Score::putNote(const Position& p, bool replace)
                                                 qDebug("can't increase fret to %d", fret);
                                           }
                                     // set fret number (orignal or combined) in all linked notes
-//                                    int tpc1 = pitch2tpc(nval.pitch, Key::KEY_C, Prefer::NEAREST);
+//                                    int tpc1 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST);
                                     foreach (Element* e, note->linkList()) {
                                           Note* linkedNote = static_cast<Note*>(e);
                                           nval.tpc = linkedNote->tpc1default(nval.pitch);
