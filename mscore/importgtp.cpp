@@ -3916,14 +3916,14 @@ Score::FileError importGTP(Score* score, const QString& name)
       if (!gp->title.isEmpty()) {
             Text* s = new Text(score);
             // s->setSubtype(TEXT_TITLE);
-            s->setTextStyleType(TEXT_STYLE_TITLE);
+            s->setTextStyleType(TextStyleType::TITLE);
             s->setText(gp->title);
             m->add(s);
             }
       if (!gp->subtitle.isEmpty() && !gp->artist.isEmpty() && !gp->album.isEmpty()) {
             Text* s = new Text(score);
             // s->setSubtype(TEXT_SUBTITLE);
-            s->setTextStyleType(TEXT_STYLE_SUBTITLE);
+            s->setTextStyleType(TextStyleType::SUBTITLE);
             QString str;
             if (!gp->subtitle.isEmpty())
                   str.append(gp->subtitle);
@@ -3943,7 +3943,7 @@ Score::FileError importGTP(Score* score, const QString& name)
       if (!gp->composer.isEmpty()) {
             Text* s = new Text(score);
             // s->setSubtype(TEXT_COMPOSER);
-            s->setTextStyleType(TEXT_STYLE_COMPOSER);
+            s->setTextStyleType(TextStyleType::COMPOSER);
             s->setText(gp->composer);
             m->add(s);
             }
@@ -4019,7 +4019,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                   measure = mb;
                   }
             Text* txt = new Text(pscore);
-            txt->setTextStyleType(TEXT_STYLE_INSTRUMENT_EXCERPT);
+            txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
             txt->setText(part->longName());
             measure->add(txt);
 

@@ -1352,7 +1352,7 @@ void TextView::setElement(Element* e)
       Text* te = (Text*)e;
 
       tb.textStyle->clear();
-      for (int i = 0; i < TEXT_STYLES; ++i)
+      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
       TextStyle ts = te->textStyle();
@@ -1388,7 +1388,7 @@ void HarmonyView::setElement(Element* e)
       Harmony* harmony = (Harmony*)e;
 
       tb.textStyle->clear();
-      for (int i = 0; i < TEXT_STYLES; ++i)
+      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
       const TextStyle& ts = harmony->textStyle();
@@ -1575,7 +1575,7 @@ void DynamicView::setElement(Element* e)
       Dynamic* dynamic = (Dynamic*)e;
 
       tb.textStyle->clear();
-      for (int i = 0; i < TEXT_STYLES; ++i)
+      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
       const TextStyle& ts = dynamic->textStyle();

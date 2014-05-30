@@ -219,19 +219,19 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   Text* text = new Text(cs);
                   switch(mm.metaType()) {
                         case META_COMPOSER:
-                              text->setTextStyleType(TEXT_STYLE_COMPOSER);
+                              text->setTextStyleType(TextStyleType::COMPOSER);
                               break;
                         case META_TRANSLATOR:
-                              text->setTextStyleType(TEXT_STYLE_TRANSLATOR);
+                              text->setTextStyleType(TextStyleType::TRANSLATOR);
                               break;
                         case META_POET:
-                              text->setTextStyleType(TEXT_STYLE_POET);
+                              text->setTextStyleType(TextStyleType::POET);
                               break;
                         case META_SUBTITLE:
-                              text->setTextStyleType(TEXT_STYLE_SUBTITLE);
+                              text->setTextStyleType(TextStyleType::SUBTITLE);
                               break;
                         case META_TITLE:
-                              text->setTextStyleType(TEXT_STYLE_TITLE);
+                              text->setTextStyleType(TextStyleType::TITLE);
                               break;
                         }
 

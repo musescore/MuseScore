@@ -279,7 +279,7 @@ void HarmonyCanvas::paintEvent(QPaintEvent* event)
             FSymbol* sb = static_cast<FSymbol*>(dragElement);
 
             double _spatium = 2.0 * PALETTE_SPATIUM / extraMag;
-            const TextStyle* st = &gscore->textStyle(TEXT_STYLE_HARMONY);
+            const TextStyle* st = &gscore->textStyle(TextStyleType::HARMONY);
             QFont ff(st->fontPx(_spatium));
             ff.setFamily(sb->font().family());
 
@@ -310,7 +310,7 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
 //      qreal mag  = PALETTE_SPATIUM * extraMag / _spatium;
 
       QList<QFont> fontList;              // temp values used in render()
-      const TextStyle* st = &gscore->textStyle(TEXT_STYLE_HARMONY);
+      const TextStyle* st = &gscore->textStyle(TextStyleType::HARMONY);
 
       foreach(ChordFont cf, chordList->fonts) {
             if (cf.family.isEmpty() || cf.family == "default")
@@ -469,7 +469,7 @@ void HarmonyCanvas::dropEvent(QDropEvent* event)
             FSymbol* sb = static_cast<FSymbol*>(dragElement);
 
             double _spatium = 2.0 * PALETTE_SPATIUM / extraMag;
-            const TextStyle* st = &gscore->textStyle(TEXT_STYLE_HARMONY);
+            const TextStyle* st = &gscore->textStyle(TextStyleType::HARMONY);
             QFont ff(st->fontPx(_spatium));
             ff.setFamily(sb->font().family());
 

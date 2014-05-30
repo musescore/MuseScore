@@ -148,7 +148,7 @@ Score* createExcerpt(const QList<Part*>& parts)
       QString partLabel = parts.front()->longName();
       if (!partLabel.isEmpty()) {
             Text* txt = new Text(score);
-            txt->setTextStyleType(TEXT_STYLE_INSTRUMENT_EXCERPT);
+            txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
             txt->setText(partLabel);
             measure->add(txt);
             }

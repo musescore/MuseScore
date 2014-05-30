@@ -45,7 +45,7 @@ Jump::Jump(Score* s)
    : Text(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      setTextStyleType(TEXT_STYLE_REPEAT);
+      setTextStyleType(TextStyleType::REPEAT);
       }
 
 //---------------------------------------------------------
@@ -95,7 +95,7 @@ void Jump::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-//      setTextStyleType(TEXT_STYLE_REPEAT_RIGHT);    // do not reset text style!
+//      setTextStyleType(TextStyleType::REPEAT_RIGHT);    // do not reset text style!
       }
 
 //---------------------------------------------------------

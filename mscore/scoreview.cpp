@@ -4918,10 +4918,10 @@ void ScoreView::cmdAddText(int type)
                         measure = _score->insertMeasure(Element::ElementType::VBOX, measure);
                   s = new Text(_score);
                   switch(type) {
-                        case TEXT_TITLE:    s->setTextStyleType(TEXT_STYLE_TITLE);    break;
-                        case TEXT_SUBTITLE: s->setTextStyleType(TEXT_STYLE_SUBTITLE); break;
-                        case TEXT_COMPOSER: s->setTextStyleType(TEXT_STYLE_COMPOSER); break;
-                        case TEXT_POET:     s->setTextStyleType(TEXT_STYLE_POET);     break;
+                        case TEXT_TITLE:    s->setTextStyleType(TextStyleType::TITLE);    break;
+                        case TEXT_SUBTITLE: s->setTextStyleType(TextStyleType::SUBTITLE); break;
+                        case TEXT_COMPOSER: s->setTextStyleType(TextStyleType::COMPOSER); break;
+                        case TEXT_POET:     s->setTextStyleType(TextStyleType::POET);     break;
                         }
                   s->setParent(measure);
                   }
@@ -4946,11 +4946,11 @@ void ScoreView::cmdAddText(int type)
                   s = new StaffText(_score);
                   if (type == TEXT_SYSTEM) {
                         s->setTrack(0);
-                        s->setTextStyleType(TEXT_STYLE_SYSTEM);
+                        s->setTextStyleType(TextStyleType::SYSTEM);
                         }
                   else {
                         s->setTrack(cr->track());
-                        s->setTextStyleType(TEXT_STYLE_STAFF);
+                        s->setTextStyleType(TextStyleType::STAFF);
                         }
                   s->setParent(cr->segment());
                   }
