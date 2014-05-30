@@ -6239,20 +6239,38 @@ void ScoreFont::load()
 
       // access needed Bravura stylistic alternates
 
-      if (_family == "Bravura") {
-            struct StylisticAlternate {
-                  SymId id;
-                  int   code;
-                  } alternate[] = {
-                        {     SymId::sixStringTabClefSerif,
-                              0xf40c
+      struct StylisticAlternate {
+            QString     key;
+            QString     altKey;
+            SymId       id;
+            } alternate[] = {
+                  {     QString("6stringTabClef"),
+                        QString("6stringTabClefSerif"),
+                        SymId::sixStringTabClefSerif
+                  }
+            };
+
+      // find each relevant alternate in "glyphsWithAlternates" value
+      QJsonObject oa = o.value("glyphsWithAlternates").toObject();
+      bool ok;
+      for (const StylisticAlternate& c : alternate) {
+            QJsonObject::const_iterator i = oa.find(c.key);
+            if (i != oa.end()) {
+                  QJsonArray oaa = i.value().toObject().value("alternates").toArray();
+                  // locate the relevant altKey in alternate array
+                  for (auto j : oaa) {
+                        QJsonObject jo = j.toObject();
+                        if(jo.value("name") == c.altKey) {
+                              Sym* sym = &_symbols[int(c.id)];
+                              int code = jo.value("codepoint").toString().mid(2).toInt(&ok, 16);
+                              if (ok) {
+                                    QString s = codeToString(code);
+                                    sym->setString(s);
+                                    sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
+                                    }
+                              break;
+                              }
                         }
-                  };
-            for (const StylisticAlternate& c : alternate) {
-                  Sym* sym = &_symbols[int(c.id)];
-                  QString s = codeToString(c.code);
-                  sym->setString(s);
-                  sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
                   }
             }
 
