@@ -770,7 +770,7 @@ void createMeasures(ReducedFraction &lastTick, Score *score)
             }
       }
 
-QString instrumentName(int type, int program, bool isDrumTrack)
+QString instrumentName(MidiType type, int program, bool isDrumTrack)
       {
       if (isDrumTrack)
             return "Percussion";
@@ -783,7 +783,7 @@ QString instrumentName(int type, int program, bool isDrumTrack)
             lbank = (program >> 8) & 0xff;
             program = program & 0xff;
             }
-      return MidiInstrument::instrName(type, hbank, lbank, program);
+      return MidiInstrument::instrName(int(type), hbank, lbank, program);
       }
 
 void setTrackInfo(MidiType midiType, MTrack &mt)
@@ -858,8 +858,8 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
             processMeta(mt, false);
-            if (midiType == MT_UNKNOWN)
-                  midiType = MT_GM;
+            if (midiType == MidiType::UNKNOWN)
+                  midiType = MidiType::GM;
             if (i % 2 && isSameChannel(tracks[i - 1], mt)) {
                   mt.program = tracks[i - 1].program;
                   }
@@ -902,8 +902,8 @@ QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
                   }
             else {
                   MidiType midiType = mf->midiType();
-                  if (midiType == MT_UNKNOWN)
-                        midiType = MT_GM;
+                  if (midiType == MidiType::UNKNOWN)
+                        midiType = MidiType::GM;
                   instrName = instrumentName(midiType, mt.program,
                                              mt.mtrack->drumTrack());
                   }
@@ -957,7 +957,7 @@ void convertMidi(Score *score, const MidiFile *mf)
 void loadMidiData(MidiFile &mf)
       {
       mf.separateChannel();
-      MidiType mt = MT_UNKNOWN;
+      MidiType mt = MidiType::UNKNOWN;
       for (auto &track: mf.tracks())
             track.mergeNoteOnOffAndFindMidiType(&mt);
       mf.setMidiType(mt);
