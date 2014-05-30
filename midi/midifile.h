@@ -24,8 +24,8 @@ const int MIDI_CHANNEL = 16;
 //   MidiType
 //---------------------------------------------------------
 
-enum MidiType {
-      MT_UNKNOWN = 0, MT_GM = 1, MT_GS = 2, MT_XG = 4
+enum class MidiType : char {
+      UNKNOWN = 0, GM = 1, GS = 2, XG = 4
       };
 
 class MidiFile;
