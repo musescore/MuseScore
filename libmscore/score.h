@@ -124,14 +124,14 @@ enum {
 
 //---------------------------------------------------------
 //   LayoutMode
-//   LayoutPage   The normal page view, honors page and line breaks
-//   LayoutLine   The panoramic view, one long system
-//   LayoutFloat  The "reflow" mode, ignore page and line breaks
-//   LayoutSystem The "never ending page", page break are turned into line break
+//    PAGE   The normal page view, honors page and line breaks
+//    LINE   The panoramic view, one long system
+//    FLOAT  The "reflow" mode, ignore page and line breaks
+//    SYSTEM The "never ending page", page break are turned into line break
 //---------------------------------------------------------
 
-enum LayoutMode {
-      LayoutPage, LayoutFloat, LayoutLine, LayoutSystem
+enum class LayoutMode : char {
+      PAGE, FLOAT, LINE, SYSTEM
       };
 
 //---------------------------------------------------------

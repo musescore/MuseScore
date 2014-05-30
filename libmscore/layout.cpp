@@ -1294,7 +1294,7 @@ void Score::doLayout()
                               key1 = ks;
                               }
                         }
-                  if (m->sectionBreak() && (_layoutMode != LayoutFloat))
+                  if (m->sectionBreak() && (_layoutMode != LayoutMode::FLOAT))
                         key1 = 0;
                   }
             st->setUpdateKeymap(false);
@@ -1320,7 +1320,7 @@ void Score::doLayout()
       layoutStage2();   // beam notes, finally decide if chord is up/down
       layoutStage3();   // compute note head horizontal positions
 
-      if (layoutMode() == LayoutLine)
+      if (layoutMode() == LayoutMode::LINE)
             layoutLinear();
       else
             layoutSystems();  // create list of systems
@@ -1387,7 +1387,7 @@ void Score::doLayout()
                         sp->layout();
                   }
             }
-      if (layoutMode() != LayoutLine) {
+      if (layoutMode() != LayoutMode::LINE) {
             layoutSystems2();
             layoutPages();    // create list of pages
             }
@@ -1862,7 +1862,7 @@ qreal Score::cautionaryWidth(Measure* m)
       if (m == 0)
             return w;
       Measure* nm = m ? m->nextMeasure() : 0;
-      if (nm == 0 || (m->sectionBreak() && _layoutMode != LayoutFloat))
+      if (nm == 0 || (m->sectionBreak() && _layoutMode != LayoutMode::FLOAT))
             return w;
 
       int tick = m->tick() + m->ticks();
@@ -1964,11 +1964,11 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                         // try to put another system on current row
                         // if not a line break
                         switch(_layoutMode) {
-                              case LayoutFloat:
+                              case LayoutMode::FLOAT:
                                     break;
-                              case LayoutLine:
-                              case LayoutPage:
-                              case LayoutSystem:
+                              case LayoutMode::LINE:
+                              case LayoutMode::PAGE:
+                              case LayoutMode::SYSTEM:
                                     continueFlag = !(curMeasure->lineBreak() || curMeasure->pageBreak());
                                     break;
                               }
@@ -2032,12 +2032,12 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
             int n = styleI(StyleIdx::FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
-                  case LayoutPage:
-                  case LayoutSystem:
+                  case LayoutMode::PAGE:
+                  case LayoutMode::SYSTEM:
                         pbreak = curMeasure->pageBreak() || curMeasure->lineBreak();
                         break;
-                  case LayoutFloat:
-                  case LayoutLine:
+                  case LayoutMode::FLOAT:
+                  case LayoutMode::LINE:
                         pbreak = false;
                         break;
                   }
@@ -2046,7 +2046,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                || pbreak
                || (nt == Element::ElementType::VBOX || nt == Element::ElementType::TBOX || nt == Element::ElementType::FBOX)
                ) {
-                  if (_layoutMode != LayoutSystem)
+                  if (_layoutMode != LayoutMode::SYSTEM)
                         system->setPageBreak(curMeasure->pageBreak());
                   curMeasure = nextMeasure;
                   break;
@@ -2188,11 +2188,11 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                         // try to put another system on current row
                         // if not a line break
                         switch(_layoutMode) {
-                              case LayoutFloat:
+                              case LayoutMode::FLOAT:
                                     break;
-                              case LayoutLine:
-                              case LayoutPage:
-                              case LayoutSystem:
+                              case LayoutMode::LINE:
+                              case LayoutMode::PAGE:
+                              case LayoutMode::SYSTEM:
                                     continueFlag = !(curMeasure->lineBreak() || curMeasure->pageBreak());
                                     break;
                               }
@@ -2221,18 +2221,18 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
             int n = styleI(StyleIdx::FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
-                  case LayoutPage:
-                  case LayoutSystem:
+                  case LayoutMode::PAGE:
+                  case LayoutMode::SYSTEM:
                         pbreak = curMeasure->pageBreak() || curMeasure->lineBreak();
                         break;
-                  case LayoutFloat:
-                  case LayoutLine:
+                  case LayoutMode::FLOAT:
+                  case LayoutMode::LINE:
                         pbreak = false;
                         break;
                   }
             if ((n && system->measures().size() >= n)
                || continueFlag || pbreak || (nt == Element::ElementType::VBOX || nt == Element::ElementType::TBOX || nt == Element::ElementType::FBOX)) {
-                  if (_layoutMode != LayoutSystem)
+                  if (_layoutMode != LayoutMode::SYSTEM)
                         system->setPageBreak(curMeasure->pageBreak());
                   curMeasure = nextMeasure;
                   break;
@@ -2564,7 +2564,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
             Measure* nm = m ? m->nextMeasure() : 0;
             Segment* s;
 
-            if (m && nm && !(m->sectionBreak() && _layoutMode != LayoutFloat)) {
+            if (m && nm && !(m->sectionBreak() && _layoutMode != LayoutMode::FLOAT)) {
                   int tick = m->tick() + m->ticks();
 
                   // locate a time sig. in the next measure and, if found,
@@ -2833,7 +2833,7 @@ void Score::layoutSystems()
                   startWithLongNames = false;
                   if (!sl.isEmpty()) {
                         Measure* lm = sl.back()->lastMeasure();
-                        firstSystem = lm && lm->sectionBreak() && _layoutMode != LayoutFloat;
+                        firstSystem = lm && lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
                         startWithLongNames = firstSystem && lm->sectionBreak()->startWithLongNames();
                         }
                   else
@@ -3143,7 +3143,7 @@ void Score::layoutPages()
                   }
 
             pC.y += h;
-            if (pC.sr.pageBreak() && (_layoutMode == LayoutPage)) {
+            if (pC.sr.pageBreak() && (_layoutMode == LayoutMode::PAGE)) {
                   if ((i + 1) == nSystems)
                         break;
                   pC.layoutPage();
@@ -3182,7 +3182,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
       qreal restHeight = pC.ey - pC.y - d;
 
       if (!gaps || MScore::layoutDebug) {
-            if (_layoutMode == LayoutFloat) {
+            if (_layoutMode == LayoutMode::FLOAT) {
                   qreal y = restHeight * .5;
                   int n = page->systems()->size();
                   for (int i = 0; i < n; ++i) {
@@ -3261,7 +3261,7 @@ void Score::doLayoutSystems()
       {
       foreach(System* system, _systems)
             system->layout2();
-      if (layoutMode() != LayoutLine)
+      if (layoutMode() != LayoutMode::LINE)
             layoutPages();
       rebuildBspTree();
       _updateAll = true;

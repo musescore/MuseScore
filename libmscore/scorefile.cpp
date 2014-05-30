@@ -979,8 +979,8 @@ bool Score::read(XmlReader& e)
             else if (tag == "Style") {
                   qreal sp = _style.spatium();
                   _style.load(e);
-                  // if (_layoutMode == LayoutFloat || _layoutMode == LayoutSystem) {
-                  if (_layoutMode == LayoutFloat) {
+                  // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
+                  if (_layoutMode == LayoutMode::FLOAT) {
                         // style should not change spatium in
                         // float mode
                         _style.setSpatium(sp);
@@ -1060,7 +1060,7 @@ bool Score::read(XmlReader& e)
             else if (tag == "name")
                   setName(e.readElementText());
             else if (tag == "page-layout") {    // obsolete
-                  if (_layoutMode != LayoutFloat && _layoutMode != LayoutSystem) {
+                  if (_layoutMode != LayoutMode::FLOAT && _layoutMode != LayoutMode::SYSTEM) {
                         PageFormat pf;
                         pf.copy(*pageFormat());
                         pf.read(e);

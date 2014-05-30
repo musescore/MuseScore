@@ -4029,7 +4029,7 @@ Measure* Measure::mmRest1() const
 
 qreal Measure::userStretch() const
       {
-      return (score()->layoutMode() == LayoutFloat ? 1.0 : _userStretch);
+      return (score()->layoutMode() == LayoutMode::FLOAT ? 1.0 : _userStretch);
       }
 
 }

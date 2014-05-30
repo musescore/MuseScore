@@ -199,7 +199,7 @@ void Page::layout()
 
 void Page::draw(QPainter* painter) const
       {
-      if (score()->layoutMode() != LayoutPage)
+      if (score()->layoutMode() != LayoutMode::PAGE)
             return;
       //
       // draw header/footer
@@ -584,7 +584,7 @@ void Page::doRebuildBspTree()
       scanElements(&el, collectElements, false);
 
       int n = el.size();
-      if (score()->layoutMode() == LayoutLine) {
+      if (score()->layoutMode() == LayoutMode::LINE) {
             qreal h = _systems.front()->height();
             MeasureBase* mb = _systems.front()->measures().back();
             qreal w = mb->x() + mb->width();
