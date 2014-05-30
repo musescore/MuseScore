@@ -2366,6 +2366,8 @@ void Score::connectTies()
                                  s->tick(), i);
                               // n->setTieFor(0);  show short bow
                               // delete tie;
+                              delete tie;
+                              n->setTieFor(0);
                               }
                         else {
                               tie->setEndNote(nnote);
