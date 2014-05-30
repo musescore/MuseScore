@@ -21,14 +21,14 @@ class Xml;
 class Score;
 class XmlReader;
 
-enum Key : signed char {
-      KEY_C_B=-7,
-      KEY_G_B, KEY_D_B, KEY_A_B, KEY_E_B, KEY_B_B, KEY_F,   KEY_C,
-      KEY_G,   KEY_D,   KEY_A,   KEY_E,   KEY_B,   KEY_F_S, KEY_C_S,
-      KEY_MIN = KEY_C_B,
-      KEY_MAX = KEY_C_S,
-      INVALID_KEY = KEY_MIN-1,
-      NUM_OF_KEYS = KEY_MAX - KEY_MIN + 1
+enum class Key : signed char {
+      C_B=-7,
+      G_B, D_B, A_B, E_B, B_B, F,   C,
+      G,   D,   A,   E,   B,   F_S, C_S,
+      MIN = Key::C_B,
+      MAX = Key::C_S,
+      INVALID = Key::MIN - 1,
+      NUM_OF = Key::MAX - Key::MIN + 1
       };
 
 // the delta in key value to reach the next (or prev) enharmonically equivalent key:

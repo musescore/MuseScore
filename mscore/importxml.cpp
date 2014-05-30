@@ -5074,7 +5074,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   int pitch = drumsets[partId][instrId].pitch;
                   note->setPitch(pitch);
                   // TODO - does this need to be key-aware?
-                  note->setTpc(pitch2tpc(pitch, Key::KEY_C, Prefer::NEAREST)); // TODO: necessary ?
+                  note->setTpc(pitch2tpc(pitch, int(Key::C), Prefer::NEAREST)); // TODO: necessary ?
                   }
             else
                   xmlSetPitch(note, c, alter, octave, ottava, track);
@@ -5306,7 +5306,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                               domError(ee);
                         }
                   if (invalidRoot)
-                        ha->setRootTpc(Tpc::INVALID);
+                        ha->setRootTpc(Tpc::TPC_INVALID);
                   else
                         ha->setRootTpc(step2tpc(step, AccidentalVal(alter)));
                   }
@@ -5397,7 +5397,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
             }
 
       const ChordDescription* d = 0;
-      if (ha->rootTpc() != Tpc::INVALID)
+      if (ha->rootTpc() != Tpc::TPC_INVALID)
             d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
       if (d) {
             ha->setId(d->id);

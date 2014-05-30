@@ -4642,7 +4642,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
             }
       int rootTpc = h->rootTpc();
-      if (rootTpc != Tpc::INVALID) {
+      if (rootTpc != Tpc::TPC_INVALID) {
             if (h->textStyle().hasFrame())
                   xml.stag(QString("harmony print-frame=\"yes\"").append(relative));
             else
@@ -4697,7 +4697,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   }
 
             int baseTpc = h->baseTpc();
-            if (baseTpc != Tpc::INVALID) {
+            if (baseTpc != Tpc::TPC_INVALID) {
                   xml.stag("bass");
                   xml.tag("bass-step", tpc2stepName(baseTpc));
                   int alter = int(tpc2alter(baseTpc));
