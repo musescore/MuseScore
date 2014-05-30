@@ -324,7 +324,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
                         m->scanElements(&p, paintElement, false);
                   }
             page->scanElements(&p, paintElement, false);
-            if (page->score()->layoutMode() == LayoutPage) {
+            if (page->score()->layoutMode() == LayoutMode::PAGE) {
                   p.setFont(QFont("FreeSans", 400));  // !!
                   p.setPen(MScore::layoutBreakColor);
                   p.drawText(page->bbox(), Qt::AlignCenter, QString("%1").arg(page->no() + 1 + _score->pageNumberOffset()));

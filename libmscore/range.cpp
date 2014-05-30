@@ -175,7 +175,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
                   }
             else if (e->type() == Element::ElementType::BAR_LINE) {
                   BarLine* bl = static_cast<BarLine*>(e);
-                  if (bl->barLineType() != BarLineType::NORMAL_BAR)
+                  if (bl->barLineType() != BarLineType::NORMAL)
                         append(e);
                   }
 //            else if (e->type() == Element::REPEAT_MEASURE) {

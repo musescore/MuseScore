@@ -429,7 +429,7 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::figuredBassStyle,      radioFBModern->isChecked() ? 0 : 1);
       // copy to text style data relevant to it (LineHeight and Style are not in text style);
       // offsetType is necessarily OFFSET_SPATIUM
-      const TextStyle fbOld = lstyle.textStyle(TEXT_STYLE_FIGURED_BASS);
+      const TextStyle fbOld = lstyle.textStyle(TextStyleType::FIGURED_BASS);
       if (family != fbOld.family() || size != fbOld.size()
          || vPos != fbOld.offset().y() || fbOld.offsetType() != OffsetType::SPATIUM)
             {

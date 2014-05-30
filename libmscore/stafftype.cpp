@@ -25,7 +25,7 @@ namespace Ms {
 //   StaffTypeTablature
 //---------------------------------------------------------
 
-#define TAB_DEFAULT_DUR_YOFFS	(-1.75)
+#define TAB_DEFAULT_DUR_YOFFS (-1.75)
 
 QList<TablatureFretFont>     StaffType::_fretFonts      = QList<TablatureFretFont>();
 QList<TablatureDurationFont> StaffType::_durationFonts  = QList<TablatureDurationFont>();
@@ -97,11 +97,11 @@ const char* StaffType::groupName(StaffGroup r)
       {
       switch (r) {
             default:
-            case STANDARD_STAFF_GROUP:
+            case StaffGroup::STANDARD:
                   return "pitched";
-            case PERCUSSION_STAFF_GROUP:
+            case StaffGroup::PERCUSSION:
                   return "percussion";
-            case TAB_STAFF_GROUP:
+            case StaffGroup::TAB:
                   return "tablature";
             }
       }
@@ -114,7 +114,7 @@ bool StaffType::operator==(const StaffType& st) const
       {
       if (!isSameStructure(st) || st._name != _name)        // common to all type groups
             return false;
-      if (_group == TAB_STAFF_GROUP) {                      // TAB-specific
+      if (_group == StaffGroup::TAB) {                      // TAB-specific
             return st._durationFontIdx  == _durationFontIdx
                && st._durationFontSize  == _durationFontSize
                && st._durationFontUserY == _durationFontUserY
@@ -144,7 +144,7 @@ bool StaffType::isSameStructure(const StaffType& st) const
          || st._genTimesig   != _genTimesig)
             return false;
 
-      if (_group != TAB_STAFF_GROUP) {                      // common to pitched and percussion
+      if (_group != StaffGroup::TAB) {                      // common to pitched and percussion
             return st._genKeysig      == _genKeysig
                && st._showLedgerLines == _showLedgerLines
                ;
@@ -170,7 +170,7 @@ bool StaffType::isSameStructure(const StaffType& st) const
 void StaffType::setLines(int val)
       {
       _lines = val;
-      if (_group != TAB_STAFF_GROUP) {
+      if (_group != StaffGroup::TAB) {
             switch(_lines) {
                   case 1:
                         _stepOffset = 0;
@@ -209,7 +209,7 @@ void StaffType::write(Xml& xml) const
             xml.tag("barlines", _showBarlines);
       if (!_genTimesig)
             xml.tag("timesig", _genTimesig);
-      if (_group == STANDARD_STAFF_GROUP || _group == PERCUSSION_STAFF_GROUP) {
+      if (_group == StaffGroup::STANDARD || _group == StaffGroup::PERCUSSION) {
             if (!_genKeysig)
                   xml.tag("keysig", _genKeysig);
             if (!_showLedgerLines)
@@ -243,14 +243,14 @@ void StaffType::read(XmlReader& e)
       {
       QString group = e.attribute("group", "pitched");
       if (group == "tablature")
-            _group = TAB_STAFF_GROUP;
+            _group = StaffGroup::TAB;
       else if (group == "percussion")
-            _group = PERCUSSION_STAFF_GROUP;
+            _group = StaffGroup::PERCUSSION;
       else if (group == "pitched")
-            _group = STANDARD_STAFF_GROUP;
+            _group = StaffGroup::STANDARD;
       else {
             qDebug("StaffType::read: unknown group: %s", qPrintable(group));
-            _group = STANDARD_STAFF_GROUP;
+            _group = StaffGroup::STANDARD;
             }
 
       while (e.readNextStartElement()) {
@@ -1006,21 +1006,21 @@ void StaffType::initStaffTypes()
 
       _presets = {
 //                       group,              xml-name,  human-readable-name,        lin dst clef  bars stmless time  key  ledger
-         StaffType(STANDARD_STAFF_GROUP,   "stdNormal", QObject::tr("Standard"),      5, 1, true, true, false, true, true,  true),
-         StaffType(PERCUSSION_STAFF_GROUP, "perc1Line", QObject::tr("Perc. 1 line"),  1, 1, true, true, false, true, false, true),
-         StaffType(PERCUSSION_STAFF_GROUP, "perc3Line", QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, false, true),
-         StaffType(PERCUSSION_STAFF_GROUP, "perc5Line", QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, false, true),
+         StaffType(StaffGroup::STANDARD,   "stdNormal", QObject::tr("Standard"),      5, 1, true, true, false, true, true,  true),
+         StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),  1, 1, true, true, false, true, false, true),
+         StaffType(StaffGroup::PERCUSSION, "perc3Line", QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, false, true),
+         StaffType(StaffGroup::PERCUSSION, "perc5Line", QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, false, true),
 //                 group               xml-name,         human-readable-name         lin dist  clef   bars stemless time      duration font     size off genDur     fret font         size off  thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
-         StaffType(TAB_STAFF_GROUP, "tab6StrSimple", QObject::tr("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tab6StrCommon", QObject::tr("Tab. 6-str common"), 6, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tab6StrFull",   QObject::tr("Tab. 6-str full"),   6, 1.5, true,  true, false, true,  "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, true),
-         StaffType(TAB_STAFF_GROUP, "tab4StrSimple", QObject::tr("Tab. 4-str simple"), 4, 1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tab4StrCommon", QObject::tr("Tab. 4-str common"), 4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tab4StrFull",   QObject::tr("Tab. 4-str full"),   4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, true),
-         StaffType(TAB_STAFF_GROUP, "tabUkulele",    QObject::tr("Tab. ukulele"),      4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tabBalajka",    QObject::tr("Tab. balalajka"),    3, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, true),
-         StaffType(TAB_STAFF_GROUP, "tab6StrItalian",QObject::tr("Tab. 6-str Italian"),6, 1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  true),
-         StaffType(TAB_STAFF_GROUP, "tab6StrFrench", QObject::tr("Tab. 6-str French"), 6, 1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false)
+         StaffType(StaffGroup::TAB, "tab6StrSimple", QObject::tr("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, true),
+         StaffType(StaffGroup::TAB, "tab6StrCommon", QObject::tr("Tab. 6-str common"), 6, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, true),
+         StaffType(StaffGroup::TAB, "tab6StrFull",   QObject::tr("Tab. 6-str full"),   6, 1.5, true,  true, false, true,  "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, true),
+         StaffType(StaffGroup::TAB, "tab4StrSimple", QObject::tr("Tab. 4-str simple"), 4, 1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, true),
+         StaffType(StaffGroup::TAB, "tab4StrCommon", QObject::tr("Tab. 4-str common"), 4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, true),
+         StaffType(StaffGroup::TAB, "tab4StrFull",   QObject::tr("Tab. 4-str full"),   4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, true),
+         StaffType(StaffGroup::TAB, "tabUkulele",    QObject::tr("Tab. ukulele"),      4, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, true),
+         StaffType(StaffGroup::TAB, "tabBalajka",    QObject::tr("Tab. balalajka"),    3, 1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, true),
+         StaffType(StaffGroup::TAB, "tab6StrItalian",QObject::tr("Tab. 6-str Italian"),6, 1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  true),
+         StaffType(StaffGroup::TAB, "tab6StrFrench", QObject::tr("Tab. 6-str French"), 6, 1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false)
          };
       }
 }                 // namespace Ms

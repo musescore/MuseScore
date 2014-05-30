@@ -53,15 +53,15 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       // only add percussion and tab groups if the instrument supports them
       if (instr != nullptr) {
             if (instr->drumset() != nullptr)          // percussion excludes standard
-                  groupCombo->addItem(StaffType::groupName(PERCUSSION_STAFF_GROUP), PERCUSSION_STAFF_GROUP);
+                  groupCombo->addItem(StaffType::groupName(StaffGroup::PERCUSSION), int(StaffGroup::PERCUSSION));
             else
-                  groupCombo->addItem(StaffType::groupName(STANDARD_STAFF_GROUP), STANDARD_STAFF_GROUP);
+                  groupCombo->addItem(StaffType::groupName(StaffGroup::STANDARD), int(StaffGroup::STANDARD));
             if (instr->stringData() != nullptr && instr->stringData()->strings() > 0)
-                  groupCombo->addItem(StaffType::groupName(TAB_STAFF_GROUP), TAB_STAFF_GROUP);
+                  groupCombo->addItem(StaffType::groupName(StaffGroup::TAB), int(StaffGroup::TAB));
             }
       // fall back to standard
       else
-            groupCombo->addItem(StaffType::groupName(STANDARD_STAFF_GROUP), STANDARD_STAFF_GROUP);
+            groupCombo->addItem(StaffType::groupName(StaffGroup::STANDARD), int(StaffGroup::STANDARD));
       int idx = int(staffType.group());
       groupCombo->setCurrentIndex(0);
       int comboIdx = groupCombo->findData(idx);
@@ -80,7 +80,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       // load a sample tabulature score in preview
       Score* sc = new Score(MScore::defaultStyle());
-      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FILE_NO_ERROR)
+      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FileError::FILE_NO_ERROR)
             preview->setScore(sc);
 
       setValues();
@@ -155,13 +155,13 @@ void EditStaffType::setValues()
       genTimesig->setChecked(staffType.genTimesig());
 
       switch (group) {
-            case STANDARD_STAFF_GROUP:
+            case StaffGroup::STANDARD:
                   genKeysigPitched->setChecked(staffType.genKeysig());
                   showLedgerLinesPitched->setChecked(staffType.showLedgerLines());
                   stemlessPitched->setChecked(staffType.slashStyle());
                   break;
 
-            case TAB_STAFF_GROUP:
+            case StaffGroup::TAB:
                   {
                   upsideDown->setChecked(staffType.upsideDown());
                   int idx = fretFontName->findText(staffType.fretFontName(), Qt::MatchFixedString);
@@ -218,7 +218,7 @@ void EditStaffType::setValues()
                   }
                   break;
 
-            case PERCUSSION_STAFF_GROUP:
+            case StaffGroup::PERCUSSION:
                   genKeysigPercussion->setChecked(staffType.genKeysig());
                   showLedgerLinesPercussion->setChecked(staffType.showLedgerLines());
                   stemlessPercussion->setChecked(staffType.slashStyle());
@@ -320,12 +320,12 @@ void EditStaffType::setFromDlg()
       staffType.setGenClef(genClef->isChecked());
       staffType.setShowBarlines(showBarlines->isChecked());
       staffType.setGenTimesig(genTimesig->isChecked());
-      if (staffType.group() == STANDARD_STAFF_GROUP) {
+      if (staffType.group() == StaffGroup::STANDARD) {
             staffType.setGenKeysig(genKeysigPitched->isChecked());
             staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
             staffType.setSlashStyle(stemlessPitched->isChecked());
             }
-      if (staffType.group() == PERCUSSION_STAFF_GROUP) {
+      if (staffType.group() == StaffGroup::PERCUSSION) {
             staffType.setGenKeysig(genKeysigPercussion->isChecked());
             staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
             staffType.setSlashStyle(stemlessPercussion->isChecked());
@@ -346,7 +346,7 @@ void EditStaffType::setFromDlg()
       //note values
       staffType.setStemsDown(stemBelowRadio->isChecked());
       staffType.setStemsThrough(stemThroughRadio->isChecked());
-      if (staffType.group() == TAB_STAFF_GROUP) {
+      if (staffType.group() == StaffGroup::TAB) {
             staffType.setSlashStyle(true);                 // assume no note values
             staffType.setGenDurations(false);              //    "     "
             if (noteValuesSymb->isChecked())
@@ -482,13 +482,13 @@ QString EditStaffType::createUniqueStaffTypeName(StaffGroup group)
       QString name;
       for (int idx = 1; ; ++idx) {
             switch (group) {
-                  case STANDARD_STAFF_GROUP:
+                  case StaffGroup::STANDARD:
                         name = QString("Standard-%1 [*]").arg(idx);
                         break;
-                  case PERCUSSION_STAFF_GROUP:
+                  case StaffGroup::PERCUSSION:
                         name = QString("Perc-%1 [*]").arg(idx);
                         break;
-                  case TAB_STAFF_GROUP:
+                  case StaffGroup::TAB:
                         name = QString("Tab-%1 [*]").arg(idx);
                         break;
                   }

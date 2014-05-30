@@ -905,7 +905,7 @@ FiguredBass::FiguredBass(Score* s)
       {
       setFlag(ElementFlag::ON_STAFF, true);
       setOnNote(true);
-      setTextStyleType(TEXT_STYLE_FIGURED_BASS);
+      setTextStyleType(TextStyleType::FIGURED_BASS);
       TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(StyleIdx::figuredBassFontSize),
                   false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, score()->styleD(StyleIdx::figuredBassYOffset)), OffsetType::SPATIUM);
       st.setSizeIsSpatiumDependent(true);
@@ -940,7 +940,7 @@ void FiguredBass::write(Xml& xml) const
       if (ticks() > 0)
             xml.tag("ticks", ticks());
       // if unparseable items or non-standard style, write full text data
-      if (items.size() < 1 || textStyleType() != TEXT_STYLE_FIGURED_BASS) {
+      if (items.size() < 1 || textStyleType() != TextStyleType::FIGURED_BASS) {
             if (items.size() < 1)
                   Text::writeProperties(xml, true);
             else
@@ -996,7 +996,7 @@ void FiguredBass::layout()
       qreal yOff  = score()->styleD(StyleIdx::figuredBassYOffset);
       qreal _sp   = spatium();
       // if 'our' style, force 'our' style data from FiguredBass parameters
-      if(textStyleType() == TEXT_STYLE_FIGURED_BASS) {
+      if(textStyleType() == TextStyleType::FIGURED_BASS) {
             TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(StyleIdx::figuredBassFontSize),
                         false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, yOff),
                         OffsetType::SPATIUM);
@@ -1006,7 +1006,7 @@ void FiguredBass::layout()
 
       // if in edit mode or if style has been changed,
       // do nothing else, keeping default laying out and formatting
-      if(editMode() || textStyleType() != TEXT_STYLE_FIGURED_BASS) {
+      if(editMode() || textStyleType() != TextStyleType::FIGURED_BASS) {
             Text::layout();
             return;
       }
@@ -1130,7 +1130,7 @@ void FiguredBass::draw(QPainter* painter) const
                         }
             }
       // if in edit mode or with custom style, use standard text drawing
-      if(editMode() || textStyleType() != TEXT_STYLE_FIGURED_BASS)
+      if(editMode() || textStyleType() != TextStyleType::FIGURED_BASS)
             Text::draw(painter);
       // not edit mode:
       else {

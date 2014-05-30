@@ -187,11 +187,11 @@ void ExcerptsDialog::newAllClicked()
       int n = partList->count();
       ExcerptItem* ei = 0;
       for (int i = 0; i < n; ++i) {
-	      Excerpt* e   = new Excerpt(0);
-	      PartItem* pi = static_cast<PartItem*>(partList->item(i));
+            Excerpt* e   = new Excerpt(0);
+            PartItem* pi = static_cast<PartItem*>(partList->item(i));
             e->parts().append(pi->part());
-	      QString name = createName(pi->part()->partName());
-	      e->setTitle(name);
+            QString name = createName(pi->part()->partName());
+            e->setTitle(name);
             excerptList->addItem(new ExcerptItem(e));
             }
       if (ei) {
@@ -288,7 +288,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       nscore->setName(e->title());
       nscore->rebuildMidiMapping();
       nscore->updateChannel();
-      nscore->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
+      nscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       nscore->setLayoutAll(true);
       score->startCmd();
       score->undo(new AddExcerpt(nscore));

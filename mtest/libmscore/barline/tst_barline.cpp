@@ -267,7 +267,7 @@ void TestBarline::barline05()
       QVERIFY2(seg != nullptr, "No SegEndBarLine segment in measure 4.");
       BarLine* bar = static_cast<BarLine*>(seg->element(0));
       QVERIFY2(bar != nullptr, "No end-repeat bar line in measure 4.");
-      QVERIFY2(bar->barLineType() == END_REPEAT, "Bar line at measure 4 is not END-REPEAT");
+      QVERIFY2(bar->barLineType() == BarLineType::END_REPEAT, "Bar line at measure 4 is not END-REPEAT");
       QVERIFY2(!bar->generated(), "End-reapeat bar line in measure 4 is generated.");
 
       // check an end-repeat bar line has been created at the beginning of the next measure and it is not generated

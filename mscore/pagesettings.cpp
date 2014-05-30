@@ -224,7 +224,7 @@ void PageSettings::updateValues()
       pageOffsetEntry->setValue(sc->pageNumberOffset() + 1);
 
       blockSignals(false);
-	}
+      }
 
 //---------------------------------------------------------
 //   inchClicked

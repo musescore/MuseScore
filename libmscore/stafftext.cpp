@@ -26,7 +26,7 @@ StaffText::StaffText(Score* s)
    : Text(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setTextStyleType(TEXT_STYLE_STAFF);
+      setTextStyleType(TextStyleType::STAFF);
       _setAeolusStops = false;
       clearAeolusStops();
       }

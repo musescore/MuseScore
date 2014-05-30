@@ -52,7 +52,7 @@ void TestText::initTestCase()
 void TestText::testText()
       {
       Text* text = new Text(score);
-      text->setTextStyle(score->textStyle(TEXT_STYLE_DYNAMICS));
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
 
       text->setEditMode(true);
       text->layout();
@@ -126,7 +126,7 @@ void TestText::testText()
 void TestText::testSpecialSymbols()
       {
       Text* text = new Text(score);
-      text->setTextStyle(score->textStyle(TEXT_STYLE_DYNAMICS));
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
 
       text->setEditMode(true);
       text->layout();
@@ -168,7 +168,7 @@ void TestText::testSpecialSymbols()
 void TestText::testTextProperties()
       {
       Text* text = new Text(score);
-      text->setTextStyle(score->textStyle(TEXT_STYLE_DYNAMICS));
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
 
       text->setEditMode(true);
       text->layout();

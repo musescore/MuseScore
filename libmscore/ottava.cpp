@@ -196,9 +196,9 @@ void Ottava::setOttavaType(OttavaType val)
 
       const OttavaDefault* def = &ottavaDefault[int(_ottavaType)];
       if (beginTextStyle == PropertyStyle::STYLED)
-            setBeginText(propertyDefault(P_ID::BEGIN_TEXT).toString(), TEXT_STYLE_OTTAVA);
+            setBeginText(propertyDefault(P_ID::BEGIN_TEXT).toString(), TextStyleType::OTTAVA);
       if (continueTextStyle == PropertyStyle::STYLED)
-            setContinueText(propertyDefault(P_ID::CONTINUE_TEXT).toString(), TEXT_STYLE_OTTAVA);
+            setContinueText(propertyDefault(P_ID::CONTINUE_TEXT).toString(), TextStyleType::OTTAVA);
 
       setEndHookHeight(score()->styleS(StyleIdx::ottavaHook) * def->hookDirection);
       setPlacement(def->place);
@@ -226,7 +226,7 @@ void Ottava::endEdit()
             s->pitchOffsets().remove(editTick2);
 
             s->updateOttava(this);
-            score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
+            score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             score()->setPlaylistDirty(true);
             }
       TextLine::endEdit();
@@ -414,7 +414,7 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_ID::BEGIN_TEXT_STYLE:
             case P_ID::CONTINUE_TEXT_STYLE:
             case P_ID::END_TEXT_STYLE:
-                  return QVariant::fromValue(score()->textStyle(TEXT_STYLE_OTTAVA));
+                  return QVariant::fromValue(score()->textStyle(TextStyleType::OTTAVA));
 
             default:
                   return TextLine::propertyDefault(propertyId);

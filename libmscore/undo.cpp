@@ -849,9 +849,9 @@ void Score::undoAddElement(Element* element)
                         element->score()->layoutFingering(static_cast<Fingering*>(element));
                   else if (element->type() == Element::ElementType::CHORD) {
                         for (Note* n : static_cast<Chord*>(element)->notes()) {
-                        //      if(n->tpc() == Tpc::INVALID)
+                        //      if(n->tpc() == Tpc::TPC_INVALID)
                         //            n->setTpcFromPitch();
-                              Q_ASSERT(n->tpc() != Tpc::INVALID);
+                              Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
                               }
                         element->score()->updateNotes();
                         }
@@ -867,7 +867,7 @@ void Score::undoAddElement(Element* element)
                         e->score()->layoutFingering(static_cast<Fingering*>(ne));
                   else if (ne->type() == Element::ElementType::CHORD) {
                         for (Note* n : static_cast<Chord*>(ne)->notes()) {
-                              Q_ASSERT(n->tpc() != Tpc::INVALID);
+                              Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
                         //      n->setTpcFromPitch();
                               }
                         ne->score()->updateNotes();
@@ -1156,9 +1156,9 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                   Chord* chord = static_cast<Chord*>(newcr);
                   // setTpcFromPitch needs to know the note tick position
                   foreach(Note* note, chord->notes()) {
-                        // if (note->tpc() == Tpc::INVALID)
+                        // if (note->tpc() == Tpc::TPC_INVALID)
                         //      note->setTpcFromPitch();
-                        Q_ASSERT(note->tpc() != Tpc::INVALID);
+                        Q_ASSERT(note->tpc() != Tpc::TPC_INVALID);
                         }
                   }
             if (t) {
@@ -1601,7 +1601,7 @@ void InsertMeasure::undo()
       {
       Score* score = measure->score();
       score->remove(measure);
-      score->addLayoutFlags(LAYOUT_FIX_TICKS);
+      score->addLayoutFlags(LayoutFlag::FIX_TICKS);
       score->setLayoutAll(true);
       }
 
@@ -1609,7 +1609,7 @@ void InsertMeasure::redo()
       {
       Score* score = measure->score();
       score->addMeasure(measure, pos);
-      score->addLayoutFlags(LAYOUT_FIX_TICKS);
+      score->addLayoutFlags(LayoutFlag::FIX_TICKS);
       score->setLayoutAll(true);
       }
 
@@ -1714,7 +1714,7 @@ void ChangeElement::flip()
                   }
             }
       else if (newElement->type() == Element::ElementType::DYNAMIC)
-            newElement->score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
+            newElement->score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       else if (newElement->type() == Element::ElementType::TEMPO_TEXT) {
             TempoText* t = static_cast<TempoText*>(oldElement);
             score->setTempo(t->segment(), t->tempo());
@@ -1982,7 +1982,7 @@ void ChangeSingleBarLineSpan::flip()
             Segment * segm = (static_cast<Segment*>(barLine->parent()));
             Measure * meas = segm->measure();
             // if it is a start-reapeat bar line at the beginning of a measure, redo measure start bar lines
-            if (barLine->barLineType() == START_REPEAT && segm->segmentType() == Segment::SegStartRepeatBarLine)
+            if (barLine->barLineType() == BarLineType::START_REPEAT && segm->segmentType() == Segment::SegStartRepeatBarLine)
                   meas->setStartRepeatBarLine(true);
             // otherwise redo measure end bar lines
             else
@@ -2906,11 +2906,11 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
             Measure* measure = s->tick2measure(m->tick());
             Measure* nm      = m->nextMeasure();
             switch(barType) {
-                  case END_BAR:
-                  case NORMAL_BAR:
-                  case DOUBLE_BAR:
-                  case BROKEN_BAR:
-                  case DOTTED_BAR:
+                  case BarLineType::END:
+                  case BarLineType::NORMAL:
+                  case BarLineType::DOUBLE:
+                  case BarLineType::BROKEN:
+                  case BarLineType::DOTTED:
                         {
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() & ~Repeat::END);
                         if (nm)
@@ -2919,15 +2919,15 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                         measure->setEndBarLineGenerated (false);
                         }
                         break;
-                  case START_REPEAT:
+                  case BarLineType::START_REPEAT:
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::START);
                         break;
-                  case END_REPEAT:
+                  case BarLineType::END_REPEAT:
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
                         if (nm)
                               s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
                         break;
-                  case END_START_REPEAT:
+                  case BarLineType::END_START_REPEAT:
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
                         if (nm)
                               s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() | Repeat::START);

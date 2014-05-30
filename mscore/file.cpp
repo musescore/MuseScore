@@ -162,33 +162,33 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
       QString msg = QString(QT_TRANSLATE_NOOP(file, "Cannot read file %1:\n")).arg(name);
       bool canIgnore = false;
       switch(error) {
-            case Score::FILE_NO_ERROR:
+            case Score::FileError::FILE_NO_ERROR:
                   return false;
-            case Score::FILE_BAD_FORMAT:
+            case Score::FileError::FILE_BAD_FORMAT:
                   msg += QT_TRANSLATE_NOOP(file, "bad format");
                   break;
-            case Score::FILE_UNKNOWN_TYPE:
+            case Score::FileError::FILE_UNKNOWN_TYPE:
                   msg += QT_TRANSLATE_NOOP(file, "unknown type");
                   break;
-            case Score::FILE_NO_ROOTFILE:
+            case Score::FileError::FILE_NO_ROOTFILE:
                   break;
-            case Score::FILE_TOO_OLD:
+            case Score::FileError::FILE_TOO_OLD:
                   msg += QT_TRANSLATE_NOOP(file, "It was last saved with version 0.9.5 or older.<br>"
                          "You can convert this score by opening and then saving with"
                          " MuseScore version 1.x</a>");
                   canIgnore = true;
                   break;
-            case Score::FILE_TOO_NEW:
+            case Score::FileError::FILE_TOO_NEW:
                   msg += QT_TRANSLATE_NOOP(file, "This score was saved using a newer version of MuseScore.<br>\n"
                          "Visit the <a href=\"http://musescore.org\">MuseScore website</a>"
                          " to obtain the latest version.");
                   canIgnore = true;
                   break;
-            case Score::FILE_NOT_FOUND:
+            case Score::FileError::FILE_NOT_FOUND:
                   msg = QString(QT_TRANSLATE_NOOP(file, "File not found %1")).arg(name);
                   break;
-            case Score::FILE_ERROR:
-            case Score::FILE_OPEN_ERROR:
+            case Score::FileError::FILE_ERROR:
+            case Score::FileError::FILE_OPEN_ERROR:
             default:
                   msg += MScore::lastError;
                   break;
@@ -315,7 +315,7 @@ Score* MuseScore::readScore(const QString& name)
       Score* score = new Score(MScore::baseStyle());  // start with built-in style
       setMidiPrefOperations(name);
       Score::FileError rv = Ms::readScore(score, name, false);
-      if (rv == Score::FILE_TOO_OLD || rv == Score::FILE_TOO_NEW) {
+      if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW) {
             if (readScoreError(name, rv, true))
                   rv = Ms::readScore(score, name, true);
             else {
@@ -323,10 +323,10 @@ Score* MuseScore::readScore(const QString& name)
                   return 0;
                   }
             }
-      if (rv != Score::FILE_NO_ERROR) {
+      if (rv != Score::FileError::FILE_NO_ERROR) {
             // in case of user abort while reading, the error has already been reported
             // else report it now
-            if (rv != Score::FILE_USER_ABORT)
+            if (rv != Score::FileError::FILE_USER_ABORT)
                   readScoreError(name, rv, false);
             delete score;
             score = 0;
@@ -362,7 +362,7 @@ bool MuseScore::saveFile(Score* score)
             return false;
       if (score->created()) {
             QString fn = score->fileInfo()->fileName();
-            Text* t = score->getText(TEXT_STYLE_TITLE);
+            Text* t = score->getText(TextStyleType::TITLE);
             if (t)
                   fn = t->plainText(true);
             QString name = createDefaultFileName(fn);
@@ -472,7 +472,7 @@ void MuseScore::newFile()
       //
       if (newWizard->useTemplate()) {
             Score::FileError rv = Ms::readScore(score, newWizard->templatePath(), false);
-            if (rv != Score::FILE_NO_ERROR) {
+            if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
                   delete score;
                   return;
@@ -572,7 +572,7 @@ void MuseScore::newFile()
                         m->setLen(timesig - Fraction(pickupTimesigZ, pickupTimesigN));
                         }*/
                   }
-            m->setEndBarLineType(i == (measures - 1) ? END_BAR : NORMAL_BAR, false);
+            m->setEndBarLineType(i == (measures - 1) ? BarLineType::END : BarLineType::NORMAL, false);
             }
 
       int tick = 0;
@@ -709,27 +709,27 @@ void MuseScore::newFile()
                   }
             if (!title.isEmpty()) {
                   Text* s = new Text(score);
-                  s->setTextStyleType(TEXT_STYLE_TITLE);
+                  s->setTextStyleType(TextStyleType::TITLE);
                   s->setPlainText(title);
                   measure->add(s);
                   score->setMetaTag("workTitle", title);
                   }
             if (!subtitle.isEmpty()) {
                   Text* s = new Text(score);
-                  s->setTextStyleType(TEXT_STYLE_SUBTITLE);
+                  s->setTextStyleType(TextStyleType::SUBTITLE);
                   s->setPlainText(subtitle);
                   measure->add(s);
                   }
             if (!composer.isEmpty()) {
                   Text* s = new Text(score);
-                  s->setTextStyleType(TEXT_STYLE_COMPOSER);
+                  s->setTextStyleType(TextStyleType::COMPOSER);
                   s->setPlainText(composer);
                   measure->add(s);
                   score->setMetaTag("composer", composer);
                   }
             if (!poet.isEmpty()) {
                   Text* s = new Text(score);
-                  s->setTextStyleType(TEXT_STYLE_POET);
+                  s->setTextStyleType(TextStyleType::POET);
                   s->setPlainText(poet);
                   measure->add(s);
                   // the poet() functions returns data called lyricist in the dialog
@@ -1796,7 +1796,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
 
       if (csl == "mscz" || csl == "mscx") {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
-            if (rv != Score::FILE_NO_ERROR)
+            if (rv != Score::FileError::FILE_NO_ERROR)
                   return rv;
             score->setCreated(false);
             }
@@ -1848,14 +1848,14 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   if (imports[i].extension == csl) {
                         // if (!(this->*imports[i].importF)(score, name))
                         Score::FileError rv = (*imports[i].importF)(score, name);
-                        if (rv != Score::FILE_NO_ERROR)
+                        if (rv != Score::FileError::FILE_NO_ERROR)
                               return rv;
                         break;
                         }
                   }
             if (i == n) {
                   qDebug("unknown file suffix <%s>, name <%s>", qPrintable(cs), qPrintable(name));
-                  return Score::FILE_UNKNOWN_TYPE;
+                  return Score::FileError::FILE_UNKNOWN_TYPE;
                   }
             score->connectTies();
             score->setCreated(true); // force save as for imported files
@@ -1895,7 +1895,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             ++staffIdx;
             }
       score->updateNotes();
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------

@@ -127,31 +127,31 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             "upprall", QT_TRANSLATE_NOOP("articulation", "up prall"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
-	{ SymId::ornamentDownPrall, SymId::ornamentDownPrall,
+      { SymId::ornamentDownPrall, SymId::ornamentDownPrall,
             "downprall", QT_TRANSLATE_NOOP("articulation", "down prall"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
-	{ SymId::ornamentUpMordent, SymId::ornamentUpMordent,
+      { SymId::ornamentUpMordent, SymId::ornamentUpMordent,
             "upmordent", QT_TRANSLATE_NOOP("articulation", "up mordent"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
-	{ SymId::ornamentDownMordent, SymId::ornamentDownMordent,
+      { SymId::ornamentDownMordent, SymId::ornamentDownMordent,
             "downmordent", QT_TRANSLATE_NOOP("articulation", "down mordent"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
-	{ SymId::ornamentPrallDown, SymId::ornamentPrallDown,
+      { SymId::ornamentPrallDown, SymId::ornamentPrallDown,
             "pralldown", QT_TRANSLATE_NOOP("articulation", "prall down"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
-	{ SymId::ornamentPrallUp, SymId::ornamentPrallUp,
+      { SymId::ornamentPrallUp, SymId::ornamentPrallUp,
             "prallup", QT_TRANSLATE_NOOP("articulation", "prall up"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
-	{ SymId::ornamentLinePrall, SymId::ornamentLinePrall,
+      { SymId::ornamentLinePrall, SymId::ornamentLinePrall,
             "lineprall", QT_TRANSLATE_NOOP("articulation", "line prall"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
-	{ SymId::ornamentPrecompSlide, SymId::ornamentPrecompSlide,
+      { SymId::ornamentPrecompSlide, SymId::ornamentPrecompSlide,
             "schleifer", QT_TRANSLATE_NOOP("articulation", "schleifer"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
@@ -174,7 +174,7 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             1.0, ArticulationShowIn::TABLATURE
             },
 #endif
-	};
+      };
 
 //---------------------------------------------------------
 //   Articulation
@@ -366,7 +366,7 @@ void Articulation::draw(QPainter* painter) const
       SymId sym = _up ? articulationList[int(articulationType())].upSym : articulationList[int(articulationType())].downSym;
       int flags = articulationList[int(articulationType())].flags;
       if (staff()) {
-            if (staff()->staffGroup() == TAB_STAFF_GROUP) {
+            if (staff()->staffGroup() == StaffGroup::TAB) {
                   if (!(flags & ArticulationShowIn::TABLATURE))
                         return;
                   }

@@ -23,16 +23,16 @@ class Event;
 
 const int   INVALID_PITCH      = -1;
 
-// a list of tpc's, with legal ranges
+// a list of tpc's, with legal ranges, not really an enum, so no way to cnvert into a class
 enum Tpc : signed char {
-      INVALID = -2,
-      F_BB, C_BB, G_BB, D_BB, A_BB, E_BB, B_BB,
-      F_B,  C_B,  G_B,  D_B,  A_B,  E_B,  B_B,
-      F,    C,    G,    D,    A,    E,    B,
-      F_S,  C_S,  G_S,  D_S,  A_S,  E_S,  B_S,
-      F_SS, C_SS, G_SS, D_SS, A_SS, E_SS, B_SS,
-      MIN = F_BB,
-      MAX = B_SS
+      TPC_INVALID = -2,
+      TPC_F_BB, TPC_C_BB, TPC_G_BB, TPC_D_BB, TPC_A_BB, TPC_E_BB, TPC_B_BB,
+      TPC_F_B,  TPC_C_B,  TPC_G_B,  TPC_D_B,  TPC_A_B,  TPC_E_B,  TPC_B_B,
+      TPC_F,    TPC_C,    TPC_G,    TPC_D,    TPC_A,    TPC_E,    TPC_B,
+      TPC_F_S,  TPC_C_S,  TPC_G_S,  TPC_D_S,  TPC_A_S,  TPC_E_S,  TPC_B_S,
+      TPC_F_SS, TPC_C_SS, TPC_G_SS, TPC_D_SS, TPC_A_SS, TPC_E_SS, TPC_B_SS,
+      TPC_MIN = TPC_F_BB,
+      TPC_MAX = TPC_B_SS
       };
 
 const int   TPC_DELTA_SEMITONE      = 7;  // the delta in tpc value to go 1 semitone up or down
@@ -48,7 +48,7 @@ const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (
 //    Midi pitch 60 is middle C.
 //---------------------------------------------------------
 
-// pitch2tpc(pitch) replaced by pitch2tpc(pitch, Key::KEY_C, Prefer::NEAREST)
+// pitch2tpc(pitch) replaced by pitch2tpc(pitch, Key::C, Prefer::NEAREST)
 
 enum class Prefer : char { FLATS=8, NEAREST=11, SHARPS=13 };
 enum class NoteSpellingType : char { STANDARD = 0, GERMAN, SOLFEGGIO };

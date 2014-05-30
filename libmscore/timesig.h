@@ -62,7 +62,7 @@ class TimeSig : public Element {
       QPointF pz, pn;
       Fraction _sig;
       Fraction _stretch;      // localSig / globalSig
-      bool	_showCourtesySig;
+      bool _showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from actualSig()
       bool _needLayout;
       Groups _groups;

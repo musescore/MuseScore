@@ -30,10 +30,10 @@ static sf_count_t tell(void* f) {
 
 static SF_VIRTUAL_IO sfio = {
       getFileLen,
-	seek,
-	read,
-	write,
-	tell
+      seek,
+      read,
+      write,
+      tell
       };
 
 //---------------------------------------------------------

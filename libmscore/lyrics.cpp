@@ -27,7 +27,7 @@ namespace Ms {
 Lyrics::Lyrics(Score* s)
    : Text(s)
       {
-      setTextStyleType(TEXT_STYLE_LYRIC1);
+      setTextStyleType(TextStyleType::LYRIC1);
       _no          = 0;
       _ticks       = 0;
       _syllabic    = Syllabic::SINGLE;
@@ -328,10 +328,10 @@ void Lyrics::setNo(int n)
       // adjust beween LYRICS1 and LYRICS2 only; keep other styles as they are
       // (_no is 0-based, so odd _no means even line and viceversa)
       if (type() == ElementType::LYRICS) {
-            if( (_no & 1) && textStyleType() == TEXT_STYLE_LYRIC1)
-                  setTextStyleType(TEXT_STYLE_LYRIC2);
-            if( !(_no & 1) && textStyleType() == TEXT_STYLE_LYRIC2)
-                  setTextStyleType(TEXT_STYLE_LYRIC1);
+            if( (_no & 1) && textStyleType() == TextStyleType::LYRIC1)
+                  setTextStyleType(TextStyleType::LYRIC2);
+            if( !(_no & 1) && textStyleType() == TextStyleType::LYRIC2)
+                  setTextStyleType(TextStyleType::LYRIC1);
             }
       }
 

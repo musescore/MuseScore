@@ -46,7 +46,7 @@ class KeySig : public Element {
       Q_OBJECT
       Q_PROPERTY(bool showCourtesy READ showCourtesy   WRITE undoSetShowCourtesy)
 
-      bool	_showCourtesy;
+      bool _showCourtesy;
       QList<KeySym*> keySymbols;
       KeySigEvent _sig;       // concertKeySig, transposingKeySig
       void addLayout(SymId sym, qreal x, int y);

@@ -758,7 +758,7 @@ void MeasureView::setElement(Element* e)
       mb.repeatFlags->setText(QString("0x%1").arg(m->repeatFlags(), 6, 16, QChar('0')));
       mb.breakMultiMeasureRest->setChecked(m->getBreakMultiMeasureRest());
       mb.breakMMRest->setChecked(m->breakMMRest());
-      mb.endBarLineType->setValue(m->endBarLineType());
+      mb.endBarLineType->setValue(int(m->endBarLineType()));
       mb.endBarLineGenerated->setChecked(m->endBarLineGenerated());
       mb.endBarLineVisible->setChecked(m->endBarLineVisible());
       mb.mmRestCount->setValue(m->mmRestCount());
@@ -1352,7 +1352,7 @@ void TextView::setElement(Element* e)
       Text* te = (Text*)e;
 
       tb.textStyle->clear();
-      for (int i = 0; i < TEXT_STYLES; ++i)
+      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
       TextStyle ts = te->textStyle();
@@ -1388,7 +1388,7 @@ void HarmonyView::setElement(Element* e)
       Harmony* harmony = (Harmony*)e;
 
       tb.textStyle->clear();
-      for (int i = 0; i < TEXT_STYLES; ++i)
+      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
       const TextStyle& ts = harmony->textStyle();
@@ -1407,12 +1407,12 @@ void HarmonyView::setElement(Element* e)
       hb.leftParen->setChecked(harmony->leftParen());
       hb.rightParen->setChecked(harmony->rightParen());
       hb.rootTpc->setValue(harmony->rootTpc());
-      if (harmony->rootTpc() == Tpc::INVALID)
+      if (harmony->rootTpc() == Tpc::TPC_INVALID)
             hb.rootName->setText("");
       else
             hb.rootName->setText(harmony->rootName());
       hb.bassTpc->setValue(harmony->baseTpc());
-      if (harmony->baseTpc() == Tpc::INVALID)
+      if (harmony->baseTpc() == Tpc::TPC_INVALID)
             hb.bassName->setText("");
       else
             hb.bassName->setText(harmony->baseName());
@@ -1549,7 +1549,7 @@ void BarLineView::setElement(Element* e)
       {
       BarLine* barline = (BarLine*)e;
       ShowElementBase::setElement(e);
-      bl.subType->setValue(barline->barLineType());
+      bl.subType->setValue(int(barline->barLineType()));
       bl.span->setValue(barline->span());
       bl.spanFrom->setValue(barline->spanFrom());
       bl.spanTo->setValue(barline->spanTo());
@@ -1575,7 +1575,7 @@ void DynamicView::setElement(Element* e)
       Dynamic* dynamic = (Dynamic*)e;
 
       tb.textStyle->clear();
-      for (int i = 0; i < TEXT_STYLES; ++i)
+      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i)
             tb.textStyle->addItem(e->score()->textStyle(i).name());
 
       const TextStyle& ts = dynamic->textStyle();
@@ -2194,9 +2194,9 @@ void Debugger::forwardClicked()
 void Debugger::reloadClicked()
       {
       Element* e = curElement;
-	updateList(cs);
-	if (e)
-	      updateElement(e);
+      updateList(cs);
+      if (e)
+            updateElement(e);
       }
 
 //---------------------------------------------------------

@@ -323,14 +323,14 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
             }
 
       if (mef.lastOfPart && !mef.repeatEnd) {
-            currentMeasure->setEndBarLineType(Ms::END_BAR, false, true);
+            currentMeasure->setEndBarLineType(Ms::BarLineType::END, false, true);
             }
       else if (mef.doubleBarLine) {
-            currentMeasure->setEndBarLineType(Ms::DOUBLE_BAR, false, true);
+            currentMeasure->setEndBarLineType(Ms::BarLineType::DOUBLE, false, true);
             }
       // BarLine* barLine = new BarLine(score);
       // bool visible = true;
-      // barLine->setSubtype(NORMAL_BAR);
+      // barLine->setSubtype(BarLineType::NORMAL);
       // barLine->setTrack(0);
       // currentMeasure->setEndBarLineType(barLine->subtype(), false, visible);
       }
@@ -444,11 +444,11 @@ void MsScWriter::header(const QString title, const QString type,
 
       //  score->setWorkTitle(title);
       Ms::VBox* vbox  = 0;
-      addText(vbox, score, title, Ms::TEXT_STYLE_TITLE);
-      addText(vbox, score, type, Ms::TEXT_STYLE_SUBTITLE);
-      addText(vbox, score, composer, Ms::TEXT_STYLE_COMPOSER);
-      // addText(vbox, score, strPoet, Ms::TEXT_STYLE_POET);
-      // addText(vbox, score, strTranslator, Ms::TEXT_STYLE_TRANSLATOR);
+      addText(vbox, score, title, Ms::TextStyleType::TITLE);
+      addText(vbox, score, type, Ms::TextStyleType::SUBTITLE);
+      addText(vbox, score, composer, Ms::TextStyleType::COMPOSER);
+      // addText(vbox, score, strPoet, Ms::TextStyleType::POET);
+      // addText(vbox, score, strTranslator, Ms::TextStyleType::TRANSLATOR);
       if (vbox) {
             vbox->setTick(0);
             score->measures()->add(vbox);
@@ -544,9 +544,9 @@ Score::FileError importBww(Score* score, const QString& path)
 
       QFile fp(path);
       if(!fp.exists())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
       if (!fp.open(QIODevice::ReadOnly))
-            return Score::FILE_OPEN_ERROR;
+            return Score::FileError::FILE_OPEN_ERROR;
 
       QString id("importBww");
       Part* part = new Part(score);
@@ -566,7 +566,7 @@ Score::FileError importBww(Score* score, const QString& path)
       score->setCreated(true);
       score->connectTies();
       qDebug("Score::importBww() done");
-      return Score::FILE_NO_ERROR;      // OK
+      return Score::FileError::FILE_NO_ERROR;      // OK
       }
 
 } // namespace Ms

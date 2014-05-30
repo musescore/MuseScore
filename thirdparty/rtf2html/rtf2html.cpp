@@ -407,7 +407,7 @@ QString rtf2html(const QString& iString)
                   break;
                case rtf_keyword::rkw_plain:
                   cur_options.chpBold=cur_options.chpItalic
-                  	=cur_options.chpUnderline=false;
+                        =cur_options.chpUnderline=false;
                   cur_options.chpVAlign=formatting_options::va_normal;
                   cur_options.chpFontSize=cur_options.chpHighlight=0;
                   cur_options.chpFColor=cur_options.chpBColor=color();

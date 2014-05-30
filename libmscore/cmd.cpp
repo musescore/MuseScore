@@ -1091,14 +1091,14 @@ static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int 
       if (up && pitch < 127) {
             newPitch = pitch + 1;
             if (n->concertPitch()) {
-                  if (tpc1 > Tpc::A + key)
+                  if (tpc1 > Tpc::TPC_A + key)
                         newTpc1 = tpc1 - 5;   // up semitone diatonic
                   else
                         newTpc1 = tpc1 + 7;   // up semitone chromatic
                   newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
-                  if (tpc2 > Tpc::A + key)
+                  if (tpc2 > Tpc::TPC_A + key)
                         newTpc2 = tpc2 - 5;   // up semitone diatonic
                   else
                         newTpc2 = tpc2 + 7;   // up semitone chromatic
@@ -1108,14 +1108,14 @@ static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int 
       else if (!up && pitch > 0) {
             newPitch = pitch - 1;
             if (n->concertPitch()) {
-                  if (tpc1 > Tpc::C + key)
+                  if (tpc1 > Tpc::TPC_C + key)
                         newTpc1 = tpc1 - 7;   // down semitone chromatic
                   else
                         newTpc1 = tpc1 + 5;   // down semitone diatonic
                   newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
-                  if (tpc2 > Tpc::C + key)
+                  if (tpc2 > Tpc::TPC_C + key)
                         newTpc2 = tpc2 - 7;   // down semitone chromatic
                   else
                         newTpc2 = tpc2 + 5;   // down semitone diatonic
@@ -1165,18 +1165,18 @@ void Score::upDown(bool up, UpDownMode mode)
             int fret     = oNote->fret();
 
             switch (oNote->staff()->staffType()->group()) {
-                  case PERCUSSION_STAFF_GROUP:
+                  case StaffGroup::PERCUSSION:
                         {
                         Drumset* ds = part->instr()->drumset();
                         if (ds)
                               newPitch = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
                         }
                         break;
-                  case TAB_STAFF_GROUP:
+                  case StaffGroup::TAB:
                         {
                         const StringData* stringData = part->instr()->stringData();
                         switch (mode) {
-                              case UP_DOWN_OCTAVE:          // move same note to next string, if possible
+                              case UpDownMode::OCTAVE:          // move same note to next string, if possible
                                     {
                                     StaffType* stt = oNote->staff()->staffType();
                                     string = stt->physStringToVisual(string);
@@ -1191,12 +1191,12 @@ void Score::upDown(bool up, UpDownMode mode)
                                     }
                                     break;
 
-                              case UP_DOWN_DIATONIC:        // increase / decrease the pitch,
+                              case UpDownMode::DIATONIC:        // increase / decrease the pitch,
                                                             // letting the algorithm to choose fret & string
                                     upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
                                     break;
 
-                              case UP_DOWN_CHROMATIC:       // increase / decrease the fret
+                              case UpDownMode::CHROMATIC:       // increase / decrease the fret
                                     {                       // without changing the string
                                     if (!stringData->frets())
                                           qDebug("upDown tab chromatic: no frets?");
@@ -1229,9 +1229,9 @@ void Score::upDown(bool up, UpDownMode mode)
                               }
                         }
                         break;
-                  case STANDARD_STAFF_GROUP:
+                  case StaffGroup::STANDARD:
                         switch(mode) {
-                              case UP_DOWN_OCTAVE:
+                              case UpDownMode::OCTAVE:
                                     if (up) {
                                           if (pitch < 116)
                                                 newPitch = pitch + 12;
@@ -1243,15 +1243,15 @@ void Score::upDown(bool up, UpDownMode mode)
                                     // newTpc remains unchanged
                                     break;
 
-                              case UP_DOWN_CHROMATIC:
+                              case UpDownMode::CHROMATIC:
                                     upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
                                     break;
 
-                              case UP_DOWN_DIATONIC:
+                              case UpDownMode::DIATONIC:
                                     {
                                     int tpc = oNote->tpc();
                                     if (up) {
-                                          if (tpc > Tpc::A + key) {
+                                          if (tpc > Tpc::TPC_A + key) {
                                                 if (pitch < 127) {
                                                       newPitch = pitch + 1;
                                                       setTpc(oNote, tpc - 5, newTpc1, newTpc2);
@@ -1265,7 +1265,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                                 }
                                           }
                                     else {
-                                          if (tpc > Tpc::C + key) {
+                                          if (tpc > Tpc::TPC_C + key) {
                                                 if (pitch > 1) {
                                                       newPitch = pitch - 2;
                                                       setTpc(oNote, tpc - 2, newTpc1, newTpc2);
@@ -1293,7 +1293,7 @@ void Score::upDown(bool up, UpDownMode mode)
                   }
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
-            else if (oNote->staff()->staffType()->group() == TAB_STAFF_GROUP) {
+            else if (oNote->staff()->staffType()->group() == StaffGroup::TAB) {
                   bool refret = false;
                   if (oNote->string() != string) {
                         undoChangeProperty(oNote, P_ID::STRING, string);
@@ -1540,8 +1540,8 @@ void Score::moveUp(Chord* chord)
 
       QList<Staff*>* staves = part->staves();
       // we know that staffMove+rstaff-1 index exists due to the previous condition.
-      if (staff->staffType()->group() != STANDARD_STAFF_GROUP ||
-          staves->at(rstaff+staffMove-1)->staffType()->group() != STANDARD_STAFF_GROUP) {
+      if (staff->staffType()->group() != StaffGroup::STANDARD ||
+          staves->at(rstaff+staffMove-1)->staffType()->group() != StaffGroup::STANDARD) {
             qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
             }
       else  {
@@ -1569,8 +1569,8 @@ void Score::moveDown(Chord* chord)
 
       QList<Staff*>* staves = part->staves();
       // we know that staffMove+rstaff+1 index exists due to the previous condition.
-      if (staff->staffType()->group() != STANDARD_STAFF_GROUP ||
-          staves->at(staffMove+rstaff+1)->staffType()->group() != STANDARD_STAFF_GROUP) {
+      if (staff->staffType()->group() != StaffGroup::STANDARD ||
+          staves->at(staffMove+rstaff+1)->staffType()->group() != StaffGroup::STANDARD) {
             qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
             }
       else  {
@@ -2054,7 +2054,7 @@ void Score::cmd(const QAction* a)
             else if (el && el->type() == Element::ElementType::LYRICS)
                   cmdMoveLyrics(static_cast<Lyrics*>(el), Direction::UP);
             else
-                  upDown(true, UP_DOWN_CHROMATIC);
+                  upDown(true, UpDownMode::CHROMATIC);
             }
       else if (cmd == "pitch-down") {
             if (el && (el->type() == Element::ElementType::ARTICULATION || el->isText()))
@@ -2064,15 +2064,15 @@ void Score::cmd(const QAction* a)
             else if (el && el->type() == Element::ElementType::LYRICS)
                   cmdMoveLyrics(static_cast<Lyrics*>(el), Direction::DOWN);
             else
-                  upDown(false, UP_DOWN_CHROMATIC);
+                  upDown(false, UpDownMode::CHROMATIC);
             }
-	else if (cmd == "add-staccato")
+      else if (cmd == "add-staccato")
             addArticulation(ArticulationType::Staccato);
-	else if (cmd == "add-tenuto")
+      else if (cmd == "add-tenuto")
             addArticulation(ArticulationType::Tenuto);
       else if (cmd == "add-marcato")
             addArticulation(ArticulationType::Marcato);
-	else if (cmd == "add-trill")
+      else if (cmd == "add-trill")
             addArticulation(ArticulationType::Trill);
       else if (cmd == "add-hairpin")
             cmdAddHairpin(false);
@@ -2093,18 +2093,18 @@ void Score::cmd(const QAction* a)
             if (el && (el->type() == Element::ElementType::ARTICULATION || el->isText()))
                   undoMove(el, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
             else
-                  upDown(true, UP_DOWN_OCTAVE);
+                  upDown(true, UpDownMode::OCTAVE);
             }
       else if (cmd == "pitch-down-octave") {
             if (el && (el->type() == Element::ElementType::ARTICULATION || el->isText()))
                   undoMove(el, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
             else
-                  upDown(false, UP_DOWN_OCTAVE);
+                  upDown(false, UpDownMode::OCTAVE);
             }
       else if (cmd == "pitch-up-diatonic")
-            upDown(true, UP_DOWN_DIATONIC);
+            upDown(true, UpDownMode::DIATONIC);
       else if (cmd == "pitch-down-diatonic")
-            upDown(false, UP_DOWN_DIATONIC);
+            upDown(false, UpDownMode::DIATONIC);
       else if (cmd == "move-up") {
             setLayoutAll(false);
             if (el && el->type() == Element::ElementType::NOTE) {
@@ -2168,57 +2168,57 @@ void Score::cmd(const QAction* a)
             setLayoutAll(false);
             }
       else if (cmd == "note-longa"   || cmd == "note-longa-TAB")
-            padToggle(PAD_NOTE00);
+            padToggle(Pad::NOTE00);
       else if (cmd == "note-breve"   || cmd == "note-breve-TAB")
-            padToggle(PAD_NOTE0);
+            padToggle(Pad::NOTE0);
       else if (cmd == "pad-note-1"   || cmd == "pad-note-1-TAB")
-            padToggle(PAD_NOTE1);
+            padToggle(Pad::NOTE1);
       else if (cmd == "pad-note-2"   || cmd == "pad-note-2-TAB")
-            padToggle(PAD_NOTE2);
+            padToggle(Pad::NOTE2);
       else if (cmd == "pad-note-4"   || cmd == "pad-note-4-TAB")
-            padToggle(PAD_NOTE4);
+            padToggle(Pad::NOTE4);
       else if (cmd == "pad-note-8"   || cmd == "pad-note-8-TAB")
-            padToggle(PAD_NOTE8);
+            padToggle(Pad::NOTE8);
       else if (cmd == "pad-note-16"  || cmd == "pad-note-16-TAB")
-            padToggle(PAD_NOTE16);
+            padToggle(Pad::NOTE16);
       else if (cmd == "pad-note-32"  || cmd == "pad-note-32-TAB")
-            padToggle(PAD_NOTE32);
+            padToggle(Pad::NOTE32);
       else if (cmd == "pad-note-64"  || cmd == "pad-note-64-TAB")
-            padToggle(PAD_NOTE64);
+            padToggle(Pad::NOTE64);
       else if (cmd == "pad-note-128" || cmd == "pad-note-128-TAB")
-            padToggle(PAD_NOTE128);
+            padToggle(Pad::NOTE128);
       else if (cmd == "pad-note-increase-TAB") {
             switch (_is.duration().type() ) {
 // cycle back from longest to shortest?
 //                  case TDuration::V_LONG:
-//                        padToggle(PAD_NOTE128);
+//                        padToggle(Pad::NOTE128);
 //                        break;
                   case TDuration::DurationType::V_BREVE:
-                        padToggle(PAD_NOTE00);
+                        padToggle(Pad::NOTE00);
                         break;
                   case TDuration::DurationType::V_WHOLE:
-                        padToggle(PAD_NOTE0);
+                        padToggle(Pad::NOTE0);
                         break;
                   case TDuration::DurationType::V_HALF:
-                        padToggle(PAD_NOTE1);
+                        padToggle(Pad::NOTE1);
                         break;
                   case TDuration::DurationType::V_QUARTER:
-                        padToggle(PAD_NOTE2);
+                        padToggle(Pad::NOTE2);
                         break;
                   case TDuration::DurationType::V_EIGHT:
-                        padToggle(PAD_NOTE4);
+                        padToggle(Pad::NOTE4);
                         break;
                   case TDuration::DurationType::V_16TH:
-                        padToggle(PAD_NOTE8);
+                        padToggle(Pad::NOTE8);
                         break;
                   case TDuration::DurationType::V_32ND:
-                        padToggle(PAD_NOTE16);
+                        padToggle(Pad::NOTE16);
                         break;
                   case TDuration::DurationType::V_64TH:
-                        padToggle(PAD_NOTE32);
+                        padToggle(Pad::NOTE32);
                         break;
                   case TDuration::DurationType::V_128TH:
-                        padToggle(PAD_NOTE64);
+                        padToggle(Pad::NOTE64);
                         break;
                   default:
                         break;
@@ -2227,46 +2227,46 @@ void Score::cmd(const QAction* a)
       else if (cmd == "pad-note-decrease-TAB") {
             switch (_is.duration().type() ) {
                   case TDuration::DurationType::V_LONG:
-                        padToggle(PAD_NOTE0);
+                        padToggle(Pad::NOTE0);
                         break;
                   case TDuration::DurationType::V_BREVE:
-                        padToggle(PAD_NOTE1);
+                        padToggle(Pad::NOTE1);
                         break;
                   case TDuration::DurationType::V_WHOLE:
-                        padToggle(PAD_NOTE2);
+                        padToggle(Pad::NOTE2);
                         break;
                   case TDuration::DurationType::V_HALF:
-                        padToggle(PAD_NOTE4);
+                        padToggle(Pad::NOTE4);
                         break;
                   case TDuration::DurationType::V_QUARTER:
-                        padToggle(PAD_NOTE8);
+                        padToggle(Pad::NOTE8);
                         break;
                   case TDuration::DurationType::V_EIGHT:
-                        padToggle(PAD_NOTE16);
+                        padToggle(Pad::NOTE16);
                         break;
                   case TDuration::DurationType::V_16TH:
-                        padToggle(PAD_NOTE32);
+                        padToggle(Pad::NOTE32);
                         break;
                   case TDuration::DurationType::V_32ND:
-                        padToggle(PAD_NOTE64);
+                        padToggle(Pad::NOTE64);
                         break;
                   case TDuration::DurationType::V_64TH:
-                        padToggle(PAD_NOTE128);
+                        padToggle(Pad::NOTE128);
                         break;
 // cycle back from shortest to longest?
 //                  case TDuration::DurationType::V_128TH:
-//                        padToggle(PAD_NOTE00);
+//                        padToggle(Pad::NOTE00);
 //                        break;
                   default:
                         break;
                   }
             }
       else if (cmd == "pad-rest")
-            padToggle(PAD_REST);
+            padToggle(Pad::REST);
       else if (cmd == "pad-dot")
-            padToggle(PAD_DOT);
+            padToggle(Pad::DOT);
       else if (cmd == "pad-dotdot")
-            padToggle(PAD_DOTDOT);
+            padToggle(Pad::DOTDOT);
       else if (cmd == "beam-start")
             cmdSetBeamMode(BeamMode::BEGIN);
       else if (cmd == "beam-mid")

@@ -67,7 +67,7 @@ namespace Ms {
 class Xml;
 class XmlReader;
 
-enum ShortcutFlags {
+enum ShortcutFlags : char {
       A_SCORE = 0x1, A_CMD = 0x2
       };
 

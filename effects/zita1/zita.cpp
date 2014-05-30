@@ -90,8 +90,8 @@ void Pareq::prepare(int nsamp)
       bool  upd = false;
 
       if (_touch1 != _touch0) {
-      	float g = _g0;
-	      float f = _f0;
+            float g = _g0;
+            float f = _f0;
             if (g != _g1) {
                   upd = true;
                   if (g > 2 * _g1)

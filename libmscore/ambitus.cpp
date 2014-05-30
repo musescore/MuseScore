@@ -45,7 +45,7 @@ Ambitus::Ambitus(Score* s)
       _hasLine          = HASLINE_DEFAULT;
       _lineWidth        = LINEWIDTH_DEFAULT;
       _topPitch = _bottomPitch = INVALID_PITCH;
-      _topTpc = _bottomTpc = Tpc::INVALID;
+      _topTpc = _bottomTpc = Tpc::TPC_INVALID;
       _topAccid.setParent(this);
       _bottomAccid.setParent(this);
 //      _topAccid.setFlags(0);
@@ -69,8 +69,8 @@ void Ambitus::setTrack(int t)
       // if not initialized and there is a segment and a staff,
       // initialize pitches and tpc's to first and last staff line
       // (for use in palettes)
-      if (_topPitch == INVALID_PITCH || _topTpc == Tpc::INVALID
-            || _bottomPitch == INVALID_PITCH ||_bottomTpc == Tpc::INVALID) {
+      if (_topPitch == INVALID_PITCH || _topTpc == Tpc::TPC_INVALID
+            || _bottomPitch == INVALID_PITCH ||_bottomTpc == Tpc::TPC_INVALID) {
             if (segm && stf) {
                   updateRange();
                   _topAccid.setTrack(t);
@@ -78,7 +78,7 @@ void Ambitus::setTrack(int t)
                   }
 //            else {
 //                  _topPitch = _bottomPitch = INVALID_PITCH;
-//                  _topTpc   = _bottomTpc   = Tpc::INVALID;
+//                  _topTpc   = _bottomTpc   = Tpc::TPC_INVALID;
             }
       }
 
@@ -96,9 +96,9 @@ void Ambitus::setTopPitch(int val)
       if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
             int newTpc        = topTpc() + deltaPitch * TPC_DELTA_SEMITONE;
             // reduce newTpc into acceptable range via enharmonic
-            while (newTpc < Tpc::MIN)
+            while (newTpc < Tpc::TPC_MIN)
                   newTpc += TPC_DELTA_ENHARMONIC;
-            while (newTpc > Tpc::MAX)
+            while (newTpc > Tpc::TPC_MAX)
                   newTpc -= TPC_DELTA_ENHARMONIC;
             _topTpc     = newTpc;
             }
@@ -114,9 +114,9 @@ void Ambitus::setBottomPitch(int val)
       if (deltaPitch % PITCH_DELTA_OCTAVE != 0) {
             int newTpc        = bottomTpc() + deltaPitch * TPC_DELTA_SEMITONE;
             // reduce newTpc into acceptable range via enharmonic
-            while (newTpc < Tpc::MIN)
+            while (newTpc < Tpc::TPC_MIN)
                   newTpc += TPC_DELTA_ENHARMONIC;
-            while (newTpc > Tpc::MAX)
+            while (newTpc > Tpc::TPC_MAX)
                   newTpc -= TPC_DELTA_ENHARMONIC;
             _bottomTpc  = newTpc;
             }
@@ -273,10 +273,10 @@ void Ambitus::layout()
       if (stf)
             key = stf->key(segm->tick()).accidentalType();
       else
-            key = Key::KEY_C;
+            key = int(Key::C);
 
       // top note head
-      if (_topPitch == INVALID_PITCH || _topTpc == Tpc::INVALID)
+      if (_topPitch == INVALID_PITCH || _topTpc == Tpc::TPC_INVALID)
             _topPos.setY(0);                          // if uninitialized, set to top staff line
       else {
             topLine  = absStep(_topTpc, _topPitch);
@@ -288,7 +288,7 @@ void Ambitus::layout()
             if (_topTpc - key >= 13 && _topTpc - key <= 19)
                   accidType = Accidental::AccidentalType::NONE;
             else {
-                  AccidentalVal accidVal = AccidentalVal( (_topTpc - Tpc::MIN) / TPC_DELTA_SEMITONE - 2 );
+                  AccidentalVal accidVal = AccidentalVal( (_topTpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
                   accidType = Accidental::value2subtype(accidVal);
                   if (accidType == Accidental::AccidentalType::NONE)
                         accidType = Accidental::AccidentalType::NATURAL;
@@ -302,7 +302,7 @@ void Ambitus::layout()
             }
 
       // bottom note head
-      if (_bottomPitch == INVALID_PITCH || _bottomTpc == Tpc::INVALID)
+      if (_bottomPitch == INVALID_PITCH || _bottomTpc == Tpc::TPC_INVALID)
             _bottomPos.setY( (numOfLines-1) * lineDist);          // if uninitialized, set to last staff line
       else {
             bottomLine  = absStep(_bottomTpc, _bottomPitch);
@@ -313,7 +313,7 @@ void Ambitus::layout()
             if (_bottomTpc - key >= 13 && _bottomTpc - key <= 19)
                   accidType = Accidental::AccidentalType::NONE;
             else {
-                  AccidentalVal accidVal = AccidentalVal( (_bottomTpc - Tpc::MIN) / TPC_DELTA_SEMITONE - 2 );
+                  AccidentalVal accidVal = AccidentalVal( (_bottomTpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
                   accidType = Accidental::value2subtype(accidVal);
                   if (accidType == Accidental::AccidentalType::NONE)
                         accidType = Accidental::AccidentalType::NATURAL;

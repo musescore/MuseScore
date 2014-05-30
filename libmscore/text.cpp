@@ -772,9 +772,9 @@ QString TextBlock::text(int col1, int len) const
 Text::Text(Score* s)
    : Element(s)
       {
-      _styleIndex = TEXT_STYLE_DEFAULT;
+      _styleIndex = TextStyleType::DEFAULT;
       if (s)
-            _textStyle = s->textStyle(TEXT_STYLE_DEFAULT);
+            _textStyle = s->textStyle(TextStyleType::DEFAULT);
       _layoutToParentWidth = false;
       _editMode            = false;
       setFlag(ElementFlag::MOVABLE, true);
@@ -1913,47 +1913,47 @@ bool Text::readProperties(XmlReader& e)
             if (ok) {
                   // obsolete old text styles
                   switch (i) {
-                        case 2:  i = TEXT_STYLE_TITLE;     break;
-                        case 3:  i = TEXT_STYLE_SUBTITLE;  break;
-                        case 4:  i = TEXT_STYLE_COMPOSER;  break;
-                        case 5:  i = TEXT_STYLE_POET;      break;
-                        case 6:  i = TEXT_STYLE_LYRIC1;    break;
-                        case 7:  i = TEXT_STYLE_LYRIC2;    break;
-                        case 8:  i = TEXT_STYLE_FINGERING; break;
-                        case 9:  i = TEXT_STYLE_INSTRUMENT_LONG;    break;
-                        case 10: i = TEXT_STYLE_INSTRUMENT_SHORT;   break;
-                        case 11: i = TEXT_STYLE_INSTRUMENT_EXCERPT; break;
+                        case 2:  i = TextStyleType::TITLE;     break;
+                        case 3:  i = TextStyleType::SUBTITLE;  break;
+                        case 4:  i = TextStyleType::COMPOSER;  break;
+                        case 5:  i = TextStyleType::POET;      break;
+                        case 6:  i = TextStyleType::LYRIC1;    break;
+                        case 7:  i = TextStyleType::LYRIC2;    break;
+                        case 8:  i = TextStyleType::FINGERING; break;
+                        case 9:  i = TextStyleType::INSTRUMENT_LONG;    break;
+                        case 10: i = TextStyleType::INSTRUMENT_SHORT;   break;
+                        case 11: i = TextStyleType::INSTRUMENT_EXCERPT; break;
 
-                        case 12: i = TEXT_STYLE_DYNAMICS;  break;
-                        case 13: i = TEXT_STYLE_TECHNIQUE;   break;
-                        case 14: i = TEXT_STYLE_TEMPO;     break;
-                        case 15: i = TEXT_STYLE_METRONOME; break;
-                        case 16: i = TEXT_STYLE_FOOTER;    break;  // TEXT_STYLE_COPYRIGHT
-                        case 17: i = TEXT_STYLE_MEASURE_NUMBER; break;
-                        case 18: i = TEXT_STYLE_FOOTER; break;    // TEXT_STYLE_PAGE_NUMBER_ODD
-                        case 19: i = TEXT_STYLE_FOOTER; break;    // TEXT_STYLE_PAGE_NUMBER_EVEN
-                        case 20: i = TEXT_STYLE_TRANSLATOR; break;
-                        case 21: i = TEXT_STYLE_TUPLET;     break;
+                        case 12: i = TextStyleType::DYNAMICS;  break;
+                        case 13: i = TextStyleType::TECHNIQUE;   break;
+                        case 14: i = TextStyleType::TEMPO;     break;
+                        case 15: i = TextStyleType::METRONOME; break;
+                        case 16: i = TextStyleType::FOOTER;    break;  // TextStyleType::COPYRIGHT
+                        case 17: i = TextStyleType::MEASURE_NUMBER; break;
+                        case 18: i = TextStyleType::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
+                        case 19: i = TextStyleType::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
+                        case 20: i = TextStyleType::TRANSLATOR; break;
+                        case 21: i = TextStyleType::TUPLET;     break;
 
-                        case 22: i = TEXT_STYLE_SYSTEM;         break;
-                        case 23: i = TEXT_STYLE_STAFF;          break;
-                        case 24: i = TEXT_STYLE_HARMONY;        break;
-                        case 25: i = TEXT_STYLE_REHEARSAL_MARK; break;
-                        case 26: i = TEXT_STYLE_REPEAT;         break;
-                        case 27: i = TEXT_STYLE_VOLTA;          break;
-                        case 28: i = TEXT_STYLE_FRAME;          break;
-                        case 29: i = TEXT_STYLE_TEXTLINE;       break;
-                        case 30: i = TEXT_STYLE_GLISSANDO;      break;
-                        case 31: i = TEXT_STYLE_STRING_NUMBER;  break;
+                        case 22: i = TextStyleType::SYSTEM;         break;
+                        case 23: i = TextStyleType::STAFF;          break;
+                        case 24: i = TextStyleType::HARMONY;        break;
+                        case 25: i = TextStyleType::REHEARSAL_MARK; break;
+                        case 26: i = TextStyleType::REPEAT;         break;
+                        case 27: i = TextStyleType::VOLTA;          break;
+                        case 28: i = TextStyleType::FRAME;          break;
+                        case 29: i = TextStyleType::TEXTLINE;       break;
+                        case 30: i = TextStyleType::GLISSANDO;      break;
+                        case 31: i = TextStyleType::STRING_NUMBER;  break;
 
-                        case 32: i = TEXT_STYLE_OTTAVA;  break;
-                        case 33: i = TEXT_STYLE_BENCH;   break;
-                        case 34: i = TEXT_STYLE_HEADER;  break;
-                        case 35: i = TEXT_STYLE_FOOTER;  break;
+                        case 32: i = TextStyleType::OTTAVA;  break;
+                        case 33: i = TextStyleType::BENCH;   break;
+                        case 34: i = TextStyleType::HEADER;  break;
+                        case 35: i = TextStyleType::FOOTER;  break;
                         case 0:
                         default:
                               qDebug("Text:readProperties: style %d<%s> invalid", i, qPrintable(val));
-                              i = TEXT_STYLE_DEFAULT;
+                              i = TextStyleType::DEFAULT;
                               break;
                         }
                   st = i;
@@ -2143,19 +2143,19 @@ QVariant Text::propertyDefault(P_ID id) const
       {
       int idx;
       switch (type()) {
-            case ElementType::DYNAMIC:           idx = TEXT_STYLE_DYNAMICS; break;
-            case ElementType::FIGURED_BASS:      idx = TEXT_STYLE_FIGURED_BASS; break;
-            case ElementType::FINGERING:         idx = TEXT_STYLE_FINGERING; break;
-            case ElementType::HARMONY:           idx = TEXT_STYLE_HARMONY; break;
-            case ElementType::INSTRUMENT_CHANGE: idx = TEXT_STYLE_INSTRUMENT_CHANGE; break;
+            case ElementType::DYNAMIC:           idx = TextStyleType::DYNAMICS; break;
+            case ElementType::FIGURED_BASS:      idx = TextStyleType::FIGURED_BASS; break;
+            case ElementType::FINGERING:         idx = TextStyleType::FINGERING; break;
+            case ElementType::HARMONY:           idx = TextStyleType::HARMONY; break;
+            case ElementType::INSTRUMENT_CHANGE: idx = TextStyleType::INSTRUMENT_CHANGE; break;
             // case ElementType::INSTRUMENT_NAME: would need to differentiate long & short
             // probably best handle this with another override
-            case ElementType::JUMP:              idx = TEXT_STYLE_REPEAT; break;
-            case ElementType::LYRICS:            idx = TEXT_STYLE_LYRIC1; break;
-            case ElementType::MARKER:            idx = TEXT_STYLE_REPEAT; break;
-            case ElementType::REHEARSAL_MARK:    idx = TEXT_STYLE_REHEARSAL_MARK; break;
-            case ElementType::STAFF_TEXT:        idx = TEXT_STYLE_STAFF; break;
-            case ElementType::TEMPO_TEXT:        idx = TEXT_STYLE_TEMPO; break;
+            case ElementType::JUMP:              idx = TextStyleType::REPEAT; break;
+            case ElementType::LYRICS:            idx = TextStyleType::LYRIC1; break;
+            case ElementType::MARKER:            idx = TextStyleType::REPEAT; break;
+            case ElementType::REHEARSAL_MARK:    idx = TextStyleType::REHEARSAL_MARK; break;
+            case ElementType::STAFF_TEXT:        idx = TextStyleType::STAFF; break;
+            case ElementType::TEMPO_TEXT:        idx = TextStyleType::TEMPO; break;
             default:
                   // if we cannot determine type, give up
                   return Element::propertyDefault(id);

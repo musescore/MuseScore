@@ -53,11 +53,11 @@ BBTrack::~BBTrack()
 
 //---------------------------------------------------------
 //   MNote
-//	special Midi Note
+//    special Midi Note
 //---------------------------------------------------------
 
 struct MNote {
-	Event mc;
+      Event mc;
       QList<Tie*> ties;
 
       MNote(const Event& _mc) : mc(_mc) {
@@ -378,10 +378,10 @@ Score::FileError importBB(Score* score, const QString& name)
       {
       BBFile bb;
       if(!QFileInfo(name).exists())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
       if (!bb.read(name)) {
             qDebug("Cannot open file <%s>", qPrintable(name));
-            return Score::FILE_OPEN_ERROR;
+            return Score::FileError::FILE_OPEN_ERROR;
             }
       score->style()->set(StyleIdx::chordsXmlFile, true);
       score->style()->chordList()->read("chords.xml");
@@ -410,14 +410,14 @@ Score::FileError importBB(Score* score, const QString& name)
             Fraction ts = score->sigmap()->timesig(tick).timesig();
             measure->setTimesig(ts);
             measure->setLen(ts);
-      	score->add(measure);
+            score->add(measure);
             }
 
       //---------------------------------------------------
       //  create notes
       //---------------------------------------------------
 
-	foreach (BBTrack* track, *tracks)
+      foreach (BBTrack* track, *tracks)
             track->cleanup();
 
       if (tracks->isEmpty()) {
@@ -433,8 +433,8 @@ Score::FileError importBB(Score* score, const QString& name)
                   }
             }
       else {
-      	int staffIdx = 0;
-	      foreach (BBTrack* track, *tracks)
+            int staffIdx = 0;
+            foreach (BBTrack* track, *tracks)
                   bb.convertTrack(score, track, staffIdx++);
             }
 
@@ -460,7 +460,7 @@ Score::FileError importBB(Score* score, const QString& name)
 
       Text* text = new Text(score);
 //      text->setSubtype(TEXT_TITLE);
-      text->setTextStyleType(TEXT_STYLE_TITLE);
+      text->setTextStyleType(TextStyleType::TITLE);
       text->setText(bb.title());
 
       MeasureBase* measure = score->first();
@@ -494,7 +494,7 @@ Score::FileError importBB(Score* score, const QString& name)
             if (c.bass > 0)
                   h->setBaseTpc(table[c.bass-1]);
             else
-                  h->setBaseTpc(Tpc::INVALID);
+                  h->setBaseTpc(Tpc::TPC_INVALID);
             h->setId(c.extension);
             h->getDescription();
             h->render();
@@ -541,7 +541,7 @@ Score::FileError importBB(Score* score, const QString& name)
             sks->add(keysig);
             }
       score->fixTicks();
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------
@@ -559,7 +559,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
       // look for len of shortest note
       //
       foreach (const MNote* n, *notes) {
-      	if (n->mc.duration() < len)
+            if (n->mc.duration() < len)
                   len = n->mc.duration();
             }
 
@@ -587,10 +587,10 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
             QList<Event>& nl = n->mc.notes();
             for (int i = 0; i < nl.size(); ++i) {
                   const Event& mn = nl[i];
-      		Note* note = new Note(score);
+                  Note* note = new Note(score);
                   note->setPitch(mn.pitch(), mn.tpc(), mn.tpc());
-      		note->setTrack(track);
-            	chord->add(note);
+                  note->setTrack(track);
+                  chord->add(note);
 
                   if (useDrumset) {
                         if (!drumset->isValid(mn.pitch())) {
@@ -613,9 +613,9 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
             for (int i = 0; i < nl.size(); ++i) {
                   const Event& mn = nl[i];
                   Note* note = chord->findNote(mn.pitch());
-      		n->ties[i] = new Tie(score);
+                  n->ties[i] = new Tie(score);
                   n->ties[i]->setStartNote(note);
-      		note->setTieFor(n->ties[i]);
+                  note->setTieFor(n->ties[i]);
                   }
             n->mc.setOntime(n->mc.ontime() + len);
             n->mc.setDuration(n->mc.duration() - len);
@@ -650,10 +650,10 @@ static ciEvent collectNotes(int tick, int voice, ciEvent i, const EventList* el,
 //---------------------------------------------------------
 
 void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
-	{
+      {
       track->findChords();
       int voices         = track->separateVoices(2);
-	const EventList el = track->events();
+      const EventList el = track->events();
 
       for (int voice = 0; voice < voices; ++voice) {
             int track = staffIdx * VOICES + voice;
@@ -695,7 +695,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                   if (voice == 0) {
                         while (restLen > 0) {
                               int len = restLen;
-                  		Measure* measure = score->tick2measure(ctick);
+                              Measure* measure = score->tick2measure(ctick);
                               if (measure == 0 || (ctick >= (measure->tick() + measure->ticks()))) {       // at end?
                                     ctick += len;
                                     restLen -= len;
@@ -733,7 +733,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                   }
 
             //
-      	// process pending notes
+            // process pending notes
             //
             while (!notes.isEmpty())
                   processPendingNotes(score, &notes, 0x7fffffff, track);
@@ -792,11 +792,11 @@ void BBTrack::quantize(int startTick, int endTick, EventList* dst)
                   break;
             if (e.type() == ME_NOTE) {
                   // prefer moving note to the right
-      	      int tick = ((e.ontime() + raster/2) / raster) * raster;
+                  int tick = ((e.ontime() + raster/2) / raster) * raster;
                   int diff = tick - e.ontime();
-	            int len  = e.duration() - diff;
-	            e.setOntime(tick);
-      	      e.setDuration(len);
+                  int len  = e.duration() - diff;
+                  e.setOntime(tick);
+                  e.setDuration(len);
                   }
             dst->insert(e);
             }
@@ -849,11 +849,11 @@ void BBTrack::quantize(int startTick, int endTick, EventList* dst)
 //---------------------------------------------------------
 
 void BBTrack::cleanup()
-	{
+      {
       EventList dl;
 
       //
-      //	quantize
+      // quantize
       //
       int lastTick = 0;
       foreach (const Event& e, _events) {
@@ -894,7 +894,7 @@ void BBTrack::cleanup()
                   if (e.duration() <= 0)
                         continue;
                   }
-		_events.insert(e);
+            _events.insert(e);
             }
       }
 
