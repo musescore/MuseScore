@@ -1347,7 +1347,7 @@ void Score::deleteItem(Element* el)
 
 void Score::cmdDeleteSelectedMeasures()
       {
-      if (selection().state() != SelState::RANGE)
+      if (!selection().isRange())
             return;
 
       MeasureBase* is   = selection().startSegment()->measure();
@@ -1470,7 +1470,7 @@ void Score::cmdDeleteSelectedMeasures()
 
 void Score::cmdDeleteSelection()
       {
-      if (selection().state() == SelState::RANGE) {
+      if (selection().isRange()) {
             Segment* s1 = selection().startSegment();
             Segment* s2 = selection().endSegment();
             int stick1 = selection().tickStart();
@@ -1593,7 +1593,7 @@ void Score::cmdDeleteSelection()
 
 void Score::cmdFullMeasureRest()
       {
-      if (selection().state() == SelState::RANGE) {
+      if (selection().isRange()) {
             Segment* s1 = selection().startSegment();
             Segment* s2 = selection().endSegment();
             int stick1 = selection().tickStart();
@@ -1790,7 +1790,7 @@ void Score::colorItem(Element* element)
 
 void Score::cmdExchangeVoice(int s, int d)
       {
-      if (selection().state() != SelState::RANGE) {
+      if (!selection().isRange()) {
             selectStavesMessage();
             return;
             }

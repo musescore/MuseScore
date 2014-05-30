@@ -292,7 +292,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             return;
       const Selection& sel = score->selection();
 
-      if (sel.state() == SelState::NONE)
+      if (sel.isNone())
             return;
 
       Element* element = 0;
@@ -309,11 +309,11 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
          && viewer->mscoreState() != STATE_TEXT_EDIT) { // Already in startCmd in this case
             score->startCmd();
             }
-      if (sel.state() == SelState::LIST) {
+      if (sel.isList()) {
             foreach(Element* e, sel.elements())
                   applyDrop(score, viewer, e, element);
             }
-      else if (sel.state() == SelState::RANGE) {
+      else if (sel.isRange()) {
             // TODO: check for other element types:
             if (element->type() == Element::ElementType::BAR_LINE) {
                   // TODO: apply to multiple measures

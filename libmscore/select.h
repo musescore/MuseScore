@@ -76,6 +76,9 @@ class Selection {
       Selection(Score*);
       Score* score() const             { return _score; }
       SelState state() const           { return _state; }
+      bool isNone() const              { return _state == SelState::NONE; }
+      bool isRange() const             { return _state == SelState::RANGE; }
+      bool isList() const              { return _state == SelState::LIST; }
       void setState(SelState s);
 
       const QList<Element*>& elements() const { return _el; }
@@ -104,7 +107,7 @@ class Selection {
       Segment* endSegment() const       { return _endSegment;   }
       void setStartSegment(Segment* s)  { _startSegment = s; }
       void setEndSegment(Segment* s)    { _endSegment = s; }
-      void setRange(Segment* a, Segment* b, int c, int d);
+      void setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd);
       Segment* activeSegment() const    { return _activeSegment; }
       void setActiveSegment(Segment* s) { _activeSegment = s; }
       ChordRest* activeCR() const;
