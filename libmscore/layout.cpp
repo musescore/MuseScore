@@ -1247,11 +1247,11 @@ void Score::doLayout()
       _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / (MScore::DPI * SPATIUM20));
 
-      if (layoutFlags & LAYOUT_FIX_TICKS)
+      if (layoutFlags & LayoutFlag::FIX_TICKS)
             fixTicks();
-      if (layoutFlags & LAYOUT_FIX_PITCH_VELO)
+      if (layoutFlags & LayoutFlag::FIX_PITCH_VELO)
             updateVelo();
-      if (layoutFlags & LAYOUT_PLAY_EVENTS)
+      if (layoutFlags & LayoutFlag::PLAY_EVENTS)
             createPlayEvents();
 
       int measureNo = 0;

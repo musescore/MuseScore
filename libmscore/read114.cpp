@@ -700,7 +700,7 @@ Score::FileError Score::read114(XmlReader& e)
                   nscore->rebuildMidiMapping();
                   nscore->updateChannel();
                   nscore->updateNotes();
-                  nscore->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
+                  nscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
                   nscore->doLayout();
                   excerpt->setScore(nscore);
                   }

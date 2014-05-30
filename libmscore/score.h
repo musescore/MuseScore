@@ -195,10 +195,10 @@ struct Position {
 //   LayoutFlag bits
 //---------------------------------------------------------
 
-enum LayoutFlag {
-      LAYOUT_FIX_TICKS = 1,
-      LAYOUT_FIX_PITCH_VELO = 2,
-      LAYOUT_PLAY_EVENTS = 4
+enum LayoutFlag : char {
+      FIX_TICKS = 1,
+      FIX_PITCH_VELO = 2,
+      PLAY_EVENTS = 4
       };
 
 typedef QFlags<LayoutFlag> LayoutFlags;
@@ -207,9 +207,9 @@ typedef QFlags<LayoutFlag> LayoutFlags;
 //   PlayMode
 //---------------------------------------------------------
 
-enum PlayMode {
-      PLAYMODE_SYNTHESIZER,
-      PLAYMODE_AUDIO
+enum class PlayMode : char {
+      SYNTHESIZER,
+      AUDIO
       };
 
 //---------------------------------------------------------
