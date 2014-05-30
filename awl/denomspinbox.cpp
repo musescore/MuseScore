@@ -27,7 +27,7 @@ namespace Awl {
 //---------------------------------------------------------
 
 DenominatorSpinBox::DenominatorSpinBox(QWidget* parent)
-   : 	QSpinBox(parent)
+   : QSpinBox(parent)
       {
       setValue(4);
       setRange(1, 256);

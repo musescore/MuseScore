@@ -528,11 +528,11 @@ Measure* MuseData::createMeasure()
 
 #if 0
       foreach(Staff* s, score->staves()) {
-	      if (s->isTop()) {
-      	      BarLine* barLine = new BarLine(score);
-            	barLine->setStaff(s);
-	            measure->setEndBarLine(barLine);
-      	      }
+            if (s->isTop()) {
+                  BarLine* barLine = new BarLine(score);
+                  barLine->setStaff(s);
+                  measure->setEndBarLine(barLine);
+                  }
             }
 #endif
       score->add(measure);

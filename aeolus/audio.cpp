@@ -37,7 +37,7 @@ void Aeolus::audio_start ()
 
 void Aeolus::audio_init(int sampleRate)
       {
-	_nplay   = 2;
+      _nplay   = 2;
       _fsamp   = sampleRate;
       _audiopar[VOLUME] = 0.32f;
       _audiopar[REVSIZE] = 0.075f;
@@ -73,7 +73,7 @@ void Aeolus::proc_queue (uint32_t k)
 
             case 1:     // Single key on.
                   key_on (i, b);
-	            break;
+                  break;
 
             case 2:     // Conditional key off.
                   cond_key_off (j, b);
@@ -149,7 +149,7 @@ void Aeolus::process(unsigned nframes, float* out, float*, float*)
                   _keymap [n] = m;
                   for (int d = 0; d < _ndivis; d++)
                         _divisp[d]->update (n, m);
-	            }
+                  }
             }
 
       for (int d = 0; d < _ndivis; d++)

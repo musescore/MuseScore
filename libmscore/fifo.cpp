@@ -19,8 +19,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 void FifoBase::clear()
-	{
-	ridx    = 0;
+      {
+      ridx    = 0;
       widx    = 0;
       counter = 0;
       }

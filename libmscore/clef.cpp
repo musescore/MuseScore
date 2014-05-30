@@ -390,7 +390,7 @@ void Clef::layout1()
 void Clef::draw(QPainter* painter) const
       {
       if (staff() && !staff()->staffType()->genClef())
-	      return;
+            return;
       QColor color(curColor());
       foreach(Element* e, elements) {
             e->setColor(color);

@@ -590,7 +590,7 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
 bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mod, const QString& s)
       {
       if (key == Qt::Key_Return)
-            return true;	// Harmony only single line
+            return true; // Harmony only single line
       bool rv = Text::edit(view, grip, key, mod, s);
       QString str = text();
       int root, base;

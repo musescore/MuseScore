@@ -3351,7 +3351,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
                   fractionTSig = Fraction(bts, btp);
                   score->sigmap()->add(tick, fractionTSig);
-		  Part* part = score->staff(staff)->part();
+                  Part* part = score->staff(staff)->part();
                   int staves = part->nstaves();
                   for (int i = 0; i < staves; ++i) {
                         TimeSig* timesig = new TimeSig(score);

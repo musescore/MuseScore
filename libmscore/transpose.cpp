@@ -153,9 +153,9 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
                   alter = 12 - alter;
                   }
             alter %= 12;
-	          if (alter > 6)
-	               alter -= 12;
-	          if (alter > maxAlter)
+            if (alter > 6)
+                  alter -= 12;
+            if (alter > maxAlter)
                   ++steps;
             else if (alter < minAlter)
                   --steps;

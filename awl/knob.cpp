@@ -161,18 +161,18 @@ void Knob::paintEvent(QPaintEvent* ev)
       int w          = width()  - _scaleWidth - 2 * _border;
       int h          = height() - _scaleWidth/2 - 2 * _border;
 
-   	int xoffset, yoffset;
+      int xoffset, yoffset;
       if (_center)
-      	h -= _markSize;
-	if (w > h) {
+            h -= _markSize;
+      if (w > h) {
             yoffset = 0;
-      	xoffset = (w - h) / 2;
+            xoffset = (w - h) / 2;
             w = h;
             }
-   	else {
+      else {
             xoffset = 0;
-      	// yoffset = (h - w) / 2;     // center
-      	yoffset = h - w;              // top align
+            // yoffset = (h - w) / 2;     // center
+            yoffset = h - w;              // top align
             h = w;
             }
 

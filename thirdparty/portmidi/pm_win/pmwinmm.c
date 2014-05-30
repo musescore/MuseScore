@@ -736,7 +736,7 @@ static void FAR PASCAL winmm_in_callback(
         if (lpMidiHdr->dwBytesRecorded > 0) {
             lpMidiHdr->dwBytesRecorded = 0;
             lpMidiHdr->dwFlags = 0;
-			
+
             /* note: no error checking -- can this actually fail? */
             assert(midiInPrepareHeader(hMidiIn, lpMidiHdr, 
                         sizeof(MIDIHDR)) == MMSYSERR_NOERROR);

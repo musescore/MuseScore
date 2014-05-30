@@ -2194,9 +2194,9 @@ void Debugger::forwardClicked()
 void Debugger::reloadClicked()
       {
       Element* e = curElement;
-	updateList(cs);
-	if (e)
-	      updateElement(e);
+      updateList(cs);
+      if (e)
+            updateElement(e);
       }
 
 //---------------------------------------------------------

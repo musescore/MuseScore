@@ -928,7 +928,7 @@ void Chord::write(Xml& xml) const
             case NoteType::APPOGGIATURA:
                   xml.tagE("appoggiatura");
                   break;
-     	      case NoteType::GRACE4:
+            case NoteType::GRACE4:
                   xml.tagE("grace4");
                   break;
             case NoteType::GRACE16:
