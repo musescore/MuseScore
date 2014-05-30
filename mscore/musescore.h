@@ -89,6 +89,7 @@ class ImportMidiPanel;
 
 struct PluginDescription;
 enum class SelState : char;
+enum class IconType : signed char;
 
 extern QString mscoreGlobalShare;
 static const int PROJECT_LIST_LEN = 6;
@@ -99,7 +100,7 @@ extern const char* voiceActions[];
 //---------------------------------------------------------
 
 struct IconAction {
-      int subtype;
+      IconType subtype;
       const char* action;
       };
 

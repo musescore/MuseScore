@@ -802,23 +802,25 @@ Element* ChordRest::drop(const DropData& data)
             case ElementType::ICON:
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
-                        case ICON_SBEAM:
+                        case IconType::SBEAM:
                               score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN));
                               break;
-                        case ICON_MBEAM:
+                        case IconType::MBEAM:
                               score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::MID));
                               break;
-                        case ICON_NBEAM:
+                        case IconType::NBEAM:
                               score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::NONE));
                               break;
-                        case ICON_BEAM32:
+                        case IconType::BEAM32:
                               score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN32));
                               break;
-                        case ICON_BEAM64:
+                        case IconType::BEAM64:
                               score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN64));
                               break;
-                        case ICON_AUTOBEAM:
+                        case IconType::AUTOBEAM:
                               score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::AUTO));
+                              break;
+                        default:
                               break;
                         }
                   }

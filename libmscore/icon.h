@@ -25,19 +25,19 @@ namespace Ms {
 class Icon : public Element {
       Q_OBJECT
 
-      int _iconType;
+      IconType _iconType;
       const char* _action;
       QIcon _icon;
 
    public:
-      Icon(Score* s) : Element(s), _iconType(0), _action(0) { }
+      Icon(Score* s) : Element(s), _iconType(IconType::NONE), _action(0) { }
       virtual Icon* clone() const        { return new Icon(*this);    }
-      virtual ElementType type() const   { return ElementType::ICON;               }
-      int iconType() const               { return _iconType;          }
-      void setIconType(int val)          { _iconType = val;           }
+      virtual ElementType type() const   { return ElementType::ICON;  }
+      IconType iconType() const          { return _iconType;          }
+      void setIconType(IconType val)     { _iconType = val;           }
       void setAction(const char* s, const QIcon& i)   { _action = s; _icon = i;  }
-      const char* action() const         { return _action;           }
-      QIcon icon() const                 { return _icon;             }
+      const char* action() const         { return _action;            }
+      QIcon icon() const                 { return _icon;              }
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
       };

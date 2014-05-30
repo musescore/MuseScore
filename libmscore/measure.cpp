@@ -1266,13 +1266,15 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
 
             case ElementType::ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
-                        case ICON_VFRAME:
-                        case ICON_HFRAME:
-                        case ICON_TFRAME:
-                        case ICON_FFRAME:
-                        case ICON_MEASURE:
+                        case IconType::VFRAME:
+                        case IconType::HFRAME:
+                        case IconType::TFRAME:
+                        case IconType::FFRAME:
+                        case IconType::MEASURE:
                               viewer->setDropRectangle(rr);
                               return true;
+                        default:
+                              break;
                         }
                   break;
 
@@ -1471,20 +1473,22 @@ qDebug("drop staffList");
                   }
             case ElementType::ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
-                        case ICON_VFRAME:
+                        case IconType::VFRAME:
                               score()->insertMeasure(ElementType::VBOX, this);
                               break;
-                        case ICON_HFRAME:
+                        case IconType::HFRAME:
                               score()->insertMeasure(ElementType::HBOX, this);
                               break;
-                        case ICON_TFRAME:
+                        case IconType::TFRAME:
                               score()->insertMeasure(ElementType::TBOX, this);
                               break;
-                        case ICON_FFRAME:
+                        case IconType::FFRAME:
                               score()->insertMeasure(ElementType::FBOX, this);
                               break;
-                        case ICON_MEASURE:
+                        case IconType::MEASURE:
                               score()->insertMeasure(ElementType::MEASURE, this);
+                              break;
+                        default:
                               break;
                         }
                   break;

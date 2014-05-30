@@ -49,7 +49,6 @@ static const int MSCVERSION = 124;
 
 class MStyle;
 class Sequencer;
-enum class ValueType : char;
 
 static const int VOICES = 4;
 inline int staff2track(int staffIdx) { return staffIdx << 2; }
@@ -313,13 +312,14 @@ enum class BarLineType : char {
       };
 
 // Icon() subtypes
-enum {
-      ICON_ACCIACCATURA, ICON_APPOGGIATURA, ICON_GRACE4, ICON_GRACE16, ICON_GRACE32,
-      ICON_GRACE8_AFTER, ICON_GRACE16_AFTER, ICON_GRACE32_AFTER,
-      ICON_SBEAM, ICON_MBEAM, ICON_NBEAM, ICON_BEAM32, ICON_BEAM64, ICON_AUTOBEAM,
-      ICON_FBEAM1, ICON_FBEAM2,
-      ICON_VFRAME, ICON_HFRAME, ICON_TFRAME, ICON_FFRAME, ICON_MEASURE,
-      ICON_BRACKETS
+enum class IconType : signed char {
+      NONE = -1,
+      ACCIACCATURA, APPOGGIATURA, GRACE4, GRACE16, GRACE32,
+      GRACE8_AFTER, GRACE16_AFTER, GRACE32_AFTER,
+      SBEAM, MBEAM, NBEAM, BEAM32, BEAM64, AUTOBEAM,
+      FBEAM1, FBEAM2,
+      VFRAME, HFRAME, TFRAME, FFRAME, MEASURE,
+      BRACKETS
       };
 
 //---------------------------------------------------------
@@ -423,7 +423,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::BeamMode);
-Q_DECLARE_METATYPE(Ms::ValueType);
 Q_DECLARE_METATYPE(Ms::Direction);
 Q_DECLARE_METATYPE(Ms::DirectionH);
 

@@ -78,6 +78,7 @@ class Spanner;
 class BarLine;
 enum class ClefType : signed char;
 enum class PlayEventType : char;
+enum class ValueType : char;
 
 // #define DEBUG_UNDO
 
