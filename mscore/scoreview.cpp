@@ -2616,7 +2616,7 @@ void ScoreView::cmd(const QAction* a)
                   }
             }
       else if (cmd == "play") {
-            if (seq->canStart())
+            if (seq && seq->canStart())
                   sm->postEvent(new CommandEvent(cmd));
             else
                   getAction("play")->setChecked(false);
