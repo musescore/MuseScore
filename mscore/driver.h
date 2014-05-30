@@ -51,6 +51,7 @@ class Driver {
       virtual void unregisterPort(int) {}
       virtual void putEvent(const NPlayEvent&, unsigned /*framePos*/) {}
       virtual void midiRead() {}
+      virtual void handleTimeSigTempoChanged() {}
       };
 
 
