@@ -307,9 +307,9 @@ enum TextStyleType : char {
 //   BarLineType
 //---------------------------------------------------------
 
-enum BarLineType {
-      NORMAL_BAR, DOUBLE_BAR, START_REPEAT, END_REPEAT,
-      BROKEN_BAR, END_BAR, END_START_REPEAT, DOTTED_BAR
+enum class BarLineType : char {
+      NORMAL, DOUBLE, START_REPEAT, END_REPEAT,
+      BROKEN, END, END_START_REPEAT, DOTTED
       };
 
 // Icon() subtypes

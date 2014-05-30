@@ -723,14 +723,14 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
             };
 
       BarLineType types[8] = {
-            NORMAL_BAR,
-            DOUBLE_BAR,
-            START_REPEAT,
-            END_REPEAT,
-            BROKEN_BAR,
-            END_BAR,
-            END_START_REPEAT,
-            DOTTED_BAR
+            BarLineType::NORMAL,
+            BarLineType::DOUBLE,
+            BarLineType::START_REPEAT,
+            BarLineType::END_REPEAT,
+            BarLineType::BROKEN,
+            BarLineType::END,
+            BarLineType::END_START_REPEAT,
+            BarLineType::DOTTED
             };
 
       e.setupUi(addWidget());
@@ -812,7 +812,7 @@ void InspectorBarLine::setElement()
 
       type->setEnabled(true);
       // set type: if measure bar line is a repeat, no other type is possible; disable combo
-      if (measureBarLineType == START_REPEAT || measureBarLineType == END_REPEAT || measureBarLineType == END_START_REPEAT) {
+      if (measureBarLineType == BarLineType::START_REPEAT || measureBarLineType == BarLineType::END_REPEAT || measureBarLineType == BarLineType::END_START_REPEAT) {
             type->setEnabled(false);
             type->setCurrentIndex(0);
             }

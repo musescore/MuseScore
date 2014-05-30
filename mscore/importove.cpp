@@ -1206,37 +1206,37 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 	}
 
 	// barline
-	BarLineType bartype = NORMAL_BAR;
+	BarLineType bartype = BarLineType::NORMAL;
 
 	switch(measurePtr->getRightBarline()) {
 	case OVE::Barline_Default:{
-			bartype = NORMAL_BAR;
+			bartype = BarLineType::NORMAL;
 			break;
 		}
 	case OVE::Barline_Double:{
-			bartype = DOUBLE_BAR;
+			bartype = BarLineType::DOUBLE;
 			break;
 		}
 	case OVE::Barline_Final:{
-			bartype = END_BAR;
+			bartype = BarLineType::END;
 			break;
 		}
 	case OVE::Barline_Null:{
-			bartype = NORMAL_BAR;
+			bartype = BarLineType::NORMAL;
 			break;
 		}
 	case OVE::Barline_RepeatLeft:{
-			bartype = START_REPEAT;
+			bartype = BarLineType::START_REPEAT;
 			measure->setRepeatFlags(Repeat::START);
 			break;
 		}
 	case OVE::Barline_RepeatRight:{
-			bartype = END_REPEAT;
+			bartype = BarLineType::END_REPEAT;
 			measure->setRepeatFlags(Repeat::END);
 			break;
 		}
 	case OVE::Barline_Dashed:{
-			bartype = BROKEN_BAR;
+			bartype = BarLineType::BROKEN;
 			break;
 		}
 	default:
@@ -1244,13 +1244,13 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 	}
 
 	if(measure->no() == ove_->getMeasureCount()-1){
-		bartype = END_BAR;
+		bartype = BarLineType::END;
 	}
 
 	measure->setEndBarLineType(bartype, false);
 
 	if(measurePtr->getLeftBarline() == OVE::Barline_RepeatLeft){
-		//bartype = START_REPEAT;
+		//bartype = BarLineType::START_REPEAT;
 		measure->setRepeatFlags(measure->repeatFlags()|Repeat::START);
 	}
 

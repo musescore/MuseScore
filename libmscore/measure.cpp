@@ -152,7 +152,7 @@ Measure::Measure(Score* s)
       _breakMMRest           = false;
       _endBarLineGenerated   = true;
       _endBarLineVisible     = true;
-      _endBarLineType        = NORMAL_BAR;
+      _endBarLineType        = BarLineType::NORMAL;
       _mmRest                = 0;
       _mmRestCount           = 0;
       setFlag(ElementFlag::MOVABLE, true);
@@ -1813,7 +1813,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   if ((e.tick() != tick()) && (e.tick() != endTick())) {
                         st = Segment::SegBarLine;
                         }
-                  else if (barLine->barLineType() == START_REPEAT && e.tick() == tick())
+                  else if (barLine->barLineType() == BarLineType::START_REPEAT && e.tick() == tick())
                         st = Segment::SegStartRepeatBarLine;
                   else {
                         setEndBarLineType(barLine->barLineType(), false, true);
@@ -2445,7 +2445,7 @@ bool Measure::setStartRepeatBarLine(bool val)
                   // no barline were we need one:
                   bl = new BarLine(score());
                   bl->setTrack(track);
-                  bl->setBarLineType(START_REPEAT);
+                  bl->setBarLineType(BarLineType::START_REPEAT);
                   if (s == 0) {
                         if (score()->undoRedo()) {
                               return false;
@@ -2575,7 +2575,7 @@ bool Measure::createEndBarLines()
                         // a bar line is there (either existing or newly created):
                         // adjust subtype, if not fitting
                         if (bl->barLineType() != _endBarLineType && !bl->customSubtype()) {
-                              score()->undoChangeProperty(bl, P_ID::SUBTYPE, _endBarLineType);
+                              score()->undoChangeProperty(bl, P_ID::SUBTYPE, int(_endBarLineType));
                               bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
                               changed = true;
                               }
@@ -3653,8 +3653,8 @@ void Measure::layoutStage1()
       MeasureBase* mb = prev();
       if (mb && mb->type() == Element::ElementType::MEASURE) {
             Measure* pm = static_cast<Measure*>(mb);
-            if (pm->endBarLineType() != NORMAL_BAR
-               && pm->endBarLineType() != BROKEN_BAR && pm->endBarLineType() != DOTTED_BAR)
+            if (pm->endBarLineType() != BarLineType::NORMAL
+               && pm->endBarLineType() != BarLineType::BROKEN && pm->endBarLineType() != BarLineType::DOTTED)
                   setBreakMMRest(true);
             }
       }

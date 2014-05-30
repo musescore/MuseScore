@@ -506,7 +506,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                         if (seg->segmentType() == Segment::SegEndBarLine) {
                               Element* e = seg->element(0);
                               if (e && e->type() == ElementType::BAR_LINE) {
-                                    if (static_cast<BarLine*>(e)->barLineType() == START_REPEAT)
+                                    if (static_cast<BarLine*>(e)->barLineType() == BarLineType::START_REPEAT)
                                           x -= e->width() - _spatium * .5;
                                     else
                                           x -= _spatium * .5;

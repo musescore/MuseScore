@@ -633,23 +633,23 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         // qDebug("pm %p", pm);
 
-                        BarLineType st = NORMAL_BAR;
+                        BarLineType st = BarLineType::NORMAL;
                         switch (o->type()) {
-                              case CapExplicitBarline::BAR_SINGLE:      st = NORMAL_BAR; break;
-                              case CapExplicitBarline::BAR_DOUBLE:      st = DOUBLE_BAR; break;
-                              case CapExplicitBarline::BAR_END:         st = END_BAR; break;
-                              case CapExplicitBarline::BAR_REPEND:      st = END_REPEAT; break;
-                              case CapExplicitBarline::BAR_REPSTART:    st = START_REPEAT; break;
-                              case CapExplicitBarline::BAR_REPENDSTART: st = END_START_REPEAT; break;
-                              case CapExplicitBarline::BAR_DASHED:      st = BROKEN_BAR; break;
+                              case CapExplicitBarline::BAR_SINGLE:      st = BarLineType::NORMAL; break;
+                              case CapExplicitBarline::BAR_DOUBLE:      st = BarLineType::DOUBLE; break;
+                              case CapExplicitBarline::BAR_END:         st = BarLineType::END; break;
+                              case CapExplicitBarline::BAR_REPEND:      st = BarLineType::END_REPEAT; break;
+                              case CapExplicitBarline::BAR_REPSTART:    st = BarLineType::START_REPEAT; break;
+                              case CapExplicitBarline::BAR_REPENDSTART: st = BarLineType::END_START_REPEAT; break;
+                              case CapExplicitBarline::BAR_DASHED:      st = BarLineType::BROKEN; break;
                               }
-                        if (st == NORMAL_BAR)
+                        if (st == BarLineType::NORMAL)
                               break;
 
-                        if (pm && (st == DOUBLE_BAR || st == END_BAR || st == BROKEN_BAR))
+                        if (pm && (st == BarLineType::DOUBLE || st == BarLineType::END || st == BarLineType::BROKEN))
                               pm->setEndBarLineType(st, false, true);
 
-                        if (st == START_REPEAT || st == END_START_REPEAT) {
+                        if (st == BarLineType::START_REPEAT || st == BarLineType::END_START_REPEAT) {
                               Measure* nm = 0; // the next measure (the one started by this barline)
                               nm = score->getCreateMeasure(tick);
                               // qDebug("nm %p", nm);
@@ -657,7 +657,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     nm->setRepeatFlags(nm->repeatFlags() | Repeat::START);
                               }
 
-                        if (st == END_REPEAT || st == END_START_REPEAT) {
+                        if (st == BarLineType::END_REPEAT || st == BarLineType::END_START_REPEAT) {
                               if (pm)
                                     pm->setRepeatFlags(pm->repeatFlags() | Repeat::END);
                               }
