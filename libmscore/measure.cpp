@@ -3127,16 +3127,16 @@ void Measure::layoutX(qreal stretch)
                                     // check for accidentals in chord
                                     if (cr->type() == Element::ElementType::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
-                                          if (!c->graceNotes().empty())
+                                          if (c->getGraceNotesBefore(0))
                                                 grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
                                                       if (note->accidental()) {
                                                             accidental = true;
-                                                            accidentalX = qMin(accidentalX, note->accidental()->x() + note->x());
+                                                            accidentalX = qMin(accidentalX, note->accidental()->x() + note->x() + c->x());
                                                             }
                                                       else
-                                                            noteX = qMin(noteX, note->x());
+                                                            noteX = qMin(noteX, note->x() + c->x());
                                                       }
                                                 }
                                           }
@@ -3177,7 +3177,22 @@ void Measure::layoutX(qreal stretch)
                                     if ((pt & Segment::SegKeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
-                              space.max(cr->space());
+
+                              // calculate space needed for segment
+                              // take cr position into account
+                              // by converting to segment-relative space
+                              // chord space itself already has ipos offset built in
+                              // but lyrics do not
+                              // and neither have user offsets
+                              qreal cx = cr->ipos().x();
+                              qreal cxu = cr->userOff().x();
+                              qreal lx = qMax(cxu, 0.0); // nudge left shouldn't require more leading space
+                              qreal rx = qMin(cxu, 0.0); // nudge right shouldn't require more trailing space
+                              Space crSpace = cr->space();
+                              Space segRelSpace(crSpace.lw()-lx, crSpace.rw()+rx);
+                              space.max(segRelSpace);
+
+                              // lyrics
                               int n = cr->lyricsList().size();
                               for (int i = 0; i < n; ++i) {
                                     Lyrics* l = cr->lyricsList().at(i);
@@ -3186,8 +3201,8 @@ void Measure::layoutX(qreal stretch)
                                     lyrics = l;
                                     if (!lyrics->isMelisma()) {
                                           QRectF b(l->bbox().translated(l->pos()));
-                                          llw = qMax(llw, -b.left());
-                                          rrw = qMax(rrw, b.right());
+                                          llw = qMax(llw, -(b.left()+lx+cx));
+                                          rrw = qMax(rrw, b.right()+rx+cx);
                                           }
                                     }
                               }
