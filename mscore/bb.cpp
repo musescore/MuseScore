@@ -378,10 +378,10 @@ Score::FileError importBB(Score* score, const QString& name)
       {
       BBFile bb;
       if(!QFileInfo(name).exists())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
       if (!bb.read(name)) {
             qDebug("Cannot open file <%s>", qPrintable(name));
-            return Score::FILE_OPEN_ERROR;
+            return Score::FileError::FILE_OPEN_ERROR;
             }
       score->style()->set(StyleIdx::chordsXmlFile, true);
       score->style()->chordList()->read("chords.xml");
@@ -541,7 +541,7 @@ Score::FileError importBB(Score* score, const QString& name)
             sks->add(keysig);
             }
       score->fixTicks();
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------

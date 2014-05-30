@@ -1004,14 +1004,14 @@ QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
 Score::FileError importMidi(Score *score, const QString &name)
       {
       if (name.isEmpty())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
 
       auto &midiData = preferences.midiImportOperations.midiData();
       if (!midiData.midiFile(name)) {
             QFile fp(name);
             if (!fp.open(QIODevice::ReadOnly)) {
                   qDebug("importMidi: file open error <%s>", qPrintable(name));
-                  return Score::FILE_OPEN_ERROR;
+                  return Score::FileError::FILE_OPEN_ERROR;
                   }
             MidiFile mf;
             try {
@@ -1026,7 +1026,7 @@ Score::FileError importMidi(Score *score, const QString &name)
                         }
                   fp.close();
                   qDebug("importMidi: bad file format");
-                  return Score::FILE_BAD_FORMAT;
+                  return Score::FileError::FILE_BAD_FORMAT;
                   }
             fp.close();
 
@@ -1036,7 +1036,7 @@ Score::FileError importMidi(Score *score, const QString &name)
 
       convertMidi(score, midiData.midiFile(name));
 
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 }
 

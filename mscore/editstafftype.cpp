@@ -80,7 +80,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       // load a sample tabulature score in preview
       Score* sc = new Score(MScore::defaultStyle());
-      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FILE_NO_ERROR)
+      if (readScore(sc, QString(":/data/tab_sample.mscx"), false) == Score::FileError::FILE_NO_ERROR)
             preview->setScore(sc);
 
       setValues();

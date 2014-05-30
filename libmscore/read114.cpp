@@ -469,7 +469,7 @@ Score::FileError Score::read114(XmlReader& e)
             }
 
       if (e.error() != XmlStreamReader::NoError)
-            return FILE_BAD_FORMAT;
+            return FileError::FILE_BAD_FORMAT;
 
       int n = nstaves();
       for (int idx = 0; idx < n; ++idx) {
@@ -712,7 +712,7 @@ Score::FileError Score::read114(XmlReader& e)
       updateChannel();
       updateNotes();    // only for parts needed?
 
-      return FILE_NO_ERROR;
+      return FileError::FILE_NO_ERROR;
       }
 
 }

@@ -544,9 +544,9 @@ Score::FileError importBww(Score* score, const QString& path)
 
       QFile fp(path);
       if(!fp.exists())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
       if (!fp.open(QIODevice::ReadOnly))
-            return Score::FILE_OPEN_ERROR;
+            return Score::FileError::FILE_OPEN_ERROR;
 
       QString id("importBww");
       Part* part = new Part(score);
@@ -566,7 +566,7 @@ Score::FileError importBww(Score* score, const QString& path)
       score->setCreated(true);
       score->connectTies();
       qDebug("Score::importBww() done");
-      return Score::FILE_NO_ERROR;      // OK
+      return Score::FileError::FILE_NO_ERROR;      // OK
       }
 
 } // namespace Ms
