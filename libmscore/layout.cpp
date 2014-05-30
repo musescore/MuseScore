@@ -1651,6 +1651,8 @@ static bool breakMultiMeasureRest(Measure* m)
 
 void Score::createMMRests()
       {
+      if (undoRedo())   // no change possible in this state
+            return;
       //
       //  create mm rest measures
       //
@@ -1840,9 +1842,8 @@ void Score::createMMRests()
                   mmr->setPrev(m->prev());
                   m = lm;
                   }
-            else if (m->mmRest()) {
+            else if (m->mmRest())
                   undo(new ChangeMMRest(m, 0));
-                  }
             }
 /* Update Notes After creating mmRest Because on load, mmRest->next() was not set
 on first pass in updateNotes() and break occur */
