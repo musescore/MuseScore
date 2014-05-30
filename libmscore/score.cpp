@@ -2619,56 +2619,56 @@ void Score::addAudioTrack()
 //   padToggle
 //---------------------------------------------------------
 
-void Score::padToggle(int n)
+void Score::padToggle(Pad n)
       {
       switch (n) {
-            case PAD_NOTE00:
+            case Pad::NOTE00:
                   _is.setDuration(TDuration::DurationType::V_LONG);
                   break;
-            case PAD_NOTE0:
+            case Pad::NOTE0:
                   _is.setDuration(TDuration::DurationType::V_BREVE);
                   break;
-            case PAD_NOTE1:
+            case Pad::NOTE1:
                   _is.setDuration(TDuration::DurationType::V_WHOLE);
                   break;
-            case PAD_NOTE2:
+            case Pad::NOTE2:
                   _is.setDuration(TDuration::DurationType::V_HALF);
                   break;
-            case PAD_NOTE4:
+            case Pad::NOTE4:
                   _is.setDuration(TDuration::DurationType::V_QUARTER);
                   break;
-            case PAD_NOTE8:
+            case Pad::NOTE8:
                   _is.setDuration(TDuration::DurationType::V_EIGHT);
                   break;
-            case PAD_NOTE16:
+            case Pad::NOTE16:
                   _is.setDuration(TDuration::DurationType::V_16TH);
                   break;
-            case PAD_NOTE32:
+            case Pad::NOTE32:
                   _is.setDuration(TDuration::DurationType::V_32ND);
                   break;
-            case PAD_NOTE64:
+            case Pad::NOTE64:
                   _is.setDuration(TDuration::DurationType::V_64TH);
                   break;
-            case PAD_NOTE128:
+            case Pad::NOTE128:
                   _is.setDuration(TDuration::DurationType::V_128TH);
                   break;
-            case PAD_REST:
+            case Pad::REST:
                   _is.setRest(!_is.rest());
                   break;
-            case PAD_DOT:
+            case Pad::DOT:
                   if (_is.duration().dots() == 1)
                         _is.setDots(0);
                   else
                         _is.setDots(1);
                   break;
-            case PAD_DOTDOT:
+            case Pad::DOTDOT:
                   if (_is.duration().dots() == 2)
                         _is.setDots(0);
                   else
                         _is.setDots(2);
                   break;
             }
-      if (n >= PAD_NOTE00 && n <= PAD_NOTE128) {
+      if (n >= Pad::NOTE00 && n <= Pad::NOTE128) {
             _is.setDots(0);
             //
             // if in "note enter" mode, reset

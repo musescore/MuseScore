@@ -105,21 +105,21 @@ extern bool showRubberBand;
 
 enum class POS : char { CURRENT, LEFT, RIGHT };
 
-enum {
-      PAD_NOTE00,
-      PAD_NOTE0,
-      PAD_NOTE1,
-      PAD_NOTE2,
-      PAD_NOTE4,
-      PAD_NOTE8,
-      PAD_NOTE16,
-      PAD_NOTE32,
-      PAD_NOTE64,
-      PAD_NOTE128,
+enum class Pad : char {
+      NOTE00,
+      NOTE0,
+      NOTE1,
+      NOTE2,
+      NOTE4,
+      NOTE8,
+      NOTE16,
+      NOTE32,
+      NOTE64,
+      NOTE128,
       //--------------------
-      PAD_REST,
-      PAD_DOT,
-      PAD_DOTDOT,
+      REST,
+      DOT,
+      DOTDOT,
       };
 
 //---------------------------------------------------------
@@ -378,7 +378,7 @@ class Score : public QObject {
       void moveUp(Chord*);
       void moveDown(Chord*);
 
-      void padToggle(int n);
+      void padToggle(Pad n);
       void addTempo();
       void addMetronome();
 
