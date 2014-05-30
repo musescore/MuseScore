@@ -455,8 +455,8 @@ QString PageFormat::name() const
 //---------------------------------------------------------
 //   read
 //  <page-layout>
-//	  <page-height>
-//	  <page-width>
+//      <page-height>
+//      <page-width>
 //      <pageFormat>A6</pageFormat>
 //      <landscape>1</landscape>
 //      <page-margins>

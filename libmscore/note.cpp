@@ -566,9 +566,9 @@ void Note::add(Element* e)
             case ElementType::TIE:
                   {
                   Tie* tie = static_cast<Tie*>(e);
-	      	tie->setStartNote(this);
+                  tie->setStartNote(this);
                   tie->setTrack(track());
-      		setTieFor(tie);
+                  setTieFor(tie);
                   if (tie->endNote())
                         tie->endNote()->setTieBack(tie);
                   int n = tie->spannerSegments().size();

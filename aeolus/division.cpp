@@ -165,7 +165,7 @@ void Division::set_div_mask (int bits)
     _dmask |= bits;
     for (r = 0; r < _nrank; r++)
     {
-	W = _ranks [r];
+        W = _ranks [r];
         if (W->_nmask & 128) W->_nmask |= bits;
     }
 }
@@ -180,7 +180,7 @@ void Division::clr_div_mask (int bits)
     _dmask &= ~bits;
     for (r = 0; r < _nrank; r++)
     {
-	W = _ranks [r];
+        W = _ranks [r];
         if (W->_nmask & 128) W->_nmask &= ~bits;
     }
 }

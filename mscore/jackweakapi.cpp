@@ -218,7 +218,7 @@ DECL_FUNCTION(int, jack_port_type_size,(),());
 
 DECL_FUNCTION(jack_nframes_t, jack_get_sample_rate, (jack_client_t *client), (client));
 DECL_FUNCTION(jack_nframes_t, jack_get_buffer_size, (jack_client_t *client), (client));
-DECL_FUNCTION_NULL(const char**, jack_get_ports, (jack_client_t *client, const char *port_name_pattern, const char *	type_name_pattern,
+DECL_FUNCTION_NULL(const char**, jack_get_ports, (jack_client_t *client, const char *port_name_pattern, const char * type_name_pattern,
                                              unsigned long flags), (client, port_name_pattern, type_name_pattern, flags));
 DECL_FUNCTION_NULL(jack_port_t *, jack_port_by_name, (jack_client_t * client, const char *port_name), (client, port_name));
 DECL_FUNCTION_NULL(jack_port_t *, jack_port_by_id, (jack_client_t *client, jack_port_id_t port_id), (client, port_id));
@@ -261,7 +261,7 @@ DECL_FUNCTION(int, jack_acquire_real_time_scheduling, (jack_native_thread_t thre
 DECL_FUNCTION(int, jack_client_create_thread, (jack_client_t* client,
                                       jack_native_thread_t *thread,
                                       int priority,
-                                      int realtime, 	// boolean
+                                      int realtime, // boolean
                                       thread_routine routine,
                                       void *arg), (client, thread, priority, realtime, routine, arg));
 DECL_FUNCTION(int, jack_drop_real_time_scheduling, (jack_native_thread_t thread), (thread));

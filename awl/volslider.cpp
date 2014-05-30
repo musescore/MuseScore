@@ -44,9 +44,9 @@ VolSlider::VolSlider(QWidget* parent)
 void VolSlider::mouseDoubleClickEvent(QMouseEvent* ev)
       {
       if (ev->button() == Qt::RightButton)
-      	_value = 0.0;
+            _value = 0.0;
       else
-      	_value = _minValue;
+            _value = _minValue;
       valueChange();
       }
 
@@ -62,9 +62,9 @@ void VolSlider::setValue(double val)
                   _value = _minValue;
             else {
                   _value = fast_log10(val) * 20.0f;
-       		if (_value < _minValue)
-            		_value = _minValue;
-                 	}
+                  if (_value < _minValue)
+                        _value = _minValue;
+                  }
             }
       else
             _value = val;

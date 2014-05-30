@@ -25,16 +25,16 @@ if (APPLE)
 
   add_library (
     portmidi STATIC
-	${INCS}
-	pm_common/pmutil.c
-	pm_common/portmidi.c
-	pm_mac/finddefault.c
-	pm_mac/pmmac.c
-	pm_mac/pmmacosxcm.c
-	pm_mac/readbinaryplist.c
-	porttime/porttime.c
-	porttime/ptmacosx_mach.c
-	porttime/ptmacosx_cf.c
+      ${INCS}
+      pm_common/pmutil.c
+      pm_common/portmidi.c
+      pm_mac/finddefault.c
+      pm_mac/pmmac.c
+      pm_mac/pmmacosxcm.c
+      pm_mac/readbinaryplist.c
+      porttime/porttime.c
+      porttime/ptmacosx_mach.c
+      porttime/ptmacosx_cf.c
   )
 else (APPLE)
   add_library (
@@ -42,7 +42,7 @@ else (APPLE)
       pm_common/pmutil.c
       pm_win/pmwinmm.c
       pm_win/pmwin.c
-	pm_common/portmidi.c
+      pm_common/portmidi.c
       porttime/porttime.c
       porttime/ptwinmm.c
   )

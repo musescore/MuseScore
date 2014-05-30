@@ -999,7 +999,7 @@ void BarLine::add(Element* e)
             delete e;
             return;
             }
-	e->setParent(this);
+      e->setParent(this);
       switch(e->type()) {
             case ElementType::ARTICULATION:
                   _el.push_back(e);

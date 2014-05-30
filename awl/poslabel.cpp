@@ -28,7 +28,7 @@ namespace Awl {
 //---------------------------------------------------------
 
 PosLabel::PosLabel(TempoMap* tl, TimeSigMap* sl, QWidget* parent)
-   : 	QLabel(parent), pos(tl, sl)
+   : QLabel(parent), pos(tl, sl)
       {
       _smpte = false;
       setFrameStyle(WinPanel | Sunken);
@@ -40,7 +40,7 @@ PosLabel::PosLabel(TempoMap* tl, TimeSigMap* sl, QWidget* parent)
       }
 
 PosLabel::PosLabel(QWidget* parent)
-   : 	QLabel(parent)
+   : QLabel(parent)
       {
       _smpte = false;
       setFrameStyle(WinPanel | Sunken);

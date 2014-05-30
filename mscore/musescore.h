@@ -607,7 +607,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       NScrollArea* navigatorScrollArea() const { return _navigator; }
       void updateLayer();
       void updatePlayMode();
-      bool loop() const         	 { return loopAction->isChecked(); }
+      bool loop() const              { return loopAction->isChecked(); }
       bool metronome() const         { return metronomeAction->isChecked(); }
       bool countIn() const           { return countInAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }

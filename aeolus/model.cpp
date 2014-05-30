@@ -324,7 +324,7 @@ void Model::retune (float freq, int temp)
 {
     if (_ready)
     {
-	_fbase = freq;
+        _fbase = freq;
         _itemp = temp;
         init_ranks (MT_CALC_RANK);
     }
@@ -448,7 +448,7 @@ int Model::read_instr ()
                   else if (sscanf (q, "%s%n", t1, &n) != 1)
                         stat = ARGS;
                   else {
-		            q += n;
+                        q += n;
                         if (_nkeybd == NKEYBD) {
                               fprintf (stderr, "Line %d: can't create more than %d keyboards\n", line, NKEYBD);
                               stat = ERROR;

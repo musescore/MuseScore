@@ -1624,7 +1624,7 @@ void Score::cmdFullMeasureRest()
 
                         if (tick == -1) {
                               // first ChordRest found:
-			      tick = s->measure()->tick();
+                              tick = s->measure()->tick();
                               removeChordRest(cr, true);
                               }
                         else {
@@ -1633,8 +1633,8 @@ void Score::cmdFullMeasureRest()
                         }
                   for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
                         if (!(track % VOICES) && m->isOnlyRests(track)) {
-			      addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
-			}
+                              addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                              }
                         if (s2 && (m == s2->measure()))
                               break;
                         }

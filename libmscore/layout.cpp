@@ -2618,7 +2618,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               // locate a key sig. in next measure and, if found,
                               // check if it has court. sig turned off
                               s = nm->findSegment(Segment::SegKeySig, tick);
-                              showCourtesySig = true;	// assume this key change has court. sig turned on
+                              showCourtesySig = true; // assume this key change has court. sig turned on
                               if (s) {
                                     KeySig* ks = static_cast<KeySig*>(s->element(track));
                                     if (ks && !ks->showCourtesy())

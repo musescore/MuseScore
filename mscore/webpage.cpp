@@ -214,7 +214,7 @@ void MyWebView::link(const QUrl& url)
 //   sizeHint
 //---------------------------------------------------------
 
-QSize	MyWebView::sizeHint() const
+QSize MyWebView::sizeHint() const
       {
       return QSize(300 , 300);
       }

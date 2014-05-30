@@ -159,9 +159,9 @@ void AbstractSlider::setValue(double val)
                   _value = _minValue;
             else {
                   _value = fast_log10(val) * 20.0f;
-       		if (_value < _minValue)
-            		_value = _minValue;
-                 	}
+                  if (_value < _minValue)
+                        _value = _minValue;
+                  }
             }
       else
             _value = val;

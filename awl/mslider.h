@@ -27,7 +27,7 @@ namespace Awl {
 
 //---------------------------------------------------------
 //   MeterSlider
-//	volume slider with meter display
+//    volume slider with meter display
 //---------------------------------------------------------
 
 class MeterSlider : public VolSlider
