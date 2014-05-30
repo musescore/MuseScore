@@ -143,7 +143,7 @@ Harmony::Harmony(Score* s)
       _parsedForm = 0;
       _leftParen  = false;
       _rightParen = false;
-      setTextStyleType(TEXT_STYLE_HARMONY); // call after setting of _id
+      setTextStyleType(TextStyleType::HARMONY); // call after setting of _id
       }
 
 Harmony::Harmony(const Harmony& h)

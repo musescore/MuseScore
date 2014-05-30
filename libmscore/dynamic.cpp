@@ -127,7 +127,7 @@ Dynamic::Dynamic(Score* s)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _velocity = -1;
       _dynRange = DynamicRange::PART;
-      setTextStyleType(TEXT_STYLE_DYNAMICS);
+      setTextStyleType(TextStyleType::DYNAMICS);
       _dynamicType  = DynamicType::OTHER;
       }
 
@@ -189,8 +189,8 @@ void Dynamic::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
-      if (textStyleType() == TEXT_STYLE_DEFAULT)
-            setTextStyleType(TEXT_STYLE_DYNAMICS);
+      if (textStyleType() == TextStyleType::DEFAULT)
+            setTextStyleType(TextStyleType::DYNAMICS);
       }
 
 //---------------------------------------------------------
@@ -390,10 +390,10 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_ID::TEXT_STYLE_TYPE: return TEXT_STYLE_DYNAMICS;
+            case P_ID::TEXT_STYLE_TYPE: return int(TextStyleType::DYNAMICS);
             case P_ID::DYNAMIC_RANGE:   return int(DynamicRange::PART);
             case P_ID::VELOCITY:        return -1;
-            default:                return Text::propertyDefault(id);
+            default:                    return Text::propertyDefault(id);
             }
       }
 

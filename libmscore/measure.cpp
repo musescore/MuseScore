@@ -622,7 +622,7 @@ void Measure::layout2()
                                     // t->setFlag(ElementFlag::MOVABLE, false); ??
                                     t->setTrack(staffIdx * VOICES);
                                     t->setGenerated(true);
-                                    t->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
+                                    t->setTextStyleType(TextStyleType::MEASURE_NUMBER);
                                     t->setParent(this);
                                     score()->undoAddElement(t);
                                     }
@@ -2103,7 +2103,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   t->setTrack(e.track());
                   t->read(e);
                   // previous versions stored measure number, delete it
-                  if ((score()->mscVersion() <= 114) && (t->textStyleType() == TEXT_STYLE_MEASURE_NUMBER))
+                  if ((score()->mscVersion() <= 114) && (t->textStyleType() == TextStyleType::MEASURE_NUMBER))
                         delete t;
                   else {
                         segment = getSegment(Segment::SegChordRest, e.tick());

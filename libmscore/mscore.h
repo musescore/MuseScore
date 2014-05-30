@@ -259,47 +259,47 @@ const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avo
 //    Must be in sync with list in setDefaultStyle().
 //---------------------------------------------------------
 
-enum {
-      TEXT_STYLE_DEFAULT = 0,
-      TEXT_STYLE_TITLE,
-      TEXT_STYLE_SUBTITLE,
-      TEXT_STYLE_COMPOSER,
-      TEXT_STYLE_POET,
-      TEXT_STYLE_LYRIC1,
-      TEXT_STYLE_LYRIC2,
-      TEXT_STYLE_FINGERING,
-      TEXT_STYLE_INSTRUMENT_LONG,
-      TEXT_STYLE_INSTRUMENT_SHORT,
+enum TextStyleType : char {
+      DEFAULT = 0,
+      TITLE,
+      SUBTITLE,
+      COMPOSER,
+      POET,
+      LYRIC1,
+      LYRIC2,
+      FINGERING,
+      INSTRUMENT_LONG,
+      INSTRUMENT_SHORT,
 
-      TEXT_STYLE_INSTRUMENT_EXCERPT,
-      TEXT_STYLE_DYNAMICS,
-      TEXT_STYLE_TECHNIQUE,
-      TEXT_STYLE_TEMPO,
-      TEXT_STYLE_METRONOME,
-      TEXT_STYLE_MEASURE_NUMBER,
-      TEXT_STYLE_TRANSLATOR,
-      TEXT_STYLE_TUPLET,
-      TEXT_STYLE_SYSTEM,
+      INSTRUMENT_EXCERPT,
+      DYNAMICS,
+      TECHNIQUE,
+      TEMPO,
+      METRONOME,
+      MEASURE_NUMBER,
+      TRANSLATOR,
+      TUPLET,
+      SYSTEM,
 
-      TEXT_STYLE_STAFF,
-      TEXT_STYLE_HARMONY,
-      TEXT_STYLE_REHEARSAL_MARK,
-      TEXT_STYLE_REPEAT_LEFT,       // align to start of measure
-      TEXT_STYLE_REPEAT_RIGHT,      // align to end of measure
-      TEXT_STYLE_REPEAT,            // obsolete
-      TEXT_STYLE_VOLTA,
-      TEXT_STYLE_FRAME,
-      TEXT_STYLE_TEXTLINE,
-      TEXT_STYLE_GLISSANDO,
+      STAFF,
+      HARMONY,
+      REHEARSAL_MARK,
+      REPEAT_LEFT,       // align to start of measure
+      REPEAT_RIGHT,      // align to end of measure
+      REPEAT,            // obsolete
+      VOLTA,
+      FRAME,
+      TEXTLINE,
+      GLISSANDO,
 
-      TEXT_STYLE_STRING_NUMBER,
-      TEXT_STYLE_OTTAVA,
-      TEXT_STYLE_BENCH,
-      TEXT_STYLE_HEADER,
-      TEXT_STYLE_FOOTER,
-      TEXT_STYLE_INSTRUMENT_CHANGE,
-      TEXT_STYLE_LYRICS_VERSE_NUMBER,
-      TEXT_STYLE_FIGURED_BASS,
+      STRING_NUMBER,
+      OTTAVA,
+      BENCH,
+      HEADER,
+      FOOTER,
+      INSTRUMENT_CHANGE,
+      LYRICS_VERSE_NUMBER,
+      FIGURED_BASS,
       TEXT_STYLES
       };
 

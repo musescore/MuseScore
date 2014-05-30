@@ -732,7 +732,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     mb->setTick(0);
                                     score->addMeasure(mb, measure);
                                     }
-                              s->setTextStyleType(TEXT_STYLE_TITLE);
+                              s->setTextStyleType(TextStyleType::TITLE);
                               measure->add(s);
                               }
                               break;
@@ -924,7 +924,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         {
                         SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
                         Text* s = new Text(score);
-                        s->setTextStyleType(TEXT_STYLE_TITLE);
+                        s->setTextStyleType(TextStyleType::TITLE);
                         QFont f(to->font());
                         s->textStyle().setItalic(f.italic());
                         // s->setUnderline(f.underline());

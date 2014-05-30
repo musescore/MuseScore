@@ -343,7 +343,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "frame-text") {
             Text* s = new Text(score());
-            s->setTextStyleType(TEXT_STYLE_FRAME);
+            s->setTextStyleType(TextStyleType::FRAME);
             s->setParent(e);
             score()->undoAddElement(s);
             score()->select(s, SelectType::SINGLE, 0);
@@ -355,7 +355,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "frame-text") {
             Text* t = new Text(score());
-            t->setTextStyleType(TEXT_STYLE_FRAME);
+            t->setTextStyleType(TextStyleType::FRAME);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
@@ -363,7 +363,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "title-text") {
             Text* t = new Text(score());
-            t->setTextStyleType(TEXT_STYLE_TITLE);
+            t->setTextStyleType(TextStyleType::TITLE);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
@@ -371,7 +371,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "subtitle-text") {
             Text* t = new Text(score());
-            t->setTextStyleType(TEXT_STYLE_SUBTITLE);
+            t->setTextStyleType(TextStyleType::SUBTITLE);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
@@ -379,7 +379,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "composer-text") {
             Text* t = new Text(score());
-            t->setTextStyleType(TEXT_STYLE_COMPOSER);
+            t->setTextStyleType(TextStyleType::COMPOSER);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
@@ -387,7 +387,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "poet-text") {
             Text* t = new Text(score());
-            t->setTextStyleType(TEXT_STYLE_POET);
+            t->setTextStyleType(TextStyleType::POET);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);

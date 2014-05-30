@@ -26,7 +26,7 @@ Marker::Marker(Score* s)
       {
       _markerType = MarkerType::FINE;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setTextStyleType(TEXT_STYLE_REPEAT);
+      setTextStyleType(TextStyleType::REPEAT);
       }
 
 //---------------------------------------------------------

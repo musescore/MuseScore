@@ -339,18 +339,18 @@ void OveToMScore::convertHeader() {
 	if( !titles.empty() && !titles[0].isEmpty() ) {
 		QString title = titles[0];
 		score_->setMetaTag("movementTitle", title);
-		addText(vbox, score_, title, TEXT_STYLE_TITLE);
+		addText(vbox, score_, title, TextStyleType::TITLE);
 	}
 
 	QList<QString> writers = ove_->getWriters();
 	if(!writers.empty()) {
 		QString composer = writers[0];
-		addText(vbox, score_, composer, TEXT_STYLE_COMPOSER);
+		addText(vbox, score_, composer, TextStyleType::COMPOSER);
 	}
 
 	if(writers.size() > 1) {
 		QString lyricist = writers[1];
-		addText(vbox, score_, lyricist, TEXT_STYLE_POET);
+		addText(vbox, score_, lyricist, TextStyleType::POET);
 	}
 
     if (vbox) {
@@ -2276,7 +2276,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
 		int absTick = mtt_->getTick(measure->no(), expressionPtr->getTick());
 		Text* t = new Text(score_);
 
-		t->setTextStyleType(TEXT_STYLE_TECHNIQUE);
+		t->setTextStyleType(TextStyleType::TECHNIQUE);
 		t->setText(expressionPtr->getText());
 		t->setTrack(track);
 

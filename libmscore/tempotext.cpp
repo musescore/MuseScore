@@ -29,7 +29,7 @@ TempoText::TempoText(Score* s)
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       setPlacement(Placement::ABOVE);
-      setTextStyleType(TEXT_STYLE_TEMPO);
+      setTextStyleType(TextStyleType::TEMPO);
       }
 
 //---------------------------------------------------------
@@ -66,7 +66,7 @@ void TempoText::read(XmlReader& e)
             // Reset text in old version to
             // style.
             //
-//TODO            if (textStyle() != TEXT_STYLE_INVALID) {
+//TODO            if (textStyle() != TextStyleType::INVALID) {
 //                  setStyled(true);
 //                  styleChanged();
 //                  }

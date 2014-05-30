@@ -88,7 +88,7 @@ void TremoloBar::draw(QPainter* painter) const
       painter->setBrush(QBrush(Qt::black));
 
       qreal _spatium = spatium();
-      const TextStyle* st = &score()->textStyle(TEXT_STYLE_BENCH);
+      const TextStyle* st = &score()->textStyle(TextStyleType::BENCH);
       QFont f = st->fontPx(_spatium);
       painter->setFont(f);
 

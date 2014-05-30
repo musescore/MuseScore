@@ -773,7 +773,7 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   Text* f = static_cast<Text*>(e);
                   int st = f->textStyleType();
-                  if (st >= TEXT_STYLE_DEFAULT)
+                  if (st >= TextStyleType::DEFAULT)
                         f->setTextStyleType(st);
                   }
                   score()->undoAddElement(e);

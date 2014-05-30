@@ -438,7 +438,7 @@ Palette* MuseScore::newFingeringPalette()
       const char stringnumber[] = "0123456";
       for (unsigned i = 0; i < strlen(stringnumber); ++i) {
             Fingering* f = new Fingering(gscore);
-            f->setTextStyleType(TEXT_STYLE_STRING_NUMBER);
+            f->setTextStyleType(TextStyleType::STRING_NUMBER);
             f->setText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
@@ -953,12 +953,12 @@ Palette* MuseScore::newTextPalette()
       sp->setDrawGrid(true);
 
       StaffText* st = new StaffText(gscore);
-      st->setTextStyleType(TEXT_STYLE_STAFF);
+      st->setTextStyleType(TextStyleType::STAFF);
       st->setText(tr("staff-text"));
       sp->append(st, tr("Staff Text"));
 
       st = new StaffText(gscore);
-      st->setTextStyleType(TEXT_STYLE_SYSTEM);
+      st->setTextStyleType(TextStyleType::SYSTEM);
       st->setText(tr("system-text"));
       sp->append(st, tr("System Text"));
 
@@ -973,7 +973,7 @@ Palette* MuseScore::newTextPalette()
 
       Text* text = new Text(gscore);
       text->setTrack(0);
-      text->setTextStyleType(TEXT_STYLE_LYRICS_VERSE_NUMBER);
+      text->setTextStyleType(TextStyleType::LYRICS_VERSE_NUMBER);
       text->setText(tr("1."));
       sp->append(text, tr("Lyrics Verse Number"));
 

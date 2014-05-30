@@ -120,7 +120,7 @@ void Tuplet::layout()
       if (_numberType != NumberType::NO_TEXT) {
             if (_number == 0) {
                   _number = new Text(score());
-                  _number->setTextStyleType(TEXT_STYLE_TUPLET);
+                  _number->setTextStyleType(TextStyleType::TUPLET);
                   _number->setTrack(track());
                   _number->setParent(this);
                   _number->setVisible(visible());
@@ -639,7 +639,7 @@ void Tuplet::read(XmlReader& e)
                   _number = new Text(score());
                   _number->setParent(this);
                   _number->read(e);
-                  _number->setTextStyleType(TEXT_STYLE_TUPLET);
+                  _number->setTextStyleType(TextStyleType::TUPLET);
                   _number->setVisible(visible());     //?? override saved property
                   _number->setTrack(track());
                   }

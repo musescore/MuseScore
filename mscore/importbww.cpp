@@ -444,11 +444,11 @@ void MsScWriter::header(const QString title, const QString type,
 
       //  score->setWorkTitle(title);
       Ms::VBox* vbox  = 0;
-      addText(vbox, score, title, Ms::TEXT_STYLE_TITLE);
-      addText(vbox, score, type, Ms::TEXT_STYLE_SUBTITLE);
-      addText(vbox, score, composer, Ms::TEXT_STYLE_COMPOSER);
-      // addText(vbox, score, strPoet, Ms::TEXT_STYLE_POET);
-      // addText(vbox, score, strTranslator, Ms::TEXT_STYLE_TRANSLATOR);
+      addText(vbox, score, title, Ms::TextStyleType::TITLE);
+      addText(vbox, score, type, Ms::TextStyleType::SUBTITLE);
+      addText(vbox, score, composer, Ms::TextStyleType::COMPOSER);
+      // addText(vbox, score, strPoet, Ms::TextStyleType::POET);
+      // addText(vbox, score, strTranslator, Ms::TextStyleType::TRANSLATOR);
       if (vbox) {
             vbox->setTick(0);
             score->measures()->add(vbox);

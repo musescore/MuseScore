@@ -95,9 +95,9 @@ void addTitle(Score *score, const QString &string, int *textCounter)
             ++*textCounter;
             Text* text = new Text(score);
             if (*textCounter == 1)
-                  text->setTextStyleType(TEXT_STYLE_TITLE);
+                  text->setTextStyleType(TextStyleType::TITLE);
             else if (*textCounter == 2)
-                  text->setTextStyleType(TEXT_STYLE_COMPOSER);
+                  text->setTextStyleType(TextStyleType::COMPOSER);
             text->setText(string.right(string.size() - TEXT_PREFIX.size()));
 
             MeasureBase* measure = score->first();

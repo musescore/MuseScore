@@ -875,7 +875,7 @@ void Note::read(XmlReader& e)
                   }
             else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
                   Fingering* f = new Fingering(score());
-                  f->setTextStyleType(TEXT_STYLE_FINGERING);
+                  f->setTextStyleType(TextStyleType::FINGERING);
                   f->read(e);
                   add(f);
                   }

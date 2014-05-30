@@ -220,7 +220,7 @@ void Page::draw(QPainter* painter) const
       QString s1, s2, s3;
 
       if (_score->styleB(StyleIdx::showHeader) && (no() || _score->styleB(StyleIdx::headerFirstPage))) {
-            TextStyle ts = score()->textStyle(TEXT_STYLE_HEADER);
+            TextStyle ts = score()->textStyle(TextStyleType::HEADER);
             QPointF o(ts.offset(spatium()));
 
             bool odd = (n & 1) || !_score->styleB(StyleIdx::headerOddEven);
@@ -268,7 +268,7 @@ void Page::draw(QPainter* painter) const
             }
 
       if (_score->styleB(StyleIdx::showFooter) && (no() || _score->styleB(StyleIdx::footerFirstPage))) {
-            TextStyle ts = score()->textStyle(TEXT_STYLE_FOOTER);
+            TextStyle ts = score()->textStyle(TextStyleType::FOOTER);
 
             QPointF o(ts.offset(spatium()));
 
@@ -358,20 +358,20 @@ void Page::drawStyledHeaderFooter(QPainter* p, int area, const QPointF& pt,
       QString s = replaceTextMacros(ss);
       if (s.isEmpty())
             return;
-      int textStyle = TEXT_STYLE_FOOTER;
+      int textStyle = TextStyleType::FOOTER;
       int flags = Qt::TextDontClip;
       switch(area) {
             case 0:
                   flags |= Qt::AlignLeft | Qt::AlignTop;
-                  textStyle = TEXT_STYLE_HEADER;
+                  textStyle = TextStyleType::HEADER;
                   break;
             case 1:
                   flags |= Qt::AlignHCenter | Qt::AlignTop;
-                  textStyle = TEXT_STYLE_HEADER;
+                  textStyle = TextStyleType::HEADER;
                   break;
             case 2:
                   flags |= Qt::AlignRight | Qt::AlignTop;
-                  textStyle = TEXT_STYLE_HEADER;
+                  textStyle = TextStyleType::HEADER;
                   break;
             case 3:
                   flags |= Qt::AlignLeft | Qt::AlignBottom;

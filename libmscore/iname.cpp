@@ -55,9 +55,9 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
       {
       _instrumentNameType = st;
       if (st == InstrumentNameType::SHORT)
-            setTextStyleType(TEXT_STYLE_INSTRUMENT_SHORT);
+            setTextStyleType(TextStyleType::INSTRUMENT_SHORT);
       else
-            setTextStyleType(TEXT_STYLE_INSTRUMENT_LONG);
+            setTextStyleType(TextStyleType::INSTRUMENT_LONG);
       }
 
 }

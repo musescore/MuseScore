@@ -3366,9 +3366,9 @@ void Score::addText(const QString& type, const QString& txt)
             }
       Text* text = new Text(this);
       if (type == "title")
-            text->setTextStyleType(TEXT_STYLE_TITLE);
+            text->setTextStyleType(TextStyleType::TITLE);
       else if (type == "subtitle")
-            text->setTextStyleType(TEXT_STYLE_SUBTITLE);
+            text->setTextStyleType(TextStyleType::SUBTITLE);
       text->setParent(measure);
       text->setText(txt);
       undoAddElement(text);
