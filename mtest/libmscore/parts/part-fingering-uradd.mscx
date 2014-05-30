@@ -162,7 +162,7 @@
             <lid>8</lid>
             <Fingering>
               <lid>116</lid>
-              <pos x="0.649687" y="-1.6"/>
+              <pos x="0.6498" y="-1.6"/>
               <text>3</text>
               </Fingering>
             <pitch>74</pitch>
@@ -797,7 +797,7 @@
               <lid>8</lid>
               <Fingering>
                 <lid>116</lid>
-                <pos x="0.649687" y="-1.6"/>
+                <pos x="0.6498" y="-1.6"/>
                 <text>3</text>
                 </Fingering>
               <pitch>74</pitch>
