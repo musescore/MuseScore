@@ -758,7 +758,7 @@ void MeasureView::setElement(Element* e)
       mb.repeatFlags->setText(QString("0x%1").arg(m->repeatFlags(), 6, 16, QChar('0')));
       mb.breakMultiMeasureRest->setChecked(m->getBreakMultiMeasureRest());
       mb.breakMMRest->setChecked(m->breakMMRest());
-      mb.endBarLineType->setValue(m->endBarLineType());
+      mb.endBarLineType->setValue(int(m->endBarLineType()));
       mb.endBarLineGenerated->setChecked(m->endBarLineGenerated());
       mb.endBarLineVisible->setChecked(m->endBarLineVisible());
       mb.mmRestCount->setValue(m->mmRestCount());
@@ -1549,7 +1549,7 @@ void BarLineView::setElement(Element* e)
       {
       BarLine* barline = (BarLine*)e;
       ShowElementBase::setElement(e);
-      bl.subType->setValue(barline->barLineType());
+      bl.subType->setValue(int(barline->barLineType()));
       bl.span->setValue(barline->span());
       bl.spanFrom->setValue(barline->spanFrom());
       bl.spanTo->setValue(barline->spanTo());

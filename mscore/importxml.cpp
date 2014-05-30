@@ -2133,21 +2133,21 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                         BarLine* barLine = new BarLine(score);
                         bool visible = true;
                         if (barStyle == "light-heavy" && repeat == "backward") {
-                              barLine->setBarLineType(END_REPEAT);
+                              barLine->setBarLineType(BarLineType::END_REPEAT);
                               }
                         else if (barStyle == "heavy-light" && repeat == "forward") {
-                              barLine->setBarLineType(START_REPEAT);
+                              barLine->setBarLineType(BarLineType::START_REPEAT);
                               }
                         else if (barStyle == "light-heavy" && repeat.isEmpty())
-                              barLine->setBarLineType(END_BAR);
+                              barLine->setBarLineType(BarLineType::END);
                         else if (barStyle == "regular")
-                              barLine->setBarLineType(NORMAL_BAR);
+                              barLine->setBarLineType(BarLineType::NORMAL);
                         else if (barStyle == "dashed")
-                              barLine->setBarLineType(BROKEN_BAR);
+                              barLine->setBarLineType(BarLineType::BROKEN);
                         else if (barStyle == "dotted")
-                              barLine->setBarLineType(DOTTED_BAR);
+                              barLine->setBarLineType(BarLineType::DOTTED);
                         else if (barStyle == "light-light")
-                              barLine->setBarLineType(DOUBLE_BAR);
+                              barLine->setBarLineType(BarLineType::DOUBLE);
                         /*
                         else if (barStyle == "heavy-light")
                               ;
@@ -2155,24 +2155,24 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                               ;
                         */
                         else if (barStyle == "none") {
-                              barLine->setBarLineType(NORMAL_BAR);
+                              barLine->setBarLineType(BarLineType::NORMAL);
                               visible = false;
                               }
                         else if (barStyle == "") {
                               if (repeat == "backward")
-                                    barLine->setBarLineType(END_REPEAT);
+                                    barLine->setBarLineType(BarLineType::END_REPEAT);
                               else if (repeat == "forward")
-                                    barLine->setBarLineType(START_REPEAT);
+                                    barLine->setBarLineType(BarLineType::START_REPEAT);
                               else
                                     qDebug("ImportXml: warning: empty bar type");
                               }
                         else
                               qDebug("unsupported bar type <%s>", barStyle.toLatin1().data());
                         barLine->setTrack(staff * VOICES);
-                        if (barLine->barLineType() == START_REPEAT) {
+                        if (barLine->barLineType() == BarLineType::START_REPEAT) {
                               measure->setRepeatFlags(Repeat::START);
                               }
-                        else if (barLine->barLineType() == END_REPEAT) {
+                        else if (barLine->barLineType() == BarLineType::END_REPEAT) {
                               measure->setRepeatFlags(Repeat::END);
                               }
                         else {

@@ -271,14 +271,14 @@ Palette* MuseScore::newBarLinePalette()
             BarLineType type;
             const char* name;
             } t[] = {
-            { NORMAL_BAR,       QT_TRANSLATE_NOOP("Palette", "Normal") },
-            { BROKEN_BAR,       QT_TRANSLATE_NOOP("Palette", "Dashed") },
-            { DOTTED_BAR,       QT_TRANSLATE_NOOP("Palette", "Dotted") },
-            { END_BAR,          QT_TRANSLATE_NOOP("Palette", "End Bar") },
-            { DOUBLE_BAR,       QT_TRANSLATE_NOOP("Palette", "Double Bar") },
-            { START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start Repeat") },
-            { END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End Repeat") },
-            { END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-Start Repeat") },
+            { BarLineType::NORMAL,       QT_TRANSLATE_NOOP("Palette", "Normal") },
+            { BarLineType::BROKEN,       QT_TRANSLATE_NOOP("Palette", "Dashed") },
+            { BarLineType::DOTTED,       QT_TRANSLATE_NOOP("Palette", "Dotted") },
+            { BarLineType::END,          QT_TRANSLATE_NOOP("Palette", "End Bar") },
+            { BarLineType::DOUBLE,       QT_TRANSLATE_NOOP("Palette", "Double Bar") },
+            { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start Repeat") },
+            { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End Repeat") },
+            { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-Start Repeat") },
             };
       for (unsigned i = 0; i < sizeof(t)/sizeof(*t); ++i) {
             BarLine* b  = new BarLine(gscore);
@@ -298,7 +298,7 @@ Palette* MuseScore::newBarLinePalette()
             };
       for (unsigned i = 0; i < sizeof(span)/sizeof(*span); ++i) {
             BarLine* b  = new BarLine(gscore);
-            b->setBarLineType(NORMAL_BAR);
+            b->setBarLineType(BarLineType::NORMAL);
             b->setSpanFrom(span[i].from);
             b->setSpanTo(span[i].to);
             sp->append(b, span[i].name);

@@ -1982,7 +1982,7 @@ void ChangeSingleBarLineSpan::flip()
             Segment * segm = (static_cast<Segment*>(barLine->parent()));
             Measure * meas = segm->measure();
             // if it is a start-reapeat bar line at the beginning of a measure, redo measure start bar lines
-            if (barLine->barLineType() == START_REPEAT && segm->segmentType() == Segment::SegStartRepeatBarLine)
+            if (barLine->barLineType() == BarLineType::START_REPEAT && segm->segmentType() == Segment::SegStartRepeatBarLine)
                   meas->setStartRepeatBarLine(true);
             // otherwise redo measure end bar lines
             else
@@ -2906,11 +2906,11 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
             Measure* measure = s->tick2measure(m->tick());
             Measure* nm      = m->nextMeasure();
             switch(barType) {
-                  case END_BAR:
-                  case NORMAL_BAR:
-                  case DOUBLE_BAR:
-                  case BROKEN_BAR:
-                  case DOTTED_BAR:
+                  case BarLineType::END:
+                  case BarLineType::NORMAL:
+                  case BarLineType::DOUBLE:
+                  case BarLineType::BROKEN:
+                  case BarLineType::DOTTED:
                         {
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() & ~Repeat::END);
                         if (nm)
@@ -2919,15 +2919,15 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                         measure->setEndBarLineGenerated (false);
                         }
                         break;
-                  case START_REPEAT:
+                  case BarLineType::START_REPEAT:
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::START);
                         break;
-                  case END_REPEAT:
+                  case BarLineType::END_REPEAT:
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
                         if (nm)
                               s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
                         break;
-                  case END_START_REPEAT:
+                  case BarLineType::END_START_REPEAT:
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
                         if (nm)
                               s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() | Repeat::START);

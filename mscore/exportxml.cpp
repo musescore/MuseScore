@@ -937,7 +937,7 @@ void ExportMusicXml::calcDivisions()
                                     continue;
 
                               // must ignore start repeat to prevent spurious backup/forward
-                              if (el->type() == Element::ElementType::BAR_LINE && static_cast<BarLine*>(el)->barLineType() == START_REPEAT)
+                              if (el->type() == Element::ElementType::BAR_LINE && static_cast<BarLine*>(el)->barLineType() == BarLineType::START_REPEAT)
                                     continue;
 
                               if (tick != seg->tick())
@@ -1339,9 +1339,9 @@ void ExportMusicXml::barlineLeft(Measure* m)
 
 void ExportMusicXml::barlineRight(Measure* m)
       {
-      int bst = m->endBarLineType();
+      BarLineType bst = m->endBarLineType();
       bool visible = m->endBarLineVisible();
-      bool needBarStyle = (bst != NORMAL_BAR && bst != START_REPEAT) || !visible;
+      bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
       Volta* volta = findVolta(m, false);
       if (!needBarStyle && !volta)
             return;
@@ -1351,20 +1351,20 @@ void ExportMusicXml::barlineRight(Measure* m)
                   xml.tag("bar-style", QString("none"));
                   } else {
                   switch (bst) {
-                        case DOUBLE_BAR:
+                        case BarLineType::DOUBLE:
                               xml.tag("bar-style", QString("light-light"));
                               break;
-                        case END_REPEAT:
+                        case BarLineType::END_REPEAT:
                               xml.tag("bar-style", QString("light-heavy"));
                               break;
-                        case BROKEN_BAR:
+                        case BarLineType::BROKEN:
                               xml.tag("bar-style", QString("dashed"));
                               break;
-                        case DOTTED_BAR:
+                        case BarLineType::DOTTED:
                               xml.tag("bar-style", QString("dotted"));
                               break;
-                        case END_BAR:
-                        case END_START_REPEAT:
+                        case BarLineType::END:
+                        case BarLineType::END_START_REPEAT:
                               xml.tag("bar-style", QString("light-heavy"));
                               break;
                         default:
@@ -1375,7 +1375,7 @@ void ExportMusicXml::barlineRight(Measure* m)
             }
       if (volta)
             ending(xml, volta, false);
-      if (bst == END_REPEAT || bst == END_START_REPEAT)
+      if (bst == BarLineType::END_REPEAT || bst == BarLineType::END_START_REPEAT)
             xml.tagE("repeat direction=\"backward\"");
       xml.etag();
       }
@@ -4403,7 +4403,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                     continue;
                                     }
                               // must ignore start repeat to prevent spurious backup/forward
-                              if (el->type() == Element::ElementType::BAR_LINE && static_cast<BarLine*>(el)->barLineType() == START_REPEAT)
+                              if (el->type() == Element::ElementType::BAR_LINE && static_cast<BarLine*>(el)->barLineType() == BarLineType::START_REPEAT)
                                     continue;
 
                               // generate backup or forward to the start time of the element
@@ -4496,10 +4496,10 @@ void ExportMusicXml::write(QIODevice* dev)
                                           // Following must be enforced (ref MusicXML barline.dtd):
                                           // If location is left, it should be the first element in the measure;
                                           // if location is right, it should be the last element.
-                                          // implementation note: START_REPEAT already written by barlineLeft()
+                                          // implementation note: BarLineType::START_REPEAT already written by barlineLeft()
                                           // any bars left should be "middle"
                                           // TODO: print barline only if middle
-                                          // if (el->subtype() != START_REPEAT)
+                                          // if (el->subtype() != BarLineType::START_REPEAT)
                                           //       bar((BarLine*) el);
                                           break;
                                     case Element::ElementType::BREATH:

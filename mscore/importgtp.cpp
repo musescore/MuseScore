@@ -66,7 +66,7 @@ const char* GuitarPro::errmsg[] = {
 
 GpBar::GpBar()
       {
-      barLine = NORMAL_BAR;
+      barLine = BarLineType::NORMAL;
       keysig  = GP_INVALID_KEYSIG;
       timesig = Fraction(4,4);
       repeatFlags = 0;
@@ -796,7 +796,7 @@ qDebug("BeginRepeat=============================================");
                   /*uchar c    =*/ readUChar();        // minor
                   }
             if (barBits & 0x80)
-                  bar.barLine = DOUBLE_BAR;
+                  bar.barLine = BarLineType::DOUBLE;
             bar.timesig = Fraction(tnumerator, tdenominator);
             bars.append(bar);
             }
@@ -1360,7 +1360,7 @@ void GuitarPro3::read(QFile* fp)
                   /*uchar c    =*/ readUChar();        // minor
                   }
             if (barBits & 0x80)
-                  bar.barLine = DOUBLE_BAR;
+                  bar.barLine = BarLineType::DOUBLE;
             bar.timesig = Fraction(tnumerator, tdenominator);
             bars.append(bar);
             }
@@ -2096,7 +2096,7 @@ void GuitarPro4::read(QFile* fp)
                   readUChar();        // minor
                   }
             if (barBits & 0x80)
-                  bar.barLine = DOUBLE_BAR;
+                  bar.barLine = BarLineType::DOUBLE;
             bar.timesig = Fraction(tnumerator, tdenominator);
             bars.append(bar);
             }
@@ -3121,7 +3121,7 @@ void GuitarPro5::read(QFile* fp)
                   /*uchar c    =*/ readUChar();        // minor
                   }
             if (barBits & 0x80)
-                  bar.barLine = DOUBLE_BAR;
+                  bar.barLine = BarLineType::DOUBLE;
             if (barBits & 0x3)
                   skip(4);
             if ((barBits & 0x10) == 0)
@@ -3951,11 +3951,15 @@ Score::FileError importGTP(Score* score, const QString& name)
 
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure(), ++idx) {
             const GpBar& bar = gp->bars[idx];
-            if (bar.barLine != NORMAL_BAR)
+            if (bar.barLine != BarLineType::NORMAL)
                   m->setEndBarLineType(bar.barLine, false);
             }
+<<<<<<< HEAD
       if (score->lastMeasure())
             score->lastMeasure()->setEndBarLineType(END_BAR, false);
+=======
+      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
+>>>>>>> convert enum BarLineType into enum class
 
       //
       // create parts (excerpts)

@@ -3152,18 +3152,18 @@ TimeSignature* Measure::getTime() const {
 }
 
 void Measure::setLeftBarline(int barline) {
-	leftBarline_ = (BarlineType) barline;
+	leftBarline_ = (BarLineType) barline;
 }
 
-BarlineType Measure::getLeftBarline() const {
+BarLineType Measure::getLeftBarline() const {
 	return leftBarline_;
 }
 
 void Measure::setRightBarline(int barline) {
-	rightBarline_ = (BarlineType) barline;
+	rightBarline_ = (BarLineType) barline;
 }
 
-BarlineType Measure::getRightBarline() const {
+BarLineType Measure::getRightBarline() const {
 	return rightBarline_;
 }
 

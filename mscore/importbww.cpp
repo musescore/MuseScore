@@ -323,14 +323,14 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
             }
 
       if (mef.lastOfPart && !mef.repeatEnd) {
-            currentMeasure->setEndBarLineType(Ms::END_BAR, false, true);
+            currentMeasure->setEndBarLineType(Ms::BarLineType::END, false, true);
             }
       else if (mef.doubleBarLine) {
-            currentMeasure->setEndBarLineType(Ms::DOUBLE_BAR, false, true);
+            currentMeasure->setEndBarLineType(Ms::BarLineType::DOUBLE, false, true);
             }
       // BarLine* barLine = new BarLine(score);
       // bool visible = true;
-      // barLine->setSubtype(NORMAL_BAR);
+      // barLine->setSubtype(BarLineType::NORMAL);
       // barLine->setTrack(0);
       // currentMeasure->setEndBarLineType(barLine->subtype(), false, visible);
       }
