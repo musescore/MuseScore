@@ -131,7 +131,14 @@ void Album::createScore()
       if (_scores.isEmpty())
             return;
       QString filter = QWidget::tr("Compressed MuseScore File (*.mscz);;");
-      QString fname  = QString("%1.mscz").arg(_name);
+      QSettings settings;
+      if (mscore->lastSaveDirectory.isEmpty())
+            mscore->lastSaveDirectory = settings.value("lastSaveDirectory", preferences.myScoresPath).toString();
+      QString saveDirectory = mscore->lastSaveDirectory;
+      
+      if (saveDirectory.isEmpty())
+          saveDirectory = preferences.myScoresPath;
+      QString fname   = QString("%1/%2.mscz").arg(saveDirectory).arg(_name);
       QString fn     = mscore->getSaveScoreName(
          QWidget::tr("MuseScore: Save Album into Score"),
          fname,
@@ -142,18 +149,15 @@ void Album::createScore()
 
       loadScores();
 
-      Score* firstScore = 0;
-      foreach(AlbumItem* item, _scores) {
-            firstScore = item->score;
-            if (firstScore)
-                  break;
-            }
+      Score* firstScore = _scores[0]->score;
       if (!firstScore)
             return;
+      firstScore->doLayout();
       Score* score = firstScore->clone();
       foreach (AlbumItem* item, _scores) {
             if (item->score == 0 || item->score == firstScore)
                   continue;
+            item->score->doLayout();
             if (!score->appendScore(item->score)) {
                   qDebug("cannot append score");
                   delete score;
@@ -164,6 +168,7 @@ void Album::createScore()
       qDebug("Album::createScore: save file");
       try {
             score->saveCompressedFile(*score->fileInfo(), false);
+            mscore->lastSaveDirectory = score->fileInfo()->absolutePath();
             }
       catch (QString s) {
             QMessageBox::critical(mscore, QWidget::tr("MuseScore: Save File"), s);
