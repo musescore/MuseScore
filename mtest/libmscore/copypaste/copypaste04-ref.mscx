@@ -203,8 +203,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Tie id="3">
-              </Tie>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
