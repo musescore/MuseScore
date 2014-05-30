@@ -113,8 +113,8 @@ void splitChords(
                   leftHandChords.insert({splits[pos].chord->first, newChord});
                   }
             else if (splitPoint == oldChord.notes.size()) {
-                  chords.erase(splits[pos].chord);
                   leftHandChords.insert({splits[pos].chord->first, newChord});
+                  chords.erase(splits[pos].chord);
                   }
 
             if (pos == 0)
