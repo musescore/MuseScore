@@ -3825,6 +3825,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                                           }
                                     }
                               }
+                        ne->setUserOff(oe->userOff());
                         s->add(ne);
                         }
                   foreach(Element* e, oseg->annotations()) {
@@ -3832,6 +3833,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                               continue;
                         Element* ne = e->clone();
                         ne->setTrack(track);
+                        ne->setUserOff(e->userOff());
                         s->add(ne);
                         }
                   }
@@ -3839,6 +3841,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       foreach(Element* e, *el()) {
             Element* ne = e->clone();
             ne->setScore(sc);
+            ne->setUserOff(e->userOff());
             m->add(ne);
             }
       return m;
