@@ -28,7 +28,7 @@ namespace Ms {
 InstrumentChange::InstrumentChange(Score* s)
    : Text(s)
       {
-      setTextStyleType(TEXT_STYLE_INSTRUMENT_CHANGE);
+      setTextStyleType(TextStyleType::INSTRUMENT_CHANGE);
       }
 
 //---------------------------------------------------------

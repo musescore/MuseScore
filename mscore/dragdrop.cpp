@@ -598,19 +598,19 @@ bool ScoreView::dropCanvas(Element* e)
       {
       if (e->type() == Element::ElementType::ICON) {
             switch(static_cast<Icon*>(e)->iconType()) {
-                  case ICON_VFRAME:
+                  case IconType::VFRAME:
                         score()->insertMeasure(Element::ElementType::VBOX, 0);
                         break;
-                  case ICON_HFRAME:
+                  case IconType::HFRAME:
                         score()->insertMeasure(Element::ElementType::HBOX, 0);
                         break;
-                  case ICON_TFRAME:
+                  case IconType::TFRAME:
                         score()->insertMeasure(Element::ElementType::TBOX, 0);
                         break;
-                  case ICON_FFRAME:
+                  case IconType::FFRAME:
                         score()->insertMeasure(Element::ElementType::FBOX, 0);
                         break;
-                  case ICON_MEASURE:
+                  case IconType::MEASURE:
                         score()->insertMeasure(Element::ElementType::MEASURE, 0);
                         break;
                   default:

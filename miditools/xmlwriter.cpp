@@ -86,9 +86,9 @@ void XmlWriter::tagE(const char* format, ...)
       va_start(args, format);
       putLevel();
       *this << '<';
-    	char buffer[BS];
+      char buffer[BS];
       vsnprintf(buffer, BS, format, args);
-    	*this << buffer;
+      *this << buffer;
       va_end(args);
       *this << "/>" << endl;
       }

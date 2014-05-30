@@ -24,7 +24,7 @@ namespace Ms {
 Fingering::Fingering(Score* s)
   : Text(s)
       {
-      setTextStyleType(TEXT_STYLE_FINGERING);
+      setTextStyleType(TextStyleType::FINGERING);
       setFlag(ElementFlag::HAS_TAG, true);
       }
 

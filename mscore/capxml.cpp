@@ -1103,7 +1103,7 @@ Score::FileError importCapXml(Score* score, const QString& name)
       MQZipReader uz(name);
       if (!uz.exists()) {
             qDebug("importCapXml: <%s> not found", qPrintable(name));
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
             }
 
       QByteArray dbuf = uz.fileData("score.xml");
@@ -1122,7 +1122,7 @@ Score::FileError importCapXml(Score* score, const QString& name)
             }
 
       convertCapella(score, &cf, true);
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 }
 

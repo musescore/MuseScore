@@ -181,8 +181,8 @@ Note::Note(Score* s)
       _lineOffset        = 0;
       _tieFor            = 0;
       _tieBack           = 0;
-      _tpc[0]            = Tpc::INVALID;
-      _tpc[1]            = Tpc::INVALID;
+      _tpc[0]            = Tpc::TPC_INVALID;
+      _tpc[1]            = Tpc::TPC_INVALID;
       _headGroup         = NoteHeadGroup::HEAD_NORMAL;
       _headType          = NoteHeadType::HEAD_AUTO;
 
@@ -566,9 +566,9 @@ void Note::add(Element* e)
             case ElementType::TIE:
                   {
                   Tie* tie = static_cast<Tie*>(e);
-	      	tie->setStartNote(this);
+                  tie->setStartNote(this);
                   tie->setTrack(track());
-      		setTieFor(tie);
+                  setTieFor(tie);
                   if (tie->endNote())
                         tie->endNote()->setTieBack(tie);
                   int n = tie->spannerSegments().size();
@@ -795,8 +795,8 @@ void Note::read(XmlReader& e)
       {
       bool hasAccidental = false;                     // used for userAccidental backward compatibility
 
-      _tpc[0] = Tpc::INVALID;
-      _tpc[1] = Tpc::INVALID;
+      _tpc[0] = Tpc::TPC_INVALID;
+      _tpc[1] = Tpc::TPC_INVALID;
 
       if (e.hasAttribute("pitch"))                   // obsolete
             _pitch = e.intAttribute("pitch");
@@ -875,7 +875,7 @@ void Note::read(XmlReader& e)
                   }
             else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
                   Fingering* f = new Fingering(score());
-                  f->setTextStyleType(TEXT_STYLE_FINGERING);
+                  f->setTextStyleType(TextStyleType::FINGERING);
                   f->read(e);
                   add(f);
                   }
@@ -1055,7 +1055,7 @@ void Note::read(XmlReader& e)
       if (score()->mscVersion() < 117 && !concertPitch()) {
             _pitch += transposition();
             _tpc[1] = _tpc[0];
-            _tpc[0] = Tpc::INVALID;
+            _tpc[0] = Tpc::TPC_INVALID;
             }
       if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
             KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
@@ -1188,22 +1188,22 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || type == ElementType::CHORD
          || type == ElementType::HARMONY
          || type == ElementType::DYNAMIC
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_ACCIACCATURA)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_APPOGGIATURA)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE4)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE8_AFTER)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE16_AFTER)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_GRACE32_AFTER)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
+      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
+      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
+      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
          || (noteType() == NoteType::NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BRACKETS)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS)
          || (type == ElementType::SYMBOL)
          || (type == ElementType::CLEF)
          || (type == ElementType::BAR_LINE)
@@ -1300,39 +1300,39 @@ Element* Note::drop(const DropData& data)
             case ElementType::ICON:
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
-                        case ICON_ACCIACCATURA:
+                        case IconType::ACCIACCATURA:
                               score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, MScore::division/2);
                               break;
-                        case ICON_APPOGGIATURA:
+                        case IconType::APPOGGIATURA:
                               score()->setGraceNote(ch, pitch(), NoteType::APPOGGIATURA, MScore::division/2);
                               break;
-                        case ICON_GRACE4:
+                        case IconType::GRACE4:
                               score()->setGraceNote(ch, pitch(), NoteType::GRACE4, MScore::division);
                               break;
-                        case ICON_GRACE16:
+                        case IconType::GRACE16:
                               score()->setGraceNote(ch, pitch(), NoteType::GRACE16,  MScore::division/4);
                               break;
-                        case ICON_GRACE32:
+                        case IconType::GRACE32:
                               score()->setGraceNote(ch, pitch(), NoteType::GRACE32, MScore::division/8);
                               break;
-                        case ICON_GRACE8_AFTER:
+                        case IconType::GRACE8_AFTER:
                               score()->setGraceNote(ch, pitch(), NoteType::GRACE8_AFTER, MScore::division/2);
                               break;
-                        case ICON_GRACE16_AFTER:
+                        case IconType::GRACE16_AFTER:
                               score()->setGraceNote(ch, pitch(), NoteType::GRACE16_AFTER, MScore::division/4);
                               break;
-                        case ICON_GRACE32_AFTER:
+                        case IconType::GRACE32_AFTER:
                               score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, MScore::division/8);
                               break;
-                        case ICON_SBEAM:
-                        case ICON_MBEAM:
-                        case ICON_NBEAM:
-                        case ICON_BEAM32:
-                        case ICON_BEAM64:
-                        case ICON_AUTOBEAM:
+                        case IconType::SBEAM:
+                        case IconType::MBEAM:
+                        case IconType::NBEAM:
+                        case IconType::BEAM32:
+                        case IconType::BEAM64:
+                        case IconType::AUTOBEAM:
                               return ch->drop(data);
                               break;
-                        case ICON_BRACKETS:
+                        case IconType::BRACKETS:
                               {
                               Symbol* s = new Symbol(score());
                               s->setSym(SymId::noteheadParenthesisLeft);
@@ -1343,6 +1343,8 @@ Element* Note::drop(const DropData& data)
                               s->setParent(this);
                               score()->undoAddElement(s);
                               }
+                              break;
+                        default:
                               break;
                         }
                   }
@@ -1960,7 +1962,7 @@ void Note::setNval(NoteVal nval)
       setPitch(nval.pitch);
       _fret      = nval.fret;
       _string    = nval.string;
-      if (nval.tpc == Tpc::INVALID) {
+      if (nval.tpc == Tpc::TPC_INVALID) {
             int key = staff()->key(chord()->tick()).accidentalType();
             _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
             Interval v = staff()->part()->instr()->transpose();

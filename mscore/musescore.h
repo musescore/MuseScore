@@ -89,6 +89,7 @@ class ImportMidiPanel;
 
 struct PluginDescription;
 enum class SelState : char;
+enum class IconType : signed char;
 
 extern QString mscoreGlobalShare;
 static const int PROJECT_LIST_LEN = 6;
@@ -99,7 +100,7 @@ extern const char* voiceActions[];
 //---------------------------------------------------------
 
 struct IconAction {
-      int subtype;
+      IconType subtype;
       const char* action;
       };
 
@@ -606,7 +607,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       NScrollArea* navigatorScrollArea() const { return _navigator; }
       void updateLayer();
       void updatePlayMode();
-      bool loop() const         	 { return loopAction->isChecked(); }
+      bool loop() const              { return loopAction->isChecked(); }
       bool metronome() const         { return metronomeAction->isChecked(); }
       bool countIn() const           { return countInAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }

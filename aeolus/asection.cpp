@@ -88,9 +88,9 @@ void Asection::set_size (float time)
             r = N - PERIOD;
     for (i = 0; i < 16; i++)
     {
-	d = (int)(r * _refl [i]);
+        d = (int)(r * _refl [i]);
         d = (_offs0 - d * PERIOD) & (N - 1);
-	_offs [i] = d + (i >> 2) * N;
+        _offs [i] = d + (i >> 2) * N;
     }
 }
 

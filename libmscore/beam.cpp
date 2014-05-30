@@ -2011,8 +2011,8 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
 
 bool Beam::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return (e->type() == ElementType::ICON) && ((static_cast<Icon*>(e)->iconType() == ICON_FBEAM1)
-         || (static_cast<Icon*>(e)->iconType() == ICON_FBEAM2));
+      return (e->type() == ElementType::ICON) && ((static_cast<Icon*>(e)->iconType() == IconType::FBEAM1)
+         || (static_cast<Icon*>(e)->iconType() == IconType::FBEAM2));
       }
 
 //---------------------------------------------------------
@@ -2027,11 +2027,11 @@ Element* Beam::drop(const DropData& data)
       qreal g1;
       qreal g2;
 
-      if (e->iconType() == ICON_FBEAM1) {
+      if (e->iconType() == IconType::FBEAM1) {
             g1 = 1.0;
             g2 = 0.0;
             }
-      else if (e->iconType() == ICON_FBEAM2) {
+      else if (e->iconType() == IconType::FBEAM2) {
             g1 = 0.0;
             g2 = 1.0;
             }

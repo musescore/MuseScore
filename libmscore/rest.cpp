@@ -168,12 +168,12 @@ bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
       ElementType type = e->type();
       if (
-         (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_SBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_MBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_NBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM32)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_BEAM64)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == ICON_AUTOBEAM)
+         (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
+         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
          || (type == ElementType::ARTICULATION && static_cast<Articulation*>(e)->articulationType() == ArticulationType::Fermata)
          || (type == ElementType::CLEF)
          || (type == ElementType::STAFF_TEXT)

@@ -22,7 +22,7 @@ namespace Ms {
 void Icon::write(Xml& xml) const
       {
       xml.stag(name());
-      xml.tag("subtype", _iconType);
+      xml.tag("subtype", int(_iconType));
       if (_action)
             xml.tag("action", _action);
       xml.etag();
@@ -39,7 +39,7 @@ void Icon::read(XmlReader& e)
             if (tag == "action")
                   _action = strdup(e.readElementText().toLatin1().data());
             else if (tag == "subtype")
-                  _iconType = e.readInt();
+                  _iconType = IconType(e.readInt());
             else
                   e.unknown();
             }

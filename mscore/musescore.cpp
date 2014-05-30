@@ -1543,7 +1543,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             return;
             }
       viewModeCombo->setEnabled(true);
-      if (cs->layoutMode() == LayoutPage)
+      if (cs->layoutMode() == LayoutMode::PAGE)
             viewModeCombo->setCurrentIndex(0);
       else
             viewModeCombo->setCurrentIndex(1);
@@ -3942,16 +3942,16 @@ void MuseScore::cmd(QAction* a)
             lastShortcut = sc;
             }
 
-      if ((sc->flags() & A_SCORE) && ! cs) {
+      if ((sc->flags() & ShortcutFlags::A_SCORE) && ! cs) {
             qDebug("no score");
             return;
             }
-      if (sc->flags() & A_CMD) {
+      if (sc->flags() & ShortcutFlags::A_CMD) {
             if (!cv->editMode())
                   cs->startCmd();
             }
       cmd(a, cmdn);
-      if (lastShortcut->flags() & A_CMD)
+      if (lastShortcut->flags() & ShortcutFlags::A_CMD)
             cs->endCmd();
       endCmd();
       }
@@ -4269,12 +4269,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             ;
       else if (cmd == "viewmode") {
             if (cs) {
-                  if (cs->layoutMode() == LayoutPage) {
-                        cs->setLayoutMode(LayoutLine);
+                  if (cs->layoutMode() == LayoutMode::PAGE) {
+                        cs->setLayoutMode(LayoutMode::LINE);
                         viewModeCombo->setCurrentIndex(1);
                         }
                   else {
-                        cs->setLayoutMode(LayoutPage);
+                        cs->setLayoutMode(LayoutMode::PAGE);
                         viewModeCombo->setCurrentIndex(0);
                         }
                   cs->doLayout();
@@ -4437,9 +4437,9 @@ void MuseScore::switchLayoutMode(int val)
       {
       if (cs) {
             if (val == 0)
-                  cs->setLayoutMode(LayoutPage);
+                  cs->setLayoutMode(LayoutMode::PAGE);
             else
-                  cs->setLayoutMode(LayoutLine);
+                  cs->setLayoutMode(LayoutMode::LINE);
             cs->doLayout();
             cs->setUpdateAll(true);
             cv->update();

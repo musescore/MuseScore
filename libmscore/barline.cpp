@@ -66,7 +66,7 @@ QString BarLine::userTypeName(BarLineType t)
 BarLine::BarLine(Score* s)
    : Element(s)
       {
-      setBarLineType(NORMAL_BAR);
+      setBarLineType(BarLineType::NORMAL);
       _span     = 1;
       _spanFrom = 0;
       _spanTo   = DEFAULT_BARLINE_TO;
@@ -273,21 +273,21 @@ void BarLine::draw(QPainter* painter) const
       painter->setPen(pen);
 
       switch(barLineType()) {
-            case BROKEN_BAR:
+            case BarLineType::BROKEN:
                   pen.setStyle(Qt::DashLine);
                   painter->setPen(pen);
                   painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
                   break;
 
-            case DOTTED_BAR:
+            case BarLineType::DOTTED:
                   pen.setStyle(Qt::DotLine);
                   painter->setPen(pen);
 
-            case NORMAL_BAR:
+            case BarLineType::NORMAL:
                   painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
                   break;
 
-            case END_BAR:
+            case BarLineType::END:
                   {
                   qreal lw2 = score()->styleS(StyleIdx::endBarWidth).val() * _spatium;
                   qreal d   = score()->styleS(StyleIdx::endBarDistance).val() * _spatium;
@@ -300,7 +300,7 @@ void BarLine::draw(QPainter* painter) const
                   }
                   break;
 
-            case DOUBLE_BAR:
+            case BarLineType::DOUBLE:
                   {
                   lw      = point(score()->styleS(StyleIdx::doubleBarWidth));
                   qreal d = point(score()->styleS(StyleIdx::doubleBarDistance));
@@ -314,7 +314,7 @@ void BarLine::draw(QPainter* painter) const
                   }
                   break;
 
-            case START_REPEAT:
+            case BarLineType::START_REPEAT:
                   {
                   qreal lw2 = point(score()->styleS(StyleIdx::endBarWidth));
                   qreal d1  = point(score()->styleS(StyleIdx::endBarDistance));
@@ -338,7 +338,7 @@ void BarLine::draw(QPainter* painter) const
                   }
                   break;
 
-            case END_REPEAT:
+            case BarLineType::END_REPEAT:
                   {
                   qreal lw2  = point(score()->styleS(StyleIdx::endBarWidth));
                   qreal d1   = point(score()->styleS(StyleIdx::endBarDistance));
@@ -361,7 +361,7 @@ void BarLine::draw(QPainter* painter) const
                   }
                   break;
 
-            case END_START_REPEAT:
+            case BarLineType::END_START_REPEAT:
                   {
                   qreal lw2  = point(score()->styleS(StyleIdx::endBarWidth));
                   qreal d1   = point(score()->styleS(StyleIdx::endBarDistance));
@@ -445,17 +445,17 @@ void BarLine::read(XmlReader& e)
                   if (!ok)
                         setBarLineType(val);
                   else {
-                        BarLineType ct = NORMAL_BAR;
+                        BarLineType ct = BarLineType::NORMAL;
                         switch (i) {
                               default:
-                              case  0: ct = NORMAL_BAR; break;
-                              case  1: ct = DOUBLE_BAR; break;
-                              case  2: ct = START_REPEAT; break;
-                              case  3: ct = END_REPEAT; break;
-                              case  4: ct = BROKEN_BAR; break;
-                              case  5: ct = END_BAR; break;
-                              case  6: ct = END_START_REPEAT; break;
-                              case  7: ct = DOTTED_BAR; break;
+                              case  0: ct = BarLineType::NORMAL; break;
+                              case  1: ct = BarLineType::DOUBLE; break;
+                              case  2: ct = BarLineType::START_REPEAT; break;
+                              case  3: ct = BarLineType::END_REPEAT; break;
+                              case  4: ct = BarLineType::BROKEN; break;
+                              case  5: ct = BarLineType::END; break;
+                              case  6: ct = BarLineType::END_START_REPEAT; break;
+                              case  7: ct = BarLineType::DOTTED; break;
                               }
                         setBarLineType(ct);
                         }
@@ -507,8 +507,8 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
                   return true;
             if (parent() && parent()->type() == ElementType::SYSTEM) {
                   BarLine* b = static_cast<BarLine*>(e);
-                  return (b->barLineType() == BROKEN_BAR || b->barLineType() == DOTTED_BAR
-                     || b->barLineType() == NORMAL_BAR || b->barLineType() == DOUBLE_BAR
+                  return (b->barLineType() == BarLineType::BROKEN || b->barLineType() == BarLineType::DOTTED
+                     || b->barLineType() == BarLineType::NORMAL || b->barLineType() == BarLineType::DOUBLE
                      || b->spanFrom() != 0 || b->spanTo() != DEFAULT_BARLINE_TO);
                   }
             }
@@ -549,10 +549,10 @@ Element* BarLine::drop(const DropData& data)
             Measure* m = static_cast<Segment*>(parent())->measure();
 
             // check if the new property can apply to this single bar line
-            bool oldRepeat = (barLineType() == START_REPEAT || barLineType() == END_REPEAT
-                        || barLineType() == END_START_REPEAT);
-            bool newRepeat = (bl->barLineType() == START_REPEAT || bl->barLineType() == END_REPEAT
-                        || bl->barLineType() == END_START_REPEAT);
+            bool oldRepeat = (barLineType() == BarLineType::START_REPEAT || barLineType() == BarLineType::END_REPEAT
+                        || barLineType() == BarLineType::END_START_REPEAT);
+            bool newRepeat = (bl->barLineType() == BarLineType::START_REPEAT || bl->barLineType() == BarLineType::END_REPEAT
+                        || bl->barLineType() == BarLineType::END_START_REPEAT);
             // if repeats are not involved or drop refers to span rather than subtype =>
             // single bar line drop
             if( (!oldRepeat && !newRepeat) || (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) ) {
@@ -575,7 +575,7 @@ Element* BarLine::drop(const DropData& data)
                   }
 
             // drop applies to all bar lines of the measure
-            if (st == START_REPEAT) {
+            if (st == BarLineType::START_REPEAT) {
                   m = m->nextMeasure();
                   if (m == 0) {
                         delete e;
@@ -823,30 +823,30 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
 
       qreal dotwidth = score->scoreFont()->width(SymId::repeatDot, mag);
       switch(type) {
-            case DOUBLE_BAR:
+            case BarLineType::DOUBLE:
                   dw  = (score->styleS(StyleIdx::doubleBarWidth) * 2
                      + score->styleS(StyleIdx::doubleBarDistance)).val() * _spatium;
                   break;
-            case START_REPEAT:
+            case BarLineType::START_REPEAT:
                   dw += dotwidth + (score->styleS(StyleIdx::endBarWidth)
                      + 2 * score->styleS(StyleIdx::endBarDistance)).val() * _spatium;
                   break;
-            case END_REPEAT:
+            case BarLineType::END_REPEAT:
                   dw += dotwidth + (score->styleS(StyleIdx::endBarWidth)
                      + 2 * score->styleS(StyleIdx::endBarDistance)).val() * _spatium;
                   break;
-            case END_BAR:
+            case BarLineType::END:
                   dw += (score->styleS(StyleIdx::endBarWidth)
                      + score->styleS(StyleIdx::endBarDistance)).val() * _spatium;
                   break;
-            case  END_START_REPEAT:
+            case  BarLineType::END_START_REPEAT:
                   dw += 2 * dotwidth + (score->styleS(StyleIdx::barWidth)
                      + score->styleS(StyleIdx::endBarWidth)
                      + 4 * score->styleS(StyleIdx::endBarDistance)).val() * _spatium;
                   break;
-            case BROKEN_BAR:
-            case NORMAL_BAR:
-            case DOTTED_BAR:
+            case BarLineType::BROKEN:
+            case BarLineType::NORMAL:
+            case BarLineType::DOTTED:
                   break;
             default:
                   qDebug("illegal bar line type");
@@ -875,11 +875,11 @@ void BarLine::layout()
 
             if (score()->styleB(StyleIdx::repeatBarTips)) {
                   switch (barLineType()) {
-                        case START_REPEAT:
+                        case BarLineType::START_REPEAT:
                               r |= symBbox(SymId::bracketTop).translated(0, y1);
                               r |= symBbox(SymId::bracketBottom).translated(0, y2);
                               break;
-                        case END_REPEAT:
+                        case BarLineType::END_REPEAT:
                               {
                               qreal w1 = symBbox(SymId::reversedBracketTop).width();
                               r |= symBbox(SymId::reversedBracketTop).translated(dw - w1, y1);
@@ -887,7 +887,7 @@ void BarLine::layout()
                               break;
                               }
 
-                        case END_START_REPEAT:
+                        case BarLineType::END_START_REPEAT:
                               {
                               qreal lw   = point(score()->styleS(StyleIdx::barWidth));
                               qreal lw2  = point(score()->styleS(StyleIdx::endBarWidth));
@@ -957,7 +957,7 @@ int BarLine::tick() const
 
 QString BarLine::barLineTypeName() const
       {
-      return QString(barLineNames[barLineType()]);
+      return QString(barLineNames[int(barLineType())]);
       }
 
 //---------------------------------------------------------
@@ -972,7 +972,7 @@ void BarLine::setBarLineType(const QString& s)
                   return;
                   }
             }
-      _barLineType = NORMAL_BAR;
+      _barLineType = BarLineType::NORMAL;
       }
 
 //---------------------------------------------------------
@@ -999,7 +999,7 @@ void BarLine::add(Element* e)
             delete e;
             return;
             }
-	e->setParent(this);
+      e->setParent(this);
       switch(e->type()) {
             case ElementType::ARTICULATION:
                   _el.push_back(e);
@@ -1105,8 +1105,8 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
             case P_ID::SUBTYPE:
                   // default subtype is the subtype of the measure, if any
                   if (parent() && parent()->type() == Element::ElementType::SEGMENT && static_cast<Segment*>(parent())->measure() )
-                      return static_cast<Segment*>(parent())->measure()->endBarLineType();
-                  return NORMAL_BAR;
+                      return int(static_cast<Segment*>(parent())->measure()->endBarLineType());
+                  return int(BarLineType::NORMAL);
             case P_ID::BARLINE_SPAN:
                   // if there is a staff, default span is staff span
                   if (staff())

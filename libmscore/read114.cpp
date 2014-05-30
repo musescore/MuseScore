@@ -337,7 +337,7 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "Style") {
                   qreal sp = _style.spatium();
                   _style.load(e);
-                  if (_layoutMode == LayoutFloat) {
+                  if (_layoutMode == LayoutMode::FLOAT) {
                         // style should not change spatium in
                         // float mode
                         _style.setSpatium(sp);
@@ -381,7 +381,7 @@ Score::FileError Score::read114(XmlReader& e)
                   _style.setTextStyle(s);
                   }
             else if (tag == "page-layout") {
-                  if (_layoutMode != LayoutFloat && _layoutMode != LayoutSystem) {
+                  if (_layoutMode != LayoutMode::FLOAT && _layoutMode != LayoutMode::SYSTEM) {
                         PageFormat pf;
                         pf.copy(*pageFormat());
                         pf.read(e, this);
@@ -469,7 +469,7 @@ Score::FileError Score::read114(XmlReader& e)
             }
 
       if (e.error() != XmlStreamReader::NoError)
-            return FILE_BAD_FORMAT;
+            return FileError::FILE_BAD_FORMAT;
 
       int n = nstaves();
       for (int idx = 0; idx < n; ++idx) {
@@ -700,7 +700,7 @@ Score::FileError Score::read114(XmlReader& e)
                   nscore->rebuildMidiMapping();
                   nscore->updateChannel();
                   nscore->updateNotes();
-                  nscore->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
+                  nscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
                   nscore->doLayout();
                   excerpt->setScore(nscore);
                   }
@@ -712,7 +712,7 @@ Score::FileError Score::read114(XmlReader& e)
       updateChannel();
       updateNotes();    // only for parts needed?
 
-      return FILE_NO_ERROR;
+      return FileError::FILE_NO_ERROR;
       }
 
 }

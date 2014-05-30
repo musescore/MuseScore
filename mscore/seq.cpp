@@ -295,7 +295,7 @@ void Seq::start()
       {
       if (playlistChanged)
             collectEvents();
-      if (cs->playMode() == PLAYMODE_AUDIO) {
+      if (cs->playMode() == PlayMode::AUDIO) {
             if (!oggInit) {
                   vorbisData.pos  = 0;
                   vorbisData.data = cs->audio()->data();
@@ -652,7 +652,7 @@ void Seq::process(unsigned n, float* buffer)
       if (driverState != state) {
             if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY) {
                   state = TRANSPORT_PLAY;
-                  if (mscore->countIn() && cs->playMode() == PLAYMODE_SYNTHESIZER) {
+                  if (mscore->countIn() && cs->playMode() == PlayMode::SYNTHESIZER) {
                         countInEvents.clear();
                         inCountIn = true;
                         }
@@ -748,7 +748,7 @@ qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop
                               }
                         }
                   if (n) {
-                        if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
+                        if (cs->playMode() == PlayMode::SYNTHESIZER) {
                               metronome(n, p, inCountIn);
                               _synti->process(n, p);
                               p += n * 2;
@@ -785,7 +785,7 @@ qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop
                   mutex.unlock();
                   }
             if (frames) {
-                  if (cs->playMode() == PLAYMODE_SYNTHESIZER) {
+                  if (cs->playMode() == PlayMode::SYNTHESIZER) {
                         metronome(frames, p, inCountIn);
                         _synti->process(frames, p);
                         *pPlayTime += frames;
@@ -965,7 +965,7 @@ void Seq::seek(int utick, Segment* seg)
       cs->setLayoutAll(false);
       cs->end();
 
-      if (cs->playMode() == PLAYMODE_AUDIO) {
+      if (cs->playMode() == PlayMode::AUDIO) {
             ogg_int64_t sp = cs->utick2utime(utick) * MScore::sampleRate;
             ov_pcm_seek(&vf, sp);
             }

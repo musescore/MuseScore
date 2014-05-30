@@ -47,7 +47,7 @@ Pos::Pos(TempoMap* tl, TimeSigMap* sl, unsigned t, TType timeType)
       {
       tempo  = tl;
       sig    = sl;
- 	_type = timeType;
+      _type = timeType;
       if (_type == TType::TICKS)
             _tick   = t;
       else

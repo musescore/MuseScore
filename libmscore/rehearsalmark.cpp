@@ -22,7 +22,7 @@ namespace Ms {
 RehearsalMark::RehearsalMark(Score* s)
    : Text(s)
       {
-      setTextStyleType(TEXT_STYLE_REHEARSAL_MARK);
+      setTextStyleType(TextStyleType::REHEARSAL_MARK);
       }
 
 }

@@ -152,7 +152,7 @@ Measure::Measure(Score* s)
       _breakMMRest           = false;
       _endBarLineGenerated   = true;
       _endBarLineVisible     = true;
-      _endBarLineType        = NORMAL_BAR;
+      _endBarLineType        = BarLineType::NORMAL;
       _mmRest                = 0;
       _mmRestCount           = 0;
       setFlag(ElementFlag::MOVABLE, true);
@@ -622,7 +622,7 @@ void Measure::layout2()
                                     // t->setFlag(ElementFlag::MOVABLE, false); ??
                                     t->setTrack(staffIdx * VOICES);
                                     t->setGenerated(true);
-                                    t->setTextStyleType(TEXT_STYLE_MEASURE_NUMBER);
+                                    t->setTextStyleType(TextStyleType::MEASURE_NUMBER);
                                     t->setParent(this);
                                     score()->undoAddElement(t);
                                     }
@@ -871,7 +871,7 @@ void Measure::add(Element* el)
                               m->setTimesig2(nfraction);
                               }
 #endif
-                        score()->addLayoutFlags(LAYOUT_FIX_TICKS);
+                        score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
                         }
                   }
                   break;
@@ -1266,13 +1266,15 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
 
             case ElementType::ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
-                        case ICON_VFRAME:
-                        case ICON_HFRAME:
-                        case ICON_TFRAME:
-                        case ICON_FFRAME:
-                        case ICON_MEASURE:
+                        case IconType::VFRAME:
+                        case IconType::HFRAME:
+                        case IconType::TFRAME:
+                        case IconType::FFRAME:
+                        case IconType::MEASURE:
                               viewer->setDropRectangle(rr);
                               return true;
+                        default:
+                              break;
                         }
                   break;
 
@@ -1471,20 +1473,22 @@ qDebug("drop staffList");
                   }
             case ElementType::ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
-                        case ICON_VFRAME:
+                        case IconType::VFRAME:
                               score()->insertMeasure(ElementType::VBOX, this);
                               break;
-                        case ICON_HFRAME:
+                        case IconType::HFRAME:
                               score()->insertMeasure(ElementType::HBOX, this);
                               break;
-                        case ICON_TFRAME:
+                        case IconType::TFRAME:
                               score()->insertMeasure(ElementType::TBOX, this);
                               break;
-                        case ICON_FFRAME:
+                        case IconType::FFRAME:
                               score()->insertMeasure(ElementType::FBOX, this);
                               break;
-                        case ICON_MEASURE:
+                        case IconType::MEASURE:
                               score()->insertMeasure(ElementType::MEASURE, this);
+                              break;
+                        default:
                               break;
                         }
                   break;
@@ -1813,7 +1817,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   if ((e.tick() != tick()) && (e.tick() != endTick())) {
                         st = Segment::SegBarLine;
                         }
-                  else if (barLine->barLineType() == START_REPEAT && e.tick() == tick())
+                  else if (barLine->barLineType() == BarLineType::START_REPEAT && e.tick() == tick())
                         st = Segment::SegStartRepeatBarLine;
                   else {
                         setEndBarLineType(barLine->barLineType(), false, true);
@@ -2103,7 +2107,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   t->setTrack(e.track());
                   t->read(e);
                   // previous versions stored measure number, delete it
-                  if ((score()->mscVersion() <= 114) && (t->textStyleType() == TEXT_STYLE_MEASURE_NUMBER))
+                  if ((score()->mscVersion() <= 114) && (t->textStyleType() == TextStyleType::MEASURE_NUMBER))
                         delete t;
                   else {
                         segment = getSegment(Segment::SegChordRest, e.tick());
@@ -2445,7 +2449,7 @@ bool Measure::setStartRepeatBarLine(bool val)
                   // no barline were we need one:
                   bl = new BarLine(score());
                   bl->setTrack(track);
-                  bl->setBarLineType(START_REPEAT);
+                  bl->setBarLineType(BarLineType::START_REPEAT);
                   if (s == 0) {
                         if (score()->undoRedo()) {
                               return false;
@@ -2575,7 +2579,7 @@ bool Measure::createEndBarLines()
                         // a bar line is there (either existing or newly created):
                         // adjust subtype, if not fitting
                         if (bl->barLineType() != _endBarLineType && !bl->customSubtype()) {
-                              score()->undoChangeProperty(bl, P_ID::SUBTYPE, _endBarLineType);
+                              score()->undoChangeProperty(bl, P_ID::SUBTYPE, int(_endBarLineType));
                               bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
                               changed = true;
                               }
@@ -3668,8 +3672,8 @@ void Measure::layoutStage1()
       MeasureBase* mb = prev();
       if (mb && mb->type() == Element::ElementType::MEASURE) {
             Measure* pm = static_cast<Measure*>(mb);
-            if (pm->endBarLineType() != NORMAL_BAR
-               && pm->endBarLineType() != BROKEN_BAR && pm->endBarLineType() != DOTTED_BAR)
+            if (pm->endBarLineType() != BarLineType::NORMAL
+               && pm->endBarLineType() != BarLineType::BROKEN && pm->endBarLineType() != BarLineType::DOTTED)
                   setBreakMMRest(true);
             }
       }
@@ -4040,7 +4044,7 @@ Measure* Measure::mmRest1() const
 
 qreal Measure::userStretch() const
       {
-      return (score()->layoutMode() == LayoutFloat ? 1.0 : _userStretch);
+      return (score()->layoutMode() == LayoutMode::FLOAT ? 1.0 : _userStretch);
       }
 
 }

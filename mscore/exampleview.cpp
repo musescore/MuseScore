@@ -63,7 +63,7 @@ void ExampleView::setScore(Score* s)
       delete _score;
       _score = s;
       _score->addViewer(this);
-      _score->setLayoutMode(LayoutLine);
+      _score->setLayoutMode(LayoutMode::LINE);
       _score->updateNotes();
       _score->doLayout();
       update();
@@ -291,17 +291,19 @@ void ExampleView::dropEvent(QDropEvent* event)
                   Icon* icon = static_cast<Icon*>(dragElement);
                   Chord* chord = static_cast<Note*>(e)->chord();
                   switch (icon->iconType()) {
-                        case ICON_SBEAM:
+                        case IconType::SBEAM:
                               chord->setBeamMode(BeamMode::BEGIN);
                               break;
-                        case ICON_MBEAM:
+                        case IconType::MBEAM:
                               chord->setBeamMode(BeamMode::AUTO);
                               break;
-                        case ICON_BEAM32:
+                        case IconType::BEAM32:
                               chord->setBeamMode(BeamMode::BEGIN32);
                               break;
-                        case ICON_BEAM64:
+                        case IconType::BEAM64:
                               chord->setBeamMode(BeamMode::BEGIN64);
+                              break;
+                        default:
                               break;
                         }
                   score()->doLayout();

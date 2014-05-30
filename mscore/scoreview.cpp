@@ -939,7 +939,7 @@ void ScoreView::setScore(Score* s)
             loopToggled(getAction("loop")->isChecked());
 
             connect(s, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
-            s->setLayoutMode(LayoutPage);
+            s->setLayoutMode(LayoutMode::PAGE);
             s->setLayoutAll(true);
             s->update();
             }
@@ -1788,7 +1788,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       QRectF fr = imatrix.mapRect(QRectF(r));
 
       QRegion r1(r);
-      if (_score->layoutMode() == LayoutLine) {
+      if (_score->layoutMode() == LayoutMode::LINE) {
             Page* page = _score->pages().front();
             QList<Element*> ell = page->items(fr);
             qStableSort(ell.begin(), ell.end(), elementLessThan);
@@ -1825,7 +1825,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   e = e->parent();
             Text* text = static_cast<Text*>(editObject);
             QRectF r = text->pageRectangle().translated(e->pos()); // abbox();
-            qreal w = 2.0 / matrix().m11();	// give the frame some padding, like in 1.3
+            qreal w = 2.0 / matrix().m11(); // give the frame some padding, like in 1.3
             r.adjust(-w,-w,w,w);
             p.setPen(QPen(QBrush(Qt::lightGray), 2.0 / matrix().m11()));  // 2 pixel pen size
             p.setBrush(QBrush(Qt::NoBrush));
@@ -1907,7 +1907,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
             }
       p.setMatrixEnabled(false);
-      if ((_score->layoutMode() != LayoutLine) && !r1.isEmpty()) {
+      if ((_score->layoutMode() != LayoutMode::LINE) && !r1.isEmpty()) {
             p.setClipRegion(r1);  // only background
             if (bgPixmap == 0 || bgPixmap->isNull())
                   p.fillRect(r, _bgColor);
@@ -2022,7 +2022,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
                   n = -n;
             score()->startCmd();
             for (int i = 0; i < n; ++i)
-                  score()->upDown(up, UP_DOWN_CHROMATIC);
+                  score()->upDown(up, UpDownMode::CHROMATIC);
             score()->endCmd();
             return;
             }
@@ -3050,9 +3050,9 @@ void ScoreView::startNoteEntry()
 
       Staff* staff = _score->staff(is.track() / VOICES);
       switch (staff->staffType()->group()) {
-            case STANDARD_STAFF_GROUP:
+            case StaffGroup::STANDARD:
                   break;
-            case TAB_STAFF_GROUP: {
+            case StaffGroup::TAB: {
                   int strg = 0;                 // assume topmost string as current string
                   // if entering note entry with a note selected and the note has a string
                   // set InputState::_string to note visual string
@@ -3063,7 +3063,7 @@ void ScoreView::startNoteEntry()
                   is.setString(strg);
                   break;
                   }
-            case PERCUSSION_STAFF_GROUP:
+            case StaffGroup::PERCUSSION:
                   break;
             }
 
@@ -3557,7 +3557,7 @@ void ScoreView::pageNext()
       {
       if (score()->pages().empty())
             return;
-      if (score()->layoutMode() == LayoutLine) {
+      if (score()->layoutMode() == LayoutMode::LINE) {
             qreal x = xoffset() - width() * .8;
             MeasureBase* lm = score()->last();
             qreal lx = (lm->pos().x() + lm->width()) * mag() - width() * .8;
@@ -3585,7 +3585,7 @@ void ScoreView::pagePrev()
       {
       if (score()->pages().empty())
             return;
-      if (score()->layoutMode() == LayoutLine) {
+      if (score()->layoutMode() == LayoutMode::LINE) {
             qreal x = xoffset() + width() * .8;
             if (x > 0.0)
                   x = 0;
@@ -3607,7 +3607,7 @@ void ScoreView::pagePrev()
 
 void ScoreView::pageTop()
       {
-      if (score()->layoutMode() == LayoutLine)
+      if (score()->layoutMode() == LayoutMode::LINE)
             setOffset(0.0, yoffset());
       else
             setOffset(10.0, 10.0);
@@ -3622,7 +3622,7 @@ void ScoreView::pageEnd()
       {
       if (score()->pages().empty())
             return;
-      if (score()->layoutMode() == LayoutLine) {
+      if (score()->layoutMode() == LayoutMode::LINE) {
             MeasureBase* lm = score()->last();
             qreal lx = (lm->canvasPos().x() + lm->width()) * mag();
             lx -= width() * .8;
@@ -3642,7 +3642,7 @@ void ScoreView::pageEnd()
 
 void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       {
-      if (score()->layoutMode() == LayoutLine) {
+      if (score()->layoutMode() == LayoutMode::LINE) {
             qreal xo;  // new x offset
             qreal curPosR = _cursor->rect().right();
             qreal curPosL = _cursor->rect().left();
@@ -3812,11 +3812,11 @@ ScoreState ScoreView::mscoreState() const
             const InputState is = _score->inputState();
             Staff* staff = _score->staff(is.track() / VOICES);
             switch( staff->staffType()->group()) {
-                  case STANDARD_STAFF_GROUP:
+                  case StaffGroup::STANDARD:
                         return STATE_NOTE_ENTRY_PITCHED;
-                  case TAB_STAFF_GROUP:
+                  case StaffGroup::TAB:
                         return STATE_NOTE_ENTRY_TAB;
-                  case PERCUSSION_STAFF_GROUP:
+                  case StaffGroup::PERCUSSION:
                         return STATE_NOTE_ENTRY_DRUM;
                   }
             }
@@ -4918,10 +4918,10 @@ void ScoreView::cmdAddText(int type)
                         measure = _score->insertMeasure(Element::ElementType::VBOX, measure);
                   s = new Text(_score);
                   switch(type) {
-                        case TEXT_TITLE:    s->setTextStyleType(TEXT_STYLE_TITLE);    break;
-                        case TEXT_SUBTITLE: s->setTextStyleType(TEXT_STYLE_SUBTITLE); break;
-                        case TEXT_COMPOSER: s->setTextStyleType(TEXT_STYLE_COMPOSER); break;
-                        case TEXT_POET:     s->setTextStyleType(TEXT_STYLE_POET);     break;
+                        case TEXT_TITLE:    s->setTextStyleType(TextStyleType::TITLE);    break;
+                        case TEXT_SUBTITLE: s->setTextStyleType(TextStyleType::SUBTITLE); break;
+                        case TEXT_COMPOSER: s->setTextStyleType(TextStyleType::COMPOSER); break;
+                        case TEXT_POET:     s->setTextStyleType(TextStyleType::POET);     break;
                         }
                   s->setParent(measure);
                   }
@@ -4946,11 +4946,11 @@ void ScoreView::cmdAddText(int type)
                   s = new StaffText(_score);
                   if (type == TEXT_SYSTEM) {
                         s->setTrack(0);
-                        s->setTextStyleType(TEXT_STYLE_SYSTEM);
+                        s->setTextStyleType(TextStyleType::SYSTEM);
                         }
                   else {
                         s->setTrack(cr->track());
-                        s->setTextStyleType(TEXT_STYLE_STAFF);
+                        s->setTextStyleType(TextStyleType::STAFF);
                         }
                   s->setParent(cr->segment());
                   }

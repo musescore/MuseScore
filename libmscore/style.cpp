@@ -1108,11 +1108,11 @@ void StyleData::save(Xml& xml, bool optimize) const
                   case StyleValueType::STRING:    xml.tag(styleTypes.name(idx), value(idx).toString()); break;
                   }
             }
-      for (int i = 0; i < TEXT_STYLES; ++i) {
+      for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i) {
             if (!optimize || _textStyles[i] != MScore::baseStyle()->textStyle(i))
                   _textStyles[i].write(xml);
             }
-      for (int i = TEXT_STYLES; i < _textStyles.size(); ++i)
+      for (int i = int(TextStyleType::TEXT_STYLES); i < _textStyles.size(); ++i)
             _textStyles[i].write(xml);
       if (_customChordList && !_chordList.isEmpty()) {
             xml.stag("ChordList");
@@ -1240,9 +1240,9 @@ int StyleData::textStyleType(const QString& name) const
                   return i;
             }
       if (name == "Dynamics2")
-            return TEXT_STYLE_DYNAMICS;
+            return TextStyleType::DYNAMICS;
       qDebug("TextStyleType <%s> not found", qPrintable(name));
-      return TEXT_STYLE_DEFAULT;
+      return TextStyleType::DEFAULT;
       }
 
 //---------------------------------------------------------

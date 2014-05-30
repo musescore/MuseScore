@@ -213,7 +213,7 @@ void Glissando::draw(QPainter* painter) const
             drawSymbol(SymId::wiggleTrill, painter, QPointF(x, b.height()*.5), n);
             }
       if (_showText) {
-            const TextStyle& st = score()->textStyle(TEXT_STYLE_GLISSANDO);
+            const TextStyle& st = score()->textStyle(TextStyleType::GLISSANDO);
             QFont f = st.fontPx(_spatium);
             QRectF r = QFontMetricsF(f).boundingRect(_text);
             // if text longer than available space, skip it

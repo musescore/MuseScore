@@ -86,7 +86,7 @@ extern bool useFactorySettings;
 
 void populateIconPalette(Palette* p, const IconAction* a)
       {
-      while (a->subtype != -1) {
+      while (a->subtype != IconType::NONE) {
             Icon* ik = new Icon(gscore);
             ik->setIconType(a->subtype);
             Shortcut* s = Shortcut::getShortcut(a->action);
@@ -110,15 +110,15 @@ Palette* MuseScore::newBeamPalette()
       sp->setDrawGrid(true);
 
       static const IconAction bpa[] = {
-            { ICON_SBEAM,    "beam-start" },
-            { ICON_MBEAM,    "beam-mid" },
-            { ICON_NBEAM,    "no-beam" },
-            { ICON_BEAM32,   "beam32" },
-            { ICON_BEAM64,   "beam64" },
-            { ICON_AUTOBEAM, "auto-beam" },
-            { ICON_FBEAM1,   "fbeam1" },
-            { ICON_FBEAM2,   "fbeam2" },
-            { -1, ""}
+            { IconType::SBEAM,    "beam-start" },
+            { IconType::MBEAM,    "beam-mid" },
+            { IconType::NBEAM,    "no-beam" },
+            { IconType::BEAM32,   "beam32" },
+            { IconType::BEAM64,   "beam64" },
+            { IconType::AUTOBEAM, "auto-beam" },
+            { IconType::FBEAM1,   "fbeam1" },
+            { IconType::FBEAM2,   "fbeam2" },
+            { IconType::NONE,     ""}
             };
 
       populateIconPalette(sp, bpa);
@@ -138,22 +138,22 @@ Palette* MuseScore::newFramePalette()
 
       if(enableExperimental) {
             static const IconAction bpa[] = {
-                  { ICON_VFRAME,   "insert-vbox" },
-                  { ICON_HFRAME,   "insert-hbox" },
-                  { ICON_TFRAME,   "insert-textframe" },
-                  { ICON_FFRAME,   "insert-fretframe" },
-                  { ICON_MEASURE,  "insert-measure" },
-                  { -1, ""}
+                  { IconType::VFRAME,   "insert-vbox" },
+                  { IconType::HFRAME,   "insert-hbox" },
+                  { IconType::TFRAME,   "insert-textframe" },
+                  { IconType::FFRAME,   "insert-fretframe" },
+                  { IconType::MEASURE,  "insert-measure" },
+                  { IconType::NONE,     ""}
                   };
             populateIconPalette(sp, bpa);
             }
       else {
             static const IconAction bpa[] = {
-                  { ICON_VFRAME,   "insert-vbox" },
-                  { ICON_HFRAME,   "insert-hbox" },
-                  { ICON_TFRAME,   "insert-textframe" },
-                  { ICON_MEASURE,  "insert-measure" },
-                  { -1, ""}
+                  { IconType::VFRAME,   "insert-vbox" },
+                  { IconType::HFRAME,   "insert-hbox" },
+                  { IconType::TFRAME,   "insert-textframe" },
+                  { IconType::MEASURE,  "insert-measure" },
+                  { IconType::NONE,     ""}
                 };
             populateIconPalette(sp, bpa);
             }
@@ -271,14 +271,14 @@ Palette* MuseScore::newBarLinePalette()
             BarLineType type;
             const char* name;
             } t[] = {
-            { NORMAL_BAR,       QT_TRANSLATE_NOOP("Palette", "Normal") },
-            { BROKEN_BAR,       QT_TRANSLATE_NOOP("Palette", "Dashed") },
-            { DOTTED_BAR,       QT_TRANSLATE_NOOP("Palette", "Dotted") },
-            { END_BAR,          QT_TRANSLATE_NOOP("Palette", "End Bar") },
-            { DOUBLE_BAR,       QT_TRANSLATE_NOOP("Palette", "Double Bar") },
-            { START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start Repeat") },
-            { END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End Repeat") },
-            { END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-Start Repeat") },
+            { BarLineType::NORMAL,       QT_TRANSLATE_NOOP("Palette", "Normal") },
+            { BarLineType::BROKEN,       QT_TRANSLATE_NOOP("Palette", "Dashed") },
+            { BarLineType::DOTTED,       QT_TRANSLATE_NOOP("Palette", "Dotted") },
+            { BarLineType::END,          QT_TRANSLATE_NOOP("Palette", "End Bar") },
+            { BarLineType::DOUBLE,       QT_TRANSLATE_NOOP("Palette", "Double Bar") },
+            { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start Repeat") },
+            { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End Repeat") },
+            { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-Start Repeat") },
             };
       for (unsigned i = 0; i < sizeof(t)/sizeof(*t); ++i) {
             BarLine* b  = new BarLine(gscore);
@@ -298,7 +298,7 @@ Palette* MuseScore::newBarLinePalette()
             };
       for (unsigned i = 0; i < sizeof(span)/sizeof(*span); ++i) {
             BarLine* b  = new BarLine(gscore);
-            b->setBarLineType(NORMAL_BAR);
+            b->setBarLineType(BarLineType::NORMAL);
             b->setSpanFrom(span[i].from);
             b->setSpanTo(span[i].to);
             sp->append(b, span[i].name);
@@ -438,7 +438,7 @@ Palette* MuseScore::newFingeringPalette()
       const char stringnumber[] = "0123456";
       for (unsigned i = 0; i < strlen(stringnumber); ++i) {
             Fingering* f = new Fingering(gscore);
-            f->setTextStyleType(TEXT_STYLE_STRING_NUMBER);
+            f->setTextStyleType(TextStyleType::STRING_NUMBER);
             f->setText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
@@ -499,7 +499,7 @@ Palette* MuseScore::newNoteHeadsPalette()
             sp->append(nh, Sym::id2userName(sym));
             }
       Icon* ik = new Icon(gscore);
-      ik->setIconType(ICON_BRACKETS);
+      ik->setIconType(IconType::BRACKETS);
       Shortcut* s = Shortcut::getShortcut("add-brackets");
       QAction* action = s->action();
       QIcon icon(action->icon());
@@ -678,15 +678,15 @@ Palette* MuseScore::newGraceNotePalette()
       notePalette->setDrawGrid(true);
 
       static const IconAction gna[] = {
-            { ICON_ACCIACCATURA, "acciaccatura" },
-            { ICON_APPOGGIATURA, "appoggiatura" },
-            { ICON_GRACE4,       "grace4" },
-            { ICON_GRACE16,      "grace16" },
-            { ICON_GRACE32,      "grace32" },
-            { ICON_GRACE8_AFTER,  "grace8after" },
-            { ICON_GRACE16_AFTER, "grace16after" },
-            { ICON_GRACE32_AFTER, "grace32after" },
-            { -1, "" }
+            { IconType::ACCIACCATURA,  "acciaccatura" },
+            { IconType::APPOGGIATURA,  "appoggiatura" },
+            { IconType::GRACE4,        "grace4" },
+            { IconType::GRACE16,       "grace16" },
+            { IconType::GRACE32,       "grace32" },
+            { IconType::GRACE8_AFTER,  "grace8after" },
+            { IconType::GRACE16_AFTER, "grace16after" },
+            { IconType::GRACE32_AFTER, "grace32after" },
+            { IconType::NONE,          "" }
             };
       populateIconPalette(notePalette, gna);
       return notePalette;
@@ -953,12 +953,12 @@ Palette* MuseScore::newTextPalette()
       sp->setDrawGrid(true);
 
       StaffText* st = new StaffText(gscore);
-      st->setTextStyleType(TEXT_STYLE_STAFF);
+      st->setTextStyleType(TextStyleType::STAFF);
       st->setText(tr("staff-text"));
       sp->append(st, tr("Staff Text"));
 
       st = new StaffText(gscore);
-      st->setTextStyleType(TEXT_STYLE_SYSTEM);
+      st->setTextStyleType(TextStyleType::SYSTEM);
       st->setText(tr("system-text"));
       sp->append(st, tr("System Text"));
 
@@ -973,7 +973,7 @@ Palette* MuseScore::newTextPalette()
 
       Text* text = new Text(gscore);
       text->setTrack(0);
-      text->setTextStyleType(TEXT_STYLE_LYRICS_VERSE_NUMBER);
+      text->setTextStyleType(TextStyleType::LYRICS_VERSE_NUMBER);
       text->setText(tr("1."));
       sp->append(text, tr("Lyrics Verse Number"));
 

@@ -66,7 +66,7 @@ const char* GuitarPro::errmsg[] = {
 
 GpBar::GpBar()
       {
-      barLine = NORMAL_BAR;
+      barLine = BarLineType::NORMAL;
       keysig  = GP_INVALID_KEYSIG;
       timesig = Fraction(4,4);
       repeatFlags = 0;
@@ -796,7 +796,7 @@ qDebug("BeginRepeat=============================================");
                   /*uchar c    =*/ readUChar();        // minor
                   }
             if (barBits & 0x80)
-                  bar.barLine = DOUBLE_BAR;
+                  bar.barLine = BarLineType::DOUBLE;
             bar.timesig = Fraction(tnumerator, tdenominator);
             bars.append(bar);
             }
@@ -1360,7 +1360,7 @@ void GuitarPro3::read(QFile* fp)
                   /*uchar c    =*/ readUChar();        // minor
                   }
             if (barBits & 0x80)
-                  bar.barLine = DOUBLE_BAR;
+                  bar.barLine = BarLineType::DOUBLE;
             bar.timesig = Fraction(tnumerator, tdenominator);
             bars.append(bar);
             }
@@ -2096,7 +2096,7 @@ void GuitarPro4::read(QFile* fp)
                   readUChar();        // minor
                   }
             if (barBits & 0x80)
-                  bar.barLine = DOUBLE_BAR;
+                  bar.barLine = BarLineType::DOUBLE;
             bar.timesig = Fraction(tnumerator, tdenominator);
             bars.append(bar);
             }
@@ -3121,7 +3121,7 @@ void GuitarPro5::read(QFile* fp)
                   /*uchar c    =*/ readUChar();        // minor
                   }
             if (barBits & 0x80)
-                  bar.barLine = DOUBLE_BAR;
+                  bar.barLine = BarLineType::DOUBLE;
             if (barBits & 0x3)
                   skip(4);
             if ((barBits & 0x10) == 0)
@@ -3836,9 +3836,9 @@ Score::FileError importGTP(Score* score, const QString& name)
       {
       QFile fp(name);
       if(!fp.exists())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
       if (!fp.open(QIODevice::ReadOnly))
-            return Score::FILE_OPEN_ERROR;
+            return Score::FileError::FILE_OPEN_ERROR;
 
       GuitarPro* gp;
       try   {
@@ -3862,7 +3862,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                         s = s.mid(21);
                   else {
                         qDebug("unknown gtp format <%s>\n", ss);
-                        return Score::FILE_BAD_FORMAT;
+                        return Score::FileError::FILE_BAD_FORMAT;
                         }
                   int a = s.left(1).toInt();
                   int b = s.mid(2).toInt();
@@ -3879,7 +3879,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                         gp = new GuitarPro5(score, version);
                   else {
                         qDebug("unknown gtp format %d\n", version);
-                        return Score::FILE_BAD_FORMAT;
+                        return Score::FileError::FILE_BAD_FORMAT;
                         }
                         gp->read(&fp);
                   }
@@ -3894,7 +3894,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             fp.close();
             qDebug("guitar pro import error====");
             // avoid another error message box
-            return Score::FILE_NO_ERROR;
+            return Score::FileError::FILE_NO_ERROR;
             }
       fp.close();
 
@@ -3916,14 +3916,14 @@ Score::FileError importGTP(Score* score, const QString& name)
       if (!gp->title.isEmpty()) {
             Text* s = new Text(score);
             // s->setSubtype(TEXT_TITLE);
-            s->setTextStyleType(TEXT_STYLE_TITLE);
+            s->setTextStyleType(TextStyleType::TITLE);
             s->setText(gp->title);
             m->add(s);
             }
       if (!gp->subtitle.isEmpty() && !gp->artist.isEmpty() && !gp->album.isEmpty()) {
             Text* s = new Text(score);
             // s->setSubtype(TEXT_SUBTITLE);
-            s->setTextStyleType(TEXT_STYLE_SUBTITLE);
+            s->setTextStyleType(TextStyleType::SUBTITLE);
             QString str;
             if (!gp->subtitle.isEmpty())
                   str.append(gp->subtitle);
@@ -3943,7 +3943,7 @@ Score::FileError importGTP(Score* score, const QString& name)
       if (!gp->composer.isEmpty()) {
             Text* s = new Text(score);
             // s->setSubtype(TEXT_COMPOSER);
-            s->setTextStyleType(TEXT_STYLE_COMPOSER);
+            s->setTextStyleType(TextStyleType::COMPOSER);
             s->setText(gp->composer);
             m->add(s);
             }
@@ -3951,11 +3951,11 @@ Score::FileError importGTP(Score* score, const QString& name)
 
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure(), ++idx) {
             const GpBar& bar = gp->bars[idx];
-            if (bar.barLine != NORMAL_BAR)
+            if (bar.barLine != BarLineType::NORMAL)
                   m->setEndBarLineType(bar.barLine, false);
             }
       if (score->lastMeasure())
-            score->lastMeasure()->setEndBarLineType(END_BAR, false);
+            score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
 
       //
       // create parts (excerpts)
@@ -3983,7 +3983,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             stavesMap.append(score->staffIdx(staff));
             cloneStaves(score, pscore, stavesMap);
 
-            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
+            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   p->setStaves(2);
                   Staff* s1 = p->staff(1);
                   s1->setUpdateKeymap(true);
@@ -4003,7 +4003,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             excerpt->parts().append(part);
             score->excerpts().append(excerpt);
 
-            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
+            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   Staff* staff2 = pscore->staff(1);
                   staff2->setStaffType(StaffType::preset(StaffTypes::TAB_DEFAULT));
                   }
@@ -4019,7 +4019,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                   measure = mb;
                   }
             Text* txt = new Text(pscore);
-            txt->setTextStyleType(TEXT_STYLE_INSTRUMENT_EXCERPT);
+            txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
             txt->setText(part->longName());
             measure->add(txt);
 
@@ -4032,7 +4032,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             pscore->updateNotes();
 
             pscore->setLayoutAll(true);
-            pscore->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
+            pscore->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
             pscore->doLayout();
             }
 
@@ -4049,9 +4049,9 @@ Score::FileError importGTP(Score* score, const QString& name)
       score->updateNotes();
 
       score->setLayoutAll(true);
-      score->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
+      score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 }
 

@@ -110,7 +110,7 @@ class Debugger : public QDialog, public Ui::DebuggerBase {
    public:
       Debugger(QWidget* parent = 0);
       void writeSettings();
-	void updateList(Score*);
+      void updateList(Score*);
       };
 
 //---------------------------------------------------------

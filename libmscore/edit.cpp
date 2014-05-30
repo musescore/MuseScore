@@ -409,7 +409,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
                   m->setTimesig(ns);
                   m->setLen(ns);
                   m->setTick(tick);
-                  m->setEndBarLineType(NORMAL_BAR, endBarGenerated);
+                  m->setEndBarLineType(BarLineType::NORMAL, endBarGenerated);
                   tick += m->ticks();
                   nlm = m;
                   if (nfm == 0)
@@ -680,7 +680,7 @@ void Score::putNote(const Position& p, bool replace)
       StaffType* tab = 0;
 
       switch(st->staffType()->group()) {
-            case PERCUSSION_STAFF_GROUP: {
+            case StaffGroup::PERCUSSION: {
                   if (_is.rest())
                         break;
                   Drumset* ds   = instr->drumset();
@@ -693,7 +693,7 @@ void Score::putNote(const Position& p, bool replace)
                   stemDirection = ds->stemDirection(nval.pitch);
                   break;
                   }
-            case TAB_STAFF_GROUP: {
+            case StaffGroup::TAB: {
                   if (_is.rest())
                         return;
                   stringData = instr->stringData();
@@ -713,7 +713,7 @@ void Score::putNote(const Position& p, bool replace)
                   break;
                   }
 
-            case STANDARD_STAFF_GROUP: {
+            case StaffGroup::STANDARD: {
                   AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);
                   int step   = absStep(line, clef);
                   int octave = step/7;
@@ -755,7 +755,7 @@ void Score::putNote(const Position& p, bool replace)
                                                 qDebug("can't increase fret to %d", fret);
                                           }
                                     // set fret number (orignal or combined) in all linked notes
-//                                    int tpc1 = pitch2tpc(nval.pitch, Key::KEY_C, Prefer::NEAREST);
+//                                    int tpc1 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST);
                                     foreach (Element* e, note->linkList()) {
                                           Note* linkedNote = static_cast<Note*>(e);
                                           nval.tpc = linkedNote->tpc1default(nval.pitch);
@@ -1229,7 +1229,7 @@ void Score::deleteItem(Element* el)
                   if (bl->parent()->type() != Element::ElementType::SEGMENT)
                         break;
                   Segment* seg   = static_cast<Segment*>(bl->parent());
-                  bool normalBar = seg->measure()->endBarLineType() == NORMAL_BAR;
+                  bool normalBar = seg->measure()->endBarLineType() == BarLineType::NORMAL;
                   int tick       = seg->tick();
                   Segment::SegmentType segType = seg->segmentType();
 
@@ -1242,7 +1242,7 @@ void Score::deleteItem(Element* el)
                         else if (segType == Segment::SegEndBarLine) {
                               // if bar line has custom barLineType, change to barLineType of the whole measure
                               if (bl->customSubtype()) {
-                                    undoChangeProperty(bl, P_ID::SUBTYPE, seg->measure()->endBarLineType());
+                                    undoChangeProperty(bl, P_ID::SUBTYPE, int(seg->measure()->endBarLineType()));
                                     }
                               // otherwise, if whole measure has special end bar line, change to normal
                               else if (!normalBar) {
@@ -1252,7 +1252,7 @@ void Score::deleteItem(Element* el)
                                     Measure* nm = m->nextMeasure();
                                     if (nm)
                                           undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
-                                    undoChangeEndBarLineType(m, NORMAL_BAR);
+                                    undoChangeEndBarLineType(m, BarLineType::NORMAL);
                                     m->setEndBarLineGenerated(true);
                                     }
                               }
@@ -1365,7 +1365,7 @@ void Score::cmdDeleteSelectedMeasures()
       bool createEndBar = false;
       if (ie->type() == Element::ElementType::MEASURE) {
             Measure* iem = static_cast<Measure*>(ie);
-            createEndBar = (iem == lastMeasureMM()) && (iem->endBarLineType() == END_BAR);
+            createEndBar = (iem == lastMeasureMM()) && (iem->endBarLineType() == BarLineType::END);
             }
 
       // get the last deleted timesig in order to restore after deletion
@@ -1433,8 +1433,8 @@ void Score::cmdDeleteSelectedMeasures()
 
             if (createEndBar) {
                   Measure* lastMeasure = score->lastMeasure();
-                  if (lastMeasure && lastMeasure->endBarLineType() == NORMAL_BAR)
-                        undoChangeEndBarLineType(lastMeasure, END_BAR);
+                  if (lastMeasure && lastMeasure->endBarLineType() == BarLineType::NORMAL)
+                        undoChangeEndBarLineType(lastMeasure, BarLineType::END);
                   }
 
             // insert correct timesig after deletion
@@ -1624,7 +1624,7 @@ void Score::cmdFullMeasureRest()
 
                         if (tick == -1) {
                               // first ChordRest found:
-			      tick = s->measure()->tick();
+                              tick = s->measure()->tick();
                               removeChordRest(cr, true);
                               }
                         else {
@@ -1633,8 +1633,8 @@ void Score::cmdFullMeasureRest()
                         }
                   for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
                         if (!(track % VOICES) && m->isOnlyRests(track)) {
-			      addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
-			}
+                              addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                              }
                         if (s2 && (m == s2->measure()))
                               break;
                         }
@@ -1992,14 +1992,14 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                   bool endBarGenerated = false;
                   if (!measure) {
                         Measure* lm = score->lastMeasure();
-                        if (lm && lm->endBarLineType() == END_BAR) {
+                        if (lm && lm->endBarLineType() == BarLineType::END) {
                               createEndBar = true;
                               if (!lm->endBarLineGenerated()) {
-                                    score->undoChangeEndBarLineType(lm, NORMAL_BAR);
+                                    score->undoChangeEndBarLineType(lm, BarLineType::NORMAL);
                                     }
                               else {
                                     endBarGenerated = true;
-                                    lm->setEndBarLineType(NORMAL_BAR, true);
+                                    lm->setEndBarLineType(BarLineType::NORMAL, true);
                                     }
                               }
                         else if (lm == nullptr)
@@ -2076,8 +2076,8 @@ MeasureBase* Score::insertMeasure(Element::ElementType type, MeasureBase* measur
                   if (createEndBar) {
                         // Measure* lm = score->lastMeasure();
                         // if (lm)
-                        //      lm->setEndBarLineType(END_BAR, endBarGenerated);
-                        m->setEndBarLineType(END_BAR, endBarGenerated);
+                        //      lm->setEndBarLineType(BarLineType::END, endBarGenerated);
+                        m->setEndBarLineType(BarLineType::END, endBarGenerated);
                         }
                   score->fixTicks();
                   }

@@ -195,7 +195,7 @@ void TestMidi::midi01()
 
       Score* score2 = new Score(mscore->baseStyle());
       score2->setName("test1b");
-      QCOMPARE(importMidi(score2, "test1.mid"), Score::FILE_NO_ERROR);
+      QCOMPARE(importMidi(score2, "test1.mid"), Score::FileError::FILE_NO_ERROR);
 
       score2->doLayout();
       score2->rebuildMidiMapping();
@@ -236,7 +236,7 @@ void TestMidi::midi02()
       Score* score2 = new Score(mscore->baseStyle());
       score2->setName("test2b");
 
-      QCOMPARE(importMidi(score2, "test2.mid"), Score::FILE_NO_ERROR);
+      QCOMPARE(importMidi(score2, "test2.mid"), Score::FileError::FILE_NO_ERROR);
 
       score2->doLayout();
       score2->rebuildMidiMapping();
@@ -277,7 +277,7 @@ void TestMidi::midi03()
 
       Score* score2 = new Score(mscore->baseStyle());
       score2->setName("test3b");
-      QCOMPARE(importMidi(score2, "test3.mid"), Score::FILE_NO_ERROR);
+      QCOMPARE(importMidi(score2, "test3.mid"), Score::FileError::FILE_NO_ERROR);
 
       score2->doLayout();
       score2->rebuildMidiMapping();

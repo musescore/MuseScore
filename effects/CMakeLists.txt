@@ -13,9 +13,9 @@
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
 if (APPLE)
-	file(GLOB_RECURSE INCS "*.h")
+      file(GLOB_RECURSE INCS "*.h")
 else (APPLE)
-        set(INCS "")
+      set(INCS "")
 endif (APPLE)
 
 QT4_ADD_RESOURCES (qrc_effects_files

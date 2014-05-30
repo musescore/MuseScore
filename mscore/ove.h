@@ -498,7 +498,7 @@ enum RepeatType {
 	Repeat_Null
 };
 
-enum BarlineType {
+enum BarLineType {
 	Barline_Default = 0,	//0x00 will be | or final (at last measure)
 	Barline_Double,			//0x01 ||
 	Barline_RepeatLeft,		//0x02 ||:
@@ -2148,11 +2148,11 @@ public:
 	BarNumber* getBarNumber() const;
 	TimeSignature* getTime() const;
 
-	void setLeftBarline(int barline/*in BarlineType*/);
-	BarlineType getLeftBarline() const;
+	void setLeftBarline(int barline/*in BarLineType*/);
+	BarLineType getLeftBarline() const;
 
-	void setRightBarline(int barline/*in BarlineType*/);
-	BarlineType getRightBarline() const;
+	void setRightBarline(int barline/*in BarLineType*/);
+	BarLineType getRightBarline() const;
 
 	// set when rightBarline == Baline_Backward
 	void setBackwardRepeatCount(int repeatCount);
@@ -2176,8 +2176,8 @@ private:
 	BarNumber* barNumber_;
 	TimeSignature* time_;
 
-	BarlineType leftBarline_;
-	BarlineType rightBarline_;
+	BarLineType leftBarline_;
+	BarLineType rightBarline_;
 	int repeatCount_;
 	double typeTempo_; // based on some type
 	bool pickup_;

@@ -96,7 +96,7 @@ class Diff1
       void  fini();
 
       float process(float x) {
-	      float z = _line [_i];
+            float z = _line [_i];
             x -= _c * z;
             _line [_i] = x;
             if (++_i == _size)

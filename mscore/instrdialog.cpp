@@ -109,9 +109,9 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       _staffTypeCombo->setAutoFillBackground(true);
       int idx = 0;
       for (const StaffType& st : StaffType::presets()) {
-            if ( (st.group() == STANDARD_STAFF_GROUP && !canUsePerc)    // percussion excludes standard
-                        || (st.group() == PERCUSSION_STAFF_GROUP && canUsePerc)
-                        || (st.group() == TAB_STAFF_GROUP && canUseTabs))
+            if ( (st.group() == StaffGroup::STANDARD && !canUsePerc)    // percussion excludes standard
+                        || (st.group() == StaffGroup::PERCUSSION && canUsePerc)
+                        || (st.group() == StaffGroup::TAB && canUseTabs))
                   _staffTypeCombo->addItem(st.name(), idx);
             ++idx;
             }
@@ -219,13 +219,13 @@ void StaffListItem::staffTypeChanged(int idx)
       if (stfType->group() != ClefInfo::staffGroup(_clef._transposingClef)) {
             ClefType clefType;
             switch (stfType->group()) {
-                  case STANDARD_STAFF_GROUP:
+                  case StaffGroup::STANDARD:
                         clefType = _defaultClef._transposingClef;
                         break;
-                  case TAB_STAFF_GROUP:
+                  case StaffGroup::TAB:
                         clefType = ClefType::TAB;
                         break;
-                  case PERCUSSION_STAFF_GROUP:
+                  case StaffGroup::PERCUSSION:
                         clefType = ClefType::PERC;
                         break;
                   }
@@ -1054,7 +1054,7 @@ void MuseScore::editInstrList()
                               // (true if changing into or away from TAB)
                               StaffGroup ng = stfType->group();         // new staff group
                               StaffGroup og = staff->staffGroup();      // old staff group
-                              bool updateNeeded = (ng == TAB_STAFF_GROUP) != (og == TAB_STAFF_GROUP);
+                              bool updateNeeded = (ng == StaffGroup::TAB) != (og == StaffGroup::TAB);
 
                               // use selected staff type
                               if (stfType->name() != staff->staffType()->name())

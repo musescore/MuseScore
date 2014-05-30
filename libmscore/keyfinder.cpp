@@ -274,15 +274,15 @@ static void count_segment_notes()
                   if (scoring_mode == 0)
                         total_dur += segment[s].snote[n].duration();
                   for (int y=0; y<28; ++y) {
-            	      if (segment[s].snote[n].tpc() == y) {
-            	            if(seg_prof[y][s]==0)
+                        if (segment[s].snote[n].tpc() == y) {
+                              if(seg_prof[y][s]==0)
                                     pc_tally[s]++;
-                  	      /* This keeps track of how many different pc's the segment contains. This counts TPCs, not NPCs! */
+                              /* This keeps track of how many different pc's the segment contains. This counts TPCs, not NPCs! */
                               /* If scoring_mode is > 1, set array value to 1. If 0, add the note's duration to the
-		                     array value (as in the K-S algorithm) */
+                                 array value (as in the K-S algorithm) */
                               if (scoring_mode > 0)
                                     seg_prof[y][s] = 1;
-		                  else {
+                              else {
                                     seg_prof[y][s] += segment[s].snote[n].duration();
                                     }
                               }
@@ -439,10 +439,10 @@ static void generate_npc_profiles()
                         tpc_to_use = tpc;
                   if (tpc-shift >= -5 && tpc-shift <= 6) {
                         /* For example: for key 14 (C major) and tpc 17 (A),
-				read from profile step 5 + (17-14) = 8. For degree
-				6 of B major (key 19), degree 6 (22) is outside the
-				9-to-20 range, so tpc_to_use is 22-12=10; still
-				read from profile step 5 + (22-19) = 8. */
+                        read from profile step 5 + (17-14) = 8. For degree
+                        6 of B major (key 19), degree 6 (22) is outside the
+                        9-to-20 range, so tpc_to_use is 22-12=10; still
+                        read from profile step 5 + (22-19) = 8. */
 
                         key_profile[key][tpc_to_use] = majp[5 + (tpc-shift)];
                         }
@@ -528,28 +528,28 @@ static void match_profiles()
                   key_score[key][s] = 0.0;
                   for (tpc=0; tpc<28; ++tpc) {
 
-	    /*
-	       If scoring mode is 0, this is the K-S algorithm (this works for npc mode only). Segment
-	       profile values represent total duration of each pc (in all other cases, they're just 1
-	       for present pc's and 0 for absent ones). Key-profiles have been normalized linearly
-	       around the average key-profile value. We normalize the input values similarly by taking
-	       (seg_prof[tpc][s]-segment[s].average_dur). Then we multiply each normalized KP value by
-	       the normalized input value, and sum these products; this gives us the numerator of the
-	       correlation expression (as commented below). We've summed the squares of the normalized
-	       key-profile value (major_sumsq and minor_sumsq above) and the normalized input values
-	       (input_sumsq above), so this allows us to calculate the denominator also.
+          /*
+             If scoring mode is 0, this is the K-S algorithm (this works for npc mode only). Segment
+             profile values represent total duration of each pc (in all other cases, they're just 1
+             for present pc's and 0 for absent ones). Key-profiles have been normalized linearly
+             around the average key-profile value. We normalize the input values similarly by taking
+             (seg_prof[tpc][s]-segment[s].average_dur). Then we multiply each normalized KP value by
+             the normalized input value, and sum these products; this gives us the numerator of the
+             correlation expression (as commented below). We've summed the squares of the normalized
+             key-profile value (major_sumsq and minor_sumsq above) and the normalized input values
+             (input_sumsq above), so this allows us to calculate the denominator also.
 
-	       If scoring_mode is 1, the key score is the sum of key-profile values for all pc's present
-	       (this is the algorithm used in CBMS)
+             If scoring_mode is 1, the key score is the sum of key-profile values for all pc's present
+             (this is the algorithm used in CBMS)
 
-	       If scoring_mode is 2, calculate key scores as above, but divide each one by the number
-	       of pc's in the segment
+             If scoring_mode is 2, calculate key scores as above, but divide each one by the number
+             of pc's in the segment
 
-	       If scoring_mode is 3: for each key, add the log of the key-profile value for all present pc's;
-	       subtract values for all absent pc's. (This is the Bayesian approach; assume key-profiles
-	       represent pc distribution's in a corpus, i.e. the number of segments containing each scale
-	       degree)
-	    */
+             If scoring_mode is 3: for each key, add the log of the key-profile value for all present pc's;
+             subtract values for all absent pc's. (This is the Bayesian approach; assume key-profiles
+             represent pc distribution's in a corpus, i.e. the number of segments containing each scale
+             degree)
+          */
 
                         if(scoring_mode == 0) {
                               if(tpc<9 || tpc>20)
@@ -569,7 +569,7 @@ static void match_profiles()
                               if(seg_prof[tpc][s]==0) {
                                     key_score[key][s] += log(1.000 - key_profile[key][tpc]);
                               /* qDebug("kp value = %6.3f: log(1-p) = %6.3f: score = %6.3f", key_profile[key][tpc], log(1.000 - key_profile[key][tpc]), key_score[key][s]); */
-		                        if(tpc>=9 && tpc<=20)
+                                    if(tpc>=9 && tpc<=20)
                                           kprob[key] *= (1.000 - key_profile[key][tpc]);
                                     }
                               else {

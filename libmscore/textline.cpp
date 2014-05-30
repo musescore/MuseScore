@@ -418,7 +418,7 @@ void TextLine::createBeginTextElement()
       if (!_beginText) {
             _beginText = new Text(score());
             _beginText->setParent(this);
-            _beginText->setTextStyleType(TEXT_STYLE_TEXTLINE);
+            _beginText->setTextStyleType(TextStyleType::TEXTLINE);
             }
       }
 
@@ -431,7 +431,7 @@ void TextLine::createContinueTextElement()
       if (!_continueText) {
             _continueText = new Text(score());
             _continueText->setParent(this);
-            _continueText->setTextStyleType(TEXT_STYLE_TEXTLINE);
+            _continueText->setTextStyleType(TextStyleType::TEXTLINE);
             }
       }
 
@@ -444,7 +444,7 @@ void TextLine::createEndTextElement()
       if (!_endText) {
             _endText = new Text(score());
             _endText->setParent(this);
-            _endText->setTextStyleType(TEXT_STYLE_TEXTLINE);
+            _endText->setTextStyleType(TextStyleType::TEXTLINE);
             }
       }
 

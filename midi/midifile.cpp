@@ -58,7 +58,7 @@ MidiFile::MidiFile()
       {
       fp               = 0;
       _format          = 1;
-      _midiType        = MT_UNKNOWN;
+      _midiType        = MidiType::UNKNOWN;
       _noRunningStatus = false;
       }
 
@@ -733,29 +733,29 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType *mt)
                         int len = ev.len();
                         const uchar* buffer = ev.edata();
                         if ((len == gmOnMsgLen) && memcmp(buffer, gmOnMsg, gmOnMsgLen) == 0) {
-                              *mt = MT_GM;
+                              *mt = MidiType::GM;
                               ev.setType(ME_INVALID);
                               continue;
                               }
                         if ((len == gsOnMsgLen) && memcmp(buffer, gsOnMsg, gsOnMsgLen) == 0) {
-                              *mt = MT_GS;
+                              *mt = MidiType::GS;
                               ev.setType(ME_INVALID);
                               continue;
                               }
                         if ((len == xgOnMsgLen) && memcmp(buffer, xgOnMsg, xgOnMsgLen) == 0) {
-                              *mt = MT_XG;
+                              *mt = MidiType::XG;
                               ev.setType(ME_INVALID);
                               continue;
                               }
                         if (buffer[0] == 0x43) {    // Yamaha
-                              *mt = MT_XG;
+                              *mt = MidiType::XG;
                               int type   = buffer[1] & 0xf0;
                               if (type == 0x10) {
 //TODO                                    if (buffer[1] != 0x10) {
 //                                          buffer[1] = 0x10;    // fix to Device 1
 //                                          }
                                     if ((len == xgOnMsgLen) && memcmp(buffer, xgOnMsg, xgOnMsgLen) == 0) {
-                                          *mt = MT_XG;
+                                          *mt = MidiType::XG;
                                           ev.setType(ME_INVALID);
                                           continue;
                                           }

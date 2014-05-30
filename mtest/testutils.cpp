@@ -141,9 +141,9 @@ Score* MTest::readCreatedScore(const QString& name)
       else if (csl == "gp3" || csl == "gp4" || csl == "gp5")
             rv = importGTP(score, name);
       else
-            rv = Score::FILE_UNKNOWN_TYPE;
+            rv = Score::FileError::FILE_UNKNOWN_TYPE;
 
-      if (rv != Score::FILE_NO_ERROR) {
+      if (rv != Score::FileError::FILE_NO_ERROR) {
             QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
             delete score;
             return 0;

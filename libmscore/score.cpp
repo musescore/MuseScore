@@ -244,7 +244,7 @@ void Score::init()
       {
       _linkId         = 0;
       _currentLayer   = 0;
-      _playMode       = PLAYMODE_SYNTHESIZER;
+      _playMode       = PlayMode::SYNTHESIZER;
       Layer l;
       l.name          = "default";
       l.tags          = 1;
@@ -321,7 +321,7 @@ void Score::init()
       _showOmr                = false;
       _sigmap                 = 0;
       _tempomap               = 0;
-      _layoutMode             = LayoutPage;
+      _layoutMode             = LayoutMode::PAGE;
       _noteHeadWidth          = 0.0;      // set in doLayout()
       }
 
@@ -1321,7 +1321,7 @@ void Score::addElement(Element* element)
          ) {
             setLayoutAll(true);
             add(element);
-            addLayoutFlags(LAYOUT_FIX_TICKS);
+            addLayoutFlags(LayoutFlag::FIX_TICKS);
             return;
             }
 
@@ -1332,7 +1332,7 @@ void Score::addElement(Element* element)
 
       switch(et) {
             case Element::ElementType::SLUR:
-                  addLayoutFlags(LAYOUT_PLAY_EVENTS);
+                  addLayoutFlags(LayoutFlag::PLAY_EVENTS);
                   // fall through
 
             case Element::ElementType::VOLTA:
@@ -1359,13 +1359,13 @@ void Score::addElement(Element* element)
                               ss->system()->add(ss);
                         }
                   o->staff()->updateOttava(o);
-                  layoutFlags |= LAYOUT_FIX_PITCH_VELO;
+                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }
                   break;
 
             case Element::ElementType::DYNAMIC:
-                  layoutFlags |= LAYOUT_FIX_PITCH_VELO;
+                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
@@ -1459,7 +1459,7 @@ void Score::removeElement(Element* element)
          || et == Element::ElementType::FBOX
             ) {
             remove(element);
-            addLayoutFlags(LAYOUT_FIX_TICKS);
+            addLayoutFlags(LayoutFlag::FIX_TICKS);
             setLayoutAll(true);
             return;
             }
@@ -1474,7 +1474,7 @@ void Score::removeElement(Element* element)
 
       switch(et) {
             case Element::ElementType::SLUR:
-                  addLayoutFlags(LAYOUT_PLAY_EVENTS);
+                  addLayoutFlags(LayoutFlag::PLAY_EVENTS);
                   // fall through
 
             case Element::ElementType::VOLTA:
@@ -1501,13 +1501,13 @@ void Score::removeElement(Element* element)
                   Staff* s = o->staff();
                   s->pitchOffsets().remove(o->tick());
                   s->pitchOffsets().remove(o->tick2());
-                  layoutFlags |= LAYOUT_FIX_PITCH_VELO;
+                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }
                   break;
 
             case Element::ElementType::DYNAMIC:
-                  layoutFlags |= LAYOUT_FIX_PITCH_VELO;
+                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
@@ -2088,7 +2088,7 @@ Score* Score::clone()
             ++staffIdx;
             }
       score->updateNotes();
-      score->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
+      score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
       score->scanElements(0, elementAdjustReadPos);  //??
       return score;
@@ -2578,7 +2578,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       undo(new ChangeConcertPitch(this, flag));       // change style flag
 
       for (Staff* staff : _staves) {
-            if (staff->staffType()->group() == PERCUSSION_STAFF_GROUP)
+            if (staff->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
             Interval interval = staff->part()->instr()->transpose();
             if (interval.isZero())
@@ -2619,56 +2619,56 @@ void Score::addAudioTrack()
 //   padToggle
 //---------------------------------------------------------
 
-void Score::padToggle(int n)
+void Score::padToggle(Pad n)
       {
       switch (n) {
-            case PAD_NOTE00:
+            case Pad::NOTE00:
                   _is.setDuration(TDuration::DurationType::V_LONG);
                   break;
-            case PAD_NOTE0:
+            case Pad::NOTE0:
                   _is.setDuration(TDuration::DurationType::V_BREVE);
                   break;
-            case PAD_NOTE1:
+            case Pad::NOTE1:
                   _is.setDuration(TDuration::DurationType::V_WHOLE);
                   break;
-            case PAD_NOTE2:
+            case Pad::NOTE2:
                   _is.setDuration(TDuration::DurationType::V_HALF);
                   break;
-            case PAD_NOTE4:
+            case Pad::NOTE4:
                   _is.setDuration(TDuration::DurationType::V_QUARTER);
                   break;
-            case PAD_NOTE8:
+            case Pad::NOTE8:
                   _is.setDuration(TDuration::DurationType::V_EIGHT);
                   break;
-            case PAD_NOTE16:
+            case Pad::NOTE16:
                   _is.setDuration(TDuration::DurationType::V_16TH);
                   break;
-            case PAD_NOTE32:
+            case Pad::NOTE32:
                   _is.setDuration(TDuration::DurationType::V_32ND);
                   break;
-            case PAD_NOTE64:
+            case Pad::NOTE64:
                   _is.setDuration(TDuration::DurationType::V_64TH);
                   break;
-            case PAD_NOTE128:
+            case Pad::NOTE128:
                   _is.setDuration(TDuration::DurationType::V_128TH);
                   break;
-            case PAD_REST:
+            case Pad::REST:
                   _is.setRest(!_is.rest());
                   break;
-            case PAD_DOT:
+            case Pad::DOT:
                   if (_is.duration().dots() == 1)
                         _is.setDots(0);
                   else
                         _is.setDots(1);
                   break;
-            case PAD_DOTDOT:
+            case Pad::DOTDOT:
                   if (_is.duration().dots() == 2)
                         _is.setDots(0);
                   else
                         _is.setDots(2);
                   break;
             }
-      if (n >= PAD_NOTE00 && n <= PAD_NOTE128) {
+      if (n >= Pad::NOTE00 && n <= Pad::NOTE128) {
             _is.setDots(0);
             //
             // if in "note enter" mode, reset
@@ -3366,9 +3366,9 @@ void Score::addText(const QString& type, const QString& txt)
             }
       Text* text = new Text(this);
       if (type == "title")
-            text->setTextStyleType(TEXT_STYLE_TITLE);
+            text->setTextStyleType(TextStyleType::TITLE);
       else if (type == "subtitle")
-            text->setTextStyleType(TEXT_STYLE_SUBTITLE);
+            text->setTextStyleType(TextStyleType::SUBTITLE);
       text->setParent(measure);
       text->setText(txt);
       undoAddElement(text);

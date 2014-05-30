@@ -18,7 +18,7 @@
 
 
 #ifndef __RNGEN_H
-#define	__RNGEN_H
+#define __RNGEN_H
 
 
 #include "prbsgen.h"
@@ -34,12 +34,12 @@ public:
 
     uint32_t irand (void)
     {
-	uint32_t r;
+        uint32_t r;
 
-	if (++_i == 55) _i = 0;
-	if (_i < 24) r = _a [_i] += _a [_i + 31];
-	else         r = _a [_i] += _a [_i - 24];
-	return r;
+        if (++_i == 55) _i = 0;
+        if (_i < 24) r = _a [_i] += _a [_i + 31];
+        else         r = _a [_i] += _a [_i - 24];
+        return r;
     }
 
     double  urand (void) { return irand () / _p32; }

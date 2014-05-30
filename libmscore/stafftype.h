@@ -130,7 +130,7 @@ enum class StaffTypes : char {
 //---------------------------------------------------------
 
 class StaffType {
-      StaffGroup _group = STANDARD_STAFF_GROUP;
+      StaffGroup _group = StaffGroup::STANDARD;
 
       QString _xmlName;                   // the name used to reference this preset in intruments.xml
       QString _name;                      // user visible name

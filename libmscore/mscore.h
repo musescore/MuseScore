@@ -49,7 +49,6 @@ static const int MSCVERSION = 124;
 
 class MStyle;
 class Sequencer;
-enum class ValueType : char;
 
 static const int VOICES = 4;
 inline int staff2track(int staffIdx) { return staffIdx << 2; }
@@ -240,18 +239,18 @@ enum class KeySigNatural : char {
 //   UpDownMode
 //---------------------------------------------------------
 
-enum UpDownMode {
-      UP_DOWN_CHROMATIC, UP_DOWN_OCTAVE, UP_DOWN_DIATONIC
+enum class UpDownMode : char {
+      CHROMATIC, OCTAVE, DIATONIC
       };
 
 //---------------------------------------------------------
 //   StaffGroup
 //---------------------------------------------------------
 
-enum StaffGroup {
-      STANDARD_STAFF_GROUP, PERCUSSION_STAFF_GROUP, TAB_STAFF_GROUP
+enum class StaffGroup : char {
+      STANDARD, PERCUSSION, TAB
       };
-const int STAFF_GROUP_MAX = TAB_STAFF_GROUP + 1;      // out of enum to avoid compiler complains about not handled switch cases
+const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avoid compiler complains about not handled switch cases
 
 //---------------------------------------------------------
 //   Text Style Type
@@ -259,47 +258,47 @@ const int STAFF_GROUP_MAX = TAB_STAFF_GROUP + 1;      // out of enum to avoid co
 //    Must be in sync with list in setDefaultStyle().
 //---------------------------------------------------------
 
-enum {
-      TEXT_STYLE_DEFAULT = 0,
-      TEXT_STYLE_TITLE,
-      TEXT_STYLE_SUBTITLE,
-      TEXT_STYLE_COMPOSER,
-      TEXT_STYLE_POET,
-      TEXT_STYLE_LYRIC1,
-      TEXT_STYLE_LYRIC2,
-      TEXT_STYLE_FINGERING,
-      TEXT_STYLE_INSTRUMENT_LONG,
-      TEXT_STYLE_INSTRUMENT_SHORT,
+enum TextStyleType : char {
+      DEFAULT = 0,
+      TITLE,
+      SUBTITLE,
+      COMPOSER,
+      POET,
+      LYRIC1,
+      LYRIC2,
+      FINGERING,
+      INSTRUMENT_LONG,
+      INSTRUMENT_SHORT,
 
-      TEXT_STYLE_INSTRUMENT_EXCERPT,
-      TEXT_STYLE_DYNAMICS,
-      TEXT_STYLE_TECHNIQUE,
-      TEXT_STYLE_TEMPO,
-      TEXT_STYLE_METRONOME,
-      TEXT_STYLE_MEASURE_NUMBER,
-      TEXT_STYLE_TRANSLATOR,
-      TEXT_STYLE_TUPLET,
-      TEXT_STYLE_SYSTEM,
+      INSTRUMENT_EXCERPT,
+      DYNAMICS,
+      TECHNIQUE,
+      TEMPO,
+      METRONOME,
+      MEASURE_NUMBER,
+      TRANSLATOR,
+      TUPLET,
+      SYSTEM,
 
-      TEXT_STYLE_STAFF,
-      TEXT_STYLE_HARMONY,
-      TEXT_STYLE_REHEARSAL_MARK,
-      TEXT_STYLE_REPEAT_LEFT,       // align to start of measure
-      TEXT_STYLE_REPEAT_RIGHT,      // align to end of measure
-      TEXT_STYLE_REPEAT,            // obsolete
-      TEXT_STYLE_VOLTA,
-      TEXT_STYLE_FRAME,
-      TEXT_STYLE_TEXTLINE,
-      TEXT_STYLE_GLISSANDO,
+      STAFF,
+      HARMONY,
+      REHEARSAL_MARK,
+      REPEAT_LEFT,       // align to start of measure
+      REPEAT_RIGHT,      // align to end of measure
+      REPEAT,            // obsolete
+      VOLTA,
+      FRAME,
+      TEXTLINE,
+      GLISSANDO,
 
-      TEXT_STYLE_STRING_NUMBER,
-      TEXT_STYLE_OTTAVA,
-      TEXT_STYLE_BENCH,
-      TEXT_STYLE_HEADER,
-      TEXT_STYLE_FOOTER,
-      TEXT_STYLE_INSTRUMENT_CHANGE,
-      TEXT_STYLE_LYRICS_VERSE_NUMBER,
-      TEXT_STYLE_FIGURED_BASS,
+      STRING_NUMBER,
+      OTTAVA,
+      BENCH,
+      HEADER,
+      FOOTER,
+      INSTRUMENT_CHANGE,
+      LYRICS_VERSE_NUMBER,
+      FIGURED_BASS,
       TEXT_STYLES
       };
 
@@ -307,19 +306,20 @@ enum {
 //   BarLineType
 //---------------------------------------------------------
 
-enum BarLineType {
-      NORMAL_BAR, DOUBLE_BAR, START_REPEAT, END_REPEAT,
-      BROKEN_BAR, END_BAR, END_START_REPEAT, DOTTED_BAR
+enum class BarLineType : char {
+      NORMAL, DOUBLE, START_REPEAT, END_REPEAT,
+      BROKEN, END, END_START_REPEAT, DOTTED
       };
 
 // Icon() subtypes
-enum {
-      ICON_ACCIACCATURA, ICON_APPOGGIATURA, ICON_GRACE4, ICON_GRACE16, ICON_GRACE32,
-      ICON_GRACE8_AFTER, ICON_GRACE16_AFTER, ICON_GRACE32_AFTER,
-      ICON_SBEAM, ICON_MBEAM, ICON_NBEAM, ICON_BEAM32, ICON_BEAM64, ICON_AUTOBEAM,
-      ICON_FBEAM1, ICON_FBEAM2,
-      ICON_VFRAME, ICON_HFRAME, ICON_TFRAME, ICON_FFRAME, ICON_MEASURE,
-      ICON_BRACKETS
+enum class IconType : signed char {
+      NONE = -1,
+      ACCIACCATURA, APPOGGIATURA, GRACE4, GRACE16, GRACE32,
+      GRACE8_AFTER, GRACE16_AFTER, GRACE32_AFTER,
+      SBEAM, MBEAM, NBEAM, BEAM32, BEAM64, AUTOBEAM,
+      FBEAM1, FBEAM2,
+      VFRAME, HFRAME, TFRAME, FFRAME, MEASURE,
+      BRACKETS
       };
 
 //---------------------------------------------------------
@@ -423,7 +423,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::BeamMode);
-Q_DECLARE_METATYPE(Ms::ValueType);
 Q_DECLARE_METATYPE(Ms::Direction);
 Q_DECLARE_METATYPE(Ms::DirectionH);
 

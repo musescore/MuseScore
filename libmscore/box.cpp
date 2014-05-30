@@ -441,11 +441,13 @@ bool Box::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
                   return true;
             case ElementType::ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
-                        case ICON_VFRAME:
-                        case ICON_TFRAME:
-                        case ICON_FFRAME:
-                        case ICON_MEASURE:
+                        case IconType::VFRAME:
+                        case IconType::TFRAME:
+                        case IconType::FFRAME:
+                        case IconType::MEASURE:
                               return true;
+                        default:
+                              break;
                         }
                   break;
             default:
@@ -495,7 +497,7 @@ Element* Box::drop(const DropData& data)
             case ElementType::STAFF_TEXT:
                   {
                   Text* text = new Text(score());
-                  text->setTextStyleType(TEXT_STYLE_FRAME);
+                  text->setTextStyleType(TextStyleType::FRAME);
                   text->setParent(this);
                   text->setText(static_cast<StaffText*>(e)->text());
                   score()->undoAddElement(text);
@@ -505,17 +507,19 @@ Element* Box::drop(const DropData& data)
 
             case ElementType::ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
-                        case ICON_VFRAME:
+                        case IconType::VFRAME:
                               score()->insertMeasure(ElementType::VBOX, this);
                               break;
-                        case ICON_TFRAME:
+                        case IconType::TFRAME:
                               score()->insertMeasure(ElementType::TBOX, this);
                               break;
-                        case ICON_FFRAME:
+                        case IconType::FFRAME:
                               score()->insertMeasure(ElementType::FBOX, this);
                               break;
-                        case ICON_MEASURE:
+                        case IconType::MEASURE:
                               score()->insertMeasure(ElementType::MEASURE, this);
+                              break;
+                        default:
                               break;
                         }
                   break;

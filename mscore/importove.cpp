@@ -339,18 +339,18 @@ void OveToMScore::convertHeader() {
 	if( !titles.empty() && !titles[0].isEmpty() ) {
 		QString title = titles[0];
 		score_->setMetaTag("movementTitle", title);
-		addText(vbox, score_, title, TEXT_STYLE_TITLE);
+		addText(vbox, score_, title, TextStyleType::TITLE);
 	}
 
 	QList<QString> writers = ove_->getWriters();
 	if(!writers.empty()) {
 		QString composer = writers[0];
-		addText(vbox, score_, composer, TEXT_STYLE_COMPOSER);
+		addText(vbox, score_, composer, TextStyleType::COMPOSER);
 	}
 
 	if(writers.size() > 1) {
 		QString lyricist = writers[1];
-		addText(vbox, score_, lyricist, TEXT_STYLE_POET);
+		addText(vbox, score_, lyricist, TextStyleType::POET);
 	}
 
     if (vbox) {
@@ -1206,37 +1206,37 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 	}
 
 	// barline
-	BarLineType bartype = NORMAL_BAR;
+	BarLineType bartype = BarLineType::NORMAL;
 
 	switch(measurePtr->getRightBarline()) {
 	case OVE::Barline_Default:{
-			bartype = NORMAL_BAR;
+			bartype = BarLineType::NORMAL;
 			break;
 		}
 	case OVE::Barline_Double:{
-			bartype = DOUBLE_BAR;
+			bartype = BarLineType::DOUBLE;
 			break;
 		}
 	case OVE::Barline_Final:{
-			bartype = END_BAR;
+			bartype = BarLineType::END;
 			break;
 		}
 	case OVE::Barline_Null:{
-			bartype = NORMAL_BAR;
+			bartype = BarLineType::NORMAL;
 			break;
 		}
 	case OVE::Barline_RepeatLeft:{
-			bartype = START_REPEAT;
+			bartype = BarLineType::START_REPEAT;
 			measure->setRepeatFlags(Repeat::START);
 			break;
 		}
 	case OVE::Barline_RepeatRight:{
-			bartype = END_REPEAT;
+			bartype = BarLineType::END_REPEAT;
 			measure->setRepeatFlags(Repeat::END);
 			break;
 		}
 	case OVE::Barline_Dashed:{
-			bartype = BROKEN_BAR;
+			bartype = BarLineType::BROKEN;
 			break;
 		}
 	default:
@@ -1244,13 +1244,13 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 	}
 
 	if(measure->no() == ove_->getMeasureCount()-1){
-		bartype = END_BAR;
+		bartype = BarLineType::END;
 	}
 
 	measure->setEndBarLineType(bartype, false);
 
 	if(measurePtr->getLeftBarline() == OVE::Barline_RepeatLeft){
-		//bartype = START_REPEAT;
+		//bartype = BarLineType::START_REPEAT;
 		measure->setRepeatFlags(measure->repeatFlags()|Repeat::START);
 	}
 
@@ -1975,9 +1975,9 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
 
 		// TODO - does this need to be key-aware?
 		harmony->setTrack(track);
-		harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot(), Key::KEY_C, Prefer::NEAREST));
+      harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot(), int(Key::C), Prefer::NEAREST));
 		if(harmonyPtr->getBass() != OVE::INVALID_NOTE && harmonyPtr->getBass() != harmonyPtr->getRoot()){
-			harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass(), Key::KEY_C, Prefer::NEAREST));
+         harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass(), int(Key::C), Prefer::NEAREST));
 		}
 		const ChordDescription* d = harmony->fromXml(OveHarmony_To_String(harmonyPtr->getHarmonyType()));
 		if(d != 0){
@@ -2276,7 +2276,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
 		int absTick = mtt_->getTick(measure->no(), expressionPtr->getTick());
 		Text* t = new Text(score_);
 
-		t->setTextStyleType(TEXT_STYLE_TECHNIQUE);
+		t->setTextStyleType(TextStyleType::TECHNIQUE);
 		t->setText(expressionPtr->getText());
 		t->setTrack(track);
 
@@ -2381,10 +2381,10 @@ Score::FileError importOve(Score* score, const QString& name) {
 
 	QFile oveFile(name);
 	if(!oveFile.exists())
-		return Score::FILE_NOT_FOUND;
+		return Score::FileError::FILE_NOT_FOUND;
 	if (!oveFile.open(QFile::ReadOnly)) {
 		//messageOutString(QString("can't read file!"));
-		return Score::FILE_OPEN_ERROR;
+		return Score::FileError::FILE_OPEN_ERROR;
 	}
 
 	QByteArray buffer = oveFile.readAll();
@@ -2409,5 +2409,5 @@ Score::FileError importOve(Score* score, const QString& name) {
                   }
 	}
 
-      return result ? Score::FILE_NO_ERROR : Score::FILE_ERROR;
+      return result ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;
 }

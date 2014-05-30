@@ -219,19 +219,19 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   Text* text = new Text(cs);
                   switch(mm.metaType()) {
                         case META_COMPOSER:
-                              text->setTextStyleType(TEXT_STYLE_COMPOSER);
+                              text->setTextStyleType(TextStyleType::COMPOSER);
                               break;
                         case META_TRANSLATOR:
-                              text->setTextStyleType(TEXT_STYLE_TRANSLATOR);
+                              text->setTextStyleType(TextStyleType::TRANSLATOR);
                               break;
                         case META_POET:
-                              text->setTextStyleType(TEXT_STYLE_POET);
+                              text->setTextStyleType(TextStyleType::POET);
                               break;
                         case META_SUBTITLE:
-                              text->setTextStyleType(TEXT_STYLE_SUBTITLE);
+                              text->setTextStyleType(TextStyleType::SUBTITLE);
                               break;
                         case META_TITLE:
-                              text->setTextStyleType(TEXT_STYLE_TITLE);
+                              text->setTextStyleType(TextStyleType::TITLE);
                               break;
                         }
 
@@ -770,7 +770,7 @@ void createMeasures(ReducedFraction &lastTick, Score *score)
             }
       }
 
-QString instrumentName(int type, int program, bool isDrumTrack)
+QString instrumentName(MidiType type, int program, bool isDrumTrack)
       {
       if (isDrumTrack)
             return "Percussion";
@@ -783,7 +783,7 @@ QString instrumentName(int type, int program, bool isDrumTrack)
             lbank = (program >> 8) & 0xff;
             program = program & 0xff;
             }
-      return MidiInstrument::instrName(type, hbank, lbank, program);
+      return MidiInstrument::instrName(int(type), hbank, lbank, program);
       }
 
 void setTrackInfo(MidiType midiType, MTrack &mt)
@@ -858,8 +858,8 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
             processMeta(mt, false);
-            if (midiType == MT_UNKNOWN)
-                  midiType = MT_GM;
+            if (midiType == MidiType::UNKNOWN)
+                  midiType = MidiType::GM;
             if (i % 2 && isSameChannel(tracks[i - 1], mt)) {
                   mt.program = tracks[i - 1].program;
                   }
@@ -902,8 +902,8 @@ QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
                   }
             else {
                   MidiType midiType = mf->midiType();
-                  if (midiType == MT_UNKNOWN)
-                        midiType = MT_GM;
+                  if (midiType == MidiType::UNKNOWN)
+                        midiType = MidiType::GM;
                   instrName = instrumentName(midiType, mt.program,
                                              mt.mtrack->drumTrack());
                   }
@@ -957,7 +957,7 @@ void convertMidi(Score *score, const MidiFile *mf)
 void loadMidiData(MidiFile &mf)
       {
       mf.separateChannel();
-      MidiType mt = MT_UNKNOWN;
+      MidiType mt = MidiType::UNKNOWN;
       for (auto &track: mf.tracks())
             track.mergeNoteOnOffAndFindMidiType(&mt);
       mf.setMidiType(mt);
@@ -1004,14 +1004,14 @@ QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
 Score::FileError importMidi(Score *score, const QString &name)
       {
       if (name.isEmpty())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
 
       auto &midiData = preferences.midiImportOperations.midiData();
       if (!midiData.midiFile(name)) {
             QFile fp(name);
             if (!fp.open(QIODevice::ReadOnly)) {
                   qDebug("importMidi: file open error <%s>", qPrintable(name));
-                  return Score::FILE_OPEN_ERROR;
+                  return Score::FileError::FILE_OPEN_ERROR;
                   }
             MidiFile mf;
             try {
@@ -1026,7 +1026,7 @@ Score::FileError importMidi(Score *score, const QString &name)
                         }
                   fp.close();
                   qDebug("importMidi: bad file format");
-                  return Score::FILE_BAD_FORMAT;
+                  return Score::FileError::FILE_BAD_FORMAT;
                   }
             fp.close();
 
@@ -1036,7 +1036,7 @@ Score::FileError importMidi(Score *score, const QString &name)
 
       convertMidi(score, midiData.midiFile(name));
 
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 }
 

@@ -105,33 +105,33 @@ extern bool showRubberBand;
 
 enum class POS : char { CURRENT, LEFT, RIGHT };
 
-enum {
-      PAD_NOTE00,
-      PAD_NOTE0,
-      PAD_NOTE1,
-      PAD_NOTE2,
-      PAD_NOTE4,
-      PAD_NOTE8,
-      PAD_NOTE16,
-      PAD_NOTE32,
-      PAD_NOTE64,
-      PAD_NOTE128,
+enum class Pad : char {
+      NOTE00,
+      NOTE0,
+      NOTE1,
+      NOTE2,
+      NOTE4,
+      NOTE8,
+      NOTE16,
+      NOTE32,
+      NOTE64,
+      NOTE128,
       //--------------------
-      PAD_REST,
-      PAD_DOT,
-      PAD_DOTDOT,
+      REST,
+      DOT,
+      DOTDOT,
       };
 
 //---------------------------------------------------------
 //   LayoutMode
-//   LayoutPage   The normal page view, honors page and line breaks
-//   LayoutLine   The panoramic view, one long system
-//   LayoutFloat  The "reflow" mode, ignore page and line breaks
-//   LayoutSystem The "never ending page", page break are turned into line break
+//    PAGE   The normal page view, honors page and line breaks
+//    LINE   The panoramic view, one long system
+//    FLOAT  The "reflow" mode, ignore page and line breaks
+//    SYSTEM The "never ending page", page break are turned into line break
 //---------------------------------------------------------
 
-enum LayoutMode {
-      LayoutPage, LayoutFloat, LayoutLine, LayoutSystem
+enum class LayoutMode : char {
+      PAGE, FLOAT, LINE, SYSTEM
       };
 
 //---------------------------------------------------------
@@ -195,10 +195,10 @@ struct Position {
 //   LayoutFlag bits
 //---------------------------------------------------------
 
-enum LayoutFlag {
-      LAYOUT_FIX_TICKS = 1,
-      LAYOUT_FIX_PITCH_VELO = 2,
-      LAYOUT_PLAY_EVENTS = 4
+enum LayoutFlag : char {
+      FIX_TICKS = 1,
+      FIX_PITCH_VELO = 2,
+      PLAY_EVENTS = 4
       };
 
 typedef QFlags<LayoutFlag> LayoutFlags;
@@ -207,9 +207,9 @@ typedef QFlags<LayoutFlag> LayoutFlags;
 //   PlayMode
 //---------------------------------------------------------
 
-enum PlayMode {
-      PLAYMODE_SYNTHESIZER,
-      PLAYMODE_AUDIO
+enum class PlayMode : char {
+      SYNTHESIZER,
+      AUDIO
       };
 
 //---------------------------------------------------------
@@ -237,7 +237,7 @@ class Score : public QObject {
       Q_PROPERTY(int npages   READ npages)
 
    public:
-      enum FileError {
+      enum class FileError : char {
             FILE_NO_ERROR,
             FILE_ERROR,
             FILE_NOT_FOUND,
@@ -378,7 +378,7 @@ class Score : public QObject {
       void moveUp(Chord*);
       void moveDown(Chord*);
 
-      void padToggle(int n);
+      void padToggle(Pad n);
       void addTempo();
       void addMetronome();
 

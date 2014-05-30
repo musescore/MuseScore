@@ -148,7 +148,7 @@ Score* createExcerpt(const QList<Part*>& parts)
       QString partLabel = parts.front()->longName();
       if (!partLabel.isEmpty()) {
             Text* txt = new Text(score);
-            txt->setTextStyleType(TEXT_STYLE_INSTRUMENT_EXCERPT);
+            txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
             txt->setText(partLabel);
             measure->add(txt);
             }
@@ -156,14 +156,14 @@ Score* createExcerpt(const QList<Part*>& parts)
       //
       // layout score
       //
-      score->addLayoutFlags(LayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO));
+      score->addLayoutFlags(LayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO));
       score->doLayout();
       //
       // handle transposing instruments
       //
       if (oscore->styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch)) {
             for (Staff* staff : score->staves()) {
-                  if (staff->staffType()->group() == PERCUSSION_STAFF_GROUP)
+                  if (staff->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
                   Interval interval = staff->part()->instr()->transpose();
                   if (interval.isZero())
