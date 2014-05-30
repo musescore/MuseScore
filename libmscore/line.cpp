@@ -535,7 +535,8 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                   break;
             }
       qreal y = 0.0;
-      y = (*sys)->staffYpage(staffIdx()) - (*sys)->pos().y();
+      if (*sys)
+            y = (*sys)->staffYpage(staffIdx()) - (*sys)->pos().y();
 //      x += (*sys)->pos().x();
       return QPointF(x, y);
       }

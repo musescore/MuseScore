@@ -254,8 +254,7 @@ void Measure::remove(Segment* el)
       {
 #ifndef NDEBUG
       if (score()->undoRedo()) {
-            qDebug("remove segment <%s> in undo/redo", el->subTypeName());
-            // abort(); can happen for mmrest
+            qFatal("remove segment <%s> in undo/redo", el->subTypeName());
             }
 
       // Q_ASSERT(!score()->undoRedo());
