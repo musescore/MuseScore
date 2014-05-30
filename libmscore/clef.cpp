@@ -562,7 +562,7 @@ ClefType Clef::clefType(const QString& s)
                   case 16: ct = ClefType::G4; break;
                   case 17: ct = ClefType::F_8VA; break;
                   case 18: ct = ClefType::F_15MA; break;
-                  case 19: ct = ClefType::PERC2; break;
+                  case 19: ct = ClefType::PERC; break;      // PERC2 no longer supported
                   case 20: ct = ClefType::TAB2; break;
                   }
             }

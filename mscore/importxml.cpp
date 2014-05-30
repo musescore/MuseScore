@@ -5492,11 +5492,11 @@ StaffTypes MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
                   clef = ClefType::C1;
             }
       else if (c == "percussion") {
-            clef = ClefType::PERC2;
+            clef = ClefType::PERC;
             res = StaffTypes::PERC_DEFAULT;
             }
       else if (c == "TAB") {
-            clef = ClefType::TAB2;
+            clef = ClefType::TAB;
             res = StaffTypes::TAB_DEFAULT;
             }
       else
