@@ -2168,57 +2168,57 @@ void Score::cmd(const QAction* a)
             setLayoutAll(false);
             }
       else if (cmd == "note-longa"   || cmd == "note-longa-TAB")
-            padToggle(PAD_NOTE00);
+            padToggle(Pad::NOTE00);
       else if (cmd == "note-breve"   || cmd == "note-breve-TAB")
-            padToggle(PAD_NOTE0);
+            padToggle(Pad::NOTE0);
       else if (cmd == "pad-note-1"   || cmd == "pad-note-1-TAB")
-            padToggle(PAD_NOTE1);
+            padToggle(Pad::NOTE1);
       else if (cmd == "pad-note-2"   || cmd == "pad-note-2-TAB")
-            padToggle(PAD_NOTE2);
+            padToggle(Pad::NOTE2);
       else if (cmd == "pad-note-4"   || cmd == "pad-note-4-TAB")
-            padToggle(PAD_NOTE4);
+            padToggle(Pad::NOTE4);
       else if (cmd == "pad-note-8"   || cmd == "pad-note-8-TAB")
-            padToggle(PAD_NOTE8);
+            padToggle(Pad::NOTE8);
       else if (cmd == "pad-note-16"  || cmd == "pad-note-16-TAB")
-            padToggle(PAD_NOTE16);
+            padToggle(Pad::NOTE16);
       else if (cmd == "pad-note-32"  || cmd == "pad-note-32-TAB")
-            padToggle(PAD_NOTE32);
+            padToggle(Pad::NOTE32);
       else if (cmd == "pad-note-64"  || cmd == "pad-note-64-TAB")
-            padToggle(PAD_NOTE64);
+            padToggle(Pad::NOTE64);
       else if (cmd == "pad-note-128" || cmd == "pad-note-128-TAB")
-            padToggle(PAD_NOTE128);
+            padToggle(Pad::NOTE128);
       else if (cmd == "pad-note-increase-TAB") {
             switch (_is.duration().type() ) {
 // cycle back from longest to shortest?
 //                  case TDuration::V_LONG:
-//                        padToggle(PAD_NOTE128);
+//                        padToggle(Pad::NOTE128);
 //                        break;
                   case TDuration::DurationType::V_BREVE:
-                        padToggle(PAD_NOTE00);
+                        padToggle(Pad::NOTE00);
                         break;
                   case TDuration::DurationType::V_WHOLE:
-                        padToggle(PAD_NOTE0);
+                        padToggle(Pad::NOTE0);
                         break;
                   case TDuration::DurationType::V_HALF:
-                        padToggle(PAD_NOTE1);
+                        padToggle(Pad::NOTE1);
                         break;
                   case TDuration::DurationType::V_QUARTER:
-                        padToggle(PAD_NOTE2);
+                        padToggle(Pad::NOTE2);
                         break;
                   case TDuration::DurationType::V_EIGHT:
-                        padToggle(PAD_NOTE4);
+                        padToggle(Pad::NOTE4);
                         break;
                   case TDuration::DurationType::V_16TH:
-                        padToggle(PAD_NOTE8);
+                        padToggle(Pad::NOTE8);
                         break;
                   case TDuration::DurationType::V_32ND:
-                        padToggle(PAD_NOTE16);
+                        padToggle(Pad::NOTE16);
                         break;
                   case TDuration::DurationType::V_64TH:
-                        padToggle(PAD_NOTE32);
+                        padToggle(Pad::NOTE32);
                         break;
                   case TDuration::DurationType::V_128TH:
-                        padToggle(PAD_NOTE64);
+                        padToggle(Pad::NOTE64);
                         break;
                   default:
                         break;
@@ -2227,46 +2227,46 @@ void Score::cmd(const QAction* a)
       else if (cmd == "pad-note-decrease-TAB") {
             switch (_is.duration().type() ) {
                   case TDuration::DurationType::V_LONG:
-                        padToggle(PAD_NOTE0);
+                        padToggle(Pad::NOTE0);
                         break;
                   case TDuration::DurationType::V_BREVE:
-                        padToggle(PAD_NOTE1);
+                        padToggle(Pad::NOTE1);
                         break;
                   case TDuration::DurationType::V_WHOLE:
-                        padToggle(PAD_NOTE2);
+                        padToggle(Pad::NOTE2);
                         break;
                   case TDuration::DurationType::V_HALF:
-                        padToggle(PAD_NOTE4);
+                        padToggle(Pad::NOTE4);
                         break;
                   case TDuration::DurationType::V_QUARTER:
-                        padToggle(PAD_NOTE8);
+                        padToggle(Pad::NOTE8);
                         break;
                   case TDuration::DurationType::V_EIGHT:
-                        padToggle(PAD_NOTE16);
+                        padToggle(Pad::NOTE16);
                         break;
                   case TDuration::DurationType::V_16TH:
-                        padToggle(PAD_NOTE32);
+                        padToggle(Pad::NOTE32);
                         break;
                   case TDuration::DurationType::V_32ND:
-                        padToggle(PAD_NOTE64);
+                        padToggle(Pad::NOTE64);
                         break;
                   case TDuration::DurationType::V_64TH:
-                        padToggle(PAD_NOTE128);
+                        padToggle(Pad::NOTE128);
                         break;
 // cycle back from shortest to longest?
 //                  case TDuration::DurationType::V_128TH:
-//                        padToggle(PAD_NOTE00);
+//                        padToggle(Pad::NOTE00);
 //                        break;
                   default:
                         break;
                   }
             }
       else if (cmd == "pad-rest")
-            padToggle(PAD_REST);
+            padToggle(Pad::REST);
       else if (cmd == "pad-dot")
-            padToggle(PAD_DOT);
+            padToggle(Pad::DOT);
       else if (cmd == "pad-dotdot")
-            padToggle(PAD_DOTDOT);
+            padToggle(Pad::DOTDOT);
       else if (cmd == "beam-start")
             cmdSetBeamMode(BeamMode::BEGIN);
       else if (cmd == "beam-mid")
