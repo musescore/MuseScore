@@ -3836,9 +3836,9 @@ Score::FileError importGTP(Score* score, const QString& name)
       {
       QFile fp(name);
       if(!fp.exists())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
       if (!fp.open(QIODevice::ReadOnly))
-            return Score::FILE_OPEN_ERROR;
+            return Score::FileError::FILE_OPEN_ERROR;
 
       GuitarPro* gp;
       try   {
@@ -3862,7 +3862,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                         s = s.mid(21);
                   else {
                         qDebug("unknown gtp format <%s>\n", ss);
-                        return Score::FILE_BAD_FORMAT;
+                        return Score::FileError::FILE_BAD_FORMAT;
                         }
                   int a = s.left(1).toInt();
                   int b = s.mid(2).toInt();
@@ -3879,7 +3879,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                         gp = new GuitarPro5(score, version);
                   else {
                         qDebug("unknown gtp format %d\n", version);
-                        return Score::FILE_BAD_FORMAT;
+                        return Score::FileError::FILE_BAD_FORMAT;
                         }
                         gp->read(&fp);
                   }
@@ -3894,7 +3894,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             fp.close();
             qDebug("guitar pro import error====");
             // avoid another error message box
-            return Score::FILE_NO_ERROR;
+            return Score::FileError::FILE_NO_ERROR;
             }
       fp.close();
 
@@ -3954,12 +3954,8 @@ Score::FileError importGTP(Score* score, const QString& name)
             if (bar.barLine != BarLineType::NORMAL)
                   m->setEndBarLineType(bar.barLine, false);
             }
-<<<<<<< HEAD
       if (score->lastMeasure())
-            score->lastMeasure()->setEndBarLineType(END_BAR, false);
-=======
-      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
->>>>>>> convert enum BarLineType into enum class
+            score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
 
       //
       // create parts (excerpts)
@@ -4055,7 +4051,7 @@ Score::FileError importGTP(Score* score, const QString& name)
       score->setLayoutAll(true);
       score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 }
 

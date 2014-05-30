@@ -558,7 +558,7 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
       QXmlSchema schema;
       schema.setMessageHandler(&messageHandler);
       if (!initMusicXmlSchema(schema))
-            return Score::FILE_BAD_FORMAT;  // appropriate error message has been printed by initMusicXmlSchema
+            return Score::FileError::FILE_BAD_FORMAT;  // appropriate error message has been printed by initMusicXmlSchema
 
       // validate the data
       QXmlSchemaValidator validator(schema);
@@ -572,11 +572,11 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
             MScore::lastError = QT_TRANSLATE_NOOP("file", "this is not a valid MusicXML file\n");
             QString text = QString("File '%1' is not a valid MusicXML file").arg(name);
             if (musicXMLValidationErrorDialog(text, messageHandler.getErrors()) != QMessageBox::Yes)
-                  return Score::FILE_USER_ABORT;
+                  return Score::FileError::FILE_USER_ABORT;
             }
 
       // return OK
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------
@@ -598,13 +598,13 @@ static Score::FileError doImport(Score* score, const QString& name, QIODevice* d
       if (!doc.setContent(dev, false, &err, &line, &column)) {
             QString s = QT_TRANSLATE_NOOP("file", "Error at line %1 column %2: %3\n");
             MScore::lastError = s.arg(line).arg(column).arg(err);
-            return Score::FILE_BAD_FORMAT;
+            return Score::FileError::FILE_BAD_FORMAT;
             }
       docName = name; // set filename for domError
       MusicXml musicxml(&doc, pass1);
       musicxml.import(score);
       qDebug("Parsing time elapsed: %d ms", t.elapsed());
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 
 
@@ -621,14 +621,14 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
       // validate the file
       Score::FileError res;
       res = doValidate(name, dev);
-      if (res != Score::FILE_NO_ERROR)
+      if (res != Score::FileError::FILE_NO_ERROR)
             return res;
 
       // pass 1
       dev->seek(0);
       MxmlReaderFirstPass pass1;
       res = pass1.setContent(dev);
-      if (res != Score::FILE_NO_ERROR)
+      if (res != Score::FileError::FILE_NO_ERROR)
             return res;
       pass1.parseFile();
 
@@ -642,7 +642,7 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
 
 //---------------------------------------------------------
 //   importMusicXml
-//    return Score::FILE_* errors
+//    return Score::FileError::FILE_* errors
 //---------------------------------------------------------
 
 /**
@@ -656,11 +656,11 @@ Score::FileError importMusicXml(Score* score, const QString& name)
       // open the MusicXML file
       QFile xmlFile(name);
       if (!xmlFile.exists())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
       if (!xmlFile.open(QIODevice::ReadOnly)) {
             qDebug("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open MusicXML file\n");
-            return Score::FILE_OPEN_ERROR;
+            return Score::FileError::FILE_OPEN_ERROR;
             }
 
       // and import it
@@ -684,17 +684,17 @@ Score::FileError importCompressedMusicXml(Score* score, const QString& name)
       // open the compressed MusicXML file
       QFile mxlFile(name);
       if (!mxlFile.exists())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
       if (!mxlFile.open(QIODevice::ReadOnly)) {
             qDebug("importCompressedMusicXml() could not open compressed MusicXML file '%s'", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open compressed MusicXML file\n");
-            return Score::FILE_OPEN_ERROR;
+            return Score::FileError::FILE_OPEN_ERROR;
             }
 
       // extract the root file
       QByteArray data;
       if (!extractRootfile(&mxlFile, data))
-            return Score::FILE_BAD_FORMAT;  // appropriate error message has been printed by extractRootfile
+            return Score::FileError::FILE_BAD_FORMAT;  // appropriate error message has been printed by extractRootfile
       QBuffer buffer(&data);
       buffer.open(QIODevice::ReadOnly);
 

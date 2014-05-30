@@ -2347,9 +2347,9 @@ Score::FileError importCapella(Score* score, const QString& name)
       {
       QFile fp(name);
       if(!fp.exists())
-            return Score::FILE_NOT_FOUND;
+            return Score::FileError::FILE_NOT_FOUND;
       if (!fp.open(QIODevice::ReadOnly))
-            return Score::FILE_OPEN_ERROR;
+            return Score::FileError::FILE_OPEN_ERROR;
 
       Capella cf;
       try {
@@ -2364,11 +2364,11 @@ Score::FileError importCapella(Score* score, const QString& name)
                   }
             fp.close();
             // avoid another error message box
-            return Score::FILE_NO_ERROR;
+            return Score::FileError::FILE_NO_ERROR;
             }
       fp.close();
       convertCapella(score, &cf, false);
-      return Score::FILE_NO_ERROR;
+      return Score::FileError::FILE_NO_ERROR;
       }
 }
 

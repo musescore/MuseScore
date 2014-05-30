@@ -653,13 +653,13 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       if (!uz.exists()) {
             qDebug("loadCompressedMsc: <%s> not found", qPrintable(name));
             MScore::lastError = QT_TRANSLATE_NOOP("file", "file not found");
-            return FILE_NOT_FOUND;
+            return FileError::FILE_NOT_FOUND;
             }
 
       QList<QString> sl;
       QString rootfile = readRootFile(&uz, sl);
       if (rootfile.isEmpty())
-            return FILE_NO_ROOTFILE;
+            return FileError::FILE_NO_ROOTFILE;
 
       //
       // load images
@@ -731,7 +731,7 @@ Score::FileError Score::loadMsc(QString name, bool ignoreVersionError)
       QFile f(name);
       if (!f.open(QIODevice::ReadOnly)) {
             MScore::lastError = f.errorString();
-            return FILE_OPEN_ERROR;
+            return FileError::FILE_OPEN_ERROR;
             }
 
       XmlReader xml(&f);
@@ -809,9 +809,9 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
                   if (!ignoreVersionError) {
                         QString message;
                         if (_mscVersion > MSCVERSION)
-                              return FILE_TOO_NEW;
+                              return FileError::FILE_TOO_NEW;
                         if (_mscVersion < 114)
-                              return FILE_TOO_OLD;
+                              return FileError::FILE_TOO_OLD;
                         }
 
                   if (_mscVersion <= 114)
@@ -826,7 +826,7 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
                               _mscoreRevision = e.readInt();
                         else if (tag == "Score") {
                               if (!read(e))
-                                    return FILE_BAD_FORMAT;
+                                    return FileError::FILE_BAD_FORMAT;
                               }
                         else if (tag == "Revision") {
                               Revision* revision = new Revision;
@@ -865,7 +865,7 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
 // _mscVersion is needed used during layout
 //      _mscVersion = MSCVERSION;     // for later drag & drop usage
 
-      return FILE_NO_ERROR;
+      return FileError::FILE_NO_ERROR;
       }
 
 //---------------------------------------------------------

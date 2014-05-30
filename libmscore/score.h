@@ -237,7 +237,7 @@ class Score : public QObject {
       Q_PROPERTY(int npages   READ npages)
 
    public:
-      enum FileError {
+      enum class FileError : char {
             FILE_NO_ERROR,
             FILE_ERROR,
             FILE_NOT_FOUND,

@@ -2381,10 +2381,10 @@ Score::FileError importOve(Score* score, const QString& name) {
 
 	QFile oveFile(name);
 	if(!oveFile.exists())
-		return Score::FILE_NOT_FOUND;
+		return Score::FileError::FILE_NOT_FOUND;
 	if (!oveFile.open(QFile::ReadOnly)) {
 		//messageOutString(QString("can't read file!"));
-		return Score::FILE_OPEN_ERROR;
+		return Score::FileError::FILE_OPEN_ERROR;
 	}
 
 	QByteArray buffer = oveFile.readAll();
@@ -2409,5 +2409,5 @@ Score::FileError importOve(Score* score, const QString& name) {
                   }
 	}
 
-      return result ? Score::FILE_NO_ERROR : Score::FILE_ERROR;
+      return result ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;
 }
