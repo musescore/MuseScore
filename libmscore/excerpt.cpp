@@ -156,7 +156,7 @@ Score* createExcerpt(const QList<Part*>& parts)
       //
       // layout score
       //
-      score->addLayoutFlags(LayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO));
+      score->addLayoutFlags(LayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO));
       score->doLayout();
       //
       // handle transposing instruments

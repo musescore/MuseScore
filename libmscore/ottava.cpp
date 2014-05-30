@@ -226,7 +226,7 @@ void Ottava::endEdit()
             s->pitchOffsets().remove(editTick2);
 
             s->updateOttava(this);
-            score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
+            score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             score()->setPlaylistDirty(true);
             }
       TextLine::endEdit();

@@ -1601,7 +1601,7 @@ void InsertMeasure::undo()
       {
       Score* score = measure->score();
       score->remove(measure);
-      score->addLayoutFlags(LAYOUT_FIX_TICKS);
+      score->addLayoutFlags(LayoutFlag::FIX_TICKS);
       score->setLayoutAll(true);
       }
 
@@ -1609,7 +1609,7 @@ void InsertMeasure::redo()
       {
       Score* score = measure->score();
       score->addMeasure(measure, pos);
-      score->addLayoutFlags(LAYOUT_FIX_TICKS);
+      score->addLayoutFlags(LayoutFlag::FIX_TICKS);
       score->setLayoutAll(true);
       }
 
@@ -1714,7 +1714,7 @@ void ChangeElement::flip()
                   }
             }
       else if (newElement->type() == Element::ElementType::DYNAMIC)
-            newElement->score()->addLayoutFlags(LAYOUT_FIX_PITCH_VELO);
+            newElement->score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       else if (newElement->type() == Element::ElementType::TEMPO_TEXT) {
             TempoText* t = static_cast<TempoText*>(oldElement);
             score->setTempo(t->segment(), t->tempo());

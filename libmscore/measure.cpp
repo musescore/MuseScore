@@ -871,7 +871,7 @@ void Measure::add(Element* el)
                               m->setTimesig2(nfraction);
                               }
 #endif
-                        score()->addLayoutFlags(LAYOUT_FIX_TICKS);
+                        score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
                         }
                   }
                   break;

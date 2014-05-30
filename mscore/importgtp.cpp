@@ -4036,7 +4036,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             pscore->updateNotes();
 
             pscore->setLayoutAll(true);
-            pscore->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
+            pscore->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
             pscore->doLayout();
             }
 
@@ -4053,7 +4053,7 @@ Score::FileError importGTP(Score* score, const QString& name)
       score->updateNotes();
 
       score->setLayoutAll(true);
-      score->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
+      score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
       return Score::FILE_NO_ERROR;
       }

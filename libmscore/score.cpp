@@ -244,7 +244,7 @@ void Score::init()
       {
       _linkId         = 0;
       _currentLayer   = 0;
-      _playMode       = PLAYMODE_SYNTHESIZER;
+      _playMode       = PlayMode::SYNTHESIZER;
       Layer l;
       l.name          = "default";
       l.tags          = 1;
@@ -1321,7 +1321,7 @@ void Score::addElement(Element* element)
          ) {
             setLayoutAll(true);
             add(element);
-            addLayoutFlags(LAYOUT_FIX_TICKS);
+            addLayoutFlags(LayoutFlag::FIX_TICKS);
             return;
             }
 
@@ -1332,7 +1332,7 @@ void Score::addElement(Element* element)
 
       switch(et) {
             case Element::ElementType::SLUR:
-                  addLayoutFlags(LAYOUT_PLAY_EVENTS);
+                  addLayoutFlags(LayoutFlag::PLAY_EVENTS);
                   // fall through
 
             case Element::ElementType::VOLTA:
@@ -1359,13 +1359,13 @@ void Score::addElement(Element* element)
                               ss->system()->add(ss);
                         }
                   o->staff()->updateOttava(o);
-                  layoutFlags |= LAYOUT_FIX_PITCH_VELO;
+                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }
                   break;
 
             case Element::ElementType::DYNAMIC:
-                  layoutFlags |= LAYOUT_FIX_PITCH_VELO;
+                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
@@ -1459,7 +1459,7 @@ void Score::removeElement(Element* element)
          || et == Element::ElementType::FBOX
             ) {
             remove(element);
-            addLayoutFlags(LAYOUT_FIX_TICKS);
+            addLayoutFlags(LayoutFlag::FIX_TICKS);
             setLayoutAll(true);
             return;
             }
@@ -1474,7 +1474,7 @@ void Score::removeElement(Element* element)
 
       switch(et) {
             case Element::ElementType::SLUR:
-                  addLayoutFlags(LAYOUT_PLAY_EVENTS);
+                  addLayoutFlags(LayoutFlag::PLAY_EVENTS);
                   // fall through
 
             case Element::ElementType::VOLTA:
@@ -1501,13 +1501,13 @@ void Score::removeElement(Element* element)
                   Staff* s = o->staff();
                   s->pitchOffsets().remove(o->tick());
                   s->pitchOffsets().remove(o->tick2());
-                  layoutFlags |= LAYOUT_FIX_PITCH_VELO;
+                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }
                   break;
 
             case Element::ElementType::DYNAMIC:
-                  layoutFlags |= LAYOUT_FIX_PITCH_VELO;
+                  layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   break;
 
@@ -2088,7 +2088,7 @@ Score* Score::clone()
             ++staffIdx;
             }
       score->updateNotes();
-      score->addLayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO);
+      score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
       score->scanElements(0, elementAdjustReadPos);  //??
       return score;
