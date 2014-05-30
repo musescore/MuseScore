@@ -51,7 +51,7 @@ Element* MuseScoreView::elementAt(const QPointF& p)
 
 Page* MuseScoreView::point2page(const QPointF& p)
       {
-      if (score()->layoutMode() == LayoutLine)
+      if (score()->layoutMode() == LayoutMode::LINE)
             return score()->pages().front();
       foreach(Page* page, score()->pages()) {
             if (page->bbox().translated(page->pos()).contains(p))

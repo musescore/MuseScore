@@ -939,7 +939,7 @@ void ScoreView::setScore(Score* s)
             loopToggled(getAction("loop")->isChecked());
 
             connect(s, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
-            s->setLayoutMode(LayoutPage);
+            s->setLayoutMode(LayoutMode::PAGE);
             s->setLayoutAll(true);
             s->update();
             }
@@ -1788,7 +1788,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       QRectF fr = imatrix.mapRect(QRectF(r));
 
       QRegion r1(r);
-      if (_score->layoutMode() == LayoutLine) {
+      if (_score->layoutMode() == LayoutMode::LINE) {
             Page* page = _score->pages().front();
             QList<Element*> ell = page->items(fr);
             qStableSort(ell.begin(), ell.end(), elementLessThan);
@@ -1907,7 +1907,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
             }
       p.setMatrixEnabled(false);
-      if ((_score->layoutMode() != LayoutLine) && !r1.isEmpty()) {
+      if ((_score->layoutMode() != LayoutMode::LINE) && !r1.isEmpty()) {
             p.setClipRegion(r1);  // only background
             if (bgPixmap == 0 || bgPixmap->isNull())
                   p.fillRect(r, _bgColor);
@@ -3557,7 +3557,7 @@ void ScoreView::pageNext()
       {
       if (score()->pages().empty())
             return;
-      if (score()->layoutMode() == LayoutLine) {
+      if (score()->layoutMode() == LayoutMode::LINE) {
             qreal x = xoffset() - width() * .8;
             MeasureBase* lm = score()->last();
             qreal lx = (lm->pos().x() + lm->width()) * mag() - width() * .8;
@@ -3585,7 +3585,7 @@ void ScoreView::pagePrev()
       {
       if (score()->pages().empty())
             return;
-      if (score()->layoutMode() == LayoutLine) {
+      if (score()->layoutMode() == LayoutMode::LINE) {
             qreal x = xoffset() + width() * .8;
             if (x > 0.0)
                   x = 0;
@@ -3607,7 +3607,7 @@ void ScoreView::pagePrev()
 
 void ScoreView::pageTop()
       {
-      if (score()->layoutMode() == LayoutLine)
+      if (score()->layoutMode() == LayoutMode::LINE)
             setOffset(0.0, yoffset());
       else
             setOffset(10.0, 10.0);
@@ -3622,7 +3622,7 @@ void ScoreView::pageEnd()
       {
       if (score()->pages().empty())
             return;
-      if (score()->layoutMode() == LayoutLine) {
+      if (score()->layoutMode() == LayoutMode::LINE) {
             MeasureBase* lm = score()->last();
             qreal lx = (lm->canvasPos().x() + lm->width()) * mag();
             lx -= width() * .8;
@@ -3642,7 +3642,7 @@ void ScoreView::pageEnd()
 
 void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       {
-      if (score()->layoutMode() == LayoutLine) {
+      if (score()->layoutMode() == LayoutMode::LINE) {
             qreal xo;  // new x offset
             qreal curPosR = _cursor->rect().right();
             qreal curPosL = _cursor->rect().left();
