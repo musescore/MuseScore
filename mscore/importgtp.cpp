@@ -2784,7 +2784,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                         }
                   cr = new Rest(score);
                   }
-            else {
+            else  {
                   if (!cr)
                         cr = new Chord(score);
                   }
@@ -3148,6 +3148,686 @@ void GuitarPro5::read(QFile* fp)
       setTempo(tempo, score->firstMeasure());
       }
 
+
+//---------------------------------------------------------
+//   readBit
+//---------------------------------------------------------
+
+int GuitarPro6::readBit() {
+      // calculate the byte index by dividing the position in bits by the bits per byte
+      int byteIndex = this->position / BITS_IN_BYTE;
+      // calculate our offset so we know how much to bit shift
+      int byteOffset = ((BITS_IN_BYTE-1) - (this->position % BITS_IN_BYTE));
+      // calculate the bit which we want to read
+      int bit = ((((*buffer)[byteIndex] & 0xff) >> byteOffset) & 0x01);
+      // increment our curent position so we know this bit has been read
+      this->position++;
+      // return the bit we calculated
+      return bit;
+      }
+
+
+//---------------------------------------------------------
+//   readBits
+//---------------------------------------------------------
+
+int GuitarPro6::readBits(int bitsToRead) {
+      int bits = 0;
+      for (int i = (bitsToRead-1); i>=0; i--) {
+            bits |= (readBit() << i);
+            }
+      return bits;
+      }
+
+//---------------------------------------------------------
+//   readBitsReversed
+//---------------------------------------------------------
+
+int GuitarPro6::readBitsReversed(int bitsToRead) {
+      int bits = 0;
+      for( int i = 0 ; i < bitsToRead ; i ++ ) {
+            bits |= (readBit() << i );
+            }
+      return bits;
+      }
+
+//---------------------------------------------------------
+//   getBytes
+//---------------------------------------------------------
+
+QByteArray GuitarPro6::getBytes(QByteArray* buffer, int offset, int length) {
+      QByteArray newBytes;
+      // compute new bytes from our buffer and return byte array
+      for (int i = 0; i < length; i++) {
+            if (buffer->length() > offset + i) {
+                  newBytes.insert(i, ((*buffer)[offset+i]));
+                  }
+            }
+      return newBytes;
+      }
+
+//---------------------------------------------------------
+//   readInteger
+//---------------------------------------------------------
+
+int GuitarPro6::readInteger(QByteArray* buffer, int offset) {
+      // assign four bytes and take them from the buffer
+      char bytes[4];
+      bytes[0] = (*buffer)[offset+0];
+      bytes[1] = (*buffer)[offset+1];
+      bytes[2] = (*buffer)[offset+2];
+      bytes[3] = (*buffer)[offset+3];
+      // increment positioning so we keep track of where we are
+      this->position+=sizeof(int)*BITS_IN_BYTE;
+      // bit shift in order to compute our integer value and return
+      return ((bytes[3] & 0xff) << 24) | ((bytes[2] & 0xff) << 16) | ((bytes[1] & 0xff) << 8) | (bytes[0] & 0xff);
+      }
+
+//---------------------------------------------------------
+//   readString
+//---------------------------------------------------------
+
+QByteArray GuitarPro6::readString(QByteArray* buffer, int offset, int length) {
+      QByteArray filename;
+      // compute the string by iterating through the buffer
+      for (int i = 0; i < length; i++) {
+            int charValue = (((*buffer)[offset + i]) & 0xff);
+            if (charValue == 0)
+                  break;
+            filename.push_back((char)charValue);
+      }
+      return filename;
+}
+
+//---------------------------------------------------------
+//   readGPX
+//---------------------------------------------------------
+
+void GuitarPro6::readGPX(QByteArray* buffer) {
+      // start by reading the file header. It will tell us if the byte array is compressed.
+      int fileHeader = readInteger(buffer, 0);
+
+      if (fileHeader == GPX_HEADER_COMPRESSED) {
+            // this is  a compressed file.
+            int length = readInteger(buffer, this->position/BITS_IN_BYTE);
+            QByteArray* bcfsBuffer = new QByteArray();
+            int positionCounter = 0;
+            while(!f->error() && (this->position/this->BITS_IN_BYTE) < length) {
+                  // read the bit indicating compression information
+                  int flag = this->readBits(1);
+
+                  if (flag) {
+                        int bits = this->readBits(4);
+                        int offs = this->readBitsReversed(bits);
+                        int size = this->readBitsReversed(bits);
+
+                        QByteArray bcfsBufferCopy = *bcfsBuffer;
+                        int pos = (bcfsBufferCopy.length() - offs );
+                        for( int i = 0; i < (size > offs ? offs : size) ; i ++ ) {
+                              bcfsBuffer->insert(positionCounter, bcfsBufferCopy[pos + i] ) ;
+                              positionCounter++;
+                              }
+                        }
+                  else  {
+                        int size = this->readBitsReversed(2);
+                        for(int i = 0; i < size; i++) {
+                              bcfsBuffer->insert(positionCounter, this->readBits(8));
+                              positionCounter++;
+                              }
+                        }
+                  }
+             // recurse on the decompressed file stored as a byte array
+             readGPX(bcfsBuffer);
+             delete bcfsBuffer;
+            }
+      else if (fileHeader == GPX_HEADER_UNCOMPRESSED) {
+            // this is an uncompressed file - strip the header off
+            *buffer = buffer->right(buffer->length()-sizeof(int));
+            int sectorSize = 0x1000;
+            int offset = 0;
+            while ((offset = (offset + sectorSize)) + 3 < buffer->length()) {
+                  int newInt = readInteger(buffer,offset);
+                  if (newInt == 2) {
+                        int indexFileName = (offset + 4);
+                        int indexFileSize = (offset + 0x8C);
+                        int indexOfBlock = (offset + 0x94);
+
+                        // create a byte array and put information about files found in it
+                        int block = 0;
+                        int blockCount = 0;
+                        QByteArray* fileBytes = new QByteArray();
+                        while((block = (readInteger(buffer, (indexOfBlock + (4 * (blockCount ++)))))) != 0 ) {
+                              fileBytes->push_back(getBytes(buffer, (offset = (block*sectorSize)), sectorSize));
+                              }
+                        // get file information and read the file
+                        int fileSize = readInteger(buffer, indexFileSize);
+                        if (fileBytes->length() >= fileSize) {
+                              QByteArray filenameBytes = readString(buffer, indexFileName, 127);
+                              char* filename = filenameBytes.data();
+                              QByteArray data = getBytes(fileBytes, 0, fileSize);
+                              parseFile(filename, &data);
+                              }
+                        delete fileBytes;
+                        }
+                  }
+            }
+}
+
+//---------------------------------------------------------
+//   parseFile
+//---------------------------------------------------------
+
+void GuitarPro6::parseFile(char* filename, QByteArray* data)
+      {
+      // test to check if we are dealing with the score
+      if (!strcmp(filename, "score.gpif")) {
+            readGpif(data);
+            }
+      }
+
+
+//---------------------------------------------------------
+//   unhandledNode
+//---------------------------------------------------------
+
+void GuitarPro6::unhandledNode(QString nodeName)
+      {
+      qDebug() << "WARNING: Discovered unhandled node name" << nodeName;
+      }
+
+//---------------------------------------------------------
+//   readScore
+//---------------------------------------------------------
+
+void GuitarPro6::readScore(QDomNode* scoreNode)
+      {
+      // loop through the score meta-info, grabbing title, artist, etc
+      QDomNode currentNode = scoreNode->firstChild();
+      while (!currentNode.isNull()) {
+            QString nodeName = currentNode.nodeName();
+            if (!nodeName.compare("Title"))
+                  title = currentNode.toElement().text();
+            else if (!nodeName.compare("Subtitle"))
+                  subtitle = currentNode.toElement().text();
+            else if (!nodeName.compare("Artist"))
+                  artist = currentNode.toElement().text();
+            else if (!nodeName.compare("Album"))
+                  album = currentNode.toElement().text();
+            else
+                  unhandledNode(nodeName);
+            currentNode = currentNode.nextSibling();
+            }
+      }
+
+//---------------------------------------------------------
+//   readMasterTracks
+//---------------------------------------------------------
+
+void GuitarPro6::readMasterTracks(QDomNode* masterTrack)
+      {
+      // inspects MasterTrack, gives information applying to start of score such as tempo
+      QDomNode currentNode = masterTrack->firstChild();
+      while (!currentNode.isNull()) {
+            QString nodeName = currentNode.nodeName();
+            if (!nodeName.compare("Automations")) {
+                  QDomNode currentAutomation = currentNode.firstChild();
+                  while (!currentAutomation.isNull()) {
+                        if (!currentAutomation.nodeName().compare("Automation")) {
+                              if (!currentAutomation.firstChild().nodeName().compare("Tempo"))
+                                    tempo = currentAutomation.lastChild().toElement().text().toInt();
+                              else
+                                    unhandledNode(currentAutomation.nodeName());
+                              }
+                        else
+                              unhandledNode(currentAutomation.nodeName());
+                        currentAutomation = currentAutomation.nextSibling();
+                        }
+                  }
+            currentNode = currentNode.nextSibling();
+            }
+      }
+
+//---------------------------------------------------------
+//   readTracks
+//---------------------------------------------------------
+
+void GuitarPro6::readTracks(QDomNode* track)
+      {
+      QDomNode nextTrack = track->firstChild();
+      int trackCounter = 0;
+      while (!nextTrack.isNull()) {
+            QDomNode currentNode = nextTrack.firstChild();
+            Part* part = new Part(score);
+            Staff* s = new Staff(score, part, trackCounter);
+            while (!currentNode.isNull()) {
+                  QString nodeName = currentNode.nodeName();
+                  if (nodeName == "Name")
+                        part->setLongName(currentNode.toElement().text());
+                  else if (nodeName == "ShortName")
+                        part->setPartName(currentNode.toElement().text());
+                  else if (nodeName == "Properties") {
+                        QDomNode currentProperty = currentNode.firstChild();
+                        while (!currentProperty.isNull()) {
+                              if (currentProperty.attributes().namedItem("name").toAttr().value() == "Tuning") {
+                                    // set up the tuning for the part
+                                    QString tuningString = currentProperty.firstChild().toElement().text();
+                                    QStringList tuningStringList = tuningString.split(" ");
+                                    int strings = 0;
+                                    int tuning[tuningStringList.length()];
+                                    int frets   = 21;
+                                    for (auto iter = tuningStringList.begin(); iter != tuningStringList.end(); ++iter) {
+                                          int currentString = (*iter).toInt();
+                                          tuning[strings] = currentString;
+                                          strings++;
+                                          }
+                                          StringData* stringData = new StringData(frets, strings, tuning);
+                                          Instrument* instr = part->instr();
+                                          instr->setStringData(*stringData);
+                                    }
+                              else
+                                    unhandledNode(nodeName);
+                              currentProperty = currentProperty.nextSibling();
+                              }
+                        }
+                  else
+                        unhandledNode(nodeName);
+                  currentNode = currentNode.nextSibling();
+                  }
+
+            // add in a new part
+            part->insertStaff(s);
+            score->staves().push_back(s);
+            score->appendPart(part);
+            trackCounter++;
+            nextTrack = nextTrack.nextSibling();
+            }
+      // set the number of staves we need
+      staves = score->staves().length();
+      }
+
+//---------------------------------------------------------
+//   getNode
+//---------------------------------------------------------
+
+QDomNode GuitarPro6::getNode(QString id, QDomNode currentNode)
+      {
+      while (!(currentNode).isNull()) {
+            QString currentId = currentNode.attributes().namedItem("id").toAttr().value();
+            if (id.compare(currentId) == 0) {
+                  return currentNode;
+                  }
+            currentNode = (currentNode).nextSibling();
+            }
+      qDebug("WARNING: A null node was returned when search for an identifier. Your Guitar Pro file may be corrupt.");
+      return currentNode;
+      }
+
+//---------------------------------------------------------
+//   findNumMeasures
+//---------------------------------------------------------
+
+int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
+      {
+            QDomNode finalMasterBar = partInfo->masterBars.nextSibling();
+            while (!finalMasterBar.isNull()) {
+                  GpBar gpBar;
+                  gpBar.keysig = finalMasterBar.firstChild().toElement().text().toInt();
+                  QString timeSignature = finalMasterBar.firstChild().nextSibling().toElement().text();
+                  QList<QString> timeSignatureList = timeSignature.split("/");
+                  gpBar.timesig = Fraction(timeSignatureList.first().toInt(), timeSignatureList.last().toInt());
+                  bars.append(gpBar);
+                  if (finalMasterBar.nextSibling().isNull())
+                        break;
+                  finalMasterBar = finalMasterBar.nextSibling();
+            }
+            QString bars = finalMasterBar.lastChildElement("Bars").toElement().text();
+            //work out the number of measures (add 1 as couning from 0, and divide by number of parts)
+            int numMeasures = (bars.split(" ").last().toInt() + 1) / score->parts().length();
+            return numMeasures;
+      }
+
+//---------------------------------------------------------
+//   rhythmToDuration
+//---------------------------------------------------------
+
+Fraction GuitarPro6::rhythmToDuration(QString value)
+      {
+            Fraction l;
+            if (value.compare("Whole") == 0)
+                  l.set(1, 1);
+            else if (value.compare("Half") == 0)
+                  l.set(1, 2);
+            else if (value.compare("Quarter") == 0)
+                  l.set(1, 4);
+            else if (value.compare("Eighth") == 0)
+                  l.set(1,8);
+            else if (value.compare("16th") == 0)
+                  l.set(1,16);
+            else if (value.compare("32nd") == 0)
+                  l.set(1,32);
+            else if (value.compare("64th") == 0)
+                  l.set(1,64);
+            else if (value.compare("128th") == 0)
+                  l.set(1,128);
+            else
+                  qFatal( "Error - unknown note length: %s", qPrintable(value));
+            return l;
+      }
+
+//---------------------------------------------------------
+//   readMasterBars
+//---------------------------------------------------------
+
+void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
+      {
+      Measure* measure = score->firstMeasure();
+      int bar = 0;
+      QDomNode nextMasterBar = partInfo->masterBars;
+      nextMasterBar = nextMasterBar.nextSibling();
+      int measureCounter = 0;
+      ClefType oldClefId[staves];
+      do    {
+            const GpBar& gpbar = bars[bar];
+
+            if (!gpbar.marker.isEmpty()) {
+                  Text* s = new RehearsalMark(score);
+                  s->setText(gpbar.marker.trimmed());
+                  s->setTrack(0);
+                  Segment* segment = measure->getSegment(Segment::SegChordRest, measure->tick());
+                  segment->add(s);
+                  }
+
+            qDebug("--- On a new master bar ---");
+            QDomNode key = nextMasterBar.firstChild();
+            KeySig* t = new KeySig(score);
+            t->setSig(0, key.firstChild().toElement().text().toInt());
+
+            QDomNode time = key.nextSibling();
+            measure->setTimesig(bars[measureCounter].timesig);
+            measure->setLen(bars[measureCounter].timesig);
+            QDomNode barList = time.nextSibling();
+            QStringList barsString = barList.toElement().text().split(" ");
+            int staffIdx = 0;
+            //Tuplet* tuplets[staves * 2];     // is this necessary?
+            for (auto iter = barsString.begin(); iter != barsString.end(); ++iter) {
+                  int tick = measure->tick();
+
+                  t->setTrack(0);
+                  Segment* s = measure->getSegment(Segment::SegKeySig, tick);
+                  s->add(t);
+
+                  QDomNode barNode = getNode(*iter, partInfo->bars);
+                  QDomNode clef = (barNode).firstChild();
+                  QString clefString = clef.toElement().text();
+                  QDomNode voices = clef.nextSibling();
+                  QString voicesString = voices.toElement().text();
+                  QDomNode xproperties = voices.nextSibling();
+                  ClefType clefId;
+                  if (!xproperties.isNull())
+                        qDebug("Unsupported tag in bars: XProperties");
+                  if (!clefString.compare("F4"))
+                        clefId = ClefType::F8;
+                  else if (!clefString.compare("G2"))
+                        clefId = ClefType::G3;
+                  else if (!clefString.compare("Neutral"))
+                        clefId = ClefType::PERC;
+                  else
+                        qDebug() << "WARNING: unhandled clef type: " << clefString;
+                  Clef* newClef = new Clef(score);
+                  newClef->setClefType(clefId);
+                  newClef->setTrack(staffIdx * VOICES);
+                  Segment* segment = measure->getSegment(Segment::SegClef, 0);
+                  if (measure->prevMeasure()) {
+                        if (clefId != oldClefId[staffIdx]) {
+                              segment->add(newClef);
+                              newClef->staff()->setClef(0, newClef->clefTypeList());
+                              oldClefId[staffIdx] = clefId;
+                              }
+                        }
+                  else  {
+                        segment->add(newClef);
+                        newClef->staff()->setClef(0, newClef->clefTypeList());
+                        oldClefId[staffIdx] = clefId;
+                        }
+
+                  // parse the voices
+                  auto currentVoice = voicesString.split(" ").first();
+                  qDebug() << "WARNING: We currently only support one voice. Handling voice: " << currentVoice;
+                  QDomNode voice = getNode(currentVoice, partInfo->voices);
+                  int voiceNum = 0;
+                  QString beats = (voice).firstChild().toElement().text();
+
+                  // we now look at the beat in order to gain note, dynamic, rhythm etc. information
+                  auto currentBeatList = beats.split(" ");
+                  for (auto currentBeat = currentBeatList.begin(); currentBeat != currentBeatList.end(); currentBeat++) {
+                  Fraction l;
+                  int dotted = 0;
+                  QDomNode beat = getNode(*currentBeat, partInfo->beats);
+
+                  Segment* segment = measure->getSegment(Segment::SegChordRest, tick);
+                  QDomNode currentNode = beat.firstChild();
+                  bool noteSpecified = false;
+                  ChordRest* cr = segment->cr(staffIdx * VOICES + voiceNum);
+                  while (!currentNode.isNull()) {
+                        if (currentNode.nodeName() == "Notes") {
+                              noteSpecified = true;
+                              auto notesList = currentNode.toElement().text().split(" ");
+
+                              // this could be set by rhythm if we dealt with a tuplet
+                              if (!cr)
+                                    cr = new Chord(score);
+                              cr->setTrack(staffIdx * VOICES + voiceNum);
+                              cr->setDuration(l);
+                              TDuration d(l);
+                              d.setDots(dotted);
+                              cr->setDurationType(d);
+
+                              for (auto iter = notesList.begin(); iter != notesList.end(); ++iter) {
+                                    // we have found a note
+                                    QDomNode note = getNode(*iter, partInfo->notes);
+                                    QDomNode currentNode = (note).firstChild();
+                                    // if a <Notes> tag is used but there is no <Note>, then we add a rest. This flag will allow us to check this.
+                                    while (!currentNode.isNull()) {
+                                          if (currentNode.nodeName() == "Properties") {
+                                                QDomNode currentProperty = currentNode.firstChild();
+                                                // these should not be in this scope - they may not even exist.
+                                                QString stringNum;
+                                                QString fretNum;
+                                                QString tone;
+                                                QString octave;
+                                                QString midi;
+                                                while (!currentProperty.isNull()) {
+                                                      QString argument = currentProperty.attributes().namedItem("name").toAttr().value();
+                                                      if (argument == "String")
+                                                            stringNum = currentProperty.firstChild().toElement().text();
+                                                      else if (argument == "Element") {}
+                                                      else if (argument == "Variation") {}
+                                                      else if (argument == "Fret")
+                                                            fretNum = currentProperty.firstChild().toElement().text();
+                                                      else if (argument == "Tone")
+                                                            tone = currentProperty.firstChild().toElement().text();
+                                                      else if (argument == "Octave")
+                                                            octave = currentProperty.firstChild().toElement().text();
+                                                      else if (argument == "Midi")
+                                                            midi = currentProperty.firstChild().toElement().text();
+                                                      else
+                                                            qDebug() << "WARNING: Not handling node argument: " << argument << "in node" << currentNode.nodeName();
+                                                      currentProperty = currentProperty.nextSibling();
+                                                      }
+
+                                                if (stringNum != "") {
+                                                      Note* note = new Note(score);
+                                                      static_cast<Chord*>(cr)->add(note);
+                                                      Staff* staff = note->staff();
+
+                                                      int string =  stringNum.toInt();
+                                                      int fretNumber = fretNum.toInt();
+                                                      int musescoreString = staff->part()->instr()->stringData()->strings() - 1 - string;
+                                                      auto pitch = staff->part()->instr()->stringData()->getPitch(musescoreString, fretNumber);
+                                                      note->setFret(fretNumber);
+                                                      // we need to turn this string number for GP to the the correct string number for musescore
+                                                      note->setString(musescoreString);
+                                                      note->setPitch(pitch);
+                                                      note->setTpcFromPitch();
+                                                      if(!segment->cr(staffIdx * VOICES + voiceNum))
+                                                            segment->add(cr);
+                                                      }
+                                                else if (tone != "") {
+                                                      Note* note = new Note(score);
+                                                      static_cast<Chord*>(cr)->add(note);
+                                                      int toneInt = tone.toInt();
+                                                      int octaveInt = octave.toInt();
+                                                      // multiply octaves by 12 as 12 semitones in octave
+                                                      note->setPitch((octaveInt * 12) + toneInt);
+                                                      note->setTpcFromPitch();
+                                                      if(!segment->cr(staffIdx * VOICES + voiceNum))
+                                                            segment->add(cr);
+                                                      }
+                                                else if (midi != "") {
+                                                      Note* note = new Note(score);
+                                                      static_cast<Chord*>(cr)->add(note);
+                                                      note->setPitch(midi.toInt());
+                                                      note->setTpcFromPitch();
+                                                      if(!segment->cr(staffIdx * VOICES + voiceNum))
+                                                            segment->add(cr);
+                                                      }
+
+                                                currentNode = currentNode.nextSibling();
+                                                }
+                                          else
+                                                unhandledNode(currentNode.nodeName());
+                                          currentNode = currentNode.nextSibling();
+                                          }
+                                    }
+                              }
+                        else if (currentNode.nodeName() == "Rhythm") {
+                              // we have found a rhythm
+                              QString refString = currentNode.attributes().namedItem("ref").toAttr().value();
+                              QDomNode rhythm = getNode(refString, partInfo->rhythms);
+                              QDomNode currentNode = (rhythm).firstChild();
+                              while (!currentNode.isNull()) {
+                                    if (currentNode.nodeName() == "NoteValue") {
+                                          l = rhythmToDuration(currentNode.toElement().text());
+                                          }
+                                    else if (currentNode.nodeName() == "AugmentationDot") {
+                                          dotted = currentNode.attributes().namedItem("count").toAttr().value().toInt();
+                                          for (int count = 1; count <= dotted; count++)
+                                                l = l + (l / pow(2, count));
+                                    }
+                                    else if (currentNode.nodeName() == "PrimaryTuplet") {
+                                          qDebug("WARNING: Not handling tuplet note.");
+                                          Tuplet* tuplet = new Tuplet(score);
+                                          // perhaps this should be a rest too, rhythm comes before notes in score.gpif
+                                          cr = new Chord(score);
+                                          // pointless? tuplets[staffIdx * voiceNum] = tuplet;
+                                          cr->setTrack(staffIdx * VOICES + voiceNum);
+                                          tuplet->setTrack(cr->track());
+                                          tuplet->setRatio(Fraction(currentNode.attributes().namedItem("num").toAttr().value().toInt(),currentNode.attributes().namedItem("den").toAttr().value().toInt()));
+                                          tuplet->setParent(measure);
+                                          tuplet->setBaseLen(l);
+                                          cr->setTuplet(tuplet);
+                                          tuplet->add(cr);
+                                          }
+                                    else
+                                          qDebug() << "WARNING: Not handling node: " << currentNode.nodeName();
+                                    currentNode = currentNode.nextSibling();
+                                    }
+                              }
+                        qDebug() << "WARNING: Not handling beat XML tag:" << currentNode.nodeName();
+                        currentNode = currentNode.nextSibling();
+                        dotted = 0;
+                        }
+                  // we have handled the note - was there a note?
+                  if (!noteSpecified) {
+                        // add a rest with length of l
+                        cr = new Rest(score);
+                        cr->setTrack(staffIdx * VOICES + voiceNum);
+                        TDuration d(l);
+                        cr->setDuration(l);
+                        cr->setDurationType(d);
+                        if(!segment->cr(staffIdx * VOICES + voiceNum))
+                              segment->add(cr);
+                        }
+                  tick += cr->actualTicks();
+                  }
+            staffIdx++;
+            }
+            measureCounter++;
+            nextMasterBar = nextMasterBar.nextSibling();
+            measure = measure->nextMeasure();
+            bar++;
+            } while (!nextMasterBar.isNull());
+      }
+
+//---------------------------------------------------------
+//   readGpif
+//---------------------------------------------------------
+
+void GuitarPro6::readGpif(QByteArray* data)
+      {
+      QDomDocument qdomDoc;
+      qdomDoc.setContent(*data);
+      QDomElement qdomElem = qdomDoc.documentElement();
+      // GPRevision node
+      QDomNode revision = qdomElem.firstChild();
+      // Score node
+      QDomNode scoreNode = revision.nextSibling();
+      readScore(&scoreNode);
+      // MasterTrack node
+      QDomNode masterTrack = scoreNode.nextSibling();
+      readMasterTracks(&masterTrack);
+      // Tracks node
+
+      QDomNode eachTrack = masterTrack.nextSibling();
+      readTracks(&eachTrack);
+      // MasterBars node
+      GPPartInfo partInfo;
+      QDomNode masterBars = eachTrack.nextSibling();
+      QDomNode bars = masterBars.nextSibling();
+      QDomNode voices = bars.nextSibling();
+      QDomNode beats = voices.nextSibling();
+      QDomNode notes = beats.nextSibling();
+      QDomNode rhythms = notes.nextSibling();
+      partInfo.masterBars = masterBars.firstChild();
+      partInfo.bars = bars.firstChild();
+      partInfo.voices = voices.firstChild();
+      partInfo.beats = beats.firstChild();
+      partInfo.notes = notes.firstChild();
+      partInfo.rhythms = rhythms.firstChild();
+
+      measures = findNumMeasures(&partInfo);
+
+      createMeasures();
+      readMasterBars(&partInfo);
+      setTempo(/*tempo*/120, score->firstMeasure());
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+void GuitarPro6::read(QFile* fp)
+      {
+      qDebug("reading guitar pro v6 file (.gpx)...");
+      f = fp;
+      this->buffer = new QByteArray();
+      *(this->buffer) = fp->readAll();
+      // decompress and read files contained within GPX file
+      readGPX(this->buffer);
+      delete this->buffer;
+      }
+
+//---------------------------------------------------------
+//   readBeatEffects
+//---------------------------------------------------------
+
+int GuitarPro6::readBeatEffects(int track, Segment*)
+      {
+      qDebug("reading beat effects (.gpx)...\n");
+      return 0;
+      }
+
+
 //---------------------------------------------------------
 //   importGTP
 //---------------------------------------------------------
@@ -3159,42 +3839,50 @@ Score::FileError importGTP(Score* score, const QString& name)
             return Score::FILE_NOT_FOUND;
       if (!fp.open(QIODevice::ReadOnly))
             return Score::FILE_OPEN_ERROR;
-      uchar l;
-      fp.read((char*)&l, 1);
-      char ss[30];
-      fp.read(ss, 30);
-      ss[l] = 0;
-      QString s(ss);
-      if (s.startsWith("FICHIER GUITAR PRO "))
-            s = s.mid(20);
-      else if (s.startsWith("FICHIER GUITARE PRO "))
-            s = s.mid(21);
-      else {
-            qDebug("unknown gtp format <%s>", ss);
-            return Score::FILE_BAD_FORMAT;
-            }
 
-      int a = s.left(1).toInt();
-      int b = s.mid(2).toInt();
-      int version = a * 100 + b;
       GuitarPro* gp;
-
-      if (a == 1)
-            gp = new GuitarPro1(score, version);
-      if (a == 2)
-            gp = new GuitarPro2(score, version);
-      if (a == 3)
-            gp = new GuitarPro3(score, version);
-      else if (a == 4)
-            gp = new GuitarPro4(score, version);
-      else if (a == 5)
-            gp = new GuitarPro5(score, version);
-      else {
-            qDebug("unknown gtp format %d", version);
-            return Score::FILE_BAD_FORMAT;
-            }
-      try {
-            gp->read(&fp);
+      try   {
+            // check to see if we are dealing with a GPX file via the extension
+            if (name.endsWith(".gpx", Qt::CaseInsensitive)) {
+                  gp = new GuitarPro6(score);
+                  gp->read(&fp);
+                  fp.close();
+                  }
+            // otherwise it's an older version - check the header
+            else  {
+                  uchar l;
+                  fp.read((char*)&l, 1);
+                  char ss[30];
+                  fp.read(ss, 30);
+                  ss[l] = 0;
+                  QString s(ss);
+                  if (s.startsWith("FICHIER GUITAR PRO "))
+                        s = s.mid(20);
+                  else if (s.startsWith("FICHIER GUITARE PRO "))
+                        s = s.mid(21);
+                  else {
+                        qDebug("unknown gtp format <%s>\n", ss);
+                        return Score::FILE_BAD_FORMAT;
+                        }
+                  int a = s.left(1).toInt();
+                  int b = s.mid(2).toInt();
+                  int version = a * 100 + b;
+                  if (a == 1)
+                        gp = new GuitarPro1(score, version);
+                  if (a == 2)
+                        gp = new GuitarPro2(score, version);
+                  if (a == 3)
+                        gp = new GuitarPro3(score, version);
+                  else if (a == 4)
+                        gp = new GuitarPro4(score, version);
+                  else if (a == 5)
+                        gp = new GuitarPro5(score, version);
+                  else {
+                        qDebug("unknown gtp format %d\n", version);
+                        return Score::FILE_BAD_FORMAT;
+                        }
+                        gp->read(&fp);
+                  }
             }
       catch(GuitarPro::GuitarProError errNo) {
             if (!MScore::noGui) {
@@ -3266,7 +3954,8 @@ Score::FileError importGTP(Score* score, const QString& name)
             if (bar.barLine != NORMAL_BAR)
                   m->setEndBarLineType(bar.barLine, false);
             }
-      score->lastMeasure()->setEndBarLineType(END_BAR, false);
+      if (score->lastMeasure())
+            score->lastMeasure()->setEndBarLineType(END_BAR, false);
 
       //
       // create parts (excerpts)
@@ -3294,7 +3983,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             stavesMap.append(score->staffIdx(staff));
             cloneStaves(score, pscore, stavesMap);
 
-            if (part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
+            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
                   p->setStaves(2);
                   Staff* s1 = p->staff(1);
                   s1->setUpdateKeymap(true);
@@ -3314,7 +4003,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             excerpt->parts().append(part);
             score->excerpts().append(excerpt);
 
-            if (part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
+            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == STANDARD_STAFF_GROUP) {
                   Staff* staff2 = pscore->staff(1);
                   staff2->setStaffType(StaffType::preset(StaffTypes::TAB_DEFAULT));
                   }

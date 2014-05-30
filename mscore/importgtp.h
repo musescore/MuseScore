@@ -83,6 +83,7 @@ class GuitarPro {
       QFile* f;
       int curPos;
       int previousTempo;
+      int tempo;
 
       int voltaSequence;
       QTextCodec* _codec;
@@ -209,6 +210,56 @@ class GuitarPro5 : public GuitarPro {
       virtual void read(QFile*);
       };
 
+//---------------------------------------------------------
+//   GuitarPro6
+//---------------------------------------------------------
+
+class GuitarPro6 : public GuitarPro {
+
+   private:
+      // an integer stored in the header indicating that the file is not compressed (BCFS).
+      const int GPX_HEADER_UNCOMPRESSED = 1397113666;
+      // an integer stored in the header indicating that the file is not compressed (BCFZ).
+      const int GPX_HEADER_COMPRESSED = 1514554178;
+      int position=0;
+      QByteArray* buffer;
+      // a constant storing the amount of bits per byte
+      const int BITS_IN_BYTE = 8;
+      // contains all the information about notes that will go in the parts
+      struct GPPartInfo {
+            QDomNode masterBars;
+            QDomNode bars;
+            QDomNode voices;
+            QDomNode beats;
+            QDomNode notes;
+            QDomNode rhythms;
+            };
+      void parseFile(char* filename, QByteArray* data);
+      int readBit();
+      QByteArray getBytes(QByteArray* buffer, int offset, int length);
+      void readGPX(QByteArray* buffer);
+      int readInteger(QByteArray* buffer, int offset);
+      QByteArray readString(QByteArray* buffer, int offset, int length);
+      int readBits(int bitsToRead);
+      int readBitsReversed(int bitsToRead);
+      void readGpif(QByteArray* data);
+      void readScore(QDomNode* metadata);
+      int findNumMeasures(GPPartInfo* partInfo);
+      void readMasterTracks(QDomNode* masterTrack);
+      void readTracks(QDomNode* tracks);
+      void readMasterBars(GPPartInfo* partInfo);
+      Fraction rhythmToDuration(QString value);
+      QDomNode getNode(QString id, QDomNode nodes);
+      void unhandledNode(QString nodeName);
+
+   protected:
+      void readNote(int string, Note* note);
+      virtual int readBeatEffects(int track, Segment*);
+
+   public:
+      GuitarPro6(Score* s) : GuitarPro(s, 6) {}
+      virtual void read(QFile*);
+      };
 
 } // namespace Ms
 #endif
