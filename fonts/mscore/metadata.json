@@ -6,6 +6,25 @@
         "tieEndpointThickness": 0.1,
         "tieMidpointThickness": 0.22
     },
+    
+    "glyphsWithAlternates": {
+        "6stringTabClef": {
+            "alternates": [ 
+                {
+                    "codepoint": "U+E1A2", 
+                    "name": "6stringTabClefSerif"
+                }
+            ]
+        },
+        "noteheadDoubleWhole": {
+            "alternates": [
+                {
+                    "codepoint": "U+E1BA", 
+                    "name": "noteheadDoubleWholeAlt"
+                }
+            ]
+        } 
+    },
 
     "glyphsWithAnchors": {
         "flag128thDown": {
