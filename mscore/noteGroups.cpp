@@ -61,11 +61,11 @@ NoteGroups::NoteGroups(QWidget* parent)
       {
       setupUi(this);
       static const IconAction bpa[] = {
-            { ICON_SBEAM,    "beam-start" },
-            { ICON_MBEAM,    "beam-mid" },
-            { ICON_BEAM32,   "beam32" },
-            { ICON_BEAM64,   "beam64" },
-            { -1, ""}
+            { IconType::SBEAM,    "beam-start" },
+            { IconType::MBEAM,    "beam-mid" },
+            { IconType::BEAM32,   "beam32" },
+            { IconType::BEAM64,   "beam64" },
+            { IconType::NONE,     ""}
             };
 
       iconPalette->setName(QT_TRANSLATE_NOOP("Palette", "Beam Properties"));
