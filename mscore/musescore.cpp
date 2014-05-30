@@ -3942,16 +3942,16 @@ void MuseScore::cmd(QAction* a)
             lastShortcut = sc;
             }
 
-      if ((sc->flags() & A_SCORE) && ! cs) {
+      if ((sc->flags() & ShortcutFlags::A_SCORE) && ! cs) {
             qDebug("no score");
             return;
             }
-      if (sc->flags() & A_CMD) {
+      if (sc->flags() & ShortcutFlags::A_CMD) {
             if (!cv->editMode())
                   cs->startCmd();
             }
       cmd(a, cmdn);
-      if (lastShortcut->flags() & A_CMD)
+      if (lastShortcut->flags() & ShortcutFlags::A_CMD)
             cs->endCmd();
       endCmd();
       }
