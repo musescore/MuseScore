@@ -1956,7 +1956,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
 
 bool MuseScore::saveSelection(Score* cs)
       {
-      if (cs->selection().state() != SelState::RANGE) {
+      if (!cs->selection().isRange()) {
             if(!MScore::noGui) QMessageBox::warning(mscore, tr("MuseScore: Save Selection"), tr("Please select one or more measures"));
             return false;
             }

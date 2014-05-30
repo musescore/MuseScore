@@ -1832,7 +1832,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.drawRect(r);
             }
       const Selection& sel = _score->selection();
-      if (sel.state() == SelState::RANGE) {
+      if (sel.isRange()) {
             Segment* ss = sel.startSegment();
             Segment* es = sel.endSegment();
             if (!ss)
@@ -2405,7 +2405,7 @@ void ScoreView::normalPaste()
             qDebug("no application mime data");
             return;
             }
-      if ((_score->selection().isSingle()|| _score->selection().state() == SelState::LIST) && ms->hasFormat(mimeSymbolFormat)) {
+      if ((_score->selection().isSingle()|| _score->selection().isList()) && ms->hasFormat(mimeSymbolFormat)) {
             QByteArray data(ms->data(mimeSymbolFormat));
             XmlReader e(data);
             QPointF dragOffset;
@@ -2441,10 +2441,10 @@ void ScoreView::normalPaste()
             else
                   qDebug("cannot read type");
             }
-      else if ((_score->selection().state() == SelState::RANGE || _score->selection().state() == SelState::LIST)
+      else if ((_score->selection().isRange() || _score->selection().isList())
          && ms->hasFormat(mimeStaffListFormat)) {
             ChordRest* cr = 0;
-            if (_score->selection().state() == SelState::RANGE)
+            if (_score->selection().isRange())
                   cr = _score->selection().firstChordRest();
             else if (_score->selection().isSingle()) {
                   Element* e = _score->selection().element();
@@ -2471,7 +2471,7 @@ void ScoreView::normalPaste()
 
       else if (ms->hasFormat(mimeSymbolListFormat)) {
             ChordRest* cr = 0;
-            if (_score->selection().state() == SelState::RANGE)
+            if (_score->selection().isRange())
                   cr = _score->selection().firstChordRest();
             else if (_score->selection().isSingle()) {
                   Element* e = _score->selection().element();
@@ -3934,7 +3934,7 @@ void ScoreView::cmdAddSlur()
             is.setSlur(nullptr);
             return;
             }
-      if (_score->selection().state() == SelState::RANGE) {
+      if (_score->selection().isRange()) {
             _score->startCmd();
             int startTrack = _score->selection().staffStart() * VOICES;
             int endTrack   = _score->selection().staffEnd() * VOICES;
@@ -3993,7 +3993,7 @@ void ScoreView::cmdAddNoteLine()
       {
       Note* firstNote = 0;
       Note* lastNote  = 0;
-      if (_score->selection().state() == SelState::RANGE) {
+      if (_score->selection().isRange()) {
             int startTrack = _score->selection().staffStart() * VOICES;
             int endTrack   = _score->selection().staffEnd() * VOICES;
             for (int track = startTrack; track < endTrack; ++track) {
@@ -5020,7 +5020,7 @@ void ScoreView::appendMeasures(int n, Element::ElementType type)
 MeasureBase* ScoreView::checkSelectionStateForInsertMeasure()
       {
       MeasureBase* mb = 0;
-      if (_score->selection().state() == SelState::RANGE) {
+      if (_score->selection().isRange()) {
             mb = _score->selection().startSegment()->measure();
             return mb;
             }
@@ -5107,7 +5107,7 @@ void ScoreView::cmdRepeatSelection()
                   }
             return;
             }
-      if (selection.state() != SelState::RANGE) {
+      if (!selection.isRange()) {
             qDebug("wrong selection type");
             return;
             }

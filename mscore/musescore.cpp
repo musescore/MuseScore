@@ -145,7 +145,7 @@ extern TextPalette* textPalette;
 void MuseScore::cmdInsertMeasures()
       {
     if (cs) {
-        if (cs->selection().state() == SelState::NONE && !cs->selection().findMeasure()) {
+        if (cs->selection().isNone() && !cs->selection().findMeasure()) {
             QMessageBox::warning(0, "MuseScore",
                  tr("No measure selected:\n" "Please select a measure and try again"));
             }
@@ -3863,7 +3863,7 @@ void MuseScore::transpose()
       {
       if (cs->last() == 0)     // empty score?
             return;
-      if (cs->selection().state() != SelState::RANGE) {
+      if (!cs->selection().isRange()) {
             QMessageBox::StandardButton sb = QMessageBox::question(mscore,
                tr("MuseScore: Transpose"),
                tr("There is nothing selected. Transpose whole score?"),
@@ -3883,7 +3883,7 @@ void MuseScore::transpose()
             cs->selection().setStaffStart(0);
             cs->selection().setStaffEnd(cs->nstaves());
             }
-      bool rangeSelection = cs->selection().state() == SelState::RANGE;
+      bool rangeSelection = cs->selection().isRange();
       TransposeDialog td;
 
       // TRANSPOSE_BY_KEY and "transpose keys" is only possible if selection state is SelState::RANGE
@@ -4251,7 +4251,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             addTempo();
       else if (cmd == "loop") {
             if (loop()) {
-                  if (cs->selection().state() == SelState::RANGE)
+                  if (cs->selection().isRange())
                         seq->setLoopSelection();
                   }
             }
