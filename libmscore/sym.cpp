@@ -6078,9 +6078,16 @@ void ScoreFont::load()
       _font->setHintingPreference(QFont::PreferVerticalHinting);
 
       qreal size = 20.0 * MScore::DPI / PPI;
-      QFont font2(font());
+      QFont font2(font());                  // See comment below
       _font->setPixelSize(lrint(size));
-      font2.setPixelSize(lrint(size)*100);
+      font2.setPixelSize(lrint(size)*100);  // See comment below
+      // Since under Windows HintingPreferences always behave as PreferFullHinting (integer result)
+      // unless DirectWrite is enabled during Qt compilation (and it would work only for Windows 7
+      // and above or Vista with Platform Update; it wouldn't work for XP), a trick is used to
+      // retrieve the actual real-number width of the character: the character is scaled up by a
+      // factor 100, its width is extracted with QFontMetricsF::width and then this width is re-scaled
+      // down by a factor 100. See issue #25142: "Stem slightly misaligned on upstem notes"
+      // TODO : Investigate the possible use of QGlyphRun instead
 
       QFile fi(_fontPath + "glyphnames.json");
       if (!fi.open(QIODevice::ReadOnly))
@@ -6092,7 +6099,7 @@ void ScoreFont::load()
                error.offset, qPrintable(error.errorString()));
 
       _fm = new QFontMetricsF(font());
-      QFontMetrics fm2(font2);
+      QFontMetrics fm2(font2);         // See comment above
       for (auto i : o.keys()) {
             bool ok;
             int code = o.value(i).toObject().value("codepoint").toString().mid(2).toInt(&ok, 16);
@@ -6102,7 +6109,7 @@ void ScoreFont::load()
                   SymId symId = Sym::lnhash.value(i);
                   Sym* sym = &_symbols[int(symId)];
                   sym->setString(codeToString(code));
-                  sym->setWidth((fm2.width(sym->string()))/100.0);
+                  sym->setWidth((fm2.width(sym->string()))/100.0); // Renormalization; see comment above
                   sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
                   }
             //else
