@@ -6247,16 +6247,21 @@ void ScoreFont::load()
                   }
             }
 
-      // access needed Bravura stylistic alternates
+      // access needed stylistic alternates
 
       struct StylisticAlternate {
             QString     key;
             QString     altKey;
             SymId       id;
-            } alternate[] = {
+            }
+      alternate[] = {
                   {     QString("6stringTabClef"),
                         QString("6stringTabClefSerif"),
                         SymId::sixStringTabClefSerif
+                  },
+                  {     QString("noteheadDoubleWhole"),
+                        QString("noteheadDoubleWholeAlt"),
+                        SymId::noteheadDoubleWholeAlt
                   }
             };
 

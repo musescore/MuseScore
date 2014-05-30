@@ -389,9 +389,6 @@
     "noteheadDoubleWhole": {
         "codepoint": "U+e12a"
     },
-    "noteheadDoubleWholeAlt": {
-        "codepoint": "U+e1ba"
-    },
     "noteheadDoubleWholeSquare": {
         "codepoint": "U+e1c6"
     },
@@ -653,13 +650,6 @@
     "wiggleTrillFastest": {
         "codepoint": "U+e182"
     },
-
-
-    "6stringTabClefSerif": {
-        "codepoint": "U+e1a2"
-    },
-
-
     "ornamentPrallMordent": {
         "codepoint": "U+e186"
     },
