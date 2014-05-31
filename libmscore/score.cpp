@@ -3055,6 +3055,7 @@ void Score::lassoSelectEnd()
       Segment* endSegment   = 0;
       int startStaff        = 0x7fffffff;
       int endStaff          = 0;
+      const ChordRest* endCR;
 
       if (_selection.elements().isEmpty()) {
             _selection.setState(SelState::NONE);
@@ -3074,6 +3075,7 @@ void Score::lassoSelectEnd()
                   startSegment = seg;
             if ((endSegment == 0) || (*seg > *endSegment)) {
                   endSegment = seg;
+                  endCR = static_cast<const ChordRest*>(e);
                   }
             int idx = e->staffIdx();
             if (idx < startStaff)
@@ -3082,10 +3084,13 @@ void Score::lassoSelectEnd()
                   endStaff = idx;
             }
       if (noteRestCount > 0) {
-            endSegment = endSegment->nextCR(endStaff * VOICES);
+            endSegment = endCR->nextSegmentAfterCR(Segment::Type::ChordRest
+                                                   | Segment::Type::EndBarLine
+                                                   | Segment::Type::Clef);
             _selection.setRange(startSegment, endSegment, startStaff, endStaff+1);
             if (!_selection.isRange())
                   _selection.setState(SelState::RANGE);
+                  _selection.updateSelectedElements();
             }
       _updateAll = true;
       }
