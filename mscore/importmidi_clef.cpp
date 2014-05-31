@@ -337,7 +337,7 @@ void makeDynamicProgrammingStep(std::vector<std::vector<int>> &penalties,
                                        ? minMaxPitch.minPitch() : minMaxPitch.maxPitch();
             const int pitchPenalty = findPitchPenaltyForClef(significantPitch, curClef);
             int minPenalty = std::numeric_limits<int>::max();
-            int minIndex;
+            int minIndex = 0;
             for (int prevClef = 0; prevClef != 2; ++prevClef) {
                   int penalty = pitchPenalty;
                   if (prevClef != curClef) {

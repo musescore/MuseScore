@@ -1033,7 +1033,7 @@ void Score::cmdFlip()
                         chord = static_cast<Note*>(e)->chord();
                   else if (e->type() == ElementType::STEM)
                         chord = static_cast<Stem*>(e)->chord();
-                  else if (e->type() == ElementType::HOOK)
+                  else //if (e->type() == ElementType::HOOK) // no other option left
                         chord = static_cast<Hook*>(e)->chord();
                   if (chord->beam())
                         e = chord->beam();  // fall trough
