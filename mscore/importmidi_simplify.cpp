@@ -111,7 +111,7 @@ void lengthenNote(
 
             if (noteDurationCount + restDurationCount
                               < minNoteDurationCount + minRestDurationCount) {
-                  if (opers.quantize.humanPerformance || noteDurationCount == 1) {
+                  if (opers.quantize.humanPerformance || noteDurationCount <= 1.5) {
                         minNoteDurationCount = noteDurationCount;
                         minRestDurationCount = restDurationCount;
                         bestOffTime = offTime;
