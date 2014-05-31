@@ -15,6 +15,12 @@ struct Node {
       bool visible = true;
       Node *parent = nullptr;
       std::vector<std::unique_ptr<Node> > children;
+
+      void setParent(Node *par)
+            {
+            parent = par;
+            par->children.push_back(std::unique_ptr<Node>(this));
+            }
       };
 
 struct Controller {
@@ -67,8 +73,7 @@ OperationsModel::OperationsModel()
       quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "32nd"));
       quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "64th"));
       quantValue->values.push_back(QCoreApplication::translate("MIDI import operations", "128th"));
-      quantValue->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(quantValue));
+      quantValue->setParent(root.get());
       controller->quantValue = quantValue;
 
 
@@ -76,8 +81,7 @@ OperationsModel::OperationsModel()
       humanPerformance->name = QCoreApplication::translate("MIDI import operations", "Human performance");
       humanPerformance->oper.type = MidiOperation::Type::QUANT_HUMAN;
       humanPerformance->oper.value = Quantization().humanPerformance;
-      humanPerformance->parent = quantValue;
-      quantValue->children.push_back(std::unique_ptr<Node>(humanPerformance));
+      humanPerformance->setParent(quantValue);
       controller->quantHuman = humanPerformance;
 
 
@@ -85,16 +89,14 @@ OperationsModel::OperationsModel()
       useDots->name = QCoreApplication::translate("MIDI import operations", "Use dots");
       useDots->oper.type = MidiOperation::Type::USE_DOTS;
       useDots->oper.value = TrackOperations().useDots;
-      useDots->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(useDots));
+      useDots->setParent(root.get());
 
 
       Node *simplifyDurations = new Node;
       simplifyDurations->name = QCoreApplication::translate("MIDI import operations", "Simplify durations");
       simplifyDurations->oper.type = MidiOperation::Type::SIMPLIFY_DURATIONS;
       simplifyDurations->oper.value = TrackOperations().simplifyDurations;
-      simplifyDurations->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(simplifyDurations));
+      simplifyDurations->setParent(root.get());
 
 
       Node *allowedVoices = new Node;
@@ -105,8 +107,7 @@ OperationsModel::OperationsModel()
       allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
       allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "3"));
       allowedVoices->values.push_back(QCoreApplication::translate("MIDI import operations", "4"));
-      allowedVoices->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(allowedVoices));
+      allowedVoices->setParent(root.get());
       controller->allowedVoices = allowedVoices;
 
 
@@ -114,8 +115,7 @@ OperationsModel::OperationsModel()
       separateVoices->name = QCoreApplication::translate("MIDI import operations", "Separate voices");
       separateVoices->oper.type = MidiOperation::Type::SEPARATE_VOICES;
       separateVoices->oper.value = TrackOperations().separateVoices;
-      separateVoices->parent = allowedVoices;
-      allowedVoices->children.push_back(std::unique_ptr<Node>(separateVoices));
+      separateVoices->setParent(allowedVoices);
       controller->separateVoices = separateVoices;
 
 
@@ -125,8 +125,7 @@ OperationsModel::OperationsModel()
       searchTuplets->name = QCoreApplication::translate("MIDI import operations", "Search tuplets");
       searchTuplets->oper.type = MidiOperation::Type::TUPLET_SEARCH;
       searchTuplets->oper.value = TrackOperations().tuplets.doSearch;
-      searchTuplets->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(searchTuplets));
+      searchTuplets->setParent(root.get());
       controller->searchTuplets = searchTuplets;
 
 
@@ -134,8 +133,7 @@ OperationsModel::OperationsModel()
       duplets->name = QCoreApplication::translate("MIDI import operations", "Duplets (2)");
       duplets->oper.type = MidiOperation::Type::TUPLET_2;
       duplets->oper.value = TrackOperations().tuplets.duplets;
-      duplets->parent = searchTuplets;
-      searchTuplets->children.push_back(std::unique_ptr<Node>(duplets));
+      duplets->setParent(searchTuplets);
       controller->duplets = duplets;
 
 
@@ -143,8 +141,7 @@ OperationsModel::OperationsModel()
       triplets->name = QCoreApplication::translate("MIDI import operations", "Triplets (3)");
       triplets->oper.type = MidiOperation::Type::TUPLET_3;
       triplets->oper.value = TrackOperations().tuplets.triplets;
-      triplets->parent = searchTuplets;
-      searchTuplets->children.push_back(std::unique_ptr<Node>(triplets));
+      triplets->setParent(searchTuplets);
       controller->triplets = triplets;
 
 
@@ -152,8 +149,7 @@ OperationsModel::OperationsModel()
       quadruplets->name = QCoreApplication::translate("MIDI import operations", "Quadruplets (4)");
       quadruplets->oper.type = MidiOperation::Type::TUPLET_4;
       quadruplets->oper.value = TrackOperations().tuplets.quadruplets;
-      quadruplets->parent = searchTuplets;
-      searchTuplets->children.push_back(std::unique_ptr<Node>(quadruplets));
+      quadruplets->setParent(searchTuplets);
       controller->quadruplets = quadruplets;
 
 
@@ -161,8 +157,7 @@ OperationsModel::OperationsModel()
       quintuplets->name = QCoreApplication::translate("MIDI import operations", "Quintuplets (5)");
       quintuplets->oper.type = MidiOperation::Type::TUPLET_5;
       quintuplets->oper.value = TrackOperations().tuplets.quintuplets;
-      quintuplets->parent = searchTuplets;
-      searchTuplets->children.push_back(std::unique_ptr<Node>(quintuplets));
+      quintuplets->setParent(searchTuplets);
       controller->quintuplets = quintuplets;
 
 
@@ -170,8 +165,7 @@ OperationsModel::OperationsModel()
       septuplets->name = QCoreApplication::translate("MIDI import operations", "Septuplets (7)");
       septuplets->oper.type = MidiOperation::Type::TUPLET_7;
       septuplets->oper.value = TrackOperations().tuplets.septuplets;
-      septuplets->parent = searchTuplets;
-      searchTuplets->children.push_back(std::unique_ptr<Node>(septuplets));
+      septuplets->setParent(searchTuplets);
       controller->septuplets = septuplets;
 
 
@@ -179,8 +173,7 @@ OperationsModel::OperationsModel()
       nonuplets->name = QCoreApplication::translate("MIDI import operations", "Nonuplets (9)");
       nonuplets->oper.type = MidiOperation::Type::TUPLET_9;
       nonuplets->oper.value = TrackOperations().tuplets.nonuplets;
-      nonuplets->parent = searchTuplets;
-      searchTuplets->children.push_back(std::unique_ptr<Node>(nonuplets));
+      nonuplets->setParent(searchTuplets);
       controller->nonuplets = nonuplets;
 
       // ------------------------------------
@@ -189,8 +182,7 @@ OperationsModel::OperationsModel()
       pickupMeasure->name = QCoreApplication::translate("MIDI import operations", "Recognize pickup measure");
       pickupMeasure->oper.type = MidiOperation::Type::PICKUP_MEASURE;
       pickupMeasure->oper.value = TrackOperations().pickupMeasure;
-      pickupMeasure->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(pickupMeasure));
+      pickupMeasure->setParent(root.get());
       controller->pickupMeasure = pickupMeasure;
 
 
@@ -201,16 +193,14 @@ OperationsModel::OperationsModel()
       swing->values.push_back(QCoreApplication::translate("MIDI import operations", "None (1:1)"));
       swing->values.push_back(QCoreApplication::translate("MIDI import operations", "Swing (2:1)"));
       swing->values.push_back(QCoreApplication::translate("MIDI import operations", "Shuffle (3:1)"));
-      swing->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(swing));
+      swing->setParent(root.get());
 
 
       Node *changeClef = new Node;
       changeClef->name = QCoreApplication::translate("MIDI import operations", "Allow clef changes within a staff");
       changeClef->oper.type = MidiOperation::Type::CHANGE_CLEF;
       changeClef->oper.value = TrackOperations().changeClef;
-      changeClef->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(changeClef));
+      changeClef->setParent(root.get());
       controller->clef = changeClef;
 
 
@@ -218,8 +208,7 @@ OperationsModel::OperationsModel()
       removeDrumRests->name = QCoreApplication::translate("MIDI import operations", "Remove rests and ties between notes");
       removeDrumRests->oper.type = MidiOperation::Type::REMOVE_DRUM_RESTS;
       removeDrumRests->oper.value = TrackOperations().removeDrumRests;
-      removeDrumRests->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(removeDrumRests));
+      removeDrumRests->setParent(root.get());
       controller->removeDrumRests = removeDrumRests;
 
 
@@ -227,8 +216,7 @@ OperationsModel::OperationsModel()
       splitDrums->name = QCoreApplication::translate("MIDI import operations", "Split drum set");
       splitDrums->oper.type = MidiOperation::Type::SPLIT_DRUMS;
       splitDrums->oper.value = TrackOperations().splitDrums.doSplit;;
-      splitDrums->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(splitDrums));
+      splitDrums->setParent(root.get());
       controller->splitDrums = splitDrums;
 
 
@@ -236,8 +224,7 @@ OperationsModel::OperationsModel()
       showStaffBracket->name = QCoreApplication::translate("MIDI import operations", "Show staff bracket");
       showStaffBracket->oper.type = MidiOperation::Type::SHOW_STAFF_BRACKET;
       showStaffBracket->oper.value = TrackOperations().splitDrums.showStaffBracket;
-      showStaffBracket->parent = splitDrums;
-      splitDrums->children.push_back(std::unique_ptr<Node>(showStaffBracket));
+      showStaffBracket->setParent(splitDrums);
       controller->showStaffBracket = showStaffBracket;
 
 
@@ -245,8 +232,7 @@ OperationsModel::OperationsModel()
       doLHRH->name = QCoreApplication::translate("MIDI import operations", "Left/right hand separation");
       doLHRH->oper.type = MidiOperation::Type::DO_LHRH_SEPARATION;
       doLHRH->oper.value = LHRHSeparation().doIt;
-      doLHRH->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(doLHRH));
+      doLHRH->setParent(root.get());
       controller->LHRHdoIt = doLHRH;
 
 
@@ -256,8 +242,7 @@ OperationsModel::OperationsModel()
       LHRHMethod->oper.value = (int)LHRHSeparation().method;
       LHRHMethod->values.push_back(QCoreApplication::translate("MIDI import operations", "Hand width"));
       LHRHMethod->values.push_back(QCoreApplication::translate("MIDI import operations", "Fixed pitch"));
-      LHRHMethod->parent = doLHRH;
-      doLHRH->children.push_back(std::unique_ptr<Node>(LHRHMethod));
+      LHRHMethod->setParent(doLHRH);
       controller->LHRHMethod = LHRHMethod;
 
 
@@ -276,8 +261,7 @@ OperationsModel::OperationsModel()
       LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C7"));
       LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C8"));
       LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C9"));
-      LHRHPitchOctave->parent = LHRHMethod;
-      LHRHMethod->children.push_back(std::unique_ptr<Node>(LHRHPitchOctave));
+      LHRHPitchOctave->setParent(LHRHMethod);
       controller->LHRHPitchOctave = LHRHPitchOctave;
 
 
@@ -297,8 +281,7 @@ OperationsModel::OperationsModel()
       LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "A"));
       LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "A#"));
       LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "B"));
-      LHRHPitchNote->parent = LHRHMethod;
-      LHRHMethod->children.push_back(std::unique_ptr<Node>(LHRHPitchNote));
+      LHRHPitchNote->setParent(LHRHMethod);
       controller->LHRHPitchNote = LHRHPitchNote;
 
       //--------------------------------------------------------------------
