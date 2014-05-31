@@ -1054,10 +1054,15 @@ void GuitarPro1::readNote(int string, Note* note)
       if (noteBits & 0x2) {               // note is dotted
             }
 
+      // set dynamic information on note if different from previous note
       if (noteBits & 0x10) {
-            int d = readUChar();                  // dynamic
-            addDynamic(note, d);
+            int d = readChar();
+            if (previousDynamic != d) {
+                  previousDynamic = d;
+                  addDynamic(note, d);
+                  }
             }
+
       int fretNumber = -1;
       if (noteBits & 0x20)
             fretNumber = readUChar();
@@ -1787,10 +1792,15 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       if (noteBits & 0x2) {               // note is dotted
             }
 
+      // set dynamic information on note if different from previous note
       if (noteBits & 0x10) {
-            int d = readUChar();                  // dynamic
-            addDynamic(note, d);
+            int d = readChar();
+            if (previousDynamic != d) {
+                  previousDynamic = d;
+                  addDynamic(note, d);
+                  }
             }
+
       int fretNumber = -1;
       if (noteBits & 0x20)
             fretNumber = readUChar();
@@ -2542,8 +2552,12 @@ void GuitarPro5::readNote(int string, Note* note)
 
       if (noteBits & 0x10) {          // velocity
             int d = readChar();
-            addDynamic(note, d);
+            if (previousDynamic != d) {
+                  previousDynamic = d;
+                  addDynamic(note, d);
+                  }
             }
+
       int fretNumber = 0;
       if (noteBits & 0x20)
             fretNumber = readChar();
