@@ -1414,7 +1414,7 @@ class Unlink : public UndoCommand {
       Element* le = 0;
 
    public:
-      Unlink(Element* _e) : e(_e) {}
+      Unlink(Element* _e);
       virtual void undo();
       virtual void redo();
       };
