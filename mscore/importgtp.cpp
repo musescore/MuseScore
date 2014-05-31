@@ -109,6 +109,9 @@ void GuitarPro::read(void* p, qint64 len)
       if (len == 0)
             return;
       qint64 rv = f->read((char*)p, len);
+#ifdef QT_NO_DEBUG
+      Q_UNUSED(rv); // avoid warning about unused variable in RELEASE mode
+#endif
       Q_ASSERT(rv == len);
       curPos += len;
       }
