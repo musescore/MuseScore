@@ -404,12 +404,8 @@ findChordsForTimeRange(
             const ReducedFraction &onTime,
             const ReducedFraction &offTime,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            std::map<int, ReducedFraction> &maxChordLengths)
+            const ReducedFraction &maxChordLength)
       {
-
-      Q_ASSERT_X(!maxChordLengths.empty(),
-                 "MChord::findChordsForTimeRange", "Empty maxChordLenghts");
-
       auto beg = chords.end();
       auto end = chords.end();
 
@@ -421,7 +417,7 @@ findChordsForTimeRange(
             return {beg, end};
       --it;
 
-      while (it->first + maxChordLengths[voice] > onTime) {
+      while (it->first + maxChordLength > onTime) {
             const MidiChord &chord = it->second;
             if (chord.voice == voice) {
                   const auto chordInterval = std::make_pair(it->first, maxNoteOffTime(chord.notes));
