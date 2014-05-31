@@ -118,6 +118,63 @@ OperationsModel::OperationsModel()
       separateVoices->setParent(allowedVoices);
       controller->separateVoices = separateVoices;
 
+      // ------------- staff separation --------------
+
+      Node *doLHRH = new Node;
+      doLHRH->name = QCoreApplication::translate("MIDI import operations", "Staff separation");
+      doLHRH->oper.type = MidiOperation::Type::DO_LHRH_SEPARATION;
+      doLHRH->oper.value = LHRHSeparation().doIt;
+      doLHRH->setParent(root.get());
+      controller->LHRHdoIt = doLHRH;
+
+
+      Node *LHRHMethod = new Node;
+      LHRHMethod->name = QCoreApplication::translate("MIDI import operations", "Separation method");
+      LHRHMethod->oper.type = MidiOperation::Type::LHRH_METHOD;
+      LHRHMethod->oper.value = (int)LHRHSeparation().method;
+      LHRHMethod->values.push_back(QCoreApplication::translate("MIDI import operations", "Hand width"));
+      LHRHMethod->values.push_back(QCoreApplication::translate("MIDI import operations", "Fixed pitch"));
+      LHRHMethod->setParent(doLHRH);
+      controller->LHRHMethod = LHRHMethod;
+
+
+      Node *LHRHPitchOctave = new Node;
+      LHRHPitchOctave->name = QCoreApplication::translate("MIDI import operations", "Split pitch octave");
+      LHRHPitchOctave->oper.type = MidiOperation::Type::LHRH_SPLIT_OCTAVE;
+      LHRHPitchOctave->oper.value = (int)LHRHSeparation().splitPitchOctave;
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C-1"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C0"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C1"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C2"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C3"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C4"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C5"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C6"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C7"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C8"));
+      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C9"));
+      LHRHPitchOctave->setParent(LHRHMethod);
+      controller->LHRHPitchOctave = LHRHPitchOctave;
+
+
+      Node *LHRHPitchNote = new Node;
+      LHRHPitchNote->name = QCoreApplication::translate("MIDI import operations", "Split pitch note");
+      LHRHPitchNote->oper.type = MidiOperation::Type::LHRH_SPLIT_NOTE;
+      LHRHPitchNote->oper.value = (int)LHRHSeparation().splitPitchNote;
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "C"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "C#"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "D"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "D#"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "E"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "F"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "F#"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "G"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "G#"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "A"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "A#"));
+      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "B"));
+      LHRHPitchNote->setParent(LHRHMethod);
+      controller->LHRHPitchNote = LHRHPitchNote;
 
       // ------------- tuplets --------------
 
@@ -226,63 +283,6 @@ OperationsModel::OperationsModel()
       showStaffBracket->oper.value = TrackOperations().splitDrums.showStaffBracket;
       showStaffBracket->setParent(splitDrums);
       controller->showStaffBracket = showStaffBracket;
-
-
-      Node *doLHRH = new Node;
-      doLHRH->name = QCoreApplication::translate("MIDI import operations", "Left/right hand separation");
-      doLHRH->oper.type = MidiOperation::Type::DO_LHRH_SEPARATION;
-      doLHRH->oper.value = LHRHSeparation().doIt;
-      doLHRH->setParent(root.get());
-      controller->LHRHdoIt = doLHRH;
-
-
-      Node *LHRHMethod = new Node;
-      LHRHMethod->name = QCoreApplication::translate("MIDI import operations", "Separation method");
-      LHRHMethod->oper.type = MidiOperation::Type::LHRH_METHOD;
-      LHRHMethod->oper.value = (int)LHRHSeparation().method;
-      LHRHMethod->values.push_back(QCoreApplication::translate("MIDI import operations", "Hand width"));
-      LHRHMethod->values.push_back(QCoreApplication::translate("MIDI import operations", "Fixed pitch"));
-      LHRHMethod->setParent(doLHRH);
-      controller->LHRHMethod = LHRHMethod;
-
-
-      Node *LHRHPitchOctave = new Node;
-      LHRHPitchOctave->name = QCoreApplication::translate("MIDI import operations", "Split pitch octave");
-      LHRHPitchOctave->oper.type = MidiOperation::Type::LHRH_SPLIT_OCTAVE;
-      LHRHPitchOctave->oper.value = (int)LHRHSeparation().splitPitchOctave;
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C-1"));
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C0"));
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C1"));
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C2"));
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C3"));
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C4"));
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C5"));
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C6"));
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C7"));
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C8"));
-      LHRHPitchOctave->values.push_back(QCoreApplication::translate("MIDI import operations", "C9"));
-      LHRHPitchOctave->setParent(LHRHMethod);
-      controller->LHRHPitchOctave = LHRHPitchOctave;
-
-
-      Node *LHRHPitchNote = new Node;
-      LHRHPitchNote->name = QCoreApplication::translate("MIDI import operations", "Split pitch note");
-      LHRHPitchNote->oper.type = MidiOperation::Type::LHRH_SPLIT_NOTE;
-      LHRHPitchNote->oper.value = (int)LHRHSeparation().splitPitchNote;
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "C"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "C#"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "D"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "D#"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "E"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "F"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "F#"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "G"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "G#"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "A"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "A#"));
-      LHRHPitchNote->values.push_back(QCoreApplication::translate("MIDI import operations", "B"));
-      LHRHPitchNote->setParent(LHRHMethod);
-      controller->LHRHPitchNote = LHRHPitchNote;
 
       //--------------------------------------------------------------------
       connect(this,
