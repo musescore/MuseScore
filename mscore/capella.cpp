@@ -481,9 +481,9 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               case ClefType::G4:     off = 0; break;
                               case ClefType::F_8VA:  off = -7; break;
                               case ClefType::F_15MA: off = 0; break;
-                              default:          off = 0; qDebug("clefType %d not implemented", clef);
+                              default:          off = 0; qDebug("clefType %hhd not implemented", clef);
                               }
-                        // qDebug("clef %d off %d", clef, off);
+                        // qDebug("clef %hhd off %d", clef, off);
 
                         static int keyOffsets[15] = {
                               /*   -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7 */
@@ -560,7 +560,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         qDebug("     <Clef>");
                         CapClef* o = static_cast<CapClef*>(no);
                         ClefType nclef = o->clef();
-                        qDebug("%d:%d <Clef> %s line %d oct %d clef %d", tick, staffIdx, o->name(), o->line, o->oct, o->clef());
+                        qDebug("%d:%d <Clef> %s line %d oct %d clef %hhd", tick, staffIdx, o->name(), o->line, o->oct, o->clef());
                         if (nclef == ClefType::INVALID)
                               break;
                         // staff(staffIdx)->setClef(tick, nclef);

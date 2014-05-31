@@ -332,7 +332,7 @@ midi_in_open(PmInternal *midi, void *driverInfo)
     if (macHostError != noErr) {
         pm_hosterror = macHostError;
         sprintf(pm_hosterror_text, 
-                "Host error %ld: MIDIPortConnectSource() in midi_in_open()",
+                "Host error %d: MIDIPortConnectSource() in midi_in_open()",
                 macHostError);
         midi->descriptor = NULL;
         pm_free(m);
@@ -363,7 +363,7 @@ midi_in_close(PmInternal *midi)
     if (macHostError != noErr) {
         pm_hosterror = macHostError;
         sprintf(pm_hosterror_text, 
-                "Host error %ld: MIDIPortDisconnectSource() in midi_in_close()",
+                "Host error %d: MIDIPortDisconnectSource() in midi_in_close()",
                 macHostError);
         err = pmHostError;
     }
@@ -442,7 +442,7 @@ midi_write_flush(PmInternal *midi, PmTimestamp timestamp)
 send_packet_error:
     pm_hosterror = macHostError;
     sprintf(pm_hosterror_text, 
-            "Host error %ld: MIDISend() in midi_write()",
+            "Host error %d: MIDISend() in midi_write()",
             macHostError);
     return pmHostError;
 
@@ -922,7 +922,7 @@ PmError pm_macosxcm_init(void)
     
 error_return:
     pm_hosterror = macHostError;
-    sprintf(pm_hosterror_text, "Host error %ld: %s\n", macHostError, error_text);
+    sprintf(pm_hosterror_text, "Host error %d: %s\n", macHostError, error_text);
     pm_macosxcm_term(); /* clear out any opened ports */
     return pmHostError;
 }
