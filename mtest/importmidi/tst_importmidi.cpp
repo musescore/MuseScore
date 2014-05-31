@@ -393,6 +393,17 @@ class TestImportMidi : public QObject, public MTest
             mf("voice_acid");
             preferences.midiImportOperations.clear();
             }
+      void voiceSeparationIntersect()
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyDurations = false;
+            opers.separateVoices = true;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("voice_intersect");
+            preferences.midiImportOperations.clear();
+            }
       };
 
 //---------------------------------------------------------
