@@ -17,7 +17,10 @@
       <file alias="fonts/mscore-BC.ttf">../fonts/mscore-BC.ttf</file>
       <file alias="fonts/Gonville.otf">../fonts/gonville/Gonville.otf</file>
       <file alias="fonts/Bravura.otf">../fonts/bravura/Bravura.otf</file>
-      
+      <file alias="fonts/FreeSerif.ttf">../fonts/FreeSerif.ttf</file>
+      <file alias="fonts/FreeSerifBold.ttf">../fonts/FreeSerifBold.ttf</file>
+      <file alias="fonts/FreeSans.ttf">../fonts/FreeSans.ttf</file>
+
       <file alias="instruments.xml">../share/templates/instruments.xml</file>
 
       <file>../mscore/data/mscore.png</file>

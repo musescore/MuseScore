@@ -1651,8 +1651,6 @@ static bool breakMultiMeasureRest(Measure* m)
 
 void Score::createMMRests()
       {
-      if (undoRedo())   // no change possible in this state
-            return;
       //
       //  create mm rest measures
       //
@@ -1701,11 +1699,11 @@ void Score::createMMRests()
                   else {
                         mmr = new Measure(this);
                         mmr->setLen(len);
+                        mmr->setTick(m->tick());
                         undo(new ChangeMMRest(m, mmr));
                         }
 
                   mmr->setMMRestCount(n);
-                  mmr->setTick(m->tick());
                   mmr->setNo(m->no());
                   mmr->setPageBreak(lm->pageBreak());
                   mmr->setLineBreak(lm->lineBreak());
@@ -1730,6 +1728,7 @@ void Score::createMMRests()
                               undo(new AddElement(r));
                               }
                         }
+
                   //
                   // check for clefs
                   //
@@ -1752,6 +1751,7 @@ void Score::createMMRests()
                         }
                   else if (ns)
                         undo(new RemoveElement(ns));
+
                   //
                   // check for time signature
                   //
@@ -1775,7 +1775,7 @@ void Score::createMMRests()
                                     }
                               }
                         }
-                  else if (ns)
+                  else if (ns && ns->isEmpty())
                         undo(new RemoveElement(ns));
 
                   //
@@ -1790,15 +1790,18 @@ void Score::createMMRests()
                               int track = staffIdx * VOICES;
                               KeySig* ts = static_cast<KeySig*>(cs->element(track));
                               if (ts) {
-                                    if (ns->element(track) == 0)
-                                          ns->add(ts->clone());
+                                    if (ns->element(track) == 0) {
+                                          KeySig* nks = ts->clone();
+                                          nks->setParent(ns);
+                                          undo(new AddElement(nks));
+                                          }
                                     else {
                                           //TODO: check if same key signature
                                           }
                                     }
                               }
                         }
-                  else if (ns)
+                  else if (ns && ns->isEmpty())
                         undo(new RemoveElement(ns));
 
                   //

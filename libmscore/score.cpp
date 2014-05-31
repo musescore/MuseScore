@@ -3276,7 +3276,7 @@ QList<Score*> Score::scoreList()
       QList<Score*> scores;
       Score* root = rootScore();
       scores.append(root);
-      foreach(const Excerpt* ex, root->excerpts())
+      for (const Excerpt* ex : root->excerpts())
             scores.append(ex->score());
       return scores;
       }
@@ -3288,7 +3288,7 @@ QList<Score*> Score::scoreList()
 bool Score::switchLayer(const QString& s)
       {
       int layerIdx = 0;
-      foreach(const Layer& l, layer()) {
+      for (const Layer& l : layer()) {
             if (s == l.name) {
                   setCurrentLayer(layerIdx);
                   return true;

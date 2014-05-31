@@ -115,7 +115,7 @@ void Score::endCmd()
             return;
             }
 
-      foreach (Score* s, scoreList()) {
+      for (Score* s : scoreList()) {
             if (s->layoutAll()) {
                   s->_updateAll  = true;
                   s->doLayout();
@@ -143,7 +143,7 @@ void Score::endCmd()
 
 void Score::end()
       {
-      foreach(Score* s, scoreList())
+      for (Score* s : scoreList())
             s->end1();
       }
 
@@ -154,7 +154,7 @@ void Score::end()
 
 void Score::update()
       {
-      foreach(Score* s, scoreList()) {
+      for (Score* s : scoreList()) {
             if (s->layoutAll()) {
                   s->setUpdateAll(true);
                   s->doLayout();
@@ -170,18 +170,18 @@ void Score::update()
 void Score::end1()
       {
       if (_updateAll) {
-            foreach(MuseScoreView* v, viewer)
+            for (MuseScoreView* v : viewer)
                   v->updateAll();
             }
       else {
             // update a little more:
             qreal d = spatium() * .5;
             refresh.adjust(-d, -d, 2 * d, 2 * d);
-            foreach(MuseScoreView* v, viewer)
+            for (MuseScoreView* v : viewer)
                   v->dataChanged(refresh);
             }
-      refresh     = QRectF();
-      _updateAll  = false;
+      refresh    = QRectF();
+      _updateAll = false;
       }
 
 //---------------------------------------------------------
@@ -192,7 +192,7 @@ void Score::end1()
 void Score::endUndoRedo()
       {
       updateSelection();
-      foreach (Score* score, scoreList()) {
+      for (Score* score : scoreList()) {
             if (score->layoutAll()) {
                   score->setUndoRedo(true);
                   score->doLayout();
