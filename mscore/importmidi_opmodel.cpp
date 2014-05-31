@@ -32,6 +32,7 @@ struct Controller {
       Node *septuplets = nullptr;
       Node *nonuplets = nullptr;
       Node *allowedVoices = nullptr;
+      Node *separateVoices = nullptr;
       Node *splitDrums = nullptr;
       Node *showStaffBracket = nullptr;
       Node *pickupMeasure = nullptr;
@@ -96,14 +97,6 @@ OperationsModel::OperationsModel()
       root->children.push_back(std::unique_ptr<Node>(simplifyDurations));
 
 
-      Node *separateVoices = new Node;
-      separateVoices->name = QCoreApplication::translate("MIDI import operations", "Separate voices");
-      separateVoices->oper.type = MidiOperation::Type::SEPARATE_VOICES;
-      separateVoices->oper.value = TrackOperations().separateVoices;
-      separateVoices->parent = root.get();
-      root->children.push_back(std::unique_ptr<Node>(separateVoices));
-
-
       Node *allowedVoices = new Node;
       allowedVoices->name = QCoreApplication::translate("MIDI import operations", "Max allowed voices");
       allowedVoices->oper.type = MidiOperation::Type::ALLOWED_VOICES;
@@ -115,6 +108,16 @@ OperationsModel::OperationsModel()
       allowedVoices->parent = root.get();
       root->children.push_back(std::unique_ptr<Node>(allowedVoices));
       controller->allowedVoices = allowedVoices;
+
+
+      Node *separateVoices = new Node;
+      separateVoices->name = QCoreApplication::translate("MIDI import operations", "Separate voices");
+      separateVoices->oper.type = MidiOperation::Type::SEPARATE_VOICES;
+      separateVoices->oper.value = TrackOperations().separateVoices;
+      separateVoices->parent = allowedVoices;
+      allowedVoices->children.push_back(std::unique_ptr<Node>(separateVoices));
+      controller->separateVoices = separateVoices;
+
 
       // ------------- tuplets --------------
 
@@ -656,6 +659,23 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
             if (LHRHMethod)
                   LHRHMethod->visible = value;
             result = true;
+            }
+      if (allowedVoices && (forceUpdate || node == allowedVoices)) {
+            const auto value = (MidiOperation::AllowedVoices)allowedVoices->oper.value.toInt();
+            switch (value) {
+                  case MidiOperation::AllowedVoices::V_1:
+                        if (separateVoices)
+                              separateVoices->visible = false;
+                        result = true;
+                        break;
+                  case MidiOperation::AllowedVoices::V_2:
+                  case MidiOperation::AllowedVoices::V_3:
+                  case MidiOperation::AllowedVoices::V_4:
+                        if (separateVoices)
+                              separateVoices->visible = true;
+                        result = true;
+                        break;
+                  }
             }
       if (searchTuplets && (forceUpdate || node == searchTuplets)) {
             const auto value = searchTuplets->oper.value.toBool();
