@@ -686,9 +686,9 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
             if (LHRHdoIt)
                   LHRHdoIt->visible = !isDrumTrack;
             if (splitDrums)
-                  splitDrums->visible = isDrumTrack;
+                  splitDrums->visible = allTracksSelected || isDrumTrack;
             if (removeDrumRests)
-                  removeDrumRests->visible = isDrumTrack;
+                  removeDrumRests->visible = allTracksSelected || isDrumTrack;
             if (allowedVoices)
                   allowedVoices->visible = !isDrumTrack;
             if (separateVoices)
