@@ -3472,7 +3472,7 @@ QDomNode GuitarPro6::getNode(QString id, QDomNode currentNode)
                   }
             currentNode = (currentNode).nextSibling();
             }
-      qDebug("WARNING: A null node was returned when search for an identifier. Your Guitar Pro file may be corrupt.");
+      qDebug("WARNING: A null node was returned when search for an identifier. Your Guitar Pro file may be corrupted.");
       return currentNode;
       }
 
@@ -3835,7 +3835,7 @@ void GuitarPro6::read(QFile* fp)
 //   readBeatEffects
 //---------------------------------------------------------
 
-int GuitarPro6::readBeatEffects(int track, Segment*)
+int GuitarPro6::readBeatEffects(int, Segment*)
       {
       qDebug("reading beat effects (.gpx)...\n");
       return 0;
