@@ -934,6 +934,46 @@ QList<Note*> Selection::uniqueNotes(int track) const
       return l;
       }
 
+//---------------------------------------------------------
+//   extendRangeSelection
+//    Extends the range selection to contain the given
+//    chord rest.
+//---------------------------------------------------------
+
+void Selection::extendRangeSelection(ChordRest* cr)
+      {
+      bool activeIsFirst;
+      int staffIdx = cr->staffIdx();
+      int tick = cr->tick();
+      if (staffIdx < _staffStart)
+            _staffStart = staffIdx;
+      else if (staffIdx >= _staffEnd)
+            _staffEnd = staffIdx + 1;
+
+      if (tick < tickStart()) {
+            if (_activeSegment == _endSegment)
+                  _endSegment = _startSegment;
+            _startSegment = cr->segment();
+            activeIsFirst = true;
+            }
+      else if (_endSegment && tick >= tickEnd()) {
+            if (_activeSegment == _startSegment)
+                  _startSegment = _endSegment;
+            Segment* s = cr->segment()->nextCR(cr->track());
+            _endSegment = s;
+            }
+      else {
+            if (_activeSegment == _startSegment) {
+                  _startSegment = cr->segment();
+                  activeIsFirst = true;
+                  }
+            else {
+                  _endSegment = cr->segment()->nextCR(cr->track());
+                  }
+            }
+      activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
+      }
+
 
 }
 
