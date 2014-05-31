@@ -691,6 +691,8 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
                   removeDrumRests->visible = isDrumTrack;
             if (allowedVoices)
                   allowedVoices->visible = !isDrumTrack;
+            if (separateVoices)
+                  separateVoices->visible = !isDrumTrack;
             if (clef)
                   clef->visible = !isDrumTrack;
             if (pickupMeasure)
