@@ -1775,7 +1775,8 @@ void Score::createMMRests()
                                     }
                               }
                         }
-                  else if (ns && ns->isEmpty())
+//                  else if (ns && ns->isEmpty())
+                  else if (ns)
                         undo(new RemoveElement(ns));
 
                   //
