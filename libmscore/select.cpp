@@ -942,9 +942,21 @@ QList<Note*> Selection::uniqueNotes(int track) const
 
 void Selection::extendRangeSelection(ChordRest* cr)
       {
+            extendRangeSelection(cr->segment(),cr->segment()->nextCR(cr->track()),cr->staffIdx(),cr->tick(),cr->tick());
+      }
+
+//---------------------------------------------------------
+//   extendRangeSelection
+//    Extends the range selection to contain the given
+//    segment. SegAfter should represent the segment
+//    that is after seg. Tick and etick represent
+//    the start and end tick of an element. Useful when
+//    extending by a chord rest.
+//---------------------------------------------------------
+
+void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, int tick, int etick)
+      {
       bool activeIsFirst;
-      int staffIdx = cr->staffIdx();
-      int tick = cr->tick();
       if (staffIdx < _staffStart)
             _staffStart = staffIdx;
       else if (staffIdx >= _staffEnd)
@@ -953,22 +965,21 @@ void Selection::extendRangeSelection(ChordRest* cr)
       if (tick < tickStart()) {
             if (_activeSegment == _endSegment)
                   _endSegment = _startSegment;
-            _startSegment = cr->segment();
+            _startSegment = seg;
             activeIsFirst = true;
             }
-      else if (_endSegment && tick >= tickEnd()) {
+      else if (_endSegment && etick >= tickEnd()) {
             if (_activeSegment == _startSegment)
                   _startSegment = _endSegment;
-            Segment* s = cr->segment()->nextCR(cr->track());
-            _endSegment = s;
+            _endSegment = segAfter;
             }
       else {
             if (_activeSegment == _startSegment) {
-                  _startSegment = cr->segment();
+                  _startSegment = seg;
                   activeIsFirst = true;
                   }
             else {
-                  _endSegment = cr->segment()->nextCR(cr->track());
+                  _endSegment = segAfter;
                   }
             }
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;

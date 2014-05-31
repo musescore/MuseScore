@@ -2846,25 +2846,11 @@ void Score::selectRange(Element* e, int staffIdx)
                                       staffIdx + 1);
                   }
             else if (_selection.isRange()) {
-                  _selection.setStaffStart(qMin(staffIdx, _selection.staffStart()));
-                  _selection.setStaffEnd(qMax(staffIdx + 1, _selection.staffEnd()));
-
-                  if (tick < _selection.tickStart()) {
-                        _selection.setStartSegment(m->tick2segment(tick));
-                        activeIsFirst = true;
-                        }
-                  else if (etick >= _selection.tickEnd())
-                        //_selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
-                        _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
-                  else {
-                        if (_selection.activeSegment() == _selection.startSegment()) {
-                              _selection.setStartSegment(m->tick2segment(tick));
-                              activeIsFirst = true;
-                              }
-                        else
-                              //_selection.setEndSegment(m == lastMeasure() ? 0 : tick2segment(etick));
-                              _selection.setEndSegment(m == lastMeasure() ? 0 : m->last());
-                        }
+                  _selection.extendRangeSelection(m->tick2segment(tick),
+                                                  m == lastMeasure() ? 0 : m->last(),
+                                                  staffIdx,
+                                                  tick,
+                                                  etick);
                   }
             else if (_selection.isSingle()) {
                   Segment* seg = 0;

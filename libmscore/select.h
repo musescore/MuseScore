@@ -125,6 +125,7 @@ class Selection {
       void updateSelectedElements();
       bool measureRange(Measure** m1, Measure** m2) const;
       void extendRangeSelection(ChordRest* cr);
+      void extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, int tick, int etick);
       };
 
 
