@@ -52,6 +52,7 @@ class TestImportMidi : public QObject, public MTest
 
       void mf(const char* name);
 
+                  // functions that modify default settings
       void dontSimplify(const char *file)
             {
             TrackOperations opers;
@@ -59,6 +60,39 @@ class TestImportMidi : public QObject, public MTest
             opers.simplifyDurations = false;
             opers.separateVoices = false;
             opers.LHRH.doIt = false;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf(file);
+            preferences.midiImportOperations.clear();
+            }
+      void voiceSeparation(const char *file)
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyDurations = false;
+            opers.separateVoices = true;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf(file);
+            preferences.midiImportOperations.clear();
+            }
+      void simplification(const char *file)
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyDurations = true;
+            opers.separateVoices = false;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf(file);
+            preferences.midiImportOperations.clear();
+            }
+      void lrhand(const char *file)
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = true;
+            opers.simplifyDurations = false;
+            opers.separateVoices = false;
             preferences.midiImportOperations.resetDefaults(opers);
             mf(file);
             preferences.midiImportOperations.clear();
@@ -198,61 +232,11 @@ class TestImportMidi : public QObject, public MTest
       void pickupMeasure() { dontSimplify("pickup"); }
 
       // LH/RH separation
-      void LHRH_Nontuplet()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = true;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("split_nontuplet");
-            preferences.midiImportOperations.clear();
-            }
-      void LHRH_Acid()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = true;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("split_acid");
-            preferences.midiImportOperations.clear();
-            }
-      void LHRH_Tuplet()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = true;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("split_tuplet");
-            preferences.midiImportOperations.clear();
-            }
-      void LHRH_2melodies()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = true;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("split_2_melodies");
-            preferences.midiImportOperations.clear();
-            }
-      void LHRH_octave()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = true;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("split_octave");
-            preferences.midiImportOperations.clear();
-            }
+      void LHRH_Nontuplet() { lrhand("split_nontuplet"); }
+      void LHRH_Acid() { lrhand("split_acid"); }
+      void LHRH_Tuplet() { lrhand("split_tuplet"); }
+      void LHRH_2melodies() { lrhand("split_2_melodies"); }
+      void LHRH_octave() { lrhand("split_octave"); }
 
       // swing
       void swingTriplets()
@@ -302,108 +286,18 @@ class TestImportMidi : public QObject, public MTest
       void clefMelody() { dontSimplify("clef_melody"); }
       void clefPrev() { dontSimplify("clef_prev"); }
 
-      // notation simplification
-      void simplify16thStaccato()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = true;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("simplify_16th_staccato");
-            preferences.midiImportOperations.clear();
-            }
-      void simplify8thDont()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = true;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("simplify_8th_dont");
-            preferences.midiImportOperations.clear();
-            }
-      void simplify32ndStaccato()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = true;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("simplify_32nd_staccato");
-            preferences.midiImportOperations.clear();
-            }
-      void simplify8thDottedNoStaccato()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = true;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("simplify_8th_dotted_no_staccato");
-            preferences.midiImportOperations.clear();
-            }
-      void simplify4thDottedTied()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = true;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("simplify_4th_dotted_tied");
-            preferences.midiImportOperations.clear();
-            }
-      void simplifyTripletStaccato()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = true;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("simplify_triplet_staccato");
-            preferences.midiImportOperations.clear();
-            }
-      void simplifyDotted3_4()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = true;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("simplify_dotted_3-4");
-            preferences.midiImportOperations.clear();
-            }
+      // duration simplification
+      void simplify16thStaccato() { simplification("simplify_16th_staccato"); }
+      void simplify8thDont() { simplification("simplify_8th_dont"); }
+      void simplify32ndStaccato() { simplification("simplify_32nd_staccato"); }
+      void simplify8thDottedNoStaccato() { simplification("simplify_8th_dotted_no_staccato"); }
+      void simplify4thDottedTied() { simplification("simplify_4th_dotted_tied"); }
+      void simplifyTripletStaccato() { simplification("simplify_triplet_staccato"); }
+      void simplifyDotted3_4() { simplification("simplify_dotted_3-4"); }
 
       // voice separation
-      void voiceSeparationAcid()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = false;
-            opers.separateVoices = true;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("voice_acid");
-            preferences.midiImportOperations.clear();
-            }
-      void voiceSeparationIntersect()
-            {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = false;
-            opers.separateVoices = true;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("voice_intersect");
-            preferences.midiImportOperations.clear();
-            }
+      void voiceSeparationAcid() { voiceSeparation("voice_acid"); }
+      void voiceSeparationIntersect() { voiceSeparation("voice_intersect"); }
       };
 
 //---------------------------------------------------------
