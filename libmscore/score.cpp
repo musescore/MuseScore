@@ -2911,14 +2911,14 @@ void Score::selectRange(Element* e, int staffIdx)
             ChordRest* cr = static_cast<ChordRest*>(e);
 
 
-                  if (_selection.isNone()
-                      || (_selection.isList() && !_selection.isSingle())) {
-                        if (_selection.isList())
-                              deselectAll();
+            if (_selection.isNone()
+                || (_selection.isList() && !_selection.isSingle())) {
+                  if (_selection.isList())
+                        deselectAll();
                   _selection.setRange(cr->segment(),
                                       cr->segment()->nextCR(cr->track()),
                                       e->staffIdx(),
-                                      selection.staffStart() + 1);
+                                      _selection.staffStart() + 1);
                   activeTrack = cr->track();
                   }
             else if (_selection.isSingle()) {
@@ -2927,34 +2927,18 @@ void Score::selectRange(Element* e, int staffIdx)
                         if (oe->type() == Element::ElementType::NOTE)
                               oe = oe->parent();
                         ChordRest* ocr = static_cast<ChordRest*>(oe);
+
+                        Segment* endSeg = tick2segment(ocr->segment()->tick() + ocr->actualTicks());
+                        if (!endSeg)
+                              endSeg = ocr->segment()->next();
+
                         _selection.setRange(ocr->segment(),
-                                            tick2segment(ocr->segment()->tick() + ocr->actualTicks()),
+                                            endSeg,
                                             oe->staffIdx(),
                                             _selection.staffStart() + 1);
-                        if (!_selection.endSegment())
-                              _selection.setEndSegment(ocr->segment()->next());
 
+                        _selection.extendRangeSelection(cr);
 
-                        staffIdx = cr->staffIdx();
-                        int tick = cr->tick();
-                        if (staffIdx < _selection.staffStart())
-                              _selection.setStaffStart(staffIdx);
-                        else if (staffIdx >= _selection.staffEnd())
-                              _selection.setStaffEnd(staffIdx + 1);
-                        if (tick < _selection.tickStart()) {
-                              _selection.setStartSegment(cr->segment());
-                              activeIsFirst = true;
-                              }
-                        else if (tick >= _selection.tickEnd())
-                              _selection.setEndSegment(tick2segment(cr->tick() + cr->actualTicks()));
-                        else {
-                              if (_selection.activeSegment() == _selection.startSegment()) {
-                                    _selection.setStartSegment(cr->segment());
-                                    activeIsFirst = true;
-                                    }
-                              else
-                                    _selection.setEndSegment(tick2segment(cr->tick() + cr->actualTicks()));
-                              }
                         }
                   else {
                         select(e, SelectType::SINGLE, 0);
@@ -2962,33 +2946,7 @@ void Score::selectRange(Element* e, int staffIdx)
                         }
                   }
             else if (_selection.isRange()) {
-                  staffIdx = cr->staffIdx();
-                  int tick = cr->tick();
-                  if (staffIdx < _selection.staffStart())
-                        _selection.setStaffStart(staffIdx);
-                  else if (staffIdx >= _selection.staffEnd())
-                        _selection.setStaffEnd(staffIdx + 1);
-                  if (tick < _selection.tickStart()) {
-                        if (_selection.activeSegment() == _selection.endSegment())
-                              _selection.setEndSegment(_selection.startSegment());
-                        _selection.setStartSegment(cr->segment());
-                        activeIsFirst = true;
-                        }
-                  else if (_selection.endSegment() && tick >= _selection.tickEnd()) {
-                        if (_selection.activeSegment() == _selection.startSegment())
-                              _selection.setStartSegment(_selection.endSegment());
-                        Segment* s = cr->segment()->nextCR(cr->track());
-                        _selection.setEndSegment(s);
-                        }
-                  else {
-                        if (_selection.activeSegment() == _selection.startSegment()) {
-                              _selection.setStartSegment(cr->segment());
-                              activeIsFirst = true;
-                              }
-                        else {
-                              _selection.setEndSegment(cr->segment()->nextCR(cr->track()));
-                              }
-                        }
+                  _selection.extendRangeSelection(cr);
                   }
             else {
                   qDebug("sel state %d", _selection.state());
