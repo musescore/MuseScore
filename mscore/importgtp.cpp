@@ -3601,7 +3601,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   QDomNode voices = clef.nextSibling();
                   QString voicesString = voices.toElement().text();
                   QDomNode xproperties = voices.nextSibling();
-                  ClefType clefId;
+                  ClefType clefId = ClefType::INVALID;
                   if (!xproperties.isNull())
                         qDebug("Unsupported tag in bars: XProperties");
                   if (!clefString.compare("F4"))

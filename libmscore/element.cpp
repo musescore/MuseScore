@@ -538,7 +538,7 @@ QPointF Element::pagePos() const
             return p;
 
       if (_flags & ElementFlag::ON_STAFF) {
-            System* system;
+            System* system = nullptr;
             if (parent()->type() == ElementType::SEGMENT)
                   system = static_cast<Segment*>(parent())->measure()->system();
             else if (parent()->type() == ElementType::MEASURE)     // used in measure number
@@ -573,7 +573,7 @@ QPointF Element::canvasPos() const
             return p;
 
       if (_flags & ElementFlag::ON_STAFF) {
-            System* system;
+            System* system = nullptr;
             if (parent()->type() == ElementType::SEGMENT)
                   system = static_cast<Segment*>(parent())->measure()->system();
             else if (parent()->type() == ElementType::MEASURE)     // used in measure number
