@@ -1150,7 +1150,7 @@ void ChordRest::writeBeam(Xml& xml)
 //    of given types
 //---------------------------------------------------------
 
-Segment* ChordRest::nextSegmentAfterCR(Segment::Type types)
+Segment* ChordRest::nextSegmentAfterCR(Segment::Type types) const
       {
       for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
             // chordrest ends at tick+actualTicks

@@ -160,7 +160,7 @@ class ChordRest : public DurationElement {
       bool isGraceAfter() const;
       void writeBeam(Xml& xml);
 
-      Segment* nextSegmentAfterCR(Segment::Type types);
+      Segment* nextSegmentAfterCR(Segment::Type types) const;
       };
 
 
