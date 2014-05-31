@@ -1048,7 +1048,9 @@ QPixmap StyleHelper::dialSlab(const QColor& color, qreal shade, int size) const 
             // colors
             const QColor base(ColorUtils::shade(color, shade) );
             const QColor light(ColorUtils::shade(calcLightColor(color), shade) );
+#if 0 // yet (?) unused
             const QColor dark(ColorUtils::shade(calcDarkColor(color), shade) );
+#endif
             const QColor mid(ColorUtils::shade(calcMidColor(color), shade) );
             const QColor shadow( calcShadowColor(color) );
 
@@ -1108,7 +1110,9 @@ QPixmap StyleHelper::dialSlabFocused(const QColor& color, const QColor& glowColo
             // colors
             const QColor base(ColorUtils::shade(color, shade));
             const QColor light(ColorUtils::shade(calcLightColor(color), shade));
+#if 0 // yet (?) unused
             const QColor dark(ColorUtils::shade(calcDarkColor(color), shade));
+#endif
             const QColor mid(ColorUtils::shade(calcMidColor(color), shade));
             const QColor shadow(calcShadowColor(color));
 
@@ -1753,7 +1757,9 @@ void StyleHelper::drawRoundSlab(QPainter& p, const QColor& color, qreal shade) c
       // colors
       const QColor base(ColorUtils::shade(color, shade) );
       const QColor light(ColorUtils::shade(calcLightColor(color), shade) );
+#if 0 // yet (?) unused
       const QColor dark(ColorUtils::shade(calcDarkColor(color), shade) );
+#endif
 
       // bevel, part 1
       QLinearGradient bevelGradient1(0, 10, 0, 18);

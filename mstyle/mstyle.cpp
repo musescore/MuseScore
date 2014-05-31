@@ -1821,7 +1821,9 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
       // toolbar engine
       const bool toolBarAnimated( isInToolBar && widget && ( animations().toolBarEngine().isAnimated( widget->parentWidget() ) || animations().toolBarEngine().isFollowMouseAnimated( widget->parentWidget() ) ) );
       const QRect animatedRect( (isInToolBar && widget) ? animations().toolBarEngine().animatedRect( widget->parentWidget() ) : QRect() );
+#if 0 // yet (?) unused
       const QRect childRect( (widget && widget->parentWidget()) ? r.translated( widget->mapToParent( QPoint(0, 0) ) ) : QRect() );
+#endif
       const QRect currentRect(  widget ? animations().toolBarEngine().currentRect( widget->parentWidget() ) : QRect() );
       const bool current( isInToolBar && widget && widget->parentWidget() && currentRect.intersects( r.translated( widget->mapToParent( QPoint(0, 0) ) ) ) );
       const bool toolBarTimerActive( isInToolBar && widget && animations().toolBarEngine().isTimerActive( widget->parentWidget() ) );
@@ -3458,9 +3460,13 @@ void MgStyle::fillTabBackground( QPainter* painter, const QRect& r, const QColor
 
 void MgStyle::fillTab( QPainter* painter, const QRect& r, const QColor& color, QTabBar::Shape shape, bool active ) const {
       const QColor dark( _helper.calcDarkColor(color) );
+#if 0 // yet (?) unused
       const QColor shadow( _helper.calcShadowColor(color) );
+#endif
       const QColor light( _helper.calcLightColor(color) );
+#if 0 // yet (?) unused
       const QColor hl( _helper.viewFocusBrush().brush(QPalette::Active).color() );
+#endif
       const QRect fillRect( r.adjusted(4, 3, -4, -5) );
 
       QLinearGradient highlight;
@@ -3748,8 +3754,9 @@ bool MgStyle::drawComboBoxComplexControl(const QStyleOptionComplex* option, QPai
                   opts |= Sunken;
 
             const QColor inputColor( enabled ? palette.color(QPalette::Base) : palette.color(QPalette::Window) );
+#if 0 // yet (?) unused
             const QRect editField( subControlRect(CC_ComboBox, cb, SC_ComboBoxEditField, widget) );
-
+#endif
             if (editable) {
                   // editable combobox. Make it look like a LineEdit
                   // focus takes precedence over hover
