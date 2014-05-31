@@ -51,6 +51,54 @@ TupletInfo& tupletFromId(int id, std::vector<TupletInfo> &tuplets)
                         tupletFromId(id, const_cast<const std::vector<TupletInfo> &>(tuplets)));
       }
 
+std::multimap<ReducedFraction, TupletData>::iterator
+removeTupletIfEmpty(
+            const std::multimap<ReducedFraction, TupletData>::iterator &tupletIt,
+            std::multimap<ReducedFraction, TupletData> &tuplets,
+            const ReducedFraction &maxChordLength,
+            std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      const auto &tuplet = tupletIt->second;
+      bool haveIntersectionWithChord = false;
+      const auto chordRange = MChord::findChordsForTimeRange(
+                        tuplet.voice, tuplet.onTime, tuplet.onTime + tuplet.len,
+                        chords, maxChordLength);
+
+      for (auto chordIt = chordRange.first; chordIt != chordRange.second; ++chordIt) {
+                        // ok, tuplet contains at least one chord
+                        // check now does it have notes with len < tuplet.len
+            if (chordIt->first == tuplet.onTime) {
+                  for (const auto &note: chordIt->second.notes) {
+                        if (note.offTime - chordIt->first < tuplet.len) {
+                              haveIntersectionWithChord = true;
+                              break;
+                              }
+                        }
+                  }
+            else {
+                  haveIntersectionWithChord = true;
+                  break;
+                  }
+            }
+
+      if (!haveIntersectionWithChord) {    // tuplet is useless - remove it
+            for (auto &chord: chords) {
+                  if (chord.first >= tuplet.onTime + tuplet.len)
+                        break;
+                  MidiChord &c = chord.second;
+                  if (c.isInTuplet && c.tuplet == tupletIt)
+                        c.isInTuplet = false;
+                  for (auto &note: c.notes) {
+                        if (note.isInTuplet && note.tuplet == tupletIt)
+                              note.isInTuplet = false;
+                        }
+                  }
+            return tuplets.erase(tupletIt);
+            }
+
+      return tuplets.end();
+      }
+
 // tuplets with no chords are removed
 // tuplets with single chord with chord.onTime = tuplet.onTime
 //    and chord.len = tuplet.len are removed as well
@@ -64,42 +112,15 @@ void removeEmptyTuplets(MTrack &track)
       std::map<int, ReducedFraction> maxChordLengths = MChord::findMaxChordLengths(chords);
 
       for (auto tupletIt = tuplets.begin(); tupletIt != tuplets.end(); ) {
-            const auto &tuplet = tupletIt->second;
-            bool haveIntersectionWithChord = false;
-            const auto chordRange = MChord::findChordsForTimeRange(
-                              tuplet.voice, tuplet.onTime, tuplet.onTime + tuplet.len,
-                              chords, maxChordLengths);
+            const auto fit = maxChordLengths.find(tupletIt->second.voice);
 
-            for (auto chordIt = chordRange.first; chordIt != chordRange.second; ++chordIt) {
-                              // ok, tuplet contains at least one chord
-                              // check now does it have notes with len < tuplet.len
-                  if (chordIt->first == tuplet.onTime) {
-                        for (const auto &note: chordIt->second.notes) {
-                              if (note.offTime - chordIt->first < tuplet.len) {
-                                    haveIntersectionWithChord = true;
-                                    break;
-                                    }
-                              }
-                        }
-                  else {
-                        haveIntersectionWithChord = true;
-                        break;
-                        }
-                  }
+            Q_ASSERT_X(fit != maxChordLengths.end(),
+                       "MidiTuplet::removeEmptyTuplets",
+                       "Max chord length for voice was not set");
 
-            if (!haveIntersectionWithChord) {    // tuplet is useless - remove it
-                  for (auto &chord: chords) {
-                        if (chord.first >= tuplet.onTime + tuplet.len)
-                              break;
-                        MidiChord &c = chord.second;
-                        if (c.isInTuplet && c.tuplet == tupletIt)
-                              c.isInTuplet = false;
-                        for (auto &note: c.notes) {
-                              if (note.isInTuplet && note.tuplet == tupletIt)
-                                    note.isInTuplet = false;
-                              }
-                        }
-                  tupletIt = tuplets.erase(tupletIt);
+            auto it = removeTupletIfEmpty(tupletIt, tuplets, fit->second, chords);
+            if (it != tupletIt) {
+                  tupletIt = it;
                   continue;
                   }
             ++tupletIt;
@@ -207,8 +228,8 @@ findTupletsInBarForDuration(
       return tupletsData;
       }
 
-std::pair<std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator,
-          std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator>
+std::pair<std::multimap<ReducedFraction, TupletData>::const_iterator,
+          std::multimap<ReducedFraction, TupletData>::const_iterator>
 findTupletsForTimeRange(
             int voice,
             const ReducedFraction &onTime,
@@ -253,7 +274,7 @@ findTupletsForTimeRange(
       return {beg, end};
       }
 
-std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator
+std::multimap<ReducedFraction, TupletData>::const_iterator
 findTupletContainsTime(
             int voice,
             const ReducedFraction &time,
@@ -552,7 +573,7 @@ void addTupletEvents(std::multimap<ReducedFraction, TupletData> &tupletEvents,
       {
       for (int i = 0; i != (int)tuplets.size(); ++i) {
             const auto &tupletInfo = tuplets[i];
-            MidiTuplet::TupletData tupletData = {
+            TupletData tupletData = {
                   tupletInfo.chords.begin()->second->second.voice,
                   tupletInfo.onTime,
                   tupletInfo.len,

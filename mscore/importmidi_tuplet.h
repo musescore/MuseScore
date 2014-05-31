@@ -36,7 +36,15 @@ struct TupletLimits
       };
 
 const TupletLimits& tupletLimits(int tupletNumber);
+
 void removeEmptyTuplets(MTrack &track);
+
+std::multimap<ReducedFraction, TupletData>::iterator
+removeTupletIfEmpty(
+            const std::multimap<ReducedFraction, TupletData>::iterator &tupletIt,
+            std::multimap<ReducedFraction, TupletData> &tuplets,
+            const ReducedFraction &maxChordLength,
+            std::multimap<ReducedFraction, MidiChord> &chords);
 
 const TupletInfo& tupletFromId(int id, const std::vector<TupletInfo> &tuplets);
 TupletInfo& tupletFromId(int id, std::vector<TupletInfo> &tuplets);
@@ -56,14 +64,14 @@ findTupletsInBarForDuration(int voice,
                             const ReducedFraction &durationLen,
                             const std::multimap<ReducedFraction, TupletData> &tupletEvents);
 
-std::pair<std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator,
-          std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator>
+std::pair<std::multimap<ReducedFraction, TupletData>::const_iterator,
+          std::multimap<ReducedFraction, TupletData>::const_iterator>
 findTupletsForTimeRange(int voice,
                        const ReducedFraction &onTime,
                        const ReducedFraction &len,
                        const std::multimap<ReducedFraction, TupletData> &tupletEvents);
 
-std::multimap<ReducedFraction, MidiTuplet::TupletData>::const_iterator
+std::multimap<ReducedFraction, TupletData>::const_iterator
 findTupletContainsTime(int voice,
                        const ReducedFraction &time,
                        const std::multimap<ReducedFraction, TupletData> &tupletEvents);

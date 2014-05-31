@@ -118,7 +118,7 @@ findChordsForTimeRange(
             const ReducedFraction &onTime,
             const ReducedFraction &offTime,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            std::map<int, ReducedFraction> &maxChordLengths);
+            const ReducedFraction &maxChordLength);
 
 #ifdef QT_DEBUG
 
