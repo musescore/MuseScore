@@ -369,6 +369,17 @@ class TestImportMidi : public QObject, public MTest
             mf("simplify_triplet_staccato");
             preferences.midiImportOperations.clear();
             }
+      void simplifyDotted3_4()
+            {
+            TrackOperations opers;
+            opers.canRedefineDefaultsLater = false;
+            opers.LHRH.doIt = false;
+            opers.simplifyDurations = true;
+            opers.separateVoices = false;
+            preferences.midiImportOperations.resetDefaults(opers);
+            mf("simplify_dotted_3-4");
+            preferences.midiImportOperations.clear();
+            }
 
       // voice separation
       void voiceSeparationAcid()
