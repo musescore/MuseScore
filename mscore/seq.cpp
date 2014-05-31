@@ -675,7 +675,7 @@ void Seq::process(unsigned n, float* buffer)
                         }
                   // Need to change state after calling collectEvents()
                   state = TRANSPORT_PLAY;
-                  if (mscore->countIn() && cs->playMode() == PLAYMODE_SYNTHESIZER) {
+                  if (mscore->countIn() && cs->playMode() == PlayMode::SYNTHESIZER) {
                         countInEvents.clear();
                         inCountIn = true;
                         }
