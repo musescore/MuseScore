@@ -38,7 +38,9 @@ class Pareq
 
       volatile int16_t  _touch0;
       volatile int16_t  _touch1;
+#if 0 // not yet (?) used
       bool              _bypass;
+#endif
       int               _state;
       float             _fsamp;
 

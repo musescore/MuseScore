@@ -30,7 +30,9 @@ class Channel {
       char ctrl[128];
 
       int _idx;               // channel index
+#if 0 // yet (?) unused
       int _sustain;
+#endif
 
    public:
       Channel(Zerberus*, int idx);
