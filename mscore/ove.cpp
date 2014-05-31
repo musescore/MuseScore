@@ -4313,7 +4313,7 @@ bool BarsParse::parse() {
 
             // MEAS
             if( !parseMeas(measure, measureChunks_[i]) ) {
-                  QString ss = "failed in parse MEAS " + i + '\n';
+                  QString ss = QString("failed in parse MEAS %1\n").arg(i);
                   messageOut(ss);
 
                   return false;
@@ -4323,7 +4323,7 @@ bool BarsParse::parse() {
       for( i=0; i<(int)conductChunks_.size(); ++i ) {
             // COND
             if( !parseCond(measures[i], measureDatas[i], conductChunks_[i]) ) {
-                  QString ss = "failed in parse COND " + i + '\n';
+                  QString ss = QString("failed in parse COND %1\n").arg(i);
                   messageOut(ss);
 
                   return false;
@@ -4335,7 +4335,7 @@ bool BarsParse::parse() {
 
             // BDAT
             if( !parseBdat(measures[measId], measureDatas[i], bdatChunks_[i]) ) {
-                  QString ss = "failed in parse BDAT " + i + '\n';
+                  QString ss = QString("failed in parse BDAT %1\n").arg(i);
                   messageOut(ss);
 
                   return false;
