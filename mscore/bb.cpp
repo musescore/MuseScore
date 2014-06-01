@@ -442,7 +442,7 @@ Score::FileError importBB(Score* score, const QString& name)
             if (mb->type() != Element::ElementType::MEASURE)
                   continue;
             Measure* measure = (Measure*)mb;
-            Segment* s = measure->findSegment(Segment::SegChordRest, measure->tick());
+            Segment* s = measure->findSegment(SegmentType::ChordRest, measure->tick());
             if (s == 0) {
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   rest->setDuration(measure->len());
@@ -487,7 +487,7 @@ Score::FileError importBB(Score* score, const QString& name)
                   qDebug("import BB: measure for tick %d not found", tick);
                   continue;
                   }
-            Segment* s = m->getSegment(Segment::SegChordRest, tick);
+            Segment* s = m->getSegment(SegmentType::ChordRest, tick);
             Harmony* h = new Harmony(score);
             h->setTrack(0);
             h->setRootTpc(table[c.root-1]);

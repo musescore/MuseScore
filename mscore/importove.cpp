@@ -1265,7 +1265,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             text->setAbove(true);
             text->setTrack(track);
 
-            Segment* s = measure->getSegment(Segment::SegChordRest, mtt_->getTick(measure->no(), 0));
+            Segment* s = measure->getSegment(SegmentType::ChordRest, mtt_->getTick(measure->no(), 0));
             s->add(text);
 		}
 	}
@@ -1285,7 +1285,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
         t->setAbove(true);
         t->setTrack(track);
 
-        Segment* s = measure->getSegment(Segment::SegChordRest, absTick);
+        Segment* s = measure->getSegment(SegmentType::ChordRest, absTick);
         s->add(t);
 	}
 }
@@ -1409,7 +1409,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 			// TODO-S          cr = measure->findChord(tick, noteTrack, graceLevel);
 			cr = measure->findChord(tick, noteTrack);
 			if (cr == 0) {
-				// Segment::SegmentType st = Segment::SegChordRest;
+				// SegmentType st = SegmentType::ChordRest;
 
 				cr = new Ms::Chord(score_);
 				cr->setTrack(noteTrack);
@@ -1433,7 +1433,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 						cr->setDurationType(TDuration::DurationType::V_EIGHT);
 					}
 
-					// st = Segment::SegGrace;
+					// st = SegmentType::Grace;
 				} else {
 					TDuration duration = OveNoteType_To_Duration(container->getNoteType());
 					duration.setDots(container->getDot());
@@ -1749,7 +1749,7 @@ void OveToMScore::convertArticulation(
 	case OVE::Articulation_Pause :{
         Breath* b = new Breath(score_);
         b->setTrack(track);
-        Segment* seg = measure->getSegment(Segment::SegBreath, absTick);
+        Segment* seg = measure->getSegment(SegmentType::Breath, absTick);
         seg->add(b);
 		break;
 	}
@@ -1838,7 +1838,7 @@ void OveToMScore::convertArticulation(
 		else {
 			pedal_ = new Pedal(score_);
 			pedal_->setTrack(track);
-            Segment* seg = measure->getSegment(Segment::SegChordRest, absTick);
+            Segment* seg = measure->getSegment(SegmentType::ChordRest, absTick);
             pedal_->setTick(seg->tick());
             seg->add(pedal_);
 		}
@@ -1846,7 +1846,7 @@ void OveToMScore::convertArticulation(
 	}
 	case OVE::Articulation_Pedal_Up :{
 		if(pedal_){
-              Segment* seg = measure->getSegment(Segment::SegChordRest, absTick);
+              Segment* seg = measure->getSegment(SegmentType::ChordRest, absTick);
               pedal_->setTick2(seg->tick());
 		  pedal_ = 0;
 		}
@@ -1877,7 +1877,7 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
 		lyric->setNo(oveLyric->getVerse());
 		lyric->setText(oveLyric->getLyric());
 		lyric->setTrack(track);
-	    Segment* segment = measure->getSegment(Segment::SegChordRest, tick);
+	    Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
           if (segment->element(track))
                   static_cast<ChordRest*>(segment->element(track))->add(lyric);
 	}
@@ -1985,7 +1985,7 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
 			harmony->render();
 		}
 
-		Segment* s = measure->getSegment(Segment::SegChordRest, absTick);
+		Segment* s = measure->getSegment(SegmentType::ChordRest, absTick);
 		s->add(harmony);
 	}
 }
@@ -2259,7 +2259,7 @@ void OveToMScore::convertDynamics(Measure* measure, int part, int staff, int tra
 		dynamic->setDynamicType(OveDynamics_To_Dynamics(dynamicPtr->getDynamicsType()));
 		dynamic->setTrack(track);
 
-		Segment* s = measure->getSegment(Segment::SegChordRest, absTick);
+		Segment* s = measure->getSegment(SegmentType::ChordRest, absTick);
         s->add(dynamic);
 	}
 }
@@ -2280,7 +2280,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
 		t->setText(expressionPtr->getText());
 		t->setTrack(track);
 
-        Segment* s = measure->getSegment(Segment::SegChordRest, absTick);
+        Segment* s = measure->getSegment(SegmentType::ChordRest, absTick);
         s->add(t);
 	}
 }

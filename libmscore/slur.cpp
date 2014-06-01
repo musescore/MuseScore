@@ -117,8 +117,8 @@ void SlurSegment::updateGrips(int* n, int* defaultGrip, QRectF* r) const
 
 static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
       {
-      // for (Segment* s = segment; s; s = s->next1MM(Segment::SegChordRest)) {
-      for (Segment* s = segment; s; s = s->next(Segment::SegChordRest)) {     // restrict search to measure
+      // for (Segment* s = segment; s; s = s->next1MM(SegmentType::ChordRest)) {
+      for (Segment* s = segment; s; s = s->next(SegmentType::ChordRest)) {     // restrict search to measure
             if (startTrack > endTrack) {
                   for (int t = startTrack-1; t >= endTrack; --t) {
                         if (s->element(t))
@@ -1199,7 +1199,7 @@ static bool chordsHaveTie(Chord* c1, Chord* c2)
 static bool isDirectionMixture(Chord* c1, Chord* c2)
       {
       bool up = c1->up();
-      for (Segment* seg = c1->segment(); seg; seg = seg->next(Segment::SegChordRest)) {
+      for (Segment* seg = c1->segment(); seg; seg = seg->next(SegmentType::ChordRest)) {
             Chord* c = static_cast<Chord*>(seg->element(c1->track()));
             if (!c || c->type() != Element::ElementType::CHORD)
                   continue;
@@ -1386,7 +1386,7 @@ qreal SlurTie::firstNoteRestSegmentX(System* system)
             if (mb->type() == ElementType::MEASURE) {
                   const Measure* measure = static_cast<const Measure*>(mb);
                   for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
-                        if (seg->segmentType() == Segment::SegChordRest) {
+                        if (seg->segmentType() == SegmentType::ChordRest) {
                               return seg->pos().x() + seg->measure()->pos().x();
                               }
                         }

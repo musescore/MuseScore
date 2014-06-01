@@ -13,9 +13,10 @@
 #ifndef __SEGMENTLIST_H__
 #define __SEGMENTLIST_H__
 
-#include "segment.h"
-
 namespace Ms {
+
+class Segment;
+enum class SegmentType;
 
 //---------------------------------------------------------
 //   SegmentList
@@ -38,7 +39,7 @@ class SegmentList {
       int size() const                     { return _size;        }
 
       Segment* first() const               { return _first;       }
-      Segment* first(Segment::SegmentTypes) const;
+      Segment* first(SegmentType) const;
 
       Segment* last() const                { return _last;        }
       Segment* firstCRSegment() const;

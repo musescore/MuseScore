@@ -64,7 +64,7 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
       Measure* mm = 0;
       if (m->score()->styleB(StyleIdx::createMultiMeasureRests) && m->type() == Element::ElementType::MEASURE) {
             mm = static_cast<Measure*>(m);
-            Segment* s = mm->findSegment(Segment::SegEndBarLine, mm->endTick());
+            Segment* s = mm->findSegment(SegmentType::EndBarLine, mm->endTick());
             if (s == 0)
                   mm->createEndBarLines();
             }
@@ -1251,7 +1251,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                   //               - part (excerpt) staff starts after
                   //                 barline element
                   bool needTick = (needFirstTick && segment == fs) || (segment->tick() != xml.curTick);
-                  if ((segment->segmentType() == Segment::SegEndBarLine)
+                  if ((segment->segmentType() == SegmentType::EndBarLine)
                      && (e == 0)
                      && writeSystemElements
                      && ((track % VOICES) == 0)) {
@@ -1278,7 +1278,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         }
                   Measure* m = segment->measure();
                   // don't write spanners for multi measure rests
-                  if ((!(m && m->isMMRest())) && (segment->segmentType() & Segment::SegChordRest)) {
+                  if ((!(m && m->isMMRest())) && (segment->segmentType() & SegmentType::ChordRest)) {
                         for (auto i : _spanner.map()) {     // TODO: dont search whole list
                               Spanner* s = i.second;
                               if (s->generated())
@@ -1338,7 +1338,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         cr->writeBeam(xml);
                         cr->writeTuplet(xml);
                         }
-                  if ((segment->segmentType() == Segment::SegEndBarLine) && (m->mmRestCount() < 0 || m->mmRest())) {
+                  if ((segment->segmentType() == SegmentType::EndBarLine) && (m->mmRestCount() < 0 || m->mmRest())) {
                         BarLine* bl = static_cast<BarLine*>(e);
                         bl->setBarLineType(m->endBarLineType());
                         bl->setVisible(m->endBarLineVisible());

@@ -63,7 +63,7 @@ void Glissando::layout()
       Segment* s = chord->segment();
       s = s->prev1();
       while (s) {
-            if ((s->segmentType() & (Segment::SegChordRest)) && s->element(track()))
+            if ((s->segmentType() & (SegmentType::ChordRest)) && s->element(track()))
                   break;
             s = s->prev1();
             }

@@ -28,7 +28,7 @@ static QHash<void*, int> segs;
 
 static void saveMeasureEvents(Xml& xml, Measure* m, int offset)
       {
-      for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
+      for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
             int tick = s->tick() + offset;
             int id = segs[(void*)s];
             int time = lrint(m->score()->repeatList()->utick2utime(tick) * 1000);
@@ -57,8 +57,8 @@ bool savePositions(Score* score, const QString& name)
       xml.stag("score");
       xml.stag("elements");
       int id = 0;
-      for (Segment* s = score->firstMeasure()->first(Segment::SegChordRest);
-         s; s = s->next1(Segment::SegChordRest)) {
+      for (Segment* s = score->firstMeasure()->first(SegmentType::ChordRest);
+         s; s = s->next1(SegmentType::ChordRest)) {
             qreal sx   = 0;
             int tracks = score->nstaves() * VOICES;
             for (int track = 0; track < tracks; track++) {

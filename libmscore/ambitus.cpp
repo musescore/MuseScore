@@ -549,7 +549,7 @@ void Ambitus::updateRange()
       int   tpcTop, tpcBottom;
       int   trk;
       Measure* meas     = segment()->measure();
-      Segment* segm     = meas->findSegment(Segment::SegChordRest, segment()->tick());
+      Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());
       bool     stop     = meas->sectionBreak() != nullptr;
       while (segm) {
             // moved to another measure?

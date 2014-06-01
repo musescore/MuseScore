@@ -484,7 +484,7 @@ Score::FileError Score::read114(XmlReader& e)
                   }
             // first clef can be implicit in 1.3 #22607
             if (s->clefList()->count(0) == 0) {
-                  Segment* seg = firstMeasure()->getSegment(Segment::SegClef, 0);
+                  Segment* seg = firstMeasure()->getSegment(SegmentType::Clef, 0);
                   ClefType ct = Clef::clefType("0");
                   Clef* clef = new Clef(this);
                   clef->setClefType(ct);
@@ -501,7 +501,7 @@ Score::FileError Score::read114(XmlReader& e)
                         continue;
                   if ((tick == m->tick()) && m->prevMeasure())
                         m = m->prevMeasure();
-                  Segment* seg = m->getSegment(Segment::SegClef, tick);
+                  Segment* seg = m->getSegment(SegmentType::Clef, tick);
                   if (seg->element(track))
                         static_cast<Clef*>(seg->element(track))->setGenerated(false);
                   else {
@@ -525,7 +525,7 @@ Score::FileError Score::read114(XmlReader& e)
                   Measure* m = tick2measure(tick);
                   if(!m) //empty score
                         break;
-                  Segment* seg = m->getSegment(Segment::SegKeySig, tick);
+                  Segment* seg = m->getSegment(SegmentType::KeySig, tick);
                   if (seg->element(track))
                         static_cast<KeySig*>(seg->element(track))->setGenerated(false);
                   else {
@@ -583,7 +583,7 @@ Score::FileError Score::read114(XmlReader& e)
             bool first = true;
             for (int track = 0; track < tracks; ++track) {
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->segmentType() != Segment::SegChordRest)
+                        if (s->segmentType() != SegmentType::ChordRest)
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (cr) {
@@ -663,7 +663,7 @@ Score::FileError Score::read114(XmlReader& e)
       style()->set(StyleIdx::measureSpacing, adjustedSpacing);
 
       _showOmr = false;
-      
+
       // add invisible tempo text if necessary
       // some 1.3 scores have tempolist but no tempo text
       fixTicks();
@@ -678,7 +678,7 @@ Score::FileError Score::read114(XmlReader& e)
                   tt->setVisible(false);
                   Measure* m = tick2measure(tick);
                   if (m) {
-                        Segment* seg = m->getSegment(Segment::SegChordRest, tick);
+                        Segment* seg = m->getSegment(SegmentType::ChordRest, tick);
                         seg->add(tt);
                         setTempo(tick, tempo);
                         }
