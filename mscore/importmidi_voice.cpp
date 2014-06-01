@@ -489,6 +489,19 @@ void addOrUpdateTuplet(
       if (ins == insertedTuplets.end()) {
             MidiTuplet::TupletData newTuplet = tuplet->second;
             newTuplet.voice = newVoice;
+
+#ifdef QT_DEBUG
+            const auto range = tuplets.equal_range(newTuplet.onTime);
+            bool found = false;
+            for (auto it = range.first; it != range.second; ++it) {
+                  if (it->second.voice == newVoice) {
+                        found = true;
+                        break;
+                        }
+                  }
+            Q_ASSERT_X(!found, "MidiVoice::addOrUpdateTuplet", "Tuplet already exists");
+#endif
+
             tuplet = tuplets.insert({tupletOnTime, newTuplet});
             insertedTuplets.insert({tupletOnTime, tuplet});
             }
@@ -507,11 +520,12 @@ void updateTuplet(
             std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
       {
       const auto oldTuplet = tuplet;
+
       addOrUpdateTuplet(tuplet, newVoice, insertedTuplets, tuplets);
       const auto it = maxChordLengths.find(oldTuplet->second.voice);
 
       Q_ASSERT_X(it != maxChordLengths.end(),
-                 "MidiVoice::doVoiceSeparation",
+                 "MidiVoice::updateTuplet",
                  "Max chord length for voice was not set");
 
       MidiTuplet::removeTupletIfEmpty(oldTuplet, tuplets, it->second, chords);
@@ -708,19 +722,19 @@ void separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
             if (opers.currentTrackOperations().separateVoices && voiceLimit() > 1) {
 
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
-                             "MidiVoice::doVoiceSeparation",
+                             "MidiVoice::separateVoices",
                              "Not all tuplets are referenced in chords or notes");
 
                   doVoiceSeparation(mtrack.chords, sigmap, mtrack.tuplets);
 
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
-                             "MidiVoice::doVoiceSeparation",
+                             "MidiVoice::separateVoices",
                              "Not all tuplets are referenced in chords or notes");
 
                   sortVoices(mtrack.chords, sigmap);
 
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
-                             "MidiVoice::doVoiceSeparation",
+                             "MidiVoice::separateVoices",
                              "Not all tuplets are referenced in chords or notes");
                   }
             }
