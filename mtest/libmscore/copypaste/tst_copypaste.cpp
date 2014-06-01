@@ -213,10 +213,10 @@ void TestCopyPaste::copyPastePartial() {
 
       Measure* m1 = score->firstMeasure();
 
-      Segment* s = m1->first(Segment::SegChordRest);
-      s = s->next(Segment::SegChordRest);
+      Segment* s = m1->first(SegmentType::ChordRest);
+      s = s->next(SegmentType::ChordRest);
       score->select(s->element(0));
-      s = s->next(Segment::SegChordRest);
+      s = s->next(SegmentType::ChordRest);
       score->select(s->element(4), SelectType::RANGE);
 
       QVERIFY(score->selection().canCopy());
@@ -226,7 +226,7 @@ void TestCopyPaste::copyPastePartial() {
       mimeData->setData(mimeType, score->selection().mimeData());
       QApplication::clipboard()->setMimeData(mimeData);
 
-      score->select(m1->first(Segment::SegChordRest)->element(0));
+      score->select(m1->first(SegmentType::ChordRest)->element(0));
       paste(score);
       score->doLayout();
 
