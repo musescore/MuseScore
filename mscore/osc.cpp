@@ -70,7 +70,7 @@ void MuseScore::initOsc()
       else
             port = preferences.oscPort;
       QOscServer* osc = new QOscServer(port, qApp);
-      
+
       PathObject* oo = new PathObject( "/addpitch", QVariant::Int, osc);
       QObject::connect(oo, SIGNAL(data(int)), SLOT(oscIntMessage(int)));
 
@@ -94,12 +94,12 @@ void MuseScore::initOsc()
             oo = new PathObject( QString("/mute%1").arg(i), QVariant::Double, osc);
             QObject::connect(oo, SIGNAL(data(double)), SLOT(oscMuteChannel(double)));
             }
-      
+
       oo = new PathObject( "/open", QVariant::String, osc);
       QObject::connect(oo, SIGNAL(data(QString)), SLOT(oscOpen(QString)));
       oo = new PathObject( "/close-all", QVariant::Invalid, osc);
       QObject::connect(oo, SIGNAL(data()), SLOT(oscCloseAll()));
-      
+
       oo = new PathObject( "/plugin", QVariant::String, osc);
       QObject::connect(oo, SIGNAL(data(QString)), SLOT(oscTriggerPlugin(QString)));
 
@@ -232,7 +232,7 @@ void MuseScore::oscColorNote(QVariantList list)
       Measure* measure = cs->tick2measure(tick);
       if(!measure)
             return;
-      Segment* s = measure->findSegment(Segment::SegChordRest, tick);
+      Segment* s = measure->findSegment(SegmentType::ChordRest, tick);
       if (!s)
             return;
       //get all chords in segment...

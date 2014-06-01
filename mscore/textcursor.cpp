@@ -128,12 +128,12 @@ void PositionCursor::move(int tick)
       int offset = 0;
 
       Segment* s;
-      for (s = measure->first(Segment::SegChordRest); s;) {
+      for (s = measure->first(SegmentType::ChordRest); s;) {
             int t1 = s->tick();
             int x1 = s->canvasPos().x();
             qreal x2;
             int t2;
-            Segment* ns = s->next(Segment::SegChordRest);
+            Segment* ns = s->next(SegmentType::ChordRest);
             if (ns) {
                   t2 = ns->tick();
                   x2 = ns->canvasPos().x();

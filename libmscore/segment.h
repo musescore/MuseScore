@@ -31,12 +31,39 @@ class Lyrics;
 class Spanner;
 class System;
 
+//---------------------------------------------------------
+//   SegmentType
+//---------------------------------------------------------
+
+enum class SegmentType {
+      Invalid            = 0x0,
+      Clef               = 0x1,        // type from SegClef to SegTimeSig
+      KeySig             = 0x2,        // need to be in the order in which they
+      Ambitus            = 0x4,        // appear in a measure
+      TimeSig            = 0x8,
+      StartRepeatBarLine = 0x10,
+      BarLine            = 0x20,
+      ChordRest          = 0x40,
+      Breath             = 0x80,
+      EndBarLine         = 0x100,
+      TimeSigAnnounce    = 0x200,
+      KeySigAnnounce     = 0x400,
+      All                = -1
+      };
+
+constexpr SegmentType operator| (SegmentType t1, SegmentType t2) {
+      return static_cast<SegmentType>(static_cast<int>(t1) | static_cast<int>(t2));
+      }
+constexpr bool operator& (SegmentType t1, SegmentType t2) {
+      return static_cast<int>(t1) & static_cast<int>(t2);
+      }
+
 //------------------------------------------------------------------------
 //   @@ Segment
 ///    A segment holds all vertical aligned staff elements.
 ///    Segments are typed and contain only Elements of the same type.
 //
-//   @P segmentType  Ms::Segment::SegmentType  (SegInvalid, SegClef, SegKeySig, SegAmbitus, SegTimeSig, SegStartRepeatBarLine, SegBarLine, SegChordRest, SegBreath, SegEndBarLine SegTimeSigAnnounce, SegKeySigAnnounce, SegAll)
+//   @P segmentType  SegmentType  (Invalid, Clef, KeySig, Ambitus, TimeSig, StartRepeatBarLine, BarLine, ChordRest, Breath, EndBarLine TimeSigAnnounce, KeySigAnnounce, All)
 //------------------------------------------------------------------------
 
 /**
@@ -53,24 +80,6 @@ class Segment : public Element {
       Q_OBJECT
       Q_PROPERTY(SegmentType segmentType READ segmentType WRITE setSegmentType)
       Q_ENUMS(SegmentType)
-
-   public:
-      enum SegmentType : unsigned short {
-            SegInvalid            = 0x0,
-            SegClef               = 0x1,        // type from SegClef to SegTimeSig
-            SegKeySig             = 0x2,        // need to be in the order in which they
-            SegAmbitus            = 0x4,        // appear in a measure
-            SegTimeSig            = 0x8,
-            SegStartRepeatBarLine = 0x10,
-            SegBarLine            = 0x20,
-            SegChordRest          = 0x40,
-            SegBreath             = 0x80,
-            SegEndBarLine         = 0x100,
-            SegTimeSigAnnounce    = 0x200,
-            SegKeySigAnnounce     = 0x400,
-            SegAll                = 0xffff
-            };
-      typedef QFlags<SegmentType> SegmentTypes;
 
    private:
       Segment* _next;               // linked list of segments inside a measure
@@ -104,21 +113,21 @@ class Segment : public Element {
       virtual void setScore(Score*);
 
       Q_INVOKABLE Ms::Segment* next() const             { return _next;   }
-      Segment* next(SegmentTypes) const;
+      Segment* next(SegmentType) const;
 
       void setNext(Segment* e)          { _next = e;      }
       Q_INVOKABLE Ms::Segment* prev() const { return _prev;   }
-      Segment* prev(SegmentTypes) const;
+      Segment* prev(SegmentType) const;
       void setPrev(Segment* e)          { _prev = e;      }
 
       Q_INVOKABLE Ms::Segment* next1() const;
       Ms::Segment* next1MM() const;
-      Segment* next1(SegmentTypes) const;
-      Segment* next1MM(SegmentTypes) const;
+      Segment* next1(SegmentType) const;
+      Segment* next1MM(SegmentType) const;
       Q_INVOKABLE Ms::Segment* prev1() const;
       Ms::Segment* prev1MM() const;
-      Segment* prev1(SegmentTypes) const;
-      Segment* prev1MM(SegmentTypes) const;
+      Segment* prev1(SegmentType) const;
+      Segment* prev1MM(SegmentType) const;
 
       Segment* nextCR(int track = -1) const;
 
@@ -126,7 +135,7 @@ class Segment : public Element {
 
       Q_INVOKABLE Ms::Element* element(int track) const { return _elist.value(track);  }
       ChordRest* cr(int track) const                    {
-            Q_ASSERT(_segmentType == SegChordRest);
+            Q_ASSERT(_segmentType == SegmentType::ChordRest);
             return (ChordRest*)(_elist.value(track));
             };
       const QList<Element*>& elist() const { return _elist; }
@@ -158,7 +167,7 @@ class Segment : public Element {
       void removeGeneratedElements();
       bool isEmpty() const                       { return empty; }
       void fixStaffIdx();
-      bool isChordRest() const                   { return _segmentType == SegChordRest; }
+      bool isChordRest() const                   { return _segmentType == SegmentType::ChordRest; }
       void setTick(int);
       int tick() const;
       int rtick() const                          { return _tick; } // tickposition relative to measure start
@@ -191,11 +200,9 @@ class Segment : public Element {
       bool operator>(const Segment&) const;
       };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Segment::SegmentTypes);
-
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Segment::SegmentType);
+Q_DECLARE_METATYPE(Ms::SegmentType);
 
 #endif
 

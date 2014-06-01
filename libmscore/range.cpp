@@ -234,7 +234,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const
       foreach (DurationElement* e, tuplet->elements()) {
             if (e->isChordRest()) {
                   Element* ne = e->clone();
-                  Segment::SegmentType st = Segment::SegChordRest;
+                  SegmentType st = SegmentType::ChordRest;
                   Segment* segment = measure->getSegment(st, tick);
                   segment->add(ne);
                   dt->add(ne);
@@ -355,7 +355,7 @@ bool TrackList::write(int track, Measure* measure) const
                         else {
                               Fraction d = qMin(rest, duration);
                               if (e->type() == Element::ElementType::REST || e->type() == Element::ElementType::REPEAT_MEASURE) {
-                                    segment = m->getSegment(Segment::SegChordRest, m->tick() + pos.ticks());
+                                    segment = m->getSegment(SegmentType::ChordRest, m->tick() + pos.ticks());
                                     Rest* r = new Rest(score, TDuration(d));
                                     r->setTrack(track);
                                     segment->add(r);

@@ -2169,7 +2169,7 @@ void ExportLy::findStartRepNoBarline(int &i, Measure* m)
  // loop over all measure relative segments in this measure
   for (Segment* seg = m->first(); seg; seg = seg->next())
     {
-      if (seg->segmentType() == Segment::SegStartRepeatBarLine)
+      if (seg->segmentType() == SegmentType::StartRepeatBarLine)
 	{
 	  i++; // insert at next slot of voltarray
 	  voltarray[i].voltart = startrepeat;
@@ -3411,7 +3411,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
   Element*  nextelem;
   nextelem= nextseg->element(track);
 
-  while (!(nextseg->segmentType() == Segment::SegEndBarLine))//  and !(nextseg->segmentType() == Segment::SegEndBarLine)))
+  while (!(nextseg->segmentType() == SegmentType::EndBarLine))//  and !(nextseg->segmentType() == SegmentType::EndBarLine)))
     {
       //go to next segment, check if it is chord or end of measure.
       if (nextseg->isChordRest())	break;
@@ -3421,7 +3421,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
 
   //if it is not on this track, continue until end we find segment
   //containing element of this track, or end of measure
-  while ((nextelem==0) and (!(nextseg->segmentType() == Segment::SegEndBarLine)))
+  while ((nextelem==0) and (!(nextseg->segmentType() == SegmentType::EndBarLine)))
     {
       nextseg = nextseg->next();
       nextelem = nextseg->element(track);
@@ -3429,7 +3429,7 @@ static void checkIfNextIsRest(MeasureBase* mb, Segment* s, bool &nextisrest, int
 
   // if next segment contains element of this track, check for end of
   // measure and chordorrest.
-  if ((nextseg->segmentType() != Segment::SegEndBarLine) &&  (nextseg->isChordRest()))
+  if ((nextseg->segmentType() != SegmentType::EndBarLine) &&  (nextseg->isChordRest()))
     {
       // probably superfluous as we have previously checked for
       // element on this track (!=0)
@@ -3527,7 +3527,7 @@ void ExportLy::findLyrics()
 	    continue;
 	  Measure* meas = (Measure*)mb;
 
-        Segment::SegmentTypes st = Segment::SegChordRest | Segment::SegGrace;
+        SegmentType st = SegmentType::ChordRest | SegmentType::Grace;
 	  for(Segment* seg = meas->first(st); seg; seg = seg->next(st))
 	    {
         const QList<Lyrics*>* lyrlist = seg->lyricsList(staffno*VOICES);

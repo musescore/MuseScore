@@ -811,7 +811,7 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
       {
       Lyrics* l = 0;
-      while ((s = s->next1(Segment::SegChordRest))) {
+      while ((s = s->next1(SegmentType::ChordRest))) {
             int strack = staffIdx * VOICES;
             int etrack = strack + VOICES;
             QList<Lyrics*>* nll = 0;

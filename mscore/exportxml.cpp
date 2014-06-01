@@ -1022,10 +1022,10 @@ static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
       const PageFormat* pf = s->pageFormat();
       if (pf)
             writePageFormat(pf, xml, INCH / millimeters * tenths);
-      
+
       // TODO: also write default system layout here
       // when exporting only manual or no breaks, system-distance is not written at all
-      
+
       // font defaults
       // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
       xml.tagE("word-font font-family=\"FreeSerif\" font-size=\"10\"");  // TODO: real value instead of hardcoded defaults
@@ -1542,7 +1542,7 @@ static Breath* hasBreathMark(Chord* ch)
       Segment* s = ch->segment();
       s = s->next1();
       Breath* b = 0;
-      if (s->segmentType() == Segment::SegBreath)
+      if (s->segmentType() == SegmentType::Breath)
             b = static_cast<Breath*>(s->element(ch->track()));
       return b;
       }
@@ -1992,7 +1992,7 @@ static Chord* nextChord(Chord* ch)
       Segment* s = ch->segment();
       s = s->next1();
       while (s) {
-            if (s->segmentType() == Segment::SegChordRest && s->element(ch->track()))
+            if (s->segmentType() == SegmentType::ChordRest && s->element(ch->track()))
                   break;
             s = s->next1();
             }
@@ -3384,7 +3384,7 @@ static void directionMarker(Xml& xml, const Marker* const m)
 
 static int findTrackForAnnotations(int track, Segment* seg)
       {
-      if (seg->segmentType() != Segment::SegChordRest)
+      if (seg->segmentType() != SegmentType::ChordRest)
             return -1;
 
       int staff = track / VOICES;
@@ -3406,7 +3406,7 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
       {
       // loop over all segments
       for (Segment* seg = m->first(); seg; seg = seg->next()) {
-            if (seg->segmentType() == Segment::SegChordRest) {
+            if (seg->segmentType() == SegmentType::ChordRest) {
                   foreach(const Element* e, seg->annotations()) {
 #ifdef DEBUG_REPEATS
                         qDebug("repeatAtMeasureStart seg %p elem %p type %d (%s) track %d",
@@ -3483,7 +3483,7 @@ static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, in
       {
       // loop over all segments
       for (Segment* seg = m->first(); seg; seg = seg->next()) {
-            if (seg->segmentType() == Segment::SegChordRest) {
+            if (seg->segmentType() == SegmentType::ChordRest) {
                   foreach(const Element* e, seg->annotations()) {
 #ifdef DEBUG_REPEATS
                         qDebug("repeatAtMeasureStop seg %p elem %p type %d (%s) track %d",
@@ -3615,7 +3615,7 @@ static void measureStyle(Xml& xml, Attributes& attr, Measure* m)
 
 static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Segment* seg)
       {
-      if (seg->segmentType() == Segment::SegChordRest) {
+      if (seg->segmentType() == SegmentType::ChordRest) {
             foreach(const Element* e, seg->annotations()) {
 
                   int wtrack = -1; // track to write annotation
@@ -3640,7 +3640,7 @@ static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Seg
 
 static void annotations(ExportMusicXml* exp, Xml&, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
-      if (seg->segmentType() == Segment::SegChordRest) {
+      if (seg->segmentType() == SegmentType::ChordRest) {
 
             const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
             // if (fd) qDebug("annotations seg %p found fretboard diagram %p", seg, fd);
@@ -3700,7 +3700,7 @@ static void annotations(ExportMusicXml* exp, Xml&, int strack, int etrack, int t
 static void figuredBass(Xml& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap)
       {
       Segment* seg = cr->segment();
-      if (seg->segmentType() == Segment::SegChordRest) {
+      if (seg->segmentType() == SegmentType::ChordRest) {
             foreach(const Element* e, seg->annotations()) {
 
                   int wtrack = -1; // track to write annotation
@@ -3760,7 +3760,7 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
 
 static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
-      if (seg->segmentType() == Segment::SegChordRest) {
+      if (seg->segmentType() == SegmentType::ChordRest) {
             int stick = seg->tick();
             for (auto it = exp->score()->spanner().lower_bound(stick); it != exp->score()->spanner().upper_bound(stick); ++it) {
                   Spanner* e = it->second;
@@ -4288,11 +4288,11 @@ void ExportMusicXml::write(QIODevice* dev)
                   Measure* prevMeasure = m->prevMeasure();
                   int tick             = m->tick();
                   Segment* cs1;
-                  Segment* cs2         = m->findSegment(Segment::SegClef, tick);
+                  Segment* cs2         = m->findSegment(SegmentType::Clef, tick);
                   Segment* seg         = 0;
 
                   if (prevMeasure)
-                        cs1 = prevMeasure->findSegment(Segment::SegClef,  tick);
+                        cs1 = prevMeasure->findSegment(SegmentType::Clef,  tick);
                   else
                         cs1 = 0;
 

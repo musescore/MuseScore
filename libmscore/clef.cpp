@@ -201,7 +201,7 @@ void Clef::layout()
                         Measure*    meas        = static_cast<Measure*>(clefSeg->parent());
                         Measure*    measNext    = meas->nextMeasure();
                         if (measNext) {
-                              clefSegNext = measNext->findSegment(Segment::SegClef, tick);
+                              clefSegNext = measNext->findSegment(SegmentType::Clef, tick);
                               if (clefSegNext)
                                     clefNext = static_cast<Clef*>(clefSegNext->element(track()));
                               }
@@ -228,7 +228,7 @@ void Clef::layout()
                   Measure*    meas        = static_cast<Measure*>(clefSeg->parent());
                   Measure*    measNext    = meas->nextMeasure();
                   if (measNext) {
-                        clefSegNext = measNext->findSegment(Segment::SegClef, tick);
+                        clefSegNext = measNext->findSegment(SegmentType::Clef, tick);
                         if (clefSegNext)
                               clefNext = static_cast<Clef*>(clefSegNext->element(track()));
 #endif      // >>>>>>> 38c666fa91f5bdaaa6d9ca0645c437c799be8c79
@@ -429,7 +429,7 @@ Element* Clef::drop(const DropData& data)
       else if (e->type() == ElementType::AMBITUS) {
             /*if (!generated())*/ {
                   Measure*    meas  = measure();
-                  Segment*    segm  = meas->getSegment(Segment::SegAmbitus, meas->tick());
+                  Segment*    segm  = meas->getSegment(SegmentType::Ambitus, meas->tick());
                   if (segm->element(track()))
                         score()->undoRemoveElement(segm->element(track()));
                   Ambitus* r = new Ambitus(score());

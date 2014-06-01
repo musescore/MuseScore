@@ -349,7 +349,7 @@ void MTrack::fillGapWithRests(Score* score,
                         Rest* rest = new Rest(score, duration);
                         rest->setDuration(duration.fraction());
                         rest->setTrack(track);
-                        Segment* s = measure->getSegment(Segment::SegChordRest,
+                        Segment* s = measure->getSegment(SegmentType::ChordRest,
                                                          startChordTick.ticks());
                         s->add(rest);
                         MidiTuplet::addElementToTuplet(voice, startChordTick, len, rest, tuplets);

@@ -477,9 +477,9 @@ void KeySig::insertIntoKeySigChain()
       int nextKeyTick = stf->nextKeyTick(tck);
       Segment* nextKeySeg = 0;
       if (nextKeyTick) {
-            nextKeySeg = score()->tick2segment(nextKeyTick, false, Segment::SegKeySig);
+            nextKeySeg = score()->tick2segment(nextKeyTick, false, SegmentType::KeySig);
             while(nextKeySeg && !nextKeySeg->element(track()))
-                  nextKeySeg = nextKeySeg->next1(Segment::SegKeySig);
+                  nextKeySeg = nextKeySeg->next1(SegmentType::KeySig);
             }
       if (nextKeySeg)
             static_cast<KeySig*>(nextKeySeg->elist()[track()])->setOldSig(_sig.accidentalType());
@@ -507,9 +507,9 @@ void KeySig::removeFromKeySigChain()
       int nextKeyTick = stf->nextKeyTick(tck);
       Segment* nextKeySeg = 0;
       if (nextKeyTick) {
-            nextKeySeg = score()->tick2segment(nextKeyTick, false, Segment::SegKeySig);
+            nextKeySeg = score()->tick2segment(nextKeyTick, false, SegmentType::KeySig);
             while(nextKeySeg && !nextKeySeg->element(track()))
-                  nextKeySeg = nextKeySeg->next1(Segment::SegKeySig);
+                  nextKeySeg = nextKeySeg->next1(SegmentType::KeySig);
             }
       if (nextKeySeg)
             static_cast<KeySig*>(nextKeySeg->elist()[track()])->setOldSig(oldKey.accidentalType());

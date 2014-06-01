@@ -62,7 +62,7 @@ void Score::updateChannel()
       Measure* fm = firstMeasure();
       if (!fm)
             return;
-      for (Segment* s = fm->first(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
+      for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             foreach(const Element* e, s->annotations()) {
                   if (e->type() != Element::ElementType::STAFF_TEXT)
                         continue;
@@ -79,7 +79,7 @@ void Score::updateChannel()
                   }
             }
 
-      for (Segment* s = fm->first(Segment::SegChordRest); s; s = s->next1(Segment::SegChordRest)) {
+      for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             foreach(Staff* st, _staves) {
                   int strack = st->idx() * VOICES;
                   int etrack = strack + VOICES;
@@ -254,7 +254,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
       int firstStaffIdx = staff->idx();
       int nextStaffIdx  = firstStaffIdx + 1;
 
-      Segment::SegmentTypes st = Segment::SegChordRest;
+      SegmentType st = SegmentType::ChordRest;
       int strack = firstStaffIdx * VOICES;
       int etrack = nextStaffIdx * VOICES;
 
@@ -275,7 +275,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   int velocity = staff->velocities().velo(seg->tick());
                   Instrument* instr = chord->staff()->part()->instr(tick);
                   int channel = instr->channel(chord->upNote()->subchannel()).channel;
-                  
+
                   foreach (Articulation* a, chord->articulations()) {
                         instr->updateVelocity(&velocity,channel, a->subtypeName());
                   }
@@ -292,7 +292,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
       //
       // collect program changes and controller
       //
-      for (Segment* s = m->first(Segment::SegChordRest); s; s = s->next(Segment::SegChordRest)) {
+      for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
             // int tick = s->tick();
             foreach(Element* e, s->annotations()) {
                   if (e->type() != Element::ElementType::STAFF_TEXT
@@ -549,7 +549,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             //int l = 1000 / n;
             if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
                   int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
-                  Segment::SegmentTypes st = Segment::SegChordRest;
+                  SegmentType st = SegmentType::ChordRest;
                   Segment* seg2 = seg->next(st);
                   int track = chord->track();
                   while (seg2 && !seg2->element(track))
@@ -773,7 +773,7 @@ void Score::createPlayEvents()
                   // skip linked staves, except primary
                   if (!m->score()->staff(track / VOICES)->primaryStaff())
                         continue;
-                  const Segment::SegmentTypes st = Segment::SegChordRest;
+                  const SegmentType st = SegmentType::ChordRest;
                   for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                         Chord* chord = static_cast<Chord*>(seg->element(track));
                         if (chord == 0 || chord->type() != Element::ElementType::CHORD)

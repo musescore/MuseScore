@@ -214,8 +214,8 @@ void detectSwing(Staff *staff, MidiOperation::Swing swingType)
       const int strack = staff->idx() * VOICES;
       SwingDetector swingDetector(swingType);
 
-      for (Segment *seg = score->firstSegment(Segment::SegChordRest); seg;
-                                      seg = seg->next1(Segment::SegChordRest)) {
+      for (Segment *seg = score->firstSegment(SegmentType::ChordRest); seg;
+                                      seg = seg->next1(SegmentType::ChordRest)) {
             for (int voice = 0; voice < VOICES; ++voice) {
                   ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
                   if (!cr)
@@ -228,7 +228,7 @@ void detectSwing(Staff *staff, MidiOperation::Swing swingType)
             StaffText* st = new StaffText(score);
             st->setTextStyleType(TextStyleType::STAFF);
             st->setText(swingCaption(swingType));
-            Segment* seg = score->firstSegment(Segment::SegChordRest);
+            Segment* seg = score->firstSegment(SegmentType::ChordRest);
             st->setParent(seg);
             st->setTrack(strack);   // voice == 0
             score->addElement(st);
