@@ -77,8 +77,9 @@ removeTupletIfEmpty(
                   }
             else {
                   haveIntersectionWithChord = true;
-                  break;
                   }
+            if (haveIntersectionWithChord)
+                  break;
             }
 
       if (!haveIntersectionWithChord) {    // tuplet is useless - remove it
@@ -555,11 +556,26 @@ bool areAllTupletsReferenced(
                   const auto &tuplet = chord.second.tuplet->second;
                   referencedTuplets.insert({tuplet.onTime, tuplet.voice});
                   }
+            for (const auto &note: chord.second.notes) {
+                  if (note.isInTuplet) {
+                        const auto &tuplet = note.tuplet->second;
+                        referencedTuplets.insert({tuplet.onTime, tuplet.voice});
+                        }
+                  }
             }
-      if (referencedTuplets.size() < tupletEvents.size())
-            qDebug() << "Referenced tuplets count < tuplet events count";
-      if (referencedTuplets.size() > tupletEvents.size())
-            qDebug() << "Referenced tuplets count > tuplet events count";
+
+      if (referencedTuplets.size() < tupletEvents.size()) {
+            qDebug() << "Referenced tuplets count ("
+                     << referencedTuplets.size() <<
+                        ") < tuplet events count ("
+                     << tupletEvents.size() << ")";
+            }
+      if (referencedTuplets.size() > tupletEvents.size()) {
+            qDebug() << "Referenced tuplets count ("
+                     << referencedTuplets.size() <<
+                        ") > tuplet events count ("
+                     << tupletEvents.size() << ")";
+            }
 
       return tupletEvents.size() == referencedTuplets.size();
       }
