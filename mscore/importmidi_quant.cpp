@@ -808,6 +808,12 @@ std::vector<QuantData> findQuantData(
       return data;
       }
 
+struct QuantInfo {
+      ReducedFraction onTime;
+      double penalty = 0.0;
+      std::multimap<ReducedFraction, MidiChord>::iterator chord;
+      };
+
 int findLastChordPosition(const std::vector<QuantData> &quantData)
       {
       int posIndex = -1;
@@ -916,7 +922,7 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
 
 void quantizeOnTimesInRange(
             const std::vector<std::multimap<ReducedFraction, MidiChord>::iterator> &chords,
-            std::multimap<ReducedFraction, MidiChord> &quantizedChords,
+            std::map<std::pair<const ReducedFraction, MidiChord> *, QuantInfo> &foundOnTimes,
             const ReducedFraction &rangeStart,
             const ReducedFraction &rangeEnd,
             const ReducedFraction &basicQuant,
@@ -952,24 +958,21 @@ void quantizeOnTimesInRange(
       for (int chordIndex = quantData.size() - 1; ; --chordIndex) {
             const QuantPos &p = quantData[chordIndex].positions[posIndex];
             const auto onTime = p.time;
-            const MidiChord &chord = chords[chordIndex]->second;
+            const auto chordIt = chords[chordIndex];
 
-            auto found = quantizedChords.end();
-            const auto range = quantizedChords.equal_range(onTime);
-            for (auto it = range.first; it != range.second; ++it) {
-                  if (it->second.voice == chord.voice) {
-                        found = it;
-                        break;
-                        }
+            const auto found = foundOnTimes.find(&*chordIt);
+            if (found == foundOnTimes.end()) {
+                  QuantInfo info;
+                  info.chord = chordIt;
+                  info.onTime = onTime;
+                  info.penalty = p.penalty;
+                  foundOnTimes.insert({&*chordIt, info});
                   }
-            if (found != quantizedChords.end()) {
-                  found->second.notes.append(chord.notes);
-                  if (chord.isInTuplet)
-                        found->second.isInTuplet = true;
+            else if (p.penalty < found->second.penalty) {
+                  found->second.onTime = onTime;
+                  found->second.penalty = p.penalty;
                   }
-            else {
-                  quantizedChords.insert({onTime, chord});
-                  }
+
             if (chordIndex == 0)
                   break;
             posIndex = p.prevPos;
@@ -1027,7 +1030,7 @@ void quantizeOffTimes(
 
 void quantizeOnTimes(
             std::multimap<ReducedFraction, MidiChord> &chords,
-            std::multimap<ReducedFraction, MidiChord> &quantizedChords,
+            std::map<std::pair<const ReducedFraction, MidiChord> *, QuantInfo> &foundOnTimes,
             const ReducedFraction &basicQuant,
             const TimeSigMap *sigmap)
       {
@@ -1091,12 +1094,54 @@ void quantizeOnTimes(
                                     }
                               }
 
-                        quantizeOnTimesInRange(chordsToQuant, quantizedChords, rangeStart, rangeEnd,
+                        const auto tol = basicQuant / 2;      // can add chords from previous range
+                        auto prevChord = chordIt;
+                        if (prevChord != chords.begin()) {
+                              for (--prevChord; prevChord->first < rangeStart
+                                          && prevChord->first > rangeStart - tol; --prevChord) {
+                                    if (prevChord->second.voice == voice)
+                                          chordsToQuant.push_back(prevChord);
+                                    if (prevChord == chords.begin())
+                                          break;
+                                    }
+                              }
+
+                        quantizeOnTimesInRange(chordsToQuant, foundOnTimes, rangeStart, rangeEnd,
                                                basicQuant, barStart, barFraction);
                         chordsToQuant.clear();
                         }
                   }
             }
+      }
+
+std::multimap<ReducedFraction, MidiChord>
+findQuantizedChords(
+            const std::map<std::pair<const ReducedFraction, MidiChord> *, QuantInfo> &foundOnTimes)
+      {
+      std::multimap<ReducedFraction, MidiChord> quantizedChords;
+      for (const auto &f: foundOnTimes) {
+            const QuantInfo &i = f.second;
+            const MidiChord &chord = i.chord->second;
+
+            auto found = quantizedChords.end();
+            const auto range = quantizedChords.equal_range(i.onTime);
+            for (auto it = range.first; it != range.second; ++it) {
+                  if (it->second.voice == chord.voice) {
+                        found = it;
+                        break;
+                        }
+                  }
+            if (found != quantizedChords.end()) {
+                  found->second.notes.append(chord.notes);     // merge chords with equal on times
+                  if (chord.isInTuplet)
+                        found->second.isInTuplet = true;
+                  }
+            else {
+                  quantizedChords.insert({i.onTime, chord});
+                  }
+            }
+
+      return quantizedChords;
       }
 
 void quantizeChords(
@@ -1106,8 +1151,9 @@ void quantizeChords(
       {
       applyTupletStaccato(chords);     // apply staccato for tuplet off times
 
-      std::multimap<ReducedFraction, MidiChord> quantizedChords;
-      quantizeOnTimes(chords, quantizedChords, basicQuant, sigmap);
+      std::map<std::pair<const ReducedFraction, MidiChord> *, QuantInfo> foundOnTimes;
+      quantizeOnTimes(chords, foundOnTimes, basicQuant, sigmap);
+      auto quantizedChords = findQuantizedChords(foundOnTimes);
       quantizeOffTimes(quantizedChords, basicQuant);
 
       std::swap(chords, quantizedChords);
