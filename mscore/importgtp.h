@@ -123,7 +123,7 @@ class GuitarPro {
       int measures;
       QList<GpBar> bars;
 
-      enum GuitarProError { GP_NO_ERROR, GP_UNKNOWN_FORMAT,
+      enum class GuitarProError : char { GP_NO_ERROR, GP_UNKNOWN_FORMAT,
          GP_EOF, GP_BAD_NUMBER_OF_STRINGS
             };
 
