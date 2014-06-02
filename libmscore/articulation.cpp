@@ -364,7 +364,7 @@ QPointF Articulation::canvasPos() const
 void Articulation::draw(QPainter* painter) const
       {
       SymId sym = _up ? articulationList[int(articulationType())].upSym : articulationList[int(articulationType())].downSym;
-      int flags = articulationList[int(articulationType())].flags;
+      ArticulationShowIn flags = articulationList[int(articulationType())].flags;
       if (staff()) {
             if (staff()->staffGroup() == StaffGroup::TAB) {
                   if (!(flags & ArticulationShowIn::TABLATURE))
