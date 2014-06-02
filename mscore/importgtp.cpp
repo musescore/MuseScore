@@ -906,7 +906,7 @@ qDebug("BeginRepeat=============================================");
             QString name = readPascalString(40);
             int strings  = readInt();
             if (strings <= 0 || strings > GP_MAX_STRING_NUMBER)
-                  throw GP_BAD_NUMBER_OF_STRINGS ;
+                  throw GuitarProError::GP_BAD_NUMBER_OF_STRINGS ;
             for (int j = 0; j < strings; ++j)
                   tuning[j] = readInt();
             for (int j = strings; j < GP_MAX_STRING_NUMBER; ++j)
@@ -1484,7 +1484,7 @@ void GuitarPro3::read(QFile* fp)
             QString name = readPascalString(40);
             int strings  = readInt();
             if (strings <= 0 || strings > GP_MAX_STRING_NUMBER)
-                  throw GP_BAD_NUMBER_OF_STRINGS ;
+                  throw GuitarProError::GP_BAD_NUMBER_OF_STRINGS ;
             for (int j = 0; j < strings; ++j)
                   tuning[j] = readInt();
             for (int j = strings; j < GP_MAX_STRING_NUMBER; ++j)
@@ -2164,7 +2164,7 @@ void GuitarPro4::read(QFile* fp)
             QString name = readPascalString(40);
             int strings  = readInt();
             if (strings <= 0 || strings > GP_MAX_STRING_NUMBER)
-                  throw GP_BAD_NUMBER_OF_STRINGS ;
+                  throw GuitarProError::GP_BAD_NUMBER_OF_STRINGS ;
             for (int j = 0; j < strings; ++j)
                   tuning[j] = readInt();
             for (int j = strings; j < GP_MAX_STRING_NUMBER; ++j)
@@ -3008,7 +3008,7 @@ void GuitarPro5::readTracks()
 
             int strings  = readInt();
             if (strings <= 0 || strings > GP_MAX_STRING_NUMBER)
-                  throw GP_BAD_NUMBER_OF_STRINGS ;
+                  throw GuitarProError::GP_BAD_NUMBER_OF_STRINGS ;
             for (int j = 0; j < strings; ++j) {
                   tuning[j] = readInt();
                   }
