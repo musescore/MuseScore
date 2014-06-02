@@ -242,7 +242,7 @@ void EditStaff::apply()
             score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col));
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {
-            updateNeeded |= (orgStaff->staffGroup() == TAB_STAFF_GROUP || staff->staffGroup() == TAB_STAFF_GROUP);
+            updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);
             score->undo()->push(new ChangeStaffType(orgStaff, *staff->staffType()));
       }
 

@@ -59,14 +59,14 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       templateCombo->clear();
       // statdard group also as fall-back (but excluded by percussion)
-      bool bStandard = !(instr != nullptr && instr->drumset() != nullptr);
+      bool bStandard    = !(instr != nullptr && instr->drumset() != nullptr);
       bool bPerc        = (instr != nullptr && instr->drumset() != nullptr);
       bool bTab         = (instr != nullptr && instr->stringData() != nullptr && instr->stringData()->strings() > 0);
       int idx           = 0;
       for (const StaffType& t : StaffType::presets()) {
-            if ( (t.group() == STANDARD_STAFF_GROUP && bStandard)
-                        || (t.group() == PERCUSSION_STAFF_GROUP && bPerc)
-                        || (t.group() == TAB_STAFF_GROUP && bTab))
+            if ( (t.group() == StaffGroup::STANDARD && bStandard)
+                        || (t.group() == StaffGroup::PERCUSSION && bPerc)
+                        || (t.group() == StaffGroup::TAB && bTab))
                   templateCombo->addItem(t.name(), idx);
             idx++;
             }
