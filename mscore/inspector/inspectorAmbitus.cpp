@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-enum {
+enum AmbitusControl : char {
       COLOR, VISIBLE, OFF_X, OFF_Y,             // Element controls
       HEADGROUP, HEADTYPE, DIRECTION,           // Range controls
       HASLINE,
@@ -119,9 +119,9 @@ void InspectorAmbitus::setElement()
       Ambitus* range = static_cast<Range*>(inspector->element());
 
 //      int octave = range->topPitch() / 12;
-//      static_cast<QSpinBox*>(iList[TOPOCTAVE].w)->setValue(octave);
+//      static_cast<QSpinBox*>(iList[AmbitusControl::TOPOCTAVE].w)->setValue(octave);
 //      octave = range->bottomPitch() / 12;
-//      static_cast<QSpinBox*>(iList[BOTTOMOCTAVE].w)->setValue(octave);
+//      static_cast<QSpinBox*>(iList[AmbitusControl::BOTTOMOCTAVE].w)->setValue(octave);
 //      InspectorBase::setElement();
       }
 */
@@ -134,7 +134,7 @@ void InspectorAmbitus::valueChanged(int idx)
       InspectorBase::valueChanged(idx);
       // if either tpc or octave is changed, notes can have been swapped
       // (to keep top above bottom): reload data
-      if (idx >= TOPTPC && idx <= BOTTOMOCTAVE) {
+      if (idx >= AmbitusControl::TOPTPC && idx <= AmbitusControl::BOTTOMOCTAVE) {
             setElement();
             }
       }
@@ -151,6 +151,6 @@ void Ms::InspectorAmbitus::updateRange()
       range->updateRange();
       range->layout();              // redo layout
       setElement();                 // set Inspector values to range properties
-      valueChanged(TOPTPC);         // force score to notice new range properties
+      valueChanged(AmbitusControl::TOPTPC);         // force score to notice new range properties
 }
 
