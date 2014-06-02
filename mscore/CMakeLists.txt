@@ -125,7 +125,7 @@ endif (OMR)
 QT4_WRAP_CPP (mocs
       scoreview.h editinstrument.h editstyle.h instrdialog.h
       musescore.h navigator.h pagesettings.h palette.h mixer.h playpanel.h
-      measureproperties.h seq.h textpalette.h textstyle.h
+      measureproperties.h seq.h textpalette.h textstyle.h selectionwindow.h
       timedialog.h symboldialog.h shortcutcapturedialog.h simplebutton.h
       greendotbutton.h recordbutton.h editdrumset.h editstaff.h selinstrument.h
       voltaproperties.h timesigproperties.h boxproperties.h newwizard.h
@@ -232,7 +232,7 @@ add_executable ( ${ExecutableName}
       icons.cpp importbww.cpp instrdialog.cpp
       debugger/debugger.cpp menus.cpp importmidi.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
-      mixer.cpp playpanel.cpp preferences.cpp measureproperties.cpp
+      mixer.cpp playpanel.cpp selectionwindow.cpp preferences.cpp measureproperties.cpp
       seq.cpp boxproperties.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
       simplebutton.cpp musedata.cpp
