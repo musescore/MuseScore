@@ -35,7 +35,7 @@ class System;
 //   SegmentType
 //---------------------------------------------------------
 
-enum class SegmentType {
+enum class SegmentType : short {
       Invalid            = 0x0,
       Clef               = 0x1,        // type from SegClef to SegTimeSig
       KeySig             = 0x2,        // need to be in the order in which they
@@ -52,10 +52,10 @@ enum class SegmentType {
       };
 
 constexpr SegmentType operator| (SegmentType t1, SegmentType t2) {
-      return static_cast<SegmentType>(static_cast<int>(t1) | static_cast<int>(t2));
+      return static_cast<SegmentType>(static_cast<short>(t1) | static_cast<short>(t2));
       }
 constexpr bool operator& (SegmentType t1, SegmentType t2) {
-      return static_cast<int>(t1) & static_cast<int>(t2);
+      return static_cast<short>(t1) & static_cast<short>(t2);
       }
 
 //------------------------------------------------------------------------
@@ -63,7 +63,7 @@ constexpr bool operator& (SegmentType t1, SegmentType t2) {
 ///    A segment holds all vertical aligned staff elements.
 ///    Segments are typed and contain only Elements of the same type.
 //
-//   @P segmentType  SegmentType  (Invalid, Clef, KeySig, Ambitus, TimeSig, StartRepeatBarLine, BarLine, ChordRest, Breath, EndBarLine TimeSigAnnounce, KeySigAnnounce, All)
+//   @P segmentType  Ms::SegmentType  (Invalid, Clef, KeySig, Ambitus, TimeSig, StartRepeatBarLine, BarLine, ChordRest, Breath, EndBarLine TimeSigAnnounce, KeySigAnnounce, All)
 //------------------------------------------------------------------------
 
 /**
@@ -78,8 +78,7 @@ constexpr bool operator& (SegmentType t1, SegmentType t2) {
 
 class Segment : public Element {
       Q_OBJECT
-      Q_PROPERTY(SegmentType segmentType READ segmentType WRITE setSegmentType)
-      Q_ENUMS(SegmentType)
+      Q_PROPERTY(Ms::SegmentType segmentType READ segmentType WRITE setSegmentType)
 
    private:
       Segment* _next;               // linked list of segments inside a measure
