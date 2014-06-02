@@ -43,7 +43,7 @@ enum class SymId : short;
 //   ElementFlag
 //---------------------------------------------------------
 
-enum ElementFlag : char {
+enum class ElementFlag : char {
       DROP_TARGET  = 0x2,
       SELECTABLE   = 0x4,
       MOVABLE      = 0x8,
@@ -526,7 +526,7 @@ class Element : public QObject {
             if (v)
                   _flags |= f;
             else
-                  _flags &= ~f;
+                  _flags &= ~ElementFlags(f);
             }
       bool flag(ElementFlag f) const   { return _flags & f; }
       void setFlags(ElementFlags f)    { _flags = f;    }
@@ -539,7 +539,7 @@ class Element : public QObject {
             if (v)
                   _flags |= ElementFlag::DROP_TARGET;
             else
-                  _flags &= ~ElementFlag::DROP_TARGET;
+                  _flags &= ~ElementFlags(ElementFlag::DROP_TARGET);
             }
       virtual bool isMovable() const   { return flag(ElementFlag::MOVABLE);     }
       bool isSegment() const           { return flag(ElementFlag::SEGMENT);     }
