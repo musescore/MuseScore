@@ -1335,6 +1335,13 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
          0,
+         "toggle-selection-window",
+         Qt::ApplicationShortcut,
+         QT_TRANSLATE_NOOP("action","Selection Window")
+         ),
+      Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         0,
          "toggle-navigator",
          Qt::ApplicationShortcut,
          QT_TRANSLATE_NOOP("action","Navigator")
