@@ -18,7 +18,7 @@
 
 namespace Ms {
 
-enum {
+enum ImageControl : char {
       COLOR, VISIBLE, OFF_X, OFF_Y,                   // Element controls
       AUTOSCALE, SIZE_W, SIZE_H, SCALE_W, SCALE_H,    // Image controls
       LOCK_RATIO, SIZE_IS_SPATIUM
@@ -104,14 +104,14 @@ void InspectorImage::valueChanged(int idx)
       QDoubleSpinBox* b3 = b.scaleWidth;
       QDoubleSpinBox* b4 = b.scaleHeight;
       Image* image = static_cast<Image*>(inspector->element());
-      if (idx == AUTOSCALE) {
+      if (idx == ImageControl::AUTOSCALE) {
             bool v = !b.autoscale->isChecked();
             b1->setEnabled(v);
             b2->setEnabled(v);
             b.scaleWidth->setEnabled(v);
             b.scaleHeight->setEnabled(v);
             }
-      if (idx == SIZE_W) {
+      if (idx == ImageControl::SIZE_W) {
             if (b.lockAspectRatio->isChecked()) {
                   QSizeF sz = image->getProperty(P_ID::SIZE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
@@ -123,7 +123,7 @@ void InspectorImage::valueChanged(int idx)
                   }
             updateScaleFromSize(QSizeF(b1->value(), b2->value()));
             }
-      else if (idx == SIZE_H) {
+      else if (idx == ImageControl::SIZE_H) {
             if (b.lockAspectRatio->isChecked()) {
                   QSizeF sz   = image->getProperty(P_ID::SIZE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
@@ -131,43 +131,43 @@ void InspectorImage::valueChanged(int idx)
                   b1->blockSignals(true);
                   b1->setValue(w);
                   b1->blockSignals(false);
-                  InspectorBase::valueChanged(SIZE_W);
+                  InspectorBase::valueChanged(ImageControl::SIZE_W);
                   }
             updateScaleFromSize(QSizeF(b1->value(), b2->value()));
             }
-      else if (idx == SCALE_W) {
+      else if (idx == ImageControl::SCALE_W) {
             if (b.lockAspectRatio->isChecked()) {
-/* LOCK_RATIO keeps original ratio:
-//      NEEDS case "else if(idx == LOCK_RATIO) ..." to restore original ratio on checking LOCK_RATIO
+/* ImageControl::LOCK_RATIO keeps original ratio:
+//      NEEDS case "else if(idx == ImageControl::LOCK_RATIO) ..." to restore original ratio on checking ImageControl::LOCK_RATIO
                   b4->blockSignals(true);
                   b4->setValue(b3->value());
                   b4->blockSignals(false);*/
-/* LOCK_RATIO keeps current ratio: */
+/* ImageControl::LOCK_RATIO keeps current ratio: */
                   QSizeF sz   = inspector->element()->getProperty(P_ID::SCALE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
                   qreal w     = b3->value() / ratio;
                   b4->blockSignals(true);
                   b4->setValue(w);
                   b4->blockSignals(false);
-                  InspectorBase::valueChanged(SCALE_H);
+                  InspectorBase::valueChanged(ImageControl::SCALE_H);
                   }
             updateSizeFromScale(QSizeF(b3->value(), b4->value()));
             }
       else if (idx == SCALE_H) {
             if (b.lockAspectRatio->isChecked()) {
-/* LOCK_RATIO keeps original ratio:
-//      NEEDS case "else if(idx == LOCK_RATIO) ..." to restore original ratio on checking LOCK_RATIO
+/* ImageControl::LOCK_RATIO keeps original ratio:
+//      NEEDS case "else if(idx == ImageControl::LOCK_RATIO) ..." to restore original ratio on checking ImageControl::LOCK_RATIO
                   b3->blockSignals(true);
                   b3->setValue(b4->value());
                   b3->blockSignals(false);*/
-/* LOCK_RATIO keeps current ratio: */
+/* ImageControl::LOCK_RATIO keeps current ratio: */
                   QSizeF sz   = inspector->element()->getProperty(P_ID::SCALE).toSizeF();
                   qreal ratio = sz.width() / sz.height();
                   qreal w     = b4->value() * ratio;
                   b3->blockSignals(true);
                   b3->setValue(w);
                   b3->blockSignals(false);
-                  InspectorBase::valueChanged(SCALE_W);
+                  InspectorBase::valueChanged(ImageControl::SCALE_W);
                   }
             updateSizeFromScale(QSizeF(b3->value(), b4->value()));
             }
