@@ -196,7 +196,7 @@ struct Position {
 //   LayoutFlag bits
 //---------------------------------------------------------
 
-enum LayoutFlag : char {
+enum class LayoutFlag : char {
       FIX_TICKS = 1,
       FIX_PITCH_VELO = 2,
       PLAY_EVENTS = 4
