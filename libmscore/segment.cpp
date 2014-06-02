@@ -29,6 +29,7 @@
 #include "hairpin.h"
 #include "ottava.h"
 #include "sig.h"
+#include "keysig.h"
 #include "staffstate.h"
 #include "instrchange.h"
 #include "clef.h"
@@ -398,6 +399,19 @@ void Segment::removeStaff(int staff)
       }
 
 //---------------------------------------------------------
+//   checkElement
+//---------------------------------------------------------
+
+void Segment::checkElement(Element* el, int track)
+      {
+      if (_elist[track]) {
+            qDebug("Segment::add(%s) there is already a %s at %s(%d) track %d. score %p",
+               el->name(), _elist[track]->name(),
+               score()->sigmap()->pos(tick()), tick(), track, score());
+            }
+      }
+
+//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
@@ -454,61 +468,45 @@ void Segment::add(Element* el)
 
             case ElementType::CLEF:
                   Q_ASSERT(_segmentType == SegmentType::Clef);
-                  if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already a %s at %s(%d) track %d. score %p",
-                           el->name(), _elist[track]->name(),
-                           score()->sigmap()->pos(tick()), tick(), track, score());
-                        }
+                  checkElement(el, track);
                   _elist[track] = el;
                   empty = false;
                   break;
 
             case ElementType::TIMESIG:
                   Q_ASSERT(segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce);
-                  if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already a %s at %s(%d) track %d. score %p",
-                           el->name(), _elist[track]->name(),
-                           score()->sigmap()->pos(tick()), tick(), track, score());
-                        }
+                  checkElement(el, track);
                   _elist[track] = el;
                   el->staff()->addTimeSig(static_cast<TimeSig*>(el));
+                  empty = false;
+                  break;
+
+            case ElementType::KEYSIG:
+                  Q_ASSERT(_segmentType == SegmentType::KeySig);
+                  checkElement(el, track);
+                  _elist[track] = el;
+                  el->staff()->setKey(tick(), static_cast<KeySig*>(el)->keySigEvent());
                   empty = false;
                   break;
 
             case ElementType::CHORD:
             case ElementType::REST:
                   Q_ASSERT(_segmentType == SegmentType::ChordRest);
-                  if (_elist[track]) {
-                        qDebug("%p Segment %s add(%s) there is already a %s at %s(%d) track %d. score %p",
-                           this, subTypeName(), el->name(), _elist[track]->name(),
-                           score()->sigmap()->pos(tick()), tick(), track, score());
-// abort();
-                        return;
-                        }
                   if (track % VOICES)
                         measure()->mstaff(track / VOICES)->hasVoices = true;
 
                   // fall through
 
-            case ElementType::KEYSIG:
             case ElementType::BAR_LINE:
             case ElementType::BREATH:
-                  if (_elist[track]) {
-                        qDebug("Segment::add(%s) there is already a %s at %s(%d) track %d. score %p",
-                           el->name(), _elist[track]->name(),
-                           score()->sigmap()->pos(tick()), tick(), track, score());
-                        }
+                  checkElement(el, track);
                   _elist[track] = el;
                   empty = false;
                   break;
+
             case ElementType::AMBITUS:
                   Q_ASSERT(_segmentType == SegmentType::Ambitus);
-                  if (_elist[track]) {
-                        qDebug("%p Segment %s add(%s) there is already an %s at %s(%d) track %d. score %p",
-                           this, subTypeName(), el->name(), _elist[track]->name(),
-                           score()->sigmap()->pos(tick()), tick(), track, score());
-                        return;
-                        }
+                  checkElement(el, track);
                   _elist[track] = el;
                   empty = false;
                   break;

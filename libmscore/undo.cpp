@@ -429,7 +429,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
                   continue;
                   }
             Segment* s   = measure->undoGetSegment(SegmentType::KeySig, tick);
-            int staffIdx = score->staffIdx(staff);
+            int staffIdx = staff->idx();
             int track    = staffIdx * VOICES;
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
@@ -437,13 +437,16 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
             if (diff && !score->styleB(StyleIdx::concertPitch))
                   st.setAccidentalType(transposeKey(st.accidentalType(), diff));
 
-            if (ks)
+            if (ks) {
+                  ks->undoChangeProperty(P_ID::GENERATED, false);
                   undo(new ChangeKeySig(ks, st, ks->showCourtesy()));
+                  }
             else {
                   KeySig* nks  = new KeySig(score);
                   nks->setParent(s);
                   nks->setTrack(track);
                   nks->setKeySigEvent(st);
+                  nks->setGenerated(false);
                   undo(new AddElement(nks));
                   if (lks)
                         lks->linkTo(nks);
@@ -1797,7 +1800,6 @@ void ChangeKeySig::flip()
       keysig->setShowCourtesy(showCourtesy);
 
       // update keymap if keysig was not generated
-      // this is needed during undo
       if (!keysig->generated())
             keysig->staff()->setKey(keysig->segment()->tick(), ks);
 
@@ -2710,6 +2712,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
                   }
             }
       undo(new RemoveMeasures(m1, m2));
+
       int ticks = 0;
       for (Measure* m = m1; m; m = m->nextMeasure()) {
             ticks += m->ticks();

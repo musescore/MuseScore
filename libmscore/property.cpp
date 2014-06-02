@@ -37,6 +37,7 @@ struct PropertyData {
 static const PropertyData propertyList[] = {
       { P_ID::SUBTYPE,             false, "subtype",       P_TYPE::INT   },
       { P_ID::SELECTED,            false, "selected",      P_TYPE::BOOL  },
+      { P_ID::GENERATED,           false, "",              P_TYPE::BOOL  },
       { P_ID::COLOR,               false, "color",         P_TYPE::COLOR },
       { P_ID::VISIBLE,             false, "visible",       P_TYPE::BOOL  },
       { P_ID::SMALL,               false, "small",         P_TYPE::BOOL  },
