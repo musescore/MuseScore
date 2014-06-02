@@ -55,7 +55,7 @@ void InspectorMarker::setElement()
       const QList<TextStyle>& ts = score->style()->textStyles();
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyle::Hidden::IN_LISTS) )
+            if (!(ts.at(i).hidden() & Hidden::IN_LISTS) )
                   t.style->addItem(ts.at(i).name(), i);
             }
       t.style->blockSignals(false);

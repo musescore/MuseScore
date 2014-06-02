@@ -27,19 +27,22 @@ class Element;
 
 class TextStyleData;
 
+enum class Hidden : unsigned char {
+      NEVER     = 0,
+      IN_EDITOR = 1,
+      IN_LISTS  = 2,
+      ALWAYS    = 0xFF
+      };
+
+constexpr bool operator& (Hidden h1, Hidden h2) {
+      return static_cast<unsigned char>(h1) & static_cast<unsigned char>(h2);
+      }
+
 //---------------------------------------------------------
 //   TextStyle
 //---------------------------------------------------------
 
 class TextStyle {
-   public:
-      enum Hidden : unsigned char {
-            NEVER     = 0,
-            IN_EDITOR = 1,
-            IN_LISTS  = 2,
-            ALWAYS    = 0xFF
-            };
-
    private:
       QSharedDataPointer<TextStyleData> d;
       Hidden _hidden;               // read-only parameter for text style visibility in various program places
