@@ -361,6 +361,12 @@ void Element::unlink()
       if (_links) {
             Q_ASSERT(_links->contains(this));
             _links->removeOne(this);
+
+            // if link list is empty, remove list
+            if (_links->size() <= 1) {
+                  _links->front()->_links = 0;
+                  delete _links;
+                  }
             _links = 0;
             }
       }
