@@ -952,7 +952,24 @@ void quantizeOnTimesInRange(
       for (int chordIndex = quantData.size() - 1; ; --chordIndex) {
             const QuantPos &p = quantData[chordIndex].positions[posIndex];
             const auto onTime = p.time;
-            quantizedChords.insert({onTime, chords[chordIndex]->second});
+            const MidiChord &chord = chords[chordIndex]->second;
+
+            auto found = quantizedChords.end();
+            const auto range = quantizedChords.equal_range(onTime);
+            for (auto it = range.first; it != range.second; ++it) {
+                  if (it->second.voice == chord.voice) {
+                        found = it;
+                        break;
+                        }
+                  }
+            if (found != quantizedChords.end()) {
+                  found->second.notes.append(chord.notes);
+                  if (chord.isInTuplet)
+                        found->second.isInTuplet = true;
+                  }
+            else {
+                  quantizedChords.insert({onTime, chord});
+                  }
             if (chordIndex == 0)
                   break;
             posIndex = p.prevPos;
