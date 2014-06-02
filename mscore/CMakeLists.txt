@@ -271,6 +271,7 @@ add_executable ( ${ExecutableName}
       importmidi_inner.cpp importmidi_tie.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp
+      continuouspanel.cpp
 
       ${OMR_FILES}
       ${AUDIO}
