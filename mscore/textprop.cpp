@@ -136,19 +136,19 @@ void TextProp::setTextStyle(const TextStyle& s)
       color->setColor(s.foregroundColor());
 
       systemFlag->setChecked(s.systemFlag());
-      int a = s.align();
-      if (a & ALIGN_HCENTER)
+      Align a = s.align();
+      if (a & AlignmentFlags::HCENTER)
             alignHCenter->setChecked(true);
-      else if (a & ALIGN_RIGHT)
+      else if (a & AlignmentFlags::RIGHT)
             alignRight->setChecked(true);
       else
             alignLeft->setChecked(true);
 
-      if (a & ALIGN_VCENTER)
+      if (a & AlignmentFlags::VCENTER)
             alignVCenter->setChecked(true);
-      else if (a & ALIGN_BOTTOM)
+      else if (a & AlignmentFlags::BOTTOM)
             alignBottom->setChecked(true);
-      else if (a & ALIGN_BASELINE)
+      else if (a & AlignmentFlags::BASELINE)
             alignBaseline->setChecked(true);
       else
             alignTop->setChecked(true);
@@ -214,16 +214,16 @@ TextStyle TextProp::textStyle() const
 
       Align a = 0;
       if (alignHCenter->isChecked())
-            a |= ALIGN_HCENTER;
+            a |= AlignmentFlags::HCENTER;
       else if (alignRight->isChecked())
-            a |= ALIGN_RIGHT;
+            a |= AlignmentFlags::RIGHT;
 
       if (alignVCenter->isChecked())
-            a |= ALIGN_VCENTER;
+            a |= AlignmentFlags::VCENTER;
       else if (alignBottom->isChecked())
-            a |= ALIGN_BOTTOM;
+            a |= AlignmentFlags::BOTTOM;
       else if (alignBaseline->isChecked())
-            a |= ALIGN_BASELINE;
+            a |= AlignmentFlags::BASELINE;
       ts.setAlign(a);
       return ts;
       }

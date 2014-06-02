@@ -134,15 +134,15 @@ QLineF FretDiagram::dragAnchor() const
 #if 0 // TODOxx
             qreal tw = width();
             qreal th = height();
-            if (_align & ALIGN_BOTTOM)
+            if (_align & AlignmentFlags::BOTTOM)
                   y = th;
-            else if (_align & ALIGN_VCENTER)
+            else if (_align & AlignmentFlags::VCENTER)
                   y = (th * .5);
-            else if (_align & ALIGN_BASELINE)
+            else if (_align & AlignmentFlags::BASELINE)
                   y = baseLine();
-            if (_align & ALIGN_RIGHT)
+            if (_align & AlignmentFlags::RIGHT)
                   x = tw;
-            else if (_align & ALIGN_HCENTER)
+            else if (_align & AlignmentFlags::HCENTER)
                   x = (tw * .5);
 #endif
             return QLineF(p1, abbox().topLeft() + QPointF(x, y));

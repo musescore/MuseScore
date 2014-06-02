@@ -225,9 +225,9 @@ void Lyrics::layout1()
       //
       // left align if syllable has a number or is a melisma
       //
-      if (_ticks == 0 && (textStyle().align() & ALIGN_HCENTER) && !_verseNumber)
+      if (_ticks == 0 && (textStyle().align() & AlignmentFlags::HCENTER) && !_verseNumber)
             x += symWidth(SymId::noteheadBlack) * .5;
-      else if (_ticks || ((textStyle().align() & ALIGN_HCENTER) && _verseNumber))
+      else if (_ticks || ((textStyle().align() & AlignmentFlags::HCENTER) && _verseNumber))
             x += width() * .5;
       rxpos() += x;
       rypos() += y;
