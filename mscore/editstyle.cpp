@@ -48,7 +48,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       lstyle = *s->style();
       setModal(true);
 
-      chordDescriptionFileButton->setIcon(*icons[fileOpen_ICON]);
+      chordDescriptionFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       pageList->setCurrentRow(0);
 

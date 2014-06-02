@@ -34,16 +34,16 @@ TextProp::TextProp(QWidget* parent)
       {
       setupUi(this);
       //set the icon here or the style can't color them
-      alignLeft->setIcon(*icons[textLeft_ICON]);
-      alignHCenter->setIcon(*icons[textCenter_ICON]);
-      alignRight->setIcon(*icons[textRight_ICON]);
-      alignTop->setIcon(*icons[textTop_ICON]);
-      alignVCenter->setIcon(*icons[textVCenter_ICON]);
-      alignBaseline->setIcon(*icons[textBaseline_ICON]);
-      alignBottom->setIcon(*icons[textBottom_ICON]);
-      fontBold->setIcon(*icons[textBold_ICON]);
-      fontItalic->setIcon(*icons[textItalic_ICON]);
-      fontUnderline->setIcon(*icons[textUnderline_ICON]);
+      alignLeft->setIcon(*icons[int(Icons::textLeft_ICON)]);
+      alignHCenter->setIcon(*icons[int(Icons::textCenter_ICON)]);
+      alignRight->setIcon(*icons[int(Icons::textRight_ICON)]);
+      alignTop->setIcon(*icons[int(Icons::textTop_ICON)]);
+      alignVCenter->setIcon(*icons[int(Icons::textVCenter_ICON)]);
+      alignBaseline->setIcon(*icons[int(Icons::textBaseline_ICON)]);
+      alignBottom->setIcon(*icons[int(Icons::textBottom_ICON)]);
+      fontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      fontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
+      fontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
 
       QButtonGroup* g1 = new QButtonGroup(this);
       g1->addButton(alignLeft);

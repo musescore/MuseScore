@@ -2836,7 +2836,7 @@ AboutBoxDialog::AboutBoxDialog()
       revisionLabel->setText(tr("Revision: %1").arg(revision));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 #ifdef MSCORE_UNSTABLE
-      copyRevisionButton->setIcon(*icons[copy_ICON]);
+      copyRevisionButton->setIcon(*icons[int(Icons::copy_ICON)]);
       connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
 #else
       copyRevisionButton->hide();
@@ -4898,7 +4898,7 @@ int main(int argc, char* av[])
       genIcons();
 
       if (!converterMode)
-            qApp->setWindowIcon(*icons[window_ICON]);
+            qApp->setWindowIcon(*icons[int(Icons::window_ICON)]);
       Workspace::initWorkspace();
       mscore = new MuseScore();
       mscoreCore = mscore;
