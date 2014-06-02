@@ -62,6 +62,8 @@ cases:
 Shortcuts marked with the STATE_NEVER state should NEVER used directly as shortcuts!
 ---------------------------------------------------------*/
 
+#include "icons.h"
+
 namespace Ms {
 
 class Xml;
@@ -90,7 +92,7 @@ class Shortcut {
       QList<QKeySequence> _keys;     //! shortcut list
       QKeySequence::StandardKey _standardKey { QKeySequence::UnknownKey };
       Qt::ShortcutContext _context           { Qt::WindowShortcut };
-      int _icon                              { -1 };
+      Icons _icon                            { Icons::Invalid_ICON };
       mutable QAction* _action               { 0 };             //! cached action
 
       static Shortcut sc[];
@@ -104,33 +106,33 @@ class Shortcut {
          const char* d,
          const char* txt = 0,
          const char* h = 0,
-         int i = -1);
+         Icons i = Icons::Invalid_ICON);
       Shortcut(int state, int flags,
          const char* name,
          const char* d,
          const char* txt = 0,
          const char* h = 0,
-         int i = -1);
+         Icons i = Icons::Invalid_ICON);
       Shortcut(int state, int flags,
          const char* name,
          const char* d,
-         int i);
+         Icons i);
       Shortcut(int state, int flags,
          const char* name,
          const char* d,
          const char* txt,
-         int i);
+         Icons i);
       Shortcut(int state, int flags,
          const char* name,
          Qt::ShortcutContext cont,
          const char* d,
-         int i);
+         Icons i);
       Shortcut(int state, int flags,
          const char* name,
          Qt::ShortcutContext cont,
          const char* d,
          const char* txt,
-         int i);
+         Icons i);
 
       Shortcut(const Shortcut& c);
       ~Shortcut() {}
@@ -146,7 +148,7 @@ class Shortcut {
       void addShortcut(const QKeySequence&);
       int state() const                        { return _state; }
       int flags() const                        { return _flags; }
-      int icon() const                         { return _icon;  }
+      Icons icon() const                       { return _icon;  }
       const QList<QKeySequence>& keys() const  { return _keys;  }
       QKeySequence::StandardKey standardKey() const { return _standardKey; }
       void setKeys(const QList<QKeySequence>& ks);

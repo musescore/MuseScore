@@ -30,7 +30,7 @@
 namespace Ms {
 
 extern QString iconPath;
-QIcon* icons[ICONS];
+QIcon* icons[int(Icons::ICONS)];
 
 //---------------------------------------------------------
 //   genIcons
@@ -147,7 +147,7 @@ static const char* iconNames[] = {
 
 void genIcons()
       {
-      for (int i = 0; i < voice1_ICON; ++i) {
+      for (int i = 0; i < int(Icons::voice1_ICON); ++i) {
             QIcon* icon = new QIcon(new MIconEngine);
             icon->addFile(iconPath + iconNames[i]);
             icons[i] = icon;
@@ -160,7 +160,7 @@ void genIcons()
       int iw = preferences.iconHeight * 2 / 3; // 16;
       int ih = preferences.iconHeight;   // 24;
       for (int i = 0; i < VOICES; ++i) {
-            icons[voice1_ICON + i] = new QIcon;
+            icons[int(Icons::voice1_ICON) + i] = new QIcon;
             QPixmap image(iw, ih);
             QColor c(MScore::selectColor[i].lighter(180));
             image.fill(c);
@@ -170,7 +170,7 @@ void genIcons()
             painter.setPen(QPen(Qt::black));
             painter.drawText(QRect(0, 0, iw, ih), Qt::AlignCenter, vtext[i]);
             painter.end();
-            icons[voice1_ICON +i]->addPixmap(image);
+            icons[int(Icons::voice1_ICON) +i]->addPixmap(image);
 
             painter.begin(&image);
             c = QColor(MScore::selectColor[i].lighter(140));
@@ -178,7 +178,7 @@ void genIcons()
             painter.setPen(QPen(Qt::black));
             painter.drawText(QRect(0, 0, iw, ih), Qt::AlignCenter, vtext[i]);
             painter.end();
-            icons[voice1_ICON + i]->addPixmap(image, QIcon::Normal, QIcon::On);
+            icons[int(Icons::voice1_ICON) + i]->addPixmap(image, QIcon::Normal, QIcon::On);
             }
       }
 }

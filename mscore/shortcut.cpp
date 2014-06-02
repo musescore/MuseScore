@@ -28,7 +28,7 @@ extern QString dataPath;
 //---------------------------------------------------------
 
 Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
-   const char* txt, const char* d, const char* h, int i)
+   const char* txt, const char* d, const char* h, Icons i)
       {
       _key         = name;
       _text        = txt;
@@ -41,7 +41,7 @@ Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
       }
 
 Shortcut::Shortcut(int s, int f, const char* name,
-   const char* txt, const char* d, const char* h, int i)
+   const char* txt, const char* d, const char* h, Icons i)
       {
       _key         = name;
       _text        = txt;
@@ -53,7 +53,7 @@ Shortcut::Shortcut(int s, int f, const char* name,
       }
 
 Shortcut::Shortcut(int s, int f, const char* name, const char* txt,
-   const char* d, int i)
+   const char* d, Icons i)
       {
       _key         = name;
       _text        = txt;
@@ -65,7 +65,7 @@ Shortcut::Shortcut(int s, int f, const char* name, const char* txt,
       }
 
 Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
-   const char* txt, const char* d, int i)
+   const char* txt, const char* d, Icons i)
       {
       _key         = name;
       _text        = txt;
@@ -77,7 +77,7 @@ Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
       _icon        = i;
       }
 
-Shortcut::Shortcut(int s, int f, const char* name, const char* txt, int i)
+Shortcut::Shortcut(int s, int f, const char* name, const char* txt, Icons i)
       {
       _key         = name;
       _text        = txt;
@@ -89,7 +89,7 @@ Shortcut::Shortcut(int s, int f, const char* name, const char* txt, int i)
       }
 
 Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
-   const char* txt, int i)
+   const char* txt, Icons i)
       {
       _key         = name;
       _text        = txt;
@@ -236,8 +236,8 @@ QAction* Shortcut::action() const
             s += ")";
             _action->setToolTip(s);
             }
-      if (_icon != -1)
-            _action->setIcon(*icons[_icon]);
+      if (_icon != Icons::Invalid_ICON)
+            _action->setIcon(*icons[int(_icon)]);
       return _action;
       }
 
