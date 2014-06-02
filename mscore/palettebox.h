@@ -19,6 +19,7 @@ namespace Ms {
 class Xml;
 class XmlReader;
 class Palette;
+enum class PaletteCommand : char;
 
 //---------------------------------------------------------
 //   PaletteBox
@@ -31,7 +32,7 @@ class PaletteBox : public QDockWidget {
       Palette* newPalette(const QString& name, int slot);
 
    private slots:
-      void paletteCmd(int, int);
+      void paletteCmd(PaletteCommand, int);
       void closeAll();
       void displayMore(const QString& paletteName);
 

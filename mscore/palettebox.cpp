@@ -108,14 +108,14 @@ Palette* PaletteBox::newPalette(const QString& name, int slot)
 //   paletteCmd
 //---------------------------------------------------------
 
-void PaletteBox::paletteCmd(int cmd, int slot)
+void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
       {
       QLayoutItem* item   = vbox->itemAt(slot);
       PaletteBoxButton* b = static_cast<PaletteBoxButton*>(item->widget());
       Palette* palette    = static_cast<Palette*>(vbox->itemAt(slot+1)->widget());
 
       switch(cmd) {
-            case PALETTE_DELETE:
+            case PaletteCommand::PDELETE:
                   {
                   vbox->removeItem(item);
                   b->deleteLater();      // this is the button widget
@@ -129,7 +129,7 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                   emit changed();
                   }
                   break;
-            case PALETTE_SAVE:
+            case PaletteCommand::SAVE:
                   {
                   QString path = mscore->getPaletteFilename(false);
                   if (!path.isEmpty())
@@ -137,7 +137,7 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                   }
                   break;
 
-            case PALETTE_LOAD:
+            case PaletteCommand::LOAD:
                   {
                   QString path = mscore->getPaletteFilename(true);
                   if (!path.isEmpty()) {
@@ -149,13 +149,13 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                   emit changed();
                   break;
 
-            case PALETTE_NEW:
+            case PaletteCommand::NEW:
                   palette = newPalette(tr("new Palette"), slot);
                   item   = vbox->itemAt(slot);
                   b = static_cast<PaletteBoxButton*>(item->widget());
                   // fall through
 
-            case PALETTE_EDIT:
+            case PaletteCommand::EDIT:
                   {
                   PaletteProperties pp(palette, 0);
                   int rv = pp.exec();
@@ -168,7 +168,7 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                   emit changed();
                   break;
 
-            case PALETTE_UP:
+            case PaletteCommand::UP:
                   if (slot) {
                         QLayoutItem* i1 = vbox->itemAt(slot);
                         QLayoutItem* i2 = vbox->itemAt(slot+1);
@@ -184,7 +184,7 @@ void PaletteBox::paletteCmd(int cmd, int slot)
                         }
                   break;
 
-            case PALETTE_DOWN:
+            case PaletteCommand::DOWN:
                   if (slot < (vbox->count() - 3)) {
                         QLayoutItem* i1 = vbox->itemAt(slot);
                         QLayoutItem* i2 = vbox->itemAt(slot+1);
