@@ -237,6 +237,7 @@ class Text : public Element {
 
       virtual void layout() override;
       virtual void layout1();
+      void sameLayout();
       qreal lineSpacing() const;
       qreal lineHeight() const;
       virtual qreal baseLine() const override;

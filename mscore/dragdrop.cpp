@@ -27,6 +27,7 @@
 #include "libmscore/xml.h"
 #include "musescore.h"
 #include "scoreview.h"
+#include "continuouspanel.h"
 
 namespace Ms {
 
@@ -58,6 +59,8 @@ void ScoreView::setViewRect(const QRectF& r)
       imatrix = _matrix.inverted();
       scroll(dx, dy, QRect(0, 0, width(), height()));
       emit offsetChanged(_matrix.dx(), _matrix.dy());
+      if (_continuousPanel->visible())
+            update();
       }
 
 //---------------------------------------------------------
