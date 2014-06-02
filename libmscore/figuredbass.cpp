@@ -916,7 +916,7 @@ FiguredBass::FiguredBass(Score* s)
       setOnNote(true);
       setTextStyleType(TextStyleType::FIGURED_BASS);
       TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(StyleIdx::figuredBassFontSize),
-                  false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, score()->styleD(StyleIdx::figuredBassYOffset)), OffsetType::SPATIUM);
+                  false, false, false, AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, score()->styleD(StyleIdx::figuredBassYOffset)), OffsetType::SPATIUM);
       st.setSizeIsSpatiumDependent(true);
       setTextStyle(st);
       setTicks(0);
@@ -1008,7 +1008,7 @@ void FiguredBass::layout()
       // if 'our' style, force 'our' style data from FiguredBass parameters
       if(textStyleType() == TextStyleType::FIGURED_BASS) {
             TextStyle st("Figured Bass", g_FBFonts[0].family, score()->styleD(StyleIdx::figuredBassFontSize),
-                        false, false, false, ALIGN_LEFT | ALIGN_TOP, QPointF(0, yOff),
+                        false, false, false, AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, yOff),
                         OffsetType::SPATIUM);
             st.setSizeIsSpatiumDependent(true);
             setTextStyle(st);

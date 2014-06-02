@@ -285,11 +285,11 @@ void TextBlock::layout(Text* t)
                   }
             }
       qreal rx;
-      if (t->textStyle().align() & ALIGN_RIGHT)
+      if (t->textStyle().align() & AlignmentFlags::RIGHT)
             rx = layoutWidth-_bbox.right();
-      else if (t->textStyle().align() & ALIGN_HCENTER)
+      else if (t->textStyle().align() & AlignmentFlags::HCENTER)
             rx = (layoutWidth - (_bbox.left() + _bbox.right())) * .5;
-      else  // ALIGN_LEFT
+      else  // AlignmentFlags::LEFT
             rx = -_bbox.left();
       rx += lm;
       for (TextFragment& f : _text)
@@ -1187,11 +1187,11 @@ void Text::layout1()
                   }
             }
 
-      if (textStyle().align() & ALIGN_BOTTOM)
+      if (textStyle().align() & AlignmentFlags::BOTTOM)
             yoff += h-bb.bottom();
-      else if (textStyle().align() & ALIGN_VCENTER)
+      else if (textStyle().align() & AlignmentFlags::VCENTER)
             yoff +=  (h - (bb.top() + bb.bottom())) * .5;
-      else if (textStyle().align() & ALIGN_BASELINE)
+      else if (textStyle().align() & AlignmentFlags::BASELINE)
             yoff += h * .5 - _layout.front().lineSpacing();
       else
             yoff += -bb.top();

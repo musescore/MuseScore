@@ -248,74 +248,74 @@ void initStyle(MStyle* s)
       {
       // this is an empty style, no offsets are allowed
       // never show this style
-      AS("", ff, 10, false, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, false,
+      AS("", ff, 10, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OS, false,
                false, Spatium(.2), Spatium(.5), 25, QColor(Qt::black), false, false, QColor(Qt::black),
                QColor(255, 255, 255, 0), Hidden::ALWAYS);
 
-      AS("Title",    ff, 24, false, false, false, ALIGN_HCENTER | ALIGN_TOP,    QPointF(), OA);
-      AS("Subtitle", ff, 14, false, false, false, ALIGN_HCENTER | ALIGN_TOP,    QPointF(0, MM(10)), OA);
-      AS("Composer", ff, 12, false, false, false, ALIGN_RIGHT   | ALIGN_BOTTOM, QPointF(), OA);
-      AS("Lyricist", ff, 12, false, false, false, ALIGN_LEFT    | ALIGN_BOTTOM, QPointF(), OA);
+      AS("Title",    ff, 24, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP,    QPointF(), OA);
+      AS("Subtitle", ff, 14, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP,    QPointF(0, MM(10)), OA);
+      AS("Composer", ff, 12, false, false, false, AlignmentFlags::RIGHT   | AlignmentFlags::BOTTOM, QPointF(), OA);
+      AS("Lyricist", ff, 12, false, false, false, AlignmentFlags::LEFT    | AlignmentFlags::BOTTOM, QPointF(), OA);
 
-      AS("Lyrics Odd Lines", ff, 11, false, false, false, ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, true);
-      AS("Lyrics Even Lines", ff, 11, false, false, false, ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, true);
-      AS("Fingering", ff,  8, false, false, false, ALIGN_CENTER, QPointF(), OA, true);
-      AS("Instrument Name (Long)",   ff, 12, false, false, false, ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, true);
-      AS("Instrument Name (Short)",   ff, 12, false, false, false, ALIGN_RIGHT | ALIGN_VCENTER, QPointF(), OA, true);
-      AS("Instrument Name (Part)", ff, 18, false, false, false, ALIGN_LEFT | ALIGN_BOTTOM, QPointF(), OA);
-      AS("Dynamics", ff, 20, false,false,false,ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0.0, 8.0), OS, true);
-      AS("Technique", ff, 12, false, true, false,ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.0, -2.0), OS);
+      AS("Lyrics Odd Lines", ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 7), OS, true);
+      AS("Lyrics Even Lines", ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 7), OS, true);
+      AS("Fingering", ff,  8, false, false, false, AlignmentFlags::CENTER, QPointF(), OA, true);
+      AS("Instrument Name (Long)",   ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OA, true);
+      AS("Instrument Name (Short)",   ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OA, true);
+      AS("Instrument Name (Part)", ff, 18, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::BOTTOM, QPointF(), OA);
+      AS("Dynamics", ff, 20, false,false,false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0.0, 8.0), OS, true);
+      AS("Technique", ff, 12, false, true, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OS);
 
-      AS("Tempo", ff, 12, false, false, false,ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -4.0), OS,
+      AS("Tempo", ff, 12, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -4.0), OS,
          true, false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true);
 
-      AS("Metronome", ff, 12, true, false, false, ALIGN_LEFT);
-      AS("Measure Number", ff, 8, false, false, false,ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(.0, -2.0), OS, true);
-      AS("Translator", ff, 11, false, false, false, ALIGN_HCENTER | ALIGN_TOP, QPointF(0, 6));
-      AS("Tuplet", ff,  10, false, true, false, ALIGN_CENTER, QPointF(), OA, true);
+      AS("Metronome", ff, 12, true, false, false, AlignmentFlags::LEFT);
+      AS("Measure Number", ff, 8, false, false, false,AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM, QPointF(.0, -2.0), OS, true);
+      AS("Translator", ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP, QPointF(0, 6));
+      AS("Tuplet", ff,  10, false, true, false, AlignmentFlags::CENTER, QPointF(), OA, true);
 
       AS("System", ff,  10, false, false, false,
-         ALIGN_LEFT, QPointF(0, -4.0), OS, true,
+         AlignmentFlags::LEFT, QPointF(0, -4.0), OS, true,
          false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true);
 
-      AS("Staff", ff,  10, false, false, false, ALIGN_LEFT, QPointF(0, -4.0), OS, true);
-      AS("Chord Symbol", ff,  12, false, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(), OS, true);
+      AS("Staff", ff,  10, false, false, false, AlignmentFlags::LEFT, QPointF(0, -4.0), OS, true);
+      AS("Chord Symbol", ff,  12, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OS, true);
 
       AS("Rehearsal Mark", ff,  14, true, false, false,
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -3.0), OS, true,
+         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, -3.0), OS, true,
          true, Spatium(.2), Spatium(.5), 20, Qt::black, false, true);
 
       AS("Repeat Text Left", ff,  20, false, false, false,
-         ALIGN_LEFT | ALIGN_BASELINE, QPointF(0, -2.0), OS, true,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OS, true,
          false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true);
 
       AS("Repeat Text Right", ff,  12, false, false, false,
-         ALIGN_RIGHT | ALIGN_BASELINE, QPointF(0, -2.0), OS, true,
+         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OS, true,
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true);
 
       AS("Repeat Text", ff,  12, false, false, false,          // for backward compatibility
-         ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, -2.0), OS, true,
+         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, -2.0), OS, true,
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true);
 
       // y offset may depend on voltaHook style element
-      AS("Volta",     ff, 11, true, false, false, ALIGN_LEFT | ALIGN_BASELINE, QPointF(0.5, 1.9), OS, true);
-      AS("Frame",     ff, 12, false, false, false, ALIGN_LEFT | ALIGN_TOP);
-      AS("Text Line", ff, 20, false, false, false, ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, true);
-      AS("Glissando", ff, 8, false, true, false, ALIGN_HCENTER | ALIGN_BASELINE, QPointF(), OS, true);
+      AS("Volta",     ff, 11, true, false, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.5, 1.9), OS, true);
+      AS("Frame",     ff, 12, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::TOP);
+      AS("Text Line", ff, 20, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OS, true);
+      AS("Glissando", ff, 8, false, true, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(), OS, true);
 
       AS("String Number", ff,  8, false, false, false,
-         ALIGN_CENTER, QPointF(0, -5.0), OS, true,
+         AlignmentFlags::CENTER, QPointF(0, -5.0), OS, true,
          true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false);
 
-      AS("Ottava", ff, 12, false, true, false, ALIGN_LEFT | ALIGN_VCENTER, QPointF(), OS, true);
-      AS("Bend", ff, 8, false, false, false, ALIGN_CENTER | ALIGN_BOTTOM, QPointF(), OS, true);
-      AS("Header", ff, 8, false, false, false, ALIGN_HCENTER | ALIGN_TOP);
-      AS("Footer", ff, 8, false, false, false, ALIGN_HCENTER | ALIGN_BOTTOM, QPointF(0.0, MM(5)), OA);
-      AS("Instrument Change", ff,  12, true, false, false, ALIGN_LEFT | ALIGN_BOTTOM, QPointF(0, -3.0), OS, true);
-      AS("Lyrics Verse", ff, 11, false, false, false,ALIGN_RIGHT | ALIGN_TOP, QPointF(), OS, true);
+      AS("Ottava", ff, 12, false, true, false, AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OS, true);
+      AS("Bend", ff, 8, false, false, false, AlignmentFlags::CENTER | AlignmentFlags::BOTTOM, QPointF(), OS, true);
+      AS("Header", ff, 8, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP);
+      AS("Footer", ff, 8, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM, QPointF(0.0, MM(5)), OA);
+      AS("Instrument Change", ff,  12, true, false, false, AlignmentFlags::LEFT | AlignmentFlags::BOTTOM, QPointF(0, -3.0), OS, true);
+      AS("Lyrics Verse", ff, 11, false, false, false,AlignmentFlags::RIGHT | AlignmentFlags::TOP, QPointF(), OS, true);
 
       AS("Figured Bass", "MScoreBC", 8, false, false, false,
-         ALIGN_LEFT | ALIGN_TOP, QPointF(0, 6), OS, true,
+         AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, 6), OS, true,
          false, Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
          false, QColor(Qt::black), QColor(255, 255, 255, 0),                   // default params
          Hidden::IN_EDITOR);                                                   // don't show in Style Editor
