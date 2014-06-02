@@ -83,6 +83,7 @@ class GuitarPro {
       QFile* f;
       int curPos;
       int previousTempo;
+      int previousDynamic;
       int tempo;
 
       int voltaSequence;
