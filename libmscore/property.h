@@ -35,6 +35,7 @@ enum class PropertyStyle : char {
 enum class P_ID : unsigned char {
       SUBTYPE,
       SELECTED,
+      GENERATED,
       COLOR,
       VISIBLE,
       SMALL,

@@ -1350,8 +1350,8 @@ void Score::cmdDeleteSelectedMeasures()
       if (!selection().isRange())
             return;
 
-      MeasureBase* is   = selection().startSegment()->measure();
-      Segment* seg      = selection().endSegment();
+      MeasureBase* is = selection().startSegment()->measure();
+      Segment* seg    = selection().endSegment();
       MeasureBase* ie;
       // choose the correct last measure based on the end segment
       // this depends on whether a whole measure is selected or only a few notes within it
@@ -1359,7 +1359,6 @@ void Score::cmdDeleteSelectedMeasures()
             ie = seg->prev() ? seg->measure() : seg->measure()->prev();
       else
             ie = lastMeasure();
-      Measure* mBeforeSel = is->prevMeasure();
 
       // createEndBar if last measure is deleted
       bool createEndBar = false;
@@ -1384,50 +1383,17 @@ void Score::cmdDeleteSelectedMeasures()
                   break;
             }
 
-      QList<Score*> scores = scoreList();
-      int startTick        = is->tick();
-//      int endIdx           = measureIdx(ie);
-//      Measure* m = static_cast<Measure *>(ie);
-//      if (m->isMMRest())
-//            endIdx += m->mmRestCount() - 1;
-//      int endTick   = measure(endIdx)->tick();
+      int startTick = is->tick();
       int endTick   = ie->tick();
 
-      foreach (Score* score, scores) {
+      foreach (Score* score, scoreList()) {
             Measure* is = score->tick2measure(startTick);
             Measure* ie = score->tick2measure(endTick);
-            mBeforeSel = is->prevMeasure();
 
-            int ticks = 0;
-            for (Measure* m = is; m; m = m->nextMeasure()) {
-                  ticks += m->ticks();
-                  if (m == ie)
-                        break;
-                  }
-
-#if 0
-            // remove spanner
-            std::list<Spanner*> sl;
-            int tick2 = startTick + ticks;
-            for (auto i : score->_spanner.map()) {
-                  Spanner* s = i.second;
-                  if (s->tick() >= startTick && s->tick() < tick2)
-                        sl.push_back(s);
-                  }
-            for (Spanner* s : sl)
-                  score->undoRemoveElement(s);
-#endif
             undoRemoveMeasures(is, ie);
 
             // adjust views
-            Measure* focusOn = is;
-            if (focusOn->prevMeasure()) {
-                  focusOn = focusOn->prevMeasure();
-                  }
-            else {
-                  focusOn = this->firstMeasure();
-                  }
-
+            Measure* focusOn = is->prevMeasure() ? is->prevMeasure() : firstMeasure();
             foreach(MuseScoreView* v, score->viewer)
                   v->adjustCanvasPosition(focusOn, false);
 
@@ -1438,7 +1404,8 @@ void Score::cmdDeleteSelectedMeasures()
                   }
 
             // insert correct timesig after deletion
-            Measure* mAfterSel = mBeforeSel ? mBeforeSel->nextMeasure() : firstMeasure();
+            Measure* mBeforeSel = is->prevMeasure();
+            Measure* mAfterSel  = mBeforeSel ? mBeforeSel->nextMeasure() : firstMeasure();
             if (mAfterSel && lastDeletedSig) {
                   bool changed = true;
                   if (mBeforeSel) {

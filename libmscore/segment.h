@@ -100,6 +100,7 @@ class Segment : public Element {
 
       void init();
       void checkEmpty() const;
+      void checkElement(Element*, int track);
 
    public:
       Segment(Measure* m = 0);

@@ -1275,6 +1275,7 @@ void Score::doLayout()
       layoutFlags = 0;
 
       int nstaves = _staves.size();
+
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* st = _staves[staffIdx];
             if (!st->updateKeymap())
@@ -1300,6 +1301,7 @@ void Score::doLayout()
                   }
             st->setUpdateKeymap(false);
             }
+
       if (_staves.isEmpty() || first() == 0) {
             // score is empty
             qDeleteAll(_pages);
@@ -1505,7 +1507,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                && */ keyIdx.isValid()
                && (isFirstSystem || styleB(StyleIdx::genKeysig));
 
-            if (needKeysig && !keysig) {
+            if (needKeysig && !keysig && keyIdx.accidentalType()) {
                   //
                   // create missing key signature
                   //
@@ -1526,7 +1528,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
             else if (keysig && keysig->keySigEvent() != keyIdx)
-                  undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy() /*, keysig->showNaturals()*/));
+                  undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
 
             bool needClef = isFirstSystem || styleB(StyleIdx::genClef);
             if (needClef) {

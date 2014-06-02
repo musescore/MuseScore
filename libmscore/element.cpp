@@ -1502,6 +1502,7 @@ void Element::undoSetPlacement(Placement v)
 QVariant Element::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
+            case P_ID::GENERATED: return _generated;
             case P_ID::COLOR:     return _color;
             case P_ID::VISIBLE:   return _visible;
             case P_ID::SELECTED:  return _selected;
@@ -1519,6 +1520,9 @@ QVariant Element::getProperty(P_ID propertyId) const
 bool Element::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case P_ID::GENERATED:
+                  _generated = v.toBool();
+                  break;
             case P_ID::COLOR:
                   _color = v.value<QColor>();
                   break;
@@ -1551,6 +1555,8 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Element::propertyDefault(P_ID id) const
       {
       switch(id) {
+            case P_ID::GENERATED:
+                  return false;
             case P_ID::VISIBLE:
                   return true;
             case P_ID::COLOR:
