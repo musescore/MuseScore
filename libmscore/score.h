@@ -365,6 +365,7 @@ class Score : public QObject {
       bool _defaultsRead;            ///< defaults were read at MusicXML import, allow export of defaults in convertermode
 
       Selection _selection;
+      SelectionFilter _selectionFilter;
       QList<KeySig*> customKeysigs;
       Omr* _omr;
       Audio* _audio;
@@ -635,6 +636,7 @@ class Score : public QObject {
       Element* getSelectedElement() const   { return _selection.element(); }
       const Selection& selection() const    { return _selection; }
       Selection& selection()                { return _selection; }
+      SelectionFilter& selectionFilter()     { return _selectionFilter; }
       void setSelection(const Selection& s);
 
       int pos();
