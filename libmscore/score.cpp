@@ -330,7 +330,7 @@ void Score::init()
 //---------------------------------------------------------
 
 Score::Score()
-   : QObject(0), _is(this), _selection(this)
+   : QObject(0), _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = 0;
       init();
@@ -340,7 +340,7 @@ Score::Score()
       }
 
 Score::Score(const MStyle* s)
-   : _is(this), _selection(this)
+   : _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = 0;
       init();
@@ -362,7 +362,7 @@ Score::Score(const MStyle* s)
 //
 
 Score::Score(Score* parent)
-   : _is(this), _selection(this)
+   : _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = parent;
       init();
@@ -386,7 +386,7 @@ Score::Score(Score* parent)
       }
 
 Score::Score(Score* parent, const MStyle* s)
-   : _is(this), _selection(this)
+   : _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = parent;
       init();
