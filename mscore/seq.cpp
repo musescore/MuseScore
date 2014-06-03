@@ -170,6 +170,11 @@ Seq::Seq()
       noteTimer->stop();
 
       connect(this, SIGNAL(toGui(int)), this, SLOT(seqMessage(int)), Qt::QueuedConnection);
+
+      prevTimeSig.setNumerator(0);
+      prevTempo = 0;
+      connect(this, SIGNAL(timeSigChanged()),this,SLOT(handleTimeSigTempoChanged()));
+      connect(this, SIGNAL(tempoChanged()),this,SLOT(handleTimeSigTempoChanged()));
       }
 
 //---------------------------------------------------------
@@ -325,6 +330,7 @@ void Seq::stop()
       {
       if (state == TRANSPORT_STOP)
             return;
+
       if (oggInit) {
             ov_clear(&vf);
             oggInit = false;
@@ -518,6 +524,8 @@ void Seq::processMessages()
                               }
                         else
                               cs->tempomap()->setRelTempo(msg.realVal);
+                        prevTempo = curTempo();
+                        emit tempoChanged();
                         }
                         break;
                   case SEQ_PLAY:
@@ -650,7 +658,22 @@ void Seq::process(unsigned n, float* buffer)
       int driverState = _driver->getState();
 
       if (driverState != state) {
+            // Got a message from JACK Transport panel: Play
             if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY) {
+
+                  if((preferences.useJackMidi || preferences.useJackAudio) && !getAction("play")->isChecked()) {
+                        // Do not play while editing elements
+                        if(mscore->state()==STATE_NORMAL && isRunning() && canStart()) {
+                              if (playlistChanged)
+                                          collectEvents();
+                              getAction("play")->setChecked(true);
+                              getAction("play")->triggered(true);
+                              }
+                        else {
+                              return;
+                              }
+                        }
+                  // Need to change state after calling collectEvents()
                   state = TRANSPORT_PLAY;
                   if (mscore->countIn() && cs->playMode() == PlayMode::SYNTHESIZER) {
                         countInEvents.clear();
@@ -658,12 +681,11 @@ void Seq::process(unsigned n, float* buffer)
                         }
                   emit toGui('1');
                   }
+            // Got a message from JACK Transport panel: Stop
             else if (state == TRANSPORT_PLAY && driverState == TRANSPORT_STOP) {
                   state = TRANSPORT_STOP;
+                  // Muting all notes
                   stopNotes();
-                  // send sustain off
-                  // TODO: channel?
-                  putEvent(NPlayEvent(ME_CONTROLLER, 0, CTRL_SUSTAIN, 0));
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
                               qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
@@ -685,7 +707,17 @@ void Seq::process(unsigned n, float* buffer)
 
       memset(buffer, 0, sizeof(float) * n * 2);
       float* p = buffer;
+
       processMessages();
+
+      if(cs && cs->sigmap()->timesig(getCurTick()).nominal()!=prevTimeSig) {
+            prevTimeSig = cs->sigmap()->timesig(getCurTick()).nominal();
+            emit timeSigChanged();
+            }
+      if(cs && curTempo()!=prevTempo) {
+            prevTempo = curTempo();
+            emit tempoChanged();
+            }
 
       if (state == TRANSPORT_PLAY) {
             if(!cs)
@@ -1026,7 +1058,21 @@ void Seq::stopNoteTimer()
 
 void Seq::stopNotes(int channel)
       {
-      _synti->allNotesOff(channel);
+      // Stop motes in all channels
+      if (channel == -1) {
+            for(int ch=0; ch<cs->midiMapping()->size();ch++) {
+                  putEvent(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
+                  for(int i=0; i<128; i++)
+                        putEvent(NPlayEvent(ME_NOTEOFF,ch,i,0));
+                  }
+            }
+      else {
+            putEvent(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
+            for(int i=0; i<128; i++)
+                  putEvent(NPlayEvent(ME_NOTEOFF,channel,i,0));
+            }
+      if(preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
+            _synti->allNotesOff(channel);
       }
 
 //---------------------------------------------------------
@@ -1237,6 +1283,8 @@ void Seq::putEvent(const NPlayEvent& event)
             }
       int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
       _synti->play(event, syntiIdx);
+      if (preferences.useJackMidi)
+            driver()->putEvent(event,0);
       }
 
 //---------------------------------------------------------
@@ -1400,5 +1448,10 @@ void Seq::setLoopSelection()
       {
       cs->setLoopInTick(cs->selection().tickStart());
       cs->setLoopOutTick(cs->selection().tickEnd());
+      }
+
+void Seq::handleTimeSigTempoChanged()
+      {
+            _driver->handleTimeSigTempoChanged();
       }
 }

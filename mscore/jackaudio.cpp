@@ -19,11 +19,12 @@
 //=============================================================================
 
 #include "jackaudio.h"
-
+#include "musescore.h"
 #include "libmscore/mscore.h"
 #include "preferences.h"
 // #include "msynth/synti.h"
 #include "seq.h"
+#include "libmscore/score.h"
 
 #include <jack/midiport.h>
 
@@ -46,6 +47,7 @@ JackAudio::JackAudio(Seq* s)
 JackAudio::~JackAudio()
       {
       if (client) {
+            stop();
             if (jack_client_close(client)) {
                   qDebug("jack_client_close() failed: %s",
                      strerror(errno));
@@ -226,7 +228,7 @@ bool JackAudio::stop()
       {
       if (preferences.useJackMidi && preferences.rememberLastMidiConnections) {
             QSettings settings;
-            settings.setValue("midiPorts", midiOutputPorts.size());
+            //settings.setValue("midiPorts", midiOutputPorts.size());
             int port = 0;
             foreach(jack_port_t* mp, midiOutputPorts) {
                   const char** cc = jack_port_get_connections(mp);
@@ -243,7 +245,8 @@ bool JackAudio::stop()
                   free((void*)cc);
                   ++port;
                   }
-            settings.setValue("midiInputPorts", midiInputPorts.size());
+            // We don't use it now
+            //settings.setValue("midiInputPorts", midiInputPorts.size());
             port = 0;
             foreach(jack_port_t* mp, midiInputPorts) {
                   const char** cc = jack_port_get_connections(mp);
@@ -311,6 +314,32 @@ static int graph_callback(void*)
       return 0;
       }
 
+void JackAudio::timebase(jack_transport_state_t state, jack_nframes_t nframes, jack_position_t *pos, int new_pos, void *arg)
+      {
+      JackAudio* audio = (JackAudio*)arg;
+      if(!audio->seq->score()) {
+            if(state==JackTransportLooping || state==JackTransportRolling)
+                  audio->stopTransport();
+            }
+      else if(audio->seq->isRunning() && audio->timeSigTempoChanged) {
+            pos->valid = JackPositionBBT;
+
+            int curTick = audio->seq->getCurTick();
+            Fraction    timeSig = audio->seq->score()->sigmap()->timesig(curTick).nominal();
+            pos->beats_per_bar =  timeSig.numerator();
+            pos->beat_type = timeSig.denominator();
+
+            int bar,beat,tick;
+            audio->seq->score()->sigmap()->tickValues(curTick, &bar, &beat, &tick);
+            pos->ticks_per_beat = MScore::division;
+            pos->tick = tick;
+            pos->bar = bar+1;
+            pos->beat = beat+1;
+            pos->beats_per_minute = audio->seq->curTempo()*60;
+            qDebug()<<"Time signature and tempo changed: "<< pos->beats_per_minute<<", bar: "<< pos->bar<<",beat: "<<pos->beat<<", tick:"<<pos->tick<<", time sig: "<<pos->beats_per_bar<<"/"<<pos->beat_type<<endl;
+            audio->timeSigTempoChanged = false;
+            }
+      }
 //---------------------------------------------------------
 //   processAudio
 //    JACK callback
@@ -319,6 +348,10 @@ static int graph_callback(void*)
 int JackAudio::processAudio(jack_nframes_t frames, void* p)
       {
       JackAudio* audio = (JackAudio*)p;
+      // Prevent from crash if score not opened yet
+      if(!audio->seq->score())
+            return 0;
+
       float* l;
       float* r;
       if (preferences.useJackAudio) {
@@ -374,6 +407,11 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
                   *r++ = *sp++;
                   }
             }
+      else {
+            // JACK MIDI only
+            float buffer[frames * 2];
+            audio->seq->process((unsigned)frames, buffer);
+            }
       return 0;
       }
 
@@ -390,8 +428,9 @@ static void jackError(const char *s)
 //   noJackError
 //---------------------------------------------------------
 
-static void noJackError(const char* /* s */)
+static void noJackError(const char*  s )
       {
+      qDebug("noJACK ERROR: %s", s);
       }
 
 //---------------------------------------------------------
@@ -404,6 +443,7 @@ bool JackAudio::init()
       jack_set_error_function(noJackError);
 
       client = 0;
+      timeSigTempoChanged = false;
       strcpy(_jackName, "mscore");
 
       jack_options_t options = (jack_options_t)0;
@@ -422,6 +462,8 @@ bool JackAudio::init()
       jack_set_port_registration_callback(client, registration_callback, this);
       jack_set_graph_order_callback(client, graph_callback, this);
       jack_set_freewheel_callback (client, freewheel_callback, this);
+      if (jack_set_timebase_callback(client, 1, timebase, this) != 0)
+                  fprintf(stderr, "Unable to take over timebase.\n");
       _segmentSize  = jack_get_buffer_size(client);
 
       MScore::sampleRate = sampleRate();
@@ -504,7 +546,7 @@ int JackAudio::getState()
 //   putEvent
 //---------------------------------------------------------
 
-void JackAudio::putEvent(const Event& e, unsigned framePos)
+void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
       {
       if (!preferences.useJackMidi)
             return;
@@ -562,7 +604,8 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
                   p[1] = e.dataA();
                   }
                   break;
-            case ME_SYSEX:
+          // Do we really need to handle ME_SYSEX?
+          /*  case ME_SYSEX:
                   {
                   const unsigned char* data = e.edata();
                   int len = e.len();
@@ -575,7 +618,7 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
                   p[len+1] = 0xf7;
                   memcpy(p+1, data, len);
                   }
-                  break;
+                  break;*/
             case ME_SONGPOS:
             case ME_CLOCK:
             case ME_START:
@@ -593,6 +636,11 @@ void JackAudio::putEvent(const Event& e, unsigned framePos)
 void JackAudio::midiRead()
       {
 //      midiDriver->read();
+      }
+
+void JackAudio::handleTimeSigTempoChanged()
+      {
+            timeSigTempoChanged = true;
       }
 }
 

@@ -827,6 +827,7 @@ void PreferenceDialog::updateValues()
       portaudioDriver->setChecked(prefs.usePortaudioAudio);
       pulseaudioDriver->setChecked(prefs.usePulseAudio);
       useJackMidi->setChecked(prefs.useJackMidi);
+      useSynthesizer->setChecked(prefs.useAlsaAudio || prefs.useJackAudio || prefs.usePortaudioAudio || prefs.usePulseAudio);
 
       alsaDevice->setText(prefs.alsaDevice);
 
