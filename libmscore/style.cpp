@@ -517,11 +517,12 @@ StyleData::StyleData()
 
 // _textStyles.append(TextStyle(defaultTextStyles[i]));
       _spatium = SPATIUM20 * MScore::DPI;
+            
       _articulationAnchor[int(ArticulationType::Fermata)]         = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Shortfermata)]    = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Longfermata)]     = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Verylongfermata)] = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Thumb)]           = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::Thumb)]           = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Sforzatoaccent)]  = ArticulationAnchor::CHORD;
 //      _articulationAnchor[int(ArticulationType::Espressivo)]      = ArticulationAnchor::CHORD;
       _articulationAnchor[int(ArticulationType::Staccato)]        = ArticulationAnchor::CHORD;
@@ -529,8 +530,8 @@ StyleData::StyleData()
       _articulationAnchor[int(ArticulationType::Tenuto)]          = ArticulationAnchor::CHORD;
       _articulationAnchor[int(ArticulationType::Portato)]         = ArticulationAnchor::CHORD;
       _articulationAnchor[int(ArticulationType::Marcato)]         = ArticulationAnchor::CHORD;
-//      _articulationAnchor[int(ArticulationType::Ouvert)]          = ArticulationAnchor::CHORD;
-//      _articulationAnchor[int(ArticulationType::Plusstop)]        = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::Ouvert)]          = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::Plusstop)]        = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Upbow)]           = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Downbow)]         = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Reverseturn)]     = ArticulationAnchor::TOP_STAFF;
@@ -552,7 +553,6 @@ StyleData::StyleData()
 //      _articulationAnchor[int(ArticulationType::Tapping)]         = ArticulationAnchor::TOP_STAFF;
 //      _articulationAnchor[int(ArticulationType::Slapping)]        = ArticulationAnchor::TOP_STAFF;
 //      _articulationAnchor[int(ArticulationType::Popping)]         = ArticulationAnchor::TOP_STAFF;
-      _spatium = SPATIUM20 * MScore::DPI;
       };
 
 StyleData::StyleData(const StyleData& s)
