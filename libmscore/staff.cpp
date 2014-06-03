@@ -162,14 +162,12 @@ Staff::Staff(Score* s)
       _score          = s;
       _rstaff         = 0;
       _part           = 0;
-      _keymap[0]      = KeySigEvent(0);                  // default to C major
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
       _barLineSpan    = 1;
       _barLineFrom    = 0;
       _barLineTo      = (lines()-1)*2;
-      _updateKeymap   = true;
       _linkedStaves   = 0;
       _color          = MScore::defaultColor;
       }
@@ -179,14 +177,12 @@ Staff::Staff(Score* s, Part* p, int rs)
       _score          = s;
       _rstaff         = rs;
       _part           = p;
-      _keymap[0]      = KeySigEvent(0);                  // default to C major
       _small          = false;
       _invisible      = false;
       _userDist       = .0;
       _barLineSpan    = 1;
       _barLineFrom    = 0;
       _barLineTo      = (lines()-1)*2;
-      _updateKeymap   = true;
       _linkedStaves   = 0;
       _color          = MScore::defaultColor;
       }
@@ -304,9 +300,18 @@ void Staff::removeTimeSig(TimeSig* timesig)
 //    locates the key sig currently in effect at tick
 //---------------------------------------------------------
 
-KeySigEvent Staff::key(int tick) const
+int Staff::key(int tick) const
       {
-      return _keymap.key(tick);
+      return _keys.key(tick);
+      }
+
+//---------------------------------------------------------
+//   prevkey
+//---------------------------------------------------------
+
+int Staff::prevKey(int tick) const
+      {
+      return _keys.prevKey(tick);
       }
 
 //---------------------------------------------------------
@@ -318,7 +323,20 @@ KeySigEvent Staff::key(int tick) const
 
 int Staff::nextKeyTick(int tick) const
       {
-      return _keymap.nextKeyTick(tick);
+      return _keys.nextKeyTick(tick);
+      }
+
+//---------------------------------------------------------
+//   Staff::currentKeyTick
+//
+//    return the tick position of the key currently
+//    in effect at tick
+//    return 0, if no such a key sig
+//---------------------------------------------------------
+
+int Staff::currentKeyTick(int tick) const
+      {
+      return _keys.currentKeyTick(tick);
       }
 
 //---------------------------------------------------------
@@ -413,7 +431,7 @@ void Staff::read(XmlReader& e)
             else if (tag == "invisible")
                   setInvisible(e.readInt());
             else if (tag == "keylist")
-                  _keymap.read(e, _score);
+                  _keys.read(e, _score);
             else if (tag == "bracket") {
                   BracketItem b;
                   b._bracket     = BracketType(e.intAttribute("type", -1));
@@ -502,17 +520,9 @@ qreal Staff::mag() const
 //   setKey
 //---------------------------------------------------------
 
-void Staff::setKey(int tick, int st)
+void Staff::setKey(int tick, int k)
       {
-      KeySigEvent ke;
-      ke.setAccidentalType(st);
-
-      setKey(tick, ke);
-      }
-
-void Staff::setKey(int tick, const KeySigEvent& st)
-      {
-      _keymap[tick] = st;
+      _keys.setKey(tick, k);
       }
 
 //---------------------------------------------------------
@@ -521,7 +531,7 @@ void Staff::setKey(int tick, const KeySigEvent& st)
 
 void Staff::removeKey(int tick)
       {
-      _keymap.erase(tick);
+      _keys.erase(tick);
       }
 
 //---------------------------------------------------------
@@ -818,13 +828,13 @@ void Staff::undoSetColor(const QColor& /*val*/)
 void Staff::insertTime(int tick, int len)
       {
       KeyList kl2;
-      for (auto i = _keymap.upper_bound(tick); i != _keymap.end();) {
-            KeySigEvent kse = i->second;
+      for (auto i = _keys.upper_bound(tick); i != _keys.end();) {
+            int kse = i->second;
             int key = i->first;
-            _keymap.erase(i++);
+            _keys.erase(i++);
             kl2[key + len] = kse;
             }
-      _keymap.insert(kl2.begin(), kl2.end());
+      _keys.insert(kl2.begin(), kl2.end());
 
       ClefList cl2;
       for (auto i = clefs.upper_bound(tick); i != clefs.end();) {
@@ -850,6 +860,26 @@ QList<Staff*> Staff::staffList() const
             staffList.append(const_cast<Staff*>(this));
       return staffList;
       }
+
+//---------------------------------------------------------
+//   updateKeys
+//    the keys list can be reconstructed from actual keys
+//---------------------------------------------------------
+
+void Staff::updateKeys()
+      {
+      int track = idx() * VOICES;
+      _keys.clear();
+      for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
+            for (Segment* s = m->first(SegmentType::KeySig); s; s = s->next(SegmentType::KeySig)) {
+                  KeySig* ks = static_cast<KeySig*>(s->element(track));
+                  if (ks == 0 || ks->generated())
+                        continue;
+                  setKey(s->tick(), ks->key());
+                  }
+            }
+      }
+
 
 }
 

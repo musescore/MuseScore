@@ -1276,32 +1276,6 @@ void Score::doLayout()
 
       int nstaves = _staves.size();
 
-      for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            Staff* st = _staves[staffIdx];
-            if (!st->updateKeymap())
-                  continue;
-            int track = staffIdx * VOICES;
-            st->keymap()->clear();
-            KeySig* key1 = 0;
-            for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-                  for (Segment* s = m->first(); s; s = s->next()) {
-                        Element* e = s->element(track);
-                        if (e == 0 || e->generated())
-                              continue;
-                        if ((s->segmentType() == SegmentType::KeySig)) {
-                              KeySig* ks = static_cast<KeySig*>(e);
-                              int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
-                              ks->setOldSig(naturals);
-                              st->setKey(s->tick(), ks->keySigEvent());
-                              key1 = ks;
-                              }
-                        }
-                  if (m->sectionBreak() && (_layoutMode != LayoutMode::FLOAT))
-                        key1 = 0;
-                  }
-            st->setUpdateKeymap(false);
-            }
-
       if (_staves.isEmpty() || first() == 0) {
             // score is empty
             qDeleteAll(_pages);
@@ -1479,7 +1453,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             // track (voice 0) of a staff
 
             const KeySigEvent& keyIdx = staff->key(tick);
-            const KeySigEvent& oKeySigBefore = staff->key(tick-1);
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   // search only up to the first ChordRest
@@ -1492,8 +1465,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         case Element::ElementType::KEYSIG:
                               keysig = static_cast<KeySig*>(el);
                               keysig->changeKeySigEvent(keyIdx);
-                              if (!keysig->isCustom() && oKeySigBefore.accidentalType() == keysig->keySignature())
-                                    keysig->setOldSig(0);
                               break;
                         case Element::ElementType::CLEF:
                               clef = static_cast<Clef*>(el);
@@ -1513,10 +1484,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   //
                   keysig = keySigFactory(keyIdx);
                   if (keysig) {
-                        // if signature is not custom or prev. signature has same accid. as
-                        // this one, reset naturals
-                        if (!keysig->isCustom() && oKeySigBefore.accidentalType() == keysig->keySignature())
-                              keysig->setOldSig(0);
                         keysig->setTrack(i * VOICES);
                         keysig->setGenerated(true);
                         Segment* seg = m->undoGetSegment(SegmentType::KeySig, tick);
@@ -2640,7 +2607,6 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                     s  = m->undoGetSegment(SegmentType::KeySigAnnounce, tick);
                                     KeySig* ks = static_cast<KeySig*>(s->element(track));
                                     KeySigEvent ksv(key2);
-                                    ksv.setNaturalType(key1.accidentalType());
 
                                     if (!ks) {
                                           ks = new KeySig(this);

@@ -80,9 +80,8 @@ bool compareElements(Element* e1, Element* e2)
       else if (e1->type() == Element::ElementType::KEYSIG) {
             KeySig* ks1 = static_cast<KeySig*>(e1);
             KeySig* ks2 = static_cast<KeySig*>(e2);
-            if (ks1->keySignature() != ks2->keySignature()) {
-                  printf("      key signature %d  !=  %d\n",
-                     ks1->keySignature(), ks2->keySignature());
+            if (ks1->key() != ks2->key()) {
+                  qDebug("      key signature %d  !=  %d\n", ks1->key(), ks2->key());
                   return false;
                   }
             }
@@ -96,14 +95,14 @@ bool compareElements(Element* e1, Element* e2)
             if (c1->duration() != c2->duration()) {
                   Fraction f1 = c1->duration();
                   Fraction f2 = c2->duration();
-                  printf("      chord duration %d/%d  !=  %d/%d\n",
+                  qDebug("      chord duration %d/%d  !=  %d/%d\n",
                      f1.numerator(), f1.denominator(),
                      f2.numerator(), f2.denominator()
                      );
                   return false;
                   }
             if (c1->notes().size() != c2->notes().size()) {
-                  printf("      != note count\n");
+                  qDebug("      != note count\n");
                   return false;
                   }
             int n = c1->notes().size();
@@ -111,11 +110,11 @@ bool compareElements(Element* e1, Element* e2)
                   Note* n1 = c1->notes()[i];
                   Note* n2 = c2->notes()[i];
                   if (n1->pitch() != n2->pitch()) {
-                        printf("      != pitch note %d\n", i);
+                        qDebug("      != pitch note %d\n", i);
                         return false;
                         }
                   if (n1->tpc() != n2->tpc()) {
-                        printf("      note tcp %d != %d\n", n1->tpc(), n2->tpc());
+                        qDebug("      note tcp %d != %d\n", n1->tpc(), n2->tpc());
                         // return false;
                         }
                   }
@@ -180,7 +179,7 @@ void TestMidi::midi01()
       c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
 
-      c.addKeySig(0);
+      c.addKeySig(1);
       c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
@@ -221,7 +220,7 @@ void TestMidi::midi02()
       c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
 
-      c.addKeySig(0);
+      c.addKeySig(2);
       c.addTimeSig(Fraction(3,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));

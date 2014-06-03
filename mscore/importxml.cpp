@@ -3239,7 +3239,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         int staves = score->staff(staff)->part()->nstaves();
                         // apply to all staves in part
                         for (int i = 0; i < staves; ++i) {
-                              KeySigEvent oldkey = score->staff(staffIdx+i)->keymap()->key(tick);
+                              KeySigEvent oldkey = score->staff(staffIdx+i)->key(tick);
                               if (oldkey != key) {
                                     // new key differs from key in effect at this tick
                                     KeySig* keysig = new KeySig(score);
@@ -3256,7 +3256,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         //
                         // apply key to staff(staffIdx) only
                         //
-                        KeySigEvent oldkey = score->staff(staffIdx)->keymap()->key(tick);
+                        KeySigEvent oldkey = score->staff(staffIdx)->key(tick);
                         if (oldkey != key) {
                               // new key differs from key in effect at this tick
                               KeySig* keysig = new KeySig(score);

@@ -204,9 +204,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                         qDebug("ImportMidi: illegal key %d", key);
                         break;
                         }
-                  KeySigEvent ks;
-                  ks.setAccidentalType(key);
-                  (*staff->keymap())[tick] = ks;
+                  staff->setKey(tick, key);
                   hasKey = true;
                   }
                   break;
@@ -494,11 +492,9 @@ void MTrack::createKeys(int accidentalType)
       Score* score = staff->score();
       const int track = staff->idx() * VOICES;
 
-      KeyList* km = staff->keymap();
+      KeyList* km = staff->keyList();
       if (!hasKey && !mtrack->drumTrack()) {
-            KeySigEvent ks;
-            ks.setAccidentalType(accidentalType);
-            (*km)[0] = ks;
+            (*km)[0] = accidentalType;
             }
       for (auto it = km->begin(); it != km->end(); ++it) {
             const int tick = it->first;

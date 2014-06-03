@@ -207,7 +207,6 @@
       <Measure number="3">
         <KeySig>
           <accidental>2</accidental>
-          <natural>1</natural>
           </KeySig>
         <Chord>
           <durationType>quarter</durationType>
@@ -241,7 +240,6 @@
       <Measure number="4">
         <KeySig>
           <accidental>-3</accidental>
-          <natural>2</natural>
           </KeySig>
         <Chord>
           <durationType>quarter</durationType>

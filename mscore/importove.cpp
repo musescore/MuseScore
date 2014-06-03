@@ -775,13 +775,11 @@ void OveToMScore::convertSignatures(){
 						int keyValue = keyPtr->getKey();
 		                Measure* measure = score_->tick2measure(tick);
 		                if(measure){
-		                	KeySigEvent key;
-		                	key.setAccidentalType(keyValue);
-		                	(*score_->staff(staffCount+j)->keymap())[tick] = key;
+		                	score_->staff(staffCount+j)->setKey(tick, keyValue);
 
 		                    KeySig* keysig = new KeySig(score_);
 		                    keysig->setTrack((staffCount+j) * VOICES);
-		                    keysig->setKeySigEvent(key);
+		                    keysig->setKeySigEvent(KeySigEvent(keyValue));
 
 		                	Segment* s = measure->getSegment(keysig, tick);
 		                	s->add(keysig);

@@ -121,10 +121,9 @@ Score* createExcerpt(const QList<Part*>& parts)
             Part* p = new Part(score);
             p->setInstrument(*part->instr());
             int idx = 0;
-            foreach(Staff* staff, *part->staves()) {
+            foreach (Staff* staff, *part->staves()) {
                   Staff* s = new Staff(score, p, idx);
                   s->setStaffType(staff->staffType());
-                  s->setUpdateKeymap(true);
                   s->linkTo(staff);
                   p->staves()->append(s);
                   score->staves().append(s);
@@ -199,7 +198,6 @@ Score* createExcerpt(const QList<Part*>& parts)
       score->updateChannel();
 
       score->setLayoutAll(true);
-//      score->addLayoutFlags(LayoutFlags(LAYOUT_FIX_TICKS | LAYOUT_FIX_PITCH_VELO));
       score->doLayout();
       return score;
       }

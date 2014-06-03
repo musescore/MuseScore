@@ -272,13 +272,15 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
             startStaffIdx = selection().staffStart();
             startTick     = selection().tickStart();
             }
-      KeyList* km = staff(startStaffIdx)->keymap();
+
+      Staff* st = staff(startStaffIdx);
+//      KeyList* km = staff(startStaffIdx)->keys();
 
       Interval interval;
       if (mode != TransposeMode::DIATONICALLY) {
             if (mode == TransposeMode::BY_KEY) {
                   // calculate interval from "transpose by key"
-                  int oKey = km->key(startTick).accidentalType();
+                  int oKey = st->key(startTick);
                   interval = keydiff2Interval(oKey, transposeKey, direction);
                   }
             else {
@@ -296,9 +298,10 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
                   transposeChordNames = false;
                   }
             }
-      else                          // diatonic transposition
+      else  { // diatonic transposition
             if (direction == TransposeDirection::DOWN)
                   transposeInterval *= -1;
+            }
 
       if (_selection.isList()) {
             foreach(Element* e, _selection.uniqueElements()) {
@@ -322,7 +325,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
                                  && h->parent()->parent()->type() == Element::ElementType::SEGMENT) {
                                     tick = static_cast<Segment*>(h->parent()->parent())->tick();
                                     }
-                              int key = !h->staff() ? int(Key::C) : h->staff()->keymap()->key(tick).accidentalType();
+                              int key = !h->staff() ? int(Key::C) : h->staff()->key(tick);
                               rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
                                           transposeInterval, key, trKeys, useDoubleSharpsFlats);
                               baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
@@ -336,11 +339,8 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
                         }
                   else if ((e->type() == Element::ElementType::KEYSIG) && mode != TransposeMode::DIATONICALLY && trKeys) {
                         KeySig* ks = static_cast<KeySig*>(e);
-                        KeySigEvent key  = km->key(ks->tick());
-                        KeySigEvent okey = km->key(ks->tick() - 1);
-                        key.setNaturalType(okey.accidentalType());
-                        undo(new ChangeKeySig(ks, key, ks->showCourtesy() /*,
-                           ks->showNaturals()*/));
+                        int key  = st->key(ks->tick());
+                        undo(new ChangeKeySig(ks, KeySigEvent(key), ks->showCourtesy()));
                         }
                   }
             return;
@@ -406,7 +406,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
                         int rootTpc, baseTpc;
                         if (mode == TransposeMode::DIATONICALLY) {
                               int tick = segment->tick();
-                              int key = !h->staff() ? int(Key::C) : h->staff()->keymap()->key(tick).accidentalType();
+                              int key = !h->staff() ? int(Key::C) : h->staff()->key(tick);
                               rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
                                           transposeInterval, key, trKeys, useDoubleSharpsFlats);
                               baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
@@ -424,7 +424,6 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
             transposeKeys(_selection.staffStart(), _selection.staffEnd(),
                _selection.tickStart(), _selection.tickEnd(), interval);
             }
-      setLayoutAll(true);
       }
 
 //---------------------------------------------------------
@@ -435,33 +434,20 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
 void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval& interval)
       {
       for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
-            if (staff(staffIdx)->staffType()->group() == StaffGroup::PERCUSSION)
+            Staff* st = staff(staffIdx);
+            if (st->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
 
-            KeyList* km = staff(staffIdx)->keymap();
-            for (auto ke = km->lower_bound(tickStart); ke != km->lower_bound(tickEnd); ++ke) {
-                  KeySigEvent oKey  = ke->second;
-                  int tick  = ke->first;
-                  int nKeyType = transposeKey(oKey.accidentalType(), interval);
-                  KeySigEvent nKey;
-                  nKey.setAccidentalType(nKeyType);
-                  (*km)[tick] = nKey;
-                  // undoChangeKey(staff(staffIdx), tick, oKey, nKey);
-                  }
-            for (Segment* s = firstSegment(); s; s = s->next1()) {
-                  if (s->segmentType() != SegmentType::KeySig)
-                        continue;
+            for (Segment* s = firstSegment(SegmentType::KeySig); s; s = s->next1(SegmentType::KeySig)) {
                   if (s->tick() < tickStart)
                         continue;
                   if (s->tick() >= tickEnd)
                         break;
                   KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
                   if (ks) {
-                        KeySigEvent key  = km->key(s->tick());
-                        KeySigEvent okey = km->key(s->tick() - 1);
-                        key.setNaturalType(okey.accidentalType());
-                        undo(new ChangeKeySig(ks, key, ks->showCourtesy() /*,
-                           ks->showNaturals()*/));
+                        int key  = st->key(s->tick());
+                        int nKey = transposeKey(key, interval);
+                        undo(new ChangeKeySig(ks, KeySigEvent(nKey), ks->showCourtesy()));
                         }
                   }
             }
@@ -482,10 +468,7 @@ void Score::transposeSemitone(int step)
 
       TransposeDirection dir = step > 0 ? TransposeDirection::UP : TransposeDirection::DOWN;
 
-
-      KeyList* km = staff(0)->keymap();
-      KeySigEvent key = km->lower_bound(0)->second;
-      int keyType = key.accidentalType() + 7;
+      int keyType = staff(0)->key(0) + 7;   // ??
 
       int intervalList[15][2] = {
             // up - down
@@ -526,7 +509,7 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
       int alter1;
       int alter2;
       int tick     = chord()->segment()->tick();
-      int key      = !staff() ? int(Key::C) : staff()->keymap()->key(tick).accidentalType();
+      int key      = !staff() ? int(Key::C) : staff()->key(tick);
       int absStep1 = pitch2absStepByKey(pitch(),                 tpc1(), key, &alter1);
       int absStep2 = pitch2absStepByKey(pitch()-transposition(), tpc2(), key, &alter2);
 

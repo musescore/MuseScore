@@ -3831,7 +3831,7 @@ void ExportLy::writeVoiceMeasure(MeasureBase* mb, Staff* staff, int staffInd, in
 	  out << "%staffkeysig\n";
 	  indent();
 	  //done in first measure anyway: ??
-	  writeKeySig(staff->keymap()->key(0).accidentalType());
+	  writeKeySig(staff->keys()->key(0).accidentalType());
 // 	  score->sigmap->timesig(0, z1, timedenom);
 // 	  out << "\\time " << z1<< "/" << timedenom << " \n";
 	}
@@ -3954,7 +3954,7 @@ void ExportLy::writeVoiceMeasure(MeasureBase* mb, Staff* staff, int staffInd, in
 		 KeySig* ksig= (KeySig*) e;
 		 int keytick = ksig->tick();
 		 cout << "at tick: " << keytick << "\n";
-		 KeyList* kl = score->staff(staffInd)-> keymap();
+		 KeyList* kl = score->staff(staffInd)-> keys();
 		 KeySigEvent key = kl->key(keytick);
 //		 auto ci = kl->find(keytick);
 		 //

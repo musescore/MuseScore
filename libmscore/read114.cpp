@@ -176,7 +176,7 @@ void Staff::read114(XmlReader& e)
                         }
                   }
             else if (tag == "keylist")
-                  _keymap.read(e, _score);
+                  _keys.read(e, _score);
             else if (tag == "bracket") {
                   BracketItem b;
                   b._bracket = BracketType(e.intAttribute("type", -1));
@@ -514,7 +514,8 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
 
-            KeyList* km = s->keymap();
+            // create missing KeySig
+            KeyList* km = s->keyList();
             for (auto i = km->begin(); i != km->end(); ++i) {
                   int tick = i->first;
                   if (tick < 0) {
@@ -523,7 +524,7 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   KeySigEvent ke = i->second;
                   Measure* m = tick2measure(tick);
-                  if(!m) //empty score
+                  if (!m) //empty score
                         break;
                   Segment* seg = m->getSegment(SegmentType::KeySig, tick);
                   if (seg->element(track))

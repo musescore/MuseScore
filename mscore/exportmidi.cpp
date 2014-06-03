@@ -129,23 +129,23 @@ void ExportMidi::writeHeader()
 
       int staffIdx = 0;
       for (auto &track: mf.tracks()) {
-            Staff* staff      = cs->staff(staffIdx);
-            KeyList* keymap   = staff->keymap();
+            Staff* staff  = cs->staff(staffIdx);
+            KeyList* keys = staff->keyList();
 
             foreach(const RepeatSegment* rs, *cs->repeatList()) {
                   int startTick  = rs->tick;
                   int endTick    = startTick + rs->len;
                   int tickOffset = rs->utick - rs->tick;
 
-                  auto sk = keymap->lower_bound(startTick);
-                  auto ek = keymap->lower_bound(endTick);
+                  auto sk = keys->lower_bound(startTick);
+                  auto ek = keys->lower_bound(endTick);
 
                   bool keysigFound = false;
                   for (auto ik = sk; ik != ek; ++ik) {
                         keysigFound = true;
                         MidiEvent ev;
                         ev.setType(ME_META);
-                        int key       = ik->second.accidentalType();   // -7 -- +7
+                        int key       = ik->second;   // -7 -- +7
                         ev.setMetaType(META_KEY_SIGNATURE);
                         ev.setLen(2);
                         unsigned char* data = new unsigned char[2];

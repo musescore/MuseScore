@@ -15,6 +15,7 @@
 #include "utils.h"
 #include "score.h"
 #include "pitchspelling.h"
+#include "keylist.h"
 
 namespace Ms {
 
@@ -22,28 +23,16 @@ namespace Ms {
 //   KeySigEvent
 //---------------------------------------------------------
 
-KeySigEvent::KeySigEvent()
+KeySigEvent::KeySigEvent(int at)
       {
-      _accidentalType = 0;
-      _naturalType    = 0;
-      _customType     = 0;
-      _custom         = false;
-      _invalid        = true;
-      }
-
-KeySigEvent::KeySigEvent(int n)
-      {
-      _accidentalType = n;
-      _naturalType    = 0;
-      _customType     = 0;
-      _custom         = false;
+      _accidentalType = at;
       _invalid        = false;
       enforceLimits();
       }
 
 //---------------------------------------------------------
-//   enforceLimits - ensure _accidentalType and _naturalType
-//   are within acceptable limits (-7 .. +7).
+//   enforceLimits - ensure _accidentalType
+//   is within acceptable limits (-7 .. +7).
 //   see KeySig::layout()
 //---------------------------------------------------------
 
@@ -57,14 +46,6 @@ void KeySigEvent::enforceLimits()
       else if (_accidentalType > 7) {
             _accidentalType = 7;
             msg = "accidentalType > 7";
-            }
-      if (_naturalType < -7) {
-            _naturalType = -7;
-            msg = "naturalType < -7";
-            }
-      else if (_naturalType > 7) {
-            _naturalType = 7;
-            msg = "naturalType > 7";
             }
       if (msg)
             qDebug("KeySigEvent: %s", msg);
@@ -93,9 +74,9 @@ void KeySigEvent::print() const
             qDebug("invalid>");
       else {
             if (_custom)
-                  qDebug("nat %d custom %d>", _naturalType, _customType);
+                  qDebug("custom %d>", _customType);
             else
-                  qDebug("nat %d accidental %d>", _naturalType, _accidentalType);
+                  qDebug("accidental %d>", _accidentalType);
             }
       }
 
@@ -168,79 +149,6 @@ void AccidentalState::init(const KeySigEvent& ks)
       }
 
 //---------------------------------------------------------
-//   key
-//
-//    locates the key sig currently in effect at tick
-//---------------------------------------------------------
-
-KeySigEvent KeyList::key(int tick) const
-      {
-      if (empty()) {
-            return KeySigEvent();
-            }
-      auto i = upper_bound(tick);
-      if (i == begin())
-            return KeySigEvent();
-      --i;
-      return i->second;
-      }
-
-//---------------------------------------------------------
-//   nextKeyTick
-//
-//    return the tick at which the key sig after tick is located
-//    return 0, if no such a key sig
-//---------------------------------------------------------
-
-int KeyList::nextKeyTick(int tick) const
-      {
-      if (empty())
-            return 0;
-      auto i = upper_bound(tick+1);
-      if (i == end())
-            return 0;
-      return i->first;
-      }
-
-//---------------------------------------------------------
-//   KeyList::write
-//---------------------------------------------------------
-
-void KeyList::write(Xml& xml, const char* name) const
-      {
-      xml.stag(name);
-      for (auto i = begin(); i != end(); ++i) {
-            if (i->second.custom())
-                  xml.tagE("key tick=\"%d\" custom=\"%d\"", i->first, i->second.customType());
-            else
-                  xml.tagE("key tick=\"%d\" idx=\"%d\"", i->first, i->second.accidentalType());
-            }
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   KeyList::read
-//---------------------------------------------------------
-
-void KeyList::read(XmlReader& e, Score* cs)
-      {
-      while (e.readNextStartElement()) {
-            if (e.name() == "key") {
-                  KeySigEvent ke;
-                  int tick = e.intAttribute("tick", 0);
-                  if (e.hasAttribute("custom"))
-                        ke.setCustomType(e.intAttribute("custom"));
-                  else
-                        ke.setAccidentalType(e.intAttribute("idx"));
-                  (*this)[cs->fileDivision(tick)] = ke;
-                  e.readNext();
-                  }
-            else
-                  e.unknown();
-            }
-      }
-
-//---------------------------------------------------------
 //   transposeKey
 //---------------------------------------------------------
 
@@ -274,7 +182,6 @@ void KeySigEvent::initFromSubtype(int st)
       U a;
       a.subtype       = st;
       _accidentalType = a._accidentalType;
-      _naturalType    = a._naturalType;
       _customType     = a._customType;
       _custom         = a._custom;
       _invalid        = a._invalid;

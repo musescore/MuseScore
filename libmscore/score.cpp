@@ -1379,13 +1379,10 @@ void Score::addElement(Element* element)
 
             case Element::ElementType::KEYSIG:
                   {
-                  KeySig* ks = static_cast<KeySig*>(element);
+                  KeySig* ks    = static_cast<KeySig*>(element);
                   Staff*  staff = element->staff();
-                  KeySigEvent keySigEvent = ks->keySigEvent();
-                  if (!ks->generated()) {
-                        staff->setKey(ks->segment()->tick(), keySigEvent);
-                        ks->insertIntoKeySigChain();
-                        }
+                  if (!ks->generated())
+                        staff->setKey(ks->segment()->tick(), ks->key());
                   }
                   break;
 
@@ -1531,10 +1528,8 @@ void Score::removeElement(Element* element)
                   {
                   KeySig* ks    = static_cast<KeySig*>(element);
                   Staff*  staff = element->staff();
-                  if (!ks->generated()) {
-                        ks->removeFromKeySigChain();
+                  if (!ks->generated())
                         staff->removeKey(ks->segment()->tick());
-                        }
                   }
                   break;
             case Element::ElementType::TEMPO_TEXT:
@@ -2014,7 +2009,7 @@ void Score::updateNotes()
 
 void Score::cmdUpdateNotes()
       {
-      for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
                   m->cmdUpdateNotes(staffIdx);
             }
@@ -2060,10 +2055,11 @@ Score* Score::clone()
       Score* score = new Score(style());
       score->read1(r, true);
 
+#if 0
       int staffIdx = 0;
-      foreach(Staff* st, score->staves()) {
+      foreach (Staff* st, score->staves()) {
             if (st->updateKeymap())
-                  st->keymap()->clear();
+                  st->clearKeys();
             int track = staffIdx * VOICES;
             KeySig* key1 = 0;
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
@@ -2077,7 +2073,7 @@ Score* Score::clone()
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);
-                              st->setKey(s->tick(), ks->keySigEvent());
+                              st->setKey(s->tick(), ks->key());
                               key1 = ks;
                               }
                         }
@@ -2087,6 +2083,8 @@ Score* Score::clone()
             st->setUpdateKeymap(false);
             ++staffIdx;
             }
+#endif
+
       score->updateNotes();
       score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
@@ -2454,7 +2452,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                         int diff = -staff->part()->instr()->transpose().chromatic;
                         if (diff != 0 && !styleB(StyleIdx::concertPitch))
                               nKey.setAccidentalType(transposeKey(nKey.accidentalType(), diff));
-                        (*(staff->keymap()))[tick] = nKey;
+                        staff->setKey(tick, nKey.accidentalType());
                         KeySig* keysig = new KeySig(this);
                         keysig->setTrack(staffIdx * VOICES);
                         keysig->setKeySigEvent(nKey);

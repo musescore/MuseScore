@@ -101,9 +101,7 @@ void KeySig::layout()
       setbbox(QRectF());
 
       if (staff() && !staff()->genKeySig()) {     // no key sigs on TAB staves
-            foreach(KeySym* ks, keySymbols)
-                  delete ks;
-            keySymbols.clear();
+            qDeleteAll(keySymbols);
             return;
             }
 
@@ -115,8 +113,7 @@ void KeySig::layout()
             return;
             }
 
-      foreach(KeySym* ks, keySymbols)
-            delete ks;
+      qDeleteAll(keySymbols);
       keySymbols.clear();
 
       // determine current clef for this staff
@@ -124,12 +121,8 @@ void KeySig::layout()
       if (staff())
             clef = staff()->clef(segment()->tick());
 
-      int t1   = _sig.accidentalType();
-      int t2   = _sig.naturalType();
-      qreal xo = 0.0;
-
-      // check ranges and compute masks for accidentals and naturals
       int accidentals = 0, naturals = 0;
+      int t1 = _sig.accidentalType();
       switch (qAbs(t1)) {
             case 7: accidentals = 0x7f; break;
             case 6: accidentals = 0x3f; break;
@@ -140,49 +133,62 @@ void KeySig::layout()
             case 1: accidentals = 0x1;  break;
             case 0: accidentals = 0;    break;
             default:
-                  qDebug("illegal t1 key %d (t2=%d)", t1, t2);
+                  qDebug("illegal t1 key %d", t1);
                   break;
             }
-      switch (qAbs(t2)) {
-            case 7: naturals = 0x7f; break;
-            case 6: naturals = 0x3f; break;
-            case 5: naturals = 0x1f; break;
-            case 4: naturals = 0xf;  break;
-            case 3: naturals = 0x7;  break;
-            case 2: naturals = 0x3;  break;
-            case 1: naturals = 0x1;  break;
-            case 0: naturals = 0;    break;
-            default:
-                  qDebug("illegal t2 key %d (t1=%d)", t2, t1);
-                  break;
-            }
-
-      xo = 0.0;
-      int coffset = t2 < 0 ? 7 : 0;
-
-      // remove redundant naturals
-      if (!((t1 > 0) ^ (t2 > 0)))
-            naturals &= ~accidentals;
 
       // manage display of naturals:
       // naturals are shown if there is some natural AND prev. measure has no section break
       // AND style says they are not off
       // OR key sig is CMaj/Amin (in which case they are always shown)
-      Measure* prevMeas = measure() != nullptr ? measure()->prevMeasure() : nullptr;
+
+      Measure* prevMeas = measure() ? measure()->prevMeasure() : nullptr;
       bool naturalsOn =
-            t2 != 0 && ( prevMeas != nullptr && prevMeas->sectionBreak() == nullptr
+            (prevMeas && prevMeas->sectionBreak() == nullptr
             && (score()->styleI(StyleIdx::keySigNaturals) != int(KeySigNatural::NONE) || t1 == 0) );
-      // naturals shoud go BEFORE accidentals if style says so
+
+      int coffset = 0;
+      int t2      = 0;
+      if (naturalsOn) {
+            t2 = staff()->prevKey(segment()->tick());
+            if (t2 == 0)
+                  naturalsOn = false;
+            else {
+                  switch (qAbs(t2)) {
+                        case 7: naturals = 0x7f; break;
+                        case 6: naturals = 0x3f; break;
+                        case 5: naturals = 0x1f; break;
+                        case 4: naturals = 0xf;  break;
+                        case 3: naturals = 0x7;  break;
+                        case 2: naturals = 0x3;  break;
+                        case 1: naturals = 0x1;  break;
+                        case 0: naturals = 0;    break;
+                        default:
+                              qDebug("illegal t2 key %d", t2);
+                              break;
+                        }
+                  // remove redundant naturals
+                  if (!((t1 > 0) ^ (t2 > 0)))
+                        naturals &= ~accidentals;
+                  if (t2 < 0)
+                        coffset = 7;
+                  }
+            }
+
+      // naturals should go BEFORE accidentals if style says so
       // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
       bool prefixNaturals =
             naturalsOn
             && (score()->styleI(StyleIdx::keySigNaturals) == int(KeySigNatural::BEFORE) || t1 * t2 < 0);
+
       // naturals should go AFTER accidentals if they should not go before!
       bool suffixNaturals = naturalsOn && !prefixNaturals;
 
       const char* lines = ClefInfo::lines(clef);
 
       // add prefixed naturals, if any
+
+      qreal xo = 0.0;
       if (prefixNaturals) {
             for (int i = 0; i < 7; ++i) {
                   if (naturals & (1 << i)) {
@@ -214,13 +220,13 @@ void KeySig::layout()
             case 0:
                   break;
             default:
-                  qDebug("illegal t1 key %d (t2=%d)", t1, t2);
+                  qDebug("illegal t1 key %d", t1);
                   break;
             }
       // add suffixed naturals, if any
       if (suffixNaturals) {
             xo += qAbs(t1);               // skip accidentals
-            if(t1 > 0) {                  // after sharps, add a little more space
+            if (t1 > 0) {                 // after sharps, add a little more space
                   xo += 0.15;
                   // if last sharp (t1) is above next natural (t1+1)...
                   if (lines[t1] < lines[t1+1])
@@ -236,7 +242,7 @@ void KeySig::layout()
 
       // compute bbox
       setbbox(QRectF());
-      foreach(KeySym* ks, keySymbols) {
+      for (KeySym* ks : keySymbols) {
             ks->pos = ks->spos * _spatium;
             addbbox(symBbox(ks->sym).translated(ks->pos));
             }
@@ -294,24 +300,12 @@ Element* KeySig::drop(const DropData& data)
       }
 
 //---------------------------------------------------------
-//   setSig
+//   setKey
 //---------------------------------------------------------
 
-void KeySig::setSig(int old, int newSig)
+void KeySig::setKey(int sig)
       {
-      KeySigEvent ks;
-      ks.setNaturalType(old);
-      ks.setAccidentalType(newSig);
-      setKeySigEvent(ks);
-      }
-
-//---------------------------------------------------------
-//   setOldSig
-//---------------------------------------------------------
-
-void KeySig::setOldSig(int old)
-      {
-      _sig.setNaturalType(old);
+      setKeySigEvent(KeySigEvent(sig));
       }
 
 //---------------------------------------------------------
@@ -342,13 +336,9 @@ void KeySig::write(Xml& xml) const
             }
       else {
             xml.tag("accidental", _sig.accidentalType());
-            if (_sig.naturalType())
-                  xml.tag("natural", _sig.naturalType());
             }
       if (!_showCourtesy)
             xml.tag("showCourtesySig", _showCourtesy);
-/*      if (!_showNaturals)
-            xml.tag("showNaturals",    _showNaturals); */
       xml.etag();
       }
 
@@ -382,8 +372,8 @@ void KeySig::read(XmlReader& e)
                   e.readInt();
             else if (tag == "accidental")
                   _sig.setAccidentalType(e.readInt());
-            else if (tag == "natural")
-                  _sig.setNaturalType(e.readInt());
+            else if (tag == "natural")                // obsolete
+                  e.readInt();
             else if (tag == "custom")
                   _sig.setCustomType(e.readInt());
             else if (tag == "subtype")
@@ -451,68 +441,6 @@ void KeySig::changeKeySigEvent(const KeySigEvent& t)
 int KeySig::tick() const
       {
       return segment() ? segment()->tick() : 0;
-      }
-
-//---------------------------------------------------------
-//   insertIntoKeySigChains
-//
-//    Adjusts the naturals of this key sig with respect to the previous
-//    and the naturals of the next with respect to this one
-//
-//    Note: staff(), tick() and track() should return sensible values!
-//---------------------------------------------------------
-
-void KeySig::insertIntoKeySigChain()
-      {
-      if (generated())
-            return;
-      Staff* stf = staff();
-      if (!stf)
-            return;
-      int tck = tick();
-      // locate previous key sig to set our delta naturals
-      KeySigEvent  oldKey = stf->key(tck-1);
-      setOldSig(oldKey.accidentalType());
-      // locate the following key sig, if any, to set into it the natural delta with this
-      int nextKeyTick = stf->nextKeyTick(tck);
-      Segment* nextKeySeg = 0;
-      if (nextKeyTick) {
-            nextKeySeg = score()->tick2segment(nextKeyTick, false, SegmentType::KeySig);
-            while(nextKeySeg && !nextKeySeg->element(track()))
-                  nextKeySeg = nextKeySeg->next1(SegmentType::KeySig);
-            }
-      if (nextKeySeg)
-            static_cast<KeySig*>(nextKeySeg->elist()[track()])->setOldSig(_sig.accidentalType());
-      }
-
-//---------------------------------------------------------
-//   removeFromKeySigChains
-//
-//    Adjusts the naturals of the next key sig with respect to the previous
-//
-//    Note: staff(), tick() and track() should return sensible values!
-//---------------------------------------------------------
-
-void KeySig::removeFromKeySigChain()
-      {
-      if (generated())
-            return;
-      Staff* stf = staff();
-      if (!stf)
-            return;
-      int tck = tick();
-      // locate previous and next key sig
-      KeySigEvent  oldKey = stf->key(tck-1);
-      // locate the following key sig, if any, to set into it the natural delta with this
-      int nextKeyTick = stf->nextKeyTick(tck);
-      Segment* nextKeySeg = 0;
-      if (nextKeyTick) {
-            nextKeySeg = score()->tick2segment(nextKeyTick, false, SegmentType::KeySig);
-            while(nextKeySeg && !nextKeySeg->element(track()))
-                  nextKeySeg = nextKeySeg->next1(SegmentType::KeySig);
-            }
-      if (nextKeySeg)
-            static_cast<KeySig*>(nextKeySeg->elist()[track()])->setOldSig(oldKey.accidentalType());
       }
 
 //---------------------------------------------------------

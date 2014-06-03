@@ -1413,7 +1413,7 @@ static void usage()
         "   -c dir    override config/settings folder\n"
         "   -t        set testMode flag for all files\n"
         );
-        
+
       exit(-1);
       }
 
@@ -3896,9 +3896,7 @@ void MuseScore::transpose()
             startStaffIdx = cs->selection().staffStart();
             startTick     = cs->selection().tickStart();
             }
-      KeyList* km = cs->staff(startStaffIdx)->keymap();
-      int key     = km->key(startTick).accidentalType();
-      td.setKey(key);
+      td.setKey(cs->staff(startStaffIdx)->key(startTick));
       if (!td.exec())
             return;
       cs->transpose(td.mode(), td.direction(), td.transposeKey(), td.transposeInterval(),
@@ -4702,13 +4700,13 @@ int main(int argc, char* av[])
 /**/
       if (dataPath.isEmpty())
             dataPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-      
+
       if (deletePreferences) {
             QDir(dataPath).removeRecursively();
             QSettings settings;
             QFile::remove(settings.fileName());
             }
-            
+
       // create local plugin directory
       // if not already there:
       QDir dir;
@@ -4726,7 +4724,7 @@ int main(int argc, char* av[])
             QSettings s;
             localeName = s.value("language", "system").toString();
             }
-      
+
       setMscoreLocale(localeName);
 
       Shortcut::init();
@@ -4789,7 +4787,7 @@ int main(int argc, char* av[])
 #ifdef Q_OS_MAC // to have session dialog on top of splashscreen on mac
             sc->setWindowFlags(Qt::FramelessWindowHint);
 #endif
-            
+
             sc->show();
             qApp->processEvents();
             }

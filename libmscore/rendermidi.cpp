@@ -638,7 +638,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                                     //
                                     events->clear();
                                     events->append(NoteEvent(0, 0, 125));
-                                    int key     = chord->staff()->key(chord->segment()->tick()).accidentalType();
+                                    int key     = chord->staff()->key(chord->segment()->tick());
                                     int pitch   = chord->notes()[k]->pitch();
                                     int pitchDown = diatonicUpDown(key, pitch, -1);
                                     events->append(NoteEvent(pitchDown - pitch, 125, 125));
@@ -652,7 +652,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                                     {
                                     events->clear();
                                     events->append(NoteEvent(0, 0, 125));
-                                    int key       = chord->staff()->key(chord->segment()->tick()).accidentalType();
+                                    int key       = chord->staff()->key(chord->segment()->tick());
                                     int pitch     = chord->notes()[k]->pitch();
                                     int pitchUp = diatonicUpDown(key, pitch, 1);
                                     events->append(NoteEvent(pitchUp - pitch, 125, 125));

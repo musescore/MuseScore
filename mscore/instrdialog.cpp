@@ -884,8 +884,8 @@ void MuseScore::editInstrList()
       KeyList tmpKeymap;
       Staff* firstStaff = nullptr;
       for (Staff* s : rootScore->staves()) {
-            KeyList* km = s->keymap();
-            if(!s->isDrumStaff()) {
+            KeyList* km = s->keyList();
+            if (!s->isDrumStaff()) {
                   tmpKeymap.insert(km->begin(), km->end());
                   firstStaff = s;
                   break;
@@ -897,10 +897,7 @@ void MuseScore::editInstrList()
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
                   int tick = i->first;
                   KeySigEvent oKey = i->second;
-                  int nKeyType = transposeKey(oKey.accidentalType(), interval);
-                  KeySigEvent nKey;
-                  nKey.setAccidentalType(nKeyType);
-                  tmpKeymap[tick] = nKey;
+                  tmpKeymap[tick] = transposeKey(oKey.accidentalType(), interval);
                   }
             }
 
@@ -1032,7 +1029,7 @@ void MuseScore::editInstrList()
                               rootScore->adjustBracketsIns(staffIdx, staffIdx+1);
                               staff->initFromStaffType(sli->staffType());
                               staff->setClef(0, sli->clef());
-                              KeySigEvent nKey = part->staff(0)->key(0);
+                              int nKey = part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
                               if (sli->linked() && rstaff > 0) {
