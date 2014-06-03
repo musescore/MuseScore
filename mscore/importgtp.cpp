@@ -1361,9 +1361,14 @@ void GuitarPro3::read(QFile* fp)
                   /*int color =*/ readInt();    // color?
                   }
             if (barBits & 0x40) {
-                  bar.keysig = readUChar();
-                  /*uchar c    =*/ readUChar();        // minor
+                  int currentKey = readUChar();
+                  /* key signatures are specified as
+                   * 1# = 1, 2# = 2, ..., 7# = 7
+                   * 1b = 255, 2b = 254, ... 7b = 249 */
+                  bar.keysig = currentKey <= 7 ? currentKey : 0-256+currentKey;
+                  readUChar();        // specifies major/minor mode
                   }
+
             if (barBits & 0x80)
                   bar.barLine = BarLineType::DOUBLE;
             bar.timesig = Fraction(tnumerator, tdenominator);
@@ -2102,8 +2107,12 @@ void GuitarPro4::read(QFile* fp)
                   /*int color = */ readInt();    // color?
                   }
             if (barBits & 0x40) {
-                  bar.keysig = readUChar();
-                  readUChar();        // minor
+                  int currentKey = readUChar();
+                  /* key signatures are specified as
+                   * 1# = 1, 2# = 2, ..., 7# = 7
+                   * 1b = 255, 2b = 254, ... 7b = 249 */
+                  bar.keysig = currentKey <= 7 ? currentKey : 0-256+currentKey;
+                  readUChar();        // specifies major/minor mode
                   }
             if (barBits & 0x80)
                   bar.barLine = BarLineType::DOUBLE;
@@ -3131,8 +3140,12 @@ void GuitarPro5::read(QFile* fp)
                         }
                   }
             if (barBits & 0x40) {
-                  bar.keysig = readUChar();
-                  /*uchar c    =*/ readUChar();        // minor
+                  int currentKey = readUChar();
+                  /* key signatures are specified as
+                   * 1# = 1, 2# = 2, ..., 7# = 7
+                   * 1b = 255, 2b = 254, ... 7b = 249 */
+                  bar.keysig = currentKey <= 7 ? currentKey : 0-256+currentKey;
+                  readUChar();        // specified major/minor mode
                   }
             if (barBits & 0x80)
                   bar.barLine = BarLineType::DOUBLE;

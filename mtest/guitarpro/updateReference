@@ -25,3 +25,5 @@ cp   $MSCORE/basic-bend.gp5.mscx basic-bend.gp5-ref.mscx
 cp   $MSCORE/bend.gp5.mscx bend.gp5-ref.mscx
 cp   $MSCORE/bend.gp4.mscx bend.gp4-ref.mscx
 cp   $MSCORE/bend.gp3.mscx bend.gp3-ref.mscx
+cp   $MSCORE/keysig.gp5.mscx keysig.gp5-ref.mscx
+cp   $MSCORE/keysig.gp4.mscx keysig.gp4-ref.mscx
