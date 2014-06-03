@@ -50,12 +50,12 @@ enum class POS : char;
 //    message format for gui -> sequencer messages
 //---------------------------------------------------------
 
-enum { SEQ_NO_MESSAGE, SEQ_TEMPO_CHANGE, SEQ_PLAY, SEQ_SEEK,
-       SEQ_MIDI_INPUT_EVENT
+enum class SeqMsgId : char { NO_MESSAGE, TEMPO_CHANGE, PLAY, SEEK,
+       MIDI_INPUT_EVENT
       };
 
 struct SeqMsg {
-      int id;
+      SeqMsgId id;
       union {
             int intVal;
             qreal realVal;
@@ -63,9 +63,9 @@ struct SeqMsg {
       NPlayEvent event;
 
       SeqMsg() {}
-      SeqMsg(int _id, int val) : id(_id), intVal(val) {}
-      SeqMsg(int _id, qreal val) : id(_id), realVal(val) {}
-      SeqMsg(int _id, const NPlayEvent& e) : id(_id), event(e) {}
+      SeqMsg(SeqMsgId _id, int val) : id(_id), intVal(val) {}
+      SeqMsg(SeqMsgId _id, qreal val) : id(_id), realVal(val) {}
+      SeqMsg(SeqMsgId _id, const NPlayEvent& e) : id(_id), event(e) {}
       };
 
 //---------------------------------------------------------
