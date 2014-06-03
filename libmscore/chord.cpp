@@ -2152,8 +2152,11 @@ void Chord::layoutTablature()
             // know the y position of the next staves
             }
 
-      if (_glissando)
-            lll += _spatium * .5;
+      if (_glissando) {
+            lll += _spatium * 0.5;
+            if (rtick())
+                  lll += score()->styleS(StyleIdx::MinTieLength).val() * _spatium;
+            }
 
       if (dots()) {
             qreal x = dotPosX() + dotNoteDistance
@@ -2222,9 +2225,13 @@ void Chord::layoutTablature()
       for (Element* e : _el) {
             e->layout();
             if (e->type() == ElementType::CHORDLINE) {
-                  int x = e->bbox().translated(e->pos()).right();
-                  if (x > _space.rw())
-                        _space.setRw(x);
+                  QRectF tbbox = e->bbox().translated(e->pos());
+                  qreal lx = tbbox.left();
+                  qreal rx = tbbox.right();
+                  if (-lx > _space.lw())
+                        _space.setLw(-lx);
+                  if (rx > _space.rw())
+                        _space.setRw(rx);
                   }
             }
       // bbox();
