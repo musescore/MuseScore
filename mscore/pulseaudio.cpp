@@ -25,7 +25,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class PulseAudio : public Driver {
-      int state;
+      Transport state;
       int runState;
       int _sampleRate;
       pa_sample_spec ss;
@@ -43,10 +43,10 @@ class PulseAudio : public Driver {
       virtual bool init();
       virtual bool start();
       virtual bool stop();
-      virtual int getState() { return state; }
+      virtual Transport getState() override { return state; }
       virtual int sampleRate() const { return _sampleRate;          }
-      virtual void stopTransport()   { state = Seq::TRANSPORT_STOP; }
-      virtual void startTransport()  { state = Seq::TRANSPORT_PLAY; }
+      virtual void stopTransport()   { state = Transport::STOP; }
+      virtual void startTransport()  { state = Transport::PLAY; }
       };
 
 //---------------------------------------------------------
@@ -72,7 +72,7 @@ PulseAudio::PulseAudio(Seq* s)
    : Driver(s)
       {
       _sampleRate = preferences.alsaSampleRate;
-      state       = Seq::TRANSPORT_STOP;
+      state       = Transport::STOP;
       runState    = 0;
       }
 

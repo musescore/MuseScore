@@ -28,6 +28,7 @@ namespace Ms {
 class Synth;
 class Seq;
 class MidiDriver;
+enum class Transport : char;
 
 //---------------------------------------------------------
 //   Portaudio
@@ -37,7 +38,7 @@ class Portaudio : public Driver {
       bool initialized;
       int _sampleRate;
 
-      int state;
+      Transport state;
       bool seekflag;
       unsigned pos;
       double startTime;
@@ -53,7 +54,7 @@ class Portaudio : public Driver {
       virtual QList<QString> inputPorts();
       virtual void startTransport();
       virtual void stopTransport();
-      virtual int getState();
+      virtual Transport getState() override;
       virtual int sampleRate() const { return _sampleRate; }
       virtual void registerPort(const QString& name, bool input, bool midi);
       virtual void unregisterPort(int);

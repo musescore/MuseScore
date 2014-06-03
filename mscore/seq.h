@@ -89,6 +89,10 @@ class SeqMsgFifo : public FifoBase {
 //    sequencer
 //---------------------------------------------------------
 
+// this are also the jack audio transport states:
+enum class Transport : char { STOP=0, PLAY=1, STARTING=3,
+     NET_STARTING=4 };
+
 class Seq : public QObject, public Sequencer {
       Q_OBJECT
 
@@ -97,7 +101,7 @@ class Seq : public QObject, public Sequencer {
       Score* cs;
       ScoreView* cv;
       bool running;                       // true if sequencer is available
-      int state;                          // TRANSPORT_STOP, TRANSPORT_PLAY, TRANSPORT_STARTING=3
+      Transport state;                    // STOP, PLAY, STARTING=3
       bool inCountIn;
       Fraction prevTimeSig;
       double prevTempo;
@@ -168,10 +172,6 @@ class Seq : public QObject, public Sequencer {
       void timeSigChanged();
 
    public:
-      // this are also the jack audio transport states:
-      enum { TRANSPORT_STOP=0, TRANSPORT_PLAY=1, TRANSPORT_STARTING=3,
-           TRANSPORT_NET_STARTING=4 };
-
       Seq();
       ~Seq();
       bool canStart();
@@ -193,8 +193,8 @@ class Seq : public QObject, public Sequencer {
       bool init();
       void exit();
       bool isRunning() const    { return running; }
-      bool isPlaying() const    { return state == TRANSPORT_PLAY; }
-      bool isStopped() const    { return state == TRANSPORT_STOP; }
+      bool isPlaying() const    { return state == Transport::PLAY; }
+      bool isStopped() const    { return state == Transport::STOP; }
 
       void processMessages();
       void process(unsigned, float*);
