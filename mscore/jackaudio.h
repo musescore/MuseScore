@@ -41,12 +41,13 @@ class JackAudio : public Driver {
       jack_client_t* client;
       char _jackName[8];
 
+      bool timeSigTempoChanged;
       QList<jack_port_t*> ports;
       QList<jack_port_t*> midiOutputPorts;
       QList<jack_port_t*> midiInputPorts;
 
       static int processAudio(jack_nframes_t, void*);
-
+      static void timebase (jack_transport_state_t, jack_nframes_t, jack_position_t*, int, void *);
    public:
       JackAudio(Seq*);
       virtual ~JackAudio();
@@ -62,11 +63,12 @@ class JackAudio : public Driver {
       virtual void stopTransport();
       virtual int getState();
       virtual int sampleRate() const    { return jack_get_sample_rate(client); }
-      virtual void putEvent(const Event&, unsigned framePos);
+      virtual void putEvent(const NPlayEvent&, unsigned framePos);
       virtual void midiRead();
 
       virtual void registerPort(const QString& name, bool input, bool midi);
       virtual void unregisterPort(int);
+      virtual void handleTimeSigTempoChanged();
       };
 
 

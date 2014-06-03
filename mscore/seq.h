@@ -22,6 +22,7 @@
 #define __SEQ_H__
 
 #include "libmscore/sequencer.h"
+#include "libmscore/fraction.h"
 #include "synthesizer/event.h"
 #include "driver.h"
 #include "libmscore/fifo.h"
@@ -35,6 +36,7 @@ class Note;
 class Score;
 class Painter;
 class Measure;
+class Fraction;
 class Driver;
 class Part;
 struct Channel;
@@ -97,6 +99,8 @@ class Seq : public QObject, public Sequencer {
       bool running;                       // true if sequencer is available
       int state;                          // TRANSPORT_STOP, TRANSPORT_PLAY, TRANSPORT_STARTING=3
       bool inCountIn;
+      Fraction prevTimeSig;
+      double prevTempo;
 
       bool oggInit;
       bool playlistChanged;
@@ -145,6 +149,7 @@ class Seq : public QObject, public Sequencer {
       void heartBeatTimeout();
       void midiInputReady();
       void setPlaylistChanged() { playlistChanged = true; }
+      void handleTimeSigTempoChanged();
 
    public slots:
       void setRelTempo(double);
@@ -159,6 +164,8 @@ class Seq : public QObject, public Sequencer {
       void stopped();
       int toGui(int);
       void heartBeat(int, int, int);
+      void tempoChanged();
+      void timeSigChanged();
 
    public:
       // this are also the jack audio transport states:
