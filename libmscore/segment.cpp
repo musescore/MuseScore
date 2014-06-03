@@ -482,7 +482,7 @@ void Segment::add(Element* el)
                   break;
 
             case ElementType::KEYSIG:
-                  Q_ASSERT(_segmentType == SegmentType::KeySig);
+                  Q_ASSERT(_segmentType == SegmentType::KeySig || _segmentType == SegmentType::KeySigAnnounce);
                   checkElement(el, track);
                   _elist[track] = el;
                   el->staff()->setKey(tick(), static_cast<KeySig*>(el)->keySigEvent());
