@@ -5282,7 +5282,7 @@ static QString codeToString(int code)
 
 void ScoreFont::load()
       {
-      qDebug() << "load" << _filename;
+      //qDebug() << "load" << _filename;
 #if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
       if (-1 == QFontDatabase::addApplicationFont(_fontPath + _filename)) {
             qDebug("ScoreFont: fatal error: cannot load internal font <%s>", qPrintable(_fontPath + _filename));
@@ -5337,8 +5337,8 @@ void ScoreFont::load()
                   sym->setWidth((fm2.width(sym->string()))/100.0); // Renormalization; see comment above
                   sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
                   }
-            else
-                  qDebug("unknown glyph: %s", qPrintable(i));
+            //else
+            //      qDebug("unknown glyph: %s", qPrintable(i));
             }
       fi.close();
       fi.setFileName(_fontPath + "metadata.json");
@@ -5514,11 +5514,11 @@ void ScoreFont::load()
                   }
             }
 
-      for (int i = 1; i < int(SymId::lastSym); ++i) {
+      /*for (int i = 1; i < int(SymId::lastSym); ++i) {
             Sym sym = _symbols[i];
             if (!sym.isValid())
                   qDebug("invalid symbol %s", Sym::id2name(SymId(i)));
-            }
+            }*/
       loaded = true;
       }
 
