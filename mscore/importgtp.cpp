@@ -482,7 +482,7 @@ qDebug("staff %d group %d timesig %d", staffIdx, int(staffType->group()), staffT
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                         KeySig* t = new KeySig(score);
                         int keysig = bars[i].keysig != GP_INVALID_KEYSIG ? bars[i].keysig : key;
-                        t->setSig(0, keysig);
+                        t->setKey(keysig);
                         t->setTrack(staffIdx * VOICES);
                         Segment* s = m->getSegment(SegmentType::KeySig, tick);
                         s->add(t);
@@ -1402,7 +1402,7 @@ void GuitarPro3::read(QFile* fp)
             if (i == 0 && key) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                         KeySig* t = new KeySig(score);
-                        t->setSig(0, key);
+                        t->setKey(key);
                         t->setTrack(staffIdx * VOICES);
                         Segment* s = m->getSegment(SegmentType::KeySig, tick);
                         s->add(t);
@@ -3554,7 +3554,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
             qDebug("--- On a new master bar ---");
             QDomNode key = nextMasterBar.firstChild();
             KeySig* t = new KeySig(score);
-            t->setSig(0, key.firstChild().toElement().text().toInt());
+            t->setKey(key.firstChild().toElement().text().toInt());
 
             QDomNode time = key.nextSibling();
             measure->setTimesig(bars[measureCounter].timesig);
@@ -3985,7 +3985,6 @@ Score::FileError importGTP(Score* score, const QString& name)
             Staff* staff = part->staves()->front();
 
             Staff* s = new Staff(pscore, p, 0);
-            s->setUpdateKeymap(true);
             StaffType* st = staff->staffType();
             s->setStaffType(st);
 //            int idx = pscore->staffTypeIdx(st);
@@ -4000,7 +3999,6 @@ Score::FileError importGTP(Score* score, const QString& name)
             if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   p->setStaves(2);
                   Staff* s1 = p->staff(1);
-                  s1->setUpdateKeymap(true);
 
                   StaffType st = *StaffType::preset(StaffTypes::TAB_DEFAULT);
                   st.setSlashStyle(true);

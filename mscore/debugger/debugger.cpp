@@ -2454,7 +2454,6 @@ void KeySigView::setElement(Element* e)
 
       keysig.showCourtesySig->setChecked(ks->showCourtesy());
       keysig.accidentalType->setValue(ks->keySigEvent().accidentalType());
-      keysig.naturalType->setValue(ks->keySigEvent().naturalType());
       keysig.customType->setValue(ks->keySigEvent().customType());
       keysig.custom->setChecked(ks->keySigEvent().custom());
       keysig.invalid->setChecked(ks->keySigEvent().invalid());

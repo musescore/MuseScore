@@ -147,7 +147,6 @@
       <Measure number="6">
         <KeySig>
           <accidental>1</accidental>
-          <natural>-2</natural>
           </KeySig>
         <Rest>
           <durationType>measure</durationType>

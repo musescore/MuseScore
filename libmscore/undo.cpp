@@ -442,35 +442,32 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
                   undo(new ChangeKeySig(ks, st, ks->showCourtesy()));
                   }
             else {
-                  KeySig* nks  = new KeySig(score);
+                  KeySig* nks = new KeySig(score);
                   nks->setParent(s);
                   nks->setTrack(track);
                   nks->setKeySigEvent(st);
-                  nks->setGenerated(false);
                   undo(new AddElement(nks));
                   if (lks)
                         lks->linkTo(nks);
                   else
                         lks = nks;
                   }
-            updateNoteLines(s, track);
             //
             // change all following generated keysigs
             //
-            for (Measure* m = measure->nextMeasure(); m; m = m->nextMeasure()) {
-                  Segment* s = m->undoGetSegment(SegmentType::KeySig, m->tick());
+            Measure* lm = measure->nextMeasure();
+            for (; lm; lm = lm->nextMeasure()) {
+                  Segment* s = lm->undoGetSegment(SegmentType::KeySig | SegmentType::KeySigAnnounce, lm->tick());
                   if (!s)
                         continue;
                   KeySig* ks = static_cast<KeySig*>(s->element(track));
                   if (!ks)
                         continue;
-                  if (ks && !ks->generated())
+                  if (!ks->generated())
                         break;
                   if (ks->keySigEvent() != st)
                         undo(new ChangeKeySig(ks, st, ks->showCourtesy()));
                   }
-            for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM())
-                  m->cmdUpdateNotes(staff->idx());
             }
       }
 
@@ -1710,11 +1707,8 @@ void ChangeElement::flip()
 
       if (newElement->type() == Element::ElementType::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(newElement);
-            if (!ks->generated()) {
-                  ks->staff()->setKey(ks->tick(),ks->keySigEvent());
-                  ks->insertIntoKeySigChain();
-                  newElement->staff()->setUpdateKeymap(true);
-                  }
+            if (!ks->generated())
+                  ks->staff()->setKey(ks->tick(), ks->key());
             }
       else if (newElement->type() == Element::ElementType::DYNAMIC)
             newElement->score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
@@ -1799,13 +1793,18 @@ void ChangeKeySig::flip()
       keysig->setKeySigEvent(ks);
       keysig->setShowCourtesy(showCourtesy);
 
-      // update keymap if keysig was not generated
+      int tick = keysig->segment()->tick();
+      // update keys if keysig was not generated
       if (!keysig->generated())
-            keysig->staff()->setKey(keysig->segment()->tick(), ks);
+            keysig->staff()->setKey(tick, ks.accidentalType());
 
       showCourtesy = sc;
       ks           = oe;
 
+      Measure* m = keysig->score()->tick2measure(keysig->staff()->currentKeyTick(tick));
+      for (; m; m = m->nextMeasure()) {
+            m->cmdUpdateNotes(keysig->staffIdx());
+            }
       keysig->score()->setLayoutAll(true);
       }
 

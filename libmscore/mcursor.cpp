@@ -99,7 +99,7 @@ void MCursor::addKeySig(int sig)
       int n = _score->nstaves();
       for (int i = 0; i < n; ++i) {
             KeySig* ks = new KeySig(_score);
-            ks->setSig(0, sig);
+            ks->setKey(sig);
             ks->setTrack(i * VOICES);
             segment->add(ks);
             }

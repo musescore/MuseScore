@@ -278,7 +278,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
                   int n = e.numerator() / e.denominator();
                   QList<NoteEvent*> events;
                   int pitch  = chord->upNote()->ppitch();
-                  int key    = chord->staff()->key(segment->tick()).accidentalType();
+                  int key    = chord->staff()->key(segment->tick());
                   int pitch2 = diatonicUpDown(key, pitch, 1);
                   int dpitch = pitch2 - pitch;
                   for (int i = 0; i < n; i += 2) {
@@ -461,7 +461,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   int tick      = chord->tick();
                   Staff* estaff = staff(on->staffIdx() + chord->staffMove());
                   ClefType clef = estaff->clef(tick);
-                  int key       = estaff->key(tick).accidentalType();
+                  int key       = estaff->key(tick);
                   npitch        = line2pitch(line, clef, key);
 
                   int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
@@ -1154,7 +1154,7 @@ void Score::upDown(bool up, UpDownMode mode)
       foreach (Note* oNote, el) {
             int tick     = oNote->chord()->tick();
             Part* part   = oNote->staff()->part();
-            int key      = oNote->staff()->key(tick).accidentalType();
+            int key      = oNote->staff()->key(tick);
             int tpc1     = oNote->tpc1();
             int tpc2     = oNote->tpc2();
             int pitch    = oNote->pitch();

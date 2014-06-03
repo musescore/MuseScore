@@ -308,7 +308,7 @@ int Note::tpc1default(int p) const
       {
       int key = 0;
       if (staff() && chord()) {
-            key = staff()->key(chord()->tick()).accidentalType();
+            key = staff()->key(chord()->tick());
             if (!concertPitch()) {
                   Interval interval = staff()->part()->instr()->transpose();
                   if (!interval.isZero()) {
@@ -328,7 +328,7 @@ int Note::tpc2default(int p) const
       {
       int key = 0;
       if (staff() && chord()) {
-            key = staff()->key(chord()->tick()).accidentalType();
+            key = staff()->key(chord()->tick());
             if (concertPitch()) {
                   Interval interval = staff()->part()->instr()->transpose();
                   if (!interval.isZero())
@@ -344,7 +344,7 @@ int Note::tpc2default(int p) const
 
 void Note::setTpcFromPitch()
       {
-      int key = (staff() && chord()) ? staff()->key(chord()->tick()).accidentalType() : 0;
+      int key = (staff() && chord()) ? staff()->key(chord()->tick()) : 0;
       _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
       _tpc[1] = pitch2tpc(_pitch - transposition(), key, Prefer::NEAREST);
       Q_ASSERT(tpcIsValid(_tpc[0]));
@@ -1143,7 +1143,7 @@ void Note::endDrag()
             // get note context
             int tick    = chord()->tick();
             ClefType clef    = staff->clef(tick);
-            int key     = staff->key(tick).accidentalType();
+            int key     = staff->key(tick);
             // determine new pitch of dragged note
             int nPitch      = line2pitch(nLine, clef, key);
             int tpc1        = pitch2tpc(nPitch, key, Prefer::NEAREST);
@@ -1963,7 +1963,7 @@ void Note::setNval(NoteVal nval)
       _fret      = nval.fret;
       _string    = nval.string;
       if (nval.tpc == Tpc::TPC_INVALID) {
-            int key = staff()->key(chord()->tick()).accidentalType();
+            int key = staff()->key(chord()->tick());
             _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
             Interval v = staff()->part()->instr()->transpose();
             if (v.isZero())

@@ -160,10 +160,11 @@ static void fixupScore(Score* score)
       score->setCreated(false);
       score->setSaved(false);
 
+#if 0
       int staffIdx = 0;
       foreach(Staff* st, score->staves()) {
             if (st->updateKeymap())
-                  st->keymap()->clear();
+                  st->clearKeys();
             int track = staffIdx * VOICES;
             KeySig* key1 = 0;
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
@@ -181,7 +182,7 @@ static void fixupScore(Score* score)
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);
-                              st->setKey(s->tick(), ks->keySigEvent());
+                              st->setKey(s->tick(), ks->key());
                               key1 = ks;
                               }
                         }
@@ -191,6 +192,7 @@ static void fixupScore(Score* score)
             st->setUpdateKeymap(false);
             ++staffIdx;
             }
+#endif
 
       score->updateNotes();
       }

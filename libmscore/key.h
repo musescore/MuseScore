@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2014 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -39,16 +39,16 @@ static const int KEY_DELTA_ENHARMONIC = 12;
 //---------------------------------------------------------
 
 class KeySigEvent {
-      int _accidentalType;          // -7 -> +7
-      int _naturalType;
-      int _customType;
-      bool _custom;
-      bool _invalid;
+      int _accidentalType { 0 };          // -7 -> +7
+      int _customType     { 0 };
+      bool _custom        { false };
+      bool _invalid       { true };
+
       void enforceLimits();
 
    public:
-      KeySigEvent();
-      KeySigEvent(int);
+      KeySigEvent() {}
+      KeySigEvent(int at);
 
       bool isValid() const { return !_invalid; }
       bool operator==(const KeySigEvent& e) const;
@@ -58,8 +58,6 @@ class KeySigEvent {
       void print() const;
 
       int accidentalType() const { return _accidentalType; }
-      int naturalType() const    { return _naturalType;    }
-      void setNaturalType(int v) { _naturalType = v;       }
       int customType() const     { return _customType;     }
       bool custom() const        { return _custom;         }
       bool invalid() const       { return _invalid;        }
@@ -93,21 +91,6 @@ class AccidentalState {
             Q_ASSERT(val >= AccidentalVal::FLAT2 && val <= AccidentalVal::SHARP2);
             state[line] = (int(val) + 2) | (tieContext ? TIE_CONTEXT : 0);
             }
-      };
-
-//---------------------------------------------------------
-//   KeyList
-//    this list is instantiated for every staff
-//    to keep track of key signature changes
-//---------------------------------------------------------
-
-class KeyList : public std::map<const int, KeySigEvent> {
-   public:
-      KeyList() {}
-      KeySigEvent key(int tick) const;
-      int nextKeyTick(int tick) const;
-      void read(XmlReader&, Score*);
-      void write(Xml&, const char* name) const;
       };
 
 struct Interval;

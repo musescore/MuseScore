@@ -603,7 +603,7 @@ void MuseScore::newFile()
                                     int diff = -part->instr()->transpose().chromatic;
                                     nKey.setAccidentalType(transposeKey(nKey.accidentalType(), diff));
                                     }
-                              (*(staff->keymap()))[0] = nKey;
+                              staff->setKey(0, nKey.accidentalType());
                               KeySig* keysig = new KeySig(score);
                               keysig->setTrack(staffIdx * VOICES);
                               keysig->setKeySigEvent(nKey);
@@ -1863,10 +1863,11 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
       score->rebuildMidiMapping();
       score->setSaved(false);
 
+#if 0
       int staffIdx = 0;
       foreach(Staff* st, score->staves()) {
             if (st->updateKeymap())
-                  st->keymap()->clear();
+                  st->clearKeys();
             int track = staffIdx * VOICES;
             KeySig* key1 = 0;
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
@@ -1876,15 +1877,11 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                         Element* e = s->element(track);
                         if (e->generated())
                               continue;
-                        //if ((s->subtype() == SegClef) && st->updateClefList()) {
-                        //      Clef* clef = static_cast<Clef*>(e);
-                        //      st->setClef(s->tick(), clef->clefTypeList());
-                        //      }
                         if ((s->segmentType() == SegmentType::KeySig) && st->updateKeymap()) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);
-                              st->setKey(s->tick(), ks->keySigEvent());
+                              st->setKey(s->tick(), ks->key());
                               key1 = ks;
                               }
                         }
@@ -1894,6 +1891,8 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             st->setUpdateKeymap(false);
             ++staffIdx;
             }
+#endif
+
       score->updateNotes();
       return Score::FileError::FILE_NO_ERROR;
       }

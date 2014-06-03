@@ -80,7 +80,7 @@ add_library (
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
       synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
       noteline.cpp spannermap.cpp
-      bagpembell.cpp ambitus.cpp
+      bagpembell.cpp ambitus.cpp keylist.cpp
       )
 if (SCRIPT_INTERFACE)
    set_target_properties (

@@ -10,4 +10,5 @@ cp ../../../build.debug/mtest/libmscore/measure/measure-7.mscx measure-7-ref.msc
 cp ../../../build.debug/mtest/libmscore/measure/measure-8.mscx measure-8-ref.mscx
 cp ../../../build.debug/mtest/libmscore/measure/measure-9.mscx measure-9-ref.mscx
 cp ../../../build.debug/mtest/libmscore/measure/measure-insert_bf_key.mscx measure-insert_bf_key-ref.mscx
+cp ../../../build.debug/mtest/libmscore/measure/measure-insert_bf_key_undo.mscx measure-insert_bf_key.mscx
 cp ../../../build.debug/mtest/libmscore/measure/measure-insert_bf_clef.mscx measure-insert_bf_clef-ref.mscx

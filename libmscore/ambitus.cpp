@@ -271,7 +271,7 @@ void Ambitus::layout()
       qreal xAccidOffTop    = 0;
       qreal xAccidOffBottom = 0;
       if (stf)
-            key = stf->key(segm->tick()).accidentalType();
+            key = stf->key(segm->tick());
       else
             key = int(Key::C);
 

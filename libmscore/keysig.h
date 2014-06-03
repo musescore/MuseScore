@@ -48,7 +48,7 @@ class KeySig : public Element {
 
       bool _showCourtesy;
       QList<KeySym*> keySymbols;
-      KeySigEvent _sig;       // concertKeySig, transposingKeySig
+      KeySigEvent _sig;
       void addLayout(SymId sym, qreal x, int y);
 
    public:
@@ -62,17 +62,15 @@ class KeySig : public Element {
       virtual void layout();
       virtual qreal mag() const;
 
-      Q_INVOKABLE void setSig(int oldSig, int newSig);
-      void setOldSig(int oldSig);
+      Q_INVOKABLE void setKey(int);
 
       Segment* segment() const            { return (Segment*)parent(); }
-      Measure* measure() const            { return parent() != nullptr ? (Measure*)parent()->parent() : nullptr; }
+      Measure* measure() const            { return parent() ? (Measure*)parent()->parent() : nullptr; }
       Space space() const;
       void setCustom(const QList<KeySym*>& symbols);
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
-      //@ -7 (flats) -- +7 (sharps)
-      Q_INVOKABLE int keySignature() const { return _sig.accidentalType(); }    // -7 - +7
+      Q_INVOKABLE int key() const         { return _sig.accidentalType(); }    //@ -7 (flats) -- +7 (sharps)
       int customType() const              { return _sig.customType(); }
       bool isCustom() const               { return _sig.custom(); }
       KeySigEvent keySigEvent() const     { return _sig; }
@@ -80,8 +78,6 @@ class KeySig : public Element {
       void changeKeySigEvent(const KeySigEvent&);
       void setKeySigEvent(const KeySigEvent& e)      { _sig = e; }
       int tick() const;
-      void insertIntoKeySigChain();
-      void removeFromKeySigChain();
 
       bool showCourtesy() const           { return _showCourtesy; }
       void setShowCourtesy(bool v)        { _showCourtesy = v;    }

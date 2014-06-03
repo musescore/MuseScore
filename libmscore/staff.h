@@ -23,6 +23,7 @@
 #include "velo.h"
 #include "pitch.h"
 #include "cleflist.h"
+#include "keylist.h"
 #include "stafftype.h"
 #include "groups.h"
 
@@ -91,7 +92,7 @@ class Staff : public QObject {
 
       ClefList clefs;
       std::map<int,TimeSig*> timesigs;
-      KeyList _keymap;
+      KeyList _keys;
 
       QList <BracketItem> _brackets;
       int _barLineSpan;       ///< 0 - no bar line, 1 - span this staff, ...
@@ -99,7 +100,6 @@ class Staff : public QObject {
       int _barLineTo;         ///< line of end staff to draw the bar line to (0= staff top line, ...)
       bool _small;
       bool _invisible;
-      bool _updateKeymap;
       QColor _color;
 
       qreal _userDist;        ///< user edited extra distance
@@ -150,17 +150,20 @@ class Staff : public QObject {
 
       void addTimeSig(TimeSig*);
       void removeTimeSig(TimeSig*);
-      void clearTimeSig()           { timesigs.clear(); }
+      void clearTimeSig()            { timesigs.clear(); }
       Fraction timeStretch(int tick) const;
       TimeSig* timeSig(int tick) const;
       const Groups& group(int tick) const;
 
-      KeyList* keymap()                   { return &_keymap;      }
-      KeySigEvent key(int tick) const;
+      KeyList* keyList()               { return &_keys;      }
+      int key(int tick) const;
       int nextKeyTick(int tick) const;
+      int currentKeyTick(int tick) const;
+      int prevKey(int tick) const;
       void setKey(int tick, int st);
-      void setKey(int tick, const KeySigEvent& st);
       void removeKey(int tick);
+      void clearKeys()               { _keys.clear(); }
+      void updateKeys();
 
       bool show() const;
       bool slashStyle() const;
@@ -194,8 +197,6 @@ class Staff : public QObject {
       bool isTabStaff() const          { return staffGroup() == StaffGroup::TAB; }
       bool isDrumStaff() const         { return staffGroup() == StaffGroup::PERCUSSION; }
 
-      bool updateKeymap() const        { return _updateKeymap;   }
-      void setUpdateKeymap(bool v)     { _updateKeymap = v;      }
       VeloList& velocities()           { return _velocities;     }
       PitchList& pitchOffsets()        { return _pitchOffsets;   }
       int pitchOffset(int tick)        { return _pitchOffsets.pitchOffset(tick);   }

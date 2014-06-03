@@ -3886,18 +3886,18 @@ void ExportMusicXml::keysigTimesig(Measure* m, int strack, int etrack)
             // check if all keysigs are identical
             if (singleKey)
                   for (int i = 1; i < nstaves; i++)
-                        if (!(keysigs.value(i)->keySignature() == keysigs.value(0)->keySignature()))
+                        if (!(keysigs.value(i)->key() == keysigs.value(0)->key()))
                               singleKey = false;
 
             // write the keysigs
             if (singleKey) {
                   // keysig applies to all staves
-                  keysig(keysigs.value(0)->keySignature(), 0, keysigs.value(0)->visible());
+                  keysig(keysigs.value(0)->key(), 0, keysigs.value(0)->visible());
                   }
             else {
                   // staff-specific keysigs
                   foreach(int st, keysigs.keys())
-                  keysig(keysigs.value(st)->keySignature(), st + 1, keysigs.value(st)->visible());
+                  keysig(keysigs.value(st)->key(), st + 1, keysigs.value(st)->visible());
                   }
             }
       else {

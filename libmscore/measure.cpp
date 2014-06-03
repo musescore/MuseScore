@@ -273,6 +273,7 @@ void Measure::remove(Segment* el)
             Q_ASSERT(el == _segments.last());
             }
 #endif
+#if 0
       int tracks = staves.size() * VOICES;
       for (int track = 0; track < tracks; track += VOICES) {
             if (!el->element(track))
@@ -280,6 +281,7 @@ void Measure::remove(Segment* el)
             if (el->segmentType() == SegmentType::KeySig)
                   score()->staff(track/VOICES)->setUpdateKeymap(true);
             }
+#endif
       _segments.remove(el);
       setDirty();
       }
@@ -365,7 +367,7 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
 AccidentalVal Measure::findAccidental(Note* note) const
       {
       AccidentalState tversatz;  // state of already set accidentals for this measure
-      tversatz.init(note->chord()->staff()->keymap()->key(tick()));
+      tversatz.init(note->chord()->staff()->key(tick()));
 
       SegmentType st = SegmentType::ChordRest;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
@@ -420,7 +422,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
       {
       AccidentalState tversatz;  // state of already set accidentals for this measure
       Staff* staff = score()->staff(staffIdx);
-      tversatz.init(staff->keymap()->key(tick()));
+      tversatz.init(staff->key(tick()));
 
       SegmentType st = SegmentType::ChordRest;
       int startTrack = staffIdx * VOICES;
@@ -815,14 +817,16 @@ void Measure::add(Element* el)
             case ElementType::SEGMENT:
                   {
                   Segment* seg = static_cast<Segment*>(el);
-                  int tracks = staves.size() * VOICES;
+#if 0
                   if (seg->segmentType() == SegmentType::KeySig) {
+                        int tracks = staves.size() * VOICES;
                         for (int track = 0; track < tracks; track += VOICES) {
                               if (!seg->element(track))
                                     continue;
                               score()->staff(track/VOICES)->setUpdateKeymap(true);
                               }
                         }
+#endif
 
                   // insert segment at specific position
                   if (seg->next()) {
@@ -1387,6 +1391,7 @@ qDebug("drop staffList");
                       }
                   else
                         delete ks;
+
                   if (data.modifiers & Qt::ControlModifier) {
                         // apply only to this stave
                         score()->undoChangeKeySig(staff, tick(), k);
@@ -2088,7 +2093,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment = getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, currTick);
                   segment->add(ks);
                   if (!courtesySig)
-                        staff->setKey(currTick, ks->keySigEvent());
+                        staff->setKey(currTick, ks->key());
                   }
             else if (tag == "Lyrics") {       // obsolete, keep for compatibility with version 114
                   Element* element = Element::name2Element(tag, score());
@@ -3687,7 +3692,7 @@ void Measure::updateNotes(int staffIdx)
       {
       AccidentalState as;      // state of already set accidentals for this measure
       Staff* staff = score()->staff(staffIdx);
-      as.init(staff->keymap()->key(tick()));
+      as.init(staff->key(tick()));
 
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
@@ -3712,7 +3717,7 @@ void Measure::cmdUpdateNotes(int staffIdx)
       {
       AccidentalState as;      // list of already set accidentals for this measure
       Staff* staff = score()->staff(staffIdx);
-      as.init(staff->keymap()->key(tick()));
+      as.init(staff->key(tick()));
 
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;

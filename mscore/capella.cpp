@@ -461,7 +461,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         s->add(chord);
                         ClefType clef = score->staff(staffIdx)->clef(tick);
-                        int key  = score->staff(staffIdx)->key(tick).accidentalType();
+                        int key  = score->staff(staffIdx)->key(tick);
                         int off;
                         switch (clef) {
                               case ClefType::G:      off = 0; break;
@@ -577,7 +577,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         {
                         qDebug("   <Key>");
                         CapKey* o = static_cast<CapKey*>(no);
-                        int key = score->staff(staffIdx)->key(tick).accidentalType();
+                        int key = score->staff(staffIdx)->key(tick);
                         if (key != o->signature) {
                               score->staff(staffIdx)->setKey(tick, o->signature);
                               KeySig* ks = new KeySig(score);
@@ -585,7 +585,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               Measure* m = score->getCreateMeasure(tick);
                               Segment* s = m->getSegment(SegmentType::KeySig, tick);
                               s->add(ks);
-                              ks->setSig(key, o->signature);
+                              ks->setKey(o->signature);
                               }
                         }
                         break;
