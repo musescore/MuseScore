@@ -70,6 +70,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
                   templateCombo->addItem(t.name(), idx);
             idx++;
             }
+      templateCombo->setCurrentIndex(-1);
 
       // tab page configuration
       QList<QString> fontNames = StaffType::fontNames(false);
@@ -545,8 +546,10 @@ void EditStaffType::loadFromTemplateClicked()
 void EditStaffType::resetToTemplateClicked()
       {
       int idx = templateCombo->itemData(templateCombo->currentIndex()).toInt();
-      staffType = *(StaffType::preset(StaffTypes(idx)));
-      setValues();
+      if (idx >= 0) {
+            staffType = *(StaffType::preset(StaffTypes(idx)));
+            setValues();
+            }
       }
 
 //---------------------------------------------------------
