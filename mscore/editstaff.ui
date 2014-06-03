@@ -25,9 +25,9 @@
   <property name="windowTitle">
    <string>MuseScore: Edit Staff/Part Properties</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0">
    <item row="1" column="0">
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="groupPartProps">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -42,7 +42,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0,0,0">
       <item>
-       <layout class="QGridLayout" name="gridLayout_3">
+       <layout class="QGridLayout" name="grid_PartProps">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -61,16 +61,22 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_14">
+         <widget class="QLabel" name="label_PartName">
           <property name="text">
            <string>Part name:</string>
+          </property>
+          <property name="buddy">
+           <cstring>partName</cstring>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_13">
+         <widget class="QLabel" name="labelInstrName">
           <property name="text">
            <string>Instrument:</string>
+          </property>
+          <property name="buddy">
+           <cstring>instrumentName</cstring>
           </property>
          </widget>
         </item>
@@ -80,9 +86,9 @@
        </layout>
       </item>
       <item>
-       <layout class="QGridLayout" name="gridLayout">
+       <layout class="QGridLayout" name="grid_InstrNames">
         <item row="0" column="0">
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="labelLongName">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -92,10 +98,13 @@
           <property name="text">
            <string>Long instrument name:</string>
           </property>
+          <property name="buddy">
+           <cstring>longName</cstring>
+          </property>
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="labelShortName">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -104,6 +113,9 @@
           </property>
           <property name="text">
            <string>Short instrument name:</string>
+          </property>
+          <property name="buddy">
+           <cstring>shortName</cstring>
           </property>
          </widget>
         </item>
@@ -144,18 +156,21 @@
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="labelPitchRanges">
         <property name="text">
          <string>Usable pitch range:</string>
         </property>
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout" name="hLayout_PitchRanges">
         <item>
          <widget class="QLabel" name="label_7">
           <property name="text">
            <string>Amateur:</string>
+          </property>
+          <property name="buddy">
+           <cstring>minPitchA</cstring>
           </property>
          </widget>
         </item>
@@ -220,6 +235,9 @@
           <property name="text">
            <string>Professional:</string>
           </property>
+          <property name="buddy">
+           <cstring>minPitchP</cstring>
+          </property>
          </widget>
         </item>
         <item>
@@ -275,11 +293,14 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QHBoxLayout" name="hLayout_Transposition">
         <item>
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="labelTransp">
           <property name="text">
            <string>Play transposition:</string>
+          </property>
+          <property name="buddy">
+           <cstring>iList</cstring>
           </property>
          </widget>
         </item>
@@ -428,6 +449,9 @@
           <property name="text">
            <string>+ Octave:</string>
           </property>
+          <property name="buddy">
+           <cstring>octave</cstring>
+          </property>
          </widget>
         </item>
         <item>
@@ -452,7 +476,7 @@
          </widget>
         </item>
         <item>
-         <spacer>
+         <spacer name="horizontalSpacer_1">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -470,9 +494,12 @@
        <widget class="QFrame" name="stringDataFrame">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="labelNumOfStrings">
            <property name="text">
             <string>Number of strings:</string>
+           </property>
+           <property name="buddy">
+            <cstring>numOfStrings</cstring>
            </property>
           </widget>
          </item>
@@ -526,7 +553,7 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="groupStaffProps">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -545,107 +572,215 @@
      <property name="flat">
       <bool>false</bool>
      </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_15">
-        <property name="text">
-         <string>Extra distance:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>Type:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="changeStaffType">
-        <property name="text">
-         <string>Change Type...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="QLineEdit" name="staffGroupName"/>
-      </item>
-      <item row="4" column="1">
-       <widget class="QDoubleSpinBox" name="spinExtraDistance">
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="suffix">
-         <string>sp</string>
-        </property>
-        <property name="minimum">
-         <double>-50.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>50.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.250000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="4">
-       <widget class="QFrame" name="frame">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QCheckBox" name="invisible">
-           <property name="text">
-            <string>Invisible staff lines</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="small">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Small staff</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_16">
-           <property name="text">
-            <string>Staff line color:</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="Awl::ColorLabel" name="color">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-       </widget>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QGridLayout" name="grid_StaffProps">
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="showTimesig">
+          <property name="text">
+           <string>Show time signature</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <layout class="QHBoxLayout" name="hLayout_LineColor">
+          <item>
+           <widget class="QLabel" name="labelColor">
+            <property name="text">
+             <string>Staff line color:</string>
+            </property>
+            <property name="buddy">
+             <cstring>color</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Awl::ColorLabel" name="color">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="2">
+         <widget class="QToolButton" name="changeStaffType">
+          <property name="text">
+           <string>Advanced style properties...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <layout class="QHBoxLayout" name="hLayout_StyleGroup">
+          <item>
+           <widget class="QLabel" name="labelStaffGroup">
+            <property name="text">
+             <string>Style group:</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::PlainText</enum>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>staffGroupName</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="staffGroupName">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="inputMask">
+             <string notr="true"/>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string notr="true"/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="2">
+         <widget class="QCheckBox" name="invisible">
+          <property name="text">
+           <string>Invisible staff lines</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="showBarlines">
+          <property name="text">
+           <string>Show barlines</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="showClef">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Show clef</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QCheckBox" name="small">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Small staff</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="3">
+         <layout class="QFormLayout" name="formLayout">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelNumOfLines">
+            <property name="text">
+             <string>Lines:</string>
+            </property>
+            <property name="buddy">
+             <cstring>lines</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="lines">
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>14</number>
+            </property>
+            <property name="value">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelLineDist">
+            <property name="text">
+             <string>Line distance:</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineDistance</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="lineDistance">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="suffix">
+             <string>sp</string>
+            </property>
+            <property name="singleStep">
+             <double>0.250000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelExtraDist">
+            <property name="text">
+             <string>Extra distance:</string>
+            </property>
+            <property name="buddy">
+             <cstring>spinExtraDistance</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDoubleSpinBox" name="spinExtraDistance">
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="suffix">
+             <string>sp</string>
+            </property>
+            <property name="minimum">
+             <double>-50.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>50.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.250000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -661,6 +796,17 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>lines</tabstop>
+  <tabstop>lineDistance</tabstop>
+  <tabstop>spinExtraDistance</tabstop>
+  <tabstop>showClef</tabstop>
+  <tabstop>showTimesig</tabstop>
+  <tabstop>showBarlines</tabstop>
+  <tabstop>small</tabstop>
+  <tabstop>invisible</tabstop>
+  <tabstop>color</tabstop>
+  <tabstop>staffGroupName</tabstop>
+  <tabstop>changeStaffType</tabstop>
   <tabstop>partName</tabstop>
   <tabstop>instrumentName</tabstop>
   <tabstop>changeInstrument</tabstop>
