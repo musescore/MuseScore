@@ -92,7 +92,7 @@ enum class ArticulationType : char {
       Tenuto,
       Portato,
       Marcato,
-      Ouvert,              //TODO-smufl
+      Ouvert,
       Plusstop,
       Upbow,
       Downbow,
