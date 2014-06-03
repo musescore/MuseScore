@@ -128,6 +128,11 @@ class TestImportMidi : public QObject, public MTest
             preferences.midiImportOperations.clear();
             }
 
+      // chord detection
+      void chordSmallError() { mf("chord_small_error"); }
+      void chordBigError() { mf("chord_big_error"); }
+      void chordLegato() { mf("chord_legato"); }
+
       // test tuplet recognition functions
       void findChordInBar();
       void isTupletAllowed();
