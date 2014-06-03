@@ -26,6 +26,7 @@ namespace Ms {
 class Seq;
 class Event;
 class NPlayEvent;
+enum class Transport : char;
 
 //---------------------------------------------------------
 //   Driver
@@ -45,7 +46,7 @@ class Driver {
       virtual QList<QString> inputPorts() { return QList<QString>(); }
       virtual void stopTransport() = 0;
       virtual void startTransport() = 0;
-      virtual int getState() = 0;
+      virtual Transport getState() = 0;
       virtual int sampleRate() const = 0;
       virtual void registerPort(const QString& /*name*/, bool /*input*/, bool /*midi*/) {}
       virtual void unregisterPort(int) {}

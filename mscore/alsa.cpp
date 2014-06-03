@@ -593,7 +593,7 @@ AlsaAudio::AlsaAudio(Seq* s)
    : Driver(s)
       {
       alsa       = 0;
-      state      = Seq::TRANSPORT_STOP;
+      state      = Transport::STOP;
       seekflag   = false;
       midiDriver = 0;
       }
@@ -769,7 +769,7 @@ void AlsaAudio::disconnect(void* /*src*/, void* /*dst*/)
 
 void AlsaAudio::startTransport()
       {
-      state = Seq::TRANSPORT_PLAY;
+      state = Transport::PLAY;
       }
 
 //---------------------------------------------------------
@@ -778,14 +778,14 @@ void AlsaAudio::startTransport()
 
 void AlsaAudio::stopTransport()
       {
-      state = Seq::TRANSPORT_STOP;
+      state = Transport::STOP;
       }
 
 //---------------------------------------------------------
 //   getState
 //---------------------------------------------------------
 
-int AlsaAudio::getState()
+Transport AlsaAudio::getState()
       {
       return state;
       }
