@@ -362,18 +362,13 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   //
                   // Draw the current KeySignature
                   //
-                  qreal yPos = 0;
                   if (currentStaff->genKeySig()) {
                         KeySig* newKs = new KeySig(_score);
                         KeySigEvent currentKeySigEvent = currentStaff->key(_currentMeasureTick);
                         newKs->setKeySigEvent(currentKeySigEvent);
-                        //newKs->setGenerated(false);
-                        //newKs->setParent(e->parent());
-                        //newKs->setTrack(e->track());
+                        newKs->setParent(_score->tick2segment(_currentMeasureTick));
+                        newKs->setTrack(e->track());
                         newKs->layout();
-                        //yPos = newKs->bbox().y();
-                        //qDebug() << "yPos =" <<yPos;
-                        //painter.translate(QPoint (0, -yPos * _sv->mag()));
                         newKs->draw(&painter);
                         delete newKs;
                         }
@@ -396,9 +391,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   pos = QPointF(_offsetPanel + _heightName * 1.5 + _widthClef + _widthKeySig + _xPosTimeSig, e->pagePos().y());
                   painter.translate(-pos);
                   delete newTs;
-
-                  //qDebug() << "Staff #" << e->staffIdx() << " _widtch "<<_width<< " offsetpanel "<<_offsetPanel;
-                 }
+                  }
             }
       painter.restore();
       }
