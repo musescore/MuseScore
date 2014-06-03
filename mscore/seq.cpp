@@ -514,7 +514,7 @@ void Seq::processMessages()
                   break;
             SeqMsg msg = toSeq.dequeue();
             switch(msg.id) {
-                  case SEQ_TEMPO_CHANGE:
+                  case SeqMsgId::TEMPO_CHANGE:
                         {
                         if (!cs)
                               continue;
@@ -530,11 +530,13 @@ void Seq::processMessages()
                         emit tempoChanged();
                         }
                         break;
-                  case SEQ_PLAY:
+                  case SeqMsgId::PLAY:
                         putEvent(msg.event);
                         break;
-                  case SEQ_SEEK:
+                  case SeqMsgId::SEEK:
                         setPos(msg.intVal);
+                        break;
+                  default:
                         break;
                   }
             }
@@ -934,7 +936,7 @@ int Seq::getCurTick()
 
 void Seq::setRelTempo(double relTempo)
       {
-      guiToSeq(SeqMsg(SEQ_TEMPO_CHANGE, relTempo));
+      guiToSeq(SeqMsg(SeqMsgId::TEMPO_CHANGE, relTempo));
       }
 
 //---------------------------------------------------------
@@ -999,7 +1001,7 @@ void Seq::seek(int utick, Segment* seg)
             ov_pcm_seek(&vf, sp);
             }
 
-      guiToSeq(SeqMsg(SEQ_SEEK, utick));
+      guiToSeq(SeqMsg(SeqMsgId::SEEK, utick));
       guiPos = events.lower_bound(utick);
       mscore->setPos(utick);
       unmarkNotes();
@@ -1090,7 +1092,7 @@ void Seq::setController(int channel, int ctrl, int data)
 
 void Seq::sendEvent(const NPlayEvent& ev)
       {
-      guiToSeq(SeqMsg(SEQ_PLAY, ev));
+      guiToSeq(SeqMsg(SeqMsgId::PLAY, ev));
       }
 
 //---------------------------------------------------------
@@ -1205,7 +1207,7 @@ void Seq::guiToSeq(const SeqMsg& msg)
 
 void Seq::eventToGui(NPlayEvent e)
       {
-      fromSeq.enqueue(SeqMsg(SEQ_MIDI_INPUT_EVENT, e));
+      fromSeq.enqueue(SeqMsg(SeqMsgId::MIDI_INPUT_EVENT, e));
       }
 
 //---------------------------------------------------------
@@ -1302,7 +1304,7 @@ void Seq::heartBeatTimeout()
 
       while (!fromSeq.isEmpty()) {
             SeqMsg msg = fromSeq.dequeue();
-            if (msg.id == SEQ_MIDI_INPUT_EVENT) {
+            if (msg.id == SeqMsgId::MIDI_INPUT_EVENT) {
                   int type = msg.event.type();
                   if (type == ME_NOTEON)
                         mscore->midiNoteReceived(msg.event.channel(), msg.event.pitch(), msg.event.velo());
@@ -1438,7 +1440,7 @@ void Seq::setLoopOut()
             cs->setPos(POS::LEFT, 0);
       cs->setPos(POS::RIGHT, tick);
       if (state == TRANSPORT_PLAY)
-            guiToSeq(SeqMsg(SEQ_SEEK, tick));
+            guiToSeq(SeqMsg(SeqMsgId::SEEK, tick));
       }
 
 void Seq::setPos(POS, unsigned tick)
