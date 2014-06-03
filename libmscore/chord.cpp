@@ -2507,7 +2507,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       ArticulationType st = a->articulationType();
 
       // TENUTO and STACCATO: always near the note head (or stem end if beyond a stem)
-      if ((st == ArticulationType::Tenuto || st == ArticulationType::Staccato) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
+      if ((st == ArticulationType::Tenuto || st == ArticulationType::Staccato || st == ArticulationType::Sforzatoaccent) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
             // if there area voices, articulation is on stem side
             if ((aa == ArticulationAnchor::CHORD) && measure()->hasVoices(a->staffIdx()))
@@ -2538,14 +2538,15 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   }
             else {                              // if articulation is not beyond a stem
                   int line;
+                  int add = (st == ArticulationType::Sforzatoaccent ? 1 : 0); // sforzato accent needs more offset
                   if (bottom) {                 // if below chord
                         line = downLine();                              // staff position (lines and spaces) of chord lowest note
                         int lines = (staff()->lines() - 1) * 2;         // num. of staff positions within staff
                         if (line < lines)                               // if note above staff bottom line
                               // round space pos. to line pos. above ("line & ~1") and move to 2nd space below ("+3")
-                              line = (line & ~1) + 3;
+                              line = ((line-add) & ~1) + 3 + add*2;
                         else                                            // if note on or below staff bottom line,
-                              line += 2;                                // move 1 whole space below
+                              line += 2 + add;                                // move 1 whole space below
                         if (!staff()->isTabStaff())                     // on pitched staves, note is at left of stem:
                               pos.rx() -= upNote()->headWidth() * .5;   // move half-a-note-head to left
                         pos.ry() = -a->height() / 2;                    // symbol is below baseline, shift if a bit up
@@ -2554,9 +2555,9 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         line = upLine();                                // staff position (lines and spaces) of chord highest note
                         if (line > 0)                                   // if note below staff top line
                               // round space pos. to line pos. below ("(line+1) & ~1") and move to 2nd space above ("-3")
-                              line = ((line+1) & ~1) - 3;
+                              line = ((line+1+add) & ~1) - 3 - add*2;
                         else                                            // if note or or above staff top line
-                              line -= 2;                                // move 1 whole space above
+                              line -= 2 + add;                                // move 1 whole space above
                         if (!staff()->isTabStaff())                     // on pitched staves, note is at right of stem:
                               pos.rx() += upNote()->headWidth() * .5;   // move half-a-note-head to right
                         pos.ry() = a->height() / 2;                     // symbol is on baseline, shift it a bit down
