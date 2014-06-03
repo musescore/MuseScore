@@ -272,6 +272,13 @@ void Selection::add(Element* el)
       update();
       }
 
+bool Selection::canSelect(Element* e)
+      {
+      if (e->type() == Element::Type::DYNAMIC
+          && !this->selectionFilter().isFiltered(SelectionFilterType::DYNAMIC)) return false;
+      return true;
+      }
+
 //---------------------------------------------------------
 //   updateSelectedElements
 //---------------------------------------------------------
@@ -332,14 +339,16 @@ void Selection::updateSelectedElements()
                               }
                         }
                   else {
-                        _el.append(e);
+                        if (canSelect(e))
+                              _el.append(e);
                         }
                   foreach(Element* e, s->annotations()) {
                         if (e->track() < startTrack || e->track() >= endTrack)
                               continue;
                         if (e->systemFlag()) //exclude system text
                               continue;
-                        _el.append(e);
+                        if (canSelect(e))
+                              _el.append(e);
                         }
 #if 0 // TODO-S
                   for(Spanner* sp = s->spannerFor(); sp; sp = sp->next()) {
@@ -1016,6 +1025,9 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
       }
 
-
+SelectionFilter& Selection::selectionFilter()
+      {
+      return _score->selectionFilter();
+      }
 }
 

@@ -50,6 +50,31 @@ enum class SelState : char {
                   // is selected
       };
 
+enum class SelectionFilterType {
+      NONE                    = 0,
+      FIRST_VOICE             = 1 << 0,
+      SECOND_VOICE            = 1 << 1,
+      THIRD_VOICE             = 1 << 2,
+      FOURTH_VOICE            = 1 << 3,
+      DYNAMIC                 = 1 << 4,
+      FINGERING               = 1 << 5,
+      LYRICS                  = 1 << 6,
+      ARTICULATIONS           = 1 << 7,
+      ALL                     = -1
+      };
+
+class SelectionFilter {
+      Score* _score;
+      int _filtered;
+
+public:
+      SelectionFilter()                      { _score = 0; _filtered = (int)SelectionFilterType::ALL;}
+      SelectionFilter(Score* score)          { _score = score; _filtered = (int)SelectionFilterType::ALL;}
+      int& filtered()                        { return _filtered; }
+      void setFiltered(int filter)           { _filtered = filter; }
+      bool isFiltered(SelectionFilterType type)        { return _filtered & (int)type; }
+      };
+
 //-------------------------------------------------------------------
 //   Selection
 //    For SelState::LIST state only visible elements can be selected
@@ -71,6 +96,8 @@ class Selection {
 
       QByteArray staffMimeData() const;
       QByteArray symbolListMimeData() const;
+      SelectionFilter& selectionFilter();
+      bool canSelect(Element*);
 
    public:
       Selection()                      { _score = 0; _state = SelState::NONE; }
