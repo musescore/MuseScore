@@ -19,24 +19,24 @@
 //=============================================================================
 
 #include "editstaff.h"
-#include "libmscore/staff.h"
-#include "libmscore/part.h"
+
 #include "editdrumset.h"
-#include "libmscore/score.h"
-#include "libmscore/measure.h"
-#include "libmscore/undo.h"
-#include "libmscore/text.h"
-#include "libmscore/utils.h"
+#include "editpitch.h"
+#include "editstafftype.h"
+#include "editstringdata.h"
 #include "libmscore/instrtemplate.h"
-#include "seq.h"
+#include "libmscore/measure.h"
+#include "libmscore/part.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
+#include "libmscore/stringdata.h"
+#include "libmscore/text.h"
+#include "libmscore/undo.h"
+#include "libmscore/utils.h"
 #include "musescore.h"
-#include "libmscore/stafftype.h"
+#include "seq.h"
 #include "selinstrument.h"
 #include "texteditor.h"
-#include "editpitch.h"
-#include "editstringdata.h"
-#include "libmscore/stringdata.h"
-#include "editstafftype.h"
 
 namespace Ms {
 
@@ -47,36 +47,63 @@ namespace Ms {
 EditStaff::EditStaff(Staff* s, QWidget* parent)
    : QDialog(parent)
       {
-      staff = s;
+      orgStaff = s;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      Part* part = staff->part();
-      instrument = *part->instr();
-      Score* score = part->score();
-
-      staffGroupName->setText(staff->staffType()->groupName());
+      Part* part        = orgStaff->part();
+      instrument        = *part->instr();
+      Score* score      = part->score();
+      staff             = new Staff(score);
+      staff->setSmall(orgStaff->small());
+      staff->setInvisible(orgStaff->invisible());
+      staff->setUserDist(orgStaff->userDist());
+      staff->setColor(orgStaff->color());
+      staff->setStaffType(orgStaff->staffType());
+      staff->setPart(part);
 
       // hide string data controls if instrument has no strings
       stringDataFrame->setVisible(instrument.stringData() && instrument.stringData()->strings() > 0);
-      small->setChecked(staff->small());
-      invisible->setChecked(staff->invisible());
+      // set dlg controls
       spinExtraDistance->setValue(s->userDist() / score->spatium());
+      invisible->setChecked(staff->invisible());
+      small->setChecked(staff->small());
       color->setColor(s->color());
       partName->setText(part->partName());
 
+      updateStaffType();
       updateInstrument();
 
-      connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
-      connect(changeInstrument, SIGNAL(clicked()), SLOT(showInstrumentDialog()));
-      connect(changeStaffType,  SIGNAL(clicked()), SLOT(showStaffTypeDialog()));
-      connect(editShortName,    SIGNAL(clicked()), SLOT(editShortNameClicked()));
-      connect(editLongName,     SIGNAL(clicked()), SLOT(editLongNameClicked()));
-      connect(minPitchASelect,  SIGNAL(clicked()), SLOT(minPitchAClicked()));
-      connect(maxPitchASelect,  SIGNAL(clicked()), SLOT(maxPitchAClicked()));
-      connect(minPitchPSelect,  SIGNAL(clicked()), SLOT(minPitchPClicked()));
-      connect(maxPitchPSelect,  SIGNAL(clicked()), SLOT(maxPitchPClicked()));
-      connect(editStringData,   SIGNAL(clicked()), SLOT(editStringDataClicked()));
+      connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
+      connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
+      connect(changeStaffType,      SIGNAL(clicked()),            SLOT(showStaffTypeDialog()));
+      connect(editShortName,        SIGNAL(clicked()),            SLOT(editShortNameClicked()));
+      connect(editLongName,         SIGNAL(clicked()),            SLOT(editLongNameClicked()));
+      connect(minPitchASelect,      SIGNAL(clicked()),            SLOT(minPitchAClicked()));
+      connect(maxPitchASelect,      SIGNAL(clicked()),            SLOT(maxPitchAClicked()));
+      connect(minPitchPSelect,      SIGNAL(clicked()),            SLOT(minPitchPClicked()));
+      connect(maxPitchPSelect,      SIGNAL(clicked()),            SLOT(maxPitchPClicked()));
+      connect(editStringData,       SIGNAL(clicked()),            SLOT(editStringDataClicked()));
+      connect(lines,                SIGNAL(valueChanged(int)),    SLOT(numOfLinesChanged()));
+      connect(lineDistance,         SIGNAL(valueChanged(double)), SLOT(lineDistanceChanged()));
+      connect(showClef,             SIGNAL(clicked()),            SLOT(showClefChanged()));
+      connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
+      connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
+      }
+
+//---------------------------------------------------------
+//   updateStaffType
+//---------------------------------------------------------
+
+void EditStaff::updateStaffType()
+      {
+      StaffType* staffType = staff->staffType();
+      lines->setValue(staffType->lines());
+      lineDistance->setValue(staffType->lineDistance().val());
+      showClef->setChecked(staffType->genClef());
+      showTimesig->setChecked(staffType->genTimesig());
+      showBarlines->setChecked(staffType->showBarlines());
+      staffGroupName->setText(staffType->groupName());
       }
 
 //---------------------------------------------------------
@@ -85,7 +112,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
 
 void EditStaff::updateInstrument()
       {
-      setInterval(instrument.transpose());
+      updateInterval(instrument.transpose());
 
       QList<StaffName>& nl = instrument.shortNames();
       QString df = nl.isEmpty() ? "" : nl[0].name;
@@ -114,10 +141,10 @@ void EditStaff::updateInstrument()
       }
 
 //---------------------------------------------------------
-//   setInterval
+//   updateInterval
 //---------------------------------------------------------
 
-void EditStaff::setInterval(const Interval& iv)
+void EditStaff::updateInterval(const Interval& iv)
       {
       int diatonic  = iv.diatonic;
       int chromatic = iv.chromatic;
@@ -170,6 +197,8 @@ void EditStaff::bboxClicked(QAbstractButton* button)
                   qDebug("EditStaff: unknown button %d", int(br));
                   break;
             }
+      if (staff != nullptr)
+            delete staff;
       }
 
 //---------------------------------------------------------
@@ -178,8 +207,8 @@ void EditStaff::bboxClicked(QAbstractButton* button)
 
 void EditStaff::apply()
       {
-      Score* score  = staff->score();
-      Part* part    = staff->part();
+      Score* score  = orgStaff->score();
+      Part* part    = orgStaff->part();
 
       int intervalIdx = iList->currentIndex();
       bool upFlag     = up->isChecked();
@@ -207,15 +236,20 @@ void EditStaff::apply()
       // before changing instrument, check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another
 
-      bool updateNeeded = instrument.stringData() != part->instr()->stringData();
+      bool updateNeeded = ( !(*instrument.stringData() == *part->instr()->stringData()) );
+
+      if (s != orgStaff->small() || inv != orgStaff->invisible() || userDist != orgStaff->userDist() || col != orgStaff->color())
+            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col));
+
+      if ( !(*orgStaff->staffType() == *staff->staffType()) ) {
+            updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);
+            score->undo()->push(new ChangeStaffType(orgStaff, *staff->staffType()));
+      }
 
       if (!(instrument == *part->instr()) || part->partName() != partName->text()) {
             score->undo(new ChangePart(part, instrument, partName->text()));
             emit instrumentChanged();
             }
-
-      if (s != staff->small() || inv != staff->invisible() || userDist != staff->userDist() || col != staff->color())
-            score->undo(new ChangeStaff(staff, s, inv, userDist * score->spatium(), col));
 
       if (updateNeeded)
             score->cmdUpdateNotes();
@@ -227,28 +261,15 @@ void EditStaff::apply()
 //---------------------------------------------------------
 //   editDrumsetClicked
 //---------------------------------------------------------
-
+/* UNUSED?
 void EditStaff::editDrumsetClicked()
       {
       EditDrumset dse(staff->part()->instr()->drumset(), this);
       dse.exec();
       }
-
+*/
 //---------------------------------------------------------
-//   showInstrumentDialog
-//---------------------------------------------------------
-
-void EditStaff::showInstrumentDialog()
-      {
-      SelectInstrument si(instrument, this);
-      if (si.exec()) {
-            instrument = Instrument::fromTemplate(si.instrTemplate());
-            updateInstrument();
-            }
-      }
-
-//---------------------------------------------------------
-//   editShortNameClicked
+//   edit...NameClicked
 //---------------------------------------------------------
 
 void EditStaff::editShortNameClicked()
@@ -256,10 +277,6 @@ void EditStaff::editShortNameClicked()
       QString s = editHtml(shortName->toHtml(), tr("Edit Short Name"));
       shortName->setHtml(s);
       }
-
-//---------------------------------------------------------
-//   editLongNameClicked
-//---------------------------------------------------------
 
 void EditStaff::editLongNameClicked()
       {
@@ -316,6 +333,48 @@ void EditStaff::maxPitchPClicked()
       }
 
 //---------------------------------------------------------
+//   StaffType props slots
+//---------------------------------------------------------
+
+void EditStaff::lineDistanceChanged()
+      {
+      staff->staffType()->setLineDistance(Spatium(lineDistance->value()));
+      }
+
+void EditStaff::numOfLinesChanged()
+      {
+      staff->staffType()->setLines(lines->value());
+      }
+
+void EditStaff::showClefChanged()
+      {
+      staff->staffType()->setGenClef(showClef->checkState() == Qt::Checked);
+      }
+
+void EditStaff::showTimeSigChanged()
+      {
+      staff->staffType()->setGenTimesig(showTimesig->checkState() == Qt::Checked);
+      }
+
+void EditStaff::showBarlinesChanged()
+      {
+      staff->staffType()->setShowBarlines(showBarlines->checkState() == Qt::Checked);
+      }
+
+//---------------------------------------------------------
+//   showInstrumentDialog
+//---------------------------------------------------------
+
+void EditStaff::showInstrumentDialog()
+      {
+      SelectInstrument si(instrument, this);
+      if (si.exec()) {
+            instrument = Instrument::fromTemplate(si.instrTemplate());
+            updateInstrument();
+            }
+      }
+
+//---------------------------------------------------------
 //   editStringDataClicked
 //---------------------------------------------------------
 
@@ -366,17 +425,8 @@ void EditStaff::showStaffTypeDialog()
       {
       EditStaffType editor(this, staff);
       if (editor.exec()) {
-            const StaffType* nt = editor.getStaffType();
-            StaffGroup og = staff->staffType()->group();
-            StaffGroup ng = nt->group();
-            bool updateNeeded = (ng == StaffGroup::TAB && og != StaffGroup::TAB) ||
-                          (ng != StaffGroup::TAB && og == StaffGroup::TAB) ||
-                          (ng == StaffGroup::TAB && og == StaffGroup::TAB);
-
-            staff->score()->undo()->push(new ChangeStaffType(staff, *nt));
-            if (updateNeeded)
-                  staff->score()->cmdUpdateNotes();
-            staffGroupName->setText(staff->staffType()->groupName());
+            staff->setStaffType(editor.getStaffType());
+            updateStaffType();
             }
       }
 

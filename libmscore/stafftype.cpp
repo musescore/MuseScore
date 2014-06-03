@@ -30,6 +30,14 @@ namespace Ms {
 QList<TablatureFretFont>     StaffType::_fretFonts      = QList<TablatureFretFont>();
 QList<TablatureDurationFont> StaffType::_durationFonts  = QList<TablatureDurationFont>();
 
+const char StaffType::groupNames[STAFF_GROUP_MAX][STAFF_GROUP_NAME_MAX_LENGTH] = {
+      QT_TRANSLATE_NOOP("Staff type group name", "Standard"),
+      QT_TRANSLATE_NOOP("Staff type group name", "Percussion"),
+      QT_TRANSLATE_NOOP("Staff type group name", "Tablature")
+      };
+
+const QString StaffType::fileGroupNames[STAFF_GROUP_MAX] = { "pitched", "percussion", "tablature" };
+
 //---------------------------------------------------------
 //   StaffType
 //---------------------------------------------------------
@@ -95,15 +103,9 @@ const char* StaffType::groupName() const
 
 const char* StaffType::groupName(StaffGroup r)
       {
-      switch (r) {
-            default:
-            case StaffGroup::STANDARD:
-                  return "pitched";
-            case StaffGroup::PERCUSSION:
-                  return "percussion";
-            case StaffGroup::TAB:
-                  return "tablature";
-            }
+      if (r < StaffGroup::STANDARD || (int)r >= STAFF_GROUP_MAX)
+            r = StaffGroup::STANDARD;
+      return groupNames[(int)r];
       }
 
 //---------------------------------------------------------
@@ -194,7 +196,7 @@ void StaffType::setLines(int val)
 
 void StaffType::write(Xml& xml) const
       {
-      xml.stag(QString("StaffType group=\"%1\"").arg(groupName()));
+      xml.stag(QString("StaffType group=\"%1\"").arg(fileGroupNames[(int)_group]));
       if (!_name.isEmpty())
             xml.tag("name", _name);
       if (_lines != 5)
@@ -241,12 +243,12 @@ void StaffType::write(Xml& xml) const
 
 void StaffType::read(XmlReader& e)
       {
-      QString group = e.attribute("group", "pitched");
-      if (group == "tablature")
+      QString group = e.attribute("group", fileGroupNames[(int)StaffGroup::STANDARD]);
+      if (group == fileGroupNames[(int)StaffGroup::TAB])
             _group = StaffGroup::TAB;
-      else if (group == "percussion")
+      else if (group == fileGroupNames[(int)StaffGroup::PERCUSSION])
             _group = StaffGroup::PERCUSSION;
-      else if (group == "pitched")
+      else if (group == fileGroupNames[(int)StaffGroup::STANDARD])
             _group = StaffGroup::STANDARD;
       else {
             qDebug("StaffType::read: unknown group: %s", qPrintable(group));

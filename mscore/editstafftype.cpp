@@ -23,6 +23,12 @@ namespace Ms {
 
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
+const QString g_groupNames[STAFF_GROUP_MAX] = {
+      QString(QT_TRANSLATE_NOOP("staff group header name", "STANDARD STAFF")),
+      QString(QT_TRANSLATE_NOOP("staff group header name", "PERCUSSION STAFF")),
+      QString(QT_TRANSLATE_NOOP("staff group header name", "TABLATURE STAFF"))
+};
+
 //---------------------------------------------------------
 //   EditStaffType
 //---------------------------------------------------------
@@ -49,24 +55,22 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       staffType = *staff->staffType();
       Instrument* instr = staff->part()->instr();
 
-      groupCombo->clear();
-      // only add percussion and tab groups if the instrument supports them
-      if (instr != nullptr) {
-            if (instr->drumset() != nullptr)          // percussion excludes standard
-                  groupCombo->addItem(StaffType::groupName(StaffGroup::PERCUSSION), int(StaffGroup::PERCUSSION));
-            else
-                  groupCombo->addItem(StaffType::groupName(StaffGroup::STANDARD), int(StaffGroup::STANDARD));
-            if (instr->stringData() != nullptr && instr->stringData()->strings() > 0)
-                  groupCombo->addItem(StaffType::groupName(StaffGroup::TAB), int(StaffGroup::TAB));
+      // template combo
+
+      templateCombo->clear();
+      // statdard group also as fall-back (but excluded by percussion)
+      bool bStandard    = !(instr != nullptr && instr->drumset() != nullptr);
+      bool bPerc        = (instr != nullptr && instr->drumset() != nullptr);
+      bool bTab         = (instr != nullptr && instr->stringData() != nullptr && instr->stringData()->strings() > 0);
+      int idx           = 0;
+      for (const StaffType& t : StaffType::presets()) {
+            if ( (t.group() == StaffGroup::STANDARD && bStandard)
+                        || (t.group() == StaffGroup::PERCUSSION && bPerc)
+                        || (t.group() == StaffGroup::TAB && bTab))
+                  templateCombo->addItem(t.name(), idx);
+            idx++;
             }
-      // fall back to standard
-      else
-            groupCombo->addItem(StaffType::groupName(StaffGroup::STANDARD), int(StaffGroup::STANDARD));
-      int idx = int(staffType.group());
-      groupCombo->setCurrentIndex(0);
-      int comboIdx = groupCombo->findData(idx);
-      if (comboIdx != -1)
-            groupCombo->setCurrentIndex(comboIdx);
+      templateCombo->setCurrentIndex(-1);
 
       // tab page configuration
       QList<QString> fontNames = StaffType::fontNames(false);
@@ -117,23 +121,23 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(upsideDown,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(numbersRadio,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
 
-      connect(loadFromTemplate, SIGNAL(clicked()),                SLOT(loadFromTemplateClicked()));
+      connect(templateReset,  SIGNAL(clicked()),                  SLOT(resetToTemplateClicked()));
       connect(addToTemplates,   SIGNAL(clicked()),                SLOT(addToTemplatesClicked()));
-      connect(groupCombo,       SIGNAL(currentIndexChanged(int)), SLOT(staffGroupChanged(int)));
+//      connect(groupCombo,       SIGNAL(currentIndexChanged(int)), SLOT(staffGroupChanged(int)));
       }
 
 //---------------------------------------------------------
 //   staffGroupChanged
 //---------------------------------------------------------
-
-void EditStaffType::staffGroupChanged(int /*n*/)
+/*
+void EditStaffType::staffGroupChanged(int n)
       {
       int groupIdx = groupCombo->itemData(groupCombo->currentIndex()).toInt();
       StaffGroup group = StaffGroup(groupIdx);
       staffType = *StaffType::getDefaultPreset(group); // overwrite with default
       setValues();
       }
-
+*/
 //---------------------------------------------------------
 //   setValues
 //---------------------------------------------------------
@@ -145,6 +149,7 @@ void EditStaffType::setValues()
       StaffGroup group = staffType.group();
       int idx = int(group);
       stack->setCurrentIndex(idx);
+      groupName->setText(g_groupNames[idx]);
 //      groupCombo->setCurrentIndex(idx);
 
       name->setText(staffType.name());
@@ -363,7 +368,7 @@ void EditStaffType::setFromDlg()
 void EditStaffType::blockSignals(bool block)
       {
       stack->blockSignals(block);
-      groupCombo->blockSignals(block);
+//      groupCombo->blockSignals(block);
       lines->blockSignals(block);
       lineDistance->blockSignals(block);
       showBarlines->blockSignals(block);
@@ -526,7 +531,7 @@ void EditStaffType::loadPresets()
 //---------------------------------------------------------
 //   loadFromTemplate
 //---------------------------------------------------------
-
+/*
 void EditStaffType::loadFromTemplateClicked()
       {
       StaffTypeTemplates stt(staffType);
@@ -535,6 +540,15 @@ void EditStaffType::loadFromTemplateClicked()
             staffType = *st;
             setValues();
             updatePreview();
+            }
+      }
+*/
+void EditStaffType::resetToTemplateClicked()
+      {
+      int idx = templateCombo->itemData(templateCombo->currentIndex()).toInt();
+      if (idx >= 0) {
+            staffType = *(StaffType::preset(StaffTypes(idx)));
+            setValues();
             }
       }
 
@@ -550,7 +564,7 @@ void EditStaffType::addToTemplatesClicked()
 //---------------------------------------------------------
 //   StaffTypeTemplates
 //---------------------------------------------------------
-
+/*
 StaffTypeTemplates::StaffTypeTemplates(const StaffType& st, QWidget* parent)
    : QDialog(parent)
       {
@@ -570,15 +584,15 @@ StaffTypeTemplates::StaffTypeTemplates(const StaffType& st, QWidget* parent)
             }
       staffTypeList->setCurrentRow(0);
       }
-
+*/
 //---------------------------------------------------------
 //   staffType
 //---------------------------------------------------------
-
+/*
 StaffType* StaffTypeTemplates::staffType() const
       {
       return (StaffType*)staffTypeList->currentItem()->data(Qt::UserRole).value<void*>();
       }
-
+*/
 }
 

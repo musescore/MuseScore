@@ -627,7 +627,7 @@ bool InstrumentData::operator==(const InstrumentData& i) const
          &&  i._transpose.diatonic == _transpose.diatonic
          &&  i._transpose.chromatic == _transpose.chromatic
          &&  i._trackName == _trackName
-         &&  i.stringData() == stringData();
+         &&  *i.stringData() == *stringData();
          ;
       }
 

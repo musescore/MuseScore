@@ -55,9 +55,9 @@ class EditStaffType : public QDialog, private Ui::EditStaffType {
 
       void savePresets();
       void loadPresets();
-      void loadFromTemplateClicked();
+      void resetToTemplateClicked();
       void addToTemplatesClicked();
-      void staffGroupChanged(int);
+//      void staffGroupChanged(int);
 
    public:
       EditStaffType(QWidget* parent, Staff*);
