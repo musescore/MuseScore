@@ -10,7 +10,7 @@ Basic font information
 ----------------------
 Bravura is a Unicode typeface designed by Steinberg for its in-development music notation and scoring application.
 
-It is compliant with version 0.9 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
+It is compliant with version 0.94 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 
 More information about Steinberg's scoring application can be found at:
 
@@ -212,3 +212,22 @@ Changelog
 – Added white and wide white diamond noteheads.
 – Added a range of glyphs for denoting accel./rit. beam lines above the staff.
 – Added normal, wide and narrow leger line glyphs.
+
+2 June 2014 (Daniel Spreadbury) Bravura version 0.99
+– Added '8' and '15' digits scaled correctly for positioning on G and F clefs
+– Added stylistic alternates for common time, cut time and + intended for use as large time signatures printed above the staff; and added an additional stylistic set (ss04) for time signature digits intended for use outside the staff
+– Added a set of noteheads enclosed in large circles, used by some drummers
+– Added an ornate X notehead contained within an ellipse
+– Added Couperin's pincé and tremblement appuyé ornaments
+– Redesigned the thumb position string technique glyph to more closely resemble a zero digit, and added a turned version
+– Added a zero-width rectangle intended to enclose single percussion beaters inside a box
+– Added strum direction arrows for guitar, and a stylistic alternate for the golpe glyph as used by Antonis Vounelakos
+– Added an additional raised 7 digit for figured bass
+– Added left- and right-pointing arrows for use in metric modulations
+– Reduced the width of stems throughout Bravura (from 0.16 spaces to 0.12 spaces); this is also reflected in the 'stemThickness' value in the 'engravingDefaults' structure in the JSON metadata
+– Redesigned the half note noteheads containing note names to improve stem connections
+– Added hundreds of new kerning pairs for beamed notes in text, percussion beaters (for overlapping tilted beaters, and overprinting of parentheses, dashed circle and rectangular outline for up/down beaters), ligated time signature digits (for positioning as numerator and denominator)
+– Fixed registration for stem decorations (e.g. tremolos, buzz roll, etc.) such that these glyphs are correctly visually centered around x = 0 and y = 0
+– Fixed registration of stylistic alternates for tablature clefs
+– Added ligatures for Johnston accidentals in various combinations
+– Removed 407 wind fingering chart glyphs; these glyphs are no longer part of the SMuFL standard, and will be released as a separate font in due course
