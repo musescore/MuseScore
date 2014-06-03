@@ -3,6 +3,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_clef.h"
 #include "libmscore/mscore.h"
+#include "preferences.h"
 
 #include <set>
 
@@ -195,9 +196,14 @@ void collectChords(std::multimap<int, MTrack> &tracks)
             if (chords.empty())
                   continue;
 
-            const ReducedFraction threshTime = minAllowedDuration() / 2;
-            const ReducedFraction fudgeTime = threshTime / 4;
-            const ReducedFraction threshExtTime = threshTime / 2;
+            const int trackIndex = track.second.indexOfOperation;
+            const auto opers = preferences.midiImportOperations.trackOperations(trackIndex);
+            const auto minAllowedDur = minAllowedDuration();
+
+            const auto threshTime = (opers.quantize.humanPerformance)
+                                          ? minAllowedDur * 2 : minAllowedDur / 2;
+            const auto fudgeTime = threshTime / 4;
+            const auto threshExtTime = threshTime / 2;
 
             ReducedFraction currentChordStart(-1, 1);    // invalid
             ReducedFraction curThreshTime(-1, 1);
@@ -223,7 +229,7 @@ void collectChords(std::multimap<int, MTrack> &tracks)
                         Q_ASSERT_X(it != chords.begin(),
                                    "MChord: collectChords", "it == chords.begin()");
 
-                        if (it->first < maxOffTime) {
+                        if (it->first <= maxOffTime - minAllowedDur) {
                                           // add current note to the previous chord
                               auto prev = std::prev(it);
                               prev->second.notes.push_back(note);
