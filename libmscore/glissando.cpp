@@ -19,6 +19,7 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
+#include "system.h"
 #include "style.h"
 #include "sym.h"
 #include "xml.h"
@@ -60,8 +61,8 @@ void Glissando::layout()
       if (chord == 0)
             return;
       Note* anchor2   = chord->upNote();
-      Segment* s = chord->segment();
-      s = s->prev1();
+      Segment* s2 = chord->segment();
+      Segment* s = s2->prev1();
       while (s) {
             if ((s->segmentType() & (SegmentType::ChordRest)) && s->element(track()))
                   break;
@@ -84,6 +85,11 @@ void Glissando::layout()
 
       QPointF cp1    = anchor1->pagePos();
       QPointF cp2    = anchor2->pagePos();
+
+      // HACK: cheap partial fix for cross-system glissandi
+      // draw line into target note only
+      if (s2->measure() == s2->system()->firstMeasure())
+            cp1.rx() = cp2.x() - 6.0 * _spatium;
 
       // line starting point
       int dots = static_cast<Chord*>(cr)->dots();
