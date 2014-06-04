@@ -1311,7 +1311,9 @@ Element* Measure::drop(const DropData& data)
 
       if (e->systemFlag())
             staffIdx = 0;
+#if 0 // yet(?) unused
       QPointF mrp(data.pos - pagePos());
+#endif
       Staff* staff = score()->staff(staffIdx);
 
       switch(e->type()) {

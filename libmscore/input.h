@@ -33,7 +33,9 @@ class InputState {
       Score*      _score;
       TDuration   _duration = TDuration::DurationType::V_INVALID;        // currently duration
       int         _drumNote = -1;
+#if 0 // yet(?) unused
       Drumset*    _drumset = 0;
+#endif
       int         _track = 0;
       Segment*    _lastSegment = 0;
       Segment*    _segment = 0;         // current segment
