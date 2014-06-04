@@ -74,32 +74,32 @@ static void paste(Score* _score)
 
       const QMimeData* ms = QApplication::clipboard()->mimeData();
       if (ms == 0) {
-                  qDebug("no application mime data");
-                  return;
-                  }
+            qDebug("no application mime data");
+            return;
+            }
       if (_score->selection().isSingle() && ms->hasFormat(mimeSymbolFormat)) {
-                  QByteArray data(ms->data(mimeSymbolFormat));
-                  XmlReader e(data);
-                  QPointF dragOffset;
-                  Fraction duration(1, 4);
-                  Element::ElementType type = Element::readType(e, &dragOffset, &duration);
-                  if (type != Element::ElementType::INVALID) {
-                              Element* el = Element::create(type, _score);
-                              if (el) {
-                                          el->read(e);
-                                          _score->addRefresh(_score->selection().element()->abbox());   // layout() ?!
-                                          DropData ddata;
-                                          ddata.view       = 0;
-                                          ddata.element    = el;
-                                          ddata.duration   = duration;
-                                          _score->selection().element()->drop(ddata);
-                                          if (_score->selection().element())
-                                                      _score->addRefresh(_score->selection().element()->abbox());
-                                          }
+            QByteArray data(ms->data(mimeSymbolFormat));
+            XmlReader e(data);
+            QPointF dragOffset;
+            Fraction duration(1, 4);
+            ElementType type = Element::readType(e, &dragOffset, &duration);
+            if (type != ElementType::INVALID) {
+                  Element* el = Element::create(type, _score);
+                        if (el) {
+                              el->read(e);
+                              _score->addRefresh(_score->selection().element()->abbox());   // layout() ?!
+                              DropData ddata;
+                              ddata.view       = 0;
+                              ddata.element    = el;
+                              ddata.duration   = duration;
+                              _score->selection().element()->drop(ddata);
+                              if (_score->selection().element())
+                                    _score->addRefresh(_score->selection().element()->abbox());
                               }
+                        }
                   else
-                              qDebug("cannot read type");
-                  }
+                        qDebug("cannot read type");
+            }
       else if ((_score->selection().isRange() || _score->selection().isList())
                && ms->hasFormat(mimeStaffListFormat)) {
                   ChordRest* cr = 0;
@@ -107,16 +107,16 @@ static void paste(Score* _score)
                               cr = _score->selection().firstChordRest();
                   else if (_score->selection().isSingle()) {
                               Element* e = _score->selection().element();
-                              if (e->type() != Element::ElementType::NOTE && e->type() != Element::ElementType::REST) {
-                                          qDebug("cannot paste to %s", e->name());
-                                          return;
-                                          }
-                              if (e->type() == Element::ElementType::NOTE)
-                                          e = static_cast<Note*>(e)->chord();
+                              if (e->type() != ElementType::NOTE && e->type() != ElementType::REST) {
+                                    qDebug("cannot paste to %s", e->name());
+                                    return;
+                                    }
+                              if (e->type() == ElementType::NOTE)
+                                    e = static_cast<Note*>(e)->chord();
                               cr  = static_cast<ChordRest*>(e);
                               }
                   if (cr == 0)
-                              qDebug("no destination to paste");
+                        qDebug("no destination to paste");
                   else if (cr->tuplet())
                               qDebug("cannot paste into tuplet");
                   else {

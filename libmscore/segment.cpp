@@ -485,7 +485,8 @@ void Segment::add(Element* el)
                   Q_ASSERT(_segmentType == SegmentType::KeySig || _segmentType == SegmentType::KeySigAnnounce);
                   checkElement(el, track);
                   _elist[track] = el;
-                  el->staff()->setKey(tick(), static_cast<KeySig*>(el)->keySigEvent().accidentalType());
+                  if (!el->generated())
+                        el->staff()->setKey(tick(), static_cast<KeySig*>(el)->key());
                   empty = false;
                   break;
 
@@ -583,8 +584,16 @@ void Segment::remove(Element* el)
                   el->staff()->removeTimeSig(static_cast<TimeSig*>(el));
                   break;
 
-            case ElementType::CLEF:
             case ElementType::KEYSIG:
+                  Q_ASSERT(_elist[track] == el);
+
+                  _elist[track] = 0;
+                  if (!el->generated())
+                        el->staff()->removeKey(tick());
+                  empty = false;
+                  break;
+
+            case ElementType::CLEF:
             case ElementType::BAR_LINE:
             case ElementType::BREATH:
             case ElementType::AMBITUS:

@@ -306,6 +306,33 @@ int Staff::key(int tick) const
       }
 
 //---------------------------------------------------------
+//   setKey
+//---------------------------------------------------------
+
+void Staff::setKey(int tick, int k)
+      {
+      _keys.setKey(tick, k);
+//      printf("setKey %d %d\n", tick, k);
+//      for (auto k : _keys)
+//            printf("   %d - %d\n", k.first, k.second);
+
+      }
+
+//---------------------------------------------------------
+//   removeKey
+//---------------------------------------------------------
+
+void Staff::removeKey(int tick)
+      {
+      /*int n =*/ _keys.erase(tick);
+//      Q_ASSERT(n == 1);     there are scores with empty KeySig's (type 0)
+
+//      printf("remove key %d\n", tick);
+//      for (auto k : _keys)
+//            printf("   %d - %d\n", k.first, k.second);
+      }
+
+//---------------------------------------------------------
 //   prevkey
 //---------------------------------------------------------
 
@@ -514,24 +541,6 @@ qreal Staff::spatium() const
 qreal Staff::mag() const
       {
       return _small ? score()->styleD(StyleIdx::smallStaffMag) : 1.0;
-      }
-
-//---------------------------------------------------------
-//   setKey
-//---------------------------------------------------------
-
-void Staff::setKey(int tick, int k)
-      {
-      _keys.setKey(tick, k);
-      }
-
-//---------------------------------------------------------
-//   removeKey
-//---------------------------------------------------------
-
-void Staff::removeKey(int tick)
-      {
-      _keys.erase(tick);
       }
 
 //---------------------------------------------------------

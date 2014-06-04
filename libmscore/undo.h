@@ -341,7 +341,7 @@ class ChangeKeySig : public UndoCommand {
       void flip();
 
    public:
-      ChangeKeySig(KeySig*, KeySigEvent newKeySig, bool sc /*, bool sn*/);
+      ChangeKeySig(KeySig* k, KeySigEvent newKeySig, bool sc) : keysig(k), ks(newKeySig), showCourtesy(sc) {}
       UNDO_NAME("ChangeKeySig")
       };
 

@@ -562,29 +562,26 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
 
 void Score::transpositionChanged(Part* part)
       {
-printf("transposition changed\n");
-      Interval v = part->instr()->transpose();
-      int transposition = v.chromatic;
-
-      int t1 = part->startTrack() / VOICES;
-      int t2 = part->endTrack() / VOICES;
-
       // TODO: grace notes
 
-      for (Segment* s = firstSegment(SegmentType::ChordRest); s;
-            s = s->next(SegmentType::ChordRest)) {
-            for (int track = t1; track < t2; ++track) {
-                  Chord* c = static_cast<Chord*>(s->element(track));
-                  if (c->type() == ElementType::CHORD) {
-                        for (Note* n : c->notes()) {
-                              int tpc = n->tpc2default(n->pitch());
-printf("  tpc %d -> %d\n", n->tpc2(), tpc);
-                              n->undoSetTpc2(tpc);
+      for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            for (Staff* st : *part->staves()) {
+                  if (st->staffType()->group() == StaffGroup::PERCUSSION)
+                        continue;
+                  int t1 = st->idx() * VOICES;
+                  int t2 = t1 + VOICES;
+                  for (int track = t1; track < t2; ++track) {
+                        Chord* c = static_cast<Chord*>(s->element(track));
+                        if (c && c->type() == ElementType::CHORD) {
+                              for (Note* n : c->notes()) {
+                                    int tpc = n->tpc2default(n->pitch());
+                                    n->undoSetTpc2(tpc);
+                                    }
                               }
                         }
                   }
             }
-      cmdUpdateNotes();
+      cmdUpdateNotes();       // DEBUG
       }
 }
 
