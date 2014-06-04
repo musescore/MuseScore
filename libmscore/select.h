@@ -71,7 +71,7 @@ public:
       SelectionFilter()                      { _score = 0; _filtered = (int)SelectionFilterType::ALL;}
       SelectionFilter(Score* score)          { _score = score; _filtered = (int)SelectionFilterType::ALL;}
       int& filtered()                        { return _filtered; }
-      void setFiltered(int filter)           { _filtered = filter; }
+      void setFiltered(SelectionFilterType type, bool set);
       bool isFiltered(SelectionFilterType type)        { return _filtered & (int)type; }
       bool canSelect(Element*);
       };

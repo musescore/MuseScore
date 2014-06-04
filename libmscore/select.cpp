@@ -1030,5 +1030,13 @@ SelectionFilter Selection::selectionFilter() const
       {
       return _score->selectionFilter();
       }
+
+void SelectionFilter::setFiltered(SelectionFilterType type, bool set)
+      {
+      if (set)
+            _filtered = _filtered | (int)type;
+      else
+            _filtered = _filtered & ~(int)type;
+      }
 }
 

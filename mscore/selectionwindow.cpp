@@ -63,13 +63,11 @@ void SelectionWindow::updateFilteredElements()
 void SelectionWindow::changeCheckbox(QListWidgetItem* item)
       {
       int type = item->data(Qt::UserRole).toInt();
-      int filtered = _score->selectionFilter().filtered();
-      if(item->checkState() == Qt::Checked)
-            filtered = filtered | type;
-      else
-            filtered = filtered & ~type;
 
-      _score->selectionFilter().setFiltered(filtered);
+      bool set = false;
+      item->checkState() == Qt::Checked ? set = true : set = false;
+      _score->selectionFilter().setFiltered(static_cast<SelectionFilterType>(type),set);
+
       if (_score->selection().isRange())
             _score->selection().updateSelectedElements();
       updateFilteredElements();
