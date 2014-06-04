@@ -111,8 +111,7 @@ int chordAveragePitch(const QList<MidiNote> &notes);
 std::map<int, ReducedFraction>
 findMaxChordLengths(const std::multimap<ReducedFraction, MidiChord> &chords);
 
-std::pair<std::multimap<ReducedFraction, MidiChord>::const_iterator,
-          std::multimap<ReducedFraction, MidiChord>::const_iterator>
+std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator>
 findChordsForTimeRange(
             int voice,
             const ReducedFraction &onTime,
