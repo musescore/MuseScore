@@ -247,18 +247,16 @@ findTupletsForTimeRange(
       auto it = tupletEvents.upper_bound(onTime + len);
       if (it == tupletEvents.begin())
             return result;
-
       --it;
       while (true) {
             const auto &tupletData = it->second;
-            const auto &tupletOffTime = tupletData.onTime + tupletData.len;
-            if (tupletData.voice == voice
-                        && onTime >= tupletData.onTime
-                        && ((len > ReducedFraction(0, 1)
-                             ? onTime + len <= tupletOffTime
-                             : onTime < tupletOffTime)
-                            )) {
-                  result.push_back(it);
+            if (tupletData.voice == voice) {
+                  const auto interval = std::make_pair(onTime, onTime + len);
+                  const auto tupletInterval = std::make_pair(
+                                    tupletData.onTime, tupletData.onTime + tupletData.len);
+                  if (haveIntersection(interval, tupletInterval)) {
+                        result.push_back(it);
+                        }
                   }
             if (it == tupletEvents.begin())
                   break;
