@@ -1771,18 +1771,7 @@ void RemoveStaves::redo()
       }
 
 //---------------------------------------------------------
-//   ChangeKeySig
-//---------------------------------------------------------
-
-ChangeKeySig::ChangeKeySig(KeySig* _keysig, KeySigEvent _ks, bool sc /*, bool sn*/)
-      {
-      keysig = _keysig;
-      ks     = _ks;
-      showCourtesy = sc;
-      }
-
-//---------------------------------------------------------
-//   flip
+//   ChangeKeySig::flip
 //---------------------------------------------------------
 
 void ChangeKeySig::flip()

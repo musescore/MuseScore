@@ -1377,15 +1377,6 @@ void Score::addElement(Element* element)
                   }
                   break;
 
-            case ElementType::KEYSIG:
-                  {
-                  KeySig* ks    = static_cast<KeySig*>(element);
-                  Staff*  staff = element->staff();
-                  if (!ks->generated())
-                        staff->setKey(ks->segment()->tick(), ks->key());
-                  }
-                  break;
-
             case ElementType::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(element);
@@ -1522,14 +1513,6 @@ void Score::removeElement(Element* element)
                   Clef* clef = static_cast<Clef*>(element);
                   if (!clef->generated())
                         updateNoteLines(clef->segment(), clef->track());
-                  }
-                  break;
-            case ElementType::KEYSIG:
-                  {
-                  KeySig* ks    = static_cast<KeySig*>(element);
-                  Staff*  staff = element->staff();
-                  if (!ks->generated())
-                        staff->removeKey(ks->segment()->tick());
                   }
                   break;
             case ElementType::TEMPO_TEXT:
