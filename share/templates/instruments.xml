@@ -7820,8 +7820,8 @@
                   <description>5 string Banjo</description>
                   <musicXMLid>pluck.banjo</musicXMLid>
                   <StringData>
-                        <frets>13</frets>
-                        <string>79</string>
+                        <frets>19</frets>
+                        <string>67</string>
                         <string>50</string>
                         <string>55</string>
                         <string>59</string>
@@ -7842,6 +7842,13 @@
                   <shortName>T. Bj.</shortName>
                   <description>4 string Tenor Banjo</description>
                   <musicXMLid>pluck.banjo.tenor</musicXMLid>
+                  <StringData>
+                        <frets>19</frets>
+                        <string>48</string>
+                        <string>55</string>
+                        <string>62</string>
+                        <string>69</string>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-83</aPitchRange>
@@ -7885,6 +7892,15 @@
                   <shortName>S. Guit.</shortName>
                   <description>Soprano Guitar</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
+                  <StringData>
+                        <frets>19</frets>
+                        <string>52</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                        <string>71</string>
+                        <string>76</string>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>52-93</aPitchRange>
@@ -7898,6 +7914,15 @@
                   <shortName>A. Guit.</shortName>
                   <description>Alto Guitar</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
+                  <StringData>
+                        <frets>19</frets>
+                        <string>47</string>
+                        <string>52</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>66</string>
+                        <string>71</string>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>47-88</aPitchRange>
@@ -7977,6 +8002,20 @@
                   <description>11-string Alto Guitar</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
                   <staves>2</staves>
+                  <StringData>
+                        <frets>19</frets>
+                        <string>35</string>
+                        <string>36</string>
+                        <string>38</string>
+                        <string>39</string>
+                        <string>41</string>
+                        <string>43</string>
+                        <string>48</string>
+                        <string>53</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                  </StringData>
                   <clef>G</clef>
                   <bracket>1</bracket>
                   <bracketSpan>2</bracketSpan>
@@ -7993,6 +8032,15 @@
                   <shortName>12-str. Guit.</shortName>
                   <description>12-string Guitar</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
+                  <StringData>
+                        <frets>19</frets>
+                        <string>40</string>
+                        <string>45</string>
+                        <string>50</string>
+                        <string>55</string>
+                        <string>59</string>
+                        <string>64</string>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
@@ -8164,6 +8212,15 @@
                   <trackName>Lute 7 course</trackName>
                   <description>Ren. Tenor Lute (7 course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
+                        <string>43</string>
+                        <string>48</string>
+                        <string>53</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>38-79</aPitchRange>
@@ -8562,10 +8619,19 @@
                   <genre>common</genre>
             </Instrument>
             <Instrument id="acoustic-bass">
+                  <!-- Same instrument as the orchestral contrabass, but used dy default plucked, rather than bowed
+                  can't init from it, as it has not been read yet. -->
                   <longName>Acoustic Bass</longName>
                   <shortName>Bass</shortName>
                   <description>Acoustic Bass</description>
                   <musicXMLid>pluck.bass.acoustic</musicXMLid>
+                  <StringData>
+                        <frets>24</frets>
+                        <string>28</string>
+                        <string>33</string>
+                        <string>38</string>
+                        <string>43</string>
+                  </StringData>
                   <clef>F8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-62</aPitchRange>
@@ -8655,6 +8721,13 @@
                   <shortName>Vln.</shortName>
                   <description>Violin</description>
                   <musicXMLid>strings.violin</musicXMLid>
+                  <StringData>
+                        <frets>24</frets>
+                        <string>55</string>
+                        <string>62</string>
+                        <string>69</string>
+                        <string>76</string>
+                  </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-88</aPitchRange>
@@ -8678,6 +8751,13 @@
                   <shortName>Vla.</shortName>
                   <description>Viola</description>
                   <musicXMLid>strings.viola</musicXMLid>
+                  <StringData>
+                        <frets>24</frets>
+                        <string>48</string>
+                        <string>55</string>
+                        <string>62</string>
+                        <string>69</string>
+                  </StringData>
                   <clef>C3</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>48-79</aPitchRange>
@@ -8700,6 +8780,13 @@
                   <shortName>Vlc.</shortName>
                   <description>Violoncello</description>
                   <musicXMLid>strings.cello</musicXMLid>
+                  <StringData>
+                        <frets>24</frets>
+                        <string>36</string>
+                        <string>43</string>
+                        <string>50</string>
+                        <string>57</string>
+                  </StringData>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-67</aPitchRange>
@@ -8722,10 +8809,17 @@
                   <shortName>Cb.</shortName>
                   <description>Contrabass</description>
                   <musicXMLid>strings.contrabass</musicXMLid>
+                  <StringData>
+                        <frets>24</frets>
+                        <string>28</string>
+                        <string>33</string>
+                        <string>38</string>
+                        <string>43</string>
+                  </StringData>
                   <clef>F8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-62</aPitchRange>
-                  <pPitchRange>23-67</pPitchRange>
+                  <pPitchRange>28-67</pPitchRange>
                   <Channel>
                         <program value="43"/>
                   </Channel>
@@ -8740,23 +8834,8 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="double-bass">
+                  <init>contrabass</init>
                   <longName>Double Bass</longName>
-                  <shortName>Cb.</shortName>
-                  <description>Double Bass</description>
-                  <musicXMLid>strings.contrabass</musicXMLid>
-                  <clef>F8vb</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-62</aPitchRange>
-                  <pPitchRange>23-67</pPitchRange>
-                  <Channel>
-                        <program value="43"/>
-                  </Channel>
-                  <Channel name="pizzicato">
-                        <program value="32"/>
-                  </Channel>
-                  <Channel name="tremolo">
-                        <program value="44"/>
-                  </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
@@ -8883,10 +8962,42 @@
                   <shortName>Vne.</shortName>
                   <description>Violone</description>
                   <musicXMLid>strings.viol.violone</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
+                        <string>31</string>
+                        <string>36</string>
+                        <string>41</string>
+                        <string>45</string>
+                        <string>50</string>
+                        <string>55</string>
+                  </StringData>
                   <clef>F8vb</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-62</aPitchRange>
-                  <pPitchRange>28-67</pPitchRange>
+                  <aPitchRange>31-60</aPitchRange>
+                  <pPitchRange>31-64</pPitchRange>
+                  <Channel>
+                        <program value="43"/>
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
+            <Instrument id="d-violone">
+                  <longName>D Violone</longName>
+                  <shortName>Vne.</shortName>
+                  <description>Violone</description>
+                  <musicXMLid>strings.viol.violone</musicXMLid>
+                  <StringData>
+                        <frets>13</frets>
+                        <string>26</string>
+                        <string>31</string>
+                        <string>36</string>
+                        <string>40</string>
+                        <string>45</string>
+                        <string>50</string>
+                  </StringData>
+                  <clef>F8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>26-55</aPitchRange>
+                  <pPitchRange>26-59</pPitchRange>
                   <Channel>
                         <program value="43"/>
                   </Channel>
