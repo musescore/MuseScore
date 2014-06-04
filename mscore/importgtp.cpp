@@ -1365,7 +1365,7 @@ void GuitarPro3::read(QFile* fp)
                   /* key signatures are specified as
                    * 1# = 1, 2# = 2, ..., 7# = 7
                    * 1b = 255, 2b = 254, ... 7b = 249 */
-                  bar.keysig = currentKey <= 7 ? currentKey : 0-256+currentKey;
+                  bar.keysig = currentKey <= 7 ? currentKey : -256+currentKey;
                   readUChar();        // specifies major/minor mode
                   }
 
@@ -2111,7 +2111,7 @@ void GuitarPro4::read(QFile* fp)
                   /* key signatures are specified as
                    * 1# = 1, 2# = 2, ..., 7# = 7
                    * 1b = 255, 2b = 254, ... 7b = 249 */
-                  bar.keysig = currentKey <= 7 ? currentKey : 0-256+currentKey;
+                  bar.keysig = currentKey <= 7 ? currentKey : -256+currentKey;
                   readUChar();        // specifies major/minor mode
                   }
             if (barBits & 0x80)
@@ -3144,7 +3144,7 @@ void GuitarPro5::read(QFile* fp)
                   /* key signatures are specified as
                    * 1# = 1, 2# = 2, ..., 7# = 7
                    * 1b = 255, 2b = 254, ... 7b = 249 */
-                  bar.keysig = currentKey <= 7 ? currentKey : 0-256+currentKey;
+                  bar.keysig = currentKey <= 7 ? currentKey : -256+currentKey;
                   readUChar();        // specified major/minor mode
                   }
             if (barBits & 0x80)
