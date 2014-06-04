@@ -39,7 +39,9 @@ void ShadowNote::draw(QPainter* painter) const
             return;
 
       QPointF ap(pagePos());
+#if 0 // yet(?) unused
       QRect r(abbox().toRect());
+#endif
 
       painter->translate(ap);
       qreal lw = point(score()->styleS(StyleIdx::ledgerLineWidth));
