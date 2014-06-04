@@ -639,20 +639,20 @@ MuseScore::MuseScore()
 
       fileTools = addToolBar(tr("File Operations"));
       fileTools->setObjectName("file-operations");
-      fileTools->addAction(getAction("file-new"));
+      fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("file-new")));
       fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("file-open")));
       fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("file-save")));
       fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("print")));
-      fileTools->addAction(getAction("musescore-connect"));
+      fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("musescore-connect")));
       fileTools->addSeparator();
 
       a = getAction("undo");
       a->setEnabled(false);
-      fileTools->addAction(a);
+      fileTools->addWidget(new AccessibleToolButton(fileTools, a));
 
       a = getAction("redo");
       a->setEnabled(false);
-      fileTools->addAction(a);
+      fileTools->addWidget(new AccessibleToolButton(fileTools, a));
 
       fileTools->addSeparator();
 
