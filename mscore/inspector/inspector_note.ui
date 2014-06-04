@@ -109,6 +109,9 @@
        <property name="text">
         <string>Tuning</string>
        </property>
+       <property name="buddy">
+        <cstring>tuning</cstring>
+       </property>
       </widget>
      </item>
      <item row="9" column="0">
@@ -122,6 +125,9 @@
        <property name="text">
         <string>Velocity</string>
        </property>
+       <property name="buddy">
+        <cstring>velocity</cstring>
+       </property>
       </widget>
      </item>
      <item row="4" column="0">
@@ -134,6 +140,9 @@
        </property>
        <property name="text">
         <string>Mirror head</string>
+       </property>
+       <property name="buddy">
+        <cstring>mirrorHead</cstring>
        </property>
       </widget>
      </item>
@@ -201,6 +210,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="maxVisibleItems">
+        <number>14</number>
        </property>
        <property name="frame">
         <bool>true</bool>
@@ -440,6 +452,9 @@
        <property name="text">
         <string>Head type</string>
        </property>
+       <property name="buddy">
+        <cstring>noteHeadType</cstring>
+       </property>
       </widget>
      </item>
      <item row="2" column="0">
@@ -452,6 +467,9 @@
        </property>
        <property name="text">
         <string>Head group</string>
+       </property>
+       <property name="buddy">
+        <cstring>noteHeadGroup</cstring>
        </property>
       </widget>
      </item>
@@ -466,6 +484,9 @@
        <property name="text">
         <string>Dot position</string>
        </property>
+       <property name="buddy">
+        <cstring>dotPosition</cstring>
+       </property>
       </widget>
      </item>
      <item row="8" column="0">
@@ -478,6 +499,9 @@
        </property>
        <property name="text">
         <string>Velocity type</string>
+       </property>
+       <property name="buddy">
+        <cstring>velocityType</cstring>
        </property>
       </widget>
      </item>
