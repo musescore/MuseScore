@@ -28,17 +28,13 @@ void AccessibleToolButton::focusOutEvent(QFocusEvent* e){
     QToolButton::focusInEvent(e);
     }
 
-bool AccessibleToolButton::event(QEvent *e){
-    if(e->type() == QEvent::KeyPress){
-        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
-
+void AccessibleToolButton::keyPressEvent(QKeyEvent *e){
         //Pressing Enter or Return button triggers the default action
-        if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return){
+        if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return){
             this->animateClick();
-            return true;
+            return;
             }
-        }
 
-    return QToolButton::event(e);
+    QToolButton::keyPressEvent(e);
     }
 }
