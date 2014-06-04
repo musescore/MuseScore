@@ -8627,6 +8627,37 @@
                         <program value="35"/>
                   </Channel>
             </Instrument>
+            <Instrument id="5-string-electric-bass">
+                  <longName>5-Str. Electric Bass</longName>
+                  <shortName>El. B.</shortName>
+                  <description>5-String Electric Bass</description>
+                  <musicXMLid>pluck.bass.electric</musicXMLid>
+                  <StringData>
+                        <frets>24</frets>
+                        <string>23</string>
+                        <string>28</string>
+                        <string>33</string>
+                        <string>38</string>
+                        <string>43</string>
+                  </StringData>
+                  <clef>F8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>23-65</aPitchRange>
+                  <pPitchRange>23-65</pPitchRange>
+                  <Channel>
+                        <program value="33"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>jazz</genre>
+            </Instrument>
+            <Instrument id="5-string-electric-bass-tab">
+                  <trackName>5-Str. Electric Bass [Tablature]</trackName>
+                  <init>5-string-electric-bass</init>
+                  <description>5-String Electric Bass (Tablature)</description>
+                  <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
+<!--                  <clef>TAB</clef> -->
+                  <genre>common</genre>
+            </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="strings">
             <name>Strings</name>
