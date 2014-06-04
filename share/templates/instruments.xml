@@ -4568,7 +4568,7 @@
                   <description>Drumset</description>
                   <musicXMLid>drum.group.set</musicXMLid>
                   <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <Channel>
