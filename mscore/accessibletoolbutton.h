@@ -9,7 +9,7 @@ public:
     AccessibleToolButton(QWidget* parent, QAction* defaultQAction );
     void focusInEvent(QFocusEvent* e);
     void focusOutEvent(QFocusEvent* e);
-    bool event(QEvent *e);
+    void keyPressEvent(QKeyEvent *e);
 };
 
 }
