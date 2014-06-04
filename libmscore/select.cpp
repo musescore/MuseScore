@@ -272,7 +272,7 @@ void Selection::add(Element* el)
       update();
       }
 
-bool Selection::canSelect(Element* e)
+bool Selection::canSelect(Element* e) const
       {
       if (e->type() == Element::Type::DYNAMIC
           && !this->selectionFilter().isFiltered(SelectionFilterType::DYNAMIC)) return false;
@@ -586,6 +586,16 @@ std::multimap<int, Spanner*> spannerMapCopy(Segment* seg1, Segment* seg2, Segmen
       return sp_copy;
       }
 
+void Selection::filterRange(QList<Segment*> segments) const
+      {
+      foreach (Segment* segment, segments) {
+            foreach (Element* e, segment->annotations()) {
+                  if (!canSelect(e))
+                        segment->removeAnnotation(e);
+                  }
+            }
+      }
+
 //---------------------------------------------------------
 //   staffMimeData
 //---------------------------------------------------------
@@ -605,6 +615,7 @@ QByteArray Selection::staffMimeData() const
       Segment* seg2 = _endSegment;
 
       QList<Segment*> segments = cloneRange(seg1, seg2);
+      filterRange(segments);
 
       //Remove 2-note tremolo if at last segment
       Segment* last = segments.last();
@@ -1106,7 +1117,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
       }
 
-SelectionFilter& Selection::selectionFilter()
+SelectionFilter& Selection::selectionFilter() const
       {
       return _score->selectionFilter();
       }

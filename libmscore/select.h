@@ -95,8 +95,9 @@ class Selection {
 
       QByteArray staffMimeData() const;
       QByteArray symbolListMimeData() const;
-      SelectionFilter& selectionFilter();
-      bool canSelect(Element*);
+      SelectionFilter& selectionFilter() const;
+      bool canSelect(Element*) const;
+      void filterRange(QList<Segment*>) const;
 
    public:
       Selection()                      { _score = 0; _state = SelState::NONE; }
