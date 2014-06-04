@@ -71,11 +71,11 @@ void InputState::update(Element* e)
       {
       if (e == 0)
             return;
-      if (e && e->type() == Element::ElementType::CHORD)
+      if (e && e->type() == ElementType::CHORD)
             e = static_cast<Chord*>(e)->upNote();
 
       setDrumNote(-1);
-      if (e->type() == Element::ElementType::NOTE) {
+      if (e->type() == ElementType::NOTE) {
             Note* note    = static_cast<Note*>(e);
             Chord* chord  = note->chord();
             setDuration(chord->durationType());
@@ -84,7 +84,7 @@ void InputState::update(Element* e)
             setNoteType(note->noteType());
             setBeamMode(chord->beamMode());
             }
-      else if (e->type() == Element::ElementType::REST) {
+      else if (e->type() == ElementType::REST) {
             Rest* rest   = static_cast<Rest*>(e);
             if (rest->durationType().type() == TDuration::DurationType::V_MEASURE)
                   setDuration(TDuration::DurationType::V_QUARTER);
@@ -95,10 +95,10 @@ void InputState::update(Element* e)
             setBeamMode(rest->beamMode());
             setNoteType(NoteType::NORMAL);
             }
-      if (e->type() == Element::ElementType::NOTE || e->type() == Element::ElementType::REST) {
+      if (e->type() == ElementType::NOTE || e->type() == ElementType::REST) {
             const Instrument* instr = e->staff()->part()->instr();
             if (instr->useDrumset()) {
-                  if (e->type() == Element::ElementType::NOTE)
+                  if (e->type() == ElementType::NOTE)
                         setDrumNote(static_cast<Note*>(e)->pitch());
                   else
                         setDrumNote(-1);
@@ -120,7 +120,7 @@ void InputState::moveInputPos(Element* e)
             s = static_cast<ChordRest*>(e)->segment();
       else
             s = static_cast<Segment*>(e);
-      if (s->type() == Element::ElementType::SEGMENT) {
+      if (s->type() == ElementType::SEGMENT) {
             if (s->measure()->isMMRest()) {
                   Measure* m = s->measure()->mmRestFirst();
                   s = m->findSegment(SegmentType::ChordRest, m->tick());

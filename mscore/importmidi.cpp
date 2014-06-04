@@ -236,7 +236,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   text->setText((const char*)(mm.edata()));
 
                   MeasureBase* measure = cs->first();
-                  if (measure->type() != Element::ElementType::VBOX) {
+                  if (measure->type() != ElementType::VBOX) {
                         measure = new VBox(cs);
                         measure->setTick(0);
                         measure->setNext(cs->first());

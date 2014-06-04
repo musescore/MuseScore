@@ -176,7 +176,7 @@ void InsertMeasuresDialog::accept()
       {
       int n = insmeasures->value();
       if (mscore->currentScore())
-            mscore->currentScoreView()->cmdInsertMeasures(n, Element::ElementType::MEASURE);
+            mscore->currentScoreView()->cmdInsertMeasures(n, ElementType::MEASURE);
       done(1);
       }
 
@@ -1784,7 +1784,7 @@ void MeasuresDialog::accept()
       {
       int n = measures->value();
       if (mscore->currentScore())
-            mscore->currentScoreView()->cmdAppendMeasures(n, Element::ElementType::MEASURE);
+            mscore->currentScoreView()->cmdAppendMeasures(n, ElementType::MEASURE);
       done(1);
       }
 
@@ -2639,7 +2639,7 @@ void MuseScore::changeState(ScoreState val)
             if (e->isText()) {
                   textTools()->setText(static_cast<Text*>(e));
                   textTools()->updateTools();
-                  if (e->type() != Element::ElementType::FIGURED_BASS && e->type() != Element::ElementType::HARMONY)   // do not show text tools for f.b.
+                  if (e->type() != ElementType::FIGURED_BASS && e->type() != ElementType::HARMONY)   // do not show text tools for f.b.
                         textTools()->show();
                   }
             if (inspector)
@@ -2759,11 +2759,11 @@ void MuseScore::play(Element* e) const
       if (noSeq || !mscore->playEnabled())
             return;
 
-      if (e->type() == Element::ElementType::NOTE) {
+      if (e->type() == ElementType::NOTE) {
             Note* note = static_cast<Note*>(e);
             play(e, note->ppitch());
             }
-      else if (e->type() == Element::ElementType::CHORD) {
+      else if (e->type() == ElementType::CHORD) {
             seq->stopNotes();
             Chord* c = static_cast<Chord*>(e);
             Part* part = c->staff()->part();
@@ -2782,7 +2782,7 @@ void MuseScore::play(Element* e, int pitch) const
       {
       if (noSeq)
             return;
-      if (mscore->playEnabled() && e->type() == Element::ElementType::NOTE) {
+      if (mscore->playEnabled() && e->type() == ElementType::NOTE) {
             Note* note = static_cast<Note*>(e);
             int tick = note->chord()->tick();
             if (tick < 0)
@@ -3714,14 +3714,14 @@ static void collectMatch(void* data, Element* e)
             return;
       if ((p->staff != -1) && (p->staff != e->staffIdx()))
             return;
-      if (e->type() == Element::ElementType::CHORD || e->type() == Element::ElementType::REST || e->type() == Element::ElementType::NOTE || e->type() == Element::ElementType::LYRICS || e->type() == Element::ElementType::STEM) {
+      if (e->type() == ElementType::CHORD || e->type() == ElementType::REST || e->type() == ElementType::NOTE || e->type() == ElementType::LYRICS || e->type() == ElementType::STEM) {
             if (p->voice != -1 && p->voice != e->voice())
                   return;
             }
       if (p->system) {
             Element* ee = e;
             do {
-                  if (ee->type() == Element::ElementType::SYSTEM) {
+                  if (ee->type() == ElementType::SYSTEM) {
                         if (p->system != ee)
                               return;
                         break;
@@ -3738,7 +3738,7 @@ static void collectMatch(void* data, Element* e)
 
 void MuseScore::selectSimilar(Element* e, bool sameStaff)
       {
-      Element::ElementType type = e->type();
+      ElementType type = e->type();
 //TODO      int subtype      = e->subtype();
 
       ElementPattern pattern;

@@ -101,11 +101,11 @@ extern QString mscoreGlobalShare;
 void MScore::init()
       {
 #ifdef SCRIPT_INTERFACE
-      qRegisterMetaType<Element::ElementType>("ElementType");
+      qRegisterMetaType<ElementType>("ElementType");
       qRegisterMetaType<ValueType>("ValueType");
       qRegisterMetaType<Direction>("Direction");
       qRegisterMetaType<DirectionH>("DirectionH");
-      qRegisterMetaType<Element::Placement>("Placement");
+      qRegisterMetaType<Placement>("Placement");
       qRegisterMetaType<Accidental::AccidentalRole>("AccidentalRole");
       qRegisterMetaType<Accidental::AccidentalType>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
@@ -117,7 +117,7 @@ void MScore::init()
       qRegisterMetaType<VoltaType>("VoltaType");
       qRegisterMetaType<OttavaType>("OttavaType");
       qRegisterMetaType<Trill::TrillType>("TrillType");
-      qRegisterMetaType<Element::DynamicRange>("DynamicRange");
+      qRegisterMetaType<DynamicRange>("DynamicRange");
       qRegisterMetaType<JumpType>("JumpType");
       qRegisterMetaType<MarkerType>("MarkerType");
       qRegisterMetaType<BeamMode>("BeamMode");

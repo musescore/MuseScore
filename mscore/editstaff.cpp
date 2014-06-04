@@ -228,46 +228,33 @@ void EditStaff::apply()
       instrument.setShortName(shortName->toPlainText());
       instrument.setLongName(longName->toPlainText());
 
-      bool s            = small->isChecked();
-      bool inv          = invisible->isChecked();
-      qreal userDist    = spinExtraDistance->value();
-      QColor col        = color->color();
-
-      // before changing instrument, check if notes need to be updated
-      // true if changing into or away from TAB or from one TAB type to another
-
-      bool updateNeeded = ( !(*instrument.stringData() == *part->instr()->stringData()) );
-
-      if (s != orgStaff->small() || inv != orgStaff->invisible() || userDist != orgStaff->userDist() || col != orgStaff->color())
-            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col));
-
-      if ( !(*orgStaff->staffType() == *staff->staffType()) ) {
-            updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);
-            score->undo()->push(new ChangeStaffType(orgStaff, *staff->staffType()));
-      }
+      bool s         = small->isChecked();
+      bool inv       = invisible->isChecked();
+      qreal userDist = spinExtraDistance->value();
+      QColor col     = color->color();
 
       if (!(instrument == *part->instr()) || part->partName() != partName->text()) {
+            Interval v1 = instrument.transpose();
+            Interval v2 = part->instr()->transpose();
+
             score->undo(new ChangePart(part, instrument, partName->text()));
             emit instrumentChanged();
+
+            if (v1 != v2)
+                  score->transpositionChanged(part);
             }
 
-      if (updateNeeded)
-            score->cmdUpdateNotes();
+      if (s != staff->small() || inv != staff->invisible() || userDist != staff->userDist() || col != staff->color())
+            score->undo(new ChangeStaff(staff, s, inv, userDist * score->spatium(), col));
 
-      score->setLayoutAll(true);
+      if ( !(*orgStaff->staffType() == *staff->staffType()) ) {
+            // updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);
+            score->undo()->push(new ChangeStaffType(orgStaff, *staff->staffType()));
+            }
+
       score->update();
       }
 
-//---------------------------------------------------------
-//   editDrumsetClicked
-//---------------------------------------------------------
-/* UNUSED?
-void EditStaff::editDrumsetClicked()
-      {
-      EditDrumset dse(staff->part()->instr()->drumset(), this);
-      dse.exec();
-      }
-*/
 //---------------------------------------------------------
 //   edit...NameClicked
 //---------------------------------------------------------

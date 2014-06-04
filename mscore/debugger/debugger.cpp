@@ -110,14 +110,14 @@ void ElementItem::init()
       {
       QString s;
       switch(el->type()) {
-            case Element::ElementType::PAGE:
+            case ElementType::PAGE:
                   {
                   QString no;
                   no.setNum(((Page*)el)->no()+1);
                   s = "Page-" + no;
                   }
                   break;
-            case Element::ElementType::MEASURE:
+            case ElementType::MEASURE:
                   {
                   QString no;
                   no.setNum(((Measure*)el)->no()+1);
@@ -141,7 +141,7 @@ Debugger::Debugger(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      for (int i = 0; i < int(Element::ElementType::MAXTYPE); ++i)
+      for (int i = 0; i < int(ElementType::MAXTYPE); ++i)
             elementViews[i] = 0;
       curElement   = 0;
 
@@ -247,7 +247,7 @@ static void addMeasureBaseToList(ElementItem* mi, MeasureBase* mb)
       {
       foreach(Element* e, *mb->el()) {
             ElementItem* mmi = new ElementItem(mi, e);
-            if (e->type() == Element::ElementType::HBOX || e->type() == Element::ElementType::VBOX)
+            if (e->type() == ElementType::HBOX || e->type() == ElementType::VBOX)
                   addMeasureBaseToList(mmi, static_cast<MeasureBase*>(e));
             }
       }
@@ -299,7 +299,7 @@ static void addChord(ElementItem* sei, Chord* chord)
                   new ElementItem(ni, note->accidental());
                   }
             foreach (Element* f, note->el()) {
-                  if (f->type() == Element::ElementType::SYMBOL || f->type() == Element::ElementType::IMAGE) {
+                  if (f->type() == ElementType::SYMBOL || f->type() == ElementType::IMAGE) {
                         BSymbol* bs = static_cast<BSymbol*>(f);
                         addSymbol(ni, bs);
                         }
@@ -325,7 +325,7 @@ static void addChord(ElementItem* sei, Chord* chord)
             }
       foreach(Element* e, chord->el()) {
             ElementItem* ei = new ElementItem(sei, e);
-            if (e->type() == Element::ElementType::SLUR) {
+            if (e->type() == ElementType::SLUR) {
                   Slur* gs = static_cast<Slur*>(e);
                   foreach (SpannerSegment* sp, gs->spannerSegments())
                         new ElementItem(ei, sp);
@@ -372,7 +372,7 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
                   if (!e)
                         continue;
                   ElementItem* sei = new ElementItem(segItem, e);
-                  if (e->type() == Element::ElementType::CHORD)
+                  if (e->type() == ElementType::CHORD)
                         addChord(sei, static_cast<Chord*>(e));
                   else if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
@@ -391,9 +391,9 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
                   }
 
             foreach(Element* s, segment->annotations()) {
-                  if (s->type() == Element::ElementType::SYMBOL || s->type() == Element::ElementType::IMAGE)
+                  if (s->type() == ElementType::SYMBOL || s->type() == ElementType::IMAGE)
                         addBSymbol(segItem, static_cast<BSymbol*>(s));
-                  else if (s->type() == Element::ElementType::FRET_DIAGRAM) {
+                  else if (s->type() == ElementType::FRET_DIAGRAM) {
                         ElementItem* fdi = new ElementItem(segItem, s);
                         FretDiagram* fd = static_cast<FretDiagram*>(s);
                         if (fd->harmony())
@@ -423,11 +423,11 @@ void Debugger::updateList(Score* s)
       if (!isVisible())
             return;
 
-      QTreeWidgetItem* li = new QTreeWidgetItem(list, int(Element::ElementType::INVALID));
+      QTreeWidgetItem* li = new QTreeWidgetItem(list, int(ElementType::INVALID));
       li->setText(0, "Global");
       for (auto i : s->spanner()) {
             ElementItem* it = new ElementItem(li, i.second);
-            if (i.second->type() == Element::ElementType::TRILL) {
+            if (i.second->type() == ElementType::TRILL) {
                   Trill* trill = static_cast<Trill*>(i.second);
                   if (trill->accidental())
                         new ElementItem(it, trill->accidental());
@@ -454,7 +454,7 @@ void Debugger::updateList(Score* s)
                         ElementItem* mi = new ElementItem(si, mb);
                         addMeasureBaseToList(mi, mb);
 
-                        if (mb->type() != Element::ElementType::MEASURE)
+                        if (mb->type() != ElementType::MEASURE)
                               continue;
                         Measure* measure = (Measure*) mb;
                         if (cs->styleB(StyleIdx::concertPitch)) {
@@ -540,7 +540,7 @@ void Debugger::itemClicked(QTreeWidgetItem* i, int)
       {
       if (i == 0)
             return;
-      if (i->type() == int(Element::ElementType::INVALID))
+      if (i->type() == int(ElementType::INVALID))
             return;
       Element* el = static_cast<ElementItem*>(i)->element();
       if (curElement) {
@@ -585,55 +585,55 @@ void Debugger::updateElement(Element* el)
       ShowElementBase* ew = elementViews[int(el->type())];
       if (ew == 0) {
             switch (el->type()) {
-                  case Element::ElementType::PAGE:             ew = new ShowPageWidget;      break;
-                  case Element::ElementType::SYSTEM:           ew = new SystemView;          break;
-                  case Element::ElementType::MEASURE:          ew = new MeasureView;         break;
-                  case Element::ElementType::CHORD:            ew = new ChordDebug;          break;
-                  case Element::ElementType::NOTE:             ew = new ShowNoteWidget;      break;
-                  case Element::ElementType::REST:             ew = new RestView;            break;
-                  case Element::ElementType::CLEF:             ew = new ClefView;            break;
-                  case Element::ElementType::TIMESIG:          ew = new ShowTimesigWidget;   break;
-                  case Element::ElementType::KEYSIG:           ew = new KeySigView;          break;
-                  case Element::ElementType::SEGMENT:          ew = new SegmentView;         break;
-                  case Element::ElementType::HAIRPIN:          ew = new HairpinView;         break;
-                  case Element::ElementType::BAR_LINE:         ew = new BarLineView;         break;
-                  case Element::ElementType::DYNAMIC:          ew = new DynamicView;         break;
-                  case Element::ElementType::TUPLET:           ew = new TupletView;          break;
-                  case Element::ElementType::SLUR:             ew = new SlurTieView;         break;
-                  case Element::ElementType::TIE:              ew = new TieView;             break;
-                  case Element::ElementType::VOLTA:            ew = new VoltaView;           break;
-                  case Element::ElementType::VOLTA_SEGMENT:    ew = new VoltaSegmentView;    break;
-                  case Element::ElementType::PEDAL:
-                  case Element::ElementType::TEXTLINE:         ew = new TextLineView;        break;
-                  case Element::ElementType::PEDAL_SEGMENT:
-                  case Element::ElementType::TEXTLINE_SEGMENT: ew = new TextLineSegmentView; break;
-                  case Element::ElementType::LYRICS:           ew = new LyricsView;          break;
-                  case Element::ElementType::BEAM:             ew = new BeamView;            break;
-                  case Element::ElementType::TREMOLO:          ew = new TremoloView;         break;
-                  case Element::ElementType::OTTAVA:           ew = new OttavaView;          break;
-                  case Element::ElementType::OTTAVA_SEGMENT:   ew = new TextLineSegmentView; break;
-                  case Element::ElementType::SLUR_SEGMENT:     ew = new SlurSegmentView;     break;
-                  case Element::ElementType::ACCIDENTAL:       ew = new AccidentalView;      break;
-                  case Element::ElementType::ARTICULATION:     ew = new ArticulationView;    break;
-                  case Element::ElementType::STEM:             ew = new StemView;            break;
-                  case Element::ElementType::VBOX:
-                  case Element::ElementType::HBOX:
-                  case Element::ElementType::FBOX:
-                  case Element::ElementType::TBOX:             ew = new BoxView;             break;
+                  case ElementType::PAGE:             ew = new ShowPageWidget;      break;
+                  case ElementType::SYSTEM:           ew = new SystemView;          break;
+                  case ElementType::MEASURE:          ew = new MeasureView;         break;
+                  case ElementType::CHORD:            ew = new ChordDebug;          break;
+                  case ElementType::NOTE:             ew = new ShowNoteWidget;      break;
+                  case ElementType::REST:             ew = new RestView;            break;
+                  case ElementType::CLEF:             ew = new ClefView;            break;
+                  case ElementType::TIMESIG:          ew = new ShowTimesigWidget;   break;
+                  case ElementType::KEYSIG:           ew = new KeySigView;          break;
+                  case ElementType::SEGMENT:          ew = new SegmentView;         break;
+                  case ElementType::HAIRPIN:          ew = new HairpinView;         break;
+                  case ElementType::BAR_LINE:         ew = new BarLineView;         break;
+                  case ElementType::DYNAMIC:          ew = new DynamicView;         break;
+                  case ElementType::TUPLET:           ew = new TupletView;          break;
+                  case ElementType::SLUR:             ew = new SlurTieView;         break;
+                  case ElementType::TIE:              ew = new TieView;             break;
+                  case ElementType::VOLTA:            ew = new VoltaView;           break;
+                  case ElementType::VOLTA_SEGMENT:    ew = new VoltaSegmentView;    break;
+                  case ElementType::PEDAL:
+                  case ElementType::TEXTLINE:         ew = new TextLineView;        break;
+                  case ElementType::PEDAL_SEGMENT:
+                  case ElementType::TEXTLINE_SEGMENT: ew = new TextLineSegmentView; break;
+                  case ElementType::LYRICS:           ew = new LyricsView;          break;
+                  case ElementType::BEAM:             ew = new BeamView;            break;
+                  case ElementType::TREMOLO:          ew = new TremoloView;         break;
+                  case ElementType::OTTAVA:           ew = new OttavaView;          break;
+                  case ElementType::OTTAVA_SEGMENT:   ew = new TextLineSegmentView; break;
+                  case ElementType::SLUR_SEGMENT:     ew = new SlurSegmentView;     break;
+                  case ElementType::ACCIDENTAL:       ew = new AccidentalView;      break;
+                  case ElementType::ARTICULATION:     ew = new ArticulationView;    break;
+                  case ElementType::STEM:             ew = new StemView;            break;
+                  case ElementType::VBOX:
+                  case ElementType::HBOX:
+                  case ElementType::FBOX:
+                  case ElementType::TBOX:             ew = new BoxView;             break;
 
-                  case Element::ElementType::FINGERING:
-                  case Element::ElementType::MARKER:
-                  case Element::ElementType::JUMP:
-                  case Element::ElementType::TEXT:
-                  case Element::ElementType::STAFF_TEXT:
-                  case Element::ElementType::REHEARSAL_MARK:
+                  case ElementType::FINGERING:
+                  case ElementType::MARKER:
+                  case ElementType::JUMP:
+                  case ElementType::TEXT:
+                  case ElementType::STAFF_TEXT:
+                  case ElementType::REHEARSAL_MARK:
                         ew = new TextView;
                         break;
-                  case Element::ElementType::HARMONY:
+                  case ElementType::HARMONY:
                         ew = new HarmonyView;
                         break;
-                  case Element::ElementType::TRILL_SEGMENT:
-                  case Element::ElementType::HAIRPIN_SEGMENT:
+                  case ElementType::TRILL_SEGMENT:
+                  case ElementType::HAIRPIN_SEGMENT:
                         ew = new LineSegmentView; break;
                         break;
                   default:

@@ -919,7 +919,7 @@ class Score : public QObject {
       bool undoRedo() const                 { return _undoRedo; }
       void respace(QList<ChordRest*>* elements);
       void transposeSemitone(int semitone);
-      MeasureBase* insertMeasure(Element::ElementType type, MeasureBase*,
+      MeasureBase* insertMeasure(ElementType type, MeasureBase*,
          bool createEmptyMeasures = false);
       Audio* audio() const         { return _audio;    }
       void setAudio(Audio* a)      { _audio = a;       }
@@ -956,6 +956,7 @@ class Score : public QObject {
       void setNoteHeadWidth( qreal n) { _noteHeadWidth = n; }
 
       QList<int> uniqueStaves() const;
+      void transpositionChanged(Part*);
 
       friend class ChangeSynthesizerState;
       friend class Chord;

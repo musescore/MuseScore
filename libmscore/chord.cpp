@@ -240,7 +240,7 @@ Chord::Chord(const Chord& c)
       _noteType         = c._noteType;
       _crossMeasure     = CrossMeasure::UNKNOWN;
       for (Element* e : c.el()) {
-            if (e->type() == Element::ElementType::CHORDLINE) {
+            if (e->type() == ElementType::CHORDLINE) {
                    ChordLine* cl = static_cast<ChordLine*>(e);
                    add(new ChordLine(*cl));
                    }
@@ -263,7 +263,7 @@ Chord* Chord::linkedClone()
       for (int i = 0; i < n; ++i)
             _graceNotes[i]->linkTo(chord->_graceNotes[i]);
       for (int i = 0; i < _el.size(); ++i) { // TODO deal with slurs
-            if (_el[i]->type() == Element::ElementType::CHORDLINE) {
+            if (_el[i]->type() == ElementType::CHORDLINE) {
                   _el[i]->linkTo(chord->el()[i]);
                   }
             }
@@ -910,7 +910,7 @@ void Chord::write(Xml& xml) const
             c->write(xml);
             }
       for (Element* e : _el) {
-            if (e->type() == Element::ElementType::SLUR) {
+            if (e->type() == ElementType::SLUR) {
                   static_cast<Slur*>(e)->setId(++xml.spannerId);
                   e->write(xml);
                   }
@@ -968,7 +968,7 @@ void Chord::write(Xml& xml) const
       if (_tremolo && tremoloChordType() != TremoloChordType::TremoloSecondNote)
             _tremolo->write(xml);
       for (Element* e : _el) {
-            if (e->type() == Element::ElementType::SLUR) {
+            if (e->type() == ElementType::SLUR) {
                   Slur* gs = static_cast<Slur*>(e);
                   xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(gs->id()));
                   }
@@ -977,7 +977,7 @@ void Chord::write(Xml& xml) const
             }
       for (Chord* c : _graceNotes) {
             for (Element* e : c->el()) {
-                  if (e->type() == Element::ElementType::SLUR) {
+                  if (e->type() == ElementType::SLUR) {
                         Slur* gs = static_cast<Slur*>(e);
                         xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(gs->id()));
                         }
@@ -2005,7 +2005,7 @@ void Chord::layoutPitched()
            }
 
       for (Element* e : _el) {
-            if (e->type() == Element::ElementType::SLUR)     // we cannot at this time as chordpositions are not fixed
+            if (e->type() == ElementType::SLUR)     // we cannot at this time as chordpositions are not fixed
                   continue;
             e->layout();
             if (e->type() == ElementType::CHORDLINE) {

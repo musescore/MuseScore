@@ -1117,7 +1117,7 @@ void MuseScore::editInstrList()
       // there should be at least one measure
       //
       if (rootScore->measures()->size() == 0)
-            rootScore->insertMeasure(Element::ElementType::MEASURE, 0, false);
+            rootScore->insertMeasure(ElementType::MEASURE, 0, false);
 
       QList<Score*> toDelete;
       for (Excerpt* excpt : rootScore->excerpts()) {

@@ -59,7 +59,7 @@ class HairpinSegment : public LineSegment {
 //   @@ Hairpin
 //   @P hairpinType  Ms::Hairpin::HairpinType  (CRESCENDO, DECRESCENDO)
 //   @P veloChange   int
-//   @P dynRange     Ms::Element::DynamicRange (STAFF, PART, SYSTEM)
+//   @P dynRange     Ms::DynamicRange (STAFF, PART, SYSTEM)
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
@@ -72,7 +72,7 @@ class Hairpin : public SLine {
    private:
       Q_PROPERTY(HairpinType                 hairpinType READ hairpinType WRITE undoSetHairpinType)
       Q_PROPERTY(int                         veloChange  READ veloChange  WRITE undoSetVeloChange)
-      Q_PROPERTY(Ms::Element::DynamicRange   dynRange    READ dynRange    WRITE undoSetDynRange)
+      Q_PROPERTY(Ms::DynamicRange   dynRange    READ dynRange    WRITE undoSetDynRange)
 
       bool  _hairpinCircledTip;
       HairpinType _hairpinType;

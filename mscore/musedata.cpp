@@ -502,7 +502,7 @@ void MuseData::readBackup(const QString& s)
 Measure* MuseData::createMeasure()
       {
       for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            if (mb->type() != Element::ElementType::MEASURE)
+            if (mb->type() != ElementType::MEASURE)
                   continue;
             Measure* m = (Measure*)mb;
             int st = m->tick();

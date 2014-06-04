@@ -1230,7 +1230,7 @@ void ExportLy::anchortest()
       for (i=0; i<nextAnchor ; i++)
 	{
 	  Element * instruction = anchors[i].instruct;
-	  Element::ElementType instructiontype = instruction ->type();
+	  ElementType instructiontype = instruction ->type();
 //	  Text* text = (Text*) instruction;
 	  qDebug("anker nr: %d ", i);
 	  switch(instructiontype)
@@ -1297,7 +1297,7 @@ void ExportLy::jumptest()
 	  qDebug("jumptest 1\n");
 	  Element * merke = jumpOrMarkerList[i].marker;
 	  qDebug("jumptest 2\n");
-	  Element::ElementType instructiontype = merke->type();
+	  ElementType instructiontype = merke->type();
 	  qDebug("jumptest 3\n");
 //	  Text* text = (Text*) merke;
 	  qDebug("jumptest 4\n");
@@ -1449,7 +1449,7 @@ void ExportLy::handlePreInstruction(Element * el)
       if  ((anchors[i].anchor != 0) && (anchors[i].anchor == el))
 	{
 	  Element * instruction = anchors[i].instruct;
-	  Element::ElementType instructiontype = instruction->type();
+	  ElementType instructiontype = instruction->type();
 
 	  switch(instructiontype)
 	    {
@@ -1510,7 +1510,7 @@ void ExportLy::handleElement(Element* el)
 	if (anchors[i].anchor != 0 and anchors[i].anchor==el) // if anchored to this element
 	    {
 		Element* instruction = anchors[i].instruct;
-		Element::ElementType instructiontype = instruction->type();
+		ElementType instructiontype = instruction->type();
 
 		switch(instructiontype)
 		    {
@@ -1553,14 +1553,14 @@ void ExportLy::handleElement(Element* el)
 				{
 
 				    Element* nextinstruct = anchors[i+1].instruct;
-				    Element::ElementType nextinstrtype = nextinstruct->type();
+				    ElementType nextinstrtype = nextinstruct->type();
 				    if (nextinstrtype == Element::DYNAMIC)
 				    nextorprev = 1;
 				}
 			    else if ((anchors[i-1].anchor != 0) and (anchors[i-1].anchor==el))
 				{
 				    Element* previnstruct = anchors[i-1].instruct;
-				    Element::ElementType previnstrtype = previnstruct->type();
+				    ElementType previnstrtype = previnstruct->type();
 				    if (previnstrtype == Element::DYNAMIC)
 					nextorprev=2;
 				}

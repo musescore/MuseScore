@@ -170,7 +170,7 @@ void TextTools::updateText()
       {
       if (!_textElement)
             return;
-      if (_textElement->type() == Element::ElementType::LYRICS) {
+      if (_textElement->type() == ElementType::LYRICS) {
             _textElement->score()->setLayoutAll(true);
             _textElement->score()->end();
             }

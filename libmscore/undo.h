@@ -992,13 +992,13 @@ class ChangeImage : public UndoCommand {
 class ChangeHairpin : public UndoCommand {
       Hairpin* hairpin;
       int veloChange;
-      Element::DynamicRange dynRange;
+      DynamicRange dynRange;
       bool diagonal;
 
       void flip();
 
    public:
-      ChangeHairpin(Hairpin* h, int c, Element::DynamicRange t, bool dg)
+      ChangeHairpin(Hairpin* h, int c, DynamicRange t, bool dg)
          : hairpin(h), veloChange(c), dynRange(t), diagonal(dg) {}
       UNDO_NAME("ChangeHairpin")
       };

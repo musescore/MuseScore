@@ -483,7 +483,7 @@ QColor Element::curColor(const Element* proxy) const
       if (flag(ElementFlag::DROP_TARGET))
             return MScore::dropColor;
       bool marked = false;
-      if (type() == Element::ElementType::NOTE) {
+      if (type() == ElementType::NOTE) {
             const Note* note = static_cast<const Note*>(this);
             marked = note->mark();
             }
@@ -1229,7 +1229,7 @@ QByteArray Element::mimeData(const QPointF& dragOffset) const
 //    return new position of QDomElement in e
 //---------------------------------------------------------
 
-Element::ElementType Element::readType(XmlReader& e, QPointF* dragOffset,
+ElementType Element::readType(XmlReader& e, QPointF* dragOffset,
    Fraction* duration)
       {
       while (e.readNextStartElement()) {
@@ -1414,7 +1414,7 @@ const char* Element::name(ElementType type)
 //   name2type
 //---------------------------------------------------------
 
-Element::ElementType Element::name2type(const QStringRef& s)
+ElementType Element::name2type(const QStringRef& s)
       {
       for (int i = 0; i < int(ElementType::MAXTYPE); ++i) {
             if (s == elementNames[i].name)

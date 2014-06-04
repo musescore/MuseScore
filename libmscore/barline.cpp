@@ -865,7 +865,7 @@ void BarLine::layout()
       getY(&y1, &y2);
 
       // if bar line does not belong to a system, has a staff and staff is set to hide bar lines, set null bbox
-      if (parent() && parent()->type() != Element::ElementType::SYSTEM && staff() && !staff()->staffType()->showBarlines())
+      if (parent() && parent()->type() != ElementType::SYSTEM && staff() && !staff()->staffType()->showBarlines())
             setbbox(QRectF());
 
       // bar lines not hidden
@@ -1104,7 +1104,7 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
       switch(propertyId) {
             case P_ID::SUBTYPE:
                   // default subtype is the subtype of the measure, if any
-                  if (parent() && parent()->type() == Element::ElementType::SEGMENT && static_cast<Segment*>(parent())->measure() )
+                  if (parent() && parent()->type() == ElementType::SEGMENT && static_cast<Segment*>(parent())->measure() )
                       return int(static_cast<Segment*>(parent())->measure()->endBarLineType());
                   return int(BarLineType::NORMAL);
             case P_ID::BARLINE_SPAN:
