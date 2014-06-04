@@ -403,8 +403,7 @@ std::map<int, ReducedFraction> findMaxChordLengths(
       return maxLengths;
       }
 
-std::pair<std::multimap<ReducedFraction, MidiChord>::const_iterator,
-          std::multimap<ReducedFraction, MidiChord>::const_iterator>
+std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator>
 findChordsForTimeRange(
             int voice,
             const ReducedFraction &onTime,
@@ -412,15 +411,14 @@ findChordsForTimeRange(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &maxChordLength)
       {
-      auto beg = chords.end();
-      auto end = chords.end();
+      std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator> result;
 
       if (chords.empty())
-            return {beg, end};
+            return result;
 
       auto it = chords.lower_bound(offTime);
       if (it == chords.begin())
-            return {beg, end};
+            return result;
       --it;
 
       while (it->first + maxChordLength > onTime) {
@@ -429,22 +427,15 @@ findChordsForTimeRange(
                   const auto chordInterval = std::make_pair(it->first, maxNoteOffTime(chord.notes));
                   const auto durationInterval = std::make_pair(onTime, offTime);
 
-                  if (MidiTuplet::haveIntersection(chordInterval, durationInterval)) {
-                        if (end == beg) {
-                              beg = it;
-                              end = std::next(beg);
-                              }
-                        else {
-                              beg = it;
-                              }
-                        }
+                  if (MidiTuplet::haveIntersection(chordInterval, durationInterval))
+                        result.push_back(it);
                   }
             if (it == chords.begin())
                   break;
             --it;
             }
 
-      return {beg, end};
+      return result;
       }
 
 } // namespace MChord

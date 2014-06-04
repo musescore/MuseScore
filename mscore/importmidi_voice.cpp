@@ -254,9 +254,9 @@ bool hasIntersectionWithTuplets(
                   std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
             const ReducedFraction &tupletOnTime)
       {
-      const auto range = MidiTuplet::findTupletsForTimeRange(voice, onTime,
-                                                             offTime - onTime, tuplets);
-      for (auto tupletIt = range.first; tupletIt != range.second; ++tupletIt) {
+      const auto foundTuplets = MidiTuplet::findTupletsForTimeRange(voice, onTime,
+                                                                    offTime - onTime, tuplets);
+      for (const auto tupletIt: foundTuplets) {
             const auto ins = findInsertedTuplet(tupletIt->first, voice, insertedTuplets);
             const bool belongsToInserted = (ins != insertedTuplets.end() && ins->first == tupletOnTime);
             if (!belongsToInserted)
@@ -288,9 +288,9 @@ void addGroupSplits(
                   continue;
             const auto it = maxChordLengths.find(voice);
             if (it != maxChordLengths.end()) {
-                  const auto chordRange = MChord::findChordsForTimeRange(
-                                          voice, onTime, groupOffTime, chords, it->second);
-                  if (chordRange.first != chordRange.second)
+                  const auto foundChords = MChord::findChordsForTimeRange(
+                                             voice, onTime, groupOffTime, chords, it->second);
+                  if (!foundChords.empty())
                         continue;
                   }
             VoiceSplit split;
