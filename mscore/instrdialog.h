@@ -78,21 +78,22 @@ class StaffListItem : public QObject, public QTreeWidgetItem {
 
       int op;
       Staff* staff;
-      int partIdx() const      { return _partIdx; }
+      int partIdx() const                       { return _partIdx; }
       void setPartIdx(int val);
       int staffIdx;
 
       void setClef(const ClefTypeList& val);
-      const ClefTypeList& clef() const { return _clef;    }
+      const ClefTypeList& clef() const          { return _clef;    }
       void setDefaultClef(const ClefTypeList& val);
+      const ClefTypeList& defaultClef() const   { return _defaultClef;  }
       void setLinked(bool val);
-      bool linked() const              { return _linked;  }
+      bool linked() const                       { return _linked;  }
       void setStaffType(const StaffType*);
       void setStaffType(int);
       const StaffType* staffType() const;
       int staffTypeIdx() const;
       void initStaffTypeCombo(bool forceRecreate = false);
-      QComboBox* staffTypeCombo() { return _staffTypeCombo; }
+      QComboBox* staffTypeCombo()               { return _staffTypeCombo; }
       };
 
 //---------------------------------------------------------

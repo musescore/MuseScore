@@ -388,7 +388,7 @@ void InstrumentWizard::on_linkedButton_clicked()
       pli->setVisible(true);
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
-      nsli->setDefaultClef(sli->clef());
+      nsli->setDefaultClef(sli->defaultClef());
       nsli->setLinked(true);
       if (staff)
             nsli->op = ITEM_ADD;
@@ -417,7 +417,7 @@ void InstrumentWizard::on_belowButton_clicked()
       PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
-      nsli->setDefaultClef(sli->clef());
+      nsli->setDefaultClef(sli->defaultClef());
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);

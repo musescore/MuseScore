@@ -468,15 +468,26 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               continue;
                         if (oe->type() == ElementType::TIMESIG)
                               continue;
-                        Element* ne;
-                        if (oe->type() == ElementType::CLEF)
-                              ne = oe->clone();
+                        Element* ne = nullptr;
+                        if (oe->type() == ElementType::CLEF) {
+                              // only clone clef if it matches staff group and does not exists yet
+                              Clef* clef = static_cast<Clef*>(oe);
+                              int   tick = seg->tick();
+                              if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffGroup()
+                                          && dstStaff->clefTypeList(tick) != clef->clefTypeList()) {
+                                    ne = oe->clone();
+                                    // add to staff clef map too
+                                    dstStaff->setClef(tick, clef->clefTypeList());
+                                    }
+                              }
                         else
                               ne = oe->linkedClone();
-                        ne->setTrack(dstTrack);
-                        ne->setParent(seg);
-                        ne->setScore(score);
-                        score->undoAddElement(ne);
+                        if (ne) {
+                              ne->setTrack(dstTrack);
+                              ne->setParent(seg);
+                              ne->setScore(score);
+                              score->undoAddElement(ne);
+                              }
                         if (oe->isChordRest()) {
                               ChordRest* ocr = static_cast<ChordRest*>(oe);
                               ChordRest* ncr = static_cast<ChordRest*>(ne);
