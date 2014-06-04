@@ -34,8 +34,8 @@ void Score::cmdSplitMeasure(ChordRest* cr)
       deleteItem(measure);
 
       // create empty measures:
-      Measure* m2 = static_cast<Measure*>(insertMeasure(Element::ElementType::MEASURE, measure->next(), true));
-      Measure* m1 = static_cast<Measure*>(insertMeasure(Element::ElementType::MEASURE, m2, true));
+      Measure* m2 = static_cast<Measure*>(insertMeasure(ElementType::MEASURE, measure->next(), true));
+      Measure* m1 = static_cast<Measure*>(insertMeasure(ElementType::MEASURE, m2, true));
 
       int tick = segment->tick();
       m1->setTick(measure->tick());

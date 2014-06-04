@@ -241,7 +241,7 @@ void TextBlock::layout(Text* t)
       Element* e = t->parent();
       if (e && t->layoutToParentWidth()) {
             layoutWidth = e->width();
-            if (e->type() == Element::ElementType::HBOX || e->type() == Element::ElementType::VBOX || e->type() == Element::ElementType::TBOX) {
+            if (e->type() == ElementType::HBOX || e->type() == ElementType::VBOX || e->type() == ElementType::TBOX) {
                   Box* b = static_cast<Box*>(e);
                   layoutWidth -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
                   }

@@ -237,12 +237,12 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void setupFotoMode();
 
-      MeasureBase* insertMeasure(Element::ElementType, MeasureBase*);
+      MeasureBase* insertMeasure(ElementType, MeasureBase*);
       MeasureBase* checkSelectionStateForInsertMeasure();
 
-      void appendMeasures(int, Element::ElementType);
-      MeasureBase* appendMeasure(Element::ElementType);
-      void cmdInsertMeasure(Element::ElementType);
+      void appendMeasures(int, ElementType);
+      MeasureBase* appendMeasure(ElementType);
+      void cmdInsertMeasure(ElementType);
       void createElementPropertyMenu(Element* e, QMenu*);
       void genPropertyMenu1(Element* e, QMenu* popup);
       void genPropertyMenuText(Element* e, QMenu* popup);
@@ -395,8 +395,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       int gripCount() const { return grips; }              // number of used grips
       void changeEditElement(Element*);
 
-      void cmdAppendMeasures(int, Element::ElementType);
-      void cmdInsertMeasures(int, Element::ElementType);
+      void cmdAppendMeasures(int, ElementType);
+      void cmdInsertMeasures(int, ElementType);
 
       ScoreState mscoreState() const;
       void setCursorVisible(bool v);

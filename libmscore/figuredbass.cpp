@@ -1691,7 +1691,7 @@ void FiguredBass::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const
 FiguredBass* Score::addFiguredBass()
       {
       Element* el = selection().element();
-      if (el == 0 || (el->type() != Element::ElementType::NOTE && el->type() != Element::ElementType::FIGURED_BASS)) {
+      if (el == 0 || (el->type() != ElementType::NOTE && el->type() != ElementType::FIGURED_BASS)) {
             if (!MScore::noGui)
                   QMessageBox::information(0,
                      QMessageBox::tr("MuseScore"),
@@ -1703,12 +1703,12 @@ FiguredBass* Score::addFiguredBass()
 
       FiguredBass * fb;
       bool bNew;
-      if (el->type() == Element::ElementType::NOTE) {
+      if (el->type() == ElementType::NOTE) {
             ChordRest * cr = static_cast<Note*>(el)->chord();
             fb = FiguredBass::addFiguredBassToSegment(cr->segment(),
                         (cr->track() / VOICES) * VOICES, 0, &bNew);
             }
-      else if (el->type() == Element::ElementType::FIGURED_BASS) {
+      else if (el->type() == ElementType::FIGURED_BASS) {
             fb = static_cast<FiguredBass*>(el);
             bNew = false;
             }

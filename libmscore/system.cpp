@@ -1003,14 +1003,14 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   Element* se = spanner->startElement();
                   Element* ee = spanner->endElement();
                   bool v1 = true;
-                  if (se && (se->type() == Element::ElementType::CHORD || se->type() == Element::ElementType::REST)) {
+                  if (se && (se->type() == ElementType::CHORD || se->type() == ElementType::REST)) {
                         ChordRest* cr = static_cast<ChordRest*>(se);
                         Measure* m    = cr->measure();
                         MStaff* mstaff = m->mstaff(cr->staffIdx());
                         v1 = mstaff->visible();
                         }
                   bool v2 = true;
-                  if(!v1 && ee && (ee->type() == Element::ElementType::CHORD || ee->type() == Element::ElementType::REST)) {
+                  if(!v1 && ee && (ee->type() == ElementType::CHORD || ee->type() == ElementType::REST)) {
                         ChordRest* cr = static_cast<ChordRest*>(ee);
                         Measure* m    = cr->measure();
                         MStaff* mstaff = m->mstaff(cr->staffIdx());
@@ -1018,7 +1018,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                         }
                   v = v1 || v2; // hide spanner if both chords are hidden
                   }
-            if (all || (score()->staff(staffIdx)->show() && v) || (spanner->type() == Element::ElementType::VOLTA))
+            if (all || (score()->staff(staffIdx)->show() && v) || (spanner->type() == ElementType::VOLTA))
                   ss->scanElements(data, func, all);
             }
       }

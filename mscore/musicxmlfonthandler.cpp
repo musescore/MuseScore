@@ -25,12 +25,13 @@
 #include "musicxmlfonthandler.h"
 
 namespace Ms {
-      
+
 //---------------------------------------------------------
 //   charFormat2QString
 //    convert charFormat to QString for debug print
 //---------------------------------------------------------
 
+#if 0
 static QString charFormat2QString(const CharFormat& f)
       {
       return QString("b %1 i %2 u %3 va %4 fs %5 fam %6")
@@ -42,6 +43,7 @@ static QString charFormat2QString(const CharFormat& f)
             .arg(f.fontFamily())
                  ;
       }
+#endif
 
 //---------------------------------------------------------
 //   MScoreTextToMXML
@@ -111,7 +113,7 @@ void MScoreTextToMXML::write(Xml& xml)
 //   MScoreTextToMXML
 //    update newFormat for start element
 //---------------------------------------------------------
-      
+
 void MScoreTextToMXML::handleStartElement(QXmlStreamReader& r)
 {
       if (r.name() == "b")
@@ -138,12 +140,12 @@ void MScoreTextToMXML::handleStartElement(QXmlStreamReader& r)
             r.skipCurrentElement();
       }
 }
-      
+
 //---------------------------------------------------------
 //   MScoreTextToMXML
 //    update newFormat for end element
 //---------------------------------------------------------
-      
+
 void MScoreTextToMXML::handleEndElement(QXmlStreamReader& r)
 {
       if (r.name() == "b")
@@ -167,7 +169,7 @@ void MScoreTextToMXML::handleEndElement(QXmlStreamReader& r)
             r.skipCurrentElement();
       }
 }
-      
+
 //---------------------------------------------------------
 //   attribute
 //    add one attribute if necessary

@@ -1057,7 +1057,7 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
 
 bool ChordRest::isGrace() const
       {
-      return type() == Element::ElementType::CHORD && ((Chord*)this)->noteType() != NoteType::NORMAL;
+      return type() == ElementType::CHORD && ((Chord*)this)->noteType() != NoteType::NORMAL;
       }
 
 //---------------------------------------------------------
@@ -1066,7 +1066,7 @@ bool ChordRest::isGrace() const
 
 bool ChordRest::isGraceBefore() const
       {
-      return (type() == Element::ElementType::CHORD && (((Chord*)this)->noteType() == NoteType::ACCIACCATURA
+      return (type() == ElementType::CHORD && (((Chord*)this)->noteType() == NoteType::ACCIACCATURA
                                           || ((Chord*)this)->noteType() == NoteType::APPOGGIATURA
                                           || ((Chord*)this)->noteType() == NoteType::GRACE4
                                           || ((Chord*)this)->noteType() == NoteType::GRACE16
@@ -1079,7 +1079,7 @@ bool ChordRest::isGraceBefore() const
 
 bool ChordRest::isGraceAfter() const
       {
-      return (type() == Element::ElementType::CHORD && (((Chord*)this)->noteType() == NoteType::GRACE8_AFTER
+      return (type() == ElementType::CHORD && (((Chord*)this)->noteType() == NoteType::GRACE8_AFTER
                                           || ((Chord*)this)->noteType() == NoteType::GRACE16_AFTER
                                           || ((Chord*)this)->noteType() == NoteType::GRACE32_AFTER));
       }

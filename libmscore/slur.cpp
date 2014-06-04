@@ -1201,7 +1201,7 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
       bool up = c1->up();
       for (Segment* seg = c1->segment(); seg; seg = seg->next(SegmentType::ChordRest)) {
             Chord* c = static_cast<Chord*>(seg->element(c1->track()));
-            if (!c || c->type() != Element::ElementType::CHORD)
+            if (!c || c->type() != ElementType::CHORD)
                   continue;
             if (c->up() != up)
                   return true;

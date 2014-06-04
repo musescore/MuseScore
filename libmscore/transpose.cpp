@@ -24,6 +24,7 @@
 #include "chord.h"
 #include "measure.h"
 #include "fret.h"
+#include "part.h"
 
 namespace Ms {
 
@@ -221,7 +222,7 @@ void Score::cmdTransposeStaff(int staffIdx, Interval interval, bool useDoubleSha
       for (Segment* segment = firstSegment(); segment; segment = segment->next1()) {
            for (int st = startTrack; st < endTrack; ++st) {
                   Element* e = segment->element(st);
-                  if (!e || e->type() != Element::ElementType::CHORD)
+                  if (!e || e->type() != ElementType::CHORD)
                       continue;
 
                   Chord* chord = static_cast<Chord*>(e);
@@ -230,7 +231,7 @@ void Score::cmdTransposeStaff(int staffIdx, Interval interval, bool useDoubleSha
                       transpose(n, interval, useDoubleSharpsFlats);
                   }
             foreach (Element* e, segment->annotations()) {
-                  if ((e->type() != Element::ElementType::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
+                  if ((e->type() != ElementType::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                         continue;
                   Harmony* h  = static_cast<Harmony*>(e);
                   int rootTpc = transposeTpc(h->rootTpc(), interval, false);
@@ -307,22 +308,22 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
             foreach(Element* e, _selection.uniqueElements()) {
                   if (e->staff()->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
-                  if (e->type() == Element::ElementType::NOTE) {
+                  if (e->type() == ElementType::NOTE) {
                         Note* note = static_cast<Note*>(e);
                         if (mode == TransposeMode::DIATONICALLY)
                               note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                         else
                               transpose(note, interval, useDoubleSharpsFlats);
                         }
-                  else if ((e->type() == Element::ElementType::HARMONY) && transposeChordNames) {
+                  else if ((e->type() == ElementType::HARMONY) && transposeChordNames) {
                         Harmony* h  = static_cast<Harmony*>(e);
                         int rootTpc, baseTpc;
                         if (mode == TransposeMode::DIATONICALLY) {
                               int tick = 0;
-                              if (h->parent()->type() == Element::ElementType::SEGMENT)
+                              if (h->parent()->type() == ElementType::SEGMENT)
                                     tick = static_cast<Segment*>(h->parent())->tick();
-                              else if (h->parent()->type() == Element::ElementType::FRET_DIAGRAM
-                                 && h->parent()->parent()->type() == Element::ElementType::SEGMENT) {
+                              else if (h->parent()->type() == ElementType::FRET_DIAGRAM
+                                 && h->parent()->parent()->type() == ElementType::SEGMENT) {
                                     tick = static_cast<Segment*>(h->parent()->parent())->tick();
                                     }
                               int key = !h->staff() ? int(Key::C) : h->staff()->key(tick);
@@ -337,7 +338,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
                               }
                         undoTransposeHarmony(h, rootTpc, baseTpc);
                         }
-                  else if ((e->type() == Element::ElementType::KEYSIG) && mode != TransposeMode::DIATONICALLY && trKeys) {
+                  else if ((e->type() == ElementType::KEYSIG) && mode != TransposeMode::DIATONICALLY && trKeys) {
                         KeySig* ks = static_cast<KeySig*>(e);
                         int key  = st->key(ks->tick());
                         undo(new ChangeKeySig(ks, KeySigEvent(key), ks->showCourtesy()));
@@ -379,7 +380,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
                   if (staff(st/VOICES)->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
                   Element* e = segment->element(st);
-                  if (!e || e->type() != Element::ElementType::CHORD)
+                  if (!e || e->type() != ElementType::CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
                   QList<Note*> nl = chord->notes();
@@ -400,7 +401,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, int tran
                   }
             if (transposeChordNames) {
                   foreach (Element* e, segment->annotations()) {
-                        if ((e->type() != Element::ElementType::HARMONY) || (!tracks.contains(e->track())))
+                        if ((e->type() != ElementType::HARMONY) || (!tracks.contains(e->track())))
                               continue;
                         Harmony* h  = static_cast<Harmony*>(e);
                         int rootTpc, baseTpc;
@@ -553,6 +554,37 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
 
       // store new data
       score()->undoChangePitch(this, newPitch, newTpc1, newTpc2);
+      }
+
+//---------------------------------------------------------
+//   transpositionChanged
+//---------------------------------------------------------
+
+void Score::transpositionChanged(Part* part)
+      {
+printf("transposition changed\n");
+      Interval v = part->instr()->transpose();
+      int transposition = v.chromatic;
+
+      int t1 = part->startTrack() / VOICES;
+      int t2 = part->endTrack() / VOICES;
+
+      // TODO: grace notes
+
+      for (Segment* s = firstSegment(SegmentType::ChordRest); s;
+            s = s->next(SegmentType::ChordRest)) {
+            for (int track = t1; track < t2; ++track) {
+                  Chord* c = static_cast<Chord*>(s->element(track));
+                  if (c->type() == ElementType::CHORD) {
+                        for (Note* n : c->notes()) {
+                              int tpc = n->tpc2default(n->pitch());
+printf("  tpc %d -> %d\n", n->tpc2(), tpc);
+                              n->undoSetTpc2(tpc);
+                              }
+                        }
+                  }
+            }
+      cmdUpdateNotes();
       }
 }
 

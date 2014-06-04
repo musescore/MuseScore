@@ -365,7 +365,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::LayoutBreakType type)
       else {
             // remove line break
             foreach(Element* e, *el()) {
-                  if (e->type() == Element::ElementType::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
+                  if (e->type() == ElementType::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
                         _score->undoRemoveElement(e);
                         break;
                         }

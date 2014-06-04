@@ -3133,7 +3133,7 @@ void Measure::layoutX(qreal stretch)
                                     if (!cr)
                                           continue;
                                     // check for accidentals in chord
-                                    if (cr->type() == Element::ElementType::CHORD) {
+                                    if (cr->type() == ElementType::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
                                           if (c->getGraceNotesBefore(0))
                                                 grace = true;
@@ -3223,7 +3223,7 @@ void Measure::layoutX(qreal stretch)
 
                         // add spacing for chord symbols
                         foreach (const Element* e, s->annotations()) {
-                              if (e->type() != Element::ElementType::HARMONY || e->track() < track || e->track() >= track+VOICES)
+                              if (e->type() != ElementType::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
                               const Harmony* h = static_cast<const Harmony*>(e);
                               QRectF b(h->bboxtight().translated(h->pos()));
@@ -3674,7 +3674,7 @@ void Measure::layoutStage1()
             }
 #endif
       MeasureBase* mb = prev();
-      if (mb && mb->type() == Element::ElementType::MEASURE) {
+      if (mb && mb->type() == ElementType::MEASURE) {
             Measure* pm = static_cast<Measure*>(mb);
             if (pm->endBarLineType() != BarLineType::NORMAL
                && pm->endBarLineType() != BarLineType::BROKEN && pm->endBarLineType() != BarLineType::DOTTED)

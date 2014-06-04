@@ -81,7 +81,7 @@ class Debugger : public QDialog, public Ui::DebuggerBase {
       QStack<Element*>backStack;
       QStack<Element*>forwardStack;
 
-      ShowElementBase* elementViews[int(Element::ElementType::MAXTYPE)];
+      ShowElementBase* elementViews[int(ElementType::MAXTYPE)];
 
       bool searchElement(QTreeWidgetItem* pi, Element* el);
 //      void addSymbol(ElementItem* parent, BSymbol* bs);
