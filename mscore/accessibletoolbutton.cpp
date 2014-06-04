@@ -8,15 +8,15 @@ namespace Ms {
 AccessibleToolButton::AccessibleToolButton(QWidget* parent, QAction* defaultQAction ): QToolButton(parent){
     this->setDefaultAction(defaultQAction);
     this->setFocusPolicy(Qt::StrongFocus);
-    this->setAutoRaise(true);
+
     this->setAccessibleName(defaultQAction->text());
     this->setAccessibleDescription(defaultQAction->toolTip());
     }
 
 
 void AccessibleToolButton::focusInEvent(QFocusEvent* e){
-    //If the button gains focus by tabbing, it will change its color
-    if(e->reason() == Qt::TabFocusReason){
+    //If the button gains focus by tabbing or backtabbing, it will change its color
+    if(e->reason() == Qt::TabFocusReason || e->reason() == Qt::BacktabFocusReason){
         setGraphicsEffect(new QGraphicsColorizeEffect());
         }
 
