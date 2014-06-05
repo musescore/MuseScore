@@ -8,11 +8,11 @@ else
       BROWSER=konqueror
 fi
 
-if [ -n $VTEST_MSCORE ]; then
+if [ -n "$VTEST_MSCORE" ]; then
       MSCORE="$VTEST_MSCORE"
 fi
 
-if [ -n $VTEST_BROWSER ]; then
+if [ -n "$VTEST_BROWSER" ]; then
       BROWSER="$VTEST_BROWSER"
 fi
 
