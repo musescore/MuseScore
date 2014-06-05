@@ -28,9 +28,11 @@ class TestSelectionFilter : public QObject, public MTest
       {
       Q_OBJECT
 
+      void testFilter(int idx, SelectionFilterType filter);
    private slots:
       void initTestCase();
-      void filterDynamic();
+      void filterDynamic()          { testFilter(1,SelectionFilterType::DYNAMIC); }
+      void filterArticulation()     { testFilter(2,SelectionFilterType::ARTICULATION); }
       };
 
 //---------------------------------------------------------
@@ -43,18 +45,18 @@ void TestSelectionFilter::initTestCase()
       }
 
 //---------------------------------------------------------
-//   filterDynamic
+//   testFilter
 //---------------------------------------------------------
 
-void TestSelectionFilter::filterDynamic()
+void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
       {
-      Score* score = readScore(DIR + QString("selectionfilter1.mscx"));
+      Score* score = readScore(DIR + QString("selectionfilter%1.mscx").arg(idx));
       Measure* m1 = score->firstMeasure();
 
       QVERIFY(m1 != 0);
 
       score->select(m1);
-      score->selectionFilter().setFiltered(SelectionFilterType::DYNAMIC,false);
+      score->selectionFilter().setFiltered(filter,false);
 
       QVERIFY(score->selection().canCopy());
       QString mimeType = score->selection().mimeType();
@@ -62,8 +64,8 @@ void TestSelectionFilter::filterDynamic()
 
       //qDebug("%s",score->selection().mimeData().data());
 
-      QVERIFY(saveCompareMimeData(score->selection().mimeData(),"selectionfilter1.xml",
-         DIR + "selectionfilter1-ref.xml"));
+      QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1.xml").arg(idx),
+         DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
       }
 
 QTEST_MAIN(TestSelectionFilter)
