@@ -500,9 +500,8 @@ void Score::fixTicks()
                   //
                   // implement fermata as a tempo change
                   //
-                  SegmentType st = SegmentType::ChordRest | SegmentType::Breath;
 
-                  for (Segment* s = m->first(st); s; s = s->next(st)) {
+                  for (Segment* s = m->first(); s; s = s->next()) {
                         if (s->segmentType() == SegmentType::Breath)
                               setPause(s->tick(), .1);
                         else if (s->segmentType() == SegmentType::TimeSig) {
@@ -512,7 +511,7 @@ void Score::fixTicks()
                                           staff(staffIdx)->addTimeSig(ts);
                                     }
                               }
-                        else {
+                        else if (s->segmentType() == SegmentType::ChordRest) {
                               foreach(Element* e, s->annotations()) {
                                     if (e->type() == ElementType::TEMPO_TEXT) {
                                           const TempoText* tt = static_cast<const TempoText*>(e);
