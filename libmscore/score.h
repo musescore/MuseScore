@@ -184,10 +184,10 @@ struct MidiInputEvent {
 //---------------------------------------------------------
 
 struct Position {
-      Segment* segment;
-      int staffIdx;
-      int line;
-      int fret;
+      Segment* segment { 0 };
+      int staffIdx     { -1 };
+      int line         { 0 };
+      int fret         { FRET_NONE };
       QPointF pos;
       };
 

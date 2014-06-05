@@ -703,7 +703,7 @@ void Score::putNote(const Position& p, bool replace)
                       return;
                   // build a default NoteVal for that line
                   nval.string = string;
-                  if(p.fret != FRET_NONE)       // if a fret is given, use it
+                  if (p.fret != FRET_NONE)       // if a fret is given, use it
                         nval.fret = p.fret;
                   else {                        // if no fret, use 0 as default
                         _is.setString(line);
