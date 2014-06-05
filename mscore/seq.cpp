@@ -710,6 +710,10 @@ void Seq::process(unsigned n, float* buffer)
 
       processMessages();
 
+#if 0
+      // this is a function running in realtime context
+      // no signal/slot ipc allowed (ws)
+      //
       if(cs && cs->sigmap()->timesig(getCurTick()).nominal()!=prevTimeSig) {
             prevTimeSig = cs->sigmap()->timesig(getCurTick()).nominal();
             emit timeSigChanged();
@@ -718,6 +722,7 @@ void Seq::process(unsigned n, float* buffer)
             prevTempo = curTempo();
             emit tempoChanged();
             }
+#endif
 
       if (state == TRANSPORT_PLAY) {
             if(!cs)
