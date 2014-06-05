@@ -481,7 +481,7 @@ void Chord::add(Element* e)
                   }
                   break;
             case ElementType::LEDGER_LINE:
-                  qFatal("Chord::add ledgerline\n");
+                  qFatal("Chord::add ledgerline");
                   break;
 
             default:
