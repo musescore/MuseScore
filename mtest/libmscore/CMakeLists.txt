@@ -14,7 +14,7 @@
 subdirs(
       barline beam chordsymbol clef clef_courtesy compat concertpitch copypaste
       copypastesymbollist dynamic element hairpin instrumentchange join keysig layout parts measure midi
-      note plugins repeat selectionrangedelete split splitstaff timesig transpose tuplet text
+      note plugins repeat selectionfilter selectionrangedelete split splitstaff timesig transpose tuplet text
       )
 
 install(FILES
