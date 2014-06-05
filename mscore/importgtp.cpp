@@ -259,7 +259,7 @@ void GuitarPro::setTuplet(Tuplet* tuplet, int tuple)
                   tuplet->setRatio(Fraction(13,8));
                   break;
             default:
-                  qFatal("unsupported tuplet %d\n", tuple);
+                  qFatal("unsupported tuplet %d", tuple);
             }
       }
 
@@ -411,7 +411,7 @@ Fraction GuitarPro::len2fraction(int len)
             //case  7: l.set(1, 1024);  break;
             //case  8: l.set(1, 2048);  break;
             default:
-                  qFatal("unknown beat len: %d\n", len);
+                  qFatal("unknown beat len: %d", len);
             }
       return l;
       }
@@ -3865,7 +3865,7 @@ void GuitarPro6::read(QFile* fp)
 
 int GuitarPro6::readBeatEffects(int, Segment*)
       {
-      qDebug("reading beat effects (.gpx)...\n");
+      qDebug("reading beat effects (.gpx)...");
       return 0;
       }
 
@@ -3903,7 +3903,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                   else if (s.startsWith("FICHIER GUITARE PRO "))
                         s = s.mid(21);
                   else {
-                        qDebug("unknown gtp format <%s>\n", ss);
+                        qDebug("unknown gtp format <%s>", ss);
                         return Score::FileError::FILE_BAD_FORMAT;
                         }
                   int a = s.left(1).toInt();
@@ -3920,7 +3920,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                   else if (a == 5)
                         gp = new GuitarPro5(score, version);
                   else {
-                        qDebug("unknown gtp format %d\n", version);
+                        qDebug("unknown gtp format %d", version);
                         return Score::FileError::FILE_BAD_FORMAT;
                         }
                         gp->read(&fp);

@@ -531,7 +531,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                   }
 
             case Spanner::Anchor::CHORD:
-                  qFatal("Sline::linePos(): anchor not implemented\n");
+                  qFatal("Sline::linePos(): anchor not implemented");
                   break;
             }
       qreal y = 0.0;

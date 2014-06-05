@@ -157,7 +157,7 @@ void MCursor::addPart(const QString& instrument)
       Staff* staff = new Staff(_score, part, 0);
       InstrumentTemplate* it = searchTemplate(instrument);
       if (it == 0) {
-            qFatal("Did not find instrument <%s>\n", qPrintable(instrument));
+            qFatal("Did not find instrument <%s>", qPrintable(instrument));
             }
       part->initFromInstrTemplate(it);
       _score->appendPart(part);
@@ -172,7 +172,7 @@ void MCursor::saveScore()
       {
       QFile fp(_score->name() + ".mscx");
       if (!fp.open(QIODevice::WriteOnly)) {
-            qFatal("Open <%s> failed\n", qPrintable(fp.fileName()));
+            qFatal("Open <%s> failed", qPrintable(fp.fileName()));
             }
       _score->saveFile(&fp, false);
       fp.close();
