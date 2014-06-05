@@ -1058,8 +1058,8 @@ void Note::read(XmlReader& e)
             _tpc[0] = Tpc::TPC_INVALID;
             }
       if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
-            KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
-            int tpc = pitch2tpc(_pitch, key.accidentalType(), Prefer::NEAREST);
+            int key = (staff() && chord()) ? staff()->key(chord()->tick()) : 0;
+            int tpc = pitch2tpc(_pitch, key, Prefer::NEAREST);
             if (concertPitch())
                   _tpc[0] = tpc;
             else
@@ -1622,8 +1622,8 @@ void Note::layout10(AccidentalState* as)
                   acci = _accidental->accidentalType();
                   if (acci == Accidental::AccidentalType::SHARP || acci == Accidental::AccidentalType::FLAT) {
                         // TODO - what about double flat and double sharp?
-                        KeySigEvent key = (staff() && chord()) ? staff()->key(chord()->tick()) : KeySigEvent();
-                        int ntpc = pitch2tpc(epitch(), key.accidentalType(), acci == Accidental::AccidentalType::SHARP ? Prefer::SHARPS : Prefer::FLATS);
+                        int key = (staff() && chord()) ? staff()->key(chord()->tick()) : 0;
+                        int ntpc = pitch2tpc(epitch(), key, acci == Accidental::AccidentalType::SHARP ? Prefer::SHARPS : Prefer::FLATS);
                         if (ntpc != tpc()) {
 //not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), tpc(), ntpc, acci);
 //                              setColor(QColor(255, 0, 0));

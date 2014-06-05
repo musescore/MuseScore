@@ -417,7 +417,7 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
 //   undoChangeKeySig
 //---------------------------------------------------------
 
-void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
+void Score::undoChangeKeySig(Staff* ostaff, int tick, int key)
       {
       KeySig* lks = 0;
       foreach (Staff* staff, ostaff->staffList()) {
@@ -435,17 +435,19 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
 
             int diff = -staff->part()->instr()->transpose().chromatic;
             if (diff && !score->styleB(StyleIdx::concertPitch))
-                  st.setAccidentalType(transposeKey(st.accidentalType(), diff));
+                  key = transposeKey(key, diff);
 
             if (ks) {
                   ks->undoChangeProperty(P_ID::GENERATED, false);
-                  undo(new ChangeKeySig(ks, st, ks->showCourtesy()));
+                  KeySigEvent kse = ks->keySigEvent();
+                  kse.setAccidentalType(key);
+                  undo(new ChangeKeySig(ks, kse, ks->showCourtesy()));
                   }
             else {
                   KeySig* nks = new KeySig(score);
                   nks->setParent(s);
                   nks->setTrack(track);
-                  nks->setKeySigEvent(st);
+                  nks->setKey(key);
                   undo(new AddElement(nks));
                   if (lks)
                         lks->linkTo(nks);
@@ -465,8 +467,11 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st)
                         continue;
                   if (!ks->generated())
                         break;
-                  if (ks->keySigEvent() != st)
-                        undo(new ChangeKeySig(ks, st, ks->showCourtesy()));
+                  if (ks->key() != key) {
+                        KeySigEvent kse = ks->keySigEvent();
+                        kse.setAccidentalType(key);
+                        undo(new ChangeKeySig(ks, kse, ks->showCourtesy()));
+                        }
                   }
             }
       }

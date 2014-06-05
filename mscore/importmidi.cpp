@@ -498,11 +498,11 @@ void MTrack::createKeys(int accidentalType)
             }
       for (auto it = km->begin(); it != km->end(); ++it) {
             const int tick = it->first;
-            const KeySigEvent &key  = it->second;
+            int key  = it->second;
             KeySig* ks = new KeySig(score);
             ks->setTrack(track);
             ks->setGenerated(false);
-            ks->setKeySigEvent(key);
+            ks->setKey(key);
             ks->setMag(staff->mag());
             Measure* m = score->tick2measure(tick);
             Segment* seg = m->getSegment(ks, tick);

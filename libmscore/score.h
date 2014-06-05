@@ -517,7 +517,7 @@ class Score : public QObject {
       void undoChangeTuning(Note*, qreal);
       void undoChangePageFormat(PageFormat*, qreal spatium, int);
       void undoChangeUserMirror(Note*, DirectionH);
-      void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent st);
+      void undoChangeKeySig(Staff* ostaff, int tick, int key);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
       void undoChangeBarLine(Measure* m, BarLineType);
       void undoChangeProperty(Element*, P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
@@ -725,7 +725,6 @@ class Score : public QObject {
       void rebuildMidiMapping();
       void updateChannel();
 
-      void cmdTransposeStaff(int staffIdx, Interval, bool useDoubleSharpsFlats);
       void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
 
       void setTempomap(TempoMap* tm);

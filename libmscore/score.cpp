@@ -2426,22 +2426,22 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
       {
       for (int staffIdx = sidx; staffIdx < eidx; ++staffIdx) {
             Staff* staff = _staves[staffIdx];
-            if(!staff->isDrumStaff()) {
-                  for (auto i = km.begin(); i != km.end(); ++i) {
-                        int tick = i->first;
-                        Measure* measure = tick2measure(tick);
-                        KeySigEvent oKey = i->second;
-                        KeySigEvent nKey = oKey;
-                        int diff = -staff->part()->instr()->transpose().chromatic;
-                        if (diff != 0 && !styleB(StyleIdx::concertPitch))
-                              nKey.setAccidentalType(transposeKey(nKey.accidentalType(), diff));
-                        staff->setKey(tick, nKey.accidentalType());
-                        KeySig* keysig = new KeySig(this);
-                        keysig->setTrack(staffIdx * VOICES);
-                        keysig->setKeySigEvent(nKey);
-                        Segment* s = measure->getSegment(keysig, tick);
-                        s->add(keysig);
-                        }
+            if (staff->isDrumStaff())
+                  continue;
+            for (auto i = km.begin(); i != km.end(); ++i) {
+                  int tick = i->first;
+                  Measure* measure = tick2measure(tick);
+                  int oKey = i->second;
+                  int nKey = oKey;
+                  int diff = -staff->part()->instr()->transpose().chromatic;
+                  if (diff != 0 && !styleB(StyleIdx::concertPitch))
+                        nKey = transposeKey(nKey, diff);
+                  staff->setKey(tick, nKey);
+                  KeySig* keysig = new KeySig(this);
+                  keysig->setTrack(staffIdx * VOICES);
+                  keysig->setKey(nKey);
+                  Segment* s = measure->getSegment(keysig, tick);
+                  s->add(keysig);
                   }
             }
       }

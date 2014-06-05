@@ -896,8 +896,8 @@ void MuseScore::editInstrList()
             int interval = firstStaff->part()->instr()->transpose().chromatic;
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
                   int tick = i->first;
-                  KeySigEvent oKey = i->second;
-                  tmpKeymap[tick] = transposeKey(oKey.accidentalType(), interval);
+                  int oKey = i->second;
+                  tmpKeymap[tick] = transposeKey(oKey, interval);
                   }
             }
 

@@ -23,11 +23,11 @@ namespace Ms {
 //   KeySigEvent
 //---------------------------------------------------------
 
-KeySigEvent::KeySigEvent(int at)
+KeySigEvent::KeySigEvent(int key)
       {
-      _accidentalType = at;
-      _invalid        = false;
-      enforceLimits();
+      Q_ASSERT(key >= -7 && key <= 7);
+      _accidentalType = key;
+      _invalid = false;
       }
 
 //---------------------------------------------------------
@@ -125,21 +125,19 @@ bool KeySigEvent::operator!=(const KeySigEvent& e) const
 //    preset lines list with accidentals for given key
 //---------------------------------------------------------
 
-void AccidentalState::init(const KeySigEvent& ks)
+void AccidentalState::init(int key)
       {
-      int type = ks.accidentalType();
-
       memset(state, 2, 74);
       for (int octave = 0; octave < 11; ++octave) {
-            if (type > 0) {
-                  for (int i = 0; i < type; ++i) {
+            if (key > 0) {
+                  for (int i = 0; i < key; ++i) {
                         int idx = tpc2step(20 + i) + octave * 7;
                         if (idx < 74)
                               state[idx] = 1 + 2;
                         }
                   }
             else {
-                  for (int i = 0; i > type; --i) {
+                  for (int i = 0; i > key; --i) {
                         int idx = tpc2step(12 + i) + octave * 7;
                         if (idx < 74)
                               state[idx] = -1 + 2;
