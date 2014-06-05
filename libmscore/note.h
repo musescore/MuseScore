@@ -73,8 +73,11 @@ enum class NoteHeadGroup : signed char {
 //---------------------------------------------------------
 
 enum class NoteHeadType : signed char {
-      HEAD_AUTO = -1, HEAD_WHOLE = 0, HEAD_HALF = 1, HEAD_QUARTER = 2,
-      HEAD_BREVIS = 3,
+      HEAD_AUTO    = -1,
+      HEAD_WHOLE   = 0,
+      HEAD_HALF    = 1,
+      HEAD_QUARTER = 2,
+      HEAD_BREVIS  = 3,
       HEAD_TYPES
       };
 
@@ -84,11 +87,11 @@ enum class NoteHeadType : signed char {
 //---------------------------------------------------------
 
 struct NoteVal {
-      int pitch = -1;
-      int tpc = Tpc::TPC_INVALID;
-      int fret = FRET_NONE;
-      int string = STRING_NONE;
-      NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
+      int pitch               { -1 };
+      int tpc                 { Tpc::TPC_INVALID };
+      int fret                { FRET_NONE };
+      int string              { STRING_NONE };
+      NoteHeadGroup headGroup { NoteHeadGroup::HEAD_NORMAL };
 
       NoteVal() {}
       NoteVal(int p) : pitch(p) {}
