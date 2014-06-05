@@ -200,16 +200,16 @@ Palette* MuseScore::newKeySigPalette()
 
       for (int i = 0; i < 7; ++i) {
             KeySig* k = new KeySig(gscore);
-            k->setKeySigEvent(KeySigEvent(i+1));
+            k->setKey(i + 1);
             sp->append(k, keyNames[i*2]);
             }
       for (int i = -7; i < 0; ++i) {
             KeySig* k = new KeySig(gscore);
-            k->setKeySigEvent(KeySigEvent(i));
+            k->setKey(i);
             sp->append(k, keyNames[(7 + i) * 2 + 1]);
             }
       KeySig* k = new KeySig(gscore);
-      k->setKeySigEvent(KeySigEvent(0));
+      k->setKey(0);
       sp->append(k, keyNames[14]);
       return sp;
       }

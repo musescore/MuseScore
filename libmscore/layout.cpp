@@ -1452,7 +1452,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             // we assume that keysigs and clefs are only in the first
             // track (voice 0) of a staff
 
-            const KeySigEvent& keyIdx = staff->key(tick);
+            KeySigEvent keyIdx;
+            keyIdx.setAccidentalType(staff->key(tick));
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   // search only up to the first ChordRest
@@ -1474,9 +1475,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                               break;
                         }
                   }
-            bool needKeysig = /* !staff->isTabStaff()       // keep key sigs in TABs: TABs themselves should hide them
-               && */ keyIdx.isValid()
-               && (isFirstSystem || styleB(StyleIdx::genKeysig));
+            bool needKeysig =        // keep key sigs in TABs: TABs themselves should hide them
+               isFirstSystem || styleB(StyleIdx::genKeysig);
 
             if (needKeysig && !keysig && keyIdx.accidentalType()) {
                   //
@@ -2589,8 +2589,8 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         Staff* staff = _staves[staffIdx];
                         showCourtesySig = false;
 
-                        KeySigEvent key1 = staff->key(tick - 1);
-                        KeySigEvent key2 = staff->key(tick);
+                        int key1 = staff->key(tick - 1);
+                        int key2 = staff->key(tick);
                         if (styleB(StyleIdx::genCourtesyKeysig) && (key1 != key2)) {
                               // locate a key sig. in next measure and, if found,
                               // check if it has court. sig turned off
@@ -2606,19 +2606,19 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                     hasCourtesyKeysig = true;
                                     s  = m->undoGetSegment(SegmentType::KeySigAnnounce, tick);
                                     KeySig* ks = static_cast<KeySig*>(s->element(track));
-                                    KeySigEvent ksv(key2);
 
                                     if (!ks) {
                                           ks = new KeySig(this);
-                                          ks->setKeySigEvent(ksv);
+                                          ks->setKey(key2);
                                           ks->setTrack(track);
                                           ks->setGenerated(true);
                                           ks->setParent(s);
                                           undoAddElement(ks);
                                           }
-                                    else if (ks->keySigEvent() != ksv) {
-                                          undo(new ChangeKeySig(ks, ksv,
-                                             ks->showCourtesy() /*, ks->showNaturals()*/));
+                                    else if (ks->key() != key2) {
+                                          KeySigEvent ke = ks->keySigEvent();
+                                          ke.setAccidentalType(key2);
+                                          undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
                                           }
                                     // change bar line to qreal bar line
                                     // m->setEndBarLineType(BarLineType::DOUBLE, true); // this caused issue #12918

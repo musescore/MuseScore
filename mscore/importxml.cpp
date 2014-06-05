@@ -2296,7 +2296,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
       // Check for "superfluous" accidentals to mark them as USER accidentals.
       // The candiadates list courtAccNotes is ordered voice after voice. Check it here segment after segment.
       AccidentalState currAcc;
-      currAcc.init(currKeySig->keySigEvent());
+      currAcc.init(currKeySig->keySigEvent().accidentalType());
       SegmentType st = SegmentType::ChordRest;
       for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
             for (int track = 0; track < staves * VOICES; ++track) {
@@ -3239,8 +3239,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         int staves = score->staff(staff)->part()->nstaves();
                         // apply to all staves in part
                         for (int i = 0; i < staves; ++i) {
-                              KeySigEvent oldkey = score->staff(staffIdx+i)->key(tick);
-                              if (oldkey != key) {
+                              int oldkey = score->staff(staffIdx+i)->key(tick);
+                              if (oldkey != key.accidentalType()) {
                                     // new key differs from key in effect at this tick
                                     KeySig* keysig = new KeySig(score);
                                     keysig->setTrack((staffIdx + i) * VOICES);
@@ -3256,8 +3256,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         //
                         // apply key to staff(staffIdx) only
                         //
-                        KeySigEvent oldkey = score->staff(staffIdx)->key(tick);
-                        if (oldkey != key) {
+                        int oldkey = score->staff(staffIdx)->key(tick);
+                        if (oldkey != key.accidentalType()) {
                               // new key differs from key in effect at this tick
                               KeySig* keysig = new KeySig(score);
                               keysig->setTrack(staffIdx * VOICES);

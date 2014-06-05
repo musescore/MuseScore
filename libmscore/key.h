@@ -48,7 +48,7 @@ class KeySigEvent {
 
    public:
       KeySigEvent() {}
-      KeySigEvent(int at);
+      KeySigEvent(int key);
 
       bool isValid() const { return !_invalid; }
       bool operator==(const KeySigEvent& e) const;
@@ -77,7 +77,7 @@ class AccidentalState {
 
    public:
       AccidentalState() {}
-      void init(const KeySigEvent&);
+      void init(int key);
       AccidentalVal accidentalVal(int line) const {
             Q_ASSERT(line >= 0 && line < 75);
             return AccidentalVal((state[line] & 0x0f) - 2);

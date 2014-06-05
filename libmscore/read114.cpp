@@ -522,14 +522,15 @@ Score::FileError Score::read114(XmlReader& e)
                         qDebug("read114: Key tick %d", tick);
                         continue;
                         }
-                  KeySigEvent ke = i->second;
                   Measure* m = tick2measure(tick);
-                  if (!m) //empty score
+                  if (!m)           //empty score
                         break;
                   Segment* seg = m->getSegment(SegmentType::KeySig, tick);
                   if (seg->element(track))
                         static_cast<KeySig*>(seg->element(track))->setGenerated(false);
                   else {
+                        KeySigEvent ke;
+                        ke.setAccidentalType(i->second);
                         KeySig* ks = keySigFactory(ke);
                         if (ks) {
                               ks->setParent(seg);

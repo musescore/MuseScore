@@ -533,7 +533,7 @@ Score::FileError importBB(Score* score, const QString& name)
             staff->setKey(tick, bb.key());
             KeySig* keysig = new KeySig(score);
             keysig->setTrack((score->staffIdx(staff->part()) + staff->rstaff()) * VOICES);
-            keysig->setKeySigEvent(KeySigEvent(bb.key()));
+            keysig->setKey(bb.key());
             Measure* mks = score->tick2measure(tick);
             Segment* sks = mks->getSegment(keysig, tick);
             sks->add(keysig);
