@@ -3754,7 +3754,9 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
             QDomNode barList = time.nextSibling();
             QStringList barsString = barList.toElement().text().split(" ");
             int staffIdx = 0;
-            //Tuplet* tuplets[staves * 2];     // is this necessary?
+            Tuplet* tuplets[staves * 2];
+            for (int track = 0; track < staves*2; ++track)
+                  tuplets[track] = 0;
             for (auto iter = barsString.begin(); iter != barsString.end(); ++iter) {
                   int tick = measure->tick();
 
@@ -3766,6 +3768,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   QDomNode currentNode = (barNode).firstChild();
                   QDomNode voice;
                   while (!currentNode.isNull()) {
+                        voice.clear();
                         if (!currentNode.nodeName().compare("Clef")) {
                               QString clefString = currentNode.toElement().text();
                               ClefType clefId;
@@ -3795,7 +3798,9 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                     }
                               }
                         else if (!currentNode.nodeName().compare("SimileMark")) {
-                              if (!currentNode.toElement().text().compare("Simple"))
+                              if (!currentNode.toElement().text().compare("Simple") ||
+                                  !currentNode.toElement().text().compare("FirstOfDouble") ||
+                                  !currentNode.toElement().text().compare("SecondOfDouble"))
                                     measure->cmdInsertRepeatMeasure(staffIdx);
                               else
                                     qDebug() << "WARNING: unhandle similie mark type: " << currentNode.toElement().text();
@@ -3803,7 +3808,9 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         else if (!currentNode.nodeName().compare("Voices")) {
                               QString voicesString = currentNode.toElement().text();
                               auto currentVoice = voicesString.split(" ").first();
-                              voice = getNode(currentVoice, partInfo->voices);
+                              // if the voice is not -1 then we set voice
+                              if (currentVoice.compare("-1"))
+                                    voice = getNode(currentVoice, partInfo->voices);
                               }
                         else
                               unhandledNode(currentNode.nodeName());
@@ -3811,6 +3818,22 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   }
 
                   int voiceNum = 0;
+                  if (voice.isNull()) {
+                        qDebug("NULL voice detected!");
+                        Fraction l = Fraction(1,1);
+                        // add a rest with length of l
+                        ChordRest* cr = new Rest(score);
+                        cr->setTrack(staffIdx * VOICES + voiceNum);
+                        TDuration d(l);
+                        cr->setDuration(l);
+                        cr->setDurationType(d);
+                        Segment* segment = measure->getSegment(Segment::SegChordRest, tick);
+                        if(!segment->cr(staffIdx * VOICES + voiceNum))
+                              segment->add(cr);
+                        tick += cr->actualTicks();
+                        staffIdx++;
+                        continue;
+                  }
                   QString beats = voice.firstChild().toElement().text();
 
                   // we now look at the beat in order to gain note, dynamic, rhythm etc. information
@@ -3824,6 +3847,8 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   QDomNode currentNode = beat.firstChild();
                   bool noteSpecified = false;
                   ChordRest* cr = segment->cr(staffIdx * VOICES + voiceNum);
+                  bool tupletSet = false;
+                  Tuplet* tuplet = tuplets[staffIdx * 2 + voiceNum];
                   while (!currentNode.isNull()) {
                         if (currentNode.nodeName() == "Notes") {
                               noteSpecified = true;
@@ -4073,16 +4098,17 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                     }
                                     else if (currentNode.nodeName() == "PrimaryTuplet") {
                                           qDebug("WARNING: Not handling tuplet note.");
-                                          Tuplet* tuplet = new Tuplet(score);
-                                          // perhaps this should be a rest too, rhythm comes before notes in score.gpif
+                                          tupletSet = true;
                                           cr = new Chord(score);
-                                          // pointless? tuplets[staffIdx * voiceNum] = tuplet;
                                           cr->setTrack(staffIdx * VOICES + voiceNum);
+                                          if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
+                                                tuplet = new Tuplet(score);
+                                                tuplets[staffIdx * 2 + voiceNum] = tuplet;
+                                                tuplet->setParent(measure);
+                                                }
                                           tuplet->setTrack(cr->track());
-                                          tuplet->setRatio(Fraction(currentNode.attributes().namedItem("num").toAttr().value().toInt(),currentNode.attributes().namedItem("den").toAttr().value().toInt()));
-                                          tuplet->setParent(measure);
                                           tuplet->setBaseLen(l);
-                                          cr->setTuplet(tuplet);
+                                          tuplet->setRatio(Fraction(currentNode.attributes().namedItem("num").toAttr().value().toInt(),currentNode.attributes().namedItem("den").toAttr().value().toInt()));
                                           tuplet->add(cr);
                                           }
                                     else
@@ -4099,6 +4125,8 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         // add a rest with length of l
                         cr = new Rest(score);
                         cr->setTrack(staffIdx * VOICES + voiceNum);
+                        if (tupletSet)
+                              tuplet->add(cr);
                         TDuration d(l);
                         cr->setDuration(l);
                         cr->setDurationType(d);
