@@ -648,9 +648,13 @@ void Seq::addCountInClicks()
       countInPlayTime = 0;
       }
 
-//---------------------------------------------------------
+//-------------------------------------------------------------------
 //   process
-//---------------------------------------------------------
+//    This function is called in a realtime context. This
+//    means that no blocking operations are allowed which
+//    includes memory allocation. The usual thread synchronisation
+//    methods like semaphores can also not be used.
+//-------------------------------------------------------------------
 
 void Seq::process(unsigned n, float* buffer)
       {
@@ -713,6 +717,7 @@ void Seq::process(unsigned n, float* buffer)
 #if 0
       // this is a function running in realtime context
       // no signal/slot ipc allowed (ws)
+      // (move to heartBeat() ?)
       //
       if(cs && cs->sigmap()->timesig(getCurTick()).nominal()!=prevTimeSig) {
             prevTimeSig = cs->sigmap()->timesig(getCurTick()).nominal();
