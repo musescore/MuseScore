@@ -273,6 +273,30 @@ bool MTest::saveMusicXml(Score* score, const QString& saveName)
       }
 
 //---------------------------------------------------------
+//   saveMimeData
+//---------------------------------------------------------
+
+bool MTest::saveMimeData(QByteArray mimeData, const QString& saveName)
+      {
+      QFile f(saveName);
+      if (!f.open(QIODevice::WriteOnly))
+            return false;
+
+      f.write(mimeData);
+      return f.error() == QFile::NoError;
+      }
+
+//---------------------------------------------------------
+//   saveCompareMimeData
+//---------------------------------------------------------
+
+bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, const QString& compareWith)
+      {
+      saveMimeData(mimeData, saveName);
+      return compareFiles(saveName, compareWith);
+      }
+
+//---------------------------------------------------------
 //   initMTest
 //---------------------------------------------------------
 
