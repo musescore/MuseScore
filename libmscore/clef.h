@@ -101,7 +101,7 @@ class ClefInfo {
       static int pitchOffset(ClefType t)       { return clefTable[int(t)]._pitchOffset; }
       static const char* lines(ClefType t)     { return clefTable[int(t)]._lines;       }
       static const char* name(ClefType t)      { return clefTable[int(t)]._name;        }
-      static StaffGroup staffGroup(ClefType t) { return clefTable[int(t)]._staffGroup;  }
+      static StaffGroup staffGroup(ClefType t) { return (int(t)>=0) ? clefTable[int(t)]._staffGroup : StaffGroup::STANDARD; }
       static ClefType tag2type(const QString&);
       };
 
