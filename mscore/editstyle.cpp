@@ -376,22 +376,28 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::showHeader,      showHeader->isChecked());
       lstyle.set(StyleIdx::headerFirstPage, showHeaderFirstPage->isChecked());
       lstyle.set(StyleIdx::headerOddEven,   headerOddEven->isChecked());
-      lstyle.set(StyleIdx::evenHeaderL, evenHeaderL->toHtml());
-      lstyle.set(StyleIdx::evenHeaderC, evenHeaderC->toHtml());
-      lstyle.set(StyleIdx::evenHeaderR, evenHeaderR->toHtml());
-      lstyle.set(StyleIdx::oddHeaderL,  oddHeaderL->toHtml());
-      lstyle.set(StyleIdx::oddHeaderC,  oddHeaderC->toHtml());
-      lstyle.set(StyleIdx::oddHeaderR,  oddHeaderR->toHtml());
+
+      Text t(cs);
+      t.setTextStyleType(TextStyleType::HEADER);
+
+      lstyle.set(StyleIdx::evenHeaderL, t.convertFromHtml(evenHeaderL->toHtml()));
+      lstyle.set(StyleIdx::evenHeaderC, t.convertFromHtml(evenHeaderC->toHtml()));
+      lstyle.set(StyleIdx::evenHeaderR, t.convertFromHtml(evenHeaderR->toHtml()));
+      lstyle.set(StyleIdx::oddHeaderL,  t.convertFromHtml(oddHeaderL->toHtml()));
+      lstyle.set(StyleIdx::oddHeaderC,  t.convertFromHtml(oddHeaderC->toHtml()));
+      lstyle.set(StyleIdx::oddHeaderR,  t.convertFromHtml(oddHeaderR->toHtml()));
 
       lstyle.set(StyleIdx::showFooter,      showFooter->isChecked());
       lstyle.set(StyleIdx::footerFirstPage, showFooterFirstPage->isChecked());
       lstyle.set(StyleIdx::footerOddEven,   footerOddEven->isChecked());
-      lstyle.set(StyleIdx::evenFooterL,     evenFooterL->toHtml());
-      lstyle.set(StyleIdx::evenFooterC,     evenFooterC->toHtml());
-      lstyle.set(StyleIdx::evenFooterR,     evenFooterR->toHtml());
-      lstyle.set(StyleIdx::oddFooterL,      oddFooterL->toHtml());
-      lstyle.set(StyleIdx::oddFooterC,      oddFooterC->toHtml());
-      lstyle.set(StyleIdx::oddFooterR,      oddFooterR->toHtml());
+
+      t.setTextStyleType(TextStyleType::FOOTER);
+      lstyle.set(StyleIdx::evenFooterL, t.convertFromHtml(evenFooterL->toHtml()));
+      lstyle.set(StyleIdx::evenFooterC, t.convertFromHtml(evenFooterC->toHtml()));
+      lstyle.set(StyleIdx::evenFooterR, t.convertFromHtml(evenFooterR->toHtml()));
+      lstyle.set(StyleIdx::oddFooterL,  t.convertFromHtml(oddFooterL->toHtml()));
+      lstyle.set(StyleIdx::oddFooterC,  t.convertFromHtml(oddFooterC->toHtml()));
+      lstyle.set(StyleIdx::oddFooterR,  t.convertFromHtml(oddFooterR->toHtml()));
 
       // figured bass
       int         idx = comboFBFont->currentIndex();
@@ -464,6 +470,28 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::tupletStemRightDistance,  Spatium(tupletStemRightDistance->value()));
       lstyle.set(StyleIdx::tupletNoteLeftDistance,   Spatium(tupletNoteLeftDistance->value()));
       lstyle.set(StyleIdx::tupletNoteRightDistance,  Spatium(tupletNoteRightDistance->value()));
+      }
+
+//---------------------------------------------------------
+//   setHeaderText
+//---------------------------------------------------------
+
+void EditStyle::setHeaderText(StyleIdx idx, QTextEdit* te)
+      {
+      QString s = lstyle.value(idx).toString();
+      s = Text::convertToHtml(s, cs->textStyle(TextStyleType::HEADER));
+      te->setHtml(s);
+      }
+
+//---------------------------------------------------------
+//   setFooterText
+//---------------------------------------------------------
+
+void EditStyle::setFooterText(StyleIdx idx, QTextEdit* te)
+      {
+      QString s = lstyle.value(idx).toString();
+      s = Text::convertToHtml(s, cs->textStyle(TextStyleType::FOOTER));
+      te->setHtml(s);
       }
 
 //---------------------------------------------------------
@@ -646,23 +674,25 @@ void EditStyle::setValues()
       showHeaderFirstPage->setChecked(lstyle.value(StyleIdx::headerFirstPage).toBool());
       headerOddEven->setChecked(lstyle.value(StyleIdx::headerOddEven).toBool());
       toggleHeaderOddEven(lstyle.value(StyleIdx::headerOddEven).toBool());
-      evenHeaderL->setHtml(lstyle.value(StyleIdx::evenHeaderL).toString());
-      evenHeaderC->setHtml(lstyle.value(StyleIdx::evenHeaderC).toString());
-      evenHeaderR->setHtml(lstyle.value(StyleIdx::evenHeaderR).toString());
-      oddHeaderL->setHtml(lstyle.value(StyleIdx::oddHeaderL).toString());
-      oddHeaderC->setHtml(lstyle.value(StyleIdx::oddHeaderC).toString());
-      oddHeaderR->setHtml(lstyle.value(StyleIdx::oddHeaderR).toString());
+
+      setHeaderText(StyleIdx::evenHeaderL, evenHeaderL);
+      setHeaderText(StyleIdx::evenHeaderC, evenHeaderC);
+      setHeaderText(StyleIdx::evenHeaderR, evenHeaderR);
+      setHeaderText(StyleIdx::oddHeaderL, oddHeaderL);
+      setHeaderText(StyleIdx::oddHeaderC, oddHeaderC);
+      setHeaderText(StyleIdx::oddHeaderR, oddHeaderR);
 
       showFooter->setChecked(lstyle.value(StyleIdx::showFooter).toBool());
       showFooterFirstPage->setChecked(lstyle.value(StyleIdx::footerFirstPage).toBool());
       footerOddEven->setChecked(lstyle.value(StyleIdx::footerOddEven).toBool());
       toggleFooterOddEven(lstyle.value(StyleIdx::footerOddEven).toBool());
-      evenFooterL->setHtml(lstyle.value(StyleIdx::evenFooterL).toString());
-      evenFooterC->setHtml(lstyle.value(StyleIdx::evenFooterC).toString());
-      evenFooterR->setHtml(lstyle.value(StyleIdx::evenFooterR).toString());
-      oddFooterL->setHtml(lstyle.value(StyleIdx::oddFooterL).toString());
-      oddFooterC->setHtml(lstyle.value(StyleIdx::oddFooterC).toString());
-      oddFooterR->setHtml(lstyle.value(StyleIdx::oddFooterR).toString());
+
+      setFooterText(StyleIdx::evenFooterL, evenFooterL);
+      setFooterText(StyleIdx::evenFooterC, evenFooterC);
+      setFooterText(StyleIdx::evenFooterR, evenFooterR);
+      setFooterText(StyleIdx::oddFooterL, oddFooterL);
+      setFooterText(StyleIdx::oddFooterC, oddFooterC);
+      setFooterText(StyleIdx::oddFooterR, oddFooterR);
 
       voltaY->setValue(lstyle.value(StyleIdx::voltaY).toDouble());
       voltaHook->setValue(lstyle.value(StyleIdx::voltaHook).toDouble());

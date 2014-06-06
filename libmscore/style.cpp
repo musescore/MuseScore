@@ -170,7 +170,7 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::SectionPause,                StyleType("sectionPause",            StyleValueType::DOUBLE) },
       { StyleIdx::MusicalSymbolFont,           StyleType("musicalSymbolFont",       StyleValueType::STRING) },
       { StyleIdx::showHeader,                  StyleType("showHeader",              StyleValueType::BOOL) },
-      { StyleIdx::headerStyled,                StyleType("headerStyled",            StyleValueType::BOOL) },
+//      { StyleIdx::headerStyled,                StyleType("headerStyled",            StyleValueType::BOOL) },
       { StyleIdx::headerFirstPage,             StyleType("headerFirstPage",         StyleValueType::BOOL) },
       { StyleIdx::headerOddEven,               StyleType("headerOddEven",           StyleValueType::BOOL) },
       { StyleIdx::evenHeaderL,                 StyleType("evenHeaderL",             StyleValueType::STRING) },
@@ -180,7 +180,7 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::oddHeaderC,                  StyleType("oddHeaderC",              StyleValueType::STRING) },
       { StyleIdx::oddHeaderR,                  StyleType("oddHeaderR",              StyleValueType::STRING) },
       { StyleIdx::showFooter,                  StyleType("showFooter",              StyleValueType::BOOL) },
-      { StyleIdx::footerStyled,                StyleType("footerStyled",            StyleValueType::BOOL) },
+//      { StyleIdx::footerStyled,                StyleType("footerStyled",            StyleValueType::BOOL) },
       { StyleIdx::footerFirstPage,             StyleType("footerFirstPage",         StyleValueType::BOOL) },
       { StyleIdx::footerOddEven,               StyleType("footerOddEven",           StyleValueType::BOOL) },
       { StyleIdx::evenFooterL,                 StyleType("evenFooterL",             StyleValueType::STRING) },
@@ -467,7 +467,7 @@ StyleData::StyleData()
             { StyleIdx::SectionPause,                QVariant(qreal(3.0)) },
             { StyleIdx::MusicalSymbolFont,           QVariant(QString("Emmentaler")) },
             { StyleIdx::showHeader,                  QVariant(false) },
-            { StyleIdx::headerStyled,                QVariant(true) },
+//            { StyleIdx::headerStyled,                QVariant(true) },
             { StyleIdx::headerFirstPage,             QVariant(false) },
             { StyleIdx::headerOddEven,               QVariant(true) },
             { StyleIdx::evenHeaderL,                 QVariant(QString()) },
@@ -477,7 +477,7 @@ StyleData::StyleData()
             { StyleIdx::oddHeaderC,                  QVariant(QString()) },
             { StyleIdx::oddHeaderR,                  QVariant(QString()) },
             { StyleIdx::showFooter,                  QVariant(true) },
-            { StyleIdx::footerStyled,                QVariant(true) },
+//            { StyleIdx::footerStyled,                QVariant(true) },
             { StyleIdx::footerFirstPage,             QVariant(true) },
             { StyleIdx::footerOddEven,               QVariant(true) },
             { StyleIdx::evenFooterL,                 QVariant(QString("$p")) },
@@ -517,7 +517,7 @@ StyleData::StyleData()
 
 // _textStyles.append(TextStyle(defaultTextStyles[i]));
       _spatium = SPATIUM20 * MScore::DPI;
-            
+
       _articulationAnchor[int(ArticulationType::Fermata)]         = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Shortfermata)]    = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Longfermata)]     = ArticulationAnchor::TOP_STAFF;

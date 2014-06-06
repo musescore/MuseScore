@@ -175,7 +175,7 @@ class TextBlock {
 
 class Text : public Element {
       Q_OBJECT
-      
+
       Q_PROPERTY(QString text READ text WRITE undoSetText)
 
       QString _text;
@@ -285,8 +285,6 @@ class Text : public Element {
 
       TextCursor* cursor() { return &_cursor; }
 
-      void setCurHalign(int);
-
       void setAbove(bool val) {  textStyle().setYoff(val ? -2.0 : 7.0); }
       void dragTo(const QPointF&);
 
@@ -301,7 +299,8 @@ class Text : public Element {
       friend class TextFragment;
       virtual void textChanged() {}
       QString convertFromHtml(const QString& ss) const;
-      
+      static QString convertToHtml(const QString&, const TextStyle&);
+
       void undoSetText(const QString& s) { undoChangeProperty(P_ID::TEXT, s); }
       };
 

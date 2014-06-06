@@ -43,6 +43,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
 
       void getValues();
       void setValues();
+      void setHeaderText(StyleIdx idx, QTextEdit* te);
+      void setFooterText(StyleIdx idx, QTextEdit* te);
 
       void apply();
 
