@@ -56,6 +56,8 @@ private slots:
       void gp5Bend()         { gpReadTest("bend", "gp5"); }
       void gp4Bend()         { gpReadTest("bend", "gp4"); }
       void gp3Bend()         { gpReadTest("bend", "gp3"); }
+      void gp5Keysig()       { gpReadTest("keysig", "gp5"); }
+      void gp4Keysig()       { gpReadTest("keysig", "gp4"); }
       };
 
 //---------------------------------------------------------
