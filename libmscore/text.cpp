@@ -16,6 +16,7 @@
 #include "measure.h"
 #include "system.h"
 #include "box.h"
+#include "page.h"
 #include "textframe.h"
 #include "sym.h"
 #include "xml.h"
@@ -233,9 +234,10 @@ void TextBlock::draw(QPainter* p, const Text* t) const
 
 void TextBlock::layout(Text* t)
       {
-      _bbox = QRectF();
-      qreal x = 0.0;
+      _bbox        = QRectF();
+      qreal x      = 0.0;
       _lineSpacing = 0.0;
+      qreal lm     = 0.0;
 
       qreal layoutWidth = 0;
       Element* e = t->parent();
@@ -244,6 +246,12 @@ void TextBlock::layout(Text* t)
             if (e->type() == ElementType::HBOX || e->type() == ElementType::VBOX || e->type() == ElementType::TBOX) {
                   Box* b = static_cast<Box*>(e);
                   layoutWidth -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
+                  lm = b->leftMargin() * MScore::DPMM;
+                  }
+            else if (e->type() == ElementType::PAGE) {
+                  Page* p = static_cast<Page*>(e);
+                  layoutWidth -= (p->lm() + p->rm());
+                  lm = p->lm();
                   }
             }
       if (_text.isEmpty()) {
@@ -283,6 +291,7 @@ void TextBlock::layout(Text* t)
             rx = (layoutWidth - (_bbox.left() + _bbox.right())) * .5;
       else  // ALIGN_LEFT
             rx = -_bbox.left();
+      rx += lm;
       for (TextFragment& f : _text)
             f.pos.rx() += rx;
       _bbox.translate(rx, 0.0);
@@ -1150,22 +1159,17 @@ void Text::layout1()
       qreal yoff = 0;
       qreal h    = 0;
       if (parent()) {
-#if 0
-            if (parent()->type() == ElementType::SEGMENT) {
-                  Segment* s = static_cast<Segment*>(parent());
-                  System* system = s->measure()->system();
-                  if (system) {
-                        SysStaff* sstaff = system->staff(staffIdx());
-                        yoff = sstaff->y();
-                        }
-                  }
-#endif
             if (layoutToParentWidth()) {
                   if (parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX || parent()->type() == ElementType::TBOX) {
                         // consider inner margins of frame
                         Box* b = static_cast<Box*>(parent());
                         yoff = b->topMargin()  * MScore::DPMM;
-                        h  = b->height() - yoff - b->bottomMargin()   * MScore::DPMM;
+                        h  = b->height() - yoff - b->bottomMargin() * MScore::DPMM;
+                        }
+                  else if (parent()->type() == ElementType::PAGE) {
+                        Page* p = static_cast<Page*>(parent());
+                        h = p->height() - p->tm() - p->bm();
+                        yoff = p->tm();
                         }
                   else
                         h  = parent()->height();
@@ -2063,8 +2067,8 @@ void Text::insertSym(SymId id)
 QRectF Text::pageRectangle() const
       {
       if (parent() && (parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX || parent()->type() == ElementType::TBOX)) {
-            QRectF r = parent()->abbox();
             Box* box = static_cast<Box*>(parent());
+            QRectF r = box->abbox();
             qreal x = r.x() + box->leftMargin() * MScore::DPMM;
             qreal y = r.y() + box->topMargin() * MScore::DPMM;
             qreal h = r.height() - (box->topMargin() + box->bottomMargin()) * MScore::DPMM;
@@ -2075,8 +2079,16 @@ QRectF Text::pageRectangle() const
 
             return QRectF(x, y, w, h);
             }
-      else
-            return abbox();
+      if (parent() && parent()->type() == ElementType::PAGE) {
+            Page* box  = static_cast<Page*>(parent());
+            QRectF r = box->abbox();
+            qreal x = r.x() + box->lm();
+            qreal y = r.y() + box->tm();
+            qreal h = r.height() - box->tm() - box->bm();
+            qreal w = r.width()  - box->lm() - box->rm();
+            return QRectF(x, y, w, h);
+            }
+      return abbox();
       }
 
 //---------------------------------------------------------
@@ -2416,5 +2428,16 @@ QString Text::convertFromHtml(const QString& ss) const
       return s;
       }
 
+//---------------------------------------------------------
+//   convertToHtml
+//    convert from internal html format to Qt
+//---------------------------------------------------------
+
+QString Text::convertToHtml(const QString& s, const TextStyle& st)
+      {
+      qreal size     = st.size();
+      QString family = st.family();
+      return QString("<html><body style=\"font-family:'%1'; font-size:%2pt;\">%3</body></html>").arg(family).arg(size).arg(s);
+      }
 }
 

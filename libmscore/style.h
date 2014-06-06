@@ -296,7 +296,7 @@ enum class StyleIdx : unsigned char {
       MusicalSymbolFont,
 
       showHeader,
-      headerStyled,
+//      headerStyled,
       headerFirstPage,
       headerOddEven,
       evenHeaderL,
@@ -307,7 +307,7 @@ enum class StyleIdx : unsigned char {
       oddHeaderR,
 
       showFooter,
-      footerStyled,
+//      footerStyled,
       footerFirstPage,
       footerOddEven,
       evenFooterL,
