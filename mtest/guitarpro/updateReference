@@ -29,3 +29,4 @@ cp   $MSCORE/keysig.gp5.mscx keysig.gp5-ref.mscx
 cp   $MSCORE/keysig.gp4.mscx keysig.gp4-ref.mscx
 cp   $MSCORE/dotted-tuplets.gp5.mscx dotted-tuplets.gp5-ref.mscx
 cp   $MSCORE/tuplet-with-slur.gp4.mscx tuplet-with-slur.gp4-ref.mscx
+cp   $MSCORE/beams-stems-ledger-lines.gp5.mscx beams-stems-ledger-lines.gp5-ref.mscx
