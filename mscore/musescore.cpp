@@ -655,6 +655,18 @@ MuseScore::MuseScore()
       fileTools->addWidget(new AccessibleToolButton(fileTools, a));
 
       fileTools->addSeparator();
+      mag = new MagBox;
+      //mag->setFocusPolicy(Qt::ClickFocus);
+      mag->setFixedHeight(preferences.iconHeight + 10);  // hack
+      connect(mag, SIGNAL(magChanged(int)), SLOT(magChanged(int)));
+      fileTools->addWidget(mag);
+      viewModeCombo = new QComboBox(this);
+      //viewModeCombo->setFocusPolicy(Qt::ClickFocus);
+      viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
+      viewModeCombo->addItem(tr("Page View"));
+      viewModeCombo->addItem(tr("Continuous View"));
+      connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
+      fileTools->addWidget(viewModeCombo);
 
       transportTools = addToolBar(tr("Transport Tools"));
       transportTools->setObjectName("transport-tools");
@@ -677,28 +689,16 @@ MuseScore::MuseScore()
 
       transportTools->addWidget(new AccessibleToolButton(transportTools, metronomeAction));
 
-      mag = new MagBox;
-      mag->setFocusPolicy(Qt::ClickFocus);
-      mag->setFixedHeight(preferences.iconHeight + 10);  // hack
-      connect(mag, SIGNAL(magChanged(int)), SLOT(magChanged(int)));
-      fileTools->addWidget(mag);
-      viewModeCombo = new QComboBox(this);
-      viewModeCombo->setFocusPolicy(Qt::ClickFocus);
-      viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
-      viewModeCombo->addItem(tr("Page View"));
-      viewModeCombo->addItem(tr("Continuous View"));
-      connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
-      fileTools->addWidget(viewModeCombo);
 
       cpitchTools = addToolBar(tr("Concert Pitch"));
       cpitchTools->setObjectName("pitch-tools");
-      cpitchTools->addAction(getAction("concert-pitch"));
+      cpitchTools->addWidget(new AccessibleToolButton( cpitchTools, getAction("concert-pitch")));
 
       QToolBar* foto = addToolBar(tr("Foto Mode"));
       foto->setObjectName("foto-tools");
       a = getAction("fotomode");
       a->setCheckable(true);
-      foto->addAction(a);
+      foto->addWidget(new AccessibleToolButton(foto, a));
 
       addToolBarBreak();
 

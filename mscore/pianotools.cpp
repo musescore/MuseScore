@@ -296,6 +296,7 @@ PianoTools::PianoTools(QWidget* parent)
       setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
 
       HPiano* piano = new HPiano;
+      piano->setFocusPolicy(Qt::ClickFocus);
       setWidget(piano);
 
 //      QWidget* w = new QWidget(this);
