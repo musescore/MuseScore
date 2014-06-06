@@ -288,6 +288,11 @@ void Selection::updateSelectedElements()
                   Element* e = s->element(st);
                   if (!e)
                         continue;
+                  if (e->isChordRest()) {
+                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        foreach (Element* e, cr->lyricsList())
+                              _el.append(e);
+                        }
                   if (e->type() == ElementType::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
                         foreach (Articulation* art, chord->articulations()) {
