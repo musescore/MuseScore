@@ -138,10 +138,11 @@ Score* MTest::readCreatedScore(const QString& name)
 #endif
       else if (csl == "xml")
             rv = importMusicXml(score, name);
-      else if (csl == "gp3" || csl == "gp4" || csl == "gp5")
+      else if (csl == "gp3" || csl == "gp4" || csl == "gp5" || csl == "gpx")
             rv = importGTP(score, name);
       else
             rv = Score::FileError::FILE_UNKNOWN_TYPE;
+
 
       if (rv != Score::FileError::FILE_NO_ERROR) {
             QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
