@@ -506,14 +506,14 @@ void checkOffTime(
             const std::multimap<ReducedFraction, MidiChord> &chords)
       {
       Q_ASSERT_X(note.offTime - chordIt->first >= MChord::minAllowedDuration(),
-                 "Quantize::quantizeOffTimes", "Too small note length");
+                 "Quantize::checkOffTime", "Too small note length");
 
       if (note.isInTuplet) {
             const auto &tuplet = note.tuplet->second;
 
             Q_ASSERT_X(note.offTime >= tuplet.onTime
                        && note.offTime <= tuplet.onTime + tuplet.len,
-                       "Quantize::quantizeOffTimes",
+                       "Quantize::checkOffTime",
                        "Note off time is outside tuplet but should be inside");
             }
       else {
@@ -535,7 +535,7 @@ void checkOffTime(
                         }
 
                   Q_ASSERT_X(note.offTime <= tuplet.onTime,
-                             "Quantize::quantizeOffTimes",
+                             "Quantize::checkOffTime",
                              "Note off time is inside next tuplet but it shouldn't");
                   break;
                   }
@@ -556,7 +556,7 @@ void checkOffTime(
                         const auto &tuplet = prev->second.tuplet->second;
 
                         Q_ASSERT_X(note.offTime >= tuplet.onTime + tuplet.len,
-                                   "Quantize::quantizeOffTimes",
+                                   "Quantize::checkOffTime",
                                    "Note off time is inside prev tuplet but it shouldn't");
                         }
                   break;
