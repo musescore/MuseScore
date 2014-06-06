@@ -540,7 +540,7 @@ void Score::transpositionChanged(Part* part)
       {
       // TODO: grace notes
 
-      for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+      for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             for (Staff* st : *part->staves()) {
                   if (st->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
