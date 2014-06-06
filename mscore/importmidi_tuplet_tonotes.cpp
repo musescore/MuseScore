@@ -9,6 +9,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/mscore.h"
+#include "libmscore/chordrest.h"
 
 
 namespace Ms {
@@ -68,6 +69,39 @@ void createTuplets(Staff *staff,
                   }
             }
       }
+
+
+#ifdef QT_DEBUG
+
+void printInvalidTupletLocation(int measureIndex, int staffIndex)
+      {
+      qDebug() << "Tuplet is invalid; measure number (from 1):"
+               << measureIndex + 1
+               << ", staff index (from 0):" << staffIndex;
+      }
+
+bool haveTupletsEnoughElements(const Staff *staff)
+      {
+      const int strack = staff->idx() * VOICES;
+
+      for (int voice = 0; voice < VOICES; ++voice) {
+            for (Segment *seg = staff->score()->firstSegment(); seg; seg = seg->next1()) {
+                  if (seg->segmentType() == Segment::Type::ChordRest) {
+                        const ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
+                        if (!cr)
+                              continue;
+                        const Tuplet *tuplet = cr->tuplet();
+                        if (tuplet && tuplet->elements().size() <= 1) {
+                              printInvalidTupletLocation(seg->measure()->no(), staff->idx());
+                              return false;
+                              }
+                        }
+                  }
+            }
+      return true;
+      }
+
+#endif
 
 } // namespace MidiTuplet
 } // namespace Ms
