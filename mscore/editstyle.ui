@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>892</width>
-    <height>573</height>
+    <width>1004</width>
+    <height>762</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -172,7 +172,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="Page1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -997,13 +997,6 @@
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="headerStyled">
-              <property name="text">
-               <string>Styled</string>
-              </property>
-             </widget>
-            </item>
-            <item>
              <spacer name="horizontalSpacer_4">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -1290,13 +1283,6 @@
               </property>
               <property name="text">
                <string>Odd/Even</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="footerStyled">
-              <property name="text">
-               <string>Styled</string>
               </property>
              </widget>
             </item>
@@ -5599,7 +5585,6 @@
   <tabstop>showHeader</tabstop>
   <tabstop>showHeaderFirstPage</tabstop>
   <tabstop>headerOddEven</tabstop>
-  <tabstop>headerStyled</tabstop>
   <tabstop>evenHeaderL</tabstop>
   <tabstop>editEvenHeaderL</tabstop>
   <tabstop>evenHeaderC</tabstop>
@@ -5615,7 +5600,6 @@
   <tabstop>showFooter</tabstop>
   <tabstop>showFooterFirstPage</tabstop>
   <tabstop>footerOddEven</tabstop>
-  <tabstop>footerStyled</tabstop>
   <tabstop>evenFooterL</tabstop>
   <tabstop>editEvenFooterL</tabstop>
   <tabstop>evenFooterC</tabstop>
