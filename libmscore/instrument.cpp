@@ -672,7 +672,8 @@ void InstrumentData::setDrumset(Drumset* ds)
 void InstrumentData::setLongName(const QString& f)
       {
       _longNames.clear();
-      _longNames.append(StaffName(f, 0));
+      if (f.length() > 0)
+            _longNames.append(StaffName(f, 0));
       }
 
 //---------------------------------------------------------
@@ -682,7 +683,8 @@ void InstrumentData::setLongName(const QString& f)
 void InstrumentData::setShortName(const QString& f)
       {
       _shortNames.clear();
-      _shortNames.append(StaffName(f, 0));
+      if (f.length() > 0)
+            _shortNames.append(StaffName(f, 0));
       }
 
 //---------------------------------------------------------

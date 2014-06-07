@@ -2361,6 +2361,9 @@ void ChangeStaffType::redo()
       StaffType st = *staff->staffType();
       staff->setStaffType(&staffType);
       staffType = st;
+      Score* score = staff->score();
+      score->setLayoutAll(true);
+      score->scanElements(0, notifyTimeSigs);
       }
 
 void ChangeStaffType::undo()
@@ -2397,6 +2400,8 @@ void ChangeStaffType::undo()
             seg->add(clef);
             }
 //      cmdUpdateNotes();                         // needed?
+      score->setLayoutAll(true);
+      score->scanElements(0, notifyTimeSigs);
       }
 
 //---------------------------------------------------------
