@@ -259,6 +259,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == ElementType::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == StaffStateType::INSTRUMENT) {
             popup->addAction(tr("Text Style..."))->setData("text-style");
+            popup->addAction(tr("Text Properties..."))->setData("text-props");
             popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
             }
       else if (e->type() == ElementType::SLUR_SEGMENT) {
@@ -295,6 +296,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       else if (e->type() == ElementType::INSTRUMENT_CHANGE) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Text Style..."))->setData("text-style");
+            popup->addAction(tr("Text Properties..."))->setData("text-props");
             popup->addAction(tr("Change Instrument..."))->setData("ch-instr");
             }
       else if (e->type() == ElementType::FRET_DIAGRAM) {

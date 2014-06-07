@@ -28,6 +28,7 @@ namespace Ms {
 InstrumentChange::InstrumentChange(Score* s)
    : Text(s)
       {
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setTextStyleType(TextStyleType::INSTRUMENT_CHANGE);
       }
 
