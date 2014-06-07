@@ -114,15 +114,15 @@ void EditStaff::updateInstrument()
       {
       updateInterval(instrument.transpose());
 
-      QList<StaffName>& nl = instrument.shortNames();
-      QString df = nl.isEmpty() ? "" : nl[0].name;
+      QList<StaffName>& snl = instrument.shortNames();
+      QString df = snl.isEmpty() ? "" : snl[0].name;
       shortName->setText(df);
 
-      nl = instrument.longNames();
-      df = nl.isEmpty() ? "" : nl[0].name;
+      QList<StaffName>& lnl = instrument.longNames();
+      df = lnl.isEmpty() ? "" : lnl[0].name;
       longName->setText(df);
 
-      if (partName->text() == instrumentName->text())    // Updates part name is no custom name has been set before
+      if (partName->text() == instrumentName->text())    // Updates part name if no custom name has been set before
             partName->setText(instrument.trackName());
 
       instrumentName->setText(instrument.trackName());
@@ -191,14 +191,14 @@ void EditStaff::bboxClicked(QAbstractButton* button)
 
             case QDialogButtonBox::RejectRole:
                   close();
+                  if (staff != nullptr)
+                        delete staff;
                   break;
 
             default:
                   qDebug("EditStaff: unknown button %d", int(br));
                   break;
             }
-      if (staff != nullptr)
-            delete staff;
       }
 
 //---------------------------------------------------------
@@ -245,7 +245,7 @@ void EditStaff::apply()
             }
 
       if (s != staff->small() || inv != staff->invisible() || userDist != staff->userDist() || col != staff->color())
-            score->undo(new ChangeStaff(staff, s, inv, userDist * score->spatium(), col));
+            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col));
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {
             // updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);
