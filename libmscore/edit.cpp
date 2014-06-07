@@ -1466,6 +1466,11 @@ void Score::cmdDeleteSelection()
                               deleteItem(s->element(track));
                               continue;
                               }
+                        foreach(Element* annotation, s->annotations()) {
+                              if(!annotation->systemFlag())
+                                    undoRemoveElement(annotation);
+                              }
+
                         if (s->segmentType() != SegmentType::ChordRest || !s->element(track))
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
