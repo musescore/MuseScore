@@ -100,8 +100,10 @@ ReducedFraction quantForLen(const ReducedFraction &noteLen,
       auto quant = basicQuant;
       while (quant > noteLen && quant >= MChord::minAllowedDuration() * 2)
             quant /= 2;
+
       if (quant >= MChord::minAllowedDuration() * 2)
             quant = reduceQuantIfDottedNote(noteLen, quant);
+
       return quant;
       }
 
@@ -115,6 +117,7 @@ ReducedFraction quantForTuplet(const ReducedFraction &tupletLen,
 
       if (quant >= MChord::minAllowedDuration() * 2)
             return quant / 2;
+
       return quant;
       }
 
@@ -371,17 +374,41 @@ void setIfHumanPerformance(
 
 //--------------------------------------------------------------------------------------------
 
+// remove small intersection with the next chord
+// (preserve legato)
+
+void removeIntersection(
+            ReducedFraction &offTime,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const ReducedFraction &basicQuant)
+      {
+      auto it = std::next(chordIt);
+      while (it != chords.end() && it->second.voice != chordIt->second.voice)
+            ++it;
+      if (it != chords.end()) {
+            const auto ioi = it->first - chordIt->first;
+            const auto cross = offTime - it->first;
+            if (cross > ReducedFraction(0, 1) && cross < ioi / 2 && cross < basicQuant / 2)
+                  offTime = it->first;
+            }
+      }
+
 std::pair<ReducedFraction, ReducedFraction>
 quantizeOffTimeForTuplet(
-            const ReducedFraction &onTime,
             const ReducedFraction &noteOffTime,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const ReducedFraction &basicQuant,
             const MidiTuplet::TupletData &tuplet)
       {
       const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
       const auto result = findQuantizedTupletNoteOffTime(
-                        onTime, noteOffTime, tuplet.len, tupletRatio, tuplet.onTime);
+                             chordIt->first, noteOffTime, tuplet.len, tupletRatio, tuplet.onTime);
       auto offTime = result.first;
       auto quant = result.second;
+      removeIntersection(offTime, chordIt, chords, basicQuant);
+
                   // verify that offTime is still inside tuplet
       if (offTime < tuplet.onTime) {
             offTime = tuplet.onTime;
@@ -406,6 +433,7 @@ quantizeOffTimeForNonTuplet(
       const auto result = findQuantizedNoteOffTime(*chordIt, noteOffTime, basicQuant);
       auto offTime = result.first;
       auto quant = result.second;
+      removeIntersection(offTime, chordIt, chords, basicQuant);
 
                   // verify that offTime is still outside tuplets
       if (chord.isInTuplet) {
@@ -1001,18 +1029,15 @@ void quantizeOffTimes(
             const ReducedFraction &basicQuant)
       {
       for (auto chordIt = quantizedChords.begin(); chordIt != quantizedChords.end(); ) {
-            auto &chordEvent = *chordIt;
-            MidiChord &chord = chordEvent.second;
+            MidiChord &chord = chordIt->second;
                         // quantize off times
             for (auto noteIt = chord.notes.begin(); noteIt != chord.notes.end(); ) {
                   MidiNote &note = *noteIt;
-
                   const auto result = (note.isInTuplet)
-                              ? quantizeOffTimeForTuplet(
-                                      chordEvent.first, note.offTime, note.tuplet->second)
-                              : quantizeOffTimeForNonTuplet(
-                                      note.offTime, chordIt, quantizedChords, basicQuant);
-
+                              ? quantizeOffTimeForTuplet(note.offTime, chordIt, quantizedChords,
+                                                         basicQuant, note.tuplet->second)
+                              : quantizeOffTimeForNonTuplet(note.offTime, chordIt,
+                                                            quantizedChords, basicQuant);
                   note.offTime = result.first;
                   note.quant = result.second;
 #ifdef QT_DEBUG
