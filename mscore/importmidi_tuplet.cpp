@@ -577,6 +577,31 @@ bool areAllTupletsReferenced(
       return tupletEvents.size() == referencedTuplets.size();
       }
 
+// this check is not full but often if use invalid iterator for comparison
+// it causes crash or something
+
+bool areTupletReferencesValid(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      for (const auto &chord: chords) {
+            const MidiChord &c = chord.second;
+            if (c.isInTuplet) {
+                  const auto &tuplet = c.tuplet->second;
+                  if (tuplet.onTime < ReducedFraction(0, 1)
+                              || tuplet.len < ReducedFraction(0, 1))
+                        return false;
+                  }
+            for (const auto &note: c.notes) {
+                  if (note.isInTuplet) {
+                        const auto &tuplet = note.tuplet->second;
+                        if (tuplet.onTime < ReducedFraction(0, 1)
+                                    || tuplet.len < ReducedFraction(0, 1))
+                              return false;
+                        }
+                  }
+            }
+      return true;
+      }
+
 #endif
 
 
@@ -748,6 +773,7 @@ void findTuplets(
                                                       endBarChordIt, startBarChordIt, basicQuant);
       if (tuplets.empty())
             return;
+
       filterTuplets(tuplets, basicQuant);
 
             // later notes will be sorted and their indexes become invalid

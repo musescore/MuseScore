@@ -102,6 +102,8 @@ bool areAllTupletsReferenced(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const std::multimap<ReducedFraction, TupletData> &tupletEvents);
 
+bool areTupletReferencesValid(const std::multimap<ReducedFraction, MidiChord> &chords);
+
 #endif
 
 } // namespace MidiTuplet

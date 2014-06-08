@@ -1150,9 +1150,21 @@ findQuantizedChords(
                         }
                   }
             if (found != quantizedChords.end()) {
-                  found->second.notes.append(chord.notes);     // merge chords with equal on times
-                  if (chord.isInTuplet)
-                        found->second.isInTuplet = true;
+                  MidiChord &fc = found->second;
+                  fc.notes.append(chord.notes);     // merge chords with equal on times
+                  if (chord.isInTuplet) {
+                        if (!fc.isInTuplet) {
+                              fc.isInTuplet = true;
+                              fc.tuplet = chord.tuplet;
+                              }
+#ifdef QT_DEBUG
+                        else {
+                              Q_ASSERT_X(fc.tuplet == chord.tuplet,
+                                         "Quantize::findQuantizedChords",
+                                         "Tuplets of merged chords are different");
+                              }
+#endif
+                        }
                   }
             else {
                   quantizedChords.insert({i.onTime, chord});
@@ -1167,13 +1179,19 @@ void quantizeChords(
             const TimeSigMap *sigmap,
             const ReducedFraction &basicQuant)
       {
-      applyTupletStaccato(chords);     // apply staccato for tuplet off times
 
+      Q_ASSERT_X(MidiTuplet::areTupletReferencesValid(chords), "Quantize::quantizeChords",
+                 "Some tuplet references are invalid");
+
+      applyTupletStaccato(chords);     // apply staccato for tuplet off times
       std::map<std::pair<const ReducedFraction, MidiChord> *, QuantInfo> foundOnTimes;
       quantizeOnTimes(chords, foundOnTimes, basicQuant, sigmap);
       auto quantizedChords = findQuantizedChords(foundOnTimes);
-      quantizeOffTimes(quantizedChords, basicQuant);
 
+      Q_ASSERT_X(MidiTuplet::areTupletReferencesValid(quantizedChords), "Quantize::quantizeChords",
+                 "Some tuplet references are invalid");
+
+      quantizeOffTimes(quantizedChords, basicQuant);
       std::swap(chords, quantizedChords);
       }
 
