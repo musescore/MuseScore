@@ -90,6 +90,10 @@ ReducedFraction quantizeValue(
             const ReducedFraction &value,
             const ReducedFraction &quant);
 
+ReducedFraction quantForLen(
+            const ReducedFraction &noteLen,
+            const ReducedFraction &basicQuant);
+
 ReducedFraction quantizeToLarge(
             const ReducedFraction &time,
             const ReducedFraction &quant);

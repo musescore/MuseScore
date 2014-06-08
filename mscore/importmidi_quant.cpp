@@ -1067,7 +1067,6 @@ void quantizeOnTimes(
                         maxVoice = chordIt->second.voice;
                   if (chordIt->second.voice != voice)
                         continue;
-
                   if (chordsToQuant.empty()) {
                         currentlyInTuplet = chordIt->second.isInTuplet;
                         if (currentBarIndex != chordIt->second.barIndex) {

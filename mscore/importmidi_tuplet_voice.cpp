@@ -31,7 +31,12 @@ chordInterval(const std::pair<const ReducedFraction, MidiChord> &chord,
               const ReducedFraction &basicQuant)
       {
       const auto onTime = Quantize::findMinQuantizedOnTime(chord, basicQuant);
-      const auto offTime = Quantize::findMaxQuantizedOffTime(chord, basicQuant);
+      auto offTime = Quantize::findMaxQuantizedOffTime(chord, basicQuant);
+      if (offTime == onTime)
+            offTime += Quantize::quantForLen(MChord::minNoteLen(chord), basicQuant);
+
+      Q_ASSERT_X(offTime > onTime, "MidiTuplet::chordInterval", "off time <= on time");
+
       return std::make_pair(onTime, offTime);
       }
 
