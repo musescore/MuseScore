@@ -252,6 +252,14 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
             }
       AccidentalBracket* ab = new AccidentalBracket(gscore);
       sp->append(ab, QT_TRANSLATE_NOOP("Palette", "round brackets"));
+
+      Icon* ik = new Icon(gscore);
+      ik->setIconType(IconType::COURTESY);
+      Shortcut* s = Shortcut::getShortcut("courtesy");
+      QAction* action = s->action();
+      QIcon icon(action->icon());
+      ik->setAction("courtesy", icon);
+      sp->append(ik, s->help());
       return sp;
       }
 

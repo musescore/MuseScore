@@ -319,6 +319,7 @@ enum class IconType : signed char {
       SBEAM, MBEAM, NBEAM, BEAM32, BEAM64, AUTOBEAM,
       FBEAM1, FBEAM2,
       VFRAME, HFRAME, TFRAME, FFRAME, MEASURE,
+      COURTESY,
       BRACKETS
       };
 

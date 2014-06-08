@@ -1140,6 +1140,14 @@ Shortcut Shortcut::sc[] = {
           flatflat_ICON
          ),
       Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_NOTE_ENTRY_DRUM,
+         ShortcutFlags::A_CMD,
+         "courtesy",
+         QT_TRANSLATE_NOOP("action","Courtesy accidental"),
+          abeam_ICON
+         ),
+
+      Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "acciaccatura",

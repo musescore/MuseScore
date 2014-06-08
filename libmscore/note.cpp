@@ -1177,6 +1177,7 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || type == ElementType::REHEARSAL_MARK
          || type == ElementType::FINGERING
          || type == ElementType::ACCIDENTAL
+         || type == ElementType::ACCIDENTAL_BRACKET
          || type == ElementType::BREATH
          || type == ElementType::ARPEGGIO
          || type == ElementType::NOTEHEAD
@@ -1190,12 +1191,13 @@ bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || type == ElementType::DYNAMIC
          || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
          || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
          || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
          || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
          || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
+         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::COURTESY)
          || (noteType() == NoteType::NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
@@ -1258,6 +1260,18 @@ Element* Note::drop(const DropData& data)
 
             case ElementType::ACCIDENTAL:
                   score()->changeAccidental(this, static_cast<Accidental*>(e)->accidentalType());
+                  break;
+
+            case ElementType::ACCIDENTAL_BRACKET:
+                  if (!_accidental) {
+                    Segment* segment = ch->segment();
+                    Measure* measure = segment->measure();
+                    AccidentalVal accval = measure->findAccidental(this);
+                    Accidental::AccidentalType acctype = (accval == AccidentalVal::NATURAL ? Accidental::AccidentalType::NATURAL : Accidental::value2subtype(accval));
+                    score()->changeAccidental(this, acctype);
+                  }
+                  _accidental->undoSetHasBracket(true);
+                  return e;
                   break;
 
             case ElementType::BEND:
@@ -1324,6 +1338,16 @@ Element* Note::drop(const DropData& data)
                         case IconType::GRACE32_AFTER:
                               score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, MScore::division/8);
                               break;
+                        case IconType::COURTESY:
+                              if (!_accidental) {
+                                    Segment* segment = ch->segment();
+                                    Measure* measure = segment->measure();
+                                    AccidentalVal accval = measure->findAccidental(this);
+                                    Accidental::AccidentalType acctype = (accval == AccidentalVal::NATURAL ? Accidental::AccidentalType::NATURAL : Accidental::value2subtype(accval));
+                                    score()->changeAccidental(this, acctype);
+                              }
+                              break;
+                  
                         case IconType::SBEAM:
                         case IconType::MBEAM:
                         case IconType::NBEAM:
