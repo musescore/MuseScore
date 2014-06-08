@@ -1028,11 +1028,10 @@ void quantizeOffTimes(
             std::multimap<ReducedFraction, MidiChord> &quantizedChords,
             const ReducedFraction &basicQuant)
       {
-      for (auto chordIt = quantizedChords.begin(); chordIt != quantizedChords.end(); ) {
+      for (auto chordIt = quantizedChords.begin(); chordIt != quantizedChords.end(); ++chordIt) {
             MidiChord &chord = chordIt->second;
                         // quantize off times
-            for (auto noteIt = chord.notes.begin(); noteIt != chord.notes.end(); ) {
-                  MidiNote &note = *noteIt;
+            for (auto &note: chord.notes) {
                   const auto result = (note.isInTuplet)
                               ? quantizeOffTimeForTuplet(note.offTime, chordIt, quantizedChords,
                                                          basicQuant, note.tuplet->second)
@@ -1043,13 +1042,7 @@ void quantizeOffTimes(
 #ifdef QT_DEBUG
                   checkOffTime(note, chordIt, quantizedChords);
 #endif
-                  ++noteIt;
                   }
-            if (chord.notes.isEmpty()) {
-                  chordIt = quantizedChords.erase(chordIt);
-                  continue;
-                  }
-            ++chordIt;
             }
       }
 
