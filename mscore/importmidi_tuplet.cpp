@@ -185,6 +185,9 @@ tupletInterval(const TupletInfo &tuplet,
             if (offTime > tupletEnd)
                   tupletEnd = offTime;
             }
+
+      Q_ASSERT_X(tupletEnd > tuplet.onTime, "MidiTuplet::tupletInterval", "off time <= on time");
+
       return std::make_pair(tuplet.onTime, tupletEnd);
       }
 
