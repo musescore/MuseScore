@@ -7,6 +7,7 @@
 namespace Ms {
 
 class MidiChord;
+class MidiNote;
 class TimeSigMap;
 class MTrack;
 class DurationElement;
@@ -38,6 +39,12 @@ struct TupletLimits
 const TupletLimits& tupletLimits(int tupletNumber);
 
 void removeEmptyTuplets(MTrack &track);
+
+bool hasNonTrivialChord(
+            const ReducedFraction &chordOnTime,
+            const QList<MidiNote> &notes,
+            const ReducedFraction &tupletOnTime,
+            const ReducedFraction &tupletLen);
 
 std::multimap<ReducedFraction, TupletData>::iterator
 removeTupletIfEmpty(

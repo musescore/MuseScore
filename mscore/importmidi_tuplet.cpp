@@ -51,6 +51,57 @@ TupletInfo& tupletFromId(int id, std::vector<TupletInfo> &tuplets)
                         tupletFromId(id, const_cast<const std::vector<TupletInfo> &>(tuplets)));
       }
 
+bool hasNonTrivialChord(
+            const ReducedFraction &chordOnTime,
+            const QList<MidiNote> &notes,
+            const ReducedFraction &tupletOnTime,
+            const ReducedFraction &tupletLen)
+      {
+      if (chordOnTime == tupletOnTime) {
+            for (const auto &note: notes) {
+                  if (note.offTime - chordOnTime < tupletLen)
+                        return true;
+                  }
+            }
+      else {
+            if (chordOnTime > tupletOnTime && chordOnTime < tupletOnTime + tupletLen)
+                  return true;
+            if (chordOnTime >= tupletOnTime + tupletLen)
+                  return false;
+
+            Q_ASSERT_X(chordOnTime < tupletOnTime, "MidiTuplet::hasNonTrivialChord",
+                       "Chord on time was not compared correctly");
+
+            for (const auto &note: notes) {
+                  if (note.offTime < tupletOnTime + tupletLen)
+                        return true;
+                  }
+            }
+      return false;
+      }
+
+bool isTupletUseless(
+            int voice,
+            const ReducedFraction &onTime,
+            const ReducedFraction &len,
+            const ReducedFraction &maxChordLength,
+            const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      bool haveIntersectionWithChord = false;
+      const auto foundChords = MChord::findChordsForTimeRange(voice, onTime, onTime + len,
+                                                              chords, maxChordLength);
+      for (const auto &chordIt: foundChords) {
+                        // ok, tuplet contains at least one chord
+                        // check now does it have notes with len < tuplet.len
+            if (hasNonTrivialChord(chordIt->first, chordIt->second.notes, onTime, len)) {
+                  haveIntersectionWithChord = true;
+                  break;
+                  }
+            }
+
+      return !haveIntersectionWithChord;
+      }
+
 std::multimap<ReducedFraction, TupletData>::iterator
 removeTupletIfEmpty(
             const std::multimap<ReducedFraction, TupletData>::iterator &tupletIt,
@@ -59,31 +110,8 @@ removeTupletIfEmpty(
             std::multimap<ReducedFraction, MidiChord> &chords)
       {
       const auto &tuplet = tupletIt->second;
-      bool haveIntersectionWithChord = false;
-      const auto foundChords = MChord::findChordsForTimeRange(
-                        tuplet.voice, tuplet.onTime, tuplet.onTime + tuplet.len,
-                        chords, maxChordLength);
-
-      for (const auto &chordIt: foundChords) {
-                        // ok, tuplet contains at least one chord
-                        // check now does it have notes with len < tuplet.len
-            if (chordIt->first == tuplet.onTime) {
-                  for (const auto &note: chordIt->second.notes) {
-                        if (note.offTime - chordIt->first < tuplet.len) {
-                              haveIntersectionWithChord = true;
-                              break;
-                              }
-                        }
-                  }
-            else {
-                  haveIntersectionWithChord = true;
-                  }
-            if (haveIntersectionWithChord)
-                  break;
-            }
-
-      if (!haveIntersectionWithChord) {    // tuplet is useless - remove it
-            for (auto &chord: chords) {
+      if (isTupletUseless(tuplet.voice, tuplet.onTime, tuplet.len, maxChordLength, chords)) {
+            for (auto &chord: chords) {   // remove references to this tuplet in chords and notes
                   if (chord.first >= tuplet.onTime + tuplet.len)
                         break;
                   MidiChord &c = chord.second;
