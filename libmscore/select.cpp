@@ -939,6 +939,57 @@ QList<Note*> Selection::uniqueNotes(int track) const
       return l;
       }
 
+//---------------------------------------------------------
+//   extendRangeSelection
+//    Extends the range selection to contain the given
+//    chord rest.
+//---------------------------------------------------------
+
+void Selection::extendRangeSelection(ChordRest* cr)
+      {
+            extendRangeSelection(cr->segment(),cr->segment()->nextCR(cr->track()),cr->staffIdx(),cr->tick(),cr->tick());
+      }
+
+//---------------------------------------------------------
+//   extendRangeSelection
+//    Extends the range selection to contain the given
+//    segment. SegAfter should represent the segment
+//    that is after seg. Tick and etick represent
+//    the start and end tick of an element. Useful when
+//    extending by a chord rest.
+//---------------------------------------------------------
+
+void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, int tick, int etick)
+      {
+      bool activeIsFirst;
+      if (staffIdx < _staffStart)
+            _staffStart = staffIdx;
+      else if (staffIdx >= _staffEnd)
+            _staffEnd = staffIdx + 1;
+
+      if (tick < tickStart()) {
+            if (_activeSegment == _endSegment)
+                  _endSegment = _startSegment;
+            _startSegment = seg;
+            activeIsFirst = true;
+            }
+      else if (_endSegment && etick >= tickEnd()) {
+            if (_activeSegment == _startSegment)
+                  _startSegment = _endSegment;
+            _endSegment = segAfter;
+            }
+      else {
+            if (_activeSegment == _startSegment) {
+                  _startSegment = seg;
+                  activeIsFirst = true;
+                  }
+            else {
+                  _endSegment = segAfter;
+                  }
+            }
+      activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
+      }
+
 
 }
 
