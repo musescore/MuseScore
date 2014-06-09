@@ -3517,8 +3517,10 @@ qreal Score::computeMinWidth(Segment* fs)
                               if (e->type() != ElementType::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
                               Harmony* h = static_cast<Harmony*>(e);
-                              //h->layout();
-                              h->calculateBoundingRect();
+                              // call full layout here
+                              // which also triggers layout of associated fret diagram if present
+                              // otherwise the vertical position of the chord symbols cannot be known
+                              h->layout(); // h->calculateBoundingRect();
                               QRectF b(h->bboxtight().translated(h->pos()));
                               if (hFound)
                                     hBbox |= b;
