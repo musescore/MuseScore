@@ -60,6 +60,7 @@ void createTuplets(Staff *staff,
 
             tuplet->setTrack(track);
             tuplet->setTick(tupletData.onTime.ticks());
+            tuplet->setVoice(tupletData.voice);
             Measure* measure = score->tick2measure(tupletData.onTime.ticks());
             tuplet->setParent(measure);
 
