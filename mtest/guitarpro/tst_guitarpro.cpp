@@ -60,6 +60,7 @@ private slots:
       void gp4Keysig()       { gpReadTest("keysig", "gp4"); }
       void gpDottedTuplets() { gpReadTest("dotted-tuplets", "gp5"); }
       void gpTupletSlur()    { gpReadTest("tuplet-with-slur", "gp4"); }
+      void gpBeamsStemsLL()  { gpReadTest("beams-stems-ledger-lines", "gp5"); }
       };
 
 //---------------------------------------------------------
