@@ -1,4 +1,4 @@
-
+//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //  $Id: palette.cpp 5576 2012-04-24 19:15:22Z wschweer $
@@ -906,8 +906,6 @@ void Palette::write(Xml& xml) const
 
       int n = cells.size();
       for (int i = 0; i < n; ++i) {
-//            if (cells[i] && cells[i]->readOnly)
-//                  continue;
             if (cells[i] && cells[i]->tag == "ShowMore")
                   continue;
             if (cells[i] == 0 || cells[i]->element == 0) {
