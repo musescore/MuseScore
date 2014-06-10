@@ -79,25 +79,25 @@ static const int KEYSEQ_SIZE = 4;
 //---------------------------------------------------------
 
 class Shortcut {
-      const char* _key;     //! xml tag name for configuration file
-      const char* _descr;   //! descriptor, shown in editor
-      const char* _text;    //! text as shown on buttons or menus
-      const char* _help;    //! ballon help
-      int _state;           //! shortcut is valid in this Mscore state
-                            //! (or'd list of states)
-      int _flags;
+      const char* _key   { 0 };    //! xml tag name for configuration file
+      const char* _descr { 0 };    //! descriptor, shown in editor
+      const char* _text  { 0 };    //! text as shown on buttons or menus
+      const char* _help  { 0 };    //! ballon help
+      int _state         { 0 };    //! shortcut is valid in this Mscore state
+                                   //! (or'd list of states)
+      int _flags         { 0 };
 
       QList<QKeySequence> _keys;     //! shortcut list
-      QKeySequence::StandardKey _standardKey;
-      Qt::ShortcutContext _context;
-      int _icon;
-      mutable QAction* _action;             //! cached action
+      QKeySequence::StandardKey _standardKey { QKeySequence::UnknownKey };
+      Qt::ShortcutContext _context           { Qt::WindowShortcut };
+      int _icon                              { -1 };
+      mutable QAction* _action               { 0 };             //! cached action
 
       static Shortcut sc[];
       static QMap<QString, Shortcut*> _shortcuts;
 
    public:
-      Shortcut();
+      Shortcut() {}
       Shortcut(int state, int flags,
          const char* name,
          Qt::ShortcutContext cont,
