@@ -280,19 +280,18 @@ WebPageDockWidget::WebPageDockWidget(MuseScore* /*mscore*/, QWidget* parent)
       for(int i = 0; i < widgets.size(); i++){
             QWidget* currentWidget = widgets.at(i);
             switch (currentWidget->focusPolicy()){
-                  case Qt::TabFocus:
-                        currentWidget->setFocusPolicy(Qt::NoFocus);
-                        break;
-                  case Qt::WheelFocus:
-                  case Qt::StrongFocus:
-                        currentWidget->setFocusPolicy(Qt::ClickFocus);
-                        break;
-                  case Qt::ClickFocus:
-                  case Qt::NoFocus:
-                        break;
-                  }
-            }
-
+                 case Qt::TabFocus:
+                       currentWidget->setFocusPolicy(Qt::NoFocus);
+                       break;
+                 case Qt::WheelFocus:
+                 case Qt::StrongFocus:
+                       currentWidget->setFocusPolicy(Qt::ClickFocus);
+                       break;
+                 case Qt::ClickFocus:
+                 case Qt::NoFocus:
+                       break;
+                 }
+           }
       }
 
 //---------------------------------------------------------

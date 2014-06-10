@@ -83,7 +83,7 @@ Inspector::Inspector(QWidget* parent)
       sa->setFrameShape(QFrame::NoFrame);
       sa->setWidgetResizable(true);
       setWidget(sa);
-      sa->setFocusPolicy(Qt::ClickFocus);
+      sa->setFocusPolicy(Qt::NoFocus);
 
       _inspectorEdit = false;
       ie             = 0;
@@ -235,7 +235,6 @@ void Inspector::setElements(const QList<Element*>& l)
                         }
                   }
             sa->setWidget(ie);
-
             //removing every widget from the tabbing order until suport for
             //accessibility is provided
             QList<QWidget*> widgets = ie->findChildren<QWidget*>();
@@ -247,9 +246,15 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         case Qt::WheelFocus:
                         case Qt::StrongFocus:
-                              currentWidget->setFocusPolicy(Qt::ClickFocus);
-                              break;
                         case Qt::ClickFocus:
+                              if(currentWidget->parent()->inherits("QAbstractSpinBox") ||
+                                 currentWidget->inherits("QLineEdit")){
+                                  currentWidget->setFocusPolicy(Qt::ClickFocus);
+                                   }
+                              else{
+                                  currentWidget->setFocusPolicy(Qt::NoFocus);
+                                   }
+                              break;
                         case Qt::NoFocus:
                               break;
                         }

@@ -50,20 +50,26 @@ ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
       layout->setSpacing(0);
       layout->setMargin(2);
 
-      tab = new QTabBar;
+      QActionGroup* ag = Shortcut::getActionGroupForWidget(MsWidget::SCORE_TAB, Qt::WidgetWithChildrenShortcut);
+      ag->setParent(this);
+      this->addActions(ag->actions());
+
+      connect(ag, SIGNAL(triggered(QAction*)), this, SLOT(actionFilter(QAction*)));
+
+      tab = new QTabBar(this);
       tab->setExpanding(false);
       tab->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
       tab->setFocusPolicy(Qt::ClickFocus);
       tab->setTabsClosable(true);
 
-      tab2 = new QTabBar;
+      tab2 = new QTabBar(this);
       tab2->setExpanding(false);
       tab2->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
       tab2->setFocusPolicy(Qt::ClickFocus);
       tab2->setVisible(false);
       tab2->setTabsClosable(false);
 
-      stack = new QStackedLayout;
+      stack = new QStackedLayout(this);
       layout->addWidget(tab);
       layout->addWidget(tab2);
       layout->addLayout(stack);
@@ -406,11 +412,18 @@ void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset,
       v->setMag(magIdx, mag);
       v->setOffset(xoffset, yoffset);
       }
+
+void ScoreTab::actionFilter(QAction * a){
+    qDebug("Here");
+    //TODO filter actions unsing main window's state
+    emit actionTriggered(a);
+}
+
 //---------------------------------------------------------
 //   keyPressEvent
 //---------------------------------------------------------
 
-void ScoreTab::keyPressEvent(QKeyEvent* event){
+/*void ScoreTab::keyPressEvent(QKeyEvent* event){
       if(event->key() == Qt::Key_Return){
             QAction* a = getAction("system-break");
             Shortcut* sc = Shortcut::getShortcut("system-break");
@@ -421,6 +434,6 @@ void ScoreTab::keyPressEvent(QKeyEvent* event){
             }
       QWidget::keyPressEvent(event);
       }
-
+*/
 }
 
