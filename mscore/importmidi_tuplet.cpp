@@ -339,6 +339,7 @@ findNonTupletChords(
             const std::vector<TupletInfo> &tuplets,
             const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
             const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &barStart,
             int barIndex)
       {
@@ -351,6 +352,23 @@ findNonTupletChords(
                         && isChordBelongToThisBar(it->first, barStart,
                                                   it->second.barIndex, barIndex)) {
                   nonTuplets.push_back(it);
+                  }
+            }
+                  // some chords that belong to the current bar can be found
+                  // even earlier; these chords have bar index == current bar index
+      if (startBarChordIt != chords.begin()) {
+            auto it = std::prev(startBarChordIt);
+            while (true) {
+                  if (it->second.barIndex == barIndex) {
+
+                        Q_ASSERT_X(!it->second.isInTuplet, "MidiTuplet::findNonTupletChords",
+                                   "Tuplet chord was assigned to the wrong (next) bar");
+
+                        nonTuplets.push_back(it);
+                        }
+                  if (it == chords.begin() || it->second.barIndex < barIndex - 1)
+                        break;
+                  --it;
                   }
             }
 
@@ -821,7 +839,7 @@ void findTuplets(
             }
 
       auto nonTuplets = findNonTupletChords(tuplets, startNonTupletChordIt,
-                                            endBarChordIt, startBarTick, barIndex);
+                                            endBarChordIt, chords, startBarTick, barIndex);
 
       resetTupletVoices(tuplets);  // because of tol some chords may have non-zero voices
       addChordsBetweenTupletNotes(tuplets, nonTuplets, startBarTick, basicQuant);
