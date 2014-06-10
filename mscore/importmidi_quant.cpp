@@ -621,6 +621,33 @@ bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &c
       return true;
       }
 
+bool areTupletChordsConsistent(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator prevTuplet;
+      bool prevTupletSet = false;
+      bool isInTuplet = false;
+
+      for (int voice = 0; voice != VOICES; ++voice) {
+            for (const auto &chord: chords) {
+                  const MidiChord &c = chord.second;
+                  if (c.voice != voice)
+                        continue;
+                  if (c.isInTuplet) {
+                        if (!isInTuplet && prevTupletSet && c.tuplet == prevTuplet)
+                              return false;     // there is a non-tuplet chord inside tuplet
+                        isInTuplet = true;
+                        prevTuplet = c.tuplet;
+                        prevTupletSet = true;
+                        }
+                  else {
+                        isInTuplet = false;
+                        }
+                  }
+            }
+
+      return true;
+      }
+
 #endif
 
 
@@ -1228,6 +1255,8 @@ void quantizeChords(
                  "Some tuplet references are invalid");
       Q_ASSERT_X(areOnTimeValuesDifferent(chords), "Quantize::quantizeChords",
                  "Chords of the same voices have equal on time values");
+      Q_ASSERT_X(areTupletChordsConsistent(chords), "Quantize::quantizeChords",
+                 "There are non-tuplet chords between tuplet chords");
 
       applyTupletStaccato(chords);     // apply staccato for tuplet off times
       std::map<const std::pair<const ReducedFraction, MidiChord> *, QuantInfo> foundOnTimes;
