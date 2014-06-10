@@ -508,6 +508,22 @@ bool areAllVoicesSame(
       return true;
       }
 
+bool areChordsDifferent(
+            const std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
+      {
+      std::set<const std::pair<const ReducedFraction, MidiChord> *> chordSet;
+
+      for (const auto &chord: chords) {
+            const auto it = chordSet.find(&*chord);
+            if (it == chordSet.end())
+                  chordSet.insert(&*chord);
+            else
+                  return false;
+            }
+
+      return true;
+      }
+
 bool notLessThanPrev(
             const std::vector<QuantData>::iterator &it,
             const std::vector<QuantData> &data)
@@ -590,6 +606,19 @@ void checkOffTime(
                   break;
                   }
             }
+      }
+
+bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      std::set<std::pair<ReducedFraction, int>> onTimeVoices;
+      for (const auto &chordEvent: chords) {
+            const auto pair = std::make_pair(chordEvent.first, chordEvent.second.voice);
+            if (onTimeVoices.find(pair) == onTimeVoices.end())
+                  onTimeVoices.insert(pair);
+            else
+                  return false;
+            }
+      return true;
       }
 
 #endif
@@ -960,12 +989,14 @@ void quantizeOnTimesInRange(
       Q_ASSERT_X(!chords.empty(), "Quantize::quantizeOnTimesInRange", "Empty chords");
       Q_ASSERT_X(areAllVoicesSame(chords),
                  "Quantize::quantizeOnTimesInRange", "Chord voices are not the same");
+      Q_ASSERT_X(areChordsDifferent(chords),
+                 "Quantize::quantizeOnTimesInRange", "There are chord duplicates");
 
       Q_ASSERT_X(rangeStart != ReducedFraction(-1, 1)
                   && rangeEnd != ReducedFraction(-1, 1)
                   && rangeStart < rangeEnd,
                  "Quantize::quantizeOnTimesInRange",
-                 "range start and/or range end are incorrect");
+                 "Range start and/or range end are incorrect");
 
       Q_ASSERT_X((chords.front()->second.isInTuplet) ? isTupletRangeCorrect(
                   chords.front()->second.tuplet->second, rangeStart, rangeEnd) : true,
@@ -1112,14 +1143,28 @@ void quantizeOnTimes(
                               }
 
                         const auto tol = basicQuant / 2;      // can add chords from previous range
-                        auto prevChord = chordIt;
-                        if (prevChord != chords.begin()) {
-                              for (--prevChord; prevChord->first < rangeStart
-                                          && prevChord->first > rangeStart - tol; --prevChord) {
-                                    if (prevChord->second.voice == voice)
-                                          chordsToQuant.push_back(prevChord);
-                                    if (prevChord == chords.begin())
+                        auto it = chordsToQuant.at(0);
+                        if (it != chords.begin())
+                              --it;
+                        while (it != chords.begin() && it->first >= rangeStart)
+                              --it;
+                        if (it->first < rangeStart) {
+                              while (true) {
+                                    if (it->first > rangeStart - tol
+                                                || (rangeStart == barStart
+                                                    && it->second.barIndex == currentBarIndex))
+                                          {
+                                          if (it->second.voice == voice)
+                                                chordsToQuant.push_back(it);
+                                          }
+                                    else if (rangeStart != barStart) {
                                           break;
+                                          }
+                                    if (it == chords.begin()
+                                                || it->second.barIndex < currentBarIndex - 1) {
+                                          break;
+                                          }
+                                    --it;
                                     }
                               }
 
@@ -1181,6 +1226,8 @@ void quantizeChords(
 
       Q_ASSERT_X(MidiTuplet::areTupletReferencesValid(chords), "Quantize::quantizeChords",
                  "Some tuplet references are invalid");
+      Q_ASSERT_X(areOnTimeValuesDifferent(chords), "Quantize::quantizeChords",
+                 "Chords of the same voices have equal on time values");
 
       applyTupletStaccato(chords);     // apply staccato for tuplet off times
       std::map<const std::pair<const ReducedFraction, MidiChord> *, QuantInfo> foundOnTimes;
