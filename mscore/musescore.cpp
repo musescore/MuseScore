@@ -514,14 +514,15 @@ MuseScore::MuseScore()
       // otherwise unused actions:
       //   must be added somewere to work
 
-      QActionGroup* ag = new QActionGroup(this);
+      /*QActionGroup* ag = new QActionGroup(this);
       ag->setExclusive(false);
       foreach(const Shortcut* s, Shortcut::shortcuts()) {
             QAction* a = s->action();
             if (a)
                   ag->addAction(a);
-            }
-      addActions(ag->actions());
+            }*/
+      QActionGroup* ag = Shortcut::getActionGroupForWidget(MsWidget::MAIN_WINDOW);
+      ag->setParent(this);
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
 
       mainWindow = new QSplitter;
@@ -592,13 +593,15 @@ MuseScore::MuseScore()
       tab1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       connect(tab1, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
       connect(tab1, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
+      connect(tab1, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
       splitter->addWidget(tab1);
 
       if (splitScreen()) {
             tab2 = new ScoreTab(&scoreList, this);
             tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
-            connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
+            connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));\
+            connect(tab2, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
             splitter->addWidget(tab2);
             tab2->setVisible(false);
             }
@@ -1136,6 +1139,7 @@ MuseScore::MuseScore()
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
             }
+      this->setFocusPolicy(Qt::NoFocus);
       }
 
 //---------------------------------------------------------
@@ -3431,6 +3435,7 @@ void MuseScore::splitWindow(bool horizontal)
                   tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                   connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
                   connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
+                  connect(tab2, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
                   splitter->addWidget(tab2);
                   }
             tab2->setVisible(true);
