@@ -26,6 +26,8 @@
 #include "libmscore/fret.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/slur.h"
+#include "libmscore/clef.h"
+#include "libmscore/keysig.h"
 
 namespace Ms {
 
@@ -252,6 +254,9 @@ class GuitarPro6 : public GuitarPro {
       void readChord(QDomNode* diagram, int track);
       int findNumMeasures(GPPartInfo* partInfo);
       void readMasterTracks(QDomNode* masterTrack);
+      void readDrumNote(Note* note, int element, int variation);
+      int readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[]);
+      void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* t);
       void readTracks(QDomNode* tracks);
       void readMasterBars(GPPartInfo* partInfo);
       Fraction rhythmToDuration(QString value);

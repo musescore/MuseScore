@@ -46,6 +46,7 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/volta.h"
 #include "libmscore/fret.h"
+#include "libmscore/instrtemplate.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -2933,7 +2934,6 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             if (dotted)
                   l = l + (l/2);
 
-
             if (tuple) {
                   Tuplet* tuplet = tuplets[staffIdx * 2 + voice];
                   if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
@@ -3603,6 +3603,45 @@ void GuitarPro6::readTracks(QDomNode* track)
                         part->setLongName(currentNode.toElement().text());
                   else if (nodeName == "ShortName")
                         part->setPartName(currentNode.toElement().text());
+                  else if (nodeName == "Instrument") {
+                        QString ref = currentNode.attributes().namedItem("ref").toAttr().value();
+                        Instrument* instr = new Instrument;
+                        // use an array as a map instead?
+                        if (!ref.compare("e-gtr6")) {
+                              *instr = instr->fromTemplate(Ms::searchTemplate("electric-guitar"));
+                              part->setInstrument(*instr, 0);
+                              }
+                        else if (!ref.compare("tnr-s")) {
+                              *instr = instr->fromTemplate(Ms::searchTemplate("voice"));
+                              part->setInstrument(*instr, 0);
+                              }
+                        else if (!ref.compare("s-gtr6")) {
+                              *instr = instr->fromTemplate(Ms::searchTemplate("guitar-steel"));
+                              part->setInstrument(*instr, 0);
+                              }
+                        else if (!ref.compare("snt-lead-ss")) {
+                              *instr = instr->fromTemplate(Ms::searchTemplate("poly-synth"));
+                              part->setInstrument(*instr, 0);
+                              }
+                        else if (!ref.compare("f-bass5")) {
+                              *instr = instr->fromTemplate(Ms::searchTemplate("bass-guitar"));
+                              part->setInstrument(*instr, 0);
+                              }
+                        else if (!ref.compare("snt-bass-ss")) {
+                              *instr = instr->fromTemplate(Ms::searchTemplate("metallic-synth"));
+                              part->setInstrument(*instr, 0);
+                              }
+                        else if (!ref.compare("mrcs")) {
+                              *instr = instr->fromTemplate(Ms::searchTemplate("maracas"));
+                              part->setInstrument(*instr, 0);
+                              }
+                        else if (!ref.compare("drmkt")) {
+                              *instr = instr->fromTemplate(Ms::searchTemplate("drumset"));
+                              part->setInstrument(*instr, 0);
+                              }
+                        else
+                              qDebug() << "WARINNG: unhandled playback instrument" << ref << "- defaulting.";
+                        }
                   else if (nodeName == "Properties") {
                         QDomNode currentProperty = currentNode.firstChild();
                         while (!currentProperty.isNull()) {
@@ -3675,22 +3714,22 @@ QDomNode GuitarPro6::getNode(QString id, QDomNode currentNode)
 
 int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
       {
-            QDomNode finalMasterBar = partInfo->masterBars.nextSibling();
-            while (!finalMasterBar.isNull()) {
-                  GpBar gpBar;
-                  gpBar.keysig = finalMasterBar.firstChild().toElement().text().toInt();
-                  QString timeSignature = finalMasterBar.firstChild().nextSibling().toElement().text();
-                  QList<QString> timeSignatureList = timeSignature.split("/");
-                  gpBar.timesig = Fraction(timeSignatureList.first().toInt(), timeSignatureList.last().toInt());
-                  bars.append(gpBar);
-                  if (finalMasterBar.nextSibling().isNull())
-                        break;
-                  finalMasterBar = finalMasterBar.nextSibling();
+      QDomNode finalMasterBar = partInfo->masterBars.nextSibling();
+      while (!finalMasterBar.isNull()) {
+            GpBar gpBar;
+            gpBar.keysig = finalMasterBar.firstChild().toElement().text().toInt();
+            QString timeSignature = finalMasterBar.firstChild().nextSibling().toElement().text();
+            QList<QString> timeSignatureList = timeSignature.split("/");
+            gpBar.timesig = Fraction(timeSignatureList.first().toInt(), timeSignatureList.last().toInt());
+            bars.append(gpBar);
+            if (finalMasterBar.nextSibling().isNull())
+                  break;
+            finalMasterBar = finalMasterBar.nextSibling();
             }
-            QString bars = finalMasterBar.lastChildElement("Bars").toElement().text();
-            //work out the number of measures (add 1 as couning from 0, and divide by number of parts)
-            int numMeasures = (bars.split(" ").last().toInt() + 1) / score->parts().length();
-            return numMeasures;
+      QString bars = finalMasterBar.lastChildElement("Bars").toElement().text();
+      //work out the number of measures (add 1 as couning from 0, and divide by number of parts)
+      int numMeasures = (bars.split(" ").last().toInt() + 1) / score->parts().length();
+      return numMeasures;
       }
 
 //---------------------------------------------------------
@@ -3699,146 +3738,155 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
 
 Fraction GuitarPro6::rhythmToDuration(QString value)
       {
-            Fraction l;
-            if (value.compare("Whole") == 0)
-                  l.set(1, 1);
-            else if (value.compare("Half") == 0)
-                  l.set(1, 2);
-            else if (value.compare("Quarter") == 0)
-                  l.set(1, 4);
-            else if (value.compare("Eighth") == 0)
-                  l.set(1,8);
-            else if (value.compare("16th") == 0)
-                  l.set(1,16);
-            else if (value.compare("32nd") == 0)
-                  l.set(1,32);
-            else if (value.compare("64th") == 0)
-                  l.set(1,64);
-            else if (value.compare("128th") == 0)
-                  l.set(1,128);
-            else
-                  qFatal( "Error - unknown note length: %s", qPrintable(value));
-            return l;
+      Fraction l;
+      if (value.compare("Whole") == 0)
+            l.set(1, 1);
+      else if (value.compare("Half") == 0)
+            l.set(1, 2);
+      else if (value.compare("Quarter") == 0)
+            l.set(1, 4);
+      else if (value.compare("Eighth") == 0)
+            l.set(1,8);
+      else if (value.compare("16th") == 0)
+            l.set(1,16);
+      else if (value.compare("32nd") == 0)
+            l.set(1,32);
+      else if (value.compare("64th") == 0)
+            l.set(1,64);
+      else if (value.compare("128th") == 0)
+            l.set(1,128);
+      else
+            qFatal( "Error - unknown note length: %s", qPrintable(value));
+      return l;
       }
 
 //---------------------------------------------------------
-//   readMasterBars
+//   readDrumNote
 //---------------------------------------------------------
 
-void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
+void GuitarPro6::readDrumNote(Note* note, int element, int variation)
       {
-      Measure* measure = score->firstMeasure();
-      int bar = 0;
-      QDomNode nextMasterBar = partInfo->masterBars;
-      nextMasterBar = nextMasterBar.nextSibling();
-      int measureCounter = 0;
-      ClefType oldClefId[staves];
-      do    {
-            const GpBar& gpbar = bars[bar];
+      int octaveInt;
+      int toneInt;
+      /* These numbers below were determined by creating all drum
+       * notes in a GPX format file and then analyzing the score.gpif
+       * file which specifies the score. */
+      if (element == 11 && variation == 0) {
+            octaveInt = 5;
+            toneInt = 0;
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+      }
+      else if (element == 0 && variation == 0) {
+            octaveInt = 5;
+            toneInt = 5;
+      }
+      else if (element == 5 && variation == 0) {
+            octaveInt = 5;
+            toneInt = 7;
+      }
+      else if (element == 6 && variation == 0) {
+            octaveInt = 5;
+            toneInt = 9;
+      }
+      else if (element == 7 && variation == 0) {
+            octaveInt = 5;
+            toneInt = 11;
+      }
+      else if (element == 1 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 0;
+      }
+      else if (element == 1 && variation == 1) {
+            octaveInt = 6;
+            toneInt = 0;
+            note->setHeadGroup(NoteHead::Group::HEAD_MI);
+      }
+      else if (element == 1 && variation == 2) {
+            octaveInt = 6;
+            toneInt = 0;
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+      }
+      else if (element == 8 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 2;
+      }
+      else if (element == 9 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 4;
+      }
+      else if (element == 2 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 4;
+            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
+      }
+      else if (element == 15 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 5;
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+      }
+      else if (element == 15 && variation == 1) {
+            octaveInt = 6;
+            toneInt = 5;
+            note->setHeadGroup(NoteHead::Group::HEAD_DIAMOND);
+      }
+      else if (element == 15 && variation == 2) {
+            octaveInt = 6;
+            toneInt = 5;
+            note->setHeadGroup(NoteHead::Group::HEAD_MI);
+      }
+      else if (element == 3 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 5;
+            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
+      }
+      else if (element == 10 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 7;
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+      }
+      else if (element == 10 && variation == 1) {
+            octaveInt = 6;
+            toneInt = 7;
+            note->setHeadGroup(NoteHead::Group::HEAD_SLASH);
+      }
+      else if (element == 10 && variation == 2) {
+            octaveInt = 6;
+            toneInt = 7;
+            note->setHeadGroup(NoteHead::Group::HEAD_XCIRCLE);
+      }
+      else if (element == 12 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 7;
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+      }
+      else if (element == 4 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 7;
+            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
+      }
+      else if (element == 14 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 9;
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+      }
+      else if (element == 13 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 9;
+            note->setHeadGroup(NoteHead::Group::HEAD_LA);
+      }
+      else if (element == 16 && variation == 0) {
+            octaveInt = 6;
+            toneInt = 11;
+            note->setHeadGroup(NoteHead::Group::HEAD_NORMAL);
+      }
+      // multiply octaves by 12 as 12 semitones in octave
+      note->setPitch((octaveInt * 12) + toneInt);
+      }
 
-            if (!gpbar.marker.isEmpty()) {
-                  Text* s = new RehearsalMark(score);
-                  s->setText(gpbar.marker.trimmed());
-                  s->setTrack(0);
-                  Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
-                  segment->add(s);
-                  }
-
-            QDomNode key = nextMasterBar.firstChild();
-            KeySig* t = new KeySig(score);
-            t->setKey(Key(key.firstChild().toElement().text().toInt()));
-
-            QDomNode time = key.nextSibling();
-            measure->setTimesig(bars[measureCounter].timesig);
-            measure->setLen(bars[measureCounter].timesig);
-            QDomNode barList = time.nextSibling();
-            QStringList barsString = barList.toElement().text().split(" ");
-            int staffIdx = 0;
-            Tuplet* tuplets[staves * 2];
-            for (int track = 0; track < staves*2; ++track)
-                  tuplets[track] = 0;
-            for (auto iter = barsString.begin(); iter != barsString.end(); ++iter) {
-                  int tick = measure->tick();
-
-                  t->setTrack(0);
-                  Segment* s = measure->getSegment(Segment::Type::KeySig, tick);
-                  s->add(t);
-
-                  QDomNode barNode = getNode(*iter, partInfo->bars);
-                  QDomNode currentNode = (barNode).firstChild();
-                  QDomNode voice;
-                  while (!currentNode.isNull()) {
-                        voice.clear();
-                        if (!currentNode.nodeName().compare("Clef")) {
-                              QString clefString = currentNode.toElement().text();
-                              ClefType clefId;
-                              if (!clefString.compare("F4"))
-                                    clefId = ClefType::F8;
-                              else if (!clefString.compare("G2"))
-                                    clefId = ClefType::G3;
-                              else if (!clefString.compare("Neutral"))
-                                    clefId = ClefType::PERC;
-                              else
-                                    qDebug() << "WARNING: unhandled clef type: " << clefString;
-                              Clef* newClef = new Clef(score);
-                              newClef->setClefType(clefId);
-                              newClef->setTrack(staffIdx * VOICES);
-                              Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
-                              if (measure->prevMeasure()) {
-                                    if (clefId != oldClefId[staffIdx]) {
-                                          segment->add(newClef);
-                                          newClef->staff()->setClef(0, newClef->clefTypeList());
-                                          oldClefId[staffIdx] = clefId;
-                                          }
-                                    }
-                              else  {
-                                    segment->add(newClef);
-                                    newClef->staff()->setClef(0, newClef->clefTypeList());
-                                    oldClefId[staffIdx] = clefId;
-                                    }
-                              }
-                        else if (!currentNode.nodeName().compare("SimileMark")) {
-                              if (!currentNode.toElement().text().compare("Simple") ||
-                                  !currentNode.toElement().text().compare("FirstOfDouble") ||
-                                  !currentNode.toElement().text().compare("SecondOfDouble"))
-                                    measure->cmdInsertRepeatMeasure(staffIdx);
-                              else
-                                    qDebug() << "WARNING: unhandle similie mark type: " << currentNode.toElement().text();
-                              }
-                        else if (!currentNode.nodeName().compare("Voices")) {
-                              QString voicesString = currentNode.toElement().text();
-                              auto currentVoice = voicesString.split(" ").first();
-                              // if the voice is not -1 then we set voice
-                              if (currentVoice.compare("-1"))
-                                    voice = getNode(currentVoice, partInfo->voices);
-                              }
-                        else
-                              unhandledNode(currentNode.nodeName());
-                        currentNode = currentNode.nextSibling();
-                  }
-
-                  int voiceNum = 0;
-                  if (voice.isNull()) {
-                        qDebug("NULL voice detected!");
-                        Fraction l = Fraction(1,1);
-                        // add a rest with length of l
-                        ChordRest* cr = new Rest(score);
-                        cr->setTrack(staffIdx * VOICES + voiceNum);
-                        TDuration d(l);
-                        cr->setDuration(l);
-                        cr->setDurationType(d);
-                        Segment* segment = measure->getSegment(Segment::SegChordRest, tick);
-                        if(!segment->cr(staffIdx * VOICES + voiceNum))
-                              segment->add(cr);
-                        tick += cr->actualTicks();
-                        staffIdx++;
-                        continue;
-                  }
-                  QString beats = voice.firstChild().toElement().text();
-
-                  // we now look at the beat in order to gain note, dynamic, rhythm etc. information
-                  auto currentBeatList = beats.split(" ");
-                  for (auto currentBeat = currentBeatList.begin(); currentBeat != currentBeatList.end(); currentBeat++) {
+int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[])
+      {
+            auto currentBeatList = beats.split(" ");
+            for (auto currentBeat = currentBeatList.begin(); currentBeat != currentBeatList.end(); currentBeat++) {
                   Fraction l;
                   int dotted = 0;
                   QDomNode beat = getNode(*currentBeat, partInfo->beats);
@@ -3898,7 +3946,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                                       else
                                                             qDebug() << "WARNING: Not handling node argument: " << argument << "in node" << currentNode.nodeName();
                                                       currentProperty = currentProperty.nextSibling();
-                                                      }
+                                                }
 
                                                 if (midi != "") {
                                                       Note* note = new Note(score);
@@ -3907,140 +3955,15 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                                       note->setTpcFromPitch();
                                                       if(!segment->cr(staffIdx * VOICES + voiceNum))
                                                             segment->add(cr);
-                                                      }
+                                                }
                                                 else if (element != "") {
-                                                      int elementNum = element.toInt();
-                                                      int variationNum = variation.toInt();
                                                       Note* note = new Note(score);
                                                       static_cast<Chord*>(cr)->add(note);
-                                                      int octaveInt;
-                                                      int toneInt;
-
-                                                      if (elementNum == 11 && variationNum == 0) {
-                                                            octaveInt = 5;
-                                                            toneInt = 0;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-                                                            }
-                                                      else if (elementNum == 0 && variationNum == 0) {
-                                                            octaveInt = 5;
-                                                            toneInt = 5;
-                                                            }
-                                                      else if (elementNum == 5 && variationNum == 0) {
-                                                            octaveInt = 5;
-                                                            toneInt = 7;
-                                                            }
-                                                      else if (elementNum == 6 && variationNum == 0) {
-                                                            octaveInt = 5;
-                                                            toneInt = 9;
-                                                            }
-                                                      else if (elementNum == 7 && variationNum == 0) {
-                                                            octaveInt = 5;
-                                                            toneInt = 11;
-                                                            }
-                                                      else if (elementNum == 1 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 0;
-                                                            }
-                                                      else if (elementNum == 1 && variationNum == 1) {
-                                                            octaveInt = 6;
-                                                            toneInt = 0;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_MI);
-                                                            }
-                                                      else if (elementNum == 1 && variationNum == 2) {
-                                                            octaveInt = 6;
-                                                            toneInt = 0;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-                                                            }
-                                                      else if (elementNum == 8 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 2;
-                                                            }
-                                                      else if (elementNum == 9 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 4;
-                                                            }
-                                                      else if (elementNum == 2 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 4;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
-                                                            }
-                                                      else if (elementNum == 15 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 5;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-                                                            }
-                                                      else if (elementNum == 15 && variationNum == 1) {
-                                                            octaveInt = 6;
-                                                            toneInt = 5;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_DIAMOND);
-                                                            }
-                                                      else if (elementNum == 15 && variationNum == 2) {
-                                                            octaveInt = 6;
-                                                            toneInt = 5;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_MI);
-                                                            }
-
-                                                      else if (elementNum == 3 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 5;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
-                                                            }
-
-                                                      else if (elementNum == 10 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 7;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-                                                            }
-
-                                                      else if (elementNum == 10 && variationNum == 1) {
-                                                            octaveInt = 6;
-                                                            toneInt = 7;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_SLASH);
-                                                            }
-
-                                                      else if (elementNum == 10 && variationNum == 2) {
-                                                            octaveInt = 6;
-                                                            toneInt = 7;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_XCIRCLE);
-                                                            }
-
-                                                      else if (elementNum == 12 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 7;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-                                                            }
-
-                                                      else if (elementNum == 4 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 7;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_TRIANGLE);
-                                                            }
-
-                                                      else if (elementNum == 14 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 9;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
-                                                            }
-
-                                                      else if (elementNum == 13 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 9;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_LA);
-                                                            }
-
-                                                      else if (elementNum == 16 && variationNum == 0) {
-                                                            octaveInt = 6;
-                                                            toneInt = 11;
-                                                            note->setHeadGroup(NoteHead::Group::HEAD_NORMAL);
-                                                            }
-
-
-                                                      // multiply octaves by 12 as 12 semitones in octave
-                                                      note->setPitch((octaveInt * 12) + toneInt);
+                                                      readDrumNote(note, element.toInt(), variation.toInt());
                                                       note->setTpcFromPitch();
                                                       if(!segment->cr(staffIdx * VOICES + voiceNum))
                                                             segment->add(cr);
-                                                      }
+                                                }
                                                 else if (stringNum != "") {
                                                       Note* note = new Note(score);
                                                       static_cast<Chord*>(cr)->add(note);
@@ -4057,7 +3980,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                                       note->setTpcFromPitch();
                                                       if(!segment->cr(staffIdx * VOICES + voiceNum))
                                                             segment->add(cr);
-                                                      }
+                                                }
                                                 else if (tone != "") {
                                                       Note* note = new Note(score);
                                                       static_cast<Chord*>(cr)->add(note);
@@ -4068,16 +3991,16 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                                       note->setTpcFromPitch();
                                                       if(!segment->cr(staffIdx * VOICES + voiceNum))
                                                             segment->add(cr);
-                                                      }
+                                                }
 
                                                 currentNode = currentNode.nextSibling();
-                                                }
+                                          }
                                           else
                                                 unhandledNode(currentNode.nodeName());
                                           currentNode = currentNode.nextSibling();
-                                          }
                                     }
                               }
+                        }
                         else if (!currentNode.nodeName().compare("Chord")) {
                               int key = currentNode.toElement().text().toInt();
                               segment->add(fretDiagrams[key]);
@@ -4090,7 +4013,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                               while (!currentNode.isNull()) {
                                     if (currentNode.nodeName() == "NoteValue") {
                                           l = rhythmToDuration(currentNode.toElement().text());
-                                          }
+                                    }
                                     else if (currentNode.nodeName() == "AugmentationDot") {
                                           dotted = currentNode.attributes().namedItem("count").toAttr().value().toInt();
                                           for (int count = 1; count <= dotted; count++)
@@ -4105,21 +4028,22 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                                 tuplet = new Tuplet(score);
                                                 tuplets[staffIdx * 2 + voiceNum] = tuplet;
                                                 tuplet->setParent(measure);
-                                                }
+                                          }
                                           tuplet->setTrack(cr->track());
                                           tuplet->setBaseLen(l);
                                           tuplet->setRatio(Fraction(currentNode.attributes().namedItem("num").toAttr().value().toInt(),currentNode.attributes().namedItem("den").toAttr().value().toInt()));
                                           tuplet->add(cr);
-                                          }
+                                    }
                                     else
                                           qDebug() << "WARNING: Not handling node: " << currentNode.nodeName();
                                     currentNode = currentNode.nextSibling();
-                                    }
                               }
-                        qDebug() << "WARNING: Not handling beat XML tag:" << currentNode.nodeName();
+                        }
+                        else
+                              qDebug() << "WARNING: Not handling beat XML tag:" << currentNode.nodeName();
                         currentNode = currentNode.nextSibling();
                         dotted = 0;
-                        }
+                  }
                   // we have handled the note - was there a note?
                   if (!noteSpecified) {
                         // add a rest with length of l
@@ -4132,11 +4056,150 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         cr->setDurationType(d);
                         if(!segment->cr(staffIdx * VOICES + voiceNum))
                               segment->add(cr);
-                        }
-                  tick += cr->actualTicks();
                   }
+                  tick += cr->actualTicks();
+            }
+            return tick;
+      }
+
+//---------------------------------------------------------
+//   readBars
+//---------------------------------------------------------
+
+void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* t)
+      {
+      // unique bar identifiers are represented as a space separated string of numbers
+      QStringList barsString = barList->toElement().text().split(" ");
+      int staffIdx = 0;
+
+      // used to keep track of tuplets
+      Tuplet* tuplets[staves * 2];
+      for (int track = 0; track < staves*2; ++track)
+            tuplets[track] = 0;
+
+      // iterate through all the bars that have been specified
+      for (auto iter = barsString.begin(); iter != barsString.end(); ++iter) {
+            int tick = measure->tick();
+
+            t->setTrack(0);
+            Segment* s = measure->getSegment(Segment::Type::KeySig, tick);
+            s->add(t);
+
+            QDomNode barNode = getNode(*iter, partInfo->bars);
+            QDomNode currentNode = (barNode).firstChild();
+            QDomNode voice;
+            while (!currentNode.isNull()) {
+                  voice.clear();
+                  // get the clef of the bar and apply
+                  if (!currentNode.nodeName().compare("Clef")) {
+                        QString clefString = currentNode.toElement().text();
+                        ClefType clefId;
+                        if (!clefString.compare("F4"))
+                              clefId = ClefType::F8;
+                        else if (!clefString.compare("G2"))
+                              clefId = ClefType::G3;
+                        else if (!clefString.compare("Neutral"))
+                              clefId = ClefType::PERC;
+                        else
+                              qDebug() << "WARNING: unhandled clef type: " << clefString;
+                        Clef* newClef = new Clef(score);
+                        newClef->setClefType(clefId);
+                        newClef->setTrack(staffIdx * VOICES);
+                        Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
+                        // only add the clef to the bar if it differs from previous measure
+                        if (measure->prevMeasure()) {
+                              if (clefId != oldClefId[staffIdx]) {
+                                    segment->add(newClef);
+                                    newClef->staff()->setClef(0, newClef->clefTypeList());
+                                    oldClefId[staffIdx] = clefId;
+                                    }
+                              }
+                        else  {
+                              segment->add(newClef);
+                              newClef->staff()->setClef(0, newClef->clefTypeList());
+                              oldClefId[staffIdx] = clefId;
+                              }
+                        }
+                  // a repeated bar (simile marking)
+                  else if (!currentNode.nodeName().compare("SimileMark")) {
+                        if (!currentNode.toElement().text().compare("Simple") ||
+                            !currentNode.toElement().text().compare("FirstOfDouble") ||
+                            !currentNode.toElement().text().compare("SecondOfDouble"))
+                              measure->cmdInsertRepeatMeasure(staffIdx);
+                        else
+                              qDebug() << "WARNING: unhandle similie mark type: " << currentNode.toElement().text();
+                        }
+                  // new voice specification
+                  else if (!currentNode.nodeName().compare("Voices")) {
+                        QString voicesString = currentNode.toElement().text();
+                        auto currentVoice = voicesString.split(" ").first();
+                        // if the voice is not -1 then we set voice
+                        if (currentVoice.compare("-1"))
+                              voice = getNode(currentVoice, partInfo->voices);
+                        }
+                  else
+                        unhandledNode(currentNode.nodeName());
+                  // go to the next node in the tree
+                  currentNode = currentNode.nextSibling();
+                  }
+
+            int voiceNum = 0;
+            if (voice.isNull()) {
+                  qDebug("NULL voice detected!");
+                  Fraction l = Fraction(1,1);
+                  // add a rest with length of l
+                  ChordRest* cr = new Rest(score);
+                  cr->setTrack(staffIdx * VOICES + voiceNum);
+                  TDuration d(l);
+                  cr->setDuration(l);
+                  cr->setDurationType(d);
+                  Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
+                  if(!segment->cr(staffIdx * VOICES + voiceNum))
+                        segment->add(cr);
+                  tick += cr->actualTicks();
+                  staffIdx++;
+                  continue;
+                  }
+
+            // read the beats that occur in the bar
+            tick = readBeats(voice.firstChild().toElement().text(), partInfo, measure, tick, staffIdx, voiceNum, tuplets);
+            // increment the counter for parts
             staffIdx++;
             }
+      }
+
+//---------------------------------------------------------
+//   readMasterBars
+//---------------------------------------------------------
+
+void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
+      {
+      Measure* measure = score->firstMeasure();
+      int bar = 0;
+      QDomNode nextMasterBar = partInfo->masterBars;
+      nextMasterBar = nextMasterBar.nextSibling();
+      int measureCounter = 0;
+      ClefType oldClefId[staves];
+      do    {
+            const GpBar& gpbar = bars[bar];
+
+            if (!gpbar.marker.isEmpty()) {
+                  Text* s = new RehearsalMark(score);
+                  s->setText(gpbar.marker.trimmed());
+                  s->setTrack(0);
+                  Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  segment->add(s);
+                  }
+
+            QDomNode key = nextMasterBar.firstChild();
+            KeySig* t = new KeySig(score);
+            t->setKey(Key(key.firstChild().toElement().text().toInt()));
+
+            QDomNode time = key.nextSibling();
+            measure->setTimesig(bars[measureCounter].timesig);
+            measure->setLen(bars[measureCounter].timesig);
+            QDomNode barList = time.nextSibling();
+            readBars(&barList, measure, oldClefId, partInfo, t);
             measureCounter++;
             nextMasterBar = nextMasterBar.nextSibling();
             measure = measure->nextMeasure();
@@ -4162,7 +4225,6 @@ void GuitarPro6::readGpif(QByteArray* data)
       QDomNode masterTrack = scoreNode.nextSibling();
       readMasterTracks(&masterTrack);
       // Tracks node
-
       QDomNode eachTrack = masterTrack.nextSibling();
       readTracks(&eachTrack);
       // MasterBars node
@@ -4173,6 +4235,8 @@ void GuitarPro6::readGpif(QByteArray* data)
       QDomNode beats = voices.nextSibling();
       QDomNode notes = beats.nextSibling();
       QDomNode rhythms = notes.nextSibling();
+
+      // set up the partInfo struct to contain information from the file
       partInfo.masterBars = masterBars.firstChild();
       partInfo.bars = bars.firstChild();
       partInfo.voices = voices.firstChild();
@@ -4184,6 +4248,7 @@ void GuitarPro6::readGpif(QByteArray* data)
 
       createMeasures();
       readMasterBars(&partInfo);
+      // set the starting tempo of the score
       setTempo(/*tempo*/120, score->firstMeasure());
       }
 
