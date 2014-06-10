@@ -27,20 +27,6 @@ extern QString dataPath;
 //   Shortcut
 //---------------------------------------------------------
 
-Shortcut::Shortcut()
-      {
-      _key         = 0;
-      _descr       = 0;
-      _text        = 0;
-      _help        = 0;
-      _state       = 0;
-      _flags       = 0;
-      _standardKey = QKeySequence::UnknownKey;
-      _context     = Qt::WindowShortcut;
-      _icon        = -1;
-      _action      = 0;
-      }
-
 Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
    const char* txt, const char* d, const char* h, int i)
       {
@@ -50,10 +36,8 @@ Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
       _help        = h ? h : _descr;
       _state       = s;
       _flags       = f;
-      _standardKey = QKeySequence::UnknownKey;
       _context     = cont;
       _icon        = i;
-      _action      = 0;
       }
 
 Shortcut::Shortcut(int s, int f, const char* name,
@@ -65,10 +49,7 @@ Shortcut::Shortcut(int s, int f, const char* name,
       _help        = h ? h : _descr;
       _state       = s;
       _flags       = f;
-      _standardKey = QKeySequence::UnknownKey;
-      _context     = Qt::WindowShortcut;
       _icon        = i;
-      _action      = 0;
       }
 
 Shortcut::Shortcut(int s, int f, const char* name, const char* txt,
@@ -80,10 +61,7 @@ Shortcut::Shortcut(int s, int f, const char* name, const char* txt,
       _help        = _descr;
       _state       = s;
       _flags       = f;
-      _standardKey = QKeySequence::UnknownKey;
-      _context     = Qt::WindowShortcut;
       _icon        = i;
-      _action      = 0;
       }
 
 Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
@@ -95,10 +73,8 @@ Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
       _help        = _descr;
       _state       = s;
       _flags       = f;
-      _standardKey = QKeySequence::UnknownKey;
       _context     = cont;
       _icon        = i;
-      _action      = 0;
       }
 
 Shortcut::Shortcut(int s, int f, const char* name, const char* txt, int i)
@@ -109,10 +85,7 @@ Shortcut::Shortcut(int s, int f, const char* name, const char* txt, int i)
       _help        = _descr;
       _state       = s;
       _flags       = f;
-      _standardKey = QKeySequence::UnknownKey;
-      _context     = Qt::WindowShortcut;
       _icon        = i;
-      _action      = 0;
       }
 
 Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
@@ -124,11 +97,8 @@ Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
       _help        = _descr;
       _state       = s;
       _flags       = f;
-      _standardKey = QKeySequence::UnknownKey;
       _context     = cont;
-      _context     = Qt::WindowShortcut;
       _icon        = i;
-      _action      = 0;
       }
 
 Shortcut::Shortcut(const Shortcut& sc)
@@ -143,14 +113,7 @@ Shortcut::Shortcut(const Shortcut& sc)
       _keys        = sc._keys;
       _context     = sc._context;
       _icon        = sc._icon;
-      _action      = 0;
       }
-
-//Shortcut::~Shortcut()
-//      {
-//      delete _action;
-//    _action->deleteLater();
-//      }
 
 //---------------------------------------------------------
 //   clear
