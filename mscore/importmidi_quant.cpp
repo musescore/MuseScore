@@ -572,7 +572,7 @@ void checkOffTime(
                         continue;
                         }
                   const auto &tuplet = next->second.tuplet->second;
-                  if (next->second.tuplet == chord.tuplet
+                  if ((chord.isInTuplet && next->second.tuplet == chord.tuplet)
                               || tuplet.onTime + tuplet.len <= note.offTime) {
                         ++next;
                         continue;
@@ -590,7 +590,7 @@ void checkOffTime(
                         break;
                   if (prev->second.voice != chord.voice
                               || !prev->second.isInTuplet
-                              || prev->second.tuplet == chord.tuplet) {
+                              || (chord.isInTuplet && prev->second.tuplet == chord.tuplet)) {
                         if (prev != chords.begin()) {
                               --prev;
                               continue;
