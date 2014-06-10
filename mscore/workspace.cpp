@@ -310,10 +310,14 @@ void Workspace::read()
       {
       if (_path == "Advanced") {
             mscore->setAdvancedPalette();
+            for (Palette* p : mscore->getPaletteBox()->palettes())
+                  p->setSystemPalette(true);
             return;
             }
       if (_path == "Basic") {
             mscore->setBasicPalette();
+            for (Palette* p : mscore->getPaletteBox()->palettes())
+                  p->setSystemPalette(true);
             return;
             }
       if (_path.isEmpty() || !QFile(_path).exists()) {
@@ -447,8 +451,11 @@ Workspace* Workspace::createNewWorkspace(const QString& name)
 
       PaletteBox* paletteBox = mscore->getPaletteBox();
       QList<Palette*> pl = paletteBox->palettes();
-      foreach (Palette* p, pl)
+      foreach (Palette* p, pl) {
             p->setSystemPalette(false);
+            for (int i = 0; i < p->size(); ++i)
+                  p->setCellReadOnly(i, false);
+            }
 
       _workspaces.append(p);
       return p;

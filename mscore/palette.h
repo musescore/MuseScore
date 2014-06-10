@@ -38,14 +38,16 @@ class Palette;
 //---------------------------------------------------------
 
 struct PaletteCell {
-      Element* element = 0;
+      Element* element { 0 };
       QString name;           // used for tool tip
       QString tag;
-      bool drawStaff = false;
-      double x = 0.0, y = 0.0;
-      double xoffset = 0.0, yoffset = 0.0;      // in spatium units of "gscore"
-      qreal mag = 1.0;
-      bool readOnly = true;
+      bool drawStaff { false };
+      double x       { 0.0   };
+      double y       { 0.0   };
+      double xoffset { 0.0   };
+      double yoffset { 0.0   };      // in spatium units of "gscore"
+      qreal mag      { 1.0   };
+      bool readOnly  { false };
       };
 
 //---------------------------------------------------------
