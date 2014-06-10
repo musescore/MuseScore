@@ -49,6 +49,7 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/glissando.h"
 #include "libmscore/chordline.h"
+#include "libmscore/instrtemplate.h"
 #include "preferences.h"
 
 namespace Ms {

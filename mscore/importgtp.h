@@ -29,6 +29,8 @@
 #include "libmscore/clef.h"
 #include "libmscore/keysig.h"
 #include "libmscore/chordrest.h"
+#include "libmscore/clef.h"
+#include "libmscore/keysig.h"
 
 namespace Ms {
 
