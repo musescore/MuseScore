@@ -149,10 +149,13 @@ void LineProperties::accept()
       else if (otl->endText().isEmpty())
             otl->setEndText("");
 
-
       if (otl->beginTextElement()) {
-            otl->beginTextElement()->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, tl->beginTextElement()->textStyleType());
-            otl->beginTextElement()->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(tl->beginTextElement()->textStyle()));
+            Text* t  = tl->beginTextElement();
+            Text* ot = otl->beginTextElement();
+            if (t) {
+                  ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, t->textStyleType());
+                  ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+                  }
             }
 
       if (otl->continueTextElement()) {
