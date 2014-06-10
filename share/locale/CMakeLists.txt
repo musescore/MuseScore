@@ -25,6 +25,7 @@ install(FILES
       mscore_be.qm      
       mscore_bg.qm
       mscore_ca.qm
+      mscore_ca@valencia.qm
       mscore_cs.qm
       mscore_da.qm
       mscore_de.qm
