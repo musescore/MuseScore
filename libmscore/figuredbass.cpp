@@ -939,17 +939,17 @@ void FiguredBass::write(Xml& xml) const
             xml.tag("onNote", onNote());
       if (ticks() > 0)
             xml.tag("ticks", ticks());
-      // if unparseable items or non-standard style, write full text data
-      if (items.size() < 1 || textStyleType() != TextStyleType::FIGURED_BASS) {
-            if (items.size() < 1)
-                  Text::writeProperties(xml, true);
-            else
-                  // if all items parsed and not unstled, we simnply have a special style: write it
+      // if unparseable items, write full text data
+      if (items.size() < 1)
+            Text::writeProperties(xml, true);
+      else {
+            if (textStyleType() != TextStyleType::FIGURED_BASS)
+                  // if all items parsed and not unstiled, we simply have a special style: write it
                   xml.tag("style", textStyle().name());
+            for(FiguredBassItem* item : items)
+                  item->write(xml);
+            Element::writeProperties(xml);
             }
-      for(FiguredBassItem* item : items)
-            item->write(xml);
-      Element::writeProperties(xml);
       xml.etag();
       }
 
@@ -984,7 +984,8 @@ void FiguredBass::read(XmlReader& e)
                   e.unknown();
             }
       // if items could be parsed set normalized text
-      setText(normalizedText);            // this is the text to show while editing
+      if (items.size() > 0)
+            setText(normalizedText);      // this is the text to show while editing
       }
 
 //---------------------------------------------------------
@@ -1006,7 +1007,7 @@ void FiguredBass::layout()
 
       // if in edit mode or if style has been changed,
       // do nothing else, keeping default laying out and formatting
-      if(editMode() || textStyleType() != TextStyleType::FIGURED_BASS) {
+      if(editMode() || items.size() < 1 || textStyleType() != TextStyleType::FIGURED_BASS) {
             Text::layout();
             return;
       }
