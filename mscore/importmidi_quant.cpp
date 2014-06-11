@@ -645,35 +645,22 @@ bool areTupletChordsConsistent(const std::multimap<ReducedFraction, MidiChord> &
                         }
                   }
             }
-
       return true;
       }
 
 bool areTupletChordsConsistent(
             const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
       {
-      std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator prevTuplet;
-      bool prevTupletSet = false;
-      bool isInTuplet = false;
-
-      for (int voice = 0; voice != VOICES; ++voice) {
-            for (const auto &chord: chords) {
-                  const MidiChord &c = chord->second;
-                  if (c.voice != voice)
-                        continue;
-                  if (c.isInTuplet) {
-                        if (!isInTuplet && prevTupletSet && c.tuplet == prevTuplet)
-                              return false;     // there is a non-tuplet chord inside tuplet
-                        isInTuplet = true;
-                        prevTuplet = c.tuplet;
-                        prevTupletSet = true;
-                        }
-                  else {
-                        isInTuplet = false;
-                        }
+      auto it = chords.begin();
+      const bool isInTuplet = (*it)->second.isInTuplet;
+      for (std::next(it); it != chords.end(); ++it) {
+            if (isInTuplet && (!(*it)->second.isInTuplet
+                               || (*it)->second.tuplet != (*chords.begin())->second.tuplet)) {
+                  return false;
                   }
+            if (!isInTuplet && (*it)->second.isInTuplet)
+                  return false;
             }
-
       return true;
       }
 
@@ -684,7 +671,6 @@ bool areChordsSortedByOnTime(
             if (chords[i]->first >= chords[i + 1]->first)
                   return false;
             }
-
       return true;
       }
 
@@ -1059,7 +1045,7 @@ void quantizeOnTimesInRange(
       Q_ASSERT_X(areChordsDifferent(chords),
                  "Quantize::quantizeOnTimesInRange", "There are chord duplicates");
       Q_ASSERT_X(areTupletChordsConsistent(chords), "Quantize::quantizeOnTimesInRange",
-                 "There are non-tuplet chords between tuplet chords");
+                 "Tuplet and non-tuplet chords mismatch");
       Q_ASSERT_X(areChordsSortedByOnTime(chords),
                  "Quantize::quantizeOnTimesInRange", "Chords are not sorted by on time values");
 
