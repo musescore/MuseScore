@@ -761,7 +761,7 @@ bool Element::readProperties(XmlReader& e)
                   // - another bug allowed text items attached to notes or chords to also have invalid tick values (#25616)
                   //   the text might be of any type, but we are now converting any text elements within notes into FINGERING
                   // - at some point, a check for SYMBOL was included here, but it isn't clear what the issue was
-                  //   ignoring ticks for symbols menas they will be positioned incorrectly, and it is not safe in any case:
+                  //   ignoring ticks for symbols means they will be positioned incorrectly if not at start of measure, and it is not safe in any case:
                   //   it causes problems if there is also another item such as a STAFF_TEXT that was depending on the tick value of the symbol (http://musescore.org/en/node/25572)
                   //   when we re-discover the issue that caused the check for SYMBOL to be added,
                   //   we will need to find a different solution if possible
