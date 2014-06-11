@@ -10,6 +10,7 @@
 #include "importmidi_beat.h"
 
 #include <set>
+#include <deque>
 
 
 namespace Ms {
@@ -497,7 +498,7 @@ struct QuantData
 #ifdef QT_DEBUG
 
 bool areAllVoicesSame(
-            const std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
+            const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
       {
       auto it = chords.begin();
       const int voice = (*it)->second.voice;
@@ -509,7 +510,7 @@ bool areAllVoicesSame(
       }
 
 bool areChordsDifferent(
-            const std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
+            const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
       {
       std::set<const std::pair<const ReducedFraction, MidiChord> *> chordSet;
 
@@ -648,6 +649,45 @@ bool areTupletChordsConsistent(const std::multimap<ReducedFraction, MidiChord> &
       return true;
       }
 
+bool areTupletChordsConsistent(
+            const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
+      {
+      std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator prevTuplet;
+      bool prevTupletSet = false;
+      bool isInTuplet = false;
+
+      for (int voice = 0; voice != VOICES; ++voice) {
+            for (const auto &chord: chords) {
+                  const MidiChord &c = chord->second;
+                  if (c.voice != voice)
+                        continue;
+                  if (c.isInTuplet) {
+                        if (!isInTuplet && prevTupletSet && c.tuplet == prevTuplet)
+                              return false;     // there is a non-tuplet chord inside tuplet
+                        isInTuplet = true;
+                        prevTuplet = c.tuplet;
+                        prevTupletSet = true;
+                        }
+                  else {
+                        isInTuplet = false;
+                        }
+                  }
+            }
+
+      return true;
+      }
+
+bool areChordsSortedByOnTime(
+            const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
+      {
+      for (size_t i = 0; i != chords.size() - 1; ++i) {
+            if (chords[i]->first >= chords[i + 1]->first)
+                  return false;
+            }
+
+      return true;
+      }
+
 #endif
 
 
@@ -675,7 +715,7 @@ ReducedFraction quantizeToSmall(
 
 void findMetricalLevels(
             std::vector<QuantData> &data,
-            const std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords,
+            const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords,
             const ReducedFraction &tupletQuant,
             const ReducedFraction &barStart,
             const ReducedFraction &barFraction)
@@ -814,7 +854,7 @@ void findChordRangeStarts(
 
 void findQuants(
             std::vector<QuantData> &data,
-            const std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords,
+            const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords,
             const ReducedFraction &rangeStart,
             const ReducedFraction &rangeEnd,
             const ReducedFraction &basicQuant,
@@ -857,7 +897,7 @@ void findQuants(
       }
 
 ReducedFraction findTupletQuant(
-            const std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
+            const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords)
       {
       ReducedFraction tupletQuant(-1, 1);
       if ((*chords.begin())->second.isInTuplet) {
@@ -870,7 +910,7 @@ ReducedFraction findTupletQuant(
       }
 
 std::vector<QuantData> findQuantData(
-            const std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords,
+            const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords,
             const ReducedFraction &rangeStart,
             const ReducedFraction &rangeEnd,
             const ReducedFraction &basicQuant,
@@ -1005,7 +1045,7 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
       }
 
 void quantizeOnTimesInRange(
-            const std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords,
+            const std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chords,
             std::map<const std::pair<const ReducedFraction, MidiChord> *, QuantInfo> &foundOnTimes,
             const ReducedFraction &rangeStart,
             const ReducedFraction &rangeEnd,
@@ -1018,6 +1058,10 @@ void quantizeOnTimesInRange(
                  "Quantize::quantizeOnTimesInRange", "Chord voices are not the same");
       Q_ASSERT_X(areChordsDifferent(chords),
                  "Quantize::quantizeOnTimesInRange", "There are chord duplicates");
+      Q_ASSERT_X(areTupletChordsConsistent(chords), "Quantize::quantizeOnTimesInRange",
+                 "There are non-tuplet chords between tuplet chords");
+      Q_ASSERT_X(areChordsSortedByOnTime(chords),
+                 "Quantize::quantizeOnTimesInRange", "Chords are not sorted by on time values");
 
       Q_ASSERT_X(rangeStart != ReducedFraction(-1, 1)
                   && rangeEnd != ReducedFraction(-1, 1)
@@ -1118,7 +1162,7 @@ void quantizeOnTimes(
             ReducedFraction barFraction(-1, 1);
             ReducedFraction barStart(-1, 1);
             bool currentlyInTuplet = false;
-            std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator> chordsToQuant;
+            std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> chordsToQuant;
 
             for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
                   if (chordIt->second.voice > maxVoice)
@@ -1170,7 +1214,7 @@ void quantizeOnTimes(
                               }
 
                         const auto tol = basicQuant / 2;      // can add chords from previous range
-                        auto it = chordsToQuant.at(0);
+                        auto it = chordsToQuant.front();
                         if (it != chords.begin())
                               --it;
                         while (it != chords.begin() && it->first >= rangeStart)
@@ -1182,7 +1226,7 @@ void quantizeOnTimes(
                                                     && it->second.barIndex == currentBarIndex))
                                           {
                                           if (it->second.voice == voice)
-                                                chordsToQuant.push_back(it);
+                                                chordsToQuant.push_front(it);
                                           }
                                     else if (rangeStart != barStart) {
                                           break;
