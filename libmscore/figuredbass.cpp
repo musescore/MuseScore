@@ -228,14 +228,12 @@ int FiguredBassItem::parseDigit(QString& str)
       _digit = FBIDigitNone;
 
       while(str.size()) {
-            // any digit acceptable, if no previous digit
-            if(str[0] >= '1' && str[0] <= '9') {
-                  if(_digit == FBIDigitNone) {
-                        _digit = str[0].unicode() - '0';
-                        str.remove(0, 1);
-                        }
-                  else
-                        return -1;
+            // any digit acceptable
+            if(str[0] >= '0' && str[0] <= '9') {
+                  if (_digit == FBIDigitNone)
+                        _digit = 0;
+                  _digit = _digit*10 + (str[0].unicode() - '0');
+                  str.remove(0, 1);
                   }
             // anything else: no longer in digit part
             else
@@ -327,7 +325,7 @@ QString FiguredBassItem::normalizedText() const
 
       // digit
       if(_digit != FBIDigitNone)
-            str.append(QChar('0' + _digit));
+            str.append(QString::number(_digit));
 
       if(parenth[2] != Parenthesis::NONE)
             str.append(normParenthToChar[int(parenth[2])]);
@@ -475,13 +473,24 @@ void FiguredBassItem::layout()
       if(_digit != FBIDigitNone) {
             // if some digit, the string created so far 'hangs' to the left of the note
             x1 = fm.width(str);
-            // if suffix is a combining shape, combine it with digit
+            // if suffix is a combining shape, combine it with digit (multi-digit numbers cannot be combined)
             // unless there is a parenthesis in between
-            if( (_suffix == Modifier::CROSS || _suffix == Modifier::BACKSLASH || _suffix == Modifier::SLASH)
+            if( (_digit < 10)
+                        && (_suffix == Modifier::CROSS || _suffix == Modifier::BACKSLASH || _suffix == Modifier::SLASH)
                         && parenth[2] == Parenthesis::NONE)
                   str.append(g_FBFonts.at(font).displayDigit[style][_digit][int(_suffix)-(int(Modifier::CROSS)-1)]);
-            else
-                  str.append(g_FBFonts.at(font).displayDigit[style][_digit][0]);
+            // if several digits or no shape combination, convert _digit to font styled chars
+            else {
+                  QString digits    = QString();
+                  int digit         = _digit;
+                  while (true) {
+                        digits.prepend(g_FBFonts.at(font).displayDigit[style][(digit % 10)][0]);
+                        digit /= 10;
+                        if (digit == 0)
+                              break;
+                        }
+                  str.append(digits);
+                  }
             // if some digit, the string from here onward 'hangs' to the right of the note
             x2 = fm.width(str);
             }
