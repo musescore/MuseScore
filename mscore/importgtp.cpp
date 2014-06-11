@@ -45,6 +45,7 @@
 #include "libmscore/dynamic.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/volta.h"
+#include "libmscore/fret.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -648,8 +649,10 @@ void GuitarPro1::read(QFile* fp)
                         if (beatBits & 0x20)
                               tuple = readInt();
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-                        if (beatBits & 0x2)
-                              readChord(segment, staffIdx * VOICES);
+                        if (beatBits & 0x2) {
+                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              readChord(segment, staffIdx * VOICES, numStrings);
+                              }
                         Lyrics* lyrics = 0;
                         if (beatBits & 0x4) {
                               lyrics = new Lyrics(score);
@@ -943,8 +946,10 @@ qDebug("BeginRepeat=============================================");
                         if (beatBits & 0x20)
                               tuple = readInt();
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-                        if (beatBits & 0x2)
-                              readChord(segment, staffIdx * VOICES);
+                        if (beatBits & 0x2) {
+                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              readChord(segment, staffIdx * VOICES, numStrings);
+                              }
                         Lyrics* lyrics = 0;
                         if (beatBits & 0x4) {
                               QString txt = readDelphiString();
@@ -1261,28 +1266,65 @@ int GuitarPro1::readBeatEffects(int, Segment*)
 //   readChord
 //---------------------------------------------------------
 
-void GuitarPro1::readChord(Segment* seg, int track)
+void GuitarPro1::readChord(Segment* seg, int track, int numStrings)
       {
+      FretDiagram* fret = new FretDiagram(score);
+      fret->setTrack(track);
+      fret->setStrings(numStrings);
+
       int header = readUChar();
 
       QString name;
       if ((header & 1) == 0) {
             name = readDelphiString();
             int firstFret = readInt();
+            fret->setOffset(firstFret-1);
             if (firstFret) {
-                  for (int i = 0; i < 6; ++i)
-                        readInt();
+                  for (int i = 0; i < 6; ++i) {
+                        int currentFret =  readInt();
+                        // read the frets and add them to the fretboard
+                        // substract 1 extra from numStrings as we count from 0
+                        if (i > numStrings-1) {}
+                        else if (currentFret > 0) {
+                              fret->setDot(numStrings-1-i, currentFret-firstFret+1);
+                              }
+                        else if (currentFret == 0) {
+                              fret->setDot(numStrings-1-i, 0);
+                              fret->setMarker(numStrings-1-i, '0');
+                             }
+                        else if (currentFret == -1) {
+                              fret->setDot(numStrings-1-i, 0);
+                              fret->setMarker(numStrings-1-i, 'X');
+                              }
+                        }
                   }
             }
       else {
             skip(25);
             name = readPascalString(34);
-            /*int firstFret =*/ readInt();
-            for (int i = 0; i < 6; ++i) {
-                  /*int fret =*/ readInt();
+            int firstFret = readInt();
+            fret->setOffset(firstFret-1);
+            // even if the guitar has 6 (or fewer) strings we must read 7 digits
+            for (int i = 0; i < 7; ++i) {
+                  int currentFret =  readInt();
+                  // read the frets and add them to the fretboard
+                  // substract 1 extra from numStrings as we count from 0
+                  if (i > numStrings-1) {}
+                  else if (currentFret > 0) {
+                        fret->setDot(numStrings-1-i, currentFret-firstFret+1);
+                  }
+                  else if (currentFret == 0) {
+                        fret->setDot(numStrings-1-i, 0);
+                        fret->setMarker(numStrings-1-i, '0');
+                        }
+                  else if (currentFret == -1) {
+                        fret->setDot(numStrings-1-i, 0);
+                        fret->setMarker(numStrings-1-i, 'X');
+                        }
                   }
             skip(36);
             }
+      seg->add(fret);
       if (name.isEmpty())
             return;
       Harmony* harmony = new Harmony(seg->score());
@@ -1544,8 +1586,10 @@ void GuitarPro3::read(QFile* fp)
                               tuple = readInt();
 
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-                        if (beatBits & 0x2)
-                              readChord(segment, staffIdx * VOICES);
+                        if (beatBits & 0x2) {
+                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              readChord(segment, staffIdx * VOICES, numStrings);
+                              }
                         Lyrics* lyrics = 0;
                         if (beatBits & 0x4) {
                               QString txt = readDelphiString();
@@ -2031,8 +2075,12 @@ void GuitarPro4::readInfo()
 //   readChord
 //---------------------------------------------------------
 
-void GuitarPro4::readChord(Segment* seg, int track)
+void GuitarPro4::readChord(Segment* seg, int track, int numStrings)
       {
+      FretDiagram* fret = new FretDiagram(score);
+      fret->setTrack(track);
+      fret->setStrings(numStrings);
+
       int header = readUChar();
 
       QString name;
@@ -2040,21 +2088,54 @@ void GuitarPro4::readChord(Segment* seg, int track)
       if ((header & 1) == 0) {
             name = readDelphiString();
             int firstFret = readInt();
+            fret->setOffset(firstFret-1);
             if (firstFret != 0) {
                   for (int i = 0; i < 6; ++i) {
-                        readInt();
+                        int currentFret =  readInt();
+                        // read the frets and add them to the fretboard
+                        // substract 1 extra from numStrings as we count from 0
+                        if (i > numStrings-1) {}
+                        else if (currentFret > 0) {
+                              fret->setDot(numStrings-1-i, currentFret-firstFret+1);
+                              }
+                        else if (currentFret == 0) {
+                              fret->setDot(numStrings-1-i, 0);
+                              fret->setMarker(numStrings-1-i, '0');
+                             }
+                        else if (currentFret == -1) {
+                              fret->setDot(numStrings-1-i, 0);
+                              fret->setMarker(numStrings-1-i, 'X');
+                              }
                         }
                   }
             }
-      else {
+      else  {
             skip(16);
             name = readPascalString(21);
             skip(4);
-            /*int firstFret =*/ readInt();
-            for (int i = 0; i < 7; ++i)
-                  readInt();
+            int firstFret = readInt();
+            fret->setOffset(firstFret-1);
+            // even if the guitar has 6 (or fewer) strings we must read 7 digits
+            for (int i = 0; i < 7; ++i) {
+                  int currentFret =  readInt();
+                  // read the frets and add them to the fretboard
+                  // substract 1 extra from numStrings as we count from 0
+                  if (i > numStrings-1) {}
+                  else if (currentFret > 0) {
+                        fret->setDot(numStrings-1-i, currentFret-firstFret+1);
+                  }
+                  else if (currentFret == 0) {
+                        fret->setDot(numStrings-1-i, 0);
+                        fret->setMarker(numStrings-1-i, '0');
+                        }
+                  else if (currentFret == -1) {
+                        fret->setDot(numStrings-1-i, 0);
+                        fret->setMarker(numStrings-1-i, 'X');
+                        }
+                  }
             skip(32);
             }
+      seg->add(fret);
       if (name.isEmpty())
             return;
       Harmony* harmony = new Harmony(seg->score());
@@ -2248,8 +2329,10 @@ void GuitarPro4::read(QFile* fp)
                         if (beatBits & 0x20)
                               tuple = readInt();
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-                        if (beatBits & 0x2)
-                              readChord(segment, staffIdx * VOICES);
+                        if (beatBits & 0x2){
+                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              readChord(segment, staffIdx * VOICES, numStrings);
+                              }
                         Lyrics* lyrics = 0;
                         if (beatBits & 0x4) {
                               lyrics = new Lyrics(score);
@@ -2785,8 +2868,10 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             tuple = readInt();
 
       Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-      if (beatBits & 0x2)
-            readChord(segment, staffIdx * VOICES);
+      if (beatBits & 0x2) {
+            int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+            readChord(segment, staffIdx * VOICES, numStrings);
+            }
       Lyrics* lyrics = 0;
       if (beatBits & 0x4) {
             QString txt = readDelphiString();
@@ -2954,16 +3039,37 @@ void GuitarPro5::readMixChange(Measure* measure)
 //   readChord
 //---------------------------------------------------------
 
-void GuitarPro5::readChord(Segment* seg, int track)
+void GuitarPro5::readChord(Segment* seg, int track, int numStrings)
       {
+      FretDiagram* fret = new FretDiagram(score);
+      fret->setTrack(track);
+      fret->setStrings(numStrings);
+
       skip(17);
       QString name = readPascalString(21);
       skip(4);
-      /*int firstFret =*/ readInt();
+      int firstFret = readInt();
+      fret->setOffset(firstFret-1);
+      // even if the guitar has 6 (or fewer) strings we must read 7 digits
       for (int i = 0; i < 7; ++i) {
-            /*int fret =*/ readInt();
+            int currentFret =  readInt();
+            // read the frets and add them to the fretboard
+            // substract 1 extra from numStrings as we count from 0
+            if (i > numStrings-1) {}
+            else if (currentFret > 0) {
+                  fret->setDot(numStrings-1-i, currentFret-firstFret+1);
+                  }
+            else if (currentFret == 0) {
+                  fret->setDot(numStrings-1-i, 0);
+                  fret->setMarker(numStrings-1-i, '0');
+                  }
+            else if (currentFret == -1) {
+                  fret->setDot(numStrings-1-i, 0);
+                  fret->setMarker(numStrings-1-i, 'X');
+                  }
             }
       skip(32);
+      seg->add(fret);
       if (name.isEmpty())
             return;
       Harmony* harmony = new Harmony(seg->score());
