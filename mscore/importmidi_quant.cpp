@@ -1134,6 +1134,55 @@ void quantizeOffTimes(
             }
       }
 
+void addChordsFromPrevRange(
+            std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> &chordsToQuant,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            bool currentlyInTuplet,
+            int currentBarIndex,
+            int voice,
+            const ReducedFraction &barStart,
+            const ReducedFraction &rangeStart,
+            const ReducedFraction &basicQuant)
+      {
+      const auto tol = basicQuant / 2;      // can add chords from previous range
+      auto it = chordsToQuant.front();
+      if (it != chords.begin())
+            --it;
+      while (it != chords.begin() && it->first >= rangeStart)
+            --it;
+      if (it->first < rangeStart) {
+            while (true) {
+                  if (it->first > rangeStart - tol
+                              || (rangeStart == barStart
+                                  && it->second.barIndex == currentBarIndex))
+                        {
+                        if (it->second.voice == voice) {
+                              if (it->second.isInTuplet == currentlyInTuplet) {
+                                    if (it->second.isInTuplet && it->second.tuplet
+                                                == chordsToQuant.front()->second.tuplet) {
+                                          chordsToQuant.push_front(it);
+                                          }
+                                    }
+                              else {
+                                    Q_ASSERT_X(rangeStart != barStart,
+                                               "Quantize::addChordsFromPrevRange",
+                                               "Chord from previous bar "
+                                               "was not prepared for quantization");
+                                    }
+                              }
+                        }
+                  else if (rangeStart != barStart) {
+                        break;
+                        }
+                  if (it == chords.begin()
+                              || it->second.barIndex < currentBarIndex - 1) {
+                        break;
+                        }
+                  --it;
+                  }
+            }
+      }
+
 void quantizeOnTimes(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             std::map<const std::pair<const ReducedFraction, MidiChord> *, QuantInfo> &foundOnTimes,
@@ -1199,31 +1248,9 @@ void quantizeOnTimes(
                                     }
                               }
 
-                        const auto tol = basicQuant / 2;      // can add chords from previous range
-                        auto it = chordsToQuant.front();
-                        if (it != chords.begin())
-                              --it;
-                        while (it != chords.begin() && it->first >= rangeStart)
-                              --it;
-                        if (it->first < rangeStart) {
-                              while (true) {
-                                    if (it->first > rangeStart - tol
-                                                || (rangeStart == barStart
-                                                    && it->second.barIndex == currentBarIndex))
-                                          {
-                                          if (it->second.voice == voice)
-                                                chordsToQuant.push_front(it);
-                                          }
-                                    else if (rangeStart != barStart) {
-                                          break;
-                                          }
-                                    if (it == chords.begin()
-                                                || it->second.barIndex < currentBarIndex - 1) {
-                                          break;
-                                          }
-                                    --it;
-                                    }
-                              }
+                        addChordsFromPrevRange(chordsToQuant, chords,
+                                               currentlyInTuplet, currentBarIndex, voice,
+                                               barStart, rangeStart, basicQuant);
 
                         quantizeOnTimesInRange(chordsToQuant, foundOnTimes, rangeStart, rangeEnd,
                                                basicQuant, barStart, barFraction);
