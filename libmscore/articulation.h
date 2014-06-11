@@ -74,7 +74,7 @@ class Articulation : public Element {
 
       virtual Articulation* clone() const   { return new Articulation(*this); }
       virtual Articulation* linkedClone();
-      virtual ElementType type() const      { return ARTICULATION; }
+      virtual ElementType type() const      { return ElementType::ARTICULATION; }
 
       virtual qreal mag() const;
 
