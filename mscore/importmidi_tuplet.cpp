@@ -651,6 +651,24 @@ bool areTupletReferencesValid(const std::multimap<ReducedFraction, MidiChord> &c
       return true;
       }
 
+bool areTupletNonTupletChordsDistinct(
+            const std::vector<TupletInfo> &tuplets,
+            const std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets)
+      {
+      std::set<std::pair<const ReducedFraction, MidiChord> *> chords;
+      for (const TupletInfo &tuplet: tuplets) {
+            for (const auto &chord: tuplet.chords) {
+                  chords.insert(&*chord.second);
+                  }
+            }
+      for (const auto &nonTuplet: nonTuplets) {
+            const auto it = chords.find(&*nonTuplet);
+            if (it != chords.end())
+                  return false;
+            }
+      return true;
+      }
+
 #endif
 
 
@@ -861,6 +879,10 @@ void findTuplets(
                                                  startBarTick, basicQuant, barIndex);
                   // backTiedTuplets can be changed here (incompatible are removed)
       assignVoices(tuplets, nonTuplets, backTiedTuplets, startBarTick, basicQuant, barIndex);
+
+      Q_ASSERT_X(areTupletNonTupletChordsDistinct(tuplets, nonTuplets),
+                 "MIDI tuplets: findTuplets", "Tuplets have common chords with non-tuplets");
+
       setBarIndexes(tuplets, nonTuplets, barIndex, endBarTick, basicQuant);
 
       addTupletEvents(tupletEvents, tuplets, backTiedTuplets);
