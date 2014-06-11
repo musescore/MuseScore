@@ -65,6 +65,7 @@ class FretDiagram : public Element {
 
       int strings() const    { return _strings; }
       int frets()   const    { return _frets; }
+      void setOffset(int offset);
       void setStrings(int n);
       void setFrets(int n)   { _frets = n; }
       void setDot(int string, int fret);

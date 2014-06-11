@@ -138,7 +138,7 @@ class GuitarPro {
 class GuitarPro1 : public GuitarPro {
 
    protected:
-      virtual void readChord(Segment*, int track);
+      virtual void readChord(Segment*, int track, int numStrings);
       void readNote(int string, Note* note);
       virtual int readBeatEffects(int track, Segment*);
 
@@ -178,7 +178,7 @@ class GuitarPro4 : public GuitarPro {
 
       void readInfo();
       void readNote(int string, Note* note, GpNote*);
-      virtual void readChord(Segment*, int track);
+      virtual void readChord(Segment*, int track, int numStrings);
       virtual int readBeatEffects(int track, Segment* segment);
       virtual void readMixChange(Measure* measure);
 
@@ -198,7 +198,7 @@ class GuitarPro5 : public GuitarPro {
       virtual int readBeatEffects(int track, Segment* segment);
       void readNote(int string, Note* note);
       virtual void readMixChange(Measure* measure);
-      virtual void readChord(Segment*, int track);
+      virtual void readChord(Segment*, int track, int numStrings);
       void readMeasure(Measure* measure, int staffIdx, Tuplet*[]);
       void readArtificialHarmonic();
       void readTracks();
