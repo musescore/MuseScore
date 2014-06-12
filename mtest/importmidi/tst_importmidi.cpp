@@ -64,12 +64,12 @@ class TestImportMidi : public QObject, public MTest
             mf(file);
             preferences.midiImportOperations.clear();
             }
-      void voiceSeparation(const char *file)
+      void voiceSeparation(const char *file, bool simplify = false)
             {
             TrackOperations opers;
             opers.canRedefineDefaultsLater = false;
             opers.LHRH.doIt = false;
-            opers.simplifyDurations = false;
+            opers.simplifyDurations = simplify;
             opers.separateVoices = true;
             preferences.midiImportOperations.resetDefaults(opers);
             mf(file);
@@ -303,6 +303,7 @@ class TestImportMidi : public QObject, public MTest
       // voice separation
       void voiceSeparationAcid() { voiceSeparation("voice_acid"); }
       void voiceSeparationIntersect() { voiceSeparation("voice_intersect"); }
+      void voiceSeparationTuplet() { voiceSeparation("voice_tuplet", true); }
       };
 
 //---------------------------------------------------------
