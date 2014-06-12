@@ -8,6 +8,7 @@
 #include "importmidi_tuplet.h"
 #include "importmidi_inner.h"
 #include "importmidi_beat.h"
+#include "importmidi_voice.h"
 
 #include <set>
 #include <deque>
@@ -627,8 +628,9 @@ bool areTupletChordsConsistent(const std::multimap<ReducedFraction, MidiChord> &
       std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator prevTuplet;
       bool prevTupletSet = false;
       bool isInTuplet = false;
+      const int limit = MidiVoice::voiceLimit();
 
-      for (int voice = 0; voice != VOICES; ++voice) {
+      for (int voice = 0; voice != limit; ++voice) {
             for (const auto &chord: chords) {
                   const MidiChord &c = chord.second;
                   if (c.voice != voice)
