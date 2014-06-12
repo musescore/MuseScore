@@ -3,6 +3,7 @@
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
 #include "importmidi_tuplet.h"
+#include "importmidi_chord.h"
 #include "importmidi_inner.h"
 
 
@@ -49,13 +50,6 @@ bool isSeptuple(const ReducedFraction &barFraction)    // 7/8, 21/8, ...
       return barFraction.numerator() % 7 == 0;
       }
 
-
-ReducedFraction minAllowedDuration()
-      {
-      return ReducedFraction::fromTicks(MScore::division / 32);    // smallest allowed duration is 1/128
-      }
-
-
 // list of bar division lengths in ticks (whole bar len, half bar len, ...)
 // and its corresponding levels
 // tuplets are not taken into account here
@@ -95,7 +89,7 @@ DivisionInfo metricDivisionsOfBar(const ReducedFraction &barFraction)
             divLengths.push_back({divLengths.back().len / 3, --level});
             }
 
-      while (divLengths.back().len >= minAllowedDuration() * 2)
+      while (divLengths.back().len >= MChord::minAllowedDuration() * 2)
             divLengths.push_back({divLengths.back().len / 2, --level});
 
       return barDivInfo;
@@ -111,7 +105,7 @@ DivisionInfo metricDivisionsOfTuplet(const MidiTuplet::TupletData &tuplet,
       tupletDivInfo.divLengths.push_back({tuplet.len, TUPLET_BOUNDARY_LEVEL});
       const auto divLen = tuplet.len / tuplet.tupletNumber;
       tupletDivInfo.divLengths.push_back({divLen, tupletStartLevel--});
-      while (tupletDivInfo.divLengths.back().len >= minAllowedDuration() * 2) {
+      while (tupletDivInfo.divLengths.back().len >= MChord::minAllowedDuration() * 2) {
             tupletDivInfo.divLengths.push_back({
                         tupletDivInfo.divLengths.back().len / 2, tupletStartLevel--});
             }
@@ -487,7 +481,7 @@ toDurationList(const ReducedFraction &startTickInBar,
             return QList<std::pair<ReducedFraction, TDuration>>();
 
       const auto divInfo = divisionInfo(barFraction, tupletsInBar);  // mectric structure of bar
-      const auto minDuration = minAllowedDuration() * 2;  // >= minAllowedDuration() after subdivision
+      const auto minDuration = MChord::minAllowedDuration() * 2;  // >= minAllowedDuration() after subdivision
 
       std::map<ReducedFraction, Node> nodes;    // <onTime, Node>
       {
