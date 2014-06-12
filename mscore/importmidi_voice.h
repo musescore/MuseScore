@@ -13,7 +13,7 @@ namespace MidiVoice {
 
 int toIntVoices(MidiOperation::AllowedVoices value);
 int voiceLimit();
-void separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap);
+bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap);
 
 } // namespace LRHand
 } // namespace Ms

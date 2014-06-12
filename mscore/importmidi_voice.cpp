@@ -534,7 +534,7 @@ void updateTuplet(
       MidiTuplet::removeTupletIfEmpty(oldTuplet, tuplets, it->second, chords);
       }
 
-void doVoiceSeparation(
+bool doVoiceSeparation(
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap,
             std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
@@ -543,6 +543,7 @@ void doVoiceSeparation(
       std::multimap<ReducedFraction,
                   std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> insertedTuplets;
       std::map<int, ReducedFraction> maxChordLengths = MChord::findMaxChordLengths(chords);
+      bool changed = false;
 
       for (auto it = chords.begin(); it != chords.end(); ++it) {
             const ReducedFraction onTime = it->first;
@@ -557,6 +558,7 @@ void doVoiceSeparation(
             if (possibleSplits.empty())
                   continue;
 
+            changed = true;
             const VoiceSplit bestSplit = findBestSplit(it, chords, possibleSplits, splitPoint);
 
             if (splitPoint == 0 || splitPoint == notes.size()) {
@@ -618,6 +620,7 @@ void doVoiceSeparation(
                   it = chords.insert({onTime, newChord});
                   }
             }
+      return changed;
       }
 
 int findBarIndexForOffTime(const ReducedFraction &offTime, const TimeSigMap *sigmap)
@@ -706,9 +709,10 @@ void sortVoices(
             }
       }
 
-void separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap)
+bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap)
       {
       auto &opers = preferences.midiImportOperations;
+      bool changed = false;
 
       for (auto &track: tracks) {
             MTrack &mtrack = track.second;
@@ -727,7 +731,8 @@ void separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
                              "MidiVoice::separateVoices",
                              "Not all tuplets are referenced in chords or notes");
 
-                  doVoiceSeparation(mtrack.chords, sigmap, mtrack.tuplets);
+                  if (!changed && doVoiceSeparation(mtrack.chords, sigmap, mtrack.tuplets))
+                        changed = true;
 
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
                              "MidiVoice::separateVoices",
@@ -740,6 +745,8 @@ void separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
                              "Not all tuplets are referenced in chords or notes");
                   }
             }
+
+      return changed;
       }
 
 } // namespace MidiVoice
