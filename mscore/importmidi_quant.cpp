@@ -1200,6 +1200,7 @@ void quantizeOnTimes(
                   if (chordIt->second.voice != voice)
                         continue;
                   if (chordsToQuant.empty()) {
+                        rangeStart = rangeEnd;
                         currentlyInTuplet = chordIt->second.isInTuplet;
                         if (currentBarIndex != chordIt->second.barIndex) {
                               currentBarIndex = chordIt->second.barIndex;
