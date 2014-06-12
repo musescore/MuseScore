@@ -878,7 +878,8 @@ void findTuplets(
       auto backTiedTuplets = findBackTiedTuplets(chords, tuplets, prevBarStart,
                                                  startBarTick, basicQuant, barIndex);
                   // backTiedTuplets can be changed here (incompatible are removed)
-      assignVoices(tuplets, nonTuplets, backTiedTuplets, startBarTick, basicQuant, barIndex);
+      assignVoices(tuplets, nonTuplets, backTiedTuplets,
+                   chords, startBarTick, basicQuant, barIndex);
 
       Q_ASSERT_X(areTupletNonTupletChordsDistinct(tuplets, nonTuplets),
                  "MIDI tuplets: findTuplets", "Tuplets have common chords with non-tuplets");
