@@ -1144,42 +1144,37 @@ void addChordsFromPrevRange(
             const ReducedFraction &rangeStart,
             const ReducedFraction &basicQuant)
       {
+      if (currentlyInTuplet)
+            return;
+
       auto it = chordsToQuant.front();
       if (it == chords.begin())
             return;
-      for (--it; it != chords.begin() && it->first >= rangeStart; --it)
-            ;
-      if (it->first >= rangeStart)
-            return;
-      const auto tol = basicQuant / 2;      // can add chords from previous range
+      --it;
 
-      while (true) {
-            if (it->first > rangeStart - tol
-                        || (rangeStart == barStart && it->second.barIndex == currentBarIndex))
-                  {
-                  if (it->second.voice == voice) {
-                        if (it->second.isInTuplet == currentlyInTuplet) {
-                              if (it->second.isInTuplet && it->second.tuplet
-                                          == chordsToQuant.front()->second.tuplet) {
-                                    chordsToQuant.push_front(it);
-                                    }
-                              }
-                        else {
-                              Q_ASSERT_X(rangeStart != barStart,
-                                         "Quantize::addChordsFromPrevRange",
-                                         "Chord from previous bar "
-                                         "was not prepared for quantization");
-                              }
+      if (rangeStart == barStart) {       // new bar
+            while (it->second.barIndex >= currentBarIndex - 1) {
+                  if (it->second.voice == voice && it->second.barIndex == currentBarIndex) {
+
+                        Q_ASSERT_X(!it->second.isInTuplet, "Quantize::addChordsFromPrevRange",
+                                   "Tuplet chord from previous bar belongs to the current bar");
+
+                        chordsToQuant.push_front(it);
                         }
+                  if (it == chords.begin())
+                        break;
+                  --it;
                   }
-            else if (rangeStart != barStart) {
-                  break;
+            }
+      else {
+            const auto tol = basicQuant / 2;
+            while (it->first > rangeStart - tol) {
+                  if (it->second.voice == voice && !it->second.isInTuplet)
+                        chordsToQuant.push_front(it);
+                  if (it == chords.begin())
+                        break;
+                  --it;
                   }
-            if (it == chords.begin()
-                        || it->second.barIndex < currentBarIndex - 1) {
-                  break;
-                  }
-            --it;
             }
       }
 
