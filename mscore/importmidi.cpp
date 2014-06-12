@@ -562,7 +562,8 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
       Q_ASSERT_X(MidiTie::areTiesConsistent(staff), "MTrack::convertTrack", "Ties are inconsistent");
 
       Q_ASSERT_X(MidiTuplet::haveTupletsEnoughElements(staff),
-                                          "MTrack::convertTrack", "Tuplet has less than 2 elements");
+                 "MTrack::convertTrack",
+                 "Tuplet has less than 2 elements or all elements are rests");
 
       MidiClef::createClefs(staff, indexOfOperation, mtrack->drumTrack());
       }
