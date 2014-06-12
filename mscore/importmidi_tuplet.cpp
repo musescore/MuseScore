@@ -125,7 +125,7 @@ removeTupletIfEmpty(
             return tuplets.erase(tupletIt);
             }
 
-      return tuplets.end();
+      return tupletIt;
       }
 
 // tuplets with no chords are removed

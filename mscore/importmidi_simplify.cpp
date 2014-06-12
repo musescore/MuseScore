@@ -224,8 +224,11 @@ void simplifyDurations(std::multimap<int, MTrack> &tracks, const TimeSigMap *sig
                         // for further usage
             opers.setCurrentTrack(mtrack.indexOfOperation);
 
-            if (opers.currentTrackOperations().simplifyDurations)
+            if (opers.currentTrackOperations().simplifyDurations) {
                   minimizeNumberOfRests(chords, sigmap, mtrack.tuplets);
+                        // empty tuplets may appear after simplification
+                  MidiTuplet::removeEmptyTuplets(mtrack);
+                  }
             }
       }
 
