@@ -219,7 +219,8 @@ void Part::read114(XmlReader& e)
                   instrument->read(e);
                   // add string data from MIDI program number, if possible
                   if (instrument->stringData()->strings() == 0
-                              && instrument->channel().count() > 0) {
+                              && instrument->channel().count() > 0
+                              && instrument->drumset() == nullptr) {
                         int program = instrument->channel(0).program;
                         if (program >= 24 && program <= 30)       // guitars
                               instrument->setStringData(StringData(19, 6, g_guitarStrings));
