@@ -92,9 +92,21 @@ bool haveTupletsEnoughElements(const Staff *staff)
                         if (!cr)
                               continue;
                         const Tuplet *tuplet = cr->tuplet();
-                        if (tuplet && tuplet->elements().size() <= 1) {
-                              printInvalidTupletLocation(seg->measure()->no(), staff->idx());
-                              return false;
+                        if (tuplet) {
+                              if (tuplet->elements().size() <= 1) {
+                                    printInvalidTupletLocation(seg->measure()->no(), staff->idx());
+                                    return false;
+                                    }
+                              int chordCount = 0;
+                              for (const auto &e: tuplet->elements()) {
+                                    const ChordRest *cr = static_cast<ChordRest *>(e);
+                                    if (cr && cr->type() == Element::CHORD)
+                                          ++chordCount;
+                                    }
+                              if (chordCount == 0) {
+                                    printInvalidTupletLocation(seg->measure()->no(), staff->idx());
+                                    return false;
+                                    }
                               }
                         }
                   }
