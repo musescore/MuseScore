@@ -666,4 +666,112 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
             }                             // inner while readNextstartElement()
       }                                   // pasteSymbolList()
 
+PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
+      {
+      if (ms == 0) {
+            qDebug("no application mime data");
+            return PasteStatus::NO_MIME;
+            }
+      if ((_selection.isSingle()|| _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
+            QByteArray data(ms->data(mimeSymbolFormat));
+            XmlReader e(data);
+            QPointF dragOffset;
+            Fraction duration(1, 4);
+            ElementType type = Element::readType(e, &dragOffset, &duration);
+
+            QList<Element*> els;
+            if(_selection.isSingle())
+                  els.append(_selection.element());
+            else
+                  els.append(_selection.elements());
+
+            if (type != ElementType::INVALID) {
+                  Element* el = Element::create(type, this);
+                  if (el) {
+                        el->read(e);
+                        if (el) {
+                              for (Element* target : els) {
+                                    Element* nel = el->clone();
+                                    addRefresh(target->abbox());   // layout() ?!
+                                    DropData ddata;
+                                    ddata.view       = view;
+                                    ddata.element    = nel;
+                                    ddata.duration   = duration;
+                                    target->drop(ddata);
+                                    if (_selection.element())
+                                          addRefresh(_selection.element()->abbox());
+                                    }
+                              }
+                              delete el;
+                        }
+                  }
+            else
+                  qDebug("cannot read type");
+            }
+      else if ((_selection.isRange() || _selection.isList())
+         && ms->hasFormat(mimeStaffListFormat)) {
+            ChordRest* cr = 0;
+            if (_selection.isRange())
+                  cr = _selection.firstChordRest();
+            else if (_selection.isSingle()) {
+                  Element* e = _selection.element();
+                  if (e->type() != ElementType::NOTE && e->type() != ElementType::REST) {
+                        qDebug("cannot paste to %s", e->name());
+                        return PasteStatus::DEST_NO_CR;
+                        }
+                  if (e->type() == ElementType::NOTE)
+                        e = static_cast<Note*>(e)->chord();
+                  cr  = static_cast<ChordRest*>(e);
+                  }
+            if (cr == 0)
+                  return PasteStatus::NO_DEST;
+            else if (cr->tuplet())
+                  return PasteStatus::DEST_TUPLET;
+            else {
+                  QByteArray data(ms->data(mimeStaffListFormat));
+                  qDebug("paste <%s>", data.data());
+                  XmlReader e(data);
+                  pasteStaff(e, cr);
+                  }
+            }
+
+
+      else if (ms->hasFormat(mimeSymbolListFormat)) {
+            ChordRest* cr = 0;
+            if (_selection.isRange())
+                  cr = _selection.firstChordRest();
+            else if (_selection.isSingle()) {
+                  Element* e = _selection.element();
+                  if (e->type() != ElementType::NOTE && e->type() != ElementType::REST) {
+                        qDebug("cannot paste to %s", e->name());
+                        return PasteStatus::DEST_NO_CR;
+                        }
+                  if (e->type() == ElementType::NOTE)
+                        e = static_cast<Note*>(e)->chord();
+                  cr  = static_cast<ChordRest*>(e);
+                  }
+            if (cr == 0)
+                  return PasteStatus::NO_DEST;
+            else if (cr->tuplet())
+                  return PasteStatus::DEST_TUPLET;
+            else {
+                  QByteArray data(ms->data(mimeSymbolListFormat));
+                  qDebug("paste <%s>", data.data());
+                  XmlReader e(data);
+//            QPointF dragOffset;
+//            Fraction duration(1, 4);
+//            ElementType type = Element::readType(e, &dragOffset, &duration);
+                  pasteSymbols(e, cr);
+                  }
+            }
+
+
+      else {
+            qDebug("cannot paste selState %d staffList %d",
+               _selection.state(), ms->hasFormat(mimeStaffListFormat));
+            foreach(const QString& s, ms->formats())
+                  qDebug("  format %s", qPrintable(s));
+            }
+      return PasteStatus::NO_ERROR;
+      }
 }
