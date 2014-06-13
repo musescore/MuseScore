@@ -5040,7 +5040,7 @@ void ScoreView::cmdRepeatSelection()
             if (e) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   _score->startCmd();
-                  _score->pasteStaff(xml, cr);
+                  _score->pasteStaff(xml, cr->segment(), cr->staffIdx());
                   _score->setLayoutAll(true);
                   _score->endCmd();
                   }

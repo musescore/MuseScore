@@ -125,6 +125,17 @@ ChordRest* Selection::activeCR() const
             return lastChordRest(_activeTrack);
       }
 
+Segment* Selection::firstChordRestSegment() const
+      {
+      if (!isRange()) return 0;
+
+      for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
+            if (s->segmentType() == SegmentType::ChordRest)
+                  return s;
+            }
+      return 0;
+      }
+
 //---------------------------------------------------------
 //   firstChordRest
 //---------------------------------------------------------

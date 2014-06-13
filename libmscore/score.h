@@ -715,7 +715,7 @@ class Score : public QObject {
       void spatiumChanged(qreal oldValue, qreal newValue);
 
       PasteStatus cmdPaste(const QMimeData* ms, MuseScoreView* view);
-      void pasteStaff(XmlReader&, ChordRest* dst);
+      void pasteStaff(XmlReader&, Segment* dst, int staffIdx);
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);

@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <assert.h>
+
 #include "score.h"
 #include "mscore.h"
 
@@ -70,11 +72,12 @@ namespace Ms {
 //   pasteStaff
 //---------------------------------------------------------
 
-void Score::pasteStaff(XmlReader& e, ChordRest* dst)
+void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
       {
+      assert(dst->segmentType() == SegmentType::ChordRest);
       clearSpannerIds();
       QList<Chord*> graceNotes;
-      int dstStaffStart = dst->staffIdx();
+      int dstStaffStart = staffIdx;
       int dstTick = dst->tick();
       bool done = false;
       bool pasted = false;
@@ -731,7 +734,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   QByteArray data(ms->data(mimeStaffListFormat));
                   qDebug("paste <%s>", data.data());
                   XmlReader e(data);
-                  pasteStaff(e, cr);
+                  pasteStaff(e, cr->segment(),cr->staffIdx());
                   }
             }
 
