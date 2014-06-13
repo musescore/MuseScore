@@ -163,7 +163,7 @@ void Accidental::read(XmlReader& e)
                                      at = AccidentalType::MIRRORED_FLAT;
                                      break;
                                case 20:
-                                     at = AccidentalType::MIRRIRED_FLAT_SLASH;
+                                     at = AccidentalType::MIRRORED_FLAT_SLASH;
                                      break;
                                case 21:
                                      at = AccidentalType::FLAT_FLAT_SLASH;
