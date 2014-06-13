@@ -112,7 +112,7 @@ OperationsModel::OperationsModel()
 
 
       Node *separateVoices = new Node;
-      separateVoices->name = QCoreApplication::translate("MIDI import operations", "Separate voices");
+      separateVoices->name = QCoreApplication::translate("MIDI import operations", "Separate voices to remove ties");
       separateVoices->oper.type = MidiOperation::Type::SEPARATE_VOICES;
       separateVoices->oper.value = TrackOperations().separateVoices;
       separateVoices->setParent(allowedVoices);
