@@ -603,6 +603,7 @@ static Score::FileError doImport(Score* score, const QString& name, QIODevice* d
       docName = name; // set filename for domError
       MusicXml musicxml(&doc, pass1);
       musicxml.import(score);
+      score->fixTicks();
       qDebug("Parsing time elapsed: %d ms", t.elapsed());
       return Score::FileError::FILE_NO_ERROR;
       }
