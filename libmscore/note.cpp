@@ -905,8 +905,8 @@ void Note::read(XmlReader& e)
                         // only construct a new accidental, if the other tag has not been read yet
                         // (<userAccidental> tag is only used in older scores: no need to check the score mscVersion)
                         if (!hasAccidental) {
-                              _accidental = new Accidental(score());
-                              _accidental->setParent(this);
+                              Accidental* a = new Accidental(score());
+                              add(a);
                               }
                         // TODO: for backward compatibility
                         bool bracket = k & 0x8000;
@@ -924,7 +924,7 @@ void Note::read(XmlReader& e)
                               case 7: at = Accidental::AccidentalType::FLAT_SLASH2; break;
                               case 8: at = Accidental::AccidentalType::MIRRORED_FLAT2; break;
                               case 9: at = Accidental::AccidentalType::MIRRORED_FLAT; break;
-                              case 10: at = Accidental::AccidentalType::MIRRIRED_FLAT_SLASH; break;
+                              case 10: at = Accidental::AccidentalType::MIRRORED_FLAT_SLASH; break;
                               case 11: at = Accidental::AccidentalType::FLAT_FLAT_SLASH; break;
 
                               case 12: at = Accidental::AccidentalType::SHARP_SLASH; break;
@@ -1631,6 +1631,12 @@ void Note::layout10(AccidentalState* as)
                               relLine = absStep(tpc(), epitch());
                               }
                         }
+#if 0
+                  else if (acci > Accidental::AccidentalType::NATURAL) {
+                        // microtonal accidental - see comment in updateAccidental
+                        as->setAccidentalVal(relLine, AccidentalVal::NATURAL, _tieBack != 0);
+                        }
+#endif
                   }
             else  {
                   AccidentalVal accVal = tpc2alter(tpc());
@@ -1921,6 +1927,17 @@ void Note::updateAccidental(AccidentalState* as)
                         }
                   }
             }
+#if 0
+      else {
+            // currently, microtonal accidentals playback as naturals
+            // but have no effect on accidental state of measure
+            // ultimetely, they should probably get their own state
+            // or at least change state to natural, so subsequent notes playback as might be expected
+            // however, this would represent an incompatible change
+            // so hold off until playback of microtonal accidentals is fully implemented
+            as->setAccidentalVal(relLine, AccidentalVal::NATURAL, _tieBack != 0);
+            }
+#endif
       updateRelLine(relLine, true);
       }
 
