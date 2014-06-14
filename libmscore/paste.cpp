@@ -743,7 +743,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   cr = _selection.firstChordRest();
             else if (_selection.isSingle()) {
                   Element* e = _selection.element();
-                  if (e->type() != ElementType::NOTE && e->type() != ElementType::REST) {
+                  if (e->type() != ElementType::NOTE && e->type() != ElementType::REST && e->type() != ElementType::CHORD) {
                         qDebug("cannot paste to %s", e->name());
                         return PasteStatus::DEST_NO_CR;
                         }
