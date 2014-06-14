@@ -143,7 +143,7 @@ double findMatchRank(const std::set<ReducedFraction> &beatSet,
                      const std::vector<int> &levels,
                      size_t beatsInBar,
                      double ticksPerSec)
-{
+      {
       std::map<ReducedFraction, double> saliences;
       for (const auto &e: events) {
             saliences.insert({MidiTempo::time2Tick(e.time, ticksPerSec), e.salience});
@@ -184,7 +184,7 @@ double findMatchRank(const std::set<ReducedFraction> &beatSet,
             matchFrac /= matchCount;
 
       return matchFrac;
-}
+      }
 
 void findBeatLocations(
             const std::multimap<ReducedFraction, MidiChord> &allChords,
@@ -224,53 +224,95 @@ void findBeatLocations(
             }
       }
 
+void scaleOffTimes(
+            QList<MidiNote> &notes,
+            const std::set<ReducedFraction> *beats,
+            const std::set<ReducedFraction>::const_iterator &onTimeBeatEndIt,
+            const ReducedFraction &newOnTimeBeatStart,
+            const ReducedFraction &newBeatLen,
+            ReducedFraction &lastTick)
+      {
+      for (auto &note: notes) {
+            int beatCount = 0;      // beat count between note on time and off time
+
+            Q_ASSERT_X(onTimeBeatEndIt != beats->begin(),
+                       "MidiBeat::scaleOffTimes",
+                       "End beat iterator cannot be the first beat iterator");
+
+            auto bStart = *std::prev(onTimeBeatEndIt);
+            for (auto bit = onTimeBeatEndIt; bit != beats->end(); ++bit) {
+                  const auto &bEnd = *bit;
+
+                  Q_ASSERT_X(bEnd > bStart,
+                             "MidiBeat::scaleOffTimes",
+                             "Beat end <= beat start for note off time that is incorrect");
+
+                  if (note.offTime >= bStart && note.offTime < bEnd) {
+                        const auto scale = newBeatLen / (bEnd - bStart);
+                        auto newOffTimeInBeat = (note.offTime - bStart) * scale;
+                        newOffTimeInBeat = Quantize::quantizeValue(
+                                                newOffTimeInBeat, MChord::minAllowedDuration());
+                        const auto desiredBeatStart = newOnTimeBeatStart + newBeatLen * beatCount;
+                        note.offTime = desiredBeatStart + newOffTimeInBeat;
+                        if (note.offTime > lastTick)
+                              lastTick = note.offTime;
+                        break;
+                        }
+
+                  bStart = bEnd;
+                  ++beatCount;
+                  }
+            }
+      }
+
 void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
                          ReducedFraction &lastTick)
       {
       const auto &opers = preferences.midiImportOperations;
-      const auto &beats = opers.getHumanBeats();
+      const auto *beats = opers.getHumanBeats();
+
       if (beats && !beats->empty() && opers.trackOperations(0).quantize.humanPerformance) {
+
+            Q_ASSERT_X(beats->size() > 1, "MidiBeat::adjustChordsToBeats", "Human beat count < 2");
+
+            const auto newBeatLen = ReducedFraction::fromTicks(MScore::division);
             for (auto trackIt = tracks.begin(); trackIt != tracks.end(); ++trackIt) {
                   auto &chords = trackIt->second.chords;
                   if (chords.empty())
                         continue;
-                             // do chord alignment according to recognized beats
+                              // do chord alignment according to recognized beats
                   std::multimap<ReducedFraction, MidiChord> newChords;
                   lastTick = {0, 1};
 
                   auto chordIt = chords.begin();
                   auto it = beats->begin();
                   auto beatStart = *it;
-                  auto correctedBeatStart = ReducedFraction(0, 1);
+                  auto newBeatStart = ReducedFraction(0, 1);
 
-                  for (; it != beats->end(); ++it) {
+                  for (++it; it != beats->end(); ++it) {
                         const auto &beatEnd = *it;
-                        if (beatEnd == beatStart)
-                              continue;
-                        const auto desiredBeatLen = ReducedFraction::fromTicks(MScore::division);
-                        const auto scale = desiredBeatLen / (beatEnd - beatStart);
+
+                        Q_ASSERT_X(beatEnd > beatStart, "MidiBeat::adjustChordsToBeats",
+                                   "Beat end <= beat start that is incorrect");
+
+                        const auto scale = newBeatLen / (beatEnd - beatStart);
 
                         for (; chordIt != chords.end() && chordIt->first < beatEnd; ++chordIt) {
+                              auto newOnTimeInBeat = (chordIt->first - beatStart) * scale;
                                           // quantize to prevent ReducedFraction overflow
-                              const auto onTimeInBeat = Quantize::quantizeValue(
-                                                      (chordIt->first - beatStart) * scale,
-                                                      MChord::minAllowedDuration());
-                              MidiChord &chord = chordIt->second;
-                              const auto newChordOnTime = correctedBeatStart + onTimeInBeat;
-                              for (auto &note: chord.notes) {
-                                    note.offTime = newChordOnTime + Quantize::quantizeValue(
-                                                      (note.offTime - chordIt->first) * scale,
-                                                      MChord::minAllowedDuration());
-                                    if (note.offTime > lastTick)
-                                          lastTick = note.offTime;
-                                    }
-                              newChords.insert({newChordOnTime, chord});
+                              newOnTimeInBeat = Quantize::quantizeValue(
+                                                 newOnTimeInBeat, MChord::minAllowedDuration());
+                              scaleOffTimes(chordIt->second.notes, beats, it,
+                                            newBeatStart, newBeatLen, lastTick);
+                              const auto newOnTime = newBeatStart + newOnTimeInBeat;
+                              newChords.insert({newOnTime, chordIt->second});
                               }
+
                         if (chordIt == chords.end())
                               break;
 
                         beatStart = beatEnd;
-                        correctedBeatStart += desiredBeatLen;
+                        newBeatStart += newBeatLen;
                         }
 
                   std::swap(chords, newChords);
