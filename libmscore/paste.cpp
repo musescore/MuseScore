@@ -10,8 +10,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <assert.h>
-
 #include "score.h"
 #include "mscore.h"
 
@@ -74,7 +72,7 @@ namespace Ms {
 
 void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
       {
-      assert(dst->segmentType() == SegmentType::ChordRest);
+      Q_ASSERT(dst->segmentType() == SegmentType::ChordRest);
       clearSpannerIds();
       QList<Chord*> graceNotes;
       int dstStaffStart = staffIdx;
