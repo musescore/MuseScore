@@ -118,11 +118,20 @@ prepareHumanBeatSet(const std::vector<double> &beatTimes,
             }
       }
       {
-                  // last beat time can be smaller than thelast chord onTime
-                  // so insert additional beats at the beginning to cover all chords
-      const auto &lastOnTime = std::prev(chords.end())->first;
+                  // last beat time can be smaller than the last chord onTime
+                  // so insert additional beats at the end to cover all chords
+
+                  // theoretically it's possible that every chord have off time
+                  // at the end of the piece - so check all chords for max off time
+      ReducedFraction lastOffTime(0, 1);
+      for (const auto &chord: chords) {
+            for (const auto &note: chord.second.notes) {
+                  if (note.offTime > lastOffTime)
+                        lastOffTime = note.offTime;
+                  }
+            }
       auto lastBeat = *(std::prev(beatSet.end()));
-      if (lastOnTime > lastBeat) {
+      if (lastOffTime > lastBeat) {
             if (beatSet.size() > 1) {
                   const auto beatLen = lastBeat - *std::prev(beatSet.end(), 2);
                   size_t counter = 0;
@@ -130,7 +139,7 @@ prepareHumanBeatSet(const std::vector<double> &beatTimes,
                         lastBeat += beatLen;
                         beatSet.insert(lastBeat);
                         ++counter;
-                        } while (lastBeat < lastOnTime || counter % beatsInBar);
+                        } while (lastBeat < lastOffTime || counter % beatsInBar);
                   }
             }
       }
