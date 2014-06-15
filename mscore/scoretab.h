@@ -62,8 +62,6 @@ class ScoreTab : public QWidget {
       void updateExcerpts();
       void setExcerpt(int);
       void setCurrent(int);
-   private slots:
-      void actionFilter(QAction*);
 
    public:
       ScoreTab(QList<Score*>*, QWidget* parent = 0);
@@ -78,7 +76,6 @@ class ScoreTab : public QWidget {
       ScoreView* view() const { return view(currentIndex()); }
       bool contains(ScoreView*) const;
       void initScoreView(int idx, double mag, MagIdx magIdx, double xoffset, double yoffset);
-      //void keyPressEvent(QKeyEvent* event);
       };
 
 

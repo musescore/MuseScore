@@ -552,7 +552,7 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
-         A_CMD,
+         ShortcutFlags::A_CMD,
          "add-marcato",
          QT_TRANSLATE_NOOP("action","Marcato"),
          QT_TRANSLATE_NOOP("action","Add marcato")
@@ -896,7 +896,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Add ottava 8vb")
          ),
       Shortcut(
-         MsWidget::SCORE_TAB,
+         MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
             | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY | STATE_FOTO,
          0,

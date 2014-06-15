@@ -54,7 +54,7 @@ ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
       ag->setParent(this);
       this->addActions(ag->actions());
 
-      connect(ag, SIGNAL(triggered(QAction*)), this, SLOT(actionFilter(QAction*)));
+      connect(ag, SIGNAL(triggered(QAction*)), this, SIGNAL(actionTriggered(QAction*)));
 
       tab = new QTabBar(this);
       tab->setExpanding(false);
@@ -412,28 +412,5 @@ void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset,
       v->setMag(magIdx, mag);
       v->setOffset(xoffset, yoffset);
       }
-
-void ScoreTab::actionFilter(QAction * a){
-    qDebug("Here");
-    //TODO filter actions unsing main window's state
-    emit actionTriggered(a);
-}
-
-//---------------------------------------------------------
-//   keyPressEvent
-//---------------------------------------------------------
-
-/*void ScoreTab::keyPressEvent(QKeyEvent* event){
-      if(event->key() == Qt::Key_Return){
-            QAction* a = getAction("system-break");
-            Shortcut* sc = Shortcut::getShortcut("system-break");
-            //checking if the state allows the system break action
-            if( (mainWindow->state() & sc->state()) != 0 ){
-                  a->trigger();
-                  }
-            }
-      QWidget::keyPressEvent(event);
-      }
-*/
 }
 
