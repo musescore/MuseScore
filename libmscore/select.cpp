@@ -281,6 +281,8 @@ bool Selection::canSelect(Element* e) const
           && !this->selectionFilter().isFiltered(SelectionFilterType::ARTICULATION)) return false;
       if (e->type() == Element::Type::LYRICS
           && !this->selectionFilter().isFiltered(SelectionFilterType::LYRICS)) return false;
+      if (e->type() == Element::Type::FINGERING
+          && !this->selectionFilter().isFiltered(SelectionFilterType::FINGERING)) return false;
       return true;
       }
 
@@ -334,7 +336,8 @@ void Selection::updateSelectedElements()
                         foreach(Note* note, chord->notes()) {
                               _el.append(note);
                               if (note->accidental()) _el.append(note->accidental());
-
+                              foreach(Element* el, note->el())
+                                    appendFiltered(el);
                               for(int x = 0; x < MAX_DOTS; x++) {
                                     if (note->dot(x) != 0) _el.append(note->dot(x));
                                                                         }
@@ -606,6 +609,14 @@ void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) co
                   if (!e)
                         continue;
                   if (e->isChordRest()) {
+                        if (e->type() == ElementType::CHORD) {
+                              Chord* chord = static_cast<Chord*>(e);
+                              foreach(Note* note, chord->notes()) {
+                                    foreach(Element* el, note->el())
+                                          if (!canSelect(el))
+                                                note->remove(el);
+                                    }
+                              }
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         foreach (Element* articulation, cr->articulations()) {
                               if (!canSelect(articulation))
