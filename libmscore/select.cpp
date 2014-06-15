@@ -19,6 +19,7 @@
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
+#include "element.h"
 #include "figuredbass.h"
 #include "harmony.h"
 #include "input.h"
@@ -283,6 +284,12 @@ bool Selection::canSelect(Element* e) const
       return true;
       }
 
+void Selection::appendFiltered(Element* e)
+      {
+      if (canSelect(e))
+            _el.append(e);
+      }
+
 //---------------------------------------------------------
 //   updateSelectedElements
 //---------------------------------------------------------
@@ -314,16 +321,14 @@ void Selection::updateSelectedElements()
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         for (Element* e : cr->lyricsList()) {
-                              if (e && canSelect(e))
-                                    _el.append(e);
+                              if (e)
+                                    appendFiltered(e);
                               }
+                        foreach (Articulation* art, cr->articulations())
+                              appendFiltered(art);
                         }
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
-                        foreach (Articulation* art, chord->articulations()) {
-                              if (canSelect(art))
-                                    _el.append(art);
-                              }
                         if (chord->beam()) _el.append(chord->beam());
                         if (chord->stem()) _el.append(chord->stem());
                         foreach(Note* note, chord->notes()) {
@@ -344,16 +349,14 @@ void Selection::updateSelectedElements()
                               }
                         }
                   else {
-                        if (canSelect(e))
-                              _el.append(e);
+                        appendFiltered(e);
                         }
                   foreach(Element* e, s->annotations()) {
                         if (e->track() < startTrack || e->track() >= endTrack)
                               continue;
                         if (e->systemFlag()) //exclude system text
                               continue;
-                        if (canSelect(e))
-                              _el.append(e);
+                        appendFiltered(e);
                         }
 #if 0 // TODO-S
                   for(Spanner* sp = s->spannerFor(); sp; sp = sp->next()) {

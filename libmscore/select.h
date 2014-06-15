@@ -97,6 +97,7 @@ class Selection {
       QByteArray symbolListMimeData() const;
       SelectionFilter& selectionFilter() const;
       bool canSelect(Element*) const;
+      void appendFiltered(Element* e);
       void filterRange(QList<Segment*>, int strack, int etrack) const;
 
    public:
