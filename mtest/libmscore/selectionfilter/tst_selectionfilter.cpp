@@ -34,6 +34,7 @@ class TestSelectionFilter : public QObject, public MTest
       void filterDynamic()          { testFilter(1,SelectionFilterType::DYNAMIC); }
       void filterArticulation()     { testFilter(2,SelectionFilterType::ARTICULATION); }
       void filterLyrics()           { testFilter(3,SelectionFilterType::LYRICS); }
+      void filterFingering()        { testFilter(4,SelectionFilterType::FINGERING); }
       };
 
 //---------------------------------------------------------

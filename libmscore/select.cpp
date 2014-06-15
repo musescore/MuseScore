@@ -19,6 +19,7 @@
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
+#include "element.h"
 #include "figuredbass.h"
 #include "harmony.h"
 #include "input.h"
@@ -280,6 +281,8 @@ bool SelectionFilter::canSelect(const Element* e) const
           && !isFiltered(SelectionFilterType::ARTICULATION)) return false;
       if (e->type() == Element::Type::LYRICS
           && !isFiltered(SelectionFilterType::LYRICS)) return false;
+      if (e->type() == Element::Type::FINGERING
+          && !isFiltered(SelectionFilterType::FINGERING)) return false;
       return true;
       }
 
@@ -333,7 +336,8 @@ void Selection::updateSelectedElements()
                         foreach(Note* note, chord->notes()) {
                               _el.append(note);
                               if (note->accidental()) _el.append(note->accidental());
-
+                              foreach(Element* el, note->el())
+                                    appendFiltered(el);
                               for(int x = 0; x < MAX_DOTS; x++) {
                                     if (note->dot(x) != 0) _el.append(note->dot(x));
                                                                         }
