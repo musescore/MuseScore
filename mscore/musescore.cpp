@@ -448,6 +448,7 @@ MuseScore::MuseScore()
       lastCmd               = 0;
       lastShortcut          = 0;
       importmidiPanel      = 0;
+      this->setFocusPolicy(Qt::NoFocus);
 
       if (!preferences.styleName.isEmpty()) {
             QFile f(preferences.styleName);
@@ -513,16 +514,9 @@ MuseScore::MuseScore()
 
       // otherwise unused actions:
       //   must be added somewere to work
-
-      /*QActionGroup* ag = new QActionGroup(this);
-      ag->setExclusive(false);
-      foreach(const Shortcut* s, Shortcut::shortcuts()) {
-            QAction* a = s->action();
-            if (a)
-                  ag->addAction(a);
-            }*/
       QActionGroup* ag = Shortcut::getActionGroupForWidget(MsWidget::MAIN_WINDOW);
       ag->setParent(this);
+      this->addActions(ag->actions());
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
 
       mainWindow = new QSplitter;
@@ -544,7 +538,7 @@ MuseScore::MuseScore()
       mainScore->setLayout(layout);
 
       _navigator = new NScrollArea;
-      _navigator->setFocusPolicy(Qt::ClickFocus);
+      _navigator->setFocusPolicy(Qt::NoFocus);
       mainWindow->addWidget(_navigator);
       showNavigator(preferences.showNavigator);
 
@@ -659,12 +653,14 @@ MuseScore::MuseScore()
 
       fileTools->addSeparator();
       mag = new MagBox;
-      //mag->setFocusPolicy(Qt::ClickFocus);
+      mag->setFocusPolicy(Qt::StrongFocus);
+      mag->setAccessibleName(tr("Zoom"));
       mag->setFixedHeight(preferences.iconHeight + 10);  // hack
       connect(mag, SIGNAL(magChanged(int)), SLOT(magChanged(int)));
       fileTools->addWidget(mag);
       viewModeCombo = new QComboBox(this);
-      //viewModeCombo->setFocusPolicy(Qt::ClickFocus);
+      viewModeCombo->setFocusPolicy(Qt::TabFocus);
+      viewModeCombo->setAccessibleName(tr("View Mode"));
       viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
       viewModeCombo->addItem(tr("Page View"));
       viewModeCombo->addItem(tr("Continuous View"));
@@ -1139,7 +1135,6 @@ MuseScore::MuseScore()
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
             }
-      this->setFocusPolicy(Qt::NoFocus);
       }
 
 //---------------------------------------------------------
@@ -3910,7 +3905,7 @@ void MuseScore::cmd(QAction* a)
       {
       if (inChordEditor)      // HACK
             return;
-
+      qDebug(a->data().toString().toLatin1().data());
       QString cmdn(a->data().toString());
 
       if (MScore::debugMode)
