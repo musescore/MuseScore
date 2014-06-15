@@ -235,9 +235,11 @@ void Inspector::setElements(const QList<Element*>& l)
                         }
                   }
             sa->setWidget(ie);
+
+            //setting focus policies for every widget and
             //removing every widget from the tabbing order until suport for
             //accessibility is provided
-           /* QList<QWidget*> widgets = ie->findChildren<QWidget*>();
+            QList<QWidget*> widgets = ie->findChildren<QWidget*>();
             for(int i = 0; i < widgets.size(); i++){
                   QWidget* currentWidget = widgets.at(i);
                   switch (currentWidget->focusPolicy()){
@@ -259,7 +261,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         }
                   }
-*/
+
             // setMinimumWidth(ie->width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
             setMinimumWidth(ie->sizeHint().width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
             }
