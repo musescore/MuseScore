@@ -59,7 +59,8 @@ enum class SelectionFilterType {
       DYNAMIC                 = 1 << 4,
       FINGERING               = 1 << 5,
       LYRICS                  = 1 << 6,
-      ARTICULATION            = 1 << 7,
+      CHORD_SYMBOL            = 1 << 7,
+      ARTICULATION            = 1 << 8,
       ALL                     = -1
       };
 

@@ -16,6 +16,7 @@ static const char* labels[] = {
       QT_TRANSLATE_NOOP("selectionfilter", "Dynamics"),
       QT_TRANSLATE_NOOP("selectionfilter", "Fingering"),
       QT_TRANSLATE_NOOP("selectionfilter", "Lyrics"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Chord Symbols"),
       QT_TRANSLATE_NOOP("selectionfilter", "Articulations")
       };
 
