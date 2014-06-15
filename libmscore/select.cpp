@@ -283,6 +283,8 @@ bool Selection::canSelect(Element* e) const
           && !this->selectionFilter().isFiltered(SelectionFilterType::LYRICS)) return false;
       if (e->type() == Element::Type::FINGERING
           && !this->selectionFilter().isFiltered(SelectionFilterType::FINGERING)) return false;
+      if (e->type() == Element::Type::HARMONY
+          && !this->selectionFilter().isFiltered(SelectionFilterType::CHORD_SYMBOL)) return false;
       return true;
       }
 
