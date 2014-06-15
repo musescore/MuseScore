@@ -3905,7 +3905,7 @@ void MuseScore::cmd(QAction* a)
       {
       if (inChordEditor)      // HACK
             return;
-      qDebug(a->data().toString().toLatin1().data());
+
       QString cmdn(a->data().toString());
 
       if (MScore::debugMode)
