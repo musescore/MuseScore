@@ -88,21 +88,14 @@ double findChordSalience2(
       return events;
       }
 
-std::set<ReducedFraction>
-prepareHumanBeatSet(const std::vector<double> &beatTimes,
-                    const std::multimap<ReducedFraction, MidiChord> &chords,
-                    double ticksPerSec,
-                    size_t beatsInBar)
-      {
-      std::set<ReducedFraction> beatSet;
-      if (chords.empty())
-            return beatSet;
+// first beat time can be larger than first chord onTime
+// so insert additional beats at the beginning to cover all chords
 
-      for (const auto &beatTime: beatTimes)
-            beatSet.insert(MidiTempo::time2Tick(beatTime, ticksPerSec));
+void addFirstBeats(
+            std::set<ReducedFraction> &beatSet,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            size_t beatsInBar)
       {
-                  // first beat time can be larger than first chord onTime
-                  // so insert additional beats at the beginning to cover all chords
       const auto &firstOnTime = chords.begin()->first;
       auto firstBeat = *beatSet.begin();
       if (firstOnTime < firstBeat) {
@@ -117,10 +110,15 @@ prepareHumanBeatSet(const std::vector<double> &beatTimes,
                   }
             }
       }
-      {
-                  // last beat time can be smaller than the last chord onTime
-                  // so insert additional beats at the end to cover all chords
 
+// last beat time can be smaller than the last chord onTime
+// so insert additional beats at the end to cover all chords
+
+void addLastBeats(
+            std::set<ReducedFraction> &beatSet,
+            size_t beatsInBar,
+            const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
                   // theoretically it's possible that every chord have off time
                   // at the end of the piece - so check all chords for max off time
       ReducedFraction lastOffTime(0, 1);
@@ -130,6 +128,7 @@ prepareHumanBeatSet(const std::vector<double> &beatTimes,
                         lastOffTime = note.offTime;
                   }
             }
+
       auto lastBeat = *(std::prev(beatSet.end()));
       if (lastOffTime > lastBeat) {
             if (beatSet.size() > 1) {
@@ -143,6 +142,22 @@ prepareHumanBeatSet(const std::vector<double> &beatTimes,
                   }
             }
       }
+
+std::set<ReducedFraction>
+prepareHumanBeatSet(const std::vector<double> &beatTimes,
+                    const std::multimap<ReducedFraction, MidiChord> &chords,
+                    double ticksPerSec,
+                    size_t beatsInBar)
+      {
+      std::set<ReducedFraction> beatSet;
+      if (chords.empty())
+            return beatSet;
+
+      for (const auto &beatTime: beatTimes)
+            beatSet.insert(MidiTempo::time2Tick(beatTime, ticksPerSec));
+
+      addFirstBeats(beatSet, chords, beatsInBar);
+      addLastBeats(beatSet, beatsInBar, chords);
 
       return beatSet;
       }
