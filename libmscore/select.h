@@ -99,6 +99,7 @@ class Selection {
       QByteArray symbolListMimeData() const;
       SelectionFilter selectionFilter() const;
       bool canSelect(Element* e) { return selectionFilter().canSelect(e); }
+      void appendFiltered(Element* e);
 
    public:
       Selection()                      { _score = 0; _state = SelState::NONE; }
