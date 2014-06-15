@@ -184,6 +184,7 @@ Harmony::~Harmony()
 
 void Harmony::write(Xml& xml) const
       {
+      if (!xml.canWrite(this)) return;
       xml.stag("Harmony");
       if (_leftParen)
             xml.tagE("leftParen");
