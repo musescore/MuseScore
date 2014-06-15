@@ -210,6 +210,18 @@ double findMatchRank(const std::set<ReducedFraction> &beatSet,
       return matchFrac;
       }
 
+void removeEvery2ndBeat(std::set<ReducedFraction> &beatSet)
+      {
+      auto it = beatSet.begin();
+      while (it != beatSet.end() && std::next(it) != beatSet.end())
+            it = beatSet.erase(std::next(it));
+      if (it == beatSet.end()) {
+                        // insert additional beat at the end to cover all chords
+            const auto beatLen = *std::prev(it) - *std::prev(it, 2);
+            beatSet.insert(*std::prev(it) + beatLen);
+            }
+      }
+
 void findBeatLocations(
             const std::multimap<ReducedFraction, MidiChord> &allChords,
             const TimeSigMap *sigmap,
@@ -236,11 +248,15 @@ void findBeatLocations(
             const auto beatTimes = BeatTracker::beatTrack(events);
 
             if (beatTimes.size() > MIN_BEAT_COUNT) {
-                  const auto beatSet = prepareHumanBeatSet(beatTimes, allChords,
-                                                           ticksPerSec, beatsInBar);
-                  const double matchRank = findMatchRank(beatSet, events,
-                                                         levels, beatsInBar, ticksPerSec);
-                  beatResults.insert({matchRank, std::move(beatSet)});
+                  auto beatSet = prepareHumanBeatSet(beatTimes, allChords,
+                                                     ticksPerSec, beatsInBar);
+                  double matchRank = findMatchRank(beatSet, events,
+                                                   levels, beatsInBar, ticksPerSec);
+                  beatResults.insert({matchRank, beatSet});
+                              // remove every 2nd beat and add this case too
+                  removeEvery2ndBeat(beatSet);
+                  matchRank = findMatchRank(beatSet, events, levels, beatsInBar, ticksPerSec);
+                  beatResults.insert({matchRank, beatSet});
                   }
             }
       if (!beatResults.empty()) {
