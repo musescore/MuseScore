@@ -33,6 +33,7 @@ class TestSelectionFilter : public QObject, public MTest
       void initTestCase();
       void filterDynamic()          { testFilter(1,SelectionFilterType::DYNAMIC); }
       void filterArticulation()     { testFilter(2,SelectionFilterType::ARTICULATION); }
+      void filterLyrics()           { testFilter(3,SelectionFilterType::LYRICS); }
       };
 
 //---------------------------------------------------------

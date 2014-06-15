@@ -278,7 +278,8 @@ bool Selection::canSelect(Element* e) const
           && !this->selectionFilter().isFiltered(SelectionFilterType::DYNAMIC)) return false;
       if (e->type() == Element::Type::ARTICULATION
           && !this->selectionFilter().isFiltered(SelectionFilterType::ARTICULATION)) return false;
-
+      if (e->type() == Element::Type::LYRICS
+          && !this->selectionFilter().isFiltered(SelectionFilterType::LYRICS)) return false;
       return true;
       }
 
@@ -313,7 +314,7 @@ void Selection::updateSelectedElements()
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         for (Element* e : cr->lyricsList()) {
-                              if (e)
+                              if (e && canSelect(e))
                                     _el.append(e);
                               }
                         }
@@ -606,6 +607,10 @@ void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) co
                         foreach (Element* articulation, cr->articulations()) {
                               if (!canSelect(articulation))
                                     cr->remove(articulation);
+                              }
+                        foreach (Element* lyric, cr->lyricsList()) {
+                              if (!canSelect(lyric))
+                                    cr->remove(lyric);
                               }
                         }
                   }
