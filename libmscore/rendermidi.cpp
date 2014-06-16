@@ -151,8 +151,12 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                   Note* n = note->tieFor()->endNote();
                   while (n) {
                         NoteEventList nel = n->playEvents();
-                        if (nel.size() == 1)
+                        if (nel.size() == 1) {
+                              // add value of this note to main note
+                              // if we wish to suppress first note of ornament,
+                              // then do this regardless of number of NoteEvents
                               tieLen += (n->chord()->actualTicks() * (nel[0].len())) / 1000;
+                              }
                         else {
                               // recurse
                               collectNote(events, channel, n, velo, tickOffset);
@@ -172,11 +176,14 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
 
       NoteEventList nel = note->playEvents();
       int nels = nel.size();
-      // foreach (const NoteEvent& e, note->playEvents()) {
       for (int i = 0; i < nels; ++i) {
             const NoteEvent e = nel[i];
-            if (tieBack && i == 0)
-                  continue;
+            // skip if note has a tie into it and only one NoteEvent
+            // its length was already added to previous note
+            // if we wish to suppress first note of ornament
+            // then change "nels == 1" to "i == 0", and change "break" to "continue"
+            if (tieBack && nels == 1)
+                  break;
             int p = pitch + e.pitch();
             if (p < 0)
                   p = 0;
