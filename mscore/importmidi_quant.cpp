@@ -636,8 +636,11 @@ bool areTupletChordsConsistent(const std::multimap<ReducedFraction, MidiChord> &
                   if (c.voice != voice)
                         continue;
                   if (c.isInTuplet) {
-                        if (!isInTuplet && prevTupletSet && c.tuplet == prevTuplet)
+                        if (!isInTuplet && prevTupletSet && c.tuplet == prevTuplet) {
+                              qDebug() << "Inconsistent tuplets, bar (from 1):"
+                                       << (c.barIndex + 1);
                               return false;     // there is a non-tuplet chord inside tuplet
+                              }
                         isInTuplet = true;
                         prevTuplet = c.tuplet;
                         prevTupletSet = true;
