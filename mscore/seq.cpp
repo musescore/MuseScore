@@ -714,21 +714,6 @@ void Seq::process(unsigned n, float* buffer)
 
       processMessages();
 
-#if 0
-      // this is a function running in realtime context
-      // no signal/slot ipc allowed (ws)
-      // (move to heartBeat() ?)
-      //
-      if(cs && cs->sigmap()->timesig(getCurTick()).nominal()!=prevTimeSig) {
-            prevTimeSig = cs->sigmap()->timesig(getCurTick()).nominal();
-            emit timeSigChanged();
-            }
-      if(cs && curTempo()!=prevTempo) {
-            prevTempo = curTempo();
-            emit tempoChanged();
-            }
-#endif
-
       if (state == TRANSPORT_PLAY) {
             if(!cs)
                   return;
@@ -1335,6 +1320,15 @@ void Seq::heartBeatTimeout()
       if (ppos != events.cbegin())
             --ppos;
       mutex.unlock();
+
+      if(cs && cs->sigmap()->timesig(getCurTick()).nominal()!=prevTimeSig) {
+            prevTimeSig = cs->sigmap()->timesig(getCurTick()).nominal();
+            emit timeSigChanged();
+            }
+      if(cs && curTempo()!=prevTempo) {
+            prevTempo = curTempo();
+            emit tempoChanged();
+            }
 
       QRectF r;
       for (;guiPos != events.cend(); ++guiPos) {
