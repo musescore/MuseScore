@@ -314,7 +314,7 @@ static int graph_callback(void*)
       return 0;
       }
 
-void JackAudio::timebase(jack_transport_state_t state, jack_nframes_t nframes, jack_position_t *pos, int new_pos, void *arg)
+void JackAudio::timebase(jack_transport_state_t state, jack_nframes_t /*nframes*/, jack_position_t *pos, int /*new_pos*/, void *arg)
       {
       JackAudio* audio = (JackAudio*)arg;
       if(!audio->seq->score()) {
@@ -336,7 +336,7 @@ void JackAudio::timebase(jack_transport_state_t state, jack_nframes_t nframes, j
             pos->bar = bar+1;
             pos->beat = beat+1;
             pos->beats_per_minute = audio->seq->curTempo()*60;
-            qDebug()<<"Time signature and tempo changed: "<< pos->beats_per_minute<<", bar: "<< pos->bar<<",beat: "<<pos->beat<<", tick:"<<pos->tick<<", time sig: "<<pos->beats_per_bar<<"/"<<pos->beat_type<<endl;
+            qDebug()<<"Time signature and tempo changed: "<< pos->beats_per_minute<<", bar: "<< pos->bar<<",beat: "<<pos->beat<<", tick:"<<pos->tick<<", time sig: "<<pos->beats_per_bar<<"/"<<pos->beat_type;
             audio->timeSigTempoChanged = false;
             }
       }
