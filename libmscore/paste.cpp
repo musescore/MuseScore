@@ -77,6 +77,8 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       int dstStaffStart = dst->staffIdx();
       int dstTick = dst->tick();
       bool done = false;
+      bool pasted = false;
+      int tickLen, staves;
       while (e.readNextStartElement()) {
             if (done)
                   break;
@@ -88,12 +90,11 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
             if(version != MSC_VERSION)
                   break;
             int tickStart     = e.intAttribute("tick", 0);
-            int tickLen       = e.intAttribute("len", 0);
+                tickLen       = e.intAttribute("len", 0);
             int srcStaffStart = e.intAttribute("staff", 0);
-            int staves        = e.intAttribute("staves", 0);
+                staves        = e.intAttribute("staves", 0);
             e.setTick(tickStart);
 
-            bool pasted = false;
             while (e.readNextStartElement()) {
                   if (done)
                         break;
@@ -314,20 +315,6 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
                               }
                         }
                   }
-
-            if (pasted) { //select only if we pasted something
-                  Segment* s1 = tick2segment(dstTick);
-                  Segment* s2 = tick2segment(dstTick + tickLen);
-                  int endStaff = dstStaffStart + staves;
-                  if (endStaff > nstaves())
-                        endStaff = nstaves();
-                  _selection.setRange(s1, s2, dstStaffStart, endStaff);
-                  _selection.updateSelectedElements();
-                  foreach(MuseScoreView* v, viewer)
-                        v->adjustCanvasPosition(s1, false);
-                  if (!selection().isRange())
-                        _selection.setState(SelState::RANGE);
-                  }
             }
       foreach (Score* s, scoreList())     // for all parts
             s->connectTies();
@@ -335,6 +322,20 @@ void Score::pasteStaff(XmlReader& e, ChordRest* dst)
       // when pasting between different staff types (pitched->tablature)
       // fret/line has to be calculated:
       updateNotes();
+
+      if (pasted) {                       //select only if we pasted something
+            Segment* s1 = tick2segment(dstTick);
+            Segment* s2 = tick2segment(dstTick + tickLen);
+            int endStaff = dstStaffStart + staves;
+            if (endStaff > nstaves())
+                  endStaff = nstaves();
+            _selection.setRange(s1, s2, dstStaffStart, endStaff);
+            _selection.updateSelectedElements();
+            foreach(MuseScoreView* v, viewer)
+                  v->adjustCanvasPosition(s1, false);
+            if (!selection().isRange())
+                  _selection.setState(SelState::RANGE);
+            }
       }
 
 //---------------------------------------------------------
