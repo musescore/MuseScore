@@ -24,6 +24,7 @@
 #include "style.h"
 #include "ottava.h"
 #include "slur.h"
+#include "tie.h"
 #include "stafftext.h"
 #include "repeat.h"
 #include "articulation.h"
@@ -127,33 +128,64 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
 
 static void collectNote(EventMap* events, int channel, const Note* note, int velo, int tickOffset)
       {
-      if (!note->play() || note->hidden() || note->tieBack())       // do not play overlapping notes
+      if (!note->play() || note->hidden())      // do not play overlapping notes
             return;
 
       int pitch = note->ppitch();
 
       Chord* chord = note->chord();
-      int tieLen;
       int ticks;
+      int tieLen = 0;
       if (chord->isGrace()) {
             chord = static_cast<Chord*>(chord->parent());
-            tieLen = 0;
             ticks = chord->actualTicks();
+            tieLen = 0;
             }
       else {
             ticks = chord->actualTicks();
-            tieLen = note->playTicks() - ticks;
+            // calculate additional length due to ties forward
+            // taking NoteEvent length adjustments into account
+            // but stopping at any note with multiple NoteEvents
+            // and processing those notes recursively
+            if (note->tieFor()) {
+                  Note* n = note->tieFor()->endNote();
+                  while (n) {
+                        NoteEventList nel = n->playEvents();
+                        if (nel.size() == 1)
+                              tieLen += (n->chord()->actualTicks() * (nel[0].len())) / 1000;
+                        else {
+                              // recurse
+                              collectNote(events, channel, n, velo, tickOffset);
+                              break;
+                              }
+                        if (n->tieFor())
+                              n = n->tieFor()->endNote();
+                        else
+                              break;
+                        }
+                  }
             }
-      int tick1 = chord->tick() + tickOffset;
 
-      foreach (const NoteEvent& e, note->playEvents()) {
+      int tick1 = chord->tick() + tickOffset;
+      bool tieFor = note->tieFor();
+      bool tieBack = note->tieBack();
+
+      NoteEventList nel = note->playEvents();
+      int nels = nel.size();
+      // foreach (const NoteEvent& e, note->playEvents()) {
+      for (int i = 0; i < nels; ++i) {
+            const NoteEvent e = nel[i];
+            if (tieBack && i == 0)
+                  continue;
             int p = pitch + e.pitch();
             if (p < 0)
                   p = 0;
             else if (p > 127)
                   p = 127;
             int on  = tick1 + (ticks * e.ontime())/1000;
-            int off = on + (ticks * e.len())/1000 - 1 + tieLen;
+            int off = on + (ticks * e.len())/1000 - 1;
+            if (tieFor && i == nels - 1)
+                  off += tieLen;
             playNote(events, note, channel, p, velo, on, off);
             }
 #if 0
