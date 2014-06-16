@@ -64,7 +64,7 @@ class Accidental : public Element {
             FLAT_SLASH2,
             MIRRORED_FLAT2,
             MIRRORED_FLAT,
-            MIRRIRED_FLAT_SLASH,
+            MIRRORED_FLAT_SLASH,
             FLAT_FLAT_SLASH,
 
             SHARP_SLASH,

@@ -3991,7 +3991,7 @@ static Accidental::AccidentalType convertAccidental(QString mxmlName)
       map["flat-down"] = Accidental::AccidentalType::FLAT_ARROW_DOWN;
       map["flat-up"] = Accidental::AccidentalType::FLAT_ARROW_UP;
 
-      map["slash-quarter-sharp"] = Accidental::AccidentalType::MIRRIRED_FLAT_SLASH;
+      map["slash-quarter-sharp"] = Accidental::AccidentalType::MIRRORED_FLAT_SLASH;
       map["slash-sharp"] = Accidental::AccidentalType::SHARP_SLASH;
       map["slash-flat"] = Accidental::AccidentalType::FLAT_SLASH;
       map["double-slash-flat"] = Accidental::AccidentalType::FLAT_SLASH2;

@@ -1445,18 +1445,16 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
             if (a)
                   undoRemoveElement(note->accidental());
             }
-      else {
-            if (acc == acc2) {
-                  //
-                  // this is a precautionary accidental
-                  //
-
-                  Accidental* a = new Accidental(this);
-                  a->setParent(note);
-                  a->setAccidentalType(accidental);
-                  a->setRole(Accidental::AccidentalRole::USER);
-                  undoAddElement(a);
-                  }
+      else if (acc == acc2 || accidental > Accidental::AccidentalType::NATURAL) {
+            //
+            // precautionary or microtonal accidental
+            // either way, we display it unconditionally
+            //
+            Accidental* a = new Accidental(this);
+            a->setParent(note);
+            a->setAccidentalType(accidental);
+            a->setRole(Accidental::AccidentalRole::USER);
+            undoAddElement(a);
             }
 
       if (note->links()) {
