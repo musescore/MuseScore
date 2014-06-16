@@ -33,10 +33,17 @@
 #include "style.h"
 #include "sym.h"
 #include "xml.h"
+#include "stringdata.h"
 #include "tempo.h"
 #include "tempotext.h"
 
 namespace Ms {
+
+static int g_guitarStrings[] = {40,45,50,55,59,64};
+static int g_bassStrings[]   = {28,33,38,43};
+static int g_violinStrings[] = {55,62,69,76};
+static int g_violaStrings[]  = {48,55,62,69};
+static int g_celloStrings[]  = {36,43,50,57};
 
 //---------------------------------------------------------
 //   StyleVal114
@@ -208,7 +215,24 @@ void Part::read114(XmlReader& e)
                   ++rstaff;
                   }
             else if (tag == "Instrument") {
-                  instr(0)->read(e);
+                  Instrument* instrument = instr(0);
+                  instrument->read(e);
+                  // add string data from MIDI program number, if possible
+                  if (instrument->stringData()->strings() == 0
+                              && instrument->channel().count() > 0
+                              && instrument->drumset() == nullptr) {
+                        int program = instrument->channel(0).program;
+                        if (program >= 24 && program <= 30)       // guitars
+                              instrument->setStringData(StringData(19, 6, g_guitarStrings));
+                        else if ( (program >= 32 && program <= 39) || program == 43)      // bass / double-bass
+                              instrument->setStringData(StringData(24, 4, g_bassStrings));
+                        else if (program == 40)                   // violin and other treble string instr.
+                              instrument->setStringData(StringData(24, 4, g_violinStrings));
+                        else if (program == 41)                   // viola and other alto string instr.
+                              instrument->setStringData(StringData(24, 4, g_violaStrings));
+                        else if (program == 42)                   // cello and other bass string instr.
+                              instrument->setStringData(StringData(24, 4, g_celloStrings));
+                        }
                   Drumset* d = instr(0)->drumset();
                   Staff*   st = staff(0);
                   if (d && st && st->lines() != 5) {
