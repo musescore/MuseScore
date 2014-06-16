@@ -789,6 +789,7 @@ void InstrumentsDialog::on_editButton_clicked()
 
 //---------------------------------------------------------
 //   on_belowButton_clicked
+//    (actually "Add Staff" button)
 //---------------------------------------------------------
 
 void InstrumentsDialog::on_belowButton_clicked()
@@ -805,7 +806,7 @@ void InstrumentsDialog::on_belowButton_clicked()
       PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
-      nsli->setDefaultClef(sli->clef());
+      nsli->setDefaultClef(sli->defaultClef());
       if (staff)
             nsli->op = ITEM_ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
@@ -833,7 +834,7 @@ void InstrumentsDialog::on_linkedButton_clicked()
       PartListItem* pli   = (PartListItem*)sli->QTreeWidgetItem::parent();
       StaffListItem* nsli = new StaffListItem();
       nsli->staff         = staff;
-      nsli->setDefaultClef(sli->clef());
+      nsli->setDefaultClef(sli->defaultClef());
       nsli->setLinked(true);
       if (staff)
             nsli->op = ITEM_ADD;
@@ -1128,9 +1129,10 @@ void MuseScore::editInstrList()
             rootScore->undo(new RemoveExcerpt(s));
 
       rootScore->setLayoutAll(true);
-      rootScore->endCmd();
+      rootScore->cmdUpdateNotes();  // do it before global layout or layout of chords will not
+      rootScore->endCmd();          // find notes in right positions for stems, ledger lines, etc
       rootScore->rebuildMidiMapping();
-      rootScore->updateNotes(); // need to compute frets for tabs
+//      rootScore->updateNotes();
       seq->initInstruments();
       }
 
