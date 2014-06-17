@@ -19,7 +19,7 @@
 //=============================================================================
 
 #ifndef __RECORDBUTTON_H__
-#define __RCORDBUTTON_H__
+#define __RECORDBUTTON_H__
 
 #include "simplebutton.h"
 

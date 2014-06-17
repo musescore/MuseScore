@@ -11,7 +11,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef _BB_H__
+#ifndef __BB_H__
 #define __BB_H__
 
 #include "midi/midifile.h"
