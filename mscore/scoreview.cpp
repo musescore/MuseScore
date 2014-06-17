@@ -2500,7 +2500,7 @@ void ScoreView::normalPaste()
 
 
       else {
-            qDebug("cannot paste selState %d staffList %d",
+            qDebug("cannot paste selState %d staffList %hhd",
                _score->selection().state(), ms->hasFormat(mimeStaffListFormat));
             foreach(const QString& s, ms->formats())
                   qDebug("  format %s", qPrintable(s));

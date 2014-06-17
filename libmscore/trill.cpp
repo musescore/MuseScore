@@ -406,7 +406,7 @@ QString Trill::trillTypeName() const
             case TrillType::PURE_LINE:
                   return "pure";
             default:
-                  qDebug("unknown Trill subtype %d", trillType());
+                  qDebug("unknown Trill subtype %hhd", trillType());
                   return "?";
             }
       }

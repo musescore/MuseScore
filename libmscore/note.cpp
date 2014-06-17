@@ -429,7 +429,7 @@ SymId Note::noteHead() const
 
       SymId t = noteHead(up, _headGroup, ht);
       if (t == SymId::noSym) {
-            qDebug("invalid note head %d/%d", _headGroup, ht);
+            qDebug("invalid note head %hhd/%hhd", _headGroup, ht);
             t = noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
             }
       return t;
