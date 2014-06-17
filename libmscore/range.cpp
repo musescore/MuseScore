@@ -437,7 +437,7 @@ bool TrackList::write(int track, Measure* measure) const
                         break;
                   // add the element in its own segment;
                   // but KeySig has to be at start of (current) measure
-                  segment = m->getSegment(e, m->tick() + (e->type() == ElementType::KEYSIG) ? 0 : pos.ticks());
+                  segment = m->getSegment(e, m->tick() + ((e->type() == ElementType::KEYSIG) ? 0 : pos.ticks()));
                   Element* ne = e->clone();
                   ne->setScore(score);
                   ne->setTrack(track);
