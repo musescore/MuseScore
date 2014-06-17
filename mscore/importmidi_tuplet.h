@@ -103,6 +103,11 @@ void findAllTuplets(
             const ReducedFraction &lastTick,
             const ReducedFraction &basicQuant);
 
+ReducedFraction findOnTimeBetweenChords(
+            const std::pair<const ReducedFraction, MidiChord> &chord,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const ReducedFraction &basicQuant);
+
 #ifdef QT_DEBUG
 
 bool areAllTupletsReferenced(
