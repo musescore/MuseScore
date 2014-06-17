@@ -323,6 +323,8 @@ void Selection::updateSelectedElements()
                   foreach(Element* e, s->annotations()) {
                         if (e->track() < startTrack || e->track() >= endTrack)
                               continue;
+                        if (e->systemFlag()) //exclude system text
+                              continue;
                         _el.append(e);
                         }
 #if 0 // TODO-S
