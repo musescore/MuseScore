@@ -44,6 +44,7 @@ class MIconEnginePrivate : public QSharedData
 
 QAtomicInt MIconEnginePrivate::lastSerialNum;
 
+#if 0 // yet(?) unused
 //---------------------------------------------------------
 //   pmKey
 //---------------------------------------------------------
@@ -52,6 +53,7 @@ static inline int pmKey(const QSize &size, QIcon::Mode mode, QIcon::State state)
       {
       return ((((((size.width()<<11)|size.height())<<11)|mode)<<4)|state);
       }
+#endif
 
 //---------------------------------------------------------
 //   MIconEngine
@@ -149,6 +151,7 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
             }
       }
 
+#if 0 // yet(?) unused
 //---------------------------------------------------------
 //   qt_intensity
 //---------------------------------------------------------
@@ -162,6 +165,7 @@ static inline uint qt_intensity(uint r, uint g, uint b)
 //---------------------------------------------------------
 //   pixmap
 //---------------------------------------------------------
+#endif
 
 QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state)
       {
