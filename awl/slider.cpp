@@ -206,7 +206,9 @@ void Slider::paintEvent(QPaintEvent* ev)
       if ((orient == Qt::Vertical && _invert) || (orient == Qt::Horizontal && !_invert))
             ppos = pixel - ppos;
 
+#if 0 // yet(?) unused
       QRect rr(ev->rect());
+#endif
       QPainter p(this);
 
       QColor sc(isEnabled() ? _scaleColor : Qt::gray);

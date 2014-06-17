@@ -29,7 +29,9 @@ static const NoteHeadType   NOTEHEADTYPE_DEFAULT    = NoteHeadType::HEAD_AUTO;
 static const DirectionH     DIR_DEFAULT             = DirectionH::DH_AUTO;
 static const bool           HASLINE_DEFAULT         = true;
 static const qreal          LINEWIDTH_DEFAULT       = 0.12;
+#if 0 // yet(?) unused
 static const qreal          LEDGEROFFSET_DEFAULT    = 0.25;
+#endif
 static const qreal          LINEOFFSET_DEFAULT      = 0.8;      // the distance between note head and line
 
 //---------------------------------------------------------

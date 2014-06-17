@@ -56,9 +56,11 @@ static const int peakHoldTime = 1400;     // msec
 static const int peakHold     = (peakHoldTime * guiRefresh) / 1000;
 static OggVorbis_File vf;
 
+#if 0 // yet(?) unused
 static const int AUDIO_BUFFER_SIZE = 1024 * 512;  // 2 MB
 
 static const int MIN_CLICKS   = 3;        // the minimum number of 'clicks' in a count-in
+#endif
 
 //---------------------------------------------------------
 //   VorbisData
