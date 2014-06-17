@@ -94,6 +94,7 @@ class Selection {
       void remove(Element*);
       void clear();
       Element* element() const;
+      Segment* firstChordRestSegment() const;
       ChordRest* firstChordRest(int track = -1) const;
       ChordRest* lastChordRest(int track = -1) const;
       Measure* findMeasure() const;

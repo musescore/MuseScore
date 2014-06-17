@@ -140,39 +140,22 @@ void TestCopyPasteSymbolList::copypaste(const char* name, const char* idx)
             m = m->nextMeasure();
       score->select(m->first()->element(0));
 
-      // paste clipboard to selected chord (copied and simplified to this case
-      // from ScoreView::normalPaste() in file mscore/scoreview.cpp)
       score->startCmd();
       const QMimeData* ms = QApplication::clipboard()->mimeData();
-      if (ms == 0 || !ms->hasFormat(mimeSymbolListFormat)) {
-            qDebug("no or wrong type mime data");
+      if (!ms->hasFormat(mimeSymbolListFormat)) {
+            qDebug("wrong type mime data");
             return;
             }
-      ChordRest* cr = 0;
-      if (score->selection().isRange())
-            cr = score->selection().firstChordRest();
-      else if (score->selection().isSingle()) {
-            Element* e = score->selection().element();
-            if (e->type() != ElementType::NOTE && e->type() != ElementType::CHORD && e->type() != ElementType::REST) {
-                  qDebug("cannot paste to %s", e->name());
-                  return;
-                  }
-            if (e->type() == ElementType::NOTE)
-                  e = static_cast<Note*>(e)->chord();
-            cr  = static_cast<ChordRest*>(e);
-            }
-      if (cr == 0) {
-            qDebug("no destination chord");
-            return;
-            }
-      else if (cr->tuplet()) {
-            qDebug("cannot paste mid-tuplet");
-            return;
-            }
-      QByteArray data(ms->data(mimeSymbolListFormat));
-//      qDebug("paste <%s>", data.data());
-      XmlReader e(data);
-      score->pasteSymbols(e, cr);
+
+      PasteStatus status = score->cmdPaste(ms,0);
+      switch (status) {
+            case PasteStatus::NO_DEST:
+                  qDebug("no destination chord"); return;
+            case PasteStatus::DEST_TUPLET:
+                  qDebug("cannot paste mid-tuplet"); return;
+            default: ;
+      }
+
       score->endCmd();
       score->doLayout();
 

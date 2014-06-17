@@ -2401,110 +2401,14 @@ void ScoreView::normalPaste()
       _score->startCmd();
 
       const QMimeData* ms = QApplication::clipboard()->mimeData();
-      if (ms == 0) {
-            qDebug("no application mime data");
-            return;
-            }
-      if ((_score->selection().isSingle()|| _score->selection().isList()) && ms->hasFormat(mimeSymbolFormat)) {
-            QByteArray data(ms->data(mimeSymbolFormat));
-            XmlReader e(data);
-            QPointF dragOffset;
-            Fraction duration(1, 4);
-            ElementType type = Element::readType(e, &dragOffset, &duration);
-
-            QList<Element*> els;
-            if(_score->selection().isSingle())
-                  els.append(_score->selection().element());
-            else
-                  els.append(_score->selection().elements());
-
-            if (type != ElementType::INVALID) {
-                  Element* el = Element::create(type, _score);
-                  if (el) {
-                        el->read(e);
-                        if (el) {
-                              for (Element* target : els) {
-                                    Element* nel = el->clone();
-                                    _score->addRefresh(target->abbox());   // layout() ?!
-                                    DropData ddata;
-                                    ddata.view       = this;
-                                    ddata.element    = nel;
-                                    ddata.duration   = duration;
-                                    target->drop(ddata);
-                                    if (_score->selection().element())
-                                          _score->addRefresh(_score->selection().element()->abbox());
-                                    }
-                              }
-                              delete el;
-                        }
-                  }
-            else
-                  qDebug("cannot read type");
-            }
-      else if ((_score->selection().isRange() || _score->selection().isList())
-         && ms->hasFormat(mimeStaffListFormat)) {
-            ChordRest* cr = 0;
-            if (_score->selection().isRange())
-                  cr = _score->selection().firstChordRest();
-            else if (_score->selection().isSingle()) {
-                  Element* e = _score->selection().element();
-                  if (e->type() != ElementType::NOTE && e->type() != ElementType::REST) {
-                        qDebug("cannot paste to %s", e->name());
-                        return;
-                        }
-                  if (e->type() == ElementType::NOTE)
-                        e = static_cast<Note*>(e)->chord();
-                  cr  = static_cast<ChordRest*>(e);
-                  }
-            if (cr == 0)
-                  errorMessage->showMessage(tr("no destination to paste"), "pasteDestination");
-            else if (cr->tuplet())
-                  errorMessage->showMessage(tr("cannot paste into tuplet"), "pasteTuplet");
-            else {
-                  QByteArray data(ms->data(mimeStaffListFormat));
-                  qDebug("paste <%s>", data.data());
-                  XmlReader e(data);
-                  _score->pasteStaff(e, cr);
-                  }
-            }
-
-
-      else if (ms->hasFormat(mimeSymbolListFormat)) {
-            ChordRest* cr = 0;
-            if (_score->selection().isRange())
-                  cr = _score->selection().firstChordRest();
-            else if (_score->selection().isSingle()) {
-                  Element* e = _score->selection().element();
-                  if (e->type() != ElementType::NOTE && e->type() != ElementType::REST) {
-                        qDebug("cannot paste to %s", e->name());
-                        return;
-                        }
-                  if (e->type() == ElementType::NOTE)
-                        e = static_cast<Note*>(e)->chord();
-                  cr  = static_cast<ChordRest*>(e);
-                  }
-            if (cr == 0)
-                  errorMessage->showMessage(tr("no destination to paste"), "pasteDestination");
-            else if (cr->tuplet())
-                  errorMessage->showMessage(tr("cannot paste into tuplet"), "pasteTuplet");
-            else {
-                  QByteArray data(ms->data(mimeSymbolListFormat));
-                  qDebug("paste <%s>", data.data());
-                  XmlReader e(data);
-//            QPointF dragOffset;
-//            Fraction duration(1, 4);
-//            ElementType type = Element::readType(e, &dragOffset, &duration);
-                  _score->pasteSymbols(e, cr);
-                  }
-            }
-
-
-      else {
-            qDebug("cannot paste selState %d staffList %hhd",
-               _score->selection().state(), ms->hasFormat(mimeStaffListFormat));
-            foreach(const QString& s, ms->formats())
-                  qDebug("  format %s", qPrintable(s));
-            }
+      PasteStatus status = _score->cmdPaste(ms,this);
+      switch (status) {
+            case PasteStatus::NO_DEST:
+                  errorMessage->showMessage(tr("no destination to paste"), "pasteDestination"); break;
+            case PasteStatus::DEST_TUPLET:
+                  errorMessage->showMessage(tr("cannot paste into tuplet"), "pasteTuplet"); break;
+            default: ;
+           }
 
       _score->endCmd();
       mscore->endCmd();
@@ -5136,7 +5040,7 @@ void ScoreView::cmdRepeatSelection()
             if (e) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   _score->startCmd();
-                  _score->pasteStaff(xml, cr);
+                  _score->pasteStaff(xml, cr->segment(), cr->staffIdx());
                   _score->setLayoutAll(true);
                   _score->endCmd();
                   }
