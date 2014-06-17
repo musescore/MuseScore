@@ -609,7 +609,7 @@ static void glissando(Glissando* gli, int number, bool start, Notations& notatio
                            number, start ? "start" : "stop");
                   break;
             default:
-                  qDebug("unknown glissando subtype %d", st);
+                  qDebug("unknown glissando subtype %hhd", st);
                   break;
             }
       }
@@ -652,7 +652,7 @@ void GlissandoHandler::doGlissandoStart(Chord* chord, Notations& notations, Xml&
       {
       GlissandoType st = chord->glissando()->glissandoType();
       if (st != GlissandoType::STRAIGHT && st != GlissandoType::WAVY) {
-            qDebug("doGlissandoStart: unknown glissando subtype %d", st);
+            qDebug("doGlissandoStart: unknown glissando subtype %hhd", st);
             return;
             }
       // check if on chord list
@@ -682,7 +682,7 @@ void GlissandoHandler::doGlissandoStop(Chord* chord, Notations& notations, Xml& 
       {
       GlissandoType st = chord->glissando()->glissandoType();
       if (st != GlissandoType::STRAIGHT && st != GlissandoType::WAVY) {
-            qDebug("doGlissandoStart: unknown glissando subtype %d", st);
+            qDebug("doGlissandoStart: unknown glissando subtype %hhd", st);
             return;
             }
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
@@ -1302,7 +1302,7 @@ static void ending(Xml& xml, Volta* v, bool left)
                         type = "stop";
                         break;
                   default:
-                        qDebug("unknown volta subtype %d", st);
+                        qDebug("unknown volta subtype %hhd", st);
                         type = "unknown";
                         break;
                   }
@@ -1368,7 +1368,7 @@ void ExportMusicXml::barlineRight(Measure* m)
                               xml.tag("bar-style", QString("light-heavy"));
                               break;
                         default:
-                              qDebug("ExportMusicXml::bar(): bar subtype %d not supported", bst);
+                              qDebug("ExportMusicXml::bar(): bar subtype %hhd not supported", bst);
                               break;
                         }
                   }
@@ -1566,7 +1566,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
                         case TremoloType::R16: count = 2; break;
                         case TremoloType::R32: count = 3; break;
                         case TremoloType::R64: count = 4; break;
-                        default: qDebug("unknown tremolo single %d", st); break;
+                        default: qDebug("unknown tremolo single %hhd", st); break;
                         }
                   }
             else if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
@@ -1576,7 +1576,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
                         case TremoloType::C16: count = 2; break;
                         case TremoloType::C32: count = 3; break;
                         case TremoloType::C64: count = 4; break;
-                        default: qDebug("unknown tremolo double %d", st); break;
+                        default: qDebug("unknown tremolo double %hhd", st); break;
                         }
                   }
             else if (chord->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
@@ -1586,10 +1586,10 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
                         case TremoloType::C16: count = 2; break;
                         case TremoloType::C32: count = 3; break;
                         case TremoloType::C64: count = 4; break;
-                        default: qDebug("unknown tremolo double %d", st); break;
+                        default: qDebug("unknown tremolo double %hhd", st); break;
                         }
                   }
-            else qDebug("unknown tremolo subtype %d", st);
+            else qDebug("unknown tremolo subtype %hhd", st);
 
 
             if (type != "" && count > 0) {
@@ -1725,7 +1725,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
             }
 
       foreach(Element* e, chord->el()) {
-            qDebug("chordAttributes: el %p type %d (%s)", e, e->type(), e->name());
+            qDebug("chordAttributes: el %p type %hhd (%s)", e, e->type(), e->name());
             if (e->type() == ElementType::CHORDLINE) {
                   ChordLine const* const cl = static_cast<ChordLine const* const>(e);
                   QString subtype;
@@ -1743,7 +1743,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                               subtype = "scoop";
                               break;
                         default:
-                              qDebug("unknown ChordLine subtype %d", cl->chordLineType());
+                              qDebug("unknown ChordLine subtype %hhd", cl->chordLineType());
                         }
                   if (subtype != "") {
                         notations.tag(xml);
@@ -2592,7 +2592,7 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                         }
                   }
             else
-                  qDebug("directionTag() element %p tp=%d (%s) not suported",
+                  qDebug("directionTag() element %p tp=%hhd (%s) not suported",
                          el, el->type(), el->name());
 
             /*
@@ -2686,7 +2686,7 @@ static void partGroupStart(Xml& xml, int number, BracketType bracket)
                   br = "square";
                   break;
             default:
-                  qDebug("bracket subtype %d not understood", bracket);
+                  qDebug("bracket subtype %hhd not understood", bracket);
             }
       if (br != "")
             xml.tag("group-symbol", br);
@@ -2704,7 +2704,7 @@ static bool findUnit(TDuration::DurationType val, QString& unit)
             case TDuration::DurationType::V_HALF: unit = "half"; break;
             case TDuration::DurationType::V_QUARTER: unit = "quarter"; break;
             case TDuration::DurationType::V_EIGHT: unit = "eighth"; break;
-            default: qDebug("findUnit: unknown DurationType %d", val);
+            default: qDebug("findUnit: unknown DurationType %hhd", val);
             }
       return true;
       }
@@ -2985,7 +2985,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
                         tp = "up";
                         break;
                   default:
-                        qDebug("ottava subtype %d not understood", st);
+                        qDebug("ottava subtype %hhd not understood", st);
                   }
             if (sz && tp)
                   xml.tagE("octave-shift type=\"%s\" size=\"%s\"", tp, sz);
@@ -2996,7 +2996,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
             else if (st == OttavaType::OTTAVA_15MA || st == OttavaType::OTTAVA_15MB)
                   xml.tagE("octave-shift type=\"stop\" size=\"15\"");
             else
-                  qDebug("ottava subtype %d not understood", st);
+                  qDebug("ottava subtype %hhd not understood", st);
             }
       xml.etag();
       directionETag(xml, staff);
@@ -3229,7 +3229,7 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
                               case Lyrics::Syllabic::END:    s = "end";    break;
                               case Lyrics::Syllabic::MIDDLE: s = "middle"; break;
                               default:
-                                    qDebug("unknown syllabic %d", syl);
+                                    qDebug("unknown syllabic %hhd", syl);
                               }
                         xml.tag("syllabic", s);
                         QString attr; // TODO TBD
@@ -3309,7 +3309,7 @@ static void directionJump(Xml& xml, const Jump* const jp)
                   sound = "dalsegno=\"" + jp->jumpTo() + "\"";
             }
       else
-            qDebug("jump type=%d not implemented", jtp);
+            qDebug("jump type=%hhd not implemented", jtp);
       if (sound != "") {
             xml.stag("direction placement=\"above\"");
             xml.stag("direction-type");
@@ -3362,7 +3362,7 @@ static void directionMarker(Xml& xml, const Marker* const m)
                   sound = "tocoda=\"" + m->label() + "\"";
             }
       else
-            qDebug("marker type=%d not implemented", mtp);
+            qDebug("marker type=%hhd not implemented", mtp);
       if (sound != "") {
             xml.stag("direction placement=\"above\"");
             xml.stag("direction-type");
@@ -3455,7 +3455,7 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
 #ifdef DEBUG_REPEATS
                                                 qDebug(" -> not implemented");
 #endif
-                                                qDebug("repeatAtMeasureStart: marker %d not implemented", mtp);
+                                                qDebug("repeatAtMeasureStart: marker %hhd not implemented", mtp);
                                                 }
                                           }
                                           break;
@@ -3532,7 +3532,7 @@ static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, in
 #ifdef DEBUG_REPEATS
                                                 qDebug(" -> not implemented");
 #endif
-                                                qDebug("repeatAtMeasureStop: marker %d not implemented", mtp);
+                                                qDebug("repeatAtMeasureStop: marker %hhd not implemented", mtp);
                                                 }
                                           }
                                           break;

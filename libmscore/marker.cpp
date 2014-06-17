@@ -76,7 +76,7 @@ void Marker::setMarkerType(MarkerType t)
                   break;
 
             default:
-                  qDebug("unknown marker type %d", t);
+                  qDebug("unknown marker type %hhd", t);
                   break;
             }
       }
