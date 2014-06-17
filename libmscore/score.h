@@ -221,6 +221,14 @@ struct Layer {
       uint tags;
       };
 
+enum class PasteStatus : char {
+      NO_ERROR,
+      NO_MIME,
+      NO_DEST,
+      DEST_TUPLET,
+      DEST_NO_CR
+      };
+
 //---------------------------------------------------------
 //   @@ Score
 //   @P name     QString  name of the score
@@ -706,7 +714,8 @@ class Score : public QObject {
 
       void spatiumChanged(qreal oldValue, qreal newValue);
 
-      void pasteStaff(XmlReader&, ChordRest* dst);
+      PasteStatus cmdPaste(const QMimeData* ms, MuseScoreView* view);
+      void pasteStaff(XmlReader&, Segment* dst, int staffIdx);
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);

@@ -563,7 +563,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   // assume there is always a ChordRest segment
                   while (seg->segmentType() != SegmentType::ChordRest)
                         seg = seg->next();
-                  score()->pasteStaff(xml, (ChordRest*)(seg->element(idx * VOICES)));
+                  score()->pasteStaff(xml, seg, idx);
                   }
             event->acceptProposedAction();
             _score->setLayoutAll(true);
