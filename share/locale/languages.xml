@@ -6,6 +6,7 @@
   <language code="be" name="Беларуская мова" />  
   <language code="bg" name="български" />
   <language code="ca" name="Català" handbook="http://musescore.org/ca/manual" />
+  <language code="ca@valencia" name="Valencià" handbook="http://musescore.org/ca/manual" />
   <language code="cs" name="Čeština" />
   <language code="da" name="Dansk" handbook="http://musescore.org/da/håndbog" />
   <language code="de" name="Deutsch" handbook="http://www.musescore.org/de/handbuch" />
