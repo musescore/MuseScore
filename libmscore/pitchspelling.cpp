@@ -467,7 +467,7 @@ static const int enharmonicSpelling[15][34] = {
 static int penalty(int lof1, int lof2, int k)
       {
       if (k < 0 || k >= 15)
-            qFatal("Illegal key %d >= 15\n", k);
+            qFatal("Illegal key %d >= 15", k);
       Q_ASSERT(lof1 >= 0 && lof1 < 34);
       Q_ASSERT(lof2 >= 0 && lof2 < 34);
       int penalty  = enharmonicSpelling[k][lof1] * 4 + enharmonicSpelling[k][lof2] * 4;

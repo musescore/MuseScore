@@ -217,7 +217,7 @@ void StaffListItem::staffTypeChanged(int idx)
       int staffTypeIdx = _staffTypeCombo->itemData(idx).toInt();
       const StaffType* stfType = StaffType::preset(StaffTypes(staffTypeIdx));
       if (stfType->group() != ClefInfo::staffGroup(_clef._transposingClef)) {
-            ClefType clefType;
+            ClefType clefType = ClefType::INVALID;
             switch (stfType->group()) {
                   case StaffGroup::STANDARD:
                         clefType = _defaultClef._transposingClef;

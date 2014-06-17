@@ -505,7 +505,7 @@ void ZitaReverb::setNValue(int idx, double value)
 
 double ZitaReverb::nvalue(int idx) const
       {
-      double v;
+      double v = 0.0;
       switch (idx) {
             case R_DELAY: v = delay(); break;
             case R_XOVER: v = xover(); break;
@@ -517,7 +517,6 @@ double ZitaReverb::nvalue(int idx) const
             case R_EQ2FR: v = eq2fr(); break;
             case R_EQ2GN: v = eq2gn(); break;
             case R_OPMIX: v = opmix(); break;
-                  break;
             }
       return v;
       }

@@ -358,7 +358,7 @@ void Note::setTpcFromPitch()
 void Note::setTpc(int v)
       {
       if (!tpcIsValid(v))
-            qFatal("Note::setTpc: bad tpc %d\n", v);
+            qFatal("Note::setTpc: bad tpc %d", v);
       _tpc[concertPitchIdx()] = v;
       }
 

@@ -2534,7 +2534,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
             //
 
             if (system->measures().isEmpty()) {
-                  qFatal("System %p is empty\n", system);
+                  qFatal("System %p is empty", system);
                   }
             Measure* m = system->lastMeasure();
             bool hasCourtesyKeysig = false;

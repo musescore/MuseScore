@@ -1927,8 +1927,8 @@ void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 
-      Chord* c1;
-      Chord* c2;
+      Chord* c1 = nullptr;
+      Chord* c2 = nullptr;
       int n = _elements.size();
       for (int i = 0; i < n; ++i) {
             if (_elements[i]->type() == ElementType::CHORD) {

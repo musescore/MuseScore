@@ -478,7 +478,7 @@ SymId Ambitus::noteHead() const
 
       SymId t = Note::noteHead(hg, _noteHeadGroup, ht);
       if (t == SymId::noSym) {
-            qDebug("invalid note head %d/%d", _noteHeadGroup, _noteHeadType);
+            qDebug("invalid note head %hhd/%hhd", _noteHeadGroup, _noteHeadType);
             t = Note::noteHead(0, NoteHeadGroup::HEAD_NORMAL, ht);
             }
       return t;

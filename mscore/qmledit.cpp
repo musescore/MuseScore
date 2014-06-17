@@ -326,8 +326,8 @@ QmlEdit::QmlEdit(QWidget* parent)
       c.setCharFormat(cf);
       setTextCursor(c);
 
-      static const Binding bindings[] = {
 #if 0
+      static const Binding bindings[] = {
             { "start",       Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_E, SLOT(start()) },
             { "end",         Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_X, SLOT(end()) },
             { "startOfLine", Qt::CTRL+Qt::Key_Q, Qt::CTRL+Qt::Key_S, SLOT(startOfLine()) },
@@ -342,8 +342,8 @@ QmlEdit::QmlEdit(QWidget* parent)
             { "put",         Qt::Key_F9,         0, SLOT(put())        },
             { "delLine",     Qt::CTRL+Qt::Key_Y, 0, SLOT(delLine())    },
             { "delWord",     Qt::CTRL+Qt::Key_T, 0, SLOT(delWord())    }
-#endif
             };
+#endif
       setTabChangesFocus(false);
       setBackgroundVisible(false);
       setCursorWidth(3);
@@ -355,6 +355,7 @@ QmlEdit::QmlEdit(QWidget* parent)
       hl = new JSHighlighter(document());
       lineNumberArea = new LineNumberArea(this);
 
+#if 0
       for (unsigned int i = 0; i < sizeof(bindings)/sizeof(*bindings); ++i) {
             const Binding& b = bindings[i];
             QAction* a = new QAction(b.name, this);
@@ -364,6 +365,7 @@ QmlEdit::QmlEdit(QWidget* parent)
             addAction(a);
             connect(a, SIGNAL(triggered()), b.slot);
             }
+#endif
 
       connect(this, SIGNAL(blockCountChanged(int)),   SLOT(updateLineNumberAreaWidth(int)));
       connect(this, SIGNAL(updateRequest(QRect,int)), SLOT(updateLineNumberArea(QRect,int)));

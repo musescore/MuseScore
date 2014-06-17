@@ -150,9 +150,11 @@ void Knob::mouseMoveEvent(QMouseEvent* ev)
 //    r - phys coord system
 //---------------------------------------------------------
 
-void Knob::paintEvent(QPaintEvent* ev)
+void Knob::paintEvent(QPaintEvent* /*ev*/)
       {
+#if 0 // yet(?) unused
       QRect rr(ev->rect());
+#endif
       QPainter p(this);
       p.setRenderHint(QPainter::Antialiasing, true);
 

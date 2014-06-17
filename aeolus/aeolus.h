@@ -33,7 +33,7 @@
 namespace Ms {
       struct MidiPatch;
       class Event;
-      class ParDescr;
+      struct ParDescr;
       }
 
 using namespace Ms;
