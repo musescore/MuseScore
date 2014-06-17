@@ -1,5 +1,4 @@
 #include "importmidi_lrhand.h"
-#include "importmidi_tuplet.h"
 #include "importmidi_inner.h"
 #include "importmidi_fraction.h"
 #include "importmidi_chord.h"
@@ -354,7 +353,6 @@ void insertNewLeftHandTrack(std::multimap<int, MTrack> &tracks,
       {
       auto leftHandTrack = it->second;
       leftHandTrack.chords = leftHandChords;
-      MidiTuplet::removeEmptyTuplets(leftHandTrack);
       it = tracks.insert({it->first, leftHandTrack});
       }
 
