@@ -636,7 +636,7 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
       // import the file
       dev->seek(0);
       res = doImport(score, name, dev, pass1);
-      qDebug("importMusicXml() return %d", res);
+      qDebug("importMusicXml() return %hhd", res);
       return res;
       }
 
@@ -2379,7 +2379,7 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
             // ignore
             }
       else
-            qDebug("setSLinePlacement sli %p unsupported type %d",
+            qDebug("setSLinePlacement sli %p unsupported type %hhd",
                    sli, sli->type());
 
       // move to correct position
@@ -2428,7 +2428,7 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
             offsBelow = -0.75;
             }
       else
-            qDebug("addElem el %p unsupported type %d",
+            qDebug("addElem el %p unsupported type %hhd",
                    el, el->type());
 
       // move to correct position

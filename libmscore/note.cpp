@@ -429,7 +429,7 @@ SymId Note::noteHead() const
 
       SymId t = noteHead(up, _headGroup, ht);
       if (t == SymId::noSym) {
-            qDebug("invalid note head %d/%d", _headGroup, ht);
+            qDebug("invalid note head %hhd/%hhd", _headGroup, ht);
             t = noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
             }
       return t;
@@ -1125,7 +1125,7 @@ void Note::endDrag()
       if (staff->isTabStaff()) {
             // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
             // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
-            int nString = _string + staff->staffType()->upsideDown() ? -_lineOffset : _lineOffset;
+            int nString = _string + (staff->staffType()->upsideDown() ? -_lineOffset : _lineOffset);
             _lineOffset = 0;
             // get a fret number for same pitch on new string
             const StringData* strData = staff->part()->instr()->stringData();
