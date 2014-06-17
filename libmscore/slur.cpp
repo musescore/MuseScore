@@ -1175,6 +1175,7 @@ Slur::~Slur()
 
 void Slur::write(Xml& xml) const
       {
+      if (!xml.canWrite(this)) return;
       xml.stag(QString("Slur id=\"%1\"").arg(xml.spannerId(this)));
       SlurTie::writeProperties(xml);
       xml.etag();

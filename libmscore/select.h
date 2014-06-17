@@ -61,6 +61,7 @@ enum class SelectionFilterType {
       LYRICS                  = 1 << 6,
       CHORD_SYMBOL            = 1 << 7,
       ARTICULATION            = 1 << 8,
+      SLUR                    = 1 << 9,
       ALL                     = -1
       };
 
