@@ -1691,7 +1691,7 @@ void SFont::safe_fread(void* buf, int count)
 void SFont::safe_fseek(long ofs)
       {
       qint64 newpos = ofs + f.pos();
-      if (f.seek(newpos) == -1)
+      if (!f.seek(newpos))
             throw(QString("File seek failed with offset = %1").arg(ofs));
       }
 }
