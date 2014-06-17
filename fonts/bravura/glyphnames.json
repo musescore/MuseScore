@@ -1348,7 +1348,7 @@
     }, 
     "accidentalJohnston13": {
         "codepoint": "U+E2B6", 
-        "description": "Thirteen (raise by 65:64~)"
+        "description": "Thirteen (raise by 65:64)"
     }, 
     "accidentalJohnston31": {
         "codepoint": "U+E2B7", 
@@ -2388,19 +2388,19 @@
     }, 
     "brassHarmonMuteClosed": {
         "codepoint": "U+E5E8", 
-        "description": "Harmon mute, closed"
+        "description": "Harmon mute, stem in"
     }, 
     "brassHarmonMuteStemHalfLeft": {
         "codepoint": "U+E5E9", 
-        "description": "Harmon mute, stem-cup half-closed, left"
+        "description": "Harmon mute, stem extended, left"
     }, 
     "brassHarmonMuteStemHalfRight": {
         "codepoint": "U+E5EA", 
-        "description": "Harmon mute, stem-cup half-closed, right"
+        "description": "Harmon mute, stem extended, right"
     }, 
     "brassHarmonMuteStemOpen": {
         "codepoint": "U+E5EB", 
-        "description": "Harmon mute, stem-cup open"
+        "description": "Harmon mute, stem out"
     }, 
     "brassJazzTurn": {
         "codepoint": "U+E5E4", 
@@ -2710,6 +2710,10 @@
     "chantPunctumCavum": {
         "codepoint": "U+E998", 
         "description": "Punctum cavum"
+    }, 
+    "chantPunctumDeminutum": {
+        "codepoint": "U+E9A1", 
+        "description": "Punctum deminutum"
     }, 
     "chantPunctumInclinatum": {
         "codepoint": "U+E991", 
