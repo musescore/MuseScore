@@ -285,6 +285,8 @@ bool SelectionFilter::canSelect(const Element* e) const
           && !isFiltered(SelectionFilterType::FINGERING)) return false;
       if (e->type() == Element::Type::HARMONY
           && !isFiltered(SelectionFilterType::CHORD_SYMBOL)) return false;
+      if (e->type() == Element::Type::SLUR
+          && !isFiltered(SelectionFilterType::SLUR)) return false;
       return true;
       }
 
@@ -419,9 +421,9 @@ void Selection::updateSelectedElements()
                   continue;
             if (sp->type() == Element::Type::SLUR
                 && ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick)))
-                  _el.append(sp); // slur with start or end in range selection
+                  appendFiltered(sp); // slur with start or end in range selection
             else if((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
-                  _el.append(sp); // spanner with start and end in range selection
+                  appendFiltered(sp); // spanner with start and end in range selection
             }
       update();
       }
