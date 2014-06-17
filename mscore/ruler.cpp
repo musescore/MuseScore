@@ -23,7 +23,9 @@
 
 namespace Ms {
 
+#if 0 // yet(?) unused
 static const int MAP_OFFSET = 480;
+#endif
 
 QPixmap* Ruler::markIcon[3];
 

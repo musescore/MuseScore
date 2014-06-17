@@ -132,7 +132,7 @@ QString TDuration::name() const
             case DurationType::V_BREVE:     return "breve";
             case DurationType::V_LONG:      return "long";
             default:
-qDebug("TDuration::name(): invalid duration type %d", _val);
+qDebug("TDuration::name(): invalid duration type %hhd", _val);
             case DurationType::V_ZERO:
             case DurationType::V_INVALID:   return "";
             }

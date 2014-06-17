@@ -961,7 +961,8 @@ void Selection::extendRangeSelection(ChordRest* cr)
 
 void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, int tick, int etick)
       {
-      bool activeIsFirst;
+      bool activeIsFirst = false;
+
       if (staffIdx < _staffStart)
             _staffStart = staffIdx;
       else if (staffIdx >= _staffEnd)

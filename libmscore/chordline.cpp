@@ -97,7 +97,7 @@ void ChordLine::layout()
             if (_chordLineType == ChordLineType::PLOP)
                   setPos(p.x() + note->headWidth() * .25, p.y() - note->headHeight() * .75);
             if (_chordLineType == ChordLineType::SCOOP) {
-                  qreal x = p.x() + chord()->up() ? note->headWidth() * .25 : _spatium * -.2;
+                  qreal x = p.x() + (chord()->up() ? note->headWidth() * .25 : _spatium * -.2);
                   setPos(x, p.y() + note->headHeight() * .75);
                   }
             }

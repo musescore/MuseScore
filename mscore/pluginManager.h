@@ -12,7 +12,7 @@
 //=============================================================================
 
 #ifndef __PLUGIN_MANAGER_H__
-#define __PLUGIN_MANAGE_H__
+#define __PLUGIN_MANAGER_H__
 
 #include "ui_pluginManager.h"
 #include "preferences.h"
