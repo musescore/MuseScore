@@ -89,14 +89,14 @@ class ElementItem : public QTreeWidgetItem
       };
 
 ElementItem::ElementItem(QTreeWidget* lv, Element* e)
-   : QTreeWidgetItem(lv, int(e->type()))
+   : QTreeWidgetItem(lv, int(e->type()) + int(QTreeWidgetItem::UserType))
       {
       el = e;
       init();
       }
 
 ElementItem::ElementItem(QTreeWidgetItem* ei, Element* e)
-   : QTreeWidgetItem(ei, int(e->type()))
+   : QTreeWidgetItem(ei, int(e->type()) + int(QTreeWidgetItem::UserType))
       {
       el = e;
       init();
@@ -144,9 +144,7 @@ Debugger::Debugger(QWidget* parent)
       for (int i = 0; i < int(ElementType::MAXTYPE); ++i)
             elementViews[i] = 0;
       curElement   = 0;
-
-//      connect(tupletView, SIGNAL(scoreChanged()), SLOT(layoutScore()));
-//      connect(notePanel,  SIGNAL(scoreChanged()), SLOT(layoutScore()));
+      cs           = 0;
 
       connect(list, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(itemClicked(QTreeWidgetItem*,int)));
       connect(list, SIGNAL(itemExpanded(QTreeWidgetItem*)), SLOT(itemExpanded(QTreeWidgetItem*)));
@@ -568,7 +566,9 @@ void Debugger::updateElement(Element* el)
                   qDebug("Debugger::Element not found %s %p", el->name(), el);
                   break;
                   }
-            ElementItem* ei = (ElementItem*)item;
+            if (item->type() == QTreeWidgetItem::Type)
+                  continue;
+            ElementItem* ei = static_cast<ElementItem*>(item);
             if (ei->element() == el) {
                   list->setItemExpanded(item, true);
                   list->setCurrentItem(item);
@@ -1767,20 +1767,6 @@ void ShowElementBase::setElement(Element* e)
       eb.readPosX->setValue(e->readPos().x());
       eb.readPosY->setValue(e->readPos().y());
       eb.placement->setCurrentIndex(int(e->placement()));
-
-#if 0
-      Align a = e->align();
-      QString s;
-      s += a & ALIGN_LEFT ? "L" : "-";
-      s += a & ALIGN_HCENTER ? "C" : "-";
-      s += a & ALIGN_RIGHT ? "R" : "-";
-      s += " ";
-      s += a & ALIGN_TOP ? "T" : "-";
-      s += a & ALIGN_VCENTER ? "C" : "-";
-      s += a & ALIGN_BOTTOM ? "B" : "-";
-      s += a & ALIGN_BASELINE ? "L" : "-";
-      eb.alignment->setText(s);
-#endif
 
       eb.bboxx->setValue(e->bbox().x());
       eb.bboxy->setValue(e->bbox().y());

@@ -51,8 +51,10 @@ const char* Segment::subTypeName() const
 const char* Segment::subTypeName(SegmentType t)
       {
       switch(t) {
+            case SegmentType::Invalid:              return "Invalid";
             case SegmentType::Clef:                 return "Clef";
             case SegmentType::KeySig:               return "Key Signature";
+            case SegmentType::Ambitus:              return "Ambitus";
             case SegmentType::TimeSig:              return "Time Signature";
             case SegmentType::StartRepeatBarLine:   return "Begin Repeat";
             case SegmentType::BarLine:              return "BarLine";
@@ -62,7 +64,7 @@ const char* Segment::subTypeName(SegmentType t)
             case SegmentType::TimeSigAnnounce:      return "Time Sig Precaution";
             case SegmentType::KeySigAnnounce:       return "Key Sig Precaution";
             default:
-                  return "";
+                  return "??";
             }
       }
 

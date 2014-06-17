@@ -74,6 +74,7 @@ Palette::Palette(QWidget* parent)
       {
       extraMag      = 1.0;
       currentIdx    = -1;
+      dragIdx       = -1;
       selectedIdx   = -1;
       _yOffset      = 0.0;
       setGrid(50, 60);
