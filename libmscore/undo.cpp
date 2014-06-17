@@ -1161,8 +1161,8 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
             newcr->setTrack(ntrack);
             newcr->setParent(seg);
 
-            if (newcr->type() == ElementType::CHORD) {
 #ifndef QT_NO_DEBUG
+            if (newcr->type() == ElementType::CHORD) {
                   Chord* chord = static_cast<Chord*>(newcr);
                   // setTpcFromPitch needs to know the note tick position
                   foreach(Note* note, chord->notes()) {
