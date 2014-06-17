@@ -37,7 +37,7 @@
 
 #include <math.h>
 #include "config.h"
-//#include "musescore.h"
+#include "musescore.h"
 #include "file.h"
 #include "libmscore/score.h"
 #include "libmscore/rest.h"
@@ -3979,6 +3979,14 @@ static int findPartGroupNumber(int* partGroupEnd)
 
 void ExportMusicXml::write(QIODevice* dev)
       {
+      // must export in transposed pitch to prevent
+      // losing the transposition information
+      // if necessary, switch concert pitch mode off
+      // before export and restore it after export
+      bool concertPitch = getAction("concert-pitch")->isChecked();
+      if (concertPitch) {
+            score()->cmdConcertPitchChanged(false, false);
+            }
 
       calcDivisions();
 
@@ -4537,6 +4545,13 @@ void ExportMusicXml::write(QIODevice* dev)
             }
 
       xml.etag();
+
+      if (concertPitch) {
+            // restore concert pitch
+            // note: can't use score()->undo()->pop() as this fails
+            // with message "UndoStack:pop(): no active command"
+            score()->cmdConcertPitchChanged(true, false);
+            }
       }
 
 //---------------------------------------------------------
