@@ -231,7 +231,7 @@ class TestImportMidi : public QObject, public MTest
       void tupletOffTimeOtherBar() { dontSimplify("tuplet_off_time_other_bar"); }
       void tupletOffTimeOtherBar2() { dontSimplify("tuplet_off_time_other_bar2"); }
       void tuplet16th8th() { dontSimplify("tuplet_16th_8th"); }
-      void tuplet7Staccato() { dontSimplify("tuplet_7_staccato"); }
+      void tuplet7Staccato() { mf("tuplet_7_staccato"); }
       void minDuration() { dontSimplify("min_duration"); }
 
       void pickupMeasure() { dontSimplify("pickup"); }
