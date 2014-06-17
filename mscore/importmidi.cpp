@@ -435,10 +435,11 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
                                  const ReducedFraction &startChordTickFrac,
                                  const ReducedFraction &nextChordTick)
       {
-      Score* score     = staff->score();
-      const int track        = staff->idx() * VOICES + voice;
+      Score* score = staff->score();
+      const int track = staff->idx() * VOICES + voice;
       Drumset* drumset = staff->part()->instr()->drumset();
-      const bool useDrumset  = staff->part()->instr()->useDrumset();
+      const bool useDrumset = staff->part()->instr()->useDrumset();
+      const auto opers = preferences.midiImportOperations.currentTrackOperations();
 
                   // all midiChords here should have the same onTime value
                   // and all notes in each midiChord should have the same duration
@@ -463,7 +464,9 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
             chord->setTrack(track);
             chord->setDurationType(d);
             chord->setDuration(d.fraction());
-            if (startChordTick == startChordTickFrac   // first chord in tied chord sequence
+
+            if (opers.showStaccato
+                        && startChordTick == startChordTickFrac   // first chord in tied chord sequence
                         && midiChords.begin()->isStaccato()) {
                   Articulation* a = new Articulation(chord->score());
                   a->setArticulationType(ArticulationType::Staccato);

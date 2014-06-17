@@ -44,6 +44,8 @@ struct Controller {
       Node *pickupMeasure = nullptr;
       Node *clef = nullptr;
       Node *removeDrumRests = nullptr;
+      Node *simplifyDurations = nullptr;
+      Node *showStaccato = nullptr;
 
       bool isDrumTrack = false;
       bool allTracksSelected = true;
@@ -97,6 +99,15 @@ OperationsModel::OperationsModel()
       simplifyDurations->oper.type = MidiOperation::Type::SIMPLIFY_DURATIONS;
       simplifyDurations->oper.value = TrackOperations().simplifyDurations;
       simplifyDurations->setParent(root.get());
+      controller->simplifyDurations = simplifyDurations;
+
+
+      Node *showStaccato = new Node;
+      showStaccato->name = QCoreApplication::translate("MIDI import operations", "Show staccato");
+      showStaccato->oper.type = MidiOperation::Type::SHOW_STACCATO;
+      showStaccato->oper.value = TrackOperations().showStaccato;
+      showStaccato->setParent(simplifyDurations);
+      controller->showStaccato = showStaccato;
 
 
       Node *allowedVoices = new Node;
@@ -507,6 +518,8 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
 
                   case MidiOperation::Type::SIMPLIFY_DURATIONS:
                         node->oper.value = opers.opers.simplifyDurations; break;
+                  case MidiOperation::Type::SHOW_STACCATO:
+                        node->oper.value = opers.opers.showStaccato; break;
 
                   case MidiOperation::Type::SEPARATE_VOICES:
                         node->oper.value = opers.opers.separateVoices; break;
@@ -641,6 +654,12 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
             const auto value = LHRHdoIt->oper.value.toBool();
             if (LHRHMethod)
                   LHRHMethod->visible = value;
+            result = true;
+            }
+      if (simplifyDurations && (forceUpdate || node == simplifyDurations)) {
+            const auto value = simplifyDurations->oper.value.toBool();
+            if (showStaccato)
+                  showStaccato->visible = value;
             result = true;
             }
       if (allowedVoices && (forceUpdate || node == allowedVoices)) {
