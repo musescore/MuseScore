@@ -924,7 +924,8 @@ void findTuplets(
 
             // later notes will be sorted and their indexes become invalid
             // so assign staccato information to notes now
-      markStaccatoTupletNotes(tuplets);
+      if (operations.simplifyDurations)
+            markStaccatoTupletNotes(tuplets);
 
             // because of tol for non-tuplets we should use only chords with onTime >= bar start
             // or with current bar index (can be set from prev bar)
@@ -948,7 +949,8 @@ void findTuplets(
             minimizeOffTimeError(tuplets, chords, nonTuplets, startBarTick, basicQuant, barIndex);
             }
 
-      cleanStaccatoOfNonTuplets(nonTuplets);
+      if (operations.simplifyDurations)
+            cleanStaccatoOfNonTuplets(nonTuplets);
 
       Q_ASSERT_X(!doTupletsHaveCommonChords(tuplets),
                  "MIDI tuplets: findTuplets", "Tuplets have common chords but they shouldn't");
