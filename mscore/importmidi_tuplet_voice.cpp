@@ -26,90 +26,12 @@ int tupletVoiceLimit()
       return (allowedVoices == 1) ? 1 : allowedVoices - 1;
       }
 
-ReducedFraction findOnTimeBetweenChords(
-            const std::pair<const ReducedFraction, MidiChord> &chord,
-            const std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &basicQuant)
-      {
-      ReducedFraction onTime(-1, 1);
-      auto quant = basicQuant;
-
-      const auto range = chords.equal_range(chord.first);
-      auto chordIt = chords.end();
-
-      for (auto it = range.first; it != range.second; ++it) {
-            if (it->second.voice == chord.second.voice) {
-                  chordIt = it;
-                  break;
-                  }
-            }
-
-      Q_ASSERT_X(chordIt != chords.end(),
-                 "MidiTuplet::findOnTimeBetweenChords", "Chord iterator was not found");
-
-            // chords with equal voices here can have equal on time values
-            // so skip such chords
-
-      const int voice = chordIt->second.voice;
-      while (true) {
-            onTime = Quantize::findMinQuantizedOnTime(*chordIt, quant);
-            bool changed = false;
-
-            if (chordIt != chords.begin()) {
-                  auto it = std::prev(chordIt);
-                  while (true) {
-                        if (it->first < chord.first && it->second.voice == voice) {
-                              if (onTime < it->first) {
-
-                                    Q_ASSERT_X(quant >= MChord::minAllowedDuration() * 2,
-                                               "MidiTuplet::findOnTimeBetweenChords",
-                                               "Too small quantization value");
-
-                                    quant /= 2;
-                                    changed = true;
-                                    }
-                              break;
-                              }
-                        if (it == chords.begin() || it->first < chord.first - basicQuant * 2)
-                              break;
-                        --it;
-                        }
-                  }
-
-            if (!changed) {
-                  for (auto it = std::next(chordIt);
-                              it != chords.end() && it->first < chord.first + basicQuant * 2; ++it) {
-                        if (it->first == chord.first || it->second.voice != voice)
-                              continue;
-                        if (onTime > it->first) {
-
-                              Q_ASSERT_X(quant >= MChord::minAllowedDuration() * 2,
-                                         "MidiTuplet::findOnTimeBetweenChords",
-                                         "Too small quantization value");
-
-                              quant /= 2;
-                              changed = true;
-                              }
-                        break;
-                        }
-                  }
-
-            if (!changed)
-                  break;
-            }
-
-      Q_ASSERT_X(onTime != ReducedFraction(-1, 1), "MidiTuplet::findOnTimeBetweenChords",
-                 "On time for chord interval was not found");
-
-      return onTime;
-      }
-
 std::pair<ReducedFraction, ReducedFraction>
 chordInterval(const std::pair<const ReducedFraction, MidiChord> &chord,
               const std::multimap<ReducedFraction, MidiChord> &chords,
               const ReducedFraction &basicQuant)
       {
-      const auto onTime = findOnTimeBetweenChords(chord, chords, basicQuant);
+      const auto onTime = MidiTuplet::findOnTimeBetweenChords(chord, chords, basicQuant);
       auto offTime = Quantize::findMaxQuantizedOffTime(chord, basicQuant);
       if (offTime == onTime)
             offTime += Quantize::quantForLen(MChord::minNoteLen(chord), basicQuant);
