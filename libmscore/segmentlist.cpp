@@ -163,7 +163,7 @@ void SegmentList::insert(Segment* seg)
       check();
       for (Segment* s = _first; s; s = s->next()) {
             if (s == seg) {
-                  qFatal("SegmentList::insert: already in list\n");
+                  qFatal("SegmentList::insert: already in list");
                   }
             }
       if (seg->prev()) {

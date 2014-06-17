@@ -549,10 +549,10 @@ QByteArray Selection::symbolListMimeData() const
 
       int         topTrack    = 1000000;
       int         bottomTrack = 0;
-      Segment*    firstSeg;
+      Segment*    firstSeg    = nullptr;
       int         firstTick   = 0x7FFFFFFF;
       MAPDATA     mapData;
-      Segment*    seg;
+      Segment*    seg         = nullptr;
       int         track;
       std::multimap<qint64, MAPDATA> map;
 

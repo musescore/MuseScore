@@ -64,7 +64,7 @@ class Q_DECL_EXPORT Knob : public AbstractSlider {
       Knob(QWidget* parent = 0);
       ~Knob();
       virtual QSize sizeHint() const { return QSize(50, 50); }
-      virtual int heightForWidth(int w) { return w; }
+      virtual int heightForWidth(int w) const { return w; }
 
       //! return text decoration
       QString text() const           { return _text; }

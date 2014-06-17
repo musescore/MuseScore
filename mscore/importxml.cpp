@@ -1952,7 +1952,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
                   beam->add(cr);
                   }
             else {
-                  qDebug("handleBeamAndStemDir() from track %d to track %d bm %d -> abort beam",
+                  qDebug("handleBeamAndStemDir() from track %d to track %d bm %hhd -> abort beam",
                          beam->track(), cr->track(), bm);
                   // ... or reset beam mode for all elements and remove the beam
                   removeBeam(beam);

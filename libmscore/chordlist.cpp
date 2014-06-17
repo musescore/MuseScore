@@ -479,7 +479,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
       int lastLeadingToken;
       int len = s.size();
       int i, j;
-      int thirdKey, seventhKey;
+      int thirdKey = 0, seventhKey = 0;
       bool susChord = false;
       QList<HDegree> hdl;
       int key[] = { 0, 0, 2, 4, 5, 7, 9, 11, 0, 2, 4, 5, 7, 9, 11 };

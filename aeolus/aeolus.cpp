@@ -224,7 +224,7 @@ void Aeolus::setValue(int id, double value)
 
 double Aeolus::value(int idx) const
       {
-      double v;
+      double v = 0.0;
       switch (idx) {
             case A_VOLUME:   v = _audiopar[VOLUME];  break;
             case A_REVSIZE:  v = _audiopar[REVSIZE]; break;

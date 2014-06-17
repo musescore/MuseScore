@@ -176,7 +176,7 @@ int RepeatList::utick2tick(int tick) const
                   }
             }
       if (MScore::debugMode) {
-            qFatal("utick %d not found in RepeatList\n", tick);
+            qFatal("tick %d not found in RepeatList", tick);
             }
       return 0;
       }
@@ -227,7 +227,7 @@ int RepeatList::utime2utick(qreal t) const
                   }
             }
       if (MScore::debugMode) {
-            qFatal("time %f not found in RepeatList\n", t);
+            qFatal("time %f not found in RepeatList", t);
             }
       return 0;
       }

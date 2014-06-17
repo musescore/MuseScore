@@ -853,11 +853,13 @@ void Score::undoAddElement(Element* element)
                   if (element->type() == ElementType::FINGERING)
                         element->score()->layoutFingering(static_cast<Fingering*>(element));
                   else if (element->type() == ElementType::CHORD) {
+#ifndef QT_NO_DEBUG
                         for (Note* n : static_cast<Chord*>(element)->notes()) {
                         //      if(n->tpc() == Tpc::TPC_INVALID)
                         //            n->setTpcFromPitch();
                               Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
                               }
+#endif
                         element->score()->updateNotes();
                         }
                   return;
@@ -871,10 +873,12 @@ void Score::undoAddElement(Element* element)
                   if (ne->type() == ElementType::FINGERING)
                         e->score()->layoutFingering(static_cast<Fingering*>(ne));
                   else if (ne->type() == ElementType::CHORD) {
+#ifndef QT_NO_DEBUG
                         for (Note* n : static_cast<Chord*>(ne)->notes()) {
                               Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
                         //      n->setTpcFromPitch();
                               }
+#endif
                         ne->score()->updateNotes();
                         }
                   else if (ne->type() == ElementType::SLUR) {
@@ -1158,6 +1162,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
             newcr->setParent(seg);
 
             if (newcr->type() == ElementType::CHORD) {
+#ifndef QT_NO_DEBUG
                   Chord* chord = static_cast<Chord*>(newcr);
                   // setTpcFromPitch needs to know the note tick position
                   foreach(Note* note, chord->notes()) {
@@ -1166,6 +1171,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                         Q_ASSERT(note->tpc() != Tpc::TPC_INVALID);
                         }
                   }
+#endif
             if (t) {
                   Tuplet* nt = 0;
                   if (staff == ostaff)
