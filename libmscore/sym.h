@@ -698,6 +698,7 @@ enum class SymId : short {
       chantPodatusUpper,
       chantPunctum,
       chantPunctumCavum,
+      chantPunctumDeminutum,
       chantPunctumInclinatum,
       chantPunctumInclinatumAuctum,
       chantPunctumInclinatumDeminutum,
