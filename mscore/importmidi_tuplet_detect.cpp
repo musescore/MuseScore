@@ -99,9 +99,13 @@ ReducedFraction findSumLengthOfRests(
       const auto tupletEndTime = tupletInfo.onTime + tupletInfo.len;
       const auto tupletNoteLen = tupletInfo.len / tupletInfo.tupletNumber;
       ReducedFraction sumLen = {0, 1};
+      const auto opers = preferences.midiImportOperations.currentTrackOperations();
 
       for (const auto &chord: tupletInfo.chords) {
-            const auto staccatoIt = tupletInfo.staccatoChords.find(chord.first);
+            const auto staccatoIt = (opers.simplifyDurations)
+                        ? tupletInfo.staccatoChords.find(chord.first)
+                        : tupletInfo.staccatoChords.end();
+
             const MidiChord &midiChord = chord.second->second;
             const auto &chordOnTime = (chord.second->first < startBarTick)
                         ? startBarTick
@@ -316,9 +320,12 @@ std::vector<TupletInfo> detectTuplets(
                         auto tupletInfo = findTupletApproximation(divLen, tupletNumber,
                                              basicQuant, startDivTime, startDivChordIt, endDivChordIt);
 
-                        if (!haveChordsInTheMiddleBetweenTupletChords(
-                                          startDivChordIt, endDivChordIt, tupletInfo)) {
-                              detectStaccato(tupletInfo);
+                        const auto opers = preferences.midiImportOperations.currentTrackOperations();
+                        if (opers.simplifyDurations) {
+                              if (!haveChordsInTheMiddleBetweenTupletChords(
+                                                startDivChordIt, endDivChordIt, tupletInfo)) {
+                                    detectStaccato(tupletInfo);
+                                    }
                               }
                         tupletInfo.sumLengthOfRests = findSumLengthOfRests(tupletInfo, startBarTick);
 
