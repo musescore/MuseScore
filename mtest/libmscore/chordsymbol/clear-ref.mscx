@@ -102,20 +102,10 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Harmony>
-          <root>14</root>
-          <name>7</name>
-          </Harmony>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <tick>960</tick>
-        <Harmony>
-          <root>16</root>
-          <name>7</name>
-          </Harmony>
-        <tick>1920</tick>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>

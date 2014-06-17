@@ -1267,8 +1267,10 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                               }
                         }
                   foreach (Element* e, segment->annotations()) {
-                        if (e->track() != track || e->generated())
-                              continue;
+                        if (e->track() != track || e->generated()
+                            || (e->systemFlag() && !writeSystemElements)) {
+                            continue;
+                        }
                         if (needTick) {
                               xml.tag("tick", segment->tick() - xml.tickDiff);
                               xml.curTick = segment->tick();
