@@ -23,6 +23,8 @@ class Element;
 class Segment;
 class Note;
 class Measure;
+class Spanner;
+class Chord;
 
 //---------------------------------------------------------
 //   ElementPattern
@@ -60,6 +62,7 @@ enum class SelectionFilterType {
       LYRICS                  = 1 << 6,
       CHORD_SYMBOL            = 1 << 7,
       ARTICULATION            = 1 << 8,
+      SLUR                    = 1 << 9,
       ALL                     = -1
       };
 
@@ -100,6 +103,7 @@ class Selection {
       bool canSelect(Element*) const;
       void appendFiltered(Element* e);
       void filterRange(QList<Segment*>, int strack, int etrack) const;
+      void filterSpanners(std::multimap<int, Spanner*>& spannerMapCopy) const;
 
    public:
       Selection()                      { _score = 0; _state = SelState::NONE; }

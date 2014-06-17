@@ -285,6 +285,8 @@ bool Selection::canSelect(Element* e) const
           && !this->selectionFilter().isFiltered(SelectionFilterType::FINGERING)) return false;
       if (e->type() == Element::Type::HARMONY
           && !this->selectionFilter().isFiltered(SelectionFilterType::CHORD_SYMBOL)) return false;
+      if (e->type() == Element::Type::SLUR
+          && !this->selectionFilter().isFiltered(SelectionFilterType::SLUR)) return false;
       return true;
       }
 
@@ -419,9 +421,9 @@ void Selection::updateSelectedElements()
                   continue;
             if (sp->type() == Element::Type::SLUR
                 && ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick)))
-                  _el.append(sp); // slur with start or end in range selection
+                  appendFiltered(sp); // slur with start or end in range selection
             else if((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
-                  _el.append(sp); // spanner with start and end in range selection
+                  appendFiltered(sp); // spanner with start and end in range selection
             }
       update();
       }
@@ -611,8 +613,14 @@ void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) co
                   if (!e)
                         continue;
                   if (e->isChordRest()) {
-                        if (e->type() == ElementType::CHORD) {
+                        if (e->type() == Element::Type::CHORD) {
                               Chord* chord = static_cast<Chord*>(e);
+                              foreach(Element* el, chord->el()) {
+                                    if (el->type() == Element::Type::SLUR) {
+                                          if (!canSelect(el))
+                                                chord->remove(el);
+                                          }
+                                    }
                               foreach(Note* note, chord->notes()) {
                                     foreach(Element* el, note->el())
                                           if (!canSelect(el))
@@ -633,6 +641,13 @@ void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) co
             }
       }
 
+void Selection::filterSpanners(std::multimap<int, Spanner*>& spannerMapCopy) const
+      {
+      for (auto i = spannerMapCopy.begin(); i != spannerMapCopy.end(); ++i) {
+            if (!canSelect(i->second))
+                  spannerMapCopy.erase(i);
+            }
+      }
 //---------------------------------------------------------
 //   staffMimeData
 //---------------------------------------------------------
@@ -666,7 +681,11 @@ QByteArray Selection::staffMimeData() const
             }
 
       std::multimap<int, Spanner*> sp_copy = spannerMapCopy(seg1,seg2,segments.first(),score()->spanner());
-      sp_copy.swap(score()->spannerMap().mapModify());
+
+      std::multimap<int, Spanner*> sp_map_copy2 = sp_copy;
+      filterSpanners(sp_map_copy2);
+
+      sp_map_copy2.swap(score()->spannerMap().mapModify());
 
       for (int staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {
             xml.stag(QString("Staff id=\"%1\"").arg(staffIdx));
@@ -681,12 +700,12 @@ QByteArray Selection::staffMimeData() const
                   xml.tag("transposeDiatonic", interval.diatonic);
 
             filterRange(segments,startTrack,endTrack);
-            score()->writeSegments(xml, startTrack, endTrack, segments.first(), seg2, false, true, true);
-            //score()->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
+
+            score()->writeSegments(xml, startTrack, endTrack, segments.first(), seg2,false, true, true);
             xml.etag();
             }
 
-      sp_copy.swap(score()->spannerMap().mapModify());
+      sp_map_copy2.swap(score()->spannerMap().mapModify());
       for (auto i : sp_copy) {
             delete i.second;
             }
