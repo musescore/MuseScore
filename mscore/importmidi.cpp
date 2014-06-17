@@ -167,6 +167,7 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                        "There are overlapping notes of the same voice that is incorrect");
 
             Quantize::quantizeChords(mtrack.chords, sigmap, basicQuant);
+            MidiTuplet::removeEmptyTuplets(mtrack);
             }
       }
 
