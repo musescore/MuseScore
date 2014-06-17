@@ -109,28 +109,39 @@ removeTupletIfEmpty(
             const ReducedFraction &maxChordLength,
             std::multimap<ReducedFraction, MidiChord> &chords)
       {
+      auto resultIt = tupletIt;
       const auto &tuplet = tupletIt->second;
+
       if (isTupletUseless(tuplet.voice, tuplet.onTime, tuplet.len, maxChordLength, chords)) {
-            for (auto &chord: chords) {   // remove references to this tuplet in chords and notes
-                  if (chord.first >= tuplet.onTime + tuplet.len)
-                        break;
-                  MidiChord &c = chord.second;
-                  if (c.isInTuplet && c.tuplet == tupletIt)
-                        c.isInTuplet = false;
-                  for (auto &note: c.notes) {
-                        if (note.isInTuplet && note.tuplet == tupletIt)
-                              note.isInTuplet = false;
+                        // remove references to this tuplet in chords and notes
+            auto chordIt = chords.lower_bound(tuplet.onTime + tuplet.len);
+            if (chordIt != chords.end() && chordIt != chords.begin()) {
+                  --chordIt;
+                  while (chordIt->first + maxChordLength > tupletIt->first) {
+                        MidiChord &c = chordIt->second;
+                        if (c.isInTuplet && c.tuplet == tupletIt)
+                              c.isInTuplet = false;
+                        for (auto &note: c.notes) {
+                              if (note.isInTuplet && note.tuplet == tupletIt)
+                                    note.isInTuplet = false;
+                              }
+                        if (chordIt == chords.begin())
+                              break;
+                        --chordIt;
                         }
                   }
-            return tuplets.erase(tupletIt);
+
+            resultIt = tuplets.erase(tupletIt);
             }
 
-      return tupletIt;
+      return resultIt;
       }
 
 // tuplets with no chords are removed
 // tuplets with single chord with chord.onTime = tuplet.onTime
 //    and chord.len = tuplet.len are removed as well
+
+// better to call this function after quantization
 
 void removeEmptyTuplets(MTrack &track)
       {
