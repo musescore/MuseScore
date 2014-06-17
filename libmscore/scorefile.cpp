@@ -1300,13 +1300,14 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                   Measure* m = segment->measure();
                   // don't write spanners for multi measure rests
                   if ((!(m && m->isMMRest())) && (segment->segmentType() & Segment::Type::ChordRest)) {
-                        for (auto i : _spanner.map()) {     // TODO: dont search whole list
-                              Spanner* s = i.second;
+                        int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
+                        auto endIt = spanner().upper_bound(endTick);
+                        for (auto i = spanner().begin(); i != endIt; ++i) {
+                              Spanner* s = i->second;
                               if (s->generated())
                                     continue;
 
                               if (s->track() == track) {
-                                    int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
                                     if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
                                           if (needTick) {
                                                 xml.tag("tick", segment->tick() - xml.tickDiff);
