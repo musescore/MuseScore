@@ -459,7 +459,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, int key)
             //
             Measure* lm = measure->nextMeasure();
             for (; lm; lm = lm->nextMeasure()) {
-                  Segment* s = lm->undoGetSegment(SegmentType::KeySig | SegmentType::KeySigAnnounce, lm->tick());
+                  Segment* s = lm->findSegment(SegmentType::KeySig | SegmentType::KeySigAnnounce, lm->tick());
                   if (!s)
                         continue;
                   KeySig* ks = static_cast<KeySig*>(s->element(track));

@@ -50,6 +50,24 @@ void SegmentList::check()
             ++n;
             }
       for (Segment* s = _first; s; s = s->next()) {
+            switch (s->segmentType()) {
+                  case SegmentType::Invalid:
+                  case SegmentType::Clef:
+                  case SegmentType::KeySig:
+                  case SegmentType::Ambitus:
+                  case SegmentType::TimeSig:
+                  case SegmentType::StartRepeatBarLine:
+                  case SegmentType::BarLine:
+                  case SegmentType::ChordRest:
+                  case SegmentType::Breath:
+                  case SegmentType::EndBarLine:
+                  case SegmentType::TimeSigAnnounce:
+                  case SegmentType::KeySigAnnounce:
+                        break;
+                  default:
+                        qFatal("SegmentList::check: invalid segment type 0x%x", int(s->segmentType()));
+                        break;
+                  }
             Segment* ss = s->next();
             while (ss) {
                   if (s == ss) {

@@ -88,7 +88,7 @@ class Segment : public Element {
       mutable bool empty;           // cached value
       mutable bool _written;        // used for write()
 
-      SegmentType _segmentType;
+      SegmentType _segmentType { SegmentType::Invalid };
       int _tick;
       Spatium _extraLeadingSpace;
       Spatium _extraTrailingSpace;
