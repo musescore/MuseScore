@@ -404,12 +404,17 @@ quantizeOffTimeForTuplet(
             const ReducedFraction &basicQuant,
             const MidiTuplet::TupletData &tuplet)
       {
+
+      Q_ASSERT_X(chordIt->first < noteOffTime,
+                 "Quantize::quantizeOffTimeForTuplet", "Negative or zero note length");
+
       const auto tupletRatio = MidiTuplet::tupletLimits(tuplet.tupletNumber).ratio;
       const auto result = findQuantizedTupletNoteOffTime(
                              chordIt->first, noteOffTime, tuplet.len, tupletRatio, tuplet.onTime);
       auto offTime = result.first;
       auto quant = result.second;
-      removeIntersection(offTime, chordIt, chords, basicQuant);
+
+      removeIntersection(offTime, chordIt, chords, basicQuant);   // preserve legato
 
                   // verify that offTime is still inside tuplet
       if (offTime < tuplet.onTime) {
@@ -431,6 +436,10 @@ quantizeOffTimeForNonTuplet(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &basicQuant)
       {
+
+      Q_ASSERT_X(chordIt->first < noteOffTime,
+                 "Quantize::quantizeOffTimeForNonTuplet", "Negative or zero note length");
+
       const MidiChord &chord = chordIt->second;
       const auto result = findQuantizedNoteOffTime(*chordIt, noteOffTime, basicQuant);
       auto offTime = result.first;
@@ -551,6 +560,7 @@ void checkOffTime(
             const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
             const std::multimap<ReducedFraction, MidiChord> &chords)
       {
+
       Q_ASSERT_X(note.offTime - chordIt->first >= MChord::minAllowedDuration(),
                  "Quantize::checkOffTime", "Too small note length");
 
@@ -1261,6 +1271,25 @@ void quantizeOnTimes(
             }
       }
 
+// if on time after quantization become >= note off time
+// then shift note off time preserving old note length
+
+void moveOffTimes(
+            const ReducedFraction &oldOnTime,
+            const ReducedFraction &newOnTime,
+            QList<MidiNote> &notes)
+      {
+      for (auto &note: notes) {
+            if (newOnTime >= note.offTime) {
+
+                  Q_ASSERT_X(newOnTime > oldOnTime,
+                             "Quantize::moveOffTimes", "Invalid note on time or off time");
+
+                  note.offTime += newOnTime - oldOnTime;
+                  }
+            }
+      }
+
 std::multimap<ReducedFraction, MidiChord>
 findQuantizedChords(
             const std::map<const std::pair<const ReducedFraction, MidiChord> *, QuantInfo> &foundOnTimes)
@@ -1296,7 +1325,9 @@ findQuantizedChords(
                         }
                   }
             else {
-                  quantizedChords.insert({i.onTime, chord});
+                  MidiChord midiChord(chord);  // copy chord
+                  moveOffTimes(i.chord->first, i.onTime, midiChord.notes);
+                  quantizedChords.insert({i.onTime, midiChord});
                   }
             }
 
