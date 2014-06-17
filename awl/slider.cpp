@@ -194,7 +194,7 @@ void Slider::mouseMoveEvent(QMouseEvent* ev)
 //    r - phys coord system
 //---------------------------------------------------------
 
-void Slider::paintEvent(QPaintEvent* ev)
+void Slider::paintEvent(QPaintEvent* /*ev*/)
       {
       int h   = height();
       int w   = width();
