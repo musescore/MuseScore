@@ -112,6 +112,9 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::SIMPLIFY_DURATIONS:
                   trackData.opers.simplifyDurations = operValue.toBool();
                   break;
+            case MidiOperation::Type::SHOW_STACCATO:
+                  trackData.opers.showStaccato = operValue.toBool();
+                  break;
             case MidiOperation::Type::SEPARATE_VOICES:
                   trackData.opers.separateVoices = operValue.toBool();
                   break;
@@ -256,6 +259,14 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
             for (int i = 1; i != trackCount_; ++i) {
                   if (tracksData_[i].opers.simplifyDurations != opers.opers.simplifyDurations) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::SIMPLIFY_DURATIONS);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::SHOW_STACCATO
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.simplifyDurations != opers.opers.showStaccato) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::SHOW_STACCATO);
                         break;
                         }
                   }

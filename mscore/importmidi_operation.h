@@ -23,6 +23,7 @@ struct MidiOperation
             USE_DOTS,
 
             SIMPLIFY_DURATIONS,
+		    SHOW_STACCATO,
 		    SEPARATE_VOICES,
 
             ALLOWED_VOICES,

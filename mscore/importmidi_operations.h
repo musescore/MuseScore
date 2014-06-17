@@ -55,6 +55,7 @@ struct TrackOperations
       Quantization quantize;
       bool useDots = true;
       bool simplifyDurations = true;
+      bool showStaccato = true;
       bool separateVoices = true;
       LHRHSeparation LHRH;
       SearchTuplets tuplets;
