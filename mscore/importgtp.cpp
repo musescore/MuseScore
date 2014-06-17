@@ -45,6 +45,7 @@
 #include "libmscore/dynamic.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/volta.h"
+#include "libmscore/fret.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -651,8 +652,21 @@ void GuitarPro1::read(QFile* fp)
                         if (beatBits & 0x20)
                               tuple = readInt();
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-                        if (beatBits & 0x2)
-                              readChord(segment, staffIdx * VOICES);
+                        if (beatBits & 0x2) {
+                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              int header = readUChar();
+                              QString name;
+                              if ((header & 1) == 0) {
+                                    name = readDelphiString();
+                                    readChord(segment, staffIdx * VOICES, numStrings, name, false);
+                                    }
+                              else  {
+                                    skip(25);
+                                    name = readPascalString(34);
+                                    readChord(segment, staffIdx * VOICES, numStrings, name, true);
+                                    skip(36);
+                                    }
+                              }
                         Lyrics* lyrics = 0;
                         if (beatBits & 0x4) {
                               lyrics = new Lyrics(score);
@@ -729,6 +743,46 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
       Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
       segment->add(tt);
       score->setTempo(measure->tick(), tt->tempo());
+      }
+
+//---------------------------------------------------------
+//   readChord
+//---------------------------------------------------------
+
+void GuitarPro::readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader)
+      {
+      FretDiagram* fret = new FretDiagram(score);
+      fret->setTrack(track);
+      fret->setStrings(numStrings);
+
+      int firstFret = readInt();
+      fret->setOffset(firstFret-1);
+      if (firstFret != 0 || gpHeader) {
+            for (int i = 0; i < (gpHeader ? 7 : 6); ++i) {
+                  int currentFret =  readInt();
+                  // read the frets and add them to the fretboard
+                  // substract 1 extra from numStrings as we count from 0
+                  if (i > numStrings - 1) {}
+                  else if (currentFret > 0) {
+                        fret->setDot(numStrings - 1 - i, currentFret-firstFret+1);
+                        }
+                  else if (currentFret == 0) {
+                        fret->setDot(numStrings - 1 - i, 0);
+                        fret->setMarker(numStrings - 1 - i, '0');
+                       }
+                  else if (currentFret == -1) {
+                        fret->setDot(numStrings - 1 - i, 0);
+                        fret->setMarker(numStrings - 1 - i, 'X');
+                        }
+                  }
+            }
+      seg->add(fret);
+      if (name.isEmpty())
+            return;
+      Harmony* harmony = new Harmony(seg->score());
+      harmony->setHarmony(name);
+      harmony->setTrack(track);
+      seg->add(harmony);
       }
 
 //---------------------------------------------------------
@@ -946,8 +1000,21 @@ qDebug("BeginRepeat=============================================");
                         if (beatBits & 0x20)
                               tuple = readInt();
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-                        if (beatBits & 0x2)
-                              readChord(segment, staffIdx * VOICES);
+                        if (beatBits & 0x2) {
+                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              int header = readUChar();
+                              QString name;
+                              if ((header & 1) == 0) {
+                                    name = readDelphiString();
+                                    readChord(segment, staffIdx * VOICES, numStrings, name, false);
+                                    }
+                              else  {
+                                    skip(25);
+                                    name = readPascalString(34);
+                                    readChord(segment, staffIdx * VOICES, numStrings, name, true);
+                                    skip(36);
+                                    }
+                              }
                         Lyrics* lyrics = 0;
                         if (beatBits & 0x4) {
                               QString txt = readDelphiString();
@@ -1261,40 +1328,6 @@ int GuitarPro1::readBeatEffects(int, Segment*)
       }
 
 //---------------------------------------------------------
-//   readChord
-//---------------------------------------------------------
-
-void GuitarPro1::readChord(Segment* seg, int track)
-      {
-      int header = readUChar();
-
-      QString name;
-      if ((header & 1) == 0) {
-            name = readDelphiString();
-            int firstFret = readInt();
-            if (firstFret) {
-                  for (int i = 0; i < 6; ++i)
-                        readInt();
-                  }
-            }
-      else {
-            skip(25);
-            name = readPascalString(34);
-            /*int firstFret =*/ readInt();
-            for (int i = 0; i < 6; ++i) {
-                  /*int fret =*/ readInt();
-                  }
-            skip(36);
-            }
-      if (name.isEmpty())
-            return;
-      Harmony* harmony = new Harmony(seg->score());
-      harmony->setHarmony(name);
-      harmony->setTrack(track);
-      seg->add(harmony);
-      }
-
-//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -1547,8 +1580,21 @@ void GuitarPro3::read(QFile* fp)
                               tuple = readInt();
 
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-                        if (beatBits & 0x2)
-                              readChord(segment, staffIdx * VOICES);
+                        if (beatBits & 0x2) {
+                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              int header = readUChar();
+                              QString name;
+                              if ((header & 1) == 0) {
+                                    name = readDelphiString();
+                                    readChord(segment, staffIdx * VOICES, numStrings, name, false);
+                                    }
+                              else  {
+                                    skip(25);
+                                    name = readPascalString(34);
+                                    readChord(segment, staffIdx * VOICES, numStrings, name, true);
+                                    skip(36);
+                                    }
+                              }
                         Lyrics* lyrics = 0;
                         if (beatBits & 0x4) {
                               QString txt = readDelphiString();
@@ -2030,41 +2076,6 @@ void GuitarPro4::readInfo()
             comments.append(readDelphiString());
       }
 
-//---------------------------------------------------------
-//   readChord
-//---------------------------------------------------------
-
-void GuitarPro4::readChord(Segment* seg, int track)
-      {
-      int header = readUChar();
-
-      QString name;
-
-      if ((header & 1) == 0) {
-            name = readDelphiString();
-            int firstFret = readInt();
-            if (firstFret != 0) {
-                  for (int i = 0; i < 6; ++i) {
-                        readInt();
-                        }
-                  }
-            }
-      else {
-            skip(16);
-            name = readPascalString(21);
-            skip(4);
-            /*int firstFret =*/ readInt();
-            for (int i = 0; i < 7; ++i)
-                  readInt();
-            skip(32);
-            }
-      if (name.isEmpty())
-            return;
-      Harmony* harmony = new Harmony(seg->score());
-      harmony->setHarmony(name);
-      harmony->setTrack(track);
-      seg->add(harmony);
-      }
 
 //---------------------------------------------------------
 //   read
@@ -2251,8 +2262,22 @@ void GuitarPro4::read(QFile* fp)
                         if (beatBits & 0x20)
                               tuple = readInt();
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-                        if (beatBits & 0x2)
-                              readChord(segment, staffIdx * VOICES);
+                        if (beatBits & 0x2){
+                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              int header = readUChar();
+                              QString name;
+                              if ((header & 1) == 0) {
+                                    name = readDelphiString();
+                                    readChord(segment, staffIdx * VOICES, numStrings, name, false);
+                                    }
+                              else  {
+                                    skip(16);
+                                    name = readPascalString(21);
+                                    skip(4);
+                                    readChord(segment, staffIdx * VOICES, numStrings, name, true);
+                                    skip(32);
+                                    }
+                              }
                         Lyrics* lyrics = 0;
                         if (beatBits & 0x4) {
                               lyrics = new Lyrics(score);
@@ -2788,8 +2813,15 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             tuple = readInt();
 
       Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
-      if (beatBits & 0x2)
-            readChord(segment, staffIdx * VOICES);
+      if (beatBits & 0x2) {
+            int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+            skip(17);
+            QString name = readPascalString(21);
+            skip(4);
+            // no header to be read in the GP5 format - default to true.
+            readChord(segment, staffIdx * VOICES, numStrings, name, true);
+            skip(32);
+            }
       Lyrics* lyrics = 0;
       if (beatBits & 0x4) {
             QString txt = readDelphiString();
@@ -2953,27 +2985,6 @@ void GuitarPro5::readMixChange(Measure* measure)
             }
       }
 
-//---------------------------------------------------------
-//   readChord
-//---------------------------------------------------------
-
-void GuitarPro5::readChord(Segment* seg, int track)
-      {
-      skip(17);
-      QString name = readPascalString(21);
-      skip(4);
-      /*int firstFret =*/ readInt();
-      for (int i = 0; i < 7; ++i) {
-            /*int fret =*/ readInt();
-            }
-      skip(32);
-      if (name.isEmpty())
-            return;
-      Harmony* harmony = new Harmony(seg->score());
-      harmony->setHarmony(name);
-      harmony->setTrack(track);
-      seg->add(harmony);
-      }
 
 //---------------------------------------------------------
 //   readTracks
@@ -3363,6 +3374,10 @@ void GuitarPro6::parseFile(char* filename, QByteArray* data)
       {
       // test to check if we are dealing with the score
       if (!strcmp(filename, "score.gpif")) {
+            QFile file("/tmp/score.gpif");
+            file.open(QIODevice::WriteOnly);
+            file.write(*data);
+            file.close();
             readGpif(data);
             }
       }
@@ -3430,6 +3445,69 @@ void GuitarPro6::readMasterTracks(QDomNode* masterTrack)
       }
 
 //---------------------------------------------------------
+//   readChord
+//---------------------------------------------------------
+
+void GuitarPro6::readChord(QDomNode* diagram, int track)
+      {
+      // initialise a new fret diagram for our current track
+      FretDiagram* fretDiagram = new FretDiagram(score);
+      fretDiagram->setTrack(track);
+
+      // get the identifier to set as the domain in the map
+      int id = diagram->attributes().namedItem("id").toAttr().value().toInt();
+      QDomNode diagramNode = diagram->firstChild();
+
+      // set the number of strings on this part
+      int stringCount = diagramNode.attributes().namedItem("stringCount").toAttr().value().toInt();
+      fretDiagram->setStrings(stringCount);
+
+      // set the fret offset
+      int baseFret = diagramNode.attributes().namedItem("baseFret").toAttr().value().toInt();
+      fretDiagram->setOffset(baseFret);
+
+      QDomNode diagramEntity = diagramNode.firstChild();
+      int counter = 0;
+      while (!diagramEntity.isNull()) {
+            QString nodeName = diagramEntity.nodeName();
+            // new fret
+            if (!nodeName.compare("Fret")) {
+                  // get the string and fret numbers from the arguments to the node as integers
+                  int string = diagramEntity.attributes().namedItem("string").toAttr().value().toInt();
+                  int fret = diagramEntity.attributes().namedItem("fret").toAttr().value().toInt();
+
+                  // if there are unspecified string values, add the X marker to that string
+                  while (counter < string) {
+                        fretDiagram->setMarker(counter, 'X');
+                        counter++;
+                        }
+
+                  // look at the specified string/fret and add to diagram
+                  if (fret == 0) {
+                        fretDiagram->setMarker(string, '0');
+                        counter++;
+                        }
+                  else  {
+                        qDebug("Setting fret (string=%d,fret=%d)", string, fret-baseFret);
+                        fretDiagram->setDot(string, fret);
+                        counter++;
+                        }
+                  }
+            // move to the next string/fret specification
+            diagramEntity = diagramEntity.nextSibling();
+            }
+
+      // mark any missing strings as 'X'
+      while (counter < stringCount) {
+            fretDiagram->setMarker(counter, 'X');
+            counter++;
+            }
+
+      // insert the fret diagram into the map of diagrams
+      fretDiagrams.insert(id, fretDiagram);
+      }
+
+//---------------------------------------------------------
 //   readTracks
 //---------------------------------------------------------
 
@@ -3450,7 +3528,8 @@ void GuitarPro6::readTracks(QDomNode* track)
                   else if (nodeName == "Properties") {
                         QDomNode currentProperty = currentNode.firstChild();
                         while (!currentProperty.isNull()) {
-                              if (currentProperty.attributes().namedItem("name").toAttr().value() == "Tuning") {
+                              QString propertyName = currentProperty.attributes().namedItem("name").toAttr().value();
+                              if (!propertyName.compare("Tuning")) {
                                     // set up the tuning for the part
                                     QString tuningString = currentProperty.firstChild().toElement().text();
                                     QStringList tuningStringList = tuningString.split(" ");
@@ -3465,6 +3544,14 @@ void GuitarPro6::readTracks(QDomNode* track)
                                           StringData* stringData = new StringData(frets, strings, tuning);
                                           Instrument* instr = part->instr();
                                           instr->setStringData(*stringData);
+                                    }
+                              else if (!propertyName.compare("DiagramCollection")) {
+                                    QDomNode items = currentProperty.firstChild();
+                                    QDomNode currentItem = items.firstChild();
+                                    while (!currentItem.isNull()) {
+                                          readChord(&currentItem, trackCounter);
+                                          currentItem = currentItem.nextSibling();
+                                          }
                                     }
                               else
                                     unhandledNode(nodeName);
@@ -3741,6 +3828,10 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                           currentNode = currentNode.nextSibling();
                                           }
                                     }
+                              }
+                        else if (!currentNode.nodeName().compare("Chord")) {
+                              int key = currentNode.toElement().text().toInt();
+                              segment->add(fretDiagrams[key]);
                               }
                         else if (currentNode.nodeName() == "Rhythm") {
                               // we have found a rhythm

@@ -23,6 +23,7 @@
 
 #include "libmscore/mscore.h"
 #include "libmscore/fraction.h"
+#include "libmscore/fret.h"
 
 namespace Ms {
 
@@ -111,6 +112,7 @@ class GuitarPro {
       void createMeasures();
       void applyBeatEffects(Chord*, int beatEffects);
       void readTremoloBar(int track, Segment*);
+      void readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader);
 
    public:
       QString title, subtitle, artist, album, composer;
@@ -138,7 +140,6 @@ class GuitarPro {
 class GuitarPro1 : public GuitarPro {
 
    protected:
-      virtual void readChord(Segment*, int track);
       void readNote(int string, Note* note);
       virtual int readBeatEffects(int track, Segment*);
 
@@ -178,7 +179,6 @@ class GuitarPro4 : public GuitarPro {
 
       void readInfo();
       void readNote(int string, Note* note, GpNote*);
-      virtual void readChord(Segment*, int track);
       virtual int readBeatEffects(int track, Segment* segment);
       virtual void readMixChange(Measure* measure);
 
@@ -198,7 +198,6 @@ class GuitarPro5 : public GuitarPro {
       virtual int readBeatEffects(int track, Segment* segment);
       void readNote(int string, Note* note);
       virtual void readMixChange(Measure* measure);
-      virtual void readChord(Segment*, int track);
       void readMeasure(Measure* measure, int staffIdx, Tuplet*[]);
       void readArtificialHarmonic();
       void readTracks();
@@ -235,6 +234,8 @@ class GuitarPro6 : public GuitarPro {
             QDomNode notes;
             QDomNode rhythms;
             };
+      // a mapping from identifiers to fret diagrams
+      QMap<int, FretDiagram*> fretDiagrams;
       void parseFile(char* filename, QByteArray* data);
       int readBit();
       QByteArray getBytes(QByteArray* buffer, int offset, int length);
@@ -245,6 +246,7 @@ class GuitarPro6 : public GuitarPro {
       int readBitsReversed(int bitsToRead);
       void readGpif(QByteArray* data);
       void readScore(QDomNode* metadata);
+      void readChord(QDomNode* diagram, int track);
       int findNumMeasures(GPPartInfo* partInfo);
       void readMasterTracks(QDomNode* masterTrack);
       void readTracks(QDomNode* tracks);
