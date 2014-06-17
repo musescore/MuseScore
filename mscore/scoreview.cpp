@@ -4820,6 +4820,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
 
                   if (!chord->concertPitch())
                         val.pitch += chord->staff()->part()->instr()->transpose().chromatic;
+                  val.tpc = step2tpc(step % 7, acci);
                   _score->addNote(chord, val);
                   _score->endCmd();
                   return;
