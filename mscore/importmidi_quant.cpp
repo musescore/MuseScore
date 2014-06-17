@@ -1334,6 +1334,24 @@ findQuantizedChords(
       return quantizedChords;
       }
 
+void removeUselessTupletReferences(std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      for (auto &chord: chords) {
+            if (chord.second.isInTuplet) {
+                  const auto &tuplet = chord.second.tuplet->second;
+                  if (chord.first >= tuplet.onTime + tuplet.len)
+                        chord.second.isInTuplet = false;
+                  }
+            for (auto &note: chord.second.notes) {
+                  if (note.isInTuplet) {
+                        const auto &tuplet = note.tuplet->second;
+                        if (note.offTime <= tuplet.onTime)
+                              note.isInTuplet = false;
+                        }
+                  }
+            }
+      }
+
 void quantizeChords(
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap,
@@ -1357,6 +1375,8 @@ void quantizeChords(
 
       quantizeOffTimes(quantizedChords, basicQuant);
       std::swap(chords, quantizedChords);
+
+      removeUselessTupletReferences(chords);
       }
 
 } // namespace Quantize
