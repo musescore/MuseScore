@@ -159,13 +159,21 @@ void LineProperties::accept()
             }
 
       if (otl->continueTextElement()) {
-            otl->continueTextElement()->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, tl->continueTextElement()->textStyleType());
-            otl->continueTextElement()->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(tl->continueTextElement()->textStyle()));
+            Text* t  = tl->continueTextElement();
+            Text* ot = otl->continueTextElement();
+            if (t) {
+                  ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, t->textStyleType());
+                  ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+                  }
             }
 
       if (otl->endTextElement()) {
-            otl->endTextElement()->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, tl->endTextElement()->textStyleType());
-            otl->endTextElement()->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(tl->endTextElement()->textStyle()));
+            Text* t  = tl->endTextElement();
+            Text* ot = otl->endTextElement();
+            if (t) {
+                  ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, t->textStyleType());
+                  ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+                  }
             }
 
       // ...

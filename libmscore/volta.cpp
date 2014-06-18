@@ -176,8 +176,6 @@ void Volta::layout()
 void Volta::setText(const QString& s)
       {
       setBeginText(s, TextStyleType::VOLTA);
-      foreach(SpannerSegment* seg, spannerSegments())
-            static_cast<VoltaSegment*>(seg)->clearText();
       }
 
 //---------------------------------------------------------

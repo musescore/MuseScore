@@ -30,7 +30,10 @@ class Text;
 class TextLineSegment : public LineSegment {
       Q_OBJECT
 
-      Text* _text;
+      Text* _text        { 0 };
+      Text* _endText     { 0 };
+
+      void setText(Text*);
 
    public:
       TextLineSegment(Score* s);
@@ -46,8 +49,7 @@ class TextLineSegment : public LineSegment {
       void layout1();
       virtual void setSelected(bool f);
 
-      Text* text() const { return _text; }
-      void clearText();
+//      Text* text() const { return _text; }
 
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
 
