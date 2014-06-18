@@ -17,9 +17,6 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include <QStackedLayout>
-#include <QTabBar>
-#include <QKeyEvent>
 #include "shortcut.h"
 #include "musescore.h"
 #include "config.h"
