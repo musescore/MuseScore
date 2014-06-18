@@ -2884,7 +2884,8 @@ void Score::selectRange(Element* e, int staffIdx)
                   _selection.setRange(cr->segment(),
                                       cr->segment()->nextCR(cr->track()),
                                       e->staffIdx(),
-                                      _selection.staffStart() + 1);
+//                                      _selection.staffStart() + 1);
+                                    e->staffIdx() + 1);
                   activeTrack = cr->track();
                   }
             else if (_selection.isSingle()) {
@@ -2894,14 +2895,28 @@ void Score::selectRange(Element* e, int staffIdx)
                               oe = oe->parent();
                         ChordRest* ocr = static_cast<ChordRest*>(oe);
 
-                        Segment* endSeg = tick2segment(ocr->segment()->tick() + ocr->actualTicks());
+                        // determine segment and staff ranges, assuming e (=> cr) goes after
+                        // currently selected element (=> ocr) and reversing if necessary
+                        Segment* startSeg = ocr->segment();
+                        Segment* endSeg = cr->segment();
+                        if (endSeg->tick() < startSeg->tick()) {
+                              qSwap(ocr, cr);
+                              qSwap(startSeg, endSeg);
+                              }
+                        endSeg = tick2segment(cr->segment()->tick() + cr->actualTicks());
                         if (!endSeg)
-                              endSeg = ocr->segment()->next();
+                              endSeg = cr->segment()->next();
 
-                        _selection.setRange(ocr->segment(),
+                        int   startStaff = ocr->staffIdx();
+                        int   endStaff   = cr->staffIdx();
+                        if (endStaff < startStaff)
+                              qSwap(startStaff, endStaff);
+                        endStaff++;
+
+                        _selection.setRange(startSeg,
                                             endSeg,
-                                            oe->staffIdx(),
-                                            _selection.staffStart() + 1);
+                                            startStaff,
+                                            endStaff);
 
                         _selection.extendRangeSelection(cr);
 
