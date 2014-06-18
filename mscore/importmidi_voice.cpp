@@ -778,20 +778,23 @@ bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
 
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
                              "MidiVoice::separateVoices",
-                             "Not all tuplets are referenced in chords or notes");
+                             "Not all tuplets are referenced in chords or notes "
+                             "before voice separation");
 
                   if (!changed && doVoiceSeparation(mtrack.chords, sigmap, mtrack.tuplets))
                         changed = true;
 
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
                              "MidiVoice::separateVoices",
-                             "Not all tuplets are referenced in chords or notes");
+                             "Not all tuplets are referenced in chords or notes "
+                             "after voice separation, before voice sort");
 
                   sortVoices(mtrack.chords, sigmap);
 
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
                              "MidiVoice::separateVoices",
-                             "Not all tuplets are referenced in chords or notes");
+                             "Not all tuplets are referenced in chords or notes "
+                             "after voice sort");
                   }
             }
 
