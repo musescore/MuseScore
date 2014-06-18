@@ -103,14 +103,7 @@
       <Measure number="2">
         <endRepeat>2</endRepeat>
         <Volta id="2">
-          <subtype>1</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
           <endHook>1</endHook>
-          <endHookHeight>1.9</endHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>1.</text>
@@ -128,12 +121,6 @@
       <Measure number="3">
         <endSpanner id="2"/>
         <Volta id="3">
-          <subtype>0</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>2.</text>

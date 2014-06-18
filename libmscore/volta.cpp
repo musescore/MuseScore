@@ -69,6 +69,12 @@ QVariant VoltaSegment::propertyDefault(P_ID id) const
       switch (id) {
             case P_ID::LINE_WIDTH:
             case P_ID::VOLTA_TYPE:
+            case P_ID::BEGIN_TEXT_PLACE:
+            case P_ID::CONTINUE_TEXT_PLACE:
+            case P_ID::ANCHOR:
+            case P_ID::BEGIN_HOOK:
+            case P_ID::BEGIN_HOOK_HEIGHT:
+            case P_ID::END_HOOK_HEIGHT:
                   return volta()->propertyDefault(id);
             default:
                   return TextLineSegment::propertyDefault(id);
@@ -127,7 +133,6 @@ void VoltaSegment::styleChanged()
 Volta::Volta(Score* s)
    : TextLine(s)
       {
-      _voltaType = VoltaType::OPEN;
       setBeginText("1.", TextStyleType::VOLTA);
 
       setBeginTextPlace(PlaceText::BELOW);
@@ -149,15 +154,25 @@ Volta::Volta(Score* s)
 
 void Volta::setVoltaType(VoltaType val)
       {
-      _voltaType = val;
-      switch (val) {
-            case VoltaType::OPEN:
-                  setEndHook(false);
-                  break;
-            case VoltaType::CLOSED:
-                  setEndHook(true);
-                  break;
-            }
+      setEndHook(VoltaType::CLOSED == val);
+      }
+
+//---------------------------------------------------------
+//   voltaType
+//---------------------------------------------------------
+
+VoltaType Volta::voltaType() const
+      {
+      return endHook() ? VoltaType::CLOSED : VoltaType::OPEN;
+      }
+
+//---------------------------------------------------------
+//   undoSetVoltaType
+//---------------------------------------------------------
+
+void Volta::undoSetVoltaType(VoltaType val)
+      {
+      undoChangeProperty(P_ID::VOLTA_TYPE, int(val));
       }
 
 //---------------------------------------------------------
@@ -199,9 +214,7 @@ void Volta::read(XmlReader& e)
       setId(e.intAttribute("id", -1));
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "subtype")
-                  setVoltaType(VoltaType(e.readInt()));
-            else if (tag == "text")            // obsolete
+            if (tag == "text")            // obsolete
                   setText(e.readElementText());
             else if (tag == "endings") {
                   QString s = e.readElementText();
@@ -216,6 +229,8 @@ void Volta::read(XmlReader& e)
                   setLineWidth(Spatium(e.readDouble()));
                   lineWidthStyle = PropertyStyle::UNSTYLED;
                   }
+            else if (tag == "subtype")    // obsolete
+                  e.readInt();
             else if (!TextLine::readProperties(e))
                   e.unknown();
             }
@@ -228,7 +243,6 @@ void Volta::read(XmlReader& e)
 void Volta::write(Xml& xml) const
       {
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
-      xml.tag("subtype", int(_voltaType));
       TextLine::writeProperties(xml);
       QString s;
       foreach(int i, _endings) {
@@ -314,19 +328,24 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
             case P_ID::LINE_WIDTH:
                   return score()->styleS(StyleIdx::voltaLineWidth).val();
 
+            case P_ID::BEGIN_TEXT_PLACE:
+            case P_ID::CONTINUE_TEXT_PLACE:
+                  return int(PlaceText::BELOW);
+
+            case P_ID::ANCHOR:
+                  return int(Anchor::MEASURE);
+
+            case P_ID::BEGIN_HOOK:
+                  return true;
+
+            case P_ID::BEGIN_HOOK_HEIGHT:
+            case P_ID::END_HOOK_HEIGHT:
+                  return score()->styleS(StyleIdx::voltaHook).val();
+
             default:
                   return TextLine::propertyDefault(propertyId);
             }
       return QVariant();
-      }
-
-//---------------------------------------------------------
-//   undoSetVoltaType
-//---------------------------------------------------------
-
-void Volta::undoSetVoltaType(VoltaType val)
-      {
-      score()->undoChangeProperty(this, P_ID::VOLTA_TYPE, int(val));
       }
 
 //---------------------------------------------------------

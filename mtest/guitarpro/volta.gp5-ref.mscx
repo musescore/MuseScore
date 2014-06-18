@@ -1351,13 +1351,7 @@
       <Measure number="8">
         <endRepeat>2</endRepeat>
         <Volta id="2">
-          <subtype>0</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lid>171</lid>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>1</text>
@@ -1419,13 +1413,7 @@
       <Measure number="9">
         <endSpanner id="2"/>
         <Volta id="3">
-          <subtype>0</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lid>172</lid>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>2,3,6,8</text>
@@ -2902,13 +2890,7 @@
         <Measure number="8">
           <endRepeat>2</endRepeat>
           <Volta id="4">
-            <subtype>0</subtype>
-            <beginHook>1</beginHook>
-            <beginHookHeight>1.9</beginHookHeight>
-            <beginTextPlace>2</beginTextPlace>
-            <beginTextPlace>2</beginTextPlace>
             <lid>171</lid>
-            <anchor>1</anchor>
             <beginText>
               <style>Volta</style>
               <text>1</text>
@@ -2970,13 +2952,7 @@
         <Measure number="9">
           <endSpanner id="4"/>
           <Volta id="5">
-            <subtype>0</subtype>
-            <beginHook>1</beginHook>
-            <beginHookHeight>1.9</beginHookHeight>
-            <beginTextPlace>2</beginTextPlace>
-            <beginTextPlace>2</beginTextPlace>
             <lid>172</lid>
-            <anchor>1</anchor>
             <beginText>
               <style>Volta</style>
               <text>2,3,6,8</text>

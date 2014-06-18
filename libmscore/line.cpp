@@ -683,8 +683,7 @@ void SLine::writeProperties(Xml& xml) const
       if (propertyStyle(P_ID::LINE_COLOR) == PropertyStyle::UNSTYLED || (lineColor() != MScore::defaultColor))
             xml.tag("lineColor", lineColor());
 
-      if (anchor() != Spanner::Anchor::SEGMENT)
-            xml.tag("anchor", int(anchor()));
+      writeProperty(xml, P_ID::ANCHOR);
       if (score() == gscore) {
             // when used as icon
             if (!spannerSegments().isEmpty()) {

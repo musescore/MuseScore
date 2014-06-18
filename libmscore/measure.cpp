@@ -1985,7 +1985,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());
-                  sp->setAnchor(Spanner::Anchor::SEGMENT);
+                  // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
                   sp->read(e);
                   score()->addSpanner(sp);
                   //
