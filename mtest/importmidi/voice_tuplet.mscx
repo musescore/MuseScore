@@ -66,7 +66,10 @@
           <durationType>quarter</durationType>
           </Rest>
         <Chord>
-          <durationType>16th</durationType>
+          <durationType>quarter</durationType>
+          <Articulation>
+            <subtype>staccato</subtype>
+            </Articulation>
           <Note>
             <Events>
               <Event>
@@ -81,12 +84,6 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Rest>
-          <durationType>16th</durationType>
-          </Rest>
-        <Rest>
-          <durationType>eighth</durationType>
-          </Rest>
         <Rest>
           <durationType>half</durationType>
           </Rest>
