@@ -316,10 +316,17 @@ void Seq::start()
       if ((mscore->loop())) {
             if(cs->selection().isRange())
                   setLoopSelection();
-            seek(cs->repeatList()->tick2utick(cs->loopInTick()));
+            if (state == Transport::STOP) {
+                  qDebug()<<"___calling seek from start with LoopInTick utick = "<<cs->repeatList()->tick2utick(cs->loopInTick());
+                  seek(cs->repeatList()->tick2utick(cs->loopInTick()));
+                  }
             }
-      else
-            seek(cs->repeatList()->tick2utick(cs->playPos()));
+      else {
+            if (state == Transport::STOP) {
+                  qDebug()<<"___calling seek from start with playpos utick = "<<cs->repeatList()->tick2utick(cs->playPos());
+                  seek(cs->repeatList()->tick2utick(cs->playPos()));
+                  }
+            }
       _driver->startTransport();
       }
 
@@ -339,7 +346,8 @@ void Seq::stop()
             }
       if (!_driver)
             return;
-      _driver->stopTransport();
+      if(_driver->getState() == Transport::PLAY)
+            _driver->stopTransport();
       if (cv)
             cv->setCursorOn(false);
       if (cs) {
@@ -664,6 +672,8 @@ void Seq::process(unsigned n, float* buffer)
       {
       unsigned frames = n;
       Transport driverState = _driver->getState();
+      // Checking for the reposition from Transport
+      _driver->checkTransportSeek(playTime, frames);
 
       if (driverState != state) {
             // Got a message from JACK Transport panel: Play
@@ -671,7 +681,7 @@ void Seq::process(unsigned n, float* buffer)
 
                   if((preferences.useJackMidi || preferences.useJackAudio) && !getAction("play")->isChecked()) {
                         // Do not play while editing elements
-                        if(mscore->state()==STATE_NORMAL && isRunning() && canStart()) {
+                        if (mscore->state() == STATE_NORMAL && isRunning() && canStart()) {
                               if (playlistChanged)
                                           collectEvents();
                               getAction("play")->setChecked(true);
@@ -771,9 +781,20 @@ void Seq::process(unsigned n, float* buffer)
                               int utickLoop = cs->repeatList()->tick2utick(cs->loopOutTick());
                               if (utickLoop < utickEnd)
                                     if ((*pPlayPos)->first >= utickLoop) {
-qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d",
-   (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), utickLoop, *pPlayTime);
-                                          emit toGui('3');   // Exit this function to avoid segmentation fault in Scoreview
+                                          qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d",
+                                             (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), utickLoop, *pPlayTime);
+                                          if (_driver->instantSeek()) {
+                                                emit toGui('3');
+                                                }
+                                          else { // JACK
+                                                int loopInUtick = cs->repeatList()->tick2utick(cs->loopInTick());
+                                                seek(loopInUtick);
+                                                if (loopInUtick != 0) {
+                                                      int seekto = loopInUtick-2*cs->utime2utick((qreal)_driver->bufferSize() / MScore::sampleRate);
+                                                      seek((seekto>0)?seekto:0,false);
+                                                      }
+                                                }
+                                          // Exit this function to avoid segmentation fault in Scoreview
                                           return;
                                           }
                               }
@@ -970,10 +991,17 @@ void Seq::setPos(int utick)
 //    send seek message to sequencer
 //---------------------------------------------------------
 
-void Seq::seek(int utick)
+void Seq::seek(int utick, bool can_wait)
       {
       if (cs == 0)
             return;
+
+      // If driver can't seek immediately, just send a signal to seek.
+      if (!_driver->instantSeek() && can_wait) {
+            _driver->seekTransport(utick);
+            if (utick != 0)
+                  return; // rewind to 0 immediately
+            }
 
       if (playlistChanged)
             collectEvents();
@@ -992,7 +1020,8 @@ void Seq::seek(int utick, Segment* seg)
       if (seg)
             mscore->currentScoreView()->moveCursor(seg->tick());
 
-      cs->setPlayPos(cs->repeatList()->utick2tick(utick));
+      int tick = cs->repeatList()->utick2tick(utick);
+      cs->setPlayPos(tick);
       cs->setLayoutAll(false);
       cs->end();
 
@@ -1003,7 +1032,7 @@ void Seq::seek(int utick, Segment* seg)
 
       guiToSeq(SeqMsg(SeqMsgId::SEEK, utick));
       guiPos = events.lower_bound(utick);
-      mscore->setPos(utick);
+      mscore->setPos(tick);
       unmarkNotes();
       cs->update();
       }
@@ -1317,6 +1346,7 @@ void Seq::heartBeatTimeout()
 
       if (state != Transport::PLAY || inCountIn)
             return;
+
       int endTime = playTime;
 
       mutex.lock();
@@ -1458,8 +1488,13 @@ void Seq::setLoopSelection()
       cs->setLoopOutTick(cs->selection().tickEnd());
       }
 
+//---------------------------------------------------------
+//   Called after tempo or time signature
+//   changed while playback
+//---------------------------------------------------------
+
 void Seq::handleTimeSigTempoChanged()
       {
-            _driver->handleTimeSigTempoChanged();
+      _driver->handleTimeSigTempoChanged();
       }
 }

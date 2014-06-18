@@ -25,6 +25,7 @@
 // #include "msynth/synti.h"
 #include "seq.h"
 #include "libmscore/score.h"
+#include "libmscore/repeatlist.h"
 
 #include <jack/midiport.h>
 
@@ -282,13 +283,6 @@ int JackAudio::framePos() const
       return (int)n;
       }
 
-
-static int bufsize_callback(jack_nframes_t /*n*/, void*)
-      {
-//      qDebug("JACK: buffersize changed %d", n);
-      return 0;
-      }
-
 //---------------------------------------------------------
 //   freewheel_callback
 //---------------------------------------------------------
@@ -297,9 +291,25 @@ static void freewheel_callback(int /*starting*/, void*)
       {
       }
 
-static int srate_callback(jack_nframes_t, void*)
+//---------------------------------------------------------
+//   sampleRateCallback
+//---------------------------------------------------------
+
+int sampleRateCallback(jack_nframes_t sampleRate, void*)
       {
-//      qDebug("JACK: sample rate changed: %d", n);
+      qDebug("JACK: sample rate changed: %d", sampleRate);
+      MScore::sampleRate = sampleRate;
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   bufferSizeCallback called if JACK buffer changed
+//---------------------------------------------------------
+
+int bufferSizeCallback(jack_nframes_t nframes, void *arg)
+      {
+      JackAudio* audio = (JackAudio*)arg;
+      audio->setBufferSize(nframes);
       return 0;
       }
 
@@ -339,6 +349,7 @@ void JackAudio::timebase(jack_transport_state_t state, jack_nframes_t /*nframes*
             qDebug()<<"Time signature and tempo changed: "<< pos->beats_per_minute<<", bar: "<< pos->bar<<",beat: "<<pos->beat<<", tick:"<<pos->tick<<", time sig: "<<pos->beats_per_bar<<"/"<<pos->beat_type;
             audio->timeSigTempoChanged = false;
             }
+      // TODO: Handle new_pos
       }
 //---------------------------------------------------------
 //   processAudio
@@ -457,13 +468,14 @@ bool JackAudio::init()
       jack_set_error_function(jackError);
       jack_set_process_callback(client, processAudio, this);
       //jack_on_shutdown(client, processShutdown, this);
-      jack_set_buffer_size_callback(client, bufsize_callback, this);
-      jack_set_sample_rate_callback(client, srate_callback, this);
+      jack_set_sample_rate_callback(client, sampleRateCallback, this);
       jack_set_port_registration_callback(client, registration_callback, this);
       jack_set_graph_order_callback(client, graph_callback, this);
       jack_set_freewheel_callback (client, freewheel_callback, this);
       if (jack_set_timebase_callback(client, 1, timebase, this) != 0)
-                  fprintf(stderr, "Unable to take over timebase.\n");
+          qDebug("Unable to take over timebase.");
+      if( jack_set_buffer_size_callback (client, bufferSizeCallback, this) != 0)
+          qDebug("Can not set bufferSizeCallback");
       _segmentSize  = jack_get_buffer_size(client);
 
       MScore::sampleRate = sampleRate();
@@ -531,12 +543,12 @@ void JackAudio::stopTransport()
 
 Transport JackAudio::getState()
       {
-      jack_position_t pos;
-      int transportState = jack_transport_query(client, &pos);
+      int transportState = jack_transport_query(client, NULL);
       switch (transportState) {
             case JackTransportStopped:  return Transport::STOP;
             case JackTransportLooping:
             case JackTransportRolling:  return Transport::PLAY;
+            case JackTransportStarting: return seq->isPlaying()?Transport::PLAY:Transport::STOP;// Keep current state
             default:
                   return Transport::STOP;
             }
@@ -638,9 +650,44 @@ void JackAudio::midiRead()
 //      midiDriver->read();
       }
 
+//---------------------------------------------------------
+//   Called after tempo or time signature
+//   changed while playback
+//---------------------------------------------------------
+
 void JackAudio::handleTimeSigTempoChanged()
       {
-            timeSigTempoChanged = true;
+      timeSigTempoChanged = true;
+      }
+
+//---------------------------------------------------------
+//   checkTransportSeek
+//---------------------------------------------------------
+
+void JackAudio::checkTransportSeek(int cur_frame, int nframes)
+      {
+      // Obtaining the current JACK Transport position
+      jack_position_t pos;
+      jack_transport_query(client, &pos);
+
+      int srate = MScore::sampleRate;
+      int cur_utick = seq->score()->utime2utick((qreal)cur_frame / srate);
+      int utick     = seq->score()->utime2utick((qreal)pos.frame / srate);
+
+      // Conversion is not precise, should check frames and uticks
+      if (labs((long int)cur_frame-(long int)pos.frame)>nframes+1 && abs(utick - cur_utick)> seq->score()->utime2utick((qreal)nframes / srate)+1) {
+            qDebug()<<"JACK Transport position changed, cur_frame: "<<cur_frame<<",pos.frame: "<<pos.frame<<", frame diff: "<<labs((long int)cur_frame-(long int)pos.frame)<<"cur utick:"<<cur_utick<<",seek to utick: "<<utick<<", tick diff: "<<abs(utick - cur_utick);
+            seq->seek(utick, false);
+            }
+      }
+
+//---------------------------------------------------------
+//   seekTransport
+//---------------------------------------------------------
+
+void JackAudio::seekTransport(int utick)
+      {
+      qDebug()<<"jack locate to utick: "<<utick<<", frame: "<<seq->score()->utick2utime(utick) * MScore::sampleRate;
+      jack_transport_locate(client, seq->score()->utick2utime(utick) * MScore::sampleRate);
       }
 }
-

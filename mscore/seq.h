@@ -157,7 +157,7 @@ class Seq : public QObject, public Sequencer {
 
    public slots:
       void setRelTempo(double);
-      void seek(int);
+      void seek(int, bool can_wait = true);
       void stopNotes(int channel = -1);
       void start();
       void stop();
