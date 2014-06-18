@@ -42,6 +42,8 @@
 #include "tuplet.h"
 #include "utils.h"
 #include "xml.h"
+#include "staff.h"
+#include "part.h"
 
 namespace Ms {
 
@@ -533,6 +535,13 @@ QByteArray Selection::staffMimeData() const
             xml.stag(QString("Staff id=\"%1\"").arg(staffIdx));
             int startTrack = staffIdx * VOICES;
             int endTrack   = startTrack + VOICES;
+            Staff* staff = score()->staff(staffIdx);
+            Part* part = staff->part();
+            Interval interval = part->instr(seg1->tick())->transpose();
+            if (interval.chromatic)
+                  xml.tag("transposeChromatic", interval.chromatic);
+            if (interval.diatonic)
+                  xml.tag("transposeDiatonic", interval.diatonic);
             score()->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
             xml.etag();
             }

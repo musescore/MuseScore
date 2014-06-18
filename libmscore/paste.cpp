@@ -11,57 +11,21 @@
 //=============================================================================
 
 #include "score.h"
-#include "mscore.h"
 
-#include "accidental.h"
-#include "articulation.h"
-#include "barline.h"
-#include "beam.h"
-#include "box.h"
-#include "breath.h"
-#include "chord.h"
-#include "chordlist.h"
-#include "clef.h"
-#include "drumset.h"
-#include "dynamic.h"
-#include "figuredbass.h"
-#include "hairpin.h"
-#include "harmony.h"
-#include "key.h"
-#include "keysig.h"
-#include "layoutbreak.h"
-#include "lyrics.h"
-#include "measure.h"
-#include "navigate.h"
-#include "note.h"
-#include "noteevent.h"
-#include "ottava.h"
-#include "page.h"
-#include "part.h"
-#include "pedal.h"
-#include "pitchspelling.h"
-#include "repeat.h"
 #include "rest.h"
-#include "segment.h"
-#include "sequencer.h"
-#include "sig.h"
-#include "slur.h"
 #include "staff.h"
-#include "stafftype.h"
-#include "stafftext.h"
-#include "style.h"
-#include "system.h"
-#include "tempo.h"
-#include "tempotext.h"
-#include "text.h"
-#include "textline.h"
+#include "measure.h"
+#include "harmony.h"
+#include "breath.h"
+#include "beam.h"
+#include "figuredbass.h"
+#include "ottava.h"
+#include "part.h"
+#include "lyrics.h"
+#include "hairpin.h"
 #include "tie.h"
-#include "timesig.h"
-#include "trill.h"
 #include "tuplet.h"
-#include "undo.h"
 #include "utils.h"
-#include "volta.h"
 #include "xml.h"
 
 namespace Ms {
@@ -120,7 +84,11 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                         pasted = true;
                         const QStringRef& tag(e.name());
 
-                        if (tag == "tick") {
+                        if (tag == "transposeChromatic")
+                              e.setTransposeChromatic(e.readInt());
+                        else if (tag == "transposeDiatonic")
+                              e.setTransposeDiatonic(e.readInt());
+                        else if (tag == "tick") {
                               int tick = e.readInt();
                               e.setTick(tick);
                               int shift = tick - tickStart;
@@ -360,6 +328,10 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
             Interval dstTranspose = part->instr()->transpose();
 
             if (srcTranspose != dstTranspose) {
+//                  qDebug("transpose %d-%d  %d-%d",
+//                     srcTranspose.diatonic, srcTranspose.chromatic,
+//                     dstTranspose.diatonic, dstTranspose.chromatic);
+
                   if (!dstTranspose.isZero()) {
                         dstTranspose.flip();
                         for (Note* n : c->notes()) {
@@ -368,6 +340,10 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                               transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc, dstTranspose, true);
                               n->setTpc2(ntpc);
                               }
+                        }
+                  else {
+                        for (Note* n : c->notes())
+                              n->setTpc2(n->tpc1());
                         }
                   }
             }
@@ -667,6 +643,10 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
             }                             // inner while readNextstartElement()
       }                                   // pasteSymbolList()
 
+//---------------------------------------------------------
+//   cmdPaste
+//---------------------------------------------------------
+
 PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
       {
       if (ms == 0) {
@@ -730,7 +710,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   return PasteStatus::DEST_TUPLET;
             else {
                   QByteArray data(ms->data(mimeStaffListFormat));
-                  qDebug("paste <%s>", data.data());
+qDebug("paste <%s>", data.data());
                   XmlReader e(data);
                   pasteStaff(e, cr->segment(),cr->staffIdx());
                   }
