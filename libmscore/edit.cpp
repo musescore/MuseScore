@@ -1062,7 +1062,9 @@ void Score::cmdFlip()
                   Articulation* a = static_cast<Articulation*>(e);
                   if (a->articulationType() == ArticulationType::Staccato
                      || a->articulationType() == ArticulationType::Tenuto
-                     || a->articulationType() == ArticulationType::Sforzatoaccent) {
+                     || a->articulationType() == ArticulationType::Sforzatoaccent
+                     || a->articulationType() == ArticulationType::FadeIn
+                     || a->articulationType() == ArticulationType::FadeOut) {
                         ArticulationAnchor aa = a->anchor();
                         if (aa == ArticulationAnchor::TOP_CHORD)
                               aa = ArticulationAnchor::BOTTOM_CHORD;

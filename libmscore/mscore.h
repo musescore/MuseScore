@@ -92,6 +92,8 @@ enum class ArticulationType : char {
       Tenuto,
       Portato,
       Marcato,
+      FadeIn,
+      FadeOut,
       Ouvert,
       Plusstop,
       Upbow,

@@ -64,6 +64,8 @@ private slots:
       void gpxFretDiagram()  { gpReadTest("fret-diagram", "gpx"); }
       void gp5FretDiagram()  { gpReadTest("fret-diagram", "gp5"); }
       void gp4FretDiagram()  { gpReadTest("fret-diagram", "gp4"); }
+      void gp5FadeIn()       { gpReadTest("fade-in", "gp5"); }
+      void gp4FadeIn()       { gpReadTest("fade-in", "gp4"); }
       };
 
 //---------------------------------------------------------

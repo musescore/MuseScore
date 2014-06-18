@@ -535,6 +535,9 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
                   a->setArticulationType(ArticulationType::Popping);
                   break;
 #endif
+            case 4:
+                  a->setArticulationType(ArticulationType::FadeIn);
+                  break;
             default:
                   qDebug("GuitarPro import: unknown beat effect %d", beatEffect);
             }
@@ -1766,6 +1769,9 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
       int effects = 0;
       uchar fxBits1 = readUChar();
       uchar fxBits2 = readUChar();
+      if (fxBits1 & 0x10) {
+            effects = 4; // fade in
+            }
       if (fxBits1 & 0x20) {
             effects = readUChar();      // effect 1-tapping, 2-slapping, 3-popping
             }
@@ -2283,8 +2289,9 @@ void GuitarPro4::read(QFile* fp)
                               lyrics = new Lyrics(score);
                               lyrics->setText(readDelphiString());
                               }
+                        int beatEffects = 0;
                         if (beatBits & 0x8)
-                              readBeatEffects(staffIdx * VOICES, segment);
+                              beatEffects = readBeatEffects(staffIdx * VOICES, segment);
                         if (beatBits & 0x10)
                               readMixChange(measure);
                         int strings = readUChar();   // used strings mask
@@ -2302,8 +2309,11 @@ void GuitarPro4::read(QFile* fp)
                               cr = new Rest(score);
                               }
                         else {
-                              if(!segment->cr(staffIdx * VOICES))
+                              if(!segment->cr(staffIdx * VOICES)) {
                                     cr = new Chord(score);
+                                    Chord* chord = static_cast<Chord*>(cr);
+                                    applyBeatEffects(chord, beatEffects);
+                                    }
                               }
 
                         cr->setTrack(staffIdx * VOICES);
@@ -2742,6 +2752,9 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
 
       uchar fxBits1 = readUChar();
       uchar fxBits2 = readUChar();
+      if (fxBits1 & 0x10) {
+            effects = 4; // fade in
+            }
       if (fxBits1 & 0x20) {
             effects = readUChar();
             // 1 - tapping
