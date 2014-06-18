@@ -991,14 +991,10 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
             _staffEnd = staffIdx + 1;
 
       if (tick < tickStart()) {
-            if (_activeSegment == _endSegment)
-                  _endSegment = _startSegment;
             _startSegment = seg;
             activeIsFirst = true;
             }
-      else if (_endSegment && etick >= tickEnd()) {
-            if (_activeSegment == _startSegment)
-                  _startSegment = _endSegment;
+      else if (etick >= tickEnd()) {
             _endSegment = segAfter;
             }
       else {
