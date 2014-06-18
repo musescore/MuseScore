@@ -115,7 +115,7 @@ removeTupletIfEmpty(
       if (isTupletUseless(tuplet.voice, tuplet.onTime, tuplet.len, maxChordLength, chords)) {
                         // remove references to this tuplet in chords and notes
             auto chordIt = chords.lower_bound(tuplet.onTime + tuplet.len);
-            if (chordIt != chords.end() && chordIt != chords.begin()) {
+            if (chordIt != chords.begin()) {
                   --chordIt;
                   while (chordIt->first + maxChordLength > tupletIt->first) {
                         MidiChord &c = chordIt->second;
@@ -646,7 +646,7 @@ bool checkForDanglingTuplets(
             bool hasReference = false;
 
             auto chordIt = chords.lower_bound(tuplet.onTime + tuplet.len);
-            if (chordIt != chords.end() && chordIt != chords.begin()) {
+            if (chordIt != chords.begin()) {
                   --chordIt;
                   while (chordIt->first + maxChordLength > tupletIt->first) {
                         const MidiChord &c = chordIt->second;
