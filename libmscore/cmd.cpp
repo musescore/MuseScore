@@ -1287,10 +1287,18 @@ void Score::upDown(bool up, UpDownMode mode)
             if ((oNote->pitch() != newPitch) || (oNote->tpc1() != newTpc1) || oNote->tpc2() != newTpc2) {
                   // remove accidental if present to make sure
                   // user added accidentals are removed here.
-                  if (oNote->accidental())
+                  if (oNote->links()) {
+                        for (Element* e : *oNote->links()) {
+                              Note* ln = static_cast<Note*>(e);
+                              if (ln->accidental())
+                                    undoRemoveElement(ln->accidental());
+                              }
+                        }
+                  else if (oNote->accidental())
                         undoRemoveElement(oNote->accidental());
                   undoChangePitch(oNote, newPitch, newTpc1, newTpc2);
                   }
+
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
             else if (oNote->staff()->staffType()->group() == StaffGroup::TAB) {
@@ -1312,6 +1320,7 @@ void Score::upDown(bool up, UpDownMode mode)
             // play new note with velocity 80 for 0.3 sec:
             _playNote = true;
             }
+
       _selection.clear();
       for (Note* note : el)
             _selection.add(note);
