@@ -250,7 +250,7 @@ void initStyle(MStyle* s)
       // never show this style
       AS("", ff, 10, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OS, false,
                false, Spatium(.2), Spatium(.5), 25, QColor(Qt::black), false, false, QColor(Qt::black),
-               QColor(255, 255, 255, 0), Hidden::ALWAYS);
+               QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS);
 
       AS("Title",    ff, 24, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP,    QPointF(), OA);
       AS("Subtitle", ff, 14, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::TOP,    QPointF(0, MM(10)), OA);
@@ -318,7 +318,7 @@ void initStyle(MStyle* s)
          AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, 6), OS, true,
          false, Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
          false, QColor(Qt::black), QColor(255, 255, 255, 0),                   // default params
-         Hidden::IN_EDITOR);                                                   // don't show in Style Editor
+         TextStyleHidden::IN_EDITOR);                                                   // don't show in Style Editor
 
 #undef MM
 #undef OA
@@ -583,7 +583,7 @@ StyleData::~StyleData()
 TextStyle::TextStyle()
       {
       d = new TextStyleData;
-      _hidden = Hidden::NEVER;
+      _hidden = TextStyleHidden::NEVER;
       }
 
 TextStyle::TextStyle(QString _name, QString _family, qreal _size,
@@ -592,7 +592,7 @@ TextStyle::TextStyle(QString _name, QString _family, qreal _size,
    const QPointF& _off, OffsetType _ot,
    bool sd,
    bool hasFrame, Spatium fw, Spatium pw, int fr, QColor co, bool _circle, bool _systemFlag,
-   QColor fg, QColor bg, Hidden hidden)
+   QColor fg, QColor bg, TextStyleHidden hidden)
       {
       d = new TextStyleData(_name, _family, _size,
          _bold, _italic, _underline, _align, _off, _ot,
