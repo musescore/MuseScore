@@ -4724,6 +4724,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
 
                   if (!chord->concertPitch())
                         val.pitch += chord->staff()->part()->instr()->transpose().chromatic;
+                  val.tpc = step2tpc(step % 7, acci);
                   _score->addNote(chord, val);
                   _score->endCmd();
                   return;
@@ -4735,8 +4736,8 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             score()->repitchNote(pos, !addFlag);
       else
             score()->putNote(pos, !addFlag);
-      _score->endCmd();
 
+      _score->endCmd();
       adjustCanvasPosition(is.cr(), false);
       }
 
