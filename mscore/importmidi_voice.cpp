@@ -522,6 +522,7 @@ void updateTuplet(
             int newVoice,
             const ReducedFraction &chordOnTime,
             const QList<MidiNote> &notes,
+            bool &isInTuplet,
             std::multimap<ReducedFraction,
                   std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
             std::multimap<ReducedFraction, MidiChord> &chords,
@@ -549,6 +550,21 @@ void updateTuplet(
 
                   tuplet = tuplets.insert({tupletOnTime, newTuplet});
                   insertedTuplets.insert({tupletOnTime, tuplet});
+                              // maybe impossible due to intersection check but check anyway:
+                              // if there is a non-chord with on time = tuplet on time
+                              // then add that chord to the new tuplet
+                  const auto range = chords.equal_range(tupletOnTime);
+                  for (auto it = range.first; it != range.second; ++it) {
+                        MidiChord &chord = it->second;
+                        if (chord.voice == newVoice && !chord.isInTuplet) {
+                              chord.isInTuplet = true;
+                              chord.tuplet = tuplet;
+                              break;
+                              }
+                        }
+                  }
+            else {
+                  isInTuplet = false;
                   }
             }
       else {
@@ -629,13 +645,15 @@ bool doVoiceSeparation(
                   chord.voice = bestSplit.voice;
 
                   if (chord.isInTuplet) {
-                        updateTuplet(chord.tuplet, chord.voice, onTime, chord.notes,
+                        updateTuplet(chord.tuplet, chord.voice, onTime,
+                                     chord.notes, chord.isInTuplet,
                                      insertedTuplets, chords, tuplets, maxChordLengths);
                         }
 
                   for (auto &note: chord.notes) {
                         if (note.isInTuplet) {
-                              updateTuplet(note.tuplet, chord.voice, onTime, {note},
+                              updateTuplet(note.tuplet, chord.voice, onTime,
+                                           {note}, note.isInTuplet,
                                            insertedTuplets, chords, tuplets, maxChordLengths);
                               }
                         }
@@ -663,14 +681,16 @@ bool doVoiceSeparation(
 
                   notes = updatedOldNotes;
 
-                  if (chord.isInTuplet) {
-                        updateTuplet(chord.tuplet, newChord.voice, onTime, newChord.notes,
+                  if (newChord.isInTuplet) {
+                        updateTuplet(newChord.tuplet, newChord.voice, onTime,
+                                     newChord.notes, chord.isInTuplet,
                                      insertedTuplets, chords, tuplets, maxChordLengths);
                         }
 
                   for (auto &note: newChord.notes) {
                         if (note.isInTuplet) {
-                              updateTuplet(note.tuplet, newChord.voice, onTime, {note},
+                              updateTuplet(note.tuplet, newChord.voice, onTime,
+                                           {note}, note.isInTuplet,
                                            insertedTuplets, chords, tuplets, maxChordLengths);
                               }
                         }
