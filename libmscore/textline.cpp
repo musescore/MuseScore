@@ -30,14 +30,12 @@ namespace Ms {
 TextLineSegment::TextLineSegment(Score* s)
    : LineSegment(s)
       {
-      _text = 0;
       }
 
 TextLineSegment::TextLineSegment(const TextLineSegment& seg)
    : LineSegment(seg)
       {
-      _text = 0;
-      layout();    // set the right _text
+      layout1();    // set the right _text
       }
 
 TextLineSegment::~TextLineSegment()
@@ -102,20 +100,16 @@ void TextLineSegment::draw(QPainter* painter) const
             painter->translate(-_text->pos());
             }
 
-      QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth, tl->lineStyle());
-      painter->setPen(pen);
       if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END) {
-            if (tl->_endText) {
-#if 0 // TODO
-                  SymId sym = tl->endSymbol();
-                  const QRectF& bb = symBbox(sym);
-                  qreal h = bb.height() * .5;
-                  QPointF o = tl->endSymbolOffset() * _spatium;
-                  pp2.setX(pp2.x() - bb.width() + textlineTextDistance);
-                  drawSymbol(sym, painter, QPointF(pp2.x() + textlineTextDistance + o.x(), h + o.y()));
-#endif
+            if (_endText) {
+                  painter->translate(_endText->pos());
+                  _endText->setVisible(tl->visible());
+                  _endText->draw(painter);
+                  painter->translate(-_endText->pos());
                   }
             }
+      QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth, tl->lineStyle());
+      painter->setPen(pen);
 
       QPointF pp1(l, 0.0);
 
@@ -165,6 +159,29 @@ void TextLineSegment::layout()
       }
 
 //---------------------------------------------------------
+//   setText
+//---------------------------------------------------------
+
+void TextLineSegment::setText(Text* t)
+      {
+      if (t) {
+            if (_text == 0) {
+                  _text = new Text(*t);
+                  _text->setFlag(ElementFlag::MOVABLE, false);
+                  _text->setParent(this);
+                  }
+            else {
+                  _text->setTextStyleType(t->textStyleType());
+                  _text->setText(t->text());
+                  }
+            }
+      else {
+            delete _text;
+            _text = 0;
+            }
+      }
+
+//---------------------------------------------------------
 //   layout1
 //---------------------------------------------------------
 
@@ -176,48 +193,38 @@ void TextLineSegment::layout1()
       switch (spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
             case SpannerSegmentType::BEGIN:
-                  if (tl->_beginText) {
-                        if (_text == 0) {
-                              _text = new Text(*tl->_beginText);
-                              _text->setFlag(ElementFlag::MOVABLE, false);
-                              _text->setParent(this);
-                              }
-                        else {
-                              _text->setTextStyleType(tl->_beginText->textStyleType());
-                              _text->setText(tl->_beginText->text());
-                              }
-                        }
-                  else {
-                        delete _text;
-                        _text = 0;
-                        }
+                  setText(tl->_beginText);
                   break;
             case SpannerSegmentType::MIDDLE:
             case SpannerSegmentType::END:
-                  if (tl->_continueText) {
-                        if (_text == 0) {
-                              _text = new Text(*tl->_continueText);
-                              _text->setFlag(ElementFlag::MOVABLE, false);
-                              _text->setParent(this);
-                              }
-                        else {
-                              _text->setTextStyleType(tl->_beginText->textStyleType());
-                              _text->setText(tl->_continueText->text());
-                              }
-                        }
-                  else {
-                        delete _text;
-                        _text = 0;
-                        }
+                  setText(tl->_continueText);
                   break;
             }
+      if (tl->_endText) {
+            if (_endText == 0) {
+                  _endText = new Text(*tl->_endText);
+                  _endText->setFlag(ElementFlag::MOVABLE, false);
+                  _endText->setParent(this);
+                  }
+            else {
+                  _endText->setTextStyleType(tl->_endText->textStyleType());
+                  _endText->setText(tl->_endText->text());
+                  }
+            }
+      else {
+            delete _endText;
+            _endText = 0;
+            }
+
       if (_text)
             _text->layout();
+      if (_endText)
+            _endText->layout();
 
       QPointF pp1;
       QPointF pp2(pos2());
 
-      if (!_text && pp2.y() != 0) {
+      if (!_text && !_endText && pp2.y() != 0) {
             setbbox(QRectF(pp1, pp2).normalized());
             return;
             }
@@ -250,16 +257,10 @@ void TextLineSegment::layout1()
                   y1 = h;
             }
       bbox().setRect(.0, y1, pp2.x(), y2 - y1);
-      }
-
-//---------------------------------------------------------
-//   clearText
-//---------------------------------------------------------
-
-void TextLineSegment::clearText()
-      {
-      delete _text;
-      _text = 0;
+      if (_endText) {
+            _endText->setPos(bbox().right(), 0);
+            bbox() |= _endText->bbox().translated(_endText->pos());
+            }
       }
 
 //---------------------------------------------------------
