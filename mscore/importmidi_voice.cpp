@@ -700,7 +700,7 @@ int averagePitchOfChords(
       return qRound(sumPitch * 1.0 / noteCounter);
       }
 
-void sortVoicesByPitch(std::map<int, std::vector<
+void sortVoicesByPitch(const std::map<int, std::vector<
                               std::multimap<ReducedFraction, MidiChord>::iterator>> &voiceChords)
       {
             // [newVoice] = <average pitch, old voice>
@@ -712,7 +712,12 @@ void sortVoicesByPitch(std::map<int, std::vector<
 
       for (int newVoice = 0; newVoice != (int)pitchVoices.size(); ++newVoice) {
             const int oldVoice = pitchVoices[newVoice].second;
-            for (auto &chord: voiceChords[oldVoice]) {
+            const auto it = voiceChords.find(oldVoice);
+
+            Q_ASSERT_X(it != voiceChords.end(),
+                       "MidiVoice::sortVoicesByPitch", "Old voice not found");
+
+            for (auto &chord: it->second) {
                   MidiChord &c = chord->second;
                   c.voice = newVoice;
                   if (c.isInTuplet)
