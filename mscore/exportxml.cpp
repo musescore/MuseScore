@@ -2270,7 +2270,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   xml.stag("time-modification");
                   xml.tag("actual-notes", actNotes);
                   xml.tag("normal-notes", nrmNotes);
-                  qDebug("nrmTicks %d", nrmTicks);
+                  //qDebug("nrmTicks %d", nrmTicks);
                   if (nrmTicks > 0) {
                         int nrmDots = 0;
                         QString nrmType = tick2xml(nrmTicks, &nrmDots);
@@ -2383,7 +2383,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                         Text* f = (Text*)e;
                         notations.tag(xml);
                         technical.tag(xml);
-                        QString t = f->text();
+                        QString t = MScoreTextToMXML::toPlainText(f->text());
                         if (f->textStyleType() == TextStyleType::FINGERING) {
                               // p, i, m, a, c represent the plucking finger
                               if (t == "p" || t == "i" || t == "m" || t == "a" || t == "c")
@@ -2892,9 +2892,8 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
 void ExportMusicXml::words(Text const* const text, int staff)
       {
       /*
-      qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f xoff=%g yoff=%g text='%s'",
-             text->userOff().x(), text->userOff().y(), text->xoff(), text->yoff(),
-             text->text().toUtf8().data());
+      qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f text='%s'",
+             text->userOff().x(), text->userOff().y(), qPrintable(text->text()));
       */
       directionTag(xml, attr, text);
       if (text->type() == ElementType::REHEARSAL_MARK) {
@@ -3168,8 +3167,12 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
             xml.tag("other-dynamics", dyn->dynamicTypeName());
             xml.etag();
             }
-      else
-            xml.tag("words", t);
+      else  {
+            QString attr; // TODO TBD
+            int fs = 10; // TODO TBD
+            MScoreTextToMXML mttm("words", attr, t, 10 /* TODO: real value */, fs);
+            mttm.write(xml);
+            }
       xml.etag();
       /*
       int offs = dyn->mxmlOff();
@@ -4058,9 +4061,9 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
 
             xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
-            xml.tag("part-name", part->longName());
+            xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
             if (!part->shortName().isEmpty())
-                  xml.tag("part-abbreviation", part->shortName());
+                  xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
 
             if (part->instr()->useDrumset()) {
                   Drumset* drumset = part->instr()->drumset();
@@ -4089,7 +4092,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
             else {
                   xml.stag(QString("score-instrument id=\"P%1-I%2\"").arg(idx+1).arg(3));
-                  xml.tag("instrument-name", part->longName());
+                  xml.tag("instrument-name", MScoreTextToMXML::toPlainText(part->longName()));
                   xml.etag();
 
                   xml.stag(QString("midi-instrument id=\"P%1-I%2\"").arg(idx+1).arg(3));
