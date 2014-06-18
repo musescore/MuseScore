@@ -1631,12 +1631,10 @@ void Note::layout10(AccidentalState* as)
                               relLine = absStep(tpc(), epitch());
                               }
                         }
-#if 0
                   else if (acci > Accidental::AccidentalType::NATURAL) {
                         // microtonal accidental - see comment in updateAccidental
                         as->setAccidentalVal(relLine, AccidentalVal::NATURAL, _tieBack != 0);
                         }
-#endif
                   }
             else  {
                   AccidentalVal accVal = tpc2alter(tpc());
@@ -1927,17 +1925,16 @@ void Note::updateAccidental(AccidentalState* as)
                         }
                   }
             }
-#if 0
+
       else {
-            // currently, microtonal accidentals playback as naturals
-            // but have no effect on accidental state of measure
+            // microtonal accidentals playback as naturals
+            // in 1.X, they had no effect on accidental state of measure
             // ultimetely, they should probably get their own state
-            // or at least change state to natural, so subsequent notes playback as might be expected
-            // however, this would represent an incompatible change
-            // so hold off until playback of microtonal accidentals is fully implemented
+            // for now, at least change state to natural, so subsequent notes playback as might be expected
+            // this is an incompatible change, but better to break it for 2.0 than wait until later
             as->setAccidentalVal(relLine, AccidentalVal::NATURAL, _tieBack != 0);
             }
-#endif
+
       updateRelLine(relLine, true);
       }
 
