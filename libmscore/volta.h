@@ -42,13 +42,13 @@ class VoltaSegment : public TextLineSegment {
 
    public:
       VoltaSegment(Score* s) : TextLineSegment(s) {}
-      virtual ElementType type() const     { return ElementType::VOLTA_SEGMENT; }
-      virtual VoltaSegment* clone() const  { return new VoltaSegment(*this); }
-      Volta* volta() const                 { return (Volta*)spanner(); }
-      virtual void layout();
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual ElementType type() const override     { return ElementType::VOLTA_SEGMENT; }
+      virtual VoltaSegment* clone() const override  { return new VoltaSegment(*this); }
+      Volta* volta() const                          { return (Volta*)spanner(); }
+      virtual void layout() override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
@@ -66,19 +66,18 @@ class Volta : public TextLine {
    private:
       Q_PROPERTY(VoltaType voltaType READ voltaType WRITE undoSetVoltaType)
 
-      VoltaType _voltaType;   // open/closed
       QList<int> _endings;
       PropertyStyle lineWidthStyle;
 
    public:
       Volta(Score* s);
-      virtual Volta* clone()     const { return new Volta(*this); }
-      virtual ElementType type() const { return ElementType::VOLTA; }
-      virtual LineSegment* createLineSegment();
-      virtual void layout();
+      virtual Volta* clone()     const override { return new Volta(*this); }
+      virtual ElementType type() const override { return ElementType::VOLTA; }
+      virtual LineSegment* createLineSegment() override;
+      virtual void layout() override;
 
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader& e);
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader& e) override;
 
       QList<int> endings() const           { return _endings; }
       QList<int>& endings()                { return _endings; }
@@ -88,19 +87,20 @@ class Volta : public TextLine {
 
       void setVoltaType(VoltaType val);
       void undoSetVoltaType(VoltaType val);
-      VoltaType voltaType() const            { return _voltaType; }
+      VoltaType voltaType() const;
 
       bool hasEnding(int repeat) const;
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
 
       virtual void setYoff(qreal);
       virtual void reset() override;
+      virtual bool systemFlag() const override  { return true;  }
       };
 
 }     // namespace Ms

@@ -312,6 +312,8 @@ QVariant Spanner::getProperty(P_ID propertyId) const
                   return tick2();
             case P_ID::SPANNER_TRACK2:
                   return track2();
+            case P_ID::ANCHOR:
+                  return int(anchor());
             default:
                   break;
             }
@@ -334,6 +336,9 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::SPANNER_TRACK2:
                   setTrack2(v.toInt());
                   break;
+            case P_ID::ANCHOR:
+                  setAnchor(Anchor(v.toInt()));
+                  break;
             default:
                   if (!Element::setProperty(propertyId, v))
                         return false;
@@ -350,6 +355,8 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Spanner::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
+            case P_ID::ANCHOR:
+                  return int(Anchor::SEGMENT);
             default:
                   break;
             }

@@ -174,7 +174,7 @@ static const PropertyData propertyList[] = {
       { P_ID::SPANNER_TRACK2,      true,  "track2",          P_TYPE::INT      },
       { P_ID::USER_OFF2,           false, "userOff2",        P_TYPE::POINT   },
       { P_ID::BEGIN_TEXT_PLACE,    false, "beginTextPlace",  P_TYPE::INT     },
-      { P_ID::CONTINUE_TEXT_PLACE, false, "beginTextPlace",  P_TYPE::INT     },
+      { P_ID::CONTINUE_TEXT_PLACE, false, "continueTextPlace",  P_TYPE::INT     },
       { P_ID::END_TEXT_PLACE,      false, "endTextPlace",    P_TYPE::INT     },
       { P_ID::BEGIN_HOOK,          false, "beginHook",       P_TYPE::BOOL    },
       { P_ID::END_HOOK,            false, "endHook",         P_TYPE::BOOL    },
@@ -195,6 +195,8 @@ static const PropertyData propertyList[] = {
       { P_ID::USER_STRETCH,        false, "stretch",         P_TYPE::REAL },
       { P_ID::NO_OFFSET,           false, "noOffset",        P_TYPE::INT  },
       { P_ID::IRREGULAR,           true,  "irregular",       P_TYPE::BOOL },
+
+      { P_ID::ANCHOR,              false,  "anchor",       P_TYPE::INT },
 
       { P_ID::END,                 false, "",              P_TYPE::INT      }
       };

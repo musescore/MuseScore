@@ -102,13 +102,7 @@
           <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
         <Volta id="2">
-          <subtype>0</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lid>85</lid>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>1</text>
@@ -225,13 +219,7 @@
         </Measure>
       <Measure number="3">
         <Volta id="3">
-          <subtype>0</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lid>86</lid>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>1,2</text>
@@ -295,13 +283,7 @@
       <Measure number="4">
         <endSpanner id="3"/>
         <Volta id="4">
-          <subtype>0</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lid>87</lid>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>3</text>
@@ -428,13 +410,7 @@
         </Measure>
       <Measure number="6">
         <Volta id="5">
-          <subtype>0</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lid>88</lid>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>4</text>
@@ -500,13 +476,7 @@
           </BarLine>
         <endSpanner id="5"/>
         <Volta id="6">
-          <subtype>0</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lid>89</lid>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>5</text>
@@ -572,13 +542,7 @@
         <endRepeat>1</endRepeat>
         <endSpanner id="6"/>
         <Volta id="7">
-          <subtype>0</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lid>90</lid>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>1,2,3,4,5,6</text>
@@ -640,13 +604,7 @@
       <Measure number="9">
         <endSpanner id="7"/>
         <Volta id="8">
-          <subtype>0</subtype>
-          <beginHook>1</beginHook>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lid>91</lid>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>7,8</text>
@@ -842,13 +800,7 @@
             <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
           <Volta id="9">
-            <subtype>0</subtype>
-            <beginHook>1</beginHook>
-            <beginHookHeight>1.9</beginHookHeight>
-            <beginTextPlace>2</beginTextPlace>
-            <beginTextPlace>2</beginTextPlace>
             <lid>85</lid>
-            <anchor>1</anchor>
             <beginText>
               <style>Volta</style>
               <text>1</text>
@@ -965,13 +917,7 @@
           </Measure>
         <Measure number="3">
           <Volta id="10">
-            <subtype>0</subtype>
-            <beginHook>1</beginHook>
-            <beginHookHeight>1.9</beginHookHeight>
-            <beginTextPlace>2</beginTextPlace>
-            <beginTextPlace>2</beginTextPlace>
             <lid>86</lid>
-            <anchor>1</anchor>
             <beginText>
               <style>Volta</style>
               <text>1,2</text>
@@ -1035,13 +981,7 @@
         <Measure number="4">
           <endSpanner id="10"/>
           <Volta id="11">
-            <subtype>0</subtype>
-            <beginHook>1</beginHook>
-            <beginHookHeight>1.9</beginHookHeight>
-            <beginTextPlace>2</beginTextPlace>
-            <beginTextPlace>2</beginTextPlace>
             <lid>87</lid>
-            <anchor>1</anchor>
             <beginText>
               <style>Volta</style>
               <text>3</text>
@@ -1168,13 +1108,7 @@
           </Measure>
         <Measure number="6">
           <Volta id="12">
-            <subtype>0</subtype>
-            <beginHook>1</beginHook>
-            <beginHookHeight>1.9</beginHookHeight>
-            <beginTextPlace>2</beginTextPlace>
-            <beginTextPlace>2</beginTextPlace>
             <lid>88</lid>
-            <anchor>1</anchor>
             <beginText>
               <style>Volta</style>
               <text>4</text>
@@ -1236,13 +1170,7 @@
           <startRepeat/>
           <endSpanner id="12"/>
           <Volta id="13">
-            <subtype>0</subtype>
-            <beginHook>1</beginHook>
-            <beginHookHeight>1.9</beginHookHeight>
-            <beginTextPlace>2</beginTextPlace>
-            <beginTextPlace>2</beginTextPlace>
             <lid>89</lid>
-            <anchor>1</anchor>
             <beginText>
               <style>Volta</style>
               <text>5</text>
@@ -1308,13 +1236,7 @@
           <endRepeat>1</endRepeat>
           <endSpanner id="13"/>
           <Volta id="14">
-            <subtype>0</subtype>
-            <beginHook>1</beginHook>
-            <beginHookHeight>1.9</beginHookHeight>
-            <beginTextPlace>2</beginTextPlace>
-            <beginTextPlace>2</beginTextPlace>
             <lid>90</lid>
-            <anchor>1</anchor>
             <beginText>
               <style>Volta</style>
               <text>1,2,3,4,5,6</text>
@@ -1376,13 +1298,7 @@
         <Measure number="9">
           <endSpanner id="14"/>
           <Volta id="15">
-            <subtype>0</subtype>
-            <beginHook>1</beginHook>
-            <beginHookHeight>1.9</beginHookHeight>
-            <beginTextPlace>2</beginTextPlace>
-            <beginTextPlace>2</beginTextPlace>
             <lid>91</lid>
-            <anchor>1</anchor>
             <beginText>
               <style>Volta</style>
               <text>7,8</text>

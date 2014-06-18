@@ -194,6 +194,8 @@ enum class P_ID : unsigned char {
       NO_OFFSET,
       IRREGULAR,
 
+      ANCHOR,
+
       END
       };
 

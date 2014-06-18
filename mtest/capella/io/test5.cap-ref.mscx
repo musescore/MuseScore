@@ -75,13 +75,46 @@
           <transposingClefType>G</transposingClefType>
           </Clef>
         <KeySig>
-          <accidental>1</accidental>
+          <accidental>0</accidental>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>41</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>43</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>45</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <subtype>flat</subtype>
+              </Accidental>
+            <pitch>46</pitch>
+            <tpc>12</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -106,15 +139,16 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Accidental>
-              <subtype>natural</subtype>
-              </Accidental>
             <pitch>53</pitch>
             <tpc>13</tpc>
             </Note>
           </Chord>
         </Measure>
-      <Measure number="2">
+      <Measure number="3">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          <pause>3</pause>
+          </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -132,8 +166,11 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>59</pitch>
-            <tpc>19</tpc>
+            <Accidental>
+              <subtype>flat</subtype>
+              </Accidental>
+            <pitch>58</pitch>
+            <tpc>12</tpc>
             </Note>
           </Chord>
         <Chord>
@@ -144,11 +181,14 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="3">
-        <LayoutBreak>
-          <subtype>line</subtype>
-          <pause>3</pause>
-          </LayoutBreak>
+      <Measure number="4">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
+        <KeySig>
+          <accidental>0</accidental>
+          </KeySig>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -166,9 +206,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Accidental>
-              <subtype>natural</subtype>
-              </Accidental>
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
@@ -181,11 +218,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="4">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
+      <Measure number="5">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -196,8 +229,11 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
+            <Accidental>
+              <subtype>flat</subtype>
+              </Accidental>
+            <pitch>70</pitch>
+            <tpc>12</tpc>
             </Note>
           </Chord>
         <Chord>
@@ -215,39 +251,6 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="5">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>76</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <subtype>natural</subtype>
-              </Accidental>
-            <pitch>77</pitch>
-            <tpc>13</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>79</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>81</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
-        </Measure>
       <Measure number="6">
         <LayoutBreak>
           <subtype>line</subtype>
@@ -256,8 +259,8 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>83</pitch>
-            <tpc>19</tpc>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
             </Note>
           </Chord>
         </Measure>
