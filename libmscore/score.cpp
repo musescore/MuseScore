@@ -2809,7 +2809,6 @@ void Score::selectAdd(Element* e)
 
 void Score::selectRange(Element* e, int staffIdx)
       {
-      bool activeIsFirst = false;
       int activeTrack = e->track();
       if (e->type() == ElementType::MEASURE) {
             Measure* m = static_cast<Measure*>(e);
@@ -2884,7 +2883,7 @@ void Score::selectRange(Element* e, int staffIdx)
                   _selection.setRange(cr->segment(),
                                       cr->segment()->nextCR(cr->track()),
                                       e->staffIdx(),
-                                      _selection.staffStart() + 1);
+                                      e->staffIdx() + 1);
                   activeTrack = cr->track();
                   }
             else if (_selection.isSingle()) {
@@ -2901,7 +2900,7 @@ void Score::selectRange(Element* e, int staffIdx)
                         _selection.setRange(ocr->segment(),
                                             endSeg,
                                             oe->staffIdx(),
-                                            _selection.staffStart() + 1);
+                                            oe->staffIdx() + 1);
 
                         _selection.extendRangeSelection(cr);
 
@@ -2927,11 +2926,6 @@ void Score::selectRange(Element* e, int staffIdx)
             select(e, SelectType::SINGLE, staffIdx);
             return;
             }
-
-      if (activeIsFirst)
-            _selection.setActiveSegment(_selection.startSegment());
-      else
-            _selection.setActiveSegment(_selection.endSegment());
 
       _selection.setActiveTrack(activeTrack);
 
