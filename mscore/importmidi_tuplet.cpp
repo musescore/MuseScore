@@ -594,20 +594,111 @@ bool areBarIndexesSet(const std::multimap<ReducedFraction, MidiChord> &chords)
       return true;
       }
 
-bool areAllTupletsReferenced(
+// check - do all tuplets have references from some chords
+
+bool checkTupletsForExistence(
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const std::multimap<ReducedFraction, TupletData> &tupletEvents)
+      {
+                  // check - do all tuplets have references from some chords
+      std::map<const std::pair<const ReducedFraction, TupletData> *, bool> tupletMap;
+      for (const auto &tuplet: tupletEvents)
+            tupletMap.insert({&tuplet, false});
+
+      for (const auto &chord: chords) {
+            const MidiChord &c = chord.second;
+            if (c.isInTuplet) {
+                  const auto it = tupletMap.find(&*c.tuplet);
+                  if (it == tupletMap.end()) {
+                        qDebug() << "Chords have references to non-existing tuplets";
+                        return false;
+                        }
+                  }
+            for (const auto &note: c.notes) {
+                  if (note.isInTuplet) {
+                        const auto it = tupletMap.find(&*note.tuplet);
+                        if (it == tupletMap.end()) {
+                              qDebug() << "Notes have references to non-existing tuplets";
+                              return false;
+                              }
+                        }
+                  }
+            }
+      return true;
+      }
+
+// check - do all tuplets have references from some chords
+
+bool checkForDanglingTuplets(
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const std::multimap<ReducedFraction, TupletData> &tupletEvents)
+      {
+      const std::map<int, ReducedFraction> maxChordLengths = MChord::findMaxChordLengths(chords);
+
+      for (auto tupletIt = tupletEvents.begin(); tupletIt != tupletEvents.end(); ++tupletIt) {
+            const auto &tuplet = tupletIt->second;
+            const auto maxLengthIt = maxChordLengths.find(tuplet.voice);
+
+            Q_ASSERT_X(maxLengthIt != maxChordLengths.end(),
+                       "MidiTuplet::checkForDanglingTuplets", "Max chord length not found");
+
+            const auto maxChordLength = maxLengthIt->second;
+            bool hasReference = false;
+
+            auto chordIt = chords.lower_bound(tuplet.onTime + tuplet.len);
+            if (chordIt != chords.end() && chordIt != chords.begin()) {
+                  --chordIt;
+                  while (chordIt->first + maxChordLength > tupletIt->first) {
+                        const MidiChord &c = chordIt->second;
+                        if (c.isInTuplet && c.tuplet == tupletIt) {
+                              hasReference = true;
+                              break;
+                              }
+                        for (const auto &note: c.notes) {
+                              if (note.isInTuplet && note.tuplet == tupletIt) {
+                                    hasReference = true;
+                                    break;
+                                    }
+                              }
+                        if (chordIt == chords.begin())
+                              break;
+                        --chordIt;
+                        }
+                  }
+
+            if (!hasReference) {
+                  qDebug() << "Not all tuplets have references in chords - "
+                              "there are dangling tuplets";
+                  return false;
+                  }
+            }
+      return true;
+      }
+
+// check tuplet events for uniqueness
+
+bool checkAreTupletsUnique(const std::multimap<ReducedFraction, TupletData> &tupletEvents)
+      {
+      std::set<std::pair<ReducedFraction, int>> referencedTuplets;      // <onTime, voice>
+      for (const auto &tuplet: tupletEvents) {
+            const auto &t = tuplet.second;
+            const auto result = referencedTuplets.insert({t.onTime, t.voice});
+
+            if (!result.second) {
+                  qDebug() << "Not unique tuplets in tupletEvents";
+                  return false;
+                  }
+            }
+      return true;
+      }
+
+// check is referenced tuplet count equal to tuplet event count
+
+bool checkForEqualTupletCount(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const std::multimap<ReducedFraction, TupletData> &tupletEvents)
       {
       std::set<std::pair<ReducedFraction, int>> referencedTuplets;      // <onTime, voice>
-                  // first - check tuplet events for uniqueness
-      for (const auto &tuplet: tupletEvents) {
-            const auto &t = tuplet.second;
-            const auto result = referencedTuplets.insert({t.onTime, t.voice});
-            Q_ASSERT_X(result.second == true, "MidiTuplet::areAllTupletsReferenced",
-                       "Not unique tuplets in tupletEvents");
-            }
-      referencedTuplets.clear();
-
       for (const auto &chord: chords) {
             if (chord.second.isInTuplet) {
                   const auto &tuplet = chord.second.tuplet->second;
@@ -635,6 +726,21 @@ bool areAllTupletsReferenced(
             }
 
       return tupletEvents.size() == referencedTuplets.size();
+      }
+
+bool areAllTupletsReferenced(
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const std::multimap<ReducedFraction, TupletData> &tupletEvents)
+      {
+      if (!checkAreTupletsUnique(tupletEvents))
+            return false;
+      if (!checkTupletsForExistence(chords, tupletEvents))
+            return false;
+      if (!checkForDanglingTuplets(chords, tupletEvents))
+            return false;
+      if (!checkForEqualTupletCount(chords, tupletEvents))
+            return false;
+      return true;
       }
 
 // this check is not full but often if use invalid iterator for comparison
