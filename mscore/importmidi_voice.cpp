@@ -708,7 +708,19 @@ void sortVoicesByPitch(const std::map<int, std::vector<
       for (const auto &v: voiceChords)
             pitchVoices.push_back({averagePitchOfChords(v.second), v.first});
 
-      std::sort(pitchVoices.begin(), pitchVoices.end(), std::greater<std::pair<int, int>>());
+      struct {
+            bool operator()(const std::pair<int, int> &p1,
+                            const std::pair<int, int> &p2) const
+                  {
+                  if (p1.first > p2.first)
+                        return true;
+                  else if (p1.first < p2.first)
+                        return false;
+                  else
+                        return p1.second < p2.second;
+                  }
+            } comparator;
+      std::sort(pitchVoices.begin(), pitchVoices.end(), comparator);
 
       for (int newVoice = 0; newVoice != (int)pitchVoices.size(); ++newVoice) {
             const int oldVoice = pitchVoices[newVoice].second;
