@@ -284,6 +284,12 @@
     "graceNoteSlashStemUp": {
         "codepoint": "U+e195"
     },
+    "guitarFadeIn": {
+        "codepoint": "U+e843"
+    },
+    "guitarFadeOut": {
+        "codepoint": "U+e844"
+    },
     "keyboardPedalHeel1": {
         "codepoint": "U+e172"
     },
