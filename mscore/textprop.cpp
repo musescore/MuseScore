@@ -83,7 +83,7 @@ void TextProp::setScore(bool onlyStyle, Score* score)
       int n = scoreStyles.size();
       for (int i = 0; i < n; ++i) {
             // if style not hidden in this context, add to combo with index in score style list as userData
-            if ( !(scoreStyles.at(i).hidden() & Hidden::IN_LISTS) )
+            if ( !(scoreStyles.at(i).hidden() & TextStyleHidden::IN_LISTS) )
                   styles->addItem(scoreStyles.at(i).name(), i);
             }
       }
