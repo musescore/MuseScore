@@ -712,6 +712,8 @@ void sortVoicesByPitch(const std::map<int, std::vector<
 
       for (int newVoice = 0; newVoice != (int)pitchVoices.size(); ++newVoice) {
             const int oldVoice = pitchVoices[newVoice].second;
+            if (newVoice == oldVoice)
+                  continue;
             const auto it = voiceChords.find(oldVoice);
 
             Q_ASSERT_X(it != voiceChords.end(),
