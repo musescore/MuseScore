@@ -768,11 +768,11 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
 
 
       else {
-            qDebug("cannot paste selState %d staffList %d",
+            qDebug("cannot paste selState %d staffList %hhd",
                _selection.state(), ms->hasFormat(mimeStaffListFormat));
             foreach(const QString& s, ms->formats())
                   qDebug("  format %s", qPrintable(s));
             }
-      return PasteStatus::NO_ERROR;
+      return PasteStatus::PS_NO_ERROR;
       }
 }

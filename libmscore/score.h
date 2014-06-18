@@ -222,7 +222,7 @@ struct Layer {
       };
 
 enum class PasteStatus : char {
-      NO_ERROR,
+      PS_NO_ERROR,
       NO_MIME,
       NO_DEST,
       DEST_TUPLET,
