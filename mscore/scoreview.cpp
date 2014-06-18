@@ -4832,8 +4832,8 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             score()->repitchNote(pos, !addFlag);
       else
             score()->putNote(pos, !addFlag);
-      _score->endCmd();
 
+      _score->endCmd();
       adjustCanvasPosition(is.cr(), false);
       }
 
