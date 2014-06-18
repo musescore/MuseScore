@@ -11,9 +11,6 @@
 //=============================================================================
 
 #include <fenv.h>
-#include <QToolBar>
-#include <QWidget>
-#include <QMenuBar>
 
 #include "palettebox.h"
 #include "config.h"
@@ -594,7 +591,7 @@ MuseScore::MuseScore()
             tab2 = new ScoreTab(&scoreList, this);
             tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
-            connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));\
+            connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
             connect(tab2, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
             splitter->addWidget(tab2);
             tab2->setVisible(false);
