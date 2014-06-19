@@ -2647,8 +2647,10 @@ void ScoreView::cmd(const QAction* a)
                   _score->cmdAddInterval(n, nl);
                   }
             }
-      else if (cmd == "tie")
+      else if (cmd == "tie") {
             _score->cmdAddTie();
+            moveCursor();
+            }
       else if (cmd == "duplet")
             cmdTuplet(2);
       else if (cmd == "triplet")
