@@ -841,15 +841,48 @@ void Score::repitchNote(const Position& p, bool replace)
       note->setTrack(chord->track());
       note->setNval(nval);
 
+      Tie* tieFor = 0;
+      Note* firstTiedNote = 0;
+      Note* lastTiedNote = note;
       if (replace) {
+            QList<Note*> notes = chord->notes();
+            if (notes.size() == 1 && notes.first()->tieFor()) {
+                  tieFor = notes.first()->tieFor();
+                  firstTiedNote = tieFor->endNote();
+                  Note* tn = firstTiedNote;
+                  while (tn) {
+                        Chord* tc = tn->chord();
+                        if (tc->notes().size() != 1)
+                              break;
+                        lastTiedNote = tn;
+
+                        tn->undoSetPitch(note->pitch());
+                        tn->undoSetTpc(note->tpc());
+                        tn->undoSetTpc1(note->tpc1());
+                        tn->undoSetTpc2(note->tpc2());
+
+                        if (tn->tieFor())
+                              tn = tn->tieFor()->endNote();
+                        else
+                              break;
+                        }
+                  }
             while (!chord->notes().isEmpty())
                   undoRemoveElement(chord->notes().first());
             }
       undoAddElement(note);
-      select(note);
+      if (tieFor) {
+            // old tieFor is no longer valid; it was deleted along with the oiginal note
+            Tie* tie = new Tie(this);
+            tie->setStartNote(note);
+            tie->setEndNote(firstTiedNote);
+            tie->setTrack(note->track());
+            undoAddElement(tie);
+            }
+      select(lastTiedNote);
       // move to next Chord
-      ChordRest* next = nextChordRest(_is.cr());
-      while(next && next->type() != ElementType::CHORD)
+      ChordRest* next = nextChordRest(lastTiedNote->chord());
+      while (next && next->type() != ElementType::CHORD)
             next = nextChordRest(next);
       if (next)
             _is.moveInputPos(next->segment());
