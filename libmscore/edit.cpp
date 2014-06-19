@@ -877,7 +877,7 @@ void Score::cmdAddTie()
 
       startCmd();
       foreach (Note* note, noteList) {
-            if(note->chord() &&  note->chord()->isGrace())
+            if (note->chord() &&  note->chord()->isGrace())
                   continue;
             if (note->tieFor()) {
                   qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
@@ -898,7 +898,7 @@ void Score::cmdAddTie()
                   bool addFlag = _is.cr()->type() == ElementType::CHORD;
                   Note* n = addPitch(note->pitch(), addFlag);
                   if (n) {
-                        // n is not necessarly next note if duration span over measure
+                        // n is not necessarily next note if duration span over measure
                         Note* nnote = searchTieNote(note);
                         if (nnote) {
                               n->setLine(note->line());
@@ -910,6 +910,8 @@ void Score::cmdAddTie()
                               undoAddElement(tie);
                               nextInputPos(n->chord(), false);
                               }
+                        else
+                              qDebug("cmdAddTie: no next note?");
                         }
                   continue;
                   }
