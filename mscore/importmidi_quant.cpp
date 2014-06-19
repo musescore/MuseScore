@@ -357,7 +357,7 @@ getTrackWithAllChords(const std::multimap<int, MTrack> &tracks)
 
 void setIfHumanPerformance(
             const std::multimap<int, MTrack> &tracks,
-            const TimeSigMap *sigmap)
+            TimeSigMap *sigmap)
       {
       auto allChordsTrack = getTrackWithAllChords(tracks);
       MChord::collectChords(allChordsTrack);

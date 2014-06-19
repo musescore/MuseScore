@@ -222,45 +222,82 @@ void removeEvery2ndBeat(std::set<ReducedFraction> &beatSet)
             }
       }
 
+// we can use ReducedFraction for time signature (bar fraction)
+// because it reduces itself only if numerator or denominator
+// is greater than some big number (see ReducedFraction class definition)
+
+std::vector<ReducedFraction> findTimeSignatures(const ReducedFraction &timeSigFromMidiFile)
+      {
+      std::vector<ReducedFraction> fractions{ReducedFraction(4, 4), ReducedFraction(3, 4)};
+      bool match = false;
+      for (const ReducedFraction &f: fractions) {
+            if (f.isIdenticalTo(timeSigFromMidiFile)) {
+                  match = true;
+                  break;
+                  }
+            }
+      if (!match) {     // some special time sig in MIDI file - use only it
+            fractions.clear();
+            fractions.push_back(timeSigFromMidiFile);
+            }
+      return fractions;
+      }
+
 void findBeatLocations(
             const std::multimap<ReducedFraction, MidiChord> &allChords,
-            const TimeSigMap *sigmap,
+            TimeSigMap *sigmap,
             double ticksPerSec)
       {
       const size_t MIN_BEAT_COUNT = 8;
-      const auto barFraction = ReducedFraction(sigmap->timesig(0).timesig());
-      const auto beatLen = Meter::beatLength(barFraction);
-      const auto div = barFraction / beatLen;
-      const size_t beatsInBar = div.numerator() / div.denominator();
-      std::vector<Meter::DivisionInfo> divsInfo = { Meter::metricDivisionsOfBar(barFraction) };
-      const std::vector<int> levels = Meter::metricLevelsOfBar(barFraction, divsInfo, beatLen);
+      const auto barFractions = findTimeSignatures(ReducedFraction(sigmap->timesig(0).timesig()));
+      const std::vector<
+                 std::function<double(const std::pair<const ReducedFraction, MidiChord> &, double)>
+                       >
+                 salienceFuncs = {findChordSalience1, findChordSalience2};
 
-      Q_ASSERT_X(levels.size() == beatsInBar,
-                 "MidiBeat::findBeatLocations", "Wrong count of bar levels");
-
-      const std::vector<std::function<double(const std::pair<const ReducedFraction, MidiChord> &,
-                                             double)>> salienceFuncs
-                  = {findChordSalience1, findChordSalience2};
-      std::map<double, std::set<ReducedFraction>, std::greater<double>> beatResults;
+                  // <match rank, beat set + bar fraction, comparator>
+      std::map<double,
+               std::pair<std::set<ReducedFraction>, ReducedFraction>,
+               std::greater<double>
+              > beatResults;
 
       for (const auto &func: salienceFuncs) {
             const auto events = prepareChordEvents(allChords, func, ticksPerSec);
             const auto beatTimes = BeatTracker::beatTrack(events);
+            if (beatTimes.size() <= MIN_BEAT_COUNT)
+                  continue;
 
-            if (beatTimes.size() > MIN_BEAT_COUNT) {
+            for (const ReducedFraction &barFraction: barFractions) {
+                  const auto beatLen = Meter::beatLength(barFraction);
+                  const auto div = barFraction / beatLen;
+                  const size_t beatsInBar = div.numerator() / div.denominator();
+
+                  const std::vector<Meter::DivisionInfo> divsInfo
+                                    = { Meter::metricDivisionsOfBar(barFraction) };
+                  const auto levels = Meter::metricLevelsOfBar(barFraction, divsInfo, beatLen);
+
+                  Q_ASSERT_X(levels.size() == beatsInBar,
+                             "MidiBeat::findBeatLocations", "Wrong count of bar levels");
+
+                              // beat set - first case
                   auto beatSet = prepareHumanBeatSet(beatTimes, allChords,
                                                      ticksPerSec, beatsInBar);
                   double matchRank = findMatchRank(beatSet, events,
                                                    levels, beatsInBar, ticksPerSec);
-                  beatResults.insert({matchRank, beatSet});
-                              // remove every 2nd beat and add this case too
+                  beatResults.insert({matchRank, {beatSet, barFraction}});
+
+                              // second case - remove every 2nd beat
                   removeEvery2ndBeat(beatSet);
                   matchRank = findMatchRank(beatSet, events, levels, beatsInBar, ticksPerSec);
-                  beatResults.insert({matchRank, beatSet});
+                  beatResults.insert({matchRank, {beatSet, barFraction}});
                   }
             }
       if (!beatResults.empty()) {
-            preferences.midiImportOperations.setHumanBeats(beatResults.begin()->second);
+            const auto &beatSet = beatResults.begin()->second.first;
+            const auto &barFraction = beatResults.begin()->second.second;
+            sigmap->clear();
+            sigmap->add(0, barFraction.fraction());
+            preferences.midiImportOperations.setHumanBeats(beatSet);
             }
       }
 

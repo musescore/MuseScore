@@ -13,7 +13,7 @@ namespace MidiBeat {
 
 void findBeatLocations(
             const std::multimap<ReducedFraction, MidiChord> &allChords,
-            const TimeSigMap *sigmap,
+            TimeSigMap *sigmap,
             double ticksPerSec);
 
 void adjustChordsToBeats(
