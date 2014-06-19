@@ -37,6 +37,7 @@ class TestSelectionFilter : public QObject, public MTest
       void filterFingering()        { testFilter(4,SelectionFilterType::FINGERING); }
       void filterChordSymbol()      { testFilter(5,SelectionFilterType::CHORD_SYMBOL); }
       void filterSlur()             { testFilter(6,SelectionFilterType::SLUR); }
+      void filterFiguredBass()      { testFilter(7,SelectionFilterType::FIGURED_BASS); }
       };
 
 //---------------------------------------------------------
