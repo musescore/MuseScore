@@ -287,6 +287,8 @@ bool SelectionFilter::canSelect(const Element* e) const
           && !isFiltered(SelectionFilterType::CHORD_SYMBOL)) return false;
       if (e->type() == Element::Type::SLUR
           && !isFiltered(SelectionFilterType::SLUR)) return false;
+      if (e->type() == Element::Type::FIGURED_BASS
+          && !isFiltered(SelectionFilterType::FIGURED_BASS)) return false;
       return true;
       }
 

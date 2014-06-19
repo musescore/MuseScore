@@ -946,6 +946,7 @@ FiguredBass::~FiguredBass()
 
 void FiguredBass::write(Xml& xml) const
       {
+      if (!xml.canWrite(this)) return;
       xml.stag("FiguredBass");
       if(!onNote())
             xml.tag("onNote", onNote());
