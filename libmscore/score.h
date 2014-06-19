@@ -375,16 +375,10 @@ class Score : public QObject {
       void cmdSetBeamMode(BeamMode);
       void cmdFlip();
       Note* getSelectedNote();
-      Element* upAlt(Element*);
-      Note* upAltCtrl(Note*) const;
-      Element* downAlt(Element*);
-      Note* downAltCtrl(Note*) const;
       ChordRest* upStaff(ChordRest* cr);
       ChordRest* downStaff(ChordRest* cr);
       ChordRest* nextTrack(ChordRest* cr);
       ChordRest* prevTrack(ChordRest* cr);
-      void moveUp(Chord*);
-      void moveDown(Chord*);
 
       void padToggle(Pad n);
       void addTempo();
@@ -965,6 +959,13 @@ class Score : public QObject {
 
       QList<int> uniqueStaves() const;
       void transpositionChanged(Part*);
+
+      void moveUp(Chord*);
+      void moveDown(Chord*);
+      Element* upAlt(Element*);
+      Note* upAltCtrl(Note*) const;
+      Element* downAlt(Element*);
+      Note* downAltCtrl(Note*) const;
 
       friend class ChangeSynthesizerState;
       friend class Chord;

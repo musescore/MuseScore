@@ -2065,8 +2065,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 
 void ScoreView::constraintCanvas (int* dxx, int* dyy)
       {
-      return;
-
+#if 0
       const qreal margin = 50.0; //move to preferences?
       int dx = *dxx;
       int dy = *dyy;
@@ -2135,6 +2134,7 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
             }
       *dxx = dx;
       *dyy = dy;
+#endif
       }
 
 //---------------------------------------------------------
@@ -2415,6 +2415,20 @@ void ScoreView::normalPaste()
       }
 
 //---------------------------------------------------------
+//   cmdGotoElement
+//---------------------------------------------------------
+
+void ScoreView::cmdGotoElement(Element* e)
+      {
+      if (e) {
+            if (e->type() == ElementType::NOTE)
+                  score()->setPlayNote(true);
+            score()->select(e, SelectType::SINGLE, 0);
+            moveCursor();
+            }
+      }
+
+//---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
 
@@ -2575,6 +2589,44 @@ void ScoreView::cmd(const QAction* a)
                         adjustCanvasPosition(el, false);
                   updateAll();
                   }
+            }
+      else if (cmd == "pitch-up-diatonic")
+            score()->upDown(true, UpDownMode::DIATONIC);
+      else if (cmd == "pitch-down-diatonic")
+            score()->upDown(false, UpDownMode::DIATONIC);
+      else if (cmd == "move-up") {
+            Element* el = score()->selection().element();
+            if (el && el->type() == ElementType::NOTE) {
+                  Note* note = static_cast<Note*>(el);
+                  score()->moveUp(note->chord());
+                  }
+            }
+      else if (cmd == "move-down") {
+            Element* el = score()->selection().element();
+            if (el && el->type() == ElementType::NOTE) {
+                  Note* note = static_cast<Note*>(el);
+                  score()->moveDown(note->chord());
+                  }
+            }
+      else if (cmd == "up-chord") {
+            Element* el = score()->selection().element();
+            if (el && (el->type() == ElementType::NOTE || el->type() == ElementType::REST))
+                  cmdGotoElement(score()->upAlt(el));
+            }
+      else if (cmd == "down-chord") {
+            Element* el = score()->selection().element();
+            if (el && (el->type() == ElementType::NOTE || el->type() == ElementType::REST))
+                  cmdGotoElement(score()->downAlt(el));
+            }
+      else if (cmd == "top-chord" ) {
+            Element* el = score()->selection().element();
+            if (el && el->type() == ElementType::NOTE)
+                  cmdGotoElement(score()->upAltCtrl(static_cast<Note*>(el)));
+            }
+      else if (cmd == "bottom-chord") {
+            Element* el = score()->selection().element();
+            if (el && el->type() == ElementType::NOTE)
+                  cmdGotoElement(score()->downAltCtrl(static_cast<Note*>(el)));
             }
       else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
