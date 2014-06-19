@@ -991,9 +991,9 @@ void StyleData::load(XmlReader& e)
 
                   QString val(e.readElementText());
 
-                  StyleIdx idx;
-                  for (int i = 0; i < int(StyleIdx::STYLES); ++i) {
-                        idx = static_cast<StyleIdx>(i);
+                  int i;
+                  for (i = 0; i < int(StyleIdx::STYLES); ++i) {
+                        StyleIdx idx = static_cast<StyleIdx>(i);
                         if (styleTypes.name(idx) == tag) {
                               switch(styleTypes.valueType(idx)) {
                                     case StyleValueType::SPATIUM:   set(idx, QVariant(val.toDouble()));    break;
@@ -1006,15 +1006,13 @@ void StyleData::load(XmlReader& e)
                               break;
                               }
                         }
-                  if (int(idx) >= int(StyleIdx::STYLES)) {
-                        if (tag == "oddHeader")
-                              ;
-                        else if (tag == "evenHeader")
-                              ;
-                        else if (tag == "oddFooter")
-                              ;
-                        else if (tag == "evenHeader")
-                              ;
+                  if (i >= int(StyleIdx::STYLES)) {
+                        if (tag == "oddHeader" || tag == "evenHeader"
+                           || tag == "oddFooter" || tag == "evenFooter"
+                           || tag == "headerStyled" || tag == "footerStyled"
+                           ) {
+                              ;     // obsolete
+                              }
                         else {
                               int idx2;
                               for (idx2 = 0; idx2 < int(ArticulationType::ARTICULATIONS); ++idx2) {
@@ -1027,7 +1025,7 @@ void StyleData::load(XmlReader& e)
                                           break;
                                           }
                                     }
-                              if (idx2 == int(ArticulationType::ARTICULATIONS))
+                              if (idx2 >= int(ArticulationType::ARTICULATIONS))
                                     e.unknown();
                               }
                         }
