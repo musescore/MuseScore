@@ -62,6 +62,7 @@ enum class SelectionFilterType {
       CHORD_SYMBOL            = 1 << 7,
       ARTICULATION            = 1 << 8,
       SLUR                    = 1 << 9,
+      FIGURED_BASS            = 1 << 10,
       ALL                     = -1
       };
 
