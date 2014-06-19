@@ -522,7 +522,7 @@ void Staff::read(XmlReader& e)
 
 qreal Staff::height() const
       {
-      return (lines()-1) * spatium() * _staffType.lineDistance().val();
+      return (lines() == 1 ? 2 : lines()-1) * spatium() * _staffType.lineDistance().val();
       }
 
 //---------------------------------------------------------

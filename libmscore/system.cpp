@@ -235,8 +235,13 @@ void System::layout(qreal xo1)
                   continue;
                   }
             qreal staffMag = staff->mag();
-            s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0,
-               (staff->lines()-1) * staff->lineDistance() * spatium() * staffMag);
+            qreal h;
+            if (staff->lines() == 1)
+                  h = 2;
+            else
+                  h = (staff->lines()-1) * staff->lineDistance();
+            h = h * staffMag * spatium();
+            s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0, h);
             }
 
       if ((nstaves > 1 && score()->styleB(StyleIdx::startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(StyleIdx::startBarlineSingle))) {
@@ -344,8 +349,10 @@ void System::layout2()
                   s->setbbox(QRectF());  // already done in layout() ?
                   continue;
                   }
-            qreal sHeight = staff->height();   // (staff->lines() - 1) * _spatium * staffMag;
+            qreal sHeight = staff->height();
             qreal dup = staffIdx == 0 ? 0.0 : s->distanceUp();
+            if (staff->lines() == 1)
+                  dup -= _spatium * staff->mag();
             s->bbox().setRect(_leftMargin, y + dup, width() - _leftMargin, sHeight);
             y += dup + sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
@@ -554,19 +561,17 @@ void System::setInstrumentNames(bool longName)
  or -1 if not found.
 
  To allow drag and drop above and below the staff, the actual y range
- considered "inside" the staff is increased a bit.
- TODO: replace magic number "0.6" by something more appropriate.
+ considered "inside" the staff is increased by "margin".
 */
 
 int System::y2staff(qreal y) const
       {
       y -= pos().y();
       int idx = 0;
-      foreach(SysStaff* s, _staves) {
-            qreal t = s->bbox().top();
-            qreal b = s->bbox().bottom();
-            qreal y1 = t - 0.6 * (b - t);
-            qreal y2 = b + 0.6 * (b - t);
+      qreal margin = spatium() * 2;
+      foreach (SysStaff* s, _staves) {
+            qreal y1 = s->bbox().top()    - margin;
+            qreal y2 = s->bbox().bottom() + margin;
             if (y >= y1 && y < y2)
                   return idx;
             ++idx;

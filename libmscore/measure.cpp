@@ -1210,61 +1210,27 @@ QRectF Measure::staffabbox(int staffIdx) const
 
 /**
  Return true if an Element of type \a type can be dropped on a Measure
- at canvas relative position \a p.
-
- Note special handling for clefs (allow drop if left of rightmost chord or rest in this staff)
- and key- and timesig (allow drop if left of first chord or rest).
 */
 
-bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) const
+bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF&, Element* e) const
       {
-      ElementType type = e->type();
-      // convert p from canvas to measure relative position and take x and y coordinates
-      QPointF mrp = p - canvasPos(); // pos() - system()->pos() - system()->page()->pos();
-      qreal mrpy = mrp.y();
-
-      System* s = system();
-      int idx = s->y2staff(p.y());
-      if (idx == -1) {
-            return false;                       // staff not found
-            }
-      QRectF sb(s->staff(idx)->bbox());
-      qreal t = sb.top();    // top of staff
-      qreal b = sb.bottom(); // bottom of staff
-
-      // compute rectangle of staff in measure
-      QRectF rrr(sb.translated(s->pagePos()));
-      QRectF rr(abbox());
-      QRectF r(rr.x(), rrr.y(), rr.width(), rrr.height());
-
-      Page* page = system()->page();
-      r.translate(page->pos());
-      rr.translate(page->pos());
-
-      switch (type) {
+      switch (e->type()) {
             case ElementType::MEASURE_LIST:
             case ElementType::JUMP:
             case ElementType::MARKER:
             case ElementType::LAYOUT_BREAK:
-                  viewer->setDropRectangle(rr);
-                  return true;
-
             case ElementType::STAFF_LIST:
             case ElementType::BRACKET:
             case ElementType::REPEAT_MEASURE:
             case ElementType::MEASURE:
             case ElementType::SPACER:
             case ElementType::IMAGE:
-                  viewer->setDropRectangle(r);
-                  return true;
-
             case ElementType::BAR_LINE:
             case ElementType::SYMBOL:
             case ElementType::CLEF:
-                  // accept drop only inside staff
-                  if (mrpy < t || mrpy > b)
-                        return false;
-                  viewer->setDropRectangle(r);
+            case ElementType::KEYSIG:
+            case ElementType::TIMESIG:
+                  viewer->setDropRectangle(canvasBoundingRect());
                   return true;
 
             case ElementType::ICON:
@@ -1274,20 +1240,12 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF& p, Element* e) co
                         case IconType::TFRAME:
                         case IconType::FFRAME:
                         case IconType::MEASURE:
-                              viewer->setDropRectangle(rr);
+                              viewer->setDropRectangle(canvasBoundingRect());
                               return true;
                         default:
                               break;
                         }
                   break;
-
-            case ElementType::KEYSIG:
-            case ElementType::TIMESIG:
-                  // accept drop only inside staff
-                  if (mrpy < t || mrpy > b)
-                        return false;
-                  viewer->setDropRectangle(r);
-                  return true;
 
             default:
                   break;
