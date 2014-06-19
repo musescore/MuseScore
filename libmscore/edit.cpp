@@ -856,12 +856,7 @@ void Score::repitchNote(const Position& p, bool replace)
                         if (!firstTiedNote)
                               firstTiedNote = tn;
                         lastTiedNote = tn;
-
-                        tn->undoSetPitch(note->pitch());
-                        tn->undoSetTpc(note->tpc());
-                        tn->undoSetTpc1(note->tpc1());
-                        tn->undoSetTpc2(note->tpc2());
-
+                        undoChangePitch(tn, note->pitch(), note->tpc1(), note->tpc2());
                         if (tn->tieFor())
                               tn = tn->tieFor()->endNote();
                         else
