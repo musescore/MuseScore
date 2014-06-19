@@ -116,8 +116,8 @@ void addFirstBeats(
 
 void addLastBeats(
             std::set<ReducedFraction> &beatSet,
-            size_t beatsInBar,
-            const std::multimap<ReducedFraction, MidiChord> &chords)
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            size_t beatsInBar)
       {
                   // theoretically it's possible that every chord have off time
                   // at the end of the piece - so check all chords for max off time
@@ -157,7 +157,7 @@ prepareHumanBeatSet(const std::vector<double> &beatTimes,
             beatSet.insert(MidiTempo::time2Tick(beatTime, ticksPerSec));
 
       addFirstBeats(beatSet, chords, beatsInBar);
-      addLastBeats(beatSet, beatsInBar, chords);
+      addLastBeats(beatSet, chords, beatsInBar);
 
       return beatSet;
       }
