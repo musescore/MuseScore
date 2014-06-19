@@ -841,19 +841,20 @@ void Score::repitchNote(const Position& p, bool replace)
       note->setTrack(chord->track());
       note->setNval(nval);
 
-      Tie* tieFor = 0;
       Note* firstTiedNote = 0;
       Note* lastTiedNote = note;
       if (replace) {
             QList<Note*> notes = chord->notes();
             if (notes.size() == 1 && notes.first()->tieFor()) {
-                  tieFor = notes.first()->tieFor();
-                  firstTiedNote = tieFor->endNote();
-                  Note* tn = firstTiedNote;
+                  Note* tn = notes.first()->tieFor()->endNote();
                   while (tn) {
                         Chord* tc = tn->chord();
-                        if (tc->notes().size() != 1)
+                        if (tc->notes().size() != 1) {
+                              undoRemoveElement(tn->tieBack());
                               break;
+                              }
+                        if (!firstTiedNote)
+                              firstTiedNote = tn;
                         lastTiedNote = tn;
 
                         tn->undoSetPitch(note->pitch());
@@ -871,8 +872,7 @@ void Score::repitchNote(const Position& p, bool replace)
                   undoRemoveElement(chord->notes().first());
             }
       undoAddElement(note);
-      if (tieFor) {
-            // old tieFor is no longer valid; it was deleted along with the oiginal note
+      if (firstTiedNote) {
             Tie* tie = new Tie(this);
             tie->setStartNote(note);
             tie->setEndNote(firstTiedNote);
