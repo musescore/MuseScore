@@ -31,22 +31,18 @@ class Score;
 
 class InputState {
       Score*      _score;
-      TDuration   _duration = TDuration::DurationType::V_INVALID;        // currently duration
-      int         _drumNote = -1;
-#if 0 // yet(?) unused
-      Drumset*    _drumset = 0;
-#endif
-      int         _track = 0;
-      Segment*    _lastSegment = 0;
-      Segment*    _segment = 0;         // current segment
-      int         _string = VISUAL_STRING_NONE;          // visual string selected for input (TAB staves only)
-      bool        _repitchMode = false;
-
-      bool _rest = false;              // rest mode
-      NoteType _noteType = NoteType::NORMAL;
-      BeamMode _beamMode = BeamMode::AUTO;
-      bool _noteEntryMode = false;
-      Slur* _slur = 0;
+      TDuration   _duration    { TDuration::DurationType::V_INVALID };  // currently duration
+      int         _drumNote    { -1 };
+      int         _track       { 0 };
+      Segment*    _lastSegment { 0 };
+      Segment*    _segment     { 0 };                       // current segment
+      int         _string      { VISUAL_STRING_NONE };      // visual string selected for input (TAB staves only)
+      bool        _repitchMode { false };
+      bool _rest               { false };              // rest mode
+      NoteType _noteType       { NoteType::NORMAL };
+      BeamMode _beamMode       { BeamMode::AUTO };
+      bool _noteEntryMode      { false };
+      Slur* _slur              { 0     };
 
       Segment* nextInputPos() const;
 
