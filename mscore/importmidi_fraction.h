@@ -23,6 +23,7 @@ class ReducedFraction
       double toDouble() const;
       int ticks() const;
       void reduce();
+      bool isIdenticalTo(const ReducedFraction &f) const;
 
       ReducedFraction& operator+=(const ReducedFraction&);
       ReducedFraction& operator-=(const ReducedFraction&);

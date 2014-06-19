@@ -196,6 +196,11 @@ void ReducedFraction::reduce()
 
       numerator_ /= tmp;
       denominator_ /= tmp;
+}
+
+bool ReducedFraction::isIdenticalTo(const ReducedFraction &f) const
+      {
+      return (f.numerator_ == numerator_ && f.denominator_ == denominator_);
       }
 
 void ReducedFraction::preventOverflow()

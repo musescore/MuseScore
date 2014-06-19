@@ -84,7 +84,7 @@ ReducedFraction findOffTimeQuantError(
 
 void setIfHumanPerformance(
             const std::multimap<int, MTrack> &tracks,
-            const TimeSigMap *sigmap);
+            TimeSigMap *sigmap);
 
 ReducedFraction quantizeValue(
             const ReducedFraction &value,
