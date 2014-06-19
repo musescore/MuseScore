@@ -4361,8 +4361,8 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             else
                   domError(ee);
             }
-
-      if (!arpeggioType.isEmpty()) {
+      // no support for arpeggio on rest
+      if (!arpeggioType.isEmpty() && cr->type() == ElementType::CHORD) {
             Arpeggio* a = new Arpeggio(score);
             if (arpeggioType == "none")
                   a->setArpeggioType(ArpeggioType::NORMAL);
