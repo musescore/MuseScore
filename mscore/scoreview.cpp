@@ -4616,9 +4616,11 @@ void ScoreView::cmdTuplet(int n)
       _score->startCmd();
       if (noteEntryMode()) {
             _score->expandVoice();
-            _score->changeCRlen(_score->inputState().cr(), _score->inputState().duration());
-            if (_score->inputState().cr())
-                  cmdTuplet(n, _score->inputState().cr());
+            ChordRest* cr = _score->inputState().cr();
+            if (cr) {
+                  _score->changeCRlen(cr, _score->inputState().duration());
+                  cmdTuplet(n, cr);
+                  }
             }
       else {
             QSet<ChordRest*> set;
