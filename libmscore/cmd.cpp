@@ -924,21 +924,16 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
       else
             dstF = d.fraction();
 
-qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
-      dstF.numerator(), dstF.denominator());
-
       if (srcF == dstF)
             return;
+
+qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(), dstF.numerator(), dstF.denominator());
+
+      //keep selected element if any
+      Element* selElement = selection().isSingle() ? getSelectedElement() : 0;
+
       int track = cr->track();
       Tuplet* tuplet = cr->tuplet();
-
-            //keep selected note if any
-      Note* selNote = 0;
-      if(selection().isSingle()) {
-            Element* el = getSelectedElement();
-            if(el->type() == ElementType::NOTE)
-                  selNote = static_cast<Note*>(el);
-            }
 
       if (srcF > dstF) {
             //
@@ -955,19 +950,17 @@ qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(),
                         if (tremolo->twoNotes())
                               undoRemoveElement(tremolo);
                         }
-                  foreach(Note* n, c->notes()) {
+                  foreach (Note* n, c->notes()) {
                         if (n->tieFor())
                               undoRemoveElement(n->tieFor());
                         }
                   }
             undoChangeChordRestLen(cr, TDuration(dstF));
-qDebug("  setRest at %d+%d, %d/%d",
-   cr->tick(), cr->actualTicks(), (srcF-dstF).numerator(), (srcF-dstF).denominator());
+qDebug("  setRest at %d+%d, %d/%d", cr->tick(), cr->actualTicks(), (srcF-dstF).numerator(), (srcF-dstF).denominator());
             setRest(cr->tick() + cr->actualTicks(), track, srcF - dstF, false, tuplet);
-            if(!selNote)
-                  select(cr, SelectType::SINGLE, 0);
-            else
-                  select(selNote, SelectType::SINGLE, 0);
+
+            if (selElement)
+                  select(selElement, SelectType::SINGLE, 0);
             return;
             }
 
@@ -1038,10 +1031,10 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
                                     oc = cc;
                                     }
                               if (oc && first) {
-                                    if(!selNote)
+                                    if (!selElement)
                                           select(oc, SelectType::SINGLE, 0);
                                     else
-                                          select(selNote, SelectType::SINGLE, 0);
+                                          select(selElement, SelectType::SINGLE, 0);
                                     first = false;
                                     }
                               if (oc)
