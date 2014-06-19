@@ -398,8 +398,9 @@ Note* Score::addPitch(int pitch, bool addFlag)
       if (_is.repitchMode() && _is.cr()->type() == ElementType::CHORD) {
             Chord* chord = static_cast<Chord*>(_is.cr());
             note = new Note(this);
-            note->setNval(nval);
             note->setParent(chord);
+            note->setTrack(chord->track());
+            note->setNval(nval);
             if (!addFlag) {
                   while (!chord->notes().isEmpty())
                         undoRemoveElement(chord->notes().first());

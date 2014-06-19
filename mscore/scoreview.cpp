@@ -4787,7 +4787,6 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   }
             }
 
-
       if (is.repitchMode())
             score()->repitchNote(pos, !addFlag);
       else

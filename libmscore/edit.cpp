@@ -837,8 +837,9 @@ void Score::repitchNote(const Position& p, bool replace)
             chord = static_cast<Chord*>(_is.cr());
             }
       Note* note = new Note(this);
-      note->setNval(nval);
       note->setParent(chord);
+      note->setTrack(chord->track());
+      note->setNval(nval);
 
       if (replace) {
             while (!chord->notes().isEmpty())
