@@ -9,7 +9,8 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
-
+#include <QList>
+#include <QPointF>
 #include "navigate.h"
 #include "element.h"
 #include "clef.h"
@@ -223,6 +224,82 @@ Element* Score::downAlt(Element* element)
 Note* Score::downAltCtrl(Note* note) const
       {
       return note->chord()->downNote();
+      }
+
+Element* firstNoteBelow(Note* e)
+      {
+      Note* re = 0;
+      Segment* seg = e->chord()->segment();
+      for(int i = e->track()/VOICES; i/VOICES == e->track()/VOICES; i++){
+            Element* el = seg->element(i);
+            if(!el){
+                  continue;
+                  }
+            if(el->type() == ElementType::REST){
+                  continue;
+                  }
+            foreach (Note* n, static_cast<Chord*>(el)->notes()){
+                  if(e->pitch() > n->pitch()){
+                        if(!re || (re->pitch() < n->pitch()) ){
+                              re = n;
+                              }
+                        }
+                  }
+            }
+      return static_cast<Element*>(re);
+      }
+
+
+Element* Score::nextNoteInChordOrSegment(Element *e)
+      {
+      Element* re = 0;
+      if(e->type() == ElementType::NOTE){
+            re = firstNoteBelow(static_cast<Note*>(e));
+            if(re){
+                  return re;
+                  }
+            }
+
+      Segment* seg;
+      if(e->type() == ElementType::NOTE){
+           seg = static_cast<Note*>(e)->chord()->segment();
+           }
+      else{
+           seg = static_cast<Segment*>(e->parent());
+           }
+      seg = seg->next1(SegmentType::KeySig    |
+                       SegmentType::TimeSig   |
+                       SegmentType::ChordRest |
+                       SegmentType::Clef      |
+                       SegmentType::Breath);
+
+      if(seg->segmentType() == SegmentType::ChordRest){
+            Note* lowest=0;
+            for(int voice = e->track()/VOICES; voice/VOICES == e->track()/VOICES; voice++){
+                  Element* el = seg->element(voice);
+                  if(!el){      //there is no chord or rest on this voice
+                        continue;
+                        }
+                  if(el->type() == ElementType::REST){ //found a rest in another voice
+                        continue;
+                  }
+
+                  Chord* ch = static_cast<Chord*>(el);
+                  Note* n = ch->notes().back();
+                  if( (lowest == 0) || (n->pitch() > lowest->pitch()) ){
+                        lowest = n;
+                        }
+                  }
+            if(lowest){
+                  return lowest;
+                  }
+            re = seg->element(e->track()/VOICES);
+            if(re && re->type() == ElementType::REST){
+                  return re;
+                  }
+            }
+      re = seg->element(e->track()/VOICES);
+      return re;
       }
 
 //---------------------------------------------------------

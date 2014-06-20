@@ -2673,6 +2673,12 @@ void ScoreView::cmd(const QAction* a)
             if (el && el->type() == Element::Type::NOTE)
                   cmdGotoElement(score()->downAltCtrl(static_cast<Note*>(el)));
             }
+      else if (cmd == "next-note-segment"){
+            Element* el = score()->selection().element();
+            if(el) {
+                  cmdGotoElement(score()->nextNoteInChordOrSegment(el));
+                  }
+            }
       else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
       else if (cmd == "rest-1")

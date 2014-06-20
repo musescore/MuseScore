@@ -261,6 +261,10 @@
     <seq>Ctrl+Alt+Up</seq>
     </SC>
   <SC>
+    <key>next-note-segment</key>
+	<seq>Ctrl+Alt+Shift+Right</seq>
+    </SC>
+  <SC>
     <key>move-up</key>
     <seq>Ctrl+Shift+Up</seq>
     </SC>

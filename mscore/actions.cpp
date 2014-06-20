@@ -599,6 +599,14 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Go to lower pitched note in chord")
          ),
       Shortcut(
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "next-note-segment",
+         QT_TRANSLATE_NOOP("action","Next Note in Chord or Segment"),
+         QT_TRANSLATE_NOOP("action","Go to next Note in Chord or Segment"),
+         QT_TRANSLATE_NOOP("action","Go to next Note in Chord or Segment")
+         ),
+      Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
          ShortcutFlags::A_CMD,
          "bottom-chord",
