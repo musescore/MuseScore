@@ -33,6 +33,7 @@ class OperationsModel : public QAbstractItemModel
       OperationsModel();
       ~OperationsModel();
 
+      void setTimeSigVisibility(bool value);
       void setTrackData(const QString &trackLabel, const Ms::DefinedTrackOperations &opers);
 
       QModelIndex index(int row, int column, const QModelIndex &parent) const;

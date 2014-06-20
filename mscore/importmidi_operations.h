@@ -46,6 +46,12 @@ struct SplitDrums
       bool showStaffBracket = true;
       };
 
+struct MidiTimeSig
+      {
+      MidiOperation::TimeSigNumerator numerator = MidiOperation::TimeSigNumerator::_4;
+      MidiOperation::TimeSigDenominator denominator = MidiOperation::TimeSigDenominator::_4;
+      };
+
       // bool and enum-like elementary operations (itself and inside structs) are allowed
 struct TrackOperations
       {
@@ -66,6 +72,7 @@ struct TrackOperations
       bool removeDrumRests = true;
       bool pickupMeasure = true;
       int lyricTrackIndex = -1;     // empty lyric
+      MidiTimeSig timeSig;
       };
 
 struct TrackMeta
@@ -117,7 +124,11 @@ class MidiImportOperations
       bool isHumanPerformance() const;
       void setHumanPerformance(bool value);
       const std::set<ReducedFraction>* getHumanBeats() const;
-      void setHumanBeats(const std::set<ReducedFraction> &humanBeats);
+      void setHumanBeats(const HumanBeatData &beatData);
+                  // time sig can be zero (not specified) if, when opened,
+                  // MIDI file was not detected as human-performed
+      ReducedFraction timeSignature() const;
+      void setTimeSignature(const ReducedFraction &value);
 
                   // quantization
       MidiOperation::QuantValue quantValue() const;

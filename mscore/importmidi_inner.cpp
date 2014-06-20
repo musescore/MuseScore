@@ -4,6 +4,123 @@
 
 
 namespace Ms {
+namespace Meter {
+
+ReducedFraction userTimeSigToFraction(const MidiTimeSig &timeSig)
+      {
+      int numerator = 4;
+      int denominator = 4;
+
+      switch (timeSig.numerator) {
+            case MidiOperation::TimeSigNumerator::_2:
+                  numerator = 2;
+                  break;
+            case MidiOperation::TimeSigNumerator::_3:
+                  numerator = 3;
+                  break;
+            case MidiOperation::TimeSigNumerator::_4:
+                  numerator = 4;
+                  break;
+            case MidiOperation::TimeSigNumerator::_5:
+                  numerator = 5;
+                  break;
+            case MidiOperation::TimeSigNumerator::_6:
+                  numerator = 6;
+                  break;
+            case MidiOperation::TimeSigNumerator::_7:
+                  numerator = 7;
+                  break;
+            case MidiOperation::TimeSigNumerator::_9:
+                  numerator = 9;
+                  break;
+            case MidiOperation::TimeSigNumerator::_12:
+                  numerator = 12;
+                  break;
+            case MidiOperation::TimeSigNumerator::_15:
+                  numerator = 15;
+                  break;
+            case MidiOperation::TimeSigNumerator::_21:
+                  numerator = 21;
+                  break;
+            default:
+                  break;
+            }
+
+      switch (timeSig.denominator) {
+            case MidiOperation::TimeSigDenominator::_2:
+                  denominator = 2;
+                  break;
+            case MidiOperation::TimeSigDenominator::_4:
+                  denominator = 4;
+                  break;
+            case MidiOperation::TimeSigDenominator::_8:
+                  denominator = 8;
+                  break;
+            case MidiOperation::TimeSigDenominator::_16:
+                  denominator = 16;
+                  break;
+            case MidiOperation::TimeSigDenominator::_32:
+                  denominator = 32;
+                  break;
+            default:
+                  break;
+            }
+
+      return ReducedFraction(numerator, denominator);
+      }
+
+MidiOperation::TimeSigNumerator fractionNumeratorToUserValue(int n)
+      {
+      MidiOperation::TimeSigNumerator numerator = MidiOperation::TimeSigNumerator::_4;
+
+      if (n == 2)
+            numerator = MidiOperation::TimeSigNumerator::_2;
+      else if (n == 3)
+            numerator = MidiOperation::TimeSigNumerator::_3;
+      else if (n == 4)
+            numerator = MidiOperation::TimeSigNumerator::_4;
+      else if (n == 5)
+            numerator = MidiOperation::TimeSigNumerator::_5;
+      else if (n == 6)
+            numerator = MidiOperation::TimeSigNumerator::_6;
+      else if (n == 7)
+            numerator = MidiOperation::TimeSigNumerator::_7;
+      else if (n == 9)
+            numerator = MidiOperation::TimeSigNumerator::_9;
+      else if (n == 12)
+            numerator = MidiOperation::TimeSigNumerator::_12;
+      else if (n == 15)
+            numerator = MidiOperation::TimeSigNumerator::_15;
+      else if (n == 21)
+            numerator = MidiOperation::TimeSigNumerator::_21;
+      else
+            Q_ASSERT_X(false, "Meter::fractionNumeratorToUserValue", "Unknown numerator");
+
+      return numerator;
+      }
+
+MidiOperation::TimeSigDenominator fractionDenominatorToUserValue(int z)
+      {
+      MidiOperation::TimeSigDenominator denominator = MidiOperation::TimeSigDenominator::_4;
+
+      if (z == 2)
+            denominator = MidiOperation::TimeSigDenominator::_2;
+      else if (z == 4)
+            denominator = MidiOperation::TimeSigDenominator::_4;
+      else if (z == 8)
+            denominator = MidiOperation::TimeSigDenominator::_8;
+      else if (z == 16)
+            denominator = MidiOperation::TimeSigDenominator::_16;
+      else if (z == 32)
+            denominator = MidiOperation::TimeSigDenominator::_32;
+      else
+            Q_ASSERT_X(false, "Meter::fractionDenominatorToUserValue", "Unknown denominator");
+
+      return denominator;
+      }
+
+} // namespace Meter
+
 namespace MidiTuplet {
 
 bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval1,

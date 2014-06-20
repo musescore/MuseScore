@@ -46,9 +46,12 @@ struct Controller {
       Node *removeDrumRests = nullptr;
       Node *simplifyDurations = nullptr;
       Node *showStaccato = nullptr;
+      Node *timeSig = nullptr;
 
       bool isDrumTrack = false;
       bool allTracksSelected = true;
+      bool timeSigVisible = false;
+
 
       bool updateNodeDependencies(Node *node, bool forceUpdate);
       };
@@ -85,6 +88,36 @@ OperationsModel::OperationsModel()
       humanPerformance->oper.value = Quantization().humanPerformance;
       humanPerformance->setParent(quantValue);
       controller->quantHuman = humanPerformance;
+
+
+      Node *timeSigNumerator = new Node;
+      timeSigNumerator->name = QCoreApplication::translate("MIDI import operations", "Time signature");
+      timeSigNumerator->oper.type = MidiOperation::Type::TIME_SIG_NUMERATOR;
+      timeSigNumerator->oper.value = (int)MidiTimeSig().numerator;
+      timeSigNumerator->values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
+      timeSigNumerator->values.push_back(QCoreApplication::translate("MIDI import operations", "3"));
+      timeSigNumerator->values.push_back(QCoreApplication::translate("MIDI import operations", "4"));
+      timeSigNumerator->values.push_back(QCoreApplication::translate("MIDI import operations", "5"));
+      timeSigNumerator->values.push_back(QCoreApplication::translate("MIDI import operations", "6"));
+      timeSigNumerator->values.push_back(QCoreApplication::translate("MIDI import operations", "7"));
+      timeSigNumerator->values.push_back(QCoreApplication::translate("MIDI import operations", "9"));
+      timeSigNumerator->values.push_back(QCoreApplication::translate("MIDI import operations", "12"));
+      timeSigNumerator->values.push_back(QCoreApplication::translate("MIDI import operations", "15"));
+      timeSigNumerator->values.push_back(QCoreApplication::translate("MIDI import operations", "21"));
+      timeSigNumerator->setParent(root.get());
+      controller->timeSig = timeSigNumerator;
+
+
+      Node *timeSigDenominator = new Node;
+      timeSigDenominator->name = QCoreApplication::translate("MIDI import operations", "/");
+      timeSigDenominator->oper.type = MidiOperation::Type::TIME_SIG_DENOMINATOR;
+      timeSigDenominator->oper.value = (int)MidiTimeSig().denominator;
+      timeSigDenominator->values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
+      timeSigDenominator->values.push_back(QCoreApplication::translate("MIDI import operations", "4"));
+      timeSigDenominator->values.push_back(QCoreApplication::translate("MIDI import operations", "8"));
+      timeSigDenominator->values.push_back(QCoreApplication::translate("MIDI import operations", "16"));
+      timeSigDenominator->values.push_back(QCoreApplication::translate("MIDI import operations", "32"));
+      timeSigDenominator->setParent(timeSigNumerator);
 
 
       Node *useDots = new Node;
@@ -307,6 +340,11 @@ OperationsModel::~OperationsModel()
       {
       }
 
+void OperationsModel::setTimeSigVisibility(bool value)
+      {
+      controller->timeSigVisible = value;
+      }
+
 QModelIndex OperationsModel::index(int row, int column, const QModelIndex &parent) const
       {
       if (!root || row < 0 || column < 0 || column >= OperationCol::OCOL_COUNT)
@@ -378,7 +416,7 @@ QVariant OperationsModel::data(const QModelIndex &index, int role) const
             return QVariant();
       switch (role) {
             case DataRole:
-                  if (node->values.empty())  // checkbox
+                  if (node->values.empty() && !node->values.empty())  // checkbox
                         return node->oper.value.toBool();
                   else
                         return node->oper.value.toInt();
@@ -503,6 +541,11 @@ void setNodeOperations(Node *node, const DefinedTrackOperations &opers)
                         node->oper.value = (int)opers.opers.quantize.value; break;
                   case MidiOperation::Type::QUANT_HUMAN:
                         node->oper.value = opers.opers.quantize.humanPerformance; break;
+
+                  case MidiOperation::Type::TIME_SIG_NUMERATOR:
+                        node->oper.value = (int)opers.opers.timeSig.numerator; break;
+                  case MidiOperation::Type::TIME_SIG_DENOMINATOR:
+                        node->oper.value = (int)opers.opers.timeSig.denominator; break;
 
                   case MidiOperation::Type::DO_LHRH_SEPARATION:
                         node->oper.value = opers.opers.LHRH.doIt; break;
@@ -718,6 +761,8 @@ bool Controller::updateNodeDependencies(Node *node, bool forceUpdate)
                   pickupMeasure->visible = allTracksSelected;
             if (quantHuman)
                   quantHuman->visible = allTracksSelected;
+            if (timeSig)
+                  timeSig->visible = allTracksSelected && timeSigVisible;
             result = true;
             }
 

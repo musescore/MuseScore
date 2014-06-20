@@ -34,7 +34,7 @@ class MidiData
                   // lyrics
       void addTrackLyrics(const QString &fileName,
                           const std::multimap<ReducedFraction, std::string> &trackLyrics);
-      const QList<std::multimap<ReducedFraction, std::string> > *
+      const QList<std::multimap<ReducedFraction, std::string> >*
             getLyrics(const QString &fileName);
       QString charset(const QString &fileName) const;
       void setCharset(const QString &fileName, const QString &charset);
@@ -42,8 +42,13 @@ class MidiData
                   // human performance: is MIDI unaligned
       bool isHumanPerformance(const QString &fileName) const;
       void setHumanPerformance(const QString &fileName, bool value);
+
       const std::set<ReducedFraction>* getHumanBeats(const QString &fileName) const;
-      void setHumanBeats(const QString &fileName, const std::set<ReducedFraction> &humanBeats);
+      void setHumanBeats(const QString &fileName, const HumanBeatData &beatData);
+                  // time sig can be zero (not specified) if, when opened,
+                  // MIDI file was not detected as human-performed
+      ReducedFraction timeSignature(const QString &fileName) const;
+      void setTimeSignature(const QString &fileName, const ReducedFraction &value);
 
                   // quantization
       MidiOperation::QuantValue quantValue(const QString &fileName) const;
@@ -70,7 +75,8 @@ class MidiData
             bool isHumanPerformance = false;
             std::map<int, bool> needLRhandSplit;      // <track index, value = false by default>
             MidiOperation::QuantValue quantValue = defaultQuantValue();
-            std::set<ReducedFraction> humanBeats;
+                        // human performance
+            HumanBeatData humanBeatData;
             };
 
       QMap<QString, MidiDataStore> data;    // <file name, tracks data>

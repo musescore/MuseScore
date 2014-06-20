@@ -135,15 +135,24 @@ void MidiImportOperations::setNeedToSplit(int trackIndex, bool value)
       defaultOperations(currentTrack_).LHRH.doIt = value;
       }
 
-const std::set<ReducedFraction>*
-MidiImportOperations::getHumanBeats() const
+const std::set<ReducedFraction>* MidiImportOperations::getHumanBeats() const
       {
       return midiData_.getHumanBeats(currentMidiFile_);
       }
 
-void MidiImportOperations::setHumanBeats(const std::set<ReducedFraction> &humanBeats)
+void MidiImportOperations::setHumanBeats(const HumanBeatData &beatData)
       {
-      return midiData_.setHumanBeats(currentMidiFile_, humanBeats);
+      return midiData_.setHumanBeats(currentMidiFile_, beatData);
+      }
+
+ReducedFraction MidiImportOperations::timeSignature() const
+      {
+      return midiData_.timeSignature(currentMidiFile_);
+      }
+
+void MidiImportOperations::setTimeSignature(const ReducedFraction &value)
+      {
+      return midiData_.setTimeSignature(currentMidiFile_, value);
       }
 
 } // namespace Ms
