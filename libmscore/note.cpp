@@ -2409,4 +2409,34 @@ QString Note::subtypeName() const
       return NoteHead::groupToGroupName(_headGroup);
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Note::nextElement()
+      {
+      if (chord()->isGrace())
+            return Element::nextElement();
+
+      QList<Note*> notes = chord()->notes();
+      int idx = notes.indexOf(this);
+      if (idx == 0)
+            return chord()->nextElement();
+
+      return notes.at(idx - 1);
+      }
+
+Element* Note::prevElement()
+      {
+      if (chord()->isGrace())
+            return Element::prevElement();
+
+      QList<Note*> notes = chord()->notes();
+      int idx = notes.indexOf(this);
+      if (idx == notes.size() - 1)
+            return chord()->prevElement();
+
+      return notes.at(idx + 1);
+      }
+
 }

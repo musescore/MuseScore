@@ -77,6 +77,9 @@ class Marker : public Text {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
       };
 
 }     // namespace Ms

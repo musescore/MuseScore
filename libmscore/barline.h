@@ -127,6 +127,9 @@ class BarLine : public Element {
       static void  setCtrlDrag(bool val)  { ctrlDrag = val; }
       static void  setShiftDrag(bool val)  { shiftDrag = val; }
       static qreal layoutWidth(Score*, BarLineType, qreal mag);
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
       };
 
 

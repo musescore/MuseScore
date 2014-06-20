@@ -134,6 +134,9 @@ class TimeSig : public Element {
 
       Fraction globalSig() const           { return (_sig * _stretch).reduced();  }
       void setGlobalSig(const Fraction& f) { _stretch = (_sig / f).reduced(); }
+
+      virtual Element* nextElement();
+      virtual Element* prevElement();
       };
 
 

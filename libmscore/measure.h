@@ -320,6 +320,9 @@ class Measure : public MeasureBase {
       void setMMRestCount(int n)    { _mmRestCount = n;    }
       Measure* mmRestFirst() const;
       Measure* mmRestLast() const;
+
+      Element* nextElement(int staff);
+      Element* prevElement(int staff);
       };
 
 }     // namespace Ms

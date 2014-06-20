@@ -212,6 +212,9 @@ class Chord : public ChordRest {
       virtual Measure* measure() const;
 
       void sortNotes();
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
       };
 
 

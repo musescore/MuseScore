@@ -506,6 +506,24 @@ QVariant KeySig::propertyDefault(P_ID id) const
             }
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* KeySig::nextElement()
+      {
+      return segment()->firstInNextSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* KeySig::prevElement()
+      {
+      return segment()->lastInPrevSegments(staffIdx());
+      }
+
 }
 
 

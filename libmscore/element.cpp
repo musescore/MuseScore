@@ -1853,5 +1853,94 @@ bool Element::concertPitch() const
       {
       return score()->styleB(StyleIdx::concertPitch);
       }
-}
 
+//------------------------------------------------------------------------------------------
+//   nextElement
+//   This function is used in for the next-element command to navigate between main elements
+//   of segments. (Note, Rest, Clef, Time Signature, Key Signature, Barline, Ambitus, Breath, etc.)
+//   The default implementation is to look for the first such element. After it is found each
+//   element knows how to find the next one and overrides this method
+//------------------------------------------------------------------------------------------
+
+Element* Element::nextElement()
+      {
+      Element* p = this;
+      while (p) {
+            switch (p->type()) {
+                  case Element::Type::NOTE:
+                        if(static_cast<Note*>(p)->chord()->isGrace())
+                              break;
+                        return p;
+                  case Element::Type::REST:
+                        return p;
+                  case Element::Type::CHORD: {
+                        Chord* c = static_cast<Chord*>(p);
+                        if (!c->isGrace())
+                              return c->notes().back();
+                        }
+                        break;
+                  case Element::Type::SEGMENT: {
+                        Segment* s = static_cast<Segment*>(p);
+                        return s->firstElement(staffIdx());
+                        }
+                  case Element::Type::MEASURE: {
+                        Measure* m = static_cast<Measure*>(p);
+                        return m->nextElement(staffIdx());
+                        }
+                  case Element::Type::SYSTEM: {
+                        System* sys = static_cast<System*>(p);
+                        return sys->nextElement();
+                        }
+                  default:
+                        break;
+                  }
+            p = p->parent();
+            }
+      return score()->firstElement();
+      }
+
+//------------------------------------------------------------------------------------------
+//   prevElement
+//   This function is used in for the prev-element command to navigate between main elements
+//   of segments. (Note, Rest, Clef, Time Signature, Key Signature, Barline, Ambitus, Breath, etc.)
+//   The default implementation is to look for the first such element. After it is found each
+//   element knows how to find the previous one and overrides this method
+//------------------------------------------------------------------------------------------
+
+Element* Element::prevElement()
+      {
+      Element* p = this;
+      while (p) {
+            switch (p->type()) {
+                  case Element::Type::NOTE:
+                        if(static_cast<Note*>(p)->chord()->isGrace())
+                              break;
+                        return p;
+                  case Element::Type::REST:
+                        return p;
+                  case Element::Type::CHORD: {
+                        Chord* c = static_cast<Chord*>(p);
+                        if (!c->isGrace())
+                              return c->notes().first();
+                        }
+                        break;
+                  case Element::Type::SEGMENT: {
+                        Segment* s = static_cast<Segment*>(p);
+                        return s->lastElement(staffIdx());
+                        }
+                  case Element::Type::MEASURE: {
+                        Measure* m = static_cast<Measure*>(p);
+                        return m->prevElement(staffIdx());
+                        }
+                  case Element::Type::SYSTEM: {
+                        System* sys = static_cast<System*>(p);
+                        return sys->prevElement();
+                        }
+                  default:
+                        break;
+                  }
+            p = p->parent();
+            }
+      return score()->firstElement();
+      }
+}
