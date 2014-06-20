@@ -883,20 +883,19 @@ void Score::cmdAddTie()
                   qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
                   continue;
                   }
-            Chord* chord  = note->chord();
+            Chord* chord = note->chord();
+
             if (noteEntryMode()) {
-                  if (note->chord() == _is.cr())      // if noteentry is started
+                  if (chord == _is.cr())      // if noteentry is started
                         break;
 
-                  if (_is.cr() == 0) {
-                        if (MScore::debugMode)
-                              qDebug("cmdAddTie: no pos");
+                  if (_is.cr() == 0)
                         expandVoice();
-                        }
                   if (_is.cr() == 0)
                         break;
-                  bool addFlag = _is.cr()->type() == ElementType::CHORD;
-                  Note* n = addPitch(note->pitch(), addFlag);
+
+                  bool addFlag = false; // _is.cr()->type() == ElementType::CHORD;
+                  Note* n      = addPitch(note->pitch(), addFlag);
                   if (n) {
                         // n is not necessarily next note if duration span over measure
                         Note* nnote = searchTieNote(note);
@@ -913,40 +912,41 @@ void Score::cmdAddTie()
                         else
                               qDebug("cmdAddTie: no next note?");
                         }
-                  continue;
                   }
-            Note* note2 = searchTieNote(note);
-            Part* part = chord->staff()->part();
-            int strack = part->staves()->front()->idx() * VOICES;
-            int etrack = strack + part->staves()->size() * VOICES;
+            else {
+                  Note* note2 = searchTieNote(note);
+                  Part* part = chord->staff()->part();
+                  int strack = part->staves()->front()->idx() * VOICES;
+                  int etrack = strack + part->staves()->size() * VOICES;
 
-            for (Segment* seg = chord->segment()->next1(SegmentType::ChordRest); seg; seg = seg->next1(SegmentType::ChordRest)) {
-                  bool noteFound = false;
-                  for (int track = strack; track < etrack; ++track) {
-                        ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-                        if (cr == 0 || cr->type() != ElementType::CHORD)
-                              continue;
-                        int staffIdx = cr->staffIdx() + cr->staffMove();
-                        if (staffIdx != chord->staffIdx() + chord->staffMove())
-                              continue;
-                        foreach(Note* n, static_cast<Chord*>(cr)->notes()) {
-                              if (n->pitch() == note->pitch()) {
-                                    if (note2 == 0 || note->chord()->track() == chord->track())
-                                          note2 = n;
+                  for (Segment* seg = chord->segment()->next1(SegmentType::ChordRest); seg; seg = seg->next1(SegmentType::ChordRest)) {
+                        bool noteFound = false;
+                        for (int track = strack; track < etrack; ++track) {
+                              ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+                              if (cr == 0 || cr->type() != ElementType::CHORD)
+                                    continue;
+                              int staffIdx = cr->staffIdx() + cr->staffMove();
+                              if (staffIdx != chord->staffIdx() + chord->staffMove())
+                                    continue;
+                              foreach(Note* n, static_cast<Chord*>(cr)->notes()) {
+                                    if (n->pitch() == note->pitch()) {
+                                          if (note2 == 0 || note->chord()->track() == chord->track())
+                                                note2 = n;
+                                          }
+                                    else if (cr->track() == chord->track())
+                                          noteFound = true;
                                     }
-                              else if (cr->track() == chord->track())
-                                    noteFound = true;
                               }
+                        if (noteFound || note2)
+                              break;
                         }
-                  if (noteFound || note2)
-                        break;
-                  }
-            if (note2) {
-                  Tie* tie = new Tie(this);
-                  tie->setStartNote(note);
-                  tie->setEndNote(note2);
-                  tie->setTrack(note->track());
-                  undoAddElement(tie);
+                  if (note2) {
+                        Tie* tie = new Tie(this);
+                        tie->setStartNote(note);
+                        tie->setEndNote(note2);
+                        tie->setTrack(note->track());
+                        undoAddElement(tie);
+                        }
                   }
             }
       endCmd();
@@ -1889,6 +1889,8 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
             select(ncr, SelectType::SINGLE, 0);
       if (ncr)
             setPlayPos(ncr->tick());
+      for (MuseScoreView* v : viewer)
+            v->moveCursor();
       }
 
 //---------------------------------------------------------
