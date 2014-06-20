@@ -2365,9 +2365,12 @@ void ChangeStaffType::redo()
       {
       initialClef = staff->clefTypeList(0);
       StaffType st = *staff->staffType();
+      bool updateNotesNeeded = st.group() != staffType.group();
       staff->setStaffType(&staffType);
       staffType = st;
       Score* score = staff->score();
+      if (updateNotesNeeded)
+            score->cmdUpdateNotes();
       score->setLayoutAll(true);
       score->scanElements(0, notifyTimeSigs);
       }
@@ -2375,6 +2378,7 @@ void ChangeStaffType::redo()
 void ChangeStaffType::undo()
       {
       StaffType st = *staff->staffType();
+      bool updateNotesNeeded = st.group() != staffType.group();
       staff->setStaffType(&staffType);
       staffType = st;
 
@@ -2405,7 +2409,8 @@ void ChangeStaffType::undo()
             clef->setParent(seg);
             seg->add(clef);
             }
-//      cmdUpdateNotes();                         // needed?
+      if (updateNotesNeeded)
+            score->cmdUpdateNotes();
       score->setLayoutAll(true);
       score->scanElements(0, notifyTimeSigs);
       }
