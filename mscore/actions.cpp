@@ -676,6 +676,42 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "next-element",
+         QT_TRANSLATE_NOOP("action","Next element"),
+         QT_TRANSLATE_NOOP("action","Go to next element"),
+         QT_TRANSLATE_NOOP("action","Go to next element")
+         ),
+      Shortcut(
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "prev-element",
+         QT_TRANSLATE_NOOP("action","Previous element"),
+         QT_TRANSLATE_NOOP("action","Go to previous element"),
+         QT_TRANSLATE_NOOP("action","Go to previous element")
+         ),
+      Shortcut(
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "first-element",
+         QT_TRANSLATE_NOOP("action","First element"),
+         QT_TRANSLATE_NOOP("action","Go to the first element"),
+         QT_TRANSLATE_NOOP("action","Go to the first element")
+         ),
+      Shortcut(
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "last-element",
+         QT_TRANSLATE_NOOP("action","Last element"),
+         QT_TRANSLATE_NOOP("action","Go to the last element"),
+         QT_TRANSLATE_NOOP("action","Go to the last element")
+         ),
+      Shortcut(
+         MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          ShortcutFlags::A_CMD,
          "bottom-chord",

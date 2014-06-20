@@ -173,6 +173,24 @@ void SpannerSegment::setVisible(bool f)
       }
 
 //---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* SpannerSegment::nextElement()
+      {
+      return spanner()->nextElement();
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* SpannerSegment::prevElement()
+      {
+      return spanner()->prevElement();
+      }
+
+//---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
 
@@ -554,6 +572,30 @@ void Spanner::setEndElement(Element* e)
             Q_ASSERT(!e || e->type() == Element::Type::NOTE);
 #endif
       _endElement = e;
+      }
+
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Spanner::nextElement()
+      {
+      Segment* s = startSegment();
+      if (s)
+            return s->firstElement(staffIdx());
+      return score()->firstElement();
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Spanner::prevElement()
+      {
+      Segment* s = endSegment();
+      if (s)
+            return s->lastElement(staffIdx());
+      return score()->lastElement();
       }
 
 }

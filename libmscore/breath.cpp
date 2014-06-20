@@ -108,5 +108,22 @@ QPointF Breath::pagePos() const
       return QPointF(pageX(), yp);
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Breath::nextElement()
+      {
+      return segment()->firstInNextSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Breath::prevElement()
+      {
+      return segment()->lastInPrevSegments(staffIdx());
+      }
 }
 

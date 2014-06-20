@@ -1131,5 +1131,29 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
       return Element::propertyDefault(propertyId);
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* BarLine::nextElement()
+      {
+      if (parent()->type() == Element::Type::SEGMENT)
+            return static_cast<Segment*>(parent())->firstInNextSegments(score()->inputState().prevTrack() / VOICES);
+
+      return parent()->nextElement();
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* BarLine::prevElement()
+      {
+      if (parent()->type() == Element::Type::SEGMENT)
+            return static_cast<Segment*>(parent())->lastInPrevSegments(score()->inputState().prevTrack() / VOICES);
+
+      return parent()->prevElement();
+      }
+
 }
 

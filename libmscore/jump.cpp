@@ -13,6 +13,7 @@
 #include "jump.h"
 #include "score.h"
 #include "xml.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -204,6 +205,24 @@ QVariant Jump::propertyDefault(P_ID propertyId) const
       return Text::propertyDefault(propertyId);
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Jump::nextElement()
+      {
+      Segment* seg = measure()->last();
+      return seg->firstElement(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Jump::prevElement()
+      {
+      return nextElement();
+      }
 
 }
 

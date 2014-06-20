@@ -90,6 +90,9 @@ class KeySig : public Element {
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
       };
 
 extern const char* keyNames[];

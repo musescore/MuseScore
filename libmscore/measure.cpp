@@ -4019,5 +4019,24 @@ qreal Measure::userStretch() const
       return (score()->layoutMode() == LayoutMode::FLOAT ? 1.0 : _userStretch);
       }
 
+Element* Measure::nextElement(int staff)
+      {
+      Segment* firstSeg = segments()->first();
+      if (firstSeg)
+            return firstSeg->firstElement(staff);
+      return score()->firstElement();
+      }
+
+Element* Measure::prevElement(int staff)
+      {
+      Measure* prevM = prevMeasureMM();
+      if (prevM) {
+            Segment* seg = prevM->last();
+            if (seg)
+                  seg->lastElement(staff);
+            }
+      return score()->lastElement();
+      }
+
 }
 

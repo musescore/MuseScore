@@ -997,4 +997,173 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
             }
       }
 
+//---------------------------------------------------------
+//   firstElement
+//   This function returns the first main element from a
+//   segment, or a barline if it spanns in the staff
+//---------------------------------------------------------
+
+Element* Segment::firstElement(int staff)
+      {
+      if (this->segmentType() == Segment::Type::ChordRest) {
+            for (int v = staff * VOICES; v/VOICES == staff; v++) {
+                Element* el = this->element(v);
+                if (!el) {      //there is no chord or rest on this voice
+                      continue;
+                      }
+                if (el->type() == Element::Type::CHORD) {
+                      return static_cast<Chord*>(el)->notes().back();
+                      }
+                else {
+                      return el;
+                      }
+                }
+            }
+      else {
+            return this->getElement(staff);
+            }
+
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   lastElement
+//   This function returns the last main element from a
+//   segment, or a barline if it spanns in the staff
+//---------------------------------------------------------
+
+Element* Segment::lastElement(int staff)
+      {
+      if (this->segmentType() == Segment::Type::ChordRest) {
+            for (int voice = staff * VOICES + (VOICES - 1); voice/VOICES == staff; voice--) {
+                  Element* el = this->element(voice);
+                  if (!el) {      //there is no chord or rest on this voice
+                        continue;
+                        }
+                  if (el->type() == Element::Type::CHORD) {
+                        return static_cast<Chord*>(el)->notes().front();
+                        }
+                  else {
+                        return el;
+                        }
+                 }
+            }
+      else {
+            return this->getElement(staff);
+            }
+
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   getElement
+//   protected because it is used by the firstElement and
+//   lastElement functions when segment types that have
+//   just one elemnt to avoid duplicated code
+//
+//   Use firstElement, or lastElement instead of this
+//---------------------------------------------------------
+
+ Element* Segment::getElement(int staff)
+      {
+      if (this->segmentType() == Segment::Type::ChordRest) {
+            return this->firstElement(staff);
+            }
+      else if (this->segmentType() == Segment::Type::EndBarLine        ||
+               this->segmentType() == Segment::Type::BarLine           ||
+               this->segmentType() == Segment::Type::StartRepeatBarLine) {
+            for (int i = staff; i >= 0; i--) {
+                  if (!this->element(i*VOICES)) {
+                        continue;
+                        }
+                  BarLine* b = static_cast<BarLine*>(this->element(i*VOICES));
+                  if (i + b->span() - 1 >= staff) {
+                        return this->element(i*VOICES);
+                        }
+                  }
+            }
+      else {
+            return this->element(staff*VOICES);
+            }
+      return 0;
+      }
+
+ //--------------------------------------------------------
+ //   firstInNextSegments
+ //   Searches for the next segment that has elements on the
+ //   active staff and returns its first element
+ //
+ //   Uses firstElement so it also returns a barline if it
+ //   spans into the active staff
+ //--------------------------------------------------------
+
+ Element* Segment::firstInNextSegments(int activeStaff)
+       {
+       Element* re = 0;
+       Segment* seg = this;
+       while (!re) {
+             seg = seg->next1MM(Segment::Type::All);
+             if (!seg) //end of staff, or score
+                   break;
+
+             re = seg->firstElement(activeStaff);
+             }
+
+       if (re)
+             return re;
+
+       if (!seg) { //end of staff
+             seg = score()->firstSegment();
+             return seg->element( (activeStaff + 1) * VOICES );
+             }
+
+       return 0;
+       }
+
+
+ //--------------------------------------------------------
+ //   firstInNextSegments
+ //   Searches for the previous segment that has elements on
+ //   the active staff and returns its last element
+ //
+ //   Uses lastElement so it also returns a barline if it
+ //   spans into the active staff
+ //--------------------------------------------------------
+
+ Element* Segment::lastInPrevSegments(int activeStaff)
+       {
+       Element* re = 0;
+       Segment* seg = this;
+
+       while (!re) {
+             seg = seg->prev1MM(Segment::Type::All);
+             if (!seg) //end of staff, or score
+                   break;
+
+             re = seg->lastElement(activeStaff);
+             }
+
+       if (re)
+             return re;
+
+       if (!seg) { //end of staff
+             if (activeStaff -1 < 0) //end of score
+                   return 0;
+
+             re = 0;
+             seg = score()->lastSegment();
+             while (true) {
+                   if (seg->segmentType() == Segment::Type::EndBarLine)
+                         score()->inputState().setTrack( (activeStaff -1) * VOICES ); //correction
+
+                   if ((re = seg->lastElement(activeStaff -1)) != 0)
+                         return re;
+
+                   seg = seg->prev1(Segment::Type::All);
+                   }
+             }
+
+       return 0;
+       }
+
 }           // namespace Ms
