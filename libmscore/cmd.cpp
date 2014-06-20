@@ -278,7 +278,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
                   int n = e.numerator() / e.denominator();
                   QList<NoteEvent*> events;
                   int pitch  = chord->upNote()->ppitch();
-                  int key    = chord->staff()->key(segment->tick());
+                  Key key    = chord->staff()->key(segment->tick());
                   int pitch2 = diatonicUpDown(key, pitch, 1);
                   int dpitch = pitch2 - pitch;
                   for (int i = 0; i < n; i += 2) {
@@ -461,7 +461,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   int tick      = chord->tick();
                   Staff* estaff = staff(on->staffIdx() + chord->staffMove());
                   ClefType clef = estaff->clef(tick);
-                  int key       = estaff->key(tick);
+                  Key key       = estaff->key(tick);
                   npitch        = line2pitch(line, clef, key);
 
                   int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
@@ -1079,19 +1079,19 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
 //   upDownChromatic
 //---------------------------------------------------------
 
-static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2)
+static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2)
       {
       if (up && pitch < 127) {
             newPitch = pitch + 1;
             if (n->concertPitch()) {
-                  if (tpc1 > Tpc::TPC_A + key)
+                  if (tpc1 > Tpc::TPC_A + int(key))
                         newTpc1 = tpc1 - 5;   // up semitone diatonic
                   else
                         newTpc1 = tpc1 + 7;   // up semitone chromatic
                   newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
-                  if (tpc2 > Tpc::TPC_A + key)
+                  if (tpc2 > Tpc::TPC_A + int(key))
                         newTpc2 = tpc2 - 5;   // up semitone diatonic
                   else
                         newTpc2 = tpc2 + 7;   // up semitone chromatic
@@ -1101,14 +1101,14 @@ static void upDownChromatic(bool up, int pitch, Note* n, int key, int tpc1, int 
       else if (!up && pitch > 0) {
             newPitch = pitch - 1;
             if (n->concertPitch()) {
-                  if (tpc1 > Tpc::TPC_C + key)
+                  if (tpc1 > Tpc::TPC_C + int(key))
                         newTpc1 = tpc1 - 7;   // down semitone chromatic
                   else
                         newTpc1 = tpc1 + 5;   // down semitone diatonic
                   newTpc2 = n->transposeTpc(newTpc1);
                   }
             else {
-                  if (tpc2 > Tpc::TPC_C + key)
+                  if (tpc2 > Tpc::TPC_C + int(key))
                         newTpc2 = tpc2 - 7;   // down semitone chromatic
                   else
                         newTpc2 = tpc2 + 5;   // down semitone diatonic
@@ -1147,7 +1147,7 @@ void Score::upDown(bool up, UpDownMode mode)
       foreach (Note* oNote, el) {
             int tick     = oNote->chord()->tick();
             Part* part   = oNote->staff()->part();
-            int key      = oNote->staff()->key(tick);
+            Key key      = oNote->staff()->key(tick);
             int tpc1     = oNote->tpc1();
             int tpc2     = oNote->tpc2();
             int pitch    = oNote->pitch();
@@ -1244,7 +1244,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                     {
                                     int tpc = oNote->tpc();
                                     if (up) {
-                                          if (tpc > Tpc::TPC_A + key) {
+                                          if (tpc > Tpc::TPC_A + int(key)) {
                                                 if (pitch < 127) {
                                                       newPitch = pitch + 1;
                                                       setTpc(oNote, tpc - 5, newTpc1, newTpc2);
@@ -1258,7 +1258,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                                 }
                                           }
                                     else {
-                                          if (tpc > Tpc::TPC_C + key) {
+                                          if (tpc > Tpc::TPC_C + int(key)) {
                                                 if (pitch > 1) {
                                                       newPitch = pitch - 2;
                                                       setTpc(oNote, tpc - 2, newTpc1, newTpc2);
@@ -1432,7 +1432,7 @@ void Score::changeAccidental(Note* note, Accidental::AccidentalType accidental)
       AccidentalVal acc2 = measure->findAccidental(note);
       AccidentalVal acc = (accidental == Accidental::AccidentalType::NONE) ? acc2 : Accidental::subtype2value(accidental);
 
-      int pitch = line2pitch(note->line(), clef, 0) + int(acc);
+      int pitch = line2pitch(note->line(), clef, Key::C) + int(acc);
       if (!note->concertPitch())
             pitch += note->transposition();
 

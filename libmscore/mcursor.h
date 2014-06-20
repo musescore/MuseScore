@@ -23,7 +23,7 @@ class TDuration;
 class Fraction;
 class TimeSig;
 class Chord;
-
+enum class Key;
 
 //---------------------------------------------------------
 //   MCursor
@@ -44,7 +44,7 @@ class MCursor {
 
       void addPart(const QString& instrument);
       Chord* addChord(int pitch, const TDuration& duration);
-      void addKeySig(int);
+      void addKeySig(Key);
       TimeSig* addTimeSig(const Fraction&);
 
       void move(int track, int tick);

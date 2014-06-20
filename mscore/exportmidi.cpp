@@ -145,11 +145,11 @@ void ExportMidi::writeHeader()
                         keysigFound = true;
                         MidiEvent ev;
                         ev.setType(ME_META);
-                        int key       = ik->second;   // -7 -- +7
+                        Key key       = ik->second;   // -7 -- +7
                         ev.setMetaType(META_KEY_SIGNATURE);
                         ev.setLen(2);
                         unsigned char* data = new unsigned char[2];
-                        data[0]   = key;
+                        data[0]   = int(key);
                         data[1]   = 0;  // major
                         ev.setEData(data);
                         track.insert(ik->first + tickOffset, ev);

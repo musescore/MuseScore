@@ -486,7 +486,7 @@ qDebug("staff %d group %d timesig %d", staffIdx, int(staffType->group()), staffT
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                         KeySig* t = new KeySig(score);
                         int keysig = bars[i].keysig != GP_INVALID_KEYSIG ? bars[i].keysig : key;
-                        t->setKey(keysig);
+                        t->setKey(Key(keysig));
                         t->setTrack(staffIdx * VOICES);
                         Segment* s = m->getSegment(SegmentType::KeySig, tick);
                         s->add(t);
@@ -1447,7 +1447,7 @@ void GuitarPro3::read(QFile* fp)
             if (i == 0 && key) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                         KeySig* t = new KeySig(score);
-                        t->setKey(key);
+                        t->setKey(Key(key));
                         t->setTrack(staffIdx * VOICES);
                         Segment* s = m->getSegment(SegmentType::KeySig, tick);
                         s->add(t);
@@ -3669,7 +3669,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
             qDebug("--- On a new master bar ---");
             QDomNode key = nextMasterBar.firstChild();
             KeySig* t = new KeySig(score);
-            t->setKey(key.firstChild().toElement().text().toInt());
+            t->setKey(Key(key.firstChild().toElement().text().toInt()));
 
             QDomNode time = key.nextSibling();
             measure->setTimesig(bars[measureCounter].timesig);

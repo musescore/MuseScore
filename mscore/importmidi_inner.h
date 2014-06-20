@@ -8,7 +8,6 @@
 #include <cstddef>
 #include <utility>
 
-
 // ---------------------------------------------------------------------------------------
 // These inner classes definitions are used in cpp files only
 // Include this header to link tests
@@ -16,6 +15,9 @@
 
 
 namespace Ms {
+
+enum class Key;
+
 namespace Meter {
 
             // max level for tuplets: duration cannot go over the tuplet boundary
@@ -81,7 +83,7 @@ class MTrack {
       QList<std::pair<ReducedFraction, TDuration> >
             toDurationList(const Measure *measure, int voice, const ReducedFraction &startTick,
                            const ReducedFraction &len, Meter::DurationType durationType);
-      void createKeys(int accidentalType);
+      void createKeys(Key);
       };
 
 namespace MidiTuplet {

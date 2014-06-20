@@ -306,7 +306,7 @@ void Note::undoSetPitch(int p)
 
 int Note::tpc1default(int p) const
       {
-      int key = 0;
+      Key key = Key::C;
       if (staff() && chord()) {
             key = staff()->key(chord()->tick());
             if (!concertPitch()) {
@@ -326,7 +326,7 @@ int Note::tpc1default(int p) const
 
 int Note::tpc2default(int p) const
       {
-      int key = 0;
+      Key key = Key::C;
       if (staff() && chord()) {
             key = staff()->key(chord()->tick());
             if (concertPitch()) {
@@ -344,7 +344,7 @@ int Note::tpc2default(int p) const
 
 void Note::setTpcFromPitch()
       {
-      int key = (staff() && chord()) ? staff()->key(chord()->tick()) : 0;
+      Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
       _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
       _tpc[1] = pitch2tpc(_pitch - transposition(), key, Prefer::NEAREST);
       Q_ASSERT(tpcIsValid(_tpc[0]));
@@ -1058,7 +1058,7 @@ void Note::read(XmlReader& e)
             _tpc[0] = Tpc::TPC_INVALID;
             }
       if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
-            int key = (staff() && chord()) ? staff()->key(chord()->tick()) : 0;
+            Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
             int tpc = pitch2tpc(_pitch, key, Prefer::NEAREST);
             if (concertPitch())
                   _tpc[0] = tpc;
@@ -1141,13 +1141,13 @@ void Note::endDrag()
             int nLine       = _line + _lineOffset;
             _lineOffset = 0;
             // get note context
-            int tick    = chord()->tick();
-            ClefType clef    = staff->clef(tick);
-            int key     = staff->key(tick);
+            int tick      = chord()->tick();
+            ClefType clef = staff->clef(tick);
+            Key key       = staff->key(tick);
             // determine new pitch of dragged note
-            int nPitch      = line2pitch(nLine, clef, key);
-            int tpc1        = pitch2tpc(nPitch, key, Prefer::NEAREST);
-            int tpc2        = pitch2tpc(nPitch - transposition(), key, Prefer::NEAREST);
+            int nPitch = line2pitch(nLine, clef, key);
+            int tpc1   = pitch2tpc(nPitch, key, Prefer::NEAREST);
+            int tpc2   = pitch2tpc(nPitch - transposition(), key, Prefer::NEAREST);
             // undefined for non-tablature staves
             Note* n = this;
             while (n->tieBack())
@@ -1622,7 +1622,7 @@ void Note::layout10(AccidentalState* as)
                   acci = _accidental->accidentalType();
                   if (acci == Accidental::AccidentalType::SHARP || acci == Accidental::AccidentalType::FLAT) {
                         // TODO - what about double flat and double sharp?
-                        int key = (staff() && chord()) ? staff()->key(chord()->tick()) : 0;
+                        Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
                         int ntpc = pitch2tpc(epitch(), key, acci == Accidental::AccidentalType::SHARP ? Prefer::SHARPS : Prefer::FLATS);
                         if (ntpc != tpc()) {
 //not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), tpc(), ntpc, acci);
@@ -1977,7 +1977,7 @@ void Note::setNval(NoteVal nval)
       _fret      = nval.fret;
       _string    = nval.string;
       if (nval.tpc == Tpc::TPC_INVALID) {
-            int key = staff()->key(chord()->tick());
+            Key key = staff()->key(chord()->tick());
             _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
             Interval v = staff()->part()->instr()->transpose();
             if (v.isZero())

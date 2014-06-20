@@ -26,6 +26,8 @@
 
 namespace Ms {
 
+enum class Key;
+
 //---------------------------------------------------------
 //   TransposeDialog
 //---------------------------------------------------------
@@ -47,13 +49,13 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase {
                                                 ? transposeKeys->isChecked()
                                                 : keepDegreeAlterations->isChecked();}
       bool getTransposeChordNames() const { return transposeChordNames->isChecked(); }
-      int transposeKey() const            { return keyList->currentIndex() - 7;      }
+      Key transposeKey() const            { return Key(keyList->currentIndex() - 7);      }
       int transposeInterval() const       { return chromaticBox->isChecked()
                                                 ? intervalList->currentIndex()
                                                 : degreeList->currentIndex() + 1;   }
       TransposeDirection direction() const;
       TransposeMode mode() const;
-      void setKey(int k)                  { keyList->setCurrentIndex(k + 7); }
+      void setKey(Key k)                  { keyList->setCurrentIndex(int(k) + 7); }
       bool useDoubleSharpsFlats() const   { return accidentalOptions->currentIndex() == 1; }
       };
 }

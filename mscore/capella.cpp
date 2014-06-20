@@ -461,7 +461,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         s->add(chord);
                         ClefType clef = score->staff(staffIdx)->clef(tick);
-                        int key  = score->staff(staffIdx)->key(tick);
+                        Key key  = score->staff(staffIdx)->key(tick);
                         int off;
                         switch (clef) {
                               case ClefType::G:      off = 0; break;
@@ -489,7 +489,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               /*   -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7 */
                               /* */ 7, 4, 1, 5, 2, 6, 3, 0, 4, 1, 5, 2, 6, 3, 0
                               };
-                        off += keyOffsets[key + 7];
+                        off += keyOffsets[int(key) + 7];
 
                         foreach(CNote n, o->notes) {
                               Note* note = new Note(score);
@@ -577,15 +577,15 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         {
                         qDebug("   <Key>");
                         CapKey* o = static_cast<CapKey*>(no);
-                        int key = score->staff(staffIdx)->key(tick);
-                        if (key != o->signature) {
-                              score->staff(staffIdx)->setKey(tick, o->signature);
+                        Key key = score->staff(staffIdx)->key(tick);
+                        if (key != Key(o->signature)) {
+                              score->staff(staffIdx)->setKey(tick, Key(o->signature));
                               KeySig* ks = new KeySig(score);
                               ks->setTrack(staffIdx * VOICES);
                               Measure* m = score->getCreateMeasure(tick);
                               Segment* s = m->getSegment(SegmentType::KeySig, tick);
                               s->add(ks);
-                              ks->setKey(o->signature);
+                              ks->setKey(Key(o->signature));
                               }
                         }
                         break;

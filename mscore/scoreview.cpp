@@ -4736,7 +4736,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                                           // check if it's an actual key change or just a courtesy
                                           ClefType ctb = staff->clef(clef->tick() - 1);
                                           if (ctb != clef->clefType() || clef->tick() == 0) {
-                                                curPitch = line2pitch(4, clef->clefType(), 0); // C 72 for treble clef
+                                                curPitch = line2pitch(4, clef->clefType(), Key::C); // C 72 for treble clef
                                                 break;
                                                 }
                                           }

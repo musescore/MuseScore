@@ -122,7 +122,7 @@ void KeySig::layout()
             clef = staff()->clef(segment()->tick());
 
       int accidentals = 0, naturals = 0;
-      int t1 = _sig.accidentalType();
+      int t1 = int(_sig.key());
       switch (qAbs(t1)) {
             case 7: accidentals = 0x7f; break;
             case 6: accidentals = 0x3f; break;
@@ -148,13 +148,13 @@ void KeySig::layout()
             && (score()->styleI(StyleIdx::keySigNaturals) != int(KeySigNatural::NONE) || t1 == 0) );
 
       int coffset = 0;
-      int t2      = 0;
+      Key t2      = Key::C;
       if (naturalsOn) {
             t2 = staff()->prevKey(segment()->tick());
-            if (t2 == 0)
+            if (t2 == Key::C)
                   naturalsOn = false;
             else {
-                  switch (qAbs(t2)) {
+                  switch (qAbs(int(t2))) {
                         case 7: naturals = 0x7f; break;
                         case 6: naturals = 0x3f; break;
                         case 5: naturals = 0x1f; break;
@@ -179,7 +179,7 @@ void KeySig::layout()
       // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
       bool prefixNaturals =
             naturalsOn
-            && (score()->styleI(StyleIdx::keySigNaturals) == int(KeySigNatural::BEFORE) || t1 * t2 < 0);
+            && (score()->styleI(StyleIdx::keySigNaturals) == int(KeySigNatural::BEFORE) || t1 * int(t2) < 0);
 
       // naturals should go AFTER accidentals if they should not go before!
       bool suffixNaturals = naturalsOn && !prefixNaturals;
@@ -289,12 +289,12 @@ Element* KeySig::drop(const DropData& data)
       if (data.modifiers & Qt::ControlModifier) {
             // apply only to this stave
             if (k != keySigEvent())
-                  score()->undoChangeKeySig(staff(), tick(), k.accidentalType());
+                  score()->undoChangeKeySig(staff(), tick(), k.key());
             }
       else {
             // apply to all staves:
             foreach(Staff* s, score()->staves())
-                  score()->undoChangeKeySig(s, tick(), k.accidentalType());
+                  score()->undoChangeKeySig(s, tick(), k.key());
             }
       return this;
       }
@@ -303,10 +303,10 @@ Element* KeySig::drop(const DropData& data)
 //   setKey
 //---------------------------------------------------------
 
-void KeySig::setKey(int key)
+void KeySig::setKey(Key key)
       {
       KeySigEvent e;
-      e.setAccidentalType(key);
+      e.setKey(key);
       setKeySigEvent(e);
       }
 
@@ -337,7 +337,7 @@ void KeySig::write(Xml& xml) const
                   }
             }
       else {
-            xml.tag("accidental", _sig.accidentalType());
+            xml.tag("accidental", int(_sig.key()));
             }
       if (!_showCourtesy)
             xml.tag("showCourtesySig", _showCourtesy);
@@ -373,7 +373,7 @@ void KeySig::read(XmlReader& e)
             else if (tag == "showNaturals")           // obsolete
                   e.readInt();
             else if (tag == "accidental")
-                  _sig.setAccidentalType(e.readInt());
+                  _sig.setKey(Key(e.readInt()));
             else if (tag == "natural")                // obsolete
                   e.readInt();
             else if (tag == "custom")

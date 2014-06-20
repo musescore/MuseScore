@@ -24,6 +24,7 @@
 #include "staff.h"
 #include "note.h"
 #include "chord.h"
+#include "key.h"
 
 namespace Ms {
 
@@ -296,7 +297,7 @@ Segment* prevSeg1(Segment* seg, int& track)
 //    key -7 ... +7
 //---------------------------------------------------------
 
-int pitchKeyAdjust(int step, int key)
+int pitchKeyAdjust(int step, Key key)
       {
       static int ptab[15][7] = {
 //             c  d  e  f  g   a  b
@@ -316,7 +317,7 @@ int pitchKeyAdjust(int step, int key)
             {  1, 3, 5, 6, 8, 10, 11 },     // Fis
             {  1, 3, 5, 6, 8, 10, 12 },     // Cis
             };
-      return ptab[key+7][step];
+      return ptab[int(key)+7][step];
       }
 
 //---------------------------------------------------------
@@ -326,7 +327,7 @@ int pitchKeyAdjust(int step, int key)
 int y2pitch(qreal y, ClefType clef, qreal _spatium)
       {
       int l = lrint(y / _spatium * 2.0);
-      return line2pitch(l, clef, 0);
+      return line2pitch(l, clef, Key::C);
       }
 
 //---------------------------------------------------------
@@ -334,7 +335,7 @@ int y2pitch(qreal y, ClefType clef, qreal _spatium)
 //    key  -7 ... +7
 //---------------------------------------------------------
 
-int line2pitch(int line, ClefType clef, int key)
+int line2pitch(int line, ClefType clef, Key key)
       {
       int l      = ClefInfo::pitchOffset(clef) - line;
       int octave = 0;
@@ -618,7 +619,7 @@ int updateVersion()
 //    key  -7 ... +7
 //---------------------------------------------------------
 
-int diatonicUpDown(int key, int pitch, int steps)
+int diatonicUpDown(Key k, int pitch, int steps)
       {
       static int ptab[15][7] = {
 //             c  c#   d  d#    e   f  f#   g  g#  a  a#   b
@@ -641,7 +642,7 @@ int diatonicUpDown(int key, int pitch, int steps)
             {  1,      3,       5,  6,      8,    10,      12 },     // Cis
             };
 
-      key += 7;
+      int key    = int(k) + 7;
       int step   = pitch % 12;
       int octave = pitch / 12;
 
@@ -769,7 +770,7 @@ int absStep(int tpc, int pitch)
 int absStep(int pitch)
       {
       // TODO - does this need to be key-aware?
-      int tpc = pitch2tpc(pitch, int(Key::C), Prefer::NEAREST);
+      int tpc = pitch2tpc(pitch, Key::C, Prefer::NEAREST);
       return absStep(tpc, pitch);
       }
 

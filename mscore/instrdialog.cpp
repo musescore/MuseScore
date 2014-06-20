@@ -897,7 +897,7 @@ void MuseScore::editInstrList()
             int interval = firstStaff->part()->instr()->transpose().chromatic;
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
                   int tick = i->first;
-                  int oKey = i->second;
+                  Key oKey = i->second;
                   tmpKeymap[tick] = transposeKey(oKey, interval);
                   }
             }
@@ -1030,7 +1030,7 @@ void MuseScore::editInstrList()
                               rootScore->adjustBracketsIns(staffIdx, staffIdx+1);
                               staff->initFromStaffType(sli->staffType());
                               staff->setClef(0, sli->clef());
-                              int nKey = part->staff(0)->key(0);
+                              Key nKey = part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
                               if (sli->linked() && rstaff > 0) {

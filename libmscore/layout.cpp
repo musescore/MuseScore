@@ -1453,7 +1453,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             // track (voice 0) of a staff
 
             KeySigEvent keyIdx;
-            keyIdx.setAccidentalType(staff->key(tick));
+            keyIdx.setKey(staff->key(tick));
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   // search only up to the first ChordRest
@@ -1478,7 +1478,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             bool needKeysig =        // keep key sigs in TABs: TABs themselves should hide them
                isFirstSystem || styleB(StyleIdx::genKeysig);
 
-            if (needKeysig && !keysig && keyIdx.accidentalType()) {
+            if (needKeysig && !keysig && (keyIdx.key() != Key::C)) {
                   //
                   // create missing key signature
                   //
@@ -2589,8 +2589,8 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         Staff* staff = _staves[staffIdx];
                         showCourtesySig = false;
 
-                        int key1 = staff->key(tick - 1);
-                        int key2 = staff->key(tick);
+                        Key key1 = staff->key(tick - 1);
+                        Key key2 = staff->key(tick);
                         if (styleB(StyleIdx::genCourtesyKeysig) && (key1 != key2)) {
                               // locate a key sig. in next measure and, if found,
                               // check if it has court. sig turned off
@@ -2617,7 +2617,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                                           }
                                     else if (ks->key() != key2) {
                                           KeySigEvent ke = ks->keySigEvent();
-                                          ke.setAccidentalType(key2);
+                                          ke.setKey(key2);
                                           undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
                                           }
                                     // change bar line to qreal bar line

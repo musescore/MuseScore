@@ -179,7 +179,7 @@ void TestMidi::midi01()
       c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
 
-      c.addKeySig(1);
+      c.addKeySig(Key(1));
       c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
@@ -220,7 +220,7 @@ void TestMidi::midi02()
       c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
 
-      c.addKeySig(2);
+      c.addKeySig(Key(2));
       c.addTimeSig(Fraction(3,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));
@@ -261,7 +261,7 @@ void TestMidi::midi03()
       c.addPart("voice");
       c.move(0, 0);     // move to track 0 tick 0
 
-      c.addKeySig(1);
+      c.addKeySig(Key(1));
       c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_QUARTER));
       c.addChord(61, TDuration(TDuration::DurationType::V_QUARTER));

@@ -417,7 +417,7 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
 //   undoChangeKeySig
 //---------------------------------------------------------
 
-void Score::undoChangeKeySig(Staff* ostaff, int tick, int key)
+void Score::undoChangeKeySig(Staff* ostaff, int tick, Key key)
       {
       KeySig* lks = 0;
       foreach (Staff* staff, ostaff->staffList()) {
@@ -440,7 +440,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, int key)
             if (ks) {
                   ks->undoChangeProperty(P_ID::GENERATED, false);
                   KeySigEvent kse = ks->keySigEvent();
-                  kse.setAccidentalType(key);
+                  kse.setKey(key);
                   undo(new ChangeKeySig(ks, kse, ks->showCourtesy()));
                   }
             else {
@@ -469,7 +469,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, int key)
                         break;
                   if (ks->key() != key) {
                         KeySigEvent kse = ks->keySigEvent();
-                        kse.setAccidentalType(key);
+                        kse.setKey(key);
                         undo(new ChangeKeySig(ks, kse, ks->showCourtesy()));
                         }
                   }
@@ -1796,7 +1796,7 @@ void ChangeKeySig::flip()
       int tick = keysig->segment()->tick();
       // update keys if keysig was not generated
       if (!keysig->generated())
-            keysig->staff()->setKey(tick, ks.accidentalType());
+            keysig->staff()->setKey(tick, ks.key());
 
       showCourtesy = sc;
       ks           = oe;

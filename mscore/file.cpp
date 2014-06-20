@@ -601,9 +601,9 @@ void MuseScore::newFile()
                               KeySigEvent nKey = ks;
                               if (part->instr()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
                                     int diff = -part->instr()->transpose().chromatic;
-                                    nKey.setAccidentalType(transposeKey(nKey.accidentalType(), diff));
+                                    nKey.setKey(transposeKey(nKey.key(), diff));
                                     }
-                              staff->setKey(0, nKey.accidentalType());
+                              staff->setKey(0, nKey.key());
                               KeySig* keysig = new KeySig(score);
                               keysig->setTrack(staffIdx * VOICES);
                               keysig->setKeySigEvent(nKey);

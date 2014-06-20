@@ -2297,7 +2297,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
       // Check for "superfluous" accidentals to mark them as USER accidentals.
       // The candiadates list courtAccNotes is ordered voice after voice. Check it here segment after segment.
       AccidentalState currAcc;
-      currAcc.init(currKeySig->keySigEvent().accidentalType());
+      currAcc.init(currKeySig->keySigEvent().key());
       SegmentType st = SegmentType::ChordRest;
       for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
             for (int track = 0; track < staves * VOICES; ++track) {
@@ -3227,7 +3227,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                   KeySigEvent key;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "fifths")
-                              key.setAccidentalType(ee.text().toInt());
+                              key.setKey(Key(ee.text().toInt()));
                         else if (ee.tagName() == "mode")
                               domNotImplemented(ee);
                         else
@@ -3240,8 +3240,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         int staves = score->staff(staff)->part()->nstaves();
                         // apply to all staves in part
                         for (int i = 0; i < staves; ++i) {
-                              int oldkey = score->staff(staffIdx+i)->key(tick);
-                              if (oldkey != key.accidentalType()) {
+                              Key oldkey = score->staff(staffIdx+i)->key(tick);
+                              if (oldkey != key.key()) {
                                     // new key differs from key in effect at this tick
                                     KeySig* keysig = new KeySig(score);
                                     keysig->setTrack((staffIdx + i) * VOICES);
@@ -3257,8 +3257,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         //
                         // apply key to staff(staffIdx) only
                         //
-                        int oldkey = score->staff(staffIdx)->key(tick);
-                        if (oldkey != key.accidentalType()) {
+                        Key oldkey = score->staff(staffIdx)->key(tick);
+                        if (oldkey != key.key()) {
                               // new key differs from key in effect at this tick
                               KeySig* keysig = new KeySig(score);
                               keysig->setTrack(staffIdx * VOICES);
@@ -5075,7 +5075,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   int pitch = drumsets[partId][instrId].pitch;
                   note->setPitch(pitch);
                   // TODO - does this need to be key-aware?
-                  note->setTpc(pitch2tpc(pitch, int(Key::C), Prefer::NEAREST)); // TODO: necessary ?
+                  note->setTpc(pitch2tpc(pitch, Key::C, Prefer::NEAREST)); // TODO: necessary ?
                   }
             else
                   xmlSetPitch(note, c, alter, octave, ottava, track);

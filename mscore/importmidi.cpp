@@ -204,7 +204,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                         qDebug("ImportMidi: illegal key %d", key);
                         break;
                         }
-                  staff->setKey(tick, key);
+                  staff->setKey(tick, Key(key));
                   hasKey = true;
                   }
                   break;
@@ -487,18 +487,18 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
                        nextChordTick - startChordTick, track);
       }
 
-void MTrack::createKeys(int accidentalType)
+void MTrack::createKeys(Key k)
       {
       Score* score = staff->score();
       const int track = staff->idx() * VOICES;
 
       KeyList* km = staff->keyList();
       if (!hasKey && !mtrack->drumTrack()) {
-            (*km)[0] = accidentalType;
+            (*km)[0] = k;
             }
       for (auto it = km->begin(); it != km->end(); ++it) {
             const int tick = it->first;
-            int key  = it->second;
+            Key key  = it->second;
             KeySig* ks = new KeySig(score);
             ks->setTrack(track);
             ks->setGenerated(false);
@@ -546,7 +546,7 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
             processPendingNotes(midiChords, voice, startChordTick, lastTick);
             }
 
-      const int key = 0;                // TODO-LIB findKey(mtrack, score->sigmap());
+      const Key key = Key::C;                // TODO-LIB findKey(mtrack, score->sigmap());
 
       MidiTuplet::createTuplets(staff, tuplets);
       createKeys(key);

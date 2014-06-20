@@ -22,13 +22,13 @@ namespace Ms {
 //    locates the key sig currently in effect at tick
 //---------------------------------------------------------
 
-int KeyList::key(int tick) const
+Key KeyList::key(int tick) const
       {
       if (empty())
-            return 0;
+            return Key::C;
       auto i = upper_bound(tick);
       if (i == begin())
-            return 0;
+            return Key::C;
       return (--i)->second;
       }
 
@@ -36,7 +36,7 @@ int KeyList::key(int tick) const
 //   setKey
 //---------------------------------------------------------
 
-void KeyList::setKey(int tick, int k)
+void KeyList::setKey(int tick, Key k)
       {
       if (key(tick) == k)
             return;
@@ -45,7 +45,7 @@ void KeyList::setKey(int tick, int k)
       else  {
             auto i = find(tick);
             if (i == end())
-                  insert(std::pair<int, int>(tick, k));
+                  insert(std::pair<int, Key>(tick, k));
             else
                   i->second = k;
             }
@@ -75,16 +75,16 @@ int KeyList::nextKeyTick(int tick) const
 //    returns the key before the current key for tick
 //---------------------------------------------------------
 
-int KeyList::prevKey(int tick) const
+Key KeyList::prevKey(int tick) const
       {
       if (empty())
-            return 0;
+            return Key::C;
       auto i = upper_bound(tick);
       if (i == begin())
-            return 0;
+            return Key::C;
       --i;
       if (i == begin())
-            return 0;
+            return Key::C;
       return (--i)->second;
       }
 
@@ -114,12 +114,12 @@ void KeyList::read(XmlReader& e, Score* cs)
       {
       while (e.readNextStartElement()) {
             if (e.name() == "key") {
-                  int k;
+                  Key k;
                   int tick = e.intAttribute("tick", 0);
                   if (e.hasAttribute("custom"))
-                        k = 0;      // ke.setCustomType(e.intAttribute("custom"));
+                        k = Key::C;      // ke.setCustomType(e.intAttribute("custom"));
                   else
-                        k = e.intAttribute("idx");
+                        k = Key(e.intAttribute("idx"));
                   (*this)[cs->fileDivision(tick)] = k;
                   e.readNext();
                   }

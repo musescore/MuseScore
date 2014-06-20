@@ -2053,7 +2053,7 @@ Score* Score::clone()
                               continue;
                         if ((s->segmentType() == SegmentType::KeySig) && st->updateKeymap()) {
                               KeySig* ks = static_cast<KeySig*>(e);
-                              int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
+                              int naturals = key1 ? key1->keySigEvent().key() : 0;
                               ks->setOldSig(naturals);
                               st->setKey(s->tick(), ks->key());
                               key1 = ks;
@@ -2430,8 +2430,8 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
             for (auto i = km.begin(); i != km.end(); ++i) {
                   int tick = i->first;
                   Measure* measure = tick2measure(tick);
-                  int oKey = i->second;
-                  int nKey = oKey;
+                  Key oKey = i->second;
+                  Key nKey = oKey;
                   int diff = -staff->part()->instr()->transpose().chromatic;
                   if (diff != 0 && !styleB(StyleIdx::concertPitch))
                         nKey = transposeKey(nKey, diff);

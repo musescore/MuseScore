@@ -20,6 +20,7 @@ namespace Ms {
 class MidiNote;
 class Note;
 class Event;
+enum class Key;
 
 const int   INVALID_PITCH      = -1;
 
@@ -53,7 +54,7 @@ const int   STEP_DELTA_TPC          = 4;  // the number of steps in a tpc step (
 enum class Prefer : char { FLATS=8, NEAREST=11, SHARPS=13 };
 enum class NoteSpellingType : char { STANDARD = 0, GERMAN, SOLFEGGIO };
 
-extern int pitch2tpc(int pitch, int key, Prefer prefer);
+extern int pitch2tpc(int pitch, Key, Prefer prefer);
 
 extern void spell(QList<Event>& notes, int);
 extern void spell(QList<Note*>& notes);
@@ -65,13 +66,13 @@ extern void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString
 extern int step2tpc(const QString& stepName, AccidentalVal alter);
 extern int step2tpc(int step);
 extern int step2tpc(int step, AccidentalVal alter);
-extern int step2tpcByKey(int step, int key);
+extern int step2tpcByKey(int step, Key);
 extern int tpc2pitch(int tpc);
 extern int tpc2step(int tpc);
-extern int tpc2stepByKey(int tpc, int key, int* pAlter);
-extern int tpc2alterByKey(int tpc, int key);
-extern int pitch2absStepByKey(int pitch, int tpc, int key, int* pAlter);
-extern int absStep2pitchByKey(int step, int key);
+extern int tpc2stepByKey(int tpc, Key, int* pAlter);
+extern int tpc2alterByKey(int tpc, Key);
+extern int pitch2absStepByKey(int pitch, int tpc, Key, int* pAlter);
+extern int absStep2pitchByKey(int step, Key);
 
 //---------------------------------------------------------
 //   tpc2alter

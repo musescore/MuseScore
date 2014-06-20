@@ -245,7 +245,7 @@ void Ambitus::layout()
       int         bottomLine, topLine;
       ClefType    clf;
       qreal       headWdt     = headWidth();
-      int         key;
+      Key         key;
       qreal       lineDist;
       int         numOfLines;
       Segment*    segm        = segment();
@@ -275,7 +275,7 @@ void Ambitus::layout()
       if (stf)
             key = stf->key(segm->tick());
       else
-            key = int(Key::C);
+            key = Key::C;
 
       // top note head
       if (_topPitch == INVALID_PITCH || _topTpc == Tpc::TPC_INVALID)
@@ -287,7 +287,7 @@ void Ambitus::layout()
             // compute accidental
             Accidental::AccidentalType accidType;
             // if (13 <= (tpc - key) <= 19) there is no accidental)
-            if (_topTpc - key >= 13 && _topTpc - key <= 19)
+            if (_topTpc - int(key) >= 13 && _topTpc - int(key) <= 19)
                   accidType = Accidental::AccidentalType::NONE;
             else {
                   AccidentalVal accidVal = AccidentalVal( (_topTpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
@@ -312,7 +312,7 @@ void Ambitus::layout()
             _bottomPos.setY(bottomLine * lineDist * 0.5);
             // compute accidental
             Accidental::AccidentalType accidType;
-            if (_bottomTpc - key >= 13 && _bottomTpc - key <= 19)
+            if (_bottomTpc - int(key) >= 13 && _bottomTpc - int(key) <= 19)
                   accidType = Accidental::AccidentalType::NONE;
             else {
                   AccidentalVal accidVal = AccidentalVal( (_bottomTpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE - 2 );

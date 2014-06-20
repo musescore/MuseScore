@@ -62,7 +62,7 @@ class KeySig : public Element {
       virtual void layout();
       virtual qreal mag() const;
 
-      Q_INVOKABLE void setKey(int);
+      Q_INVOKABLE void setKey(Key);
 
       Segment* segment() const            { return (Segment*)parent(); }
       Measure* measure() const            { return parent() ? (Measure*)parent()->parent() : nullptr; }
@@ -70,7 +70,7 @@ class KeySig : public Element {
       void setCustom(const QList<KeySym*>& symbols);
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
-      Q_INVOKABLE int key() const         { return _sig.accidentalType(); }    //@ -7 (flats) -- +7 (sharps)
+      Q_INVOKABLE Key key() const         { return _sig.key(); }    //@ -7 (flats) -- +7 (sharps)
       int customType() const              { return _sig.customType(); }
       bool isCustom() const               { return _sig.custom(); }
       KeySigEvent keySigEvent() const     { return _sig; }
