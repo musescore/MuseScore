@@ -84,6 +84,12 @@ void TracksModel::setTrackOperation(int trackIndex, MidiOperation::Type operType
             case MidiOperation::Type::QUANT_HUMAN:
                   trackData.opers.quantize.humanPerformance = operValue.toBool();
                   break;
+            case MidiOperation::Type::TIME_SIG_NUMERATOR:
+                  trackData.opers.timeSig.numerator = (MidiOperation::TimeSigNumerator)operValue.toInt();
+                  break;
+            case MidiOperation::Type::TIME_SIG_DENOMINATOR:
+                  trackData.opers.timeSig.denominator = (MidiOperation::TimeSigDenominator)operValue.toInt();
+                  break;
             case MidiOperation::Type::DO_LHRH_SEPARATION:
                   trackData.opers.LHRH.doIt = operValue.toBool();
                   break;
@@ -185,6 +191,22 @@ DefinedTrackOperations TracksModel::trackOperations(int row) const
                   if (tracksData_[i].opers.quantize.humanPerformance
                               != opers.opers.quantize.humanPerformance) {
                         opers.undefinedOpers.insert((int)MidiOperation::Type::QUANT_HUMAN);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::TIME_SIG_NUMERATOR
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.timeSig.numerator != opers.opers.timeSig.numerator) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::TIME_SIG_NUMERATOR);
+                        break;
+                        }
+                  }
+
+            // MidiOperation::Type::TIME_SIG_DENOMINATOR
+            for (int i = 1; i != trackCount_; ++i) {
+                  if (tracksData_[i].opers.timeSig.denominator != opers.opers.timeSig.denominator) {
+                        opers.undefinedOpers.insert((int)MidiOperation::Type::TIME_SIG_DENOMINATOR);
                         break;
                         }
                   }

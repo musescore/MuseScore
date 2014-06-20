@@ -526,7 +526,7 @@ toDurationList(const ReducedFraction &startTickInBar,
       excludeNodes(nodes, tol, useDots);
 
       return collectDurations(nodes, tupletsInBar, useDots, printRestRemains);
-      }
+}
 
 } // namespace Meter
 } // namespace Ms

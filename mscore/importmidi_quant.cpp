@@ -370,7 +370,7 @@ void setIfHumanPerformance(
       if (isHuman) {
             preferences.midiImportOperations.setQuantValue(MidiOperation::QuantValue::N_8);
             const double ticksPerSec = MidiTempo::findBasicTempo(tracks) * MScore::division;
-            MidiBeat::findBeatLocations(allChords, sigmap, ticksPerSec);
+            MidiBeat::findBeatLocations(allChords, sigmap, ticksPerSec);      // and set time sig
             }
       }
 

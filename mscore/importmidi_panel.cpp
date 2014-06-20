@@ -349,7 +349,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                   const QList<TrackMeta> tracksMeta = extractMidiTracksMeta(fileName);
                   tracksModel->reset(tracksMeta);
                   tracksModel->setLyricsList(MidiLyrics::makeLyricsListForUI());
-
+                              // assign initial values of computed options to GUI model
                   const int row = 0;            // for all tracks
                   const bool isHumanPerformance = midiData.isHumanPerformance(fileName);
                   tracksModel->setOperation(row, MidiOperation::Type::QUANT_HUMAN,
@@ -357,6 +357,20 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                   const auto quantValue = midiData.quantValue(fileName);
                   tracksModel->setOperation(row, MidiOperation::Type::QUANT_VALUE,
                                             QVariant((int)quantValue));
+                  if (isHumanPerformance) {
+                        const auto timeSig = midiData.timeSignature(fileName);
+
+                        Q_ASSERT_X(timeSig != ReducedFraction(0, 1),
+                                   "ImportMidiPanel::setMidiFile", "Zero time signature");
+
+                        const auto numerator = Meter::fractionNumeratorToUserValue(timeSig.numerator());
+                        const auto denominator = Meter::fractionDenominatorToUserValue(timeSig.denominator());
+                        tracksModel->setOperation(row, MidiOperation::Type::TIME_SIG_NUMERATOR,
+                                                  QVariant((int)numerator));
+                        tracksModel->setOperation(row, MidiOperation::Type::TIME_SIG_DENOMINATOR,
+                                                  QVariant((int)denominator));
+                        }
+                  operationsModel->setTimeSigVisibility(isHumanPerformance);
 
                   for (int i = 0; i != tracksModel->trackCount(); ++i) {
                         const bool needSplit = midiData.needToSplit(fileName, i);
@@ -377,6 +391,10 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                   preferences.midiImportOperations.setCurrentMidiFile(midiFile);
                   tracksModel->reset(trackData);
                   tracksModel->setLyricsList(MidiLyrics::makeLyricsListForUI());
+                              // time sig option is shown only for files
+                              // that were initially detected as human-performed
+                  const bool isHumanPerformance = midiData.isHumanPerformance(fileName);
+                  operationsModel->setTimeSigVisibility(isHumanPerformance);
                   restoreTableViewState(fileName);
                   }
             ui->comboBoxCharset->setCurrentText(preferences.midiImportOperations.charset());

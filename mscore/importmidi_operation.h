@@ -1,6 +1,10 @@
 #ifndef IMPORTMIDI_OPERATION_H
 #define IMPORTMIDI_OPERATION_H
 
+#include "importmidi_fraction.h"
+
+#include <set>
+
 
 namespace Ms {
 
@@ -15,6 +19,9 @@ struct MidiOperation
             QUANT_VALUE,
             QUANT_HUMAN,
 
+            TIME_SIG_NUMERATOR,
+            TIME_SIG_DENOMINATOR,
+
             DO_LHRH_SEPARATION,
             LHRH_METHOD,
             LHRH_SPLIT_OCTAVE,
@@ -23,8 +30,8 @@ struct MidiOperation
             USE_DOTS,
 
             SIMPLIFY_DURATIONS,
-		    SHOW_STACCATO,
-		    SEPARATE_VOICES,
+            SHOW_STACCATO,
+            SEPARATE_VOICES,
 
             ALLOWED_VOICES,
 
@@ -60,6 +67,27 @@ struct MidiOperation
             N_32,
             N_64,
             N_128
+            };
+
+      enum class TimeSigNumerator {
+            _2 = 0,
+            _3,
+            _4,
+            _5,
+            _6,
+            _7,
+            _9,
+            _12,
+            _15,
+            _21
+            };
+
+      enum class TimeSigDenominator {
+            _2 = 0,
+            _4,
+            _8,
+            _16,
+            _32
             };
 
       enum class AllowedVoices {
@@ -108,6 +136,17 @@ struct MidiOperation
             Ais,
             H
             };
+      };
+
+struct HumanBeatData
+      {
+      std::set<ReducedFraction> beatSet;
+                // to adapt human beats to a different time sig, if necessary
+      int addedFirstBeats;
+      int addedLastBeats;
+      ReducedFraction firstChordTick;
+      ReducedFraction lastChordTick;
+      ReducedFraction timeSig;
       };
 
 } // namespace Ms

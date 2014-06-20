@@ -1,5 +1,8 @@
 #include "importmidi_data.h"
 #include "importmidi_operations.h"
+#include "importmidi_meter.h"
+#include "importmidi_inner.h"
+#include "importmidi_beat.h"
 
 
 namespace Ms {
@@ -167,15 +170,65 @@ MidiData::getHumanBeats(const QString &fileName) const
       const auto it = data.find(fileName);
       if (it == data.end())
             return nullptr;
-      return &it.value().humanBeats;
+      return &it.value().humanBeatData.beatSet;
       }
 
-void MidiData::setHumanBeats(const QString &fileName, const std::set<ReducedFraction> &humanBeats)
+void MidiData::setHumanBeats(const QString &fileName, const HumanBeatData &beatData)
       {
       const auto it = data.find(fileName);
       if (it == data.end())
             return;
-      it.value().humanBeats = humanBeats;
+      it.value().humanBeatData = beatData;
+      }
+
+ReducedFraction MidiData::timeSignature(const QString &fileName) const
+      {
+      const auto it = data.find(fileName);
+                  // if data was not found - return zero value;
+                  // it means that time sig should be taken from MIDI file meta event
+                  // or, if no such event, it will be set to default 4/4 later;
+                  // so, don't return default time sig here
+      if (it == data.end())
+            return ReducedFraction(0, 1);
+      return it.value().humanBeatData.timeSig;
+      }
+
+void MidiData::setTimeSignature(const QString &fileName, const ReducedFraction &timeSig)
+      {
+      const auto it = data.find(fileName);
+      if (it == data.end())
+            return;
+
+      HumanBeatData &beatData = it.value().humanBeatData;
+      if (beatData.timeSig == timeSig)
+            return;
+
+      beatData.timeSig = timeSig;
+
+      auto &beatSet = beatData.beatSet;
+      if (beatSet.empty())
+            return;
+
+      for (int i = 0; i != beatData.addedFirstBeats; ++i) {
+
+            Q_ASSERT_X(!beatSet.empty(), "MidiData::setTimeSignature",
+                       "Empty beat set after deletion first beats");
+
+            beatSet.erase(beatSet.begin());
+            }
+      for (int i = 0; i != beatData.addedLastBeats; ++i) {
+
+            Q_ASSERT_X(!beatSet.empty(), "MidiData::setTimeSignature",
+                       "Empty beat set after deletion last beats");
+
+            beatSet.erase(std::prev(beatSet.end()));
+            }
+
+      const int beatsInBar = MidiBeat::beatsInBar(timeSig);
+      MidiBeat::addFirstBeats(beatSet, beatData.firstChordTick,
+                              beatsInBar, beatData.addedFirstBeats);
+      MidiBeat::addLastBeats(beatSet, beatData.lastChordTick,
+                             beatsInBar, beatData.addedLastBeats);
       }
 
 } // namespace Ms

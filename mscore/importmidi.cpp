@@ -255,8 +255,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   cs->setMetaTag("copyright", QString((const char*)(mm.edata())));
                   break;
             case META_TIME_SIGNATURE:
-                  cs->sigmap()->add(tick, Fraction(data[0], 1 << data[1]));
-                  break;
+                  break;                  // added earlier
             default:
                   if (MScore::debugMode)
                         qDebug("unknown meta type 0x%02x", mm.metaType());
@@ -929,10 +928,16 @@ void convertMidi(Score *score, const MidiFile *mf)
       auto tracks = createMTrackList(lastTick, sigmap, mf);
       cleanUpMidiEvents(tracks);
       auto &opers = preferences.midiImportOperations;
-
-                  // for newly opened MIDI file
+                  // for newly opened MIDI file - detect if it is a human performance
+                  // if so - detect beats and set initial time signature
       if (opers.count() == 0 && opers.defaultOperations().canRedefineDefaultsLater)
             Quantize::setIfHumanPerformance(tracks, sigmap);
+      else        // user value
+            MidiBeat::setTimeSignature(sigmap);
+
+      Q_ASSERT_X(preferences.midiImportOperations.isHumanPerformance()
+                        ? opers.timeSignature() != ReducedFraction(0, 1) : true,
+                 "convertMidi", "Null time signature for human-performed MIDI file");
 
       MChord::collectChords(tracks);
       MidiBeat::adjustChordsToBeats(tracks, lastTick);
