@@ -18,6 +18,8 @@
 
 namespace Ms {
 
+enum class Key;
+
 //---------------------------------------------------------
 //   cycles
 //---------------------------------------------------------
@@ -40,8 +42,8 @@ enum class ClefType : signed char;
 extern QRectF handleRect(const QPointF& pos);
 
 extern int getStaff(System* system, const QPointF& p);
-extern int pitchKeyAdjust(int note, int key);
-extern int line2pitch(int line, ClefType clef, int key);
+extern int pitchKeyAdjust(int note, Key);
+extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(qreal y, ClefType clef, qreal spatium);
 extern int quantizeLen(int, int);
 extern void selectNoteMessage();
@@ -57,7 +59,7 @@ extern Interval intervalList[26];
 extern int searchInterval(int steps, int semitones);
 extern int chromatic2diatonic(int val);
 
-int diatonicUpDown(int /*clef*/, int pitch, int steps);
+int diatonicUpDown(Key, int pitch, int steps);
 
 extern int version();
 extern int majorVersion();

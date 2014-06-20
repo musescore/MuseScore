@@ -100,6 +100,7 @@ class ScoreFont;
 enum class OttavaType : char;
 enum class ClefType : signed char;
 enum class SymId : short;
+enum class Key;
 
 extern bool showRubberBand;
 
@@ -519,7 +520,7 @@ class Score : public QObject {
       void undoChangeTuning(Note*, qreal);
       void undoChangePageFormat(PageFormat*, qreal spatium, int);
       void undoChangeUserMirror(Note*, DirectionH);
-      void undoChangeKeySig(Staff* ostaff, int tick, int key);
+      void undoChangeKeySig(Staff* ostaff, int tick, Key);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
       void undoChangeBarLine(Measure* m, BarLineType);
       void undoChangeProperty(Element*, P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
@@ -895,7 +896,7 @@ class Score : public QObject {
       const QList<Layer>& layer() const     { return _layer;       }
       bool tagIsValid(uint tag) const       { return tag & _layer[_currentLayer].tags; }
 
-      void transpose(TransposeMode mode, TransposeDirection, int transposeKey, int transposeInterval,
+      void transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
          bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
       void addViewer(MuseScoreView* v)      { viewer.append(v);    }
       void removeViewer(MuseScoreView* v)   { viewer.removeAll(v); }

@@ -4541,9 +4541,6 @@ using namespace Ms;
 
 int main(int argc, char* av[])
       {
-//      tlineTest();
-//      return 0;
-
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
       qInstallMessageHandler(mscoreMessageHandler);
 #endif

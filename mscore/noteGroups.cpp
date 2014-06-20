@@ -16,6 +16,7 @@
 #include "libmscore/timesig.h"
 #include "libmscore/score.h"
 #include "libmscore/part.h"
+#include "libmscore/key.h"
 #include "musescore.h"
 
 namespace Ms {
@@ -33,7 +34,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.createScore("score8");
       c.addPart("voice");
       c.move(0, 0);
-      c.addKeySig(0);
+      c.addKeySig(Key::C);
       TimeSig* nts = c.addTimeSig(_sig);
       GroupNode node {0, 0};
       Groups ng;

@@ -30,6 +30,8 @@ namespace Ms {
 
 bool tpcIsValid(int val)
       {
+      if (!(val >= Tpc::TPC_MIN && val <= Tpc::TPC_MAX))
+            qDebug("invalid tpc %d", val);
       return val >= Tpc::TPC_MIN && val <= Tpc::TPC_MAX;
       }
 
@@ -77,12 +79,15 @@ static const int tpcByStepAndKey[int(Key::NUM_OF)][STEP_DELTA_OCTAVE] = {
       { Tpc::TPC_C_S, Tpc::TPC_D_S, Tpc::TPC_E_S, Tpc::TPC_F_S, Tpc::TPC_G_S, Tpc::TPC_A_S, Tpc::TPC_B_S}, // C#
 };
 
-int step2tpcByKey(int step, int key)
+int step2tpcByKey(int step, Key key)
       {
-      while (step < 0)            step += STEP_DELTA_OCTAVE;
-      while (key < int(Key::MIN)) key  += KEY_DELTA_ENHARMONIC;
-      while (key > int(Key::MAX)) key  -= KEY_DELTA_ENHARMONIC;
-      return tpcByStepAndKey[key-int(Key::MIN)][step % STEP_DELTA_OCTAVE];
+      while (step < 0)
+            step += STEP_DELTA_OCTAVE;
+      while (key < Key::MIN)
+            key  += Key::DELTA_ENHARMONIC;
+      while (key > Key::MAX)
+            key  -= Key::DELTA_ENHARMONIC;
+      return tpcByStepAndKey[int(key) - int(Key::MIN)][step % STEP_DELTA_OCTAVE];
       }
 
 //---------------------------------------------------------
@@ -105,9 +110,9 @@ int tpc2step(int tpc)
 //   tpc2stepByKey
 //---------------------------------------------------------
 
-int tpc2stepByKey(int tpc, int key, int* pAlter)
+int tpc2stepByKey(int tpc, Key key, int* pAlter)
       {
-      if(pAlter)
+      if (pAlter)
             *pAlter = tpc2alterByKey(tpc, key);
       return tpc2step(tpc);
       }
@@ -162,15 +167,15 @@ static const int pitchByStepAndKey[int(Key::NUM_OF)][STEP_DELTA_OCTAVE] = {
       {  1,  3,  5,  6,  8, 10, 12},      // C#
 };
 
-int step2deltaPitchByKey(int step, int key)
+int step2deltaPitchByKey(int step, Key key)
       {
       while (step < 0)
             step+= STEP_DELTA_OCTAVE;
-      while (key < int(Key::MIN))
-            key += KEY_DELTA_ENHARMONIC;
-      while (key > int(Key::MAX))
-            key -= KEY_DELTA_ENHARMONIC;
-      return pitchByStepAndKey[key-int(Key::MIN)][step % STEP_DELTA_OCTAVE];
+      while (key < Key::MIN)
+            key += Key::DELTA_ENHARMONIC;
+      while (key > Key::MAX)
+            key -= Key::DELTA_ENHARMONIC;
+      return pitchByStepAndKey[int(key)-int(Key::MIN)][step % STEP_DELTA_OCTAVE];
       }
 
 //---------------------------------------------------------
@@ -213,8 +218,8 @@ int tpc2pitch(int tpc)
 //          ((tcp-Tpc::TPC_MIN) - (key-Key::MAX)) / TCP_DELTA_SEMITONE - 3
 //---------------------------------------------------------
 
-int tpc2alterByKey(int tpc, int key) {
-      return (tpc - key - int(Tpc::TPC_MIN) + int(Key::MAX)) / TPC_DELTA_SEMITONE - 3;
+int tpc2alterByKey(int tpc, Key key) {
+      return (tpc - int(key) - int(Tpc::TPC_MIN) + int(Key::MAX)) / TPC_DELTA_SEMITONE - 3;
       }
 
 //---------------------------------------------------------
@@ -573,7 +578,7 @@ int computeWindow(const QList<Note*>& notes, int start, int end)
       while (i < end) {
             pitch[k] = notes[i]->pitch() % 12;
             int tick = notes[i]->chord()->tick();
-            key[k]   = notes[i]->staff()->key(tick) + 7;
+            key[k]   = int(notes[i]->staff()->key(tick)) + 7;
             if (key[k] < 0 || key[k] > 14) {
                   qDebug("illegal key at tick %d: %d, window %d-%d",
                      tick, key[k] - 7, start, end);
@@ -776,9 +781,9 @@ void Score::spellNotelist(QList<Note*>& notes)
 // Gb major will use Bbb Fb [Cb Gb Db Ab Eb Bb F] Cn Gn Dn.
 //---------------------------------------------------------
 
-int pitch2tpc(int pitch, int key, Prefer prefer)
+int pitch2tpc(int pitch, Key key, Prefer prefer)
       {
-      return (pitch * 7 + 26 - (int(prefer) + key)) % 12 + (int(prefer) + key);
+      return (pitch * 7 + 26 - (int(prefer) + int(key))) % 12 + (int(prefer) + int(key));
       }
 
 //---------------------------------------------------------
@@ -789,15 +794,21 @@ int pitch2tpc(int pitch, int key, Prefer prefer)
 //    key: between Key::MIN and Key::MAX
 //---------------------------------------------------------
 
-int pitch2absStepByKey(int pitch, int tpc, int key, int *pAlter)
+int pitch2absStepByKey(int pitch, int tpc, Key key, int *pAlter)
       {
       // sanitize input data
-      if(pitch < 0)           pitch += PITCH_DELTA_OCTAVE;
-      if(pitch > 127)         pitch -= PITCH_DELTA_OCTAVE;
-      if(tpc < Tpc::TPC_MIN)  tpc   += TPC_DELTA_ENHARMONIC;
-      if(tpc > Tpc::TPC_MAX)  tpc   -= TPC_DELTA_ENHARMONIC;
-      if(key < int(Key::MIN)) key   += KEY_DELTA_ENHARMONIC;
-      if(key > int(Key::MAX)) key   -= KEY_DELTA_ENHARMONIC;
+      if (pitch < 0)
+            pitch += PITCH_DELTA_OCTAVE;
+      if (pitch > 127)
+            pitch -= PITCH_DELTA_OCTAVE;
+      if (tpc < Tpc::TPC_MIN)
+            tpc   += TPC_DELTA_ENHARMONIC;
+      if (tpc > Tpc::TPC_MAX)
+            tpc   -= TPC_DELTA_ENHARMONIC;
+      if (key < Key::MIN)
+            key   += Key::DELTA_ENHARMONIC;
+      if (key > Key::MAX)
+            key   -= Key::DELTA_ENHARMONIC;
 
       int octave = pitch / PITCH_DELTA_OCTAVE;
       if (tpc == Tpc::TPC_C_BB || tpc == Tpc::TPC_C_B)
@@ -805,7 +816,7 @@ int pitch2absStepByKey(int pitch, int tpc, int key, int *pAlter)
       else if (tpc == Tpc::TPC_B_S || tpc == Tpc::TPC_B_SS)
             --octave;
       int step = tpc2step(tpc);
-      if(pAlter)
+      if (pAlter)
             *pAlter = tpc2alterByKey(tpc, key);
       return octave * STEP_DELTA_OCTAVE + step;
       }
@@ -815,13 +826,17 @@ int pitch2absStepByKey(int pitch, int tpc, int key, int *pAlter)
 //    the default pitch for the given absolute step in the given key
 //---------------------------------------------------------
 
-int absStep2pitchByKey(int step, int key)
+int absStep2pitchByKey(int step, Key key)
       {
       // sanitize input data
-      if(step < 0)            step += STEP_DELTA_OCTAVE;
-      if(step > 74)           step -= STEP_DELTA_OCTAVE;
-      if(key < int(Key::MIN)) key  += KEY_DELTA_ENHARMONIC;
-      if(key > int(Key::MAX)) key  -= KEY_DELTA_ENHARMONIC;
+      if (step < 0)
+            step += STEP_DELTA_OCTAVE;
+      if (step > 74)
+            step -= STEP_DELTA_OCTAVE;
+      if (key < Key::MIN)
+            key  += Key::DELTA_ENHARMONIC;
+      if (key > Key::MAX)
+            key  -= Key::DELTA_ENHARMONIC;
 
       int octave = step / STEP_DELTA_OCTAVE;
       int deltaPitch = step2deltaPitchByKey(step % STEP_DELTA_OCTAVE, key);

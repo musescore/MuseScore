@@ -554,7 +554,7 @@ Score::FileError Score::read114(XmlReader& e)
                         static_cast<KeySig*>(seg->element(track))->setGenerated(false);
                   else {
                         KeySigEvent ke;
-                        ke.setAccidentalType(i->second);
+                        ke.setKey(i->second);
                         KeySig* ks = keySigFactory(ke);
                         if (ks) {
                               ks->setParent(seg);

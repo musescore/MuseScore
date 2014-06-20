@@ -19,7 +19,7 @@
 */
 
 #include "mscore.h"
-#include "key.h"
+// #include "key.h"
 #include "velo.h"
 #include "pitch.h"
 #include "cleflist.h"
@@ -43,6 +43,8 @@ class Segment;
 class Clef;
 class TimeSig;
 class Ottava;
+
+enum class Key;
 
 //---------------------------------------------------------
 //   LinkedStaves
@@ -156,11 +158,11 @@ class Staff : public QObject {
       const Groups& group(int tick) const;
 
       KeyList* keyList()               { return &_keys;      }
-      int key(int tick) const;
+      Key key(int tick) const;
       int nextKeyTick(int tick) const;
       int currentKeyTick(int tick) const;
-      int prevKey(int tick) const;
-      void setKey(int tick, int st);
+      Key prevKey(int tick) const;
+      void setKey(int tick, Key);
       void removeKey(int tick);
       void clearKeys()               { _keys.clear(); }
       void updateKeys();

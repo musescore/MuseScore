@@ -25,13 +25,13 @@ class XmlReader;
 //    to keep track of key signature changes
 //---------------------------------------------------------
 
-class KeyList : public std::map<const int, int> {
+class KeyList : public std::map<const int, Key> {
 
    public:
       KeyList() {}
-      int key(int tick) const;
-      int prevKey(int tick) const;
-      void setKey(int tick, int k);
+      Key key(int tick) const;
+      Key prevKey(int tick) const;
+      void setKey(int tick, Key);
       int nextKeyTick(int tick) const;
       int currentKeyTick(int tick) const;
       void read(XmlReader&, Score*);

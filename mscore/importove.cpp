@@ -775,11 +775,11 @@ void OveToMScore::convertSignatures(){
 						int keyValue = keyPtr->getKey();
 		                Measure* measure = score_->tick2measure(tick);
 		                if(measure){
-		                	score_->staff(staffCount+j)->setKey(tick, keyValue);
+		                	score_->staff(staffCount+j)->setKey(tick, Key(keyValue));
 
 		                    KeySig* keysig = new KeySig(score_);
 		                    keysig->setTrack((staffCount+j) * VOICES);
-		                    keysig->setKey(keyValue);
+		                    keysig->setKey(Key(keyValue));
 
 		                	Segment* s = measure->getSegment(keysig, tick);
 		                	s->add(keysig);
@@ -1973,9 +1973,9 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
 
 		// TODO - does this need to be key-aware?
 		harmony->setTrack(track);
-      harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot(), int(Key::C), Prefer::NEAREST));
+      harmony->setRootTpc(pitch2tpc(harmonyPtr->getRoot(), Key::C, Prefer::NEAREST));
 		if(harmonyPtr->getBass() != OVE::INVALID_NOTE && harmonyPtr->getBass() != harmonyPtr->getRoot()){
-         harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass(), int(Key::C), Prefer::NEAREST));
+         harmony->setBaseTpc(pitch2tpc(harmonyPtr->getBass(), Key::C, Prefer::NEAREST));
 		}
 		const ChordDescription* d = harmony->fromXml(OveHarmony_To_String(harmonyPtr->getHarmonyType()));
 		if(d != 0){

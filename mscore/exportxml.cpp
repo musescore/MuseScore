@@ -278,7 +278,7 @@ class ExportMusicXml {
       void rest(Rest* chord, int staff);
       void clef(int staff, ClefType clef);
       void timesig(TimeSig* tsig);
-      void keysig(int key, int staff = 0, bool visible = true);
+      void keysig(Key, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
       void barlineRight(Measure* m);
       void lyrics(const QList<Lyrics*>* ll, const int trk);
@@ -1151,7 +1151,7 @@ static void midipitch2xml(int pitch, char& c, int& alter, int& octave)
 static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter, int& octave)
       {
       s      = tpc2stepName(tpc);
-      alter  = tpc2alterByKey(tpc, 0);
+      alter  = tpc2alterByKey(tpc, Key::C);
       octave = (pitch - alter) / 12 - 1;
       if (alter < -2 || 2 < alter)
             qDebug("tabpitch2xml(pitch %d, tpc %d) problem:  step %s, alter %d, octave %d",
@@ -1170,7 +1170,7 @@ static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter,
 static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       {
       s      = tpc2stepName(note->tpc());
-      alter  = tpc2alterByKey(note->tpc(), 0);
+      alter  = tpc2alterByKey(note->tpc(), Key::C);
       octave = (note->pitch() - alter) / 12 - 1;
 
       //
@@ -1184,7 +1184,7 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       ClefType ct     = st->clef(tick);
       if (ct == ClefType::PERC || ct == ClefType::PERC2) {
             alter = 0;
-            octave = line2pitch(note->line(), ct, 0) / 12 - 1;
+            octave = line2pitch(note->line(), ct, Key::C) / 12 - 1;
       }
 
       // correct for ottava lines
@@ -1443,7 +1443,7 @@ void ExportMusicXml::timesig(TimeSig* tsig)
 //   keysig
 //---------------------------------------------------------
 
-void ExportMusicXml::keysig(int key, int staff, bool visible)
+void ExportMusicXml::keysig(Key key, int staff, bool visible)
       {
       QString tg = "key";
       if (staff)
@@ -1452,7 +1452,7 @@ void ExportMusicXml::keysig(int key, int staff, bool visible)
             tg += " print-object=\"no\"";
       attr.doAttr(xml, true);
       xml.stag(tg);
-      xml.tag("fifths", key);
+      xml.tag("fifths", int(key));
       xml.tag("mode", QString("major"));
       xml.etag();
       }
@@ -3906,7 +3906,7 @@ void ExportMusicXml::keysigTimesig(Measure* m, int strack, int etrack)
       else {
             // always write a keysig at tick = 0
             if (m->tick() == 0)
-                  keysig(0);
+                  keysig(Key::C);
             }
 
       TimeSig* tsig = 0;
@@ -3982,7 +3982,7 @@ static int findPartGroupNumber(int* partGroupEnd)
 
 void ExportMusicXml::write(QIODevice* dev)
       {
-            
+
       // must export in transposed pitch to prevent
       // losing the transposition information
       // if necessary, switch concert pitch mode off
@@ -3992,7 +3992,7 @@ void ExportMusicXml::write(QIODevice* dev)
             score()->cmdConcertPitchChanged(false, false);
             score()->doLayout();
             }
-            
+
       calcDivisions();
 
       for (int i = 0; i < MAX_BRACKETS; ++i)
@@ -4550,7 +4550,7 @@ void ExportMusicXml::write(QIODevice* dev)
             }
 
       xml.etag();
-      
+
       if (concertPitch) {
             // restore concert pitch
             score()->cmdConcertPitchChanged(true, false);

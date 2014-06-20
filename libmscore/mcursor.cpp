@@ -91,7 +91,7 @@ Chord* MCursor::addChord(int pitch, const TDuration& duration)
 //   addKeySig
 //---------------------------------------------------------
 
-void MCursor::addKeySig(int sig)
+void MCursor::addKeySig(Key key)
       {
       createMeasures();
       Measure* measure = _score->tick2measure(_tick);
@@ -99,7 +99,7 @@ void MCursor::addKeySig(int sig)
       int n = _score->nstaves();
       for (int i = 0; i < n; ++i) {
             KeySig* ks = new KeySig(_score);
-            ks->setKey(sig);
+            ks->setKey(key);
             ks->setTrack(i * VOICES);
             segment->add(ks);
             }

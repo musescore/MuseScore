@@ -300,7 +300,7 @@ void Staff::removeTimeSig(TimeSig* timesig)
 //    locates the key sig currently in effect at tick
 //---------------------------------------------------------
 
-int Staff::key(int tick) const
+Key Staff::key(int tick) const
       {
       return _keys.key(tick);
       }
@@ -309,7 +309,7 @@ int Staff::key(int tick) const
 //   setKey
 //---------------------------------------------------------
 
-void Staff::setKey(int tick, int k)
+void Staff::setKey(int tick, Key k)
       {
       _keys.setKey(tick, k);
 //      printf("setKey %d %d\n", tick, k);
@@ -336,7 +336,7 @@ void Staff::removeKey(int tick)
 //   prevkey
 //---------------------------------------------------------
 
-int Staff::prevKey(int tick) const
+Key Staff::prevKey(int tick) const
       {
       return _keys.prevKey(tick);
       }
@@ -838,10 +838,10 @@ void Staff::insertTime(int tick, int len)
       {
       KeyList kl2;
       for (auto i = _keys.upper_bound(tick); i != _keys.end();) {
-            int kse = i->second;
-            int key = i->first;
+            Key kse = i->second;
+            int k   = i->first;
             _keys.erase(i++);
-            kl2[key + len] = kse;
+            kl2[k + len] = kse;
             }
       _keys.insert(kl2.begin(), kl2.end());
 

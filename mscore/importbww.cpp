@@ -274,7 +274,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
             s->add(clef);
             // keysig
             Ms::KeySigEvent key;
-            key.setAccidentalType(2);
+            key.setKey(Ms::Key::D);
             Ms::KeySig* keysig = new Ms::KeySig(score);
             keysig->setKeySigEvent(key);
             keysig->setTrack(0);

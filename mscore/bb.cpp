@@ -530,10 +530,10 @@ Score::FileError importBB(Score* score, const QString& name)
 
       foreach(Staff* staff, score->staves()) {
             int tick = 0;
-            staff->setKey(tick, bb.key());
+            staff->setKey(tick, Key(bb.key()));
             KeySig* keysig = new KeySig(score);
             keysig->setTrack((score->staffIdx(staff->part()) + staff->rstaff()) * VOICES);
-            keysig->setKey(bb.key());
+            keysig->setKey(Key(bb.key()));
             Measure* mks = score->tick2measure(tick);
             Segment* sks = mks->getSegment(keysig, tick);
             sks->add(keysig);

@@ -10,26 +10,39 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __KEY_H__
-#define __KEY_H__
-
-#include "mscore.h"
+#ifndef __KEY__H__
+#define __KEY__H__
 
 namespace Ms {
 
 class Xml;
 class Score;
 class XmlReader;
+enum class AccidentalVal : signed char;
 
-enum class Key : signed char {
-      C_B=-7,
+//---------------------------------------------------------
+//   Key
+//---------------------------------------------------------
+
+enum class Key {
+      C_B = -7,
       G_B, D_B, A_B, E_B, B_B, F,   C,
       G,   D,   A,   E,   B,   F_S, C_S,
       MIN = Key::C_B,
       MAX = Key::C_S,
       INVALID = Key::MIN - 1,
-      NUM_OF = Key::MAX - Key::MIN + 1
+      NUM_OF = Key::MAX - Key::MIN + 1,
+      DELTA_ENHARMONIC = 12
       };
+
+static inline bool operator<  (Key a, Key b) { return int(a) < int(b); }
+static inline bool operator>  (Key a, Key b) { return int(a) > int(b); }
+static inline bool operator>  (Key a, int b) { return int(a) > b; }
+static inline bool operator<  (Key a, int b) { return int(a) < b; }
+static inline bool operator== (Key a, Key b) { return int(a) == int(b); }
+static inline bool operator!= (Key a, Key b) { return int(a) != int(b); }
+static inline Key  operator+= (Key& a, const Key& b) { return a = Key(int(a) + int(b)); }
+static inline Key  operator-= (Key& a, const Key& b) { return a = Key(int(a) - int(b)); }
 
 // the delta in key value to reach the next (or prev) enharmonically equivalent key:
 static const int KEY_DELTA_ENHARMONIC = 12;
@@ -39,7 +52,7 @@ static const int KEY_DELTA_ENHARMONIC = 12;
 //---------------------------------------------------------
 
 class KeySigEvent {
-      int _accidentalType { 0 };          // -7 -> +7
+      Key _key            { Key::C };          // -7 -> +7
       int _customType     { 0 };
       bool _custom        { false };
       bool _invalid       { true };
@@ -48,16 +61,17 @@ class KeySigEvent {
 
    public:
       KeySigEvent() {}
-      KeySigEvent(int key);
+      KeySigEvent(Key);
 
       bool isValid() const { return !_invalid; }
       bool operator==(const KeySigEvent& e) const;
       bool operator!=(const KeySigEvent& e) const;
+
+      void setKey(Key v);
       void setCustomType(int v);
-      void setAccidentalType(int v);
       void print() const;
 
-      int accidentalType() const { return _accidentalType; }
+      Key key() const            { return _key; }
       int customType() const     { return _customType;     }
       bool custom() const        { return _custom;         }
       bool invalid() const       { return _invalid;        }
@@ -77,24 +91,14 @@ class AccidentalState {
 
    public:
       AccidentalState() {}
-      void init(int key);
-      AccidentalVal accidentalVal(int line) const {
-            Q_ASSERT(line >= 0 && line < 75);
-            return AccidentalVal((state[line] & 0x0f) - 2);
-            }
-      bool tieContext(int line) const {
-            Q_ASSERT(line >= 0 && line < 75);
-            return state[line] & TIE_CONTEXT;
-            }
-      void setAccidentalVal(int line, AccidentalVal val, bool tieContext = false) {
-            Q_ASSERT(line >= 0 && line < 75);
-            Q_ASSERT(val >= AccidentalVal::FLAT2 && val <= AccidentalVal::SHARP2);
-            state[line] = (int(val) + 2) | (tieContext ? TIE_CONTEXT : 0);
-            }
+      void init(Key key);
+      AccidentalVal accidentalVal(int line) const;
+      bool tieContext(int line) const;
+      void setAccidentalVal(int line, AccidentalVal val, bool tieContext = false);
       };
 
 struct Interval;
-extern int transposeKey(int oldKey, const Interval&);
+extern Key transposeKey(Key oldKey, const Interval&);
 
 
 }     // namespace Ms
