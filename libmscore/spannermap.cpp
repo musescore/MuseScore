@@ -91,5 +91,18 @@ bool SpannerMap::removeSpanner(Spanner* s)
       return false;
       }
 
+void SpannerMap::fixKeys()
+      {
+      std::vector<std::pair<int,Spanner*>> values;
+      for (auto i = begin(); i != end(); ++i) {
+            values.push_back(*i);
+            }
+      clear();
+      for (auto i : values) {
+            i.first = i.second->tick();
+            insert(i);
+            }
+      }
+
 }     // namespace Ms
 

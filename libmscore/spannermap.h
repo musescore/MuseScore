@@ -42,6 +42,7 @@ class SpannerMap : std::multimap<int, Spanner*> {
       std::multimap<int,Spanner*>::const_iterator cend() const  { return std::multimap<int, Spanner*>::cend(); }
       void addSpanner(Spanner* s);
       bool removeSpanner(Spanner* s);
+      void fixKeys();
       };
 
 }     // namespace Ms
