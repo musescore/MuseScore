@@ -67,6 +67,8 @@ class MidiData
             QByteArray VHeaderData;
             QList<TrackData> tracksData;
                         // tracks of <tick, lyric fragment> from karaoke files
+                        // QList of lyric tracks - there can be multiple lyric tracks,
+                        // lyric track count != MIDI chord track count in general
             QList<std::multimap<ReducedFraction, std::string>> lyricTracks;
                         // default values - when MIDI is opened
             int selectedRow = 0;
