@@ -41,11 +41,11 @@ bool isLyricEvent(const MidiEvent &e)
       }
 
 std::multimap<ReducedFraction, std::string>
-extractLyricsFromTrack(const MidiTrack &lyricsTrack, int division)
+extractLyricsFromTrack(const MidiTrack &track, int division)
       {
       std::multimap<ReducedFraction, std::string> lyrics;
 
-      for (const auto &i: lyricsTrack.events()) {
+      for (const auto &i: track.events()) {
             const auto& e = i.second;
             if (isLyricEvent(e)) {
                   const uchar* data = (uchar*)e.edata();
@@ -203,15 +203,12 @@ void setLyricsFromOperations(const QList<MTrack> &tracks)
             }
       }
 
-void setLyricsToScore(const MidiFile *mf, const QList<MTrack> &tracks)
+void setLyricsToScore(const QList<MTrack> &tracks)
       {
-      if (preferences.midiImportOperations.count() == 0) {
-            extractLyricsToMidiData(mf);
+      if (preferences.midiImportOperations.count() == 0)
             setInitialLyricsFromMidiData(tracks);
-            }
-      else {
+      else
             setLyricsFromOperations(tracks);
-            }
       }
 
 QList<std::string> makeLyricsListForUI()

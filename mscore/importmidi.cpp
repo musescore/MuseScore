@@ -928,6 +928,10 @@ void convertMidi(Score *score, const MidiFile *mf)
       auto tracks = createMTrackList(lastTick, sigmap, mf);
       cleanUpMidiEvents(tracks);
       auto &opers = preferences.midiImportOperations;
+
+      if (opers.count() == 0)       // for newly opened MIDI file
+            MidiLyrics::extractLyricsToMidiData(mf);
+
                   // for newly opened MIDI file - detect if it is a human performance
                   // if so - detect beats and set initial time signature
       if (opers.count() == 0 && opers.defaultOperations().canRedefineDefaultsLater)
@@ -978,7 +982,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       createNotes(lastTick, trackList, mf->midiType());
       createTimeSignatures(score);
       score->connectTies();
-      MidiLyrics::setLyricsToScore(mf, trackList);
+      MidiLyrics::setLyricsToScore(trackList);
 
       if (opers.count() == 0) {
                   // clear defaults - they can be set during opening of this new MIDI file
