@@ -314,7 +314,7 @@
             <item>
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>Select swing ratio (In percentage) :                  </string>
+               <string>Select swing ratio :     </string>
               </property>
              </widget>
             </item>
@@ -328,6 +328,9 @@
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
+              </property>
+              <property name="suffix">
+               <string>%</string>
               </property>
               <property name="minimum">
                <number>50</number>
