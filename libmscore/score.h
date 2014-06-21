@@ -531,6 +531,9 @@ class Score : public QObject {
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(int tick, int len);
+      void swingAdjustParams(Chord*, int&, int&, int, int);
+      bool isSubdivided(ChordRest*, int);
+
 
       void setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
