@@ -14,129 +14,6 @@
    <string>MuseScore: Edit Style</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_11">
-   <item row="0" column="0">
-    <widget class="QListWidget" name="pageList">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="alternatingRowColors">
-      <bool>true</bool>
-     </property>
-     <property name="resizeMode">
-      <enum>QListView::Fixed</enum>
-     </property>
-     <property name="uniformItemSizes">
-      <bool>true</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>Score</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Page</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Header, Footer, Numbers</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string extracomment="a music system, a line of music">System</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Measure</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Barlines</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Notes</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Clefs</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Arpeggios</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Beams</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slurs/Ties</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Sizes</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Hairpins, Volta, Ottava</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Pedal, Trill</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Chord Symbols, Fretboard Diagrams</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Figured Bass</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Articulations, Ornaments</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Accidentals</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Tuplets</string>
-      </property>
-     </item>
-    </widget>
-   </item>
    <item row="1" column="0" colspan="2">
     <layout class="QHBoxLayout">
      <property name="spacing">
@@ -172,7 +49,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Page1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -261,26 +138,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_5">
              <item>
               <layout class="QFormLayout" name="formLayout_3">
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_16">
-                 <property name="text">
-                  <string>Minimum width of measure:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QDoubleSpinBox" name="minMeasureWidth">
-                 <property name="suffix">
-                  <string>sp</string>
-                 </property>
-                 <property name="minimum">
-                  <double>2.000000000000000</double>
-                 </property>
-                 <property name="value">
-                  <double>4.000000000000000</double>
-                 </property>
-                </widget>
-               </item>
+               <property name="fieldGrowthPolicy">
+                <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+               </property>
                <item row="1" column="0">
                 <widget class="QLabel" name="label_15">
                  <property name="text">
@@ -290,11 +150,43 @@
                </item>
                <item row="1" column="1">
                 <widget class="QSpinBox" name="minEmptyMeasures">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="minimum">
                   <number>1</number>
                  </property>
                  <property name="value">
                   <number>2</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_16">
+                 <property name="text">
+                  <string>Minimum width of measure:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QDoubleSpinBox" name="minMeasureWidth">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="minimum">
+                  <double>2.000000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>4.000000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -330,6 +222,138 @@
              <string>Hide instrument name if there is only 1 instrument</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_10">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>10</width>
+              <height>10</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Swing Settings</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="SwingLabel">
+              <property name="text">
+               <string>Swing :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="SwingOff">
+              <property name="text">
+               <string>Off</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="swingEighth">
+              <property name="text">
+               <string>Eighth Note</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="swingSixteenth">
+              <property name="text">
+               <string>Sixteenth Note</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="zontalSpacer_16">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <property name="bottomMargin">
+             <number>30</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Select swing ratio :     </string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="swingBox">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="suffix">
+               <string>%</string>
+              </property>
+              <property name="minimum">
+               <number>50</number>
+              </property>
+              <property name="value">
+               <number>60</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_16">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
           <item>
            <spacer name="verticalSpacer">
@@ -5549,6 +5573,129 @@
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QListWidget" name="pageList">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="resizeMode">
+      <enum>QListView::Fixed</enum>
+     </property>
+     <property name="uniformItemSizes">
+      <bool>true</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>Score</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Page</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Header, Footer, Numbers</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string extracomment="a music system, a line of music">System</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Measure</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Barlines</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Notes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Clefs</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Arpeggios</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Beams</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slurs/Ties</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Sizes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Hairpins, Volta, Ottava</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Pedal, Trill</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Chord Symbols, Fretboard Diagrams</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Figured Bass</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Articulations, Ornaments</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Accidentals</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Tuplets</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>
