@@ -60,14 +60,22 @@ extractLyricsFromTrack(const MidiTrack &track, int division)
       return lyrics;
       }
 
+struct BestTrack
+      {
+      int index = -1;
+                  // <orig time, current time - after quantization>
+      std::vector<std::pair<ReducedFraction, ReducedFraction>> matchedLyricTimes;
+      };
+
 // find track to insert lyrics
 // it will be the track with max onTime match cases, except drum tracks
 
-int findBestTrack(const QList<MTrack> &tracks,
-                  const std::multimap<ReducedFraction, std::string> &lyricTrack,
-                  const std::set<int> &usedTracks)
+BestTrack findBestTrack(
+            const QList<MTrack> &tracks,
+            const std::multimap<ReducedFraction, std::string> &lyricTrack,
+            const std::set<int> &usedTracks)
       {
-      int bestTrack = -1;
+      BestTrack bestTrack;
       int maxMatches = 0;
 
       for (int i = 0; i != tracks.size(); ++i) {
@@ -75,14 +83,19 @@ int findBestTrack(const QList<MTrack> &tracks,
                   continue;
 
             int matches = 0;
-            for (const auto &e: lyricTrack) {
-                  const auto &chords = tracks[i].chords;
-                  if (chords.find(e.first) != chords.end())
-                        ++matches;
+            for (const auto &chord: tracks[i].chords) {
+                  for (const auto &note: chord.second.notes) {
+                        if (lyricTrack.find(note.origOnTime) != lyricTrack.end()) {
+                              ++matches;
+                              bestTrack.matchedLyricTimes.push_back({chord.first,
+                                                                     note.origOnTime});
+                              break;
+                              }
+                        }
                   }
             if (matches > maxMatches) {
                   maxMatches = matches;
-                  bestTrack = i;
+                  bestTrack.index = i;
                   }
             }
 
@@ -130,22 +143,26 @@ std::string removeSlashes(const std::string &text)
       return str;
       }
 
-void addLyricsToScore(const std::multimap<ReducedFraction, std::string> &lyricTrack,
-                      const Staff *staffAddTo)
+void addLyricsToScore(
+            const std::multimap<ReducedFraction, std::string> &lyricTrack,
+            const std::vector<std::pair<ReducedFraction, ReducedFraction>> &matchedLyricTimes,
+            const Staff *staffAddTo)
       {
       Score *score = staffAddTo->score();
       int textCounter = 0;
 
-      for (const auto &e: lyricTrack) {
-            const auto &tick = e.first;
-            QString str = MidiCharset::convertToCharset(e.second);
-            if (tick == ReducedFraction(0, 1)) {
-                  addTitle(score, str, &textCounter);
-                  }
-            else {
-                  QString text = removeSlashes(str);
-                  score->addLyrics(tick.ticks(), staffAddTo->idx(), text);
-                  }
+      for (const auto &timePair: matchedLyricTimes) {
+            const auto lyricTime = timePair.first;
+            const auto it = lyricTrack.find(timePair.second);
+
+            Q_ASSERT_X(it != lyricTrack.end(),
+                       "MidiLyrics::addLyricsToScore", "Lyric time not found");
+
+            QString text = MidiCharset::convertToCharset(it->second);
+            if (lyricTime == ReducedFraction(0, 1))
+                  addTitle(score, text, &textCounter);
+            else
+                  score->addLyrics(lyricTime.ticks(), staffAddTo->idx(), removeSlashes(text));
             }
       }
 
@@ -166,10 +183,10 @@ void assignLyricsToTracks(QList<MTrack> &tracks)
             return;
 
       for (int i = 0; i != lyricTracks->size(); ++i) {
-            const int bestTrack = findBestTrack(tracks, (*lyricTracks)[i], usedTracks);
-            if (bestTrack >= 0) {
-                  usedTracks.insert(bestTrack);
-                  tracks[bestTrack].initLyricTrackIndex = i;
+            const BestTrack bestTrack = findBestTrack(tracks, (*lyricTracks)[i], usedTracks);
+            if (bestTrack.index >= 0) {
+                  usedTracks.insert(bestTrack.index);
+                  tracks[bestTrack.index].initLyricTrackIndex = i;
                   }
             }
       }
@@ -182,12 +199,31 @@ void setInitialLyricsFromMidiData(const QList<MTrack> &tracks)
             return;
 
       for (const auto &lyricTrack: *lyricTracks) {
-            const int bestTrack = findBestTrack(tracks, lyricTrack, usedTracks);
-            if (bestTrack >= 0) {
-                  usedTracks.insert(bestTrack);
-                  addLyricsToScore(lyricTrack, tracks[bestTrack].staff);
+            const BestTrack bestTrack = findBestTrack(tracks, lyricTrack, usedTracks);
+            if (bestTrack.index >= 0) {
+                  usedTracks.insert(bestTrack.index);
+                  addLyricsToScore(lyricTrack,
+                                   bestTrack.matchedLyricTimes,
+                                   tracks[bestTrack.index].staff);
                   }
             }
+      }
+
+std::vector<std::pair<ReducedFraction, ReducedFraction> > findMatchedLyricTimes(
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const std::multimap<ReducedFraction, std::string> &lyricTrack)
+      {
+      std::vector<std::pair<ReducedFraction, ReducedFraction> > matchedLyricTimes;
+
+      for (const auto &chord: chords) {
+            for (const auto &note: chord.second.notes) {
+                  if (lyricTrack.find(note.origOnTime) != lyricTrack.end()) {
+                        matchedLyricTimes.push_back({chord.first, note.origOnTime});
+                        break;
+                        }
+                  }
+            }
+      return matchedLyricTimes;
       }
 
 void setLyricsFromOperations(const QList<MTrack> &tracks)
@@ -196,10 +232,14 @@ void setLyricsFromOperations(const QList<MTrack> &tracks)
       if (!lyricTracks)
             return;
       for (const auto &track: tracks) {
-            const auto opers
-                  = preferences.midiImportOperations.trackOperations(track.indexOfOperation);
-            if (opers.lyricTrackIndex >= 0 && opers.lyricTrackIndex < lyricTracks->size())
-                  addLyricsToScore((*lyricTracks)[opers.lyricTrackIndex], track.staff);
+            const auto opers = preferences.midiImportOperations.trackOperations(
+                                                                  track.indexOfOperation);
+            if (opers.lyricTrackIndex >= 0 && opers.lyricTrackIndex < lyricTracks->size()) {
+                  const auto &lyricTrack = (*lyricTracks)[opers.lyricTrackIndex];
+                  const auto matchedLyricTimes = findMatchedLyricTimes(track.chords, lyricTrack);
+
+                  addLyricsToScore(lyricTrack, matchedLyricTimes, track.staff);
+                  }
             }
       }
 

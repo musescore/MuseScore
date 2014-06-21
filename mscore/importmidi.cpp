@@ -627,10 +627,11 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                         if (tick + len > lastTick)
                               lastTick = tick + len;
 
-                        MidiNote  n;
-                        n.pitch    = pitch;
-                        n.velo     = e.velo();
-                        n.offTime  = tick + len;
+                        MidiNote n;
+                        n.pitch           = pitch;
+                        n.velo            = e.velo();
+                        n.offTime         = tick + len;
+                        n.origOnTime      = tick;
 
                         MidiChord c;
                         c.notes.push_back(n);
