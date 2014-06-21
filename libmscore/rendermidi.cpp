@@ -832,8 +832,8 @@ void Score::createPlayEvents(Chord* chord)
 
       // Check if swing needs to be applied
       int swingUnit = styleI(StyleIdx::swingUnit);
-      int swingRatio = styleI(StyleIdx::swingRatio);
       if (swingUnit) {
+            int swingRatio = styleI(StyleIdx::swingRatio);
             swingAdjustParams(chord, gateTime, ontime, swingUnit, swingRatio);
       }
       //
