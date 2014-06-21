@@ -334,7 +334,9 @@ void Beam::layout1()
             else {
                   if (c1) {
                         Measure* m = c1->measure();
-                        if (m->hasVoices(c1->staffIdx()))
+                        if (c1->stemDirection() != Direction::AUTO)
+                              _up = c1->stemDirection() == Direction::UP;
+                        else if (m->hasVoices(c1->staffIdx()))
                               _up = !(c1->voice() % 2);
                         else if (!twoBeamedNotes()) {
                               // highest or lowest note determines stem direction
