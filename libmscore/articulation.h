@@ -123,6 +123,10 @@ class Articulation : public Element {
       const ArticulationInfo* articulationInfo() const { return &articulationList[int(articulationType())]; }
 
       static QString idx2name(int idx);
+      bool isFermata() { return _articulationType == ArticulationType::Fermata ||
+                                _articulationType == ArticulationType::Shortfermata ||
+                                _articulationType == ArticulationType::Longfermata ||
+                                _articulationType == ArticulationType::Verylongfermata; }
       };
 
 

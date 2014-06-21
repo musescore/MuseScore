@@ -174,7 +174,7 @@ bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
          || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
-         || (type == ElementType::ARTICULATION && static_cast<Articulation*>(e)->articulationType() == ArticulationType::Fermata)
+         || (type == ElementType::ARTICULATION && static_cast<Articulation*>(e)->isFermata())
          || (type == ElementType::CLEF)
          || (type == ElementType::STAFF_TEXT)
          || (type == ElementType::BAR_LINE)
@@ -208,7 +208,7 @@ Element* Rest::drop(const DropData& data)
             case ElementType::ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
-                  if (a->articulationType() != ArticulationType::Fermata
+                  if (!a->isFermata()
                      || !score()->addArticulation(this, a)) {
                         delete e;
                         e = 0;
