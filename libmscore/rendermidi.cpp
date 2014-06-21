@@ -561,6 +561,46 @@ void Score::renderStaff(EventMap* events, Staff* staff)
             }
       }
 
+//--------------------------------------------------------
+//   swingAdjustParams
+//--------------------------------------------------------
+
+void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swingUnit, int swingRatio)
+      {
+      int tick = chord->tick();
+      int swingBeat = swingUnit * 2;
+      qreal ticksDuration = (qreal)chord->actualTicks();
+      qreal swingTickAdjust = ((qreal)swingBeat) * (((qreal)(swingRatio-50))/100.0);
+      qreal swingActualAdjust = (swingTickAdjust/ticksDuration) * 1000.0;
+      ChordRest *ncr = nextChordRest(chord);
+
+      //Check the position of the chord to apply changes accordingly
+      if (tick % swingBeat == swingUnit) {
+            if (!isSubdivided(chord,swingUnit)) {
+                  ontime = ontime + swingActualAdjust;
+                  }
+            }
+            int endTick = tick + ticksDuration;
+            if ((endTick % swingBeat == swingUnit) && (!isSubdivided(ncr,swingUnit))) {
+                  gateTime = gateTime + (swingActualAdjust/10);
+                  }
+      }
+
+//---------------------------------------------------------
+//   isSubdivided
+//   Check for subdivided beat
+//---------------------------------------------------------
+
+bool Score::isSubdivided(ChordRest* chord, int swingUnit)
+      {
+      ChordRest* prev = prevChordRest(chord);
+
+      if (chord->actualTicks() < swingUnit || prev->actualTicks() < swingUnit)
+            return true;
+      else
+            return false;
+      }
+
 //---------------------------------------------------------
 //   renderChord
 //    ontime in 1/1000 of duration
@@ -789,6 +829,13 @@ void Score::createPlayEvents(Chord* chord)
                   on += graceDuration;
                   }
             }
+
+      // Check if swing needs to be applied
+      int swingUnit = styleI(StyleIdx::swingUnit);
+      if (swingUnit) {
+            int swingRatio = styleI(StyleIdx::swingRatio);
+            swingAdjustParams(chord, gateTime, ontime, swingUnit, swingRatio);
+      }
       //
       //    render normal (and articulated) chords
       //
