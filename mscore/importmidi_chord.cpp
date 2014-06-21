@@ -2,6 +2,7 @@
 #include "importmidi_inner.h"
 #include "importmidi_chord.h"
 #include "importmidi_clef.h"
+#include "importmidi_operations.h"
 #include "libmscore/mscore.h"
 #include "preferences.h"
 
@@ -196,11 +197,10 @@ void collectChords(std::multimap<int, MTrack> &tracks)
             if (chords.empty())
                   continue;
 
-            const int trackIndex = track.second.indexOfOperation;
-            const auto opers = preferences.midiImportOperations.trackOperations(trackIndex);
+            const auto &opers = preferences.midiImportOperations.data()->trackOpers;
             const auto minAllowedDur = minAllowedDuration();
 
-            const auto threshTime = (opers.quantize.humanPerformance)
+            const auto threshTime = (opers.isHumanPerformance)
                                           ? minAllowedDur * 2 : minAllowedDur / 2;
             const auto fudgeTime = threshTime / 4;
             const auto threshExtTime = threshTime / 2;

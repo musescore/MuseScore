@@ -5,6 +5,8 @@
 #include "importmidi_chord.h"
 #include "importmidi_quant.h"
 #include "importmidi_inner.h"
+#include "importmidi_operations.h"
+#include "libmscore/sig.h"
 #include "preferences.h"
 
 #include <set>
@@ -1021,8 +1023,9 @@ void findTuplets(
       {
       if (chords.empty() || startBarTick >= endBarTick)     // invalid cases
             return;
-      const auto operations = preferences.midiImportOperations.currentTrackOperations();
-      if (!operations.tuplets.doSearch)
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      if (!opers.searchTuplets.value(currentTrack))
             return;
 
       const auto tol = basicQuant / 2;
@@ -1041,7 +1044,7 @@ void findTuplets(
 
             // later notes will be sorted and their indexes become invalid
             // so assign staccato information to notes now
-      if (operations.simplifyDurations)
+      if (opers.simplifyDurations.value(currentTrack))
             markStaccatoTupletNotes(tuplets);
 
             // because of tol for non-tuplets we should use only chords with onTime >= bar start
@@ -1066,7 +1069,7 @@ void findTuplets(
             minimizeOffTimeError(tuplets, chords, nonTuplets, startBarTick, basicQuant, barIndex);
             }
 
-      if (operations.simplifyDurations)
+      if (opers.simplifyDurations.value(currentTrack))
             cleanStaccatoOfNonTuplets(nonTuplets);
 
       Q_ASSERT_X(!doTupletsHaveCommonChords(tuplets),

@@ -58,6 +58,7 @@
 #include "importmidi_beat.h"
 #include "importmidi_simplify.h"
 #include "importmidi_voice.h"
+#include "importmidi_operations.h"
 
 #include <set>
 
@@ -70,11 +71,8 @@ extern void updateNoteLines(Segment*, int track);
 
 void cleanUpMidiEvents(std::multimap<int, MTrack> &tracks)
       {
-      auto &opers = preferences.midiImportOperations;
-
       for (auto &track: tracks) {
             MTrack &mtrack = track.second;
-            opers.setCurrentTrack(mtrack.indexOfOperation);
 
             for (auto chordIt = mtrack.chords.begin(); chordIt != mtrack.chords.end(); ) {
                   MidiChord &ch = chordIt->second;
@@ -155,10 +153,18 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
             MTrack &mtrack = track.second;
                         // pass current track index through MidiImportOperations
                         // for further usage
-            opers.setCurrentTrack(mtrack.indexOfOperation);
-            opers.adaptForPercussion(mtrack.indexOfOperation, mtrack.mtrack->drumTrack());
+            MidiOperations::CurrentTrackSetter setCurrentTrack{opers, mtrack.indexOfOperation};
+
+            if (opers.data()->isNewlyOpened) {
+                  opers.data()->trackOpers.isDrumTrack.setValue(
+                                          opers.currentTrack(), mtrack.mtrack->drumTrack());
+                  if (mtrack.mtrack->drumTrack()) {
+                        opers.data()->trackOpers.maxVoiceCount.setValue(
+                                          opers.currentTrack(), MidiOperations::VoiceCount::V_1);
+                        }
+                  }
             const auto basicQuant = Quantize::userQuantNoteToFraction(
-                                          opers.currentTrackOperations().quantize.value);
+                                    opers.data()->trackOpers.quantValue.defaultValue());
 
             MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, lastTick, basicQuant);
 
@@ -270,7 +276,6 @@ MTrack::toDurationList(const Measure *measure,
                        const ReducedFraction &len,
                        Meter::DurationType durationType)
       {
-      const bool useDots = preferences.midiImportOperations.currentTrackOperations().useDots;
                   // find tuplets over which duration goes
       auto barTick = ReducedFraction::fromTicks(measure->tick());
       auto tupletsData = MidiTuplet::findTupletsInBarForDuration(
@@ -287,6 +292,9 @@ MTrack::toDurationList(const Measure *measure,
 
       const ReducedFraction startTickInBar = startTick - barTick;
       const ReducedFraction endTickInBar = startTickInBar + len;
+
+      const auto &opers = preferences.midiImportOperations;
+      const bool useDots = opers.data()->trackOpers.useDots.value(indexOfOperation);
       return Meter::toDurationList(startTickInBar, endTickInBar,
                                    ReducedFraction(measure->timesig()), tupletsData,
                                    durationType, useDots);
@@ -439,7 +447,9 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
       const int track = staff->idx() * VOICES + voice;
       Drumset* drumset = staff->part()->instr()->drumset();
       const bool useDrumset = staff->part()->instr()->useDrumset();
-      const auto opers = preferences.midiImportOperations.currentTrackOperations();
+
+      const auto& opers = preferences.midiImportOperations.data()->trackOpers;
+      const int currentTrack = preferences.midiImportOperations.currentTrack();
 
                   // all midiChords here should have the same onTime value
                   // and all notes in each midiChord should have the same duration
@@ -465,7 +475,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
             chord->setDurationType(d);
             chord->setDuration(d.fraction());
 
-            if (opers.showStaccato
+            if (opers.showStaccato.value(currentTrack)
                         && startChordTick == startChordTickFrac   // first chord in tied chord sequence
                         && midiChords.begin()->isStaccato()) {
                   Articulation* a = new Articulation(chord->score());
@@ -559,7 +569,8 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
       MidiTuplet::createTuplets(staff, tuplets);
       createKeys(key);
 
-      const auto swingType = preferences.midiImportOperations.trackOperations(indexOfOperation).swing;
+      const auto& opers = preferences.midiImportOperations.data()->trackOpers;
+      const auto swingType = opers.swing.value(indexOfOperation);
       Swing::detectSwing(staff, swingType);
 
       Q_ASSERT_X(MidiTie::areTiesConsistent(staff), "MTrack::convertTrack", "Ties are inconsistent");
@@ -645,12 +656,12 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   }
             if (events != 0) {
                   ++trackIndex;
-                  if (preferences.midiImportOperations.count()) {
-                        auto trackOperations
-                                    = preferences.midiImportOperations.trackOperations(trackIndex);
-                        if (trackOperations.doImport) {
+                  const auto *data = preferences.midiImportOperations.data();
+                  if (!data->isNewlyOpened) {
+                        if (data->trackOpers.doImport.value(trackIndex)) {
                               track.indexOfOperation = trackIndex;
-                              tracks.insert({trackOperations.reorderedIndex, track});
+                              tracks.insert({data->trackOpers.trackIndexAfterShuffle.value(trackIndex),
+                                             track});
                               }
                         }
                   else {            // if it is an initial track-list query from MIDI import panel
@@ -733,7 +744,8 @@ void createMeasures(ReducedFraction &lastTick, Score *score)
       if (beat > 0 || tick > 0)
             ++bars;           // convert bar index to number of bars
 
-      const bool pickupMeasure = preferences.midiImportOperations.currentTrackOperations().pickupMeasure;
+      const auto& opers = preferences.midiImportOperations;
+      const bool pickupMeasure = opers.data()->trackOpers.searchPickupMeasure;
 
       for (int i = 0; i < bars; ++i) {
             Measure* measure  = new Measure(score);
@@ -811,7 +823,9 @@ void createTimeSignatures(Score *score)
                   continue;
             Fraction newTimeSig = se.timesig();
 
-            const bool pickupMeasure = preferences.midiImportOperations.currentTrackOperations().pickupMeasure;
+            const auto& opers = preferences.midiImportOperations;
+            const bool pickupMeasure = opers.data()->trackOpers.searchPickupMeasure;
+
             if (pickupMeasure && is == score->sigmap()->begin()) {
                   auto next = std::next(is);
                   if (next != score->sigmap()->end()) {
@@ -868,46 +882,13 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
             setTrackInfo(midiType, mt);
                         // pass current track index to the convertTrack function
                         //   through MidiImportOperations
-            preferences.midiImportOperations.setCurrentTrack(mt.indexOfOperation);
+            auto &opers = preferences.midiImportOperations;
+            MidiOperations::CurrentTrackSetter setCurrentTrack(opers, mt.indexOfOperation);
             mt.convertTrack(lastTick);
             processMeta(mt, true);
             }
       }
 
-QList<TrackMeta> getTracksMeta(const QList<MTrack> &tracks,
-                               const MidiFile *mf)
-{
-      QList<TrackMeta> tracksMeta;
-      for (int i = 0; i < tracks.size(); ++i) {
-            const MTrack &mt = tracks[i];
-            std::string trackName;
-            for (const auto &ie: mt.mtrack->events()) {
-                  const MidiEvent &e = ie.second;
-                  if ((e.type() == ME_META) && (e.metaType() == META_TRACK_NAME)) {
-                        trackName = (const char*)e.edata();
-                        break;
-                        }
-                  }
-            QString instrName;
-            if (i % 2 && isSameChannel(tracks[i - 1], tracks[i])){
-                  TrackMeta lastMeta = tracksMeta.back();
-                  instrName = lastMeta.instrumentName;
-                  }
-            else {
-                  MidiType midiType = mf->midiType();
-                  if (midiType == MidiType::UNKNOWN)
-                        midiType = MidiType::GM;
-                  instrName = instrumentName(midiType, mt.program,
-                                             mt.mtrack->drumTrack());
-                  }
-            tracksMeta.push_back({trackName,
-                                  instrName,
-                                  mt.mtrack->drumTrack(),
-                                  mt.initLyricTrackIndex
-                                 });
-            }
-      return tracksMeta;
-      }
 
 void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
       {
@@ -917,7 +898,8 @@ void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
             bool needToSplit = false;
             if (LRHand::needToSplit(mtrack.chords, mtrack.program))
                   needToSplit = true;
-            preferences.midiImportOperations.setNeedToSplit(trackIndex, needToSplit);
+            preferences.midiImportOperations.data()->trackOpers.doStaffSplit.setValue(
+                                                                    trackIndex, needToSplit);
             }
       }
 
@@ -930,18 +912,21 @@ void convertMidi(Score *score, const MidiFile *mf)
       cleanUpMidiEvents(tracks);
       auto &opers = preferences.midiImportOperations;
 
-      if (opers.count() == 0)       // for newly opened MIDI file
+      if (opers.data()->isNewlyOpened) {       // for newly opened MIDI file
+            opers.data()->trackCount = tracks.size();
             MidiLyrics::extractLyricsToMidiData(mf);
-
+            }
                   // for newly opened MIDI file - detect if it is a human performance
                   // if so - detect beats and set initial time signature
-      if (opers.count() == 0 && opers.defaultOperations().canRedefineDefaultsLater)
+      if (opers.data()->isNewlyOpened && opers.data()->canRedefineDefaultsLater)
             Quantize::setIfHumanPerformance(tracks, sigmap);
       else        // user value
             MidiBeat::setTimeSignature(sigmap);
 
-      Q_ASSERT_X(preferences.midiImportOperations.isHumanPerformance()
-                        ? opers.timeSignature() != ReducedFraction(0, 1) : true,
+      Q_ASSERT_X((opers.data()->trackOpers.isHumanPerformance)
+                        ? Meter::userTimeSigToFraction(opers.data()->trackOpers.timeSigNumerator,
+                                                       opers.data()->trackOpers.timeSigDenominator)
+                          != ReducedFraction(0, 1) : true,
                  "convertMidi", "Null time signature for human-performed MIDI file");
 
       MChord::collectChords(tracks);
@@ -949,7 +934,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
 
                   // for newly opened MIDI file
-      if (opers.count() == 0 && opers.defaultOperations().canRedefineDefaultsLater)
+      if (opers.data()->isNewlyOpened && opers.data()->canRedefineDefaultsLater)
             setLeftRightHandSplit(tracks);
 
       MChord::removeOverlappingNotes(tracks);
@@ -985,10 +970,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       score->connectTies();
       MidiLyrics::setLyricsToScore(trackList);
 
-      if (opers.count() == 0) {
-                  // clear defaults - they can be set during opening of this new MIDI file
-            opers.clear();
-            }
+      opers.data()->isNewlyOpened = false;
       }
 
 void loadMidiData(MidiFile &mf)
@@ -1000,51 +982,23 @@ void loadMidiData(MidiFile &mf)
       mf.setMidiType(mt);
       }
 
-// for new MIDI file called AFTER importMidi
-
-QList<TrackMeta> extractMidiTracksMeta(const QString &fileName)
-      {
-      if (fileName.isEmpty())
-            return QList<TrackMeta>();
-
-      auto &midiData = preferences.midiImportOperations.midiData();
-      if (!midiData.midiFile(fileName)) {
-            QFile fp(fileName);
-            if (!fp.open(QIODevice::ReadOnly))
-                  return QList<TrackMeta>();
-            MidiFile mf;
-            try {
-                  mf.read(&fp);
-            }
-            catch (...) {
-                  fp.close();
-                  return QList<TrackMeta>();
-            }
-            fp.close();
-
-            loadMidiData(mf);
-            midiData.setMidiFile(fileName, mf);
-            }
-
-      Score mockScore;
-      ReducedFraction lastTick;
-      const MidiFile *mf = midiData.midiFile(fileName);
-      const auto tracks = createMTrackList(lastTick, mockScore.sigmap(), mf);
-      QList<MTrack> trackList = prepareTrackList(tracks);
-      MidiLyrics::assignLyricsToTracks(trackList);
-
-      return getTracksMeta(trackList, mf);
-      }
-
-// for new MIDI file called BEFORE extractMidiTracksMeta
-
 Score::FileError importMidi(Score *score, const QString &name)
       {
       if (name.isEmpty())
             return Score::FileError::FILE_NOT_FOUND;
 
-      auto &midiData = preferences.midiImportOperations.midiData();
-      if (!midiData.midiFile(name)) {
+      auto &opers = preferences.midiImportOperations;
+
+      if (!opers.hasFile(name)) {
+            opers.addNewFile(name);
+            opers.data()->isNewlyOpened = true;
+            }
+      else {
+            opers.setCurrentMidiFile(name);
+            }
+
+      if (opers.data()->isNewlyOpened) {
+
             QFile fp(name);
             if (!fp.open(QIODevice::ReadOnly)) {
                   qDebug("importMidi: file open error <%s>", qPrintable(name));
@@ -1068,10 +1022,10 @@ Score::FileError importMidi(Score *score, const QString &name)
             fp.close();
 
             loadMidiData(mf);
-            midiData.setMidiFile(name, mf);
+            opers.setMidiFileData(name, mf);
             }
 
-      convertMidi(score, midiData.midiFile(name));
+      convertMidi(score, opers.midiFile(name));
 
       return Score::FileError::FILE_NO_ERROR;
       }

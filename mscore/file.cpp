@@ -313,7 +313,7 @@ Score* MuseScore::readScore(const QString& name)
             return 0;
 
       Score* score = new Score(MScore::baseStyle());  // start with built-in style
-      setMidiPrefOperations(name);
+      setReopenInProgress(name);
       Score::FileError rv = Ms::readScore(score, name, false);
       if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW) {
             if (readScoreError(name, rv, true))

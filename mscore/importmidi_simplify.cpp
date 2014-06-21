@@ -5,10 +5,12 @@
 #include "importmidi_tuplet.h"
 #include "importmidi_quant.h"
 #include "importmidi_voice.h"
+#include "importmidi_operations.h"
 #include "preferences.h"
 #include "libmscore/sig.h"
 #include "libmscore/durationtype.h"
 #include "importmidi_tuplet_voice.h"
+#include "midi/midifile.h"
 
 
 namespace Ms {
@@ -57,8 +59,10 @@ void lengthenNote(
       if (endTime <= note.offTime)
             return;
 
-      const auto &opers = preferences.midiImportOperations.currentTrackOperations();
-      const bool useDots = opers.useDots;
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const int currentTrack = preferences.midiImportOperations.currentTrack();
+
+      const bool useDots = opers.useDots.value(currentTrack);
       const auto tupletsForDuration = MidiTuplet::findTupletsInBarForDuration(
                               voice, barStart, note.offTime, endTime - note.offTime, tuplets);
 
@@ -111,7 +115,7 @@ void lengthenNote(
 
             if (noteDurationCount + restDurationCount
                               < minNoteDurationCount + minRestDurationCount) {
-                  if (opers.quantize.humanPerformance || noteDurationCount <= 1.5) {
+                  if (opers.isHumanPerformance || noteDurationCount <= 1.5) {
                         minNoteDurationCount = noteDurationCount;
                         minRestDurationCount = restDurationCount;
                         bestOffTime = offTime;
@@ -142,7 +146,7 @@ void lengthenNote(
       // discard change because it silently reduces duration accuracy
       // without significant improvement of readability
 
-      if (!opers.quantize.humanPerformance
+      if (!opers.isHumanPerformance
                   && (origNoteDurations.size() + origRestDurations.size())
                        - (minNoteDurationCount + minRestDurationCount) <= 1
                   && !hasComplexBeamedDurations(origNoteDurations)
@@ -220,11 +224,9 @@ void simplifyDurations(std::multimap<int, MTrack> &tracks, const TimeSigMap *sig
             auto &chords = track.second.chords;
             if (chords.empty())
                   continue;
-                        // pass current track index through MidiImportOperations
-                        // for further usage
-            opers.setCurrentTrack(mtrack.indexOfOperation);
 
-            if (opers.currentTrackOperations().simplifyDurations) {
+            if (opers.data()->trackOpers.simplifyDurations.value(mtrack.indexOfOperation)) {
+                  MidiOperations::CurrentTrackSetter setCurrentTrack{opers, mtrack.indexOfOperation};
                   minimizeNumberOfRests(chords, sigmap, mtrack.tuplets);
                         // empty tuplets may appear after simplification
                   MidiTuplet::removeEmptyTuplets(mtrack);

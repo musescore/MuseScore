@@ -6,16 +6,11 @@ namespace Ui {
       class ImportMidiPanel;
       }
 
-class QModelIndex;
-
-
 namespace Ms {
 
 class TracksModel;
 class OperationsModel;
 class OperationsDelegate;
-struct TrackData;
-struct TrackMeta;
 
 class ImportMidiPanel : public QWidget
       {
@@ -24,52 +19,44 @@ class ImportMidiPanel : public QWidget
    public:
       explicit ImportMidiPanel(QWidget *parent = 0);
       ~ImportMidiPanel();
-      static bool isMidiFile(const QString &fileName);
+
       void setMidiFile(const QString &fileName);
       void excludeMidiFile(const QString &fileName);
-      bool prefferedVisible() const { return prefferedVisible_; }
+      bool isPrefferedVisible() const { return _prefferedVisible; }
       void setPrefferedVisible(bool visible);
-      void setMidiPrefOperations(const QString &fileName);
+      void setReopenInProgress();
+
+      static bool isMidiFile(const QString &fileName);
 
    signals:
       void closeClicked();
 
    private slots:
       void updateUi();
-      void onCurrentTrackChanged(const QModelIndex &currentIndex);
-      void onOperationChanged(const QModelIndex &index);
-      void doMidiImport();
       void hidePanel();
-      void moveTrackUp();
-      void moveTrackDown();
-      bool canMoveTrackUp(int visualIndex);
-      bool canMoveTrackDown(int visualIndex);
+      void applyMidiImport();
+      void onCurrentTrackChanged(const QModelIndex &);
 
    private:
-      void tweakUi();
+      void setupUi();
       bool canImportMidi() const;
-      QList<int> findReorderedIndexes();
-      void saveTableViewState(const QString &fileName);
-      void restoreTableViewState(const QString &fileName);
+      bool canMoveTrackUp(int visualIndex) const;
+      bool canMoveTrackDown(int visualIndex) const;
+      int currentVisualIndex() const;
+      void saveTableViewState();
+      void restoreTableViewState();
       void resetTableViewState();
-      int currentVisualIndex();
-      void setMidiPrefOperations(const QList<TrackData> &trackData);
-      void clearMidiPrefOperations();
-      bool isMidiFileExists() const;
-      void showOrHideStaffNameCol(const QList<TrackMeta> &tracksMeta);
-      void showOrHideLyricsCol(const QList<TrackData> &tracksData);
       void fillCharsetList();
 
-      Ui::ImportMidiPanel *ui;
-      QTimer *updateUiTimer;
-      QString midiFile;
-      TracksModel *tracksModel;
-      OperationsModel *operationsModel;
-      OperationsDelegate *operationsDelegate;
-      OperationsDelegate *tracksDelegate;
-      bool importInProgress;
-      bool prefferedVisible_;
-      bool reopenInProgress;
+      Ui::ImportMidiPanel *_ui;
+      QTimer *_updateUiTimer;
+
+      TracksModel *_model;
+      OperationsDelegate *_delegate;
+      bool _prefferedVisible;
+      bool _importInProgress;
+      bool _reopenInProgress;
+      QString _midiFile;
       };
 
 } // namespace Ms

@@ -9,6 +9,7 @@
 #include "importmidi_inner.h"
 #include "importmidi_beat.h"
 #include "importmidi_voice.h"
+#include "importmidi_operations.h"
 
 #include <set>
 #include <deque>
@@ -20,31 +21,31 @@ extern Preferences preferences;
 
 namespace Quantize {
 
-ReducedFraction userQuantNoteToFraction(MidiOperation::QuantValue quantNote)
+ReducedFraction userQuantNoteToFraction(MidiOperations::QuantValue quantNote)
       {
       const auto division = ReducedFraction::fromTicks(MScore::division);
       auto userQuantValue = ReducedFraction::fromTicks(preferences.shortestNote);
                   // specified quantization value
       switch (quantNote) {
-            case MidiOperation::QuantValue::N_4:
+            case MidiOperations::QuantValue::Q_4:
                   userQuantValue = division;
                   break;
-            case MidiOperation::QuantValue::N_8:
+            case MidiOperations::QuantValue::Q_8:
                   userQuantValue = division / 2;
                   break;
-            case MidiOperation::QuantValue::N_16:
+            case MidiOperations::QuantValue::Q_16:
                   userQuantValue = division / 4;
                   break;
-            case MidiOperation::QuantValue::N_32:
+            case MidiOperations::QuantValue::Q_32:
                   userQuantValue = division / 8;
                   break;
-            case MidiOperation::QuantValue::N_64:
+            case MidiOperations::QuantValue::Q_64:
                   userQuantValue = division / 16;
                   break;
-            case MidiOperation::QuantValue::N_128:
+            case MidiOperations::QuantValue::Q_128:
                   userQuantValue = division / 32;
                   break;
-            case MidiOperation::QuantValue::FROM_PREFERENCES:
+            case MidiOperations::QuantValue::FROM_PREFERENCES:
             default:
                   break;
             }
@@ -366,9 +367,11 @@ void setIfHumanPerformance(
       if (allChords.empty())
             return;
       const bool isHuman = isHumanPerformance(allChords, sigmap);
-      preferences.midiImportOperations.setHumanPerformance(isHuman);
+      auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      opers.isHumanPerformance = isHuman;
+
       if (isHuman) {
-            preferences.midiImportOperations.setQuantValue(MidiOperation::QuantValue::N_8);
+            opers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_8);
             const double ticksPerSec = MidiTempo::findBasicTempo(tracks) * MScore::division;
             MidiBeat::findBeatLocations(allChords, sigmap, ticksPerSec);      // and set time sig
             }
@@ -992,8 +995,8 @@ double findTempoPenalty(
 
 void applyDynamicProgramming(std::vector<QuantData> &quantData)
       {
-      const auto &opers = preferences.midiImportOperations.currentTrackOperations();
-      const bool isHuman = opers.quantize.humanPerformance;
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const bool isHuman = opers.isHumanPerformance;
       const double MERGE_PENALTY_COEFF = 5.0;
 
       for (int chordIndex = 0; chordIndex != (int)quantData.size(); ++chordIndex) {

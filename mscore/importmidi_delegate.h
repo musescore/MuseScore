@@ -1,5 +1,5 @@
-#ifndef IMPORTMIDI_OPDELEGATE_H
-#define IMPORTMIDI_OPDELEGATE_H
+#ifndef IMPORTMIDI_DELEGATE_H
+#define IMPORTMIDI_DELEGATE_H
 
 
 namespace Ms {
@@ -31,4 +31,4 @@ class OperationsDelegate : public QStyledItemDelegate
 } // namespace Ms
 
 
-#endif // IMPORTMIDI_OPDELEGATE_H
+#endif // IMPORTMIDI_DELEGATE_H

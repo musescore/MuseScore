@@ -5,6 +5,7 @@
 #include "importmidi_inner.h"
 #include "importmidi_quant.h"
 #include "importmidi_meter.h"
+#include "importmidi_operations.h"
 #include "thirdparty/beatroot/BeatTracker.h"
 #include "preferences.h"
 #include "libmscore/mscore.h"
@@ -160,13 +161,13 @@ void addLastBeats(
             }
       }
 
-HumanBeatData prepareHumanBeatData(
+MidiOperations::HumanBeatData prepareHumanBeatData(
             const std::vector<double> &beatTimes,
             const std::multimap<ReducedFraction, MidiChord> &chords,
             double ticksPerSec,
             int beatsInBar)
       {
-      HumanBeatData beatData;
+      MidiOperations::HumanBeatData beatData;
       if (chords.empty())
             return beatData;
 
@@ -284,7 +285,7 @@ void findBeatLocations(
                  salienceFuncs = {findChordSalience1, findChordSalience2};
 
             // <match rank, beat data, comparator>
-      std::map<double, HumanBeatData, std::greater<double>> beatResults;
+      std::map<double, MidiOperations::HumanBeatData, std::greater<double>> beatResults;
 
       for (const auto &func: salienceFuncs) {
             const auto events = prepareChordEvents(allChords, func, ticksPerSec);
@@ -305,8 +306,8 @@ void findBeatLocations(
                              "MidiBeat::findBeatLocations", "Wrong count of bar levels");
 
                               // beat set - first case
-                  HumanBeatData beatData = prepareHumanBeatData(beatTimes, allChords,
-                                                                ticksPerSec, beatsInBar);
+                  MidiOperations::HumanBeatData beatData = prepareHumanBeatData(
+                                                beatTimes, allChords, ticksPerSec, beatsInBar);
                   beatData.timeSig = barFraction;
                   double matchRank = findMatchRank(beatData.beatSet, events,
                                                    levels, beatsInBar, ticksPerSec);
@@ -319,14 +320,19 @@ void findBeatLocations(
                   beatResults.insert({matchRank, beatData});
                   }
             }
+
+      auto *data = preferences.midiImportOperations.data();
       if (!beatResults.empty()) {
-            const HumanBeatData &beatData = beatResults.begin()->second;
+            const MidiOperations::HumanBeatData &beatData = beatResults.begin()->second;
             setTimeSig(sigmap, beatData.timeSig);
-            preferences.midiImportOperations.setHumanBeats(beatData);
+            data->humanBeatData = beatData;
             }
       else {
             const auto currentTimeSig = ReducedFraction(sigmap->timesig(0).timesig());
-            preferences.midiImportOperations.setTimeSignature(currentTimeSig);
+            data->trackOpers.timeSigNumerator = Meter::fractionNumeratorToUserValue(
+                                                                  currentTimeSig.numerator());
+            data->trackOpers.timeSigDenominator = Meter::fractionDenominatorToUserValue(
+                                                                  currentTimeSig.denominator());
             }
       }
 
@@ -375,13 +381,13 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
                          ReducedFraction &lastTick)
       {
       const auto &opers = preferences.midiImportOperations;
-      const std::set<ReducedFraction> *beats = opers.getHumanBeats();
-      if (!beats || beats->empty())
+      const std::set<ReducedFraction> &beats = opers.data()->humanBeatData.beatSet;
+      if (beats.empty())
             return;
 
-      if (opers.trackOperations(0).quantize.humanPerformance) {
+      if (opers.data()->trackOpers.isHumanPerformance) {
 
-            Q_ASSERT_X(beats->size() > 1, "MidiBeat::adjustChordsToBeats", "Human beat count < 2");
+            Q_ASSERT_X(beats.size() > 1, "MidiBeat::adjustChordsToBeats", "Human beat count < 2");
 
             const auto newBeatLen = ReducedFraction::fromTicks(MScore::division);
             for (auto trackIt = tracks.begin(); trackIt != tracks.end(); ++trackIt) {
@@ -393,11 +399,11 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
                   lastTick = {0, 1};
 
                   auto chordIt = chords.begin();
-                  auto it = beats->begin();
+                  auto it = beats.begin();
                   auto beatStart = *it;
                   auto newBeatStart = ReducedFraction(0, 1);
 
-                  for (++it; it != beats->end(); ++it) {
+                  for (++it; it != beats.end(); ++it) {
                         const auto &beatEnd = *it;
 
                         Q_ASSERT_X(beatEnd > beatStart, "MidiBeat::adjustChordsToBeats",
@@ -410,7 +416,7 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
                                           // quantize to prevent ReducedFraction overflow
                               newOnTimeInBeat = Quantize::quantizeValue(
                                                  newOnTimeInBeat, MChord::minAllowedDuration());
-                              scaleOffTimes(chordIt->second.notes, *beats, it,
+                              scaleOffTimes(chordIt->second.notes, beats, it,
                                             newBeatStart, newBeatLen, lastTick);
                               const auto newOnTime = newBeatStart + newOnTimeInBeat;
                               newChords.insert({newOnTime, chordIt->second});
@@ -430,20 +436,13 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
 
 void setTimeSignature(TimeSigMap *sigmap)
       {
-      auto &opers = preferences.midiImportOperations;
-      const auto currentTimeSig = opers.timeSignature();
-                  // when opened MIDI file was not detected as human-performed
-      if (currentTimeSig == ReducedFraction(0, 1))
-            return;
-
-      const auto newTimeSig = Meter::userTimeSigToFraction(opers.currentTrackOperations().timeSig);
-      setTimeSig(sigmap, newTimeSig);
-
-      const auto *beats = opers.getHumanBeats();
-      if (!beats || beats->empty() || newTimeSig == currentTimeSig)
-            return;
-
-      opers.setTimeSignature(newTimeSig);
+      const auto *data = preferences.midiImportOperations.data();
+      const std::set<ReducedFraction> &beats = data->humanBeatData.beatSet;
+      if (beats.empty())
+            return;           // don't set time sig for non-human performed MIDI files
+      const auto timeSig = Meter::userTimeSigToFraction(data->trackOpers.timeSigNumerator,
+                                                        data->trackOpers.timeSigDenominator);
+      setTimeSig(sigmap, timeSig);
       }
 
 } // namespace MidiBeat
