@@ -2,10 +2,15 @@
 #define IMPORTMIDI_OPERATIONS_H
 
 #include "importmidi_operation.h"
-#include "importmidi_data.h"
+#include "midi/midifile.h"
+#include "importmidi_inner.h"
 
 
 namespace Ms {
+
+class ReducedFraction;
+
+namespace MidiOperations {
 
 // operation types are in importmidi_operation.h
 
@@ -15,147 +20,176 @@ namespace Ms {
 //   - importmidi_trmodel.cpp (2 places),
 // and - other importmidi files where algorithm requires it
 
-struct SearchTuplets
-      {
-      bool doSearch = true;
-      bool duplets = false;
-      bool triplets = true;
-      bool quadruplets = true;
-      bool quintuplets = true;
-      bool septuplets = true;
-      bool nonuplets = true;
-      };
-
-struct Quantization
-      {
-      MidiOperation::QuantValue value = MidiOperation::QuantValue::FROM_PREFERENCES;
-      bool humanPerformance = false;
-      };
-
-struct LHRHSeparation
-      {
-      bool doIt = false;
-      MidiOperation::LHRHMethod method = MidiOperation::LHRHMethod::HAND_WIDTH;
-      MidiOperation::Octave splitPitchOctave = MidiOperation::Octave::C4;
-      MidiOperation::Note splitPitchNote = MidiOperation::Note::E;
-      };
-
-struct SplitDrums
-      {
-      bool doSplit = false;
-      bool showStaffBracket = true;
-      };
-
-struct MidiTimeSig
-      {
-      MidiOperation::TimeSigNumerator numerator = MidiOperation::TimeSigNumerator::_4;
-      MidiOperation::TimeSigDenominator denominator = MidiOperation::TimeSigDenominator::_4;
-      };
-
-      // bool and enum-like elementary operations (itself and inside structs) are allowed
-struct TrackOperations
-      {
-      bool canRedefineDefaultsLater = true;    // can try to adapt defaults to the imported score
-      int reorderedIndex = 0;
-      bool doImport = true;
-      Quantization quantize;
-      bool useDots = true;
-      bool simplifyDurations = true;
-      bool showStaccato = true;
-      bool separateVoices = true;
-      LHRHSeparation LHRH;
-      SearchTuplets tuplets;
-      MidiOperation::AllowedVoices allowedVoices = MidiOperation::AllowedVoices::V_4;
-      bool changeClef = true;
-      MidiOperation::Swing swing = MidiOperation::Swing::NONE;
-      SplitDrums splitDrums;
-      bool removeDrumRests = true;
-      bool pickupMeasure = true;
-      int lyricTrackIndex = -1;     // empty lyric
-      MidiTimeSig timeSig;
-      };
-
-struct TrackMeta
-      {
-      std::string staffName;    // will be converted to unicode later
-      QString instrumentName;
-      bool isDrumTrack;
-      int initLyricTrackIndex;
-      };
-
-struct TrackData
-      {
-      TrackMeta meta;
-      TrackOperations opers;
-      };
-
-struct DefinedTrackOperations
-      {
-      QSet<int> undefinedOpers;
-      bool isDrumTrack;
-      bool allTracksSelected;
-      TrackOperations opers;
-      };
-
-class ReducedFraction;
-
-class MidiImportOperations
+template<typename T>
+class TrackOp
       {
    public:
-      void appendTrackOperations(const TrackOperations& operations);
-      void clear();
-      void resetDefaults(const TrackOperations& operations);
-      void setCurrentTrack(int trackIndex);
-      void setCurrentMidiFile(const QString &fileName);
-      int currentTrack() const { return currentTrack_; }
-      TrackOperations defaultOperations() const { return defaultOpers; }
-      TrackOperations currentTrackOperations() const;
-      TrackOperations trackOperations(int trackIndex) const;
-      int count() const { return operations_.size(); }
-      MidiData& midiData() { return midiData_; }
-      QString charset() const;
-      void adaptForPercussion(int trackIndex, bool isDrumTrack);
+      TrackOp(T defaultValue)
+            : _operation{{-1, defaultValue}}
+            {}
 
-                  // lyrics
-      void addTrackLyrics(const std::multimap<ReducedFraction, std::string> &trackLyrics);
-      const QList<std::multimap<ReducedFraction, std::string> > *getLyrics();
+      TrackOp<T>& operator=(const TrackOp<T> &op)
+            {
+            if (this == &op)
+                  return *this;
+            for (const auto &pair: op._operation) {
+                  if (pair.second != value(pair.first) && pair.second != defaultValue()) {
+                        _operation[pair.first] = pair.second;
+                        }
+                  }
+            return *this;
+            }
 
-                  // human performance: is MIDI unaligned
-      bool isHumanPerformance() const;
-      void setHumanPerformance(bool value);
-      const std::set<ReducedFraction>* getHumanBeats() const;
-      void setHumanBeats(const HumanBeatData &beatData);
-                  // time sig can be zero (not specified) if, when opened,
-                  // MIDI file was not detected as human-performed
-      ReducedFraction timeSignature() const;
-      void setTimeSignature(const ReducedFraction &value);
+      T value(int trackIndex) const
+            {
+            const auto it = _operation.find(trackIndex);
+            if (it == _operation.end())
+                  return _operation.find(-1)->second;
+            return it->second;
+            }
 
-                  // quantization
-      MidiOperation::QuantValue quantValue() const;
-      void setQuantValue(MidiOperation::QuantValue value);
+      void setValue(int trackIndex, T value)
+            {
+            Q_ASSERT_X(trackIndex >= 0, "TrackOperation", "Invalid track index");
 
-                  // left/right hand split
-      bool needToSplit(int trackIndex) const;
-      void setNeedToSplit(int trackIndex, bool value);
+            if (value != defaultValue())
+                  _operation[trackIndex] = value;
+            }
 
+      T defaultValue() const
+            {
+            return _operation.find(-1)->second;
+            }
+
+      void setDefaultValue(T value)
+            {
+            _operation[-1] = value;
+            }
    private:
-      TrackOperations& defaultOperations(int trackIndex);
-      const TrackOperations& defaultOperations(int trackIndex) const;
-
-      QList<TrackOperations> operations_;
-      std::map<int, TrackOperations> defaultOpersMap;       // <track index, operations>
-      TrackOperations defaultOpers;
-      int currentTrack_ = -1;
-      QString currentMidiFile_;
-      MidiData midiData_;
-
-      bool isValidIndex(int index) const;
+                  // <track index, operation value>
+                  // if track index == -1 then it's default value (for all tracks)
+      std::map<int, T> _operation;
       };
 
+// values that can be changed
+
+struct Opers
+      {
+                  // data that cannot be changed by the user
+      TrackOp<std::string> staffName = std::string();       // will be converted to unicode later
+      TrackOp<QString> instrumentName = QString();
+      TrackOp<bool> isDrumTrack = false;
+
+                  // operations for all tracks
+      bool isHumanPerformance = false;
+      bool searchPickupMeasure = true;
+      TimeSigNumerator timeSigNumerator = TimeSigNumerator::_4;
+      TimeSigDenominator timeSigDenominator = TimeSigDenominator::_4;
+
+                  // operations for individual tracks
+      TrackOp<int> trackIndexAfterShuffle = 0;
+      TrackOp<bool> doImport = true;
+      TrackOp<QuantValue> quantValue = QuantValue::FROM_PREFERENCES;
+      TrackOp<bool> searchTuplets = true;
+      TrackOp<bool> search2plets = false;
+      TrackOp<bool> search3plets = true;
+      TrackOp<bool> search4plets = true;
+      TrackOp<bool> search5plets = true;
+      TrackOp<bool> search7plets = true;
+      TrackOp<bool> search9plets = true;
+      TrackOp<bool> useDots = true;
+      TrackOp<bool> simplifyDurations = true;   // for drum tracks - remove rests and ties
+      TrackOp<bool> showStaccato = true;
+      TrackOp<bool> doStaffSplit = false;       // for drum tracks - split by voices
+      TrackOp<StaffSplitMethod> staffSplitMethod = StaffSplitMethod::HAND_WIDTH;
+      TrackOp<StaffSplitOctave> staffSplitOctave = StaffSplitOctave::C4;
+      TrackOp<StaffSplitNote> staffSplitNote = StaffSplitNote::E;
+      TrackOp<VoiceCount> maxVoiceCount = VoiceCount::V_4;
+      TrackOp<bool> changeClef = true;
+      TrackOp<Swing> swing = Swing::NONE;
+      TrackOp<bool> removeDrumRests = true;
+      TrackOp<int> lyricTrackIndex = -1;        // empty lyric
+      };
+
+struct HumanBeatData
+      {
+      std::set<ReducedFraction> beatSet;
+                // to adapt human beats to a different time sig, if necessary
+      int addedFirstBeats;
+      int addedLastBeats;
+      ReducedFraction firstChordTick;
+      ReducedFraction lastChordTick;
+      ReducedFraction timeSig;
+      };
+
+struct FileData
+      {
+      MidiFile midiFile;
+      bool isNewlyOpened = true;
+      bool canRedefineDefaultsLater = true;
+      QByteArray HHeaderData;
+      QByteArray VHeaderData;
+      int selectedRow = 0;
+      int trackCount = 0;
+      MidiOperations::Opers trackOpers;
+      QString charset = MidiCharset::defaultCharset();
+                  // after the user apply MIDI import operations
+                  // this value should be set to false
+                  // tracks of <tick, lyric fragment> from karaoke files
+                  // QList of lyric tracks - there can be multiple lyric tracks,
+                  // lyric track count != MIDI track count in general
+      QList<std::multimap<ReducedFraction, std::string>> lyricTracks;
+      HumanBeatData humanBeatData;
+      };
+
+class Data
+      {
+   public:
+      FileData* data();
+      const FileData* data() const;
+
+      void addNewFile(const QString &fileName);
+      int currentTrack() const;
+      void setMidiFileData(const QString &fileName, const MidiFile &midiFile);
+      void setCurrentMidiFile(const QString &fileName);
+      void excludeFile(const QString &fileName);
+      bool hasFile(const QString &fileName);
+      const MidiFile* midiFile(const QString &fileName);
+
+   private:
+      friend class CurrentTrackSetter;
+
+      QString _currentMidiFile;
+      int _currentTrack = -1;
+
+      std::map<QString, FileData> _data;    // <file name, tracks data>
+      };
+
+// scoped setter of current track
+class CurrentTrackSetter
+      {
+   public:
+      CurrentTrackSetter(Data &opers, int track)
+            : _opers(opers)
+            {
+            _opers._currentTrack = track;
+            }
+
+      ~CurrentTrackSetter()
+            {
+            _opers._currentTrack = -1;
+            }
+   private:
+      Data &_opers;
+                  // disallow heap allocation - for stack-only usage
+      void* operator new(size_t);               // standard new
+      void* operator new(size_t, void*);        // placement new
+      void* operator new[](size_t);             // array new
+      void* operator new[](size_t, void*);      // placement array new
+      };
+
+} // namespace MidiOperations
 } // namespace Ms
-
-
-Q_DECLARE_METATYPE(Ms::TrackData);
 
 
 #endif // IMPORTMIDI_OPERATIONS_H

@@ -1,5 +1,4 @@
-#include "importmidi_opdelegate.h"
-#include "importmidi_opmodel.h"
+#include "importmidi_delegate.h"
 
 
 namespace Ms {

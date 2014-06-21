@@ -2,6 +2,7 @@
 #include "importmidi_inner.h"
 #include "importmidi_fraction.h"
 #include "importmidi_chord.h"
+#include "importmidi_operations.h"
 #include "libmscore/box.h"
 #include "libmscore/element.h"
 #include "libmscore/measurebase.h"
@@ -171,19 +172,19 @@ void extractLyricsToMidiData(const MidiFile *mf)
       for (const auto &t: mf->tracks()) {
             const auto lyrics = extractLyricsFromTrack(t, mf->division());
             if (!lyrics.empty())
-                  preferences.midiImportOperations.addTrackLyrics(lyrics);
+                  preferences.midiImportOperations.data()->lyricTracks.push_back(lyrics);
             }
       }
 
 void assignLyricsToTracks(QList<MTrack> &tracks)
       {
       std::set<int> usedTracks;
-      const auto *lyricTracks = preferences.midiImportOperations.getLyrics();
-      if (!lyricTracks)
+      const auto &lyricTracks = preferences.midiImportOperations.data()->lyricTracks;
+      if (lyricTracks.isEmpty())
             return;
 
-      for (int i = 0; i != lyricTracks->size(); ++i) {
-            const BestTrack bestTrack = findBestTrack(tracks, (*lyricTracks)[i], usedTracks);
+      for (int i = 0; i != lyricTracks.size(); ++i) {
+            const BestTrack bestTrack = findBestTrack(tracks, lyricTracks[i], usedTracks);
             if (bestTrack.index >= 0) {
                   usedTracks.insert(bestTrack.index);
                   tracks[bestTrack.index].initLyricTrackIndex = i;
@@ -194,11 +195,11 @@ void assignLyricsToTracks(QList<MTrack> &tracks)
 void setInitialLyricsFromMidiData(const QList<MTrack> &tracks)
       {
       std::set<int> usedTracks;
-      const auto *lyricTracks = preferences.midiImportOperations.getLyrics();
-      if (!lyricTracks)
+      const auto &lyricTracks = preferences.midiImportOperations.data()->lyricTracks;
+      if (lyricTracks.isEmpty())
             return;
 
-      for (const auto &lyricTrack: *lyricTracks) {
+      for (const auto &lyricTrack: lyricTracks) {
             const BestTrack bestTrack = findBestTrack(tracks, lyricTrack, usedTracks);
             if (bestTrack.index >= 0) {
                   usedTracks.insert(bestTrack.index);
@@ -228,14 +229,14 @@ std::vector<std::pair<ReducedFraction, ReducedFraction> > findMatchedLyricTimes(
 
 void setLyricsFromOperations(const QList<MTrack> &tracks)
       {
-      const auto *lyricTracks = preferences.midiImportOperations.getLyrics();
-      if (!lyricTracks)
+      const auto &lyricTracks = preferences.midiImportOperations.data()->lyricTracks;
+      if (lyricTracks.isEmpty())
             return;
       for (const auto &track: tracks) {
-            const auto opers = preferences.midiImportOperations.trackOperations(
-                                                                  track.indexOfOperation);
-            if (opers.lyricTrackIndex >= 0 && opers.lyricTrackIndex < lyricTracks->size()) {
-                  const auto &lyricTrack = (*lyricTracks)[opers.lyricTrackIndex];
+            const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+            const int lyricTrackIndex = opers.lyricTrackIndex.value(track.indexOfOperation);
+            if (lyricTrackIndex >= 0 && lyricTrackIndex < lyricTracks.size()) {
+                  const auto &lyricTrack = lyricTracks[lyricTrackIndex];
                   const auto matchedLyricTimes = findMatchedLyricTimes(track.chords, lyricTrack);
 
                   addLyricsToScore(lyricTrack, matchedLyricTimes, track.staff);
@@ -245,7 +246,8 @@ void setLyricsFromOperations(const QList<MTrack> &tracks)
 
 void setLyricsToScore(const QList<MTrack> &tracks)
       {
-      if (preferences.midiImportOperations.count() == 0)
+      const auto *data = preferences.midiImportOperations.data();
+      if (data->isNewlyOpened)
             setInitialLyricsFromMidiData(tracks);
       else
             setLyricsFromOperations(tracks);
@@ -254,12 +256,13 @@ void setLyricsToScore(const QList<MTrack> &tracks)
 QList<std::string> makeLyricsListForUI()
       {
       QList<std::string> list;
-      const auto *lyrics = preferences.midiImportOperations.getLyrics();
-      if (!lyrics)
+      const auto &lyrics = preferences.midiImportOperations.data()->lyricTracks;
+      if (lyrics.isEmpty())
             return list;
+
       const unsigned int symbolLimit = 16;
 
-      for (const auto &trackLyric: *lyrics) {
+      for (const auto &trackLyric: lyrics) {
             std::string lyricText;
 
             for (const auto &lyric: trackLyric) {

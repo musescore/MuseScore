@@ -4,6 +4,7 @@
 #include "importmidi_quant.h"
 #include "importmidi_inner.h"
 #include "importmidi_voice.h"
+#include "importmidi_operations.h"
 #include "libmscore/mscore.h"
 #include "preferences.h"
 
@@ -15,8 +16,9 @@ namespace MidiTuplet {
 
 int tupletVoiceLimit()
       {
-      const auto operations = preferences.midiImportOperations.currentTrackOperations();
-      const int allowedVoices = MidiVoice::toIntVoices(operations.allowedVoices);
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      const int allowedVoices = MidiVoice::toIntVoiceCount(opers.maxVoiceCount.value(currentTrack));
 
       Q_ASSERT_X(allowedVoices <= VOICES,
                  "MidiTuplet::tupletVoiceLimit",

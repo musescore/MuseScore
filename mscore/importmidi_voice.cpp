@@ -4,6 +4,7 @@
 #include "importmidi_inner.h"
 #include "importmidi_chord.h"
 #include "importmidi_meter.h"
+#include "importmidi_operations.h"
 #include "libmscore/sig.h"
 #include "libmscore/mscore.h"
 #include "preferences.h"
@@ -15,16 +16,16 @@ namespace MidiVoice {
 
 // no more than VOICES
 
-int toIntVoices(MidiOperation::AllowedVoices value)
+int toIntVoiceCount(MidiOperations::VoiceCount value)
       {
       switch (value) {
-            case MidiOperation::AllowedVoices::V_1:
+            case MidiOperations::VoiceCount::V_1:
                   return 1;
-            case MidiOperation::AllowedVoices::V_2:
+            case MidiOperations::VoiceCount::V_2:
                   return 2;
-            case MidiOperation::AllowedVoices::V_3:
+            case MidiOperations::VoiceCount::V_3:
                   return 3;
-            case MidiOperation::AllowedVoices::V_4:
+            case MidiOperations::VoiceCount::V_4:
                   return 4;
             }
       return VOICES;
@@ -32,14 +33,15 @@ int toIntVoices(MidiOperation::AllowedVoices value)
 
 int voiceLimit()
       {
-      const auto operations = preferences.midiImportOperations.currentTrackOperations();
-      const int allowedVoices = toIntVoices(operations.allowedVoices);
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      const int allowedVoiceCount = toIntVoiceCount(opers.maxVoiceCount.value(currentTrack));
 
-      Q_ASSERT_X(allowedVoices <= VOICES,
+      Q_ASSERT_X(allowedVoiceCount <= VOICES,
                  "MidiVoice::voiceLimit",
                  "Allowed voice count exceeds MuseScore voice limit");
 
-      return allowedVoices;
+      return allowedVoiceCount;
       }
 
 
@@ -120,8 +122,9 @@ int findDurationCountInGroup(
                  "MidiVoice::findDurationCountInGroup",
                  "Notes are not sorted by off time in ascending order");
 
-      const auto &opers = preferences.midiImportOperations.currentTrackOperations();
-      const bool useDots = opers.useDots;
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      const bool useDots = opers.useDots.value(currentTrack);
 
       int count = 0;
       auto onTime = chordOnTime;
@@ -790,7 +793,7 @@ void sortVoices(
             const auto &chord = it->second;
 
             // some notes: if chord off time belongs to tuplet
-            // then this tuplet belongs to the same bar as the chord off time
+            // then this tuplet belongs to the same bar as the chord off time;
             // same is for chord on time
 
             if (chord.barIndex <= maxBarIndex) {
@@ -823,11 +826,13 @@ bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
             auto &chords = track.second.chords;
             if (chords.empty())
                   continue;
+            const int userVoiceCount = toIntVoiceCount(
+                        opers.data()->trackOpers.maxVoiceCount.value(mtrack.indexOfOperation));
                         // pass current track index through MidiImportOperations
                         // for further usage
-            opers.setCurrentTrack(mtrack.indexOfOperation);
+            MidiOperations::CurrentTrackSetter setCurrentTrack{opers, mtrack.indexOfOperation};
 
-            if (opers.currentTrackOperations().separateVoices && voiceLimit() > 1) {
+            if (userVoiceCount > 1 && userVoiceCount <= voiceLimit()) {
 
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
                              "MidiVoice::separateVoices",

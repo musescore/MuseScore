@@ -16,7 +16,7 @@ namespace Swing {
 class SwingDetector
       {
    public:
-      SwingDetector(MidiOperation::Swing st);
+      SwingDetector(MidiOperations::Swing st);
 
       void add(ChordRest *cr);
       bool wasSwingApplied() const { return swingApplied; }
@@ -25,7 +25,7 @@ class SwingDetector
       std::vector<ChordRest *> elements;
       ReducedFraction sumLen;
       const ReducedFraction FULL_LEN = {1, 4};
-      MidiOperation::Swing swingType;
+      MidiOperations::Swing swingType;
       bool swingApplied = false;
 
       void reset();
@@ -38,7 +38,7 @@ class SwingDetector
       };
 
 
-SwingDetector::SwingDetector(MidiOperation::Swing st)
+SwingDetector::SwingDetector(MidiOperations::Swing st)
       : swingType(st)
       {
       }
@@ -61,10 +61,10 @@ void SwingDetector::add(ChordRest *cr)
             if (sumLen == FULL_LEN) {
                               // check for swing patterns
                   switch (swingType) {
-                        case MidiOperation::Swing::SWING:
+                        case MidiOperations::Swing::SWING:
                               checkNormalSwing();
                               break;
-                        case MidiOperation::Swing::SHUFFLE:
+                        case MidiOperations::Swing::SHUFFLE:
                               checkShuffle();
                               break;
                         default:
@@ -192,23 +192,23 @@ bool SwingDetector::areAllNonTuplets() const
 
 // ---------------------------------------------------------------
 
-QString swingCaption(MidiOperation::Swing swingType)
+QString swingCaption(MidiOperations::Swing swingType)
       {
       QString caption;
       switch (swingType) {
-            case MidiOperation::Swing::SWING:
+            case MidiOperations::Swing::SWING:
                   caption = "Swing";
                   break;
-            case MidiOperation::Swing::SHUFFLE:
+            case MidiOperations::Swing::SHUFFLE:
                   caption = "Shuffle";
                   break;
-            case MidiOperation::Swing::NONE:
+            case MidiOperations::Swing::NONE:
                   break;
             }
       return caption;
       }
 
-void detectSwing(Staff *staff, MidiOperation::Swing swingType)
+void detectSwing(Staff *staff, MidiOperations::Swing swingType)
       {
       Score *score = staff->score();
       const int strack = staff->idx() * VOICES;

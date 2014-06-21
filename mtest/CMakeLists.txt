@@ -51,7 +51,6 @@ add_library(
           ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_voice.cpp
           ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_tonotes.cpp
           ${PROJECT_SOURCE_DIR}/mscore/importmidi_chord.cpp
-          ${PROJECT_SOURCE_DIR}/mscore/importmidi_data.cpp
           ${PROJECT_SOURCE_DIR}/mscore/importmidi_fraction.cpp
           ${PROJECT_SOURCE_DIR}/mscore/importmidi_swing.cpp
           ${PROJECT_SOURCE_DIR}/mscore/importmidi_drum.cpp

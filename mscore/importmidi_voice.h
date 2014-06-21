@@ -11,7 +11,7 @@ class TimeSigMap;
 
 namespace MidiVoice {
 
-int toIntVoices(MidiOperation::AllowedVoices value);
+int toIntVoiceCount(MidiOperations::VoiceCount value);
 int voiceLimit();
 bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap);
 

@@ -150,14 +150,13 @@ QT4_WRAP_CPP (mocs
           inspector/inspectorJump.h inspector/inspectorMarker.h inspector/inspectorGlissando.h
           inspector/inspectorNote.h inspector/inspectorAmbitus.h
           paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
-          importmidi_panel.h importmidi_operations.h
-          importmidi_opmodel.h importmidi_trmodel.h importmidi_opdelegate.h
+          importmidi_panel.h importmidi_operations.h importmidi_model.h importmidi_delegate.h
           importmidi_operation.h importmidi_quant.h importmidi_chord.h
-          importmidi_inner.h importmidi_data.h importmidi_swing.h
+          importmidi_inner.h importmidi_swing.h
           importmidi_tuplet_detect.h  importmidi_tuplet_filter.h importmidi_tuplet_tonotes.h
           importmidi_tuplet_voice.h importmidi_beat.h importmidi_simplify.h
-          debugger/debugger.h importmidi_fraction.h importmidi_drum.h
-          importmidi_lrhand.h importmidi_lyrics.h importmidi_trview.h importmidi_tie.h importmidi_voice.h
+          debugger/debugger.h importmidi_fraction.h importmidi_drum.h importmidi_view.h
+          importmidi_lrhand.h importmidi_lyrics.h importmidi_tie.h importmidi_voice.h
           resourceManager.h downloadUtils.h
           ${OMR_MOCS}
           ${SCRIPT_MOCS}
@@ -269,13 +268,13 @@ add_executable ( ${ExecutableName}
           paletteBoxButton.cpp driver.cpp exportmidi.cpp noteGroups.cpp
           pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp
           importmidi_panel.cpp importmidi_operations.cpp miconengine.cpp
-          importmidi_opmodel.cpp importmidi_trmodel.cpp importmidi_opdelegate.cpp
+          importmidi_model.cpp importmidi_delegate.cpp
           importmidi_meter.cpp importmidi_quant.cpp importmidi_tuplet.cpp importmidi_chord.cpp
-          importmidi_data.cpp importmidi_swing.cpp importmidi_fraction.cpp importmidi_drum.cpp
-          importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp importmidi_trview.cpp
+          importmidi_swing.cpp importmidi_fraction.cpp importmidi_drum.cpp
+          importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp
           importmidi_inner.cpp importmidi_tie.cpp importmidi_tuplet_voice.cpp importmidi_beat.cpp
           importmidi_tuplet_detect.cpp  importmidi_tuplet_filter.cpp importmidi_tuplet_tonotes.cpp
-          importmidi_simplify.cpp importmidi_voice.cpp
+          importmidi_simplify.cpp importmidi_voice.cpp importmidi_view.cpp
           resourceManager.cpp downloadUtils.cpp
           textcursor.cpp
       continuouspanel.cpp

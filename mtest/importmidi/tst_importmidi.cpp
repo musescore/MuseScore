@@ -31,6 +31,7 @@
 #include "mscore/importmidi_inner.h"
 #include "mscore/importmidi_quant.h"
 #include "mscore/importmidi_fraction.h"
+#include "mscore/importmidi_operations.h"
 #include "mscore/preferences.h"
 
 
@@ -50,52 +51,54 @@ class TestImportMidi : public QObject, public MTest
       {
       Q_OBJECT
 
-      void mf(const char* name);
+      QString midiFilePath(const QString &fileName) const;
+      QString midiFilePath(const char* fileName) const;
+      void mf(const char* name) const;
 
                   // functions that modify default settings
       void dontSimplify(const char *file)
             {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            opers.LHRH.doIt = false;
-            preferences.midiImportOperations.resetDefaults(opers);
+            preferences.midiImportOperations.addNewFile(midiFilePath(file));
+            auto &data = *preferences.midiImportOperations.data();
+
+            data.canRedefineDefaultsLater = false;
+            data.trackOpers.simplifyDurations.setDefaultValue(false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1);
+            data.trackOpers.doStaffSplit.setDefaultValue(false);
             mf(file);
-            preferences.midiImportOperations.clear();
             }
       void voiceSeparation(const char *file, bool simplify = false)
             {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = simplify;
-            opers.separateVoices = true;
-            preferences.midiImportOperations.resetDefaults(opers);
+            preferences.midiImportOperations.addNewFile(midiFilePath(file));
+            auto &data = *preferences.midiImportOperations.data();
+
+            data.canRedefineDefaultsLater = false;
+            data.trackOpers.doStaffSplit.setDefaultValue(false);
+            data.trackOpers.simplifyDurations.setDefaultValue(simplify);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_4);
             mf(file);
-            preferences.midiImportOperations.clear();
             }
       void simplification(const char *file)
             {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = false;
-            opers.simplifyDurations = true;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
+            preferences.midiImportOperations.addNewFile(midiFilePath(file));
+            auto &data = *preferences.midiImportOperations.data();
+
+            data.canRedefineDefaultsLater = false;
+            data.trackOpers.doStaffSplit.setDefaultValue(false);
+            data.trackOpers.simplifyDurations.setDefaultValue(true);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1);
             mf(file);
-            preferences.midiImportOperations.clear();
             }
-      void lrhand(const char *file)
+      void staffSplit(const char *file)
             {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.LHRH.doIt = true;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            preferences.midiImportOperations.resetDefaults(opers);
+            preferences.midiImportOperations.addNewFile(midiFilePath(file));
+            auto &data = *preferences.midiImportOperations.data();
+
+            data.canRedefineDefaultsLater = false;
+            data.trackOpers.doStaffSplit.setDefaultValue(true);
+            data.trackOpers.simplifyDurations.setDefaultValue(false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1);
             mf(file);
-            preferences.midiImportOperations.clear();
             }
 
    private slots:
@@ -119,13 +122,15 @@ class TestImportMidi : public QObject, public MTest
       // human-performed (unaligned) files
       void human4_4()
             {
-            TrackOperations opers;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            opers.LHRH.doIt = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("human_4-4");
-            preferences.midiImportOperations.clear();
+            QString midiFile("human_4-4");
+            preferences.midiImportOperations.addNewFile(midiFilePath(midiFile));
+            preferences.midiImportOperations.addNewFile(midiFile);
+            auto &data = *preferences.midiImportOperations.data();
+
+            data.trackOpers.doStaffSplit.setDefaultValue(false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1);
+            mf(midiFile.toStdString().c_str());
             }
 
       // chord detection
@@ -179,15 +184,15 @@ class TestImportMidi : public QObject, public MTest
       void tuplet2VoicesTupletNon() { mf("tuplet_2_voices_tuplet_non"); }
       void tuplet3_5_7tuplets()
             {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.changeClef = false;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            opers.LHRH.doIt = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("tuplet_3_5_7_tuplets");
-            preferences.midiImportOperations.clear();
+            QString midiFile("tuplet_3_5_7_tuplets");
+            preferences.midiImportOperations.addNewFile(midiFilePath(midiFile));
+            auto &data = *preferences.midiImportOperations.data();
+
+            data.canRedefineDefaultsLater = false;
+            data.trackOpers.changeClef.setDefaultValue(false);
+            data.trackOpers.doStaffSplit.setDefaultValue(false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false);
+            mf(midiFile.toStdString().c_str());
             }
       void tuplet5_5TupletsRests() { dontSimplify("tuplet_5_5_tuplets_rests"); }
       void tuplet3_4() { dontSimplify("tuplet_3-4"); }
@@ -237,54 +242,57 @@ class TestImportMidi : public QObject, public MTest
       void pickupMeasure() { dontSimplify("pickup"); }
 
       // LH/RH separation
-      void LHRH_Nontuplet() { lrhand("split_nontuplet"); }
-      void LHRH_Acid() { lrhand("split_acid"); }
-      void LHRH_Tuplet() { lrhand("split_tuplet"); }
-      void LHRH_2melodies() { lrhand("split_2_melodies"); }
-      void LHRH_octave() { lrhand("split_octave"); }
+      void LHRH_Nontuplet() { staffSplit("split_nontuplet"); }
+      void LHRH_Acid() { staffSplit("split_acid"); }
+      void LHRH_Tuplet() { staffSplit("split_tuplet"); }
+      void LHRH_2melodies() { staffSplit("split_2_melodies"); }
+      void LHRH_octave() { staffSplit("split_octave"); }
 
       // swing
       void swingTriplets()
             {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.swing = MidiOperation::Swing::SWING;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            opers.LHRH.doIt = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("swing_triplets");
-            preferences.midiImportOperations.clear();
+            QString midiFile("swing_triplets");
+            preferences.midiImportOperations.addNewFile(midiFilePath(midiFile));
+            auto &data = *preferences.midiImportOperations.data();
+
+            data.canRedefineDefaultsLater = false;
+            data.trackOpers.swing.setDefaultValue(MidiOperations::Swing::SWING);
+            data.trackOpers.doStaffSplit.setDefaultValue(false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1);
+            mf(midiFile.toStdString().c_str());
             }
       void swingShuffle()
             {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.swing = MidiOperation::Swing::SHUFFLE;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            opers.LHRH.doIt = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("swing_shuffle");
-            preferences.midiImportOperations.clear();
+            QString midiFile("swing_shuffle");
+            preferences.midiImportOperations.addNewFile(midiFilePath(midiFile));
+            auto &data = *preferences.midiImportOperations.data();
+
+            data.canRedefineDefaultsLater = false;
+            data.trackOpers.swing.setDefaultValue(MidiOperations::Swing::SHUFFLE);
+            data.trackOpers.doStaffSplit.setDefaultValue(false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1);
+            mf(midiFile.toStdString().c_str());
             }
       void swingClef()
             {
-            TrackOperations opers;
-            opers.canRedefineDefaultsLater = false;
-            opers.swing = MidiOperation::Swing::SWING;
-            opers.changeClef = true;
-            opers.simplifyDurations = false;
-            opers.separateVoices = false;
-            opers.LHRH.doIt = false;
-            preferences.midiImportOperations.resetDefaults(opers);
-            mf("swing_clef");
-            preferences.midiImportOperations.clear();
+            QString midiFile("swing_clef");
+            preferences.midiImportOperations.addNewFile(midiFilePath(midiFile));
+            auto &data = *preferences.midiImportOperations.data();
+
+            data.canRedefineDefaultsLater = false;
+            data.trackOpers.swing.setDefaultValue(MidiOperations::Swing::SWING);
+            data.trackOpers.changeClef.setDefaultValue(true);
+            data.trackOpers.doStaffSplit.setDefaultValue(false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1);
+            mf(midiFile.toStdString().c_str());
             }
 
       // percussion
-      void percDrums() { dontSimplify("perc_drums"); }
-      void percRemoveTies() { dontSimplify("perc_remove_ties"); }
+      void percDrums() { mf("perc_drums"); }
+      void percRemoveTies() { mf("perc_remove_ties"); }
 
       // clef changes along the score
       void clefTied() { dontSimplify("clef_tied"); }
@@ -319,15 +327,25 @@ void TestImportMidi::initTestCase()
 //   midifile
 //---------------------------------------------------------
 
-void TestImportMidi::mf(const char* name)
+void TestImportMidi::mf(const char* name) const
       {
       Score* score = new Score(mscore->baseStyle());
       score->setName(name);
-      const QString midiname = QString(name) + ".mid";
       const QString mscorename = QString(name) + ".mscx";
-      QCOMPARE(importMidi(score,  TESTROOT "/mtest/" + DIR + midiname), Score::FileError::FILE_NO_ERROR);
+      QCOMPARE(importMidi(score,  midiFilePath(name)), Score::FileError::FILE_NO_ERROR);;
       QVERIFY(saveCompareScore(score, mscorename, DIR + mscorename));
       delete score;
+      }
+
+QString TestImportMidi::midiFilePath(const QString &fileName) const
+      {
+      const QString nameWithExtention = fileName + ".mid";
+      return QString(TESTROOT "/mtest/" + DIR + nameWithExtention);
+      }
+
+QString TestImportMidi::midiFilePath(const char* fileName) const
+      {
+      return midiFilePath(QString(fileName));
       }
 
 //---------------------------------------------------------
@@ -532,6 +550,9 @@ void TestImportMidi::isTupletAllowed()
 
 void TestImportMidi::findTupletNumbers()
       {
+      auto &opers = preferences.midiImportOperations;
+      opers.addNewFile("");
+      MidiOperations::CurrentTrackSetter setCurrentTrack{opers, 0};
       {
       const ReducedFraction barFraction(4, 4);
       const ReducedFraction divLen = barFraction / 4;

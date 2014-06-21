@@ -49,9 +49,11 @@ struct DivisionInfo
 
 enum class DurationType : char;
 
-ReducedFraction userTimeSigToFraction(const MidiTimeSig &timeSig);
-MidiOperation::TimeSigNumerator fractionNumeratorToUserValue(int n);
-MidiOperation::TimeSigDenominator fractionDenominatorToUserValue(int z);
+ReducedFraction userTimeSigToFraction(
+            MidiOperations::TimeSigNumerator timeSigNumerator,
+            MidiOperations::TimeSigDenominator timeSigDenominator);
+MidiOperations::TimeSigNumerator fractionNumeratorToUserValue(int n);
+MidiOperations::TimeSigDenominator fractionDenominatorToUserValue(int z);
 
 } // namespace Meter
 

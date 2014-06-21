@@ -2,6 +2,7 @@
 #include "importmidi_inner.h"
 #include "importmidi_fraction.h"
 #include "importmidi_chord.h"
+#include "importmidi_operations.h"
 #include "preferences.h"
 
 
@@ -386,9 +387,9 @@ void splitByFixedPitch(std::multimap<int, MTrack> &tracks,
                        std::multimap<int, MTrack>::iterator &it)
       {
       auto &srcTrack = it->second;
-      const auto trackOpers = preferences.midiImportOperations.trackOperations(srcTrack.indexOfOperation);
-      const int splitPitch = 12 * (int)trackOpers.LHRH.splitPitchOctave
-                           + (int)trackOpers.LHRH.splitPitchNote;
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const int splitPitch = 12 * (int)opers.staffSplitOctave.value(srcTrack.indexOfOperation)
+                           + (int)opers.staffSplitNote.value(srcTrack.indexOfOperation);
       std::multimap<ReducedFraction, MidiChord> leftHandChords;
 
       for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ) {
@@ -420,20 +421,19 @@ void splitIntoLeftRightHands(std::multimap<int, MTrack> &tracks)
       for (auto it = tracks.begin(); it != tracks.end(); ++it) {
             if (it->second.mtrack->drumTrack())
                   continue;
-            const auto operations = preferences.midiImportOperations.trackOperations(
-                                                              it->second.indexOfOperation);
-            if (!operations.LHRH.doIt)
+            const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+            if (!opers.doStaffSplit.value(it->second.indexOfOperation))
                   continue;
                         // iterator 'it' will change after track split to ++it
                         // C++11 guarantees that newely inserted item with equal key will go after:
                         //    "The relative ordering of elements with equivalent keys is preserved,
                         //     and newly inserted elements follow those with equivalent keys
                         //     already in the container"
-            switch (operations.LHRH.method) {
-                  case MidiOperation::LHRHMethod::HAND_WIDTH:
+            switch (opers.staffSplitMethod.value(it->second.indexOfOperation)) {
+                  case MidiOperations::StaffSplitMethod::HAND_WIDTH:
                         splitByHandWidth(tracks, it);
                         break;
-                  case MidiOperation::LHRHMethod::SPECIFIED_PITCH:
+                  case MidiOperations::StaffSplitMethod::SPECIFIED_PITCH:
                         splitByFixedPitch(tracks, it);
                         break;
                   }

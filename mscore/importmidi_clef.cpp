@@ -21,8 +21,11 @@
 #include "libmscore/note.h"
 #include "libmscore/slur.h"
 #include "libmscore/element.h"
+#include "libmscore/sig.h"
 #include "importmidi_tie.h"
 #include "importmidi_meter.h"
+#include "importmidi_fraction.h"
+#include "importmidi_operations.h"
 #include "preferences.h"
 
 #include <set>
@@ -398,9 +401,9 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
 
       ClefType mainClef = staff->clefTypeList(0)._concertClef;
       const int strack = staff->idx() * VOICES;
-      const auto trackOpers = preferences.midiImportOperations.trackOperations(indexOfOperation);
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
 
-      if (trackOpers.changeClef) {
+      if (opers.changeClef.value(indexOfOperation)) {
             MidiTie::TieStateMachine tieTracker;
 
                         // find optimal clef changes via dynamic programming

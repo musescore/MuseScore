@@ -4,6 +4,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_quant.h"
 #include "importmidi_inner.h"
+#include "importmidi_operations.h"
 #include "preferences.h"
 
 #include <set>
@@ -34,9 +35,8 @@ bool isTupletAllowed(const TupletInfo &tupletInfo)
             }
       }
                   // for all tuplets
-      const bool isHumanPerformance = preferences.midiImportOperations
-                              .currentTrackOperations().quantize.humanPerformance;
-      const int minAllowedNoteCount = (isHumanPerformance)
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const int minAllowedNoteCount = (opers.isHumanPerformance)
                   ? tupletLimits(tupletInfo.tupletNumber).minNoteCountHuman
                   : tupletLimits(tupletInfo.tupletNumber).minNoteCount;
       if ((int)tupletInfo.chords.size() < minAllowedNoteCount)
@@ -65,23 +65,24 @@ bool isTupletAllowed(const TupletInfo &tupletInfo)
 std::vector<int> findTupletNumbers(const ReducedFraction &divLen,
                                    const ReducedFraction &barFraction)
       {
-      const auto operations = preferences.midiImportOperations.currentTrackOperations();
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const int currentTrack = preferences.midiImportOperations.currentTrack();
       std::vector<int> tupletNumbers;
 
       if (Meter::isCompound(barFraction) && divLen == Meter::beatLength(barFraction)) {
-            if (operations.tuplets.duplets)
+            if (opers.search2plets.value(currentTrack))
                   tupletNumbers.push_back(2);
-            if (operations.tuplets.quadruplets)
+            if (opers.search4plets.value(currentTrack))
                   tupletNumbers.push_back(4);
             }
       else {
-            if (operations.tuplets.triplets)
+            if (opers.search3plets.value(currentTrack))
                   tupletNumbers.push_back(3);
-            if (operations.tuplets.quintuplets)
+            if (opers.search5plets.value(currentTrack))
                   tupletNumbers.push_back(5);
-            if (operations.tuplets.septuplets)
+            if (opers.search7plets.value(currentTrack))
                   tupletNumbers.push_back(7);
-            if (operations.tuplets.nonuplets)
+            if (opers.search9plets.value(currentTrack))
                   tupletNumbers.push_back(9);
             }
 
@@ -99,10 +100,12 @@ ReducedFraction findSumLengthOfRests(
       const auto tupletEndTime = tupletInfo.onTime + tupletInfo.len;
       const auto tupletNoteLen = tupletInfo.len / tupletInfo.tupletNumber;
       ReducedFraction sumLen = {0, 1};
-      const auto opers = preferences.midiImportOperations.currentTrackOperations();
+
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const int currentTrack = preferences.midiImportOperations.currentTrack();
 
       for (const auto &chord: tupletInfo.chords) {
-            const auto staccatoIt = (opers.simplifyDurations)
+            const auto staccatoIt = (opers.simplifyDurations.value(currentTrack))
                         ? tupletInfo.staccatoChords.find(chord.first)
                         : tupletInfo.staccatoChords.end();
 
@@ -320,8 +323,10 @@ std::vector<TupletInfo> detectTuplets(
                         auto tupletInfo = findTupletApproximation(divLen, tupletNumber,
                                              basicQuant, startDivTime, startDivChordIt, endDivChordIt);
 
-                        const auto opers = preferences.midiImportOperations.currentTrackOperations();
-                        if (opers.simplifyDurations) {
+                        const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+                        const int currentTrack = preferences.midiImportOperations.currentTrack();
+
+                        if (opers.simplifyDurations.value(currentTrack)) {
                               if (!haveChordsInTheMiddleBetweenTupletChords(
                                                 startDivChordIt, endDivChordIt, tupletInfo)) {
                                     detectStaccato(tupletInfo);

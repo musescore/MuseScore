@@ -1,65 +1,69 @@
 #include "importmidi_inner.h"
+#include "importmidi_operations.h"
 #include "preferences.h"
 #include "libmscore/durationtype.h"
+#include "midi/midifile.h"
 
 
 namespace Ms {
 namespace Meter {
 
-ReducedFraction userTimeSigToFraction(const MidiTimeSig &timeSig)
+ReducedFraction userTimeSigToFraction(
+            MidiOperations::TimeSigNumerator timeSigNumerator,
+            MidiOperations::TimeSigDenominator timeSigDenominator)
       {
       int numerator = 4;
       int denominator = 4;
 
-      switch (timeSig.numerator) {
-            case MidiOperation::TimeSigNumerator::_2:
+      switch (timeSigNumerator) {
+            case MidiOperations::TimeSigNumerator::_2:
                   numerator = 2;
                   break;
-            case MidiOperation::TimeSigNumerator::_3:
+            case MidiOperations::TimeSigNumerator::_3:
                   numerator = 3;
                   break;
-            case MidiOperation::TimeSigNumerator::_4:
+            case MidiOperations::TimeSigNumerator::_4:
                   numerator = 4;
                   break;
-            case MidiOperation::TimeSigNumerator::_5:
+            case MidiOperations::TimeSigNumerator::_5:
                   numerator = 5;
                   break;
-            case MidiOperation::TimeSigNumerator::_6:
+            case MidiOperations::TimeSigNumerator::_6:
                   numerator = 6;
                   break;
-            case MidiOperation::TimeSigNumerator::_7:
+            case MidiOperations::TimeSigNumerator::_7:
                   numerator = 7;
                   break;
-            case MidiOperation::TimeSigNumerator::_9:
+            case MidiOperations::TimeSigNumerator::_9:
                   numerator = 9;
                   break;
-            case MidiOperation::TimeSigNumerator::_12:
+            case MidiOperations::TimeSigNumerator::_12:
                   numerator = 12;
                   break;
-            case MidiOperation::TimeSigNumerator::_15:
+            case MidiOperations::TimeSigNumerator::_15:
                   numerator = 15;
                   break;
-            case MidiOperation::TimeSigNumerator::_21:
+            case MidiOperations::TimeSigNumerator::_21:
                   numerator = 21;
                   break;
             default:
                   break;
             }
 
-      switch (timeSig.denominator) {
-            case MidiOperation::TimeSigDenominator::_2:
+      switch (timeSigDenominator) {
+            case MidiOperations::TimeSigDenominator::_2:
                   denominator = 2;
                   break;
-            case MidiOperation::TimeSigDenominator::_4:
+            case MidiOperations::TimeSigDenominator::_4:
                   denominator = 4;
                   break;
-            case MidiOperation::TimeSigDenominator::_8:
+            case MidiOperations::TimeSigDenominator::_8:
                   denominator = 8;
                   break;
-            case MidiOperation::TimeSigDenominator::_16:
+            case MidiOperations::TimeSigDenominator::_16:
                   denominator = 16;
                   break;
-            case MidiOperation::TimeSigDenominator::_32:
+            case MidiOperations::TimeSigDenominator::_32:
                   denominator = 32;
                   break;
             default:
@@ -69,50 +73,50 @@ ReducedFraction userTimeSigToFraction(const MidiTimeSig &timeSig)
       return ReducedFraction(numerator, denominator);
       }
 
-MidiOperation::TimeSigNumerator fractionNumeratorToUserValue(int n)
+MidiOperations::TimeSigNumerator fractionNumeratorToUserValue(int n)
       {
-      MidiOperation::TimeSigNumerator numerator = MidiOperation::TimeSigNumerator::_4;
+      MidiOperations::TimeSigNumerator numerator = MidiOperations::TimeSigNumerator::_4;
 
       if (n == 2)
-            numerator = MidiOperation::TimeSigNumerator::_2;
+            numerator = MidiOperations::TimeSigNumerator::_2;
       else if (n == 3)
-            numerator = MidiOperation::TimeSigNumerator::_3;
+            numerator = MidiOperations::TimeSigNumerator::_3;
       else if (n == 4)
-            numerator = MidiOperation::TimeSigNumerator::_4;
+            numerator = MidiOperations::TimeSigNumerator::_4;
       else if (n == 5)
-            numerator = MidiOperation::TimeSigNumerator::_5;
+            numerator = MidiOperations::TimeSigNumerator::_5;
       else if (n == 6)
-            numerator = MidiOperation::TimeSigNumerator::_6;
+            numerator = MidiOperations::TimeSigNumerator::_6;
       else if (n == 7)
-            numerator = MidiOperation::TimeSigNumerator::_7;
+            numerator = MidiOperations::TimeSigNumerator::_7;
       else if (n == 9)
-            numerator = MidiOperation::TimeSigNumerator::_9;
+            numerator = MidiOperations::TimeSigNumerator::_9;
       else if (n == 12)
-            numerator = MidiOperation::TimeSigNumerator::_12;
+            numerator = MidiOperations::TimeSigNumerator::_12;
       else if (n == 15)
-            numerator = MidiOperation::TimeSigNumerator::_15;
+            numerator = MidiOperations::TimeSigNumerator::_15;
       else if (n == 21)
-            numerator = MidiOperation::TimeSigNumerator::_21;
+            numerator = MidiOperations::TimeSigNumerator::_21;
       else
             Q_ASSERT_X(false, "Meter::fractionNumeratorToUserValue", "Unknown numerator");
 
       return numerator;
       }
 
-MidiOperation::TimeSigDenominator fractionDenominatorToUserValue(int z)
+MidiOperations::TimeSigDenominator fractionDenominatorToUserValue(int z)
       {
-      MidiOperation::TimeSigDenominator denominator = MidiOperation::TimeSigDenominator::_4;
+      MidiOperations::TimeSigDenominator denominator = MidiOperations::TimeSigDenominator::_4;
 
       if (z == 2)
-            denominator = MidiOperation::TimeSigDenominator::_2;
+            denominator = MidiOperations::TimeSigDenominator::_2;
       else if (z == 4)
-            denominator = MidiOperation::TimeSigDenominator::_4;
+            denominator = MidiOperations::TimeSigDenominator::_4;
       else if (z == 8)
-            denominator = MidiOperation::TimeSigDenominator::_8;
+            denominator = MidiOperations::TimeSigDenominator::_8;
       else if (z == 16)
-            denominator = MidiOperation::TimeSigDenominator::_16;
+            denominator = MidiOperations::TimeSigDenominator::_16;
       else if (z == 32)
-            denominator = MidiOperation::TimeSigDenominator::_32;
+            denominator = MidiOperations::TimeSigDenominator::_32;
       else
             Q_ASSERT_X(false, "Meter::fractionDenominatorToUserValue", "Unknown denominator");
 
@@ -147,7 +151,7 @@ namespace MidiCharset {
 QString convertToCharset(const std::string &text)
       {
                   // charset for the current MIDI file
-      QString charset = preferences.midiImportOperations.charset();
+      QString charset = preferences.midiImportOperations.data()->charset;
       auto *codec = QTextCodec::codecForName(charset.toLatin1());
       if (codec)
             return codec->toUnicode(text.c_str());

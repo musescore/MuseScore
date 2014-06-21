@@ -5,7 +5,9 @@
 #include "libmscore/drumset.h"
 #include "importmidi_chord.h"
 #include "importmidi_tuplet.h"
+#include "importmidi_operations.h"
 #include "libmscore/score.h"
+#include "midi/midifile.h"
 
 #include <set>
 
@@ -156,9 +158,8 @@ void splitDrumTracks(std::multimap<int, MTrack> &tracks)
       for (auto it = tracks.begin(); it != tracks.end(); ++it) {
             if (!it->second.mtrack->drumTrack())
                   continue;
-            const auto operations = preferences.midiImportOperations.trackOperations(
-                                                            it->second.indexOfOperation);
-            if (!operations.splitDrums.doSplit)
+            const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+            if (!opers.doStaffSplit.value(it->second.indexOfOperation))
                   continue;
             const auto newTracks = splitDrumTrack(it->second);
             const int trackIndex = it->first;
@@ -185,16 +186,13 @@ void setStaffBracketForDrums(QList<MTrack> &tracks)
       int counter = 0;
       Staff *firstDrumStaff = nullptr;
       int opIndex = -1;
-      const auto &opers = preferences.midiImportOperations;
 
       for (const MTrack &track: tracks) {
             if (track.mtrack->drumTrack()) {
                   if (opIndex != track.indexOfOperation) {
+                        opIndex = track.indexOfOperation;
                         setBracket(firstDrumStaff, counter);
-                        if (opers.trackOperations(track.indexOfOperation).splitDrums.showStaffBracket) {
-                              opIndex = track.indexOfOperation;
-                              firstDrumStaff = track.staff;
-                              }
+                        firstDrumStaff = track.staff;
                         }
                   ++counter;
                   }
@@ -236,13 +234,13 @@ ReducedFraction findOptimalNoteOffTime(
 
 void removeRests(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap)
       {
-      const auto &opers = preferences.midiImportOperations;
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
 
       for (auto &trackItem: tracks) {
             MTrack &track = trackItem.second;
             if (!track.mtrack->drumTrack())
                   continue;
-            if (!opers.trackOperations(track.indexOfOperation).removeDrumRests)
+            if (!opers.simplifyDurations.value(track.indexOfOperation))
                   continue;
             bool changed = false;
                         // all chords here with the same voice should have different onTime values
