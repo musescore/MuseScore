@@ -265,6 +265,9 @@ enum class StyleIdx : unsigned char {
       genCourtesyKeysig,
       genCourtesyClef,
 
+      swingRatio,
+      swingUnit,
+
       useStandardNoteNames,
       useGermanNoteNames,
       useSolfeggioNoteNames,
