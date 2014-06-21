@@ -26,6 +26,8 @@ class MidiNote {
       std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator tuplet;
                   // for notation simplification - final quant value
       ReducedFraction quant = ReducedFraction(-1, 1);       // invalid by default
+                  // to assign lyrics
+      ReducedFraction origOnTime;
       };
 
 class MidiChord {
