@@ -439,7 +439,7 @@ StyleData::StyleData()
             { StyleIdx::genCourtesyTimesig,          QVariant(true) },
             { StyleIdx::genCourtesyKeysig,           QVariant(true) },
             { StyleIdx::genCourtesyClef,             QVariant(true) },
-            { StyleIdx::swingRatio,                  QVariant(50)   },
+            { StyleIdx::swingRatio,                  QVariant(60)   },
             { StyleIdx::swingUnit,                   QVariant(0)    },
             { StyleIdx::useStandardNoteNames,        QVariant(true) },
             { StyleIdx::useGermanNoteNames,          QVariant(false) },

@@ -49,7 +49,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="pageStack">
      <property name="currentIndex">
-      <number>14</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Page1">
       <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -250,12 +250,25 @@
               </property>
              </widget>
             </item>
+            <item>
+             <spacer name="zontalSpacer_16">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
            </layout>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_11">
             <property name="bottomMargin">
-             <number>20</number>
+             <number>10</number>
             </property>
             <item>
              <widget class="QLabel" name="label_3">
@@ -272,7 +285,26 @@
               <property name="minimum">
                <number>50</number>
               </property>
+              <property name="value">
+               <number>60</number>
+              </property>
              </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_16">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </item>
