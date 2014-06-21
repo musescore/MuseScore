@@ -531,9 +531,6 @@ class Score : public QObject {
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(int tick, int len);
-      void swingAdjustParams(Chord*, int&, int&, int, int);
-      bool isSubdivided(ChordRest*, int);
-
 
       void setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
@@ -717,6 +714,10 @@ class Score : public QObject {
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
+
+      void swingAdjustParams(Chord*, int&, int&, int, int);
+      bool isSubdivided(ChordRest*, int);
+
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }
 
