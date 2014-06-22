@@ -281,7 +281,7 @@ void TextBlock::layout(Text* t)
                   w = fm.width(f.text);
                   _bbox |= r;
                   x += w;
-                  _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
+                  _lineSpacing = _lineSpacing == 0 || fm.lineSpacing() == 0 ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
                   }
             }
       qreal rx;
