@@ -395,19 +395,54 @@ Note* Score::addPitch(int pitch, bool addFlag)
             duration = _is.duration().fraction();
             }
       Note* note = 0;
+      Note* firstTiedNote = 0;
+      Note* lastTiedNote = 0;
       if (_is.repitchMode() && _is.cr()->type() == ElementType::CHORD) {
             Chord* chord = static_cast<Chord*>(_is.cr());
             note = new Note(this);
             note->setParent(chord);
             note->setTrack(chord->track());
             note->setNval(nval);
+            lastTiedNote = note;
             if (!addFlag) {
+                  QList<Note*> notes = chord->notes();
+                  // break ties into current chord
+                  for (Note* n : notes) {
+                        if (n->tieBack())
+                              undoRemoveElement(n->tieBack());
+                        }
+                  if (notes.size() == 1 && notes.first()->tieFor()) {
+                        Note* tn = notes.first()->tieFor()->endNote();
+                        while (tn) {
+                              Chord* tc = tn->chord();
+                              if (tc->notes().size() != 1) {
+                                    undoRemoveElement(tn->tieBack());
+                                    break;
+                                    }
+                              if (!firstTiedNote)
+                                    firstTiedNote = tn;
+                              lastTiedNote = tn;
+                              undoChangePitch(tn, note->pitch(), note->tpc1(), note->tpc2());
+                              if (tn->tieFor())
+                                    tn = tn->tieFor()->endNote();
+                              else
+                                    break;
+                              }
+                        }
                   while (!chord->notes().isEmpty())
                         undoRemoveElement(chord->notes().first());
                   }
             undoAddElement(note);
+            if (firstTiedNote) {
+                  Tie* tie = new Tie(this);
+                  tie->setStartNote(note);
+                  tie->setEndNote(firstTiedNote);
+                  tie->setTrack(note->track());
+                  undoAddElement(tie);
+                  }
+            select(lastTiedNote);
             }
-      else {
+      else if (!_is.repitchMode()) {
             Segment* seg = setNoteRest(_is.segment(), track, nval, duration, stemDirection);
             if (seg) {
                   note = static_cast<Chord*>(seg->element(track))->upNote();
@@ -437,7 +472,15 @@ Note* Score::addPitch(int pitch, bool addFlag)
                   qDebug("addPitch: cannot find slur note");
             setLayoutAll(true);
             }
-      _is.moveToNextInputPos();
+      if (_is.repitchMode()) {
+            ChordRest* next = lastTiedNote ? nextChordRest(lastTiedNote->chord()) : nextChordRest(_is.cr());
+            while (next && next->type() != ElementType::CHORD)
+                  next = nextChordRest(next);
+            if (next)
+                  _is.moveInputPos(next->segment());
+            }
+      else
+            _is.moveToNextInputPos();
       return note;
       }
 
