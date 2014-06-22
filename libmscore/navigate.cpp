@@ -11,6 +11,8 @@
 //=============================================================================
 #include <QList>
 #include <QPointF>
+#include <QObject>
+#include <QMetaObject>
 #include "navigate.h"
 #include "element.h"
 #include "clef.h"
@@ -253,6 +255,13 @@ Element* firstNoteBelow(Note* e)
 Element* Score::nextNoteInChordOrSegment(Element *e)
       {
       Element* re = 0;
+      //if it is a note attached element, I'm returning the note
+      if(e->parent()->type() == ElementType::NOTE){
+          return e->parent();
+      }
+
+      //if it is a note, I'm looking for the first note below it
+      //in that staff
       if(e->type() == ElementType::NOTE){
             re = firstNoteBelow(static_cast<Note*>(e));
             if(re){
@@ -260,19 +269,24 @@ Element* Score::nextNoteInChordOrSegment(Element *e)
                   }
             }
 
+      //else, I'm finding the parent segment and moving to the next one
       Segment* seg;
-      if(e->type() == ElementType::NOTE){
-           seg = static_cast<Note*>(e)->chord()->segment();
-           }
-      else{
-           seg = static_cast<Segment*>(e->parent());
-           }
+      Element* p = e;
+      while( strcmp(p->metaObject()->className(),"Ms::Segment") ){
+          qDebug(p->metaObject()->className());
+          p = p->parent();
+      }
+
+      seg = static_cast<Segment*>(p);
       seg = seg->next1(SegmentType::KeySig    |
                        SegmentType::TimeSig   |
                        SegmentType::ChordRest |
                        SegmentType::Clef      |
-                       SegmentType::Breath);
+                       SegmentType::Breath    |
+                       SegmentType::BarLine   );
 
+      //if the segment is a ChordRest, I'm looking for the highest note first,
+      //if it doesn't exist, I'm returning the rest
       if(seg->segmentType() == SegmentType::ChordRest){
             Note* lowest=0;
             for(int voice = e->track()/VOICES; voice/VOICES == e->track()/VOICES; voice++){
@@ -298,6 +312,8 @@ Element* Score::nextNoteInChordOrSegment(Element *e)
                   return re;
                   }
             }
+
+      //if a segment is not a ChordRest, I'm returning its element
       re = seg->element(e->track()/VOICES);
       return re;
       }
