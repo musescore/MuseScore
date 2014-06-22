@@ -829,7 +829,7 @@ void Score::repitchNote(const Position& p, bool replace)
             ChordRest* next = nextChordRest(_is.cr());
             while(next && next->type() != ElementType::CHORD)
                   next = nextChordRest(next);
-            if(next)
+            if (next)
                   _is.moveInputPos(next->segment());
             return;
             }
@@ -845,6 +845,11 @@ void Score::repitchNote(const Position& p, bool replace)
       Note* lastTiedNote = note;
       if (replace) {
             QList<Note*> notes = chord->notes();
+            // break ties into current chord
+            for (Note* n : notes) {
+                  if (n->tieBack())
+                        undoRemoveElement(n->tieBack());
+                  }
             if (notes.size() == 1 && notes.first()->tieFor()) {
                   Note* tn = notes.first()->tieFor()->endNote();
                   while (tn) {
