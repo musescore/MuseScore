@@ -398,6 +398,9 @@ Note* Score::addPitch(int pitch, bool addFlag)
       Note* firstTiedNote = 0;
       Note* lastTiedNote = 0;
       if (_is.repitchMode() && _is.cr()->type() == ElementType::CHORD) {
+            // repitch mode for MIDI input (where we are given a pitch) is handled here
+            // for keyboard input (where we are given a staff position), there is a separate function Score::repitchNote()
+            // the code is similar enough that it could possibly be refactored
             Chord* chord = static_cast<Chord*>(_is.cr());
             note = new Note(this);
             note->setParent(chord);
@@ -406,11 +409,17 @@ Note* Score::addPitch(int pitch, bool addFlag)
             lastTiedNote = note;
             if (!addFlag) {
                   QList<Note*> notes = chord->notes();
-                  // break ties into current chord
+                  // break all ties into current chord
+                  // these will exist only if user explicitly moved cursor to a tied-into note
+                  // in ordinary use, cursor will autoamtically skip past these during note entry
                   for (Note* n : notes) {
                         if (n->tieBack())
                               undoRemoveElement(n->tieBack());
                         }
+                  // for single note chords only, preserve ties by changing pitch of all forward notes
+                  // the tie forward itself will be added later
+                  // multi-note chords get reduced to single note chords anyhow since we remove the old notes below
+                  // so there will be no way to preserve those ties
                   if (notes.size() == 1 && notes.first()->tieFor()) {
                         Note* tn = notes.first()->tieFor()->endNote();
                         while (tn) {
@@ -429,10 +438,15 @@ Note* Score::addPitch(int pitch, bool addFlag)
                                     break;
                               }
                         }
+                  // remove all notes from chord
+                  // the new note will be added below
                   while (!chord->notes().isEmpty())
                         undoRemoveElement(chord->notes().first());
                   }
+            // add new note to chord
             undoAddElement(note);
+            // recreate tie forward if there is a note to tie to
+            // one-sided ties will not be recreated
             if (firstTiedNote) {
                   Tie* tie = new Tie(this);
                   tie->setStartNote(note);
@@ -473,6 +487,7 @@ Note* Score::addPitch(int pitch, bool addFlag)
             setLayoutAll(true);
             }
       if (_is.repitchMode()) {
+            // move cursor to next note, but skip tied ntoes (they were already repitched above)
             ChordRest* next = lastTiedNote ? nextChordRest(lastTiedNote->chord()) : nextChordRest(_is.cr());
             while (next && next->type() != ElementType::CHORD)
                   next = nextChordRest(next);
