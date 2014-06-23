@@ -67,7 +67,6 @@
     <genCourtesyTimesig>0</genCourtesyTimesig>
     <genCourtesyKeysig>0</genCourtesyKeysig>
     <useGermanNoteNames>1</useGermanNoteNames>
-    <chordDescriptionFile>jazzchords.xml</chordDescriptionFile>
     <concertPitch>1</concertPitch>
     <createMultiMeasureRests>1</createMultiMeasureRests>
     <minEmptyMeasures>3</minEmptyMeasures>
