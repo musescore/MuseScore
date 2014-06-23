@@ -1010,6 +1010,8 @@ void StyleData::load(XmlReader& e)
                         if (tag == "oddHeader" || tag == "evenHeader"
                            || tag == "oddFooter" || tag == "evenFooter"
                            || tag == "headerStyled" || tag == "footerStyled"
+                           || tag == "beamMinSlope" || tag == "beamMaxSlope"
+                            || tag == "stemDir1" || tag == "stemDir2" || tag == "stemDir3" || tag == "stemDir4"
                            ) {
                               ;     // obsolete
                               }
@@ -1017,13 +1019,21 @@ void StyleData::load(XmlReader& e)
                               int idx2;
                               for (idx2 = 0; idx2 < int(ArticulationType::ARTICULATIONS); ++idx2) {
                                     ArticulationInfo& ai =  Articulation::articulationList[idx2];
-                                    if (tag == ai.name + "Anchor"
-                                       || (tag == "U" + ai.name + "Anchor")
-                                       || (tag == "D" + ai.name + "Anchor")
+                                    // deal with obsolete tags from 1.14 format
+                                    if (tag == "SforzatoaccentAnchor")
+                                          tag = "SforzatoAnchor";
+                                    if (tag == "SnappizzicatorAnchor")
+                                          tag = "SnappizzicatoAnchor";
+                                    else if (tag == "EspressivoAnchor")
+                                          break;
+                                    if (QString::compare(tag, ai.name + "Anchor",  Qt::CaseInsensitive) == 0
+                                       || QString::compare(tag, "U" + ai.name + "Anchor", Qt::CaseInsensitive) == 0
+                                       || QString::compare(tag, "D" + ai.name + "Anchor", Qt::CaseInsensitive) == 0
                                        ) {
                                           _articulationAnchor[idx2] = ArticulationAnchor(val.toInt());
                                           break;
                                           }
+                                    
                                     }
                               if (idx2 >= int(ArticulationType::ARTICULATIONS))
                                     e.unknown();
