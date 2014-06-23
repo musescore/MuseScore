@@ -1705,7 +1705,11 @@ void GuitarPro3::read(QFile* fp)
                               }
 
                         cr->setDuration(l);
-                        cr->setDurationType(d);
+
+                        if (cr->type() == Element::Type::REST && l == measure->len())
+                              cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                        else
+                              cr->setDurationType(d);
 
                         if(!segment->cr(track))
                               segment->add(cr);
