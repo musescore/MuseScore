@@ -49,6 +49,7 @@ MasterSynthesizer* synti;
 QString dataPath;
 QIcon* icons[0];
 Shortcut Shortcut::sc[1] = { Shortcut() };
+QString mscoreGlobalShare;
 
 //---------------------------------------------------------
 //   Preferences
