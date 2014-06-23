@@ -835,6 +835,7 @@ void OveToMScore::convertSignatures(){
 
 	            Segment* s = measure->getSegment(clef, 0);
 	            s->add(clef);
+                  staff->setClef(0, clef->clefTypeList());
 			}
 
 			// clef in measure
@@ -856,9 +857,9 @@ void OveToMScore::convertSignatures(){
 			            Segment* s = measure->getSegment(clef, absTick);
 			            s->add(clef);
 
-//						if(staff){
-//                                          staff->setClef(absTick, clefType);
-//						}
+                              if(staff){
+                                    staff->setClef(absTick, clefType);
+						}
 					}
 				}
 			}

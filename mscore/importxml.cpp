@@ -5509,6 +5509,7 @@ StaffTypes MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
       clefs->setTrack((staffIdx + clefno) * VOICES);
       Segment* s = measure->getSegment(clefs, tick);
       s->add(clefs);
+      clefs->staff()->setClef(tick, clefs->clefTypeList());
       return res;
       }
 
