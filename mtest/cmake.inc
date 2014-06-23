@@ -34,12 +34,12 @@ target_link_libraries(
       ${QT_LIBRARIES}
       )
 
-if (NOT MINGW)
+if (NOT MINGW AND NOT APPLE)
    target_link_libraries(${TARGET}
       dl
       pthread
       freetype)
-endif (NOT MINGW)
+endif (NOT MINGW AND NOT APPLE)
 
 if (OMR)
       target_link_libraries(${TARGET} omr fitz openjpeg jbig2dec jpeg fontconfig)
@@ -48,7 +48,20 @@ if (OMR)
       endif (OCR)
 endif (OMR)
 
-
+if (APPLE)
+target_link_libraries(${TARGET} ${OsxFrameworks})
+target_link_libraries(${TARGET}
+      dl
+      pthread
+      )
+set_target_properties (
+      ${TARGET}
+      PROPERTIES
+      AUTOMOC true
+      COMPILE_FLAGS "-include all.h -D QT_GUI_LIB -D TESTROOT=\\\\\"${PROJECT_SOURCE_DIR}\\\\\" -g -Wall -Wextra"
+      LINK_FLAGS    "-g -stdlib=libc++"
+      )
+else(APPLE)
 set_target_properties (
       ${TARGET}
       PROPERTIES
@@ -56,5 +69,6 @@ set_target_properties (
       COMPILE_FLAGS "-include all.h -D QT_GUI_LIB -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
       LINK_FLAGS    "-g"
       )
+endif(APPLE)
 
 add_test(${TARGET} ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}  -xunitxml -o result.xml)
