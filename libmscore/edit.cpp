@@ -829,7 +829,7 @@ void Score::repitchNote(const Position& p, bool replace)
             ChordRest* next = nextChordRest(_is.cr());
             while(next && next->type() != ElementType::CHORD)
                   next = nextChordRest(next);
-            if(next)
+            if (next)
                   _is.moveInputPos(next->segment());
             return;
             }
@@ -837,18 +837,63 @@ void Score::repitchNote(const Position& p, bool replace)
             chord = static_cast<Chord*>(_is.cr());
             }
       Note* note = new Note(this);
-      note->setNval(nval);
       note->setParent(chord);
+      note->setTrack(chord->track());
+      note->setNval(nval);
 
+      Note* firstTiedNote = 0;
+      Note* lastTiedNote = note;
       if (replace) {
+            QList<Note*> notes = chord->notes();
+            // break all ties into current chord
+            // these will exist only if user explicitly moved cursor to a tied-into note
+            // in ordinary use, cursor will autoamtically skip past these during note entry
+            for (Note* n : notes) {
+                  if (n->tieBack())
+                        undoRemoveElement(n->tieBack());
+                  }
+            // for single note chords only, preserve ties by changing pitch of all forward notes
+            // the tie forward itself will be added later
+            // multi-note chords get reduced to single note chords anyhow since we remove the old notes below
+            // so there will be no way to preserve those ties
+            if (notes.size() == 1 && notes.first()->tieFor()) {
+                  Note* tn = notes.first()->tieFor()->endNote();
+                  while (tn) {
+                        Chord* tc = tn->chord();
+                        if (tc->notes().size() != 1) {
+                              undoRemoveElement(tn->tieBack());
+                              break;
+                              }
+                        if (!firstTiedNote)
+                              firstTiedNote = tn;
+                        lastTiedNote = tn;
+                        undoChangePitch(tn, note->pitch(), note->tpc1(), note->tpc2());
+                        if (tn->tieFor())
+                              tn = tn->tieFor()->endNote();
+                        else
+                              break;
+                        }
+                  }
+            // remove all notes from chord
+            // the new note will be added below
             while (!chord->notes().isEmpty())
                   undoRemoveElement(chord->notes().first());
             }
+      // add new note to chord
       undoAddElement(note);
-      select(note);
+      // recreate tie forward if there is a note to tie to
+      // one-sided ties will not be recreated
+      if (firstTiedNote) {
+            Tie* tie = new Tie(this);
+            tie->setStartNote(note);
+            tie->setEndNote(firstTiedNote);
+            tie->setTrack(note->track());
+            undoAddElement(tie);
+            }
+      select(lastTiedNote);
       // move to next Chord
-      ChordRest* next = nextChordRest(_is.cr());
-      while(next && next->type() != ElementType::CHORD)
+      ChordRest* next = nextChordRest(lastTiedNote->chord());
+      while (next && next->type() != ElementType::CHORD)
             next = nextChordRest(next);
       if (next)
             _is.moveInputPos(next->segment());
