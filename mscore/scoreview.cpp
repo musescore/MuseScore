@@ -2673,6 +2673,7 @@ void ScoreView::cmd(const QAction* a)
             if (tuplet)
                   cmdCreateTuplet(_score->getSelectedChordRest(), tuplet);
             _score->endCmd();
+            moveCursor();
             }
       else if (cmd == "repeat-sel")
             cmdRepeatSelection();
@@ -4643,6 +4644,7 @@ void ScoreView::cmdTuplet(int n)
                   }
             }
       _score->endCmd();
+      moveCursor();     // do this after endCmd to make sure segment has been laid out
       }
 
 //---------------------------------------------------------
