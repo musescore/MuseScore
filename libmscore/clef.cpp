@@ -156,21 +156,6 @@ void Clef::layout()
             bool        bHide;
             // check staff type allows clef display
             staffType = staff()->staffType();
-#if 0 // <<<<<<< HEAD
-            if (!staffType->genClef()) {        // if no clef, set empty bbox and do nothing
-                  qDeleteAll(elements);
-                  elements.clear();
-                  setbbox(QRectF());
-                  return;
-                  }
-
-            // tablatures:
-            if (staffType->group() == StaffGroup::TAB) {
-                  // if current clef type not compatible with tablature,
-                  // set tab clef according to score style
-                  if (ClefInfo::staffGroup(clefType()) != StaffGroup::TAB)
-                        setClefType( ClefType(score()->styleI(StyleIdx::tabClef)) );
-#else
             bHide = !staffType->genClef();
 
             // check clef is compatible with staff type group
@@ -182,44 +167,12 @@ void Clef::layout()
                         // TODO : instead of initial staff clef (which is assumed to be compatible)
                         // use the last compatible clef previously found in staff
                         _clefTypes = stf->clefTypeList(0);
-#endif      // >>>>>>> 38c666fa91f5bdaaa6d9ca0645c437c799be8c79
                   }
 
             //
             // courtesy clef
             //
             bool showClef = true;
-#if 0 // <<<<<<< HEAD
-            Segment* clefSeg = static_cast<Segment*>(parent());
-            if (clefSeg) {
-                  int tick = clefSeg->tick();
-                  // only if there is a clef change
-                  if (stf->clef(tick) != stf->clef(tick-1)) {
-                        // locate clef at the begining of next measure, if any
-                        Clef*       clefNext    = nullptr;
-                        Segment*    clefSegNext = nullptr;
-                        Measure*    meas        = static_cast<Measure*>(clefSeg->parent());
-                        Measure*    measNext    = meas->nextMeasure();
-                        if (measNext) {
-                              clefSegNext = measNext->findSegment(SegmentType::Clef, tick);
-                              if (clefSegNext)
-                                    clefNext = static_cast<Clef*>(clefSegNext->element(track()));
-                              }
-                        // show this clef if: it is not a courtesy clef (no next clef or not at the end of the measure)
-                        showClef = !clefNext || (clefSeg->tick() != meas->tick() + meas->ticks())
-                              // if courtesy clef: show if score has courtesy clefs on
-                              || ( score()->styleB(StyleIdx::genCourtesyClef)
-                              // AND measure is not at the end of a repeat or of a section
-                              && !( (meas->repeatFlags() & Repeat::END) || meas->sectionBreak() )
-                              // AND this clef has courtesy clef turned on
-                              && showCourtesy() );
-                        if (!showClef)    {     // if no clef, set empty bbox and do nothing
-                              qDeleteAll(elements);
-                              elements.clear();
-                              setbbox(QRectF());
-                              return;
-                              }
-#else
             // only if there is a clef change
             if (!bHide && tick > 0 && stf->clef(tick) != stf->clef(tick-1)) {
                   // locate clef at the begining of next measure, if any
@@ -231,7 +184,6 @@ void Clef::layout()
                         clefSegNext = measNext->findSegment(SegmentType::Clef, tick);
                         if (clefSegNext)
                               clefNext = static_cast<Clef*>(clefSegNext->element(track()));
-#endif      // >>>>>>> 38c666fa91f5bdaaa6d9ca0645c437c799be8c79
                         }
                   // show this clef if: it is not a courtesy clef (no next clef or not at the end of the measure)
                   showClef = !clefNext || (clefSeg->tick() != meas->tick() + meas->ticks())
