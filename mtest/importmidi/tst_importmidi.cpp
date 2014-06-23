@@ -358,7 +358,7 @@ void isSingleNoteInTupletAllowed(int tupletNumber,
       MidiNote note;
       const ReducedFraction onTime = ReducedFraction::fromTicks(10);
       note.offTime = onTime + ReducedFraction::fromTicks(
-                        std::round(tupletInfo.len.ticks() * noteLenInTupletLen));
+                        qRound(tupletInfo.len.ticks() * noteLenInTupletLen));
       chord.notes.push_back(note);
       chords.insert({onTime, chord});
 
