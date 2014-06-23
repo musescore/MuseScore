@@ -1468,8 +1468,8 @@ void Score::cmdDeleteSelection()
                               deleteItem(s->element(track));
                               continue;
                               }
-                        foreach(Element* annotation, s->annotations()) {
-                              if(!annotation->systemFlag())
+                        foreach (Element* annotation, s->annotations()) {
+                              if (!annotation->systemFlag() && annotation->track() == track)
                                     undoRemoveElement(annotation);
                               }
 
