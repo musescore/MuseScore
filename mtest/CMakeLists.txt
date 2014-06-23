@@ -79,16 +79,38 @@ target_link_libraries(
       )
 
 set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -g")
-set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -O2 -DNDEBUG -DQT_NO_DEBUG")
+
+if (APPLE)
+   set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++0x -fPIC -stdlib=libc++ -g")
+   set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -fPIC -stdlib=libc++ -O2 -DNDEBUG -DQT_NO_DEBUG")
+else (APPLE)
+   if (MINGW)
+      # -mno-ms-bitfields see #22048
+      set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -mno-ms-bitfields -g")
+      set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG")
+   else (MINGW)
+      set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -fPIC -fPIE -g")
+      set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG")
+   endif (MINGW)
+endif(APPLE)
+
 
 string(REPLACE ";" ";-I" INC "${QT_INCLUDES}")
 
+if (APPLE)
+set_target_properties (
+      testutils
+      PROPERTIES
+      COMPILE_FLAGS "-include all.h -D TESTROOT=\\\\\"${PROJECT_SOURCE_DIR}\\\\\" -g -Wall -Wextra"
+      )
+else (APPLE)
 set_target_properties (
       testutils
       PROPERTIES
       COMPILE_FLAGS "-include all.h -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
       )
+endif(APPLE)
+
 #      COMPILE_FLAGS "-include all.h -I ${INC} -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
 
 add_custom_target(report
