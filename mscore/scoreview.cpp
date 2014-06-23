@@ -4692,11 +4692,13 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       if (ds) {
             char note1 = "CDEFGAB"[note];
             int pitch = -1;
+            int voice = 0;
             for (int i = 0; i < 127; ++i) {
                   if (!ds->isValid(i))
                         continue;
                   if (ds->shortcut(i) && (ds->shortcut(i) == note1)) {
                         pitch = i;
+                        voice = ds->voice(i);
                         break;
                         }
                   }
@@ -4705,6 +4707,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   return;
                   }
             is.setDrumNote(pitch);
+            is.setTrack(is.track() / VOICES + voice);
             octave = pitch / 12;
             }
       else {
