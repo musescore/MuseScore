@@ -2063,7 +2063,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 //    which is not immediate obvious.)
 //-----------------------------------------------------------------------------
 
-void ScoreView::constraintCanvas (int* dxx, int* dyy)
+void ScoreView::constraintCanvas (int* /*dxx*/, int* /*dyy*/)
       {
 #if 0
       const qreal margin = 50.0; //move to preferences?
