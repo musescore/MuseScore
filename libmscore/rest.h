@@ -42,10 +42,10 @@ class Rest : public ChordRest {
    public:
       Rest(Score* s = 0);
       Rest(Score*, const TDuration&);
-      virtual Rest* clone() const override      { return new Rest(*this); }
-      virtual ElementType type() const override { return ElementType::REST; }
+      virtual Rest* clone() const override        { return new Rest(*this); }
+      virtual Element::Type type() const override { return Element::Type::REST; }
 
-      virtual Measure* measure() const override { return parent() ? (Measure*)(parent()->parent()) : 0; }
+      virtual Measure* measure() const override   { return parent() ? (Measure*)(parent()->parent()) : 0; }
       virtual qreal mag() const override;
       virtual void draw(QPainter*) const override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;

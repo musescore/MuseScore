@@ -55,8 +55,8 @@ class LayoutBreak : public Element {
       LayoutBreak(Score* = 0);
       virtual LayoutBreak* clone() const { return new LayoutBreak(*this); }
 
-      virtual ElementType type() const { return ElementType::LAYOUT_BREAK; }
-      virtual bool systemFlag() const  { return true;  }
+      virtual Element::Type type() const { return Element::Type::LAYOUT_BREAK; }
+      virtual bool systemFlag() const    { return true;  }
 
       void setLayoutBreakType(LayoutBreakType);
       LayoutBreakType layoutBreakType() const  { return _layoutBreakType; }

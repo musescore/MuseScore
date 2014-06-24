@@ -81,7 +81,7 @@ class Debugger : public QDialog, public Ui::DebuggerBase {
       QStack<Element*>backStack;
       QStack<Element*>forwardStack;
 
-      ShowElementBase* elementViews[int(ElementType::MAXTYPE)];
+      ShowElementBase* elementViews[int(Element::Type::MAXTYPE)];
 
       bool searchElement(QTreeWidgetItem* pi, Element* el);
       void updateElement(Element*);

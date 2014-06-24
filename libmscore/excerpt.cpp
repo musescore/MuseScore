@@ -138,7 +138,7 @@ Score* createExcerpt(const QList<Part*>& parts)
       // create excerpt title
       //
       MeasureBase* measure = score->first();
-      if (!measure || (measure->type() != ElementType::VBOX)) {
+      if (!measure || (measure->type() != Element::Type::VBOX)) {
             MeasureBase* nmeasure = new VBox(score);
             nmeasure->setTick(0);
             score->addMeasure(nmeasure, measure);
@@ -178,7 +178,7 @@ Score* createExcerpt(const QList<Part*>& parts)
 
                   for (auto segment = score->firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
                         for (auto e : segment->annotations()) {
-                              if ((e->type() != ElementType::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
+                              if ((e->type() != Element::Type::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                                     continue;
                               Harmony* h  = static_cast<Harmony*>(e);
                               int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, false);
@@ -213,13 +213,13 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
       MeasureBaseList* nmbl = score->measures();
       for (MeasureBase* mb = oscore->measures()->first(); mb; mb = mb->next()) {
             MeasureBase* nmb = 0;
-            if (mb->type() == ElementType::HBOX)
+            if (mb->type() == Element::Type::HBOX)
                   nmb = new HBox(score);
-            else if (mb->type() == ElementType::VBOX)
+            else if (mb->type() == Element::Type::VBOX)
                   nmb = new VBox(score);
-            else if (mb->type() == ElementType::TBOX)
+            else if (mb->type() == Element::Type::TBOX)
                   nmb = new TBox(score);
-            else if (mb->type() == ElementType::MEASURE) {
+            else if (mb->type() == Element::Type::MEASURE) {
                   Measure* m  = static_cast<Measure*>(mb);
                   Measure* nm = new Measure(score);
                   nmb = nm;
@@ -270,7 +270,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           ns->add(ne);
                                           // for chord symbols,
                                           // re-render with new style settings
-                                          if (ne->type() == ElementType::HARMONY) {
+                                          if (ne->type() == Element::Type::HARMONY) {
                                                 Harmony* h = static_cast<Harmony*>(ne);
                                                 h->render();
                                                 }
@@ -284,7 +284,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               if (oe == 0)
                                     continue;
                               Element* ne;
-                              if (oe->generated() || oe->type() == ElementType::CLEF)
+                              if (oe->generated() || oe->type() == Element::Type::CLEF)
                                     ne = oe->clone();
                               else
                                     ne = oe->linkedClone();
@@ -318,7 +318,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           ncr->setTuplet(nt);
                                           }
 
-                                    if (oe->type() == ElementType::CHORD) {
+                                    if (oe->type() == Element::Type::CHORD) {
                                           Chord* och = static_cast<Chord*>(ocr);
                                           Chord* nch = static_cast<Chord*>(ncr);
 
@@ -375,13 +375,13 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   }
             nmb->linkTo(mb);
             foreach (Element* e, *mb->el()) {
-                  if (e->type() == ElementType::LAYOUT_BREAK) {
+                  if (e->type() == Element::Type::LAYOUT_BREAK) {
                         LayoutBreak::LayoutBreakType st = static_cast<LayoutBreak*>(e)->layoutBreakType();
                         if (st == LayoutBreak::LayoutBreakType::PAGE || st == LayoutBreak::LayoutBreakType::LINE)
                               continue;
                         }
                   Element* ne;
-                  if (e->type() == ElementType::TEXT) // clone the title, subtitle etc...
+                  if (e->type() == Element::Type::TEXT) // clone the title, subtitle etc...
                         ne = e->linkedClone();
                   else
                         ne = e->clone();
@@ -420,7 +420,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             int dstTrack2 = -1;
             int st = 0;
             //always export voltas to first staff in part
-            if (s->type() == ElementType::VOLTA)
+            if (s->type() == Element::Type::VOLTA)
                   dstTrack = s->voice();
             else { //export other spanner if staffidx matches
                   for (int index : map) {
@@ -466,10 +466,10 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                         Element* oe = seg->element(srcTrack);
                         if (oe == 0 || oe->generated())
                               continue;
-                        if (oe->type() == ElementType::TIMESIG)
+                        if (oe->type() == Element::Type::TIMESIG)
                               continue;
                         Element* ne = nullptr;
-                        if (oe->type() == ElementType::CLEF) {
+                        if (oe->type() == Element::Type::CLEF) {
                               // only clone clef if it matches staff group and does not exists yet
                               Clef* clef = static_cast<Clef*>(oe);
                               int   tick = seg->tick();
@@ -512,11 +512,11 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                     switch (e->type()) {
                                           // exclude certain element types
                                           // this should be same list excluded in Score::undoAddElement()
-                                          case ElementType::STAFF_TEXT:
-                                          case ElementType::HARMONY:
-                                          case ElementType::FIGURED_BASS:
-                                          case ElementType::LYRICS:
-                                          case ElementType::DYNAMIC:
+                                          case Element::Type::STAFF_TEXT:
+                                          case Element::Type::HARMONY:
+                                          case Element::Type::FIGURED_BASS:
+                                          case Element::Type::LYRICS:
+                                          case Element::Type::DYNAMIC:
                                                 continue;
                                           default:
                                                 Element* ne = e->clone();
@@ -526,7 +526,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                 score->undoAddElement(ne);
                                           }
                                     }
-                              if (oe->type() == ElementType::CHORD) {
+                              if (oe->type() == Element::Type::CHORD) {
                                     Chord* och = static_cast<Chord*>(ocr);
                                     Chord* nch = static_cast<Chord*>(ncr);
                                     int n = och->notes().size();
@@ -562,7 +562,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
             int staffIdx = s->staffIdx();
             int dstTrack = -1;
             int dstTrack2 = -1;
-            if (s->type() != ElementType::VOLTA) {
+            if (s->type() != Element::Type::VOLTA) {
                   //export other spanner if staffidx matches
                   if (srcStaffIdx == staffIdx) {
                         dstTrack = dstStaffIdx * VOICES + s->voice();
@@ -608,11 +608,11 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                         Element* oe = oseg->element(srcTrack);
                         if (oe == 0 || oe->generated())
                               continue;
-                        if (oe->type() == ElementType::TIMESIG)
+                        if (oe->type() == Element::Type::TIMESIG)
                               continue;
                         Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                         Element* ne;
-                        if (oe->type() == ElementType::CLEF)
+                        if (oe->type() == Element::Type::CLEF)
                               ne = oe->clone();
                         else
                               ne = oe->linkedClone();
@@ -644,11 +644,11 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                                     switch (e->type()) {
                                           // exclude certain element types
                                           // this should be same list excluded in Score::undoAddElement()
-                                          case ElementType::STAFF_TEXT:
-                                          case ElementType::HARMONY:
-                                          case ElementType::FIGURED_BASS:
-                                          case ElementType::LYRICS:
-                                          case ElementType::DYNAMIC:
+                                          case Element::Type::STAFF_TEXT:
+                                          case Element::Type::HARMONY:
+                                          case Element::Type::FIGURED_BASS:
+                                          case Element::Type::LYRICS:
+                                          case Element::Type::DYNAMIC:
                                                 continue;
                                           default:
                                                 Element* ne = e->clone();
@@ -658,7 +658,7 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                                                 score->undoAddElement(ne);
                                           }
                                     }
-                              if (oe->type() == ElementType::CHORD) {
+                              if (oe->type() == Element::Type::CHORD) {
                                     Chord* och = static_cast<Chord*>(ocr);
                                     Chord* nch = static_cast<Chord*>(ncr);
                                     int n = och->notes().size();
@@ -697,7 +697,7 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
             int staffIdx = s->staffIdx();
             int dstTrack = -1;
             int dstTrack2 = -1;
-            if (s->type() != ElementType::VOLTA) {
+            if (s->type() != Element::Type::VOLTA) {
                   //export other spanner if staffidx matches
                   if (srcStaffIdx == staffIdx) {
                         dstTrack  = dstStaffIdx * VOICES + s->voice();

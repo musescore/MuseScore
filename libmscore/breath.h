@@ -35,8 +35,8 @@ class Breath : public Element {
 
    public:
       Breath(Score* s);
-      virtual ElementType type() const override { return ElementType::BREATH; }
-      virtual Breath* clone() const override    { return new Breath(*this); }
+      virtual Element::Type type() const override { return Element::Type::BREATH; }
+      virtual Breath* clone() const override      { return new Breath(*this); }
 
       int breathType() const           { return _breathType; }
       void setBreathType(int v)        { _breathType = v; }

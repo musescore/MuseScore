@@ -32,7 +32,7 @@ class InstrumentName : public Text  {
    public:
       InstrumentName(Score*);
       virtual InstrumentName* clone() const { return new InstrumentName(*this); }
-      virtual ElementType type() const { return ElementType::INSTRUMENT_NAME; }
+      virtual Element::Type type() const    { return Element::Type::INSTRUMENT_NAME; }
       int layoutPos() const      { return _layoutPos; }
       void setLayoutPos(int val) { _layoutPos = val;  }
 

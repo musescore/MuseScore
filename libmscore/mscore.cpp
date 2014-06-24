@@ -103,7 +103,7 @@ extern QString mscoreGlobalShare;
 void MScore::init()
       {
 #ifdef SCRIPT_INTERFACE
-      qRegisterMetaType<ElementType>("ElementType");
+      qRegisterMetaType<Element::Type>("Element::Type");
       qRegisterMetaType<ValueType>("ValueType");
       qRegisterMetaType<Direction>("Direction");
       qRegisterMetaType<DirectionH>("DirectionH");

@@ -105,7 +105,7 @@ class Accidental : public Element {
    public:
       Accidental(Score* s = 0);
       virtual Accidental* clone() const     { return new Accidental(*this); }
-      virtual ElementType type() const      { return ElementType::ACCIDENTAL; }
+      virtual Element::Type type() const    { return Element::Type::ACCIDENTAL; }
 
       const char* subtypeUserName() const;
       void setSubtype(const QString& s);
@@ -156,7 +156,7 @@ class AccidentalBracket : public Compound {
    public:
       AccidentalBracket(Score*);
       virtual AccidentalBracket* clone() const { return new AccidentalBracket(*this); }
-      virtual ElementType type() const         { return ElementType::ACCIDENTAL_BRACKET; }
+      virtual Element::Type type() const       { return Element::Type::ACCIDENTAL_BRACKET; }
       };
 
 

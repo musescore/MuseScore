@@ -30,7 +30,7 @@ class InstrumentChange : public Text  {
    public:
       InstrumentChange(Score*);
       virtual InstrumentChange* clone() const { return new InstrumentChange(*this); }
-      virtual ElementType type() const        { return ElementType::INSTRUMENT_CHANGE; }
+      virtual Element::Type type() const      { return Element::Type::INSTRUMENT_CHANGE; }
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
 

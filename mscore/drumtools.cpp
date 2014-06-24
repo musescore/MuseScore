@@ -168,7 +168,7 @@ void DrumTools::editDrumset()
 void DrumTools::drumNoteSelected(int val)
       {
       Element* element = drumPalette->element(val);
-      if(element && element->type() == ElementType::CHORD) {
+      if(element && element->type() == Element::Type::CHORD) {
             Chord* ch        = static_cast<Chord*>(element);
             Note* note       = ch->downNote();
             int ticks        = MScore::defaultPlayDuration;

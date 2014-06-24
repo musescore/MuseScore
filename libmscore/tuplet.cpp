@@ -144,14 +144,14 @@ void Tuplet::layout()
       if (_direction == Direction::AUTO) {
             int up = 1;
             foreach (const DurationElement* e, _elements) {
-                  if (e->type() == ElementType::CHORD) {
+                  if (e->type() == Element::Type::CHORD) {
                         const Chord* c = static_cast<const Chord*>(e);
                         if (c->stemDirection() != Direction::AUTO)
                               up += c->stemDirection() == Direction::UP ? 1000 : -1000;
                         else
                               up += c->up() ? 1 : -1;
                         }
-                  else if (e->type() == ElementType::TUPLET) {
+                  else if (e->type() == Element::Type::TUPLET) {
                         // TODO
                         }
                   }
@@ -161,14 +161,14 @@ void Tuplet::layout()
             _isUp = _direction == Direction::UP;
 
       const DurationElement* cr1 = _elements.front();
-      while (cr1->type() == ElementType::TUPLET) {
+      while (cr1->type() == Element::Type::TUPLET) {
             const Tuplet* t = static_cast<const Tuplet*>(cr1);
             if (t->elements().empty())
                   break;
             cr1 = t->elements().front();
             }
       const DurationElement* cr2 = _elements.back();
-      while (cr2->type() == ElementType::TUPLET) {
+      while (cr2->type() == Element::Type::TUPLET) {
             const Tuplet* t = static_cast<const Tuplet*>(cr2);
             if (t->elements().empty())
                   break;
@@ -181,7 +181,7 @@ void Tuplet::layout()
       if (_bracketType == BracketType::AUTO_BRACKET) {
             _hasBracket = false;
             foreach (DurationElement* e, _elements) {
-                  if (e->type() == ElementType::TUPLET || e->type() == ElementType::REST) {
+                  if (e->type() == Element::Type::TUPLET || e->type() == Element::Type::REST) {
                         _hasBracket = true;
                         break;
                         }
@@ -230,7 +230,7 @@ void Tuplet::layout()
       qreal xx1 = p1.x(); // use to center the number on the beam
 
       if (_isUp) {
-            if (cr1->type() == ElementType::CHORD) {
+            if (cr1->type() == Element::Type::CHORD) {
                   const Chord* chord1 = static_cast<const Chord*>(cr1);
                   Stem* stem = chord1->stem();
                   if (stem)
@@ -254,7 +254,7 @@ void Tuplet::layout()
                         }
                   }
 
-            if (cr2->type() == ElementType::CHORD) {
+            if (cr2->type() == Element::Type::CHORD) {
                   const Chord* chord2 = static_cast<const Chord*>(cr2);
                   Stem* stem = chord2->stem();
                   if (stem && chord2->up()) {
@@ -273,13 +273,13 @@ void Tuplet::layout()
             // special case: one of the bracket endpoints is
             // a rest
             //
-            if (cr1->type() != ElementType::CHORD && cr2->type() == ElementType::CHORD) {
+            if (cr1->type() != Element::Type::CHORD && cr2->type() == Element::Type::CHORD) {
                   if (p2.y() < p1.y())
                         p1.setY(p2.y());
                   else
                         p2.setY(p1.y());
                   }
-            else if (cr1->type() == ElementType::CHORD && cr2->type() != ElementType::CHORD) {
+            else if (cr1->type() == Element::Type::CHORD && cr2->type() != Element::Type::CHORD) {
                   if (p1.y() < p2.y())
                         p2.setY(p1.y());
                   else
@@ -317,7 +317,7 @@ void Tuplet::layout()
                   d = (p2.y() - p1.y())/(p2.x() - p1.x());
                   for (int i = 1; i < (n-1); ++i) {
                         Element* e = _elements[i];
-                        if (e->type() == ElementType::CHORD) {
+                        if (e->type() == Element::Type::CHORD) {
                               const Chord* chord = static_cast<const Chord*>(e);
                               const Stem* stem = chord->stem();
                               if (stem) {
@@ -336,7 +336,7 @@ void Tuplet::layout()
                   }
             }
       else {
-            if (cr1->type() == ElementType::CHORD) {
+            if (cr1->type() == Element::Type::CHORD) {
                   const Chord* chord1 = static_cast<const Chord*>(cr1);
                   Stem* stem = chord1->stem();
                   if (stem)
@@ -360,7 +360,7 @@ void Tuplet::layout()
                   }
 
 
-            if (cr2->type() == ElementType::CHORD) {
+            if (cr2->type() == Element::Type::CHORD) {
                   const Chord* chord2 = static_cast<const Chord*>(cr2);
                   Stem* stem = chord2->stem();
                   if (stem && !chord2->up()) {
@@ -382,13 +382,13 @@ void Tuplet::layout()
             // special case: one of the bracket endpoints is
             // a rest
             //
-            if (cr1->type() != ElementType::CHORD && cr2->type() == ElementType::CHORD) {
+            if (cr1->type() != Element::Type::CHORD && cr2->type() == Element::Type::CHORD) {
                   if (p2.y() > p1.y())
                         p1.setY(p2.y());
                   else
                         p2.setY(p1.y());
                   }
-            else if (cr1->type() == ElementType::CHORD && cr2->type() != ElementType::CHORD) {
+            else if (cr1->type() == Element::Type::CHORD && cr2->type() != Element::Type::CHORD) {
                   if (p1.y() > p2.y())
                         p2.setY(p1.y());
                   else
@@ -424,7 +424,7 @@ void Tuplet::layout()
                   qreal d  = (p2.y() - p1.y())/(p2.x() - p1.x());
                   for (int i = 1; i < (n-1); ++i) {
                         Element* e = _elements[i];
-                        if (e->type() == ElementType::CHORD) {
+                        if (e->type() == Element::Type::CHORD) {
                               const Chord* chord = static_cast<const Chord*>(e);
                               const Stem* stem = chord->stem();
                               if (stem) {
@@ -684,12 +684,12 @@ void Tuplet::add(Element* e)
 #endif
 
       switch(e->type()) {
-            case ElementType::TEXT:
+            case Element::Type::TEXT:
                   _number = static_cast<Text*>(e);
                   break;
-            case ElementType::CHORD:
-            case ElementType::REST:
-            case ElementType::TUPLET: {
+            case Element::Type::CHORD:
+            case Element::Type::REST:
+            case Element::Type::TUPLET: {
                   bool found = false;
                   DurationElement* de = static_cast<DurationElement*>(e);
                   int tick = de->tick();
@@ -725,13 +725,13 @@ void Tuplet::add(Element* e)
 void Tuplet::remove(Element* e)
       {
       switch(e->type()) {
-            case ElementType::TEXT:
+            case Element::Type::TEXT:
                   if (e == _number)
                         _number = 0;
                   break;
-            case ElementType::CHORD:
-            case ElementType::REST:
-            case ElementType::TUPLET:
+            case Element::Type::CHORD:
+            case Element::Type::REST:
+            case Element::Type::TUPLET:
                   if (!_elements.removeOne(static_cast<DurationElement*>(e))) {
                         qDebug("Tuplet::remove: cannot find element <%s>", e->name());
                         qDebug("  elements %d", _elements.size());

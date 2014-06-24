@@ -52,13 +52,13 @@ static bool needsStaff(Element* e)
       if (e == 0)
             return false;
       switch(e->type()) {
-            case ElementType::CHORD:
-            case ElementType::BAR_LINE:
-            case ElementType::CLEF:
-            case ElementType::KEYSIG:
-            case ElementType::TIMESIG:
-            case ElementType::REST:
-            case ElementType::BAGPIPE_EMBELLISHMENT:
+            case Element::Type::CHORD:
+            case Element::Type::BAR_LINE:
+            case Element::Type::CLEF:
+            case Element::Type::KEYSIG:
+            case Element::Type::TIMESIG:
+            case Element::Type::REST:
+            case Element::Type::BAGPIPE_EMBELLISHMENT:
                   return true;
             default:
                   return false;
@@ -316,7 +316,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             }
       else if (sel.isRange()) {
             // TODO: check for other element types:
-            if (element->type() == ElementType::BAR_LINE) {
+            if (element->type() == Element::Type::BAR_LINE) {
                   // TODO: apply to multiple measures
                   Measure* m = sel.startSegment()->measure();
                   QRectF r = m->staffabbox(sel.staffStart());
@@ -333,14 +333,14 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                               Element* e = s->element(track);
                               if (e == 0)
                                     continue;
-                              if (e->type() == ElementType::CHORD) {
+                              if (e->type() == Element::Type::CHORD) {
                                     Chord* chord = static_cast<Chord*>(e);
                                     foreach(Note* n, chord->notes())
                                           applyDrop(score, viewer, n, element);
                                     }
                               else {
                                     // do not apply articulation to barline in a range selection
-                                    if(e->type() != ElementType::BAR_LINE || element->type() != ElementType::ARTICULATION)
+                                    if(e->type() != Element::Type::BAR_LINE || element->type() != Element::Type::ARTICULATION)
                                           applyDrop(score, viewer, e, element);
                                     }
                               }
@@ -519,7 +519,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
       cell->mag       = mag;
       cell->readOnly  = false;
       update();
-      if (s && s->type() == ElementType::ICON) {
+      if (s && s->type() == Element::Type::ICON) {
             Icon* icon = static_cast<Icon*>(s);
             connect(getAction(icon->action()), SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
             }
@@ -623,7 +623,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             if (el == 0)
                   continue;
             bool drawStaff = cells[idx]->drawStaff;
-            if (el->type() == ElementType::ICON) {
+            if (el->type() == Element::Type::ICON) {
                   int x      = rShift.x();
                   int y      = rShift.y();
                   Icon* _icon = static_cast<Icon*>(el);
@@ -677,7 +677,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
                   QColor color;
                   if (idx != selectedIdx) {
                         // show voice colors for notes
-                        if (el->type() == ElementType::CHORD) {
+                        if (el->type() == Element::Type::CHORD) {
                               el->setSelected(true);
                               color = el->curColor();
                               }
@@ -817,9 +817,9 @@ void Palette::dropEvent(QDropEvent* event)
             XmlReader xml(data);
             QPointF dragOffset;
             Fraction duration;
-            ElementType type = Element::readType(xml, &dragOffset, &duration);
+            Element::Type type = Element::readType(xml, &dragOffset, &duration);
 
-            if (type == ElementType::SYMBOL) {
+            if (type == Element::Type::SYMBOL) {
                   Symbol* symbol = new Symbol(gscore);
                   symbol->read(xml);
                   e = symbol;
@@ -828,18 +828,18 @@ void Palette::dropEvent(QDropEvent* event)
                   e = Element::create(type, gscore);
                   if (e) {
                         e->read(xml);
-                        if (e->type() == ElementType::TEXTLINE
-                           || e->type() == ElementType::HAIRPIN
-                           || e->type() == ElementType::VOLTA
-                           || e->type() == ElementType::OTTAVA
-                           || e->type() == ElementType::PEDAL
-                           || e->type() == ElementType::TRILL
+                        if (e->type() == Element::Type::TEXTLINE
+                           || e->type() == Element::Type::HAIRPIN
+                           || e->type() == Element::Type::VOLTA
+                           || e->type() == Element::Type::OTTAVA
+                           || e->type() == Element::Type::PEDAL
+                           || e->type() == Element::Type::TRILL
                            ) {
                               SLine* tl = static_cast<SLine*>(e);
                               tl->setLen(gscore->spatium() * 7);
                               tl->setTrack(0);
                               }
-                        else if (e->type() == ElementType::SLUR || e->type() == ElementType::TIE) {
+                        else if (e->type() == Element::Type::SLUR || e->type() == Element::Type::TIE) {
                               SlurTie* st = static_cast<SlurTie*>(e);
                               st->setTrack(0);
                               }
@@ -1067,7 +1067,7 @@ void Palette::write(const QString& p)
       QSet<ImageStoreItem*> images;
       int n = cells.size();
       for (int i = 0; i < n; ++i) {
-            if (cells[i] == 0 || cells[i]->element == 0 || cells[i]->element->type() != ElementType::IMAGE)
+            if (cells[i] == 0 || cells[i]->element == 0 || cells[i]->element->type() != Element::Type::IMAGE)
                   continue;
             images.insert(static_cast<Image*>(cells[i]->element)->storeItem());
             }
@@ -1175,7 +1175,7 @@ void Palette::read(XmlReader& e)
                                     }
                               else {
                                     cell->element->read(e);
-                                    if (cell->element->type() == ElementType::ICON) {
+                                    if (cell->element->type() == Element::Type::ICON) {
                                           Icon* icon = static_cast<Icon*>(cell->element);
                                           QAction* ac = getAction(icon->action());
                                           if (ac) {
@@ -1262,7 +1262,7 @@ void Palette::actionToggled(bool /*val*/)
       int nn = cells.size();
       for (int n = 0; n < nn; ++n) {
             Element* e = cells[n]->element;
-            if (e && e->type() == ElementType::ICON) {
+            if (e && e->type() == Element::Type::ICON) {
                   QAction* a = getAction(static_cast<Icon*>(e)->action());
                   if (a->isChecked()) {
                         selectedIdx = n;

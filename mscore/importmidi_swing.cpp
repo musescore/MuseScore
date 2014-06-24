@@ -83,7 +83,7 @@ void SwingDetector::reset()
 
 void SwingDetector::append(ChordRest *cr)
       {
-      if (cr->type() == ElementType::CHORD || cr->type() == ElementType::REST) {
+      if (cr->type() == Element::Type::CHORD || cr->type() == Element::Type::REST) {
             elements.push_back(cr);
             sumLen += ReducedFraction(cr->globalDuration());
             }
@@ -93,8 +93,8 @@ void SwingDetector::checkNormalSwing()
       {
       if (elements.size() == 2
                   && areAllTuplets()
-                  && (elements[0]->type() == ElementType::CHORD
-                      || elements[1]->type() == ElementType::CHORD)
+                  && (elements[0]->type() == Element::Type::CHORD
+                      || elements[1]->type() == Element::Type::CHORD)
                   && elements[0]->duration().reduced() == Fraction(1, 4)
                   && elements[1]->duration().reduced() == Fraction(1, 8))
             {
@@ -104,9 +104,9 @@ void SwingDetector::checkNormalSwing()
             applySwing();
             }
       else if (elements.size() == 3
-               && elements[0]->type() == ElementType::CHORD
-               && elements[1]->type() == ElementType::REST
-               && elements[2]->type() == ElementType::CHORD
+               && elements[0]->type() == Element::Type::CHORD
+               && elements[1]->type() == Element::Type::REST
+               && elements[2]->type() == Element::Type::CHORD
                && elements[0]->duration().reduced() == Fraction(1, 8)
                && elements[1]->duration().reduced() == Fraction(1, 8)
                && elements[2]->duration().reduced() == Fraction(1, 8))
@@ -120,9 +120,9 @@ void SwingDetector::checkShuffle()
       {
       if (elements.size() == 2
                   && areAllNonTuplets()
-                  && elements[0]->type() == ElementType::CHORD
-                  && (elements[1]->type() == ElementType::CHORD
-                      || elements[1]->type() == ElementType::REST)
+                  && elements[0]->type() == Element::Type::CHORD
+                  && (elements[1]->type() == Element::Type::CHORD
+                      || elements[1]->type() == Element::Type::REST)
                   && elements[0]->duration().reduced() == Fraction(3, 16)  // dotted 8th
                   && elements[1]->duration().reduced() == Fraction(1, 16))
             {

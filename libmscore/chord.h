@@ -105,11 +105,11 @@ class Chord : public ChordRest {
       ~Chord();
       Chord &operator=(const Chord&);
 
-      virtual Chord* clone() const     { return new Chord(*this); }
+      virtual Chord* clone() const       { return new Chord(*this); }
       virtual Chord* linkedClone();
 
       virtual void setScore(Score* s);
-      virtual ElementType type() const { return ElementType::CHORD; }
+      virtual Element::Type type() const { return Element::Type::CHORD; }
       virtual qreal mag() const;
 
       virtual void write(Xml& xml) const;
@@ -117,10 +117,10 @@ class Chord : public ChordRest {
       virtual void setSelected(bool f);
       virtual Element* drop(const DropData&);
 
-      void setStemDirection(Direction d)  { _stemDirection = d; }
-      Direction stemDirection() const     { return _stemDirection; }
+      void setStemDirection(Direction d) { _stemDirection = d; }
+      Direction stemDirection() const    { return _stemDirection; }
 
-      LedgerLine* ledgerLines()           { return _ledgerLines; }
+      LedgerLine* ledgerLines()          { return _ledgerLines; }
 
       void layoutStem1();
       void layoutHook1();     // create hook if required

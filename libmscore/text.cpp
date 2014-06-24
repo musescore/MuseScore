@@ -243,12 +243,12 @@ void TextBlock::layout(Text* t)
       Element* e = t->parent();
       if (e && t->layoutToParentWidth()) {
             layoutWidth = e->width();
-            if (e->type() == ElementType::HBOX || e->type() == ElementType::VBOX || e->type() == ElementType::TBOX) {
+            if (e->type() == Element::Type::HBOX || e->type() == Element::Type::VBOX || e->type() == Element::Type::TBOX) {
                   Box* b = static_cast<Box*>(e);
                   layoutWidth -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
                   lm = b->leftMargin() * MScore::DPMM;
                   }
-            else if (e->type() == ElementType::PAGE) {
+            else if (e->type() == Element::Type::PAGE) {
                   Page* p = static_cast<Page*>(e);
                   layoutWidth -= (p->lm() + p->rm());
                   lm = p->lm();
@@ -1174,13 +1174,13 @@ void Text::layout1()
       qreal h    = 0;
       if (parent()) {
             if (layoutToParentWidth()) {
-                  if (parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX || parent()->type() == ElementType::TBOX) {
+                  if (parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX || parent()->type() == Element::Type::TBOX) {
                         // consider inner margins of frame
                         Box* b = static_cast<Box*>(parent());
                         yoff = b->topMargin()  * MScore::DPMM;
                         h  = b->height() - yoff - b->bottomMargin() * MScore::DPMM;
                         }
-                  else if (parent()->type() == ElementType::PAGE) {
+                  else if (parent()->type() == Element::Type::PAGE) {
                         Page* p = static_cast<Page*>(parent());
                         h = p->height() - p->tm() - p->bm();
                         yoff = p->tm();
@@ -1522,13 +1522,13 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
                   break;
 
             case Qt::Key_Left:
-                  if (!movePosition(ctrlPressed ? QTextCursor::StartOfLine : QTextCursor::Left, mm) && type() == ElementType::LYRICS)
+                  if (!movePosition(ctrlPressed ? QTextCursor::StartOfLine : QTextCursor::Left, mm) && type() == Element::Type::LYRICS)
                         return false;
                   s.clear();
                   break;
 
             case Qt::Key_Right:
-                  if (!movePosition(ctrlPressed ? QTextCursor::EndOfLine : QTextCursor::Right, mm) && type() == ElementType::LYRICS)
+                  if (!movePosition(ctrlPressed ? QTextCursor::EndOfLine : QTextCursor::Right, mm) && type() == Element::Type::LYRICS)
                         return false;
                   s.clear();
                   break;
@@ -1608,7 +1608,7 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
       if (!s.isEmpty())
             insertText(s);
       layout1();
-      if (parent() && parent()->type() == ElementType::TBOX) {
+      if (parent() && parent()->type() == Element::Type::TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
             tbox->layout();
             System* system = tbox->system();
@@ -2080,7 +2080,7 @@ void Text::insertSym(SymId id)
 
 QRectF Text::pageRectangle() const
       {
-      if (parent() && (parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX || parent()->type() == ElementType::TBOX)) {
+      if (parent() && (parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX || parent()->type() == Element::Type::TBOX)) {
             Box* box = static_cast<Box*>(parent());
             QRectF r = box->abbox();
             qreal x = r.x() + box->leftMargin() * MScore::DPMM;
@@ -2093,7 +2093,7 @@ QRectF Text::pageRectangle() const
 
             return QRectF(x, y, w, h);
             }
-      if (parent() && parent()->type() == ElementType::PAGE) {
+      if (parent() && parent()->type() == Element::Type::PAGE) {
             Page* box  = static_cast<Page*>(parent());
             QRectF r = box->abbox();
             qreal x = r.x() + box->lm();
@@ -2169,19 +2169,19 @@ QVariant Text::propertyDefault(P_ID id) const
       {
       int idx;
       switch (type()) {
-            case ElementType::DYNAMIC:           idx = TextStyleType::DYNAMICS; break;
-            case ElementType::FIGURED_BASS:      idx = TextStyleType::FIGURED_BASS; break;
-            case ElementType::FINGERING:         idx = TextStyleType::FINGERING; break;
-            case ElementType::HARMONY:           idx = TextStyleType::HARMONY; break;
-            case ElementType::INSTRUMENT_CHANGE: idx = TextStyleType::INSTRUMENT_CHANGE; break;
-            // case ElementType::INSTRUMENT_NAME: would need to differentiate long & short
+            case Element::Type::DYNAMIC:           idx = TextStyleType::DYNAMICS; break;
+            case Element::Type::FIGURED_BASS:      idx = TextStyleType::FIGURED_BASS; break;
+            case Element::Type::FINGERING:         idx = TextStyleType::FINGERING; break;
+            case Element::Type::HARMONY:           idx = TextStyleType::HARMONY; break;
+            case Element::Type::INSTRUMENT_CHANGE: idx = TextStyleType::INSTRUMENT_CHANGE; break;
+            // case Element::Type::INSTRUMENT_NAME: would need to differentiate long & short
             // probably best handle this with another override
-            case ElementType::JUMP:              idx = TextStyleType::REPEAT; break;
-            case ElementType::LYRICS:            idx = TextStyleType::LYRIC1; break;
-            case ElementType::MARKER:            idx = TextStyleType::REPEAT; break;
-            case ElementType::REHEARSAL_MARK:    idx = TextStyleType::REHEARSAL_MARK; break;
-            case ElementType::STAFF_TEXT:        idx = TextStyleType::STAFF; break;
-            case ElementType::TEMPO_TEXT:        idx = TextStyleType::TEMPO; break;
+            case Element::Type::JUMP:              idx = TextStyleType::REPEAT; break;
+            case Element::Type::LYRICS:            idx = TextStyleType::LYRIC1; break;
+            case Element::Type::MARKER:            idx = TextStyleType::REPEAT; break;
+            case Element::Type::REHEARSAL_MARK:    idx = TextStyleType::REHEARSAL_MARK; break;
+            case Element::Type::STAFF_TEXT:        idx = TextStyleType::STAFF; break;
+            case Element::Type::TEMPO_TEXT:        idx = TextStyleType::TEMPO; break;
             default:
                   // if we cannot determine type, give up
                   return Element::propertyDefault(id);
@@ -2209,7 +2209,7 @@ void Text::paste()
             qDebug("Text::paste() <%s>", qPrintable(txt));
       insertText(txt);
       layoutEdit();
-      bool lo = type() == ElementType::INSTRUMENT_NAME;
+      bool lo = type() == Element::Type::INSTRUMENT_NAME;
       score()->setLayoutAll(lo);
       score()->setUpdateAll();
       score()->end();
@@ -2237,7 +2237,7 @@ bool Text::mousePress(const QPointF& p, QMouseEvent* ev)
 void Text::layoutEdit()
       {
       layout();
-      if (parent() && parent()->type() == ElementType::TBOX) {
+      if (parent() && parent()->type() == Element::Type::TBOX) {
             TBox* tbox = static_cast<TBox*>(parent());
             tbox->layout();
             System* system = tbox->system();
@@ -2257,8 +2257,8 @@ void Text::layoutEdit()
 
 bool Text::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      ElementType type = e->type();
-      return type == ElementType::SYMBOL;
+      Element::Type type = e->type();
+      return type == Element::Type::SYMBOL;
       }
 
 //---------------------------------------------------------
@@ -2270,7 +2270,7 @@ Element* Text::drop(const DropData& data)
       Element* e = data.element;
 
       switch(e->type()) {
-            case ElementType::SYMBOL:
+            case Element::Type::SYMBOL:
                   {
                   SymId id = static_cast<Symbol*>(e)->sym();
                   delete e;

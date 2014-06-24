@@ -52,8 +52,8 @@ class Tremolo : public Element {
       Tremolo(Score*);
       Tremolo(const Tremolo&);
       Tremolo &operator=(const Tremolo&);
-      virtual Tremolo* clone() const   { return new Tremolo(*this); }
-      virtual ElementType type() const { return ElementType::TREMOLO; }
+      virtual Tremolo* clone() const     { return new Tremolo(*this); }
+      virtual Element::Type type() const { return Element::Type::TREMOLO; }
 
       QString tremoloTypeName() const;
       void setTremoloType(const QString& s);

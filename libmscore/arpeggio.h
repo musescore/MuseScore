@@ -50,7 +50,7 @@ class Arpeggio : public Element {
    public:
       Arpeggio(Score* s);
       virtual Arpeggio* clone() const      { return new Arpeggio(*this); }
-      virtual ElementType type() const     { return ElementType::ARPEGGIO; }
+      virtual Element::Type type() const   { return Element::Type::ARPEGGIO; }
       ArpeggioType arpeggioType() const    { return _arpeggioType; }
       void setArpeggioType(ArpeggioType v) { _arpeggioType = v;    }
 

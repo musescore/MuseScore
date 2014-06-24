@@ -57,11 +57,11 @@ class Jump : public Text {
       void setJumpType(JumpType t);
       JumpType jumpType() const;
 
-      virtual Jump* clone() const      { return new Jump(*this); }
-      virtual ElementType type() const { return ElementType::JUMP; }
+      virtual Jump* clone()          const { return new Jump(*this); }
+      virtual Element::Type type()   const { return Element::Type::JUMP; }
 
       virtual void read(XmlReader&);
-      virtual void write(Xml& xml) const;
+      virtual void write(Xml& xml)   const;
 
       QString jumpTo()               const { return _jumpTo;     }
       QString playUntil()            const { return _playUntil;  }

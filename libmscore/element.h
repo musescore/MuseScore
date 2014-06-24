@@ -129,108 +129,6 @@ struct ElementName {
       ElementName(const char* _name, const char* _userName) : name(_name), userName(_userName) {}
       };
 
-//-------------------------------------------------------------------
-//    The value of this enum determines the "stacking order"
-//    of elements on the canvas.
-//   Note: keep in sync with array elementNames[] in element.cpp
-//-------------------------------------------------------------------
-
-enum class ElementType : char {
-      INVALID = 0,
-      SYMBOL,
-      TEXT,
-      INSTRUMENT_NAME,
-      SLUR_SEGMENT,
-      STAFF_LINES,
-      BAR_LINE,
-      STEM_SLASH,
-      LINE,
-      BRACKET,
-
-      ARPEGGIO,
-      ACCIDENTAL,
-      STEM,             // list STEM before NOTE: notes in TAB might 'break' stems
-      NOTE,             // and this requires stems to be drawn before notes
-      CLEF,             // elements from CLEF to TIMESIG need to be in the order
-      KEYSIG,           // in which they appear in a measure
-      AMBITUS,
-      TIMESIG,
-      REST,
-      BREATH,
-      GLISSANDO,
-
-      REPEAT_MEASURE,
-      IMAGE,
-      TIE,
-      ARTICULATION,
-      CHORDLINE,
-      DYNAMIC,
-      BEAM,
-      HOOK,
-      LYRICS,
-      FIGURED_BASS,
-
-      MARKER,
-      JUMP,
-      FINGERING,
-      TUPLET,
-      TEMPO_TEXT,
-      STAFF_TEXT,
-      REHEARSAL_MARK,
-      INSTRUMENT_CHANGE,
-      HARMONY,
-      FRET_DIAGRAM,
-      BEND,
-      TREMOLOBAR,
-      VOLTA,
-      HAIRPIN_SEGMENT,
-      OTTAVA_SEGMENT,
-      TRILL_SEGMENT,
-      TEXTLINE_SEGMENT,
-      VOLTA_SEGMENT,
-      PEDAL_SEGMENT,
-      LAYOUT_BREAK,
-      SPACER,
-      STAFF_STATE,
-      LEDGER_LINE,
-      NOTEHEAD,
-      NOTEDOT,
-      TREMOLO,
-      MEASURE,
-      SELECTION,
-      LASSO,
-      SHADOW_NOTE,
-      RUBBERBAND,
-      TAB_DURATION_SYMBOL,
-      FSYMBOL,
-      PAGE,
-      HAIRPIN,
-      OTTAVA,
-      PEDAL,
-      TRILL,
-      TEXTLINE,
-      NOTELINE,
-      SEGMENT,
-      SYSTEM,
-      COMPOUND,
-      CHORD,
-      SLUR,
-      ELEMENT,
-      ELEMENT_LIST,
-      STAFF_LIST,
-      MEASURE_LIST,
-      LAYOUT,
-      HBOX,
-      VBOX,
-      TBOX,
-      FBOX,
-      ACCIDENTAL_BRACKET,
-      ICON,
-      OSSIA,
-      BAGPIPE_EMBELLISHMENT,
-
-      MAXTYPE
-      };
 
 //-------------------------------------------------------------------
 //    @@ Element
@@ -239,7 +137,7 @@ enum class ElementType : char {
 ///     The Element class is the virtual base class of all
 ///     score layout elements.
 //
-//    @P type       Ms::ElementType         element type, read only
+//    @P type       Ms::Element::Type       element type, read only
 //    @P parent     Ms::Element*            parent in drawing hierarchy
 //    @P track      int
 //    @P color      QColor                  foreground color
@@ -255,11 +153,11 @@ enum class ElementType : char {
 
 class Element : public QObject {
       Q_OBJECT
-      Q_ENUMS(ElementType)
+      Q_ENUMS(Type)
       Q_ENUMS(Placement)
 
-      Q_PROPERTY(ElementType type                  READ type)
-      Q_PROPERTY(Element* parent                   READ parent     WRITE setParent)
+      Q_PROPERTY(Ms::Element::Type type            READ type)
+      Q_PROPERTY(Ms::Element* parent               READ parent     WRITE setParent)
       Q_PROPERTY(int track                         READ track      WRITE setTrack)
       Q_PROPERTY(QColor color                      READ color      WRITE undoSetColor)
       Q_PROPERTY(bool selected                     READ selected   WRITE setSelected)
@@ -281,6 +179,108 @@ class Element : public QObject {
       bool _visible;              ///< visibility attribute
 
   public:
+      //-------------------------------------------------------------------
+      //    The value of this enum determines the "stacking order"
+      //    of elements on the canvas.
+      //   Note: keep in sync with array elementNames[] in element.cpp
+      //-------------------------------------------------------------------
+      enum class Type : char {
+            INVALID = 0,
+            SYMBOL,
+            TEXT,
+            INSTRUMENT_NAME,
+            SLUR_SEGMENT,
+            STAFF_LINES,
+            BAR_LINE,
+            STEM_SLASH,
+            LINE,
+            BRACKET,
+
+            ARPEGGIO,
+            ACCIDENTAL,
+            STEM,             // list STEM before NOTE: notes in TAB might 'break' stems
+            NOTE,             // and this requires stems to be drawn before notes
+            CLEF,             // elements from CLEF to TIMESIG need to be in the order
+            KEYSIG,           // in which they appear in a measure
+            AMBITUS,
+            TIMESIG,
+            REST,
+            BREATH,
+            GLISSANDO,
+
+            REPEAT_MEASURE,
+            IMAGE,
+            TIE,
+            ARTICULATION,
+            CHORDLINE,
+            DYNAMIC,
+            BEAM,
+            HOOK,
+            LYRICS,
+            FIGURED_BASS,
+
+            MARKER,
+            JUMP,
+            FINGERING,
+            TUPLET,
+            TEMPO_TEXT,
+            STAFF_TEXT,
+            REHEARSAL_MARK,
+            INSTRUMENT_CHANGE,
+            HARMONY,
+            FRET_DIAGRAM,
+            BEND,
+            TREMOLOBAR,
+            VOLTA,
+            HAIRPIN_SEGMENT,
+            OTTAVA_SEGMENT,
+            TRILL_SEGMENT,
+            TEXTLINE_SEGMENT,
+            VOLTA_SEGMENT,
+            PEDAL_SEGMENT,
+            LAYOUT_BREAK,
+            SPACER,
+            STAFF_STATE,
+            LEDGER_LINE,
+            NOTEHEAD,
+            NOTEDOT,
+            TREMOLO,
+            MEASURE,
+            SELECTION,
+            LASSO,
+            SHADOW_NOTE,
+            RUBBERBAND,
+            TAB_DURATION_SYMBOL,
+            FSYMBOL,
+            PAGE,
+            HAIRPIN,
+            OTTAVA,
+            PEDAL,
+            TRILL,
+            TEXTLINE,
+            NOTELINE,
+            SEGMENT,
+            SYSTEM,
+            COMPOUND,
+            CHORD,
+            SLUR,
+            ELEMENT,
+            ELEMENT_LIST,
+            STAFF_LIST,
+            MEASURE_LIST,
+            LAYOUT,
+            HBOX,
+            VBOX,
+            TBOX,
+            FBOX,
+            ACCIDENTAL_BRACKET,
+            ICON,
+            OSSIA,
+            BAGPIPE_EMBELLISHMENT,
+
+            MAXTYPE
+            };
+
       enum class Placement : char {
             ABOVE, BELOW
             };
@@ -396,8 +396,8 @@ class Element : public QObject {
       virtual QPainterPath shape() const;
       virtual qreal baseLine() const          { return -height();       }
 
-      virtual ElementType type() const = 0;
-      virtual ElementType subType() const             { return type(); }  // for select gui
+      virtual Element::Type type() const = 0;
+      virtual Element::Type subType() const   { return type(); }  // for select gui
       bool isChordRest() const;
       bool isDurationElement() const;
       bool isSLine() const;
@@ -457,7 +457,7 @@ class Element : public QObject {
       void setColor(const QColor& c)     { _color = c;    }
       void undoSetColor(const QColor& c);
 
-      static ElementType readType(XmlReader& node, QPointF*, Fraction*);
+      static Element::Type readType(XmlReader& node, QPointF*, Fraction*);
 
       QByteArray mimeData(const QPointF&) const;
 /**
@@ -509,9 +509,9 @@ class Element : public QObject {
       QPointF startDragPosition() const           { return _startDragPosition; }
       void setStartDragPosition(const QPointF& v) { _startDragPosition = v; }
 
-      static const char* name(ElementType type);
-      Q_INVOKABLE static Ms::Element* create(Ms::ElementType type, Score*);
-      static ElementType name2type(const QStringRef&);
+      static const char* name(Element::Type type);
+      Q_INVOKABLE static Ms::Element* create(Ms::Element::Type type, Score*);
+      static Element::Type name2type(const QStringRef&);
       static Element* name2Element(const QStringRef&, Score*);
 
       void setFlag(ElementFlag f, bool v)  {
@@ -602,7 +602,7 @@ class StaffLines : public Element {
    public:
       StaffLines(Score*);
       virtual StaffLines* clone() const    { return new StaffLines(*this); }
-      virtual ElementType type() const     { return ElementType::STAFF_LINES; }
+      virtual Element::Type type() const   { return Element::Type::STAFF_LINES; }
       virtual void layout();
 
       Measure* measure() const             { return (Measure*)parent(); }
@@ -634,8 +634,8 @@ class Line : public Element {
       Line(Score*, bool vertical);
       Line &operator=(const Line&);
 
-      virtual Line* clone() const { return new Line(*this); }
-      virtual ElementType type() const { return ElementType::LINE; }
+      virtual Line* clone() const        { return new Line(*this); }
+      virtual Element::Type type() const { return Element::Type::LINE; }
       virtual void layout();
 
       virtual void draw(QPainter*) const;
@@ -666,7 +666,7 @@ class Compound : public Element {
    public:
       Compound(Score*);
       Compound(const Compound&);
-      virtual ElementType type() const = 0;
+      virtual Element::Type type() const = 0;
 
       virtual void draw(QPainter*) const;
       virtual void addElement(Element*, qreal x, qreal y);
@@ -687,8 +687,8 @@ class RubberBand : public Element {
 
    public:
       RubberBand(Score* s) : Element(s) {}
-      virtual RubberBand* clone() const { return new RubberBand(*this); }
-      virtual ElementType type() const { return ElementType::RUBBERBAND; }
+      virtual RubberBand* clone() const  { return new RubberBand(*this); }
+      virtual Element::Type type() const { return Element::Type::RUBBERBAND; }
       virtual void draw(QPainter*) const;
 
       void set(const QPointF& p1, const QPointF& p2) { _p1 = p1; _p2 = p2; }
@@ -702,7 +702,7 @@ extern void collectElements(void* data, Element* e);
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::ElementType);
+Q_DECLARE_METATYPE(Ms::Element::Type);
 Q_DECLARE_METATYPE(Ms::Element::Placement);
 
 #endif

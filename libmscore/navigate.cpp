@@ -72,7 +72,7 @@ ChordRest* nextChordRest(ChordRest* cr)
       for (Segment* seg = cr->segment()->next1(st); seg; seg = seg->next1(st)) {
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e) {
-                  if (e->type() == ElementType::CHORD) {
+                  if (e->type() == Element::Type::CHORD) {
                         Chord* c = static_cast<Chord*>(e);
                         if (!c->graceNotes().empty())
                               return c->graceNotes().front();
@@ -122,7 +122,7 @@ ChordRest* prevChordRest(ChordRest* cr)
                   }
             }
       else {
-            if (cr->type() == ElementType::CHORD) {
+            if (cr->type() == Element::Type::CHORD) {
                   Chord* c = static_cast<Chord*>(cr);
                   if (!c->graceNotes().empty())
                         return c->graceNotes().back();
@@ -150,9 +150,9 @@ ChordRest* prevChordRest(ChordRest* cr)
 Element* Score::upAlt(Element* element)
       {
       Element* re = 0;
-      if (element->type() == ElementType::REST)
+      if (element->type() == Element::Type::REST)
             re = prevTrack(static_cast<Rest*>(element));
-      else if (element->type() == ElementType::NOTE) {
+      else if (element->type() == Element::Type::NOTE) {
             Chord* chord = static_cast<Note*>(element)->chord();
             const QList<Note*>& notes = chord->notes();
             int idx = notes.indexOf(static_cast<Note*>(element));
@@ -168,7 +168,7 @@ Element* Score::upAlt(Element* element)
             }
       if (re == 0)
             return 0;
-      if (re->type() == ElementType::CHORD)
+      if (re->type() == Element::Type::CHORD)
             re = static_cast<Chord*>(re)->notes().front();
       return re;
       }
@@ -192,9 +192,9 @@ Note* Score::upAltCtrl(Note* note) const
 Element* Score::downAlt(Element* element)
       {
       Element* re = 0;
-      if (element->type() == ElementType::REST)
+      if (element->type() == Element::Type::REST)
             re = nextTrack(static_cast<Rest*>(element));
-      else if (element->type() == ElementType::NOTE) {
+      else if (element->type() == Element::Type::NOTE) {
             Chord* chord = static_cast<Note*>(element)->chord();
             const QList<Note*>& notes = chord->notes();
             int idx = notes.indexOf(static_cast<Note*>(element));
@@ -210,7 +210,7 @@ Element* Score::downAlt(Element* element)
             }
       if (re == 0)
             return 0;
-      if (re->type() == ElementType::CHORD)
+      if (re->type() == Element::Type::CHORD)
             re = static_cast<Chord*>(re)->notes().back();
       return re;
       }
@@ -240,7 +240,7 @@ ChordRest* Score::upStaff(ChordRest* cr)
             Element* el = segment->element(track);
             if (!el)
                   continue;
-            if (el->type() == ElementType::NOTE)
+            if (el->type() == Element::Type::NOTE)
                   el = static_cast<Note*>(el)->chord();
             if (el->isChordRest())
                   return static_cast<ChordRest*>(el);
@@ -264,7 +264,7 @@ ChordRest* Score::downStaff(ChordRest* cr)
             Element* el = segment->element(track);
             if (!el)
                   continue;
-            if (el->type() == ElementType::NOTE)
+            if (el->type() == Element::Type::NOTE)
                   el = static_cast<Note*>(el)->chord();
             if (el->isChordRest())
                   return static_cast<ChordRest*>(el);
@@ -400,7 +400,7 @@ ChordRest* Score::prevMeasure(ChordRest* element)
             return 0;
 
       MeasureBase* mb = element->measure()->prev();
-      while (mb && mb->type() != ElementType::MEASURE)
+      while (mb && mb->type() != Element::Type::MEASURE)
             mb = mb->prev();
 
       Measure* measure = static_cast<Measure*>(mb);

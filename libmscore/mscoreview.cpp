@@ -40,7 +40,7 @@ Element* MuseScoreView::elementAt(const QPointF& p)
             qDebug("  %s %d", e->name(), e->selected());
 #endif
       Element* e = el.value(0);
-      if (e && (e->type() == ElementType::PAGE))
+      if (e && (e->type() == Element::Type::PAGE))
             e = el.value(1);
       return e;
       }

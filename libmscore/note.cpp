@@ -550,20 +550,20 @@ void Note::add(Element* e)
       e->setTrack(track());
 
       switch(e->type()) {
-            case ElementType::NOTEDOT:
+            case Element::Type::NOTEDOT:
                   {
                   NoteDot* dot = static_cast<NoteDot*>(e);
                   _dots[dot->idx()] = dot;
                   }
                   break;
-            case ElementType::SYMBOL:
-            case ElementType::IMAGE:
-            case ElementType::FINGERING:
-            case ElementType::TEXT:
-            case ElementType::BEND:
+            case Element::Type::SYMBOL:
+            case Element::Type::IMAGE:
+            case Element::Type::FINGERING:
+            case Element::Type::TEXT:
+            case Element::Type::BEND:
                   _el.push_back(e);
                   break;
-            case ElementType::TIE:
+            case Element::Type::TIE:
                   {
                   Tie* tie = static_cast<Tie*>(e);
                   tie->setStartNote(this);
@@ -579,10 +579,10 @@ void Note::add(Element* e)
                         }
                   }
                   break;
-            case ElementType::ACCIDENTAL:
+            case Element::Type::ACCIDENTAL:
                   _accidental = static_cast<Accidental*>(e);
                   break;
-            case ElementType::TEXTLINE:
+            case Element::Type::TEXTLINE:
                   addSpanner(static_cast<Spanner*>(e));
                   break;
             default:
@@ -598,7 +598,7 @@ void Note::add(Element* e)
 void Note::remove(Element* e)
       {
       switch(e->type()) {
-            case ElementType::NOTEDOT:
+            case Element::Type::NOTEDOT:
                   for (int i = 0; i < 3; ++i) {
                         if (_dots[i] == e) {
                               _dots[i] = 0;
@@ -607,15 +607,15 @@ void Note::remove(Element* e)
                         }
                   break;
 
-            case ElementType::TEXT:
-            case ElementType::SYMBOL:
-            case ElementType::IMAGE:
-            case ElementType::FINGERING:
-            case ElementType::BEND:
+            case Element::Type::TEXT:
+            case Element::Type::SYMBOL:
+            case Element::Type::IMAGE:
+            case Element::Type::FINGERING:
+            case Element::Type::BEND:
                   if (!_el.remove(e))
                         qDebug("Note::remove(): cannot find %s", e->name());
                   break;
-            case ElementType::TIE:
+            case Element::Type::TIE:
                   {
                   Tie* tie = static_cast<Tie*>(e);
                   setTieFor(0);
@@ -636,11 +636,11 @@ void Note::remove(Element* e)
                   }
                   break;
 
-            case ElementType::ACCIDENTAL:
+            case Element::Type::ACCIDENTAL:
                   _accidental = 0;
                   break;
 
-            case ElementType::TEXTLINE:
+            case Element::Type::TEXTLINE:
                   removeSpanner(static_cast<Spanner*>(e));
                   break;
 
@@ -1011,7 +1011,7 @@ void Note::read(XmlReader& e)
                   Spanner* sp = e.findSpanner(id);
                   if (sp) {
                         sp->setEndElement(this);
-                        if (sp->type() == ElementType::TIE)
+                        if (sp->type() == Element::Type::TIE)
                               _tieBack = static_cast<Tie*>(sp);
                         else
                               addSpannerBack(sp);
@@ -1170,49 +1170,49 @@ void Note::endDrag()
 
 bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      ElementType type = e->type();
-      return (type == ElementType::ARTICULATION
-         || type == ElementType::CHORDLINE
-         || type == ElementType::TEXT
-         || type == ElementType::REHEARSAL_MARK
-         || type == ElementType::FINGERING
-         || type == ElementType::ACCIDENTAL
-         || type == ElementType::BREATH
-         || type == ElementType::ARPEGGIO
-         || type == ElementType::NOTEHEAD
-         || type == ElementType::NOTE
-         || type == ElementType::TREMOLO
-         || type == ElementType::STAFF_STATE
-         || type == ElementType::INSTRUMENT_CHANGE
-         || type == ElementType::IMAGE
-         || type == ElementType::CHORD
-         || type == ElementType::HARMONY
-         || type == ElementType::DYNAMIC
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
-         || (noteType() == NoteType::NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS)
-         || (type == ElementType::SYMBOL)
-         || (type == ElementType::CLEF)
-         || (type == ElementType::BAR_LINE)
-         || (type == ElementType::GLISSANDO)
-         || (type == ElementType::SLUR)
-         || (type == ElementType::STAFF_TEXT)
-         || (type == ElementType::TEMPO_TEXT)
-         || (type == ElementType::BEND && (staff()->isTabStaff()))
-         || (type == ElementType::FRET_DIAGRAM));
+      Element::Type type = e->type();
+      return (type == Element::Type::ARTICULATION
+         || type == Element::Type::CHORDLINE
+         || type == Element::Type::TEXT
+         || type == Element::Type::REHEARSAL_MARK
+         || type == Element::Type::FINGERING
+         || type == Element::Type::ACCIDENTAL
+         || type == Element::Type::BREATH
+         || type == Element::Type::ARPEGGIO
+         || type == Element::Type::NOTEHEAD
+         || type == Element::Type::NOTE
+         || type == Element::Type::TREMOLO
+         || type == Element::Type::STAFF_STATE
+         || type == Element::Type::INSTRUMENT_CHANGE
+         || type == Element::Type::IMAGE
+         || type == Element::Type::CHORD
+         || type == Element::Type::HARMONY
+         || type == Element::Type::DYNAMIC
+         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
+         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
+      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
+      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
+      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
+         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
+         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
+         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
+         || (noteType() == NoteType::NORMAL && type == Element::Type::BAGPIPE_EMBELLISHMENT)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS)
+         || (type == Element::Type::SYMBOL)
+         || (type == Element::Type::CLEF)
+         || (type == Element::Type::BAR_LINE)
+         || (type == Element::Type::GLISSANDO)
+         || (type == Element::Type::SLUR)
+         || (type == Element::Type::STAFF_TEXT)
+         || (type == Element::Type::TEMPO_TEXT)
+         || (type == Element::Type::BEND && (staff()->isTabStaff()))
+         || (type == Element::Type::FRET_DIAGRAM));
       }
 
 //---------------------------------------------------------
@@ -1225,16 +1225,16 @@ Element* Note::drop(const DropData& data)
 
       Chord* ch = chord();
       switch(e->type()) {
-            case ElementType::REHEARSAL_MARK:
+            case Element::Type::REHEARSAL_MARK:
                   return ch->drop(data);
 
-            case ElementType::SYMBOL:
-            case ElementType::IMAGE:
+            case Element::Type::SYMBOL:
+            case Element::Type::IMAGE:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   return e;
 
-            case ElementType::FINGERING:
+            case Element::Type::FINGERING:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   {
@@ -1245,22 +1245,22 @@ Element* Note::drop(const DropData& data)
                   }
                   return e;
 
-            case ElementType::SLUR:
+            case Element::Type::SLUR:
                   delete e;
                   data.view->cmdAddSlur(this, 0);
                   return 0;
 
-            case ElementType::LYRICS:
+            case Element::Type::LYRICS:
                   e->setParent(ch);
                   e->setTrack(track());
                   score()->undoAddElement(e);
                   return e;
 
-            case ElementType::ACCIDENTAL:
+            case Element::Type::ACCIDENTAL:
                   score()->changeAccidental(this, static_cast<Accidental*>(e)->accidentalType());
                   break;
 
-            case ElementType::BEND:
+            case Element::Type::BEND:
                   {
                   Bend* b = static_cast<Bend*>(e);
                   b->setParent(this);
@@ -1269,7 +1269,7 @@ Element* Note::drop(const DropData& data)
                   }
                   return e;
 
-            case ElementType::NOTEHEAD:
+            case Element::Type::NOTEHEAD:
                   {
                   NoteHead* s = static_cast<NoteHead*>(e);
                   NoteHeadGroup group = s->headGroup();
@@ -1297,7 +1297,7 @@ Element* Note::drop(const DropData& data)
                   }
                   break;
 
-            case ElementType::ICON:
+            case Element::Type::ICON:
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case IconType::ACCIACCATURA:
@@ -1351,7 +1351,7 @@ Element* Note::drop(const DropData& data)
                   delete e;
                   break;
 
-            case ElementType::BAGPIPE_EMBELLISHMENT:
+            case Element::Type::BAGPIPE_EMBELLISHMENT:
                   {
                   BagpipeEmbellishment* b = static_cast<BagpipeEmbellishment*>(e);
                   noteList nl = b->getNoteList();
@@ -1365,7 +1365,7 @@ Element* Note::drop(const DropData& data)
                   delete e;
                   break;
 
-            case ElementType::NOTE:
+            case Element::Type::NOTE:
                   {
                   Chord* ch = chord();
                   if (ch->noteType() != NoteType::NORMAL) {
@@ -1378,7 +1378,7 @@ Element* Note::drop(const DropData& data)
                   }
                   break;
 
-            case ElementType::GLISSANDO:
+            case Element::Type::GLISSANDO:
                   {
                   Segment* s = ch->segment();
                   s = s->next1();
@@ -1393,7 +1393,7 @@ Element* Note::drop(const DropData& data)
                         return 0;
                         }
                   ChordRest* cr1 = static_cast<ChordRest*>(s->element(track()));
-                  if (cr1 == 0 || cr1->type() != ElementType::CHORD) {
+                  if (cr1 == 0 || cr1->type() != Element::Type::CHORD) {
                         qDebug("no second note for glissando found, track %d", track());
                         delete e;
                         return 0;
@@ -1409,7 +1409,7 @@ Element* Note::drop(const DropData& data)
                   }
                   break;
 
-            case ElementType::CHORD:
+            case Element::Type::CHORD:
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
@@ -1566,7 +1566,7 @@ void Note::layout2()
                   continue;
             e->setMag(mag());
             e->layout();
-            if (e->type() == ElementType::SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
+            if (e->type() == Element::Type::SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
                   qreal w = headWidth();
                   if (staff()->isTabStaff()) {
                         StaffType* tab = staff()->staffType();

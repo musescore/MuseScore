@@ -81,10 +81,10 @@ class Dynamic : public Text {
    public:
       Dynamic(Score*);
       Dynamic(const Dynamic&);
-      virtual Dynamic* clone() const override   { return new Dynamic(*this); }
-      virtual ElementType type() const override { return ElementType::DYNAMIC; }
-      Segment* segment() const                  { return (Segment*)parent(); }
-      Measure* measure() const                  { return (Measure*)parent()->parent(); }
+      virtual Dynamic* clone() const override     { return new Dynamic(*this); }
+      virtual Element::Type type() const override { return Element::Type::DYNAMIC; }
+      Segment* segment() const                    { return (Segment*)parent(); }
+      Measure* measure() const                    { return (Measure*)parent()->parent(); }
 
       void setDynamicType(Type val)      { _dynamicType = val; }
       void setDynamicType(const QString&);

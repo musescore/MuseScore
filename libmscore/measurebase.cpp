@@ -83,7 +83,7 @@ MeasureBase::~MeasureBase()
 
 void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      if (type() == ElementType::MEASURE) {
+      if (type() == Element::Type::MEASURE) {
             foreach(Element* e, _el) {
                   if (score()->tagIsValid(e->tag())) {
                         if ((e->track() == -1) || ((Measure*)this)->visible(e->staffIdx()))
@@ -111,10 +111,10 @@ void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool a
 void MeasureBase::add(Element* e)
       {
       e->setParent(this);
-      if (e->type() == ElementType::LAYOUT_BREAK) {
+      if (e->type() == Element::Type::LAYOUT_BREAK) {
             LayoutBreak* b = static_cast<LayoutBreak*>(e);
             foreach (Element* ee, _el) {
-                  if (ee->type() == ElementType::LAYOUT_BREAK && static_cast<LayoutBreak*>(ee)->layoutBreakType() == b->layoutBreakType()) {
+                  if (ee->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(ee)->layoutBreakType() == b->layoutBreakType()) {
                         if (MScore::debugMode)
                               qDebug("warning: layout break already set");
                         return;
@@ -147,7 +147,7 @@ void MeasureBase::add(Element* e)
 
 void MeasureBase::remove(Element* el)
       {
-      if (el->type() == ElementType::LAYOUT_BREAK) {
+      if (el->type() == Element::Type::LAYOUT_BREAK) {
             LayoutBreak* lb = static_cast<LayoutBreak*>(el);
             switch (lb->layoutBreakType()) {
                   case LayoutBreak::LayoutBreakType::PAGE:
@@ -175,7 +175,7 @@ Measure* MeasureBase::nextMeasure() const
       {
       MeasureBase* m = _next;
       for (;;) {
-            if (m == 0 || m->type() == ElementType::MEASURE)
+            if (m == 0 || m->type() == Element::Type::MEASURE)
                   break;
             m = m->_next;
             }
@@ -190,7 +190,7 @@ Measure* MeasureBase::nextMeasureMM() const
       {
       MeasureBase* m = _next;
       for (;;) {
-            if (m == 0 || m->type() == ElementType::MEASURE)
+            if (m == 0 || m->type() == Element::Type::MEASURE)
                   break;
             m = m->_next;
             }
@@ -208,7 +208,7 @@ Measure* MeasureBase::prevMeasure() const
       {
       MeasureBase* m = prev();
       while (m) {
-            if (m->type() == ElementType::MEASURE)
+            if (m->type() == Element::Type::MEASURE)
                   return static_cast<Measure*>(m);
             m = m->prev();
             }
@@ -223,7 +223,7 @@ Measure* MeasureBase::prevMeasureMM() const
       {
       MeasureBase* m = prev();
       while (m) {
-            if (m->type() == ElementType::MEASURE) {
+            if (m->type() == Element::Type::MEASURE) {
                   Measure* mm = static_cast<Measure*>(m);
                   if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
                         if (mm->mmRestCount() >= 0) {
@@ -260,7 +260,7 @@ void MeasureBase::layout0()
       _sectionBreak = 0;
 
       foreach (Element* element, _el) {
-            if (!score()->tagIsValid(element->tag()) || (element->type() != ElementType::LAYOUT_BREAK))
+            if (!score()->tagIsValid(element->tag()) || (element->type() != Element::Type::LAYOUT_BREAK))
                   continue;
             LayoutBreak* e = static_cast<LayoutBreak*>(element);
             switch (e->layoutBreakType()) {
@@ -288,7 +288,7 @@ void MeasureBase::layout()
       foreach (Element* element, _el) {
             if (!score()->tagIsValid(element->tag()))
                   continue;
-            if (element->type() == ElementType::LAYOUT_BREAK) {
+            if (element->type() == Element::Type::LAYOUT_BREAK) {
                   qreal _spatium = spatium();
                   qreal x = -_spatium - element->width() + width()
                             - breakCount * (element->width() + _spatium * .8);
@@ -365,7 +365,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::LayoutBreakType type)
       else {
             // remove line break
             foreach(Element* e, *el()) {
-                  if (e->type() == ElementType::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
+                  if (e->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
                         _score->undoRemoveElement(e);
                         break;
                         }
@@ -380,7 +380,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::LayoutBreakType type)
 MeasureBase* MeasureBase::nextMM() const
       {
       if (_next
-         && _next->type() == ElementType::MEASURE
+         && _next->type() == Element::Type::MEASURE
          && score()->styleB(StyleIdx::createMultiMeasureRests)
          && static_cast<Measure*>(_next)->hasMMRest()) {
             return static_cast<Measure*>(_next)->mmRest();

@@ -34,7 +34,7 @@ class RepeatMeasure : public Rest {
       RepeatMeasure(Score*);
       RepeatMeasure &operator=(const RepeatMeasure&);
       virtual RepeatMeasure* clone() const  { return new RepeatMeasure(*this); }
-      virtual ElementType type() const      { return ElementType::REPEAT_MEASURE; }
+      virtual Element::Type type() const     { return Element::Type::REPEAT_MEASURE; }
       virtual void draw(QPainter*) const;
       virtual void layout();
       virtual Fraction duration() const;

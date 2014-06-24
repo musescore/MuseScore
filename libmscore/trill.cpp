@@ -40,7 +40,7 @@ void TrillSegment::draw(QPainter* painter) const
 void TrillSegment::add(Element* e)
       {
       e->setParent(this);
-      if (e->type() == ElementType::ACCIDENTAL) {
+      if (e->type() == Element::Type::ACCIDENTAL) {
             // accidental is part of trill
             trill()->setAccidental(static_cast<Accidental*>(e));
             }
@@ -158,7 +158,7 @@ void TrillSegment::layout()
 
 bool TrillSegment::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      if (e->type() == ElementType::ACCIDENTAL)
+      if (e->type() == Element::Type::ACCIDENTAL)
             return true;
       return false;
       }
@@ -171,7 +171,7 @@ Element* TrillSegment::drop(const DropData& data)
       {
       Element* e = data.element;
       switch(e->type()) {
-            case ElementType::ACCIDENTAL:
+            case Element::Type::ACCIDENTAL:
                   e->setParent(trill());
                   score()->undoAddElement(e);
                   break;
@@ -262,7 +262,7 @@ Trill::~Trill()
 
 void Trill::add(Element* e)
       {
-      if (e->type() == ElementType::ACCIDENTAL) {
+      if (e->type() == Element::Type::ACCIDENTAL) {
             e->setParent(this);
             _accidental = static_cast<Accidental*>(e);
             }

@@ -32,7 +32,7 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       range.read(m1->first(), m2->last());
 
       undoRemoveMeasures(m1, m2);
-      Measure* m = static_cast<Measure*>(insertMeasure(ElementType::MEASURE, m2->next(), true));
+      Measure* m = static_cast<Measure*>(insertMeasure(Element::Type::MEASURE, m2->next(), true));
       fixTicks();
 
       m->setTick(m1->tick());
