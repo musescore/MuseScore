@@ -41,7 +41,7 @@ class Accidental;
 class NoteDot;
 class Spanner;
 class StaffType;
-enum class SymId : short;
+enum class SymId;
 
 enum class ValueType : char { OFFSET_VAL, USER_VAL };
 

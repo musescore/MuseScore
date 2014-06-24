@@ -26,7 +26,7 @@ class QPainter;
 namespace Ms {
 
 class Note;
-enum class SymId : short;
+enum class SymId;
 
 //---------------------------------------------------------
 //   SymElement

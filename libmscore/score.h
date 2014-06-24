@@ -99,7 +99,7 @@ class ScoreFont;
 
 enum class OttavaType : char;
 enum class ClefType : signed char;
-enum class SymId : short;
+enum class SymId;
 enum class Key;
 
 extern bool showRubberBand;

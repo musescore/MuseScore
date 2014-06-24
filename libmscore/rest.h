@@ -18,7 +18,7 @@
 namespace Ms {
 
 class TDuration;
-enum class SymId : short;
+enum class SymId;
 
 //---------------------------------------------------------
 //    @@ Rest
