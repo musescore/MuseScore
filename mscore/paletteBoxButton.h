@@ -17,14 +17,14 @@ namespace Ms {
 
 class Palette;
 
-enum PaletteCommand {
-      PALETTE_DELETE,
-      PALETTE_SAVE,
-      PALETTE_LOAD,
-      PALETTE_EDIT,
-      PALETTE_UP,
-      PALETTE_DOWN,
-      PALETTE_NEW
+enum class PaletteCommand : char {
+      PDELETE,
+      SAVE,
+      LOAD,
+      EDIT,
+      UP,
+      DOWN,
+      NEW
       };
 
 //---------------------------------------------------------
@@ -45,20 +45,20 @@ class PaletteBoxButton : public QToolButton {
       virtual QSize sizeHint() const;
 
    private slots:
-      void deleteTriggered()     { emit paletteCmd(PALETTE_DELETE, id);  }
-      void saveTriggered()       { emit paletteCmd(PALETTE_SAVE, id);    }
-      void loadTriggered()       { emit paletteCmd(PALETTE_LOAD, id);    }
-      void propertiesTriggered() { emit paletteCmd(PALETTE_EDIT, id);    }
-      void upTriggered()         { emit paletteCmd(PALETTE_UP, id);      }
-      void downTriggered()       { emit paletteCmd(PALETTE_DOWN, id);    }
-      void newTriggered()        { emit paletteCmd(PALETTE_NEW, id);     }
+      void deleteTriggered()     { emit paletteCmd(PaletteCommand::PDELETE, id);  }
+      void saveTriggered()       { emit paletteCmd(PaletteCommand::SAVE, id);    }
+      void loadTriggered()       { emit paletteCmd(PaletteCommand::LOAD, id);    }
+      void propertiesTriggered() { emit paletteCmd(PaletteCommand::EDIT, id);    }
+      void upTriggered()         { emit paletteCmd(PaletteCommand::UP, id);      }
+      void downTriggered()       { emit paletteCmd(PaletteCommand::DOWN, id);    }
+      void newTriggered()        { emit paletteCmd(PaletteCommand::NEW, id);     }
       void enableEditing(bool);
 
    public slots:
       void showPalette(bool);
 
    signals:
-      void paletteCmd(int, int);
+      void paletteCmd(PaletteCommand, int);
       void closeAll();
 
    public:

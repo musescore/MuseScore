@@ -25,7 +25,8 @@ namespace Ms {
 
 extern void genIcons();
 
-enum { longaUp_ICON, brevis_ICON, note_ICON, note2_ICON, note4_ICON, note8_ICON, note16_ICON,
+enum class Icons : signed char { Invalid_ICON = -1,
+      longaUp_ICON, brevis_ICON, note_ICON, note2_ICON, note4_ICON, note8_ICON, note16_ICON,
       note32_ICON, note64_ICON, note128_ICON,
       natural_ICON, sharp_ICON, sharpsharp_ICON, flat_ICON, flatflat_ICON,
       quartrest_ICON, dot_ICON, dotdot_ICON,
@@ -56,7 +57,7 @@ enum { longaUp_ICON, brevis_ICON, note_ICON, note2_ICON, note4_ICON, note8_ICON,
       ICONS
       };
 
-extern QIcon* icons[ICONS];
+extern QIcon* icons[];
 
 } // namespace Ms
 #endif

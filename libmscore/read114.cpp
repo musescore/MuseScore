@@ -400,7 +400,7 @@ Score::FileError Score::read114(XmlReader& e)
                         s.setName("Tuplet");
 
                   if (s.name() == "Lyrics Odd Lines" || s.name() == "Lyrics Even Lines")
-                        s.setAlign((s.align() & ~ ALIGN_VMASK) | Align(ALIGN_BASELINE));
+                        s.setAlign((s.align() & ~ Align(AlignmentFlags::VMASK)) | AlignmentFlags::BASELINE);
 
                   _style.setTextStyle(s);
                   }

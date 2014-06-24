@@ -40,6 +40,7 @@ typedef struct pollfd PollFd;
 namespace Ms {
 
 class MidiDriver;
+enum class Transport : char;
 
 //---------------------------------------------------------
 //   AlsaDriver
@@ -111,7 +112,7 @@ class AlsaAudio : public Driver {
       pthread_t thread;
       AlsaDriver* alsa;
       volatile int runAlsa;
-      int state;
+      Transport state;
       bool seekflag;
 
       MidiDriver* midiDriver;
@@ -132,7 +133,7 @@ class AlsaAudio : public Driver {
       virtual bool isRealtime() const   { return false; }
       virtual void startTransport();
       virtual void stopTransport();
-      virtual int getState();
+      virtual Transport getState() override;
       virtual int sampleRate() const;
       void alsaLoop();
       void write(int n, void* l);

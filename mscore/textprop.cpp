@@ -34,16 +34,16 @@ TextProp::TextProp(QWidget* parent)
       {
       setupUi(this);
       //set the icon here or the style can't color them
-      alignLeft->setIcon(*icons[textLeft_ICON]);
-      alignHCenter->setIcon(*icons[textCenter_ICON]);
-      alignRight->setIcon(*icons[textRight_ICON]);
-      alignTop->setIcon(*icons[textTop_ICON]);
-      alignVCenter->setIcon(*icons[textVCenter_ICON]);
-      alignBaseline->setIcon(*icons[textBaseline_ICON]);
-      alignBottom->setIcon(*icons[textBottom_ICON]);
-      fontBold->setIcon(*icons[textBold_ICON]);
-      fontItalic->setIcon(*icons[textItalic_ICON]);
-      fontUnderline->setIcon(*icons[textUnderline_ICON]);
+      alignLeft->setIcon(*icons[int(Icons::textLeft_ICON)]);
+      alignHCenter->setIcon(*icons[int(Icons::textCenter_ICON)]);
+      alignRight->setIcon(*icons[int(Icons::textRight_ICON)]);
+      alignTop->setIcon(*icons[int(Icons::textTop_ICON)]);
+      alignVCenter->setIcon(*icons[int(Icons::textVCenter_ICON)]);
+      alignBaseline->setIcon(*icons[int(Icons::textBaseline_ICON)]);
+      alignBottom->setIcon(*icons[int(Icons::textBottom_ICON)]);
+      fontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      fontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
+      fontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
 
       QButtonGroup* g1 = new QButtonGroup(this);
       g1->addButton(alignLeft);
@@ -83,7 +83,7 @@ void TextProp::setScore(bool onlyStyle, Score* score)
       int n = scoreStyles.size();
       for (int i = 0; i < n; ++i) {
             // if style not hidden in this context, add to combo with index in score style list as userData
-            if ( !(scoreStyles.at(i).hidden() & TextStyle::Hidden::IN_LISTS) )
+            if ( !(scoreStyles.at(i).hidden() & TextStyleHidden::IN_LISTS) )
                   styles->addItem(scoreStyles.at(i).name(), i);
             }
       }
@@ -136,19 +136,19 @@ void TextProp::setTextStyle(const TextStyle& s)
       color->setColor(s.foregroundColor());
 
       systemFlag->setChecked(s.systemFlag());
-      int a = s.align();
-      if (a & ALIGN_HCENTER)
+      Align a = s.align();
+      if (a & AlignmentFlags::HCENTER)
             alignHCenter->setChecked(true);
-      else if (a & ALIGN_RIGHT)
+      else if (a & AlignmentFlags::RIGHT)
             alignRight->setChecked(true);
       else
             alignLeft->setChecked(true);
 
-      if (a & ALIGN_VCENTER)
+      if (a & AlignmentFlags::VCENTER)
             alignVCenter->setChecked(true);
-      else if (a & ALIGN_BOTTOM)
+      else if (a & AlignmentFlags::BOTTOM)
             alignBottom->setChecked(true);
-      else if (a & ALIGN_BASELINE)
+      else if (a & AlignmentFlags::BASELINE)
             alignBaseline->setChecked(true);
       else
             alignTop->setChecked(true);
@@ -214,16 +214,16 @@ TextStyle TextProp::textStyle() const
 
       Align a = 0;
       if (alignHCenter->isChecked())
-            a |= ALIGN_HCENTER;
+            a |= AlignmentFlags::HCENTER;
       else if (alignRight->isChecked())
-            a |= ALIGN_RIGHT;
+            a |= AlignmentFlags::RIGHT;
 
       if (alignVCenter->isChecked())
-            a |= ALIGN_VCENTER;
+            a |= AlignmentFlags::VCENTER;
       else if (alignBottom->isChecked())
-            a |= ALIGN_BOTTOM;
+            a |= AlignmentFlags::BOTTOM;
       else if (alignBaseline->isChecked())
-            a |= ALIGN_BASELINE;
+            a |= AlignmentFlags::BASELINE;
       ts.setAlign(a);
       return ts;
       }

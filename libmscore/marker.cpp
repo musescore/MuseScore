@@ -103,7 +103,7 @@ void Marker::adjustReadPos()
                   uo = userOff();
                   uo.rx() -= segment()->pos().x();
                   // 1.2 is always HCENTER aligned
-                  if ((textStyle().align() & ALIGN_HMASK) == 0)    // ALIGN_LEFT
+                  if ((textStyle().align() & AlignmentFlags::HMASK) == 0)    // AlignmentFlags::LEFT
                         uo.rx() -= bbox().width() * .5;
                   }
             else

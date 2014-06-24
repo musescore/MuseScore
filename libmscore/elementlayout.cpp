@@ -24,7 +24,7 @@ namespace Ms {
 
 ElementLayout::ElementLayout()
       {
-      _align      = ALIGN_LEFT | ALIGN_BASELINE;
+      _align      = AlignmentFlags::LEFT | AlignmentFlags::BASELINE;
       _offsetType = OffsetType::SPATIUM;
       }
 
@@ -60,16 +60,16 @@ void ElementLayout::layout(Element* e) const
             h = e->parent()->height();
       else
             w = e->width();
-      if (_align & ALIGN_BOTTOM)
+      if (_align & AlignmentFlags::BOTTOM)
             p.setY(h - e->height());
-      else if (_align & ALIGN_VCENTER)
+      else if (_align & AlignmentFlags::VCENTER)
             p.setY((h - e->height()) * .5);
-      else if (_align & ALIGN_BASELINE)
+      else if (_align & AlignmentFlags::BASELINE)
             p.setY(-e->baseLine());
       if (!frameText) {
-            if (_align & ALIGN_RIGHT)
+            if (_align & AlignmentFlags::RIGHT)
                   p.setX(-w);
-            else if (_align & ALIGN_HCENTER)
+            else if (_align & AlignmentFlags::HCENTER)
                   p.setX(-(w * .5));
             }
       e->setPos(p + o);
@@ -82,24 +82,24 @@ void ElementLayout::layout(Element* e) const
 
 void ElementLayout::writeProperties(Xml& xml, const ElementLayout& l) const
       {
-      if ((l._align & ALIGN_HMASK) != (_align & ALIGN_HMASK)) {
+      if ((l._align & AlignmentFlags::HMASK) != (_align & AlignmentFlags::HMASK)) {
             const char* p;
-            if (_align & ALIGN_HCENTER)
+            if (_align & AlignmentFlags::HCENTER)
                   p = "center";
-            else if (_align & ALIGN_RIGHT)
+            else if (_align & AlignmentFlags::RIGHT)
                   p = "right";
             else
                   p = "left";
             xml.tag("halign", p);
             }
 
-      if ((l._align & ALIGN_VMASK) != (_align & ALIGN_VMASK)) {
+      if ((l._align & AlignmentFlags::VMASK) != (_align & AlignmentFlags::VMASK)) {
             const char* p;
-            if (_align & ALIGN_BOTTOM)
+            if (_align & AlignmentFlags::BOTTOM)
                   p = "bottom";
-            else if (_align & ALIGN_VCENTER)
+            else if (_align & AlignmentFlags::VCENTER)
                   p = "center";
-            else if (_align & ALIGN_BASELINE)
+            else if (_align & AlignmentFlags::BASELINE)
                   p = "baseline";
             else
                   p = "top";
@@ -130,17 +130,17 @@ void ElementLayout::writeProperties(Xml& xml, const ElementLayout& l) const
 
 void ElementLayout::writeProperties(Xml& xml) const
       {
-      if (_align & ALIGN_HCENTER)
+      if (_align & AlignmentFlags::HCENTER)
             xml.tag("halign", "center");
-      else if (_align & ALIGN_RIGHT)
+      else if (_align & AlignmentFlags::RIGHT)
             xml.tag("halign", "right");
       else
             xml.tag("halign", "left");
-      if (_align & ALIGN_BOTTOM)
+      if (_align & AlignmentFlags::BOTTOM)
             xml.tag("valign", "bottom");
-      else if (_align & ALIGN_VCENTER)
+      else if (_align & AlignmentFlags::VCENTER)
             xml.tag("valign", "center");
-      else if (_align & ALIGN_BASELINE)
+      else if (_align & AlignmentFlags::BASELINE)
             xml.tag("valign", "baseline");
       else
             xml.tag("valign", "top");
@@ -171,11 +171,11 @@ bool ElementLayout::readProperties(XmlReader& e)
 
       if (tag == "halign") {
             const QString& val(e.readElementText());
-            _align &= ~(ALIGN_HCENTER | ALIGN_RIGHT);
+            _align &= ~(AlignmentFlags::HCENTER | AlignmentFlags::RIGHT);
             if (val == "center")
-                  _align |= ALIGN_HCENTER;
+                  _align |= AlignmentFlags::HCENTER;
             else if (val == "right")
-                  _align |= ALIGN_RIGHT;
+                  _align |= AlignmentFlags::RIGHT;
             else if (val == "left")
                   ;
             else
@@ -183,13 +183,13 @@ bool ElementLayout::readProperties(XmlReader& e)
             }
       else if (tag == "valign") {
             const QString& val(e.readElementText());
-            _align &= ~(ALIGN_VCENTER | ALIGN_BOTTOM | ALIGN_BASELINE);
+            _align &= ~(AlignmentFlags::VCENTER | AlignmentFlags::BOTTOM | AlignmentFlags::BASELINE);
             if (val == "center")
-                  _align |= ALIGN_VCENTER;
+                  _align |= AlignmentFlags::VCENTER;
             else if (val == "bottom")
-                  _align |= ALIGN_BOTTOM;
+                  _align |= AlignmentFlags::BOTTOM;
             else if (val == "baseline")
-                  _align |= ALIGN_BASELINE;
+                  _align |= AlignmentFlags::BASELINE;
             else if (val == "top")
                   ;
             else
@@ -235,10 +235,10 @@ bool ElementLayout::readProperties(XmlReader& e)
 
 void ElementLayout::restyle(const ElementLayout& ol, const ElementLayout& nl)
       {
-      if ((ol._align & ALIGN_HMASK) == (_align & ALIGN_HMASK))
-            _align |= nl._align & ALIGN_HMASK;
-      if ((ol._align & ALIGN_VMASK) == (_align & ALIGN_VMASK))
-            _align |= nl._align & ALIGN_VMASK;
+      if ((ol._align & AlignmentFlags::HMASK) == (_align & AlignmentFlags::HMASK))
+            _align |= nl._align & AlignmentFlags::HMASK;
+      if ((ol._align & AlignmentFlags::VMASK) == (_align & AlignmentFlags::VMASK))
+            _align |= nl._align & AlignmentFlags::VMASK;
       if (ol._offset == _offset)
             _offset = nl._offset;
       if (_offsetType == ol._offsetType)

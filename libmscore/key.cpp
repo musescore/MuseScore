@@ -215,7 +215,8 @@ bool AccidentalState::tieContext(int line) const
 void AccidentalState::setAccidentalVal(int line, AccidentalVal val, bool tieContext)
       {
       Q_ASSERT(line >= 0 && line < 75);
-      Q_ASSERT(val >= AccidentalVal::FLAT2 && val <= AccidentalVal::SHARP2);
+      // casts needed to work around a bug in Xcode 4.2 on Mac, see #25910
+      Q_ASSERT(int(val) >= int(AccidentalVal::FLAT2) && int(val) <= int(AccidentalVal::SHARP2));
       state[line] = (int(val) + 2) | (tieContext ? TIE_CONTEXT : 0);
       }
 }

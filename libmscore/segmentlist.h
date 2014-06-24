@@ -16,7 +16,7 @@
 namespace Ms {
 
 class Segment;
-enum class SegmentType;
+enum class SegmentType : short;
 
 //---------------------------------------------------------
 //   SegmentList

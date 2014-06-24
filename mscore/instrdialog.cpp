@@ -156,7 +156,7 @@ void StaffListItem::setClef(const ClefTypeList& val)
 void StaffListItem::setLinked(bool val)
       {
       _linked = val;
-      setIcon(3, _linked ? *icons[checkmark_ICON] : QIcon() );
+      setIcon(3, _linked ? *icons[int(Icons::checkmark_ICON)] : QIcon() );
       }
 
 //---------------------------------------------------------

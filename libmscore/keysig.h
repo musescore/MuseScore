@@ -70,7 +70,8 @@ class KeySig : public Element {
       void setCustom(const QList<KeySym*>& symbols);
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
-      Q_INVOKABLE Key key() const         { return _sig.key(); }    //@ -7 (flats) -- +7 (sharps)
+      //@ -7 (flats) -- +7 (sharps)
+      Q_INVOKABLE Key key() const         { return _sig.key(); }
       int customType() const              { return _sig.customType(); }
       bool isCustom() const               { return _sig.custom(); }
       KeySigEvent keySigEvent() const     { return _sig; }

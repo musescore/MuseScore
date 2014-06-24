@@ -126,7 +126,7 @@ Measure::Measure(Score* s)
      _timesig(4,4), _len(4,4)
       {
       _repeatCount           = 2;
-      _repeatFlags           = 0;
+      _repeatFlags           = Repeat::NONE;
 
       int n = _score->nstaves();
       staves.reserve(n);
@@ -3868,7 +3868,7 @@ QVariant Measure::getProperty(P_ID propertyId) const
             case P_ID::TIMESIG_ACTUAL:
                   return QVariant::fromValue(_len);
             case P_ID::REPEAT_FLAGS:
-                  return repeatFlags();
+                  return int(repeatFlags());
             case P_ID::MEASURE_NUMBER_MODE:
                   return int(measureNumberMode());
             case P_ID::BREAK_MMR:
@@ -3900,7 +3900,7 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
                   _len = value.value<Fraction>();
                   break;
             case P_ID::REPEAT_FLAGS:
-                  setRepeatFlags(value.toInt());
+                  setRepeatFlags(Repeat(value.toInt()));
                   break;
             case P_ID::MEASURE_NUMBER_MODE:
                   setMeasureNumberMode(MeasureNumberMode(value.toInt()));
