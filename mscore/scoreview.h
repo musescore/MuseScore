@@ -48,6 +48,7 @@ class MeasureBase;
 class Staff;
 class OmrView;
 class PositionCursor;
+class ContinuousPanel;
 class Tuplet;
 
 enum class POS : char;
@@ -169,6 +170,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       // Loop In/Out marks in the score
       PositionCursor* _curLoopIn;
       PositionCursor* _curLoopOut;
+
+      // Continuous panel
+      ContinuousPanel* _continuousPanel;
 
       Lasso* lasso;           ///< temporarily drawn lasso selection
       Lasso* _foto;
@@ -293,6 +297,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void cloneElement(Element* e);
       void doFotoDragEdit(QMouseEvent* ev);
+
+      void updateContinuousPanel();
 
    signals:
       void viewRectChanged();
