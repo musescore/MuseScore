@@ -3140,38 +3140,38 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
 void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       {
       QString t = dyn->text();
-      Dynamic::DynamicType st = dyn->dynamicType();
+      Dynamic::Type st = dyn->dynamicType();
 
       directionTag(xml, attr, dyn);
       xml.stag("direction-type");
-      if (st == Dynamic::DynamicType::P
-          || st == Dynamic::DynamicType::PP
-          || st == Dynamic::DynamicType::PPP
-          || st == Dynamic::DynamicType::PPPP
-          || st == Dynamic::DynamicType::PPPPP
-          || st == Dynamic::DynamicType::PPPPPP
-          || st == Dynamic::DynamicType::F
-          || st == Dynamic::DynamicType::FF
-          || st == Dynamic::DynamicType::FFF
-          || st == Dynamic::DynamicType::FFFF
-          || st == Dynamic::DynamicType::FFFFF
-          || st == Dynamic::DynamicType::FFFFFF
-          || st == Dynamic::DynamicType::MP
-          || st == Dynamic::DynamicType::MF
-          || st == Dynamic::DynamicType::SF
-          || st == Dynamic::DynamicType::SFP
-          || st == Dynamic::DynamicType::SFPP
-          || st == Dynamic::DynamicType::FP
-          || st == Dynamic::DynamicType::RF
-          || st == Dynamic::DynamicType::RFZ
-          || st == Dynamic::DynamicType::SFZ
-          || st == Dynamic::DynamicType::SFFZ
-          || st == Dynamic::DynamicType::FZ) {
+      if (st == Dynamic::Type::P
+          || st == Dynamic::Type::PP
+          || st == Dynamic::Type::PPP
+          || st == Dynamic::Type::PPPP
+          || st == Dynamic::Type::PPPPP
+          || st == Dynamic::Type::PPPPPP
+          || st == Dynamic::Type::F
+          || st == Dynamic::Type::FF
+          || st == Dynamic::Type::FFF
+          || st == Dynamic::Type::FFFF
+          || st == Dynamic::Type::FFFFF
+          || st == Dynamic::Type::FFFFFF
+          || st == Dynamic::Type::MP
+          || st == Dynamic::Type::MF
+          || st == Dynamic::Type::SF
+          || st == Dynamic::Type::SFP
+          || st == Dynamic::Type::SFPP
+          || st == Dynamic::Type::FP
+          || st == Dynamic::Type::RF
+          || st == Dynamic::Type::RFZ
+          || st == Dynamic::Type::SFZ
+          || st == Dynamic::Type::SFFZ
+          || st == Dynamic::Type::FZ) {
             xml.stag("dynamics");
             xml.tagE(dyn->dynamicTypeName());
             xml.etag();
             }
-      else if (st == Dynamic::DynamicType::M || st == Dynamic::DynamicType::Z) {
+      else if (st == Dynamic::Type::M || st == Dynamic::Type::Z) {
             xml.stag("dynamics");
             xml.tag("other-dynamics", dyn->dynamicTypeName());
             xml.etag();
