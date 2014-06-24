@@ -51,24 +51,24 @@ void TestDynamic::test1()
       Dynamic* dynamic = new Dynamic(score);
       dynamic->setDynamicType(Dynamic::Type(1));
 
-      dynamic->setPlacement(Placement::ABOVE);
+      dynamic->setPlacement(Element::Placement::ABOVE);
       Dynamic* d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->placement(), Placement::ABOVE);
+      QCOMPARE(d->placement(), Element::Placement::ABOVE);
       delete d;
 
-      dynamic->setPlacement(Placement::BELOW);
+      dynamic->setPlacement(Element::Placement::BELOW);
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->placement(), Placement::BELOW);
+      QCOMPARE(d->placement(), Element::Placement::BELOW);
       delete d;
 
-      dynamic->setProperty(P_ID::PLACEMENT, int(Placement::ABOVE));
+      dynamic->setProperty(P_ID::PLACEMENT, int(Element::Placement::ABOVE));
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->placement(), Placement::ABOVE);
+      QCOMPARE(d->placement(), Element::Placement::ABOVE);
       delete d;
 
-      dynamic->setProperty(P_ID::PLACEMENT, int(Placement::BELOW));
+      dynamic->setProperty(P_ID::PLACEMENT, int(Element::Placement::BELOW));
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
-      QCOMPARE(d->placement(), Placement::BELOW);
+      QCOMPARE(d->placement(), Element::Placement::BELOW);
       delete d;
 
       dynamic->setVelocity(23);

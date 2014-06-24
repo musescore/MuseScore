@@ -1341,7 +1341,7 @@ void Score::cmdFlip()
                | (e->type() == ElementType::HAIRPIN)
                | (e->type() == ElementType::DYNAMIC)
                ) {
-                  Placement p = e->placement() == Placement::ABOVE ? Placement::BELOW : Placement::ABOVE;
+                  Element::Placement p = e->placement() == Element::Placement::ABOVE ? Element::Placement::BELOW : Element::Placement::ABOVE;
                   undoChangeProperty(e, P_ID::PLACEMENT, int(p));
                   }
             }

@@ -586,7 +586,7 @@ Score::FileError Score::read114(XmlReader& e)
                       Ottava* ottava = static_cast<Ottava*>(s);
                       ottava->staff()->updateOttava(ottava);
                       yo = styleS(StyleIdx::ottavaY).val() * spatium();
-                      if (s->placement() == Placement::BELOW)
+                      if (s->placement() == Element::Placement::BELOW)
                             yo = -yo + s->staff()->height();
                       }
                   else if (s->type() == ElementType::PEDAL) {
