@@ -67,6 +67,7 @@
 #include "measureproperties.h"
 #include "textcursor.h"
 #include "navigator.h"
+#include "continuouspanel.h"
 
 #include "libmscore/pitchspelling.h"
 #include "libmscore/notedot.h"
@@ -658,6 +659,8 @@ ScoreView::ScoreView(QWidget* parent)
 
       _cursor     = new PositionCursor(this);
       _cursor->setType(CursorType::POS);
+      _continuousPanel = new ContinuousPanel(this);
+      _continuousPanel->setVisible(true);
 
       shadowNote  = 0;
       grips       = 0;
@@ -933,12 +936,16 @@ void ScoreView::setScore(Score* s)
             shadowNote->setScore(_score);
       lasso->setScore(s);
       _foto->setScore(s);
+      _continuousPanel->setScore(s);
+
       if (s) {
             _curLoopIn->move(s->pos(POS::LEFT));
             _curLoopOut->move(s->pos(POS::RIGHT));
             loopToggled(getAction("loop")->isChecked());
 
             connect(s, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
+            connect(this, SIGNAL(viewRectChanged()), this, SLOT(updateContinuousPanel()));
+
             s->setLayoutMode(LayoutMode::PAGE);
             s->setLayoutAll(true);
             s->update();
@@ -956,6 +963,7 @@ ScoreView::~ScoreView()
       delete lasso;
       delete _foto;
       delete _cursor;
+      delete _continuousPanel;
       delete _curLoopIn;
       delete _curLoopOut;
       delete bgPixmap;
@@ -1600,6 +1608,9 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       _curLoopIn->paint(&vp);
       _curLoopOut->paint(&vp);
       _cursor->paint(&vp);
+
+      if (_score->layoutMode() == LayoutMode::LINE)
+            _continuousPanel->paint(ev->rect(), vp);
 
       lasso->draw(&vp);
       if (fotoMode())
@@ -5552,5 +5563,16 @@ void ScoreView::cmdMoveCR(bool left)
                         }
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   updateContinuousPanel
+//   slot triggered when moving around the score to keep the panel visible
+//---------------------------------------------------------
+
+void ScoreView::updateContinuousPanel()
+      {
+      if (_score->layoutMode() == LayoutMode::LINE)
+            update();
       }
 }
