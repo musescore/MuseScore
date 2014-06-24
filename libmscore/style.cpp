@@ -254,8 +254,8 @@ void initStyle(MStyle* s)
 
       AS("Title",    ff, 24, false, false, false, ALIGN_HCENTER | ALIGN_TOP,    QPointF(), OA);
       AS("Subtitle", ff, 14, false, false, false, ALIGN_HCENTER | ALIGN_TOP,    QPointF(0, MM(10)), OA);
-      AS("Composer", ff, 12, false, false, false, ALIGN_RIGHT   | ALIGN_BOTTOM, QPointF(MM(-1), MM(-2)), OA);
-      AS("Lyricist", ff, 12, false, false, false, ALIGN_LEFT    | ALIGN_BOTTOM, QPointF(MM(1), MM(-2)), OA);
+      AS("Composer", ff, 12, false, false, false, ALIGN_RIGHT   | ALIGN_BOTTOM, QPointF(), OA);
+      AS("Lyricist", ff, 12, false, false, false, ALIGN_LEFT    | ALIGN_BOTTOM, QPointF(), OA);
 
       AS("Lyrics Odd Lines", ff, 11, false, false, false, ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, true);
       AS("Lyrics Even Lines", ff, 11, false, false, false, ALIGN_HCENTER | ALIGN_BASELINE, QPointF(0, 7), OS, true);
@@ -1033,7 +1033,7 @@ void StyleData::load(XmlReader& e)
                                           _articulationAnchor[idx2] = ArticulationAnchor(val.toInt());
                                           break;
                                           }
-                                    
+
                                     }
                               if (idx2 >= int(ArticulationType::ARTICULATIONS))
                                     e.unknown();
