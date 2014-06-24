@@ -147,12 +147,16 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
                   step += 7;
             step   %= 7;
             int p1 = tpc2pitch(step2tpc(step, AccidentalVal::NATURAL));
-            alter  = int(AccidentalVal(semitones - (p1 - pitch)));
+            alter  = semitones - (p1 - pitch);
             // alter  = p1 + semitones - pitch;
-            if (alter < 0) {
-                  alter *= -1;
-                  alter = 12 - alter;
-                  }
+
+//            if (alter < 0) {
+//                  alter *= -1;
+//                  alter = 12 - alter;
+//                  }
+            while (alter < 0)
+                  alter += 12;
+
             alter %= 12;
             if (alter > 6)
                   alter -= 12;
