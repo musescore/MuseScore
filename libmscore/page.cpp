@@ -268,12 +268,12 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
 
       Align flags;
       switch (area) {
-            case 0: flags = ALIGN_LEFT    | ALIGN_TOP;    break;
-            case 1: flags = ALIGN_HCENTER | ALIGN_TOP;    break;
-            case 2: flags = ALIGN_RIGHT   | ALIGN_TOP;    break;
-            case 3: flags = ALIGN_LEFT    | ALIGN_BOTTOM; break;
-            case 4: flags = ALIGN_HCENTER | ALIGN_BOTTOM; break;
-            case 5: flags = ALIGN_RIGHT   | ALIGN_BOTTOM; break;
+            case 0: flags = AlignmentFlags::LEFT    | AlignmentFlags::TOP;    break;
+            case 1: flags = AlignmentFlags::HCENTER | AlignmentFlags::TOP;    break;
+            case 2: flags = AlignmentFlags::RIGHT   | AlignmentFlags::TOP;    break;
+            case 3: flags = AlignmentFlags::LEFT    | AlignmentFlags::BOTTOM; break;
+            case 4: flags = AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM; break;
+            case 5: flags = AlignmentFlags::RIGHT   | AlignmentFlags::BOTTOM; break;
             }
       text.textStyle().setAlign(flags);
       text.setText(s);

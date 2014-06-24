@@ -29,7 +29,7 @@
 
 namespace Ms {
 
-enum { COL_PITCH, COL_NOTE, COL_SHORTCUT, COL_NAME };
+enum Column : char { PITCH, NOTE, SHORTCUT, NAME };
 
 //---------------------------------------------------------
 //   noteHeadNames
@@ -94,15 +94,15 @@ void EditDrumset::updateList()
       pitchList->clear();
       for (int i = 0; i < 128; ++i) {
             QTreeWidgetItem* item = new QTreeWidgetItem(pitchList);
-            item->setText(COL_PITCH, QString("%1").arg(i));
-            item->setText(COL_NOTE, pitch2string(i));
+            item->setText(Column::PITCH, QString("%1").arg(i));
+            item->setText(Column::NOTE, pitch2string(i));
             if (nDrumset.shortcut(i) == 0)
-                  item->setText(COL_SHORTCUT, "");
+                  item->setText(Column::SHORTCUT, "");
             else {
                   QString s(QChar(nDrumset.shortcut(i)));
-                  item->setText(COL_SHORTCUT, s);
+                  item->setText(Column::SHORTCUT, s);
                   }
-            item->setText(COL_NAME, qApp->translate("drumset", qPrintable(nDrumset.name(i))));
+            item->setText(Column::NAME, qApp->translate("drumset", qPrintable(nDrumset.name(i))));
             item->setData(0, Qt::UserRole, i);
             }
       }
@@ -113,12 +113,12 @@ void EditDrumset::updateList2()
             QTreeWidgetItem* item = pitchList->topLevelItem(i);
             int pitch = item->data(0, Qt::UserRole).toInt();
             if (nDrumset.shortcut(pitch) == 0)
-                  item->setText(COL_SHORTCUT, "");
+                  item->setText(Column::SHORTCUT, "");
             else {
                   QString s(QChar(nDrumset.shortcut(pitch)));
-                  item->setText(COL_SHORTCUT, s);
+                  item->setText(Column::SHORTCUT, s);
                   }
-            item->setText(COL_NAME, qApp->translate("drumset", qPrintable(nDrumset.name(pitch))));
+            item->setText(Column::NAME, qApp->translate("drumset", qPrintable(nDrumset.name(pitch))));
             item->setData(0, Qt::UserRole, pitch);
             }
       }
@@ -131,7 +131,7 @@ void EditDrumset::nameChanged(const QString& name)
       {
       QTreeWidgetItem* item = pitchList->currentItem();
       if (item)
-            item->setText(COL_NAME, name);
+            item->setText(Column::NAME, name);
       }
 
 //---------------------------------------------------------
@@ -144,7 +144,7 @@ void EditDrumset::shortcutChanged()
       if (!item)
             return;
 
-      int pitch = item->data(COL_PITCH, Qt::UserRole).toInt();
+      int pitch = item->data(Column::PITCH, Qt::UserRole).toInt();
       int sc;
       if (shortcut->currentIndex() == 7)
             sc = 0;
@@ -163,9 +163,9 @@ void EditDrumset::shortcutChanged()
                   }
             nDrumset.drum(pitch).shortcut = sc;
             if (shortcut->currentIndex() == 7)
-                  item->setText(COL_SHORTCUT, "");
+                  item->setText(Column::SHORTCUT, "");
             else
-                  item->setText(COL_SHORTCUT, shortcut->currentText());
+                  item->setText(Column::SHORTCUT, shortcut->currentText());
             }
       updateList2();
       }
@@ -224,7 +224,7 @@ void EditDrumset::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previou
             else
                   nDrumset.drum(pitch).shortcut = "ABCDEFG"[shortcut->currentIndex()];
             nDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
-            previous->setText(COL_NAME, qApp->translate("drumset", qPrintable(nDrumset.name(pitch))));
+            previous->setText(Column::NAME, qApp->translate("drumset", qPrintable(nDrumset.name(pitch))));
             }
       if (current == 0)
             return;
@@ -265,7 +265,7 @@ void EditDrumset::valueChanged()
       {
       if(!pitchList->currentItem())
             return;
-      int pitch = pitchList->currentItem()->data(COL_PITCH, Qt::UserRole).toInt();
+      int pitch = pitchList->currentItem()->data(Column::PITCH, Qt::UserRole).toInt();
       nDrumset.drum(pitch).name          = name->text();
       nDrumset.drum(pitch).notehead      = NoteHeadGroup(noteHead->currentIndex() - 1);
       nDrumset.drum(pitch).line          = staffLine->value();

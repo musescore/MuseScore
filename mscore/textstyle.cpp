@@ -46,7 +46,7 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
       textNames->clear();
       for (int i = 0; i < styles.size(); ++i) {
 //            const TextStyle& s = styles.at(i);
-            if ( (styles.at(i).hidden()& TextStyle::Hidden::IN_EDITOR) == 0) {
+            if ( (styles.at(i).hidden()& TextStyleHidden::IN_EDITOR) == 0) {
                   int count = textNames->count();
                   textNames->addItem(qApp->translate("MuseScore", styles.at(i).name().toLatin1().data()));
                   textNames->item(count)->setData(Qt::UserRole, i);

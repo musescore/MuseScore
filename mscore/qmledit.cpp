@@ -96,7 +96,7 @@ void JSHighlighter::setColor(QmlEdit::ColorComponent component, const QColor& co
 void JSHighlighter::highlightBlock(const QString& text)
       {
       // parsing state
-      enum {
+      enum class State : char {
             Start = 0,
             Number = 1,
             Identifier = 2,
@@ -108,10 +108,10 @@ void JSHighlighter::highlightBlock(const QString& text)
       QList<int> bracketPositions;
       int blockState = previousBlockState();
       int bracketLevel = blockState >> 4;
-      int state = blockState & 15;
+      State state = State(blockState & 15);
       if (blockState < 0) {
             bracketLevel = 0;
-            state = Start;
+            state = State::Start;
             }
       int start = 0;
       int i = 0;
@@ -119,27 +119,27 @@ void JSHighlighter::highlightBlock(const QString& text)
             QChar ch = (i < text.length()) ? text.at(i) : QChar();
             QChar next = (i < text.length() - 1) ? text.at(i + 1) : QChar();
             switch (state) {
-                  case Start:
+                  case State::Start:
                         start = i;
                         if (ch.isSpace()) {
                               ++i;
                               }
                         else if (ch.isDigit()) {
                               ++i;
-                              state = Number;
+                              state = State::Number;
                               }
                         else if (ch.isLetter() || ch == '_') {
                               ++i;
-                              state = Identifier;
+                              state = State::Identifier;
                               }
                         else if (ch == '\'' || ch == '\"') {
                               ++i;
-                              state = String;
+                              state = State::String;
                               }
                         else if (ch == '/' && next == '*') {
                               ++i;
                               ++i;
-                              state = Comment;
+                              state = State::Comment;
                               }
                         else if (ch == '/' && next == '/') {
                               i = text.length();
@@ -147,7 +147,7 @@ void JSHighlighter::highlightBlock(const QString& text)
                               }
                         else if (ch == '/' && next != '*') {
                               ++i;
-                              state = Regex;
+                              state = State::Regex;
                               }
                         else {
                               if (!QString("(){}[]").contains(ch))
@@ -160,38 +160,38 @@ void JSHighlighter::highlightBlock(const QString& text)
                                           bracketLevel--;
                                     }
                               ++i;
-                              state = Start;
+                              state = State::Start;
                               }
                         break;
-                  case Number:
+                  case State::Number:
                         if (ch.isSpace() || !ch.isDigit()) {
                               setFormat(start, i - start, m_colors[QmlEdit::Number]);
-                              state = Start;
+                              state = State::Start;
                               }
                         else {
                               ++i;
                               }
                         break;
-                  case Identifier:
+                  case State::Identifier:
                         if (ch.isSpace() || !(ch.isDigit() || ch.isLetter() || ch == '_')) {
                               QString token = text.mid(start, i - start).trimmed();
                               if (m_keywords.contains(token))
                                     setFormat(start, i - start, m_colors[QmlEdit::Keyword]);
                               else if (m_knownIds.contains(token))
                                     setFormat(start, i - start, m_colors[QmlEdit::BuiltIn]);
-                              state = Start;
+                              state = State::Start;
                               }
                         else {
                               ++i;
                               }
                         break;
-                  case String:
+                  case State::String:
                         if (ch == text.at(start)) {
                               QChar prev = (i > 0) ? text.at(i - 1) : QChar();
                               if (prev != '\\') {
                                     ++i;
                                     setFormat(start, i - start, m_colors[QmlEdit::String]);
-                                    state = Start;
+                                    state = State::Start;
                                     }
                               else {
                                     ++i;
@@ -201,24 +201,24 @@ void JSHighlighter::highlightBlock(const QString& text)
                               ++i;
                               }
                         break;
-                  case Comment:
+                  case State::Comment:
                         if (ch == '*' && next == '/') {
                               ++i;
                               ++i;
                               setFormat(start, i - start, m_colors[QmlEdit::Comment]);
-                              state = Start;
+                              state = State::Start;
                               }
                         else {
                               ++i;
                               }
                         break;
-                  case Regex:
+                  case State::Regex:
                         if (ch == '/') {
                               QChar prev = (i > 0) ? text.at(i - 1) : QChar();
                               if (prev != '\\') {
                                     ++i;
                                     setFormat(start, i - start, m_colors[QmlEdit::String]);
-                                    state = Start;
+                                    state = State::Start;
                                     }
                               else {
                                     ++i;
@@ -229,15 +229,15 @@ void JSHighlighter::highlightBlock(const QString& text)
                               }
                         break;
                   default:
-                        state = Start;
+                        state = State::Start;
                         break;
                   }
             }
 
-      if (state == Comment)
+      if (state == State::Comment)
             setFormat(start, text.length(), m_colors[QmlEdit::Comment]);
       else
-            state = Start;
+            state = State::Start;
 
       if (!m_markString.isEmpty()) {
             int pos = 0;
@@ -261,7 +261,7 @@ void JSHighlighter::highlightBlock(const QString& text)
                   }
             blockData->bracketPositions = bracketPositions;
             }
-      blockState = (state & 15) | (bracketLevel << 4);
+      blockState = (int(state) & 15) | (bracketLevel << 4);
       setCurrentBlockState(blockState);
       }
 

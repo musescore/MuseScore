@@ -74,6 +74,7 @@ struct MStaff {
       };
 
 enum Repeat : char {
+      NONE    = 0,
       END     = 1,
       START   = 2,
       MEASURE = 4,

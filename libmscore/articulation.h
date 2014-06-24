@@ -37,7 +37,14 @@ enum class ArticulationAnchor : char {
       };
 
 // flags:
-enum ArticulationShowIn : char { PITCHED_STAFF = 1, TABLATURE = 2 };
+enum class ArticulationShowIn : char { PITCHED_STAFF = 1, TABLATURE = 2 };
+
+constexpr ArticulationShowIn operator| (ArticulationShowIn a1, ArticulationShowIn a2) {
+      return static_cast<ArticulationShowIn>(static_cast<unsigned char>(a1) | static_cast<unsigned char>(a2));
+      }
+constexpr bool operator& (ArticulationShowIn a1, ArticulationShowIn a2) {
+      return static_cast<unsigned char>(a1) & static_cast<unsigned char>(a2);
+      }
 
 struct ArticulationInfo {
       SymId upSym;
@@ -45,7 +52,7 @@ struct ArticulationInfo {
       QString name;
       QString description;    // translated name
       qreal timeStretch;      // for fermata
-      int flags;
+      ArticulationShowIn flags;
       };
 
 //---------------------------------------------------------

@@ -61,7 +61,7 @@ class JackAudio : public Driver {
       virtual bool isRealtime() const   { return jack_is_realtime(client); }
       virtual void startTransport();
       virtual void stopTransport();
-      virtual int getState();
+      virtual Transport getState() override;
       virtual int sampleRate() const    { return jack_get_sample_rate(client); }
       virtual void putEvent(const NPlayEvent&, unsigned framePos);
       virtual void midiRead();

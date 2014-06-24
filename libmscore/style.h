@@ -27,22 +27,25 @@ class Element;
 
 class TextStyleData;
 
+enum class TextStyleHidden : unsigned char {
+      NEVER     = 0,
+      IN_EDITOR = 1,
+      IN_LISTS  = 2,
+      ALWAYS    = 0xFF
+      };
+
+constexpr bool operator& (TextStyleHidden h1, TextStyleHidden h2) {
+      return static_cast<unsigned char>(h1) & static_cast<unsigned char>(h2);
+      }
+
 //---------------------------------------------------------
 //   TextStyle
 //---------------------------------------------------------
 
 class TextStyle {
-   public:
-      enum Hidden : unsigned char {
-            NEVER     = 0,
-            IN_EDITOR = 1,
-            IN_LISTS  = 2,
-            ALWAYS    = 0xFF
-            };
-
    private:
       QSharedDataPointer<TextStyleData> d;
-      Hidden _hidden;               // read-only parameter for text style visibility in various program places
+      TextStyleHidden _hidden;               // read-only parameter for text style visibility in various program places
 
    public:
       TextStyle();
@@ -54,7 +57,7 @@ class TextStyle {
          bool sd = false,
          bool hasFrame = false, Spatium fw = Spatium(0.2), Spatium pw = Spatium(0.5), int fr = 25,
          QColor co = QColor(Qt::black), bool circle = false, bool systemFlag = false,
-         QColor fg = QColor(Qt::black), QColor bg = QColor(255, 255, 255, 0), Hidden hidden = Hidden::NEVER);
+         QColor fg = QColor(Qt::black), QColor bg = QColor(255, 255, 255, 0), TextStyleHidden hidden = TextStyleHidden::NEVER);
 
       TextStyle(const TextStyle&);
       ~TextStyle();
@@ -106,7 +109,7 @@ class TextStyle {
       void setSystemFlag(bool v);
       void setForegroundColor(const QColor& v);
       void setBackgroundColor(const QColor& v);
-      Hidden hidden() const   { return _hidden; }
+      TextStyleHidden hidden() const   { return _hidden; }
       void write(Xml& xml) const;
       void writeProperties(Xml& xml) const;
       void writeProperties(Xml& xml, const TextStyle&) const;

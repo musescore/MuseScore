@@ -49,33 +49,33 @@ PluginCreator::PluginCreator(QWidget* parent)
       QToolBar* fileTools = addToolBar(tr("File Operations"));
       fileTools->setObjectName("FileOperations");
 
-      actionNew->setIcon(*icons[fileNew_ICON]);
+      actionNew->setIcon(*icons[int(Icons::fileNew_ICON)]);
       actionNew->setShortcut(QKeySequence(QKeySequence::New));
       fileTools->addAction(actionNew);
 
-      actionOpen->setIcon(*icons[fileOpen_ICON]);
+      actionOpen->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       actionOpen->setShortcut(QKeySequence(QKeySequence::Open));
       fileTools->addAction(actionOpen);
 
-      actionReload->setIcon(*icons[viewRefresh_ICON]);
+      actionReload->setIcon(*icons[int(Icons::viewRefresh_ICON)]);
       fileTools->addAction(actionReload);
 
-      actionSave->setIcon(*icons[fileSave_ICON]);
+      actionSave->setIcon(*icons[int(Icons::fileSave_ICON)]);
       actionSave->setShortcut(QKeySequence(QKeySequence::Save));
       fileTools->addAction(actionSave);
 
       actionQuit->setShortcut(QKeySequence(QKeySequence::Quit));
 
-      actionManual->setIcon(QIcon(*icons[helpContents_ICON]));
+      actionManual->setIcon(QIcon(*icons[int(Icons::helpContents_ICON)]));
       actionManual->setShortcut(QKeySequence(QKeySequence::HelpContents));
       fileTools->addAction(actionManual);
 
       QToolBar* editTools = addToolBar(tr("Edit Operations"));
       editTools->setObjectName("EditOperations");
-      actionUndo->setIcon(*icons[undo_ICON]);
+      actionUndo->setIcon(*icons[int(Icons::undo_ICON)]);
       actionUndo->setShortcut(QKeySequence(QKeySequence::Undo));
       editTools->addAction(actionUndo);
-      actionRedo->setIcon(*icons[redo_ICON]);
+      actionRedo->setIcon(*icons[int(Icons::redo_ICON)]);
       actionRedo->setShortcut(QKeySequence(QKeySequence::Redo));
       editTools->addAction(actionRedo);
       actionUndo->setEnabled(false);

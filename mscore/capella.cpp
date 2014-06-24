@@ -233,7 +233,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         // qDebug("setText %s (%f %f)(%f %f) <%s>",
                         //            qPrintable(st->font().family()),
                         //            st->pos().x(), st->pos().y(), p.x(), p.y(), qPrintable(st->text()));
-                        text->textStyle().setAlign(ALIGN_LEFT | ALIGN_BASELINE);
+                        text->textStyle().setAlign(AlignmentFlags::LEFT | AlignmentFlags::BASELINE);
                         text->setTrack(track);
                         s->add(text);
                         }

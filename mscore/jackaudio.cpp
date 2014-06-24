@@ -529,16 +529,16 @@ void JackAudio::stopTransport()
 //   getState
 //---------------------------------------------------------
 
-int JackAudio::getState()
+Transport JackAudio::getState()
       {
       jack_position_t pos;
       int transportState = jack_transport_query(client, &pos);
       switch (transportState) {
-            case JackTransportStopped:  return Seq::TRANSPORT_STOP;
+            case JackTransportStopped:  return Transport::STOP;
             case JackTransportLooping:
-            case JackTransportRolling:  return Seq::TRANSPORT_PLAY;
+            case JackTransportRolling:  return Transport::PLAY;
             default:
-                  return Seq::TRANSPORT_STOP;
+                  return Transport::STOP;
             }
       }
 

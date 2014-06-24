@@ -140,17 +140,17 @@ enum class PlaceText : char {
 //   AlignmentFlags
 //---------------------------------------------------------
 
-enum AlignmentFlags : char {
-      ALIGN_LEFT     = 0,
-      ALIGN_RIGHT    = 1,
-      ALIGN_HCENTER  = 2,
-      ALIGN_TOP      = 0,
-      ALIGN_BOTTOM   = 4,
-      ALIGN_VCENTER  = 8,
-      ALIGN_BASELINE = 16,
-      ALIGN_CENTER = ALIGN_HCENTER | ALIGN_VCENTER,
-      ALIGN_HMASK = ALIGN_LEFT | ALIGN_RIGHT | ALIGN_HCENTER,
-      ALIGN_VMASK = ALIGN_TOP | ALIGN_BOTTOM | ALIGN_VCENTER | ALIGN_BASELINE
+enum class AlignmentFlags : char {
+      LEFT     = 0,
+      RIGHT    = 1,
+      HCENTER  = 2,
+      TOP      = 0,
+      BOTTOM   = 4,
+      VCENTER  = 8,
+      BASELINE = 16,
+      CENTER = AlignmentFlags::HCENTER | AlignmentFlags::VCENTER,
+      HMASK = AlignmentFlags::LEFT | AlignmentFlags::RIGHT | AlignmentFlags::HCENTER,
+      VMASK = AlignmentFlags::TOP | AlignmentFlags::BOTTOM | AlignmentFlags::VCENTER | AlignmentFlags::BASELINE
       };
 
 //---------------------------------------------------------

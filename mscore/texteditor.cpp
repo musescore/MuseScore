@@ -39,42 +39,42 @@ TextEditor::TextEditor(QWidget* parent)
       f->setLayout(hl);
 
       typefaceBold = new QToolButton;
-      typefaceBold->setIcon(*icons[textBold_ICON]);
+      typefaceBold->setIcon(*icons[int(Icons::textBold_ICON)]);
       typefaceBold->setToolTip(tr("bold"));
       typefaceBold->setCheckable(true);
 
       typefaceItalic = new QToolButton;
-      typefaceItalic->setIcon(*icons[textItalic_ICON]);
+      typefaceItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       typefaceItalic->setToolTip(tr("italic"));
       typefaceItalic->setCheckable(true);
 
       typefaceUnderline = new QToolButton;
-      typefaceUnderline->setIcon(*icons[textUnderline_ICON]);
+      typefaceUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
       typefaceUnderline->setToolTip(tr("underline"));
       typefaceUnderline->setCheckable(true);
 
       leftAlign   = new QToolButton;
-      leftAlign->setIcon(*icons[textLeft_ICON]);
+      leftAlign->setIcon(*icons[int(Icons::textLeft_ICON)]);
       leftAlign->setToolTip(tr("align left"));
       leftAlign->setCheckable(true);
 
       centerAlign = new QToolButton;
-      centerAlign->setIcon(*icons[textCenter_ICON]);
+      centerAlign->setIcon(*icons[int(Icons::textCenter_ICON)]);
       centerAlign->setToolTip(tr("align center"));
       centerAlign->setCheckable(true);
 
       rightAlign  = new QToolButton;
-      rightAlign->setIcon(*icons[textRight_ICON]);
+      rightAlign->setIcon(*icons[int(Icons::textRight_ICON)]);
       rightAlign->setToolTip(tr("align right"));
       rightAlign->setCheckable(true);
 
       typefaceSubscript = new QToolButton;
-      typefaceSubscript->setIcon(*icons[textSub_ICON]);
+      typefaceSubscript->setIcon(*icons[int(Icons::textSub_ICON)]);
       typefaceSubscript->setToolTip(tr("subscript"));
       typefaceSubscript->setCheckable(true);
 
       typefaceSuperscript = new QToolButton;
-      typefaceSuperscript->setIcon(*icons[textSuper_ICON]);
+      typefaceSuperscript->setIcon(*icons[int(Icons::textSuper_ICON)]);
       typefaceSuperscript->setToolTip(tr("superscript"));
       typefaceSuperscript->setCheckable(true);
 

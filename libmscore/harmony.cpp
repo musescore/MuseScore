@@ -898,15 +898,15 @@ void Harmony::layout()
       yy += textStyle().offset(_spatium).y();
       if (!editMode()) {
             qreal hb = lineHeight() - Text::baseLine();
-            if (textStyle().align() & ALIGN_BOTTOM)
+            if (textStyle().align() & AlignmentFlags::BOTTOM)
                   yy -= hb;
-            else if (textStyle().align() & ALIGN_VCENTER) {
+            else if (textStyle().align() & AlignmentFlags::VCENTER) {
                   yy -= hb;
                   yy += (height() * .5);
                   }
-            else if (textStyle().align() & ALIGN_BASELINE) {
+            else if (textStyle().align() & AlignmentFlags::BASELINE) {
                   }
-            else { // ALIGN_TOP
+            else { // AlignmentFlags::TOP
                   yy -= hb;
                   yy += height();
                   }
@@ -915,11 +915,11 @@ void Harmony::layout()
       qreal xx = textStyle().offset(_spatium).x();
       if (!editMode()) {
             qreal cw = symWidth(SymId::noteheadBlack);
-            if (textStyle().align() & ALIGN_RIGHT) {
+            if (textStyle().align() & AlignmentFlags::RIGHT) {
                   xx += cw;
                   xx -= width();
                   }
-            else if (textStyle().align() & ALIGN_HCENTER) {
+            else if (textStyle().align() & AlignmentFlags::HCENTER) {
                   xx += (cw * .5);
                   xx -= (width() * .5);
                   }

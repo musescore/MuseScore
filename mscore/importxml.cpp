@@ -2874,7 +2874,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   }
             else {
                   Symbol* s = new Symbol(score);
-                  s->setAlign(ALIGN_LEFT | ALIGN_BASELINE);
+                  s->setAlign(AlignmentFlags::LEFT | AlignmentFlags::BASELINE);
                   s->setOffsetType(OffsetType::SPATIUM);
                   if (type == "start")
                         s->setSym(SymId::keyboardPedalPed);

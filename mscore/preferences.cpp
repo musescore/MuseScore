@@ -560,20 +560,20 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
-      startWithButton->setIcon(*icons[fileOpen_ICON]);
-      instrumentList1Button->setIcon(*icons[fileOpen_ICON]);
-      instrumentList2Button->setIcon(*icons[fileOpen_ICON]);
-      defaultStyleButton->setIcon(*icons[fileOpen_ICON]);
-      partStyleButton->setIcon(*icons[fileOpen_ICON]);
-      myScoresButton->setIcon(*icons[fileOpen_ICON]);
-      myStylesButton->setIcon(*icons[fileOpen_ICON]);
-      myTemplatesButton->setIcon(*icons[fileOpen_ICON]);
-      myPluginsButton->setIcon(*icons[fileOpen_ICON]);
-      myImagesButton->setIcon(*icons[fileOpen_ICON]);
+      startWithButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      instrumentList1Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      instrumentList2Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      defaultStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      partStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myScoresButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
-      bgWallpaperSelect->setIcon(*icons[fileOpen_ICON]);
-      fgWallpaperSelect->setIcon(*icons[fileOpen_ICON]);
-      styleFileButton->setIcon(*icons[fileOpen_ICON]);
+      bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      fgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      styleFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       shortcutsChanged        = false;
 
 #ifndef USE_JACK
@@ -1044,8 +1044,8 @@ void PreferenceDialog::updateSCListView()
                   continue;
             ShortcutItem* newItem = new ShortcutItem;
             newItem->setText(0, s->descr());
-            if (s->icon() != -1)
-                  newItem->setIcon(0, *icons[s->icon()]);
+            if (s->icon() != Icons::Invalid_ICON)
+                  newItem->setIcon(0, *icons[int(s->icon())]);
             newItem->setText(1, s->keysToString());
             newItem->setData(0, Qt::UserRole, s->key());
             shortcutList->addTopLevelItem(newItem);

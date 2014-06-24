@@ -64,25 +64,25 @@ TextTools::TextTools(QWidget* parent)
       showKeyboard->setCheckable(true);
       tb->addAction(showKeyboard);
 
-      typefaceBold = tb->addAction(*icons[textBold_ICON], "");
+      typefaceBold = tb->addAction(*icons[int(Icons::textBold_ICON)], "");
       typefaceBold->setToolTip(tr("bold"));
       typefaceBold->setCheckable(true);
 
-      typefaceItalic = tb->addAction(*icons[textItalic_ICON], "");
+      typefaceItalic = tb->addAction(*icons[int(Icons::textItalic_ICON)], "");
       typefaceItalic->setToolTip(tr("italic"));
       typefaceItalic->setCheckable(true);
 
-      typefaceUnderline = tb->addAction(*icons[textUnderline_ICON], "");
+      typefaceUnderline = tb->addAction(*icons[int(Icons::textUnderline_ICON)], "");
       typefaceUnderline->setToolTip(tr("underline"));
       typefaceUnderline->setCheckable(true);
 
       tb->addSeparator();
 
-      typefaceSubscript   = tb->addAction(*icons[textSub_ICON], "");
+      typefaceSubscript   = tb->addAction(*icons[int(Icons::textSub_ICON)], "");
       typefaceSubscript->setToolTip(tr("subscript"));
       typefaceSubscript->setCheckable(true);
 
-      typefaceSuperscript = tb->addAction(*icons[textSuper_ICON], "");
+      typefaceSuperscript = tb->addAction(*icons[int(Icons::textSuper_ICON)], "");
       typefaceSuperscript->setToolTip(tr("superscript"));
       typefaceSuperscript->setCheckable(true);
 

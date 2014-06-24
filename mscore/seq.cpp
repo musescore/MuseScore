@@ -144,7 +144,7 @@ Seq::Seq()
       tickRest        = 0;
 
       endTick  = 0;
-      state    = TRANSPORT_STOP;
+      state    = Transport::STOP;
       oggInit  = false;
       _driver  = 0;
       playPos  = events.cbegin();
@@ -330,7 +330,7 @@ void Seq::start()
 
 void Seq::stop()
       {
-      if (state == TRANSPORT_STOP)
+      if (state == Transport::STOP)
             return;
 
       if (oggInit) {
@@ -358,7 +358,7 @@ void Seq::stopWait()
       stop();
       QWaitCondition sleep;
       int idx = 0;
-      while (state != TRANSPORT_STOP) {
+      while (state != Transport::STOP) {
             qDebug("State %d", state);
             mutex.lock();
             sleep.wait(&mutex, 100);
@@ -514,7 +514,7 @@ void Seq::processMessages()
                   break;
             SeqMsg msg = toSeq.dequeue();
             switch(msg.id) {
-                  case SEQ_TEMPO_CHANGE:
+                  case SeqMsgId::TEMPO_CHANGE:
                         {
                         if (!cs)
                               continue;
@@ -530,11 +530,13 @@ void Seq::processMessages()
                         emit tempoChanged();
                         }
                         break;
-                  case SEQ_PLAY:
+                  case SeqMsgId::PLAY:
                         putEvent(msg.event);
                         break;
-                  case SEQ_SEEK:
+                  case SeqMsgId::SEEK:
                         setPos(msg.intVal);
+                        break;
+                  default:
                         break;
                   }
             }
@@ -661,11 +663,11 @@ void Seq::addCountInClicks()
 void Seq::process(unsigned n, float* buffer)
       {
       unsigned frames = n;
-      int driverState = _driver->getState();
+      Transport driverState = _driver->getState();
 
       if (driverState != state) {
             // Got a message from JACK Transport panel: Play
-            if (state == TRANSPORT_STOP && driverState == TRANSPORT_PLAY) {
+            if (state == Transport::STOP && driverState == Transport::PLAY) {
 
                   if((preferences.useJackMidi || preferences.useJackAudio) && !getAction("play")->isChecked()) {
                         // Do not play while editing elements
@@ -680,7 +682,7 @@ void Seq::process(unsigned n, float* buffer)
                               }
                         }
                   // Need to change state after calling collectEvents()
-                  state = TRANSPORT_PLAY;
+                  state = Transport::PLAY;
                   if (mscore->countIn() && cs->playMode() == PlayMode::SYNTHESIZER) {
                         countInEvents.clear();
                         inCountIn = true;
@@ -688,8 +690,8 @@ void Seq::process(unsigned n, float* buffer)
                   emit toGui('1');
                   }
             // Got a message from JACK Transport panel: Stop
-            else if (state == TRANSPORT_PLAY && driverState == TRANSPORT_STOP) {
-                  state = TRANSPORT_STOP;
+            else if (state == Transport::PLAY && driverState == Transport::STOP) {
+                  state = Transport::STOP;
                   // Muting all notes
                   stopNotes();
                   if (playPos == events.cend()) {
@@ -716,7 +718,7 @@ void Seq::process(unsigned n, float* buffer)
 
       processMessages();
 
-      if (state == TRANSPORT_PLAY) {
+      if (state == Transport::PLAY) {
             if(!cs)
                   return;
             EventMap::const_iterator* pPlayPos = &playPos;
@@ -899,7 +901,7 @@ void Seq::initInstruments()
 void Seq::collectEvents()
       {
       //do not collect even while playing
-      if (state ==  TRANSPORT_PLAY)
+      if (state ==  Transport::PLAY)
             return;
       events.clear();
 
@@ -934,7 +936,7 @@ int Seq::getCurTick()
 
 void Seq::setRelTempo(double relTempo)
       {
-      guiToSeq(SeqMsg(SEQ_TEMPO_CHANGE, relTempo));
+      guiToSeq(SeqMsg(SeqMsgId::TEMPO_CHANGE, relTempo));
       }
 
 //---------------------------------------------------------
@@ -999,7 +1001,7 @@ void Seq::seek(int utick, Segment* seg)
             ov_pcm_seek(&vf, sp);
             }
 
-      guiToSeq(SeqMsg(SEQ_SEEK, utick));
+      guiToSeq(SeqMsg(SeqMsgId::SEEK, utick));
       guiPos = events.lower_bound(utick);
       mscore->setPos(utick);
       unmarkNotes();
@@ -1012,7 +1014,7 @@ void Seq::seek(int utick, Segment* seg)
 
 void Seq::startNote(int channel, int pitch, int velo, double nt)
       {
-      if (state != TRANSPORT_STOP)
+      if (state != Transport::STOP)
             return;
       NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
       ev.setTuning(nt);
@@ -1090,7 +1092,7 @@ void Seq::setController(int channel, int ctrl, int data)
 
 void Seq::sendEvent(const NPlayEvent& ev)
       {
-      guiToSeq(SeqMsg(SEQ_PLAY, ev));
+      guiToSeq(SeqMsg(SeqMsgId::PLAY, ev));
       }
 
 //---------------------------------------------------------
@@ -1205,7 +1207,7 @@ void Seq::guiToSeq(const SeqMsg& msg)
 
 void Seq::eventToGui(NPlayEvent e)
       {
-      fromSeq.enqueue(SeqMsg(SEQ_MIDI_INPUT_EVENT, e));
+      fromSeq.enqueue(SeqMsg(SeqMsgId::MIDI_INPUT_EVENT, e));
       }
 
 //---------------------------------------------------------
@@ -1302,7 +1304,7 @@ void Seq::heartBeatTimeout()
 
       while (!fromSeq.isEmpty()) {
             SeqMsg msg = fromSeq.dequeue();
-            if (msg.id == SEQ_MIDI_INPUT_EVENT) {
+            if (msg.id == SeqMsgId::MIDI_INPUT_EVENT) {
                   int type = msg.event.type();
                   if (type == ME_NOTEON)
                         mscore->midiNoteReceived(msg.event.channel(), msg.event.pitch(), msg.event.velo());
@@ -1313,7 +1315,7 @@ void Seq::heartBeatTimeout()
                   }
             }
 
-      if (state != TRANSPORT_PLAY || inCountIn)
+      if (state != Transport::PLAY || inCountIn)
             return;
       int endTime = playTime;
 
@@ -1409,7 +1411,7 @@ double Seq::curTempo() const
 void Seq::setLoopIn()
       {
       int tick;
-      if (state == TRANSPORT_PLAY) {      // If in playback mode, set the In position where note is being played
+      if (state == Transport::PLAY) {      // If in playback mode, set the In position where note is being played
             auto ppos = playPos;
             if (ppos != events.cbegin())
                   --ppos;                 // We have to go back one pos to get the correct note that has just been played
@@ -1429,7 +1431,7 @@ void Seq::setLoopIn()
 void Seq::setLoopOut()
       {
       int tick;
-      if (state == TRANSPORT_PLAY) {    // If in playback mode, set the Out position where note is being played
+      if (state == Transport::PLAY) {    // If in playback mode, set the Out position where note is being played
             tick = cs->repeatList()->utick2tick(playPos->first);
             }
       else
@@ -1437,8 +1439,8 @@ void Seq::setLoopOut()
       if (tick <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
             cs->setPos(POS::LEFT, 0);
       cs->setPos(POS::RIGHT, tick);
-      if (state == TRANSPORT_PLAY)
-            guiToSeq(SeqMsg(SEQ_SEEK, tick));
+      if (state == Transport::PLAY)
+            guiToSeq(SeqMsg(SeqMsgId::SEEK, tick));
       }
 
 void Seq::setPos(POS, unsigned tick)
