@@ -256,7 +256,7 @@ void TextBlock::layout(Text* t)
             }
       if (_text.isEmpty()) {
             QFontMetricsF fm(t->textStyle().fontPx(t->spatium()));
-            _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.ascent());
+            _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
             _lineSpacing = fm.lineSpacing();
             }
       else {
@@ -277,7 +277,7 @@ void TextBlock::layout(Text* t)
                         f.pos.setY(0.0);
                   qreal w;
                   QRectF r;
-                  r = fm.tightBoundingRect(f.text).translated(f.pos);
+                  r = fm.boundingRect(f.text).translated(f.pos);
                   w = fm.width(f.text);
                   _bbox |= r;
                   x += w;
