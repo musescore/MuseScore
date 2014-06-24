@@ -14,15 +14,12 @@
 #define __XML_H__
 
 #include "thirdparty/xmlstream/xmlstream.h"
-#include "mscore.h"
-#include "spatium.h"
-#include "fraction.h"
-#include "property.h"
 #include "stafftype.h"
 #include "interval.h"
 
 namespace Ms {
 
+enum class PlaceText : char;
 class Spanner;
 class Beam;
 class Tuplet;
@@ -52,6 +49,7 @@ class XmlReader : public XmlStreamReader {
       QList<Beam*>    _beams;
       QList<Tuplet*>  _tuplets;
       QList<SpannerValues> _spannerValues;
+      QList<Spanner*> _spanner;
       QList<StaffType> _staffTypes;
       void htmlToString(int level, QString*);
       Interval _transpose;
@@ -104,6 +102,11 @@ class XmlReader : public XmlStreamReader {
 
       QList<Tuplet*>& tuplets()                      { return _tuplets; }
       QList<Beam*>& beams()                          { return _beams; }
+
+      void removeSpanner(Spanner*);
+      void addSpanner(Spanner*);
+      Spanner* findSpanner(int id);
+
       void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
       const SpannerValues* spannerValues(int id);
       QList<StaffType>& staffType() { return _staffTypes; }

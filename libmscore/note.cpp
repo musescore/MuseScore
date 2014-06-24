@@ -871,7 +871,7 @@ void Note::read(XmlReader& e)
                   _tieFor->setTrack(track());
                   _tieFor->read(e);
                   _tieFor->setStartNote(this);
-                  score()->addSpanner(_tieFor);
+                  e.addSpanner(_tieFor);
                   }
             else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
                   Fingering* f = new Fingering(score());
@@ -1008,14 +1008,14 @@ void Note::read(XmlReader& e)
                   }
             else if (tag == "endSpanner") {
                   int id = e.intAttribute("id");
-                  Spanner* sp = score()->findSpanner(id);
+                  Spanner* sp = e.findSpanner(id);
                   if (sp) {
                         sp->setEndElement(this);
                         if (sp->type() == ElementType::TIE)
                               _tieBack = static_cast<Tie*>(sp);
                         else
                               addSpannerBack(sp);
-                        score()->removeSpanner(sp);   // no note spanners in global spanner map
+                        e.removeSpanner(sp);
                         }
                   else
                         qDebug("Note::read(): cannot find spanner %d", id);
@@ -1030,7 +1030,7 @@ void Note::read(XmlReader& e)
                   sp->setTick(e.tick());
                   addSpannerFor(sp);
                   sp->setParent(this);
-                  score()->addSpanner(sp);
+                  e.addSpanner(sp);
                   }
             else if (tag == "onTimeType")                   // obsolete
                   e.skipCurrentElement(); // _onTimeType = readValueType(e);

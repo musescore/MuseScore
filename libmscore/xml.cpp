@@ -717,5 +717,24 @@ const SpannerValues* XmlReader::spannerValues(int id)
       return 0;
       }
 
+void XmlReader::addSpanner(Spanner* t)
+      {
+      _spanner.append(t);
+      }
+
+void XmlReader::removeSpanner(Spanner* t)
+      {
+      _spanner.removeOne(t);
+      }
+
+Spanner* XmlReader::findSpanner(int id)
+      {
+      for (Spanner* spanner : _spanner) {
+            if (spanner->id() == id)
+                  return spanner;
+            }
+      return 0;
+      }
+
 }
 
