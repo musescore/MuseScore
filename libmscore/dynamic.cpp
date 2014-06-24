@@ -126,7 +126,7 @@ Dynamic::Dynamic(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _velocity = -1;
-      _dynRange = DynamicRange::PART;
+      _dynRange = Range::PART;
       setTextStyleType(TextStyleType::DYNAMICS);
       _dynamicType  = Type::OTHER;
       }
@@ -185,7 +185,7 @@ void Dynamic::read(XmlReader& e)
             else if (tag == "velocity")
                   _velocity = e.readInt();
             else if (tag == "dynType")
-                  _dynRange = DynamicRange(e.readInt());
+                  _dynRange = Range(e.readInt());
             else if (!Text::readProperties(e))
                   e.unknown();
             }
@@ -338,7 +338,7 @@ QRectF Dynamic::drag(EditData* ed)
 //   undoSetDynRange
 //---------------------------------------------------------
 
-void Dynamic::undoSetDynRange(DynamicRange v)
+void Dynamic::undoSetDynRange(Range v)
       {
       score()->undoChangeProperty(this, P_ID::DYNAMIC_RANGE, int(v));
       }
@@ -366,7 +366,7 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case P_ID::DYNAMIC_RANGE:
-                  _dynRange = DynamicRange(v.toInt());
+                  _dynRange = Range(v.toInt());
                   break;
             case P_ID::VELOCITY:
                   _velocity = v.toInt();
@@ -391,7 +391,7 @@ QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::TEXT_STYLE_TYPE: return int(TextStyleType::DYNAMICS);
-            case P_ID::DYNAMIC_RANGE:   return int(DynamicRange::PART);
+            case P_ID::DYNAMIC_RANGE:   return int(Range::PART);
             case P_ID::VELOCITY:        return -1;
             default:                    return Text::propertyDefault(id);
             }

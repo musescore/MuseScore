@@ -2827,9 +2827,9 @@ void ChangeImage::flip()
 
 void ChangeHairpin::flip()
       {
-      int vc        = hairpin->veloChange();
-      DynamicRange t = hairpin->dynRange();
-      bool dg       = hairpin->diagonal();
+      int vc           = hairpin->veloChange();
+      Dynamic::Range t = hairpin->dynRange();
+      bool dg          = hairpin->diagonal();
       hairpin->setVeloChange(veloChange);
       hairpin->setDynRange(dynRange);
       hairpin->setDiagonal(diagonal);

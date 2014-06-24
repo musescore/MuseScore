@@ -14,6 +14,8 @@
 #include "style.h"
 #include "mscore.h"
 #include "sequencer.h"
+#include "element.h"
+#include "dynamic.h"
 #include "accidental.h"
 #include "figuredbass.h"
 #include "stafftype.h"
@@ -117,7 +119,7 @@ void MScore::init()
       qRegisterMetaType<VoltaType>("VoltaType");
       qRegisterMetaType<OttavaType>("OttavaType");
       qRegisterMetaType<Trill::TrillType>("TrillType");
-      qRegisterMetaType<DynamicRange>("DynamicRange");
+      qRegisterMetaType<Dynamic::Range>("DynamicRange");
       qRegisterMetaType<JumpType>("JumpType");
       qRegisterMetaType<MarkerType>("MarkerType");
       qRegisterMetaType<BeamMode>("BeamMode");
