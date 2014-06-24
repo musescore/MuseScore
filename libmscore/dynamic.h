@@ -33,7 +33,7 @@ class Dynamic : public Text {
       Q_PROPERTY(DynamicRange range READ dynRange  WRITE undoSetDynRange)
 
    public:
-      enum class DynamicType : char {
+      enum class Type : char {
             OTHER,
             PPPPPP,
             PPPPP,
@@ -66,7 +66,7 @@ class Dynamic : public Text {
             };
 
    private:
-      DynamicType _dynamicType;
+      Type _dynamicType;
 
       mutable QPointF dragOffset;
       int _velocity;          // associated midi velocity 0-127
@@ -82,10 +82,10 @@ class Dynamic : public Text {
       Segment* segment() const                  { return (Segment*)parent(); }
       Measure* measure() const                  { return (Measure*)parent()->parent(); }
 
-      void setDynamicType(DynamicType val)      { _dynamicType = val; }
+      void setDynamicType(Type val)      { _dynamicType = val; }
       void setDynamicType(const QString&);
       QString dynamicTypeName() const;
-      DynamicType dynamicType() const           { return _dynamicType; }
+      Type dynamicType() const           { return _dynamicType; }
 
       virtual void layout() override;
       virtual void write(Xml& xml) const override;

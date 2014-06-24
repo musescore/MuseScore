@@ -128,7 +128,7 @@ Dynamic::Dynamic(Score* s)
       _velocity = -1;
       _dynRange = DynamicRange::PART;
       setTextStyleType(TextStyleType::DYNAMICS);
-      _dynamicType  = DynamicType::OTHER;
+      _dynamicType  = Type::OTHER;
       }
 
 Dynamic::Dynamic(const Dynamic& d)
@@ -167,7 +167,7 @@ void Dynamic::write(Xml& xml) const
       xml.tag("subtype", dynamicTypeName());
       writeProperty(xml, P_ID::VELOCITY);
       writeProperty(xml, P_ID::DYNAMIC_RANGE);
-      Text::writeProperties(xml, dynamicType() == DynamicType::OTHER);
+      Text::writeProperties(xml, dynamicType() == Type::OTHER);
       xml.etag();
       }
 
@@ -241,13 +241,13 @@ void Dynamic::setDynamicType(const QString& tag)
       int n = sizeof(dynList)/sizeof(*dynList);
       for (int i = 0; i < n; ++i) {
             if (dynList[i].tag == tag || dynList[i].text == tag) {
-                  setDynamicType(DynamicType(i));
+                  setDynamicType(Type(i));
                   setText(QString::fromUtf8(dynList[i].text));
                   return;
                   }
             }
       qDebug("setDynamicType: other <%s>", qPrintable(tag));
-      setDynamicType(DynamicType::OTHER);
+      setDynamicType(Type::OTHER);
       setText(tag);
       }
 
@@ -277,7 +277,7 @@ void Dynamic::endEdit()
       {
       Text::endEdit();
       if (text() != QString::fromUtf8(dynList[int(_dynamicType)].text))
-            _dynamicType = DynamicType::OTHER;
+            _dynamicType = Type::OTHER;
       }
 
 //---------------------------------------------------------
@@ -372,7 +372,7 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
                   _velocity = v.toInt();
                   break;
             case P_ID::SUBTYPE:
-                  _dynamicType = DynamicType(v.toInt());
+                  _dynamicType = Type(v.toInt());
                   break;
             default:
                   if (!Text::setProperty(propertyId, v))
