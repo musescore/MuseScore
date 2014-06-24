@@ -28,6 +28,7 @@
 #include "input.h"
 #include "measure.h"
 #include "page.h"
+#include "spanner.h"
 
 namespace Ms {
 
@@ -232,7 +233,7 @@ Element* firstNoteBelow(Note* e)
       {
       Note* re = 0;
       Segment* seg = e->chord()->segment();
-      for(int i = e->track()/VOICES; i/VOICES == e->track()/VOICES; i++){
+      for(int i = e->track()/VOICES * VOICES; i/VOICES * VOICES == e->track()/VOICES * VOICES; i++){
             Element* el = seg->element(i);
             if(!el){
                   continue;
@@ -254,11 +255,16 @@ Element* firstNoteBelow(Note* e)
 
 Element* Score::nextNoteInChordOrSegment(Element *e)
       {
+      //if nothing is selected, I'm starting at the begining of the score
+      if(!e){
+          return this->firstSegment()->element(0);
+          }
+
       Element* re = 0;
       //if it is a note attached element, I'm returning the note
       if(e->parent()->type() == ElementType::NOTE){
-          return e->parent();
-      }
+            return e->parent();
+            }
 
       //if it is a note, I'm looking for the first note below it
       //in that staff
@@ -270,26 +276,43 @@ Element* Score::nextNoteInChordOrSegment(Element *e)
             }
 
       //else, I'm finding the parent segment and moving to the next one
+      bool goToNextSeg = true;
       Segment* seg;
       Element* p = e;
-      while( strcmp(p->metaObject()->className(),"Ms::Segment") ){
-          qDebug(p->metaObject()->className());
-          p = p->parent();
+
+      while(!p->inherits("Ms::Segment") && !p->inherits("Ms::SpannerSegment")){
+            if(p->type() == ElementType::CHORD && e->type() != ElementType::NOTE){
+                  goToNextSeg = false;
+            }
+            p = p->parent();
       }
 
-      seg = static_cast<Segment*>(p);
-      seg = seg->next1(SegmentType::KeySig    |
-                       SegmentType::TimeSig   |
-                       SegmentType::ChordRest |
-                       SegmentType::Clef      |
-                       SegmentType::Breath    |
-                       SegmentType::BarLine   );
+      if(p->inherits("Ms::SpannerSegment")){
+            SpannerSegment* s = static_cast<SpannerSegment*>(p);
+            seg = s->spanner()->startSegment();
+            goToNextSeg = false;
+            }
+      else{
+            seg = static_cast<Segment*>(p);
+            }
 
+      if(goToNextSeg){
+            do{
+                  seg = seg->next1(SegmentType::All);
+                  }while(seg && !seg->element(e->track()/VOICES * VOICES) );
+            }
+
+      if(!seg){ //end of staff
+            if( (seg = this->firstSegment() ) == 0){ //end of score
+                  return 0;
+                  }
+            return seg->element( (e->track()/VOICES + 1) * VOICES);
+            }
       //if the segment is a ChordRest, I'm looking for the highest note first,
       //if it doesn't exist, I'm returning the rest
       if(seg->segmentType() == SegmentType::ChordRest){
             Note* lowest=0;
-            for(int voice = e->track()/VOICES; voice/VOICES == e->track()/VOICES; voice++){
+            for(int voice = e->track()/VOICES * VOICES; voice/VOICES * VOICES == e->track()/VOICES * VOICES; voice++){
                   Element* el = seg->element(voice);
                   if(!el){      //there is no chord or rest on this voice
                         continue;
@@ -307,14 +330,14 @@ Element* Score::nextNoteInChordOrSegment(Element *e)
             if(lowest){
                   return lowest;
                   }
-            re = seg->element(e->track()/VOICES);
+            re = seg->element(e->track()/VOICES * VOICES);
             if(re && re->type() == ElementType::REST){
                   return re;
                   }
             }
 
       //if a segment is not a ChordRest, I'm returning its element
-      re = seg->element(e->track()/VOICES);
+      re = seg->element(e->track()/VOICES * VOICES);
       return re;
       }
 
