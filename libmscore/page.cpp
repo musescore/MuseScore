@@ -278,7 +278,9 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       text.textStyle().setAlign(flags);
       text.setText(s);
       text.layout();
+      p->translate(text.pos());
       text.draw(p);
+      p->translate(-text.pos());
       }
 
 //---------------------------------------------------------
