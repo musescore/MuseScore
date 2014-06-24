@@ -3433,8 +3433,8 @@ void Score::undoInsertTime(int tick, int len)
                         }
                   }
             }
-            // insert time in (key, clef) maps
-            undo(new InsertTime(this, tick, len));
+      // insert time in (key, clef) maps
+      undo(new InsertTime(this, tick, len));
       }
 
 
