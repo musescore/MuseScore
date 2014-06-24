@@ -3155,12 +3155,18 @@ void ChangeProperty::flip()
             << property
             ;
 #endif
+      if (id == P_ID::SPANNER_TICK)
+            element->score()->removeSpanner(static_cast<Spanner*>(element));
+
       QVariant v       = element->getProperty(id);
       PropertyStyle ps = element->propertyStyle(id);
       if (propertyStyle == PropertyStyle::STYLED)
             element->resetProperty(id);
       else
             element->setProperty(id, property);
+
+      if (id == P_ID::SPANNER_TICK)
+            element->score()->addSpanner(static_cast<Spanner*>(element));
       property = v;
       propertyStyle = ps;
       }
