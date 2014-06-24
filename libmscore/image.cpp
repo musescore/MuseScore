@@ -41,7 +41,7 @@ Image::Image(Score* s)
       _lockAspectRatio = defaultLockAspectRatio;
       _autoScale       = defaultAutoScale;
       _sizeIsSpatium   = defaultSizeIsSpatium;
-      setZ(int(ElementType::IMAGE) * 100);
+      setZ(int(Element::Type::IMAGE) * 100);
       _linkIsValid     = false;
       }
 
@@ -538,7 +538,7 @@ void Image::layout()
 
       qreal f = _sizeIsSpatium ? spatium() : MScore::DPMM;
       // if autoscale && inside a box, scale to box relevant size
-      if (autoScale() && parent() && ((parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX))) {
+      if (autoScale() && parent() && ((parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX))) {
             if (_lockAspectRatio) {
                   QSizeF size(imageSize());
                   qreal ratio = size.width() / size.height();

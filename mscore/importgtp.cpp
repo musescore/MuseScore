@@ -1278,7 +1278,7 @@ void GuitarPro1::readNote(int string, Note* note)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == ElementType::CHORD) {
+                        if (e->type() == Element::Type::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -2030,7 +2030,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == ElementType::CHORD) {
+                        if (e->type() == Element::Type::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -2333,7 +2333,7 @@ void GuitarPro4::read(QFile* fp)
 
 
                         cr->setDuration(l);
-                        if (cr->type() == ElementType::REST && (pause == 0 || l == measure->len()))
+                        if (cr->type() == Element::Type::REST && (pause == 0 || l == measure->len()))
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
                         else
                               cr->setDurationType(d);
@@ -2657,7 +2657,7 @@ void GuitarPro5::readNote(int string, Note* note)
             while (segment) {
                   Element* e = segment->element(track);
                   if (e) {
-                        if (e->type() == ElementType::CHORD) {
+                        if (e->type() == Element::Type::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
                               foreach(Note* note2, chord2->notes()) {
                                     if (note2->string() == string) {
@@ -2881,7 +2881,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   }
 
             cr->setDuration(l);
-            if (cr->type() == ElementType::REST && pause == 0)
+            if (cr->type() == Element::Type::REST && pause == 0)
                   cr->setDurationType(TDuration::DurationType::V_MEASURE);
             else
                   cr->setDurationType(d);
@@ -2904,7 +2904,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   cr->add(lyrics);
             }
       int rr = readChar();
-      if (cr && (cr->type() == ElementType::CHORD)) {
+      if (cr && (cr->type() == Element::Type::CHORD)) {
             Chord* chord = static_cast<Chord*>(cr);
             applyBeatEffects(chord, beatEffects);
             if (rr == 0x2)
@@ -4039,7 +4039,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             }
       else  {
             m = score->measures()->first();
-            if (m->type() != ElementType::VBOX) {
+            if (m->type() != Element::Type::VBOX) {
                   MeasureBase* mb = new VBox(score);
                   mb->setTick(0);
                   score->addMeasure(mb, m);
@@ -4143,7 +4143,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             // create excerpt title
             //
             MeasureBase* measure = pscore->first();
-            if (!measure || (measure->type() != ElementType::VBOX)) {
+            if (!measure || (measure->type() != Element::Type::VBOX)) {
                   MeasureBase* mb = new VBox(pscore);
                   mb->setTick(0);
                   pscore->addMeasure(mb, measure);

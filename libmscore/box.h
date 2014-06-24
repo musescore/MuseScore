@@ -96,8 +96,8 @@ class HBox : public Box {
    public:
       HBox(Score* score);
       ~HBox() {}
-      virtual HBox* clone() const      { return new HBox(*this); }
-      virtual ElementType type() const { return ElementType::HBOX;       }
+      virtual HBox* clone() const        { return new HBox(*this); }
+      virtual Element::Type type() const { return Element::Type::HBOX;       }
 
       virtual void layout();
 
@@ -118,8 +118,8 @@ class VBox : public Box {
    public:
       VBox(Score* score);
       ~VBox() {}
-      virtual VBox* clone() const      { return new VBox(*this); }
-      virtual ElementType type() const { return ElementType::VBOX;       }
+      virtual VBox* clone() const        { return new VBox(*this); }
+      virtual Element::Type type() const { return Element::Type::VBOX;       }
 
       virtual void layout();
 
@@ -138,8 +138,8 @@ class FBox : public VBox {
    public:
       FBox(Score* score) : VBox(score) {}
       ~FBox() {}
-      virtual FBox* clone() const      { return new FBox(*this); }
-      virtual ElementType type() const { return ElementType::FBOX;       }
+      virtual FBox* clone() const        { return new FBox(*this); }
+      virtual Element::Type type() const { return Element::Type::FBOX;       }
 
       virtual void layout();
       void add(Element*);

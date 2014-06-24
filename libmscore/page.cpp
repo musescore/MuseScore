@@ -681,7 +681,7 @@ Measure* Page::searchMeasure(const QPointF& p) const
       foreach(System* system, systems) {
             qreal x = p.x() - system->pagePos().x();
             foreach(MeasureBase* mb, system->measures()) {
-                  if (mb->type() != ElementType::MEASURE)
+                  if (mb->type() != Element::Type::MEASURE)
                         continue;
                   if (x < (mb->x() + mb->bbox().width()))
                         return static_cast<Measure*>(mb);

@@ -295,7 +295,7 @@ QPointF Arpeggio::gripAnchor(int n) const
             Note* dnote = c->downNote();
             int btrack  = track() + (_span - 1) * VOICES;
             ChordRest* bchord = static_cast<ChordRest*>(c->segment()->element(btrack));
-            if (bchord && bchord->type() == ElementType::CHORD)
+            if (bchord && bchord->type() == Element::Type::CHORD)
                   dnote = static_cast<Chord*>(bchord)->downNote();
             return dnote->pagePos();
             }
@@ -360,7 +360,7 @@ void Arpeggio::spatiumChanged(qreal oldValue, qreal newValue)
 
 bool Arpeggio::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == ElementType::ARPEGGIO;
+      return e->type() == Element::Type::ARPEGGIO;
       }
 
 //---------------------------------------------------------
@@ -371,7 +371,7 @@ Element* Arpeggio::drop(const DropData& data)
       {
       Element* e = data.element;
       switch(e->type()) {
-            case ElementType::ARPEGGIO:
+            case Element::Type::ARPEGGIO:
                   {
                   Arpeggio* a = static_cast<Arpeggio*>(e);
                   if (parent())

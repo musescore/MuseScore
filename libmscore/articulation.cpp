@@ -491,7 +491,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
       // layout:
       if (chordRest())
             chordRest()->layoutArticulations();
-      else if (parent() && parent()->type() == ElementType::BAR_LINE)
+      else if (parent() && parent()->type() == Element::Type::BAR_LINE)
             static_cast<BarLine*>(parent())->layout();
 
       score()->addRefresh(canvasBoundingRect());

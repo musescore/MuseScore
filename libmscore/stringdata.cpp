@@ -177,7 +177,7 @@ void StringData::fretChords(Chord * chord) const
       int   count = 0;
       // if chord parent is not a segment, the chord is special (usually a grace chord):
       // fret it by itself, ignoring the segment
-      if (chord->parent()->type() != ElementType::SEGMENT)
+      if (chord->parent()->type() != Element::Type::SEGMENT)
             sortChordNotes(sortedNotes, chord, &count);
       else {
             // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
@@ -187,7 +187,7 @@ void StringData::fretChords(Chord * chord) const
             int trkTo   = trkFrom + VOICES;
             for(trk = trkFrom; trk < trkTo; ++trk) {
                   Element* ch = seg->elist().at(trk);
-                  if (ch && ch->type() == ElementType::CHORD)
+                  if (ch && ch->type() == Element::Type::CHORD)
                         sortChordNotes(sortedNotes, static_cast<Chord*>(ch), &count);
                   }
             }

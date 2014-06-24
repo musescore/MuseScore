@@ -124,7 +124,7 @@ void ContinuousPanel::paint(const QRect& /*r*/, QPainter& p)
                         continue;
                   }
 
-            if (e->type() == ElementType::MEASURE) {
+            if (e->type() == Element::Type::MEASURE) {
                   _currentMeasure = static_cast<const Measure*>(e);
                   _currentTimeSig = _currentMeasure->timesig();
                   _currentMeasureTick = _currentMeasure->tick();
@@ -168,7 +168,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                         continue;
                   }
 
-           if (e->type() == ElementType::STAFF_LINES) {
+           if (e->type() == Element::Type::STAFF_LINES) {
                   Staff* currentStaff = _score->staff(e->staffIdx());
 
                   //
@@ -312,7 +312,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                         continue;
                   }
 
-           if (e->type() == ElementType::STAFF_LINES) {
+           if (e->type() == Element::Type::STAFF_LINES) {
                   Staff* currentStaff = _score->staff(e->staffIdx());
 
                   //

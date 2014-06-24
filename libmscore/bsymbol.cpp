@@ -23,7 +23,7 @@ namespace Ms {
 BSymbol::BSymbol(Score* s)
    : Element(s)
       {
-      _z = int(ElementType::SYMBOL) * 100;
+      _z = int(Element::Type::SYMBOL) * 100;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _systemFlag = false;
       }
@@ -90,7 +90,7 @@ bool BSymbol::readProperties(XmlReader& e)
 
 void BSymbol::add(Element* e)
       {
-      if (e->type() == ElementType::SYMBOL || e->type() == ElementType::IMAGE) {
+      if (e->type() == Element::Type::SYMBOL || e->type() == Element::Type::IMAGE) {
             e->setParent(this);
             _leafs.append(e);
             static_cast<BSymbol*>(e)->setZ(z() - 1);    // draw on top of parent
@@ -105,7 +105,7 @@ void BSymbol::add(Element* e)
 
 void BSymbol::remove(Element* e)
       {
-      if (e->type() == ElementType::SYMBOL || e->type() == ElementType::IMAGE) {
+      if (e->type() == Element::Type::SYMBOL || e->type() == Element::Type::IMAGE) {
             if (!_leafs.removeOne(e))
                   qDebug("BSymbol::remove: element <%s> not found", e->name());
             }
@@ -130,8 +130,8 @@ void BSymbol::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 bool BSymbol::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      ElementType type = e->type();
-      return type == ElementType::SYMBOL || type == ElementType::IMAGE;
+      Element::Type type = e->type();
+      return type == Element::Type::SYMBOL || type == Element::Type::IMAGE;
       }
 
 //---------------------------------------------------------
@@ -141,7 +141,7 @@ bool BSymbol::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* BSymbol::drop(const DropData& data)
       {
       Element* el = data.element;
-      if (el->type() == ElementType::SYMBOL || el->type() == ElementType::IMAGE) {
+      if (el->type() == Element::Type::SYMBOL || el->type() == Element::Type::IMAGE) {
             el->setParent(this);
             QPointF p = data.pos - pagePos() - data.dragOffset;
             el->setUserOff(p);

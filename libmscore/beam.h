@@ -73,7 +73,7 @@ class Beam : public Element {
       Beam(const Beam&);
       ~Beam();
       virtual Beam* clone() const override         { return new Beam(*this); }
-      virtual ElementType type() const override    { return ElementType::BEAM; }
+      virtual Element::Type type() const override  { return Element::Type::BEAM; }
       virtual QPointF pagePos() const override;    ///< position in page coordinates
       virtual QPointF canvasPos() const override;  ///< position in page coordinates
 

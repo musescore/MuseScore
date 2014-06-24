@@ -695,7 +695,7 @@ Note* searchTieNote(Note* note)
       while ((seg = seg->next1(SegmentType::ChordRest))) {
             for (int track = strack; track < etrack; ++track) {
                   Chord* c = static_cast<Chord*>(seg->element(track));
-                  if (c == 0 || c->type() != ElementType::CHORD)
+                  if (c == 0 || c->type() != Element::Type::CHORD)
                         continue;
                   int staffIdx = c->staffIdx() + c->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
@@ -731,7 +731,7 @@ Note* searchTieNote114(Note* note)
       while ((seg = seg->next1(SegmentType::ChordRest))) {
             for (int track = strack; track < etrack; ++track) {
                   Chord* c = static_cast<Chord*>(seg->element(track));
-                  if (c == 0 || (c->type() != ElementType::CHORD) || (c->track() != chord->track()))
+                  if (c == 0 || (c->type() != Element::Type::CHORD) || (c->track() != chord->track()))
                         continue;
                   int staffIdx = c->staffIdx() + c->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?

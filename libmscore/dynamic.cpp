@@ -218,7 +218,7 @@ void Dynamic::layout()
             Chord* c = static_cast<Chord*>(s->element(t));
             if (!c)
                   continue;
-            if (c->type() == ElementType::CHORD) {
+            if (c->type() == Element::Type::CHORD) {
                   qreal noteHeadWidth = score()->noteHeadWidth() * c->mag();
                   if (c->stem() && !c->up())  // stem down
                         rxpos() += noteHeadWidth * .25;  // center on stem + optical correction

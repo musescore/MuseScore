@@ -75,7 +75,7 @@ class ChordRest : public DurationElement {
       ChordRest(const ChordRest&);
       ChordRest &operator=(const ChordRest&);
       ~ChordRest();
-      virtual ElementType type() const = 0;
+      virtual Element::Type type() const = 0;
       virtual Element* drop(const DropData&);
 
       virtual Segment* segment() const           { return (Segment*)parent(); }

@@ -566,7 +566,7 @@ void Ambitus::updateRange()
             // scan all relevant tracks of this segment for chords
             for (trk=firstTrack; trk <= lastTrack; trk++)
                   if ( (chord=static_cast<Chord*>(segm->element(trk))) != nullptr
-                              && chord->type() == ElementType::CHORD) {
+                              && chord->type() == Element::Type::CHORD) {
                         // update pitch range (with associated tpc's)
                         foreach (Note* n, chord->notes()) {
                               int pitch = n->ppitch();

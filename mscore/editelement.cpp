@@ -36,7 +36,7 @@ namespace Ms {
 
 void ScoreView::startEdit(Element* e)
       {
-      if (e->type() == ElementType::TBOX)
+      if (e->type() == Element::Type::TBOX)
             e = static_cast<TBox*>(e)->getText();
       editObject = e;
       sm->postEvent(new CommandEvent("edit"));
@@ -94,12 +94,12 @@ void ScoreView::endEdit()
 
       _score->addRefresh(editObject->canvasBoundingRect());
 
-      ElementType tp = editObject->type();
-      if (tp == ElementType::LYRICS)
+      Element::Type tp = editObject->type();
+      if (tp == Element::Type::LYRICS)
             lyricsEndEdit();
-      else if (tp == ElementType::HARMONY)
+      else if (tp == Element::Type::HARMONY)
             harmonyEndEdit();
-      else if (tp == ElementType::FIGURED_BASS)
+      else if (tp == Element::Type::FIGURED_BASS)
             figuredBassEndEdit();
       _score->endCmd();
       mscore->endCmd();
@@ -157,14 +157,14 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
       data.pos     = toLogical(ev->pos());
 
       if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
-            if (editObject->type() == ElementType::BAR_LINE)
+            if (editObject->type() == Element::Type::BAR_LINE)
                   BarLine::setShiftDrag(true);
             else
                   data.pos.setX(data.lastPos.x());
             }
 
       if (qApp->keyboardModifiers() == Qt::ControlModifier) {
-            if (editObject->type() == ElementType::BAR_LINE)
+            if (editObject->type() == Element::Type::BAR_LINE)
                   BarLine::setCtrlDrag(true);
             else
                   data.pos.setY(data.lastPos.y());

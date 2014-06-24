@@ -233,8 +233,8 @@ class SeekTransition : public QMouseEventTransition
             QMouseEvent* me = static_cast<QMouseEvent*>(static_cast<QStateMachine::WrappedEvent*>(event)->event());
             QPointF p = canvas->toLogical(me->pos());
             Element* e = canvas->elementNear(p);
-            if (e && (e->type() == ElementType::NOTE || e->type() == ElementType::REST)) {
-                  if (e->type() == ElementType::NOTE)
+            if (e && (e->type() == Element::Type::NOTE || e->type() == Element::Type::REST)) {
+                  if (e->type() == Element::Type::NOTE)
                         e = e->parent();
                   cr = static_cast<ChordRest*>(e);
                   return true;
@@ -980,7 +980,7 @@ ScoreView::~ScoreView()
 void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       {
       // show tuplet properties if number is clicked:
-      if (obj->type() == ElementType::TEXT && obj->parent() && obj->parent()->type() == ElementType::TUPLET) {
+      if (obj->type() == Element::Type::TEXT && obj->parent() && obj->parent()->type() == Element::Type::TUPLET) {
             obj = obj->parent();
             if (!obj->selected())
                   obj->score()->select(obj, SelectType::SINGLE, 0);
@@ -1830,7 +1830,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       // frame text in edit mode, except for text in a text frame
       //
       if (editObject && editObject->isText()
-         && !(editObject->parent() && editObject->parent()->type() == ElementType::TBOX)) {
+         && !(editObject->parent() && editObject->parent()->type() == Element::Type::TBOX)) {
             Element* e = editObject;
             while (e->parent())
                   e = e->parent();
@@ -1897,7 +1897,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   // HACK for whole measure rest:
                   if (ns == 0 || ns == es) {    // last segment?
                         Element* e = s->element(staffStart * VOICES);
-                        if (e && e->type() == ElementType::REST && static_cast<Rest*>(e)->durationType().type() == TDuration::DurationType::V_MEASURE)
+                        if (e && e->type() == Element::Type::REST && static_cast<Rest*>(e)->durationType().type() == TDuration::DurationType::V_MEASURE)
                               x2 = s->measure()->abbox().right() - _spatium;
                         }
 
@@ -2156,7 +2156,7 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
       {
       const Element* e = _e;
 #if 0
-      if (e->type() == ElementType::NOTE) {
+      if (e->type() == Element::Type::NOTE) {
             e = e->parent();
             const ChordRest* cr = static_cast<const ChordRest*>(e);
             p.setPen(Qt::red);
@@ -2198,16 +2198,16 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
       p.translate(-pos);
       if (e->parent()) {
             const Element* ee = e->parent();
-            if (e->type() == ElementType::NOTE)
+            if (e->type() == Element::Type::NOTE)
                   ee = static_cast<const Note*>(e)->chord()->segment();
-            else if (e->type() == ElementType::CLEF)
+            else if (e->type() == Element::Type::CLEF)
                   ee = static_cast<const Clef*>(e)->segment();
 
             p.setPen(QPen(Qt::green, 0.0));
 
             p.drawRect(ee->pageBoundingRect());
 
-            if (ee->type() == ElementType::SEGMENT) {
+            if (ee->type() == Element::Type::SEGMENT) {
                   QPointF pt = ee->pagePos();
                   p.setPen(QPen(Qt::blue, 0.0));
                   p.drawLine(QLineF(pt.x()-w, pt.y()-h, pt.x()+w, pt.y()+h));
@@ -2396,7 +2396,7 @@ void ScoreView::normalCut()
 void ScoreView::editPaste()
       {
       if (editObject->isText()) {
-            if (editObject->type() == ElementType::LYRICS)
+            if (editObject->type() == Element::Type::LYRICS)
                   static_cast<Lyrics*>(editObject)->paste(this);
             else
                   static_cast<Text*>(editObject)->paste();
@@ -2432,7 +2432,7 @@ void ScoreView::normalPaste()
 void ScoreView::cmdGotoElement(Element* e)
       {
       if (e) {
-            if (e->type() == ElementType::NOTE)
+            if (e->type() == Element::Type::NOTE)
                   score()->setPlayNote(true);
             score()->select(e, SelectType::SINGLE, 0);
             moveCursor();
@@ -2607,36 +2607,36 @@ void ScoreView::cmd(const QAction* a)
             score()->upDown(false, UpDownMode::DIATONIC);
       else if (cmd == "move-up") {
             Element* el = score()->selection().element();
-            if (el && el->type() == ElementType::NOTE) {
+            if (el && el->type() == Element::Type::NOTE) {
                   Note* note = static_cast<Note*>(el);
                   score()->moveUp(note->chord());
                   }
             }
       else if (cmd == "move-down") {
             Element* el = score()->selection().element();
-            if (el && el->type() == ElementType::NOTE) {
+            if (el && el->type() == Element::Type::NOTE) {
                   Note* note = static_cast<Note*>(el);
                   score()->moveDown(note->chord());
                   }
             }
       else if (cmd == "up-chord") {
             Element* el = score()->selection().element();
-            if (el && (el->type() == ElementType::NOTE || el->type() == ElementType::REST))
+            if (el && (el->type() == Element::Type::NOTE || el->type() == Element::Type::REST))
                   cmdGotoElement(score()->upAlt(el));
             }
       else if (cmd == "down-chord") {
             Element* el = score()->selection().element();
-            if (el && (el->type() == ElementType::NOTE || el->type() == ElementType::REST))
+            if (el && (el->type() == Element::Type::NOTE || el->type() == Element::Type::REST))
                   cmdGotoElement(score()->downAlt(el));
             }
       else if (cmd == "top-chord" ) {
             Element* el = score()->selection().element();
-            if (el && el->type() == ElementType::NOTE)
+            if (el && el->type() == Element::Type::NOTE)
                   cmdGotoElement(score()->upAltCtrl(static_cast<Note*>(el)));
             }
       else if (cmd == "bottom-chord") {
             Element* el = score()->selection().element();
-            if (el && el->type() == ElementType::NOTE)
+            if (el && el->type() == Element::Type::NOTE)
                   cmdGotoElement(score()->downAltCtrl(static_cast<Note*>(el)));
             }
       else if (cmd == "rest" || cmd == "rest-TAB")
@@ -2707,30 +2707,30 @@ void ScoreView::cmd(const QAction* a)
             s->createRevision();
             }
       else if (cmd == "append-measure")
-            cmdAppendMeasures(1, ElementType::MEASURE);
+            cmdAppendMeasures(1, Element::Type::MEASURE);
       else if (cmd == "insert-measure")
-          cmdInsertMeasures(1, ElementType::MEASURE);
+          cmdInsertMeasures(1, Element::Type::MEASURE);
       else if (cmd == "insert-hbox")
-          cmdInsertMeasures(1, ElementType::HBOX);
+          cmdInsertMeasures(1, Element::Type::HBOX);
       else if (cmd == "insert-vbox")
-          cmdInsertMeasures(1, ElementType::VBOX);
+          cmdInsertMeasures(1, Element::Type::VBOX);
       else if (cmd == "append-hbox") {
-          MeasureBase* mb = appendMeasure(ElementType::HBOX);
+          MeasureBase* mb = appendMeasure(Element::Type::HBOX);
             _score->select(mb, SelectType::SINGLE, 0);
             }
       else if (cmd == "append-vbox") {
-          MeasureBase* mb = appendMeasure(ElementType::VBOX);
+          MeasureBase* mb = appendMeasure(Element::Type::VBOX);
             _score->select(mb, SelectType::SINGLE, 0);
             }
       else if (cmd == "insert-textframe")
-            cmdInsertMeasure(ElementType::TBOX);
+            cmdInsertMeasure(Element::Type::TBOX);
       else if (cmd == "append-textframe") {
-            MeasureBase* mb = appendMeasure(ElementType::TBOX);
+            MeasureBase* mb = appendMeasure(Element::Type::TBOX);
             if (mb) {
                   TBox* tf = static_cast<TBox*>(mb);
                   Text* text = 0;
                   foreach(Element* e, *tf->el()) {
-                        if (e->type() == ElementType::TEXT) {
+                        if (e->type() == Element::Type::TEXT) {
                               text = static_cast<Text*>(e);
                               break;
                               }
@@ -2742,7 +2742,7 @@ void ScoreView::cmd(const QAction* a)
                   }
             }
       else if (cmd == "insert-fretframe")
-            cmdInsertMeasure(ElementType::FBOX);
+            cmdInsertMeasure(Element::Type::FBOX);
       else if (cmd == "move-left")
             cmdMoveCR(true);
       else if (cmd == "move-right")
@@ -2769,13 +2769,13 @@ void ScoreView::cmd(const QAction* a)
 #endif
       else if (cmd == "split-measure") {
             Element* e = _score->selection().element();
-            if (!(e && (e->type() == ElementType::NOTE || e->type() == ElementType::REST))) {
+            if (!(e && (e->type() == Element::Type::NOTE || e->type() == Element::Type::REST))) {
                   QMessageBox::warning(0, "MuseScore",
                      tr("No chord/rest selected:\n"
                      "please select a chord/rest and try again"));
                   }
             else {
-                  if (e->type() == ElementType::NOTE)
+                  if (e->type() == Element::Type::NOTE)
                         e = static_cast<Note*>(e)->chord();
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   if (cr->segment()->splitsTuplet()) {
@@ -2833,77 +2833,77 @@ void ScoreView::cmd(const QAction* a)
       // STATE_HARMONY_FIGBASS_EDIT actions
 
       else if (cmd == "advance-longa") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTicksTab(MScore::division << 4);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division << 4);
             }
       else if (cmd == "advance-breve") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTicksTab(MScore::division << 3);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division << 3);
             }
       else if (cmd == "advance-1") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTicksTab(MScore::division << 2);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division << 2);
             }
       else if (cmd == "advance-2") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTicksTab(MScore::division << 1);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division << 1);
             }
       else if (cmd == "advance-4") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTicksTab(MScore::division);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division);
             }
       else if (cmd == "advance-8") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTicksTab(MScore::division >> 1);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division >> 1);
             }
       else if (cmd == "advance-16") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTicksTab(MScore::division >> 2);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division >> 2);
             }
       else if (cmd == "advance-32") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTicksTab(MScore::division >> 3);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division >> 3);
             }
       else if (cmd == "advance-64") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTicksTab(MScore::division >> 4);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTicksTab(MScore::division >> 4);
             }
       else if (cmd == "prev-measure-TEXT") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTab(true);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTab(true, true);
             }
       else if (cmd == "next-measure-TEXT") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyTab(false);
-            else if (editObject->type() == ElementType::FIGURED_BASS)
+            else if (editObject->type() == Element::Type::FIGURED_BASS)
                   figuredBassTab(true,false);
             }
       else if (cmd == "prev-beat-TEXT") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyBeatsTab(false, true);
             }
       else if (cmd == "next-beat-TEXT") {
-            if (editObject->type() == ElementType::HARMONY)
+            if (editObject->type() == Element::Type::HARMONY)
                   harmonyBeatsTab(false,false);
             }
 
@@ -2988,13 +2988,13 @@ void ScoreView::startNoteEntry()
       is.setSegment(0);
       Note* note  = 0;
       Element* el = _score->selection().activeCR() ? _score->selection().activeCR() : _score->selection().element();
-      if (el == 0 || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
+      if (el == 0 || (el->type() != Element::Type::CHORD && el->type() != Element::Type::REST && el->type() != Element::Type::NOTE)) {
             int track = is.track() == -1 ? 0 : is.track();
             el = static_cast<ChordRest*>(_score->searchNote(0, track));
             if (el == 0)
                   return;
             }
-      if (el->type() == ElementType::CHORD) {
+      if (el->type() == Element::Type::CHORD) {
             Chord* c = static_cast<Chord*>(el);
             note = c->selectedNote();
             if (note == 0)
@@ -3026,7 +3026,7 @@ void ScoreView::startNoteEntry()
                   int strg = 0;                 // assume topmost string as current string
                   // if entering note entry with a note selected and the note has a string
                   // set InputState::_string to note visual string
-                  if (el->type() == ElementType::NOTE) {
+                  if (el->type() == Element::Type::NOTE) {
                         strg = (static_cast<Note*>(el))->string();
                         strg = staff->staffType()->physStringToVisual(strg);
                         }
@@ -3080,10 +3080,10 @@ void ScoreView::contextPopup(QContextMenuEvent* ev)
                   curElement = e;
 //TODO?                  select(ev);
                   }
-            ElementType type = e->type();
+            Element::Type type = e->type();
             if (seq)
                   seq->stopNotes();       // stop now because we dont get a mouseRelease event
-            if (type == ElementType::MEASURE)
+            if (type == Element::Type::MEASURE)
                   measurePopup(gp, static_cast<Measure*>(e));
             else {
                   objectPopup(gp, e);
@@ -3168,9 +3168,9 @@ void ScoreView::select(QMouseEvent* ev)
             cloneElement(curElement);
             return;
             }
-      ElementType type = curElement->type();
+      Element::Type type = curElement->type();
       int dragStaffIdx = 0;
-      if (type == ElementType::MEASURE) {
+      if (type == Element::Type::MEASURE) {
             System* dragSystem = (System*)(curElement->parent());
             dragStaffIdx  = getStaff(dragSystem, data.startMove);
             }
@@ -3196,7 +3196,7 @@ void ScoreView::select(QMouseEvent* ev)
                   st = SelectType::ADD;
                   }
             _score->select(curElement, st, dragStaffIdx);
-            if (curElement && curElement->type() == ElementType::NOTE) {
+            if (curElement && curElement->type() == Element::Type::NOTE) {
                   Note* note = static_cast<Note*>(curElement);
                   int pitch = note->ppitch();
                   mscore->play(note, pitch);
@@ -3219,7 +3219,7 @@ bool ScoreView::mousePress(QMouseEvent* ev)
       data.startMove  = imatrix.map(QPointF(startMoveI));
       curElement = elementNear(data.startMove);
 
-      if (curElement && curElement->type() == ElementType::MEASURE) {
+      if (curElement && curElement->type() == Element::Type::MEASURE) {
             System* dragSystem = (System*)(curElement->parent());
             int dragStaffIdx  = getStaff(dragSystem, data.startMove);
             if (dragStaffIdx < 0)
@@ -3265,7 +3265,7 @@ bool ScoreView::editScoreViewDragTransition(QMouseEvent* ev)
       QPointF p = toLogical(ev->pos());
       Element* e = elementNear(p);
 
-      if (e == 0 || e->type() == ElementType::MEASURE) {
+      if (e == 0 || e->type() == Element::Type::MEASURE) {
             data.startMove   = p;
 //TODOxxx            dragElement = e;
             return true;
@@ -3635,23 +3635,23 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       const Measure* m;
       if (!el)
             return;
-      else if (el->type() == ElementType::NOTE)
+      else if (el->type() == Element::Type::NOTE)
             m = static_cast<const Note*>(el)->chord()->measure();
-      else if (el->type() == ElementType::REST)
+      else if (el->type() == Element::Type::REST)
             m = static_cast<const Rest*>(el)->measure();
-      else if (el->type() == ElementType::CHORD)
+      else if (el->type() == Element::Type::CHORD)
             m = static_cast<const Chord*>(el)->measure();
-      else if (el->type() == ElementType::SEGMENT)
+      else if (el->type() == Element::Type::SEGMENT)
             m = static_cast<const Segment*>(el)->measure();
-      else if (el->type() == ElementType::LYRICS)
+      else if (el->type() == Element::Type::LYRICS)
             m = static_cast<const Lyrics*>(el)->measure();
-      else if ( (el->type() == ElementType::HARMONY || el->type() == ElementType::FIGURED_BASS)
-         && el->parent()->type() == ElementType::SEGMENT)
+      else if ( (el->type() == Element::Type::HARMONY || el->type() == Element::Type::FIGURED_BASS)
+         && el->parent()->type() == Element::Type::SEGMENT)
             m = static_cast<const Segment*>(el->parent())->measure();
-      else if (el->type() == ElementType::HARMONY && el->parent()->type() == ElementType::FRET_DIAGRAM
-         && el->parent()->parent()->type() == ElementType::SEGMENT)
+      else if (el->type() == Element::Type::HARMONY && el->parent()->type() == Element::Type::FRET_DIAGRAM
+         && el->parent()->parent()->type() == Element::Type::SEGMENT)
             m = static_cast<const Segment*>(el->parent()->parent())->measure();
-      else if (el->type() == ElementType::MEASURE)
+      else if (el->type() == Element::Type::MEASURE)
             m = static_cast<const Measure*>(el);
       else
             return;
@@ -3791,10 +3791,10 @@ ScoreState ScoreView::mscoreState() const
                   }
             }
       if (sm->configuration().contains(states[EDIT]) || sm->configuration().contains(states[DRAG_EDIT])) {
-            if (editObject && (editObject->type() == ElementType::LYRICS))
+            if (editObject && (editObject->type() == Element::Type::LYRICS))
                   return STATE_LYRICS_EDIT;
             else if (editObject &&
-                  ( (editObject->type() == ElementType::HARMONY) || editObject->type() == ElementType::FIGURED_BASS) )
+                  ( (editObject->type() == Element::Type::HARMONY) || editObject->type() == Element::Type::FIGURED_BASS) )
                   return STATE_HARMONY_FIGBASS_EDIT;
             else if (editObject && editObject->isText())
                   return STATE_TEXT_EDIT;
@@ -4019,8 +4019,8 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
       if (cr1->isGrace()) {
             // slur from a gracenote
             //
-            Q_ASSERT(cr1->type() == ElementType::CHORD);
-            Q_ASSERT(cr2->type() == ElementType::CHORD);
+            Q_ASSERT(cr1->type() == Element::Type::CHORD);
+            Q_ASSERT(cr2->type() == Element::Type::CHORD);
             Slur* slur = new Slur(score());
             slur->setAnchor(Spanner::Anchor::CHORD);
 
@@ -4159,9 +4159,9 @@ void ScoreView::cmdChangeEnharmonic(bool up)
 
 void ScoreView::cloneElement(Element* e)
       {
-      if (!e->isMovable() && e->type() != ElementType::SPACER && e->type() != ElementType::VBOX)
+      if (!e->isMovable() && e->type() != Element::Type::SPACER && e->type() != Element::Type::VBOX)
             return;
-      if(e->type() == ElementType::NOTE || e->type() == ElementType::MEASURE)
+      if(e->type() == Element::Type::NOTE || e->type() == Element::Type::MEASURE)
             return;
       QDrag* drag = new QDrag(this);
       QMimeData* mimeData = new QMimeData;
@@ -4249,7 +4249,7 @@ void ScoreView::cmdCreateTuplet( ChordRest* cr, Tuplet* tuplet)
       const QList<DurationElement*>& cl = tuplet->elements();
       int ne = cl.size();
       DurationElement* el = 0;
-      if (ne && cl[0]->type() == ElementType::REST)
+      if (ne && cl[0]->type() == Element::Type::REST)
             el  = cl[0];
       else if (ne > 1)
             el = cl[1];
@@ -4286,7 +4286,7 @@ void ScoreView::changeVoice(int voice)
             score()->startCmd();
             QList<Element*> el;
             foreach(Element* e, score()->selection().elements()) {
-                  if (e->type() == ElementType::NOTE) {
+                  if (e->type() == Element::Type::NOTE) {
                         Note* note = static_cast<Note*>(e);
                         Chord* chord = note->chord();
                         if (chord->voice() != voice) {
@@ -4358,9 +4358,9 @@ void ScoreView::modifyElement(Element* el)
             }
       Element* e = cs->selection().element();
       Chord* chord;
-      if (e->type() == ElementType::CHORD)
+      if (e->type() == Element::Type::CHORD)
             chord = static_cast<Chord*>(e);
-      else if (e->type() == ElementType::NOTE)
+      else if (e->type() == Element::Type::NOTE)
             chord = static_cast<Note*>(e)->chord();
       else {
             qDebug("modifyElement: no note/Chord selected:");
@@ -4369,7 +4369,7 @@ void ScoreView::modifyElement(Element* el)
             return;
             }
       switch (el->type()) {
-            case ElementType::ARTICULATION:
+            case Element::Type::ARTICULATION:
                   chord->add(static_cast<Articulation*>(el));
                   break;
             default:
@@ -4387,7 +4387,7 @@ void ScoreView::modifyElement(Element* el)
 void ScoreView::harmonyTab(bool back)
       {
       Harmony* harmony = static_cast<Harmony*>(editObject);
-      if (!harmony->parent() || harmony->parent()->type() != ElementType::SEGMENT){
+      if (!harmony->parent() || harmony->parent()->type() != Element::Type::SEGMENT){
             qDebug("harmonyTab: no segment parent");
             return;
             }
@@ -4425,7 +4425,7 @@ void ScoreView::harmonyTab(bool back)
       // search for next chord name
       harmony = 0;
       foreach(Element* e, segment->annotations()) {
-            if (e->type() == ElementType::HARMONY && e->track() == track) {
+            if (e->type() == Element::Type::HARMONY && e->track() == track) {
                   Harmony* h = static_cast<Harmony*>(e);
                   harmony = h;
                   break;
@@ -4511,7 +4511,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
             if (noterest) {
                   int minTrack = (track / VOICES ) * VOICES;
                   int maxTrack = minTrack + (VOICES-1);
-                  if (segment->findAnnotationOrElement(ElementType::HARMONY, minTrack, maxTrack))
+                  if (segment->findAnnotationOrElement(Element::Type::HARMONY, minTrack, maxTrack))
                         break;
                   }
             }
@@ -4523,7 +4523,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       // search for next chord name
       harmony = 0;
       foreach(Element* e, segment->annotations()) {
-            if (e->type() == ElementType::HARMONY && e->track() == track) {
+            if (e->type() == Element::Type::HARMONY && e->track() == track) {
                   Harmony* h = static_cast<Harmony*>(e);
                   harmony = h;
                   break;
@@ -4594,7 +4594,7 @@ void ScoreView::harmonyTicksTab(int ticks)
       // search for next chord name
       harmony = 0;
       foreach(Element* e, segment->annotations()) {
-            if (e->type() == ElementType::HARMONY && e->track() == track) {
+            if (e->type() == Element::Type::HARMONY && e->track() == track) {
                   Harmony* h = static_cast<Harmony*>(e);
                   harmony = h;
                   break;
@@ -4637,7 +4637,7 @@ void ScoreView::cmdTuplet(int n)
       else {
             QSet<ChordRest*> set;
             foreach(Element* e, _score->selection().elements()) {
-                  if (e->type() == ElementType::NOTE) {
+                  if (e->type() == Element::Type::NOTE) {
                         Note* note = static_cast<Note*>(e);
                         if(note->noteType() != NoteType::NORMAL) { //no tuplet on grace notes
                               _score->endCmd();
@@ -4724,7 +4724,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
       else {
             // if adding notes, add above the upNote of the current chord
             Element* el = score()->selection().element();
-            if (addFlag && el && el->type() == ElementType::NOTE) {
+            if (addFlag && el && el->type() == Element::Type::NOTE) {
                   Chord* chord = static_cast<Note*>(el)->chord();
                   Note* n = chord->upNote();
                   octave = n->epitch() / 12;
@@ -4739,7 +4739,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                         while(seg) {
                               if (seg->segmentType() == SegmentType::ChordRest) {
                                     Element* p = seg->element(is.track());
-                                    if (p && p->type() == ElementType::CHORD) {
+                                    if (p && p->type() == Element::Type::CHORD) {
                                           Chord* ch = static_cast<Chord*>(p);
                                           curPitch = ch->downNote()->epitch();
                                           break;
@@ -4747,7 +4747,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                                     }
                               else if (seg->segmentType() == SegmentType::Clef) {
                                     Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
-                                    if(p && p->type() == ElementType::CLEF) {
+                                    if(p && p->type() == Element::Type::CLEF) {
                                           Clef* clef = static_cast<Clef*>(p);
                                           // check if it's an actual key change or just a courtesy
                                           ClefType ctb = staff->clef(clef->tick() - 1);
@@ -4857,8 +4857,8 @@ void ScoreView::cmdAddText(int type)
             case TEXT_POET:
                   {
                   MeasureBase* measure = _score->first();
-                  if (measure->type() != ElementType::VBOX)
-                        measure = _score->insertMeasure(ElementType::VBOX, measure);
+                  if (measure->type() != Element::Type::VBOX)
+                        measure = _score->insertMeasure(Element::Type::VBOX, measure);
                   s = new Text(_score);
                   switch(type) {
                         case TEXT_TITLE:    s->setTextStyleType(TextStyleType::TITLE);    break;
@@ -4920,7 +4920,7 @@ void ScoreView::cmdAddText(int type)
 //    - called from pulldown menu
 //---------------------------------------------------------
 
-void ScoreView::cmdAppendMeasures(int n, ElementType type)
+void ScoreView::cmdAppendMeasures(int n, Element::Type type)
       {
       _score->startCmd();
       appendMeasures(n, type);
@@ -4931,7 +4931,7 @@ void ScoreView::cmdAppendMeasures(int n, ElementType type)
 //   appendMeasure
 //---------------------------------------------------------
 
-MeasureBase* ScoreView::appendMeasure(ElementType type)
+MeasureBase* ScoreView::appendMeasure(Element::Type type)
       {
       _score->startCmd();
       MeasureBase* mb = _score->insertMeasure(type, 0);
@@ -4943,7 +4943,7 @@ MeasureBase* ScoreView::appendMeasure(ElementType type)
 //   appendMeasures
 //---------------------------------------------------------
 
-void ScoreView::appendMeasures(int n, ElementType type)
+void ScoreView::appendMeasures(int n, Element::Type type)
       {
       if (_score->noStaves()) {
             QMessageBox::warning(0, "MuseScore",
@@ -4974,7 +4974,7 @@ MeasureBase* ScoreView::checkSelectionStateForInsertMeasure()
 
       Element* e = _score->selection().element();
       if (e) {
-            if (e->type() == ElementType::VBOX || e->type() == ElementType::TBOX)
+            if (e->type() == Element::Type::VBOX || e->type() == Element::Type::TBOX)
                   return static_cast<MeasureBase*>(e);
             }
       QMessageBox::warning(0, "MuseScore",
@@ -4986,7 +4986,7 @@ MeasureBase* ScoreView::checkSelectionStateForInsertMeasure()
 //   cmdInsertMeasures
 //---------------------------------------------------------
 
-void ScoreView::cmdInsertMeasures(int n, ElementType type)
+void ScoreView::cmdInsertMeasures(int n, Element::Type type)
       {
       MeasureBase* mb = checkSelectionStateForInsertMeasure();
       if (!mb)
@@ -4996,7 +4996,7 @@ void ScoreView::cmdInsertMeasures(int n, ElementType type)
             _score->insertMeasure(type, mb);
 
       // measure may be part of mm rest:
-      if (!_score->styleB(StyleIdx::createMultiMeasureRests) && type == ElementType::MEASURE)
+      if (!_score->styleB(StyleIdx::createMultiMeasureRests) && type == Element::Type::MEASURE)
             _score->select(mb, SelectType::SINGLE, 0);
       _score->endCmd();
       }
@@ -5005,14 +5005,14 @@ void ScoreView::cmdInsertMeasures(int n, ElementType type)
 //   cmdInsertMeasure
 //---------------------------------------------------------
 
-void ScoreView::cmdInsertMeasure(ElementType type)
+void ScoreView::cmdInsertMeasure(Element::Type type)
       {
       MeasureBase* mb = checkSelectionStateForInsertMeasure();
       if (!mb)
             return;
       _score->startCmd();
       mb = _score->insertMeasure(type, mb);
-      if (mb->type() == ElementType::TBOX) {
+      if (mb->type() == Element::Type::TBOX) {
             TBox* tbox = static_cast<TBox*>(mb);
             Text* s = tbox->getText();
             _score->select(s, SelectType::SINGLE, 0);
@@ -5035,7 +5035,7 @@ void ScoreView::cmdRepeatSelection()
 
       if (noteEntryMode() && selection.isSingle()) {
             Element* el = _score->selection().element();
-            if (el && el->type() == ElementType::NOTE) {
+            if (el && el->type() == Element::Type::NOTE) {
                   if (!_score->inputState().endOfScore()) {
                         _score->startCmd();
                         bool addTo = false;
@@ -5138,7 +5138,7 @@ void ScoreView::search(const QString& s)
                   //search rehearsal marks
                   for (Segment* seg = score()->firstSegment(); seg; seg = seg->next1(SegmentType::ChordRest)) {
                         for (Element* e : seg->annotations()){
-                              if (e->type() == ElementType::REHEARSAL_MARK) {
+                              if (e->type() == Element::Type::REHEARSAL_MARK) {
                                     RehearsalMark* rm = static_cast<RehearsalMark*>(e);
                                     QString rms = rm->text();
                                     if (rms.contains(s)) {
@@ -5212,7 +5212,7 @@ void ScoreView::gotoMeasure(Measure* measure)
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr) {
                         Element* e;
-                        if (cr->type() == ElementType::CHORD)
+                        if (cr->type() == Element::Type::CHORD)
                               e =  static_cast<Chord*>(cr)->upNote();
                         else //REST
                               e = cr;
@@ -5302,7 +5302,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
             int maxTrack = minTrack + (VOICES-1);
 
             while (nextSegm) {                   // look for a ChordRest in the compatible track range
-                  if(nextSegm->findAnnotationOrElement(ElementType::FIGURED_BASS, minTrack, maxTrack))
+                  if(nextSegm->findAnnotationOrElement(Element::Type::FIGURED_BASS, minTrack, maxTrack))
                         break;
                   nextSegm = bBack ? nextSegm->prev1(SegmentType::ChordRest) : nextSegm->next1(SegmentType::ChordRest);
                   }
@@ -5395,7 +5395,7 @@ static bool elementLower(const Element* e1, const Element* e2)
             return false;
       if (e1->z() == e2->z()) {
             if (e1->type() == e2->type()) {
-                  if (e1->type() == ElementType::NOTEDOT) {
+                  if (e1->type() == Element::Type::NOTEDOT) {
                         const NoteDot* n1 = static_cast<const NoteDot*>(e1);
                         const NoteDot* n2 = static_cast<const NoteDot*>(e2);
                         if (n1->note()->hidden())
@@ -5403,7 +5403,7 @@ static bool elementLower(const Element* e1, const Element* e2)
                         else
                               return n1;
                         }
-                  else if (e1->type() == ElementType::NOTE) {
+                  else if (e1->type() == Element::Type::NOTE) {
                         const Note* n1 = static_cast<const Note*>(e1);
                         const Note* n2 = static_cast<const Note*>(e2);
                         if (n1->hidden())
@@ -5436,18 +5436,18 @@ Element* ScoreView::elementNear(QPointF p)
       QList<Element*> ll;
       foreach (Element* e, el) {
             e->itemDiscovered = 0;
-            if (!e->selectable() || e->type() == ElementType::PAGE)
+            if (!e->selectable() || e->type() == Element::Type::PAGE)
                   continue;
             if (e->contains(p))
                   ll.append(e);
             }
       int n = ll.size();
-      if ((n == 0) || ((n == 1) && (ll[0]->type() == ElementType::MEASURE))) {
+      if ((n == 0) || ((n == 1) && (ll[0]->type() == Element::Type::MEASURE))) {
             //
             // if no relevant element hit, look nearby
             //
             foreach (Element* e, el) {
-                  if (e->type() == ElementType::PAGE || !e->selectable())
+                  if (e->type() == Element::Type::PAGE || !e->selectable())
                         continue;
                   if (e->intersects(r))
                         ll.append(e);
@@ -5511,8 +5511,8 @@ void ScoreView::loopToggled(bool val)
 void ScoreView::cmdMoveCR(bool left)
       {
       Element* e = _score->getSelectedElement();
-      if (e && (e->type() == ElementType::NOTE || e->type() == ElementType::REST)) {
-            if (e->type() == ElementType::NOTE)
+      if (e && (e->type() == Element::Type::NOTE || e->type() == Element::Type::REST)) {
+            if (e->type() == Element::Type::NOTE)
                   e = e->parent();
             QList<ChordRest*> crl;
             if (e->links()) {

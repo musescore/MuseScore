@@ -924,7 +924,7 @@ class Score : public QObject {
       bool undoRedo() const                 { return _undoRedo; }
       void respace(QList<ChordRest*>* elements);
       void transposeSemitone(int semitone);
-      MeasureBase* insertMeasure(ElementType type, MeasureBase*,
+      MeasureBase* insertMeasure(Element::Type type, MeasureBase*,
          bool createEmptyMeasures = false);
       Audio* audio() const         { return _audio;    }
       void setAudio(Audio* a)      { _audio = a;       }

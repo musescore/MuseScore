@@ -53,7 +53,7 @@ class Ambitus : public Element {
       virtual Ambitus* clone() const                    { return new Ambitus(*this); }
 
       // getters and setters
-      virtual ElementType type() const                { return ElementType::AMBITUS;    }
+      virtual Element::Type type() const              { return Element::Type::AMBITUS;    }
       NoteHeadGroup noteHeadGroup() const             { return _noteHeadGroup;}
       NoteHeadType noteHeadType() const               { return _noteHeadType; }
       DirectionH direction() const                    { return _dir;          }

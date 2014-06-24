@@ -50,8 +50,8 @@ class Lyrics : public Text {
       Lyrics(Score* = 0);
       Lyrics(const Lyrics&);
       ~Lyrics();
-      virtual Lyrics* clone() const override    { return new Lyrics(*this); }
-      virtual ElementType type() const override { return ElementType::LYRICS; }
+      virtual Lyrics* clone() const override      { return new Lyrics(*this); }
+      virtual Element::Type type() const override { return Element::Type::LYRICS; }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
       virtual Element* drop(const DropData&) override;

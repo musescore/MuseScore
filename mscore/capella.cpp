@@ -727,7 +727,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               //    to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
                               s->setText(ss);
                               MeasureBase* measure = score->measures()->first();
-                              if (measure->type() != ElementType::VBOX) {
+                              if (measure->type() != Element::Type::VBOX) {
                                     MeasureBase* mb = new VBox(score);
                                     mb->setTick(0);
                                     score->addMeasure(mb, measure);
@@ -949,7 +949,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       if (cap->topDist) {
             VBox* mb = 0;
             MeasureBaseList* mbl = score->measures();
-            if (mbl->size() && mbl->first()->type() == ElementType::VBOX)
+            if (mbl->size() && mbl->first()->type() == Element::Type::VBOX)
                   mb = static_cast<VBox*>(mbl->first());
             else {
                   VBox* vb = new VBox(score);

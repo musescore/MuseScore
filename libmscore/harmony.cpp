@@ -874,12 +874,12 @@ void Harmony::layout()
       qreal yy = 0.0;
       qreal _spatium  = spatium();
 
-      if (parent()->type() == ElementType::SEGMENT) {
+      if (parent()->type() == Element::Type::SEGMENT) {
             Segment* s = static_cast<Segment*>(parent());
             // look for fret diagram
             bool fretsFound = false;
             for (Element* e : s->annotations()) {
-                  if (e->type() == ElementType::FRET_DIAGRAM && e->track() == track()) {
+                  if (e->type() == Element::Type::FRET_DIAGRAM && e->track() == track()) {
                         yy -= score()->styleP(StyleIdx::fretY);
                         e->layout();
                         yy -= e->height();
@@ -891,7 +891,7 @@ void Harmony::layout()
             if (!fretsFound)
                   yy -= score()->styleP(StyleIdx::harmonyY);
             }
-      else if (parent()->type() == ElementType::FRET_DIAGRAM) {
+      else if (parent()->type() == Element::Type::FRET_DIAGRAM) {
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
             yy = score()->styleP(StyleIdx::harmonyFretDist);
             }
@@ -937,7 +937,7 @@ void Harmony::layout()
             setReadPos(QPointF());
             }
 
-      if (parent()->type() == ElementType::FRET_DIAGRAM && parent()->parent()->type() == ElementType::SEGMENT) {
+      if (parent()->type() == Element::Type::FRET_DIAGRAM && parent()->parent()->type() == Element::Type::SEGMENT) {
             qDebug("Harmony %s with fret diagram as parent and segment as grandparent", qPrintable(_textName));
             MStaff* mstaff = static_cast<Segment*>(parent()->parent())->measure()->mstaff(staffIdx());
             qreal dist = -(bbox().top());
@@ -1310,7 +1310,7 @@ QLineF Harmony::dragAnchor() const
       for (Element* e = parent(); e; e = e->parent())
             xp += e->x();
       qreal yp;
-      if (parent()->type() == ElementType::SEGMENT)
+      if (parent()->type() == Element::Type::SEGMENT)
             yp = static_cast<Segment*>(parent())->measure()->system()->staffYpage(staffIdx());
       else
             yp = parent()->canvasPos().y();

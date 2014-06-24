@@ -58,7 +58,7 @@ class BagpipeEmbellishment : public Element {
    public:
       BagpipeEmbellishment(Score* s) : Element(s), _embelType(0) { }
       virtual BagpipeEmbellishment* clone() const { return new BagpipeEmbellishment(*this); }
-      virtual ElementType type() const            { return ElementType::BAGPIPE_EMBELLISHMENT;           }
+      virtual Element::Type type() const          { return Element::Type::BAGPIPE_EMBELLISHMENT;           }
       int embelType() const                       { return _embelType;                      }
       void setEmbelType(int val)                  { _embelType = val;                       }
       virtual qreal mag() const;

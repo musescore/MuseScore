@@ -170,7 +170,7 @@ class FiguredBassItem : public Element {
 
       // standard re-implemented virtual functions
       virtual FiguredBassItem*      clone() const     { return new FiguredBassItem(*this); }
-      virtual ElementType           type() const      { return ElementType::INVALID; }
+      virtual Element::Type         type() const      { return Element::Type::INVALID; }
       virtual void      draw(QPainter* painter) const;
       virtual void      layout();
       virtual void      read(XmlReader&);
@@ -278,7 +278,7 @@ class FiguredBass : public Text {
 
       // standard re-implemented virtual functions
       virtual FiguredBass*    clone() const     { return new FiguredBass(*this); }
-      virtual ElementType     type() const      { return ElementType::FIGURED_BASS; }
+      virtual Element::Type   type() const      { return Element::Type::FIGURED_BASS; }
       virtual void      draw(QPainter* painter) const;
 //      virtual bool      edit(MuseScoreView*msv, int currGrip, int key, Qt::KeyboardModifiers modifiers, const QString& _s);
       virtual void      endEdit();

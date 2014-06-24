@@ -71,7 +71,7 @@ void TBox::layout()
 
 void TBox::add(Element* e)
       {
-      if (e->type() == ElementType::TEXT) {
+      if (e->type() == Element::Type::TEXT) {
             Text* text = static_cast<Text*>(e);
             text->setLayoutToParentWidth(true);
             text->setFlag(ElementFlag::MOVABLE, false);
@@ -87,7 +87,7 @@ Text* TBox::getText()
       {
       if (_el.empty())
             return 0;
-      if ((*_el.begin())->type() == ElementType::TEXT)
+      if ((*_el.begin())->type() == Element::Type::TEXT)
             return static_cast<Text*>(*_el.begin());
       return 0;
       }

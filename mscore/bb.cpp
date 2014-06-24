@@ -422,7 +422,7 @@ Score::FileError importBB(Score* score, const QString& name)
 
       if (tracks->isEmpty()) {
             for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-                  if (mb->type() != ElementType::MEASURE)
+                  if (mb->type() != Element::Type::MEASURE)
                         continue;
                   Measure* measure = (Measure*)mb;
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
@@ -439,7 +439,7 @@ Score::FileError importBB(Score* score, const QString& name)
             }
 
       for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            if (mb->type() != ElementType::MEASURE)
+            if (mb->type() != Element::Type::MEASURE)
                   continue;
             Measure* measure = (Measure*)mb;
             Segment* s = measure->findSegment(SegmentType::ChordRest, measure->tick());
@@ -464,7 +464,7 @@ Score::FileError importBB(Score* score, const QString& name)
       text->setText(bb.title());
 
       MeasureBase* measure = score->first();
-      if (measure->type() != ElementType::VBOX) {
+      if (measure->type() != Element::Type::VBOX) {
             measure = new VBox(score);
             measure->setTick(0);
             measure->setNext(score->first());
@@ -511,7 +511,7 @@ Score::FileError importBB(Score* score, const QString& name)
 
       int n = 0;
       for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            if (mb->type() != ElementType::MEASURE)
+            if (mb->type() != Element::Type::MEASURE)
                   continue;
             Measure* measure = (Measure*)mb;
             if (n && (n % 4) == 0) {

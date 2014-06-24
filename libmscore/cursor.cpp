@@ -127,12 +127,12 @@ void Cursor::add(Element* s)
 
       if (s->isChordRest())
             s->score()->undoAddCR(static_cast<ChordRest*>(s), _segment->measure(), _segment->tick());
-      else if (s->type() == ElementType::KEYSIG) {
+      else if (s->type() == Element::Type::KEYSIG) {
             Segment* ns = _segment->measure()->undoGetSegment(SegmentType::KeySig, _segment->tick());
             s->setParent(ns);
             _score->undoAddElement(s);
             }
-      else if (s->type() == ElementType::TIMESIG) {
+      else if (s->type() == Element::Type::TIMESIG) {
             Measure* m = _segment->measure();
             int tick = m->tick();
             _score->cmdAddTimeSig(m, _track, static_cast<TimeSig*>(s), false);
@@ -140,7 +140,7 @@ void Cursor::add(Element* s)
             _segment = m->first(SegmentType::ChordRest);
             firstChordRestInTrack();
             }
-      else if (s->type() == ElementType::LAYOUT_BREAK) {
+      else if (s->type() == Element::Type::LAYOUT_BREAK) {
             Measure* m = _segment->measure();
             s->setParent(m);
             _score->undoAddElement(s);

@@ -107,18 +107,18 @@ class Segment : public Element {
       Segment(const Segment&);
       ~Segment();
 
-      virtual Segment* clone() const    { return new Segment(*this); }
-      virtual ElementType type() const  { return ElementType::SEGMENT; }
+      virtual Segment* clone() const     { return new Segment(*this); }
+      virtual Element::Type type() const { return Element::Type::SEGMENT; }
 
       virtual void setScore(Score*);
 
       Q_INVOKABLE Ms::Segment* next() const             { return _next;   }
       Segment* next(SegmentType) const;
 
-      void setNext(Segment* e)          { _next = e;      }
+      void setNext(Segment* e)           { _next = e;      }
       Q_INVOKABLE Ms::Segment* prev() const { return _prev;   }
       Segment* prev(SegmentType) const;
-      void setPrev(Segment* e)          { _prev = e;      }
+      void setPrev(Segment* e)           { _prev = e;      }
 
       Q_INVOKABLE Ms::Segment* next1() const;
       Ms::Segment* next1MM() const;
@@ -160,7 +160,7 @@ class Segment : public Element {
       void sortStaves(QList<int>& dst);
       const char* subTypeName() const;
       static const char* subTypeName(SegmentType);
-      static SegmentType segmentType(ElementType type);
+      static SegmentType segmentType(Element::Type type);
       SegmentType segmentType() const            { return _segmentType; }
       void setSegmentType(SegmentType t);
 
@@ -178,7 +178,7 @@ class Segment : public Element {
       const std::vector<Element*>& annotations() const { return _annotations;        }
       void clearAnnotations();
       void removeAnnotation(Element* e);
-      bool findAnnotationOrElement(ElementType type, int minTrack, int maxTrack);
+      bool findAnnotationOrElement(Element::Type type, int minTrack, int maxTrack);
 
       qreal dotPosX(int staffIdx) const          { return _dotPosX[staffIdx];  }
       void setDotPosX(int staffIdx, qreal val)   { _dotPosX[staffIdx] = val;   }

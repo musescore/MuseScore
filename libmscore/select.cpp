@@ -146,15 +146,15 @@ ChordRest* Selection::firstChordRest(int track) const
       {
       if (_el.size() == 1) {
             Element* el = _el[0];
-            if (el->type() == ElementType::NOTE)
+            if (el->type() == Element::Type::NOTE)
                   return static_cast<ChordRest*>(el->parent());
-            else if (el->type() == ElementType::REST)
+            else if (el->type() == Element::Type::REST)
                   return static_cast<ChordRest*>(el);
             return 0;
             }
       ChordRest* cr = 0;
       foreach (Element* el, _el) {
-            if (el->type() == ElementType::NOTE)
+            if (el->type() == Element::Type::NOTE)
                   el = el->parent();
             if (el->isChordRest()) {
                   if (track != -1 && el->track() != track)
@@ -178,16 +178,16 @@ ChordRest* Selection::lastChordRest(int track) const
       {
       if (_el.size() == 1) {
             Element* el = _el[0];
-            if (el && el->type() == ElementType::NOTE)
+            if (el && el->type() == Element::Type::NOTE)
                   return static_cast<ChordRest*>(el->parent());
-            else if (el->type() == ElementType::CHORD || el->type() == ElementType::REST)
+            else if (el->type() == Element::Type::CHORD || el->type() == Element::Type::REST)
                   return static_cast<ChordRest*>(el);
             return 0;
             }
       ChordRest* cr = 0;
       for (auto i = _el.begin(); i != _el.end(); ++i) {
             Element* el = *i;
-            if (el->type() == ElementType::NOTE)
+            if (el->type() == Element::Type::NOTE)
                   el = ((Note*)el)->chord();
             if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->segmentType() == SegmentType::ChordRest) {
                   if (track != -1 && el->track() != track)
@@ -306,7 +306,7 @@ void Selection::updateSelectedElements()
                         foreach (Element* e, cr->lyricsList())
                               _el.append(e);
                         }
-                  if (e->type() == ElementType::CHORD) {
+                  if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
                         foreach (Articulation* art, chord->articulations()) {
                               _el.append(art);
@@ -321,7 +321,7 @@ void Selection::updateSelectedElements()
                                     if (note->dot(x) != 0) _el.append(note->dot(x));
                                                                         }
                                     if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
-                                          if (note->tieFor()->endElement()->type() == ElementType::NOTE) {
+                                          if (note->tieFor()->endElement()->type() == Element::Type::NOTE) {
                                           Note* endNote = static_cast<Note*>(note->tieFor()->endElement());
                                           Segment* s = endNote->chord()->segment();
                                           if (_endSegment && (s->tick() < _endSegment->tick()))
@@ -368,12 +368,12 @@ void Selection::updateSelectedElements()
                         if (sp->track() < startTrack || sp->track() >= endTrack)
                               continue;
                         // if spanner ends between _startSegment and _endSegment, select it
-                        if (sp->endElement()->type() == ElementType::SEGMENT) {
+                        if (sp->endElement()->type() == Element::Type::SEGMENT) {
                               Segment* s2 = static_cast<Segment*>(sp->endElement());
                               if (s2->tick() >= _startSegment->tick() && s2->tick() < endTick)
                                     _el.append(sp);
                               }
-                        else if (sp->endElement()->type() == ElementType::MEASURE) {
+                        else if (sp->endElement()->type() == Element::Type::MEASURE) {
                               Measure* s2 = static_cast<Measure*>(sp->endElement());
                               if (s2->tick() >= _startSegment->tick() && s2->tick() < endTick)
                                     _el.append(sp);
@@ -497,7 +497,7 @@ QByteArray Selection::mimeData() const
             case SelState::LIST:
                   if (isSingle()) {
                         Element* e = element();
-                        if (e->type() == ElementType::TEXTLINE_SEGMENT)
+                        if (e->type() == Element::Type::TEXTLINE_SEGMENT)
                               e = static_cast<TextLineSegment*>(e)->textLine();
                         a = e->mimeData(QPointF());
                         }
@@ -585,115 +585,115 @@ QByteArray Selection::symbolListMimeData() const
 
 Enabling copying of more element types requires enabling pasting in Score::pasteSymbols() in libmscore/paste.cpp
 
-                  case ElementType::SYMBOL:
-                  case ElementType::TEXT:
-                  case ElementType::INSTRUMENT_NAME:
-                  case ElementType::SLUR_SEGMENT:
-                  case ElementType::STAFF_LINES:
-                  case ElementType::BAR_LINE:
-                  case ElementType::STEM_SLASH:
-                  case ElementType::LINE:
-                  case ElementType::BRACKET:
-                  case ElementType::ARPEGGIO:
-                  case ElementType::ACCIDENTAL:
-                  case ElementType::STEM:
-                  case ElementType::NOTE:
-                  case ElementType::CLEF:
-                  case ElementType::KEYSIG:
-                  case ElementType::TIMESIG:
-                  case ElementType::REST:
-                  case ElementType::BREATH:
-                  case ElementType::GLISSANDO:
-                  case ElementType::REPEAT_MEASURE:
-                  case ElementType::IMAGE:
-                  case ElementType::TIE:
-                  case ElementType::CHORDLINE:
-                  case ElementType::DYNAMIC:
-                  case ElementType::BEAM:
-                  case ElementType::HOOK:
-                  case ElementType::MARKER:
-                  case ElementType::JUMP:
-                  case ElementType::FINGERING:
-                  case ElementType::TUPLET:
-                  case ElementType::TEMPO_TEXT:
-                  case ElementType::STAFF_TEXT:
-                  case ElementType::REHEARSAL_MARK:
-                  case ElementType::INSTRUMENT_CHANGE:
-                  case ElementType::FRET_DIAGRAM:
-                  case ElementType::BEND:
-                  case ElementType::TREMOLOBAR:
-                  case ElementType::VOLTA:
-                  case ElementType::HAIRPIN_SEGMENT:
-                  case ElementType::OTTAVA_SEGMENT:
-                  case ElementType::TRILL_SEGMENT:
-                  case ElementType::TEXTLINE_SEGMENT:
-                  case ElementType::VOLTA_SEGMENT:
-                  case ElementType::PEDAL_SEGMENT:
-                  case ElementType::LAYOUT_BREAK:
-                  case ElementType::SPACER:
-                  case ElementType::STAFF_STATE:
-                  case ElementType::LEDGER_LINE:
-                  case ElementType::NOTEHEAD:
-                  case ElementType::NOTEDOT:
-                  case ElementType::TREMOLO:
-                  case ElementType::MEASURE:
-                  case ElementType::SELECTION:
-                  case ElementType::LASSO:
-                  case ElementType::SHADOW_NOTE:
-                  case ElementType::RUBBERBAND:
-                  case ElementType::TAB_DURATION_SYMBOL:
-                  case ElementType::FSYMBOL:
-                  case ElementType::PAGE:
-                  case ElementType::HAIRPIN:
-                  case ElementType::OTTAVA:
-                  case ElementType::PEDAL:
-                  case ElementType::TRILL:
-                  case ElementType::TEXTLINE:
-                  case ElementType::NOTELINE:
-                  case ElementType::SEGMENT:
-                  case ElementType::SYSTEM:
-                  case ElementType::COMPOUND:
-                  case ElementType::CHORD:
-                  case ElementType::SLUR:
-                  case ElementType::ELEMENT:
-                  case ElementType::ELEMENT_LIST:
-                  case ElementType::STAFF_LIST:
-                  case ElementType::MEASURE_LIST:
-                  case ElementType::LAYOUT:
-                  case ElementType::HBOX:
-                  case ElementType::VBOX:
-                  case ElementType::TBOX:
-                  case ElementType::FBOX:
-                  case ElementType::ACCIDENTAL_BRACKET:
-                  case ElementType::ICON:
-                  case ElementType::OSSIA:
-                  case ElementType::BAGPIPE_EMBELLISHMENT:
+                  case Element::Type::SYMBOL:
+                  case Element::Type::TEXT:
+                  case Element::Type::INSTRUMENT_NAME:
+                  case Element::Type::SLUR_SEGMENT:
+                  case Element::Type::STAFF_LINES:
+                  case Element::Type::BAR_LINE:
+                  case Element::Type::STEM_SLASH:
+                  case Element::Type::LINE:
+                  case Element::Type::BRACKET:
+                  case Element::Type::ARPEGGIO:
+                  case Element::Type::ACCIDENTAL:
+                  case Element::Type::STEM:
+                  case Element::Type::NOTE:
+                  case Element::Type::CLEF:
+                  case Element::Type::KEYSIG:
+                  case Element::Type::TIMESIG:
+                  case Element::Type::REST:
+                  case Element::Type::BREATH:
+                  case Element::Type::GLISSANDO:
+                  case Element::Type::REPEAT_MEASURE:
+                  case Element::Type::IMAGE:
+                  case Element::Type::TIE:
+                  case Element::Type::CHORDLINE:
+                  case Element::Type::DYNAMIC:
+                  case Element::Type::BEAM:
+                  case Element::Type::HOOK:
+                  case Element::Type::MARKER:
+                  case Element::Type::JUMP:
+                  case Element::Type::FINGERING:
+                  case Element::Type::TUPLET:
+                  case Element::Type::TEMPO_TEXT:
+                  case Element::Type::STAFF_TEXT:
+                  case Element::Type::REHEARSAL_MARK:
+                  case Element::Type::INSTRUMENT_CHANGE:
+                  case Element::Type::FRET_DIAGRAM:
+                  case Element::Type::BEND:
+                  case Element::Type::TREMOLOBAR:
+                  case Element::Type::VOLTA:
+                  case Element::Type::HAIRPIN_SEGMENT:
+                  case Element::Type::OTTAVA_SEGMENT:
+                  case Element::Type::TRILL_SEGMENT:
+                  case Element::Type::TEXTLINE_SEGMENT:
+                  case Element::Type::VOLTA_SEGMENT:
+                  case Element::Type::PEDAL_SEGMENT:
+                  case Element::Type::LAYOUT_BREAK:
+                  case Element::Type::SPACER:
+                  case Element::Type::STAFF_STATE:
+                  case Element::Type::LEDGER_LINE:
+                  case Element::Type::NOTEHEAD:
+                  case Element::Type::NOTEDOT:
+                  case Element::Type::TREMOLO:
+                  case Element::Type::MEASURE:
+                  case Element::Type::SELECTION:
+                  case Element::Type::LASSO:
+                  case Element::Type::SHADOW_NOTE:
+                  case Element::Type::RUBBERBAND:
+                  case Element::Type::TAB_DURATION_SYMBOL:
+                  case Element::Type::FSYMBOL:
+                  case Element::Type::PAGE:
+                  case Element::Type::HAIRPIN:
+                  case Element::Type::OTTAVA:
+                  case Element::Type::PEDAL:
+                  case Element::Type::TRILL:
+                  case Element::Type::TEXTLINE:
+                  case Element::Type::NOTELINE:
+                  case Element::Type::SEGMENT:
+                  case Element::Type::SYSTEM:
+                  case Element::Type::COMPOUND:
+                  case Element::Type::CHORD:
+                  case Element::Type::SLUR:
+                  case Element::Type::ELEMENT:
+                  case Element::Type::ELEMENT_LIST:
+                  case Element::Type::STAFF_LIST:
+                  case Element::Type::MEASURE_LIST:
+                  case Element::Type::LAYOUT:
+                  case Element::Type::HBOX:
+                  case Element::Type::VBOX:
+                  case Element::Type::TBOX:
+                  case Element::Type::FBOX:
+                  case Element::Type::ACCIDENTAL_BRACKET:
+                  case Element::Type::ICON:
+                  case Element::Type::OSSIA:
+                  case Element::Type::BAGPIPE_EMBELLISHMENT:
                         continue;
 */
-                  case ElementType::ARTICULATION:
+                  case Element::Type::ARTICULATION:
                         // ignore articulations not attached to chords/rest
-                        if (e->parent()->type() == ElementType::CHORD) {
+                        if (e->parent()->type() == Element::Type::CHORD) {
                               Chord* par = static_cast<Chord*>( (static_cast<Articulation*>(e))->parent() );
                               seg = par->segment();
                               break;
                               }
-                        else if (e->parent()->type() == ElementType::REST) {
+                        else if (e->parent()->type() == Element::Type::REST) {
                               Rest* par = static_cast<Rest*>( (static_cast<Articulation*>(e))->parent() );
                               seg = par->segment();
                               break;
                               }
                         continue;
-                  case ElementType::FIGURED_BASS:
+                  case Element::Type::FIGURED_BASS:
                         seg = (static_cast<FiguredBass*>(e))->segment();
                         break;
-                  case ElementType::HARMONY:
+                  case Element::Type::HARMONY:
                         // ignore chord sybols not attached to segment
-                        if (e->parent()->type() == ElementType::SEGMENT) {
+                        if (e->parent()->type() == Element::Type::SEGMENT) {
                               seg = static_cast<Segment*>( (static_cast<Harmony*>(e))->parent() );
                               break;
                               }
                         continue;
-                  case ElementType::LYRICS:
+                  case Element::Type::LYRICS:
                         seg = (static_cast<Lyrics*>(e))->segment();
                         break;
                   default:
@@ -730,7 +730,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
             numSegs = 0;
             // with figured bass, we need to look for the proper segment
             // not only according to ChordRest elements, but also annotations
-            if (iter->second.e->type() == ElementType::FIGURED_BASS) {
+            if (iter->second.e->type() == Element::Type::FIGURED_BASS) {
                   bool done = false;
                   for ( ; seg; seg = seg->next1()) {
                         if (seg->segmentType() == SegmentType::ChordRest) {
@@ -743,7 +743,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                                                 break;
                                                 }
                                           // do annotations include any f.b.?
-                                          if (el->type() == ElementType::FIGURED_BASS && el->track() == track) {
+                                          if (el->type() == Element::Type::FIGURED_BASS && el->track() == track) {
                                                 numSegs++;  //yes: it counts as a step
                                                 break;
                                                 }
@@ -785,7 +785,7 @@ QList<Note*> Selection::noteList(int selTrack) const
 
       if (_state == SelState::LIST) {
             foreach(Element* e, _el) {
-                  if (e->type() == ElementType::NOTE)
+                  if (e->type() == Element::Type::NOTE)
                         nl.append(static_cast<Note*>(e));
                   }
             }
@@ -798,7 +798,7 @@ QList<Note*> Selection::noteList(int selTrack) const
                               continue;
                         for (int track = startTrack; track < endTrack; ++track) {
                               Element* e = seg->element(track);
-                              if (e == 0 || e->type() != ElementType::CHORD
+                              if (e == 0 || e->type() != Element::Type::CHORD
                                  || (selTrack != -1 && selTrack != track))
                                     continue;
                               Chord* c = static_cast<Chord*>(e);

@@ -82,7 +82,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
 
 bool TimeSig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == ElementType::TIMESIG;
+      return e->type() == Element::Type::TIMESIG;
       }
 
 //---------------------------------------------------------
@@ -92,7 +92,7 @@ bool TimeSig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* TimeSig::drop(const DropData& data)
       {
       Element* e = data.element;
-      if (e->type() == ElementType::TIMESIG) {
+      if (e->type() == Element::Type::TIMESIG) {
             // change timesig applies to all staves, can't simply set subtype
             // for this one only
             // ownership of e is transferred to cmdAddTimeSig

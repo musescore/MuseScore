@@ -143,8 +143,8 @@ class Measure : public MeasureBase {
       Measure(Score* = 0);
       Measure(const Measure&);
       ~Measure();
-      virtual Measure* clone() const override   { return new Measure(*this); }
-      virtual ElementType type() const override { return ElementType::MEASURE; }
+      virtual Measure* clone() const override     { return new Measure(*this); }
+      virtual Element::Type type() const override { return Element::Type::MEASURE; }
       virtual void setScore(Score* s) override;
       Measure* cloneMeasure(Score*, TieMap*);
 

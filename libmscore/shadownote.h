@@ -36,13 +36,13 @@ class ShadowNote : public Element {
 
    public:
       ShadowNote(Score*);
-      virtual ShadowNote* clone() const { return new ShadowNote(*this); }
-      virtual ElementType type() const  { return ElementType::SHADOW_NOTE; }
+      virtual ShadowNote* clone() const  { return new ShadowNote(*this); }
+      virtual Element::Type type() const { return Element::Type::SHADOW_NOTE; }
       virtual void layout();
-      int line() const                  { return _line;   }
-      void setLine(int n)               { _line = n;      }
+      int line() const                   { return _line;   }
+      void setLine(int n)                { _line = n;      }
       virtual void draw(QPainter*) const;
-      void setSym(SymId id)             { sym = id;     }
+      void setSym(SymId id)              { sym = id;     }
       };
 
 

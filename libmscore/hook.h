@@ -30,14 +30,14 @@ class Hook : public Symbol {
 
    public:
       Hook(Score*);
-      virtual Hook* clone() const      { return new Hook(*this); }
-      virtual qreal mag() const        { return parent()->mag(); }
-      virtual ElementType type() const { return ElementType::HOOK; }
+      virtual Hook* clone() const        { return new Hook(*this); }
+      virtual qreal mag() const          { return parent()->mag(); }
+      virtual Element::Type type() const { return Element::Type::HOOK; }
       void setHookType(int v);
-      int hookType() const             { return _hookType; }
+      int hookType() const               { return _hookType; }
       virtual void layout();
       virtual void draw(QPainter*) const;
-      Chord* chord() const            { return (Chord*)parent(); }
+      Chord* chord() const               { return (Chord*)parent(); }
       };
 
 
