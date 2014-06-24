@@ -28,7 +28,7 @@ TempoText::TempoText(Score* s)
       {
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
-      setPlacement(Placement::ABOVE);
+      setPlacement(Element::Placement::ABOVE);
       setTextStyleType(TextStyleType::TEMPO);
       }
 
@@ -230,7 +230,7 @@ QVariant TempoText::propertyDefault(P_ID id) const
       switch(id) {
             case P_ID::TEMPO:             return 120;
             case P_ID::TEMPO_FOLLOW_TEXT: return false;
-            case P_ID::PLACEMENT:         return int(Placement::ABOVE);
+            case P_ID::PLACEMENT:         return int(Element::Placement::ABOVE);
             default:                  return Text::propertyDefault(id);
             }
       }
@@ -242,7 +242,7 @@ QVariant TempoText::propertyDefault(P_ID id) const
 void TempoText::layout()
       {
       Text::layout();
-      if (placement() == Placement::BELOW) {
+      if (placement() == Element::Placement::BELOW) {
             rypos() = -rypos() + 4 * spatium();
             // rUserYoffset() *= -1;
             // text height ?

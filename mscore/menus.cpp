@@ -784,7 +784,7 @@ Palette* MuseScore::newLinesPalette()
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_8VB);
       ottava->setLen(w);
-      ottava->setPlacement(Placement::BELOW);
+      ottava->setPlacement(Element::Placement::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8vb"));
 
       ottava = new Ottava(gscore);
@@ -795,7 +795,7 @@ Palette* MuseScore::newLinesPalette()
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_15MB);
       ottava->setLen(w);
-      ottava->setPlacement(Placement::BELOW);
+      ottava->setPlacement(Element::Placement::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15mb"));
 
       ottava = new Ottava(gscore);
