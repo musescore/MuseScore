@@ -1015,7 +1015,7 @@ void Note::read(XmlReader& e)
                               _tieBack = static_cast<Tie*>(sp);
                         else
                               addSpannerBack(sp);
-                        score()->removeSpanner(sp);
+                        score()->removeSpanner(sp);   // no note spanners in global spanner map
                         }
                   else
                         qDebug("Note::read(): cannot find spanner %d", id);

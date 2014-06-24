@@ -1349,7 +1349,7 @@ void Score::doLayout()
                         e->layout();
                   }
             }
-      for (const std::pair<int,Spanner*>& s : _spanner.map()) {
+      for (auto s : _spanner.map()) {
             Spanner* sp = s.second;
             if (sp->type() == ElementType::OTTAVA && sp->tick2() == -1) {
                   sp->setTick2(lastMeasure()->endTick());
@@ -2336,10 +2336,9 @@ void Score::connectTies()
                         else
                               nnote = searchTieNote(n);
                         if (nnote == 0) {
-                              qDebug("next note at %d track %d for tie not found",
-                                 s->tick(), i);
-                              // n->setTieFor(0);  show short bow
-                              // delete tie;
+                              qDebug("next note at %d track %d for tie not found", s->tick(), i);
+                              if (findSpanner(tie->id()))
+                                    removeSpanner(tie);
                               delete tie;
                               n->setTieFor(0);
                               }
