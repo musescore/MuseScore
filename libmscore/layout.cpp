@@ -2337,8 +2337,6 @@ void Score::connectTies()
                               nnote = searchTieNote(n);
                         if (nnote == 0) {
                               qDebug("next note at %d track %d for tie not found", s->tick(), i);
-                              if (findSpanner(tie->id()))
-                                    removeSpanner(tie);
                               delete tie;
                               n->setTieFor(0);
                               }

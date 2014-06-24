@@ -3359,7 +3359,13 @@ void Score::undoInsertTime(int tick, int len)
       if (len == 0)
             return;
 
-      for (auto i : _spanner.map()) {
+      //
+      // we have to iterate on a map copy bc. the map is
+      // changed in the loop
+      //
+      std::multimap<int, Spanner*> spannerMap = _spanner.map();
+
+      for (auto i : spannerMap) {
             Spanner* s = i.second;
             if (s->tick2() < tick)
                   continue;
