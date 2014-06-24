@@ -19,7 +19,7 @@ class QPainter;
 
 namespace Ms {
 
-enum class SymId : short;
+enum class SymId;
 
 //---------------------------------------------------------
 //   @@ Breath
