@@ -25,12 +25,12 @@ class Segment;
 //   @@ Dynamic
 ///    dynamics marker; determines midi velocity
 //
-//   @P range  Ms::DynamicRange (STAFF, PART, SYSTEM)
+//   @P range  Ms::Dynamic::Range (STAFF, PART, SYSTEM)
 //-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
       Q_OBJECT
-      Q_PROPERTY(DynamicRange range READ dynRange  WRITE undoSetDynRange)
+      Q_PROPERTY(Ms::Dynamic::Range range  READ dynRange  WRITE undoSetDynRange)
 
    public:
       enum class Type : char {
@@ -65,12 +65,16 @@ class Dynamic : public Text {
             Z
             };
 
+      enum class Range : char {
+            STAFF, PART, SYSTEM
+            };
+
    private:
       Type _dynamicType;
 
       mutable QPointF dragOffset;
-      int _velocity;          // associated midi velocity 0-127
-      DynamicRange _dynRange;   // STAFF, PART, SYSTEM
+      int _velocity;     // associated midi velocity 0-127
+      Range _dynRange;   // STAFF, PART, SYSTEM
 
       virtual QRectF drag(EditData*) override;
 
@@ -98,9 +102,9 @@ class Dynamic : public Text {
 
       void setVelocity(int v);
       int velocity() const;
-      DynamicRange dynRange() const    { return _dynRange; }
-      void setDynRange(DynamicRange t) { _dynRange = t;    }
-      void undoSetDynRange(DynamicRange t);
+      Range dynRange() const    { return _dynRange; }
+      void setDynRange(Range t) { _dynRange = t;    }
+      void undoSetDynRange(Range t);
 
       virtual QLineF dragAnchor() const override;
 
@@ -111,4 +115,7 @@ class Dynamic : public Text {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Dynamic::Range);
+
 #endif

@@ -14,6 +14,7 @@
 #define __HAIRPIN_H__
 
 #include "element.h"
+#include "dynamic.h"
 #include "line.h"
 #include "mscore.h"
 
@@ -59,25 +60,26 @@ class HairpinSegment : public LineSegment {
 //   @@ Hairpin
 //   @P hairpinType  Ms::Hairpin::HairpinType  (CRESCENDO, DECRESCENDO)
 //   @P veloChange   int
-//   @P dynRange     Ms::DynamicRange          (STAFF, PART, SYSTEM)
+//   @P dynRange     Ms::Dynamic::Range        (STAFF, PART, SYSTEM)
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
       Q_OBJECT
       Q_ENUMS(HairpinType)
+      Q_ENUMS(Ms::Dynamic::Range)
 
    public:
       enum class HairpinType : char { CRESCENDO, DECRESCENDO };
 
    private:
-      Q_PROPERTY(HairpinType                 hairpinType READ hairpinType WRITE undoSetHairpinType)
-      Q_PROPERTY(int                         veloChange  READ veloChange  WRITE undoSetVeloChange)
-      Q_PROPERTY(Ms::DynamicRange   dynRange    READ dynRange    WRITE undoSetDynRange)
+      Q_PROPERTY(HairpinType        hairpinType READ  hairpinType WRITE undoSetHairpinType)
+      Q_PROPERTY(int                veloChange  READ  veloChange  WRITE undoSetVeloChange)
+      Q_PROPERTY(Ms::Dynamic::Range dynRange    READ  dynRange    WRITE undoSetDynRange)
 
       bool  _hairpinCircledTip;
       HairpinType _hairpinType;
       int _veloChange;
-      DynamicRange _dynRange;
+      Dynamic::Range _dynRange;
       PropertyStyle lineWidthStyle;
 
       Spatium _hairpinHeight;
@@ -106,9 +108,9 @@ class Hairpin : public SLine {
       void setVeloChange(int v)        { _veloChange = v;    }
       void undoSetVeloChange(int v);
 
-      DynamicRange dynRange() const          { return _dynRange; }
-      void setDynRange(DynamicRange t)       { _dynRange = t;    }
-      void undoSetDynRange(DynamicRange t);
+      Dynamic::Range dynRange() const        { return _dynRange; }
+      void setDynRange(Dynamic::Range t)     { _dynRange = t;    }
+      void undoSetDynRange(Dynamic::Range t);
 
       Spatium hairpinHeight() const          { return _hairpinHeight; }
       void setHairpinHeight(Spatium val)     { _hairpinHeight = val; }

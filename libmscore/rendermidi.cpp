@@ -428,17 +428,17 @@ void Score::updateHairpin(Hairpin* h)
             endVelo = 1;
 
       switch (h->dynRange()) {
-            case DynamicRange::STAFF:
+            case Dynamic::Range::STAFF:
                   st->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
                   st->velocities().setVelo(tick2, VeloEvent(VeloType::FIX, endVelo));
                   break;
-            case DynamicRange::PART:
+            case Dynamic::Range::PART:
                   foreach(Staff* s, *st->part()->staves()) {
                         s->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
                         s->velocities().setVelo(tick2, VeloEvent(VeloType::FIX, endVelo));
                         }
                   break;
-            case DynamicRange::SYSTEM:
+            case Dynamic::Range::SYSTEM:
                   foreach(Staff* s, _staves) {
                         s->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
                         s->velocities().setVelo(tick2, VeloEvent(VeloType::FIX, endVelo));
@@ -458,17 +458,17 @@ void Score::removeHairpin(Hairpin* h)
       int tick2 = h->tick2() - 1;
 
       switch(h->dynRange()) {
-            case DynamicRange::STAFF:
+            case Dynamic::Range::STAFF:
                   st->velocities().remove(tick);
                   st->velocities().remove(tick2);
                   break;
-            case DynamicRange::PART:
+            case Dynamic::Range::PART:
                   foreach(Staff* s, *st->part()->staves()) {
                         s->velocities().remove(tick);
                         s->velocities().remove(tick2);
                         }
                   break;
-            case DynamicRange::SYSTEM:
+            case Dynamic::Range::SYSTEM:
                   foreach(Staff* s, _staves) {
                         s->velocities().remove(tick);
                         s->velocities().remove(tick2);
@@ -515,17 +515,17 @@ void Score::updateVelo()
                               continue;
                         int dStaffIdx = d->staffIdx();
                         switch(d->dynRange()) {
-                              case DynamicRange::STAFF:
+                              case Dynamic::Range::STAFF:
                                     if (dStaffIdx == staffIdx)
                                           velo.setVelo(tick, v);
                                     break;
-                              case DynamicRange::PART:
+                              case Dynamic::Range::PART:
                                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff+partStaves) {
                                           for (int i = partStaff; i < partStaff+partStaves; ++i)
                                                 staff(i)->velocities().setVelo(tick, v);
                                           }
                                     break;
-                              case DynamicRange::SYSTEM:
+                              case Dynamic::Range::SYSTEM:
                                     for (int i = 0; i < nstaves(); ++i)
                                           staff(i)->velocities().setVelo(tick, v);
                                     break;

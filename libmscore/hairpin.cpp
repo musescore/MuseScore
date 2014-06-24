@@ -290,7 +290,7 @@ Hairpin::Hairpin(Score* s)
       _hairpinType = HairpinType::CRESCENDO;
       _hairpinCircledTip = false;
       _veloChange  = 10;
-      _dynRange    = DynamicRange::PART;
+      _dynRange    = Dynamic::Range::PART;
       setLineWidth(score()->styleS(StyleIdx::hairpinLineWidth));
       lineWidthStyle         = PropertyStyle::STYLED;
       _hairpinHeight         = score()->styleS(StyleIdx::hairpinHeight);
@@ -369,7 +369,7 @@ void Hairpin::read(XmlReader& e)
             else if (tag == "veloChange")
                   _veloChange = e.readInt();
             else if (tag == "dynType")
-                  _dynRange = DynamicRange(e.readInt());
+                  _dynRange = Dynamic::Range(e.readInt());
             else if (!SLine::readProperties(e))
                   e.unknown();
             }
@@ -397,7 +397,7 @@ void Hairpin::undoSetVeloChange(int val)
 //   undoSetDynType
 //---------------------------------------------------------
 
-void Hairpin::undoSetDynRange(DynamicRange val)
+void Hairpin::undoSetDynRange(Dynamic::Range val)
       {
       score()->undoChangeProperty(this, P_ID::DYNAMIC_RANGE, int(val));
       }
@@ -444,7 +444,7 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
                   _veloChange = v.toInt();
                   break;
             case P_ID::DYNAMIC_RANGE:
-                  _dynRange = DynamicRange(v.toInt());
+                  _dynRange = Dynamic::Range(v.toInt());
                   break;
             case P_ID::LINE_WIDTH:
                   lineWidthStyle = PropertyStyle::UNSTYLED;
@@ -474,7 +474,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
             case P_ID::HAIRPIN_CIRCLEDTIP:  return false;
             case P_ID::HAIRPIN_TYPE:        return int(HairpinType::CRESCENDO);
             case P_ID::VELO_CHANGE:         return 10;
-            case P_ID::DYNAMIC_RANGE:       return int(DynamicRange::PART);
+            case P_ID::DYNAMIC_RANGE:       return int(Dynamic::Range::PART);
             case P_ID::LINE_WIDTH:          return score()->styleS(StyleIdx::hairpinLineWidth).val();
             case P_ID::HAIRPIN_HEIGHT:      return score()->styleS(StyleIdx::hairpinHeight).val();
             case P_ID::HAIRPIN_CONT_HEIGHT: return score()->styleS(StyleIdx::hairpinContHeight).val();

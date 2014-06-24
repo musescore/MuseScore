@@ -33,6 +33,7 @@
 #include "noteevent.h"
 #include "synthesizerstate.h"
 #include "bracket.h"
+#include "dynamic.h"
 #include "stafftype.h"
 #include "cleflist.h"
 
@@ -992,13 +993,13 @@ class ChangeImage : public UndoCommand {
 class ChangeHairpin : public UndoCommand {
       Hairpin* hairpin;
       int veloChange;
-      DynamicRange dynRange;
+      Dynamic::Range dynRange;
       bool diagonal;
 
       void flip();
 
    public:
-      ChangeHairpin(Hairpin* h, int c, DynamicRange t, bool dg)
+      ChangeHairpin(Hairpin* h, int c, Dynamic::Range t, bool dg)
          : hairpin(h), veloChange(c), dynRange(t), diagonal(dg) {}
       UNDO_NAME("ChangeHairpin")
       };

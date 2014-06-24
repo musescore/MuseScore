@@ -232,14 +232,6 @@ enum class ElementType : char {
       MAXTYPE
       };
 
-//---------------------------------------------------------
-//   DynamicRange
-//---------------------------------------------------------
-
-enum class DynamicRange : char {
-      STAFF, PART, SYSTEM
-      };
-
 enum class Placement : char {
       ABOVE, BELOW
       };
@@ -268,7 +260,6 @@ enum class Placement : char {
 class Element : public QObject {
       Q_OBJECT
       Q_ENUMS(ElementType)
-      Q_ENUMS(DynamicRange)
       Q_ENUMS(Placement)
 
       Q_PROPERTY(ElementType type    READ type)
@@ -711,7 +702,6 @@ extern void collectElements(void* data, Element* e);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::ElementType);
-Q_DECLARE_METATYPE(Ms::DynamicRange);
 Q_DECLARE_METATYPE(Ms::Placement);
 
 #endif
