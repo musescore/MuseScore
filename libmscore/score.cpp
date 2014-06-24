@@ -3433,8 +3433,11 @@ void Score::undoInsertTime(int tick, int len)
                         }
                   }
             }
-            // insert time in (key, clef) maps
-            undo(new InsertTime(this, tick, len));
+      // fix spanner map to correctly map key to value->tick()
+      _spanner.fixKeys();
+
+      // insert time in (key, clef) maps
+      undo(new InsertTime(this, tick, len));
       }
 
 
