@@ -277,7 +277,10 @@ void TextBlock::layout(Text* t)
                         f.pos.setY(0.0);
                   qreal w;
                   QRectF r;
-                  r = fm.boundingRect(f.text).translated(f.pos);
+                  if (f.format.type() == CharFormatType::SYMBOL)
+                        r = fm.tightBoundingRect(f.text).translated(f.pos);
+                  else
+                        r = fm.boundingRect(f.text).translated(f.pos);
                   w = fm.width(f.text);
                   _bbox |= r;
                   x += w;
