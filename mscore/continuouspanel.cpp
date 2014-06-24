@@ -124,7 +124,7 @@ void ContinuousPanel::paint(const QRect& r, QPainter& p)
                         continue;
                   }
 
-            if (e->type() == Element::ElementType::MEASURE) {
+            if (e->type() == ElementType::MEASURE) {
                   _currentMeasure = static_cast<const Measure*>(e);
                   _currentTimeSig = _currentMeasure->timesig();
                   _currentMeasureTick = _currentMeasure->tick();
@@ -168,7 +168,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                         continue;
                   }
 
-           if (e->type() == Element::ElementType::STAFF_LINES) {
+           if (e->type() == ElementType::STAFF_LINES) {
                   Staff* currentStaff = _score->staff(e->staffIdx());
 
                   //
@@ -187,7 +187,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   Clef* newClef = new Clef(_score);
                   ClefType currentClef = currentStaff->clef(_currentMeasureTick);
                   newClef->setClefType(currentClef);
-                  newClef->layout(); 
+                  newClef->layout();
 
                   //
                   // Find maximum width for the current KeySignature
@@ -256,7 +256,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
 //   draw
 //---------------------------------------------------------
 
-void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {     
+void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
       painter.save();
 
       //
@@ -304,7 +304,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                         continue;
                   }
 
-           if (e->type() == Element::ElementType::STAFF_LINES) {
+           if (e->type() == ElementType::STAFF_LINES) {
                   Staff* currentStaff = _score->staff(e->staffIdx());
 
                   //
@@ -320,7 +320,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   //
                   // Draw the current staff name
                   //
-                  QList<StaffName>& staffNamesShort = currentStaff->part()->instr()->shortNames();               
+                  QList<StaffName>& staffNamesShort = currentStaff->part()->instr()->shortNames();
                   QString staffNameShort = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name;
                   Text* newName = new Text(_score);
                   newName->setText(staffNameShort);
