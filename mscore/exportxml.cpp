@@ -3338,11 +3338,11 @@ static void directionJump(Xml& xml, const Jump* const jp)
 
 static void directionMarker(Xml& xml, const Marker* const m)
       {
-      MarkerType mtp = m->markerType();
+      Marker::Type mtp = m->markerType();
       QString words = "";
       QString type  = "";
       QString sound = "";
-      if (mtp == MarkerType::CODA) {
+      if (mtp == Marker::Type::CODA) {
             type = "coda";
             if (m->label() == "")
                   sound = "coda=\"1\"";
@@ -3351,18 +3351,18 @@ static void directionMarker(Xml& xml, const Marker* const m)
                   // sound = "coda=\"" + m->label() + "\"";
                   sound = "coda=\"coda\"";
             }
-      else if (mtp == MarkerType::SEGNO) {
+      else if (mtp == Marker::Type::SEGNO) {
             type = "segno";
             if (m->label() == "")
                   sound = "segno=\"1\"";
             else
                   sound = "segno=\"" + m->label() + "\"";
             }
-      else if (mtp == MarkerType::FINE) {
+      else if (mtp == Marker::Type::FINE) {
             words = "Fine";
             sound = "fine=\"yes\"";
             }
-      else if (mtp == MarkerType::TOCODA) {
+      else if (mtp == Marker::Type::TOCODA) {
             if (m->text() == "")
                   words = "To Coda";
             else
@@ -3443,19 +3443,19 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
                                           {
                                           // filter out the markers at measure Start
                                           const Marker* const mk = static_cast<const Marker* const>(e);
-                                          MarkerType mtp = mk->markerType();
+                                          Marker::Type mtp = mk->markerType();
 #ifdef DEBUG_REPEATS
                                           qDebug("repeatAtMeasureStart: marker type %d", mtp);
 #endif
-                                          if (   mtp == MarkerType::SEGNO
-                                                 || mtp == MarkerType::CODA
+                                          if (   mtp == Marker::Type::SEGNO
+                                                 || mtp == Marker::Type::CODA
                                                  ) {
                                                 qDebug(" -> handled");
                                                 attr.doAttr(xml, false);
                                                 directionMarker(xml, mk);
                                                 }
-                                          else if (   mtp == MarkerType::FINE
-                                                      || mtp == MarkerType::TOCODA
+                                          else if (   mtp == Marker::Type::FINE
+                                                      || mtp == Marker::Type::TOCODA
                                                       ) {
 #ifdef DEBUG_REPEATS
                                                 qDebug(" -> ignored");
@@ -3519,20 +3519,20 @@ static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, in
                                           {
                                           // filter out the markers at measure stop
                                           const Marker* const mk = static_cast<const Marker* const>(e);
-                                          MarkerType mtp = mk->markerType();
+                                          Marker::Type mtp = mk->markerType();
 #ifdef DEBUG_REPEATS
                                           qDebug("repeatAtMeasureStop: marker type %d", mtp);
 #endif
-                                          if (   mtp == MarkerType::FINE
-                                                 || mtp == MarkerType::TOCODA
+                                          if (   mtp == Marker::Type::FINE
+                                                 || mtp == Marker::Type::TOCODA
                                                  ) {
 #ifdef DEBUG_REPEATS
                                                 qDebug(" -> handled");
 #endif
                                                 directionMarker(xml, mk);
                                                 }
-                                          else if (   mtp == MarkerType::SEGNO
-                                                      || mtp == MarkerType::CODA
+                                          else if (   mtp == Marker::Type::SEGNO
+                                                      || mtp == Marker::Type::CODA
                                                       ) {
 #ifdef DEBUG_REPEATS
                                                 qDebug(" -> ignored");

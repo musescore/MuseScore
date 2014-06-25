@@ -2733,22 +2733,22 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   // avoid duplicated code
                   m->setTextStyleType(TextStyleType::REPEAT_LEFT);
                   // apparently this MUST be after setTextStyle
-                  m->setMarkerType(MarkerType::SEGNO);
+                  m->setMarkerType(Marker::Type::SEGNO);
                   }
             else if (repeat == "coda") {
                   m = new Marker(score);
                   m->setTextStyleType(TextStyleType::REPEAT_LEFT);
-                  m->setMarkerType(MarkerType::CODA);
+                  m->setMarkerType(Marker::Type::CODA);
                   }
             else if (repeat == "fine") {
                   m = new Marker(score);
                   m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  m->setMarkerType(MarkerType::FINE);
+                  m->setMarkerType(Marker::Type::FINE);
                   }
             else if (repeat == "toCoda") {
                   m = new Marker(score);
                   m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  m->setMarkerType(MarkerType::TOCODA);
+                  m->setMarkerType(Marker::Type::TOCODA);
                   }
             else if (repeat == "daCapo") {
                   jp = new Jump(score);

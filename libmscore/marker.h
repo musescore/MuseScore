@@ -17,44 +17,44 @@
 
 namespace Ms {
 
-//---------------------------------------------------------
-//   MarkerType
-//---------------------------------------------------------
-
-enum class MarkerType : char {
-      SEGNO,
-      VARSEGNO,
-      CODA,
-      VARCODA,
-      CODETTA,
-      FINE,
-      TOCODA,
-      USER
-      };
 
 //---------------------------------------------------------
 //   @@ Marker
 //
 //   @P label       QString
-//   @P markerType  Ms::MarkerType  (SEGNO, VARSEGNO, CODA, VARCODA, CODETTA, FINE, TOCODA, USER)
+//   @P markerType  Ms::Marker::Type  (SEGNO, VARSEGNO, CODA, VARCODA, CODETTA, FINE, TOCODA, USER)
 //---------------------------------------------------------
 
 class Marker : public Text {
       Q_OBJECT
 
-      Q_PROPERTY(QString label             READ label      WRITE undoSetLabel)
-      Q_PROPERTY(Ms::MarkerType markerType READ markerType WRITE undoSetMarkerType)
+      Q_PROPERTY(QString label               READ label      WRITE undoSetLabel)
+      Q_PROPERTY(Ms::Marker::Type markerType READ markerType WRITE undoSetMarkerType)
+      Q_ENUMS(Type)
 
-      MarkerType _markerType;
+   public:
+      enum class Type : char {
+            SEGNO,
+            VARSEGNO,
+            CODA,
+            VARCODA,
+            CODETTA,
+            FINE,
+            TOCODA,
+            USER
+            };
+
+   private:
+      Type _markerType;
       QString _label;               ///< referenced from Jump() element
 
-      MarkerType markerType(const QString&) const;
+      Type markerType(const QString&) const;
 
    public:
       Marker(Score*);
 
-      void setMarkerType(MarkerType t);
-      MarkerType markerType() const    { return _markerType; }
+      void setMarkerType(Type t);
+      Type markerType() const          { return _markerType; }
 
       virtual Marker* clone() const override      { return new Marker(*this); }
       virtual Element::Type type() const override { return Element::Type::MARKER; }
@@ -68,7 +68,7 @@ class Marker : public Text {
       QString label() const            { return _label; }
       void setLabel(const QString& s)  { _label = s; }
       void undoSetLabel(const QString& s);
-      void undoSetMarkerType(MarkerType t);
+      void undoSetMarkerType(Type t);
 
       virtual void styleChanged() override;
       virtual bool systemFlag() const override  { return true;        }
@@ -81,7 +81,7 @@ class Marker : public Text {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::MarkerType);
+Q_DECLARE_METATYPE(Ms::Marker::Type);
 
 #endif
 
