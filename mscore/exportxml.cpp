@@ -2969,26 +2969,26 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
 
 void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
       {
-      OttavaType st = ot->ottavaType();
+      Ottava::Type st = ot->ottavaType();
       directionTag(xml, attr, ot);
       xml.stag("direction-type");
       if (ot->tick() == tick) {
             const char* sz = 0;
             const char* tp = 0;
             switch (st) {
-                  case OttavaType::OTTAVA_8VA:
+                  case Ottava::Type::OTTAVA_8VA:
                         sz = "8";
                         tp = "down";
                         break;
-                  case OttavaType::OTTAVA_15MA:
+                  case Ottava::Type::OTTAVA_15MA:
                         sz = "15";
                         tp = "down";
                         break;
-                  case OttavaType::OTTAVA_8VB:
+                  case Ottava::Type::OTTAVA_8VB:
                         sz = "8";
                         tp = "up";
                         break;
-                  case OttavaType::OTTAVA_15MB:
+                  case Ottava::Type::OTTAVA_15MB:
                         sz = "15";
                         tp = "up";
                         break;
@@ -2999,9 +2999,9 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
                   xml.tagE("octave-shift type=\"%s\" size=\"%s\"", tp, sz);
             }
       else {
-            if (st == OttavaType::OTTAVA_8VA || st == OttavaType::OTTAVA_8VB)
+            if (st == Ottava::Type::OTTAVA_8VA || st == Ottava::Type::OTTAVA_8VB)
                   xml.tagE("octave-shift type=\"stop\" size=\"8\"");
-            else if (st == OttavaType::OTTAVA_15MA || st == OttavaType::OTTAVA_15MB)
+            else if (st == Ottava::Type::OTTAVA_15MA || st == Ottava::Type::OTTAVA_15MB)
                   xml.tagE("octave-shift type=\"stop\" size=\"15\"");
             else
                   qDebug("ottava subtype %hhd not understood", st);

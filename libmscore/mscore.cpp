@@ -120,7 +120,7 @@ void MScore::init()
       qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
       qRegisterMetaType<FiguredBassItem::ContLine>("ContLine");
       qRegisterMetaType<VoltaType>("VoltaType");
-      qRegisterMetaType<OttavaType>("OttavaType");
+      qRegisterMetaType<Ottava::Type>("OttavaType");
       qRegisterMetaType<Trill::Type>("TrillType");
       qRegisterMetaType<Dynamic::Range>("DynamicRange");
       qRegisterMetaType<JumpType>("JumpType");

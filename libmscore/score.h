@@ -30,6 +30,7 @@
 #include "segment.h"
 #include "accidental.h"
 #include "note.h"
+#include "ottava.h"
 #include "spannermap.h"
 #include "pitchspelling.h"
 
@@ -97,7 +98,6 @@ class Bracket;
 class KeyList;
 class ScoreFont;
 
-enum class OttavaType : char;
 enum class ClefType : signed char;
 enum class SymId;
 enum class Key;
@@ -464,7 +464,7 @@ class Score : public QObject {
       void cmdRemovePart(Part*);
       void cmdAddTie();
       void cmdAddHairpin(bool);
-      void cmdAddOttava(OttavaType);
+      void cmdAddOttava(Ottava::Type);
       void cmdAddStretch(qreal);
       void transpose(Note* n, Interval, bool useSharpsFlats);
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);

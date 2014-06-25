@@ -39,7 +39,7 @@ struct OttavaDefault {
       const char* numbersOnlyName;
       };
 
-// order is important, should be the same than OttavaType
+// order is important, should be the same as Ottava::Type
 static const OttavaDefault ottavaDefault[] = {
       { SymId::ottavaAlta,        SymId::ottava,       QPointF(0.0, .7),    1.0, Element::Placement::ABOVE,  12, "8va", "8"   },
       { SymId::ottavaBassaBa,     SymId::ottava,       QPointF(0.0, -1.0), -1.0, Element::Placement::BELOW, -12, "8vb", "8"   },
@@ -170,7 +170,7 @@ Ottava::Ottava(Score* s)
       numbersOnlyStyle    = PropertyStyle::STYLED;
       beginTextStyle      = PropertyStyle::STYLED;
       continueTextStyle   = PropertyStyle::STYLED;
-      setOttavaType(OttavaType::OTTAVA_8VA);
+      setOttavaType(Type::OTTAVA_8VA);
       setLineWidth(score()->styleS(StyleIdx::ottavaLineWidth));
       lineWidthStyle = PropertyStyle::STYLED;
       setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::ottavaLineStyle)));
@@ -189,7 +189,7 @@ Ottava::Ottava(const Ottava& o)
 //   setOttavaType
 //---------------------------------------------------------
 
-void Ottava::setOttavaType(OttavaType val)
+void Ottava::setOttavaType(Type val)
       {
       setEndHook(true);
       _ottavaType = val;
@@ -261,7 +261,7 @@ void Ottava::read(XmlReader& e)
                   bool ok;
                   int idx = s.toInt(&ok);
                   if (!ok) {
-                        idx = int(OttavaType::OTTAVA_8VA);
+                        idx = int(Type::OTTAVA_8VA);
                         for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
                               if (s == ottavaDefault[i].name) {
                                     idx = i;
@@ -276,7 +276,7 @@ void Ottava::read(XmlReader& e)
                         else if (idx == 2)
                               idx = 1;
                         }
-                  setOttavaType(OttavaType(idx));
+                  setOttavaType(Type(idx));
                   }
             else if (tag == "numbersOnly") {
                   _numbersOnly = e.readInt();
@@ -330,7 +330,7 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch (propertyId) {
             case P_ID::OTTAVA_TYPE:
-                  setOttavaType(OttavaType(val.toInt()));
+                  setOttavaType(Type(val.toInt()));
                   break;
 
             case P_ID::LINE_WIDTH:
@@ -425,7 +425,7 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
 //   undoSetOttavaType
 //---------------------------------------------------------
 
-void Ottava::undoSetOttavaType(OttavaType val)
+void Ottava::undoSetOttavaType(Type val)
       {
       score()->undoChangeProperty(this, P_ID::OTTAVA_TYPE, int(val));
       }
