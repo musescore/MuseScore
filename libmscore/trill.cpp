@@ -120,14 +120,14 @@ void TrillSegment::layout()
                   a->adjustReadPos();
                   }
             switch (trill()->trillType()) {
-                  case Trill::TrillType::TRILL_LINE:
+                  case Trill::Type::TRILL_LINE:
                         symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
                         break;
-                  case Trill::TrillType::PRALLPRALL_LINE:
-                  case Trill::TrillType::PURE_LINE:
+                  case Trill::Type::PRALLPRALL_LINE:
+                  case Trill::Type::PURE_LINE:
                         symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
                         break;
-                  case Trill::TrillType::UPPRALL_LINE:
+                  case Trill::Type::UPPRALL_LINE:
                         if (score()->scoreFont()->isValid(SymId::ornamentBottomLeftConcaveStroke))
                               symbolLine(SymId::ornamentBottomLeftConcaveStroke,
                                  SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
@@ -136,7 +136,7 @@ void TrillSegment::layout()
                                  // SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
                                  SymId::ornamentZigZagLineNoRightEnd);
                         break;
-                  case Trill::TrillType::DOWNPRALL_LINE:
+                  case Trill::Type::DOWNPRALL_LINE:
                         if (score()->scoreFont()->isValid(SymId::ornamentLeftVerticalStroke))
                               symbolLine(SymId::ornamentLeftVerticalStroke,
                                  SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
@@ -247,7 +247,7 @@ void TrillSegment::scanElements(void* data, void (*func)(void*, Element*), bool 
 Trill::Trill(Score* s)
   : SLine(s)
       {
-      _trillType = TrillType::TRILL_LINE;
+      _trillType = Type::TRILL_LINE;
       _accidental = 0;
       }
 
@@ -375,15 +375,15 @@ void Trill::read(XmlReader& e)
 void Trill::setTrillType(const QString& s)
       {
       if (s == "trill" || s == "0")
-            _trillType = TrillType::TRILL_LINE;
+            _trillType = Type::TRILL_LINE;
       else if (s == "upprall")
-            _trillType = TrillType::UPPRALL_LINE;
+            _trillType = Type::UPPRALL_LINE;
       else if (s == "downprall")
-            _trillType = TrillType::DOWNPRALL_LINE;
+            _trillType = Type::DOWNPRALL_LINE;
       else if (s == "prallprall")
-            _trillType = TrillType::PRALLPRALL_LINE;
+            _trillType = Type::PRALLPRALL_LINE;
       else if (s == "pure")
-            _trillType = TrillType::PURE_LINE;
+            _trillType = Type::PURE_LINE;
       else
             qDebug("Trill::setSubtype: unknown <%s>", qPrintable(s));
       }
@@ -395,15 +395,15 @@ void Trill::setTrillType(const QString& s)
 QString Trill::trillTypeName() const
       {
       switch(trillType()) {
-            case TrillType::TRILL_LINE:
+            case Type::TRILL_LINE:
                   return "trill";
-            case TrillType::UPPRALL_LINE:
+            case Type::UPPRALL_LINE:
                   return "upprall";
-            case TrillType::DOWNPRALL_LINE:
+            case Type::DOWNPRALL_LINE:
                   return "downprall";
-            case TrillType::PRALLPRALL_LINE:
+            case Type::PRALLPRALL_LINE:
                   return "prallprall";
-            case TrillType::PURE_LINE:
+            case Type::PURE_LINE:
                   return "pure";
             default:
                   qDebug("unknown Trill subtype %hhd", trillType());
@@ -446,7 +446,7 @@ bool Trill::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch(propertyId) {
             case P_ID::TRILL_TYPE:
-                  setTrillType(TrillType(val.toInt()));
+                  setTrillType(Type(val.toInt()));
                   break;
             default:
                   if (!SLine::setProperty(propertyId, val))
@@ -476,7 +476,7 @@ QVariant Trill::propertyDefault(P_ID propertyId) const
 //   undoSetTrillType
 //---------------------------------------------------------
 
-void Trill::undoSetTrillType(TrillType val)
+void Trill::undoSetTrillType(Type val)
       {
       score()->undoChangeProperty(this, P_ID::TRILL_TYPE, int(val));
       }
