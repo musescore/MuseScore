@@ -37,6 +37,7 @@ class TestBarline : public QObject, public MTest
       void barline03();
       void barline04();
       void barline05();
+      void barline06();
       };
 
 //---------------------------------------------------------
@@ -279,6 +280,60 @@ void TestBarline::barline05()
       QVERIFY2(!bar->generated(), "Start-reapeat bar line in measure 5 is generated.");
 
 //      QVERIFY(saveCompareScore(score, "barline05.mscx", DIR + "barline05-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   barline06
+///   Read a score with 3 staves and custom bar line sub-types for staff i-th at measure i-th
+///   and check the custom syb-types are applied only to their respective bar lines,
+///   rather than to whole measures.
+//
+//    NO REFERENCE SCORE IS USED.
+//---------------------------------------------------------
+
+void TestBarline::barline06()
+      {
+      char  msg[256];
+      Score* score = readScore(DIR + "barline06.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // scan each measure
+      Measure*    msr   = score->firstMeasure();
+      int         msrNo = 1;
+      for (int i=0; i < 3; i++) {
+            // check measure endbarline type
+            sprintf(msg, "EndBarLineType not NORMAL in measure %d.", msrNo);
+            QVERIFY2(msr->endBarLineType() == BarLineType::NORMAL, msg);
+            // locate end-measure bar line segment
+            Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
+            sprintf(msg, "No SegEndBarLine in measure %d.", msr->no());
+            QVERIFY2(seg != nullptr, msg);
+
+            // check only i-th staff has custom bar line type
+            for (int j=0; j < 3; j++) {
+                  BarLine* bar = static_cast<BarLine*>(seg->element(j*VOICES));
+                  // if not the i-th staff, bar should be normal and not custom
+                  if (j != i) {
+                        sprintf(msg, "bar line type NOT NORMAL or CUSTOM TYPE in staff %d of measure %d.", j+1, msrNo);
+                        QVERIFY2(bar->barLineType() == BarLineType::NORMAL, msg);
+                        QVERIFY2(bar->customSubtype() == false, msg);
+                        }
+                  // in the i-th staff, the bar line should be of type DOUBLE and custom type should be true
+                  else {
+                        sprintf(msg, "No bar line for staff %d in measure %d", j+1, msrNo);
+                        QVERIFY2(bar != nullptr, msg);
+                        sprintf(msg, "bar line type NOT DOUBLE or NOT CUSTOM TYPE in staff %d of measure %d.", j+1, msrNo);
+                        QVERIFY2(bar->barLineType() == BarLineType::DOUBLE, msg);
+                        QVERIFY2(bar->customSubtype() == true, msg);
+                        }
+                  }
+
+            msr = msr->nextMeasure();
+            msrNo++;
+            }
+//      QVERIFY(saveCompareScore(score, "barline06.mscx", DIR + "barline06-ref.mscx"));
       delete score;
       }
 
