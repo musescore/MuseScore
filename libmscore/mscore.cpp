@@ -127,7 +127,7 @@ void MScore::init()
       qRegisterMetaType<BeamMode>("BeamMode");
       qRegisterMetaType<Hairpin::Type>("HairpinType");
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
-      qRegisterMetaType<LayoutBreak::LayoutBreakType>("LayoutBreakType");
+      qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
 //      qRegisterMetaType<TextStyle>("TextStyle");
 #endif
 

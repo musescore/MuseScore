@@ -715,7 +715,7 @@ void OveToMScore::convertLineBreak(){
 				if ((int)line->getBeginBar() + (int)line->getBarCount()-1 == measure->no()) {
 					LayoutBreak* lb = new LayoutBreak(score_);
 					lb->setTrack(0);
-					lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
+					lb->setLayoutBreakType(LayoutBreak::Type::LINE);
 					measure->add(lb);
 				}
 			}

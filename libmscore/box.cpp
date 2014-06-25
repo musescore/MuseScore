@@ -471,9 +471,9 @@ Element* Box::drop(const DropData& data)
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
                   if (_pageBreak || _lineBreak) {
                         if (
-                           (lb->layoutBreakType() == LayoutBreak::LayoutBreakType::PAGE && _pageBreak)
-                           || (lb->layoutBreakType() == LayoutBreak::LayoutBreakType::LINE && _lineBreak)
-                           || (lb->layoutBreakType() == LayoutBreak::LayoutBreakType::SECTION && _sectionBreak)
+                           (lb->layoutBreakType() == LayoutBreak::Type::PAGE && _pageBreak)
+                           || (lb->layoutBreakType() == LayoutBreak::Type::LINE && _lineBreak)
+                           || (lb->layoutBreakType() == LayoutBreak::Type::SECTION && _sectionBreak)
                            ) {
                               //
                               // if break already set
