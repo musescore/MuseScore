@@ -2926,7 +2926,7 @@ Page* Score::getEmptyPage()
       page->setNo(curPage);
       page->layout();
       qreal x = (curPage == 0) ? 0.0 : _pages[curPage - 1]->pos().x()
-         + page->width() + ((curPage & 1) ? 50.0 : 1.0);
+         + page->width() + (((curPage+_pageNumberOffset) & 1) ? 50.0 : 1.0);
       ++curPage;
       page->setPos(x, 0.0);
       page->systems()->clear();
