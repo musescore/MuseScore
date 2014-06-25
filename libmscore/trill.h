@@ -57,21 +57,21 @@ class TrillSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Trill
-//   @P trillType  Ms::Trill::TrillType  (TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE)
+//   @P trillType  Ms::Trill::Type  (TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE)
 //---------------------------------------------------------
 
 class Trill : public SLine {
       Q_OBJECT
-      Q_ENUMS(TrillType)
+      Q_ENUMS(Type)
 
    public:
-      enum class TrillType : char {
+      enum class Type : char {
             TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE
             };
 
    private:
-      Q_PROPERTY(TrillType trillType READ trillType WRITE undoSetTrillType)
-      TrillType _trillType;
+      Q_PROPERTY(Ms::Trill::Type trillType READ trillType WRITE undoSetTrillType)
+      Type _trillType;
       Accidental* _accidental;
 
    public:
@@ -88,9 +88,9 @@ class Trill : public SLine {
       virtual void read(XmlReader&) override;
 
       void setTrillType(const QString& s);
-      void undoSetTrillType(TrillType val);
-      void setTrillType(TrillType tt)     { _trillType = tt; }
-      TrillType trillType() const         { return _trillType; }
+      void undoSetTrillType(Type val);
+      void setTrillType(Type tt)          { _trillType = tt; }
+      Type trillType() const              { return _trillType; }
       QString trillTypeName() const;
       Accidental* accidental() const      { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a; }
@@ -107,7 +107,7 @@ class Trill : public SLine {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Trill::TrillType);
+Q_DECLARE_METATYPE(Ms::Trill::Type);
 
 #endif
 
