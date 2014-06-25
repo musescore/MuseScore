@@ -751,9 +751,9 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     volta->setText(QString("%1.").arg(vo->to));
                                     volta->endings().append(vo->to);
                                     if (vo->bRight)
-                                          volta->setVoltaType(VoltaType::CLOSED);
+                                          volta->setVoltaType(Volta::Type::CLOSED);
                                     else
-                                          volta->setVoltaType(VoltaType::OPEN);
+                                          volta->setVoltaType(Volta::Type::OPEN);
                                     volta->setTick(cr1->measure()->tick());
                                     volta->setTick2(cr2->measure()->tick() + cr2->measure()->ticks());
                                     score->addElement(volta);

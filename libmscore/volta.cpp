@@ -152,25 +152,25 @@ Volta::Volta(Score* s)
 //   setVoltaType
 //---------------------------------------------------------
 
-void Volta::setVoltaType(VoltaType val)
+void Volta::setVoltaType(Type val)
       {
-      setEndHook(VoltaType::CLOSED == val);
+      setEndHook(Type::CLOSED == val);
       }
 
 //---------------------------------------------------------
 //   voltaType
 //---------------------------------------------------------
 
-VoltaType Volta::voltaType() const
+Volta::Type Volta::voltaType() const
       {
-      return endHook() ? VoltaType::CLOSED : VoltaType::OPEN;
+      return endHook() ? Type::CLOSED : Type::OPEN;
       }
 
 //---------------------------------------------------------
 //   undoSetVoltaType
 //---------------------------------------------------------
 
-void Volta::undoSetVoltaType(VoltaType val)
+void Volta::undoSetVoltaType(Type val)
       {
       undoChangeProperty(P_ID::VOLTA_TYPE, int(val));
       }
@@ -300,7 +300,7 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
       score()->addRefresh(pageBoundingRect());
       switch (propertyId) {
             case P_ID::VOLTA_TYPE:
-                  setVoltaType(VoltaType(val.toInt()));
+                  setVoltaType(Type(val.toInt()));
                   break;
             case P_ID::LINE_WIDTH:
                   lineWidthStyle = PropertyStyle::UNSTYLED;

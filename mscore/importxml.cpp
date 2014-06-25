@@ -2218,7 +2218,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                                           }
                                     else if (endingType == "stop") {
                                           if (lastVolta) {
-                                                lastVolta->setVoltaType(VoltaType::CLOSED);
+                                                lastVolta->setVoltaType(Volta::Type::CLOSED);
                                                 lastVolta->setTick2(measure->tick() + measure->ticks());
                                                 lastVolta = 0;
                                                 }
@@ -2228,7 +2228,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                                           }
                                     else if (endingType == "discontinue") {
                                           if (lastVolta) {
-                                                lastVolta->setVoltaType(VoltaType::OPEN);
+                                                lastVolta->setVoltaType(Volta::Type::OPEN);
                                                 lastVolta->setTick2(measure->tick() + measure->ticks());
                                                 lastVolta = 0;
                                                 }
