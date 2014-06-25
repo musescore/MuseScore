@@ -2675,7 +2675,10 @@ void ScoreView::cmd(const QAction* a)
             }
       else if (cmd == "next-note-segment"){
             Element* el = score()->selection().element();
-                  cmdGotoElement(score()->nextNoteInChordOrSegment(el));
+            if(!el && !score()->selection().elements().isEmpty() ){
+                el = score()->selection().elements().first();
+            }
+            cmdGotoElement(score()->nextNoteInChordOrSegment(el));
             }
       else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
