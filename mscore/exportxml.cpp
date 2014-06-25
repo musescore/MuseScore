@@ -2146,7 +2146,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   noteTag += QString(" print-object=\"no\"");
                   }
             //TODO support for OFFSET_VAL
-            if (note->veloType() == ValueType::USER_VAL) {
+            if (note->veloType() == Note::ValueType::USER_VAL) {
                   int velo = note->veloOffset();
                   noteTag += QString(" dynamics=\"%1\"").arg(QString::number(velo * 100.0 / 90.0,'f',2));
                   }

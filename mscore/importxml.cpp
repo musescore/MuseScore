@@ -5060,7 +5060,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   }
 
             if (velocity > 0) {
-                  note->setVeloType(ValueType::USER_VAL);
+                  note->setVeloType(Note::ValueType::USER_VAL);
                   note->setVeloOffset(velocity);
                   }
 

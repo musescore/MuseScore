@@ -447,11 +447,11 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case P_TYPE::VALUE_TYPE:
-                  switch(ValueType(data.toInt())) {
-                        case ValueType::OFFSET_VAL:
+                  switch(Note::ValueType(data.toInt())) {
+                        case Note::ValueType::OFFSET_VAL:
                               tag(name, QVariant("offset"));
                               break;
-                        case ValueType::USER_VAL:
+                        case Note::ValueType::USER_VAL:
                               tag(name, QVariant("user"));
                               break;
                         }

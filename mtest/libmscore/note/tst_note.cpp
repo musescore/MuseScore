@@ -157,14 +157,14 @@ void TestNote::note()
       delete n;
 
    // velo type
-      note->setVeloType(ValueType::USER_VAL);
+      note->setVeloType(Note::ValueType::USER_VAL);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), ValueType::USER_VAL);
+      QCOMPARE(n->veloType(), Note::ValueType::USER_VAL);
       delete n;
 
-      note->setVeloType(ValueType::OFFSET_VAL);
+      note->setVeloType(Note::ValueType::OFFSET_VAL);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), ValueType::OFFSET_VAL);
+      QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
       delete n;
 
       //================================================
@@ -284,14 +284,14 @@ void TestNote::note()
       delete n;
 
    // velo type
-      note->setProperty(P_ID::VELO_TYPE, int(ValueType::USER_VAL));
+      note->setProperty(P_ID::VELO_TYPE, int(Note::ValueType::USER_VAL));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), ValueType::USER_VAL);
+      QCOMPARE(n->veloType(), Note::ValueType::USER_VAL);
       delete n;
 
-      note->setProperty(P_ID::VELO_TYPE, int(ValueType::OFFSET_VAL));
+      note->setProperty(P_ID::VELO_TYPE, int(Note::ValueType::OFFSET_VAL));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), ValueType::OFFSET_VAL);
+      QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
       delete n;
       }
 

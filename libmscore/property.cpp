@@ -292,9 +292,9 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::VALUE_TYPE: {
                   QString value(e.readElementText());
                   if (value == "offset")
-                        return QVariant(int(ValueType::OFFSET_VAL));
+                        return QVariant(int(Note::ValueType::OFFSET_VAL));
                   else if (value == "user")
-                        return QVariant(int(ValueType::USER_VAL));
+                        return QVariant(int(Note::ValueType::USER_VAL));
                   }
                   break;
             case P_TYPE::PLACEMENT: {
