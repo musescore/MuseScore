@@ -42,17 +42,17 @@ struct SymElement {
 //   @@ Accidental
 //   @P hasBracket  bool
 //   @P small       bool
-//   @P acctype     Ms::Accidental::AccidentalType  (NONE, SHARP, FLAT, SHARP2, FLAT2, NATURAL, ...) (read only)
-//   @P role        Ms::Accidental::AccidentalRole  (AUTO, USER) (read only)
+//   @P acctype     Ms::Accidental::Type  (NONE, SHARP, FLAT, SHARP2, FLAT2, NATURAL, ...) (read only)
+//   @P role        Ms::Accidental::Role  (AUTO, USER) (read only)
 //---------------------------------------------------------
 
 class Accidental : public Element {
    public:
-      enum class AccidentalRole : char {
+      enum class Role : char {
             AUTO,               // layout created accidental
             USER                // user created accidental
             };
-      enum class AccidentalType : char {
+      enum class Type : char {
             NONE,
             SHARP,
             FLAT,
@@ -89,18 +89,18 @@ class Accidental : public Element {
 
    private:
       Q_OBJECT
-      Q_PROPERTY(bool           hasBracket  READ hasBracket  WRITE undoSetHasBracket)
-      Q_PROPERTY(bool           small       READ small       WRITE undoSetSmall)
-      Q_PROPERTY(AccidentalType accType     READ accidentalType)
-      Q_PROPERTY(AccidentalRole role        READ role)
-      Q_ENUMS(AccidentalType)
-      Q_ENUMS(AccidentalRole)
+      Q_PROPERTY(bool                 hasBracket  READ hasBracket  WRITE undoSetHasBracket)
+      Q_PROPERTY(bool                 small       READ small       WRITE undoSetSmall)
+      Q_PROPERTY(Ms::Accidental::Type accType     READ accidentalType)
+      Q_PROPERTY(Ms::Accidental::Role role        READ role)
+      Q_ENUMS(Type)
+      Q_ENUMS(Role)
 
       QList<SymElement> el;
-      AccidentalType _accidentalType;
+      Type _accidentalType;
       bool _hasBracket;
       bool _small;
-      AccidentalRole _role;
+      Role _role;
 
    public:
       Accidental(Score* s = 0);
@@ -109,14 +109,14 @@ class Accidental : public Element {
 
       const char* subtypeUserName() const;
       void setSubtype(const QString& s);
-      void setAccidentalType(AccidentalType t) { _accidentalType = t;    }
-      AccidentalType accidentalType() const    { return _accidentalType; }
+      void setAccidentalType(Type t)        { _accidentalType = t;    }
+      Type accidentalType() const           { return _accidentalType; }
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
       virtual void layout();
       virtual void draw(QPainter*) const;
-      virtual bool isEditable() const                    { return true; }
+      virtual bool isEditable() const                        { return true; }
       virtual void startEdit(MuseScoreView*, const QPointF&) { setGenerated(false); }
 
       SymId symbol() const;
@@ -126,8 +126,8 @@ class Accidental : public Element {
       void setHasBracket(bool val)        { _hasBracket = val;      }
       void undoSetHasBracket(bool val);
 
-      AccidentalRole role() const         { return _role;           }
-      void setRole(AccidentalRole r)      { _role = r;              }
+      Role role() const                   { return _role;           }
+      void setRole(Role r)                { _role = r;              }
 
       bool small() const                  { return _small;          }
       void setSmall(bool val)             { _small = val;           }
@@ -139,10 +139,10 @@ class Accidental : public Element {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
 
-      static AccidentalVal subtype2value(AccidentalType);             // return effective pitch offset
-      static const char* subtype2name(AccidentalType);
-      static AccidentalType value2subtype(AccidentalVal);
-      static AccidentalType name2subtype(const QString&);
+      static AccidentalVal subtype2value(Type);             // return effective pitch offset
+      static const char* subtype2name(Type);
+      static Type value2subtype(AccidentalVal);
+      static Type name2subtype(const QString&);
       };
 
 //---------------------------------------------------------
@@ -162,8 +162,8 @@ class AccidentalBracket : public Compound {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Accidental::AccidentalRole);
-Q_DECLARE_METATYPE(Ms::Accidental::AccidentalType);
+Q_DECLARE_METATYPE(Ms::Accidental::Role);
+Q_DECLARE_METATYPE(Ms::Accidental::Type);
 
 #endif
 
