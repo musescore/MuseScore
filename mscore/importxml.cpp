@@ -2916,7 +2916,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else {
                         hairpin = new Hairpin(score);
                         hairpin->setHairpinType(type == "crescendo"
-                                                ? Hairpin::HairpinType::CRESCENDO : Hairpin::HairpinType::DECRESCENDO);
+                                                ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
                         setSLinePlacement(hairpin,
                                           score->spatium(), placement,
                                           hasYoffset, yoffset);

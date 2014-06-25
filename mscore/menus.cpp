@@ -731,12 +731,12 @@ Palette* MuseScore::newLinesPalette()
       sp->append(slur, qApp->translate("lines", "Slur"));
 
       Hairpin* gabel0 = new Hairpin(gscore);
-      gabel0->setHairpinType(Hairpin::HairpinType::CRESCENDO);
+      gabel0->setHairpinType(Hairpin::Type::CRESCENDO);
       gabel0->setLen(w);
       sp->append(gabel0, qApp->translate("lines", "Crescendo"));
 
       Hairpin* gabel1 = new Hairpin(gscore);
-      gabel1->setHairpinType(Hairpin::HairpinType::DECRESCENDO);
+      gabel1->setHairpinType(Hairpin::Type::DECRESCENDO);
       gabel1->setLen(w);
       sp->append(gabel1, QT_TRANSLATE_NOOP("Palette", "Diminuendo"));
 
