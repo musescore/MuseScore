@@ -490,10 +490,10 @@ Palette* MuseScore::newNoteHeadsPalette()
       sp->setDrawGrid(true);
 
       for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
-            SymId sym = Note::noteHead(0, NoteHead::Group(i), NoteHeadType::HEAD_HALF);
+            SymId sym = Note::noteHead(0, NoteHead::Group(i), NoteHead::Type::HEAD_HALF);
             // HEAD_BREVIS_ALT shows up only for brevis value
             if (i == int(NoteHead::Group::HEAD_BREVIS_ALT) )
-                  sym = Note::noteHead(0, NoteHead::Group(i), NoteHeadType::HEAD_BREVIS);
+                  sym = Note::noteHead(0, NoteHead::Group(i), NoteHead::Type::HEAD_BREVIS);
             NoteHead* nh = new NoteHead(gscore);
             nh->setSym(sym);
             sp->append(nh, Sym::id2userName(sym));

@@ -119,8 +119,8 @@ void TestNote::note()
             }
 
   // headType
-      for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i) {
-            note->setHeadType(NoteHeadType(i));
+      for (int i = 0; i < int(NoteHead::Type::HEAD_TYPES); ++i) {
+            note->setHeadType(NoteHead::Type(i));
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headType()), i);
             delete n;
@@ -241,7 +241,7 @@ void TestNote::note()
             }
 
   // headType
-      for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i) {
+      for (int i = 0; i < int(NoteHead::Type::HEAD_TYPES); ++i) {
             note->setProperty(P_ID::HEAD_TYPE, i);
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headType()), i);

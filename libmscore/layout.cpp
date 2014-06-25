@@ -249,8 +249,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   Note* p = overlapNotes[0];
                   for (int i = 0, count = overlapNotes.size(); i < count; ++i) {
                         Note* n = overlapNotes[i];
-                        NoteHeadType nHeadType;
-                        NoteHeadType pHeadType;
+                        NoteHead::Type nHeadType;
+                        NoteHead::Type pHeadType;
                         Chord* nchord = n->chord();
                         Chord* pchord = p->chord();
                         if (n->mirror()) {
@@ -268,8 +268,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     // unison
                                     conflictUnison = true;
                                     matchPending = false;
-                                    nHeadType = (n->headType() == NoteHeadType::HEAD_AUTO) ? n->chord()->durationType().headType() : n->headType();
-                                    pHeadType = (p->headType() == NoteHeadType::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
+                                    nHeadType = (n->headType() == NoteHead::Type::HEAD_AUTO) ? n->chord()->durationType().headType() : n->headType();
+                                    pHeadType = (p->headType() == NoteHead::Type::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
                                     // the most important rules for sharing noteheads on unisons between voices are
                                     // that notes must be one same line with same tpc
                                     // noteheads must be unmirrored and of same group
@@ -288,7 +288,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                           // by setting one of the notehead types to match the other or by making one notehead invisible
                                           // TODO: consider adding a style option, staff properties, or note property to control sharing
                                           if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem() || nHeadType != pHeadType || n->small() || p->small()) &&
-                                              ((n->headType() == NoteHeadType::HEAD_AUTO && p->headType() == NoteHeadType::HEAD_AUTO) || nHeadType != pHeadType) &&
+                                              ((n->headType() == NoteHead::Type::HEAD_AUTO && p->headType() == NoteHead::Type::HEAD_AUTO) || nHeadType != pHeadType) &&
                                               (n->visible() == p->visible())) {
                                                 shareHeads = false;
                                                 }
@@ -750,7 +750,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   chord->stem()->rxpos() = _up ? stemX - stemWidth5 : stemWidth5;
                   overlapMirror = stemWidth;
                   }
-            else if (chord->durationType().headType() == NoteHeadType::HEAD_WHOLE)
+            else if (chord->durationType().headType() == NoteHead::Type::HEAD_WHOLE)
                   overlapMirror = styleD(StyleIdx::stemWidth) * chord->mag() * sp;
             else
                   overlapMirror = 0.0;
