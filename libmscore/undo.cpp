@@ -2618,14 +2618,14 @@ void ChangeChordStaffMove::flip()
 //   ChangeVelocity
 //---------------------------------------------------------
 
-ChangeVelocity::ChangeVelocity(Note* n, ValueType t, int o)
+ChangeVelocity::ChangeVelocity(Note* n, Note::ValueType t, int o)
    : note(n), veloType(t), veloOffset(o)
       {
       }
 
 void ChangeVelocity::flip()
       {
-      ValueType t = note->veloType();
+      Note::ValueType t = note->veloType();
       int o       = note->veloOffset();
       note->setVeloType(veloType);
       note->setVeloOffset(veloOffset);

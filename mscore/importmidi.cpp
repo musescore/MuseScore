@@ -379,7 +379,7 @@ void setMusicNotesFromMidi(Score *score,
             note->setTpcFromPitch();
 
             chord->add(note);
-            note->setVeloType(ValueType::USER_VAL);
+            note->setVeloType(Note::ValueType::USER_VAL);
             note->setVeloOffset(mn.velo);
 
             NoteEventList el;

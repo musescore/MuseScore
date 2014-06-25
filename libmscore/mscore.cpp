@@ -106,7 +106,7 @@ void MScore::init()
       {
 #ifdef SCRIPT_INTERFACE
       qRegisterMetaType<Element::Type>("ElementType");
-      qRegisterMetaType<ValueType>("ValueType");
+      qRegisterMetaType<Note::ValueType>("ValueType");
       qRegisterMetaType<Direction>("Direction");
       qRegisterMetaType<DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
