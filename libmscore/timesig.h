@@ -54,7 +54,7 @@ class TimeSig : public Element {
       Q_PROPERTY(int denominator           READ denominator)
       Q_PROPERTY(int numeratorStretch      READ numeratorStretch)
       Q_PROPERTY(int denominatorStretch    READ denominatorStretch)
-      Q_PROPERTY(Groups groups             READ groups            WRITE undoSetGroups)
+      Q_PROPERTY(Ms::Groups groups         READ groups            WRITE undoSetGroups)
 
       TimeSigType _timeSigType;
       QString _numeratorString;     // calculated from actualSig() if !customText

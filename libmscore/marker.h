@@ -42,8 +42,8 @@ enum class MarkerType : char {
 class Marker : public Text {
       Q_OBJECT
 
-      Q_PROPERTY(QString label         READ label      WRITE undoSetLabel)
-      Q_PROPERTY(MarkerType markerType READ markerType WRITE undoSetMarkerType)
+      Q_PROPERTY(QString label             READ label      WRITE undoSetLabel)
+      Q_PROPERTY(Ms::MarkerType markerType READ markerType WRITE undoSetMarkerType)
 
       MarkerType _markerType;
       QString _label;               ///< referenced from Jump() element

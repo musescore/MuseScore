@@ -97,9 +97,9 @@ class Spanner : public Element {
             SEGMENT, MEASURE, CHORD, NOTE
             };
    private:
-      Q_PROPERTY(int    tick    READ tick    WRITE setTick)
-      Q_PROPERTY(int    tick2   READ tick2   WRITE setTick2)
-      Q_PROPERTY(Anchor anchor  READ anchor  WRITE setAnchor)
+      Q_PROPERTY(int                 tick    READ tick    WRITE setTick)
+      Q_PROPERTY(int                 tick2   READ tick2   WRITE setTick2)
+      Q_PROPERTY(Ms::Spanner::Anchor anchor  READ anchor  WRITE setAnchor)
 
       QList<SpannerSegment*> segments;
       Anchor _anchor = Anchor::SEGMENT;
