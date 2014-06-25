@@ -564,7 +564,7 @@ void ScoreView::dropEvent(QDropEvent* event)
             if (idx != -1) {
                   Segment* seg = measure->first();
                   // assume there is always a ChordRest segment
-                  while (seg->segmentType() != SegmentType::ChordRest)
+                  while (seg->segmentType() != Segment::Type::ChordRest)
                         seg = seg->next();
                   score()->pasteStaff(xml, seg, idx);
                   }

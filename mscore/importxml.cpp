@@ -1294,7 +1294,7 @@ void MusicXml::scorePartwise(QDomElement ee)
       // now attach all jumps and markers to segments
       // simply use the first SegChordRest in the measure
       for (int i = 0; i < jumpsMarkers.size(); i++) {
-            Segment* seg = jumpsMarkers.at(i).meas()->first(SegmentType::ChordRest);
+            Segment* seg = jumpsMarkers.at(i).meas()->first(Segment::Type::ChordRest);
             qDebug("jumpsMarkers jm %p meas %p ",
                    jumpsMarkers.at(i).el(), jumpsMarkers.at(i).meas());
             if (seg) {
@@ -2298,7 +2298,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
       // The candiadates list courtAccNotes is ordered voice after voice. Check it here segment after segment.
       AccidentalState currAcc;
       currAcc.init(currKeySig->keySigEvent().key());
-      SegmentType st = SegmentType::ChordRest;
+      Segment::Type st = Segment::Type::ChordRest;
       for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
             for (int track = 0; track < staves * VOICES; ++track) {
                    Element* e = segment->element(track);
@@ -2440,7 +2440,7 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
       y *= score->spatium();
       el->setUserOff(QPoint(0, y));
       el->setTrack((staff + rstaff) * VOICES);
-      Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
+      Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
       s->add(el);
       }
 
@@ -4439,7 +4439,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             // b->setTrack(trk + voice); TODO check next line
             b->setTrack(track);
             b->setBreathType(breath);
-            Segment* seg = measure->getSegment(SegmentType::Breath, tick);
+            Segment* seg = measure->getSegment(Segment::Type::Breath, tick);
             seg->add(b);
             }
 
@@ -4523,7 +4523,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
 static FiguredBass* findLastFiguredBass(int track, Segment* seg)
       {
       // qDebug("findLastFiguredBass(track %d seg %p)", track, seg);
-      while ((seg = seg->prev1(SegmentType::ChordRest))) {
+      while ((seg = seg->prev1(Segment::Type::ChordRest))) {
             // qDebug("findLastFiguredBass seg %p", seg);
             foreach(Element* e, seg->annotations()) {
                   if (e->track() == track && e->type() == Element::Type::FIGURED_BASS) {
@@ -5172,7 +5172,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             figBass->setTrack(trk);
             figBass->setTicks(ticks);
             // TODO: set correct onNote value
-            Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
+            Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
             // TODO: use addelement() instead of Segment::add() ?
             s->add(figBass);
             figBass = 0;
@@ -5386,7 +5386,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                   fd->setTrack(staff * VOICES);
                   // read frame into FretDiagram
                   readFretDiagram(fd, e);
-                  Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
                   s->add(fd);
                   }
             else if (tag == "level")
@@ -5415,7 +5415,7 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
       // TODO-LV: do this only if ha points to a valid harmony
       // harmony = ha;
       ha->setTrack(staff * VOICES);
-      Segment* s = measure->getSegment(SegmentType::ChordRest, tick + offset);
+      Segment* s = measure->getSegment(Segment::Type::ChordRest, tick + offset);
       s->add(ha);
       }
 

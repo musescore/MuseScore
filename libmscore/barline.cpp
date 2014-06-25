@@ -516,7 +516,7 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
             return (type == Element::Type::ARTICULATION
                && parent()
                && parent()->type() == Element::Type::SEGMENT
-               && static_cast<Segment*>(parent())->segmentType() == SegmentType::EndBarLine);
+               && static_cast<Segment*>(parent())->segmentType() == Segment::Type::EndBarLine);
             }
       return false;
       }

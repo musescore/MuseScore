@@ -31,39 +31,12 @@ class Lyrics;
 class Spanner;
 class System;
 
-//---------------------------------------------------------
-//   SegmentType
-//---------------------------------------------------------
-
-enum class SegmentType : short {
-      Invalid            = 0x0,
-      Clef               = 0x1,        // type from SegClef to SegTimeSig
-      KeySig             = 0x2,        // need to be in the order in which they
-      Ambitus            = 0x4,        // appear in a measure
-      TimeSig            = 0x8,
-      StartRepeatBarLine = 0x10,
-      BarLine            = 0x20,
-      ChordRest          = 0x40,
-      Breath             = 0x80,
-      EndBarLine         = 0x100,
-      TimeSigAnnounce    = 0x200,
-      KeySigAnnounce     = 0x400,
-      All                = -1
-      };
-
-constexpr SegmentType operator| (SegmentType t1, SegmentType t2) {
-      return static_cast<SegmentType>(static_cast<short>(t1) | static_cast<short>(t2));
-      }
-constexpr bool operator& (SegmentType t1, SegmentType t2) {
-      return static_cast<short>(t1) & static_cast<short>(t2);
-      }
-
 //------------------------------------------------------------------------
 //   @@ Segment
 ///    A segment holds all vertical aligned staff elements.
 ///    Segments are typed and contain only Elements of the same type.
 //
-//   @P segmentType  Ms::SegmentType  (Invalid, Clef, KeySig, Ambitus, TimeSig, StartRepeatBarLine, BarLine, ChordRest, Breath, EndBarLine TimeSigAnnounce, KeySigAnnounce, All)
+//   @P segmentType  Ms::Segment::Type  (Invalid, Clef, KeySig, Ambitus, TimeSig, StartRepeatBarLine, BarLine, ChordRest, Breath, EndBarLine TimeSigAnnounce, KeySigAnnounce, All)
 //------------------------------------------------------------------------
 
 /**
@@ -78,7 +51,25 @@ constexpr bool operator& (SegmentType t1, SegmentType t2) {
 
 class Segment : public Element {
       Q_OBJECT
-      Q_PROPERTY(Ms::SegmentType segmentType READ segmentType WRITE setSegmentType)
+      Q_PROPERTY(Ms::Segment::Type segmentType READ segmentType WRITE setSegmentType)
+      Q_ENUMS(Type)
+
+public:
+   enum class Type {
+         Invalid            = 0x0,
+         Clef               = 0x1,        // type from Clef to TimeSig
+         KeySig             = 0x2,        // need to be in the order in which they
+         Ambitus            = 0x4,        // appear in a measure
+         TimeSig            = 0x8,
+         StartRepeatBarLine = 0x10,
+         BarLine            = 0x20,
+         ChordRest          = 0x40,
+         Breath             = 0x80,
+         EndBarLine         = 0x100,
+         TimeSigAnnounce    = 0x200,
+         KeySigAnnounce     = 0x400,
+         All                = -1
+         };
 
    private:
       Segment* _next;               // linked list of segments inside a measure
@@ -87,7 +78,7 @@ class Segment : public Element {
       mutable bool empty;           // cached value
       mutable bool _written;        // used for write()
 
-      SegmentType _segmentType { SegmentType::Invalid };
+      Type _segmentType { Type::Invalid };
       int _tick;
       Spatium _extraLeadingSpace;
       Spatium _extraTrailingSpace;
@@ -103,7 +94,7 @@ class Segment : public Element {
 
    public:
       Segment(Measure* m = 0);
-      Segment(Measure*, SegmentType, int tick);
+      Segment(Measure*, Type, int tick);
       Segment(const Segment&);
       ~Segment();
 
@@ -113,21 +104,21 @@ class Segment : public Element {
       virtual void setScore(Score*);
 
       Q_INVOKABLE Ms::Segment* next() const             { return _next;   }
-      Segment* next(SegmentType) const;
+      Segment* next(Type) const;
 
       void setNext(Segment* e)           { _next = e;      }
       Q_INVOKABLE Ms::Segment* prev() const { return _prev;   }
-      Segment* prev(SegmentType) const;
+      Segment* prev(Type) const;
       void setPrev(Segment* e)           { _prev = e;      }
 
       Q_INVOKABLE Ms::Segment* next1() const;
       Ms::Segment* next1MM() const;
-      Segment* next1(SegmentType) const;
-      Segment* next1MM(SegmentType) const;
+      Segment* next1(Type) const;
+      Segment* next1MM(Type) const;
       Q_INVOKABLE Ms::Segment* prev1() const;
       Ms::Segment* prev1MM() const;
-      Segment* prev1(SegmentType) const;
-      Segment* prev1MM(SegmentType) const;
+      Segment* prev1(Type) const;
+      Segment* prev1MM(Type) const;
 
       Segment* nextCR(int track = -1) const;
 
@@ -135,7 +126,7 @@ class Segment : public Element {
 
       Q_INVOKABLE Ms::Element* element(int track) const { return _elist.value(track);  }
       ChordRest* cr(int track) const                    {
-            Q_ASSERT(_segmentType == SegmentType::ChordRest);
+            Q_ASSERT(_segmentType == Type::ChordRest);
             return (ChordRest*)(_elist.value(track));
             };
       const QList<Element*>& elist() const { return _elist; }
@@ -159,15 +150,15 @@ class Segment : public Element {
 
       void sortStaves(QList<int>& dst);
       const char* subTypeName() const;
-      static const char* subTypeName(SegmentType);
-      static SegmentType segmentType(Element::Type type);
-      SegmentType segmentType() const            { return _segmentType; }
-      void setSegmentType(SegmentType t);
+      static const char* subTypeName(Type);
+      static Type segmentType(Element::Type type);
+      Type segmentType() const                   { return _segmentType; }
+      void setSegmentType(Type t);
 
       void removeGeneratedElements();
       bool isEmpty() const                       { return empty; }
       void fixStaffIdx();
-      bool isChordRest() const                   { return _segmentType == SegmentType::ChordRest; }
+      bool isChordRest() const                   { return _segmentType == Type::ChordRest; }
       void setTick(int);
       int tick() const;
       int rtick() const                          { return _tick; } // tickposition relative to measure start
@@ -200,9 +191,16 @@ class Segment : public Element {
       bool operator>(const Segment&) const;
       };
 
+constexpr Segment::Type operator| (Segment::Type t1, Segment::Type t2) {
+      return static_cast<Segment::Type>(static_cast<int>(t1) | static_cast<int>(t2));
+      }
+constexpr bool operator& (Segment::Type t1, Segment::Type t2) {
+      return static_cast<int>(t1) & static_cast<int>(t2);
+      }
+
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::SegmentType);
+Q_DECLARE_METATYPE(Ms::Segment::Type);
 
 #endif
 

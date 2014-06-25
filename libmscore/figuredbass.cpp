@@ -1068,7 +1068,7 @@ NoLen:
       Measure* m = score()->tick2measure(nextTick-1);
       if (m != 0) {
             // locate the first segment (of ANY type) right after this' last tick
-            for (nextSegm = m->first(SegmentType::All); nextSegm; ) {
+            for (nextSegm = m->first(Segment::Type::All); nextSegm; ) {
                   if(nextSegm->tick() >= nextTick)
                         break;
                   nextSegm = nextSegm->next();
@@ -1249,7 +1249,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
       int         nextTick = segment()->tick() + _ticks;    // the tick beyond this' duration
 
       // locate the ChordRest segment right after this' end
-      nextSegm = score()->tick2segment(nextTick, true, SegmentType::ChordRest);
+      nextSegm = score()->tick2segment(nextTick, true, Segment::Type::ChordRest);
       if (nextSegm == 0)
             return 0;
 
@@ -1397,7 +1397,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
             // locate previous FB for same staff
             Segment *         prevSegm;
             FiguredBass*      prevFB = 0;
-            for(prevSegm = seg->prev1(SegmentType::ChordRest); prevSegm; prevSegm = prevSegm->prev1(SegmentType::ChordRest)) {
+            for(prevSegm = seg->prev1(Segment::Type::ChordRest); prevSegm; prevSegm = prevSegm->prev1(Segment::Type::ChordRest)) {
                   for (Element* e : prevSegm->annotations()) {
                         if (e->type() == Element::Type::FIGURED_BASS && (e->track() ) == track) {
                               prevFB = static_cast<FiguredBass*>(e);   // previous FB found

@@ -137,7 +137,7 @@ static void setTempo(Ms::Score* score, int tempo)
       tt->endEdit();
 #endif
       Ms::Measure* measure = score->firstMeasure();
-      Ms::Segment* segment = measure->getSegment(Ms::SegmentType::ChordRest, 0);
+      Ms::Segment* segment = measure->getSegment(Ms::Segment::Type::ChordRest, 0);
       segment->add(tt);
       }
 

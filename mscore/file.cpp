@@ -492,7 +492,7 @@ void MuseScore::newFile()
             if (score->firstMeasure()) {
                   for (Segment* s = score->firstMeasure()->first(); s;) {
                         Segment* ns = s->next1();
-                        if (s->segmentType() == SegmentType::ChordRest && s->tick() == 0) {
+                        if (s->segmentType() == Segment::Type::ChordRest && s->tick() == 0) {
                               int tracks = s->elist().size();
                               for (int track = 0; track < tracks; ++track) {
                                     delete s->element(track);
@@ -500,10 +500,10 @@ void MuseScore::newFile()
                                     }
                               }
                         else if (
-                           (s->segmentType() == SegmentType::ChordRest)
-      //                     || (s->subtype() == SegmentType::Clef)
-                           || (s->segmentType() == SegmentType::KeySig)
-                           || (s->segmentType() == SegmentType::Breath)
+                           (s->segmentType() == Segment::Type::ChordRest)
+      //                     || (s->subtype() == Segment::Type::Clef)
+                           || (s->segmentType() == Segment::Type::KeySig)
+                           || (s->segmentType() == Segment::Type::Breath)
                            ) {
                               s->measure()->remove(s);
                               delete s;
@@ -516,7 +516,7 @@ void MuseScore::newFile()
                   if (exScore->firstMeasure()) {
                         for (Segment* s = exScore->firstMeasure()->first(); s;) {
                               Segment* ns = s->next1();
-                              if (s->segmentType() == SegmentType::ChordRest && s->tick() == 0) {
+                              if (s->segmentType() == Segment::Type::ChordRest && s->tick() == 0) {
                                     int tracks = s->elist().size();
                                     for (int track = 0; track < tracks; ++track) {
                                           delete s->element(track);
@@ -684,7 +684,7 @@ void MuseScore::newFile()
       //
       Measure* m = score->firstMeasure();
       for (Segment* s = m->first(); s; s = s->next()) {
-            if (s->segmentType() == SegmentType::ChordRest) {
+            if (s->segmentType() == Segment::Type::ChordRest) {
                   if (s->element(0)) {
                         score->select(s->element(0), SelectType::SINGLE, 0);
                         break;
@@ -744,7 +744,7 @@ void MuseScore::newFile()
 
             tt->setTempo(tempo);
             tt->setTrack(0);
-            Segment* seg = score->firstMeasure()->first(SegmentType::ChordRest);
+            Segment* seg = score->firstMeasure()->first(Segment::Type::ChordRest);
             seg->add(tt);
             score->setTempo(0, tempo);
             }
@@ -1877,7 +1877,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                         Element* e = s->element(track);
                         if (e->generated())
                               continue;
-                        if ((s->segmentType() == SegmentType::KeySig) && st->updateKeymap()) {
+                        if ((s->segmentType() == Segment::Type::KeySig) && st->updateKeymap()) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
                               ks->setOldSig(naturals);

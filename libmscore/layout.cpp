@@ -73,7 +73,7 @@ void Score::rebuildBspTree()
 ChordRest* Score::searchNote(int tick, int track) const
       {
       ChordRest* ipe = 0;
-      SegmentType st = SegmentType::ChordRest;
+      Segment::Type st = Segment::Type::ChordRest;
       for (Segment* segment = firstSegment(st); segment; segment = segment->next(st)) {
             ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
             if (!cr)
@@ -1117,7 +1117,7 @@ void Score::layoutStage2()
             Measure* measure = 0;
 
             BeamMode bm = BeamMode::AUTO;
-            SegmentType st = SegmentType::ChordRest;
+            Segment::Type st = Segment::Type::ChordRest;
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
@@ -1226,7 +1226,7 @@ void Score::layoutStage2()
 
 void Score::layoutStage3()
       {
-      SegmentType st = SegmentType::ChordRest;
+      Segment::Type st = Segment::Type::ChordRest;
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             if (!staff(staffIdx)->show())
                   continue;
@@ -1457,7 +1457,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   // search only up to the first ChordRest
-                  if (seg->segmentType() == SegmentType::ChordRest)
+                  if (seg->segmentType() == Segment::Type::ChordRest)
                         break;
                   Element* el = seg->element(strack);
                   if (!el)
@@ -1486,7 +1486,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   if (keysig) {
                         keysig->setTrack(i * VOICES);
                         keysig->setGenerated(true);
-                        Segment* seg = m->undoGetSegment(SegmentType::KeySig, tick);
+                        Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
                         keysig->setParent(seg);
                         keysig->layout();
                         undoAddElement(keysig);
@@ -1508,7 +1508,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         clef->setSmall(false);
                         clef->setGenerated(staff->clef(tick) == staff->clef(tick-1));
 
-                        Segment* s = m->undoGetSegment(SegmentType::Clef, tick);
+                        Segment* s = m->undoGetSegment(Segment::Type::Clef, tick);
                         clef->setParent(s);
                         clef->layout();
                         clef->setClefType(staff->clefTypeList(tick));  // set before add !
@@ -1659,7 +1659,7 @@ void Score::createMMRests()
                   if (m->mmRest()) {
                         mmr = m->mmRest();
                         if (mmr->len() != len) {
-                              Segment* s = mmr->findSegment(SegmentType::EndBarLine, mmr->endTick());
+                              Segment* s = mmr->findSegment(Segment::Type::EndBarLine, mmr->endTick());
                               mmr->setLen(len);
                               if (s)
                                     s->setTick(mmr->endTick());
@@ -1686,7 +1686,7 @@ void Score::createMMRests()
                   for (Element* e : *lm->el())
                         mmr->add(e->clone());
 
-                  Segment* s = mmr->undoGetSegment(SegmentType::ChordRest, m->tick());
+                  Segment* s = mmr->undoGetSegment(Segment::Type::ChordRest, m->tick());
                   for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                         int track = staffIdx * VOICES;
                         if (s->element(track) == 0) {
@@ -1701,11 +1701,11 @@ void Score::createMMRests()
                   //
                   // check for clefs
                   //
-                  Segment* cs = lm->findSegment(SegmentType::Clef, lm->endTick());
-                  Segment* ns = mmr->findSegment(SegmentType::Clef, lm->endTick());
+                  Segment* cs = lm->findSegment(Segment::Type::Clef, lm->endTick());
+                  Segment* ns = mmr->findSegment(Segment::Type::Clef, lm->endTick());
                   if (cs) {
                         if (ns == 0)
-                              ns = mmr->undoGetSegment(SegmentType::Clef, lm->endTick());
+                              ns = mmr->undoGetSegment(Segment::Type::Clef, lm->endTick());
                         for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                               int track = staffIdx * VOICES;
                               Clef* clef = static_cast<Clef*>(cs->element(track));
@@ -1724,11 +1724,11 @@ void Score::createMMRests()
                   //
                   // check for time signature
                   //
-                  cs = m->findSegment(SegmentType::TimeSig, m->tick());
-                  ns = mmr->findSegment(SegmentType::TimeSig, m->tick());
+                  cs = m->findSegment(Segment::Type::TimeSig, m->tick());
+                  ns = mmr->findSegment(Segment::Type::TimeSig, m->tick());
                   if (cs) {
                         if (ns == 0)
-                              ns = mmr->undoGetSegment(SegmentType::TimeSig, m->tick());
+                              ns = mmr->undoGetSegment(Segment::Type::TimeSig, m->tick());
                         for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                               int track = staffIdx * VOICES;
                               TimeSig* ts = static_cast<TimeSig*>(cs->element(track));
@@ -1751,11 +1751,11 @@ void Score::createMMRests()
                   //
                   // check for key signature
                   //
-                  cs = m->findSegment(SegmentType::KeySig, m->tick());
-                  ns = mmr->findSegment(SegmentType::KeySig, m->tick());
+                  cs = m->findSegment(Segment::Type::KeySig, m->tick());
+                  ns = mmr->findSegment(Segment::Type::KeySig, m->tick());
                   if (cs) {
                         if (ns == 0)
-                              ns = mmr->undoGetSegment(SegmentType::KeySig, m->tick());
+                              ns = mmr->undoGetSegment(Segment::Type::KeySig, m->tick());
                         for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                               int track = staffIdx * VOICES;
                               KeySig* ts = static_cast<KeySig*>(cs->element(track));
@@ -1777,7 +1777,7 @@ void Score::createMMRests()
                   //
                   // check for rehearsal mark and tempo text
                   //
-                  cs = m->findSegment(SegmentType::ChordRest, m->tick());
+                  cs = m->findSegment(Segment::Type::ChordRest, m->tick());
                   if (cs) {
                         for (Element* e : cs->annotations()) {
                               if (e->type() != Element::Type::REHEARSAL_MARK && e->type() != Element::Type::TEMPO_TEXT && e->type() != Element::Type::STAFF_TEXT)
@@ -1845,7 +1845,7 @@ qreal Score::cautionaryWidth(Measure* m)
       // locate a time sig. in the next measure and, if found,
       // check if it has caut. sig. turned off
 
-      Segment* ns       = nm->findSegment(SegmentType::TimeSig, tick);
+      Segment* ns       = nm->findSegment(Segment::Type::TimeSig, tick);
       TimeSig* ts       = 0;
       bool showCourtesy = styleB(StyleIdx::genCourtesyTimesig) && ns;
       if (showCourtesy) {
@@ -1853,7 +1853,7 @@ qreal Score::cautionaryWidth(Measure* m)
             if (ts && !ts->showCourtesySig())
                   showCourtesy = false;     // this key change has court. sig turned off
             }
-      Segment* s = m->findSegment(SegmentType::TimeSigAnnounce, tick);
+      Segment* s = m->findSegment(Segment::Type::TimeSigAnnounce, tick);
 
       if (showCourtesy && !s)
             w += ts->space().width();
@@ -1866,7 +1866,7 @@ qreal Score::cautionaryWidth(Measure* m)
       int n = _staves.size();
       for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
             int track        = staffIdx * VOICES;
-            ns               = nm->findSegment(SegmentType::KeySig, tick);
+            ns               = nm->findSegment(Segment::Type::KeySig, tick);
             KeySig* ks       = 0;
 
             showCourtesy = styleB(StyleIdx::genCourtesyKeysig) && ns;
@@ -1875,7 +1875,7 @@ qreal Score::cautionaryWidth(Measure* m)
                   if (ks && !ks->showCourtesy())
                         showCourtesy = false;
                   }
-            Segment* s = m->findSegment(SegmentType::KeySigAnnounce, tick);
+            Segment* s = m->findSegment(Segment::Type::KeySigAnnounce, tick);
 
             if (showCourtesy && !s && ks)
                   wwMax = qMax(wwMax, ks->space().width());
@@ -1961,7 +1961,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                         ww = m->minWidth1();
 
                   Segment* s = m->last();
-                  if ((s->segmentType() == SegmentType::EndBarLine) && s->element(0)) {
+                  if ((s->segmentType() == Segment::Type::EndBarLine) && s->element(0)) {
                         BarLine*    bl = static_cast<BarLine*>(s->element(0));
                         BarLineType ot = bl->barLineType();
                         BarLineType nt = m->endBarLineType();
@@ -2088,7 +2088,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                                     if (mb->type() != Element::Type::MEASURE)
                                           continue;
                                     Measure* m = static_cast<Measure*>(mb);
-                                    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                                    for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
                                           for (int voice = 0; voice < VOICES; ++voice) {
                                                 ChordRest* cr = static_cast<ChordRest*>(s->element(st * VOICES + voice));
                                                 if (cr == 0 || cr->type() == Element::Type::REST)
@@ -2240,10 +2240,10 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
             //    - set size of clefs to small
             //
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                  SegmentType st = seg->segmentType();
-                  if (st == SegmentType::EndBarLine)
+                  Segment::Type st = seg->segmentType();
+                  if (st == Segment::Type::EndBarLine)
                         continue;
-                  if (st == SegmentType::StartRepeatBarLine && m != sm) {
+                  if (st == Segment::Type::StartRepeatBarLine && m != sm) {
                         if (!undoRedo())
                               undoRemoveElement(seg);
                         else
@@ -2255,13 +2255,13 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                         if (el == 0)
                               continue;
 /*
-                        if (el->generated() && ((st == SegmentType::TimeSigAnnounce && m != em)
+                        if (el->generated() && ((st == Segment::Type::TimeSigAnnounce && m != em)
                             || (el->type() == Element::CLEF   && seg->tick() != sm->tick())
                             || (el->type() == Element::KEYSIG && seg->tick() != sm->tick())))
 */
                         // courtesy time sigs and key sigs: remove if not in last measure (generated or not!)
                         // clefs & keysig: remove if generated and not at beginning of first measure
-                        if ( ((st == SegmentType::TimeSigAnnounce || st == SegmentType::KeySigAnnounce) && m != em)
+                        if ( ((st == Segment::Type::TimeSigAnnounce || st == Segment::Type::KeySigAnnounce) && m != em)
                               || ((el->type() == Element::Type::CLEF || el->type() == Element::Type::KEYSIG) && el->generated() && seg->tick() != sm->tick())
                         )
                               {
@@ -2282,7 +2282,7 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                               if (s->firstMeasure() != m && seg->tick() == m->tick()) {
                                     undoRemoveElement(el);
                                     Measure* pm = m->prevMeasure();
-                                    Segment* s = pm->undoGetSegment(SegmentType::Clef, m->tick());
+                                    Segment* s = pm->undoGetSegment(Segment::Type::Clef, m->tick());
                                     Clef* nc = clef->clone();
                                     nc->setParent(s);
                                     undoAddElement(nc);
@@ -2320,7 +2320,7 @@ void Score::connectTies()
       Measure* m = firstMeasure();
       if (!m)
             return;
-      SegmentType st = SegmentType::ChordRest;
+      Segment::Type st = Segment::Type::ChordRest;
       for (Segment* s = m->first(st); s; s = s->next1(st)) {
             for (int i = 0; i < tracks; ++i) {
                   Chord* c = static_cast<Chord*>(s->element(i));
@@ -2544,7 +2544,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   // locate a time sig. in the next measure and, if found,
                   // check if it has cout. sig. turned off
                   TimeSig* ts;
-                  Segment* tss         = nm->findSegment(SegmentType::TimeSig, tick);
+                  Segment* tss         = nm->findSegment(Segment::Type::TimeSig, tick);
                   bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig);
                   if (showCourtesySig) {
                         ts = static_cast<TimeSig*>(tss->element(0));
@@ -2553,7 +2553,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         }
                   if (showCourtesySig) {
                         // if due, create a new courtesy time signature for each staff
-                        s  = m->undoGetSegment(SegmentType::TimeSigAnnounce, tick);
+                        s  = m->undoGetSegment(Segment::Type::TimeSigAnnounce, tick);
                         int nstaves = Score::nstaves();
                         for (int track = 0; track < nstaves * VOICES; track += VOICES) {
                               TimeSig* nts = static_cast<TimeSig*>(tss->element(track));
@@ -2573,7 +2573,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         }
                   else {
                         // remove any existing time signatures
-                        Segment* tss = m->findSegment(SegmentType::TimeSigAnnounce, tick);
+                        Segment* tss = m->findSegment(Segment::Type::TimeSigAnnounce, tick);
                         if (tss) {
                               undoRemoveElement(tss);
                               }
@@ -2591,7 +2591,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         if (styleB(StyleIdx::genCourtesyKeysig) && (key1 != key2)) {
                               // locate a key sig. in next measure and, if found,
                               // check if it has court. sig turned off
-                              s = nm->findSegment(SegmentType::KeySig, tick);
+                              s = nm->findSegment(Segment::Type::KeySig, tick);
                               showCourtesySig = true; // assume this key change has court. sig turned on
                               if (s) {
                                     KeySig* ks = static_cast<KeySig*>(s->element(track));
@@ -2601,7 +2601,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
                               if (showCourtesySig) {
                                     hasCourtesyKeysig = true;
-                                    s  = m->undoGetSegment(SegmentType::KeySigAnnounce, tick);
+                                    s  = m->undoGetSegment(Segment::Type::KeySigAnnounce, tick);
                                     KeySig* ks = static_cast<KeySig*>(s->element(track));
 
                                     if (!ks) {
@@ -2623,7 +2623,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         if (!showCourtesySig) {
                               // remove any existent courtesy key signature
-                              Segment* s = m->findSegment(SegmentType::KeySigAnnounce, tick);
+                              Segment* s = m->findSegment(Segment::Type::KeySigAnnounce, tick);
                               if (s && s->element(track))
                                     undoRemoveElement(s->element(track));
                               }
@@ -3382,7 +3382,7 @@ qreal Score::computeMinWidth(Segment* fs)
             qreal elsp = s->extraLeadingSpace().val()  * _spatium;
             qreal etsp = s->extraTrailingSpace().val() * _spatium;
 
-            if ((s->segmentType() == SegmentType::Clef) && (s != fs)) {
+            if ((s->segmentType() == Segment::Type::Clef) && (s != fs)) {
                   --segmentIdx;
                   for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
                         if (!staff(staffIdx)->show())
@@ -3399,11 +3399,11 @@ qreal Score::computeMinWidth(Segment* fs)
             bool rest2[_nstaves];
             bool hRest2[_nstaves];
             bool spaceHarmony     = false;
-            SegmentType segType   = s->segmentType();
+            Segment::Type segType   = s->segmentType();
             qreal segmentWidth    = 0.0;
             qreal harmonyWidth    = 0.0;
             qreal stretchDistance = 0.0;
-            SegmentType pt        = pSeg ? pSeg->segmentType() : SegmentType::BarLine;
+            Segment::Type pt        = pSeg ? pSeg->segmentType() : Segment::Type::BarLine;
 
             for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
                   if (!staff(staffIdx)->show())
@@ -3417,7 +3417,7 @@ qreal Score::computeMinWidth(Segment* fs)
                   bool hFound = false;
                   bool eFound = false;
 
-                  if (segType & (SegmentType::ChordRest)) {
+                  if (segType & (Segment::Type::ChordRest)) {
                         qreal llw = 0.0;
                         qreal rrw = 0.0;
                         Lyrics* lyrics = 0;
@@ -3426,7 +3426,7 @@ qreal Score::computeMinWidth(Segment* fs)
                               if (!cr)
                                     continue;
                               found = true;
-                              if (pt & (SegmentType::StartRepeatBarLine | SegmentType::BarLine | SegmentType::TimeSig)) {
+                              if (pt & (Segment::Type::StartRepeatBarLine | Segment::Type::BarLine | Segment::Type::TimeSig)) {
                                     // check for accidentals in chord
                                     bool accidental = false;
                                     bool grace = false;
@@ -3460,19 +3460,19 @@ qreal Score::computeMinWidth(Segment* fs)
                                           sp = styleS(StyleIdx::barAccidentalDistance).val() * _spatium;
                                     else
                                           sp = bnd;
-                                    if (pt & SegmentType::TimeSig)
+                                    if (pt & Segment::Type::TimeSig)
                                           sp += clefKeyRightMargin - bnd;
                                     minDistance = qMax(minDistance, sp);
-                                    if (!(pt & SegmentType::TimeSig))
+                                    if (!(pt & Segment::Type::TimeSig))
                                           stretchDistance = sp * .7;
                                     }
-                              else if (pt & SegmentType::ChordRest) {
+                              else if (pt & Segment::Type::ChordRest) {
                                     minDistance = qMax(minDistance, minNoteDistance);
                                     }
                               else {
-                                    // if (pt & (SegmentType::KeySig | SegmentType::Clef))
-                                    bool firstClef = (segmentIdx == 1) && (pt == SegmentType::Clef);
-                                    if ((pt & SegmentType::KeySig) || firstClef)
+                                    // if (pt & (Segment::Type::KeySig | Segment::Type::Clef))
+                                    bool firstClef = (segmentIdx == 1) && (pt == Segment::Type::Clef);
+                                    if ((pt & Segment::Type::KeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
                               cr->layout();
@@ -3535,12 +3535,12 @@ qreal Score::computeMinWidth(Segment* fs)
                   else {
                         // current segment (s) is not a ChordRest
                         Element* e = s->element(track);
-                        if ((segType == SegmentType::Clef) && (pt != SegmentType::ChordRest))
+                        if ((segType == Segment::Type::Clef) && (pt != Segment::Type::ChordRest))
                               minDistance = styleP(StyleIdx::clefLeftMargin);
-                        else if (segType == SegmentType::StartRepeatBarLine)
+                        else if (segType == Segment::Type::StartRepeatBarLine)
                               minDistance = .5 * _spatium;
-                        else if ((segType == SegmentType::EndBarLine) && segmentIdx) {
-                              if (pt == SegmentType::Clef)
+                        else if ((segType == Segment::Type::EndBarLine) && segmentIdx) {
+                              if (pt == Segment::Type::Clef)
                                     minDistance = styleP(StyleIdx::clefBarlineDistance);
                               else
                                     stretchDistance = styleP(StyleIdx::noteBarDistance);
@@ -3555,7 +3555,7 @@ qreal Score::computeMinWidth(Segment* fs)
                               }
                         if (e) {
                               eFound = true;
-                              if (!s->next())               // segType & SegmentType::EndBarLine
+                              if (!s->next())               // segType & Segment::Type::EndBarLine
                                     spaceHarmony = true;    // to space last Harmony to end of measure
                               e->layout();
                               space.max(e->space());

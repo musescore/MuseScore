@@ -109,9 +109,9 @@ void createSmallClef(ClefType clefType, Segment *chordRestSeg, Staff *staff)
       {
       const int strack = staff->idx() * VOICES;
       const int tick = chordRestSeg->tick();
-      Segment *clefSeg = chordRestSeg->measure()->findSegment(SegmentType::Clef, tick);
+      Segment *clefSeg = chordRestSeg->measure()->findSegment(Segment::Type::Clef, tick);
                   // remove clef if it is not the staff clef
-      if (clefSeg && clefSeg != chordRestSeg->score()->firstSegment(SegmentType::Clef)) {
+      if (clefSeg && clefSeg != chordRestSeg->score()->firstSegment(Segment::Type::Clef)) {
             Clef *c = static_cast<Clef *>(clefSeg->element(strack));   // voice == 0 for clefs
             if (c) {
                   clefSeg->remove(c);
@@ -166,13 +166,13 @@ bool doesClefBreakTie(const Staff *staff)
       for (int voice = 0; voice < VOICES; ++voice) {
             bool currentTie = false;
             for (Segment *seg = staff->score()->firstSegment(); seg; seg = seg->next1()) {
-                  if (seg->segmentType() == SegmentType::ChordRest) {
+                  if (seg->segmentType() == Segment::Type::ChordRest) {
                         if (MidiTie::isTiedBack(seg, strack, voice))
                               currentTie = false;
                         if (MidiTie::isTiedFor(seg, strack, voice))
                               currentTie = true;
                         }
-                  else if (seg->segmentType() == SegmentType::Clef && seg->element(strack)) {
+                  else if (seg->segmentType() == Segment::Type::Clef && seg->element(strack)) {
                         if (currentTie) {
                               qDebug() << "Clef breaks tie; measure number (from 1):"
                                        << seg->measure()->no() + 1
@@ -264,8 +264,8 @@ int findClefChangePenalty(
       const ReducedFraction beatLen = Meter::beatLength(barFraction);
 
                   // find backward penalty
-      for (const Segment *segPrev = segment->prev1(SegmentType::ChordRest); ;
-                    segPrev = segPrev->prev1(SegmentType::ChordRest)) {
+      for (const Segment *segPrev = segment->prev1(Segment::Type::ChordRest); ;
+                    segPrev = segPrev->prev1(Segment::Type::ChordRest)) {
             if (!segPrev) {
                   penalty += clefChangePenalty;
                   break;
@@ -292,7 +292,7 @@ int findClefChangePenalty(
             }
                   // find forward penalty
       int chordCounter = 0;
-      for (const Segment *seg = segment; ; seg = seg->next1(SegmentType::ChordRest)) {
+      for (const Segment *seg = segment; ; seg = seg->next1(Segment::Type::ChordRest)) {
             if (!seg) {
                   penalty += clefChangePenalty;
                   break;
@@ -400,8 +400,8 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
             std::vector<Segment *> segments;
 
             int pos = 0;
-            for (Segment *seg = staff->score()->firstSegment(SegmentType::ChordRest); seg;
-                              seg = seg->next1(SegmentType::ChordRest)) {
+            for (Segment *seg = staff->score()->firstSegment(Segment::Type::ChordRest); seg;
+                              seg = seg->next1(Segment::Type::ChordRest)) {
 
                   const auto minMaxPitch = findMinMaxSegPitch(seg, strack);
                   if (minMaxPitch.empty())                      // no chords
@@ -423,8 +423,8 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
             }
       else {
             AveragePitch allAveragePitch;
-            for (Segment *seg = staff->score()->firstSegment(SegmentType::ChordRest); seg;
-                          seg = seg->next1(SegmentType::ChordRest)) {
+            for (Segment *seg = staff->score()->firstSegment(Segment::Type::ChordRest); seg;
+                          seg = seg->next1(Segment::Type::ChordRest)) {
                   allAveragePitch += findAverageSegPitch(seg, strack);
                   }
             mainClef = MidiClef::clefTypeFromAveragePitch(allAveragePitch.pitch());

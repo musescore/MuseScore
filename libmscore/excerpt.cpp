@@ -176,7 +176,7 @@ Score* createExcerpt(const QList<Part*>& parts)
 
                   score->transposeKeys(staffIdx, staffIdx+1, 0, score->lastSegment()->tick(), interval);
 
-                  for (auto segment = score->firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
+                  for (auto segment = score->firstSegment(Segment::Type::ChordRest); segment; segment = segment->next1(Segment::Type::ChordRest)) {
                         for (auto e : segment->annotations()) {
                               if ((e->type() != Element::Type::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                                     continue;
