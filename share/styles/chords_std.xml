@@ -52,10 +52,10 @@
 
 <!-- add "code" attributes to these, matching those for "b" and "#" above
     (0x266d / 0x266f) to get German chords to render with flat and sharp -->
-    <sym name="es"/>
-    <sym name="is"/>
+    <sym class="accidental" name="es"/>
+    <sym class="accidental" name="is"/>
 <!-- this is to render the "s" in "As" and "Es" in German -->
-    <sym name="s"/>
+    <sym class="accidental" name="s"/>
 
     </font>
 

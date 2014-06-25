@@ -35,6 +35,20 @@
 -->
 
   <font id="0">   <!-- use chord name text style font -->
+    <sym class="note" name="a"/>
+    <sym class="note" name="b"/>
+    <sym class="note" name="c"/>
+    <sym class="note" name="d"/>
+    <sym class="note" name="e"/>
+    <sym class="note" name="f"/>
+    <sym class="note" name="g"/>
+    <sym class="note" name="h"/>
+
+  <!-- delete code parameter to render German chords with "es" and "is" -->
+    <sym code="0x266d" class="accidental" name="es"/>
+    <sym code="0x266d" class="accidental" name="s"/>
+    <sym code="0x266f" class="accidental" name="is"/>
+
     </font>
 
   <font id="1" family="FreeSerif">
