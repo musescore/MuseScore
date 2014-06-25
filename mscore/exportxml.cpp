@@ -1010,6 +1010,12 @@ static void writePageFormat(const PageFormat* pf, Xml& xml, double conversion)
 //   defaults
 //---------------------------------------------------------
 
+static void dumpStyleInfo(const TextStyle& st)
+      {
+      qDebug("dumpStyleInfo name '%s' family '%s' size %f",
+             qPrintable(st.name()), qPrintable(st.family()), st.size());
+      }
+
 // _spatium = MScore::DPMM * (millimeter * 10.0 / tenths);
 
 static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
@@ -1027,9 +1033,18 @@ static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
       // when exporting only manual or no breaks, system-distance is not written at all
 
       // font defaults
+      // as MuseScore supports dozens of different styles, while MusicXML only has defaults
+      // for music (TODO), words and lyrics, use TextStyleType STAFF (typically used for words)
+      // and LYRIC1 to get MusicXML defaults
+      const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
+      const TextStyle tsLyric = s->textStyle(TextStyleType::LYRIC1);
+      dumpStyleInfo(s->textStyle(TextStyleType::TITLE));
+      dumpStyleInfo(tsLyric);
+      dumpStyleInfo(tsStaff);
+      dumpStyleInfo(s->textStyle(TextStyleType::SYSTEM));
       // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
-      xml.tagE("word-font font-family=\"FreeSerif\" font-size=\"10\"");  // TODO: real value instead of hardcoded defaults
-      xml.tagE("lyric-font font-family=\"FreeSerif\" font-size=\"11\""); // TODO: real value instead of hardcoded defaults
+      xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(tsStaff.family()).arg(tsStaff.size()));
+      xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(tsLyric.family()).arg(tsLyric.size()));
       xml.etag();
       }
 
@@ -1038,14 +1053,14 @@ static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
 //   creditWords
 //---------------------------------------------------------
 
-static void creditWords(Xml& xml, double x, double y, int fs, QString just, QString val, QString words)
+static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QString val, QString words, const TextStyle& ts)
       {
       xml.stag("credit page=\"1\"");
       QString attr = QString(" default-x=\"%1\"").arg(x);
       attr += QString(" default-y=\"%1\"").arg(y);
       attr += " justify=\"" + just + "\"";
       attr += " valign=\"" + val + "\"";
-      MScoreTextToMXML mttm("credit-words", attr, words, 10 /* TODO: real value */, fs);
+      MScoreTextToMXML mttm("credit-words", attr, words, s->textStyle(TextStyleType::STAFF), ts);
       mttm.write(xml);
       xml.etag();
       }
@@ -1093,7 +1108,6 @@ void ExportMusicXml::credits(Xml& xml)
       qDebug(" h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
       // write the credits
-      // TODO add real font size
       if (measure) {
             foreach(const Element* element, *measure->el()) {
                   if (element->type() == ElementType::TEXT) {
@@ -1104,27 +1118,25 @@ void ExportMusicXml::credits(Xml& xml)
                                int(text->textStyle().size())
                                );
                         const double ty = h - getTenthsFromDots(text->pagePos().y());
-                        const int fs = int(text->textStyle().size());
                         // MusicXML credit-words are untyped and simple list position and font info.
                         // TODO: these parameters should be extracted from text layout and style
                         //       instead of relying on the style name
                         QString styleName = text->textStyle().name();
                         if (styleName == "Title")
-                              creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
+                              creditWords(xml, _score, w / 2, ty, "center", "top", text->text(), text->textStyle());
                         else if (styleName == "Subtitle")
-                              creditWords(xml, w / 2, ty, fs, "center", "top", text->text());
+                              creditWords(xml, _score, w / 2, ty, "center", "top", text->text(), text->textStyle());
                         else if (styleName == "Composer")
-                              creditWords(xml, w - rm, ty, fs, "right", "top", text->text());
+                              creditWords(xml,  _score,w - rm, ty, "right", "top", text->text(), text->textStyle());
                         else if (styleName == "Lyricist")
-                              creditWords(xml, lm, ty, fs, "left", "top", text->text());
+                              creditWords(xml, _score, lm, ty, "left", "top", text->text(), text->textStyle());
                         else
                               qDebug("credits: text style %s not supported", qPrintable(styleName));
                         }
                   }
             }
       if (!rights.isEmpty()) {
-            const int fs = 8; // score->copyright()->font().pointSize();
-            creditWords(xml, w / 2, bm, fs, "center", "bottom", rights);
+            creditWords(xml, _score, w / 2, bm, "center", "bottom", rights, _score->textStyle(TextStyleType::FOOTER));
             }
       }
 
@@ -2817,7 +2829,7 @@ static void beatUnit(Xml& xml, const TDuration dur)
             }
       }
 
-static void wordsMetrome(Xml& xml, Text const* const text)
+static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
       {
       QString wordsLeft;  // words left of metronome
       bool hasParen;      // parenthesis
@@ -2828,8 +2840,7 @@ static void wordsMetrome(Xml& xml, Text const* const text)
             if (wordsLeft != "") {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD
-                  int fs = 10; // TODO TBD
-                  MScoreTextToMXML mttm("words", attr, wordsLeft, 10 /* TODO: real value */, fs);
+                  MScoreTextToMXML mttm("words", attr, wordsLeft, s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF) /* TODO: verify correct value */);
                   mttm.write(xml);
                   xml.etag();
                   }
@@ -2850,8 +2861,7 @@ static void wordsMetrome(Xml& xml, Text const* const text)
             if (wordsRight != "") {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD
-                  int fs = 10; // TODO TBD
-                  MScoreTextToMXML mttm("words", attr, wordsRight, 10 /* TODO: real value */, fs);
+                  MScoreTextToMXML mttm("words", attr, wordsRight, s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF) /* TODO: verify correct value */);
                   mttm.write(xml);
                   xml.etag();
                   }
@@ -2859,8 +2869,7 @@ static void wordsMetrome(Xml& xml, Text const* const text)
       else {
             xml.stag("direction-type");
             QString attr; // TODO TBD
-            int fs = 10; // TODO TBD
-            MScoreTextToMXML mttm("words", attr, text->text(), 10 /* TODO: real value */, fs);
+            MScoreTextToMXML mttm("words", attr, text->text(), s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF));
             mttm.write(xml);
             xml.etag();
             }
@@ -2873,7 +2882,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       */
       attr.doAttr(xml, false);
       xml.stag(QString("direction placement=\"%1\"").arg((text->parent()->y()-text->y() < 0.0) ? "below" : "above"));
-      wordsMetrome(xml, text);
+      wordsMetrome(xml, _score, text);
       /*
       int offs = text->mxmlOff();
       if (offs)
@@ -2903,7 +2912,7 @@ void ExportMusicXml::words(Text const* const text, int staff)
             xml.etag();
             }
       else
-            wordsMetrome(xml, text);
+            wordsMetrome(xml, _score, text);
       directionETag(xml, staff);
       }
 
@@ -3169,8 +3178,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
             }
       else  {
             QString attr; // TODO TBD
-            int fs = 10; // TODO TBD
-            MScoreTextToMXML mttm("words", attr, t, 10 /* TODO: real value */, fs);
+            MScoreTextToMXML mttm("words", attr, t, _score->textStyle(TextStyleType::STAFF), _score->textStyle(TextStyleType::DYNAMICS));
             mttm.write(xml);
             }
       xml.etag();
@@ -3237,7 +3245,7 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
                         xml.tag("syllabic", s);
                         QString attr; // TODO TBD
                         int fs = 11; // TODO TBD
-                        MScoreTextToMXML mttm("text", attr, (l)->text(), 11 /* TODO: real value */, fs);
+                        MScoreTextToMXML mttm("text", attr, (l)->text(), _score->textStyle(TextStyleType::LYRIC1), _score->textStyle(TextStyleType::LYRIC1));
                         mttm.write(xml);
                         /*
                          Temporarily disabled because it doesn't work yet (and thus breaks the regression test).
