@@ -80,6 +80,7 @@ class Articulation : public Element {
       Articulation &operator=(const Articulation&);
 
       virtual Articulation* clone() const   { return new Articulation(*this); }
+      virtual Articulation* linkedClone();
       virtual ElementType type() const      { return ElementType::ARTICULATION; }
 
       virtual qreal mag() const;

@@ -189,6 +189,14 @@ Articulation::Articulation(Score* s)
       setArticulationType(ArticulationType::Fermata);
        }
 
+Articulation* Articulation::linkedClone()
+      {
+      Articulation* na = new Articulation(*this);
+      linkTo(na);
+
+      return na;
+      }
+
 //---------------------------------------------------------
 //   setArticulationType
 //---------------------------------------------------------

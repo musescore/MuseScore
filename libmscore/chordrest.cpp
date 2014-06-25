@@ -83,8 +83,8 @@ ChordRest::ChordRest(const ChordRest& cr)
       _tabDur       = 0;  // tab sur. symb. depends upon context: can't be
                           // simply copied from another CR
 
-      for (const Articulation* a : cr._articulations) {    // make deep copy
-            Articulation* na = new Articulation(*a);
+      for (Articulation* a : cr._articulations) {    // make deep copy
+            Articulation* na = a->linkedClone();      // new Articulation(*a);
             na->setParent(this);
             na->setTrack(track());
             _articulations.append(na);
