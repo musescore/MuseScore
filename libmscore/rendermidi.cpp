@@ -63,7 +63,7 @@ void Score::updateChannel()
       Measure* fm = firstMeasure();
       if (!fm)
             return;
-      for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+      for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             foreach(const Element* e, s->annotations()) {
                   if (e->type() != Element::Type::STAFF_TEXT)
                         continue;
@@ -80,7 +80,7 @@ void Score::updateChannel()
                   }
             }
 
-      for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+      for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             foreach(Staff* st, _staves) {
                   int strack = st->idx() * VOICES;
                   int etrack = strack + VOICES;
@@ -293,7 +293,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
       int firstStaffIdx = staff->idx();
       int nextStaffIdx  = firstStaffIdx + 1;
 
-      SegmentType st = SegmentType::ChordRest;
+      Segment::Type st = Segment::Type::ChordRest;
       int strack = firstStaffIdx * VOICES;
       int etrack = nextStaffIdx * VOICES;
 
@@ -331,7 +331,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
       //
       // collect program changes and controller
       //
-      for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+      for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
             // int tick = s->tick();
             foreach(Element* e, s->annotations()) {
                   if (e->type() != Element::Type::STAFF_TEXT
@@ -588,7 +588,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             //int l = 1000 / n;
             if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
                   int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
-                  SegmentType st = SegmentType::ChordRest;
+                  Segment::Type st = Segment::Type::ChordRest;
                   Segment* seg2 = seg->next(st);
                   int track = chord->track();
                   while (seg2 && !seg2->element(track))
@@ -812,7 +812,7 @@ void Score::createPlayEvents()
                   // skip linked staves, except primary
                   if (!m->score()->staff(track / VOICES)->primaryStaff())
                         continue;
-                  const SegmentType st = SegmentType::ChordRest;
+                  const Segment::Type st = Segment::Type::ChordRest;
                   for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                         Chord* chord = static_cast<Chord*>(seg->element(track));
                         if (chord == 0 || chord->type() != Element::Type::CHORD)

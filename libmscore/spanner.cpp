@@ -393,7 +393,7 @@ void Spanner::computeEndElement()
       switch (_anchor) {
             case Anchor::SEGMENT:
                   if (type() == Element::Type::SLUR) {
-                        Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
+                        Segment* s = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
                         _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
                         }
                   else

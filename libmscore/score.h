@@ -637,8 +637,8 @@ class Score : public QObject {
       Measure* tick2measure(int tick) const;
       Measure* tick2measureMM(int tick) const;
       MeasureBase* tick2measureBase(int tick) const;
-      Segment* tick2segment(int tick, bool first = false, SegmentType st = SegmentType::All,bool useMMrest = false ) const;
-      Segment* tick2segmentMM(int tick, bool first = false, SegmentType st = SegmentType::All) const;
+      Segment* tick2segment(int tick, bool first = false, Segment::Type st = Segment::Type::All,bool useMMrest = false ) const;
+      Segment* tick2segmentMM(int tick, bool first = false, Segment::Type st = Segment::Type::All) const;
       Segment* tick2segmentEnd(int track, int tick) const;
       Segment* tick2leftSegment(int tick) const;
       Segment* tick2rightSegment(int tick) const;
@@ -798,8 +798,8 @@ class Score : public QObject {
 //      int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;
 
-      Q_INVOKABLE Ms::Segment* firstSegment(SegmentType s = SegmentType::All) const;
-      Ms::Segment* firstSegmentMM(SegmentType s = SegmentType::All) const;
+      Q_INVOKABLE Ms::Segment* firstSegment(Segment::Type s = Segment::Type::All) const;
+      Ms::Segment* firstSegmentMM(Segment::Type s = Segment::Type::All) const;
       Q_INVOKABLE Ms::Segment* lastSegment() const;
 
       void connectTies();

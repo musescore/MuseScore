@@ -78,7 +78,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       Segment* nextSegment = segment;
       if (back) {
             // search prev chord
-            while ((nextSegment = nextSegment->prev1(SegmentType::ChordRest))) {
+            while ((nextSegment = nextSegment->prev1(Segment::Type::ChordRest))) {
                   Element* el = nextSegment->element(track);
                   if (el &&  el->type() == Element::Type::CHORD)
                         break;
@@ -86,7 +86,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             }
       else {
             // search next chord
-            while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
+            while ((nextSegment = nextSegment->next1(Segment::Type::ChordRest))) {
                   Element* el = nextSegment->element(track);
                   if (el &&  el->type() == Element::Type::CHORD)
                         break;
@@ -107,7 +107,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                         if (oldLyrics)
                               break;
                         }
-                  segment = segment->prev1(SegmentType::ChordRest);
+                  segment = segment->prev1(Segment::Type::ChordRest);
                   }
             }
 
@@ -188,7 +188,7 @@ void ScoreView::lyricsMinus()
 
       // search next chord
       Segment* nextSegment = segment;
-      while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
+      while ((nextSegment = nextSegment->next1(Segment::Type::ChordRest))) {
             Element* el = nextSegment->element(track);
             if (el &&  el->type() == Element::Type::CHORD)
                   break;
@@ -202,13 +202,13 @@ void ScoreView::lyricsMinus()
       while (segment) {
             const QList<Lyrics*>* nll = segment->lyricsList(track);
             if (!nll) {
-                  segment = segment->prev1(SegmentType::ChordRest);
+                  segment = segment->prev1(Segment::Type::ChordRest);
                   continue;
                   }
             oldLyrics = nll->value(verse);
             if (oldLyrics)
                   break;
-            segment = segment->prev1(SegmentType::ChordRest);
+            segment = segment->prev1(Segment::Type::ChordRest);
             }
 
       _score->startCmd();
@@ -275,7 +275,7 @@ void ScoreView::lyricsUnderscore()
 
       // search next chord
       Segment* nextSegment = segment;
-      while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
+      while ((nextSegment = nextSegment->next1(Segment::Type::ChordRest))) {
             Element* el = nextSegment->element(track);
             if (el &&  el->type() == Element::Type::CHORD)
                   break;
@@ -290,7 +290,7 @@ void ScoreView::lyricsUnderscore()
                   if (oldLyrics)
                         break;
                   }
-            segment = segment->prev1(SegmentType::ChordRest);
+            segment = segment->prev1(Segment::Type::ChordRest);
             }
 
       if (nextSegment == 0) {
@@ -400,7 +400,7 @@ void ScoreView::lyricsEndEdit()
                   if (oldLyrics)
                         break;
                   }
-            segment = segment->prev1(SegmentType::ChordRest);
+            segment = segment->prev1(Segment::Type::ChordRest);
             }
 
 //      if (lyrics->isEmpty() && origL->isEmpty())

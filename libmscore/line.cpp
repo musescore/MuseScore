@@ -503,7 +503,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                               x = m->pos().x() + m->bbox().right();
                               }
                         Segment* seg = m->last();
-                        if (seg->segmentType() == SegmentType::EndBarLine) {
+                        if (seg->segmentType() == Segment::Type::EndBarLine) {
                               Element* e = seg->element(0);
                               if (e && e->type() == Element::Type::BAR_LINE) {
                                     if (static_cast<BarLine*>(e)->barLineType() == BarLineType::START_REPEAT)
@@ -623,7 +623,7 @@ void SLine::layout()
             seg->setSystem(system);
 
             Measure* m = system->firstMeasure();
-            Segment* mseg = m->first(SegmentType::ChordRest);
+            Segment* mseg = m->first(Segment::Type::ChordRest);
 
             if (sysIdx1 == sysIdx2) {
                   // single segment

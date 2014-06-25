@@ -132,7 +132,7 @@ Segment* Selection::firstChordRestSegment() const
       if (!isRange()) return 0;
 
       for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
-            if (s->segmentType() == SegmentType::ChordRest)
+            if (s->segmentType() == Segment::Type::ChordRest)
                   return s;
             }
       return 0;
@@ -189,7 +189,7 @@ ChordRest* Selection::lastChordRest(int track) const
             Element* el = *i;
             if (el->type() == Element::Type::NOTE)
                   el = ((Note*)el)->chord();
-            if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->segmentType() == SegmentType::ChordRest) {
+            if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->segmentType() == Segment::Type::ChordRest) {
                   if (track != -1 && el->track() != track)
                         continue;
                   if (cr) {
@@ -296,7 +296,7 @@ void Selection::updateSelectedElements()
       for (int st = startTrack; st < endTrack; ++st) {
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
                   previousEndSegment = s;
-                  if (s->segmentType() == SegmentType::EndBarLine)  // do not select end bar line
+                  if (s->segmentType() == Segment::Type::EndBarLine)  // do not select end bar line
                         continue;
                   Element* e = s->element(st);
                   if (!e)
@@ -733,7 +733,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
             if (iter->second.e->type() == Element::Type::FIGURED_BASS) {
                   bool done = false;
                   for ( ; seg; seg = seg->next1()) {
-                        if (seg->segmentType() == SegmentType::ChordRest) {
+                        if (seg->segmentType() == Segment::Type::ChordRest) {
                               // if no ChordRest in right track, look in anotations
                               if (seg->element(currTrack) == nullptr) {
                                     foreach (Element* el, seg->annotations()) {
@@ -794,7 +794,7 @@ QList<Note*> Selection::noteList(int selTrack) const
                   int startTrack = staffIdx * VOICES;
                   int endTrack   = startTrack + VOICES;
                   for (Segment* seg = _startSegment; seg && seg != _endSegment; seg = seg->next1()) {
-                        if (!(seg->segmentType() & (SegmentType::ChordRest)))
+                        if (!(seg->segmentType() & (Segment::Type::ChordRest)))
                               continue;
                         for (int track = startTrack; track < endTrack; ++track) {
                               Element* e = seg->element(track);

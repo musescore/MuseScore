@@ -101,12 +101,12 @@ MeasureBase* Score::tick2measureBase(int tick) const
 //   tick2segment
 //---------------------------------------------------------
 
-Segment* Score::tick2segmentMM(int tick, bool first, SegmentType st) const
+Segment* Score::tick2segmentMM(int tick, bool first, Segment::Type st) const
       {
       return tick2segment(tick,first,st,true);
       }
 
-Segment* Score::tick2segment(int tick, bool first, SegmentType st, bool useMMrest ) const
+Segment* Score::tick2segment(int tick, bool first, Segment::Type st, bool useMMrest ) const
       {
       Measure* m;
       if (useMMrest) {
@@ -150,7 +150,7 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
             return 0;
             }
       // loop over all segments
-      for (Segment* segment = m->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+      for (Segment* segment = m->first(Segment::Type::ChordRest); segment; segment = segment->next(Segment::Type::ChordRest)) {
             ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
             if (!cr)
                   continue;
@@ -185,7 +185,7 @@ Segment* Score::tick2leftSegment(int tick) const
             }
       // loop over all segments
       Segment* ps = 0;
-      for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+      for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
             if (tick < s->tick())
                   return ps;
             else if (tick == s->tick())
@@ -209,7 +209,7 @@ Segment* Score::tick2rightSegment(int tick) const
             return 0;
             }
       // loop over all segments
-      for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+      for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
             if (tick <= s->tick())
                   return s;
             }
@@ -240,7 +240,7 @@ int Score::nextSeg(int tick, int track)
       {
       Segment* seg = tick2segment(tick);
       while (seg) {
-            seg = seg->next1(SegmentType::ChordRest);
+            seg = seg->next1(Segment::Type::ChordRest);
             if (seg == 0)
                   break;
             if (seg->element(track))
@@ -258,7 +258,7 @@ Segment* nextSeg1(Segment* seg, int& track)
       int staffIdx   = track / VOICES;
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
-      while ((seg = seg->next1(SegmentType::ChordRest))) {
+      while ((seg = seg->next1(Segment::Type::ChordRest))) {
             for (int t = startTrack; t < endTrack; ++t) {
                   if (seg->element(t)) {
                         track = t;
@@ -278,7 +278,7 @@ Segment* prevSeg1(Segment* seg, int& track)
       int staffIdx   = track / VOICES;
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
-      while ((seg = seg->prev1(SegmentType::ChordRest))) {
+      while ((seg = seg->prev1(Segment::Type::ChordRest))) {
             for (int t = startTrack; t < endTrack; ++t) {
                   if (seg->element(t)) {
                         track = t;
@@ -692,7 +692,7 @@ Note* searchTieNote(Note* note)
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
 
-      while ((seg = seg->next1(SegmentType::ChordRest))) {
+      while ((seg = seg->next1(Segment::Type::ChordRest))) {
             for (int track = strack; track < etrack; ++track) {
                   Chord* c = static_cast<Chord*>(seg->element(track));
                   if (c == 0 || c->type() != Element::Type::CHORD)
@@ -728,7 +728,7 @@ Note* searchTieNote114(Note* note)
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
 
-      while ((seg = seg->next1(SegmentType::ChordRest))) {
+      while ((seg = seg->next1(Segment::Type::ChordRest))) {
             for (int track = strack; track < etrack; ++track) {
                   Chord* c = static_cast<Chord*>(seg->element(track));
                   if (c == 0 || (c->type() != Element::Type::CHORD) || (c->track() != chord->track()))

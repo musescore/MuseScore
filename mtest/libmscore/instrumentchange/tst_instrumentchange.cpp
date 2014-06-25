@@ -80,7 +80,7 @@ void TestInstrumentChange::testAdd()
       {
       Score* score = test_pre("add");
       Measure* m = score->firstMeasure()->nextMeasure();
-      Segment* s = m->first(SegmentType::ChordRest);
+      Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = new InstrumentChange(score);
       ic->setParent(s);
       ic->setTrack(0);
@@ -94,7 +94,7 @@ void TestInstrumentChange::testDelete()
       {
       Score* score = test_pre("delete");
       Measure* m = score->firstMeasure()->nextMeasure();
-      Segment* s = m->first(SegmentType::ChordRest);
+      Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
       score->deleteItem(ic);
       score->doLayout();
@@ -105,7 +105,7 @@ void TestInstrumentChange::testChange()
       {
       Score* score = test_pre("change");
       Measure* m = score->firstMeasure()->nextMeasure();
-      Segment* s = m->first(SegmentType::ChordRest);
+      Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
       Instrument* ni = score->staff(1)->part()->instr();
       ic->setInstrument(*ni);
@@ -121,7 +121,7 @@ void TestInstrumentChange::testMixer()
       {
       Score* score = test_pre("mixer");
       Measure* m = score->firstMeasure()->nextMeasure();
-      Segment* s = m->first(SegmentType::ChordRest);
+      Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
       int idx = score->staff(0)->channel(s->tick(), 0);
       Channel* c = &score->staff(0)->part()->instr(s->tick())->channel(idx);
@@ -143,10 +143,10 @@ void TestInstrumentChange::testCopy()
       {
       Score* score = test_pre("copy");
       Measure* m = score->firstMeasure()->nextMeasure();
-      Segment* s = m->first(SegmentType::ChordRest);
+      Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
       m = m->nextMeasure();
-      s = m->first(SegmentType::ChordRest);
+      s = m->first(Segment::Type::ChordRest);
       InstrumentChange* nic = new InstrumentChange(*ic);
       nic->setParent(s);
       nic->setTrack(4);

@@ -82,7 +82,7 @@ void TestClefCourtesy::clef_courtesy01()
       // check the required courtesy clef is there and it is shown
       Clef*    clefCourt = nullptr;
       Measure* m = m1->prevMeasure();
-      Segment* seg = m->findSegment(SegmentType::Clef, m1->tick());
+      Segment* seg = m->findSegment(Segment::Type::Clef, m1->tick());
       QVERIFY2(seg != nullptr, "No SegClef in measure 3.");
       clefCourt = static_cast<Clef*>(seg->element(0));
       QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 3.");
@@ -91,7 +91,7 @@ void TestClefCourtesy::clef_courtesy01()
       // check the not required courtesy clef element is there but it is not shown
       clefCourt = nullptr;
       m = m2->prevMeasure();
-      seg = m->findSegment(SegmentType::Clef, m2->tick());
+      seg = m->findSegment(Segment::Type::Clef, m2->tick());
       QVERIFY2(seg != nullptr, "No SegClef in measure 6.");
       clefCourt = static_cast<Clef*>(seg->element(0));
       QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 6.");
@@ -139,7 +139,7 @@ void TestClefCourtesy::clef_courtesy02()
       // check both clef elements are there, but none is shown
       Clef*    clefCourt = nullptr;
       Measure* m = m1->prevMeasure();
-      Segment* seg = m->findSegment(SegmentType::Clef, m1->tick());
+      Segment* seg = m->findSegment(Segment::Type::Clef, m1->tick());
       QVERIFY2(seg != nullptr, "No SegClef in measure 3.");
       clefCourt = static_cast<Clef*>(seg->element(0));
       QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 3.");
@@ -147,7 +147,7 @@ void TestClefCourtesy::clef_courtesy02()
 
       clefCourt = nullptr;
       m = m2->prevMeasure();
-      seg = m->findSegment(SegmentType::Clef, m2->tick());
+      seg = m->findSegment(Segment::Type::Clef, m2->tick());
       QVERIFY2(seg != nullptr, "No SegClef in measure 6.");
       clefCourt = static_cast<Clef*>(seg->element(0));
       QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 6.");

@@ -798,10 +798,10 @@ SegmentView::SegmentView()
       {
       sb.setupUi(addWidget());
       sb.segmentType->clear();
-      static std::vector<SegmentType> segmentTypes = {
-            SegmentType::Clef,    SegmentType::KeySig, SegmentType::TimeSig, SegmentType::StartRepeatBarLine,
-            SegmentType::BarLine, SegmentType::ChordRest, SegmentType::Breath, SegmentType::EndBarLine,
-            SegmentType::TimeSigAnnounce, SegmentType::KeySigAnnounce
+      static std::vector<Segment::Type> segmentTypes = {
+            Segment::Type::Clef,    Segment::Type::KeySig, Segment::Type::TimeSig, Segment::Type::StartRepeatBarLine,
+            Segment::Type::BarLine, Segment::Type::ChordRest, Segment::Type::Breath, Segment::Type::EndBarLine,
+            Segment::Type::TimeSigAnnounce, Segment::Type::KeySigAnnounce
             };
       connect(sb.lyrics, SIGNAL(itemClicked(QListWidgetItem*)),      SLOT(gotoElement(QListWidgetItem*)));
       connect(sb.spannerFor, SIGNAL(itemClicked(QListWidgetItem*)),  SLOT(gotoElement(QListWidgetItem*)));

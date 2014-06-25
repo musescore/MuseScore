@@ -67,7 +67,7 @@ ChordRest* nextChordRest(ChordRest* cr)
             return pc;
             }
       int track = cr->track();
-      SegmentType st = SegmentType::ChordRest;
+      Segment::Type st = Segment::Type::ChordRest;
 
       for (Segment* seg = cr->segment()->next1(st); seg; seg = seg->next1(st)) {
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
@@ -129,7 +129,7 @@ ChordRest* prevChordRest(ChordRest* cr)
                   }
             }
       int track = cr->track();
-      SegmentType st = SegmentType::ChordRest;
+      Segment::Type st = Segment::Type::ChordRest;
       for (Segment* seg = cr->segment()->prev1(st); seg; seg = seg->prev1(st)) {
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e)
@@ -299,7 +299,7 @@ ChordRest* Score::nextTrack(ChordRest* cr)
             if (track == tracks)
                   return cr;
             // find element at same or previous segment within this track
-            for (Segment* segment = cr->segment(); segment; segment = segment->prev(SegmentType::ChordRest)) {
+            for (Segment* segment = cr->segment(); segment; segment = segment->prev(Segment::Type::ChordRest)) {
                   el = static_cast<ChordRest*>(segment->element(track));
                   if (el)
                         break;
@@ -334,7 +334,7 @@ ChordRest* Score::prevTrack(ChordRest* cr)
             if (track < 0)
                   return cr;
             // find element at same or previous segment within this track
-            for (Segment* segment = cr->segment(); segment != 0; segment = segment->prev(SegmentType::ChordRest)) {
+            for (Segment* segment = cr->segment(); segment != 0; segment = segment->prev(Segment::Type::ChordRest)) {
                   el = static_cast<ChordRest*>(segment->element(track));
                   if (el)
                         break;

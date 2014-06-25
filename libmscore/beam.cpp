@@ -154,7 +154,7 @@ void Beam::add(ChordRest* a)
                   for (int i = 0; i < _elements.size(); ++i) {
                         Segment* s = _elements[i]->segment();
                         if ((s->tick() > a->segment()->tick())
-                           || ((s->tick() == a->segment()->tick()) && (a->segment()->next(SegmentType::ChordRest) == s))
+                           || ((s->tick() == a->segment()->tick()) && (a->segment()->next(Segment::Type::ChordRest) == s))
                            )  {
                               _elements.insert(i, a);
                               return;
@@ -231,7 +231,7 @@ bool Beam::twoBeamedNotes()
       if ((dist1 == -dist2) || (-dist1 == dist2)) {
             _up = false;
             Segment* s = c1->segment();
-            s = s->prev1(SegmentType::ChordRest);
+            s = s->prev1(Segment::Type::ChordRest);
             if (s && s->element(c1->track())) {
                   Chord* c = static_cast<Chord*>(s->element(c1->track()));
                   if ((c->type() == Element::Type::CHORD) && c->beam())

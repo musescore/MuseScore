@@ -106,7 +106,7 @@ void TestBarline::barline01()
             for (int msrNo=0; msrNo < 2; ++msrNo) {
                   BarLine* bar = nullptr;
                   Measure* msr = static_cast<Measure*>(sys->measure(msrNo));
-                  Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
+                  Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick()+msr->ticks());
                   sprintf(msg, "No SegEndBarLine in measure %d of system %d.", msrNo+1, sysNo+1);
                   QVERIFY2(seg != nullptr, msg);
 
@@ -148,7 +148,7 @@ void TestBarline::barline02()
       int msrNo = 1;
       while ( (msr=msr->nextMeasure()) != nullptr ) {
             ++msrNo;
-            Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
+            Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick()+msr->ticks());
             sprintf(msg, "No SegEndBarLine in measure %d.", msrNo);
             QVERIFY2(seg != nullptr, msg);
 
@@ -184,7 +184,7 @@ void TestBarline::barline03()
       for (int i=0; i < 4; i++)
             msr = msr->nextMeasure();
       // check span data of measure-initial start-repeat bar line
-      Segment* seg = msr->findSegment(SegmentType::StartRepeatBarLine, msr->tick());
+      Segment* seg = msr->findSegment(Segment::Type::StartRepeatBarLine, msr->tick());
       QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
 
       BarLine* bar = static_cast<BarLine*>(seg->element(0));
@@ -219,7 +219,7 @@ void TestBarline::barline04()
       for (int i=0; i < 4; i++)
             msr = msr->nextMeasure();
       // check span data of measure-initial start-repeat bar line
-      Segment* seg = msr->findSegment(SegmentType::StartRepeatBarLine, msr->tick());
+      Segment* seg = msr->findSegment(Segment::Type::StartRepeatBarLine, msr->tick());
       QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
 
       BarLine* bar = static_cast<BarLine*>(seg->element(0));
@@ -264,7 +264,7 @@ void TestBarline::barline05()
       score->doLayout();
 
       // check an end-repeat bar line has been created at the end of this measure and it is not generated
-      Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
+      Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick()+msr->ticks());
       QVERIFY2(seg != nullptr, "No SegEndBarLine segment in measure 4.");
       BarLine* bar = static_cast<BarLine*>(seg->element(0));
       QVERIFY2(bar != nullptr, "No end-repeat bar line in measure 4.");
@@ -273,7 +273,7 @@ void TestBarline::barline05()
 
       // check an end-repeat bar line has been created at the beginning of the next measure and it is not generated
       msr = msr->nextMeasure();
-      seg = msr->findSegment(SegmentType::StartRepeatBarLine, msr->tick());
+      seg = msr->findSegment(Segment::Type::StartRepeatBarLine, msr->tick());
       QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
       bar = static_cast<BarLine*>(seg->element(0));
       QVERIFY2(bar != nullptr, "No start-repeat bar line in measure 5.");

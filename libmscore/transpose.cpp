@@ -417,7 +417,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
             if (st->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
 
-            for (Segment* s = firstSegment(SegmentType::KeySig); s; s = s->next1(SegmentType::KeySig)) {
+            for (Segment* s = firstSegment(Segment::Type::KeySig); s; s = s->next1(Segment::Type::KeySig)) {
                   if (s->tick() < tickStart)
                         continue;
                   if (s->tick() >= tickEnd)
@@ -543,7 +543,7 @@ void Score::transpositionChanged(Part* part)
       {
       // TODO: grace notes
 
-      for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+      for (Segment* s = firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             for (Staff* st : *part->staves()) {
                   if (st->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;

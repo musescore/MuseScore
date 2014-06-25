@@ -512,7 +512,7 @@ Score::FileError Score::read114(XmlReader& e)
                   }
             // first clef can be implicit in 1.3 #22607
             if (s->clefList()->count(0) == 0) {
-                  Segment* seg = firstMeasure()->getSegment(SegmentType::Clef, 0);
+                  Segment* seg = firstMeasure()->getSegment(Segment::Type::Clef, 0);
                   ClefType ct = Clef::clefType("0");
                   Clef* clef = new Clef(this);
                   clef->setClefType(ct);
@@ -529,7 +529,7 @@ Score::FileError Score::read114(XmlReader& e)
                         continue;
                   if ((tick == m->tick()) && m->prevMeasure())
                         m = m->prevMeasure();
-                  Segment* seg = m->getSegment(SegmentType::Clef, tick);
+                  Segment* seg = m->getSegment(Segment::Type::Clef, tick);
                   if (seg->element(track))
                         static_cast<Clef*>(seg->element(track))->setGenerated(false);
                   else {
@@ -553,7 +553,7 @@ Score::FileError Score::read114(XmlReader& e)
                   Measure* m = tick2measure(tick);
                   if (!m)           //empty score
                         break;
-                  Segment* seg = m->getSegment(SegmentType::KeySig, tick);
+                  Segment* seg = m->getSegment(Segment::Type::KeySig, tick);
                   if (seg->element(track))
                         static_cast<KeySig*>(seg->element(track))->setGenerated(false);
                   else {
@@ -613,7 +613,7 @@ Score::FileError Score::read114(XmlReader& e)
             bool first = true;
             for (int track = 0; track < tracks; ++track) {
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->segmentType() != SegmentType::ChordRest)
+                        if (s->segmentType() != Segment::Type::ChordRest)
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (cr) {
@@ -706,7 +706,7 @@ Score::FileError Score::read114(XmlReader& e)
                   tt->setVisible(false);
                   Measure* m = tick2measure(tick);
                   if (m) {
-                        Segment* seg = m->getSegment(SegmentType::ChordRest, tick);
+                        Segment* seg = m->getSegment(Segment::Type::ChordRest, tick);
                         seg->add(tt);
                         setTempo(tick, tempo);
                         }

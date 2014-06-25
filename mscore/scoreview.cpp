@@ -1298,12 +1298,12 @@ void ScoreView::moveCursor(int tick)
 
       qreal x;
       Segment* s;
-      for (s = measure->first(SegmentType::ChordRest); s;) {
+      for (s = measure->first(Segment::Type::ChordRest); s;) {
             int t1 = s->tick();
             int x1 = s->canvasPos().x();
             qreal x2;
             int t2;
-            Segment* ns = s->next(SegmentType::ChordRest);
+            Segment* ns = s->next(Segment::Type::ChordRest);
             if (ns) {
                   t2 = ns->tick();
                   x2 = ns->canvasPos().x();
@@ -1311,7 +1311,7 @@ void ScoreView::moveCursor(int tick)
             else {
                   t2 = measure->endTick();
                   // measure->width is not good enough because of courtesy keysig, timesig
-                  Segment* seg = measure->findSegment(SegmentType::EndBarLine, measure->tick() + measure->ticks());
+                  Segment* seg = measure->findSegment(Segment::Type::EndBarLine, measure->tick() + measure->ticks());
                   if(seg)
                         x2 = seg->canvasPos().x();
                   else
@@ -1378,7 +1378,7 @@ void ScoreView::moveCursor()
       Segment* segment = is.segment();
       if (segment && score()->styleB(StyleIdx::createMultiMeasureRests) && segment->measure()->hasMMRest()) {
             Measure* m = segment->measure()->mmRest();
-            segment = m->findSegment(SegmentType::ChordRest, m->tick());
+            segment = m->findSegment(Segment::Type::ChordRest, m->tick());
             }
       if (!segment)
             return;
@@ -1466,12 +1466,12 @@ void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
       int offset = 0;
 
       Segment* s;
-      for (s = measure->first(SegmentType::ChordRest); s;) {
+      for (s = measure->first(Segment::Type::ChordRest); s;) {
             int t1 = s->tick();
             int x1 = s->canvasPos().x();
             qreal x2;
             int t2;
-            Segment* ns = s->next(SegmentType::ChordRest);
+            Segment* ns = s->next(Segment::Type::ChordRest);
             if (ns) {
                   t2 = ns->tick();
                   x2 = ns->canvasPos().x();
@@ -4276,7 +4276,7 @@ void ScoreView::changeVoice(int voice)
 
       if (is->noteEntryMode()) {
             if (is->segment()) { // can be null for eg repeatMeasure
-                  is->setSegment(is->segment()->measure()->first(SegmentType::ChordRest));
+                  is->setSegment(is->segment()->measure()->first(Segment::Type::ChordRest));
                   score()->setUpdateAll(true);
                   score()->end();
                   mscore->setPos(is->segment()->tick());
@@ -4412,7 +4412,7 @@ void ScoreView::harmonyTab(bool back)
             return;
             }
 
-      segment = measure->findSegment(SegmentType::ChordRest, measure->tick());
+      segment = measure->findSegment(Segment::Type::ChordRest, measure->tick());
       if (!segment) {
             qDebug("harmonyTab: no ChordRest segment as measure");
             return;
@@ -4484,7 +4484,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
 
       // look for next/prev beat, note, rest or chord
       for (;;) {
-            segment = back ? segment->prev1(SegmentType::ChordRest) : segment->next1(SegmentType::ChordRest);
+            segment = back ? segment->prev1(Segment::Type::ChordRest) : segment->next1(Segment::Type::ChordRest);
 
             if (!segment || (back ? (segment->tick() < newTick) : (segment->tick() > newTick))) {
                   // no segment or moved past the beat - create new segment
@@ -4496,7 +4496,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
                               return;
                               }
                         }
-                  segment = new Segment(measure, SegmentType::ChordRest, newTick);
+                  segment = new Segment(measure, Segment::Type::ChordRest, newTick);
                   if (!segment) {
                         qDebug("harmonyBeatsTab: no prev segment");
                         return;
@@ -4577,9 +4577,9 @@ void ScoreView::harmonyTicksTab(int ticks)
 
       // look for a segment at this tick; if none, create one
       while(segment && segment->tick() < newTick)
-            segment = segment->next1(SegmentType::ChordRest);
+            segment = segment->next1(Segment::Type::ChordRest);
       if (!segment || segment->tick() > newTick) {      // no ChordRest segment at this tick
-            segment = new Segment(measure, SegmentType::ChordRest, newTick);
+            segment = new Segment(measure, Segment::Type::ChordRest, newTick);
             if (!segment) {
                   qDebug("harmonyTicksTab: no next segment");
                   return;
@@ -4735,9 +4735,9 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   int curPitch = -1;
                   if (is.segment()) {
                         Staff* staff = score()->staff(is.track() / VOICES);
-                        Segment* seg = is.segment()->prev1(SegmentType::ChordRest | SegmentType::Clef);
+                        Segment* seg = is.segment()->prev1(Segment::Type::ChordRest | Segment::Type::Clef);
                         while(seg) {
-                              if (seg->segmentType() == SegmentType::ChordRest) {
+                              if (seg->segmentType() == Segment::Type::ChordRest) {
                                     Element* p = seg->element(is.track());
                                     if (p && p->type() == Element::Type::CHORD) {
                                           Chord* ch = static_cast<Chord*>(p);
@@ -4745,7 +4745,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                                           break;
                                           }
                                     }
-                              else if (seg->segmentType() == SegmentType::Clef) {
+                              else if (seg->segmentType() == Segment::Type::Clef) {
                                     Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
                                     if(p && p->type() == Element::Type::CLEF) {
                                           Clef* clef = static_cast<Clef*>(p);
@@ -4757,7 +4757,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                                                 }
                                           }
                                     }
-                              seg = seg->prev1(SegmentType::ChordRest | SegmentType::Clef);
+                              seg = seg->prev1(Segment::Type::ChordRest | Segment::Type::Clef);
                               }
                         octave = curPitch / 12;
                         }
@@ -5073,8 +5073,8 @@ void ScoreView::cmdRepeatSelection()
       int dStaff = selection.staffStart();
       Segment* endSegment = selection.endSegment();
 
-      if (endSegment && endSegment->segmentType() != SegmentType::ChordRest)
-            endSegment = endSegment->next1(SegmentType::ChordRest);
+      if (endSegment && endSegment->segmentType() != Segment::Type::ChordRest)
+            endSegment = endSegment->next1(Segment::Type::ChordRest);
       if (endSegment && endSegment->element(dStaff * VOICES)) {
             Element* e = endSegment->element(dStaff * VOICES);
             if (e) {
@@ -5136,7 +5136,7 @@ void ScoreView::search(const QString& s)
                   }
             else {
                   //search rehearsal marks
-                  for (Segment* seg = score()->firstSegment(); seg; seg = seg->next1(SegmentType::ChordRest)) {
+                  for (Segment* seg = score()->firstSegment(); seg; seg = seg->next1(Segment::Type::ChordRest)) {
                         for (Element* e : seg->annotations()){
                               if (e->type() == Element::Type::REHEARSAL_MARK) {
                                     RehearsalMark* rm = static_cast<RehearsalMark*>(e);
@@ -5205,7 +5205,7 @@ void ScoreView::gotoMeasure(Measure* measure)
       adjustCanvasPosition(measure, true);
       int tracks = _score->nstaves() * VOICES;
       for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-            if (segment->segmentType() != SegmentType::ChordRest)
+            if (segment->segmentType() != Segment::Type::ChordRest)
                   continue;
             int track;
             for (track = 0; track < tracks; ++track) {
@@ -5286,7 +5286,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
                   return;
                   }
             // find initial ChordRest segment
-            nextSegm = meas->findSegment(SegmentType::ChordRest, meas->tick());
+            nextSegm = meas->findSegment(Segment::Type::ChordRest, meas->tick());
             if (!nextSegm) {
                   qDebug("figuredBassTab: no ChordRest segment at measure");
                   return;
@@ -5297,14 +5297,14 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
 
       else {
             // search next chord segment in same staff
-            nextSegm = bBack ? segm->prev1(SegmentType::ChordRest) : segm->next1(SegmentType::ChordRest);
+            nextSegm = bBack ? segm->prev1(Segment::Type::ChordRest) : segm->next1(Segment::Type::ChordRest);
             int minTrack = (track / VOICES ) * VOICES;
             int maxTrack = minTrack + (VOICES-1);
 
             while (nextSegm) {                   // look for a ChordRest in the compatible track range
                   if(nextSegm->findAnnotationOrElement(Element::Type::FIGURED_BASS, minTrack, maxTrack))
                         break;
-                  nextSegm = bBack ? nextSegm->prev1(SegmentType::ChordRest) : nextSegm->next1(SegmentType::ChordRest);
+                  nextSegm = bBack ? nextSegm->prev1(Segment::Type::ChordRest) : nextSegm->next1(Segment::Type::ChordRest);
                   }
 
             if (!nextSegm) {
@@ -5360,9 +5360,9 @@ void ScoreView::figuredBassTicksTab(int ticks)
       // look for a segment at this tick; if none, create one
       Segment * nextSegm = segm;
       while (nextSegm && nextSegm->tick() < nextSegTick)
-            nextSegm = nextSegm->next1(SegmentType::ChordRest);
+            nextSegm = nextSegm->next1(Segment::Type::ChordRest);
       if (!nextSegm || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
-            nextSegm = new Segment(measure, SegmentType::ChordRest, nextSegTick);
+            nextSegm = new Segment(measure, Segment::Type::ChordRest, nextSegTick);
             if (!nextSegm) {
                   qDebug("figuredBassTicksTab: no next segment");
                   return;

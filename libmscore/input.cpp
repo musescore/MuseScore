@@ -123,7 +123,7 @@ void InputState::moveInputPos(Element* e)
       if (s->type() == Element::Type::SEGMENT) {
             if (s->measure()->isMMRest()) {
                   Measure* m = s->measure()->mmRestFirst();
-                  s = m->findSegment(SegmentType::ChordRest, m->tick());
+                  s = m->findSegment(Segment::Type::ChordRest, m->tick());
                   }
             _lastSegment = _segment;
             _segment = s;
@@ -138,7 +138,7 @@ void InputState::setSegment(Segment* s)
       {
       if (s && s->measure()->isMMRest()) {
             Measure* m = s->measure()->mmRestFirst();
-            s = m->findSegment(SegmentType::ChordRest, m->tick());
+            s = m->findSegment(Segment::Type::ChordRest, m->tick());
             }
       _segment = s;
       _lastSegment = s;
@@ -151,8 +151,8 @@ void InputState::setSegment(Segment* s)
 Segment* InputState::nextInputPos() const
       {
       Measure* m = _segment->measure();
-      Segment* s = _segment->next1(SegmentType::ChordRest);
-      for (; s; s = s->next1(SegmentType::ChordRest)) {
+      Segment* s = _segment->next1(Segment::Type::ChordRest);
+      for (; s; s = s->next1(Segment::Type::ChordRest)) {
             if (s->element(_track) || s->measure() != m)
                   return s;
             }
