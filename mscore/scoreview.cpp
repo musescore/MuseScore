@@ -1545,7 +1545,7 @@ void ScoreView::setShadowNote(const QPointF& p)
       Staff* staff      = score()->staff(pos.staffIdx);
       shadowNote->setMag(staff->mag());
       const Instrument* instr     = staff->part()->instr();
-      NoteHeadGroup noteheadGroup = NoteHeadGroup::HEAD_NORMAL;
+      NoteHead::Group noteheadGroup = NoteHead::Group::HEAD_NORMAL;
       int line                    = pos.line;
       NoteHeadType noteHead       = is.duration().headType();
 

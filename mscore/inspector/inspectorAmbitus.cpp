@@ -37,21 +37,21 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       r.setupUi(addWidget());
       s.setupUi(addWidget());
 
-      static const NoteHeadGroup heads[] = {
-            NoteHeadGroup::HEAD_NORMAL,
-            NoteHeadGroup::HEAD_CROSS,
-            NoteHeadGroup::HEAD_DIAMOND,
-            NoteHeadGroup::HEAD_TRIANGLE,
-            NoteHeadGroup::HEAD_SLASH,
-            NoteHeadGroup::HEAD_XCIRCLE,
-            NoteHeadGroup::HEAD_DO,
-            NoteHeadGroup::HEAD_RE,
-            NoteHeadGroup::HEAD_MI,
-            NoteHeadGroup::HEAD_FA,
-            NoteHeadGroup::HEAD_SOL,
-            NoteHeadGroup::HEAD_LA,
-            NoteHeadGroup::HEAD_TI,
-            NoteHeadGroup::HEAD_BREVIS_ALT
+      static const NoteHead::Group heads[] = {
+            NoteHead::Group::HEAD_NORMAL,
+            NoteHead::Group::HEAD_CROSS,
+            NoteHead::Group::HEAD_DIAMOND,
+            NoteHead::Group::HEAD_TRIANGLE,
+            NoteHead::Group::HEAD_SLASH,
+            NoteHead::Group::HEAD_XCIRCLE,
+            NoteHead::Group::HEAD_DO,
+            NoteHead::Group::HEAD_RE,
+            NoteHead::Group::HEAD_MI,
+            NoteHead::Group::HEAD_FA,
+            NoteHead::Group::HEAD_SOL,
+            NoteHead::Group::HEAD_LA,
+            NoteHead::Group::HEAD_TI,
+            NoteHead::Group::HEAD_BREVIS_ALT
             };
       static const Tpc tpcs[] = {
             Tpc::TPC_INVALID,
@@ -67,7 +67,7 @@ InspectorAmbitus::InspectorAmbitus(QWidget* parent)
       //
       // fix order of note heads and tpc's
       //
-      for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i)
+      for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i)
             r.noteHeadGroup->setItemData(i, int(heads[i]));
       // noteHeadType starts at -1
       for (int i = 0; i < 5; ++i)

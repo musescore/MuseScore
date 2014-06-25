@@ -15,14 +15,11 @@
 
 #include "accidental.h"
 #include "element.h"
-// #include "note.h"
+#include "note.h"
 
 class QPainter;
 
 namespace Ms {
-
-enum class NoteHeadGroup : signed char;
-enum class NoteHeadType : signed char;
 
 //---------------------------------------------------------
 //   @@ Ambitus
@@ -31,7 +28,7 @@ enum class NoteHeadType : signed char;
 class Ambitus : public Element {
       Q_OBJECT
 
-      NoteHeadGroup       _noteHeadGroup;
+      NoteHead::Group     _noteHeadGroup;
       NoteHeadType        _noteHeadType;
       DirectionH  _dir;
       bool  _hasLine;
@@ -54,7 +51,7 @@ class Ambitus : public Element {
 
       // getters and setters
       virtual Element::Type type() const              { return Element::Type::AMBITUS;    }
-      NoteHeadGroup noteHeadGroup() const             { return _noteHeadGroup;}
+      NoteHead::Group noteHeadGroup() const           { return _noteHeadGroup;}
       NoteHeadType noteHeadType() const               { return _noteHeadType; }
       DirectionH direction() const                    { return _dir;          }
       bool hasLine() const                            { return _hasLine;      }
@@ -66,7 +63,7 @@ class Ambitus : public Element {
       int topTpc() const                              { return _topTpc;       }
       int bottomTpc() const                           { return _bottomTpc;    }
 
-      void setNoteHeadGroup(NoteHeadGroup val)        { _noteHeadGroup = val; }
+      void setNoteHeadGroup(NoteHead::Group val)      { _noteHeadGroup = val; }
       void setNoteHeadType (NoteHeadType val)         { _noteHeadType  = val; }
       void setDirection    (DirectionH val)           { _dir = val;           }
       void setHasLine      (bool val)                 { _hasLine = val;       }

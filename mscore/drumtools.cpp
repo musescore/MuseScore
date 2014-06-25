@@ -100,7 +100,7 @@ void DrumTools::updateDrumset()
                   continue;
             bool up;
             int line      = drumset->line(pitch);
-            NoteHeadGroup noteHead  = drumset->noteHead(pitch);
+            NoteHead::Group noteHead  = drumset->noteHead(pitch);
             int voice     = drumset->voice(pitch);
             Direction dir = drumset->stemDirection(pitch);
             if (dir == Direction::UP)
