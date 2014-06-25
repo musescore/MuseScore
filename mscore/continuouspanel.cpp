@@ -102,15 +102,15 @@ void ContinuousPanel::paint(const QRect& /*r*/, QPainter& p)
                   continue;
             y2 = ss->y() + ss->bbox().height();
             }
-      _height += y2 + 2*_spatium;
-      _y -= 4 * _spatium;
+      _height += y2 + 6*_spatium;
+      _y -= 6 * _spatium;
 
       //
       // Check elements at current panel position
       //
       _offsetPanel = -(_sv->xoffset()) / _sv->mag();
       _rect = QRect(_offsetPanel + _width, _y, 1, _height);
-      //qDebug() << "width=" << _width << "x="<< x << "y="<< y << "_offsetPanel=" << _offsetPanel << "_sv->xoffset()" << _sv->xoffset() << "_sv->mag()" << _sv->mag() <<"_spatium" << _spatium << "s->canvasPos().x()" << s->canvasPos().x() << "s->x()" << s->x();
+      //qDebug() << "width=" << _width << "_y="<< _y << "_offsetPanel=" << _offsetPanel << "_sv->xoffset()" << _sv->xoffset() << "_sv->mag()" << _sv->mag() <<"_spatium" << _spatium << "s->canvasPos().x()" << s->canvasPos().x() << "s->x()" << s->x();
       Page* page = _score->pages().front();
       QList<Element*> elementsCurrent = page->items(_rect);
       if (elementsCurrent.empty())
@@ -195,6 +195,10 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   KeySig* newKs = new KeySig(_score);
                   KeySigEvent currentKeySigEvent = currentStaff->key(_currentMeasureTick);
                   newKs->setKeySigEvent(currentKeySigEvent);
+                  // The Parent and the Track must be set to have the key signature layout adjusted to different clefs
+                  // This also adds naturals to the key signature (if set in the score style)
+                  newKs->setParent(_score->tick2segment(_currentMeasureTick));
+                  newKs->setTrack(e->track());
                   newKs->layout();
 
                   //
@@ -231,8 +235,12 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
 
       _newWidth = _heightName * 1.5 + _widthClef + _widthKeySig + _widthTimeSig + 5;
       _xPosMeasure -= _offsetPanel;
-      //qDebug() << "xPosBarLine = " << _xPosMeasure << "_width ="<<_width<< " offsetpanel ="<<_offsetPanel << "newWidth ="<<_newWidth  << "oldWidth ="<<_oldWidth << "_measureWidth ="<<_measureWidth;
-      if (_newWidth > 0) {
+      //qDebug() << "_xPosMeasure="<< _xPosMeasure << "_width ="<<_width<< " offsetpanel ="<<_offsetPanel << "newWidth ="<<_newWidth  << "oldWidth ="<<_oldWidth << "_measureWidth ="<<_measureWidth;
+      if (_oldWidth == 0) {
+            _oldWidth = _newWidth;
+            _width = _newWidth;
+            }
+      else if (_newWidth > 0) {
             if (_newWidth == _width) {
                   _oldWidth = _width;
                   _width = _newWidth;
@@ -281,16 +289,16 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
       //
       painter.setOpacity(1);
       painter.setBrush(QColor(0, 0, 0, 255));
+      QString text = _mmRestCount ? QString("#%1-%2").arg(_currentMeasureNo+1).arg(_currentMeasureNo+_mmRestCount) : QString("#%1").arg(_currentMeasureNo+1);
       Text* newElement = new Text(_score);
       newElement->setTextStyleType(TextStyleType::DEFAULT);
-      newElement->setTrack(0);
-      newElement->setParent(0);
-      pos = QPointF (0, _y + newElement->height());
+      newElement->setFlag(ElementFlag::MOVABLE, false);
+      newElement->setText(text);
       newElement->sameLayout();
+      pos = QPointF (_heightName * 1.5, _y + newElement->height());
+      painter.translate(pos);
       newElement->draw(&painter);
-      QString text = _mmRestCount ? QString("#%1-%2").arg(_currentMeasureNo+1).arg(_currentMeasureNo+_mmRestCount) : QString("#%1").arg(_currentMeasureNo+1);
-      painter.drawText(QPointF(0, _y + newElement->height()), text);
-      pos += QPointF (_offsetPanel, -_y);
+      pos += QPointF (_offsetPanel, 0);
       painter.translate(-pos);
       delete newElement;
 
@@ -366,8 +374,12 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                         KeySig* newKs = new KeySig(_score);
                         KeySigEvent currentKeySigEvent = currentStaff->key(_currentMeasureTick);
                         newKs->setKeySigEvent(currentKeySigEvent);
+
+                        // The Parent and the track must be set to have the key signature layout adjusted to different clefs
+                        // This also adds naturals to the key signature (if set in the score style)
                         newKs->setParent(_score->tick2segment(_currentMeasureTick));
                         newKs->setTrack(e->track());
+
                         newKs->layout();
                         newKs->draw(&painter);
                         delete newKs;
