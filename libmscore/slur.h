@@ -119,8 +119,8 @@ class SlurSegment : public SpannerSegment {
 
 //-------------------------------------------------------------------
 //   @@ SlurTie
-//   @P lineType       int        (0 - solid, 1 - dotted, 2 - dashed)
-//   @P slurDirection  Direction  (AUTO, UP, DOWN)
+//   @P lineType       int            (0 - solid, 1 - dotted, 2 - dashed)
+//   @P slurDirection  Ms::Direction  (AUTO, UP, DOWN)
 //-------------------------------------------------------------------
 
 class SlurTie : public Spanner {

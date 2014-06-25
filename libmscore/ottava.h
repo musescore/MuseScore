@@ -73,7 +73,7 @@ enum class OttavaType : char {
 
 class Ottava : public TextLine {
       Q_OBJECT
-      Q_PROPERTY(OttavaType ottavaType READ ottavaType WRITE undoSetOttavaType)
+      Q_PROPERTY(Ms::OttavaType ottavaType READ ottavaType WRITE undoSetOttavaType)
 
       OttavaType _ottavaType;
       bool _numbersOnly;

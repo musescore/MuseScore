@@ -30,7 +30,7 @@ class Chord;
 
 class Lyrics : public Text {
       Q_OBJECT
-      Q_PROPERTY(Syllabic syllabic READ syllabic WRITE setSyllabic)
+      Q_PROPERTY(Ms::Lyrics::Syllabic syllabic READ syllabic WRITE setSyllabic)
       Q_ENUMS(Syllabic)
 
    public:

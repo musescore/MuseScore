@@ -36,7 +36,7 @@ class LayoutBreak : public Element {
             PAGE, LINE, SECTION
             };
    private:
-      Q_PROPERTY(Type layoutBreakType READ layoutBreakType WRITE undoSetLayoutBreakType)
+      Q_PROPERTY(Ms::LayoutBreak::Type layoutBreakType READ layoutBreakType WRITE undoSetLayoutBreakType)
       Q_ENUMS(Type)
 
       Type _layoutBreakType;
