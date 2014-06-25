@@ -58,26 +58,26 @@ class HairpinSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Hairpin
-//   @P hairpinType  Ms::Hairpin::HairpinType  (CRESCENDO, DECRESCENDO)
+//   @P hairpinType  Ms::Hairpin::Type  (CRESCENDO, DECRESCENDO)
 //   @P veloChange   int
-//   @P dynRange     Ms::Dynamic::Range        (STAFF, PART, SYSTEM)
+//   @P dynRange     Ms::Dynamic::Range (STAFF, PART, SYSTEM)
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
       Q_OBJECT
-      Q_ENUMS(HairpinType)
+      Q_ENUMS(Type)
       Q_ENUMS(Ms::Dynamic::Range)
 
    public:
-      enum class HairpinType : char { CRESCENDO, DECRESCENDO };
+      enum class Type : char { CRESCENDO, DECRESCENDO };
 
    private:
-      Q_PROPERTY(HairpinType        hairpinType READ  hairpinType WRITE undoSetHairpinType)
+      Q_PROPERTY(Ms::Hairpin::Type  hairpinType READ  hairpinType WRITE undoSetHairpinType)
       Q_PROPERTY(int                veloChange  READ  veloChange  WRITE undoSetVeloChange)
       Q_PROPERTY(Ms::Dynamic::Range dynRange    READ  dynRange    WRITE undoSetDynRange)
 
       bool  _hairpinCircledTip;
-      HairpinType _hairpinType;
+      Type _hairpinType;
       int _veloChange;
       Dynamic::Range _dynRange;
       PropertyStyle lineWidthStyle;
@@ -93,11 +93,11 @@ class Hairpin : public SLine {
       virtual Hairpin* clone() const override     { return new Hairpin(*this); }
       virtual Element::Type type() const override { return Element::Type::HAIRPIN;  }
 
-      HairpinType hairpinType() const      { return _hairpinType; }
-      void setHairpinType(HairpinType val) { _hairpinType = val;  }
-      void undoSetHairpinType(HairpinType);
+      Type hairpinType() const      { return _hairpinType; }
+      void setHairpinType(Type val) { _hairpinType = val;  }
+      void undoSetHairpinType(Type);
 
-      Segment* segment() const             { return (Segment*)parent(); }
+      Segment* segment() const      { return (Segment*)parent(); }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
 
@@ -134,7 +134,7 @@ class Hairpin : public SLine {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Hairpin::HairpinType);
+Q_DECLARE_METATYPE(Ms::Hairpin::Type);
 
 #endif
 

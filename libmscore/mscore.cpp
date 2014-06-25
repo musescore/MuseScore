@@ -28,6 +28,7 @@
 #include "jump.h"
 #include "marker.h"
 #include "layoutbreak.h"
+#include "hairpin.h"
 #include "page.h"
 #include "slur.h"
 #include "lyrics.h"
@@ -103,7 +104,7 @@ extern QString mscoreGlobalShare;
 void MScore::init()
       {
 #ifdef SCRIPT_INTERFACE
-      qRegisterMetaType<Element::Type>("Element::Type");
+      qRegisterMetaType<Element::Type>("ElementType");
       qRegisterMetaType<ValueType>("ValueType");
       qRegisterMetaType<Direction>("Direction");
       qRegisterMetaType<DirectionH>("DirectionH");
@@ -113,9 +114,10 @@ void MScore::init()
       qRegisterMetaType<Spanner::Anchor>("Anchor");
       qRegisterMetaType<NoteHeadGroup>("NoteHeadGroup");
       qRegisterMetaType<NoteHeadType>("NoteHeadType");
-      qRegisterMetaType<Segment::Type>("Segment::Type");
+      qRegisterMetaType<Segment::Type>("SegmentType");
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
       qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
+      qRegisterMetaType<FiguredBassItem::ContLine>("ContLine");
       qRegisterMetaType<VoltaType>("VoltaType");
       qRegisterMetaType<OttavaType>("OttavaType");
       qRegisterMetaType<Trill::TrillType>("TrillType");
@@ -123,6 +125,8 @@ void MScore::init()
       qRegisterMetaType<JumpType>("JumpType");
       qRegisterMetaType<MarkerType>("MarkerType");
       qRegisterMetaType<BeamMode>("BeamMode");
+      qRegisterMetaType<Hairpin::Type>("HairpinType");
+      qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::LayoutBreakType>("LayoutBreakType");
 //      qRegisterMetaType<TextStyle>("TextStyle");
 #endif
