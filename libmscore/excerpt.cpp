@@ -376,8 +376,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             nmb->linkTo(mb);
             foreach (Element* e, *mb->el()) {
                   if (e->type() == Element::Type::LAYOUT_BREAK) {
-                        LayoutBreak::LayoutBreakType st = static_cast<LayoutBreak*>(e)->layoutBreakType();
-                        if (st == LayoutBreak::LayoutBreakType::PAGE || st == LayoutBreak::LayoutBreakType::LINE)
+                        LayoutBreak::Type st = static_cast<LayoutBreak*>(e)->layoutBreakType();
+                        if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE)
                               continue;
                         }
                   Element* ne;

@@ -2192,13 +2192,13 @@ void Score::cmd(const QAction* a)
       else if (cmd == "voice-x34")
             cmdExchangeVoice(2, 3);
       else if (cmd == "system-break" || cmd == "page-break" || cmd == "section-break") {
-            LayoutBreak::LayoutBreakType type;
+            LayoutBreak::Type type;
             if (cmd == "system-break")
-                  type = LayoutBreak::LayoutBreakType::LINE;
+                  type = LayoutBreak::Type::LINE;
             else if (cmd == "page-break")
-                  type = LayoutBreak::LayoutBreakType::PAGE;
+                  type = LayoutBreak::Type::PAGE;
             else
-                  type = LayoutBreak::LayoutBreakType::SECTION;
+                  type = LayoutBreak::Type::SECTION;
 
             if (el && el->type() == Element::Type::BAR_LINE && el->parent()->type() == Element::Type::SEGMENT) {
                   Measure* measure = static_cast<Measure*>(el->parent()->parent());

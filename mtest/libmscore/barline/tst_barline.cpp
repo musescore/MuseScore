@@ -257,7 +257,7 @@ void TestBarline::barline05()
             msr = msr->nextMeasure();
       // create and add a LineBreak element
       LayoutBreak* lb = new LayoutBreak(score);
-      lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
+      lb->setLayoutBreakType(LayoutBreak::Type::LINE);
       lb->setTrack(-1);             // system-level element
       lb->setParent(msr);
       score->undoAddElement(lb);
