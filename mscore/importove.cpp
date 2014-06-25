@@ -2124,7 +2124,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 			volta->setTick(absTick1);
 			volta->setTick2(absTick2);
 			score_->addElement(volta);
-			volta->setVoltaType(VoltaType::CLOSED);
+			volta->setVoltaType(Volta::Type::CLOSED);
 			volta->setText(ending->getText());
 
 			volta->endings().clear();

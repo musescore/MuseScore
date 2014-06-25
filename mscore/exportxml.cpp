@@ -1305,12 +1305,12 @@ static void ending(Xml& xml, Volta* v, bool left)
             type = "start";
             }
       else {
-            VoltaType st = v->voltaType();
+            Volta::Type st = v->voltaType();
             switch (st) {
-                  case VoltaType::OPEN:
+                  case Volta::Type::OPEN:
                         type = "discontinue";
                         break;
-                  case VoltaType::CLOSED:
+                  case Volta::Type::CLOSED:
                         type = "stop";
                         break;
                   default:
