@@ -1114,6 +1114,9 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
       int fontIdx = 0;
       qreal _spatium = spatium();
       qreal mag = (MScore::DPI / PPI) * (_spatium / (SPATIUM20 * MScore::DPI));
+      // German spelling - render TPC_B_B as Bb, not B (even though B is used for input)
+      if (tpc == Tpc::TPC_B_B && spelling == NoteSpellingType::GERMAN)
+            spelling = NoteSpellingType::STANDARD;
 
       foreach(const RenderAction& a, renderList) {
             if (a.type == RenderAction::RenderActionType::SET) {
@@ -1167,7 +1170,10 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   tpc2name(tpc, spelling, lowerCase, c, acc);
                   if (acc != "") {
                         TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
-                        ChordSymbol cs = chordList->symbol(acc);
+                        QString lookup = "accidental" + acc;
+                        ChordSymbol cs = chordList->symbol(lookup);
+                        if (!cs.isValid())
+                              cs = chordList->symbol(acc);
                         if (cs.isValid()) {
                               ts->font = fontList[cs.fontIdx];
                               ts->setText(cs.value);

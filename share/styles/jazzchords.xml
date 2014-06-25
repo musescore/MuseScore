@@ -33,6 +33,7 @@
 -->
   <font id="0" family="MuseJazz">
     <mag>1.33</mag>                    <!-- for compatibility with older versions of MuseJazz -->
+
     <sym code="0xe180" name="Maj"/>    <!-- ma -->
     <sym code="0xe181" name="m"/>      <!-- mi -->
     <sym code="0xe192" name="2"/>
@@ -57,6 +58,12 @@
     <sym code="0xe189" name="s#"/>
     <sym code="0xe18b" name="add"/>
     <sym code="0xe18c" name="add11"/>
+
+  <!-- delete code parameter to render German chords with "es" and "is" -->
+    <sym code="0x266d" class="accidental" name="es"/>
+    <sym code="0x266d" class="accidental" name="s"/>
+    <sym code="0x266f" class="accidental" name="is"/>
+
     </font>
 
 <!--
