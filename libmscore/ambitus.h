@@ -29,7 +29,7 @@ class Ambitus : public Element {
       Q_OBJECT
 
       NoteHead::Group     _noteHeadGroup;
-      NoteHeadType        _noteHeadType;
+      NoteHead::Type      _noteHeadType;
       DirectionH  _dir;
       bool  _hasLine;
       qreal _lineWidth;                     // in spatium
@@ -52,7 +52,7 @@ class Ambitus : public Element {
       // getters and setters
       virtual Element::Type type() const              { return Element::Type::AMBITUS;    }
       NoteHead::Group noteHeadGroup() const           { return _noteHeadGroup;}
-      NoteHeadType noteHeadType() const               { return _noteHeadType; }
+      NoteHead::Type noteHeadType() const             { return _noteHeadType; }
       DirectionH direction() const                    { return _dir;          }
       bool hasLine() const                            { return _hasLine;      }
       qreal lineWidth() const                         { return _lineWidth;    }
@@ -64,7 +64,7 @@ class Ambitus : public Element {
       int bottomTpc() const                           { return _bottomTpc;    }
 
       void setNoteHeadGroup(NoteHead::Group val)      { _noteHeadGroup = val; }
-      void setNoteHeadType (NoteHeadType val)         { _noteHeadType  = val; }
+      void setNoteHeadType (NoteHead::Type val)       { _noteHeadType  = val; }
       void setDirection    (DirectionH val)           { _dir = val;           }
       void setHasLine      (bool val)                 { _hasLine = val;       }
       void setLineWidth    (qreal val)                { _lineWidth = val;     }

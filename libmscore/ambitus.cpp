@@ -25,7 +25,7 @@
 namespace Ms {
 
 static const NoteHead::Group  NOTEHEADGROUP_DEFAULT   = NoteHead::Group::HEAD_NORMAL;
-static const NoteHeadType   NOTEHEADTYPE_DEFAULT    = NoteHeadType::HEAD_AUTO;
+static const NoteHead::Type   NOTEHEADTYPE_DEFAULT    = NoteHead::Type::HEAD_AUTO;
 static const DirectionH     DIR_DEFAULT             = DirectionH::DH_AUTO;
 static const bool           HASLINE_DEFAULT         = true;
 static const qreal          LINEWIDTH_DEFAULT       = 0.12;
@@ -473,9 +473,9 @@ void Ambitus::scanElements(void* data, void (*func)(void*, Element*), bool /*all
 SymId Ambitus::noteHead() const
       {
       int hg = 1;
-      NoteHeadType ht  = NoteHeadType::HEAD_QUARTER;
+      NoteHead::Type ht  = NoteHead::Type::HEAD_QUARTER;
 
-      if (_noteHeadType != NoteHeadType::HEAD_AUTO)
+      if (_noteHeadType != NoteHead::Type::HEAD_AUTO)
             ht = _noteHeadType;
 
       SymId t = Note::noteHead(hg, _noteHeadGroup, ht);
@@ -639,7 +639,7 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
                   setNoteHeadGroup( NoteHead::Group(v.toInt()) );
                   break;
             case P_ID::HEAD_TYPE:
-                  setNoteHeadType( NoteHeadType(v.toInt()) );
+                  setNoteHeadType( NoteHead::Type(v.toInt()) );
                   break;
             case P_ID::MIRROR_HEAD:
                   setDirection(DirectionH(v.toInt()) );

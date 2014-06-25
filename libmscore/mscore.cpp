@@ -114,7 +114,7 @@ void MScore::init()
       qRegisterMetaType<Accidental::Type>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
       qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
-      qRegisterMetaType<NoteHeadType>("NoteHeadType");
+      qRegisterMetaType<NoteHead::Type>("NoteHeadType");
       qRegisterMetaType<Segment::Type>("SegmentType");
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
       qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");

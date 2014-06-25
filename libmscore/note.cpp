@@ -62,7 +62,7 @@ namespace Ms {
 //    note head groups
 //---------------------------------------------------------
 
-static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHeadType::HEAD_TYPES)] = {
+static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)] = {
    // previous non-SMUFL data kept in comments for future reference
    {     // down stem
       { SymId::noteheadWhole,       SymId::noteheadHalf,          SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
@@ -122,7 +122,7 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHeadT
 //   noteHead
 //---------------------------------------------------------
 
-SymId Note::noteHead(int direction, NoteHead::Group g, NoteHeadType t)
+SymId Note::noteHead(int direction, NoteHead::Group g, NoteHead::Type t)
       {
       return noteHeads[direction][int(g)][int(t)];
       };
@@ -184,7 +184,7 @@ Note::Note(Score* s)
       _tpc[0]            = Tpc::TPC_INVALID;
       _tpc[1]            = Tpc::TPC_INVALID;
       _headGroup         = NoteHead::Group::HEAD_NORMAL;
-      _headType          = NoteHeadType::HEAD_AUTO;
+      _headType          = NoteHead::Type::HEAD_AUTO;
 
       _hidden            = false;
       _subchannel        = 0;
@@ -415,16 +415,16 @@ int Note::transposeTpc(int tpc)
 SymId Note::noteHead() const
       {
       int up;
-      NoteHeadType ht;
+      NoteHead::Type ht;
       if (chord()) {
             up = chord()->up();
             ht = chord()->durationType().headType();
             }
       else {
             up = 1;
-            ht = NoteHeadType::HEAD_QUARTER;
+            ht = NoteHead::Type::HEAD_QUARTER;
             }
-      if (_headType != NoteHeadType::HEAD_AUTO)
+      if (_headType != NoteHead::Type::HEAD_AUTO)
             ht = _headType;
 
       SymId t = noteHead(up, _headGroup, ht);
@@ -2101,7 +2101,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   setGhost(v.toBool());
                   break;
             case P_ID::HEAD_TYPE:
-                  setHeadType(NoteHeadType(v.toInt()));
+                  setHeadType(NoteHead::Type(v.toInt()));
                   break;
             case P_ID::VELO_TYPE:
                   setVeloType(ValueType(v.toInt()));
@@ -2232,7 +2232,7 @@ void Note::undoSetHeadGroup(NoteHead::Group val)
 //   setHeadType
 //---------------------------------------------------------
 
-void Note::setHeadType(NoteHeadType t)
+void Note::setHeadType(NoteHead::Type t)
       {
       _headType = t;
       }
@@ -2241,7 +2241,7 @@ void Note::setHeadType(NoteHeadType t)
 //   undoSetHeadType
 //---------------------------------------------------------
 
-void Note::undoSetHeadType(NoteHeadType val)
+void Note::undoSetHeadType(NoteHead::Type val)
       {
       undoChangeProperty(P_ID::HEAD_TYPE, int(val));
       }
@@ -2270,7 +2270,7 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             case P_ID::STRING:
                   return -1;
             case P_ID::HEAD_TYPE:
-                  return int(NoteHeadType::HEAD_AUTO);
+                  return int(NoteHead::Type::HEAD_AUTO);
             case P_ID::VELO_TYPE:
                   return int (ValueType::OFFSET_VAL);
             case P_ID::PLAY:

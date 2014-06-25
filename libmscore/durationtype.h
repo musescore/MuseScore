@@ -14,12 +14,9 @@
 #define __DURATIONTYPE_H__
 
 #include "fraction.h"
+#include "note.h"
 
 namespace Ms {
-
-enum class NoteHeadType : signed char;
-
-static const int MAX_DOTS = 3;
 
 //---------------------------------------------------------
 //   TDuration
@@ -62,7 +59,7 @@ class TDuration {
       TDuration operator+(const TDuration& t) const { return TDuration(*this) += t; }
 
       QString name() const;
-      NoteHeadType headType() const;
+      NoteHead::Type headType() const;
       int hooks() const;
       bool hasStem() const;
       TDuration shift(int val) const;

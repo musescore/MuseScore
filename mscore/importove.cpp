@@ -601,7 +601,7 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
         	OVE::Track::DrumNode node = nodes[i];
         	if (pitch < DRUM_INSTRUMENTS) {
         		drumset->drum(pitch).line = node.line_;
-        		drumset->drum(pitch).notehead = getHeadGroup(OVE::NoteHeadType(node.headType_));
+            drumset->drum(pitch).notehead = getHeadGroup(OVE::NoteHeadType(node.headType_));
         		drumset->drum(pitch).voice = node.voice_;
         	}
         }
