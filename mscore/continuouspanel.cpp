@@ -61,7 +61,7 @@ ContinuousPanel::ContinuousPanel(ScoreView* sv)
 //   paintContinousPanel
 //---------------------------------------------------------
 
-void ContinuousPanel::paint(const QRect& r, QPainter& p)
+void ContinuousPanel::paint(const QRect& /*r*/, QPainter& p)
       {
       if (!_visible)
             return;
