@@ -111,8 +111,8 @@ void TestNote::note()
       QCOMPARE(n->userDotPosition(), Direction::AUTO);
       delete n;
   // headGroup
-      for (int i = 0; i < int (NoteHeadGroup::HEAD_GROUPS); ++i) {
-            note->setHeadGroup(NoteHeadGroup(i));
+      for (int i = 0; i < int (NoteHead::Group::HEAD_GROUPS); ++i) {
+            note->setHeadGroup(NoteHead::Group(i));
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headGroup()), i);
             delete n;
@@ -233,7 +233,7 @@ void TestNote::note()
       delete n;
 
   // headGroup
-      for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
+      for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
             note->setProperty(P_ID::HEAD_GROUP, i);
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headGroup()), i);

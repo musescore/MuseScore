@@ -4017,7 +4017,7 @@ static Accidental::Type convertAccidental(QString mxmlName)
  Convert a MusicXML notehead name to a MuseScore headgroup.
  */
 
-static NoteHeadGroup convertNotehead(QString mxmlName)
+static NoteHead::Group convertNotehead(QString mxmlName)
       {
       QMap<QString, int> map; // map MusicXML notehead name to a MuseScore headgroup
       map["slash"] = 5;
@@ -4035,11 +4035,11 @@ static NoteHeadGroup convertNotehead(QString mxmlName)
       map["normal"] = 0;
 
       if (map.contains(mxmlName))
-            return NoteHeadGroup(map.value(mxmlName));
+            return NoteHead::Group(map.value(mxmlName));
       else
             qDebug("unknown notehead %s", qPrintable(mxmlName));
       // default: return 0
-      return NoteHeadGroup::HEAD_NORMAL;
+      return NoteHead::Group::HEAD_NORMAL;
       }
 
 //---------------------------------------------------------
@@ -4661,7 +4661,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       bool editorial = false;
       bool cautionary = false;
       TDuration duration(TDuration::DurationType::V_INVALID);
-      NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
+      NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
       bool noStem = false;
       QColor noteheadColor = QColor::Invalid;
       bool noteheadParentheses = false;

@@ -35,7 +35,7 @@ enum Column : char { PITCH, NOTE, SHORTCUT, NAME };
 //   noteHeadNames
 //---------------------------------------------------------
 
-const char* noteHeadNames[int(NoteHeadGroup::HEAD_GROUPS)] = {
+const char* noteHeadNames[int(NoteHead::Group::HEAD_GROUPS)] = {
       QT_TRANSLATE_NOOP("noteheadnames", "normal"),
       QT_TRANSLATE_NOOP("noteheadnames", "cross"),
       QT_TRANSLATE_NOOP("noteheadnames", "diamond"),
@@ -69,7 +69,7 @@ EditDrumset::EditDrumset(Drumset* ds, QWidget* parent)
       updateList();
 
       noteHead->addItem(tr("invalid"));
-      for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS) - 2 ; ++i)
+      for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS) - 2 ; ++i)
             noteHead->addItem(noteHeadNames[i]);
 
       connect(pitchList, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
@@ -216,7 +216,7 @@ void EditDrumset::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previou
       if (previous) {
             int pitch = previous->data(0, Qt::UserRole).toInt();
             nDrumset.drum(pitch).name          = name->text();
-            nDrumset.drum(pitch).notehead      = NoteHeadGroup(noteHead->currentIndex() - 1);
+            nDrumset.drum(pitch).notehead      = NoteHead::Group(noteHead->currentIndex() - 1);
             nDrumset.drum(pitch).line          = staffLine->value();
             nDrumset.drum(pitch).voice         = voice->currentIndex();
             if (shortcut->currentIndex() == 7)
@@ -241,7 +241,7 @@ void EditDrumset::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previou
       voice->setCurrentIndex(nDrumset.voice(pitch));
       qDebug("AFTER %d", nDrumset.voice(pitch));
       stemDirection->setCurrentIndex(int(nDrumset.stemDirection(pitch)));
-      NoteHeadGroup nh = nDrumset.noteHead(pitch);
+      NoteHead::Group nh = nDrumset.noteHead(pitch);
       noteHead->setCurrentIndex(int(nh) + 1);
       if (nDrumset.shortcut(pitch) == 0)
             shortcut->setCurrentIndex(7);
@@ -267,7 +267,7 @@ void EditDrumset::valueChanged()
             return;
       int pitch = pitchList->currentItem()->data(Column::PITCH, Qt::UserRole).toInt();
       nDrumset.drum(pitch).name          = name->text();
-      nDrumset.drum(pitch).notehead      = NoteHeadGroup(noteHead->currentIndex() - 1);
+      nDrumset.drum(pitch).notehead      = NoteHead::Group(noteHead->currentIndex() - 1);
       nDrumset.drum(pitch).line          = staffLine->value();
       nDrumset.drum(pitch).voice         = voice->currentIndex();
       nDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
@@ -292,7 +292,7 @@ void EditDrumset::updateExample()
             return;
             }
       int line      = nDrumset.line(pitch);
-      NoteHeadGroup noteHead = nDrumset.noteHead(pitch);
+      NoteHead::Group noteHead = nDrumset.noteHead(pitch);
       int voice     = nDrumset.voice(pitch);
       Direction dir = nDrumset.stemDirection(pitch);
       bool up;

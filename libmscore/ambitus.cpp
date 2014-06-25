@@ -24,7 +24,7 @@
 
 namespace Ms {
 
-static const NoteHeadGroup  NOTEHEADGROUP_DEFAULT   = NoteHeadGroup::HEAD_NORMAL;
+static const NoteHead::Group  NOTEHEADGROUP_DEFAULT   = NoteHead::Group::HEAD_NORMAL;
 static const NoteHeadType   NOTEHEADTYPE_DEFAULT    = NoteHeadType::HEAD_AUTO;
 static const DirectionH     DIR_DEFAULT             = DirectionH::DH_AUTO;
 static const bool           HASLINE_DEFAULT         = true;
@@ -481,7 +481,7 @@ SymId Ambitus::noteHead() const
       SymId t = Note::noteHead(hg, _noteHeadGroup, ht);
       if (t == SymId::noSym) {
             qDebug("invalid note head %hhd/%hhd", _noteHeadGroup, _noteHeadType);
-            t = Note::noteHead(0, NoteHeadGroup::HEAD_NORMAL, ht);
+            t = Note::noteHead(0, NoteHead::Group::HEAD_NORMAL, ht);
             }
       return t;
       }
@@ -636,7 +636,7 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
             case P_ID::HEAD_GROUP:
-                  setNoteHeadGroup( NoteHeadGroup(v.toInt()) );
+                  setNoteHeadGroup( NoteHead::Group(v.toInt()) );
                   break;
             case P_ID::HEAD_TYPE:
                   setNoteHeadType( NoteHeadType(v.toInt()) );

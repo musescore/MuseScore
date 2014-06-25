@@ -884,7 +884,7 @@ void Score::putNote(const Position& p, bool replace)
                   if (nval.pitch < 0)
                         return;
                   nval.headGroup = ds->noteHead(nval.pitch);
-                  if (nval.headGroup == NoteHeadGroup::HEAD_INVALID)
+                  if (nval.headGroup == NoteHead::Group::HEAD_INVALID)
                         return;
                   stemDirection = ds->stemDirection(nval.pitch);
                   break;

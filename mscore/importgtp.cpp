@@ -1087,7 +1087,7 @@ void GuitarPro1::readNote(int string, Note* note)
       uchar noteBits = readUChar();
 
       if (noteBits & 0x04) {
-            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
 
@@ -1101,7 +1101,7 @@ void GuitarPro1::readNote(int string, Note* note)
                   tieNote = true;
                   }
             else if (variant == 3) {                 // dead notes
-                  note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                   note->setGhost(true);
                   qDebug("DeathNote tick %d pitch %d", note->chord()->segment()->tick(), note->pitch());
                   }
@@ -1171,7 +1171,7 @@ void GuitarPro1::readNote(int string, Note* note)
                   Note* gn = new Note(score);
 
                   if (fret == 255) {
-                        gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                        gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                         gn->setGhost(true);
                         }
                   gn->setFret((fret != 255)?fret:0);
@@ -1262,7 +1262,7 @@ void GuitarPro1::readNote(int string, Note* note)
       Staff* staff = note->staff();
       if (fretNumber == 255) {
             fretNumber = 0;
-            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
@@ -1823,7 +1823,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       //    0 - Time-independent duration
 
       if (noteBits & 0x04) {
-            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
 
@@ -1837,7 +1837,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                   tieNote = true;
                   }
             else if (variant == 3) {                 // dead notes = ghost note
-                  note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                   note->setGhost(true);
                   }
             else
@@ -1906,7 +1906,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                   Note* gn = new Note(score);
 
                   if (fret == 255) {
-                        gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                        gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                         gn->setGhost(true);
                         }
                   gn->setFret((fret != 255)?fret:0);
@@ -2014,7 +2014,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
       Staff* staff = note->staff();
       if (fretNumber == 255) {
             fretNumber = 0;
-            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
@@ -2440,7 +2440,7 @@ void GuitarPro5::readNoteEffects(Note* note)
             Note* gn = new Note(score);
 
             if (gflags & 0x01) {
-                  gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                   gn->setGhost(true);
                   }
             gn->setFret(fret);
@@ -2576,7 +2576,7 @@ void GuitarPro5::readNote(int string, Note* note)
       //    0 - Time-independent duration
 
       if (noteBits & 0x04) {
-            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
 
@@ -2589,7 +2589,7 @@ void GuitarPro5::readNote(int string, Note* note)
                   tieNote = true;
                   }
             else if (noteType == 3) {                 // dead notes
-                  note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                  note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                   note->setGhost(true);
                   }
             else
@@ -2637,7 +2637,7 @@ void GuitarPro5::readNote(int string, Note* note)
       Staff* staff = note->staff();
       if (fretNumber == 255) {
             fretNumber = 0;
-            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
