@@ -2055,7 +2055,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                   note = xmlNote(measure, staff, part->id(), beam, cv, e, graceNotes, alt);
                   if(note) {
                         if(note->accidental()){
-                              if(note->accidental()->accidentalType() != Accidental::AccidentalType::NONE){
+                              if(note->accidental()->accidentalType() != Accidental::Type::NONE){
                                     courtAccNotes.append(note);
                                     alterList.append(alt);
                                     }
@@ -2311,10 +2311,10 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                                int alter = alterList.value(i);
                                int ln  = absStep(nt->tpc(), nt->pitch());
                                AccidentalVal currAccVal = currAcc.accidentalVal(ln);
-                               if ((alter == -1 && currAccVal == AccidentalVal::FLAT && nt->accidental()->accidentalType() == Accidental::AccidentalType::FLAT    && !accTmp.value(ln))
-                                     || (alter ==  0 && currAccVal == AccidentalVal::NATURAL && nt->accidental()->accidentalType() == Accidental::AccidentalType::NATURAL && !accTmp.value(ln))
-                                     || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == Accidental::AccidentalType::SHARP   && !accTmp.value(ln))) {
-                                     nt->accidental()->setRole(Accidental::AccidentalRole::USER);
+                               if ((alter == -1 && currAccVal == AccidentalVal::FLAT && nt->accidental()->accidentalType() == Accidental::Type::FLAT    && !accTmp.value(ln))
+                                     || (alter ==  0 && currAccVal == AccidentalVal::NATURAL && nt->accidental()->accidentalType() == Accidental::Type::NATURAL && !accTmp.value(ln))
+                                     || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == Accidental::Type::SHARP   && !accTmp.value(ln))) {
+                                     nt->accidental()->setRole(Accidental::Role::USER);
                                      }
                                else {
                                      accTmp.replace(ln, true);
@@ -3967,46 +3967,46 @@ static bool readArticulations(ChordRest* cr, QString mxmlName)
  Convert a MusicXML accidental name to a MuseScore enum Accidental::Type.
  */
 
-static Accidental::AccidentalType convertAccidental(QString mxmlName)
+static Accidental::Type convertAccidental(QString mxmlName)
       {
-      QMap<QString, Accidental::AccidentalType> map; // map MusicXML accidental name to MuseScore enum Accidental::Type
-      map["natural"] = Accidental::AccidentalType::NATURAL;
-      map["flat"] = Accidental::AccidentalType::FLAT;
-      map["sharp"] = Accidental::AccidentalType::SHARP;
-      map["double-sharp"] = Accidental::AccidentalType::SHARP2;
-      map["sharp-sharp"] = Accidental::AccidentalType::SHARP2;
-      map["flat-flat"] = Accidental::AccidentalType::FLAT2;
-      map["double-flat"] = Accidental::AccidentalType::FLAT2;
-      map["natural-flat"] = Accidental::AccidentalType::NONE;
+      QMap<QString, Accidental::Type> map; // map MusicXML accidental name to MuseScore enum Accidental::Type
+      map["natural"] = Accidental::Type::NATURAL;
+      map["flat"] = Accidental::Type::FLAT;
+      map["sharp"] = Accidental::Type::SHARP;
+      map["double-sharp"] = Accidental::Type::SHARP2;
+      map["sharp-sharp"] = Accidental::Type::SHARP2;
+      map["flat-flat"] = Accidental::Type::FLAT2;
+      map["double-flat"] = Accidental::Type::FLAT2;
+      map["natural-flat"] = Accidental::Type::NONE;
 
-      map["quarter-flat"] = Accidental::AccidentalType::MIRRORED_FLAT;
-      map["quarter-sharp"] = Accidental::AccidentalType::SHARP_SLASH;
-      map["three-quarters-flat"] = Accidental::AccidentalType::MIRRORED_FLAT2;
-      map["three-quarters-sharp"] = Accidental::AccidentalType::SHARP_SLASH4;
+      map["quarter-flat"] = Accidental::Type::MIRRORED_FLAT;
+      map["quarter-sharp"] = Accidental::Type::SHARP_SLASH;
+      map["three-quarters-flat"] = Accidental::Type::MIRRORED_FLAT2;
+      map["three-quarters-sharp"] = Accidental::Type::SHARP_SLASH4;
 
-      map["sharp-down"] = Accidental::AccidentalType::SHARP_ARROW_DOWN;
-      map["sharp-up"] = Accidental::AccidentalType::SHARP_ARROW_UP;
-      map["natural-down"] = Accidental::AccidentalType::NATURAL_ARROW_DOWN;
-      map["natural-up"] = Accidental::AccidentalType::NATURAL_ARROW_UP;
-      map["flat-down"] = Accidental::AccidentalType::FLAT_ARROW_DOWN;
-      map["flat-up"] = Accidental::AccidentalType::FLAT_ARROW_UP;
+      map["sharp-down"] = Accidental::Type::SHARP_ARROW_DOWN;
+      map["sharp-up"] = Accidental::Type::SHARP_ARROW_UP;
+      map["natural-down"] = Accidental::Type::NATURAL_ARROW_DOWN;
+      map["natural-up"] = Accidental::Type::NATURAL_ARROW_UP;
+      map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
+      map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
 
-      map["slash-quarter-sharp"] = Accidental::AccidentalType::MIRRORED_FLAT_SLASH;
-      map["slash-sharp"] = Accidental::AccidentalType::SHARP_SLASH;
-      map["slash-flat"] = Accidental::AccidentalType::FLAT_SLASH;
-      map["double-slash-flat"] = Accidental::AccidentalType::FLAT_SLASH2;
+      map["slash-quarter-sharp"] = Accidental::Type::MIRRORED_FLAT_SLASH;
+      map["slash-sharp"] = Accidental::Type::SHARP_SLASH;
+      map["slash-flat"] = Accidental::Type::FLAT_SLASH;
+      map["double-slash-flat"] = Accidental::Type::FLAT_SLASH2;
 
-      map["sori"] = Accidental::AccidentalType::SORI;
-      map["koron"] = Accidental::AccidentalType::KORON;
+      map["sori"] = Accidental::Type::SORI;
+      map["koron"] = Accidental::Type::KORON;
 
-      map["natural-sharp"] = Accidental::AccidentalType::NONE;
+      map["natural-sharp"] = Accidental::Type::NONE;
 
       if (map.contains(mxmlName))
             return map.value(mxmlName);
       else
             qDebug("unknown accidental %s", qPrintable(mxmlName));
-      // default: return Accidental::AccidentalType::NONE
-      return Accidental::AccidentalType::NONE;
+      // default: return Accidental::Type::NONE
+      return Accidental::Type::NONE;
       }
 
 //---------------------------------------------------------
@@ -4656,7 +4656,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       QString step;
       int alter  = 0;
       int octave = 4;
-      Accidental::AccidentalType accidental = Accidental::AccidentalType::NONE;
+      Accidental::Type accidental = Accidental::Type::NONE;
       bool parentheses = false;
       bool editorial = false;
       bool cautionary = false;
@@ -5087,12 +5087,12 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             // qDebug("staff for new note: %p (staff=%d, relStaff=%d)",
             //        score->staff(staff + relStaff), staff, relStaff);
 
-            if(accidental != Accidental::AccidentalType::NONE){
+            if(accidental != Accidental::Type::NONE){
                   Accidental* a = new Accidental(score);
                   a->setAccidentalType(accidental);
                    if (editorial || cautionary || parentheses) {
                           a->setHasBracket(cautionary || parentheses);
-                          a->setRole(Accidental::AccidentalRole::USER);
+                          a->setRole(Accidental::Role::USER);
                           }
                     else {
                           alt = alter;

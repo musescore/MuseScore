@@ -108,8 +108,8 @@ void MScore::init()
       qRegisterMetaType<Direction>("Direction");
       qRegisterMetaType<DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
-      qRegisterMetaType<Accidental::AccidentalRole>("AccidentalRole");
-      qRegisterMetaType<Accidental::AccidentalType>("AccidentalType");
+      qRegisterMetaType<Accidental::Role>("AccidentalRole");
+      qRegisterMetaType<Accidental::Type>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
       qRegisterMetaType<NoteHeadGroup>("NoteHeadGroup");
       qRegisterMetaType<NoteHeadType>("NoteHeadType");

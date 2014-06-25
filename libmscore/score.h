@@ -552,8 +552,8 @@ class Score : public QObject {
 
       // undo/redo ops
       void addArticulation(ArticulationType);
-      void changeAccidental(Accidental::AccidentalType);
-      void changeAccidental(Note* oNote, Accidental::AccidentalType);
+      void changeAccidental(Accidental::Type);
+      void changeAccidental(Note* oNote, Accidental::Type);
 
       void addElement(Element*);
       void removeElement(Element*);

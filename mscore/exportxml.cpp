@@ -2237,25 +2237,25 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                     */
                   QString s;
                   switch (acc->accidentalType()) {
-                        case Accidental::AccidentalType::SHARP:              s = "sharp";                break;
-                        case Accidental::AccidentalType::FLAT:               s = "flat";                 break;
-                        case Accidental::AccidentalType::SHARP2:             s = "double-sharp";         break;
-                        case Accidental::AccidentalType::FLAT2:              s = "flat-flat";            break;
-                        case Accidental::AccidentalType::NATURAL:            s = "natural";              break;
-                        case Accidental::AccidentalType::FLAT_SLASH:         s = "quarter-flat";         break; // (alternative)
-                        case Accidental::AccidentalType::MIRRORED_FLAT:      s = "quarter-flat";         break; // (recommended by Michael)
-                        case Accidental::AccidentalType::FLAT_ARROW_UP:      s = "quarter-flat";         break; // (alternative)
-                        case Accidental::AccidentalType::NATURAL_ARROW_DOWN: s = "quarter-flat";         break; // (alternative)
-                        case Accidental::AccidentalType::SHARP_SLASH:        s = "quarter-sharp";        break; // (recommended by Michael)
-                        case Accidental::AccidentalType::SHARP_ARROW_DOWN:   s = "quarter-sharp";        break; // (alternative)
-                        case Accidental::AccidentalType::NATURAL_ARROW_UP:   s = "quarter-sharp";        break; // (alternative)
-                        case Accidental::AccidentalType::MIRRORED_FLAT2:     s = "three-quarters-flat";  break; // (recommended by Michael)
-                        case Accidental::AccidentalType::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break; // (alternative)
-                        case Accidental::AccidentalType::FLAT_ARROW_DOWN:    s = "three-quarters-flat";  break; // (alternative)
-                        case Accidental::AccidentalType::SHARP_SLASH4:       s = "three-quarters-sharp"; break; // (recommended by Michael)
-                        case Accidental::AccidentalType::SHARP_ARROW_UP:     s = "three-quarters-sharp"; break; // (alternate)
-                        case Accidental::AccidentalType::SORI:               s = "sori";                 break; //sori
-                        case Accidental::AccidentalType::KORON:              s = "koron";                break; //koron
+                        case Accidental::Type::SHARP:              s = "sharp";                break;
+                        case Accidental::Type::FLAT:               s = "flat";                 break;
+                        case Accidental::Type::SHARP2:             s = "double-sharp";         break;
+                        case Accidental::Type::FLAT2:              s = "flat-flat";            break;
+                        case Accidental::Type::NATURAL:            s = "natural";              break;
+                        case Accidental::Type::FLAT_SLASH:         s = "quarter-flat";         break; // (alternative)
+                        case Accidental::Type::MIRRORED_FLAT:      s = "quarter-flat";         break; // (recommended by Michael)
+                        case Accidental::Type::FLAT_ARROW_UP:      s = "quarter-flat";         break; // (alternative)
+                        case Accidental::Type::NATURAL_ARROW_DOWN: s = "quarter-flat";         break; // (alternative)
+                        case Accidental::Type::SHARP_SLASH:        s = "quarter-sharp";        break; // (recommended by Michael)
+                        case Accidental::Type::SHARP_ARROW_DOWN:   s = "quarter-sharp";        break; // (alternative)
+                        case Accidental::Type::NATURAL_ARROW_UP:   s = "quarter-sharp";        break; // (alternative)
+                        case Accidental::Type::MIRRORED_FLAT2:     s = "three-quarters-flat";  break; // (recommended by Michael)
+                        case Accidental::Type::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break; // (alternative)
+                        case Accidental::Type::FLAT_ARROW_DOWN:    s = "three-quarters-flat";  break; // (alternative)
+                        case Accidental::Type::SHARP_SLASH4:       s = "three-quarters-sharp"; break; // (recommended by Michael)
+                        case Accidental::Type::SHARP_ARROW_UP:     s = "three-quarters-sharp"; break; // (alternate)
+                        case Accidental::Type::SORI:               s = "sori";                 break; //sori
+                        case Accidental::Type::KORON:              s = "koron";                break; //koron
                         default:
                               qDebug("unknown accidental %d", int(acc->accidentalType()));
                         }

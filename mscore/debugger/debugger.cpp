@@ -2362,8 +2362,8 @@ void AccidentalView::setElement(Element* e)
       ShowElementBase::setElement(e);
 
       acc.hasBracket->setChecked(s->hasBracket());
-      acc.accAuto->setChecked(s->role() == Accidental::AccidentalRole::AUTO);
-      acc.accUser->setChecked(s->role() == Accidental::AccidentalRole::USER);
+      acc.accAuto->setChecked(s->role() == Accidental::Role::AUTO);
+      acc.accUser->setChecked(s->role() == Accidental::Role::USER);
       acc.small->setChecked(s->small());
       }
 
