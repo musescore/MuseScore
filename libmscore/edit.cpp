@@ -1226,7 +1226,7 @@ void Score::cmdAddHairpin(bool decrescendo)
 //   cmdAddOttava
 //---------------------------------------------------------
 
-void Score::cmdAddOttava(OttavaType type)
+void Score::cmdAddOttava(Ottava::Type type)
       {
       ChordRest* cr1;
       ChordRest* cr2;
