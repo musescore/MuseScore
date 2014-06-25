@@ -29,6 +29,7 @@
 #include "marker.h"
 #include "layoutbreak.h"
 #include "hairpin.h"
+#include "glissando.h"
 #include "page.h"
 #include "slur.h"
 #include "lyrics.h"
@@ -128,6 +129,7 @@ void MScore::init()
       qRegisterMetaType<Hairpin::Type>("HairpinType");
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
+      qRegisterMetaType<Glissando::Type>("Glissando::Type");
 //      qRegisterMetaType<TextStyle>("TextStyle");
 #endif
 
