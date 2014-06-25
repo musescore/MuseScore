@@ -2051,13 +2051,13 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 		switch(type) {
 		case OVE::Repeat_Segno:{
 			Marker* marker = new Marker(score_);
-		    marker->setMarkerType(MarkerType::SEGNO);
+		    marker->setMarkerType(Marker::Type::SEGNO);
 		    e = marker;
 			break;
 		}
 		case OVE::Repeat_Coda:{
 			Marker* marker = new Marker(score_);
-		    marker->setMarkerType(MarkerType::CODA);
+		    marker->setMarkerType(Marker::Type::CODA);
 		    e = marker;
 			break;
 		}
@@ -2087,13 +2087,13 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 		}
 		case OVE::Repeat_ToCoda:{
 			Marker* m = new Marker(score_);
-			m->setMarkerType(MarkerType::TOCODA);
+			m->setMarkerType(Marker::Type::TOCODA);
 			e = m;
 			break;
 		}
 		case OVE::Repeat_Fine:{
 			Marker* m = new Marker(score_);
-			m->setMarkerType(MarkerType::FINE);
+			m->setMarkerType(Marker::Type::FINE);
 			e = m;
 			break;
 		}

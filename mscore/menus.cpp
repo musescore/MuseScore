@@ -322,27 +322,27 @@ Palette* MuseScore::newRepeatsPalette()
       sp->append(rm, tr("Repeat measure sign"));
 
       Marker* mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::SEGNO);
+      mk->setMarkerType(Marker::Type::SEGNO);
       sp->append(mk, tr("Segno"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::VARSEGNO);
+      mk->setMarkerType(Marker::Type::VARSEGNO);
       sp->append(mk, tr("Segno Variation"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::CODA);
+      mk->setMarkerType(Marker::Type::CODA);
       sp->append(mk, tr("Coda"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::VARCODA);
+      mk->setMarkerType(Marker::Type::VARCODA);
       sp->append(mk, tr("Varied coda"));
 
 /*      mk = new Marker(gscore);                      // not in smufl
-      mk->setMarkerType(MarkerType::CODETTA);
+      mk->setMarkerType(Marker::Type::CODETTA);
       sp->append(mk, tr("Codetta"));
   */
       mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::FINE);
+      mk->setMarkerType(Marker::Type::FINE);
       sp->append(mk, tr("Fine"));
 
       Jump* jp = new Jump(gscore);
@@ -370,7 +370,7 @@ Palette* MuseScore::newRepeatsPalette()
       sp->append(jp, tr("D.S."));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::TOCODA);
+      mk->setMarkerType(Marker::Type::TOCODA);
       sp->append(mk, tr("To Coda"));
       return sp;
       }

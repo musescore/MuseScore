@@ -124,7 +124,7 @@ void MScore::init()
       qRegisterMetaType<Trill::Type>("TrillType");
       qRegisterMetaType<Dynamic::Range>("DynamicRange");
       qRegisterMetaType<JumpType>("JumpType");
-      qRegisterMetaType<MarkerType>("MarkerType");
+      qRegisterMetaType<Marker::Type>("MarkerType");
       qRegisterMetaType<BeamMode>("BeamMode");
       qRegisterMetaType<Hairpin::Type>("HairpinType");
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
