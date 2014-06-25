@@ -249,6 +249,11 @@
     <sym class="note" name="g"/>
     <sym class="note" name="h"/>
 
+<!-- delete code parameter to render German chords with "es" and "is" -->
+    <sym code="0x266d" class="accidental" name="es"/>
+    <sym code="0x266d" class="accidental" name="s"/>
+    <sym code="0x266f" class="accidental" name="is"/>
+
 <!-- Italian / solfege chord names
     <sym code="0xe201" name="C"/>
     <sym code="0xe202" name="D"/>
@@ -291,8 +296,6 @@
     <sym code="0xe18a" name="striangle"/>
 
     <sym class="note" name="mi"/>
-    <sym name="es"/>
-    <sym name="is"/>
 
 <!-- true lower case letters -->
     <sym code="0x61" name="a"/>

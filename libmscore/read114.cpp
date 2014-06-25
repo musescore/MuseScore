@@ -361,6 +361,10 @@ Score::FileError Score::read114(XmlReader& e)
             else if (tag == "Style") {
                   qreal sp = _style.spatium();
                   _style.load(e);
+                  // adjust this now so chords render properly on read
+                  // other style adjustments can wait until reading is finished
+                  if (style(StyleIdx::useGermanNoteNames).toBool())
+                        style()->set(StyleIdx::useStandardNoteNames, false);
                   if (_layoutMode == LayoutMode::FLOAT) {
                         // style should not change spatium in
                         // float mode
@@ -676,8 +680,6 @@ Score::FileError Score::read114(XmlReader& e)
             style()->set(StyleIdx::voltaY, -2.0f);
       if (style(StyleIdx::hideEmptyStaves).toBool()) // http://musescore.org/en/node/16228
             style()->set(StyleIdx::dontHideStavesInFirstSystem, false);
-      if (style(StyleIdx::useGermanNoteNames).toBool())
-            style()->set(StyleIdx::useStandardNoteNames, false);
       if (style(StyleIdx::showPageNumberOne).toBool()) { // http://musescore.org/en/node/21207
             style()->set(StyleIdx::evenFooterL, QString("$P"));
             style()->set(StyleIdx::oddFooterR, QString("$P"));
