@@ -596,14 +596,14 @@ void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
 
 static void glissando(Glissando* gli, int number, bool start, Notations& notations, Xml& xml)
       {
-      GlissandoType st = gli->glissandoType();
+      Glissando::Type st = gli->glissandoType();
       switch (st) {
-            case GlissandoType::STRAIGHT:
+            case Glissando::Type::STRAIGHT:
                   notations.tag(xml);
                   xml.tagE("slide line-type=\"solid\" number=\"%d\" type=\"%s\"",
                            number, start ? "start" : "stop");
                   break;
-            case GlissandoType::WAVY:
+            case Glissando::Type::WAVY:
                   notations.tag(xml);
                   xml.tagE("glissando line-type=\"wavy\" number=\"%d\" type=\"%s\"",
                            number, start ? "start" : "stop");
@@ -650,8 +650,8 @@ int GlissandoHandler::findChord(const Chord* c, int st) const
 
 void GlissandoHandler::doGlissandoStart(Chord* chord, Notations& notations, Xml& xml)
       {
-      GlissandoType st = chord->glissando()->glissandoType();
-      if (st != GlissandoType::STRAIGHT && st != GlissandoType::WAVY) {
+      Glissando::Type st = chord->glissando()->glissandoType();
+      if (st != Glissando::Type::STRAIGHT && st != Glissando::Type::WAVY) {
             qDebug("doGlissandoStart: unknown glissando subtype %hhd", st);
             return;
             }
@@ -660,14 +660,14 @@ void GlissandoHandler::doGlissandoStart(Chord* chord, Notations& notations, Xml&
       if (i >= 0) {
             // print error and remove from list
             qDebug("doGlissandoStart: chord %p already on list", chord);
-            if (st == GlissandoType::STRAIGHT) slideChrd[i] = 0;
-            if (st == GlissandoType::WAVY) glissChrd[i] = 0;
+            if (st == Glissando::Type::STRAIGHT) slideChrd[i] = 0;
+            if (st == Glissando::Type::WAVY) glissChrd[i] = 0;
             }
       // find free slot to store it
       i = findChord(0, int(st));
       if (i >= 0) {
-            if (st == GlissandoType::STRAIGHT) slideChrd[i] = chord;
-            if (st == GlissandoType::WAVY) glissChrd[i] = chord;
+            if (st == Glissando::Type::STRAIGHT) slideChrd[i] = chord;
+            if (st == Glissando::Type::WAVY) glissChrd[i] = chord;
             glissando(chord->glissando(), i + 1, true, notations, xml);
             }
       else
@@ -680,18 +680,18 @@ void GlissandoHandler::doGlissandoStart(Chord* chord, Notations& notations, Xml&
 
 void GlissandoHandler::doGlissandoStop(Chord* chord, Notations& notations, Xml& xml)
       {
-      GlissandoType st = chord->glissando()->glissandoType();
-      if (st != GlissandoType::STRAIGHT && st != GlissandoType::WAVY) {
+      Glissando::Type st = chord->glissando()->glissandoType();
+      if (st != Glissando::Type::STRAIGHT && st != Glissando::Type::WAVY) {
             qDebug("doGlissandoStart: unknown glissando subtype %hhd", st);
             return;
             }
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            if (st == GlissandoType::STRAIGHT && slideChrd[i] == chord) {
+            if (st == Glissando::Type::STRAIGHT && slideChrd[i] == chord) {
                   slideChrd[i] = 0;
                   glissando(chord->glissando(), i + 1, false, notations, xml);
                   return;
                   }
-            if (st == GlissandoType::WAVY && glissChrd[i] == chord) {
+            if (st == Glissando::Type::WAVY && glissChrd[i] == chord) {
                   glissChrd[i] = 0;
                   glissando(chord->glissando(), i + 1, false, notations, xml);
                   return;

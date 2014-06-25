@@ -4389,9 +4389,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
       if (!glissandoType.isEmpty()) {
             Glissando* g = new Glissando(score);
             if (glissandoType == "slide")
-                  g->setGlissandoType(GlissandoType::STRAIGHT);
+                  g->setGlissandoType(Glissando::Type::STRAIGHT);
             else if (glissandoType == "glissando")
-                  g->setGlissandoType(GlissandoType::WAVY);
+                  g->setGlissandoType(Glissando::Type::WAVY);
             else {
                   qDebug("unknown glissando type %s", glissandoType.toLatin1().data());
                   delete g;

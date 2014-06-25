@@ -1402,7 +1402,7 @@ Element* Note::drop(const DropData& data)
                   e->setParent(cr1);
                   // in TAB, use straight line with no text
                   if (staff()->isTabStaff()) {
-                        (static_cast<Glissando*>(e))->setGlissandoType(GlissandoType::STRAIGHT);
+                        (static_cast<Glissando*>(e))->setGlissandoType(Glissando::Type::STRAIGHT);
                         (static_cast<Glissando*>(e))->setShowText(false);
                         }
                   score()->undoAddElement(e);
