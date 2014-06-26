@@ -307,7 +307,7 @@ void TestBarline::barline06()
             sprintf(msg, "EndBarLineType not NORMAL in measure %d.", msrNo);
             QVERIFY2(msr->endBarLineType() == BarLineType::NORMAL, msg);
             // locate end-measure bar line segment
-            Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick()+msr->ticks());
+            Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick()+msr->ticks());
             sprintf(msg, "No SegEndBarLine in measure %d.", msr->no());
             QVERIFY2(seg != nullptr, msg);
 
