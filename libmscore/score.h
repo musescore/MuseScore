@@ -33,6 +33,7 @@
 #include "ottava.h"
 #include "spannermap.h"
 #include "pitchspelling.h"
+#include "beam.h"
 
 class QPainter;
 
@@ -373,7 +374,7 @@ class Score : public QObject {
 
       ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false);
       ChordRest* prevMeasure(ChordRest* element);
-      void cmdSetBeamMode(BeamMode);
+      void cmdSetBeamMode(Beam::Mode);
       void cmdFlip();
       Note* getSelectedNote();
       ChordRest* upStaff(ChordRest* cr);

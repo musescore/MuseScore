@@ -41,6 +41,7 @@
 #include "stem.h"
 #include "layoutbreak.h"
 #include "mscore.h"
+#include "beam.h"
 #include "accidental.h"
 #include "undo.h"
 #include "layout.h"
@@ -1028,6 +1029,9 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
 
       }
 
+#define beamModeMid(a) (a == Beam::Mode::MID || a == Beam::Mode::BEGIN32 || a == Beam::Mode::BEGIN64)
+
+
 //---------------------------------------------------------
 //   beamGraceNotes
 //---------------------------------------------------------
@@ -1036,7 +1040,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
       {
       ChordRest* a1    = 0;      // start of (potential) beam
       Beam* beam       = 0;      // current beam
-      BeamMode bm = BeamMode::AUTO;
+      Beam::Mode bm = Beam::Mode::AUTO;
       QList<Chord*> graceNotes;
       if (after)
             mainNote->getGraceNotesAfter(&graceNotes);
@@ -1044,7 +1048,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
             mainNote->getGraceNotesBefore(&graceNotes);
       foreach (ChordRest* cr, graceNotes) {
             bm = Groups::endBeam(cr);
-            if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
+            if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
                   if (beam) {
                         beam->layoutGraceNotes();
                         beam = 0;
@@ -1057,12 +1061,12 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
                   continue;
                   }
             if (beam) {
-                  bool beamEnd = bm == BeamMode::BEGIN;
+                  bool beamEnd = bm == Beam::Mode::BEGIN;
                   if (!beamEnd) {
                         cr->removeDeleteBeam(true);
                         beam->add(cr);
                         cr = 0;
-                        beamEnd = (bm == BeamMode::END);
+                        beamEnd = (bm == Beam::Mode::END);
                         }
                   if (beamEnd) {
                         beam->layoutGraceNotes();
@@ -1074,7 +1078,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
             if (a1 == 0)
                   a1 = cr;
             else {
-                  if (!beamModeMid(bm) && (bm == BeamMode::BEGIN)) {
+                  if (!beamModeMid(bm) && (bm == Beam::Mode::BEGIN)) {
                         a1->removeDeleteBeam();
                         a1 = cr;
                         }
@@ -1116,7 +1120,7 @@ void Score::layoutStage2()
             Beam* beam       = 0;      // current beam
             Measure* measure = 0;
 
-            BeamMode bm = BeamMode::AUTO;
+            Beam::Mode bm = Beam::Mode::AUTO;
             Segment::Type st = Segment::Type::ChordRest;
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
@@ -1138,7 +1142,7 @@ void Score::layoutStage2()
                   // set beam mode to NONE (do not combine with following chord beam/hook, if any)
 
                   if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND)
-                        bm = BeamMode::NONE;
+                        bm = Beam::Mode::NONE;
                   if (cr->measure() != measure) {
                         if (measure && !beamModeMid(bm)) {
                               if (beam) {
@@ -1156,7 +1160,7 @@ void Score::layoutStage2()
                               beam    = 0;
                               }
                         }
-                  if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
+                  if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
                         if (beam) {
                               beam->layout1();
                               beam = 0;
@@ -1170,12 +1174,12 @@ void Score::layoutStage2()
                         }
 
                   if (beam) {
-                        bool beamEnd = bm == BeamMode::BEGIN;
+                        bool beamEnd = bm == Beam::Mode::BEGIN;
                         if (!beamEnd) {
                               cr->removeDeleteBeam(true);
                               beam->add(cr);
                               cr = 0;
-                              beamEnd = (bm == BeamMode::END);
+                              beamEnd = (bm == Beam::Mode::END);
                               }
                         if (beamEnd) {
                               beam->layout1();
@@ -1190,7 +1194,7 @@ void Score::layoutStage2()
                   else {
                         if (!beamModeMid(bm)
                              &&
-                             (bm == BeamMode::BEGIN
+                             (bm == Beam::Mode::BEGIN
                              || (a1->segment()->segmentType() != cr->segment()->segmentType())
                              || (a1->tick() + a1->actualTicks() < cr->tick())
                              )

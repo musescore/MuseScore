@@ -1251,7 +1251,7 @@ void Score::cmdAddOttava(Ottava::Type type)
 //   cmdSetBeamMode
 //---------------------------------------------------------
 
-void Score::cmdSetBeamMode(BeamMode mode)
+void Score::cmdSetBeamMode(Beam::Mode mode)
       {
       ChordRest* cr = getSelectedChordRest();
       if (cr == 0)

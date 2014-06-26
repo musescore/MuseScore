@@ -2678,7 +2678,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
 void Chord::reset()
       {
       score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(Direction::AUTO));
-      score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::AUTO));
+      score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
       score()->createPlayEvents(this);
       ChordRest::reset();
       }

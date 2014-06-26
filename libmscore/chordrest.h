@@ -15,6 +15,7 @@
 
 #include "symbol.h"
 #include "duration.h"
+#include "beam.h"
 
 namespace Ms {
 
@@ -27,7 +28,6 @@ enum class CrossMeasure : signed char {
 
 class Score;
 class Measure;
-class Beam;
 class Tuplet;
 class Segment;
 class Slur;
@@ -41,15 +41,16 @@ class Spanner;
 ///    Virtual base class. Chords and rests can be part of a beam
 //
 //   @P durationType  int
-//   @P beamMode      Ms::BeamMode (AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID)
-//   @P small         bool         small chord/rest
+//   @P beamMode      Ms::Beam::Mode (AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID)
+//   @P small         bool           small chord/rest
 //-------------------------------------------------------------------
 
 class ChordRest : public DurationElement {
       Q_OBJECT
-      Q_PROPERTY(int      durationType  READ durationTypeTicks  WRITE setDurationType)
-      Q_PROPERTY(BeamMode beamMode      READ beamMode           WRITE undoSetBeamMode)
-      Q_PROPERTY(bool     small         READ small              WRITE undoSetSmall)
+      Q_PROPERTY(int            durationType  READ durationTypeTicks  WRITE setDurationType)
+      Q_PROPERTY(Ms::Beam::Mode beamMode      READ beamMode           WRITE undoSetBeamMode)
+      Q_PROPERTY(bool           small         READ small              WRITE undoSetSmall)
+      Q_ENUMS(Ms::Beam::Mode)
 
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming
@@ -60,7 +61,7 @@ class ChordRest : public DurationElement {
       QList<Lyrics*> _lyricsList;
       TabDurationSymbol* _tabDur;         // stores a duration symbol in tablature staves
 
-      BeamMode _beamMode;
+      Beam::Mode _beamMode;
       bool _up;                           // actual stem direction
       bool _small;
 
@@ -85,9 +86,9 @@ class ChordRest : public DurationElement {
       virtual bool readProperties(XmlReader&);
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
-      void setBeamMode(BeamMode m)              { _beamMode = m;    }
-      void undoSetBeamMode(BeamMode m);
-      BeamMode beamMode() const                 { return _beamMode; }
+      void setBeamMode(Beam::Mode m)            { _beamMode = m;    }
+      void undoSetBeamMode(Beam::Mode m);
+      Beam::Mode beamMode() const               { return _beamMode; }
 
       void setBeam(Beam* b);
       virtual Beam* beam() const                { return _beam; }

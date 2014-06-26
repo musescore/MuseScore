@@ -1520,7 +1520,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 		}
 
 		// beam
-		BeamMode bm = container->getIsRest() ? BeamMode::NONE : BeamMode::AUTO;
+		Beam::Mode bm = container->getIsRest() ? Beam::Mode::NONE : Beam::Mode::AUTO;
 		if(container->getInBeam()){
 			OVE::MeasurePos pos = container->start()->shiftMeasure(0);
 			OVE::MusicData* data = getCrossMeasureElementByPos(part, staff, pos, container->getVoice(), OVE::MusicData_Beam);
@@ -1531,13 +1531,13 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				OVE::MeasurePos stopPos = beam->stop()->shiftMeasure(beam->start()->getMeasure());
 
 				if(startPos == pos){
-					bm = BeamMode::BEGIN;
+					bm = Beam::Mode::BEGIN;
 				}
 				else if(stopPos == pos){
-					bm = BeamMode::END;
+					bm = Beam::Mode::END;
 				}
 				else{
-					bm = BeamMode::MID;
+					bm = Beam::Mode::MID;
 				}
 			}
 		}

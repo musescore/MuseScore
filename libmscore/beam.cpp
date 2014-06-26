@@ -1568,9 +1568,9 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         ChordRest* c = crl[i];
                         int l = c->durationType().hooks() - 1;
 
-                        BeamMode bm = Groups::endBeam(c);
-                        bool b32 = (beamLevel >= 1) && (bm == BeamMode::BEGIN32);
-                        bool b64 = (beamLevel >= 2) && (bm == BeamMode::BEGIN64);
+                        Mode bm = Groups::endBeam(c);
+                        bool b32 = (beamLevel >= 1) && (bm == Mode::BEGIN32);
+                        bool b64 = (beamLevel >= 2) && (bm == Mode::BEGIN64);
 
                         if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel)) {
                               if (i && crl[i-1]->type() == Element::Type::REST) {

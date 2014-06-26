@@ -16,6 +16,7 @@
 #include "fraction.h"
 #include "mscore.h"
 #include "durationtype.h"
+#include "beam.h"
 
 namespace Ms {
 
@@ -53,8 +54,8 @@ class Groups : public std::vector<GroupNode> {
       void write(Xml&) const;
       void read(XmlReader&);
 
-      BeamMode beamMode(int tick, TDuration::DurationType d) const;
-      void addStop(int pos, TDuration::DurationType d, BeamMode bm);
+      Beam::Mode beamMode(int tick, TDuration::DurationType d) const;
+      void addStop(int pos, TDuration::DurationType d, Beam::Mode bm);
       bool operator==(const Groups& g) const {
             if (g.size() != size())
                   return false;
@@ -67,7 +68,7 @@ class Groups : public std::vector<GroupNode> {
       void dump(const char*) const;
 
       static const Groups& endings(const Fraction& f);
-      static BeamMode endBeam(ChordRest* cr);
+      static Beam::Mode endBeam(ChordRest* cr);
       };
 
 
