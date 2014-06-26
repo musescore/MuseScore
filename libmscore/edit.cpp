@@ -668,7 +668,7 @@ void Score::addPitch(int step, bool addFlag)
 
       if (addFlag) {
             Element* el = selection().element();
-            if (el && el->type() == ElementType::NOTE) {
+            if (el && el->type() == Element::Type::NOTE) {
                   Chord* chord = static_cast<Note*>(el)->chord();
                   NoteVal val;
 
@@ -702,7 +702,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       if (addFlag) {
             Chord* c = static_cast<Chord*>(_is.lastSegment()->element(_is.track()));
 
-            if (c == 0 || c->type() != ElementType::CHORD) {
+            if (c == 0 || c->type() != Element::Type::CHORD) {
                   qDebug("Score::addPitch: cr %s", c ? c->name() : "zero");
                   return 0;
                   }
@@ -714,7 +714,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       expandVoice();
 
       // insert note
-      Direction stemDirection = Direction::AUTO;
+      MScore::Direction stemDirection = MScore::Direction::AUTO;
       int track               = _is.track();
       if (_is.drumNote() != -1) {
             nval.pitch    = _is.drumNote();
@@ -737,7 +737,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       Note* note = 0;
       Note* firstTiedNote = 0;
       Note* lastTiedNote = 0;
-      if (_is.repitchMode() && _is.cr()->type() == ElementType::CHORD) {
+      if (_is.repitchMode() && _is.cr()->type() == Element::Type::CHORD) {
             // repitch mode for MIDI input (where we are given a pitch) is handled here
             // for keyboard input (where we are given a staff position), there is a separate function Score::repitchNote()
             // the code is similar enough that it could possibly be refactored
@@ -814,7 +814,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                   Element* ee = _is.slur()->startElement();
                   if (ee->isChordRest())
                         stick = static_cast<ChordRest*>(ee)->tick();
-                  else if (ee->type() == ElementType::NOTE)
+                  else if (ee->type() == Element::Type::NOTE)
                         stick = static_cast<Note*>(ee)->chord()->tick();
                   if (stick == e->tick()) {
                         _is.slur()->setTick(stick);
@@ -829,7 +829,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       if (_is.repitchMode()) {
             // move cursor to next note, but skip tied ntoes (they were already repitched above)
             ChordRest* next = lastTiedNote ? nextChordRest(lastTiedNote->chord()) : nextChordRest(_is.cr());
-            while (next && next->type() != ElementType::CHORD)
+            while (next && next->type() != Element::Type::CHORD)
                   next = nextChordRest(next);
             if (next)
                   _is.moveInputPos(next->segment());
