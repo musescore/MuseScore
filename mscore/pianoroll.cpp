@@ -104,8 +104,8 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addSeparator();
       tb->addWidget(new QLabel(tr("Velocity:")));
       veloType = new QComboBox;
-      veloType->addItem(tr("offset"), int(ValueType::OFFSET_VAL));
-      veloType->addItem(tr("user"),   int (ValueType::USER_VAL));
+      veloType->addItem(tr("offset"), int(Note::ValueType::OFFSET_VAL));
+      veloType->addItem(tr("user"),   int (Note::ValueType::USER_VAL));
       tb->addWidget(veloType);
 
       velocity = new QSpinBox;
@@ -396,11 +396,11 @@ void PianorollEditor::veloTypeChanged(int val)
       if (item->type() != PianoItemType)
             return;
       Note* note = static_cast<PianoItem*>(item)->note();
-      if (ValueType(val) == note->veloType())
+      if (Note::ValueType(val) == note->veloType())
             return;
 
       _score->undo()->beginMacro();
-      _score->undo(new ChangeVelocity(note, ValueType(val), note->veloOffset()));
+      _score->undo(new ChangeVelocity(note, Note::ValueType(val), note->veloOffset()));
       _score->undo()->endMacro(_score->undo()->current()->childCount() == 0);
       updateVelocity(note);
       }
@@ -411,16 +411,16 @@ void PianorollEditor::veloTypeChanged(int val)
 
 void PianorollEditor::updateVelocity(Note* note)
       {
-      ValueType vt = note->veloType();
-      if (vt != ValueType(veloType->currentIndex())) {
+      Note::ValueType vt = note->veloType();
+      if (vt != Note::ValueType(veloType->currentIndex())) {
             veloType->setCurrentIndex(int(vt));
             switch(vt) {
-                  case ValueType::USER_VAL:
+                  case Note::ValueType::USER_VAL:
                         velocity->setReadOnly(false);
                         velocity->setSuffix("");
                         velocity->setRange(0, 127);
                         break;
-                  case ValueType::OFFSET_VAL:
+                  case Note::ValueType::OFFSET_VAL:
                         velocity->setReadOnly(false);
                         velocity->setSuffix("%");
                         velocity->setRange(-200, 200);
@@ -428,10 +428,10 @@ void PianorollEditor::updateVelocity(Note* note)
                   }
             }
       switch(vt) {
-            case ValueType::USER_VAL:
+            case Note::ValueType::USER_VAL:
                   // TODO velocity->setValue(note->velocity());
                   break;
-            case ValueType::OFFSET_VAL:
+            case Note::ValueType::OFFSET_VAL:
                   velocity->setValue(note->veloOffset());
                   break;
             }
@@ -450,9 +450,9 @@ void PianorollEditor::velocityChanged(int val)
       if (item->type() != PianoItemType)
             return;
       Note* note = static_cast<PianoItem*>(item)->note();
-      ValueType vt = note->veloType();
+      Note::ValueType vt = note->veloType();
 
-      if (vt == ValueType::OFFSET_VAL)
+      if (vt == Note::ValueType::OFFSET_VAL)
             return;
 
       _score->undo()->beginMacro();

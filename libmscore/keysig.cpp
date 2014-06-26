@@ -265,7 +265,7 @@ void KeySig::draw(QPainter* p) const
 
 bool KeySig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == ElementType::KEYSIG;
+      return e->type() == Element::Type::KEYSIG;
       }
 
 //---------------------------------------------------------
@@ -275,7 +275,7 @@ bool KeySig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* KeySig::drop(const DropData& data)
       {
       Element* e = data.element;
-      if (e->type() != ElementType::KEYSIG) {
+      if (e->type() != Element::Type::KEYSIG) {
             delete e;
             return 0;
             }

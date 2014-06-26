@@ -149,9 +149,9 @@ void Lyrics::read(XmlReader& e)
 void Lyrics::add(Element* el)
       {
       el->setParent(this);
-      if (el->type() == ElementType::LINE)
+      if (el->type() == Element::Type::LINE)
             _separator.append((Line*)el);
-      else if (el->type() == ElementType::TEXT)
+      else if (el->type() == Element::Type::TEXT)
             _verseNumber = static_cast<Text*>(el);
       else
             qDebug("Lyrics::add: unknown element %s", el->name());
@@ -163,7 +163,7 @@ void Lyrics::add(Element* el)
 
 void Lyrics::remove(Element* el)
       {
-      if (el->type() == ElementType::LINE)
+      if (el->type() == Element::Type::LINE)
             _separator.removeAll((Line*)el);
       else if (el == _verseNumber)
             _verseNumber = 0;
@@ -299,7 +299,7 @@ int Lyrics::endTick() const
 
 bool Lyrics::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == ElementType::TEXT;
+      return e->type() == Element::Type::TEXT;
       }
 
 //---------------------------------------------------------
@@ -309,7 +309,7 @@ bool Lyrics::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* Lyrics::drop(const DropData& data)
       {
       Text* e = static_cast<Text*>(data.element);
-      if (!(e->type() == ElementType::TEXT && e->textStyle().name() == "Lyrics Verse")) {
+      if (!(e->type() == Element::Type::TEXT && e->textStyle().name() == "Lyrics Verse")) {
             delete e;
             return 0;
             }
@@ -327,7 +327,7 @@ void Lyrics::setNo(int n)
       _no = n;
       // adjust beween LYRICS1 and LYRICS2 only; keep other styles as they are
       // (_no is 0-based, so odd _no means even line and viceversa)
-      if (type() == ElementType::LYRICS) {
+      if (type() == Element::Type::LYRICS) {
             if( (_no & 1) && textStyleType() == TextStyleType::LYRIC1)
                   setTextStyleType(TextStyleType::LYRIC2);
             if( !(_no & 1) && textStyleType() == TextStyleType::LYRIC2)

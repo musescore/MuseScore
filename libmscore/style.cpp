@@ -1450,7 +1450,7 @@ void MStyle::set(StyleIdx t, int val)
       set(t, QVariant(val));
       }
 
-void MStyle::set(StyleIdx t, Direction val)
+void MStyle::set(StyleIdx t, MScore::Direction val)
       {
       set(t, QVariant(int(val)));
       }

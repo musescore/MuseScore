@@ -24,7 +24,7 @@ namespace Ms {
 LayoutBreak::LayoutBreak(Score* score)
    : Element(score)
       {
-      _layoutBreakType     = LayoutBreakType(propertyDefault(P_ID::LAYOUT_BREAK).toInt());
+      _layoutBreakType     = Type(propertyDefault(P_ID::LAYOUT_BREAK).toInt());
       _pause               = score->styleD(StyleIdx::SectionPause);
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
@@ -119,7 +119,7 @@ void LayoutBreak::layout0()
       path.addRect(rect);
 
       switch(layoutBreakType()) {
-            case LayoutBreakType::LINE:
+            case Type::LINE:
                   path2.moveTo(w * .8, h * .3);
                   path2.lineTo(w * .8, h * .6);
                   path2.lineTo(w * .3, h * .6);
@@ -130,7 +130,7 @@ void LayoutBreak::layout0()
                   path2.lineTo(w * .4, h * .5);
                   break;
 
-            case LayoutBreakType::PAGE:
+            case Type::PAGE:
                   path2.moveTo(w*.25, h*.2);
                   path2.lineTo(w*.60, h*.2);
                   path2.lineTo(w*.75, h*.35);
@@ -143,7 +143,7 @@ void LayoutBreak::layout0()
                   path2.lineTo(w*.74, h*.40);
                   break;
 
-            case LayoutBreakType::SECTION:
+            case Type::SECTION:
                   path2.moveTo(w*.25, h*.2);
                   path2.lineTo(w*.75, h*.2);
                   path2.lineTo(w*.75, h*.8);
@@ -166,7 +166,7 @@ void LayoutBreak::layout0()
 //   setLayoutBreakType
 //---------------------------------------------------------
 
-void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
+void LayoutBreak::setLayoutBreakType(Type val)
       {
       _layoutBreakType = val;
       layout0();
@@ -188,7 +188,7 @@ void LayoutBreak::spatiumChanged(qreal, qreal)
 
 bool LayoutBreak::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == ElementType::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() != layoutBreakType();
+      return e->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() != layoutBreakType();
       }
 
 //---------------------------------------------------------
@@ -226,7 +226,7 @@ bool LayoutBreak::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::LAYOUT_BREAK:
-                  setLayoutBreakType(LayoutBreakType(v.toInt()));
+                  setLayoutBreakType(Type(v.toInt()));
                   break;
             case P_ID::PAUSE:
                   setPause(v.toDouble());
@@ -261,7 +261,7 @@ QVariant LayoutBreak::propertyDefault(P_ID id) const
 //   undoLayoutBreakType
 //---------------------------------------------------------
 
-void LayoutBreak::undoSetLayoutBreakType(LayoutBreakType t)
+void LayoutBreak::undoSetLayoutBreakType(Type t)
       {
       undoChangeProperty(P_ID::LAYOUT_BREAK, int(t));
       }

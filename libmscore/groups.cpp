@@ -66,18 +66,18 @@ static std::vector<NoteGroup> noteGroups {
 //   endBeam
 //---------------------------------------------------------
 
-BeamMode Groups::endBeam(ChordRest* cr)
+Beam::Mode Groups::endBeam(ChordRest* cr)
       {
-      if (cr->isGrace() || cr->beamMode() != BeamMode::AUTO)
+      if (cr->isGrace() || cr->beamMode() != Beam::Mode::AUTO)
             return cr->beamMode();
       Q_ASSERT(cr->staff());
 
       if (cr->tuplet() && !cr->tuplet()->elements().isEmpty()) {
             if (cr->tuplet()->elements().front() == cr)     // end beam at new tuplet
-                  return BeamMode::BEGIN;
+                  return Beam::Mode::BEGIN;
             if (cr->tuplet()->elements().back() == cr)      // end beam at tuplet end
-                  return BeamMode::END;
-            return BeamMode::AUTO;
+                  return Beam::Mode::END;
+            return Beam::Mode::AUTO;
             }
 
       TDuration d = cr->durationType();
@@ -90,7 +90,7 @@ BeamMode Groups::endBeam(ChordRest* cr)
 //    tick is relative to begin of measure
 //---------------------------------------------------------
 
-BeamMode Groups::beamMode(int tick, TDuration::DurationType d) const
+Beam::Mode Groups::beamMode(int tick, TDuration::DurationType d) const
       {
       int shift;
       switch (d) {
@@ -98,7 +98,7 @@ BeamMode Groups::beamMode(int tick, TDuration::DurationType d) const
             case TDuration::DurationType::V_16TH:  shift = 4; break;
             case TDuration::DurationType::V_32ND:  shift = 8; break;
             default:
-                  return BeamMode::AUTO;
+                  return Beam::Mode::AUTO;
             }
       for (const GroupNode& e : *this) {
             if (e.pos * 60 < tick)
@@ -108,16 +108,16 @@ BeamMode Groups::beamMode(int tick, TDuration::DurationType d) const
 
             int action = (e.action >> shift) & 0xf;
             switch (action) {
-                  case 0: return BeamMode::AUTO;
-                  case 1: return BeamMode::BEGIN;
-                  case 2: return BeamMode::BEGIN32;
-                  case 3: return BeamMode::BEGIN64;
+                  case 0: return Beam::Mode::AUTO;
+                  case 1: return Beam::Mode::BEGIN;
+                  case 2: return Beam::Mode::BEGIN32;
+                  case 3: return Beam::Mode::BEGIN64;
                   default:
                         qDebug("   Groups::beamMode: bad action %d", action);
-                        return BeamMode::AUTO;
+                        return Beam::Mode::AUTO;
                   }
             }
-      return BeamMode::AUTO;
+      return Beam::Mode::AUTO;
       }
 
 //---------------------------------------------------------
@@ -190,7 +190,7 @@ void Groups::read(XmlReader& e)
 //   addStop
 //---------------------------------------------------------
 
-void Groups::addStop(int pos, TDuration::DurationType d, BeamMode bm)
+void Groups::addStop(int pos, TDuration::DurationType d, Beam::Mode bm)
       {
       int shift;
       switch (d) {
@@ -201,11 +201,11 @@ void Groups::addStop(int pos, TDuration::DurationType d, BeamMode bm)
                   return;
             }
       int action;
-      if (bm == BeamMode::BEGIN)
+      if (bm == Beam::Mode::BEGIN)
             action = 1;
-      else if (bm == BeamMode::BEGIN32)
+      else if (bm == Beam::Mode::BEGIN32)
             action = 2;
-      else if (bm == BeamMode::BEGIN64)
+      else if (bm == Beam::Mode::BEGIN64)
             action = 3;
       else
             return;

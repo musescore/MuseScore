@@ -85,7 +85,7 @@ void TestKeySig::keysig()
 
       // remove key signature in measure 2
       Segment* s = m2->first();
-      while (!(s->segmentType() & (SegmentType::KeySig)))
+      while (!(s->segmentType() & (Segment::Type::KeySig)))
             s = s->next();
       Element* e=s->element(0);
       score->startCmd();

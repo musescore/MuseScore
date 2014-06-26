@@ -34,7 +34,7 @@ namespace Ms {
 static void cleanupTuplet(Tuplet* t)
       {
       foreach(DurationElement* e, t->elements()) {
-            if (e->type() == ElementType::TUPLET)
+            if (e->type() == Element::Type::TUPLET)
                   cleanupTuplet(static_cast<Tuplet*>(e));
             delete e;
             }
@@ -49,7 +49,7 @@ TrackList::~TrackList()
       int n = size();
       for (int i = 0; i < n; ++i) {
             Element* e = at(i);
-            if (e->type() == ElementType::TUPLET) {
+            if (e->type() == Element::Type::TUPLET) {
                   Tuplet* t = static_cast<Tuplet*>(e);
                   cleanupTuplet(t);
                   }
@@ -68,8 +68,8 @@ void TrackList::append(Element* e)
             Fraction d = static_cast<DurationElement*>(e)->duration();
             _duration += d;
 
-            bool accumulateRest = e->type() == ElementType::REST && !isEmpty()
-               && back()->type() == ElementType::REST;
+            bool accumulateRest = e->type() == Element::Type::REST && !isEmpty()
+               && back()->type() == Element::Type::REST;
             Segment* s = accumulateRest ? static_cast<Rest*>(e)->segment() : 0;
 
             if (s && !s->score()->isSpannerStartEnd(s->tick(), e->track()) && !s->annotations().size()) {
@@ -83,7 +83,7 @@ void TrackList::append(Element* e)
                   {
                   Element* element = e->clone();
                   QList<Element*>::append(element);
-                  if (e->type() == ElementType::TUPLET) {
+                  if (e->type() == Element::Type::TUPLET) {
                         Tuplet* srcTuplet = static_cast<Tuplet*>(e);
                         Tuplet* dstTuplet = static_cast<Tuplet*>(element);
 
@@ -113,7 +113,7 @@ void TrackList::appendGap(const Fraction& d)
       if (d.isZero())
             return;
       Element* e = isEmpty() ? 0 : back();
-      if (e && (e->type() == ElementType::REST)) {
+      if (e && (e->type() == Element::Type::REST)) {
             Rest* rest  = static_cast<Rest*>(back());
             Fraction dd = rest->duration();
             dd          += d;
@@ -160,7 +160,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
                         DurationElement* nde = tuplet;
                         while (nde) {
                               nde = tuplet->elements().back();
-                              if (nde->type() != ElementType::TUPLET)
+                              if (nde->type() != Element::Type::TUPLET)
                                     break;
                               }
                         s = static_cast<ChordRest*>(nde)->segment();
@@ -173,7 +173,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
                   append(de);
                   tick += de->duration().ticks();;
                   }
-            else if (e->type() == ElementType::BAR_LINE) {
+            else if (e->type() == Element::Type::BAR_LINE) {
                   BarLine* bl = static_cast<BarLine*>(e);
                   if (bl->barLineType() != BarLineType::NORMAL)
                         append(e);
@@ -194,7 +194,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
       int n = size();
       for (int i = 0; i < n; ++i) {
             Element* e = at(i);
-            if (e->type() != ElementType::CHORD)
+            if (e->type() != Element::Type::CHORD)
                   continue;
             Chord* chord = static_cast<Chord*>(e);
             foreach(Note* n1, chord->notes()) {
@@ -203,7 +203,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
                         continue;
                   for (int k = i+1; k < n; ++k) {
                         Element* ee = at(k);
-                        if (ee->type() != ElementType::CHORD)
+                        if (ee->type() != Element::Type::CHORD)
                               continue;
                         Chord* c2 = static_cast<Chord*>(ee);
                         bool found = false;
@@ -234,7 +234,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const
       foreach (DurationElement* e, tuplet->elements()) {
             if (e->isChordRest()) {
                   Element* ne = e->clone();
-                  SegmentType st = SegmentType::ChordRest;
+                  Segment::Type st = Segment::Type::ChordRest;
                   Segment* segment = measure->getSegment(st, tick);
                   segment->add(ne);
                   dt->add(ne);
@@ -264,10 +264,10 @@ bool TrackList::canWrite(const Fraction& measureLen) const
             Element* e = at(i);
             if (e->isDurationElement()) {
                   Fraction duration = static_cast<DurationElement*>(e)->duration();
-                  if (duration > rest && e->type() == ElementType::TUPLET)
+                  if (duration > rest && e->type() == Element::Type::TUPLET)
                         return false;
                   while (!duration.isZero()) {
-                        if (e->type() == ElementType::REST && duration >= rest && rest == measureLen) {
+                        if (e->type() == Element::Type::REST && duration >= rest && rest == measureLen) {
                               duration -= rest;
                               pos = measureLen;
                               }
@@ -323,7 +323,7 @@ bool TrackList::write(int track, Measure* measure) const
             if (e->isDurationElement()) {
                   Fraction duration = static_cast<DurationElement*>(e)->duration();
 
-                  if (duration > rest && e->type() == ElementType::TUPLET) {
+                  if (duration > rest && e->type() == Element::Type::TUPLET) {
                         // cannot split tuplet
                         qDebug("TrackList::write: cannot split tuplet");
                         return false;
@@ -333,7 +333,7 @@ bool TrackList::write(int track, Measure* measure) const
                   //
 
                   while (duration.numerator() > 0) {
-                        if ((e->type() == ElementType::REST || e->type() == ElementType::REPEAT_MEASURE)
+                        if ((e->type() == Element::Type::REST || e->type() == Element::Type::REPEAT_MEASURE)
                            && (duration >= rest || e == back())
                            && (rest == m->len()))
                               {
@@ -354,8 +354,8 @@ bool TrackList::write(int track, Measure* measure) const
                               }
                         else {
                               Fraction d = qMin(rest, duration);
-                              if (e->type() == ElementType::REST || e->type() == ElementType::REPEAT_MEASURE) {
-                                    segment = m->getSegment(SegmentType::ChordRest, m->tick() + pos.ticks());
+                              if (e->type() == Element::Type::REST || e->type() == Element::Type::REPEAT_MEASURE) {
+                                    segment = m->getSegment(Segment::Type::ChordRest, m->tick() + pos.ticks());
                                     Rest* r = new Rest(score, TDuration(d));
                                     r->setTrack(track);
                                     segment->add(r);
@@ -363,7 +363,7 @@ bool TrackList::write(int track, Measure* measure) const
                                     rest     -= d;
                                     pos      += d;
                                     }
-                              else if (e->type() == ElementType::CHORD) {
+                              else if (e->type() == Element::Type::CHORD) {
                                     segment = m->getSegment(e, m->tick() + pos.ticks());
                                     Chord* c = static_cast<Chord*>(e)->clone();
                                     c->setScore(score);
@@ -384,7 +384,7 @@ bool TrackList::write(int track, Measure* measure) const
                                           note->setTieBack(0);
                                           }
                                     }
-                              else if (e->type() == ElementType::TUPLET) {
+                              else if (e->type() == Element::Type::TUPLET) {
                                     writeTuplet(static_cast<Tuplet*>(e), m, m->tick() + pos.ticks());
                                     duration -= d;
                                     rest     -= d;
@@ -424,7 +424,7 @@ bool TrackList::write(int track, Measure* measure) const
 //            else if (e->type() == Element::KEYSIG) {
 //                  // keysig has to be at start of measure
 //                  }
-            else if (e->type() == ElementType::BAR_LINE) {
+            else if (e->type() == Element::Type::BAR_LINE) {
                   if (pos.numerator() == 0 && m) {
                         BarLineType t = static_cast<BarLine*>(e)->barLineType();
                         Measure* pm = m->prevMeasure();
@@ -437,7 +437,7 @@ bool TrackList::write(int track, Measure* measure) const
                         break;
                   // add the element in its own segment;
                   // but KeySig has to be at start of (current) measure
-                  segment = m->getSegment(e, m->tick() + ((e->type() == ElementType::KEYSIG) ? 0 : pos.ticks()));
+                  segment = m->getSegment(e, m->tick() + ((e->type() == Element::Type::KEYSIG) ? 0 : pos.ticks()));
                   Element* ne = e->clone();
                   ne->setScore(score);
                   ne->setTrack(track);
@@ -450,7 +450,7 @@ bool TrackList::write(int track, Measure* measure) const
       //
       for (Segment* s = measure->first(); s; s = s->next1()) {
             Element* el = s->element(track);
-            if (el == 0 || el->type() != ElementType::CHORD)
+            if (el == 0 || el->type() != Element::Type::CHORD)
                   continue;
             foreach(Note* n, static_cast<Chord*>(el)->notes()) {
                   Tie* tie = n->tieFor();

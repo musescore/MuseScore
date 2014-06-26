@@ -44,8 +44,8 @@ class ChordLine : public Element {
       ChordLine(Score*);
       ChordLine(const ChordLine&);
 
-      virtual ChordLine* clone() const { return new ChordLine(*this); }
-      virtual ElementType type() const { return ElementType::CHORDLINE; }
+      virtual ChordLine* clone() const    { return new ChordLine(*this); }
+      virtual Element::Type type() const  { return Element::Type::CHORDLINE; }
       virtual void setChordLineType(ChordLineType);
       ChordLineType chordLineType() const { return _chordLineType; }
       Chord* chord() const                { return (Chord*)(parent()); }

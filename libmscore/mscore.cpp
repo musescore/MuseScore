@@ -14,6 +14,8 @@
 #include "style.h"
 #include "mscore.h"
 #include "sequencer.h"
+#include "element.h"
+#include "dynamic.h"
 #include "accidental.h"
 #include "figuredbass.h"
 #include "stafftype.h"
@@ -26,6 +28,8 @@
 #include "jump.h"
 #include "marker.h"
 #include "layoutbreak.h"
+#include "hairpin.h"
+#include "glissando.h"
 #include "page.h"
 #include "slur.h"
 #include "lyrics.h"
@@ -33,6 +37,7 @@
 #include "notedot.h"
 #include "tie.h"
 #include "staff.h"
+#include "beam.h"
 #include "timesig.h"
 #include "part.h"
 #include "measure.h"
@@ -101,27 +106,31 @@ extern QString mscoreGlobalShare;
 void MScore::init()
       {
 #ifdef SCRIPT_INTERFACE
-      qRegisterMetaType<ElementType>("ElementType");
-      qRegisterMetaType<ValueType>("ValueType");
-      qRegisterMetaType<Direction>("Direction");
-      qRegisterMetaType<DirectionH>("DirectionH");
-      qRegisterMetaType<Placement>("Placement");
-      qRegisterMetaType<Accidental::AccidentalRole>("AccidentalRole");
-      qRegisterMetaType<Accidental::AccidentalType>("AccidentalType");
+      qRegisterMetaType<Element::Type>("ElementType");
+      qRegisterMetaType<Note::ValueType>("ValueType");
+      qRegisterMetaType<MScore::Direction>("Direction");
+      qRegisterMetaType<MScore::DirectionH>("DirectionH");
+      qRegisterMetaType<Element::Placement>("Placement");
+      qRegisterMetaType<Accidental::Role>("AccidentalRole");
+      qRegisterMetaType<Accidental::Type>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
-      qRegisterMetaType<NoteHeadGroup>("NoteHeadGroup");
-      qRegisterMetaType<NoteHeadType>("NoteHeadType");
-      qRegisterMetaType<SegmentType>("SegmentType");
+      qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
+      qRegisterMetaType<NoteHead::Type>("NoteHeadType");
+      qRegisterMetaType<Segment::Type>("SegmentType");
       qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
       qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
-      qRegisterMetaType<VoltaType>("VoltaType");
-      qRegisterMetaType<OttavaType>("OttavaType");
-      qRegisterMetaType<Trill::TrillType>("TrillType");
-      qRegisterMetaType<DynamicRange>("DynamicRange");
-      qRegisterMetaType<JumpType>("JumpType");
-      qRegisterMetaType<MarkerType>("MarkerType");
-      qRegisterMetaType<BeamMode>("BeamMode");
-      qRegisterMetaType<LayoutBreak::LayoutBreakType>("LayoutBreakType");
+      qRegisterMetaType<FiguredBassItem::ContLine>("ContLine");
+      qRegisterMetaType<Volta::Type>("VoltaType");
+      qRegisterMetaType<Ottava::Type>("OttavaType");
+      qRegisterMetaType<Trill::Type>("TrillType");
+      qRegisterMetaType<Dynamic::Range>("DynamicRange");
+      qRegisterMetaType<Jump::Type>("JumpType");
+      qRegisterMetaType<Marker::Type>("MarkerType");
+      qRegisterMetaType<Beam::Mode>("BeamMode");
+      qRegisterMetaType<Hairpin::Type>("HairpinType");
+      qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
+      qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
+      qRegisterMetaType<Glissando::Type>("GlissandoType");
 //      qRegisterMetaType<TextStyle>("TextStyle");
 #endif
 

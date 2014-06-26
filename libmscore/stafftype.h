@@ -340,7 +340,7 @@ class TabDurationSymbol : public Element {
       virtual void draw(QPainter*) const;
       virtual bool isEditable() const           { return false; }
       virtual void layout();
-      virtual ElementType type() const          { return ElementType::TAB_DURATION_SYMBOL; }
+      virtual Element::Type type() const        { return Element::Type::TAB_DURATION_SYMBOL; }
 
       void setDuration(TDuration::DurationType type, int dots, StaffType* tab) {
             _tab = tab;

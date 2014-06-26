@@ -68,7 +68,7 @@ ChordRest::ChordRest(Score* s)
       _staffMove   = 0;
       _beam        = 0;
       _tabDur      = 0;
-      _beamMode    = BeamMode::AUTO;
+      _beamMode    = Beam::Mode::AUTO;
       _up          = true;
       _small       = false;
       _crossMeasure = CrossMeasure::UNKNOWN;
@@ -153,22 +153,22 @@ void ChordRest::writeProperties(Xml& xml) const
       DurationElement::writeProperties(xml);
 
       //
-      // BeamMode default:
-      //    REST  - BeamMode::NONE
-      //    CHORD - BeamMode::AUTO
+      // Beam::Mode default:
+      //    REST  - Beam::Mode::NONE
+      //    CHORD - Beam::Mode::AUTO
       //
-      if ((type() == ElementType::REST && _beamMode != BeamMode::NONE)
-         || (type() == ElementType::CHORD && _beamMode != BeamMode::AUTO)) {
+      if ((type() == Element::Type::REST && _beamMode != Beam::Mode::NONE)
+         || (type() == Element::Type::CHORD && _beamMode != Beam::Mode::AUTO)) {
             QString s;
             switch(_beamMode) {
-                  case BeamMode::AUTO:    s = "auto"; break;
-                  case BeamMode::BEGIN:   s = "begin"; break;
-                  case BeamMode::MID:     s = "mid"; break;
-                  case BeamMode::END:     s = "end"; break;
-                  case BeamMode::NONE:    s = "no"; break;
-                  case BeamMode::BEGIN32: s = "begin32"; break;
-                  case BeamMode::BEGIN64: s = "begin64"; break;
-                  case BeamMode::INVALID: s = "?"; break;
+                  case Beam::Mode::AUTO:    s = "auto"; break;
+                  case Beam::Mode::BEGIN:   s = "begin"; break;
+                  case Beam::Mode::MID:     s = "mid"; break;
+                  case Beam::Mode::END:     s = "end"; break;
+                  case Beam::Mode::NONE:    s = "no"; break;
+                  case Beam::Mode::BEGIN32: s = "begin32"; break;
+                  case Beam::Mode::BEGIN64: s = "begin64"; break;
+                  case Beam::Mode::INVALID: s = "?"; break;
                   }
             xml.tag("BeamMode", s);
             }
@@ -215,7 +215,7 @@ bool ChordRest::readProperties(XmlReader& e)
       if (tag == "durationType") {
             setDurationType(e.readElementText());
             if (actualDurationType().type() != TDuration::DurationType::V_MEASURE) {
-                  if ((type() == ElementType::REST) &&
+                  if ((type() == Element::Type::REST) &&
                               // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
                               // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
@@ -241,24 +241,24 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "BeamMode") {
             QString val(e.readElementText());
-            BeamMode bm = BeamMode::AUTO;
+            Beam::Mode bm = Beam::Mode::AUTO;
             if (val == "auto")
-                  bm = BeamMode::AUTO;
+                  bm = Beam::Mode::AUTO;
             else if (val == "begin")
-                  bm = BeamMode::BEGIN;
+                  bm = Beam::Mode::BEGIN;
             else if (val == "mid")
-                  bm = BeamMode::MID;
+                  bm = Beam::Mode::MID;
             else if (val == "end")
-                  bm = BeamMode::END;
+                  bm = Beam::Mode::END;
             else if (val == "no")
-                  bm = BeamMode::NONE;
+                  bm = Beam::Mode::NONE;
             else if (val == "begin32")
-                  bm = BeamMode::BEGIN32;
+                  bm = Beam::Mode::BEGIN32;
             else if (val == "begin64")
-                  bm = BeamMode::BEGIN64;
+                  bm = Beam::Mode::BEGIN64;
             else
-                  bm = BeamMode(val.toInt());
-            _beamMode = BeamMode(bm);
+                  bm = Beam::Mode(val.toInt());
+            _beamMode = Beam::Mode(bm);
             }
       else if (tag == "Attribute" || tag == "Articulation") {     // obsolete: "Attribute"
             Articulation* atr = new Articulation(score());
@@ -307,7 +307,7 @@ bool ChordRest::readProperties(XmlReader& e)
                         if (start)
                               slur->setTrack(start->track());
                         slur->setTrack2(track());
-                        if (start && start->type() == ElementType::CHORD && start->noteType() != NoteType::NORMAL) {
+                        if (start && start->type() == Element::Type::CHORD && start->noteType() != NoteType::NORMAL) {
                               start->add(slur);
                               slur->setAnchor(Spanner::Anchor::CHORD);
                               score()->removeSpanner(slur);
@@ -325,7 +325,7 @@ bool ChordRest::readProperties(XmlReader& e)
             int i = e.readInt();
             if (i == 0)
                   i = mticks;
-            if ((type() == ElementType::REST) && (mticks == i)) {
+            if ((type() == Element::Type::REST) && (mticks == i)) {
                   setDurationType(TDuration::DurationType::V_MEASURE);
                   setDuration(Fraction::fromTicks(i));
                   }
@@ -353,7 +353,7 @@ bool ChordRest::readProperties(XmlReader& e)
       else if (tag == "offset") {
             if (score()->mscVersion() > 114) // || voice() >= 2) {
                   DurationElement::readProperties(e);
-            else if (type() == ElementType::REST) {
+            else if (type() == Element::Type::REST) {
                   DurationElement::readProperties(e);
                   setUserXoffset(0.0); // honor Y offset but not X for rests in older scores
                   }
@@ -397,7 +397,7 @@ void ChordRest::layoutArticulations()
       qreal _spatium  = spatium();
       qreal _spStaff  = _spatium * staff()->lineDistance(); // scaled to staff line distance for vert. pos. within a staff
 
-      if (type() == ElementType::CHORD) {
+      if (type() == Element::Type::CHORD) {
             if (_articulations.size() == 1) {
                   static_cast<Chord*>(this)->layoutArticulation(_articulations[0]);
                   return;
@@ -461,7 +461,7 @@ void ChordRest::layoutArticulations()
       // avoid collisions of staff articulations with chord notes:
       // gap between note and staff articulation is distance0 + 0.5 spatium
 
-      if (type() == ElementType::CHORD) {
+      if (type() == Element::Type::CHORD) {
             Chord* chord = static_cast<Chord*>(this);
             Stem* stem   = chord->stem();
             if (stem) {
@@ -491,10 +491,10 @@ void ChordRest::layoutArticulations()
       for (int i = 0; i < n; ++i) {
             Articulation* a = _articulations.at(i);
             //
-            // determine Direction
+            // determine MScore::Direction
             //
-            if (a->direction() != Direction::AUTO) {
-                  a->setUp(a->direction() == Direction::UP);
+            if (a->direction() != MScore::Direction::AUTO) {
+                  a->setUp(a->direction() == MScore::Direction::UP);
                   }
             else {
                   if (a->anchor() == ArticulationAnchor::CHORD)
@@ -534,7 +534,7 @@ void ChordRest::layoutArticulations()
             if (bottom) {
                   int line = downLine();
                   y = chordBotY + dy;
-                  if (!headSide && type() == ElementType::CHORD && chord->stem()) {
+                  if (!headSide && type() == Element::Type::CHORD && chord->stem()) {
                         Stem* stem = chord->stem();
                         y          = chordTopY + stem->stemLen();
                         if (chord->beam())
@@ -558,7 +558,7 @@ void ChordRest::layoutArticulations()
             else {
                   int line = upLine();
                   y = chordTopY - dy;
-                  if (!headSide && type() == ElementType::CHORD && chord->stem()) {
+                  if (!headSide && type() == Element::Type::CHORD && chord->stem()) {
                         Stem* stem = chord->stem();
                         y          = chordBotY + stem->stemLen();
                         if (chord->beam())
@@ -699,20 +699,20 @@ Element* ChordRest::drop(const DropData& data)
       Element* e = data.element;
       Measure* m  = measure();
       switch (e->type()) {
-            case ElementType::BREATH:
+            case Element::Type::BREATH:
                   {
                   Breath* b = static_cast<Breath*>(e);
                   b->setTrack(staffIdx() * VOICES);
 
                   // TODO: insert automatically in all staves?
 
-                  Segment* seg = m->undoGetSegment(SegmentType::Breath, tick());
+                  Segment* seg = m->undoGetSegment(Segment::Type::Breath, tick());
                   b->setParent(seg);
                   score()->undoAddElement(b);
                   }
                   return e;
 
-            case ElementType::BAR_LINE:
+            case Element::Type::BAR_LINE:
                   {
                   BarLine* bl = static_cast<BarLine*>(e);
                   bl->setTrack(staffIdx() * VOICES);
@@ -720,18 +720,18 @@ Element* ChordRest::drop(const DropData& data)
                   if (tick() == m->tick())
                         return m->drop(data);
 
-                  Segment* seg = m->undoGetSegment(SegmentType::BarLine, tick());
+                  Segment* seg = m->undoGetSegment(Segment::Type::BarLine, tick());
                   bl->setParent(seg);
                   score()->undoAddElement(bl);
                   }
                   return e;
 
-            case ElementType::CLEF:
+            case Element::Type::CLEF:
                   score()->undoChangeClef(staff(), segment(), static_cast<Clef*>(e)->clefType());
                   delete e;
                   break;
 
-            case ElementType::TEMPO_TEXT:
+            case Element::Type::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(e);
                   tt->setParent(segment());
@@ -741,33 +741,33 @@ Element* ChordRest::drop(const DropData& data)
                   }
                   return e;
 
-            case ElementType::DYNAMIC:
-            case ElementType::FRET_DIAGRAM:
-            case ElementType::SYMBOL:
+            case Element::Type::DYNAMIC:
+            case Element::Type::FRET_DIAGRAM:
+            case Element::Type::SYMBOL:
                   e->setTrack(track());
                   e->setParent(segment());
                   score()->undoAddElement(e);
                   return e;
 
-            case ElementType::NOTE:
+            case Element::Type::NOTE:
                   {
                   Note* note = static_cast<Note*>(e);
                   NoteVal nval;
                   nval.pitch = note->pitch();
                   nval.headGroup = note->headGroup();
-                  score()->setNoteRest(segment(), track(), nval, data.duration, Direction::AUTO);
+                  score()->setNoteRest(segment(), track(), nval, data.duration, MScore::Direction::AUTO);
                   delete e;
                   }
                   break;
 
-            case ElementType::HARMONY:
+            case Element::Type::HARMONY:
                   static_cast<Harmony*>(e)->render();
                   // fall through
-            case ElementType::TEXT:
-            case ElementType::STAFF_TEXT:
-            case ElementType::STAFF_STATE:
-            case ElementType::INSTRUMENT_CHANGE:
-            case ElementType::REHEARSAL_MARK:
+            case Element::Type::TEXT:
+            case Element::Type::STAFF_TEXT:
+            case Element::Type::STAFF_STATE:
+            case Element::Type::INSTRUMENT_CHANGE:
+            case Element::Type::REHEARSAL_MARK:
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
                   {
@@ -779,7 +779,7 @@ Element* ChordRest::drop(const DropData& data)
                   score()->undoAddElement(e);
                   return e;
 
-            case ElementType::FIGURED_BASS:
+            case Element::Type::FIGURED_BASS:
                   {
                   bool bNew;
                   FiguredBass * fb = static_cast<FiguredBass *>(e);
@@ -794,31 +794,31 @@ Element* ChordRest::drop(const DropData& data)
                   return e;
                   }
 
-            case ElementType::IMAGE:
+            case Element::Type::IMAGE:
                   e->setParent(segment());
                   score()->undoAddElement(e);
                   return e;
 
-            case ElementType::ICON:
+            case Element::Type::ICON:
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case IconType::SBEAM:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::BEGIN));
                               break;
                         case IconType::MBEAM:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::MID));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::MID));
                               break;
                         case IconType::NBEAM:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::NONE));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::NONE));
                               break;
                         case IconType::BEAM32:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN32));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::BEGIN32));
                               break;
                         case IconType::BEAM64:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN64));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::BEGIN64));
                               break;
                         case IconType::AUTOBEAM:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::AUTO));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
                               break;
                         default:
                               break;
@@ -881,7 +881,7 @@ void ChordRest::setTrack(int val)
       foreach(Articulation* a, _articulations)
             a->setTrack(val);
       Element::setTrack(val);
-      if (type() == ElementType::CHORD) {
+      if (type() == Element::Type::CHORD) {
             foreach(Note* n, static_cast<Chord*>(this)->notes())
                   n->setTrack(val);
             }
@@ -922,7 +922,7 @@ void ChordRest::add(Element* e)
       e->setParent(this);
       e->setTrack(track());
       switch(e->type()) {
-            case ElementType::ARTICULATION:
+            case Element::Type::ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
                   _articulations.push_back(a);
@@ -930,7 +930,7 @@ void ChordRest::add(Element* e)
                         score()->fixTicks();          // update tempo map
                   }
                   break;
-            case ElementType::LYRICS:
+            case Element::Type::LYRICS:
                   {
                   Lyrics* l = static_cast<Lyrics*>(e);
                   int size = _lyricsList.size();
@@ -954,7 +954,7 @@ void ChordRest::add(Element* e)
 void ChordRest::remove(Element* e)
       {
       switch (e->type()) {
-            case ElementType::ARTICULATION:
+            case Element::Type::ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
                   if (!_articulations.removeOne(a))
@@ -963,7 +963,7 @@ void ChordRest::remove(Element* e)
                         score()->fixTicks();           // update tempo map
                   }
                   break;
-            case ElementType::LYRICS:
+            case Element::Type::LYRICS:
                   {
                   for (int i = 0; i < _lyricsList.size(); ++i) {
                         if (_lyricsList[i] != e)
@@ -996,7 +996,7 @@ void ChordRest::removeDeleteBeam(bool beamed)
             if (b->isEmpty())
                   score()->undoRemoveElement(b);
             }
-      if (!beamed && type() == ElementType::CHORD)
+      if (!beamed && type() == Element::Type::CHORD)
             static_cast<Chord*>(this)->layoutHook1();
       }
 
@@ -1004,7 +1004,7 @@ void ChordRest::removeDeleteBeam(bool beamed)
 //   undoSetBeamMode
 //---------------------------------------------------------
 
-void ChordRest::undoSetBeamMode(BeamMode mode)
+void ChordRest::undoSetBeamMode(Beam::Mode mode)
       {
       undoChangeProperty(P_ID::BEAM_MODE, int(mode));
       }
@@ -1030,7 +1030,7 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::SMALL:     setSmall(v.toBool()); break;
-            case P_ID::BEAM_MODE: setBeamMode(BeamMode(v.toInt())); break;
+            case P_ID::BEAM_MODE: setBeamMode(Beam::Mode(v.toInt())); break;
             default:          return DurationElement::setProperty(propertyId, v);
             }
       score()->setLayoutAll(true);
@@ -1045,7 +1045,7 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_ID::SMALL:     return false;
-            case P_ID::BEAM_MODE: return int(BeamMode::AUTO);
+            case P_ID::BEAM_MODE: return int(Beam::Mode::AUTO);
             default:          return DurationElement::propertyDefault(propertyId);
             }
       score()->setLayoutAll(true);
@@ -1057,7 +1057,7 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
 
 bool ChordRest::isGrace() const
       {
-      return type() == ElementType::CHORD && ((Chord*)this)->noteType() != NoteType::NORMAL;
+      return type() == Element::Type::CHORD && ((Chord*)this)->noteType() != NoteType::NORMAL;
       }
 
 //---------------------------------------------------------
@@ -1066,7 +1066,7 @@ bool ChordRest::isGrace() const
 
 bool ChordRest::isGraceBefore() const
       {
-      return (type() == ElementType::CHORD && (((Chord*)this)->noteType() == NoteType::ACCIACCATURA
+      return (type() == Element::Type::CHORD && (((Chord*)this)->noteType() == NoteType::ACCIACCATURA
                                           || ((Chord*)this)->noteType() == NoteType::APPOGGIATURA
                                           || ((Chord*)this)->noteType() == NoteType::GRACE4
                                           || ((Chord*)this)->noteType() == NoteType::GRACE16
@@ -1079,7 +1079,7 @@ bool ChordRest::isGraceBefore() const
 
 bool ChordRest::isGraceAfter() const
       {
-      return (type() == ElementType::CHORD && (((Chord*)this)->noteType() == NoteType::GRACE8_AFTER
+      return (type() == Element::Type::CHORD && (((Chord*)this)->noteType() == NoteType::GRACE8_AFTER
                                           || ((Chord*)this)->noteType() == NoteType::GRACE16_AFTER
                                           || ((Chord*)this)->noteType() == NoteType::GRACE32_AFTER));
       }

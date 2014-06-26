@@ -236,7 +236,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   text->setText((const char*)(mm.edata()));
 
                   MeasureBase* measure = cs->first();
-                  if (measure->type() != ElementType::VBOX) {
+                  if (measure->type() != Element::Type::VBOX) {
                         measure = new VBox(cs);
                         measure->setTick(0);
                         measure->setNext(cs->first());
@@ -347,7 +347,7 @@ void MTrack::fillGapWithRests(Score* score,
                         Rest* rest = new Rest(score, duration);
                         rest->setDuration(duration.fraction());
                         rest->setTrack(track);
-                        Segment* s = measure->getSegment(SegmentType::ChordRest,
+                        Segment* s = measure->getSegment(Segment::Type::ChordRest,
                                                          startChordTick.ticks());
                         s->add(rest);
                         MidiTuplet::addElementToTuplet(voice, startChordTick, len, rest, tuplets);
@@ -379,7 +379,7 @@ void setMusicNotesFromMidi(Score *score,
             note->setTpcFromPitch();
 
             chord->add(note);
-            note->setVeloType(ValueType::USER_VAL);
+            note->setVeloType(Note::ValueType::USER_VAL);
             note->setVeloOffset(mn.velo);
 
             NoteEventList el;
@@ -395,7 +395,7 @@ void setMusicNotesFromMidi(Score *score,
                   if (!drumset->isValid(mn.pitch))
                         qDebug("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
                   else {
-                        Direction sd = drumset->stemDirection(mn.pitch);
+                        MScore::Direction sd = drumset->stemDirection(mn.pitch);
                         chord->setStemDirection(sd);
                         }
                   }

@@ -20,7 +20,6 @@
 
 #include "element.h"
 #include "symbol.h"
-#include "durationtype.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
 
@@ -41,61 +40,9 @@ class Accidental;
 class NoteDot;
 class Spanner;
 class StaffType;
-enum class SymId : short;
+enum class SymId;
 
-enum class ValueType : char { OFFSET_VAL, USER_VAL };
-
-//---------------------------------------------------------
-//   NoteHeadGroup
-//---------------------------------------------------------
-
-enum class NoteHeadGroup : signed char {
-      HEAD_NORMAL = 0,
-      HEAD_CROSS,
-      HEAD_DIAMOND,
-      HEAD_TRIANGLE,
-      HEAD_MI,
-      HEAD_SLASH,
-      HEAD_XCIRCLE,
-      HEAD_DO,
-      HEAD_RE,
-      HEAD_FA,
-      HEAD_LA,
-      HEAD_TI,
-      HEAD_SOL,
-      HEAD_BREVIS_ALT,
-      HEAD_GROUPS,
-      HEAD_INVALID = -1
-      };
-
-//---------------------------------------------------------
-//   NoteHeadType
-//---------------------------------------------------------
-
-enum class NoteHeadType : signed char {
-      HEAD_AUTO    = -1,
-      HEAD_WHOLE   = 0,
-      HEAD_HALF    = 1,
-      HEAD_QUARTER = 2,
-      HEAD_BREVIS  = 3,
-      HEAD_TYPES
-      };
-
-//---------------------------------------------------------
-//   NoteVal
-//    helper structure
-//---------------------------------------------------------
-
-struct NoteVal {
-      int pitch               { -1 };
-      int tpc                 { Tpc::TPC_INVALID };
-      int fret                { FRET_NONE };
-      int string              { STRING_NONE };
-      NoteHeadGroup headGroup { NoteHeadGroup::HEAD_NORMAL };
-
-      NoteVal() {}
-      NoteVal(int p) : pitch(p) {}
-      };
+static const int MAX_DOTS = 3;
 
 //---------------------------------------------------------
 //   @@ NoteHead
@@ -105,69 +52,121 @@ class NoteHead : public Symbol {
       Q_OBJECT
 
    public:
+      enum class Group : signed char {
+            HEAD_NORMAL = 0,
+            HEAD_CROSS,
+            HEAD_DIAMOND,
+            HEAD_TRIANGLE,
+            HEAD_MI,
+            HEAD_SLASH,
+            HEAD_XCIRCLE,
+            HEAD_DO,
+            HEAD_RE,
+            HEAD_FA,
+            HEAD_LA,
+            HEAD_TI,
+            HEAD_SOL,
+            HEAD_BREVIS_ALT,
+            HEAD_GROUPS,
+            HEAD_INVALID = -1
+            };
+      enum class Type : signed char {
+            HEAD_AUTO    = -1,
+            HEAD_WHOLE   = 0,
+            HEAD_HALF    = 1,
+            HEAD_QUARTER = 2,
+            HEAD_BREVIS  = 3,
+            HEAD_TYPES
+            };
+
       NoteHead(Score* s) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&);
-      virtual NoteHead* clone() const  { return new NoteHead(*this); }
-      virtual ElementType type() const { return ElementType::NOTEHEAD; }
+      virtual NoteHead* clone() const    { return new NoteHead(*this); }
+      virtual Element::Type type() const { return Element::Type::NOTEHEAD; }
 
       virtual void write(Xml& xml) const;
 
-      NoteHeadGroup headGroup() const;
+      Group headGroup() const;
+      };
+
+//---------------------------------------------------------
+//   NoteVal
+//    helper structure
+//---------------------------------------------------------
+
+struct NoteVal {
+      int pitch                 { -1 };
+      int tpc                   { Tpc::TPC_INVALID };
+      int fret                  { FRET_NONE };
+      int string                { STRING_NONE };
+      NoteHead::Group headGroup { NoteHead::Group::HEAD_NORMAL };
+
+      NoteVal() {}
+      NoteVal(int p) : pitch(p) {}
       };
 
 //---------------------------------------------------------------------------------------
 //   @@ Note
 ///    Graphic representation of a note.
 //
-//   @P subchannel       int                 midi subchannel (for midi articulation) (read only)
-//   @P line             int                 notehead position (read only)
-//   @P fret             int                 fret number in tablature
-//   @P string           int                 string number in tablature
-//   @P tpc              int                 tonal pitch class, as per concert pitch setting
-//   @P tpc1             int                 tonal pitch class, non transposed
-//   @P tpc2             int                 tonal pitch class, transposed
-//   @P pitch            int                 midi pitch
-//   @P ppitch           int                 actual played midi pitch (honoring ottavas) (read only)
-//   @P ghost            bool                ghost note (guitar: death note)
-//   @P hidden           bool                hidden, not played note (read only)
-//   @P mirror           bool                mirror note head on x axis (read only)
-//   @P small            bool                small note head
-//   @P play             bool                play note
-//   @P tuning           qreal               tuning offset in cent
-//   @P veloType         Ms::ValueType       (OFFSET_VAL, USER_VAL)
+//   @P subchannel       int                     midi subchannel (for midi articulation) (read only)
+//   @P line             int                     notehead position (read only)
+//   @P fret             int                     fret number in tablature
+//   @P string           int                     string number in tablature
+//   @P tpc              int                     tonal pitch class, as per concert pitch setting
+//   @P tpc1             int                     tonal pitch class, non transposed
+//   @P tpc2             int                     tonal pitch class, transposed
+//   @P pitch            int                     midi pitch
+//   @P ppitch           int                     actual played midi pitch (honoring ottavas) (read only)
+//   @P ghost            bool                    ghost note (guitar: death note)
+//   @P hidden           bool                    hidden, not played note (read only)
+//   @P mirror           bool                    mirror note head on x axis (read only)
+//   @P small            bool                    small note head
+//   @P play             bool                    play note
+//   @P tuning           qreal                   tuning offset in cent
+//   @P veloType         Ms::Note::ValueType     (OFFSET_VAL, USER_VAL)
 //   @P veloOffset       int
-//   @P userMirror       Ms::DirectionH      (DH_AUTO, DH_LEFT, DH_RIGHT)
-//   @P userDotPosition  Ms::Direction       (AUTO, UP, DOWN)
-//   @P headGroup        Ms::NoteHeadGroup   (HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT)
-//   @P headType         Ms::NoteHeadType    (HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS)
-//   @P elements         array[Ms::Element]  list of elements attached to note head
+//   @P userMirror       Ms::MScore::DirectionH  (AUTO, LEFT, RIGHT)
+//   @P userDotPosition  Ms::MScore::Direction   (AUTO, UP, DOWN)
+//   @P headGroup        Ms::NoteHead::Group     (HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT)
+//   @P headType         Ms::NoteHead::Type      (HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS)
+//   @P elements         array[Ms::Element]      list of elements attached to note head
 //---------------------------------------------------------------------------------------
 
 class Note : public Element {
       Q_OBJECT
-      Q_PROPERTY(int subchannel                READ subchannel)
-      Q_PROPERTY(int line                      READ line)
-      Q_PROPERTY(int fret                      READ fret              WRITE undoSetFret)
-      Q_PROPERTY(int string                    READ string            WRITE undoSetString)
-      Q_PROPERTY(int tpc                       READ tpc)
-      Q_PROPERTY(int tpc1                      READ tpc1              WRITE undoSetTpc1)
-      Q_PROPERTY(int tpc2                      READ tpc2              WRITE undoSetTpc2)
-      Q_PROPERTY(int pitch                     READ pitch             WRITE undoSetPitch)
-      Q_PROPERTY(int ppitch                    READ ppitch)
-      Q_PROPERTY(bool ghost                    READ ghost             WRITE undoSetGhost)
-      Q_PROPERTY(bool hidden                   READ hidden)
-      Q_PROPERTY(bool mirror                   READ mirror)
-      Q_PROPERTY(bool small                    READ small             WRITE undoSetSmall)
-      Q_PROPERTY(bool play                     READ play              WRITE undoSetPlay)
-      Q_PROPERTY(qreal tuning                  READ tuning            WRITE undoSetTuning)
-      Q_PROPERTY(Ms::ValueType  veloType       READ veloType          WRITE undoSetVeloType)
-      Q_PROPERTY(int veloOffset                READ veloOffset        WRITE undoSetVeloOffset)
-      Q_PROPERTY(Ms::DirectionH userMirror     READ userMirror        WRITE undoSetUserMirror)
-      Q_PROPERTY(Ms::Direction userDotPosition READ userDotPosition   WRITE undoSetUserDotPosition)
-      Q_PROPERTY(Ms::NoteHeadGroup  headGroup  READ headGroup         WRITE undoSetHeadGroup)
-      Q_PROPERTY(Ms::NoteHeadType   headType   READ headType          WRITE undoSetHeadType)
+      Q_PROPERTY(int subchannel                          READ subchannel)
+      Q_PROPERTY(int line                                READ line)
+      Q_PROPERTY(int fret                                READ fret             WRITE undoSetFret)
+      Q_PROPERTY(int string                              READ string           WRITE undoSetString)
+      Q_PROPERTY(int tpc                                 READ tpc)
+      Q_PROPERTY(int tpc1                                READ tpc1             WRITE undoSetTpc1)
+      Q_PROPERTY(int tpc2                                READ tpc2             WRITE undoSetTpc2)
+      Q_PROPERTY(int pitch                               READ pitch            WRITE undoSetPitch)
+      Q_PROPERTY(int ppitch                              READ ppitch)
+      Q_PROPERTY(bool ghost                              READ ghost            WRITE undoSetGhost)
+      Q_PROPERTY(bool hidden                             READ hidden)
+      Q_PROPERTY(bool mirror                             READ mirror)
+      Q_PROPERTY(bool small                              READ small            WRITE undoSetSmall)
+      Q_PROPERTY(bool play                               READ play             WRITE undoSetPlay)
+      Q_PROPERTY(qreal tuning                            READ tuning           WRITE undoSetTuning)
+      Q_PROPERTY(Ms::Note::ValueType veloType            READ veloType         WRITE undoSetVeloType)
+      Q_PROPERTY(int veloOffset                          READ veloOffset       WRITE undoSetVeloOffset)
+      Q_PROPERTY(Ms::MScore::DirectionH userMirror       READ userMirror       WRITE undoSetUserMirror)
+      Q_PROPERTY(Ms::MScore::Direction userDotPosition   READ userDotPosition  WRITE undoSetUserDotPosition)
+      Q_PROPERTY(Ms::NoteHead::Group headGroup           READ headGroup        WRITE undoSetHeadGroup)
+      Q_PROPERTY(Ms::NoteHead::Type headType             READ headType         WRITE undoSetHeadType)
       Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
+      Q_ENUMS(ValueType)
+      Q_ENUMS(Ms::NoteHead::Group)
+      Q_ENUMS(Ms::NoteHead::Type)
+      Q_ENUMS(Ms::MScore::Direction)
+      Q_ENUMS(Ms::MScore::DirectionH)
 
+   public:
+      enum class ValueType : char { OFFSET_VAL, USER_VAL };
+
+   private:
       int _subchannel;        ///< articulation
       int _line;              ///< y-Position; 0 - top line.
       int _fret;              ///< for tablature view
@@ -190,11 +189,11 @@ class Note : public Element {
       bool _play;             // note is not played if false
       mutable bool _mark;     // for use in sequencer
 
-      DirectionH _userMirror;     ///< user override of mirror
-      Direction _userDotPosition; ///< user override of dot position
+      MScore::DirectionH _userMirror;     ///< user override of mirror
+      MScore::Direction _userDotPosition; ///< user override of dot position
 
-      NoteHeadGroup _headGroup;
-      NoteHeadType _headType;
+      NoteHead::Group _headGroup;
+      NoteHead::Type  _headType;
 
       ValueType _veloType;
       short int _veloOffset; ///< velocity user offset in percent, or absolute velocity for this note
@@ -231,8 +230,8 @@ class Note : public Element {
       Note(const Note&);
       Note& operator=(const Note&);
       ~Note();
-      Note* clone() const      { return new Note(*this); }
-      ElementType type() const { return ElementType::NOTE; }
+      Note* clone() const        { return new Note(*this); }
+      Element::Type type() const { return Element::Type::NOTE; }
 
       virtual qreal mag() const;
 
@@ -253,10 +252,10 @@ class Note : public Element {
       QPointF attach() const;
 
       SymId noteHead() const;
-      NoteHeadGroup headGroup() const     { return _headGroup; }
-      NoteHeadType headType() const       { return _headType;  }
-      void setHeadGroup(NoteHeadGroup val);
-      void setHeadType(NoteHeadType t);
+      NoteHead::Group headGroup() const   { return _headGroup; }
+      NoteHead::Type headType() const     { return _headType;  }
+      void setHeadGroup(NoteHead::Group val);
+      void setHeadType(NoteHead::Type t);
 
       void setPitch(int val);
       void undoSetPitch(int val);
@@ -340,11 +339,11 @@ class Note : public Element {
       int subchannel() const                    { return _subchannel; }
       void setSubchannel(int val)               { _subchannel = val;  }
 
-      DirectionH userMirror() const             { return _userMirror; }
-      void setUserMirror(DirectionH d)          { _userMirror = d; }
+      MScore::DirectionH userMirror() const             { return _userMirror; }
+      void setUserMirror(MScore::DirectionH d)          { _userMirror = d; }
 
-      Direction userDotPosition() const         { return _userDotPosition; }
-      void setUserDotPosition(Direction d)      { _userDotPosition = d;    }
+      MScore::Direction userDotPosition() const         { return _userDotPosition; }
+      void setUserDotPosition(MScore::Direction d)      { _userDotPosition = d;    }
       bool dotIsUp() const;               // actual dot position
 
       void reset();
@@ -388,10 +387,10 @@ class Note : public Element {
       void undoSetVeloOffset(int);
       void undoSetOnTimeUserOffset(int);
       void undoSetOffTimeUserOffset(int);
-      void undoSetUserMirror(DirectionH);
-      void undoSetUserDotPosition(Direction);
-      void undoSetHeadGroup(NoteHeadGroup);
-      void undoSetHeadType(NoteHeadType);
+      void undoSetUserMirror(MScore::DirectionH);
+      void undoSetUserDotPosition(MScore::Direction);
+      void undoSetHeadGroup(NoteHead::Group);
+      void undoSetHeadType(NoteHead::Type);
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
@@ -400,20 +399,20 @@ class Note : public Element {
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
       virtual void setScore(Score* s);
-      void setDotY(Direction);
+      void setDotY(MScore::Direction);
 
-      static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
+      static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
       NoteVal noteVal() const;
       };
 
-// extern const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS)][int(NoteHeadType::HEAD_TYPES)];
+// extern const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)];
 
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::NoteHeadGroup);
-Q_DECLARE_METATYPE(Ms::NoteHeadType);
-Q_DECLARE_METATYPE(Ms::ValueType);
+Q_DECLARE_METATYPE(Ms::NoteHead::Group);
+Q_DECLARE_METATYPE(Ms::NoteHead::Type);
+Q_DECLARE_METATYPE(Ms::Note::ValueType);
 
 #endif
 

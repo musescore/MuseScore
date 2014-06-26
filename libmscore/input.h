@@ -15,6 +15,7 @@
 
 #include "mscore.h"
 #include "durationtype.h"
+#include "beam.h"
 
 namespace Ms {
 
@@ -40,7 +41,7 @@ class InputState {
       bool        _repitchMode { false };
       bool _rest               { false };              // rest mode
       NoteType _noteType       { NoteType::NORMAL };
-      BeamMode _beamMode       { BeamMode::AUTO };
+      Beam::Mode _beamMode       { Beam::Mode::AUTO };
       bool _noteEntryMode      { false };
       Slur* _slur              { 0     };
 
@@ -87,8 +88,8 @@ class InputState {
       NoteType noteType() const           { return _noteType; }
       void setNoteType(NoteType t)        { _noteType = t; }
 
-      BeamMode beamMode() const           { return _beamMode; }
-      void setBeamMode(BeamMode m)        { _beamMode = m; }
+      Beam::Mode beamMode() const           { return _beamMode; }
+      void setBeamMode(Beam::Mode m)        { _beamMode = m; }
 
       bool noteEntryMode() const          { return _noteEntryMode; }
       void setNoteEntryMode(bool v)       { _noteEntryMode = v; }

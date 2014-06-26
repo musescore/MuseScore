@@ -69,14 +69,14 @@ static void collectMatch(void* data, Element* e)
             return;
       if ((p->staff != -1) && (p->staff != e->staffIdx()))
             return;
-      if (e->type() == ElementType::CHORD || e->type() == ElementType::REST || e->type() == ElementType::NOTE || e->type() == ElementType::LYRICS) {
+      if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS) {
             if (p->voice != -1 && p->voice != e->voice())
                   return;
             }
       if (p->system) {
             Element* ee = e;
             do {
-                  if (ee->type() == ElementType::SYSTEM) {
+                  if (ee->type() == Element::Type::SYSTEM) {
                         if (p->system != ee)
                               return;
                         break;
@@ -101,20 +101,20 @@ void TestCopyPasteSymbolList::copypaste(const char* name, const char* idx)
       // MuseScore::selectSimilar(Element* e, bool sameStaff) in file mscore/musescore.cpp
       ElementPattern pattern;
       pattern.subtypeValid = true;
-//TODO      if (type == int(ElementType::VOLTA_SEGMENT)) {
+//TODO      if (type == int(Element::Type::VOLTA_SEGMENT)) {
             // Volta* volta = static_cast<VoltaSegment*>(e)->volta();
             // type    = volta->type();
             // subtype = volta->subtype();
             pattern.subtypeValid = false;
 //            }
       if (!strcmp(idx, "articulation"))
-            pattern.type = int(ElementType::ARTICULATION);
+            pattern.type = int(Element::Type::ARTICULATION);
       else if (!strcmp(idx, "chordnames"))
-            pattern.type = int(ElementType::HARMONY);
+            pattern.type = int(Element::Type::HARMONY);
       else if (!strcmp(idx, "figuredbass"))
-            pattern.type = int(ElementType::FIGURED_BASS);
+            pattern.type = int(Element::Type::FIGURED_BASS);
       else if (!strcmp(idx, "lyrics"))
-            pattern.type = int(ElementType::LYRICS);
+            pattern.type = int(Element::Type::LYRICS);
       else
             return;
       pattern.subtype = 0; // TODO subtype;

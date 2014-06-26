@@ -30,7 +30,7 @@ class Chord;
 
 class Lyrics : public Text {
       Q_OBJECT
-      Q_PROPERTY(Syllabic syllabic READ syllabic WRITE setSyllabic)
+      Q_PROPERTY(Ms::Lyrics::Syllabic syllabic READ syllabic WRITE setSyllabic)
       Q_ENUMS(Syllabic)
 
    public:
@@ -50,8 +50,8 @@ class Lyrics : public Text {
       Lyrics(Score* = 0);
       Lyrics(const Lyrics&);
       ~Lyrics();
-      virtual Lyrics* clone() const override    { return new Lyrics(*this); }
-      virtual ElementType type() const override { return ElementType::LYRICS; }
+      virtual Lyrics* clone() const override      { return new Lyrics(*this); }
+      virtual Element::Type type() const override { return Element::Type::LYRICS; }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
       virtual Element* drop(const DropData&) override;

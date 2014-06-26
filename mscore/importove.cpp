@@ -465,70 +465,70 @@ ClefType OveClefToClef(OVE::ClefType type){
 	return clef;
 }
 
-NoteHeadGroup getHeadGroup(OVE::NoteHeadType type) {
-    NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
+NoteHead::Group getHeadGroup(OVE::NoteHeadType type) {
+    NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
 	switch (type) {
 	case OVE::NoteHead_Standard: {
-		headGroup = NoteHeadGroup::HEAD_NORMAL;
+		headGroup = NoteHead::Group::HEAD_NORMAL;
 		break;
 	}
 	case OVE::NoteHead_Invisible: {
 		break;
 	}
 	case OVE::NoteHead_Rhythmic_Slash: {
-		headGroup = NoteHeadGroup::HEAD_SLASH;
+		headGroup = NoteHead::Group::HEAD_SLASH;
 		break;
 	}
 	case OVE::NoteHead_Percussion: {
-		headGroup = NoteHeadGroup::HEAD_XCIRCLE;
+		headGroup = NoteHead::Group::HEAD_XCIRCLE;
 		break;
 	}
 	case OVE::NoteHead_Closed_Rhythm: {
-		headGroup = NoteHeadGroup::HEAD_CROSS;
+		headGroup = NoteHead::Group::HEAD_CROSS;
 		break;
 	}
 	case OVE::NoteHead_Open_Rhythm: {
-		headGroup = NoteHeadGroup::HEAD_CROSS;
+		headGroup = NoteHead::Group::HEAD_CROSS;
 		break;
 	}
 	case OVE::NoteHead_Closed_Slash: {
-		headGroup = NoteHeadGroup::HEAD_SLASH;
+		headGroup = NoteHead::Group::HEAD_SLASH;
 		break;
 	}
 	case OVE::NoteHead_Open_Slash: {
-		headGroup = NoteHeadGroup::HEAD_SLASH;
+		headGroup = NoteHead::Group::HEAD_SLASH;
 		break;
 	}
 	case OVE::NoteHead_Closed_Do: {
-		headGroup = NoteHeadGroup::HEAD_DO;
+		headGroup = NoteHead::Group::HEAD_DO;
 		break;
 	}
 	case OVE::NoteHead_Open_Do: {
-		headGroup = NoteHeadGroup::HEAD_DO;
+		headGroup = NoteHead::Group::HEAD_DO;
 		break;
 	}
 	case OVE::NoteHead_Closed_Re: {
-		headGroup = NoteHeadGroup::HEAD_RE;
+		headGroup = NoteHead::Group::HEAD_RE;
 		break;
 	}
 	case OVE::NoteHead_Open_Re: {
-		headGroup = NoteHeadGroup::HEAD_RE;
+		headGroup = NoteHead::Group::HEAD_RE;
 		break;
 	}
 	case OVE::NoteHead_Closed_Mi: {
-		headGroup = NoteHeadGroup::HEAD_MI;
+		headGroup = NoteHead::Group::HEAD_MI;
 		break;
 	}
 	case OVE::NoteHead_Open_Mi: {
-		headGroup = NoteHeadGroup::HEAD_MI;
+		headGroup = NoteHead::Group::HEAD_MI;
 		break;
 	}
 	case OVE::NoteHead_Closed_Fa: {
-		headGroup = NoteHeadGroup::HEAD_FA;
+		headGroup = NoteHead::Group::HEAD_FA;
 		break;
 	}
 	case OVE::NoteHead_Open_Fa: {
-		headGroup = NoteHeadGroup::HEAD_FA;
+		headGroup = NoteHead::Group::HEAD_FA;
 		break;
 	}
 	case OVE::NoteHead_Closed_Sol: {
@@ -538,19 +538,19 @@ NoteHeadGroup getHeadGroup(OVE::NoteHeadType type) {
 		break;
 	}
 	case OVE::NoteHead_Closed_La: {
-		headGroup = NoteHeadGroup::HEAD_LA;
+		headGroup = NoteHead::Group::HEAD_LA;
 		break;
 	}
 	case OVE::NoteHead_Open_La: {
-		headGroup = NoteHeadGroup::HEAD_LA;
+		headGroup = NoteHead::Group::HEAD_LA;
 		break;
 	}
 	case OVE::NoteHead_Closed_Ti: {
-		headGroup = NoteHeadGroup::HEAD_TI;
+		headGroup = NoteHead::Group::HEAD_TI;
 		break;
 	}
 	case OVE::NoteHead_Open_Ti: {
-		headGroup = NoteHeadGroup::HEAD_TI;
+		headGroup = NoteHead::Group::HEAD_TI;
 		break;
 	}
 	default: {
@@ -601,7 +601,7 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
         	OVE::Track::DrumNode node = nodes[i];
         	if (pitch < DRUM_INSTRUMENTS) {
         		drumset->drum(pitch).line = node.line_;
-        		drumset->drum(pitch).notehead = getHeadGroup(OVE::NoteHeadType(node.headType_));
+            drumset->drum(pitch).notehead = getHeadGroup(OVE::NoteHeadType(node.headType_));
         		drumset->drum(pitch).voice = node.voice_;
         	}
         }
@@ -613,23 +613,23 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
 	}
 }
 
-static OttavaType OctaveShiftTypeToInt(OVE::OctaveShiftType type) {
-	OttavaType subtype = OttavaType::OTTAVA_8VA;
+static Ottava::Type OctaveShiftTypeToInt(OVE::OctaveShiftType type) {
+	Ottava::Type subtype = Ottava::Type::OTTAVA_8VA;
 	switch (type) {
 	case OVE::OctaveShift_8: {
-		subtype = OttavaType::OTTAVA_8VA;
+		subtype = Ottava::Type::OTTAVA_8VA;
 		break;
 	}
 	case OVE::OctaveShift_15: {
-		subtype = OttavaType::OTTAVA_15MA;
+		subtype = Ottava::Type::OTTAVA_15MA;
 		break;
 	}
 	case OVE::OctaveShift_Minus_8: {
-		subtype = OttavaType::OTTAVA_8VB;
+		subtype = Ottava::Type::OTTAVA_8VB;
 		break;
 	}
 	case OVE::OctaveShift_Minus_15: {
-		subtype = OttavaType::OTTAVA_15MB;
+		subtype = Ottava::Type::OTTAVA_15MB;
 		break;
 	}
 	default:
@@ -705,7 +705,7 @@ void OveToMScore::convertTrackElements(int track) {
 
 void OveToMScore::convertLineBreak(){
     for (MeasureBase* mb = score_->measures()->first(); mb; mb = mb->next()) {
-		if (mb->type() != ElementType::MEASURE)
+		if (mb->type() != Element::Type::MEASURE)
 			continue;
 		Measure* measure = static_cast<Measure*> (mb);
 
@@ -715,7 +715,7 @@ void OveToMScore::convertLineBreak(){
 				if ((int)line->getBeginBar() + (int)line->getBarCount()-1 == measure->no()) {
 					LayoutBreak* lb = new LayoutBreak(score_);
 					lb->setTrack(0);
-					lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
+					lb->setLayoutBreakType(LayoutBreak::Type::LINE);
 					measure->add(lb);
 				}
 			}
@@ -1121,7 +1121,7 @@ OVE::ClefType getClefType(OVE::MeasureData* measure, int tick) {
 
 void OveToMScore::convertMeasures() {
     for (MeasureBase* mb = score_->measures()->first(); mb; mb = mb->next()) {
-          if (mb->type() != ElementType::MEASURE)
+          if (mb->type() != Element::Type::MEASURE)
                 continue;
           Measure* measure = static_cast<Measure*>(mb);
 
@@ -1130,7 +1130,7 @@ void OveToMScore::convertMeasures() {
 
     //  convert based on notes
     for (MeasureBase* mb = score_->measures()->first(); mb; mb = mb->next()) {
-          if (mb->type() != ElementType::MEASURE)
+          if (mb->type() != Element::Type::MEASURE)
                 continue;
           Measure* measure = static_cast<Measure*>(mb);
 
@@ -1264,7 +1264,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             text->setAbove(true);
             text->setTrack(track);
 
-            Segment* s = measure->getSegment(SegmentType::ChordRest, mtt_->getTick(measure->no(), 0));
+            Segment* s = measure->getSegment(Segment::Type::ChordRest, mtt_->getTick(measure->no(), 0));
             s->add(text);
 		}
 	}
@@ -1284,7 +1284,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
         t->setAbove(true);
         t->setTrack(track);
 
-        Segment* s = measure->getSegment(SegmentType::ChordRest, absTick);
+        Segment* s = measure->getSegment(Segment::Type::ChordRest, absTick);
         s->add(t);
 	}
 }
@@ -1408,7 +1408,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 			// TODO-S          cr = measure->findChord(tick, noteTrack, graceLevel);
 			cr = measure->findChord(tick, noteTrack);
 			if (cr == 0) {
-				// SegmentType st = SegmentType::ChordRest;
+				// Segment::Type st = Segment::Type::ChordRest;
 
 				cr = new Ms::Chord(score_);
 				cr->setTrack(noteTrack);
@@ -1432,7 +1432,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 						cr->setDurationType(TDuration::DurationType::V_EIGHT);
 					}
 
-					// st = SegmentType::Grace;
+					// st = Segment::Type::Grace;
 				} else {
 					TDuration duration = OveNoteType_To_Duration(container->getNoteType());
 					duration.setDots(container->getDot());
@@ -1458,7 +1458,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				int pitch = oveNote->getNote();
 
 				//note->setTrack(noteTrack);
-                note->setVeloType(ValueType::USER_VAL);
+                note->setVeloType(Note::ValueType::USER_VAL);
 				note->setVeloOffset(oveNote->getOnVelocity());
 				//note->setUserAccidental(OveAccidental_to_Accidental(notePtr->getAccidental()));
 				note->setPitch(pitch);
@@ -1508,7 +1508,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				cr->setVisible(oveNote->getShow());
 				((Ms::Chord*) cr)->setNoStem((int) container->getNoteType() <= OVE::Note_Whole);
 				if(!setDirection)
-					((Ms::Chord*) cr)->setStemDirection(container->getStemUp() ? Direction::UP : Direction::DOWN);
+					((Ms::Chord*) cr)->setStemDirection(container->getStemUp() ? MScore::Direction::UP : MScore::Direction::DOWN);
 
 				// cross staff
 				int staffMove = 0;
@@ -1520,7 +1520,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 		}
 
 		// beam
-		BeamMode bm = container->getIsRest() ? BeamMode::NONE : BeamMode::AUTO;
+		Beam::Mode bm = container->getIsRest() ? Beam::Mode::NONE : Beam::Mode::AUTO;
 		if(container->getInBeam()){
 			OVE::MeasurePos pos = container->start()->shiftMeasure(0);
 			OVE::MusicData* data = getCrossMeasureElementByPos(part, staff, pos, container->getVoice(), OVE::MusicData_Beam);
@@ -1531,13 +1531,13 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				OVE::MeasurePos stopPos = beam->stop()->shiftMeasure(beam->start()->getMeasure());
 
 				if(startPos == pos){
-					bm = BeamMode::BEGIN;
+					bm = Beam::Mode::BEGIN;
 				}
 				else if(stopPos == pos){
-					bm = BeamMode::END;
+					bm = Beam::Mode::END;
 				}
 				else{
-					bm = BeamMode::MID;
+					bm = Beam::Mode::MID;
 				}
 			}
 		}
@@ -1575,7 +1575,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				const OVE::Tuplet* oveTuplet = getTuplet(tuplets, container->start()->getOffset());
 				if (oveTuplet != 0) {
 					//set direction
-					tuplet->setDirection(oveTuplet->getLeftShoulder()->getYOffset() < 0 ? Direction::UP : Direction::DOWN);
+					tuplet->setDirection(oveTuplet->getLeftShoulder()->getYOffset() < 0 ? MScore::Direction::UP : MScore::Direction::DOWN);
 
 					if(container->start()->getOffset() == oveTuplet->stop()->getOffset()){
 						tuplet = 0;
@@ -1748,7 +1748,7 @@ void OveToMScore::convertArticulation(
 	case OVE::Articulation_Pause :{
         Breath* b = new Breath(score_);
         b->setTrack(track);
-        Segment* seg = measure->getSegment(SegmentType::Breath, absTick);
+        Segment* seg = measure->getSegment(Segment::Type::Breath, absTick);
         seg->add(b);
 		break;
 	}
@@ -1837,7 +1837,7 @@ void OveToMScore::convertArticulation(
 		else {
 			pedal_ = new Pedal(score_);
 			pedal_->setTrack(track);
-            Segment* seg = measure->getSegment(SegmentType::ChordRest, absTick);
+            Segment* seg = measure->getSegment(Segment::Type::ChordRest, absTick);
             pedal_->setTick(seg->tick());
             seg->add(pedal_);
 		}
@@ -1845,7 +1845,7 @@ void OveToMScore::convertArticulation(
 	}
 	case OVE::Articulation_Pedal_Up :{
 		if(pedal_){
-              Segment* seg = measure->getSegment(SegmentType::ChordRest, absTick);
+              Segment* seg = measure->getSegment(Segment::Type::ChordRest, absTick);
               pedal_->setTick2(seg->tick());
 		  pedal_ = 0;
 		}
@@ -1876,7 +1876,7 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
 		lyric->setNo(oveLyric->getVerse());
 		lyric->setText(oveLyric->getLyric());
 		lyric->setTrack(track);
-	    Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
+	    Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
           if (segment->element(track))
                   static_cast<ChordRest*>(segment->element(track))->add(lyric);
 	}
@@ -1984,7 +1984,7 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
 			harmony->render();
 		}
 
-		Segment* s = measure->getSegment(SegmentType::ChordRest, absTick);
+		Segment* s = measure->getSegment(Segment::Type::ChordRest, absTick);
 		s->add(harmony);
 	}
 }
@@ -2051,49 +2051,49 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 		switch(type) {
 		case OVE::Repeat_Segno:{
 			Marker* marker = new Marker(score_);
-		    marker->setMarkerType(MarkerType::SEGNO);
+		    marker->setMarkerType(Marker::Type::SEGNO);
 		    e = marker;
 			break;
 		}
 		case OVE::Repeat_Coda:{
 			Marker* marker = new Marker(score_);
-		    marker->setMarkerType(MarkerType::CODA);
+		    marker->setMarkerType(Marker::Type::CODA);
 		    e = marker;
 			break;
 		}
 		case OVE::Repeat_DSAlCoda:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JumpType::DS_AL_CODA);
+            jp->setJumpType(Jump::Type::DS_AL_CODA);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_DSAlFine:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JumpType::DS_AL_FINE);
+            jp->setJumpType(Jump::Type::DS_AL_FINE);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_DCAlCoda:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JumpType::DC_AL_CODA);
+            jp->setJumpType(Jump::Type::DC_AL_CODA);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_DCAlFine:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JumpType::DC_AL_FINE);
+            jp->setJumpType(Jump::Type::DC_AL_FINE);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_ToCoda:{
 			Marker* m = new Marker(score_);
-			m->setMarkerType(MarkerType::TOCODA);
+			m->setMarkerType(Marker::Type::TOCODA);
 			e = m;
 			break;
 		}
 		case OVE::Repeat_Fine:{
 			Marker* m = new Marker(score_);
-			m->setMarkerType(MarkerType::FINE);
+			m->setMarkerType(Marker::Type::FINE);
 			e = m;
 			break;
 		}
@@ -2124,7 +2124,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 			volta->setTick(absTick1);
 			volta->setTick2(absTick2);
 			score_->addElement(volta);
-			volta->setVoltaType(VoltaType::CLOSED);
+			volta->setVoltaType(Volta::Type::CLOSED);
 			volta->setText(ending->getText());
 
 			volta->endings().clear();
@@ -2157,7 +2157,7 @@ void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
 			int absEndTick = mtt_->getTick(slurPtr->start()->getMeasure()+slurPtr->stop()->getMeasure(), endContainer->getTick());
 
 	        Slur* slur = new Slur(score_);
-	        slur->setSlurDirection(slurPtr->getShowOnTop()? Direction::UP : Direction::DOWN);
+	        slur->setSlurDirection(slurPtr->getShowOnTop()? MScore::Direction::UP : MScore::Direction::DOWN);
 		slur->setTick(absStartTick);
 		slur->setTick2(absEndTick);
 	        slur->setTrack(track);
@@ -2258,7 +2258,7 @@ void OveToMScore::convertDynamics(Measure* measure, int part, int staff, int tra
 		dynamic->setDynamicType(OveDynamics_To_Dynamics(dynamicPtr->getDynamicsType()));
 		dynamic->setTrack(track);
 
-		Segment* s = measure->getSegment(SegmentType::ChordRest, absTick);
+		Segment* s = measure->getSegment(Segment::Type::ChordRest, absTick);
         s->add(dynamic);
 	}
 }
@@ -2279,7 +2279,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
 		t->setText(expressionPtr->getText());
 		t->setTrack(track);
 
-        Segment* s = measure->getSegment(SegmentType::ChordRest, absTick);
+        Segment* s = measure->getSegment(Segment::Type::ChordRest, absTick);
         s->add(t);
 	}
 }
@@ -2304,34 +2304,34 @@ void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int t
 			ChordRest* cr = measure->findChordRest(absTick, track);
 			if(cr != 0){
 		        Glissando* g = new Glissando(score_);
-		        g->setGlissandoType(GlissandoType::WAVY);
+		        g->setGlissandoType(Glissando::Type::WAVY);
 		        cr->add(g);
 			}
 		}
 	}
 }
 
-static Hairpin::HairpinType OveWedgeType_To_Type(OVE::WedgeType type) {
-	Hairpin::HairpinType subtype = Hairpin::HairpinType::CRESCENDO;
+static Hairpin::Type OveWedgeType_To_Type(OVE::WedgeType type) {
+	Hairpin::Type subtype = Hairpin::Type::CRESCENDO;
 	switch(type) {
 	case OVE::Wedge_Cres_Line: {
-		subtype = Hairpin::HairpinType::CRESCENDO;
+		subtype = Hairpin::Type::CRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Double_Line: {
-		subtype = Hairpin::HairpinType::CRESCENDO;
+		subtype = Hairpin::Type::CRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Decresc_Line: {
-		subtype = Hairpin::HairpinType::DECRESCENDO;
+		subtype = Hairpin::Type::DECRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Cres: {
-		subtype = Hairpin::HairpinType::CRESCENDO;
+		subtype = Hairpin::Type::CRESCENDO;
 		break;
 	}
 	case OVE::Wedge_Decresc: {
-		subtype = Hairpin::HairpinType::DECRESCENDO;
+		subtype = Hairpin::Type::DECRESCENDO;
 		break;
 	}
 	default:

@@ -72,9 +72,6 @@ static const int  VISUAL_STRING_NONE      = -2;       // no ordinal for the visu
 static const int  STRING_NONE             = -1;       // no ordinal for a physical string (0 = topmost in instrument)
 static const int  FRET_NONE               = -1;       // no ordinal for a fret
 
-enum class Direction  : char { AUTO, UP, DOWN };
-enum class DirectionH : char { DH_AUTO, DH_LEFT, DH_RIGHT };
-
 //---------------------------------------------------------
 //   ArticulationType
 //---------------------------------------------------------
@@ -161,16 +158,6 @@ enum class OffsetType : char {
       ABS,       ///< offset in point units
       SPATIUM    ///< offset in space units
       };
-
-//---------------------------------------------------------
-//   BeamMode
-//---------------------------------------------------------
-
-enum class BeamMode : signed char {
-      AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
-      };
-
-#define beamModeMid(a) (a == BeamMode::MID || a == BeamMode::BEGIN32 || a == BeamMode::BEGIN64)
 
 //---------------------------------------------------------
 //   TransposeDirection
@@ -343,6 +330,9 @@ class MScore : public QObject {
 #endif
 
    public:
+      enum class Direction  : char { AUTO, UP, DOWN };
+      enum class DirectionH : char { AUTO, LEFT, RIGHT };
+
       static void init();
 
       static MStyle* defaultStyle();
@@ -422,9 +412,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::BeamMode);
-Q_DECLARE_METATYPE(Ms::Direction);
-Q_DECLARE_METATYPE(Ms::DirectionH);
+Q_DECLARE_METATYPE(Ms::MScore::Direction);
+Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
 
 
 #endif

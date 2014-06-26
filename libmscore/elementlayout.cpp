@@ -53,7 +53,7 @@ void ElementLayout::layout(Element* e) const
       QPointF o(offset(e->spatium()));
       qreal w = 0.0;
       qreal h = 0.0;
-      bool frameText = e->type() == ElementType::TEXT
+      bool frameText = e->type() == Element::Type::TEXT
          && static_cast<Text*>(e)->layoutToParentWidth() && e->parent();
       QPointF p;
       if (frameText)

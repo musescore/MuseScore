@@ -24,9 +24,9 @@
 
 namespace Ms {
 
-static const NoteHeadGroup  NOTEHEADGROUP_DEFAULT   = NoteHeadGroup::HEAD_NORMAL;
-static const NoteHeadType   NOTEHEADTYPE_DEFAULT    = NoteHeadType::HEAD_AUTO;
-static const DirectionH     DIR_DEFAULT             = DirectionH::DH_AUTO;
+static const NoteHead::Group  NOTEHEADGROUP_DEFAULT = NoteHead::Group::HEAD_NORMAL;
+static const NoteHead::Type   NOTEHEADTYPE_DEFAULT  = NoteHead::Type::HEAD_AUTO;
+static const MScore::DirectionH     DIR_DEFAULT     = MScore::DirectionH::AUTO;
 static const bool           HASLINE_DEFAULT         = true;
 static const qreal          LINEWIDTH_DEFAULT       = 0.12;
 #if 0 // yet(?) unused
@@ -175,12 +175,12 @@ void Ambitus::write(Xml& xml) const
       xml.tag("topTpc",     _topTpc);
       xml.tag("bottomPitch",_bottomPitch);
       xml.tag("bottomTpc",  _bottomTpc);
-      if (_topAccid.accidentalType() != Accidental::AccidentalType::NONE) {
+      if (_topAccid.accidentalType() != Accidental::Type::NONE) {
             xml.stag("topAccidental");
             _topAccid.write(xml);
             xml.etag();
             }
-      if (_bottomAccid.accidentalType() != Accidental::AccidentalType::NONE) {
+      if (_bottomAccid.accidentalType() != Accidental::Type::NONE) {
             xml.stag("bottomAccidental");
             _bottomAccid.write(xml);
             xml.etag();
@@ -285,18 +285,18 @@ void Ambitus::layout()
             topLine  = relStep(topLine, clf);
             _topPos.setY(topLine * lineDist * 0.5);
             // compute accidental
-            Accidental::AccidentalType accidType;
+            Accidental::Type accidType;
             // if (13 <= (tpc - key) <= 19) there is no accidental)
             if (_topTpc - int(key) >= 13 && _topTpc - int(key) <= 19)
-                  accidType = Accidental::AccidentalType::NONE;
+                  accidType = Accidental::Type::NONE;
             else {
                   AccidentalVal accidVal = AccidentalVal( (_topTpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
                   accidType = Accidental::value2subtype(accidVal);
-                  if (accidType == Accidental::AccidentalType::NONE)
-                        accidType = Accidental::AccidentalType::NATURAL;
+                  if (accidType == Accidental::Type::NONE)
+                        accidType = Accidental::Type::NATURAL;
                   }
             _topAccid.setAccidentalType(accidType);
-            if (accidType != Accidental::AccidentalType::NONE)
+            if (accidType != Accidental::Type::NONE)
                   _topAccid.layout();
             else
                   _topAccid.setbbox(QRect());
@@ -311,17 +311,17 @@ void Ambitus::layout()
             bottomLine  = relStep(bottomLine, clf);
             _bottomPos.setY(bottomLine * lineDist * 0.5);
             // compute accidental
-            Accidental::AccidentalType accidType;
+            Accidental::Type accidType;
             if (_bottomTpc - int(key) >= 13 && _bottomTpc - int(key) <= 19)
-                  accidType = Accidental::AccidentalType::NONE;
+                  accidType = Accidental::Type::NONE;
             else {
                   AccidentalVal accidVal = AccidentalVal( (_bottomTpc - Tpc::TPC_MIN) / TPC_DELTA_SEMITONE - 2 );
                   accidType = Accidental::value2subtype(accidVal);
-                  if (accidType == Accidental::AccidentalType::NONE)
-                        accidType = Accidental::AccidentalType::NATURAL;
+                  if (accidType == Accidental::Type::NONE)
+                        accidType = Accidental::Type::NATURAL;
                   }
             _bottomAccid.setAccidentalType(accidType);
-            if (accidType != Accidental::AccidentalType::NONE)
+            if (accidType != Accidental::Type::NONE)
                   _bottomAccid.layout();
             else
                   _bottomAccid.setbbox(QRect());
@@ -342,25 +342,25 @@ void Ambitus::layout()
       bool collision =
             (_topAccid.ipos().y() + _topAccid.bbox().y() + _topAccid.height()
                    > _bottomAccid.ipos().y() + _bottomAccid.bbox().y() )
-            && _dir != DirectionH::DH_RIGHT;
+            && _dir != MScore::DirectionH::RIGHT;
       if (collision) {
             // displace bottom accidental (also attempting to 'undercut' flats)
             xAccidOffBottom = xAccidOffTop +
-                  ((_bottomAccid.accidentalType() == Accidental::AccidentalType::FLAT
-                        || _bottomAccid.accidentalType() == Accidental::AccidentalType::FLAT2
-                        || _bottomAccid.accidentalType() == Accidental::AccidentalType::NATURAL)
+                  ((_bottomAccid.accidentalType() == Accidental::Type::FLAT
+                        || _bottomAccid.accidentalType() == Accidental::Type::FLAT2
+                        || _bottomAccid.accidentalType() == Accidental::Type::NATURAL)
                   ? _bottomAccid.width() * 0.5 : _bottomAccid.width());
             }
 
       switch (_dir) {
-            case DirectionH::DH_AUTO:               // note heads one above the other
+            case MScore::DirectionH::AUTO:               // note heads one above the other
                   // left align note heads and right align accidentals 'hanging' on the left
                   _topPos.setX(0.0);
                   _bottomPos.setX(0.0);
                   _topAccid.rxpos()       = - xAccidOffTop;
                   _bottomAccid.rxpos()    = - xAccidOffBottom;
                   break;
-            case DirectionH::DH_LEFT:               // top note head at the left of bottom note head
+            case MScore::DirectionH::LEFT:               // top note head at the left of bottom note head
                   // place top note head at left margin; bottom note head at right of top head;
                   // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
                   _topPos.setX(0.0);
@@ -368,7 +368,7 @@ void Ambitus::layout()
                   _topAccid.rxpos() = - xAccidOffTop;
                   _bottomAccid.rxpos() = collision ? - xAccidOffBottom : headWdt - xAccidOffBottom;
                   break;
-            case DirectionH::DH_RIGHT:              // top note head at the right of bottom note head
+            case MScore::DirectionH::RIGHT:              // top note head at the right of bottom note head
                   // bottom note head at left margin; top note head at right of bottomnote head
                   // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
                   _bottomPos.setX(0.0);
@@ -447,8 +447,8 @@ Space Ambitus::space() const
       qreal _spatium = spatium();
       // reduce left space if there accidentals
       qreal leftSpace = _spatium *
-            ((_topAccid.accidentalType() != Accidental::AccidentalType::NONE
-                  || _bottomAccid.accidentalType() != Accidental::AccidentalType::NONE)
+            ((_topAccid.accidentalType() != Accidental::Type::NONE
+                  || _bottomAccid.accidentalType() != Accidental::Type::NONE)
             ? 0.5 : 0.75);
       return Space(leftSpace - bbox().x(), width() + bbox().x() + _spatium * 0.5);
       }
@@ -460,9 +460,9 @@ Space Ambitus::space() const
 void Ambitus::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
       {
       func(data, this);
-      if (_topAccid.accidentalType() != Accidental::AccidentalType::NONE)
+      if (_topAccid.accidentalType() != Accidental::Type::NONE)
             func(data, &_topAccid);
-      if (_bottomAccid.accidentalType() != Accidental::AccidentalType::NONE)
+      if (_bottomAccid.accidentalType() != Accidental::Type::NONE)
             func(data, &_bottomAccid);
       }
 
@@ -473,15 +473,15 @@ void Ambitus::scanElements(void* data, void (*func)(void*, Element*), bool /*all
 SymId Ambitus::noteHead() const
       {
       int hg = 1;
-      NoteHeadType ht  = NoteHeadType::HEAD_QUARTER;
+      NoteHead::Type ht  = NoteHead::Type::HEAD_QUARTER;
 
-      if (_noteHeadType != NoteHeadType::HEAD_AUTO)
+      if (_noteHeadType != NoteHead::Type::HEAD_AUTO)
             ht = _noteHeadType;
 
       SymId t = Note::noteHead(hg, _noteHeadGroup, ht);
       if (t == SymId::noSym) {
             qDebug("invalid note head %hhd/%hhd", _noteHeadGroup, _noteHeadType);
-            t = Note::noteHead(0, NoteHeadGroup::HEAD_NORMAL, ht);
+            t = Note::noteHead(0, NoteHead::Group::HEAD_NORMAL, ht);
             }
       return t;
       }
@@ -551,7 +551,7 @@ void Ambitus::updateRange()
       int   tpcTop, tpcBottom;
       int   trk;
       Measure* meas     = segment()->measure();
-      Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());
+      Segment* segm     = meas->findSegment(Segment::Type::ChordRest, segment()->tick());
       bool     stop     = meas->sectionBreak() != nullptr;
       while (segm) {
             // moved to another measure?
@@ -566,7 +566,7 @@ void Ambitus::updateRange()
             // scan all relevant tracks of this segment for chords
             for (trk=firstTrack; trk <= lastTrack; trk++)
                   if ( (chord=static_cast<Chord*>(segm->element(trk))) != nullptr
-                              && chord->type() == ElementType::CHORD) {
+                              && chord->type() == Element::Type::CHORD) {
                         // update pitch range (with associated tpc's)
                         foreach (Note* n, chord->notes()) {
                               int pitch = n->ppitch();
@@ -636,13 +636,13 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
             case P_ID::HEAD_GROUP:
-                  setNoteHeadGroup( NoteHeadGroup(v.toInt()) );
+                  setNoteHeadGroup( NoteHead::Group(v.toInt()) );
                   break;
             case P_ID::HEAD_TYPE:
-                  setNoteHeadType( NoteHeadType(v.toInt()) );
+                  setNoteHeadType( NoteHead::Type(v.toInt()) );
                   break;
             case P_ID::MIRROR_HEAD:
-                  setDirection(DirectionH(v.toInt()) );
+                  setDirection(MScore::DirectionH(v.toInt()) );
                   break;
             case P_ID::GHOST:                 // recycled property = _hasLine
                   setHasLine(v.toBool());

@@ -28,7 +28,7 @@ class Segment;
 enum class TimeSigType : char {
       NORMAL,            // use sz/sn text
       FOUR_FOUR,         // common time (4/4)
-      ALLA_BREVE,         // cut time (2/2)
+      ALLA_BREVE,        // cut time (2/2)
       };
 
 //---------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ class TimeSig : public Element {
       Q_PROPERTY(int denominator           READ denominator)
       Q_PROPERTY(int numeratorStretch      READ numeratorStretch)
       Q_PROPERTY(int denominatorStretch    READ denominatorStretch)
-      Q_PROPERTY(Groups groups             READ groups            WRITE undoSetGroups)
+      Q_PROPERTY(Ms::Groups groups         READ groups            WRITE undoSetGroups)
 
       TimeSigType _timeSigType;
       QString _numeratorString;     // calculated from actualSig() if !customText
@@ -76,7 +76,7 @@ class TimeSig : public Element {
       void setSSig(const QString&);
 
       virtual TimeSig* clone() const override;
-      virtual ElementType type() const override          { return ElementType::TIMESIG; }
+      virtual Element::Type type() const override        { return Element::Type::TIMESIG; }
 
       TimeSigType timeSigType() const    { return _timeSigType; }
 

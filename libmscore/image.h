@@ -54,23 +54,23 @@ class Image : public BSymbol {
       Image(Score* = 0);
       Image(const Image&);
       ~Image();
-      virtual Image* clone() const     { return new Image(*this); }
-      virtual ElementType type() const { return ElementType::IMAGE; }
+      virtual Image* clone() const       { return new Image(*this); }
+      virtual Element::Type type() const { return Element::Type::IMAGE; }
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       bool load(const QString& s);
       virtual void layout();
       virtual void draw(QPainter*) const;
 
-      void setSize(const QSizeF& s)     { _size = s;    }
-      QSizeF size() const               { return _size; }
-      bool lockAspectRatio() const      { return _lockAspectRatio; }
-      void setLockAspectRatio(bool v)   { _lockAspectRatio = v;  }
-      bool autoScale() const            { return _autoScale;     }
-      void setAutoScale(bool v)         { _autoScale = v;        }
-      ImageStoreItem* storeItem() const { return _storeItem;     }
-      bool sizeIsSpatium() const        { return _sizeIsSpatium; }
-      void setSizeIsSpatium(bool val)   { _sizeIsSpatium = val;  }
+      void setSize(const QSizeF& s)      { _size = s;    }
+      QSizeF size() const                { return _size; }
+      bool lockAspectRatio() const       { return _lockAspectRatio; }
+      void setLockAspectRatio(bool v)    { _lockAspectRatio = v;  }
+      bool autoScale() const             { return _autoScale;     }
+      void setAutoScale(bool v)          { _autoScale = v;        }
+      ImageStoreItem* storeItem() const  { return _storeItem;     }
+      bool sizeIsSpatium() const         { return _sizeIsSpatium; }
+      void setSizeIsSpatium(bool val)    { _sizeIsSpatium = val;  }
 
       QSizeF scale() const;
       void setScale(const QSizeF&);

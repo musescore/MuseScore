@@ -71,24 +71,24 @@ class Chord : public ChordRest {
       Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics READ qmlLyrics)
       Q_PROPERTY(QQmlListProperty<Ms::Chord> graceNotes READ qmlGraceNotes)
 
-      QList<Note*> _notes;          // sorted to decreasing line step
-      LedgerLine*  _ledgerLines;    // single linked list
+      QList<Note*>         _notes;       // sorted to decreasing line step
+      LedgerLine*          _ledgerLines; // single linked list
 
-      Stem*      _stem;
-      Hook*      _hook;
-      StemSlash* _stemSlash;        // for acciacatura
+      Stem*               _stem;
+      Hook*               _hook;
+      StemSlash*          _stemSlash;    // for acciacatura
 
-      Arpeggio*  _arpeggio;
-      Tremolo*   _tremolo;
-      Glissando* _glissando;
-      ElementList _el;              ///< chordline, slur
-      QList<Chord*> _graceNotes;
-      int _graceIndex;              ///< if this is a grace note, index in parent list
+      Arpeggio*           _arpeggio;
+      Tremolo*            _tremolo;
+      Glissando*          _glissando;
+      ElementList         _el;           ///< chordline, slur
+      QList<Chord*>       _graceNotes;
+      int                 _graceIndex;   ///< if this is a grace note, index in parent list
 
-      Direction     _stemDirection;
-      NoteType      _noteType;         ///< mark grace notes: acciaccatura and appoggiatura
-      bool          _noStem;
-      PlayEventType _playEventType;    ///< play events were modified by user
+      MScore::Direction  _stemDirection;
+      NoteType           _noteType;      ///< mark grace notes: acciaccatura and appoggiatura
+      bool               _noStem;
+      PlayEventType      _playEventType; ///< play events were modified by user
 
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
@@ -105,11 +105,11 @@ class Chord : public ChordRest {
       ~Chord();
       Chord &operator=(const Chord&);
 
-      virtual Chord* clone() const     { return new Chord(*this); }
+      virtual Chord* clone() const       { return new Chord(*this); }
       virtual Chord* linkedClone();
 
       virtual void setScore(Score* s);
-      virtual ElementType type() const { return ElementType::CHORD; }
+      virtual Element::Type type() const         { return Element::Type::CHORD; }
       virtual qreal mag() const;
 
       virtual void write(Xml& xml) const;
@@ -117,10 +117,10 @@ class Chord : public ChordRest {
       virtual void setSelected(bool f);
       virtual Element* drop(const DropData&);
 
-      void setStemDirection(Direction d)  { _stemDirection = d; }
-      Direction stemDirection() const     { return _stemDirection; }
+      void setStemDirection(MScore::Direction d) { _stemDirection = d; }
+      MScore::Direction stemDirection() const    { return _stemDirection; }
 
-      LedgerLine* ledgerLines()           { return _ledgerLines; }
+      LedgerLine* ledgerLines()                  { return _ledgerLines; }
 
       void layoutStem1();
       void layoutHook1();     // create hook if required

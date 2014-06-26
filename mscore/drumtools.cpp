@@ -100,12 +100,12 @@ void DrumTools::updateDrumset()
                   continue;
             bool up;
             int line      = drumset->line(pitch);
-            NoteHeadGroup noteHead  = drumset->noteHead(pitch);
+            NoteHead::Group noteHead  = drumset->noteHead(pitch);
             int voice     = drumset->voice(pitch);
-            Direction dir = drumset->stemDirection(pitch);
-            if (dir == Direction::UP)
+            MScore::Direction dir = drumset->stemDirection(pitch);
+            if (dir == MScore::Direction::UP)
                   up = true;
-            else if (dir == Direction::DOWN)
+            else if (dir == MScore::Direction::DOWN)
                   up = false;
             else
                   up = line > 4;
@@ -168,7 +168,7 @@ void DrumTools::editDrumset()
 void DrumTools::drumNoteSelected(int val)
       {
       Element* element = drumPalette->element(val);
-      if(element && element->type() == ElementType::CHORD) {
+      if(element && element->type() == Element::Type::CHORD) {
             Chord* ch        = static_cast<Chord*>(element);
             Note* note       = ch->downNote();
             int ticks        = MScore::defaultPlayDuration;

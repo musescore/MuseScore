@@ -46,7 +46,7 @@ class Spacer : public Element {
       Spacer(Score*);
       Spacer(const Spacer&);
       virtual Spacer* clone() const    { return new Spacer(*this); }
-      virtual ElementType type() const { return ElementType::SPACER; }
+      virtual Element::Type type() const { return Element::Type::SPACER; }
       SpacerType spacerType() const    { return _spacerType; }
       void setSpacerType(SpacerType t) { _spacerType = t; }
 

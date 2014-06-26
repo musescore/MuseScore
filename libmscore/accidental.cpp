@@ -80,9 +80,9 @@ Accidental::Accidental(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _hasBracket     = false;
-      _role           = AccidentalRole::AUTO;
+      _role           = Role::AUTO;
       _small          = false;
-      _accidentalType = AccidentalType::NONE;
+      _accidentalType = Type::NONE;
       }
 
 //---------------------------------------------------------
@@ -105,121 +105,121 @@ void Accidental::read(XmlReader& e)
                   if (isInt) {
                         _hasBracket = i & 0x8000;
                         i &= ~0x8000;
-                        AccidentalType at;
+                        Type at;
                         switch(i) {
                                case 0:
-                                     at = AccidentalType::NONE;
+                                     at = Type::NONE;
                                      break;
                                case 1:
                                case 11:
-                                     at = AccidentalType::SHARP;
+                                     at = Type::SHARP;
                                      break;
                                case 2:
                                case 12:
-                                     at = AccidentalType::FLAT;
+                                     at = Type::FLAT;
                                      break;
                                case 3:
                                case 13:
-                                     at = AccidentalType::SHARP2;
+                                     at = Type::SHARP2;
                                      break;
                                case 4:
                                case 14:
-                                     at = AccidentalType::FLAT2;
+                                     at = Type::FLAT2;
                                      break;
                                case 5:
                                case 15:
-                                     at = AccidentalType::NATURAL;
+                                     at = Type::NATURAL;
                                      break;
                                case 6:
-                                     at = AccidentalType::SHARP;
+                                     at = Type::SHARP;
                                      _hasBracket = true;
                                      break;
                                case 7:
-                                     at = AccidentalType::FLAT;
+                                     at = Type::FLAT;
                                      _hasBracket = true;
                                      break;
                                case 8:
-                                     at = AccidentalType::SHARP2;
+                                     at = Type::SHARP2;
                                      _hasBracket = true;
                                      break;
                                case 9:
-                                     at = AccidentalType::FLAT2;
+                                     at = Type::FLAT2;
                                      _hasBracket = true;
                                      break;
                                case 10:
-                                     at = AccidentalType::NATURAL;
+                                     at = Type::NATURAL;
                                      _hasBracket = true;
                                      break;
                                case 16:
-                                     at = AccidentalType::FLAT_SLASH;
+                                     at = Type::FLAT_SLASH;
                                      break;
                                case 17:
-                                     at = AccidentalType::FLAT_SLASH2;
+                                     at = Type::FLAT_SLASH2;
                                      break;
                                case 18:
-                                     at = AccidentalType::MIRRORED_FLAT2;
+                                     at = Type::MIRRORED_FLAT2;
                                      break;
                                case 19:
-                                     at = AccidentalType::MIRRORED_FLAT;
+                                     at = Type::MIRRORED_FLAT;
                                      break;
                                case 20:
-                                     at = AccidentalType::MIRRORED_FLAT_SLASH;
+                                     at = Type::MIRRORED_FLAT_SLASH;
                                      break;
                                case 21:
-                                     at = AccidentalType::FLAT_FLAT_SLASH;
+                                     at = Type::FLAT_FLAT_SLASH;
                                      break;
                                case 22:
-                                     at = AccidentalType::SHARP_SLASH;
+                                     at = Type::SHARP_SLASH;
                                      break;
                                case 23:
-                                     at = AccidentalType::SHARP_SLASH2;
+                                     at = Type::SHARP_SLASH2;
                                      break;
                                case 24:
-                                     at = AccidentalType::SHARP_SLASH3;
+                                     at = Type::SHARP_SLASH3;
                                      break;
                                case 25:
-                                     at = AccidentalType::SHARP_SLASH4;
+                                     at = Type::SHARP_SLASH4;
                                      break;
                                case 26:
-                                     at = AccidentalType::SHARP_ARROW_UP;
+                                     at = Type::SHARP_ARROW_UP;
                                      break;
                                case 27:
-                                     at = AccidentalType::SHARP_ARROW_DOWN;
+                                     at = Type::SHARP_ARROW_DOWN;
                                      break;
                                case 28:
-                                     at = AccidentalType::SHARP_ARROW_BOTH;
+                                     at = Type::SHARP_ARROW_BOTH;
                                      break;
                                case 29:
-                                     at = AccidentalType::FLAT_ARROW_UP;
+                                     at = Type::FLAT_ARROW_UP;
                                      break;
                                case 30:
-                                     at = AccidentalType::FLAT_ARROW_DOWN;
+                                     at = Type::FLAT_ARROW_DOWN;
                                      break;
                                case 31:
-                                     at = AccidentalType::FLAT_ARROW_BOTH;
+                                     at = Type::FLAT_ARROW_BOTH;
                                      break;
                                case 32:
-                                     at = AccidentalType::NATURAL_ARROW_UP;
+                                     at = Type::NATURAL_ARROW_UP;
                                      break;
                                case 33:
-                                     at = AccidentalType::NATURAL_ARROW_DOWN;
+                                     at = Type::NATURAL_ARROW_DOWN;
                                      break;
                                case 34:
-                                     at = AccidentalType::NATURAL_ARROW_BOTH;
+                                     at = Type::NATURAL_ARROW_BOTH;
                                      break;
                                default:
-                                     at = AccidentalType::NONE;
+                                     at = Type::NONE;
                                      break;
                                }
-                        setAccidentalType(AccidentalType(at));
+                        setAccidentalType(Type(at));
                         }
                   else
                         setSubtype(text);
                   }
             else if (tag == "role") {
                   int i = e.readInt();
-                  if (i == int(AccidentalRole::AUTO) || i == int(AccidentalRole::USER))
-                        _role = AccidentalRole(i);
+                  if (i == int(Role::AUTO) || i == int(Role::USER))
+                        _role = Role(i);
                   }
             else if (tag == "small")
                   _small = e.readInt();
@@ -245,7 +245,7 @@ void Accidental::write(Xml& xml) const
       xml.stag(name());
       if (_hasBracket)
             xml.tag("bracket", _hasBracket);
-      if (_role != AccidentalRole::AUTO)
+      if (_role != Role::AUTO)
             xml.tag("role", int(_role));
       if (_small)
             xml.tag("small", _small);
@@ -272,11 +272,11 @@ void Accidental::setSubtype(const QString& tag)
       int n = sizeof(accList)/sizeof(*accList);
       for (int i = 0; i < n; ++i) {
             if (accList[i].tag == tag) {
-                  setAccidentalType(AccidentalType(i));
+                  setAccidentalType(Type(i));
                   return;
                   }
             }
-      setAccidentalType(AccidentalType::NONE);
+      setAccidentalType(Type::NONE);
       }
 
 //---------------------------------------------------------
@@ -334,7 +334,7 @@ void Accidental::layout()
 //    returns the resulting pitch offset
 //---------------------------------------------------------
 
-AccidentalVal Accidental::subtype2value(AccidentalType st)
+AccidentalVal Accidental::subtype2value(Type st)
       {
       return accList[int(st)].offset;
       }
@@ -343,7 +343,7 @@ AccidentalVal Accidental::subtype2value(AccidentalType st)
 //   subtype2name
 //---------------------------------------------------------
 
-const char* Accidental::subtype2name(AccidentalType st)
+const char* Accidental::subtype2name(Type st)
       {
       return accList[int(st)].tag;
       }
@@ -352,32 +352,32 @@ const char* Accidental::subtype2name(AccidentalType st)
 //   value2subtype
 //---------------------------------------------------------
 
-Accidental::AccidentalType Accidental::value2subtype(AccidentalVal v)
+Accidental::Type Accidental::value2subtype(AccidentalVal v)
       {
       switch(v) {
-            case AccidentalVal::NATURAL: return AccidentalType::NONE;
-            case AccidentalVal::SHARP:   return AccidentalType::SHARP;
-            case AccidentalVal::SHARP2:  return AccidentalType::SHARP2;
-            case AccidentalVal::FLAT:    return AccidentalType::FLAT;
-            case AccidentalVal::FLAT2:   return AccidentalType::FLAT2;
+            case AccidentalVal::NATURAL: return Type::NONE;
+            case AccidentalVal::SHARP:   return Type::SHARP;
+            case AccidentalVal::SHARP2:  return Type::SHARP2;
+            case AccidentalVal::FLAT:    return Type::FLAT;
+            case AccidentalVal::FLAT2:   return Type::FLAT2;
             default:
                   qFatal("value2subtype: illegal accidental val %hhd", v);
             }
-      return AccidentalType::NONE;
+      return Type::NONE;
       }
 
 //---------------------------------------------------------
 //   name2subtype
 //---------------------------------------------------------
 
-Accidental::AccidentalType Accidental::name2subtype(const QString& tag)
+Accidental::Type Accidental::name2subtype(const QString& tag)
       {
       int n = sizeof(accList)/sizeof(*accList);
       for (int i = 0; i < n; ++i) {
             if (accList[i].tag == tag)
-                  return AccidentalType(i);
+                  return Type(i);
             }
-      return AccidentalType::NONE;
+      return Type::NONE;
       }
 
 //---------------------------------------------------------
@@ -399,7 +399,7 @@ void Accidental::draw(QPainter* painter) const
 
 bool Accidental::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == ElementType::ACCIDENTAL_BRACKET;
+      return e->type() == Element::Type::ACCIDENTAL_BRACKET;
       }
 
 //---------------------------------------------------------
@@ -410,7 +410,7 @@ Element* Accidental::drop(const DropData& data)
       {
       Element* e = data.element;
       switch(e->type()) {
-            case ElementType::ACCIDENTAL_BRACKET:
+            case Element::Type::ACCIDENTAL_BRACKET:
                   if (!_hasBracket)
                         undoSetHasBracket(true);
                   break;

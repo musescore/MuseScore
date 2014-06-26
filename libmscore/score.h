@@ -30,8 +30,10 @@
 #include "segment.h"
 #include "accidental.h"
 #include "note.h"
+#include "ottava.h"
 #include "spannermap.h"
 #include "pitchspelling.h"
+#include "beam.h"
 
 class QPainter;
 
@@ -97,9 +99,8 @@ class Bracket;
 class KeyList;
 class ScoreFont;
 
-enum class OttavaType : char;
 enum class ClefType : signed char;
-enum class SymId : short;
+enum class SymId;
 enum class Key;
 
 extern bool showRubberBand;
@@ -373,7 +374,7 @@ class Score : public QObject {
 
       ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false);
       ChordRest* prevMeasure(ChordRest* element);
-      void cmdSetBeamMode(BeamMode);
+      void cmdSetBeamMode(Beam::Mode);
       void cmdFlip();
       Note* getSelectedNote();
       ChordRest* upStaff(ChordRest* cr);
@@ -391,8 +392,8 @@ class Score : public QObject {
       void cmdExchangeVoice(int, int);
 
       void removeChordRest(ChordRest* cr, bool clearSegment);
-      void cmdMoveRest(Rest*, Direction);
-      void cmdMoveLyrics(Lyrics*, Direction);
+      void cmdMoveRest(Rest*, MScore::Direction);
+      void cmdMoveLyrics(Lyrics*, MScore::Direction);
 
       void cmdHalfDuration();
       void cmdDoubleDuration();
@@ -464,7 +465,7 @@ class Score : public QObject {
       void cmdRemovePart(Part*);
       void cmdAddTie();
       void cmdAddHairpin(bool);
-      void cmdAddOttava(OttavaType);
+      void cmdAddOttava(Ottava::Type);
       void cmdAddStretch(qreal);
       void transpose(Note* n, Interval, bool useSharpsFlats);
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
@@ -519,7 +520,7 @@ class Score : public QObject {
       void undoChangeBracketSpan(Staff* staff, int column, int span);
       void undoChangeTuning(Note*, qreal);
       void undoChangePageFormat(PageFormat*, qreal spatium, int);
-      void undoChangeUserMirror(Note*, DirectionH);
+      void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, int tick, Key);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
       void undoChangeBarLine(Measure* m, BarLineType);
@@ -534,7 +535,7 @@ class Score : public QObject {
 
       void setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
-      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = Direction::AUTO);
+      Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, MScore::Direction stemDirection = MScore::Direction::AUTO);
       void changeCRlen(ChordRest* cr, const TDuration&);
 
       Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*, bool keepChord = false);
@@ -552,8 +553,8 @@ class Score : public QObject {
 
       // undo/redo ops
       void addArticulation(ArticulationType);
-      void changeAccidental(Accidental::AccidentalType);
-      void changeAccidental(Note* oNote, Accidental::AccidentalType);
+      void changeAccidental(Accidental::Type);
+      void changeAccidental(Note* oNote, Accidental::Type);
 
       void addElement(Element*);
       void removeElement(Element*);
@@ -637,8 +638,8 @@ class Score : public QObject {
       Measure* tick2measure(int tick) const;
       Measure* tick2measureMM(int tick) const;
       MeasureBase* tick2measureBase(int tick) const;
-      Segment* tick2segment(int tick, bool first = false, SegmentType st = SegmentType::All,bool useMMrest = false ) const;
-      Segment* tick2segmentMM(int tick, bool first = false, SegmentType st = SegmentType::All) const;
+      Segment* tick2segment(int tick, bool first = false, Segment::Type st = Segment::Type::All,bool useMMrest = false ) const;
+      Segment* tick2segmentMM(int tick, bool first = false, Segment::Type st = Segment::Type::All) const;
       Segment* tick2segmentEnd(int track, int tick) const;
       Segment* tick2leftSegment(int tick) const;
       Segment* tick2rightSegment(int tick) const;
@@ -798,8 +799,8 @@ class Score : public QObject {
 //      int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;
 
-      Q_INVOKABLE Ms::Segment* firstSegment(SegmentType s = SegmentType::All) const;
-      Ms::Segment* firstSegmentMM(SegmentType s = SegmentType::All) const;
+      Q_INVOKABLE Ms::Segment* firstSegment(Segment::Type s = Segment::Type::All) const;
+      Ms::Segment* firstSegmentMM(Segment::Type s = Segment::Type::All) const;
       Q_INVOKABLE Ms::Segment* lastSegment() const;
 
       void connectTies();
@@ -924,7 +925,7 @@ class Score : public QObject {
       bool undoRedo() const                 { return _undoRedo; }
       void respace(QList<ChordRest*>* elements);
       void transposeSemitone(int semitone);
-      MeasureBase* insertMeasure(ElementType type, MeasureBase*,
+      MeasureBase* insertMeasure(Element::Type type, MeasureBase*,
          bool createEmptyMeasures = false);
       Audio* audio() const         { return _audio;    }
       void setAudio(Audio* a)      { _audio = a;       }

@@ -178,7 +178,7 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
             XmlReader e(a);
             QPointF dragOffset;
             Fraction duration;  // dummy
-            ElementType type = Element::readType(e, &dragOffset, &duration);
+            Element::Type type = Element::readType(e, &dragOffset, &duration);
 
             dragElement = Element::create(type, _score);
             if (dragElement) {
@@ -223,14 +223,14 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
       {
       event->acceptProposedAction();
 
-      if (!dragElement || dragElement->type() != ElementType::ICON)
+      if (!dragElement || dragElement->type() != Element::Type::ICON)
             return;
 
       QPointF pos(imatrix.map(QPointF(event->pos())));
       QList<Element*> el = elementsAt(pos);
       bool found = false;
       foreach(const Element* e, el) {
-            if (e->type() == ElementType::NOTE) {
+            if (e->type() == Element::Type::NOTE) {
                   setDropTarget(const_cast<Element*>(e));
                   found = true;
                   break;
@@ -281,27 +281,27 @@ void ExampleView::dropEvent(QDropEvent* event)
 
       if (!dragElement)
            return;
-      if (dragElement->type() != ElementType::ICON) {
+      if (dragElement->type() != Element::Type::ICON) {
             delete dragElement;
             dragElement = 0;
             return;
             }
       foreach (Element* e, elementsAt(pos)) {
-            if (e->type() == ElementType::NOTE) {
+            if (e->type() == Element::Type::NOTE) {
                   Icon* icon = static_cast<Icon*>(dragElement);
                   Chord* chord = static_cast<Note*>(e)->chord();
                   switch (icon->iconType()) {
                         case IconType::SBEAM:
-                              chord->setBeamMode(BeamMode::BEGIN);
+                              chord->setBeamMode(Beam::Mode::BEGIN);
                               break;
                         case IconType::MBEAM:
-                              chord->setBeamMode(BeamMode::AUTO);
+                              chord->setBeamMode(Beam::Mode::AUTO);
                               break;
                         case IconType::BEAM32:
-                              chord->setBeamMode(BeamMode::BEGIN32);
+                              chord->setBeamMode(Beam::Mode::BEGIN32);
                               break;
                         case IconType::BEAM64:
-                              chord->setBeamMode(BeamMode::BEGIN64);
+                              chord->setBeamMode(Beam::Mode::BEGIN64);
                               break;
                         default:
                               break;
@@ -324,7 +324,7 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
       {
       QPointF pos(imatrix.map(QPointF(event->pos())));
       foreach (Element* e, elementsAt(pos)) {
-            if (e->type() == ElementType::NOTE) {
+            if (e->type() == Element::Type::NOTE) {
                   emit noteClicked(static_cast<Note*>(e));
                   break;
                   }

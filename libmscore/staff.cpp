@@ -880,7 +880,7 @@ void Staff::updateKeys()
       int track = idx() * VOICES;
       _keys.clear();
       for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
-            for (Segment* s = m->first(SegmentType::KeySig); s; s = s->next(SegmentType::KeySig)) {
+            for (Segment* s = m->first(Segment::Type::KeySig); s; s = s->next(Segment::Type::KeySig)) {
                   KeySig* ks = static_cast<KeySig*>(s->element(track));
                   if (ks == 0 || ks->generated())
                         continue;

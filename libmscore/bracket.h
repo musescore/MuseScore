@@ -45,7 +45,7 @@ class Bracket : public Element {
       Bracket(Score*);
       virtual Bracket* clone() const   { return new Bracket(*this); }
 
-      virtual ElementType type() const   { return ElementType::BRACKET;  }
+      virtual Element::Type type() const { return Element::Type::BRACKET;  }
       BracketType bracketType() const    { return _bracketType; }
       void setBracketType(BracketType t) { _bracketType = t;    }
 

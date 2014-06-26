@@ -77,7 +77,7 @@ void TestChordSymbol::testExtend()
       {
       Score* score = test_pre("extend");
       Measure* m = score->firstMeasure();
-      Segment* s = m->first(SegmentType::ChordRest);
+      Segment* s = m->first(Segment::Type::ChordRest);
       ChordRest* cr = s->cr(0);
       score->changeCRlen(cr, TDuration::DurationType::V_WHOLE);
       score->doLayout();
@@ -97,7 +97,7 @@ void TestChordSymbol::testClear()
 void TestChordSymbol::testAddLink()
       {
       Score* score = test_pre("add-link");
-      Segment* seg = score->firstSegment(SegmentType::ChordRest);
+      Segment* seg = score->firstSegment(Segment::Type::ChordRest);
       ChordRest* cr = seg->cr(0);
       Harmony* harmony = new Harmony(score);
       harmony->setHarmony("C7");
@@ -111,7 +111,7 @@ void TestChordSymbol::testAddLink()
 void TestChordSymbol::testAddPart()
       {
       Score* score = test_pre("add-part");
-      Segment* seg = score->firstSegment(SegmentType::ChordRest);
+      Segment* seg = score->firstSegment(Segment::Type::ChordRest);
       ChordRest* cr = seg->cr(0);
       Harmony* harmony = new Harmony(score);
       harmony->setHarmony("C7");

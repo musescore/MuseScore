@@ -62,7 +62,7 @@ namespace Ms {
 //    note head groups
 //---------------------------------------------------------
 
-static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS)][int(NoteHeadType::HEAD_TYPES)] = {
+static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)] = {
    // previous non-SMUFL data kept in comments for future reference
    {     // down stem
       { SymId::noteheadWhole,       SymId::noteheadHalf,          SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
@@ -122,7 +122,7 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS)][int(NoteHeadTyp
 //   noteHead
 //---------------------------------------------------------
 
-SymId Note::noteHead(int direction, NoteHeadGroup g, NoteHeadType t)
+SymId Note::noteHead(int direction, NoteHead::Group g, NoteHead::Type t)
       {
       return noteHeads[direction][int(g)][int(t)];
       };
@@ -143,13 +143,13 @@ void NoteHead::write(Xml& xml) const
 //   headGroup
 //---------------------------------------------------------
 
-NoteHeadGroup NoteHead::headGroup() const
+NoteHead::Group NoteHead::headGroup() const
       {
-      NoteHeadGroup group = NoteHeadGroup::HEAD_INVALID;
+      Group group = Group::HEAD_INVALID;
 
-      for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
+      for (int i = 0; i < int(Group::HEAD_GROUPS); ++i) {
             if (noteHeads[0][i][1] == _sym || noteHeads[0][i][3] == _sym) {
-                  group = (NoteHeadGroup)i;
+                  group = (Group)i;
                         break;
                   }
             }
@@ -170,9 +170,9 @@ Note::Note(Score* s)
       _tuning            = 0.0;
       _accidental        = 0;
       _mirror            = false;
-      _userMirror        = DirectionH::DH_AUTO;
+      _userMirror        = MScore::DirectionH::AUTO;
       _small             = false;
-      _userDotPosition   = Direction::AUTO;
+      _userDotPosition   = MScore::Direction::AUTO;
       _line              = 0;
       _fret              = -1;
       _string            = -1;
@@ -183,8 +183,8 @@ Note::Note(Score* s)
       _tieBack           = 0;
       _tpc[0]            = Tpc::TPC_INVALID;
       _tpc[1]            = Tpc::TPC_INVALID;
-      _headGroup         = NoteHeadGroup::HEAD_NORMAL;
-      _headType          = NoteHeadType::HEAD_AUTO;
+      _headGroup         = NoteHead::Group::HEAD_NORMAL;
+      _headType          = NoteHead::Type::HEAD_AUTO;
 
       _hidden            = false;
       _subchannel        = 0;
@@ -415,22 +415,22 @@ int Note::transposeTpc(int tpc)
 SymId Note::noteHead() const
       {
       int up;
-      NoteHeadType ht;
+      NoteHead::Type ht;
       if (chord()) {
             up = chord()->up();
             ht = chord()->durationType().headType();
             }
       else {
             up = 1;
-            ht = NoteHeadType::HEAD_QUARTER;
+            ht = NoteHead::Type::HEAD_QUARTER;
             }
-      if (_headType != NoteHeadType::HEAD_AUTO)
+      if (_headType != NoteHead::Type::HEAD_AUTO)
             ht = _headType;
 
       SymId t = noteHead(up, _headGroup, ht);
       if (t == SymId::noSym) {
             qDebug("invalid note head %hhd/%hhd", _headGroup, ht);
-            t = noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
+            t = noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
             }
       return t;
       }
@@ -550,20 +550,20 @@ void Note::add(Element* e)
       e->setTrack(track());
 
       switch(e->type()) {
-            case ElementType::NOTEDOT:
+            case Element::Type::NOTEDOT:
                   {
                   NoteDot* dot = static_cast<NoteDot*>(e);
                   _dots[dot->idx()] = dot;
                   }
                   break;
-            case ElementType::SYMBOL:
-            case ElementType::IMAGE:
-            case ElementType::FINGERING:
-            case ElementType::TEXT:
-            case ElementType::BEND:
+            case Element::Type::SYMBOL:
+            case Element::Type::IMAGE:
+            case Element::Type::FINGERING:
+            case Element::Type::TEXT:
+            case Element::Type::BEND:
                   _el.push_back(e);
                   break;
-            case ElementType::TIE:
+            case Element::Type::TIE:
                   {
                   Tie* tie = static_cast<Tie*>(e);
                   tie->setStartNote(this);
@@ -579,10 +579,10 @@ void Note::add(Element* e)
                         }
                   }
                   break;
-            case ElementType::ACCIDENTAL:
+            case Element::Type::ACCIDENTAL:
                   _accidental = static_cast<Accidental*>(e);
                   break;
-            case ElementType::TEXTLINE:
+            case Element::Type::TEXTLINE:
                   addSpanner(static_cast<Spanner*>(e));
                   break;
             default:
@@ -598,7 +598,7 @@ void Note::add(Element* e)
 void Note::remove(Element* e)
       {
       switch(e->type()) {
-            case ElementType::NOTEDOT:
+            case Element::Type::NOTEDOT:
                   for (int i = 0; i < 3; ++i) {
                         if (_dots[i] == e) {
                               _dots[i] = 0;
@@ -607,15 +607,15 @@ void Note::remove(Element* e)
                         }
                   break;
 
-            case ElementType::TEXT:
-            case ElementType::SYMBOL:
-            case ElementType::IMAGE:
-            case ElementType::FINGERING:
-            case ElementType::BEND:
+            case Element::Type::TEXT:
+            case Element::Type::SYMBOL:
+            case Element::Type::IMAGE:
+            case Element::Type::FINGERING:
+            case Element::Type::BEND:
                   if (!_el.remove(e))
                         qDebug("Note::remove(): cannot find %s", e->name());
                   break;
-            case ElementType::TIE:
+            case Element::Type::TIE:
                   {
                   Tie* tie = static_cast<Tie*>(e);
                   setTieFor(0);
@@ -636,11 +636,11 @@ void Note::remove(Element* e)
                   }
                   break;
 
-            case ElementType::ACCIDENTAL:
+            case Element::Type::ACCIDENTAL:
                   _accidental = 0;
                   break;
 
-            case ElementType::TEXTLINE:
+            case Element::Type::TEXTLINE:
                   removeSpanner(static_cast<Spanner*>(e));
                   break;
 
@@ -911,42 +911,42 @@ void Note::read(XmlReader& e)
                         // TODO: for backward compatibility
                         bool bracket = k & 0x8000;
                         k &= 0xfff;
-                        Accidental::AccidentalType at = Accidental::AccidentalType::NONE;
+                        Accidental::Type at = Accidental::Type::NONE;
                         switch(k) {
-                              case 0: at = Accidental::AccidentalType::NONE; break;
-                              case 1: at = Accidental::AccidentalType::SHARP; break;
-                              case 2: at = Accidental::AccidentalType::FLAT; break;
-                              case 3: at = Accidental::AccidentalType::SHARP2; break;
-                              case 4: at = Accidental::AccidentalType::FLAT2; break;
-                              case 5: at = Accidental::AccidentalType::NATURAL; break;
+                              case 0: at = Accidental::Type::NONE; break;
+                              case 1: at = Accidental::Type::SHARP; break;
+                              case 2: at = Accidental::Type::FLAT; break;
+                              case 3: at = Accidental::Type::SHARP2; break;
+                              case 4: at = Accidental::Type::FLAT2; break;
+                              case 5: at = Accidental::Type::NATURAL; break;
 
-                              case 6: at = Accidental::AccidentalType::FLAT_SLASH; break;
-                              case 7: at = Accidental::AccidentalType::FLAT_SLASH2; break;
-                              case 8: at = Accidental::AccidentalType::MIRRORED_FLAT2; break;
-                              case 9: at = Accidental::AccidentalType::MIRRORED_FLAT; break;
-                              case 10: at = Accidental::AccidentalType::MIRRORED_FLAT_SLASH; break;
-                              case 11: at = Accidental::AccidentalType::FLAT_FLAT_SLASH; break;
+                              case 6: at = Accidental::Type::FLAT_SLASH; break;
+                              case 7: at = Accidental::Type::FLAT_SLASH2; break;
+                              case 8: at = Accidental::Type::MIRRORED_FLAT2; break;
+                              case 9: at = Accidental::Type::MIRRORED_FLAT; break;
+                              case 10: at = Accidental::Type::MIRRORED_FLAT_SLASH; break;
+                              case 11: at = Accidental::Type::FLAT_FLAT_SLASH; break;
 
-                              case 12: at = Accidental::AccidentalType::SHARP_SLASH; break;
-                              case 13: at = Accidental::AccidentalType::SHARP_SLASH2; break;
-                              case 14: at = Accidental::AccidentalType::SHARP_SLASH3; break;
-                              case 15: at = Accidental::AccidentalType::SHARP_SLASH4; break;
+                              case 12: at = Accidental::Type::SHARP_SLASH; break;
+                              case 13: at = Accidental::Type::SHARP_SLASH2; break;
+                              case 14: at = Accidental::Type::SHARP_SLASH3; break;
+                              case 15: at = Accidental::Type::SHARP_SLASH4; break;
 
-                              case 16: at = Accidental::AccidentalType::SHARP_ARROW_UP; break;
-                              case 17: at = Accidental::AccidentalType::SHARP_ARROW_DOWN; break;
-                              case 18: at = Accidental::AccidentalType::SHARP_ARROW_BOTH; break;
-                              case 19: at = Accidental::AccidentalType::FLAT_ARROW_UP; break;
-                              case 20: at = Accidental::AccidentalType::FLAT_ARROW_DOWN; break;
-                              case 21: at = Accidental::AccidentalType::FLAT_ARROW_BOTH; break;
-                              case 22: at = Accidental::AccidentalType::NATURAL_ARROW_UP; break;
-                              case 23: at = Accidental::AccidentalType::NATURAL_ARROW_DOWN; break;
-                              case 24: at = Accidental::AccidentalType::NATURAL_ARROW_BOTH; break;
-                              case 25: at = Accidental::AccidentalType::SORI; break;
-                              case 26: at = Accidental::AccidentalType::KORON; break;
+                              case 16: at = Accidental::Type::SHARP_ARROW_UP; break;
+                              case 17: at = Accidental::Type::SHARP_ARROW_DOWN; break;
+                              case 18: at = Accidental::Type::SHARP_ARROW_BOTH; break;
+                              case 19: at = Accidental::Type::FLAT_ARROW_UP; break;
+                              case 20: at = Accidental::Type::FLAT_ARROW_DOWN; break;
+                              case 21: at = Accidental::Type::FLAT_ARROW_BOTH; break;
+                              case 22: at = Accidental::Type::NATURAL_ARROW_UP; break;
+                              case 23: at = Accidental::Type::NATURAL_ARROW_DOWN; break;
+                              case 24: at = Accidental::Type::NATURAL_ARROW_BOTH; break;
+                              case 25: at = Accidental::Type::SORI; break;
+                              case 26: at = Accidental::Type::KORON; break;
                               }
                         _accidental->setAccidentalType(at);
                         _accidental->setHasBracket(bracket);
-                        _accidental->setRole(Accidental::AccidentalRole::USER);
+                        _accidental->setRole(Accidental::Role::USER);
                         hasAccidental = true;   // we now have an accidental
                         }
                   }
@@ -1011,7 +1011,7 @@ void Note::read(XmlReader& e)
                   Spanner* sp = e.findSpanner(id);
                   if (sp) {
                         sp->setEndElement(this);
-                        if (sp->type() == ElementType::TIE)
+                        if (sp->type() == Element::Type::TIE)
                               _tieBack = static_cast<Tie*>(sp);
                         else
                               addSpannerBack(sp);
@@ -1170,49 +1170,49 @@ void Note::endDrag()
 
 bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      ElementType type = e->type();
-      return (type == ElementType::ARTICULATION
-         || type == ElementType::CHORDLINE
-         || type == ElementType::TEXT
-         || type == ElementType::REHEARSAL_MARK
-         || type == ElementType::FINGERING
-         || type == ElementType::ACCIDENTAL
-         || type == ElementType::BREATH
-         || type == ElementType::ARPEGGIO
-         || type == ElementType::NOTEHEAD
-         || type == ElementType::NOTE
-         || type == ElementType::TREMOLO
-         || type == ElementType::STAFF_STATE
-         || type == ElementType::INSTRUMENT_CHANGE
-         || type == ElementType::IMAGE
-         || type == ElementType::CHORD
-         || type == ElementType::HARMONY
-         || type == ElementType::DYNAMIC
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
-      || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
-         || (noteType() == NoteType::NORMAL && type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
-         || (noteType() == NoteType::NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS)
-         || (type == ElementType::SYMBOL)
-         || (type == ElementType::CLEF)
-         || (type == ElementType::BAR_LINE)
-         || (type == ElementType::GLISSANDO)
-         || (type == ElementType::SLUR)
-         || (type == ElementType::STAFF_TEXT)
-         || (type == ElementType::TEMPO_TEXT)
-         || (type == ElementType::BEND && (staff()->isTabStaff()))
-         || (type == ElementType::FRET_DIAGRAM));
+      Element::Type type = e->type();
+      return (type == Element::Type::ARTICULATION
+         || type == Element::Type::CHORDLINE
+         || type == Element::Type::TEXT
+         || type == Element::Type::REHEARSAL_MARK
+         || type == Element::Type::FINGERING
+         || type == Element::Type::ACCIDENTAL
+         || type == Element::Type::BREATH
+         || type == Element::Type::ARPEGGIO
+         || type == Element::Type::NOTEHEAD
+         || type == Element::Type::NOTE
+         || type == Element::Type::TREMOLO
+         || type == Element::Type::STAFF_STATE
+         || type == Element::Type::INSTRUMENT_CHANGE
+         || type == Element::Type::IMAGE
+         || type == Element::Type::CHORD
+         || type == Element::Type::HARMONY
+         || type == Element::Type::DYNAMIC
+         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
+         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
+      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
+      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
+      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
+         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
+         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
+         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
+         || (noteType() == NoteType::NORMAL && type == Element::Type::BAGPIPE_EMBELLISHMENT)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS)
+         || (type == Element::Type::SYMBOL)
+         || (type == Element::Type::CLEF)
+         || (type == Element::Type::BAR_LINE)
+         || (type == Element::Type::GLISSANDO)
+         || (type == Element::Type::SLUR)
+         || (type == Element::Type::STAFF_TEXT)
+         || (type == Element::Type::TEMPO_TEXT)
+         || (type == Element::Type::BEND && (staff()->isTabStaff()))
+         || (type == Element::Type::FRET_DIAGRAM));
       }
 
 //---------------------------------------------------------
@@ -1225,16 +1225,16 @@ Element* Note::drop(const DropData& data)
 
       Chord* ch = chord();
       switch(e->type()) {
-            case ElementType::REHEARSAL_MARK:
+            case Element::Type::REHEARSAL_MARK:
                   return ch->drop(data);
 
-            case ElementType::SYMBOL:
-            case ElementType::IMAGE:
+            case Element::Type::SYMBOL:
+            case Element::Type::IMAGE:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   return e;
 
-            case ElementType::FINGERING:
+            case Element::Type::FINGERING:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   {
@@ -1245,22 +1245,22 @@ Element* Note::drop(const DropData& data)
                   }
                   return e;
 
-            case ElementType::SLUR:
+            case Element::Type::SLUR:
                   delete e;
                   data.view->cmdAddSlur(this, 0);
                   return 0;
 
-            case ElementType::LYRICS:
+            case Element::Type::LYRICS:
                   e->setParent(ch);
                   e->setTrack(track());
                   score()->undoAddElement(e);
                   return e;
 
-            case ElementType::ACCIDENTAL:
+            case Element::Type::ACCIDENTAL:
                   score()->changeAccidental(this, static_cast<Accidental*>(e)->accidentalType());
                   break;
 
-            case ElementType::BEND:
+            case Element::Type::BEND:
                   {
                   Bend* b = static_cast<Bend*>(e);
                   b->setParent(this);
@@ -1269,13 +1269,13 @@ Element* Note::drop(const DropData& data)
                   }
                   return e;
 
-            case ElementType::NOTEHEAD:
+            case Element::Type::NOTEHEAD:
                   {
                   NoteHead* s = static_cast<NoteHead*>(e);
-                  NoteHeadGroup group = s->headGroup();
-                  if (group == NoteHeadGroup::HEAD_INVALID) {
+                  NoteHead::Group group = s->headGroup();
+                  if (group == NoteHead::Group::HEAD_INVALID) {
                         qDebug("unknown note head");
-                        group = NoteHeadGroup::HEAD_NORMAL;
+                        group = NoteHead::Group::HEAD_NORMAL;
                         }
                   delete s;
 
@@ -1285,7 +1285,7 @@ Element* Note::drop(const DropData& data)
                                     e->score()->undoChangeProperty(e, P_ID::HEAD_GROUP, int(group));
                                     Note* note = static_cast<Note*>(e);
                                     if (note->staff() && note->staff()->isTabStaff()
-                                       && group == NoteHeadGroup::HEAD_CROSS) {
+                                       && group == NoteHead::Group::HEAD_CROSS) {
                                           e->score()->undoChangeProperty(e, P_ID::GHOST, true);
                                           }
                                     }
@@ -1297,7 +1297,7 @@ Element* Note::drop(const DropData& data)
                   }
                   break;
 
-            case ElementType::ICON:
+            case Element::Type::ICON:
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case IconType::ACCIACCATURA:
@@ -1351,7 +1351,7 @@ Element* Note::drop(const DropData& data)
                   delete e;
                   break;
 
-            case ElementType::BAGPIPE_EMBELLISHMENT:
+            case Element::Type::BAGPIPE_EMBELLISHMENT:
                   {
                   BagpipeEmbellishment* b = static_cast<BagpipeEmbellishment*>(e);
                   noteList nl = b->getNoteList();
@@ -1365,7 +1365,7 @@ Element* Note::drop(const DropData& data)
                   delete e;
                   break;
 
-            case ElementType::NOTE:
+            case Element::Type::NOTE:
                   {
                   Chord* ch = chord();
                   if (ch->noteType() != NoteType::NORMAL) {
@@ -1378,12 +1378,12 @@ Element* Note::drop(const DropData& data)
                   }
                   break;
 
-            case ElementType::GLISSANDO:
+            case Element::Type::GLISSANDO:
                   {
                   Segment* s = ch->segment();
                   s = s->next1();
                   while (s) {
-                        if ((s->segmentType() == SegmentType::ChordRest) && s->element(track()))
+                        if ((s->segmentType() == Segment::Type::ChordRest) && s->element(track()))
                               break;
                         s = s->next1();
                         }
@@ -1393,7 +1393,7 @@ Element* Note::drop(const DropData& data)
                         return 0;
                         }
                   ChordRest* cr1 = static_cast<ChordRest*>(s->element(track()));
-                  if (cr1 == 0 || cr1->type() != ElementType::CHORD) {
+                  if (cr1 == 0 || cr1->type() != Element::Type::CHORD) {
                         qDebug("no second note for glissando found, track %d", track());
                         delete e;
                         return 0;
@@ -1402,18 +1402,18 @@ Element* Note::drop(const DropData& data)
                   e->setParent(cr1);
                   // in TAB, use straight line with no text
                   if (staff()->isTabStaff()) {
-                        (static_cast<Glissando*>(e))->setGlissandoType(GlissandoType::STRAIGHT);
+                        (static_cast<Glissando*>(e))->setGlissandoType(Glissando::Type::STRAIGHT);
                         (static_cast<Glissando*>(e))->setShowText(false);
                         }
                   score()->undoAddElement(e);
                   }
                   break;
 
-            case ElementType::CHORD:
+            case Element::Type::CHORD:
                   {
                   Chord* c      = static_cast<Chord*>(e);
                   Note* n       = c->upNote();
-                  Direction dir = c->stemDirection();
+                  MScore::Direction dir = c->stemDirection();
                   int t         = (staff2track(staffIdx()) + n->voice());
                   score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;
@@ -1438,7 +1438,7 @@ Element* Note::drop(const DropData& data)
 //   setDotPosition
 //---------------------------------------------------------
 
-void Note::setDotY(Direction pos)
+void Note::setDotY(MScore::Direction pos)
       {
       bool onLine = false;
       qreal y = 0;
@@ -1465,17 +1465,17 @@ void Note::setDotY(Direction pos)
       bool oddVoice = voice() & 1;
       if (onLine) {
             // displace dots by half spatium up or down according to voice
-            if (pos == Direction::AUTO)
+            if (pos == MScore::Direction::AUTO)
                   y = oddVoice ? 0.5 : -0.5;
-            else if (pos == Direction::UP)
+            else if (pos == MScore::Direction::UP)
                   y = -0.5;
             else
                   y = 0.5;
             }
       else {
-            if (pos == Direction::UP && !oddVoice)
+            if (pos == MScore::Direction::UP && !oddVoice)
                   y -= 1.0;
-            else if (pos == Direction::DOWN && oddVoice)
+            else if (pos == MScore::Direction::DOWN && oddVoice)
                   y += 1.0;
             }
       y *= spatium() * staff()->lineDistance();
@@ -1566,7 +1566,7 @@ void Note::layout2()
                   continue;
             e->setMag(mag());
             e->layout();
-            if (e->type() == ElementType::SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
+            if (e->type() == Element::Type::SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
                   qreal w = headWidth();
                   if (staff()->isTabStaff()) {
                         StaffType* tab = staff()->staffType();
@@ -1585,10 +1585,10 @@ bool Note::dotIsUp() const
       {
       if (_dots[0] == 0)
             return true;
-      if (_userDotPosition == Direction::AUTO)
+      if (_userDotPosition == MScore::Direction::AUTO)
             return _dots[0]->y() < spatium() * .1;
       else
-            return (_userDotPosition == Direction::UP);
+            return (_userDotPosition == MScore::Direction::UP);
       }
 
 //---------------------------------------------------------
@@ -1617,13 +1617,13 @@ void Note::layout10(AccidentalState* as)
 
             // calculate accidental
 
-            Accidental::AccidentalType acci = Accidental::AccidentalType::NONE;
-            if (_accidental && _accidental->role() == Accidental::AccidentalRole::USER) {
+            Accidental::Type acci = Accidental::Type::NONE;
+            if (_accidental && _accidental->role() == Accidental::Role::USER) {
                   acci = _accidental->accidentalType();
-                  if (acci == Accidental::AccidentalType::SHARP || acci == Accidental::AccidentalType::FLAT) {
+                  if (acci == Accidental::Type::SHARP || acci == Accidental::Type::FLAT) {
                         // TODO - what about double flat and double sharp?
                         Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
-                        int ntpc = pitch2tpc(epitch(), key, acci == Accidental::AccidentalType::SHARP ? Prefer::SHARPS : Prefer::FLATS);
+                        int ntpc = pitch2tpc(epitch(), key, acci == Accidental::Type::SHARP ? Prefer::SHARPS : Prefer::FLATS);
                         if (ntpc != tpc()) {
 //not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), tpc(), ntpc, acci);
 //                              setColor(QColor(255, 0, 0));
@@ -1631,7 +1631,7 @@ void Note::layout10(AccidentalState* as)
                               relLine = absStep(tpc(), epitch());
                               }
                         }
-                  else if (acci > Accidental::AccidentalType::NATURAL) {
+                  else if (acci > Accidental::Type::NATURAL) {
                         // microtonal accidental - see comment in updateAccidental
                         as->setAccidentalVal(relLine, AccidentalVal::NATURAL, _tieBack != 0);
                         }
@@ -1643,12 +1643,12 @@ void Note::layout10(AccidentalState* as)
                         as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                         if (!_tieBack) {
                               acci = Accidental::value2subtype(accVal);
-                              if (acci == Accidental::AccidentalType::NONE)
-                                    acci = Accidental::AccidentalType::NATURAL;
+                              if (acci == Accidental::Type::NONE)
+                                    acci = Accidental::Type::NATURAL;
                               }
                         }
                   }
-            if (acci != Accidental::AccidentalType::NONE && !_tieBack && !_hidden) {
+            if (acci != Accidental::Type::NONE && !_tieBack && !_hidden) {
                   if (_accidental == 0) {
                         _accidental = new Accidental(score());
                         _accidental->setGenerated(true);
@@ -1759,7 +1759,7 @@ void Note::reset()
       {
       score()->undoChangeProperty(this, P_ID::USER_OFF, QPointF());
       score()->undoChangeProperty(chord(), P_ID::USER_OFF, QPointF());
-      score()->undoChangeProperty(chord(), P_ID::STEM_DIRECTION, int(Direction::AUTO));
+      score()->undoChangeProperty(chord(), P_ID::STEM_DIRECTION, int(MScore::Direction::AUTO));
       }
 
 //---------------------------------------------------------
@@ -1807,9 +1807,9 @@ void Note::setString(int val)
 //   setHeadGroup
 //---------------------------------------------------------
 
-void Note::setHeadGroup(NoteHeadGroup val)
+void Note::setHeadGroup(NoteHead::Group val)
       {
-      Q_ASSERT(int(val) >= 0 && int(val) < int(NoteHeadGroup::HEAD_GROUPS));
+      Q_ASSERT(int(val) >= 0 && int(val) < int(NoteHead::Group::HEAD_GROUPS));
       _headGroup = val;
       }
 
@@ -1876,22 +1876,22 @@ void Note::updateAccidental(AccidentalState* as)
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
-      if (!(_accidental && _accidental->accidentalType() > Accidental::AccidentalType::NATURAL)) {
+      if (!(_accidental && _accidental->accidentalType() > Accidental::Type::NATURAL)) {
             // calculate accidental
-            Accidental::AccidentalType acci = Accidental::AccidentalType::NONE;
+            Accidental::Type acci = Accidental::Type::NONE;
 
             AccidentalVal accVal = tpc2alter(tpc());
             if ((accVal != as->accidentalVal(relLine)) || hidden() || as->tieContext(relLine)) {
                   as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                   if (_tieBack)
-                        acci = Accidental::AccidentalType::NONE;
+                        acci = Accidental::Type::NONE;
                   else {
                         acci = Accidental::value2subtype(accVal);
-                        if (acci == Accidental::AccidentalType::NONE)
-                              acci = Accidental::AccidentalType::NATURAL;
+                        if (acci == Accidental::Type::NONE)
+                              acci = Accidental::Type::NATURAL;
                         }
                   }
-            if (acci != Accidental::AccidentalType::NONE && !_tieBack && !_hidden) {
+            if (acci != Accidental::Type::NONE && !_tieBack && !_hidden) {
                   if (_accidental == 0) {
                         Accidental* a = new Accidental(score());
                         a->setParent(this);
@@ -1908,13 +1908,13 @@ void Note::updateAccidental(AccidentalState* as)
             else {
                   if (_accidental) {
                         // remove this if it was AUTO:
-                        if (_accidental->role() == Accidental::AccidentalRole::AUTO)
+                        if (_accidental->role() == Accidental::Role::AUTO)
                               score()->undoRemoveElement(_accidental);
                         else {
                               // keep it, but update type if needed
                               acci = Accidental::value2subtype(accVal);
-                              if (acci == Accidental::AccidentalType::NONE)
-                                    acci = Accidental::AccidentalType::NATURAL;
+                              if (acci == Accidental::Type::NONE)
+                                    acci = Accidental::Type::NATURAL;
                               if (_accidental->accidentalType() != acci) {
                                     Accidental* a = _accidental->clone();
                                     a->setParent(this);
@@ -1997,7 +1997,7 @@ void Note::setNval(const NoteVal& nval)
             _tpc[0] = transposeTpc(nval.tpc);
             _tpc[1] = nval.tpc;
             }
-      _headGroup = NoteHeadGroup(nval.headGroup);
+      _headGroup = NoteHead::Group(nval.headGroup);
       }
 
 //---------------------------------------------------------
@@ -2075,13 +2075,13 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   setSmall(v.toBool());
                   break;
             case P_ID::MIRROR_HEAD:
-                  setUserMirror(DirectionH(v.toInt()));
+                  setUserMirror(MScore::DirectionH(v.toInt()));
                   break;
             case P_ID::DOT_POSITION:
-                  setUserDotPosition(Direction(v.toInt()));
+                  setUserDotPosition(MScore::Direction(v.toInt()));
                   break;
             case P_ID::HEAD_GROUP:
-                  setHeadGroup(NoteHeadGroup(v.toInt()));
+                  setHeadGroup(NoteHead::Group(v.toInt()));
                   break;
             case P_ID::VELO_OFFSET:
                   setVeloOffset(v.toInt());
@@ -2101,7 +2101,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   setGhost(v.toBool());
                   break;
             case P_ID::HEAD_TYPE:
-                  setHeadType(NoteHeadType(v.toInt()));
+                  setHeadType(NoteHead::Type(v.toInt()));
                   break;
             case P_ID::VELO_TYPE:
                   setVeloType(ValueType(v.toInt()));
@@ -2205,7 +2205,7 @@ void Note::undoSetVeloOffset(int val)
 //   undoSetUserMirror
 //---------------------------------------------------------
 
-void Note::undoSetUserMirror(DirectionH val)
+void Note::undoSetUserMirror(MScore::DirectionH val)
       {
       undoChangeProperty(P_ID::MIRROR_HEAD, int(val));
       }
@@ -2214,7 +2214,7 @@ void Note::undoSetUserMirror(DirectionH val)
 //   undoSetUserDotPosition
 //---------------------------------------------------------
 
-void Note::undoSetUserDotPosition(Direction val)
+void Note::undoSetUserDotPosition(MScore::Direction val)
       {
       undoChangeProperty(P_ID::DOT_POSITION, int(val));
       }
@@ -2223,7 +2223,7 @@ void Note::undoSetUserDotPosition(Direction val)
 //   undoSetHeadGroup
 //---------------------------------------------------------
 
-void Note::undoSetHeadGroup(NoteHeadGroup val)
+void Note::undoSetHeadGroup(NoteHead::Group val)
       {
       undoChangeProperty(P_ID::HEAD_GROUP, int(val));
       }
@@ -2232,7 +2232,7 @@ void Note::undoSetHeadGroup(NoteHeadGroup val)
 //   setHeadType
 //---------------------------------------------------------
 
-void Note::setHeadType(NoteHeadType t)
+void Note::setHeadType(NoteHead::Type t)
       {
       _headType = t;
       }
@@ -2241,7 +2241,7 @@ void Note::setHeadType(NoteHeadType t)
 //   undoSetHeadType
 //---------------------------------------------------------
 
-void Note::undoSetHeadType(NoteHeadType val)
+void Note::undoSetHeadType(NoteHead::Type val)
       {
       undoChangeProperty(P_ID::HEAD_TYPE, int(val));
       }
@@ -2257,11 +2257,11 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             case P_ID::SMALL:
                   return false;
             case P_ID::MIRROR_HEAD:
-                  return int(DirectionH::DH_AUTO);
+                  return int(MScore::DirectionH::AUTO);
             case P_ID::DOT_POSITION:
-                  return int(Direction::AUTO);
+                  return int(MScore::Direction::AUTO);
             case P_ID::HEAD_GROUP:
-                  return int(NoteHeadGroup::HEAD_NORMAL);
+                  return int(NoteHead::Group::HEAD_NORMAL);
             case P_ID::VELO_OFFSET:
                   return 0;
             case P_ID::TUNING:
@@ -2270,7 +2270,7 @@ QVariant Note::propertyDefault(P_ID propertyId) const
             case P_ID::STRING:
                   return -1;
             case P_ID::HEAD_TYPE:
-                  return int(NoteHeadType::HEAD_AUTO);
+                  return int(NoteHead::Type::HEAD_AUTO);
             case P_ID::VELO_TYPE:
                   return int (ValueType::OFFSET_VAL);
             case P_ID::PLAY:

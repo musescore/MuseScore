@@ -48,21 +48,21 @@ const char* Segment::subTypeName() const
       return subTypeName(_segmentType);
       }
 
-const char* Segment::subTypeName(SegmentType t)
+const char* Segment::subTypeName(Type t)
       {
       switch(t) {
-            case SegmentType::Invalid:              return "Invalid";
-            case SegmentType::Clef:                 return "Clef";
-            case SegmentType::KeySig:               return "Key Signature";
-            case SegmentType::Ambitus:              return "Ambitus";
-            case SegmentType::TimeSig:              return "Time Signature";
-            case SegmentType::StartRepeatBarLine:   return "Begin Repeat";
-            case SegmentType::BarLine:              return "BarLine";
-            case SegmentType::ChordRest:            return "ChordRest";
-            case SegmentType::Breath:               return "Breath";
-            case SegmentType::EndBarLine:           return "EndBarLine";
-            case SegmentType::TimeSigAnnounce:      return "Time Sig Precaution";
-            case SegmentType::KeySigAnnounce:       return "Key Sig Precaution";
+            case Type::Invalid:              return "Invalid";
+            case Type::Clef:                 return "Clef";
+            case Type::KeySig:               return "Key Signature";
+            case Type::Ambitus:              return "Ambitus";
+            case Type::TimeSig:              return "Time Signature";
+            case Type::StartRepeatBarLine:   return "Begin Repeat";
+            case Type::BarLine:              return "BarLine";
+            case Type::ChordRest:            return "ChordRest";
+            case Type::Breath:               return "Breath";
+            case Type::EndBarLine:           return "EndBarLine";
+            case Type::TimeSigAnnounce:      return "Time Sig Precaution";
+            case Type::KeySigAnnounce:       return "Key Sig Precaution";
             default:
                   return "??";
             }
@@ -115,7 +115,7 @@ Segment::Segment(Measure* m)
       empty = true;
       }
 
-Segment::Segment(Measure* m, SegmentType st, int t)
+Segment::Segment(Measure* m, Type st, int t)
    : Element(m->score())
       {
       setParent(m);
@@ -158,9 +158,9 @@ Segment::Segment(const Segment& s)
       _dotPosX = s._dotPosX;
       }
 
-void Segment::setSegmentType(SegmentType t)
+void Segment::setSegmentType(Type t)
       {
-      Q_ASSERT(_segmentType != SegmentType::Clef || t != SegmentType::ChordRest);
+      Q_ASSERT(_segmentType != Type::Clef || t != Type::ChordRest);
       _segmentType = t;
       }
 
@@ -184,7 +184,7 @@ Segment::~Segment()
       foreach(Element* e, _elist) {
             if (!e)
                   continue;
-            if (e->type() == ElementType::TIMESIG)
+            if (e->type() == Element::Type::TIMESIG)
                   e->staff()->removeTimeSig(static_cast<TimeSig*>(e));
             delete e;
             }
@@ -238,7 +238,7 @@ Segment* Segment::next1MM() const
       return m->first();
       }
 
-Segment* Segment::next1(SegmentType types) const
+Segment* Segment::next1(Type types) const
       {
       for (Segment* s = next1(); s; s = s->next1()) {
             if (s->segmentType() & types)
@@ -247,7 +247,7 @@ Segment* Segment::next1(SegmentType types) const
       return 0;
       }
 
-Segment* Segment::next1MM(SegmentType types) const
+Segment* Segment::next1MM(Type types) const
       {
       for (Segment* s = next1MM(); s; s = s->next1MM()) {
             if (s->segmentType() & types)
@@ -261,7 +261,7 @@ Segment* Segment::next1MM(SegmentType types) const
 //    got to next segment which has subtype in types
 //---------------------------------------------------------
 
-Segment* Segment::next(SegmentType types) const
+Segment* Segment::next(Type types) const
       {
       for (Segment* s = next(); s; s = s->next()) {
             if (s->segmentType() & types)
@@ -275,7 +275,7 @@ Segment* Segment::next(SegmentType types) const
 //    got to previous segment which has subtype in types
 //---------------------------------------------------------
 
-Segment* Segment::prev(SegmentType types) const
+Segment* Segment::prev(Type types) const
       {
       for (Segment* s = prev(); s; s = s->prev()) {
             if (s->segmentType() & types)
@@ -310,7 +310,7 @@ Segment* Segment::prev1MM() const
       return m->last();
       }
 
-Segment* Segment::prev1(SegmentType types) const
+Segment* Segment::prev1(Type types) const
       {
       for (Segment* s = prev1(); s; s = s->prev1()) {
             if (s->segmentType() & types)
@@ -319,7 +319,7 @@ Segment* Segment::prev1(SegmentType types) const
       return 0;
       }
 
-Segment* Segment::prev1MM(SegmentType types) const
+Segment* Segment::prev1MM(Type types) const
       {
       for (Segment* s = prev1MM(); s; s = s->prev1MM()) {
             if (s->segmentType() & types)
@@ -337,7 +337,7 @@ Segment* Segment::nextCR(int track) const
       {
       Segment* seg = next1();
       for (; seg; seg = seg->next1()) {
-            if (seg->segmentType() == SegmentType::ChordRest) {
+            if (seg->segmentType() == Type::ChordRest) {
                   if (track != -1 && !seg->element(track))
                         continue;
                   return seg;
@@ -426,32 +426,32 @@ void Segment::add(Element* el)
       Q_ASSERT(track != -1);
 
       switch (el->type()) {
-            case ElementType::REPEAT_MEASURE:
+            case Element::Type::REPEAT_MEASURE:
                   measure()->setRepeatFlags(measure()->repeatFlags() | Repeat::MEASURE);
                   _elist[track] = el;
                   empty = false;
                   break;
 
-            case ElementType::DYNAMIC:
-            case ElementType::HARMONY:
-            case ElementType::SYMBOL:
-            case ElementType::FRET_DIAGRAM:
-            case ElementType::TEMPO_TEXT:
-            case ElementType::STAFF_TEXT:
-            case ElementType::REHEARSAL_MARK:
-            case ElementType::MARKER:
-            case ElementType::IMAGE:
-            case ElementType::TEXT:
-            case ElementType::TAB_DURATION_SYMBOL:
-            case ElementType::FIGURED_BASS:
+            case Element::Type::DYNAMIC:
+            case Element::Type::HARMONY:
+            case Element::Type::SYMBOL:
+            case Element::Type::FRET_DIAGRAM:
+            case Element::Type::TEMPO_TEXT:
+            case Element::Type::STAFF_TEXT:
+            case Element::Type::REHEARSAL_MARK:
+            case Element::Type::MARKER:
+            case Element::Type::IMAGE:
+            case Element::Type::TEXT:
+            case Element::Type::TAB_DURATION_SYMBOL:
+            case Element::Type::FIGURED_BASS:
                   _annotations.push_back(el);
                   break;
-            case ElementType::JUMP:
+            case Element::Type::JUMP:
                   measure()->setRepeatFlags(measure()->repeatFlags() | Repeat::JUMP);
                   _annotations.push_back(el);
                   break;
 
-            case ElementType::STAFF_STATE:
+            case Element::Type::STAFF_STATE:
                   if (static_cast<StaffState*>(el)->staffStateType() == StaffStateType::INSTRUMENT) {
                         StaffState* ss = static_cast<StaffState*>(el);
                         Part* part = el->staff()->part();
@@ -460,7 +460,7 @@ void Segment::add(Element* el)
                   _annotations.push_back(el);
                   break;
 
-            case ElementType::INSTRUMENT_CHANGE: {
+            case Element::Type::INSTRUMENT_CHANGE: {
                   InstrumentChange* is = static_cast<InstrumentChange*>(el);
                   Part* part = is->staff()->part();
                   part->setInstrument(is->instrument(), tick());
@@ -468,23 +468,23 @@ void Segment::add(Element* el)
                   break;
                   }
 
-            case ElementType::CLEF:
-                  Q_ASSERT(_segmentType == SegmentType::Clef);
+            case Element::Type::CLEF:
+                  Q_ASSERT(_segmentType == Type::Clef);
                   checkElement(el, track);
                   _elist[track] = el;
                   empty = false;
                   break;
 
-            case ElementType::TIMESIG:
-                  Q_ASSERT(segmentType() == SegmentType::TimeSig || segmentType() == SegmentType::TimeSigAnnounce);
+            case Element::Type::TIMESIG:
+                  Q_ASSERT(segmentType() == Type::TimeSig || segmentType() == Type::TimeSigAnnounce);
                   checkElement(el, track);
                   _elist[track] = el;
                   el->staff()->addTimeSig(static_cast<TimeSig*>(el));
                   empty = false;
                   break;
 
-            case ElementType::KEYSIG:
-                  Q_ASSERT(_segmentType == SegmentType::KeySig || _segmentType == SegmentType::KeySigAnnounce);
+            case Element::Type::KEYSIG:
+                  Q_ASSERT(_segmentType == Type::KeySig || _segmentType == Type::KeySigAnnounce);
                   checkElement(el, track);
                   _elist[track] = el;
                   if (!el->generated())
@@ -492,23 +492,23 @@ void Segment::add(Element* el)
                   empty = false;
                   break;
 
-            case ElementType::CHORD:
-            case ElementType::REST:
-                  Q_ASSERT(_segmentType == SegmentType::ChordRest);
+            case Element::Type::CHORD:
+            case Element::Type::REST:
+                  Q_ASSERT(_segmentType == Type::ChordRest);
                   if (track % VOICES)
                         measure()->mstaff(track / VOICES)->hasVoices = true;
 
                   // fall through
 
-            case ElementType::BAR_LINE:
-            case ElementType::BREATH:
+            case Element::Type::BAR_LINE:
+            case Element::Type::BREATH:
                   checkElement(el, track);
                   _elist[track] = el;
                   empty = false;
                   break;
 
-            case ElementType::AMBITUS:
-                  Q_ASSERT(_segmentType == SegmentType::Ambitus);
+            case Element::Type::AMBITUS:
+                  Q_ASSERT(_segmentType == Type::Ambitus);
                   checkElement(el, track);
                   _elist[track] = el;
                   empty = false;
@@ -530,8 +530,8 @@ void Segment::remove(Element* el)
       int track = el->track();
 
       switch(el->type()) {
-            case ElementType::CHORD:
-            case ElementType::REST:
+            case Element::Type::CHORD:
+            case Element::Type::REST:
                   {
                   _elist[track] = 0;
                   int staffIdx = el->staffIdx();
@@ -539,32 +539,32 @@ void Segment::remove(Element* el)
                   }
                   break;
 
-            case ElementType::REPEAT_MEASURE:
+            case Element::Type::REPEAT_MEASURE:
                   measure()->setRepeatFlags(measure()->repeatFlags() & ~Repeat::MEASURE);
                   _elist[track] = 0;
                   break;
 
-            case ElementType::DYNAMIC:
-            case ElementType::HARMONY:
-            case ElementType::SYMBOL:
-            case ElementType::FRET_DIAGRAM:
-            case ElementType::TEMPO_TEXT:
-            case ElementType::STAFF_TEXT:
-            case ElementType::REHEARSAL_MARK:
-            case ElementType::MARKER:
-            case ElementType::IMAGE:
-            case ElementType::TEXT:
-            case ElementType::TAB_DURATION_SYMBOL:
-            case ElementType::FIGURED_BASS:
+            case Element::Type::DYNAMIC:
+            case Element::Type::HARMONY:
+            case Element::Type::SYMBOL:
+            case Element::Type::FRET_DIAGRAM:
+            case Element::Type::TEMPO_TEXT:
+            case Element::Type::STAFF_TEXT:
+            case Element::Type::REHEARSAL_MARK:
+            case Element::Type::MARKER:
+            case Element::Type::IMAGE:
+            case Element::Type::TEXT:
+            case Element::Type::TAB_DURATION_SYMBOL:
+            case Element::Type::FIGURED_BASS:
                   removeAnnotation(el);
                   break;
 
-            case ElementType::JUMP:
+            case Element::Type::JUMP:
                   measure()->setRepeatFlags(measure()->repeatFlags() & ~Repeat::JUMP);
                   removeAnnotation(el);
                   break;
 
-            case ElementType::STAFF_STATE:
+            case Element::Type::STAFF_STATE:
                   if (static_cast<StaffState*>(el)->staffStateType() == StaffStateType::INSTRUMENT) {
                         Part* part = el->staff()->part();
                         part->removeInstrument(tick());
@@ -572,7 +572,7 @@ void Segment::remove(Element* el)
                   removeAnnotation(el);
                   break;
 
-            case ElementType::INSTRUMENT_CHANGE:
+            case Element::Type::INSTRUMENT_CHANGE:
                   {
                   InstrumentChange* is = static_cast<InstrumentChange*>(el);
                   Part* part = is->staff()->part();
@@ -581,12 +581,12 @@ void Segment::remove(Element* el)
                   removeAnnotation(el);
                   break;
 
-            case ElementType::TIMESIG:
+            case Element::Type::TIMESIG:
                   _elist[track] = 0;
                   el->staff()->removeTimeSig(static_cast<TimeSig*>(el));
                   break;
 
-            case ElementType::KEYSIG:
+            case Element::Type::KEYSIG:
                   Q_ASSERT(_elist[track] == el);
 
                   _elist[track] = 0;
@@ -595,10 +595,10 @@ void Segment::remove(Element* el)
                   empty = false;
                   break;
 
-            case ElementType::CLEF:
-            case ElementType::BAR_LINE:
-            case ElementType::BREATH:
-            case ElementType::AMBITUS:
+            case Element::Type::CLEF:
+            case Element::Type::BAR_LINE:
+            case Element::Type::BREATH:
+            case Element::Type::AMBITUS:
                   _elist[track] = 0;
                   break;
 
@@ -614,28 +614,28 @@ void Segment::remove(Element* el)
 //    returns segment type suitable for storage of Element
 //---------------------------------------------------------
 
-SegmentType Segment::segmentType(ElementType type)
+Segment::Type Segment::segmentType(Element::Type type)
       {
       switch (type) {
-            case ElementType::CHORD:
-            case ElementType::REST:
-            case ElementType::REPEAT_MEASURE:
-            case ElementType::JUMP:
-            case ElementType::MARKER:
-                  return SegmentType::ChordRest;
-            case ElementType::CLEF:
-                  return SegmentType::Clef;
-            case ElementType::KEYSIG:
-                  return SegmentType::KeySig;
-            case ElementType::TIMESIG:
-                  return SegmentType::TimeSig;
-            case ElementType::BAR_LINE:
-                  return SegmentType::StartRepeatBarLine;
-            case ElementType::BREATH:
-                  return SegmentType::Breath;
+            case Element::Type::CHORD:
+            case Element::Type::REST:
+            case Element::Type::REPEAT_MEASURE:
+            case Element::Type::JUMP:
+            case Element::Type::MARKER:
+                  return Type::ChordRest;
+            case Element::Type::CLEF:
+                  return Type::Clef;
+            case Element::Type::KEYSIG:
+                  return Type::KeySig;
+            case Element::Type::TIMESIG:
+                  return Type::TimeSig;
+            case Element::Type::BAR_LINE:
+                  return Type::StartRepeatBarLine;
+            case Element::Type::BREATH:
+                  return Type::Breath;
             default:
                   qDebug("Segment:segmentType():  bad type: <%s>", Element::name(type));
-                  return SegmentType::Invalid;
+                  return Type::Invalid;
             }
       }
 
@@ -737,7 +737,7 @@ void Segment::setTick(int t)
 
 const QList<Lyrics*>* Segment::lyricsList(int track) const
       {
-      if (!(segmentType() & (SegmentType::ChordRest))) {
+      if (!(segmentType() & (Type::ChordRest))) {
             if (MScore::debugMode)
                   qDebug("warning : lyricsList  bad segment type <%s><%s>", name(), subTypeName());
             return 0;
@@ -849,7 +849,7 @@ bool Segment::setProperty(P_ID propertyId, const QVariant& v)
 
 bool Segment::splitsTuplet() const
       {
-      if (segmentType() != SegmentType::ChordRest)
+      if (segmentType() != Type::ChordRest)
             return false;
       int tracks = score()->nstaves() * VOICES;
       for (int track = 0; track < tracks; ++track) {
@@ -903,7 +903,7 @@ bool Segment::operator>(const Segment& s) const
 ///  return true if an annotation of type type or and element is found in the track range
 //---------------------------------------------------------
 
-bool Segment::findAnnotationOrElement(ElementType type, int minTrack, int maxTrack)
+bool Segment::findAnnotationOrElement(Element::Type type, int minTrack, int maxTrack)
       {
       for (const Element* e : _annotations)
             if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack)

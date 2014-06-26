@@ -353,7 +353,7 @@ void LineSegment::editDrag(const EditData& ed)
             // if we touch a different note, change anchor
             //
             Element* e = ed.view->elementNear(ed.pos);
-            if (e && e->type() == ElementType::NOTE) {
+            if (e && e->type() == Element::Type::NOTE) {
                   SLine* l = line();
                   if (ed.curGrip == int(GripLine::END) && e != line()->endElement()) {
                         qDebug("LineSegment: move end anchor");
@@ -479,7 +479,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                   // anchor() == Anchor::MEASURE
                   Measure* m;
                   if (grip == GripLine::START) {
-                        Q_ASSERT(startElement()->type() == ElementType::MEASURE);
+                        Q_ASSERT(startElement()->type() == Element::Type::MEASURE);
                         m = static_cast<Measure*>(startElement());
                         x = m->pos().x();
                         if(score()->styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest()) {
@@ -487,7 +487,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                               }
                         }
                   else {
-                        Q_ASSERT(endElement()->type() == ElementType::MEASURE);
+                        Q_ASSERT(endElement()->type() == Element::Type::MEASURE);
                         m = static_cast<Measure*>(endElement());
                         x = m->pos().x() + m->bbox().right();
 
@@ -503,9 +503,9 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                               x = m->pos().x() + m->bbox().right();
                               }
                         Segment* seg = m->last();
-                        if (seg->segmentType() == SegmentType::EndBarLine) {
+                        if (seg->segmentType() == Segment::Type::EndBarLine) {
                               Element* e = seg->element(0);
-                              if (e && e->type() == ElementType::BAR_LINE) {
+                              if (e && e->type() == Element::Type::BAR_LINE) {
                                     if (static_cast<BarLine*>(e)->barLineType() == BarLineType::START_REPEAT)
                                           x -= e->width() - _spatium * .5;
                                     else
@@ -623,7 +623,7 @@ void SLine::layout()
             seg->setSystem(system);
 
             Measure* m = system->firstMeasure();
-            Segment* mseg = m->first(SegmentType::ChordRest);
+            Segment* mseg = m->first(Segment::Type::ChordRest);
 
             if (sysIdx1 == sysIdx2) {
                   // single segment

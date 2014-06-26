@@ -21,7 +21,7 @@ class QPainter;
 namespace Ms {
 
 class ChordRest;
-enum class SymId : short;
+enum class SymId;
 
 //---------------------------------------------------------
 //   ArticulationInfo
@@ -64,7 +64,7 @@ class Articulation : public Element {
       Q_OBJECT
 
       ArticulationType _articulationType;
-      Direction _direction;
+      MScore::Direction _direction;
       QString _channelName;
 
       ArticulationAnchor _anchor;
@@ -80,7 +80,7 @@ class Articulation : public Element {
       Articulation &operator=(const Articulation&);
 
       virtual Articulation* clone() const   { return new Articulation(*this); }
-      virtual ElementType type() const      { return ElementType::ARTICULATION; }
+      virtual Element::Type type() const    { return Element::Type::ARTICULATION; }
 
       virtual qreal mag() const;
 
@@ -111,8 +111,8 @@ class Articulation : public Element {
 
       bool up() const                       { return _up; }
       void setUp(bool val)                  { _up = val;  }
-      void setDirection(Direction d);
-      Direction direction() const   { return _direction; }
+      void setDirection(MScore::Direction d);
+      MScore::Direction direction() const   { return _direction; }
 
       ChordRest* chordRest() const;
 

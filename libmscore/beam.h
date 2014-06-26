@@ -36,7 +36,7 @@ class Beam : public Element {
 
       QList<ChordRest*> _elements;        // must be sorted by tick
       QList<QLineF*> beamSegments;
-      Direction _direction;
+      MScore::Direction _direction;
 
       bool _up;
       bool _distribute;                   // equal spacing of elements
@@ -69,11 +69,15 @@ class Beam : public Element {
       bool hasNoSlope();
 
    public:
+      enum class Mode : signed char {
+            AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
+            };
+
       Beam(Score* s);
       Beam(const Beam&);
       ~Beam();
       virtual Beam* clone() const override         { return new Beam(*this); }
-      virtual ElementType type() const override    { return ElementType::BEAM; }
+      virtual Element::Type type() const override  { return Element::Type::BEAM; }
       virtual QPointF pagePos() const override;    ///< position in page coordinates
       virtual QPointF canvasPos() const override;  ///< position in page coordinates
 
@@ -111,8 +115,8 @@ class Beam : public Element {
       bool noSlope() const                { return _noSlope; }
       void setNoSlope(bool val)           { _noSlope = val; }
 
-      void setBeamDirection(Direction d);
-      Direction beamDirection() const     { return _direction; }
+      void setBeamDirection(MScore::Direction d);
+      MScore::Direction beamDirection() const     { return _direction; }
 
       virtual QPainterPath shape() const override;
       virtual bool contains(const QPointF& p) const override;
@@ -143,5 +147,8 @@ class Beam : public Element {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Beam::Mode);
+
 #endif
 

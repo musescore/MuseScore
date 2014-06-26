@@ -30,7 +30,7 @@ Symbol::Symbol(Score* s)
    : BSymbol(s)
       {
       _sym = SymId::accidentalSharp;        // arbitrary valid default
-      setZ(int(ElementType::SYMBOL) * 100);
+      setZ(int(Element::Type::SYMBOL) * 100);
       }
 
 #if 0
@@ -46,7 +46,7 @@ Symbol::Symbol(const Symbol& s)
    : BSymbol(s)
       {
       _sym   = s._sym;
-      setZ(int(ElementType::SYMBOL) * 100);
+      setZ(int(Element::Type::SYMBOL) * 100);
       }
 
 //---------------------------------------------------------
@@ -79,7 +79,7 @@ void Symbol::layout()
 
 void Symbol::draw(QPainter* p) const
       {
-      if (type() != ElementType::NOTEDOT || !staff()->isTabStaff()) {
+      if (type() != Element::Type::NOTEDOT || !staff()->isTabStaff()) {
             p->setPen(curColor());
             if (_scoreFont)
                   _scoreFont->draw(_sym, p, magS(), QPointF());
@@ -162,7 +162,7 @@ void Symbol::read(XmlReader& e)
 
 QLineF BSymbol::dragAnchor() const
       {
-      if (parent() && parent()->type() == ElementType::SEGMENT) {
+      if (parent() && parent()->type() == Element::Type::SEGMENT) {
             System* system = segment()->measure()->system();
             qreal y        = system->staff(staffIdx())->y() + system->y();
 //            QPointF anchor(segment()->pageX(), y);
@@ -180,7 +180,7 @@ QLineF BSymbol::dragAnchor() const
 
 QPointF BSymbol::pagePos() const
       {
-      if (parent() && (parent()->type() == ElementType::SEGMENT)) {
+      if (parent() && (parent()->type() == Element::Type::SEGMENT)) {
             QPointF p(pos());
             System* system = segment()->measure()->system();
             if (system) {
@@ -199,7 +199,7 @@ QPointF BSymbol::pagePos() const
 
 QPointF BSymbol::canvasPos() const
       {
-      if (parent() && (parent()->type() == ElementType::SEGMENT)) {
+      if (parent() && (parent()->type() == Element::Type::SEGMENT)) {
             QPointF p(pos());
             Segment* s = static_cast<Segment*>(parent());
 

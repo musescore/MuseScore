@@ -26,7 +26,7 @@ class TextStyle;
 //    must be in sync with symNames
 //---------------------------------------------------------
 
-enum class SymId : short {
+enum class SymId {
 
       // SMuFL standard symbol ID's
 

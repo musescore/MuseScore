@@ -22,14 +22,6 @@ class Xml;
 class Volta;
 class Measure;
 
-//---------------------------------------------------------
-//   VoltaType
-//---------------------------------------------------------
-
-enum class VoltaType : char {
-      OPEN, CLOSED
-      };
-
 extern void vdebug(int n);
 extern LineSegment* voltaDebug;
 
@@ -42,7 +34,7 @@ class VoltaSegment : public TextLineSegment {
 
    public:
       VoltaSegment(Score* s) : TextLineSegment(s) {}
-      virtual ElementType type() const override     { return ElementType::VOLTA_SEGMENT; }
+      virtual Element::Type type() const override   { return Element::Type::VOLTA_SEGMENT; }
       virtual VoltaSegment* clone() const override  { return new VoltaSegment(*this); }
       Volta* volta() const                          { return (Volta*)spanner(); }
       virtual void layout() override;
@@ -57,22 +49,27 @@ class VoltaSegment : public TextLineSegment {
 
 //---------------------------------------------------------
 //   @@ Volta
-//   @P voltaType  Ms::VoltaType  (OPEN, CLOSED)
+//   @P voltaType  Ms::Volta::Type  (OPEN, CLOSED)
 //---------------------------------------------------------
 
 class Volta : public TextLine {
       Q_OBJECT
 
-   private:
-      Q_PROPERTY(VoltaType voltaType READ voltaType WRITE undoSetVoltaType)
+      Q_PROPERTY(Ms::Volta::Type voltaType READ voltaType WRITE undoSetVoltaType)
+      Q_ENUMS(Type)
 
+private:
       QList<int> _endings;
       PropertyStyle lineWidthStyle;
 
    public:
+      enum class Type : char {
+            OPEN, CLOSED
+            };
+
       Volta(Score* s);
-      virtual Volta* clone()     const override { return new Volta(*this); }
-      virtual ElementType type() const override { return ElementType::VOLTA; }
+      virtual Volta* clone()       const override { return new Volta(*this); }
+      virtual Element::Type type() const override { return Element::Type::VOLTA; }
       virtual LineSegment* createLineSegment() override;
       virtual void layout() override;
 
@@ -85,9 +82,9 @@ class Volta : public TextLine {
       void setText(const QString& s);
       QString text() const;
 
-      void setVoltaType(VoltaType val);
-      void undoSetVoltaType(VoltaType val);
-      VoltaType voltaType() const;
+      void setVoltaType(Type val);
+      void undoSetVoltaType(Type val);
+      Type voltaType() const;
 
       bool hasEnding(int repeat) const;
 
@@ -105,7 +102,7 @@ class Volta : public TextLine {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::VoltaType);
+Q_DECLARE_METATYPE(Ms::Volta::Type);
 
 #endif
 

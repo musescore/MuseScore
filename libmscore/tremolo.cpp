@@ -213,7 +213,7 @@ void Tremolo::layout()
       //
       Segment* s = _chord1->segment()->next();
       while (s) {
-            if (s->element(track()) && (s->element(track())->type() == ElementType::CHORD))
+            if (s->element(track()) && (s->element(track())->type() == Element::Type::CHORD))
                   break;
             s = s->next();
             }

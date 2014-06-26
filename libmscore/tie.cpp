@@ -267,7 +267,7 @@ void Tie::calculateDirection()
       Measure* m1 = c1->measure();
       Measure* m2 = c2->measure();
 
-      if (_slurDirection == Direction::AUTO) {
+      if (_slurDirection == MScore::Direction::AUTO) {
             QList<Note*> notes = c1->notes();
             int n = notes.size();
             if (m1->mstaff(c1->staffIdx())->hasVoices || m2->mstaff(c2->staffIdx())->hasVoices) {
@@ -311,7 +311,7 @@ void Tie::calculateDirection()
                   }
             }
       else
-            _up = _slurDirection == Direction::UP ? true : false;
+            _up = _slurDirection == MScore::Direction::UP ? true : false;
       }
 
 //---------------------------------------------------------
@@ -331,7 +331,7 @@ void Tie::layout()
                   return;
                   }
             Chord* c1 = startNote()->chord();
-            if (_slurDirection == Direction::AUTO) {
+            if (_slurDirection == MScore::Direction::AUTO) {
                   if (c1->measure()->mstaff(c1->staffIdx())->hasVoices) {
                         // in polyphonic passage, ties go on the stem side
                         _up = c1->up();
@@ -340,7 +340,7 @@ void Tie::layout()
                         _up = !c1->up();
                   }
             else
-                  _up = _slurDirection == Direction::UP ? true : false;
+                  _up = _slurDirection == MScore::Direction::UP ? true : false;
             fixupSegments(1);
             SlurSegment* segment = segmentAt(0);
             segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);

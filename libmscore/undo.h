@@ -33,8 +33,10 @@
 #include "noteevent.h"
 #include "synthesizerstate.h"
 #include "bracket.h"
+#include "dynamic.h"
 #include "stafftype.h"
 #include "cleflist.h"
+#include "note.h"
 
 namespace Ms {
 
@@ -78,7 +80,6 @@ class Spanner;
 class BarLine;
 enum class ClefType : signed char;
 enum class PlayEventType : char;
-enum class ValueType : char;
 
 // #define DEBUG_UNDO
 
@@ -892,12 +893,12 @@ class ChangeChordStaffMove : public UndoCommand {
 
 class ChangeVelocity : public UndoCommand {
       Note* note;
-      ValueType veloType;
+      Note::ValueType veloType;
       int veloOffset;
       void flip();
 
    public:
-      ChangeVelocity(Note*, ValueType, int);
+      ChangeVelocity(Note*, Note::ValueType, int);
       UNDO_NAME("ChangeVelocity")
       };
 
@@ -992,13 +993,13 @@ class ChangeImage : public UndoCommand {
 class ChangeHairpin : public UndoCommand {
       Hairpin* hairpin;
       int veloChange;
-      DynamicRange dynRange;
+      Dynamic::Range dynRange;
       bool diagonal;
 
       void flip();
 
    public:
-      ChangeHairpin(Hairpin* h, int c, DynamicRange t, bool dg)
+      ChangeHairpin(Hairpin* h, int c, Dynamic::Range t, bool dg)
          : hairpin(h), veloChange(c), dynRange(t), diagonal(dg) {}
       UNDO_NAME("ChangeHairpin")
       };

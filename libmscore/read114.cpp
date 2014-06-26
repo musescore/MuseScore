@@ -512,7 +512,7 @@ Score::FileError Score::read114(XmlReader& e)
                   }
             // first clef can be implicit in 1.3 #22607
             if (s->clefList()->count(0) == 0) {
-                  Segment* seg = firstMeasure()->getSegment(SegmentType::Clef, 0);
+                  Segment* seg = firstMeasure()->getSegment(Segment::Type::Clef, 0);
                   ClefType ct = Clef::clefType("0");
                   Clef* clef = new Clef(this);
                   clef->setClefType(ct);
@@ -529,7 +529,7 @@ Score::FileError Score::read114(XmlReader& e)
                         continue;
                   if ((tick == m->tick()) && m->prevMeasure())
                         m = m->prevMeasure();
-                  Segment* seg = m->getSegment(SegmentType::Clef, tick);
+                  Segment* seg = m->getSegment(Segment::Type::Clef, tick);
                   if (seg->element(track))
                         static_cast<Clef*>(seg->element(track))->setGenerated(false);
                   else {
@@ -553,7 +553,7 @@ Score::FileError Score::read114(XmlReader& e)
                   Measure* m = tick2measure(tick);
                   if (!m)           //empty score
                         break;
-                  Segment* seg = m->getSegment(SegmentType::KeySig, tick);
+                  Segment* seg = m->getSegment(Segment::Type::KeySig, tick);
                   if (seg->element(track))
                         static_cast<KeySig*>(seg->element(track))->setGenerated(false);
                   else {
@@ -572,27 +572,27 @@ Score::FileError Score::read114(XmlReader& e)
 
       for (std::pair<int,Spanner*> p : spanner()) {
             Spanner* s = p.second;
-            if (s->type() != ElementType::SLUR) {
-                  if (s->type() == ElementType::VOLTA) {
+            if (s->type() != Element::Type::SLUR) {
+                  if (s->type() == Element::Type::VOLTA) {
                         Volta* volta = static_cast<Volta*>(s);
                         volta->setAnchor(Spanner::Anchor::MEASURE);
                         }
                   }
 
-            if (s->type() == ElementType::OTTAVA || s->type() == ElementType::PEDAL || s->type() == ElementType::TRILL) {
+            if (s->type() == Element::Type::OTTAVA || s->type() == Element::Type::PEDAL || s->type() == Element::Type::TRILL) {
                   qreal yo = 0;
-                  if (s->type() == ElementType::OTTAVA) {
+                  if (s->type() == Element::Type::OTTAVA) {
                       // fix ottava position
                       Ottava* ottava = static_cast<Ottava*>(s);
                       ottava->staff()->updateOttava(ottava);
                       yo = styleS(StyleIdx::ottavaY).val() * spatium();
-                      if (s->placement() == Placement::BELOW)
+                      if (s->placement() == Element::Placement::BELOW)
                             yo = -yo + s->staff()->height();
                       }
-                  else if (s->type() == ElementType::PEDAL) {
+                  else if (s->type() == Element::Type::PEDAL) {
                         yo = styleS(StyleIdx::pedalY).val() * spatium();
                         }
-                  else if (s->type() == ElementType::TRILL) {
+                  else if (s->type() == Element::Type::TRILL) {
                         yo = styleS(StyleIdx::trillY).val() * spatium();
                         }
                   for (SpannerSegment* seg : s->spannerSegments()) {
@@ -613,11 +613,11 @@ Score::FileError Score::read114(XmlReader& e)
             bool first = true;
             for (int track = 0; track < tracks; ++track) {
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->segmentType() != SegmentType::ChordRest)
+                        if (s->segmentType() != Segment::Type::ChordRest)
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (cr) {
-                              if(cr->type() == ElementType::REST) {
+                              if(cr->type() == Element::Type::REST) {
                                     Rest* r = static_cast<Rest*>(cr);
                                     if (!r->userOff().isNull()) {
                                           int lineOffset = r->computeLineOffset();
@@ -627,21 +627,21 @@ Score::FileError Score::read114(XmlReader& e)
                                     }
                               if(!first) {
                                     switch(cr->beamMode()) {
-                                          case BeamMode::AUTO:
-                                          case BeamMode::BEGIN:
-                                          case BeamMode::END:
-                                          case BeamMode::NONE:
+                                          case Beam::Mode::AUTO:
+                                          case Beam::Mode::BEGIN:
+                                          case Beam::Mode::END:
+                                          case Beam::Mode::NONE:
                                                 break;
-                                          case BeamMode::MID:
-                                          case BeamMode::BEGIN32:
-                                          case BeamMode::BEGIN64:
-                                                cr->setBeamMode(BeamMode::BEGIN);
+                                          case Beam::Mode::MID:
+                                          case Beam::Mode::BEGIN32:
+                                          case Beam::Mode::BEGIN64:
+                                                cr->setBeamMode(Beam::Mode::BEGIN);
                                                 break;
-                                          case BeamMode::INVALID:
-                                                if (cr->type() == ElementType::CHORD)
-                                                      cr->setBeamMode(BeamMode::AUTO);
+                                          case Beam::Mode::INVALID:
+                                                if (cr->type() == Element::Type::CHORD)
+                                                      cr->setBeamMode(Beam::Mode::AUTO);
                                                 else
-                                                      cr->setBeamMode(BeamMode::NONE);
+                                                      cr->setBeamMode(Beam::Mode::NONE);
                                                 break;
                                           }
                                     first = false;
@@ -651,7 +651,7 @@ Score::FileError Score::read114(XmlReader& e)
                   }
             }
       for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
-            if (mb->type() == ElementType::VBOX) {
+            if (mb->type() == Element::Type::VBOX) {
                   Box* b  = static_cast<Box*>(mb);
                   qreal y = point(styleS(StyleIdx::staffUpperBorder));
                   b->setBottomGap(y);
@@ -706,7 +706,7 @@ Score::FileError Score::read114(XmlReader& e)
                   tt->setVisible(false);
                   Measure* m = tick2measure(tick);
                   if (m) {
-                        Segment* seg = m->getSegment(SegmentType::ChordRest, tick);
+                        Segment* seg = m->getSegment(Segment::Type::ChordRest, tick);
                         seg->add(tt);
                         setTempo(tick, tempo);
                         }
