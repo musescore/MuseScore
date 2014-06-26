@@ -3244,7 +3244,6 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
                               }
                         xml.tag("syllabic", s);
                         QString attr; // TODO TBD
-                        int fs = 11; // TODO TBD
                         MScoreTextToMXML mttm("text", attr, (l)->text(), _score->textStyle(TextStyleType::LYRIC1), _score->textStyle(TextStyleType::LYRIC1));
                         mttm.write(xml);
                         /*
