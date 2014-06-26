@@ -24,6 +24,7 @@ public:
       SelectionWindow(QWidget *parent = 0, Score* score = 0);
       ~SelectionWindow();
       virtual QSize sizeHint() const {return QSize(170,170);}
+      void setScore(Score*);
 
       };
 } // namespace Ms
