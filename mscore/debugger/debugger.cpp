@@ -1073,7 +1073,7 @@ void ChordDebug::beamModeChanged(int n)
 
 void ChordDebug::directionChanged(int val)
       {
-      ((Chord*)element())->setStemDirection(Direction(val));
+      ((Chord*)element())->setStemDirection(MScore::Direction(val));
       }
 
 //---------------------------------------------------------

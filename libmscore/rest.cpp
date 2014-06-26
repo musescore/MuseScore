@@ -218,9 +218,9 @@ Element* Rest::drop(const DropData& data)
 
             case Element::Type::CHORD:
                   {
-                  Chord* c      = static_cast<Chord*>(e);
-                  Note* n       = c->upNote();
-                  Direction dir = c->stemDirection();
+                  Chord* c              = static_cast<Chord*>(e);
+                  Note* n               = c->upNote();
+                  MScore::Direction dir = c->stemDirection();
                   // score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;
                   nval.pitch = n->pitch();

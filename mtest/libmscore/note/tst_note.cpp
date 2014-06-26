@@ -80,35 +80,35 @@ void TestNote::note()
       delete n;
 
    // mirror
-      note->setUserMirror(DirectionH::DH_LEFT);
+      note->setUserMirror(MScore::DirectionH::LEFT);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_LEFT);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::LEFT);
       delete n;
 
-      note->setUserMirror(DirectionH::DH_RIGHT);
+      note->setUserMirror(MScore::DirectionH::RIGHT);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_RIGHT);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::RIGHT);
       delete n;
 
-      note->setUserMirror(DirectionH::DH_AUTO);
+      note->setUserMirror(MScore::DirectionH::AUTO);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_AUTO);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::AUTO);
       delete n;
 
    // dot position
-      note->setUserDotPosition(Direction::UP);
+      note->setUserDotPosition(MScore::Direction::UP);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::UP);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::UP);
       delete n;
 
-      note->setUserDotPosition(Direction::DOWN);
+      note->setUserDotPosition(MScore::Direction::DOWN);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::DOWN);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::DOWN);
       delete n;
 
-      note->setUserDotPosition(Direction::AUTO);
+      note->setUserDotPosition(MScore::Direction::AUTO);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::AUTO);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::AUTO);
       delete n;
   // headGroup
       for (int i = 0; i < int (NoteHead::Group::HEAD_GROUPS); ++i) {
@@ -201,35 +201,35 @@ void TestNote::note()
       delete n;
 
    // mirror
-      note->setProperty(P_ID::MIRROR_HEAD, int(DirectionH::DH_LEFT));
+      note->setProperty(P_ID::MIRROR_HEAD, int(MScore::DirectionH::LEFT));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_LEFT);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::LEFT);
       delete n;
 
-      note->setProperty(P_ID::MIRROR_HEAD, int(DirectionH::DH_RIGHT));
+      note->setProperty(P_ID::MIRROR_HEAD, int(MScore::DirectionH::RIGHT));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_RIGHT);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::RIGHT);
       delete n;
 
-      note->setProperty(P_ID::MIRROR_HEAD, int(DirectionH::DH_AUTO));
+      note->setProperty(P_ID::MIRROR_HEAD, int(MScore::DirectionH::AUTO));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_AUTO);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::AUTO);
       delete n;
 
    // dot position
-      note->setProperty(P_ID::DOT_POSITION, int(Direction::UP));
+      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::UP));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::UP);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::UP);
       delete n;
 
-      note->setProperty(P_ID::DOT_POSITION, int(Direction::DOWN));
+      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::DOWN));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::DOWN);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::DOWN);
       delete n;
 
-      note->setProperty(P_ID::DOT_POSITION, int(Direction::AUTO));
+      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::AUTO));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::AUTO);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::AUTO);
       delete n;
 
   // headGroup

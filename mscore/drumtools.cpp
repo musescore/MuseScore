@@ -102,10 +102,10 @@ void DrumTools::updateDrumset()
             int line      = drumset->line(pitch);
             NoteHead::Group noteHead  = drumset->noteHead(pitch);
             int voice     = drumset->voice(pitch);
-            Direction dir = drumset->stemDirection(pitch);
-            if (dir == Direction::UP)
+            MScore::Direction dir = drumset->stemDirection(pitch);
+            if (dir == MScore::Direction::UP)
                   up = true;
-            else if (dir == Direction::DOWN)
+            else if (dir == MScore::Direction::DOWN)
                   up = false;
             else
                   up = line > 4;

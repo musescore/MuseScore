@@ -410,26 +410,26 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   break;
 
             case P_TYPE::DIRECTION:
-                  switch(Direction(data.toInt())) {
-                        case Direction::UP:
+                  switch(MScore::Direction(data.toInt())) {
+                        case MScore::Direction::UP:
                               tag(name, QVariant("up"));
                               break;
-                        case Direction::DOWN:
+                        case MScore::Direction::DOWN:
                               tag(name, QVariant("down"));
                               break;
-                        case Direction::AUTO:
+                        case MScore::Direction::AUTO:
                               break;
                         }
                   break;
             case P_TYPE::DIRECTION_H:
-                  switch(DirectionH(data.toInt())) {
-                        case DirectionH::DH_LEFT:
+                  switch(MScore::DirectionH(data.toInt())) {
+                        case MScore::DirectionH::LEFT:
                               tag(name, QVariant("left"));
                               break;
-                        case DirectionH::DH_RIGHT:
+                        case MScore::DirectionH::RIGHT:
                               tag(name, QVariant("right"));
                               break;
-                        case DirectionH::DH_AUTO:
+                        case MScore::DirectionH::AUTO:
                               break;
                         }
                   break;

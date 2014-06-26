@@ -395,7 +395,7 @@ void setMusicNotesFromMidi(Score *score,
                   if (!drumset->isValid(mn.pitch))
                         qDebug("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
                   else {
-                        Direction sd = drumset->stemDirection(mn.pitch);
+                        MScore::Direction sd = drumset->stemDirection(mn.pitch);
                         chord->setStemDirection(sd);
                         }
                   }

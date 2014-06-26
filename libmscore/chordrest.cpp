@@ -491,10 +491,10 @@ void ChordRest::layoutArticulations()
       for (int i = 0; i < n; ++i) {
             Articulation* a = _articulations.at(i);
             //
-            // determine Direction
+            // determine MScore::Direction
             //
-            if (a->direction() != Direction::AUTO) {
-                  a->setUp(a->direction() == Direction::UP);
+            if (a->direction() != MScore::Direction::AUTO) {
+                  a->setUp(a->direction() == MScore::Direction::UP);
                   }
             else {
                   if (a->anchor() == ArticulationAnchor::CHORD)
@@ -755,7 +755,7 @@ Element* ChordRest::drop(const DropData& data)
                   NoteVal nval;
                   nval.pitch = note->pitch();
                   nval.headGroup = note->headGroup();
-                  score()->setNoteRest(segment(), track(), nval, data.duration, Direction::AUTO);
+                  score()->setNoteRest(segment(), track(), nval, data.duration, MScore::Direction::AUTO);
                   delete e;
                   }
                   break;

@@ -188,7 +188,7 @@ Chord::Chord(Score* s)
       _ledgerLines      = 0;
       _stem             = 0;
       _hook             = 0;
-      _stemDirection    = Direction::AUTO;
+      _stemDirection    = MScore::Direction::AUTO;
       _arpeggio         = 0;
       _tremolo          = 0;
       _glissando        = 0;
@@ -826,8 +826,8 @@ void Chord::computeUp()
             }
 
       // PITCHED STAVES (or TAB with stems through staves)
-      if (_stemDirection != Direction::AUTO) {
-            _up = _stemDirection == Direction::UP;
+      if (_stemDirection != MScore::Direction::AUTO) {
+            _up = _stemDirection == MScore::Direction::UP;
             }
       else if (_noteType != NoteType::NORMAL) {
             //
@@ -955,9 +955,9 @@ void Chord::write(Xml& xml) const
       if (_hook && (!_hook->visible() || !_hook->userOff().isNull() || (_hook->color() != MScore::defaultColor)))
             _hook->write(xml);
       switch(_stemDirection) {
-            case Direction::UP:   xml.tag("StemDirection", QVariant("up")); break;
-            case Direction::DOWN: xml.tag("StemDirection", QVariant("down")); break;
-            case Direction::AUTO: break;
+            case MScore::Direction::UP:   xml.tag("StemDirection", QVariant("up")); break;
+            case MScore::Direction::DOWN: xml.tag("StemDirection", QVariant("down")); break;
+            case MScore::Direction::AUTO: break;
             }
       for (Note* n : _notes)
             n->write(xml);
@@ -1050,11 +1050,11 @@ void Chord::read(XmlReader& e)
             else if (tag == "StemDirection") {
                   QString val(e.readElementText());
                   if (val == "up")
-                        _stemDirection = Direction::UP;
+                        _stemDirection = MScore::Direction::UP;
                   else if (val == "down")
-                        _stemDirection = Direction::DOWN;
+                        _stemDirection = MScore::Direction::DOWN;
                   else
-                        _stemDirection = Direction(val.toInt());
+                        _stemDirection = MScore::Direction(val.toInt());
                   }
             else if (tag == "noStem")
                   _noStem = e.readInt();
@@ -2456,7 +2456,7 @@ QVariant Chord::propertyDefault(P_ID propertyId) const
       switch(propertyId) {
             case P_ID::NO_STEM:        return false;
             case P_ID::SMALL:          return false;
-            case P_ID::STEM_DIRECTION: return int(Direction::AUTO);
+            case P_ID::STEM_DIRECTION: return int(MScore::Direction::AUTO);
             default:
                   return ChordRest::getProperty(propertyId);
             }
@@ -2478,7 +2478,7 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
                   score()->setLayoutAll(true);
                   break;
             case P_ID::STEM_DIRECTION:
-                  setStemDirection(Direction(v.toInt()));
+                  setStemDirection(MScore::Direction(v.toInt()));
                   score()->setLayoutAll(true);
                   break;
             default:
@@ -2629,10 +2629,10 @@ QPointF Chord::layoutArticulation(Articulation* a)
       staffBotY = qMax(staffBotY, qreal(chordBotY));  // bottom is bottom between staff bottom and chord bottom
 
       //
-      // determine Direction
+      // determine MScore::Direction
       //
-      if (a->direction() != Direction::AUTO) {
-            a->setUp(a->direction() == Direction::UP);
+      if (a->direction() != MScore::Direction::AUTO) {
+            a->setUp(a->direction() == MScore::Direction::UP);
             }
       else {
             if (measure()->hasVoices(a->staffIdx())) {
@@ -2677,7 +2677,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
 
 void Chord::reset()
       {
-      score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(Direction::AUTO));
+      score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(MScore::Direction::AUTO));
       score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
       score()->createPlayEvents(this);
       ChordRest::reset();

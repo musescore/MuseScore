@@ -449,7 +449,7 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
 //---------------------------------------------------------
 
 Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd,
-   Direction stemDirection)
+   MScore::Direction stemDirection)
       {
       Q_ASSERT(segment->segmentType() == Segment::Type::ChordRest);
 
@@ -1850,11 +1850,11 @@ void Score::cmdMirrorNoteHead()
                   if (note->staff() && note->staff()->isTabStaff())
                         note->score()->undoChangeProperty(e, P_ID::GHOST, true);
                   else {
-                        DirectionH d = note->userMirror();
-                        if (d == DirectionH::DH_AUTO)
-                              d = note->chord()->up() ? DirectionH::DH_RIGHT : DirectionH::DH_LEFT;
+                        MScore::DirectionH d = note->userMirror();
+                        if (d == MScore::DirectionH::AUTO)
+                              d = note->chord()->up() ? MScore::DirectionH::RIGHT : MScore::DirectionH::LEFT;
                         else
-                              d = d == DirectionH::DH_LEFT ? DirectionH::DH_RIGHT : DirectionH::DH_LEFT;
+                              d = d == MScore::DirectionH::LEFT ? MScore::DirectionH::RIGHT : MScore::DirectionH::LEFT;
                         undoChangeUserMirror(note, d);
                         }
                   }
@@ -1925,12 +1925,12 @@ void Score::cmdDoubleDuration()
 //   cmdMoveRest
 //---------------------------------------------------------
 
-void Score::cmdMoveRest(Rest* rest, Direction dir)
+void Score::cmdMoveRest(Rest* rest, MScore::Direction dir)
       {
       QPointF pos(rest->userOff());
-      if (dir == Direction::UP)
+      if (dir == MScore::Direction::UP)
             pos.ry() -= spatium();
-      else if (dir == Direction::DOWN)
+      else if (dir == MScore::Direction::DOWN)
             pos.ry() += spatium();
       undoChangeProperty(rest, P_ID::USER_OFF, pos);
       setLayoutAll(rest->beam() != nullptr);    // layout all if rest is beamed
@@ -1940,12 +1940,12 @@ void Score::cmdMoveRest(Rest* rest, Direction dir)
 //   cmdMoveLyrics
 //---------------------------------------------------------
 
-void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
+void Score::cmdMoveLyrics(Lyrics* lyrics, MScore::Direction dir)
       {
       ChordRest* cr      = lyrics->chordRest();
       QList<Lyrics*>& ll = cr->lyricsList();
       int no             = lyrics->no();
-      if (dir == Direction::UP) {
+      if (dir == MScore::Direction::UP) {
             if (no) {
                   if (ll[no-1] == 0) {
                         ll[no-1] = ll[no];
@@ -1986,9 +1986,9 @@ void Score::cmd(const QAction* a)
             if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
                   undoMove(el, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == Element::Type::REST)
-                  cmdMoveRest(static_cast<Rest*>(el), Direction::UP);
+                  cmdMoveRest(static_cast<Rest*>(el), MScore::Direction::UP);
             else if (el && el->type() == Element::Type::LYRICS)
-                  cmdMoveLyrics(static_cast<Lyrics*>(el), Direction::UP);
+                  cmdMoveLyrics(static_cast<Lyrics*>(el), MScore::Direction::UP);
             else
                   upDown(true, UpDownMode::CHROMATIC);
             }
@@ -1996,9 +1996,9 @@ void Score::cmd(const QAction* a)
             if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
                   undoMove(el, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == Element::Type::REST)
-                  cmdMoveRest(static_cast<Rest*>(el), Direction::DOWN);
+                  cmdMoveRest(static_cast<Rest*>(el), MScore::Direction::DOWN);
             else if (el && el->type() == Element::Type::LYRICS)
-                  cmdMoveLyrics(static_cast<Lyrics*>(el), Direction::DOWN);
+                  cmdMoveLyrics(static_cast<Lyrics*>(el), MScore::Direction::DOWN);
             else
                   upDown(false, UpDownMode::CHROMATIC);
             }

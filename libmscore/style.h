@@ -387,7 +387,7 @@ class MStyle {
       void set(StyleIdx t, bool val);
       void set(StyleIdx t, qreal val);
       void set(StyleIdx t, int val);
-      void set(StyleIdx t, Direction val);
+      void set(StyleIdx t, MScore::Direction val);
       void set(StyleIdx t, const QVariant& v);
 
       QVariant value(StyleIdx idx) const;
