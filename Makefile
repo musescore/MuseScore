@@ -28,7 +28,7 @@ VERSION   = "2.0b-${REVISION}"
 #
 # change path to include your Qt5 installation
 #
-BINPATH      = ${HOME}/Qt5.2.0/5.2.0-rc1/gcc_64/bin:${PATH}
+BINPATH      = ${HOME}/Qt5/5.3/gcc_64/bin:${PATH}
 
 release:
 	if test ! -d build.release; then mkdir build.release; fi; \

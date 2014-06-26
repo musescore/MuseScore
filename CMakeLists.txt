@@ -41,7 +41,7 @@ include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
 # for debugging the make system uncomment next line:
-#set(CMAKE_VERBOSE_MAKEFILE ON)
+# set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(MSCORE_UNSTABLE  TRUE)          # mark as unstable
 
@@ -108,8 +108,8 @@ else (APPLE)
       set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -mno-ms-bitfields -g")
       set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -mno-ms-bitfields -O2 -DNDEBUG -DQT_NO_DEBUG")
    else (MINGW)
-      set(CMAKE_CXX_FLAGS_DEBUG   "-std=gnu++0x -fPIC -fPIE -g")
-      set(CMAKE_CXX_FLAGS_RELEASE "-std=gnu++0x -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG")
+      set(CMAKE_CXX_FLAGS_DEBUG   "-std=c++11 -fPIC -fPIE -g")
+      set(CMAKE_CXX_FLAGS_RELEASE "-std=c++11 -fPIC -O2 -DNDEBUG -DQT_NO_DEBUG")
    endif (MINGW)
 endif(APPLE)
 
@@ -153,8 +153,7 @@ SET(QT_USE_QTWEBKIT      TRUE)
 SET(QT_USE_QTXMLPATTERNS TRUE)
 SET(QT_USE_QTDECLARATIVE TRUE)
 
-# find_package(Qt4 "4.8" REQUIRED QtCore QtGui QtXml QtSvg QtNetwork QtWebkit QtDeclarative)
-# include(${QT_USE_FILE})
+find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer WebKit Declarative)
 
 
 ##
@@ -170,7 +169,7 @@ else (APPLE OR MINGW)
       if (NOT ALSA_INCDIR)
             message(FATAL_ERROR "Fatal error: ALSA >= 1.0.0 required")
       else (NOT ALSA_INCDIR)
-            message("Alsa detected.")
+            message("Alsa found.")
             set (USE_ALSA 1)
             set (HAS_MIDI 1)
       endif (NOT ALSA_INCDIR)
@@ -365,7 +364,9 @@ if (MINGW)
 else (MINGW)
   set(BUILD_PCH true)
 endif(MINGW)
+
 precompiled_header(QT_INCLUDES all ${BUILD_PCH})
+
 ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
 ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 
@@ -381,7 +382,7 @@ if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 #with xcode, we need to have all the targets in the same project
 add_subdirectory(mtest)
 else(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
-add_subdirectory(mtest EXCLUDE_FROM_ALL)  
+add_subdirectory(mtest EXCLUDE_FROM_ALL)
 endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
 add_subdirectory(miditools EXCLUDE_FROM_ALL)
