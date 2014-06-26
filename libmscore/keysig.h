@@ -47,6 +47,7 @@ class KeySig : public Element {
       Q_PROPERTY(bool showCourtesy READ showCourtesy   WRITE undoSetShowCourtesy)
 
       bool _showCourtesy;
+      bool _hideNaturals;     // used in layout to override score style (needed for the Continuous panel)
       QList<KeySym*> keySymbols;
       KeySigEvent _sig;
       void addLayout(SymId sym, qreal x, int y);
@@ -83,6 +84,8 @@ class KeySig : public Element {
       bool showCourtesy() const           { return _showCourtesy; }
       void setShowCourtesy(bool v)        { _showCourtesy = v;    }
       void undoSetShowCourtesy(bool v);
+
+      void setHideNaturals(bool hide)     { _hideNaturals = hide; }
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);

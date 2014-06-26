@@ -199,6 +199,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   // This also adds naturals to the key signature (if set in the score style)
                   newKs->setParent(_score->tick2segment(_currentMeasureTick));
                   newKs->setTrack(e->track());
+                  newKs->setHideNaturals(true);
                   newKs->layout();
 
                   //
@@ -380,6 +381,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                         newKs->setParent(_score->tick2segment(_currentMeasureTick));
                         newKs->setTrack(e->track());
 
+                        newKs->setHideNaturals(true);
                         newKs->layout();
                         newKs->draw(&painter);
                         delete newKs;
