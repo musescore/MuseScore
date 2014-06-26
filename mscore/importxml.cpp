@@ -2753,32 +2753,32 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             else if (repeat == "daCapo") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(JumpType::DC);
+                  jp->setJumpType(Jump::Type::DC);
                   }
             else if (repeat == "daCapoAlCoda") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(JumpType::DC_AL_CODA);
+                  jp->setJumpType(Jump::Type::DC_AL_CODA);
                   }
             else if (repeat == "daCapoAlFine") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(JumpType::DC_AL_FINE);
+                  jp->setJumpType(Jump::Type::DC_AL_FINE);
                   }
             else if (repeat == "dalSegno") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(JumpType::DS);
+                  jp->setJumpType(Jump::Type::DS);
                   }
             else if (repeat == "dalSegnoAlCoda") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(JumpType::DS_AL_CODA);
+                  jp->setJumpType(Jump::Type::DS_AL_CODA);
                   }
             else if (repeat == "dalSegnoAlFine") {
                   jp = new Jump(score);
                   jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(JumpType::DS_AL_FINE);
+                  jp->setJumpType(Jump::Type::DS_AL_FINE);
                   }
             if (jp) {
                   jp->setTrack((staff + rstaff) * VOICES);

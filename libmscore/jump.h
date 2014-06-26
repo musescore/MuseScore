@@ -18,44 +18,43 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   JumpType
-//---------------------------------------------------------
-
-enum class JumpType : char {
-      DC,
-      DC_AL_FINE,
-      DC_AL_CODA,
-      DS_AL_CODA,
-      DS_AL_FINE,
-      DS,
-      USER
-      };
-
-//---------------------------------------------------------
 //   @@ Jump
 ///    Jump label
 //
 //   @P jumpTo      QString
 //   @P playUntil   QString
 //   @P continueAt  QString
+//   @P jumpType    Ms::Jump::Type (DC, DC_AL_FINE, DC_AL_CODA, DS_AL_CODA, DS_AL_FINE, DS, USER) (read only)
 //---------------------------------------------------------
 
 class Jump : public Text {
       Q_OBJECT
 
-      Q_PROPERTY(QString jumpTo     READ jumpTo     WRITE undoSetJumpTo)
-      Q_PROPERTY(QString playUntil  READ playUntil  WRITE undoSetPlayUntil)
-      Q_PROPERTY(QString continueAt READ continueAt WRITE undoSetContinueAt)
+      Q_PROPERTY(QString jumpTo      READ jumpTo      WRITE undoSetJumpTo)
+      Q_PROPERTY(QString playUntil   READ playUntil   WRITE undoSetPlayUntil)
+      Q_PROPERTY(QString continueAt  READ continueAt  WRITE undoSetContinueAt)
+      //Q_Property(Ms::Jump::Type      READ jumpType)
+      //Q_ENUMS(Type)
 
       QString _jumpTo;
       QString _playUntil;
       QString _continueAt;
 
    public:
+      enum class Type : char {
+            DC,
+            DC_AL_FINE,
+            DC_AL_CODA,
+            DS_AL_CODA,
+            DS_AL_FINE,
+            DS,
+            USER
+            };
+
       Jump(Score*);
 
-      void setJumpType(JumpType t);
-      JumpType jumpType() const;
+      void setJumpType(Type t);
+      Type jumpType() const;
 
       virtual Jump* clone()          const { return new Jump(*this); }
       virtual Element::Type type()   const { return Element::Type::JUMP; }
@@ -82,7 +81,7 @@ class Jump : public Text {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::JumpType);
+Q_DECLARE_METATYPE(Ms::Jump::Type);
 
 #endif
 

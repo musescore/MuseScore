@@ -346,27 +346,27 @@ Palette* MuseScore::newRepeatsPalette()
       sp->append(mk, tr("Fine"));
 
       Jump* jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DC);
+      jp->setJumpType(Jump::Type::DC);
       sp->append(jp, tr("Da Capo"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DC_AL_FINE);
+      jp->setJumpType(Jump::Type::DC_AL_FINE);
       sp->append(jp, tr("Da Capo al Fine"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DC_AL_CODA);
+      jp->setJumpType(Jump::Type::DC_AL_CODA);
       sp->append(jp, tr("Da Capo al Coda"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DS_AL_CODA);
+      jp->setJumpType(Jump::Type::DS_AL_CODA);
       sp->append(jp, tr("D.S. al Coda"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DS_AL_FINE);
+      jp->setJumpType(Jump::Type::DS_AL_FINE);
       sp->append(jp, tr("D.S. al Fine"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DS);
+      jp->setJumpType(Jump::Type::DS);
       sp->append(jp, tr("D.S."));
 
       mk = new Marker(gscore);

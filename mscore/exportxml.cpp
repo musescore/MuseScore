@@ -3267,32 +3267,32 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
 
 static void directionJump(Xml& xml, const Jump* const jp)
       {
-      JumpType jtp = jp->jumpType();
+      Jump::Type jtp = jp->jumpType();
       QString words = "";
       QString type  = "";
       QString sound = "";
-      if (jtp == JumpType::DC) {
+      if (jtp == Jump::Type::DC) {
             if (jp->text() == "")
                   words = "D.C.";
             else
                   words = jp->text();
             sound = "dacapo=\"yes\"";
             }
-      else if (jtp == JumpType::DC_AL_FINE) {
+      else if (jtp == Jump::Type::DC_AL_FINE) {
             if (jp->text() == "")
                   words = "D.C. al Fine";
             else
                   words = jp->text();
             sound = "dacapo=\"yes\"";
             }
-      else if (jtp == JumpType::DC_AL_CODA) {
+      else if (jtp == Jump::Type::DC_AL_CODA) {
             if (jp->text() == "")
                   words = "D.C. al Coda";
             else
                   words = jp->text();
             sound = "dacapo=\"yes\"";
             }
-      else if (jtp == JumpType::DS_AL_CODA) {
+      else if (jtp == Jump::Type::DS_AL_CODA) {
             if (jp->text() == "")
                   words = "D.S. al Coda";
             else
@@ -3302,7 +3302,7 @@ static void directionJump(Xml& xml, const Jump* const jp)
             else
                   sound = "dalsegno=\"" + jp->jumpTo() + "\"";
             }
-      else if (jtp == JumpType::DS_AL_FINE) {
+      else if (jtp == Jump::Type::DS_AL_FINE) {
             if (jp->text() == "")
                   words = "D.S. al Fine";
             else
@@ -3312,7 +3312,7 @@ static void directionJump(Xml& xml, const Jump* const jp)
             else
                   sound = "dalsegno=\"" + jp->jumpTo() + "\"";
             }
-      else if (jtp == JumpType::DS) {
+      else if (jtp == Jump::Type::DS) {
             words = "D.S.";
             if (jp->jumpTo() == "")
                   sound = "dalsegno=\"1\"";

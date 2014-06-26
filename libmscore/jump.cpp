@@ -21,7 +21,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 struct JumpTypeTable {
-      JumpType type;
+      Jump::Type type;
       const char* text;
       const char* jumpTo;
       const char* playUntil;
@@ -29,12 +29,12 @@ struct JumpTypeTable {
       };
 
 static const JumpTypeTable jumpTypeTable[] = {
-      { JumpType::DC,         "D.C.",         "start", "end",  "" },
-      { JumpType::DC_AL_FINE, "D.C. al Fine", "start", "fine", "" },
-      { JumpType::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab" },
-      { JumpType::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab" },
-      { JumpType::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "" },
-      { JumpType::DS,         "D.S.",         "segno", "end",  "" }
+      { Jump::Type::DC,         "D.C.",         "start", "end",  "" },
+      { Jump::Type::DC_AL_FINE, "D.C. al Fine", "start", "fine", "" },
+      { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab" },
+      { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab" },
+      { Jump::Type::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "" },
+      { Jump::Type::DS,         "D.S.",         "segno", "end",  "" }
       };
 
 //---------------------------------------------------------
@@ -52,7 +52,7 @@ Jump::Jump(Score* s)
 //   setJumpType
 //---------------------------------------------------------
 
-void Jump::setJumpType(JumpType t)
+void Jump::setJumpType(Type t)
       {
       for (const JumpTypeTable& p : jumpTypeTable) {
             if (p.type == t) {
@@ -69,13 +69,13 @@ void Jump::setJumpType(JumpType t)
 //   jumpType
 //---------------------------------------------------------
 
-JumpType Jump::jumpType() const
+Jump::Type Jump::jumpType() const
       {
       for (const JumpTypeTable& t : jumpTypeTable) {
             if (_jumpTo == t.jumpTo && _playUntil == t.playUntil && _continueAt == t.continueAt)
                   return t.type;
             }
-      return JumpType::USER;
+      return Type::USER;
       }
 
 //---------------------------------------------------------

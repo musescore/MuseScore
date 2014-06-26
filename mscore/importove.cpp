@@ -2063,25 +2063,25 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 		}
 		case OVE::Repeat_DSAlCoda:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JumpType::DS_AL_CODA);
+            jp->setJumpType(Jump::Type::DS_AL_CODA);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_DSAlFine:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JumpType::DS_AL_FINE);
+            jp->setJumpType(Jump::Type::DS_AL_FINE);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_DCAlCoda:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JumpType::DC_AL_CODA);
+            jp->setJumpType(Jump::Type::DC_AL_CODA);
             e = jp;
 			break;
 		}
 		case OVE::Repeat_DCAlFine:{
             Jump* jp = new Jump(score_);
-            jp->setJumpType(JumpType::DC_AL_FINE);
+            jp->setJumpType(Jump::Type::DC_AL_FINE);
             e = jp;
 			break;
 		}
