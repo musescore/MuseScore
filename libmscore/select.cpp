@@ -276,6 +276,9 @@ bool SelectionFilter::canSelect(Element* e) const
       {
       if (e->type() == Element::Type::DYNAMIC
           && !isFiltered(SelectionFilterType::DYNAMIC)) return false;
+      if (e->type() == Element::Type::ARTICULATION
+          && !isFiltered(SelectionFilterType::ARTICULATION)) return false;
+
       return true;
       }
 
