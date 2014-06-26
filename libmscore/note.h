@@ -402,6 +402,7 @@ class Note : public Element {
       void setDotY(MScore::Direction);
 
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
+      NoteVal noteVal() const;
       };
 
 // extern const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)];
