@@ -31,7 +31,7 @@ namespace Ms {
 class MScoreTextToMXML {
 
 public:
-      MScoreTextToMXML(const QString& tag, const QString& attr, const QString& t, const int deffs, const int curfs);
+      MScoreTextToMXML(const QString& tag, const QString& attr, const QString& t, const TextStyle& defTs, const TextStyle& actTs);
       static QString toPlainText(const QString& text);
       void write(Xml& xml);
 
