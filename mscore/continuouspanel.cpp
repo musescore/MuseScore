@@ -175,9 +175,13 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   // Find maximum height for the staff name
                   //
                   QList<StaffName>& staffNamesShort = currentStaff->part()->instr()->shortNames();
-                  QString staffNameShort = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name;
+                  QString staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name;
+                  if (staffName == "") {
+                        QList<StaffName>& staffNamesLong = currentStaff->part()->instr()->longNames();
+                        staffName = staffNamesLong.isEmpty() ? "" : staffNamesLong[0].name;
+                  }
                   Text* newName = new Text(_score);
-                  newName->setText(staffNameShort);
+                  newName->setText(staffName);
                   newName->setTrack(e->track());
                   newName->sameLayout();
 
@@ -330,9 +334,14 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   // Draw the current staff name
                   //
                   QList<StaffName>& staffNamesShort = currentStaff->part()->instr()->shortNames();
-                  QString staffNameShort = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name;
+                  QString staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name;
+                  if (staffName == "") {
+                        QList<StaffName>& staffNamesLong = currentStaff->part()->instr()->longNames();
+                        staffName = staffNamesLong.isEmpty() ? "" : staffNamesLong[0].name;
+                  }
+
                   Text* newName = new Text(_score);
-                  newName->setText(staffNameShort);
+                  newName->setText(staffName);
                   newName->setTrack(e->track());
                   newName->sameLayout();
                   pos = QPointF (_offsetPanel, e->pagePos().y());
