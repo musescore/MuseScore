@@ -58,7 +58,7 @@ enum class SelectionFilterType {
       DYNAMIC                 = 1 << 4,
       FINGERING               = 1 << 5,
       LYRICS                  = 1 << 6,
-      ARTICULATIONS           = 1 << 7,
+      ARTICULATION            = 1 << 7,
       ALL                     = -1
       };
 
@@ -97,7 +97,7 @@ class Selection {
       QByteArray symbolListMimeData() const;
       SelectionFilter& selectionFilter() const;
       bool canSelect(Element*) const;
-      void filterRange(QList<Segment*>) const;
+      void filterRange(QList<Segment*>, int strack, int etrack) const;
 
    public:
       Selection()                      { _score = 0; _state = SelState::NONE; }

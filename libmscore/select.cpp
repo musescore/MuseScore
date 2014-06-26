@@ -276,6 +276,9 @@ bool Selection::canSelect(Element* e) const
       {
       if (e->type() == Element::Type::DYNAMIC
           && !this->selectionFilter().isFiltered(SelectionFilterType::DYNAMIC)) return false;
+      if (e->type() == Element::Type::ARTICULATION
+          && !this->selectionFilter().isFiltered(SelectionFilterType::ARTICULATION)) return false;
+
       return true;
       }
 
@@ -317,7 +320,8 @@ void Selection::updateSelectedElements()
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
                         foreach (Articulation* art, chord->articulations()) {
-                              _el.append(art);
+                              if (canSelect(art))
+                                    _el.append(art);
                               }
                         if (chord->beam()) _el.append(chord->beam());
                         if (chord->stem()) _el.append(chord->stem());
@@ -586,12 +590,24 @@ std::multimap<int, Spanner*> spannerMapCopy(Segment* seg1, Segment* seg2, Segmen
       return sp_copy;
       }
 
-void Selection::filterRange(QList<Segment*> segments) const
+void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) const
       {
       foreach (Segment* segment, segments) {
             foreach (Element* e, segment->annotations()) {
                   if (!canSelect(e))
                         segment->removeAnnotation(e);
+                  }
+            for (int track = strack; track < etrack; ++track) {
+                  Element* e = segment->element(track);
+                  if (!e)
+                        continue;
+                  if (e->isChordRest()) {
+                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        foreach (Element* articulation, cr->articulations()) {
+                              if (!canSelect(articulation))
+                                    cr->remove(articulation);
+                              }
+                        }
                   }
             }
       }
@@ -615,7 +631,6 @@ QByteArray Selection::staffMimeData() const
       Segment* seg2 = _endSegment;
 
       QList<Segment*> segments = cloneRange(seg1, seg2);
-      filterRange(segments);
 
       //Remove 2-note tremolo if at last segment
       Segment* last = segments.last();
@@ -644,6 +659,7 @@ QByteArray Selection::staffMimeData() const
             if (interval.diatonic)
                   xml.tag("transposeDiatonic", interval.diatonic);
 
+            filterRange(segments,startTrack,endTrack);
             score()->writeSegments(xml, startTrack, endTrack, segments.first(), seg2, false, true, true);
             //score()->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
             xml.etag();
@@ -1129,5 +1145,6 @@ void SelectionFilter::setFiltered(SelectionFilterType type, bool set)
       else
             _filtered = _filtered & ~(int)type;
       }
+
 }
 
