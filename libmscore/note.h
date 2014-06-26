@@ -361,7 +361,7 @@ class Note : public Element {
       Q_INVOKABLE Ms::NoteDot* dot(int n)       { return _dots[n];           }
       void updateAccidental(AccidentalState*);
       void updateLine();
-      void setNval(NoteVal);
+      void setNval(const NoteVal&);
       NoteEventList& playEvents()                { return _playEvents; }
       const NoteEventList& playEvents() const    { return _playEvents; }
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
@@ -403,6 +403,7 @@ class Note : public Element {
       void setDotY(Direction);
 
       static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
+      NoteVal noteVal() const;
       };
 
 // extern const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS)][int(NoteHeadType::HEAD_TYPES)];

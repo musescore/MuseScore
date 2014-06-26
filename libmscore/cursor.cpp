@@ -157,7 +157,8 @@ void Cursor::add(Element* s)
 
 Note* Cursor::addNote(int pitch)
       {
-      return _score->addPitch(pitch, false);
+      NoteVal nval(pitch);
+      return _score->addPitch(nval, false);
       }
 
 //---------------------------------------------------------

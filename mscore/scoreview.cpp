@@ -4765,50 +4765,17 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
                   int delta = octave * 12 + tab[note] - curPitch;
                   if (delta > 6)
-                         --octave;
+                        --octave;
                   else if (delta < -6)
                         ++octave;
                   }
             }
 
-      _score->startCmd();
       if (!noteEntryMode()) {
             sm->postEvent(new CommandEvent("note-input"));
             qApp->processEvents();
             }
-      Position pos;
-      pos.segment   = is.segment();
-      pos.staffIdx  = is.track() / VOICES;
-      ClefType clef = score()->staff(pos.staffIdx)->clef(pos.segment->tick());
-      pos.line      = relStep(octave * 7 + note, clef);
-
-      if (addFlag) {
-            Element* el = score()->selection().element();
-            if (el && el->type() == ElementType::NOTE) {
-                  Chord* chord = static_cast<Note*>(el)->chord();
-                  NoteVal val;
-
-                  Segment* s         = chord->segment();
-                  AccidentalVal acci = s->measure()->findAccidental(s, chord->staffIdx(), pos.line);
-                  int step           = absStep(pos.line, clef);
-                  int octave         = step/7;
-                  val.pitch          = step2pitch(step) + octave * 12 + int(acci);
-
-                  if (!chord->concertPitch())
-                        val.pitch += chord->staff()->part()->instr()->transpose().chromatic;
-                  val.tpc = step2tpc(step % 7, acci);
-                  _score->addNote(chord, val);
-                  _score->endCmd();
-                  return;
-                  }
-            }
-
-      if (is.repitchMode())
-            score()->repitchNote(pos, !addFlag);
-      else
-            score()->putNote(pos, !addFlag);
-
-      _score->endCmd();
+      _score->cmdAddPitch(octave * 7 + note, addFlag);
       adjustCanvasPosition(is.cr(), false);
       }
 
@@ -5074,7 +5041,8 @@ void ScoreView::cmdRepeatSelection()
                         bool addTo = false;
                         Chord* c = static_cast<Note*>(el)->chord();
                         for (Note* note : c->notes()) {
-                              _score->addPitch(note->pitch(), addTo);
+                              NoteVal nval = note->noteVal();
+                              _score->addPitch(nval, addTo);
                               addTo = true;
                               }
                         _score->endCmd();

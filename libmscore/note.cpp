@@ -1971,11 +1971,11 @@ void Note::updateLine()
 //   setNval
 //---------------------------------------------------------
 
-void Note::setNval(NoteVal nval)
+void Note::setNval(const NoteVal& nval)
       {
       setPitch(nval.pitch);
-      _fret      = nval.fret;
-      _string    = nval.string;
+      _fret   = nval.fret;
+      _string = nval.string;
       if (nval.tpc == Tpc::TPC_INVALID) {
             Key key = staff()->key(chord()->tick());
             _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
@@ -2311,5 +2311,21 @@ void Note::setScore(Score* s)
       if (_tieFor)
             _tieFor->setScore(s);
       }
+
+//---------------------------------------------------------
+//   noteVal
+//---------------------------------------------------------
+
+NoteVal Note::noteVal() const
+      {
+      NoteVal nval;
+      nval.pitch     = pitch();
+      nval.tpc       = tpc1();
+      nval.fret      = fret();
+      nval.string    = string();
+      nval.headGroup = headGroup();
+      return nval;
+      }
+
 }
 
