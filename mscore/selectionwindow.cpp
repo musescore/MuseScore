@@ -55,6 +55,8 @@ void SelectionWindow::updateFilteredElements()
             QListWidgetItem *item = _listWidget->item(row);
             if (filter & 1 << row)
                   item->setCheckState(Qt::Checked);
+            else
+                  item->setCheckState(Qt::Unchecked);
             }
       }
 
@@ -102,4 +104,11 @@ void SelectionWindow::hideEvent(QHideEvent* ev)
       settings.setValue("selectionWindow/pos", pos());
       QWidget::hideEvent(ev);
       }
+
+void SelectionWindow::setScore(Score* score)
+      {
+      _score = score;
+      updateFilteredElements();
+      }
+
 }

@@ -1517,6 +1517,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             playPanel->setScore(cs);
       if (synthControl)
             synthControl->setScore(cs);
+      if (selectionWindow)
+            selectionWindow->setScore(cs);
       if (mixer)
             mixer->updateAll(cs);
 #ifdef OMR
