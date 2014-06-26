@@ -1784,8 +1784,9 @@ void Measure::read(XmlReader& e, int staffIdx)
                   else if (barLine->barLineType() == BarLineType::START_REPEAT && e.tick() == tick())
                         st = SegmentType::StartRepeatBarLine;
                   else {
-                        setEndBarLineType(barLine->barLineType(), false, true);
-                        if(!barLine->customSpan()) {
+                        if (!barLine->customSubtype())
+                              setEndBarLineType(barLine->barLineType(), false, true);
+                        if (!barLine->customSpan()) {
                               Staff* staff = score()->staff(staffIdx);
                               barLine->setSpan(staff->barLineSpan());
                               }
