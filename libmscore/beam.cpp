@@ -37,8 +37,8 @@ namespace Ms {
 //---------------------------------------------------------
 //   BeamFragment
 //    position of primary beam
-//    idx 0 - MScore::AUTO or Direction::DOWN
-//        1 - Direction::UP
+//    idx 0 - MScore::Direction::AUTO or MScore::Direction::DOWN
+//        1 - MScore::Direction::UP
 //---------------------------------------------------------
 
 struct BeamFragment {
@@ -54,7 +54,7 @@ Beam::Beam(Score* s)
    : Element(s)
       {
       setFlags(ElementFlag::SELECTABLE);
-      _direction       = Direction::AUTO;
+      _direction       = MScore::Direction::AUTO;
       _up              = true;
       _distribute      = false;
       _userModified[0] = false;
@@ -280,8 +280,8 @@ void Beam::layout1()
                   }
             }
       else if (staff()->isDrumStaff()) {
-            if (_direction != Direction::AUTO) {
-                  _up = _direction == Direction::UP;
+            if (_direction != MScore::Direction::AUTO) {
+                  _up = _direction == MScore::Direction::UP;
                   }
             else {
                   foreach (ChordRest* cr, _elements) {
@@ -328,14 +328,14 @@ void Beam::layout1()
             //
             // determine beam stem direction
             //
-            if (_direction != Direction::AUTO) {
-                  _up = _direction == Direction::UP;
+            if (_direction != MScore::Direction::AUTO) {
+                  _up = _direction == MScore::Direction::UP;
                   }
             else {
                   if (c1) {
                         Measure* m = c1->measure();
-                        if (c1->stemDirection() != Direction::AUTO)
-                              _up = c1->stemDirection() == Direction::UP;
+                        if (c1->stemDirection() != MScore::Direction::AUTO)
+                              _up = c1->stemDirection() == MScore::Direction::UP;
                         else if (m->hasVoices(c1->staffIdx()))
                               _up = !(c1->voice() % 2);
                         else if (!twoBeamedNotes()) {
@@ -351,7 +351,7 @@ void Beam::layout1()
                   }
 
             cross   = minMove < maxMove;
-            // int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+            // int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
             slope   = 0.0;
 
             foreach(ChordRest* cr, _elements)
@@ -394,8 +394,8 @@ void Beam::layoutGraceNotes()
       //
       // determine beam stem direction
       //
-      if (_direction != Direction::AUTO)
-            _up = _direction == Direction::UP;
+      if (_direction != MScore::Direction::AUTO)
+            _up = _direction == MScore::Direction::UP;
       else {
             ChordRest* cr = _elements[0];
 
@@ -406,7 +406,7 @@ void Beam::layoutGraceNotes()
                   _up = true;
             }
 
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       slope   = 0.0;
 
       if (!_userModified[idx]) {
@@ -514,7 +514,7 @@ inline qreal absLimit(qreal val, qreal limit)
 
 bool Beam::hasNoSlope()
       {
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       return _noSlope && !_userModified[idx];
       }
 
@@ -1410,7 +1410,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             }
 
       BeamFragment* f = fragments[frag];
-      int dIdx        = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int dIdx        = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       qreal& py1      = f->py1[dIdx];
       qreal& py2      = f->py2[dIdx];
 
@@ -1773,7 +1773,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
 void Beam::spatiumChanged(qreal oldValue, qreal newValue)
       {
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
             qreal diff = newValue / oldValue;
             foreach(BeamFragment* f, fragments) {
@@ -1800,7 +1800,7 @@ void Beam::write(Xml& xml) const
       writeProperty(xml, P_ID::GROW_LEFT);
       writeProperty(xml, P_ID::GROW_RIGHT);
 
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
             qreal _spatium = spatium();
             foreach(BeamFragment* f, fragments) {
@@ -1855,7 +1855,7 @@ void Beam::read(XmlReader& e)
                   if (fragments.isEmpty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
-                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+                  int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   f->py1[idx] = e.readDouble() * _spatium;
                   }
@@ -1863,13 +1863,13 @@ void Beam::read(XmlReader& e)
                   if (fragments.isEmpty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
-                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+                  int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   f->py2[idx] = e.readDouble() * _spatium;
                   }
             else if (tag == "Fragment") {
                   BeamFragment* f = new BeamFragment;
-                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+                  int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   qreal _spatium = spatium();
 
@@ -1899,7 +1899,7 @@ void Beam::read(XmlReader& e)
 
 void Beam::editDrag(const EditData& ed)
       {
-      int idx  = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx  = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       qreal dy = ed.delta.y();
       BeamFragment* f = fragments[editFragment];
       if (ed.curGrip == 0)
@@ -1926,7 +1926,7 @@ void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       *grips = 2;
       *defaultGrip = 1;
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 
       Chord* c1 = nullptr;
@@ -1953,11 +1953,11 @@ void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 //   setBeamDirection
 //---------------------------------------------------------
 
-void Beam::setBeamDirection(Direction d)
+void Beam::setBeamDirection(MScore::Direction d)
       {
       _direction = d;
-      if (d != Direction::AUTO)
-            _up = d == Direction::UP;
+      if (d != MScore::Direction::AUTO)
+            _up = d == MScore::Direction::UP;
       }
 
 //---------------------------------------------------------
@@ -1976,8 +1976,8 @@ void Beam::reset()
             score()->undoChangeProperty(this, P_ID::BEAM_POS, QVariant(beamPos()));
             score()->undoChangeProperty(this, P_ID::USER_MODIFIED, false);
             }
-      if (beamDirection() != Direction::AUTO)
-            score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(Direction::AUTO));
+      if (beamDirection() != MScore::Direction::AUTO)
+            score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(MScore::Direction::AUTO));
       if (noSlopeStyle == PropertyStyle::UNSTYLED)
             score()->undoChangeProperty(this, P_ID::BEAM_NO_SLOPE, propertyDefault(P_ID::BEAM_NO_SLOPE), PropertyStyle::STYLED);
 
@@ -1994,7 +1994,7 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
 
       QPointF pt(p - pagePos());
       qreal ydiff = 100000000.0;
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       int i = 0;
       editFragment = 0;
       foreach (BeamFragment* f, fragments) {
@@ -2056,7 +2056,7 @@ QPointF Beam::beamPos() const
       if (fragments.isEmpty())
             return QPointF(0.0, 0.0);
       BeamFragment* f = fragments.back();
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       qreal _spatium = spatium();
       return QPointF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
       }
@@ -2070,7 +2070,7 @@ void Beam::setBeamPos(const QPointF& bp)
       if (fragments.isEmpty())
             fragments.append(new BeamFragment);
       BeamFragment* f = fragments.back();
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       _userModified[idx] = true;
       setGenerated(false);
       qreal _spatium = spatium();
@@ -2084,7 +2084,7 @@ void Beam::setBeamPos(const QPointF& bp)
 
 bool Beam::userModified() const
       {
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       return _userModified[idx];
       }
 
@@ -2094,7 +2094,7 @@ bool Beam::userModified() const
 
 void Beam::setUserModified(bool val)
       {
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       _userModified[idx] = val;
       }
 
@@ -2125,7 +2125,7 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::STEM_DIRECTION:
-                  setBeamDirection(Direction(v.toInt()));
+                  setBeamDirection(MScore::Direction(v.toInt()));
                   break;
             case P_ID::DISTRIBUTE:
                   setDistribute(v.toBool());
@@ -2164,7 +2164,7 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Beam::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_ID::STEM_DIRECTION: return int(Direction::AUTO);
+            case P_ID::STEM_DIRECTION: return int(MScore::Direction::AUTO);
             case P_ID::DISTRIBUTE:     return false;
             case P_ID::GROW_LEFT:      return 1.0;
             case P_ID::GROW_RIGHT:     return 1.0;

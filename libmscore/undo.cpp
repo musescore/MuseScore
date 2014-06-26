@@ -1232,7 +1232,7 @@ void Score::undoChangeTuning(Note* n, qreal v)
       undoChangeProperty(n, P_ID::TUNING, v);
       }
 
-void Score::undoChangeUserMirror(Note* n, DirectionH d)
+void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
       {
       undoChangeProperty(n, P_ID::MIRROR_HEAD, int(d));
       }

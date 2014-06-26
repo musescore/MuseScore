@@ -913,11 +913,11 @@ void BarLine::layout()
       foreach(Element* e, _el) {
             e->layout();
             if (e->type() == Element::Type::ARTICULATION) {
-                  Articulation* a   = static_cast<Articulation*>(e);
-                  Direction dir     = a->direction();
-                  qreal distance    = 0.5 * spatium();
-                  qreal x           = width() * .5;
-                  if (dir == Direction::DOWN) {
+                  Articulation* a       = static_cast<Articulation*>(e);
+                  MScore::Direction dir = a->direction();
+                  qreal distance        = 0.5 * spatium();
+                  qreal x               = width() * .5;
+                  if (dir == MScore::Direction::DOWN) {
                         qreal botY = y2 + distance;
                         a->setPos(QPointF(x, botY));
                         }

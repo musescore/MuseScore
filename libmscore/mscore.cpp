@@ -108,8 +108,8 @@ void MScore::init()
 #ifdef SCRIPT_INTERFACE
       qRegisterMetaType<Element::Type>("ElementType");
       qRegisterMetaType<Note::ValueType>("ValueType");
-      qRegisterMetaType<Direction>("Direction");
-      qRegisterMetaType<DirectionH>("DirectionH");
+      qRegisterMetaType<MScore::Direction>("Direction");
+      qRegisterMetaType<MScore::DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
       qRegisterMetaType<Accidental::Role>("AccidentalRole");
       qRegisterMetaType<Accidental::Type>("AccidentalType");
@@ -130,7 +130,7 @@ void MScore::init()
       qRegisterMetaType<Hairpin::Type>("HairpinType");
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
-      qRegisterMetaType<Glissando::Type>("Glissando::Type");
+      qRegisterMetaType<Glissando::Type>("GlissandoType");
 //      qRegisterMetaType<TextStyle>("TextStyle");
 #endif
 

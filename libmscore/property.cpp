@@ -260,22 +260,22 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   {
                   QString value(e.readElementText());
                   if (value == "up")
-                        return QVariant(int(Direction::UP));
+                        return QVariant(int(MScore::Direction::UP));
                   else if (value == "down")
-                        return QVariant(int(Direction::DOWN));
+                        return QVariant(int(MScore::Direction::DOWN));
                   else if (value == "auto")
-                        return QVariant(int(Direction::AUTO));
+                        return QVariant(int(MScore::Direction::AUTO));
                   }
                   break;
             case P_TYPE::DIRECTION_H:
                   {
                   QString value(e.readElementText());
                   if (value == "left" || value == "1")
-                        return QVariant(int(DirectionH::DH_LEFT));
+                        return QVariant(int(MScore::DirectionH::LEFT));
                   else if (value == "right" || value == "2")
-                        return QVariant(int(DirectionH::DH_RIGHT));
+                        return QVariant(int(MScore::DirectionH::RIGHT));
                   else if (value == "auto")
-                        return QVariant(int(DirectionH::DH_AUTO));
+                        return QVariant(int(MScore::DirectionH::AUTO));
                   }
                   break;
             case P_TYPE::LAYOUT_BREAK: {

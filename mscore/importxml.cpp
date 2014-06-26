@@ -1926,7 +1926,7 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direction sd, Beam*& beam)
+static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const MScore::Direction sd, Beam*& beam)
       {
       if (!cr) return;
       // create a new beam
@@ -4166,9 +4166,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     endSlur = true;
                               QString pl = ee.attribute(QString("placement"));
                               if (pl == "above")
-                                    slur[slurNo]->setSlurDirection(Direction::UP);
+                                    slur[slurNo]->setSlurDirection(MScore::Direction::UP);
                               else if (pl == "below")
-                                    slur[slurNo]->setSlurDirection(Direction::DOWN);
+                                    slur[slurNo]->setSlurDirection(MScore::Direction::DOWN);
                               //slur[slurNo]->setStart(tick, trk + voice);
                               //slur[slurNo]->setTrack((staff + relStaff) * VOICES);
                               slur[slurNo]->setTrack(track);
@@ -4222,9 +4222,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               tie->setTrack(track);
                               QString tiedOrientation = ee.attribute("orientation", "auto");
                               if (tiedOrientation == "over")
-                                    tie->setSlurDirection(Direction::UP);
+                                    tie->setSlurDirection(MScore::Direction::UP);
                               else if (tiedOrientation == "under")
-                                    tie->setSlurDirection(Direction::DOWN);
+                                    tie->setSlurDirection(MScore::Direction::DOWN);
                               else if (tiedOrientation == "auto")
                                     ;  // ignore
                               else
@@ -4650,7 +4650,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       bool rest    = false;
       int relStaff = 0;
       Beam::Mode bm  = Beam::Mode::NONE;
-      Direction sd = Direction::AUTO;
+      MScore::Direction sd = MScore::Direction::AUTO;
       bool grace   = false;
       QString graceSlash;
       QString step;
@@ -4813,9 +4813,9 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   ;
             else if (tag == "stem") {
                   if (s == "up")
-                        sd = Direction::UP;
+                        sd = MScore::Direction::UP;
                   else if (s == "down")
-                        sd = Direction::DOWN;
+                        sd = MScore::Direction::DOWN;
                   else if (s == "none")
                         noStem = true;
                   else if (s == "double")
@@ -5139,11 +5139,11 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
 
                   // the drum palette cannot handle stem direction AUTO,
                   // overrule if necessary
-                  if (sd == Direction::AUTO) {
+                  if (sd == MScore::Direction::AUTO) {
                         if (line > 4)
-                              sd = Direction::DOWN;
+                              sd = MScore::Direction::DOWN;
                         else
-                              sd = Direction::UP;
+                              sd = MScore::Direction::UP;
                         }
 
                   if (drumsets.contains(partId)

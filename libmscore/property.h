@@ -214,8 +214,8 @@ enum class P_TYPE : char {
       STRING,
       SCALE,
       COLOR,
-      DIRECTION,      // enum class Direction
-      DIRECTION_H,    // enum class DirectionH
+      DIRECTION,      // enum class MScore::Direction
+      DIRECTION_H,    // enum class MScore::DirectionH
       LAYOUT_BREAK,
       VALUE_TYPE,
       BEAM_MODE,

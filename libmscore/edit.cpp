@@ -870,7 +870,7 @@ void Score::putNote(const Position& p, bool replace)
       _is.setSegment(s);
 
       const Instrument* instr = st->part()->instr(s->tick());
-      Direction stemDirection = Direction::AUTO;
+      MScore::Direction stemDirection = MScore::Direction::AUTO;
       NoteVal nval;
       const StringData* stringData = 0;
       StaffType* tab = 0;
@@ -1283,19 +1283,19 @@ void Score::cmdFlip()
                   if (chord->beam())
                         e = chord->beam();  // fall trough
                   else {
-                        Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
+                        MScore::Direction dir = chord->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
                         undoChangeProperty(chord, P_ID::STEM_DIRECTION, int(dir));
                         }
                   }
 
             if (e->type() == Element::Type::BEAM) {
                   Beam* beam = static_cast<Beam*>(e);
-                  Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
+                  MScore::Direction dir = beam->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
                   undoChangeProperty(beam, P_ID::STEM_DIRECTION, int(dir));
                   }
             else if (e->type() == Element::Type::SLUR_SEGMENT) {
                   SlurTie* slur = static_cast<SlurSegment*>(e)->slurTie();
-                  Direction dir = slur->up() ? Direction::DOWN : Direction::UP;
+                  MScore::Direction dir = slur->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
                   undoChangeProperty(slur, P_ID::SLUR_DIRECTION, int(dir));
                   }
             else if (e->type() == Element::Type::HAIRPIN_SEGMENT) {
@@ -1319,19 +1319,19 @@ void Score::cmdFlip()
                               undoChangeProperty(a, P_ID::ARTICULATION_ANCHOR, int(aa));
                         }
                   else {
-                        Direction d = a->up() ? Direction::DOWN : Direction::UP;
+                        MScore::Direction d = a->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
                         undoChangeProperty(a, P_ID::DIRECTION, int(d));
                         }
                   return;   // no layoutAll
                   }
             else if (e->type() == Element::Type::TUPLET) {
                   Tuplet* tuplet = static_cast<Tuplet*>(e);
-                  Direction d = tuplet->isUp() ? Direction::DOWN : Direction::UP;
+                  MScore::Direction d = tuplet->isUp() ? MScore::Direction::DOWN : MScore::Direction::UP;
                   undoChangeProperty(tuplet, P_ID::DIRECTION, int(d));
                   }
             else if (e->type() == Element::Type::NOTEDOT) {
                   Note* note = static_cast<Note*>(e->parent());
-                  Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
+                  MScore::Direction d = note->dotIsUp() ? MScore::Direction::DOWN : MScore::Direction::UP;
                   undoChangeProperty(note, P_ID::DOT_POSITION, int(d));
                   // undo(new FlipNoteDotDirection(static_cast<Note*>(e->parent())));
                   }
@@ -2046,7 +2046,7 @@ void Score::cmdEnterRest(const TDuration& d)
 
       int track = _is.track();
       NoteVal nval;
-      setNoteRest(_is.segment(), track, nval, d.fraction(), Direction::AUTO);
+      setNoteRest(_is.segment(), track, nval, d.fraction(), MScore::Direction::AUTO);
       _is.moveToNextInputPos();
       _is.setRest(false);  // continue with normal note entry
       endCmd();

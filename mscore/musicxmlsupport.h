@@ -130,15 +130,15 @@ struct MusicXMLDrumInstrument {
       QString name;
       NoteHead::Group notehead; ///< notehead symbol set
       int line;                 ///< place notehead onto this line
-      Direction stemDirection;
+      MScore::Direction stemDirection;
 
       QString toString() const;
 
       MusicXMLDrumInstrument()
-            : pitch(-1), name(), notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
+            : pitch(-1), name(), notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
       MusicXMLDrumInstrument(QString s)
-            : pitch(-1), name(s), notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
-      MusicXMLDrumInstrument(int p, QString s, NoteHead::Group nh, int l, Direction d)
+            : pitch(-1), name(s), notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
+      MusicXMLDrumInstrument(int p, QString s, NoteHead::Group nh, int l, MScore::Direction d)
             : pitch(p), name(s), notehead(nh), line(l), stemDirection(d) {}
       };
 

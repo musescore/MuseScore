@@ -145,7 +145,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
       Slur* sl = static_cast<Slur*>(slurTie());
 
       if (key == Qt::Key_X) {
-            sl->setSlurDirection(sl->up() ? Direction::DOWN : Direction::UP);
+            sl->setSlurDirection(sl->up() ? MScore::Direction::DOWN : MScore::Direction::UP);
             sl->layout();
             return true;
             }
@@ -635,7 +635,7 @@ bool SlurSegment::isEdited() const
 SlurTie::SlurTie(Score* s)
    : Spanner(s)
       {
-      _slurDirection = Direction::AUTO;
+      _slurDirection = MScore::Direction::AUTO;
       _up            = true;
       _lineType      = 0;     // default is solid
       }
@@ -956,7 +956,7 @@ void SlurTie::writeProperties(Xml& xml) const
       int idx = 0;
       foreach(const SpannerSegment* ss, spannerSegments())
             ((SlurSegment*)ss)->write(xml, idx++);
-      if (_slurDirection != Direction::AUTO)
+      if (_slurDirection != MScore::Direction::AUTO)
             xml.tag("up", int(_slurDirection));
       if (_lineType)
             xml.tag("lineType", _lineType);
@@ -980,7 +980,7 @@ bool SlurTie::readProperties(XmlReader& e)
             add(segment);
             }
       else if (tag == "up")
-            _slurDirection = Direction(e.readInt());
+            _slurDirection = MScore::Direction(e.readInt());
       else if (tag == "lineType")
             _lineType = e.readInt();
       else if (!Element::readProperties(e))
@@ -1001,7 +1001,7 @@ void SlurTie::undoSetLineType(int t)
 //   undoSetSlurDirection
 //---------------------------------------------------------
 
-void SlurTie::undoSetSlurDirection(Direction d)
+void SlurTie::undoSetSlurDirection(MScore::Direction d)
       {
       score()->undoChangeProperty(this, P_ID::SLUR_DIRECTION, int(d));
       }
@@ -1037,7 +1037,7 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::LINE_TYPE:      setLineType(v.toInt()); break;
-            case P_ID::SLUR_DIRECTION: setSlurDirection(Direction(v.toInt())); break;
+            case P_ID::SLUR_DIRECTION: setSlurDirection(MScore::Direction(v.toInt())); break;
             default:
                   return Spanner::setProperty(propertyId, v);
             }
@@ -1054,7 +1054,7 @@ QVariant SlurTie::propertyDefault(P_ID id) const
             case P_ID::LINE_TYPE:
                   return 0;
             case P_ID::SLUR_DIRECTION:
-                  return int(Direction::AUTO);
+                  return int(MScore::Direction::AUTO);
             default:
                   return Spanner::propertyDefault(id);
             }
@@ -1258,13 +1258,13 @@ void Slur::layout()
             return;
             }
       switch (_slurDirection) {
-            case Direction::UP:
+            case MScore::Direction::UP:
                   _up = true;
                   break;
-            case Direction::DOWN:
+            case MScore::Direction::DOWN:
                   _up = false;
                   break;
-            case Direction::AUTO:
+            case MScore::Direction::AUTO:
                   {
                   //
                   // assumption:
@@ -1457,10 +1457,10 @@ void Slur::layoutChord()
       Note* startNote = c1->upNote();
       // Note* endNote = c2->upNote();
 
-      if (_slurDirection == Direction::AUTO)
+      if (_slurDirection == MScore::Direction::AUTO)
             _up = false;
       else
-            _up = _slurDirection == Direction::UP ? true : false;
+            _up = _slurDirection == MScore::Direction::UP ? true : false;
 
       qreal w   = startNote->headWidth();
       qreal xo1 = w * 1.12;

@@ -223,7 +223,7 @@ void EditDrumset::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previou
                   nDrumset.drum(pitch).shortcut = 0;
             else
                   nDrumset.drum(pitch).shortcut = "ABCDEFG"[shortcut->currentIndex()];
-            nDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
+            nDrumset.drum(pitch).stemDirection = MScore::Direction(stemDirection->currentIndex());
             previous->setText(Column::NAME, qApp->translate("drumset", qPrintable(nDrumset.name(pitch))));
             }
       if (current == 0)
@@ -270,7 +270,7 @@ void EditDrumset::valueChanged()
       nDrumset.drum(pitch).notehead      = NoteHead::Group(noteHead->currentIndex() - 1);
       nDrumset.drum(pitch).line          = staffLine->value();
       nDrumset.drum(pitch).voice         = voice->currentIndex();
-      nDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
+      nDrumset.drum(pitch).stemDirection = MScore::Direction(stemDirection->currentIndex());
       if (QString(QChar(nDrumset.drum(pitch).shortcut)) != shortcut->currentText()) {
             if (shortcut->currentText().isEmpty())
                   nDrumset.drum(pitch).shortcut = 0;
@@ -294,11 +294,11 @@ void EditDrumset::updateExample()
       int line      = nDrumset.line(pitch);
       NoteHead::Group noteHead = nDrumset.noteHead(pitch);
       int voice     = nDrumset.voice(pitch);
-      Direction dir = nDrumset.stemDirection(pitch);
+      MScore::Direction dir = nDrumset.stemDirection(pitch);
       bool up;
-      if (dir == Direction::UP)
+      if (dir == MScore::Direction::UP)
             up = true;
-      else if (dir == Direction::DOWN)
+      else if (dir == MScore::Direction::DOWN)
             up = false;
       else
             up = line > 4;
