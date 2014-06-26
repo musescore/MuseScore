@@ -163,16 +163,6 @@ enum class OffsetType : char {
       };
 
 //---------------------------------------------------------
-//   BeamMode
-//---------------------------------------------------------
-
-enum class BeamMode : signed char {
-      AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
-      };
-
-#define beamModeMid(a) (a == BeamMode::MID || a == BeamMode::BEGIN32 || a == BeamMode::BEGIN64)
-
-//---------------------------------------------------------
 //   TransposeDirection
 //---------------------------------------------------------
 
@@ -422,7 +412,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::BeamMode);
 Q_DECLARE_METATYPE(Ms::Direction);
 Q_DECLARE_METATYPE(Ms::DirectionH);
 

@@ -68,7 +68,7 @@ ChordRest::ChordRest(Score* s)
       _staffMove   = 0;
       _beam        = 0;
       _tabDur      = 0;
-      _beamMode    = BeamMode::AUTO;
+      _beamMode    = Beam::Mode::AUTO;
       _up          = true;
       _small       = false;
       _crossMeasure = CrossMeasure::UNKNOWN;
@@ -153,22 +153,22 @@ void ChordRest::writeProperties(Xml& xml) const
       DurationElement::writeProperties(xml);
 
       //
-      // BeamMode default:
-      //    REST  - BeamMode::NONE
-      //    CHORD - BeamMode::AUTO
+      // Beam::Mode default:
+      //    REST  - Beam::Mode::NONE
+      //    CHORD - Beam::Mode::AUTO
       //
-      if ((type() == Element::Type::REST && _beamMode != BeamMode::NONE)
-         || (type() == Element::Type::CHORD && _beamMode != BeamMode::AUTO)) {
+      if ((type() == Element::Type::REST && _beamMode != Beam::Mode::NONE)
+         || (type() == Element::Type::CHORD && _beamMode != Beam::Mode::AUTO)) {
             QString s;
             switch(_beamMode) {
-                  case BeamMode::AUTO:    s = "auto"; break;
-                  case BeamMode::BEGIN:   s = "begin"; break;
-                  case BeamMode::MID:     s = "mid"; break;
-                  case BeamMode::END:     s = "end"; break;
-                  case BeamMode::NONE:    s = "no"; break;
-                  case BeamMode::BEGIN32: s = "begin32"; break;
-                  case BeamMode::BEGIN64: s = "begin64"; break;
-                  case BeamMode::INVALID: s = "?"; break;
+                  case Beam::Mode::AUTO:    s = "auto"; break;
+                  case Beam::Mode::BEGIN:   s = "begin"; break;
+                  case Beam::Mode::MID:     s = "mid"; break;
+                  case Beam::Mode::END:     s = "end"; break;
+                  case Beam::Mode::NONE:    s = "no"; break;
+                  case Beam::Mode::BEGIN32: s = "begin32"; break;
+                  case Beam::Mode::BEGIN64: s = "begin64"; break;
+                  case Beam::Mode::INVALID: s = "?"; break;
                   }
             xml.tag("BeamMode", s);
             }
@@ -241,24 +241,24 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "BeamMode") {
             QString val(e.readElementText());
-            BeamMode bm = BeamMode::AUTO;
+            Beam::Mode bm = Beam::Mode::AUTO;
             if (val == "auto")
-                  bm = BeamMode::AUTO;
+                  bm = Beam::Mode::AUTO;
             else if (val == "begin")
-                  bm = BeamMode::BEGIN;
+                  bm = Beam::Mode::BEGIN;
             else if (val == "mid")
-                  bm = BeamMode::MID;
+                  bm = Beam::Mode::MID;
             else if (val == "end")
-                  bm = BeamMode::END;
+                  bm = Beam::Mode::END;
             else if (val == "no")
-                  bm = BeamMode::NONE;
+                  bm = Beam::Mode::NONE;
             else if (val == "begin32")
-                  bm = BeamMode::BEGIN32;
+                  bm = Beam::Mode::BEGIN32;
             else if (val == "begin64")
-                  bm = BeamMode::BEGIN64;
+                  bm = Beam::Mode::BEGIN64;
             else
-                  bm = BeamMode(val.toInt());
-            _beamMode = BeamMode(bm);
+                  bm = Beam::Mode(val.toInt());
+            _beamMode = Beam::Mode(bm);
             }
       else if (tag == "Attribute" || tag == "Articulation") {     // obsolete: "Attribute"
             Articulation* atr = new Articulation(score());
@@ -803,22 +803,22 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case IconType::SBEAM:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::BEGIN));
                               break;
                         case IconType::MBEAM:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::MID));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::MID));
                               break;
                         case IconType::NBEAM:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::NONE));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::NONE));
                               break;
                         case IconType::BEAM32:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN32));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::BEGIN32));
                               break;
                         case IconType::BEAM64:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::BEGIN64));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::BEGIN64));
                               break;
                         case IconType::AUTOBEAM:
-                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::AUTO));
+                              score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
                               break;
                         default:
                               break;
@@ -1004,7 +1004,7 @@ void ChordRest::removeDeleteBeam(bool beamed)
 //   undoSetBeamMode
 //---------------------------------------------------------
 
-void ChordRest::undoSetBeamMode(BeamMode mode)
+void ChordRest::undoSetBeamMode(Beam::Mode mode)
       {
       undoChangeProperty(P_ID::BEAM_MODE, int(mode));
       }
@@ -1030,7 +1030,7 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::SMALL:     setSmall(v.toBool()); break;
-            case P_ID::BEAM_MODE: setBeamMode(BeamMode(v.toInt())); break;
+            case P_ID::BEAM_MODE: setBeamMode(Beam::Mode(v.toInt())); break;
             default:          return DurationElement::setProperty(propertyId, v);
             }
       score()->setLayoutAll(true);
@@ -1045,7 +1045,7 @@ QVariant ChordRest::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_ID::SMALL:     return false;
-            case P_ID::BEAM_MODE: return int(BeamMode::AUTO);
+            case P_ID::BEAM_MODE: return int(Beam::Mode::AUTO);
             default:          return DurationElement::propertyDefault(propertyId);
             }
       score()->setLayoutAll(true);

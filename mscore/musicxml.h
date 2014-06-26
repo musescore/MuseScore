@@ -187,7 +187,7 @@ class MusicXml {
       Chord* tremStart;                          ///< Starting chord for current tremolo
       FiguredBass* figBass;                      ///< Current figured bass element (to attach to next note)
       bool figBassExtend;                        ///< Current figured bass extend
-      BeamMode beamMode;                         ///< Current beam mode
+      Beam::Mode beamMode;                       ///< Current beam mode
 
       int pageWidth;                             ///< Page width read from defaults
       int pageHeight;                            ///< Page height read from defaults

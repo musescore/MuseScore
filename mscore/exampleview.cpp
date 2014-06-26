@@ -292,16 +292,16 @@ void ExampleView::dropEvent(QDropEvent* event)
                   Chord* chord = static_cast<Note*>(e)->chord();
                   switch (icon->iconType()) {
                         case IconType::SBEAM:
-                              chord->setBeamMode(BeamMode::BEGIN);
+                              chord->setBeamMode(Beam::Mode::BEGIN);
                               break;
                         case IconType::MBEAM:
-                              chord->setBeamMode(BeamMode::AUTO);
+                              chord->setBeamMode(Beam::Mode::AUTO);
                               break;
                         case IconType::BEAM32:
-                              chord->setBeamMode(BeamMode::BEGIN32);
+                              chord->setBeamMode(Beam::Mode::BEGIN32);
                               break;
                         case IconType::BEAM64:
-                              chord->setBeamMode(BeamMode::BEGIN64);
+                              chord->setBeamMode(Beam::Mode::BEGIN64);
                               break;
                         default:
                               break;

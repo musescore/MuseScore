@@ -69,6 +69,10 @@ class Beam : public Element {
       bool hasNoSlope();
 
    public:
+      enum class Mode : signed char {
+            AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
+            };
+
       Beam(Score* s);
       Beam(const Beam&);
       ~Beam();
@@ -143,5 +147,8 @@ class Beam : public Element {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Beam::Mode);
+
 #endif
 

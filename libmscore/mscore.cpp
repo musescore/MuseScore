@@ -37,6 +37,7 @@
 #include "notedot.h"
 #include "tie.h"
 #include "staff.h"
+#include "beam.h"
 #include "timesig.h"
 #include "part.h"
 #include "measure.h"
@@ -125,7 +126,7 @@ void MScore::init()
       qRegisterMetaType<Dynamic::Range>("DynamicRange");
       qRegisterMetaType<JumpType>("JumpType");
       qRegisterMetaType<Marker::Type>("MarkerType");
-      qRegisterMetaType<BeamMode>("BeamMode");
+      qRegisterMetaType<Beam::Mode>("BeamMode");
       qRegisterMetaType<Hairpin::Type>("HairpinType");
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");

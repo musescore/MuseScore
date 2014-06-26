@@ -1063,7 +1063,7 @@ void ChordDebug::upChanged(bool val)
 
 void ChordDebug::beamModeChanged(int n)
       {
-      ((Chord*)element())->setBeamMode(BeamMode(n));
+      ((Chord*)element())->setBeamMode(Beam::Mode(n));
       element()->score()->setLayoutAll(true);
       }
 

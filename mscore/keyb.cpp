@@ -334,11 +334,11 @@ void MuseScore::updateInputState(Score* score)
       getAction("grace8after")->setChecked(is.noteType()  == NoteType::GRACE8_AFTER);
       getAction("grace16after")->setChecked(is.noteType() == NoteType::GRACE16_AFTER);
       getAction("grace32after")->setChecked(is.noteType() == NoteType::GRACE32_AFTER);
-      getAction("beam-start")->setChecked(is.beamMode() == BeamMode::BEGIN);
-      getAction("beam-mid")->setChecked(is.beamMode()   == BeamMode::MID);
-      getAction("no-beam")->setChecked(is.beamMode()    == BeamMode::NONE);
-      getAction("beam32")->setChecked(is.beamMode()     == BeamMode::BEGIN32);
-      getAction("auto-beam")->setChecked(is.beamMode()  == BeamMode::AUTO);
+      getAction("beam-start")->setChecked(is.beamMode() == Beam::Mode::BEGIN);
+      getAction("beam-mid")->setChecked(is.beamMode()   == Beam::Mode::MID);
+      getAction("no-beam")->setChecked(is.beamMode()    == Beam::Mode::NONE);
+      getAction("beam32")->setChecked(is.beamMode()     == Beam::Mode::BEGIN32);
+      getAction("auto-beam")->setChecked(is.beamMode()  == Beam::Mode::AUTO);
       getAction("repitch")->setChecked(is.repitchMode());
       }
 }

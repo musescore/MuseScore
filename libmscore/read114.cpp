@@ -627,21 +627,21 @@ Score::FileError Score::read114(XmlReader& e)
                                     }
                               if(!first) {
                                     switch(cr->beamMode()) {
-                                          case BeamMode::AUTO:
-                                          case BeamMode::BEGIN:
-                                          case BeamMode::END:
-                                          case BeamMode::NONE:
+                                          case Beam::Mode::AUTO:
+                                          case Beam::Mode::BEGIN:
+                                          case Beam::Mode::END:
+                                          case Beam::Mode::NONE:
                                                 break;
-                                          case BeamMode::MID:
-                                          case BeamMode::BEGIN32:
-                                          case BeamMode::BEGIN64:
-                                                cr->setBeamMode(BeamMode::BEGIN);
+                                          case Beam::Mode::MID:
+                                          case Beam::Mode::BEGIN32:
+                                          case Beam::Mode::BEGIN64:
+                                                cr->setBeamMode(Beam::Mode::BEGIN);
                                                 break;
-                                          case BeamMode::INVALID:
+                                          case Beam::Mode::INVALID:
                                                 if (cr->type() == Element::Type::CHORD)
-                                                      cr->setBeamMode(BeamMode::AUTO);
+                                                      cr->setBeamMode(Beam::Mode::AUTO);
                                                 else
-                                                      cr->setBeamMode(BeamMode::NONE);
+                                                      cr->setBeamMode(Beam::Mode::NONE);
                                                 break;
                                           }
                                     first = false;

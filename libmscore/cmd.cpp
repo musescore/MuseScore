@@ -1569,12 +1569,12 @@ void Score::cmdResetBeamMode()
                   if (cr == 0)
                         continue;
                   if (cr->type() == Element::Type::CHORD) {
-                        if (cr->beamMode() != BeamMode::AUTO)
-                              undoChangeProperty(cr, P_ID::BEAM_MODE, int(BeamMode::AUTO));
+                        if (cr->beamMode() != Beam::Mode::AUTO)
+                              undoChangeProperty(cr, P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
                         }
                   else if (cr->type() == Element::Type::REST) {
-                        if (cr->beamMode() != BeamMode::NONE)
-                              undoChangeProperty(cr, P_ID::BEAM_MODE, int(BeamMode::NONE));
+                        if (cr->beamMode() != Beam::Mode::NONE)
+                              undoChangeProperty(cr, P_ID::BEAM_MODE, int(Beam::Mode::NONE));
                         }
                   }
             }
@@ -2138,13 +2138,13 @@ void Score::cmd(const QAction* a)
       else if (cmd == "pad-dotdot")
             padToggle(Pad::DOTDOT);
       else if (cmd == "beam-start")
-            cmdSetBeamMode(BeamMode::BEGIN);
+            cmdSetBeamMode(Beam::Mode::BEGIN);
       else if (cmd == "beam-mid")
-            cmdSetBeamMode(BeamMode::MID);
+            cmdSetBeamMode(Beam::Mode::MID);
       else if (cmd == "no-beam")
-            cmdSetBeamMode(BeamMode::NONE);
+            cmdSetBeamMode(Beam::Mode::NONE);
       else if (cmd == "beam-32")
-            cmdSetBeamMode(BeamMode::BEGIN32);
+            cmdSetBeamMode(Beam::Mode::BEGIN32);
       else if (cmd == "sharp2")
             changeAccidental(Accidental::Type::SHARP2);
       else if (cmd == "sharp")
