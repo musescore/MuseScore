@@ -601,10 +601,34 @@ Shortcut Shortcut::sc[] = {
       Shortcut(
          STATE_NORMAL,
          ShortcutFlags::A_CMD,
-         "next-note-segment",
-         QT_TRANSLATE_NOOP("action","Next Note in Chord or Segment"),
-         QT_TRANSLATE_NOOP("action","Go to next Note in Chord or Segment"),
-         QT_TRANSLATE_NOOP("action","Go to next Note in Chord or Segment")
+         "next-element",
+         QT_TRANSLATE_NOOP("action","Next element"),
+         QT_TRANSLATE_NOOP("action","Go to next element"),
+         QT_TRANSLATE_NOOP("action","Go to next element")
+         ),
+      Shortcut(
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "prev-element",
+         QT_TRANSLATE_NOOP("action","Previous element"),
+         QT_TRANSLATE_NOOP("action","Go to previous element"),
+         QT_TRANSLATE_NOOP("action","Go to previous element")
+         ),
+      Shortcut(
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "home",
+         QT_TRANSLATE_NOOP("action","Home"),
+         QT_TRANSLATE_NOOP("action","Go to the first element"),
+         QT_TRANSLATE_NOOP("action","Go to the first element")
+         ),
+      Shortcut(
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "end",
+         QT_TRANSLATE_NOOP("action","End"),
+         QT_TRANSLATE_NOOP("action","Go to the last element"),
+         QT_TRANSLATE_NOOP("action","Go to the last element")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY,
