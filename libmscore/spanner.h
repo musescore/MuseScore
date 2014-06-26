@@ -97,9 +97,9 @@ class Spanner : public Element {
             SEGMENT, MEASURE, CHORD, NOTE
             };
    private:
-      Q_PROPERTY(int    tick    READ tick    WRITE setTick)
-      Q_PROPERTY(int    tick2   READ tick2   WRITE setTick2)
-      Q_PROPERTY(Anchor anchor  READ anchor  WRITE setAnchor)
+      Q_PROPERTY(int                 tick    READ tick    WRITE setTick)
+      Q_PROPERTY(int                 tick2   READ tick2   WRITE setTick2)
+      Q_PROPERTY(Ms::Spanner::Anchor anchor  READ anchor  WRITE setAnchor)
 
       QList<SpannerSegment*> segments;
       Anchor _anchor = Anchor::SEGMENT;
@@ -121,7 +121,7 @@ class Spanner : public Element {
       Spanner(const Spanner&);
       ~Spanner();
 
-      virtual ElementType type() const = 0;
+      virtual Element::Type type() const = 0;
       virtual void setScore(Score* s) override;
 
       int tick() const         { return _tick;          }

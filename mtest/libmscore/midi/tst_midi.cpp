@@ -75,9 +75,9 @@ bool compareElements(Element* e1, Element* e2)
       {
       if (e1->type() != e2->type())
             return false;
-      if (e1->type() == ElementType::TIMESIG) {
+      if (e1->type() == Element::Type::TIMESIG) {
             }
-      else if (e1->type() == ElementType::KEYSIG) {
+      else if (e1->type() == Element::Type::KEYSIG) {
             KeySig* ks1 = static_cast<KeySig*>(e1);
             KeySig* ks2 = static_cast<KeySig*>(e2);
             if (ks1->key() != ks2->key()) {
@@ -85,11 +85,11 @@ bool compareElements(Element* e1, Element* e2)
                   return false;
                   }
             }
-      else if (e1->type() == ElementType::CLEF) {
+      else if (e1->type() == Element::Type::CLEF) {
             }
-      else if (e1->type() == ElementType::REST) {
+      else if (e1->type() == Element::Type::REST) {
             }
-      else if (e1->type() == ElementType::CHORD) {
+      else if (e1->type() == Element::Type::CHORD) {
             Ms::Chord* c1 = static_cast<Ms::Chord*>(e1);
             Ms::Chord* c2 = static_cast<Ms::Chord*>(e2);
             if (c1->duration() != c2->duration()) {

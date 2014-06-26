@@ -33,20 +33,20 @@ struct OttavaDefault {
       SymId numbersOnlyId;
       QPointF offset;
       qreal  hookDirection;
-      Placement place;
+      Element::Placement place;
       int shift;
       const char* name;
       const char* numbersOnlyName;
       };
 
-// order is important, should be the same than OttavaType
+// order is important, should be the same as Ottava::Type
 static const OttavaDefault ottavaDefault[] = {
-      { SymId::ottavaAlta,        SymId::ottava,       QPointF(0.0, .7),    1.0, Placement::ABOVE,  12, "8va", "8"   },
-      { SymId::ottavaBassaBa,     SymId::ottava,       QPointF(0.0, -1.0), -1.0, Placement::BELOW, -12, "8vb", "8"   },
-      { SymId::quindicesimaAlta,  SymId::quindicesima, QPointF(0.0, .7),    1.0, Placement::ABOVE,  24, "15ma", "15" },
-      { SymId::quindicesimaBassa, SymId::quindicesima, QPointF(0.0, -1.0), -1.0, Placement::BELOW, -24, "15mb", "15" },
-      { SymId::ventiduesimaAlta,  SymId::ventiduesima, QPointF(0.0, .7),    1.0, Placement::ABOVE,  36, "22ma", "22" },
-      { SymId::ventiduesimaBassa, SymId::ventiduesima, QPointF(0.0, -1.0), -1.0, Placement::BELOW, -36, "22mb", "22" }
+      { SymId::ottavaAlta,        SymId::ottava,       QPointF(0.0, .7),    1.0, Element::Placement::ABOVE,  12, "8va", "8"   },
+      { SymId::ottavaBassaBa,     SymId::ottava,       QPointF(0.0, -1.0), -1.0, Element::Placement::BELOW, -12, "8vb", "8"   },
+      { SymId::quindicesimaAlta,  SymId::quindicesima, QPointF(0.0, .7),    1.0, Element::Placement::ABOVE,  24, "15ma", "15" },
+      { SymId::quindicesimaBassa, SymId::quindicesima, QPointF(0.0, -1.0), -1.0, Element::Placement::BELOW, -24, "15mb", "15" },
+      { SymId::ventiduesimaAlta,  SymId::ventiduesima, QPointF(0.0, .7),    1.0, Element::Placement::ABOVE,  36, "22ma", "22" },
+      { SymId::ventiduesimaBassa, SymId::ventiduesima, QPointF(0.0, -1.0), -1.0, Element::Placement::BELOW, -36, "22mb", "22" }
       };
 
 //---------------------------------------------------------
@@ -58,7 +58,7 @@ void OttavaSegment::layout()
       TextLineSegment::layout1();
       if (parent()) {     // for palette
             qreal yo(score()->styleS(StyleIdx::ottavaY).val() * spatium());
-            if (ottava()->placement() == Placement::BELOW)
+            if (ottava()->placement() == Element::Placement::BELOW)
                   yo = -yo + staff()->height();
             rypos() += yo;
             }
@@ -170,7 +170,7 @@ Ottava::Ottava(Score* s)
       numbersOnlyStyle    = PropertyStyle::STYLED;
       beginTextStyle      = PropertyStyle::STYLED;
       continueTextStyle   = PropertyStyle::STYLED;
-      setOttavaType(OttavaType::OTTAVA_8VA);
+      setOttavaType(Type::OTTAVA_8VA);
       setLineWidth(score()->styleS(StyleIdx::ottavaLineWidth));
       lineWidthStyle = PropertyStyle::STYLED;
       setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::ottavaLineStyle)));
@@ -189,7 +189,7 @@ Ottava::Ottava(const Ottava& o)
 //   setOttavaType
 //---------------------------------------------------------
 
-void Ottava::setOttavaType(OttavaType val)
+void Ottava::setOttavaType(Type val)
       {
       setEndHook(true);
       _ottavaType = val;
@@ -261,7 +261,7 @@ void Ottava::read(XmlReader& e)
                   bool ok;
                   int idx = s.toInt(&ok);
                   if (!ok) {
-                        idx = int(OttavaType::OTTAVA_8VA);
+                        idx = int(Type::OTTAVA_8VA);
                         for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
                               if (s == ottavaDefault[i].name) {
                                     idx = i;
@@ -276,7 +276,7 @@ void Ottava::read(XmlReader& e)
                         else if (idx == 2)
                               idx = 1;
                         }
-                  setOttavaType(OttavaType(idx));
+                  setOttavaType(Type(idx));
                   }
             else if (tag == "numbersOnly") {
                   _numbersOnly = e.readInt();
@@ -330,7 +330,7 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
       {
       switch (propertyId) {
             case P_ID::OTTAVA_TYPE:
-                  setOttavaType(OttavaType(val.toInt()));
+                  setOttavaType(Type(val.toInt()));
                   break;
 
             case P_ID::LINE_WIDTH:
@@ -425,7 +425,7 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
 //   undoSetOttavaType
 //---------------------------------------------------------
 
-void Ottava::undoSetOttavaType(OttavaType val)
+void Ottava::undoSetOttavaType(Type val)
       {
       score()->undoChangeProperty(this, P_ID::OTTAVA_TYPE, int(val));
       }
@@ -439,7 +439,7 @@ void Ottava::setYoff(qreal val)
       {
       qreal _spatium = spatium();
       qreal yo(score()->styleS(StyleIdx::ottavaY).val() * _spatium);
-      if (placement() == Placement::BELOW)
+      if (placement() == Element::Placement::BELOW)
             yo = -yo + staff()->height();
       rUserYoffset() += val * _spatium - yo;
       }

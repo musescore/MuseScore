@@ -37,8 +37,8 @@ namespace Ms {
 //---------------------------------------------------------
 //   BeamFragment
 //    position of primary beam
-//    idx 0 - MScore::AUTO or Direction::DOWN
-//        1 - Direction::UP
+//    idx 0 - MScore::Direction::AUTO or MScore::Direction::DOWN
+//        1 - MScore::Direction::UP
 //---------------------------------------------------------
 
 struct BeamFragment {
@@ -54,7 +54,7 @@ Beam::Beam(Score* s)
    : Element(s)
       {
       setFlags(ElementFlag::SELECTABLE);
-      _direction       = Direction::AUTO;
+      _direction       = MScore::Direction::AUTO;
       _up              = true;
       _distribute      = false;
       _userModified[0] = false;
@@ -154,7 +154,7 @@ void Beam::add(ChordRest* a)
                   for (int i = 0; i < _elements.size(); ++i) {
                         Segment* s = _elements[i]->segment();
                         if ((s->tick() > a->segment()->tick())
-                           || ((s->tick() == a->segment()->tick()) && (a->segment()->next(SegmentType::ChordRest) == s))
+                           || ((s->tick() == a->segment()->tick()) && (a->segment()->next(Segment::Type::ChordRest) == s))
                            )  {
                               _elements.insert(i, a);
                               return;
@@ -216,8 +216,8 @@ bool Beam::twoBeamedNotes()
       {
       // if not two elements or elements are not chords or chords have more than 1 note, return failure
       if ((_elements.size() != 2)
-         || (_elements[0]->type() != ElementType::CHORD)
-         || _elements[1]->type() != ElementType::CHORD) {
+         || (_elements[0]->type() != Element::Type::CHORD)
+         || _elements[1]->type() != Element::Type::CHORD) {
             return false;
             }
       const Chord* c1 = static_cast<const Chord*>(_elements[0]);
@@ -231,10 +231,10 @@ bool Beam::twoBeamedNotes()
       if ((dist1 == -dist2) || (-dist1 == dist2)) {
             _up = false;
             Segment* s = c1->segment();
-            s = s->prev1(SegmentType::ChordRest);
+            s = s->prev1(Segment::Type::ChordRest);
             if (s && s->element(c1->track())) {
                   Chord* c = static_cast<Chord*>(s->element(c1->track()));
-                  if ((c->type() == ElementType::CHORD) && c->beam())
+                  if ((c->type() == Element::Type::CHORD) && c->beam())
                         _up = c->beam()->up();
                   }
             }
@@ -269,7 +269,7 @@ void Beam::layout1()
             cross = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
             foreach(ChordRest* cr, _elements) {
-                  if (cr->type() == ElementType::CHORD) {
+                  if (cr->type() == Element::Type::CHORD) {
                         // set members maxDuration, c1, c2
                         if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
                               maxDuration = cr->durationType();
@@ -280,12 +280,12 @@ void Beam::layout1()
                   }
             }
       else if (staff()->isDrumStaff()) {
-            if (_direction != Direction::AUTO) {
-                  _up = _direction == Direction::UP;
+            if (_direction != MScore::Direction::AUTO) {
+                  _up = _direction == MScore::Direction::UP;
                   }
             else {
                   foreach (ChordRest* cr, _elements) {
-                        if (cr->type() == ElementType::CHORD) {
+                        if (cr->type() == Element::Type::CHORD) {
                               c2 = static_cast<Chord*>(cr);
                               _up = c2->up();
                               break;
@@ -306,7 +306,7 @@ void Beam::layout1()
             int upDnLimit = staff()->lines() - 1;           // was '4' hard-coded in following code
 
             foreach (ChordRest* cr, _elements) {
-                  if (cr->type() == ElementType::CHORD) {
+                  if (cr->type() == Element::Type::CHORD) {
                         c2 = static_cast<Chord*>(cr);
                         if (c1 == 0)
                               c1 = c2;
@@ -328,14 +328,14 @@ void Beam::layout1()
             //
             // determine beam stem direction
             //
-            if (_direction != Direction::AUTO) {
-                  _up = _direction == Direction::UP;
+            if (_direction != MScore::Direction::AUTO) {
+                  _up = _direction == MScore::Direction::UP;
                   }
             else {
                   if (c1) {
                         Measure* m = c1->measure();
-                        if (c1->stemDirection() != Direction::AUTO)
-                              _up = c1->stemDirection() == Direction::UP;
+                        if (c1->stemDirection() != MScore::Direction::AUTO)
+                              _up = c1->stemDirection() == MScore::Direction::UP;
                         else if (m->hasVoices(c1->staffIdx()))
                               _up = !(c1->voice() % 2);
                         else if (!twoBeamedNotes()) {
@@ -351,7 +351,7 @@ void Beam::layout1()
                   }
 
             cross   = minMove < maxMove;
-            // int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+            // int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
             slope   = 0.0;
 
             foreach(ChordRest* cr, _elements)
@@ -394,8 +394,8 @@ void Beam::layoutGraceNotes()
       //
       // determine beam stem direction
       //
-      if (_direction != Direction::AUTO)
-            _up = _direction == Direction::UP;
+      if (_direction != MScore::Direction::AUTO)
+            _up = _direction == MScore::Direction::UP;
       else {
             ChordRest* cr = _elements[0];
 
@@ -406,7 +406,7 @@ void Beam::layoutGraceNotes()
                   _up = true;
             }
 
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       slope   = 0.0;
 
       if (!_userModified[idx]) {
@@ -514,7 +514,7 @@ inline qreal absLimit(qreal val, qreal limit)
 
 bool Beam::hasNoSlope()
       {
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       return _noSlope && !_userModified[idx];
       }
 
@@ -531,7 +531,7 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
       // return true if beam spans a rest
       //
       for(const ChordRest* cr : cl) {
-            if (cr->type() != ElementType::CHORD)
+            if (cr->type() != Element::Type::CHORD)
                   return true;
             }
       int l1 = cl.front()->line();
@@ -1410,7 +1410,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             }
 
       BeamFragment* f = fragments[frag];
-      int dIdx        = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int dIdx        = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       qreal& py1      = f->py1[dIdx];
       qreal& py2      = f->py2[dIdx];
 
@@ -1466,7 +1466,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
-                        if (c->type() == ElementType::REST)
+                        if (c->type() == Element::Type::REST)
                               continue;
                         QPointF p = c->upNote()->pagePos();
                         qreal y1  = beamY + (p.x() - px1) * slope;
@@ -1486,7 +1486,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
                         qreal y;
-                        if (c->type() == ElementType::REST)
+                        if (c->type() == Element::Type::REST)
                               continue;   //y = c->pagePos().y();
                         else
                               y  = c->upNote()->pagePos().y();
@@ -1504,7 +1504,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
-                        if (c->type() != ElementType::CHORD)
+                        if (c->type() != Element::Type::CHORD)
                               continue;
                         qreal y  = c->upNote()->pagePos().y();
                         bool nup = beamY < y;
@@ -1520,7 +1520,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
-                        if (c->type() != ElementType::CHORD)
+                        if (c->type() != Element::Type::CHORD)
                               continue;
                         bool _up = c->up();
                         qreal y = (_up ? c->upNote() : c->downNote())->pagePos().y();
@@ -1558,7 +1558,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   ChordRest* cr1 = crl[i];
                   int l = cr1->durationType().hooks() - 1;
 
-                  if ((cr1->type() == ElementType::REST && i) || l < beamLevel) {
+                  if ((cr1->type() == Element::Type::REST && i) || l < beamLevel) {
                         ++i;
                         continue;
                         }
@@ -1568,12 +1568,12 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         ChordRest* c = crl[i];
                         int l = c->durationType().hooks() - 1;
 
-                        BeamMode bm = Groups::endBeam(c);
-                        bool b32 = (beamLevel >= 1) && (bm == BeamMode::BEGIN32);
-                        bool b64 = (beamLevel >= 2) && (bm == BeamMode::BEGIN64);
+                        Mode bm = Groups::endBeam(c);
+                        bool b32 = (beamLevel >= 1) && (bm == Mode::BEGIN32);
+                        bool b64 = (beamLevel >= 2) && (bm == Mode::BEGIN64);
 
                         if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel)) {
-                              if (i && crl[i-1]->type() == ElementType::REST) {
+                              if (i && crl[i-1]->type() == Element::Type::REST) {
                                     --i;
                                     }
                               break;
@@ -1618,7 +1618,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   else {
                         // create broken segment
-                        if (cr1->type() == ElementType::REST)
+                        if (cr1->type() == Element::Type::REST)
                               continue;
 
                         int n = crl.size();
@@ -1695,7 +1695,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       //
       for (int i = 0; i < n; ++i) {
             Chord* c = static_cast<Chord*>(crl[i]);
-            if (c->type() != ElementType::CHORD)
+            if (c->type() != Element::Type::CHORD)
                   continue;
             Stem* stem = c->stem();
             if (!stem) {
@@ -1773,7 +1773,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
 void Beam::spatiumChanged(qreal oldValue, qreal newValue)
       {
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
             qreal diff = newValue / oldValue;
             foreach(BeamFragment* f, fragments) {
@@ -1800,7 +1800,7 @@ void Beam::write(Xml& xml) const
       writeProperty(xml, P_ID::GROW_LEFT);
       writeProperty(xml, P_ID::GROW_RIGHT);
 
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
             qreal _spatium = spatium();
             foreach(BeamFragment* f, fragments) {
@@ -1855,7 +1855,7 @@ void Beam::read(XmlReader& e)
                   if (fragments.isEmpty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
-                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+                  int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   f->py1[idx] = e.readDouble() * _spatium;
                   }
@@ -1863,13 +1863,13 @@ void Beam::read(XmlReader& e)
                   if (fragments.isEmpty())
                         fragments.append(new BeamFragment);
                   BeamFragment* f = fragments.back();
-                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+                  int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   f->py2[idx] = e.readDouble() * _spatium;
                   }
             else if (tag == "Fragment") {
                   BeamFragment* f = new BeamFragment;
-                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+                  int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
                   qreal _spatium = spatium();
 
@@ -1899,7 +1899,7 @@ void Beam::read(XmlReader& e)
 
 void Beam::editDrag(const EditData& ed)
       {
-      int idx  = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx  = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       qreal dy = ed.delta.y();
       BeamFragment* f = fragments[editFragment];
       if (ed.curGrip == 0)
@@ -1926,20 +1926,20 @@ void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       *grips = 2;
       *defaultGrip = 1;
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 
       Chord* c1 = nullptr;
       Chord* c2 = nullptr;
       int n = _elements.size();
       for (int i = 0; i < n; ++i) {
-            if (_elements[i]->type() == ElementType::CHORD) {
+            if (_elements[i]->type() == Element::Type::CHORD) {
                   c1 = static_cast<Chord*>(_elements[i]);
                   break;
                   }
             }
       for (int i = n-1; i >= 0; --i) {
-            if (_elements[i]->type() == ElementType::CHORD) {
+            if (_elements[i]->type() == Element::Type::CHORD) {
                   c2 = static_cast<Chord*>(_elements[i]);
                   break;
                   }
@@ -1953,11 +1953,11 @@ void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 //   setBeamDirection
 //---------------------------------------------------------
 
-void Beam::setBeamDirection(Direction d)
+void Beam::setBeamDirection(MScore::Direction d)
       {
       _direction = d;
-      if (d != Direction::AUTO)
-            _up = d == Direction::UP;
+      if (d != MScore::Direction::AUTO)
+            _up = d == MScore::Direction::UP;
       }
 
 //---------------------------------------------------------
@@ -1976,8 +1976,8 @@ void Beam::reset()
             score()->undoChangeProperty(this, P_ID::BEAM_POS, QVariant(beamPos()));
             score()->undoChangeProperty(this, P_ID::USER_MODIFIED, false);
             }
-      if (beamDirection() != Direction::AUTO)
-            score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(Direction::AUTO));
+      if (beamDirection() != MScore::Direction::AUTO)
+            score()->undoChangeProperty(this, P_ID::STEM_DIRECTION, int(MScore::Direction::AUTO));
       if (noSlopeStyle == PropertyStyle::UNSTYLED)
             score()->undoChangeProperty(this, P_ID::BEAM_NO_SLOPE, propertyDefault(P_ID::BEAM_NO_SLOPE), PropertyStyle::STYLED);
 
@@ -1994,7 +1994,7 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
 
       QPointF pt(p - pagePos());
       qreal ydiff = 100000000.0;
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       int i = 0;
       editFragment = 0;
       foreach (BeamFragment* f, fragments) {
@@ -2013,7 +2013,7 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
 
 bool Beam::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return (e->type() == ElementType::ICON) && ((static_cast<Icon*>(e)->iconType() == IconType::FBEAM1)
+      return (e->type() == Element::Type::ICON) && ((static_cast<Icon*>(e)->iconType() == IconType::FBEAM1)
          || (static_cast<Icon*>(e)->iconType() == IconType::FBEAM2));
       }
 
@@ -2024,7 +2024,7 @@ bool Beam::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* Beam::drop(const DropData& data)
       {
       Icon* e = static_cast<Icon*>(data.element);
-      if (e->type() != ElementType::ICON)
+      if (e->type() != Element::Type::ICON)
             return 0;
       qreal g1;
       qreal g2;
@@ -2056,7 +2056,7 @@ QPointF Beam::beamPos() const
       if (fragments.isEmpty())
             return QPointF(0.0, 0.0);
       BeamFragment* f = fragments.back();
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       qreal _spatium = spatium();
       return QPointF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
       }
@@ -2070,7 +2070,7 @@ void Beam::setBeamPos(const QPointF& bp)
       if (fragments.isEmpty())
             fragments.append(new BeamFragment);
       BeamFragment* f = fragments.back();
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       _userModified[idx] = true;
       setGenerated(false);
       qreal _spatium = spatium();
@@ -2084,7 +2084,7 @@ void Beam::setBeamPos(const QPointF& bp)
 
 bool Beam::userModified() const
       {
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       return _userModified[idx];
       }
 
@@ -2094,7 +2094,7 @@ bool Beam::userModified() const
 
 void Beam::setUserModified(bool val)
       {
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       _userModified[idx] = val;
       }
 
@@ -2125,7 +2125,7 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::STEM_DIRECTION:
-                  setBeamDirection(Direction(v.toInt()));
+                  setBeamDirection(MScore::Direction(v.toInt()));
                   break;
             case P_ID::DISTRIBUTE:
                   setDistribute(v.toBool());
@@ -2164,7 +2164,7 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Beam::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_ID::STEM_DIRECTION: return int(Direction::AUTO);
+            case P_ID::STEM_DIRECTION: return int(MScore::Direction::AUTO);
             case P_ID::DISTRIBUTE:     return false;
             case P_ID::GROW_LEFT:      return 1.0;
             case P_ID::GROW_RIGHT:     return 1.0;

@@ -41,7 +41,7 @@ class OttavaSegment : public TextLineSegment {
    public:
       // OttavaSegment(Score* s) : TextLineSegment(s) { setFlag(ElementFlag::ON_STAFF, true); }
       OttavaSegment(Score* s) : TextLineSegment(s) { }
-      virtual ElementType type() const override     { return ElementType::OTTAVA_SEGMENT; }
+      virtual Element::Type type() const override   { return Element::Type::OTTAVA_SEGMENT; }
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
       Ottava* ottava() const               { return (Ottava*)spanner(); }
       virtual void layout() override;
@@ -54,28 +54,27 @@ class OttavaSegment : public TextLineSegment {
       };
 
 //---------------------------------------------------------
-//   OttavaType
-//---------------------------------------------------------
-
-enum class OttavaType : char {
-      OTTAVA_8VA,
-      OTTAVA_8VB,
-      OTTAVA_15MA,
-      OTTAVA_15MB,
-      OTTAVA_22MA,
-      OTTAVA_22MB
-      };
-
-//---------------------------------------------------------
 //   @@ Ottava
-//   @P ottavaType  Ms::OttavaType  (OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB, OTTAVA_22MA, OTTAVA_22MB)
+//   @P ottavaType  Ms::Ottava::Type  (OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB, OTTAVA_22MA, OTTAVA_22MB)
 //---------------------------------------------------------
 
 class Ottava : public TextLine {
       Q_OBJECT
-      Q_PROPERTY(OttavaType ottavaType READ ottavaType WRITE undoSetOttavaType)
+      Q_PROPERTY(Ms::Ottava::Type ottavaType READ ottavaType WRITE undoSetOttavaType)
+      Q_ENUMS(Type)
 
-      OttavaType _ottavaType;
+   public:
+      enum class Type : char {
+            OTTAVA_8VA,
+            OTTAVA_8VB,
+            OTTAVA_15MA,
+            OTTAVA_15MB,
+            OTTAVA_22MA,
+            OTTAVA_22MB
+            };
+
+   private:
+      Type _ottavaType;
       bool _numbersOnly;
       PropertyStyle numbersOnlyStyle;
       PropertyStyle lineWidthStyle;
@@ -91,12 +90,12 @@ class Ottava : public TextLine {
    public:
       Ottava(Score* s);
       Ottava(const Ottava&);
-      virtual Ottava* clone() const override { return new Ottava(*this); }
-      virtual ElementType type() const override { return ElementType::OTTAVA; }
+      virtual Ottava* clone() const override      { return new Ottava(*this); }
+      virtual Element::Type type() const override { return Element::Type::OTTAVA; }
 
-      void setOttavaType(OttavaType val);
-      OttavaType ottavaType() const { return _ottavaType; }
-      void undoSetOttavaType(OttavaType val);
+      void setOttavaType(Type val);
+      Type ottavaType() const       { return _ottavaType; }
+      void undoSetOttavaType(Type val);
 
       bool numbersOnly() const      { return _numbersOnly; }
       void setNumbersOnly(bool val) { _numbersOnly = val; }
@@ -121,7 +120,7 @@ class Ottava : public TextLine {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::OttavaType);
+Q_DECLARE_METATYPE(Ms::Ottava::Type);
 
 #endif
 

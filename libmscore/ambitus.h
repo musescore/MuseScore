@@ -15,14 +15,11 @@
 
 #include "accidental.h"
 #include "element.h"
-// #include "note.h"
+#include "note.h"
 
 class QPainter;
 
 namespace Ms {
-
-enum class NoteHeadGroup : signed char;
-enum class NoteHeadType : signed char;
 
 //---------------------------------------------------------
 //   @@ Ambitus
@@ -31,9 +28,9 @@ enum class NoteHeadType : signed char;
 class Ambitus : public Element {
       Q_OBJECT
 
-      NoteHeadGroup       _noteHeadGroup;
-      NoteHeadType        _noteHeadType;
-      DirectionH  _dir;
+      NoteHead::Group     _noteHeadGroup;
+      NoteHead::Type      _noteHeadType;
+      MScore::DirectionH  _dir;
       bool  _hasLine;
       qreal _lineWidth;                     // in spatium
       Accidental  _topAccid, _bottomAccid;
@@ -53,10 +50,10 @@ class Ambitus : public Element {
       virtual Ambitus* clone() const                    { return new Ambitus(*this); }
 
       // getters and setters
-      virtual ElementType type() const                { return ElementType::AMBITUS;    }
-      NoteHeadGroup noteHeadGroup() const             { return _noteHeadGroup;}
-      NoteHeadType noteHeadType() const               { return _noteHeadType; }
-      DirectionH direction() const                    { return _dir;          }
+      virtual Element::Type type() const              { return Element::Type::AMBITUS;    }
+      NoteHead::Group noteHeadGroup() const           { return _noteHeadGroup;}
+      NoteHead::Type noteHeadType() const             { return _noteHeadType; }
+      MScore::DirectionH direction() const                    { return _dir;          }
       bool hasLine() const                            { return _hasLine;      }
       qreal lineWidth() const                         { return _lineWidth;    }
       int topOctave() const                           { return _topPitch / 12;}
@@ -66,9 +63,9 @@ class Ambitus : public Element {
       int topTpc() const                              { return _topTpc;       }
       int bottomTpc() const                           { return _bottomTpc;    }
 
-      void setNoteHeadGroup(NoteHeadGroup val)        { _noteHeadGroup = val; }
-      void setNoteHeadType (NoteHeadType val)         { _noteHeadType  = val; }
-      void setDirection    (DirectionH val)           { _dir = val;           }
+      void setNoteHeadGroup(NoteHead::Group val)      { _noteHeadGroup = val; }
+      void setNoteHeadType (NoteHead::Type val)       { _noteHeadType  = val; }
+      void setDirection    (MScore::DirectionH val)   { _dir = val;           }
       void setHasLine      (bool val)                 { _hasLine = val;       }
       void setLineWidth    (qreal val)                { _lineWidth = val;     }
       void setTopPitch     (int val);

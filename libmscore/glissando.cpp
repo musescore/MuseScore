@@ -34,7 +34,7 @@ Glissando::Glissando(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
 
-      _glissandoType = GlissandoType::STRAIGHT;
+      _glissandoType = Type::STRAIGHT;
       _text          = "gliss.";
       _showText      = true;
       qreal _spatium = spatium();
@@ -63,7 +63,7 @@ void Glissando::layout()
       Segment* s = chord->segment();
       s = s->prev1();
       while (s) {
-            if ((s->segmentType() & (SegmentType::ChordRest)) && s->element(track()))
+            if ((s->segmentType() & (Segment::Type::ChordRest)) && s->element(track()))
                   break;
             s = s->prev1();
             }
@@ -72,7 +72,7 @@ void Glissando::layout()
             return;
             }
       ChordRest* cr = static_cast<ChordRest*>(s->element(track()));
-      if (cr == 0 || cr->type() != ElementType::CHORD) {
+      if (cr == 0 || cr->type() != Element::Type::CHORD) {
             qDebug("no first note for glissando found, track %d", track());
             return;
             }
@@ -174,7 +174,7 @@ void Glissando::read(XmlReader& e)
                   _text = e.readElementText();
                   }
             else if (tag == "subtype")
-                  _glissandoType = GlissandoType(e.readInt());
+                  _glissandoType = Type(e.readInt());
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -202,10 +202,10 @@ void Glissando::draw(QPainter* painter) const
       qreal wi = asin(-h / l) * 180.0 / M_PI;
       painter->rotate(-wi);
 
-      if (glissandoType() == GlissandoType::STRAIGHT) {
+      if (glissandoType() == Type::STRAIGHT) {
             painter->drawLine(QLineF(0.0, 0.0, l, 0.0));
             }
-      else if (glissandoType() == GlissandoType::WAVY) {
+      else if (glissandoType() == Type::WAVY) {
             QRectF b = symBbox(SymId::wiggleTrill);
             qreal w  = symWidth(SymId::wiggleTrill);
             int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
@@ -220,7 +220,7 @@ void Glissando::draw(QPainter* painter) const
             if (r.width() < l) {
                   qreal yOffset = r.height() + r.y();       // find text descender height
                   // raise text slightly above line and slightly more with WAVY than with STRAIGHT
-                  yOffset += _spatium * (glissandoType() == GlissandoType::WAVY ? 0.3 : 0.05);
+                  yOffset += _spatium * (glissandoType() == Type::WAVY ? 0.3 : 0.05);
                   painter->setFont(f);
                   qreal x = (l - r.width()) * 0.5;
                   painter->drawText(QPointF(x, -yOffset), _text);
@@ -253,7 +253,7 @@ void Glissando::setSize(const QSizeF& s)
 //   undoSetGlissandoType
 //---------------------------------------------------------
 
-void Glissando::undoSetGlissandoType(GlissandoType t)
+void Glissando::undoSetGlissandoType(Type t)
       {
       score()->undoChangeProperty(this, P_ID::GLISS_TYPE, int(t));
       }
@@ -303,7 +303,7 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case P_ID::GLISS_TYPE:
-                  setGlissandoType(GlissandoType(v.toInt()));
+                  setGlissandoType(Type(v.toInt()));
                   break;
             case P_ID::GLISS_TEXT:
                   setText(v.toString());
@@ -328,7 +328,7 @@ QVariant Glissando::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::GLISS_TYPE:
-                  return int(GlissandoType::STRAIGHT);
+                  return int(Type::STRAIGHT);
             case P_ID::GLISS_TEXT:
                   return "gliss.";
             case P_ID::GLISS_SHOW_TEXT:

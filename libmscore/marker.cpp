@@ -24,7 +24,7 @@ namespace Ms {
 Marker::Marker(Score* s)
    : Text(s)
       {
-      _markerType = MarkerType::FINE;
+      _markerType = Type::FINE;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setTextStyleType(TextStyleType::REPEAT);
       }
@@ -33,46 +33,46 @@ Marker::Marker(Score* s)
 //   setMarkerType
 //---------------------------------------------------------
 
-void Marker::setMarkerType(MarkerType t)
+void Marker::setMarkerType(Type t)
       {
       _markerType = t;
       switch (t) {
-            case MarkerType::SEGNO:
+            case Type::SEGNO:
                   setText("<sym>segno</sym>");
                   setLabel("segno");
                   break;
 
-            case MarkerType::VARSEGNO:
+            case Type::VARSEGNO:
                   setText("<sym>segnoSerpent1</sym>");
                   setLabel("varsegno");
                   break;
 
-            case MarkerType::CODA:
+            case Type::CODA:
                   setText("<sym>coda</sym>");
                   setLabel("codab");
                   break;
 
-            case MarkerType::VARCODA:
+            case Type::VARCODA:
                   setText("<sym>codaSquare</sym>");
                   setLabel("varcoda");
                   break;
 
-            case MarkerType::CODETTA:
+            case Type::CODETTA:
                   setText("<sym>coda</sym><sym>coda</sym>");
                   setLabel("codetta");
                   break;
 
-            case MarkerType::FINE:
+            case Type::FINE:
                   setText("Fine");
                   setLabel("fine");
                   break;
 
-            case MarkerType::TOCODA:
+            case Type::TOCODA:
                   setText("To Coda");
                   setLabel("coda");
                   break;
 
-            case MarkerType::USER:
+            case Type::USER:
                   break;
 
             default:
@@ -117,24 +117,24 @@ void Marker::adjustReadPos()
 //   markerType
 //---------------------------------------------------------
 
-MarkerType Marker::markerType(const QString& s) const
+Marker::Type Marker::markerType(const QString& s) const
       {
       if (s == "segno")
-            return MarkerType::SEGNO;
+            return Type::SEGNO;
       else if (s == "varsegno")
-            return MarkerType::VARSEGNO;
+            return Type::VARSEGNO;
       else if (s == "codab")
-            return MarkerType::CODA;
+            return Type::CODA;
       else if (s == "varcoda")
-            return MarkerType::VARCODA;
+            return Type::VARCODA;
       else if (s == "codetta")
-            return MarkerType::CODETTA;
+            return Type::CODETTA;
       else if (s == "fine")
-            return MarkerType::FINE;
+            return Type::FINE;
       else if (s == "coda")
-            return MarkerType::TOCODA;
+            return Type::TOCODA;
       else
-            return MarkerType::USER;
+            return Type::USER;
       }
 
 //---------------------------------------------------------
@@ -143,7 +143,7 @@ MarkerType Marker::markerType(const QString& s) const
 
 void Marker::read(XmlReader& e)
       {
-      MarkerType mt = MarkerType::SEGNO;
+      Type mt = Type::SEGNO;
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -184,7 +184,7 @@ void Marker::undoSetLabel(const QString& s)
 //   undoSetMarkerType
 //---------------------------------------------------------
 
-void Marker::undoSetMarkerType(MarkerType t)
+void Marker::undoSetMarkerType(Type t)
       {
       score()->undoChangeProperty(this, P_ID::MARKER_TYPE, int(t));
       }
@@ -217,7 +217,7 @@ bool Marker::setProperty(P_ID propertyId, const QVariant& v)
                   setLabel(v.toString());
                   break;
             case P_ID::MARKER_TYPE:
-                  setMarkerType(MarkerType(v.toInt()));
+                  setMarkerType(Type(v.toInt()));
                   break;
             default:
                   if (!Text::setProperty(propertyId, v))
@@ -239,7 +239,7 @@ QVariant Marker::propertyDefault(P_ID propertyId) const
                   return QString();
 
             case P_ID::MARKER_TYPE:
-                  return int(MarkerType::FINE);
+                  return int(Type::FINE);
 
             default:
                   break;

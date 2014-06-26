@@ -29,16 +29,16 @@ class StemSlash : public Element {
       QLineF line;
 
    public:
-      StemSlash(Score* s) : Element(s) {}
+      StemSlash(Score* s) : Element(s)   {}
 
-      virtual qreal mag() const        { return parent()->mag(); }
+      virtual qreal mag() const          { return parent()->mag(); }
       void setLine(const QLineF& l);
 
-      virtual StemSlash* clone() const { return new StemSlash(*this); }
-      virtual ElementType type() const { return ElementType::STEM_SLASH; }
+      virtual StemSlash* clone() const   { return new StemSlash(*this); }
+      virtual Element::Type type() const { return Element::Type::STEM_SLASH; }
       virtual void draw(QPainter*) const;
       virtual void layout();
-      Chord* chord() const { return (Chord*)parent(); }
+      Chord* chord() const               { return (Chord*)parent(); }
       };
 
 

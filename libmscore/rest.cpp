@@ -40,7 +40,7 @@ Rest::Rest(Score* s)
   : ChordRest(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      _beamMode  = BeamMode::NONE;
+      _beamMode  = Beam::Mode::NONE;
       dotline    = -1;
       _sym       = SymId::restQuarter;
       }
@@ -49,7 +49,7 @@ Rest::Rest(Score* s, const TDuration& d)
   : ChordRest(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      _beamMode  = BeamMode::NONE;
+      _beamMode  = Beam::Mode::NONE;
       dotline    = -1;
       _sym       = SymId::restQuarter;
       setDurationType(d);
@@ -166,33 +166,33 @@ QRectF Rest::drag(EditData* data)
 
 bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      ElementType type = e->type();
+      Element::Type type = e->type();
       if (
-         (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
-         || (type == ElementType::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
-         || (type == ElementType::ARTICULATION && static_cast<Articulation*>(e)->isFermata())
-         || (type == ElementType::CLEF)
-         || (type == ElementType::STAFF_TEXT)
-         || (type == ElementType::BAR_LINE)
-         || (type == ElementType::BREATH)
-         || (type == ElementType::CHORD)
-         || (type == ElementType::STAFF_STATE)
-         || (type == ElementType::INSTRUMENT_CHANGE)
-         || (type == ElementType::DYNAMIC)
-         || (type == ElementType::HARMONY)
-         || (type == ElementType::TEMPO_TEXT)
-         || (type == ElementType::STAFF_TEXT)
-         || (type == ElementType::REHEARSAL_MARK)
-         || (type == ElementType::FRET_DIAGRAM)
-         || (type == ElementType::SYMBOL)
+         (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM64)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
+         || (type == Element::Type::ARTICULATION && static_cast<Articulation*>(e)->isFermata())
+         || (type == Element::Type::CLEF)
+         || (type == Element::Type::STAFF_TEXT)
+         || (type == Element::Type::BAR_LINE)
+         || (type == Element::Type::BREATH)
+         || (type == Element::Type::CHORD)
+         || (type == Element::Type::STAFF_STATE)
+         || (type == Element::Type::INSTRUMENT_CHANGE)
+         || (type == Element::Type::DYNAMIC)
+         || (type == Element::Type::HARMONY)
+         || (type == Element::Type::TEMPO_TEXT)
+         || (type == Element::Type::STAFF_TEXT)
+         || (type == Element::Type::REHEARSAL_MARK)
+         || (type == Element::Type::FRET_DIAGRAM)
+         || (type == Element::Type::SYMBOL)
          ) {
             return true;
             }
-      if(type == ElementType::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
+      if(type == Element::Type::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
             return true;
       return false;
       }
@@ -205,7 +205,7 @@ Element* Rest::drop(const DropData& data)
       {
       Element* e = data.element;
       switch (e->type()) {
-            case ElementType::ARTICULATION:
+            case Element::Type::ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
                   if (!a->isFermata()
@@ -216,11 +216,11 @@ Element* Rest::drop(const DropData& data)
                   }
                   return e;
 
-            case ElementType::CHORD:
+            case Element::Type::CHORD:
                   {
-                  Chord* c      = static_cast<Chord*>(e);
-                  Note* n       = c->upNote();
-                  Direction dir = c->stemDirection();
+                  Chord* c              = static_cast<Chord*>(e);
+                  Note* n               = c->upNote();
+                  MScore::Direction dir = c->stemDirection();
                   // score()->select(0, SelectType::SINGLE, 0);
                   NoteVal nval;
                   nval.pitch = n->pitch();
@@ -237,7 +237,7 @@ Element* Rest::drop(const DropData& data)
                   delete e;
                   }
                   break;
-            case ElementType::REPEAT_MEASURE:
+            case Element::Type::REPEAT_MEASURE:
                   delete e;
                   if (durationType().type() == TDuration::DurationType::V_MEASURE) {
                         measure()->cmdInsertRepeatMeasure(staffIdx());
@@ -534,7 +534,7 @@ void Rest::setMMWidth(qreal val)
 
 void Rest::reset()
       {
-      score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(BeamMode::NONE));
+      score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::NONE));
       ChordRest::reset();
       }
 

@@ -56,7 +56,7 @@ void Box::layout()
       {
       MeasureBase::layout();
       foreach (Element* el, _el) {
-            if (el->type() != ElementType::LAYOUT_BREAK)
+            if (el->type() != Element::Type::LAYOUT_BREAK)
                   el->layout();
             }
       }
@@ -96,7 +96,7 @@ void Box::draw(QPainter* painter) const
 void Box::startEdit(MuseScoreView*, const QPointF&)
       {
       editMode = true;
-      if (type() == ElementType::HBOX)
+      if (type() == Element::Type::HBOX)
             undoPushProperty(P_ID::BOX_WIDTH);
       else
             undoPushProperty(P_ID::BOX_HEIGHT);
@@ -117,7 +117,7 @@ bool Box::edit(MuseScoreView*, int /*grip*/, int /*key*/, Qt::KeyboardModifiers,
 
 void Box::editDrag(const EditData& ed)
       {
-      if (type() == ElementType::VBOX) {
+      if (type() == Element::Type::VBOX) {
             _boxHeight = Spatium((ed.pos.y() - abbox().y()) / spatium());
             if (ed.vRaster) {
                   qreal vRaster = 1.0 / MScore::vRaster();
@@ -159,9 +159,9 @@ void Box::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       *grips = 1;
       *defaultGrip = 1;
       QRectF r(abbox());
-      if (type() == ElementType::HBOX)
+      if (type() == Element::Type::HBOX)
             grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
-      else if (type() == ElementType::VBOX)
+      else if (type() == Element::Type::VBOX)
             grip[0].translate(QPointF(r.x() + r.width() * .5, r.bottom()));
       }
 
@@ -216,7 +216,7 @@ void Box::read(XmlReader& e)
                   _bottomMargin = e.readDouble();
             else if (tag == "Text") {
                   Text* t;
-                  if (type() == ElementType::TBOX) {
+                  if (type() == Element::Type::TBOX) {
                         t = static_cast<TBox*>(this)->getText();
                         t->read(e);
                         }
@@ -274,7 +274,7 @@ void Box::read(XmlReader& e)
       // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
       // for backward compatibility set them to 0 in all other cases
 
-      if (score()->mscVersion() < 117 && (type() == ElementType::HBOX || type() == ElementType::VBOX) && !keepMargins)  {
+      if (score()->mscVersion() < 117 && (type() == Element::Type::HBOX || type() == Element::Type::VBOX) && !keepMargins)  {
             _leftMargin = _rightMargin = _topMargin = _bottomMargin = 0.0;
             }
       }
@@ -286,7 +286,7 @@ void Box::read(XmlReader& e)
 
 void Box::add(Element* e)
       {
-      if (e->type() == ElementType::TEXT)
+      if (e->type() == Element::Type::TEXT)
             static_cast<Text*>(e)->setLayoutToParentWidth(true);
       MeasureBase::add(e);
       }
@@ -397,7 +397,7 @@ HBox::HBox(Score* score)
 
 void HBox::layout()
       {
-      if (parent() && parent()->type() == ElementType::VBOX) {
+      if (parent() && parent()->type() == Element::Type::VBOX) {
             VBox* vb = static_cast<VBox*>(parent());
             qreal x = vb->leftMargin() * MScore::DPMM;
             qreal y = vb->topMargin() * MScore::DPMM;
@@ -429,17 +429,17 @@ void HBox::layout2()
 
 bool Box::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      ElementType type = e->type();
+      Element::Type type = e->type();
       if(e->flag(ElementFlag::ON_STAFF))
             return false;
       switch(type) {
-            case ElementType::LAYOUT_BREAK:
-            case ElementType::TEXT:
-            case ElementType::STAFF_TEXT:
-            case ElementType::IMAGE:
-            case ElementType::SYMBOL:
+            case Element::Type::LAYOUT_BREAK:
+            case Element::Type::TEXT:
+            case Element::Type::STAFF_TEXT:
+            case Element::Type::IMAGE:
+            case Element::Type::SYMBOL:
                   return true;
-            case ElementType::ICON:
+            case Element::Type::ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case IconType::VFRAME:
                         case IconType::TFRAME:
@@ -466,14 +466,14 @@ Element* Box::drop(const DropData& data)
       if(e->flag(ElementFlag::ON_STAFF))
             return 0;
       switch(e->type()) {
-            case ElementType::LAYOUT_BREAK:
+            case Element::Type::LAYOUT_BREAK:
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
                   if (_pageBreak || _lineBreak) {
                         if (
-                           (lb->layoutBreakType() == LayoutBreak::LayoutBreakType::PAGE && _pageBreak)
-                           || (lb->layoutBreakType() == LayoutBreak::LayoutBreakType::LINE && _lineBreak)
-                           || (lb->layoutBreakType() == LayoutBreak::LayoutBreakType::SECTION && _sectionBreak)
+                           (lb->layoutBreakType() == LayoutBreak::Type::PAGE && _pageBreak)
+                           || (lb->layoutBreakType() == LayoutBreak::Type::LINE && _lineBreak)
+                           || (lb->layoutBreakType() == LayoutBreak::Type::SECTION && _sectionBreak)
                            ) {
                               //
                               // if break already set
@@ -482,7 +482,7 @@ Element* Box::drop(const DropData& data)
                               break;
                               }
                         foreach(Element* elem, _el) {
-                              if (elem->type() == ElementType::LAYOUT_BREAK) {
+                              if (elem->type() == Element::Type::LAYOUT_BREAK) {
                                     score()->undoChangeElement(elem, e);
                                     break;
                                     }
@@ -494,7 +494,7 @@ Element* Box::drop(const DropData& data)
                   score()->undoAddElement(lb);
                   return lb;
                   }
-            case ElementType::STAFF_TEXT:
+            case Element::Type::STAFF_TEXT:
                   {
                   Text* text = new Text(score());
                   text->setTextStyleType(TextStyleType::FRAME);
@@ -505,19 +505,19 @@ Element* Box::drop(const DropData& data)
                   return text;
                   }
 
-            case ElementType::ICON:
+            case Element::Type::ICON:
                   switch(static_cast<Icon*>(e)->iconType()) {
                         case IconType::VFRAME:
-                              score()->insertMeasure(ElementType::VBOX, this);
+                              score()->insertMeasure(Element::Type::VBOX, this);
                               break;
                         case IconType::TFRAME:
-                              score()->insertMeasure(ElementType::TBOX, this);
+                              score()->insertMeasure(Element::Type::TBOX, this);
                               break;
                         case IconType::FFRAME:
-                              score()->insertMeasure(ElementType::FBOX, this);
+                              score()->insertMeasure(Element::Type::FBOX, this);
                               break;
                         case IconType::MEASURE:
-                              score()->insertMeasure(ElementType::MEASURE, this);
+                              score()->insertMeasure(Element::Type::MEASURE, this);
                               break;
                         default:
                               break;
@@ -541,7 +541,7 @@ QRectF HBox::drag(EditData* data)
       QRectF r(canvasBoundingRect());
       qreal diff = data->delta.x();
       qreal x1   = userOff().x() + diff;
-      if (parent()->type() == ElementType::VBOX) {
+      if (parent()->type() == Element::Type::VBOX) {
             VBox* vb = static_cast<VBox*>(parent());
             qreal x2 = parent()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * MScore::DPMM;
             if (x1 < 0.0)
@@ -570,7 +570,7 @@ void HBox::endEditDrag()
 
 bool HBox::isMovable() const
       {
-      return parent() && (parent()->type() == ElementType::HBOX || parent()->type() == ElementType::VBOX);
+      return parent() && (parent()->type() == Element::Type::HBOX || parent()->type() == Element::Type::VBOX);
       }
 
 //---------------------------------------------------------
@@ -635,7 +635,7 @@ void FBox::layout()
 void FBox::add(Element* e)
       {
       e->setParent(this);
-      if (e->type() == ElementType::FRET_DIAGRAM) {
+      if (e->type() == Element::Type::FRET_DIAGRAM) {
 //            FretDiagram* fd = static_cast<FretDiagram*>(e);
 //            fd->setFlag(ElementFlag::MOVABLE, false);
             }

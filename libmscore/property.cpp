@@ -260,49 +260,49 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   {
                   QString value(e.readElementText());
                   if (value == "up")
-                        return QVariant(int(Direction::UP));
+                        return QVariant(int(MScore::Direction::UP));
                   else if (value == "down")
-                        return QVariant(int(Direction::DOWN));
+                        return QVariant(int(MScore::Direction::DOWN));
                   else if (value == "auto")
-                        return QVariant(int(Direction::AUTO));
+                        return QVariant(int(MScore::Direction::AUTO));
                   }
                   break;
             case P_TYPE::DIRECTION_H:
                   {
                   QString value(e.readElementText());
                   if (value == "left" || value == "1")
-                        return QVariant(int(DirectionH::DH_LEFT));
+                        return QVariant(int(MScore::DirectionH::LEFT));
                   else if (value == "right" || value == "2")
-                        return QVariant(int(DirectionH::DH_RIGHT));
+                        return QVariant(int(MScore::DirectionH::RIGHT));
                   else if (value == "auto")
-                        return QVariant(int(DirectionH::DH_AUTO));
+                        return QVariant(int(MScore::DirectionH::AUTO));
                   }
                   break;
             case P_TYPE::LAYOUT_BREAK: {
                   QString value(e.readElementText());
                   if (value == "line")
-                        return QVariant(int(LayoutBreak::LayoutBreakType::LINE));
+                        return QVariant(int(LayoutBreak::Type::LINE));
                   if (value == "page")
-                        return QVariant(int(LayoutBreak::LayoutBreakType::PAGE));
+                        return QVariant(int(LayoutBreak::Type::PAGE));
                   if (value == "section")
-                        return QVariant(int(LayoutBreak::LayoutBreakType::SECTION));
+                        return QVariant(int(LayoutBreak::Type::SECTION));
                   qDebug("getProperty: invalid P_TYPE::LAYOUT_BREAK: <%s>", qPrintable(value));
                   }
                   break;
             case P_TYPE::VALUE_TYPE: {
                   QString value(e.readElementText());
                   if (value == "offset")
-                        return QVariant(int(ValueType::OFFSET_VAL));
+                        return QVariant(int(Note::ValueType::OFFSET_VAL));
                   else if (value == "user")
-                        return QVariant(int(ValueType::USER_VAL));
+                        return QVariant(int(Note::ValueType::USER_VAL));
                   }
                   break;
             case P_TYPE::PLACEMENT: {
                   QString value(e.readElementText());
                   if (value == "above")
-                        return QVariant(int(Placement::ABOVE));
+                        return QVariant(int(Element::Placement::ABOVE));
                   else if (value == "below")
-                        return QVariant(int(Placement::BELOW));
+                        return QVariant(int(Element::Placement::BELOW));
                   }
                   break;
             case P_TYPE::BEAM_MODE:             // TODO

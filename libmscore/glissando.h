@@ -20,16 +20,8 @@ namespace Ms {
 class Note;
 
 //---------------------------------------------------------
-//   GlissandoType
-//---------------------------------------------------------
-
-enum class GlissandoType : char {
-      STRAIGHT, WAVY
-      };
-
-//---------------------------------------------------------
 //   @@ Glissando
-//   @P glissandoType  Ms::GlissandoType (STRAIGHT, WAVY)
+//   @P glissandoType  Ms::Glissando::Type (STRAIGHT, WAVY)
 //   @P text           QString
 //   @P showText       bool
 //---------------------------------------------------------
@@ -37,11 +29,18 @@ enum class GlissandoType : char {
 class Glissando : public Element {
       Q_OBJECT
 
-      Q_PROPERTY(GlissandoType glissandoType READ glissandoType  WRITE undoSetGlissandoType)
-      Q_PROPERTY(QString text                READ text     WRITE undoSetText)
-      Q_PROPERTY(bool showText               READ showText WRITE undoSetShowText)
+      Q_PROPERTY(Ms::Glissando::Type glissandoType READ glissandoType  WRITE undoSetGlissandoType)
+      Q_PROPERTY(QString text                      READ text     WRITE undoSetText)
+      Q_PROPERTY(bool showText                     READ showText WRITE undoSetShowText)
+      Q_ENUMS(Type)
 
-      GlissandoType _glissandoType;
+  public:
+      enum class Type : char {
+            STRAIGHT, WAVY
+            };
+
+   private:
+      Type _glissandoType;
       QLineF line;
       QString _text;
       bool _showText;
@@ -51,9 +50,9 @@ class Glissando : public Element {
       Glissando(const Glissando&);
 
       virtual Glissando* clone() const       { return new Glissando(*this); }
-      virtual ElementType type() const       { return ElementType::GLISSANDO; }
-      GlissandoType glissandoType() const    { return _glissandoType; }
-      void setGlissandoType(GlissandoType v) { _glissandoType = v;    }
+      virtual Element::Type type() const     { return Element::Type::GLISSANDO; }
+      Type glissandoType() const             { return _glissandoType; }
+      void setGlissandoType(Type v)          { _glissandoType = v;    }
       virtual Space space() const;
 
       virtual void draw(QPainter*) const;
@@ -68,7 +67,7 @@ class Glissando : public Element {
       bool showText() const          { return _showText; }
       void setShowText(bool v)       { _showText = v;    }
 
-      void undoSetGlissandoType(GlissandoType);
+      void undoSetGlissandoType(Type);
       void undoSetText(const QString&);
       void undoSetShowText(bool);
 
@@ -80,7 +79,7 @@ class Glissando : public Element {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::GlissandoType);
+Q_DECLARE_METATYPE(Ms::Glissando::Type);
 
 #endif
 

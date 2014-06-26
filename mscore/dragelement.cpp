@@ -29,7 +29,7 @@ bool ScoreView::testElementDragTransition(QMouseEvent* ev)
       {
       if (curElement == 0 || !curElement->isMovable() || QApplication::mouseButtons() != Qt::LeftButton)
             return false;
-      if (curElement->type() == ElementType::MEASURE) {
+      if (curElement->type() == Element::Type::MEASURE) {
             System* dragSystem = (System*)(curElement->parent());
             int staffIdx  = getStaff(dragSystem, data.startMove);
             dragStaff = score()->staff(staffIdx);
@@ -50,7 +50,7 @@ void ScoreView::startDrag()
       data.startMove  -= dragElement->userOff();
       _score->startCmd();
 
-      if (dragElement->type() == ElementType::MEASURE) {
+      if (dragElement->type() == Element::Type::MEASURE) {
             staffUserDist = dragStaff->userDist();
             }
       else {
@@ -79,7 +79,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       data.delta   = pt;
       data.pos     = toLogical(ev->pos());
 
-      if (dragElement->type() == ElementType::MEASURE) {
+      if (dragElement->type() == Element::Type::MEASURE) {
             qreal dist      = dragStaff->userDist() + delta.y();
             int partStaves  = dragStaff->part()->nstaves();
             StyleIdx i      = (partStaves > 1) ? StyleIdx::akkoladeDistance : StyleIdx::staffDistance;
@@ -127,7 +127,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
 
 void ScoreView::endDrag()
       {
-      if (dragElement->type() == ElementType::MEASURE) {
+      if (dragElement->type() == Element::Type::MEASURE) {
             qreal userDist = dragStaff->userDist();
             dragStaff->setUserDist(staffUserDist);
             score()->undo(new ChangeStaffUserDist(dragStaff, userDist));

@@ -25,15 +25,15 @@ class Segment;
 //   @@ Dynamic
 ///    dynamics marker; determines midi velocity
 //
-//   @P range  Ms::DynamicRange (STAFF, PART, SYSTEM)
+//   @P range  Ms::Dynamic::Range (STAFF, PART, SYSTEM)
 //-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
       Q_OBJECT
-      Q_PROPERTY(DynamicRange range READ dynRange  WRITE undoSetDynRange)
+      Q_PROPERTY(Ms::Dynamic::Range range  READ dynRange  WRITE undoSetDynRange)
 
    public:
-      enum class DynamicType : char {
+      enum class Type : char {
             OTHER,
             PPPPPP,
             PPPPP,
@@ -65,27 +65,31 @@ class Dynamic : public Text {
             Z
             };
 
+      enum class Range : char {
+            STAFF, PART, SYSTEM
+            };
+
    private:
-      DynamicType _dynamicType;
+      Type _dynamicType;
 
       mutable QPointF dragOffset;
-      int _velocity;          // associated midi velocity 0-127
-      DynamicRange _dynRange;   // STAFF, PART, SYSTEM
+      int _velocity;     // associated midi velocity 0-127
+      Range _dynRange;   // STAFF, PART, SYSTEM
 
       virtual QRectF drag(EditData*) override;
 
    public:
       Dynamic(Score*);
       Dynamic(const Dynamic&);
-      virtual Dynamic* clone() const override   { return new Dynamic(*this); }
-      virtual ElementType type() const override { return ElementType::DYNAMIC; }
-      Segment* segment() const                  { return (Segment*)parent(); }
-      Measure* measure() const                  { return (Measure*)parent()->parent(); }
+      virtual Dynamic* clone() const override     { return new Dynamic(*this); }
+      virtual Element::Type type() const override { return Element::Type::DYNAMIC; }
+      Segment* segment() const                    { return (Segment*)parent(); }
+      Measure* measure() const                    { return (Measure*)parent()->parent(); }
 
-      void setDynamicType(DynamicType val)      { _dynamicType = val; }
+      void setDynamicType(Type val)      { _dynamicType = val; }
       void setDynamicType(const QString&);
       QString dynamicTypeName() const;
-      DynamicType dynamicType() const           { return _dynamicType; }
+      Type dynamicType() const           { return _dynamicType; }
 
       virtual void layout() override;
       virtual void write(Xml& xml) const override;
@@ -98,9 +102,9 @@ class Dynamic : public Text {
 
       void setVelocity(int v);
       int velocity() const;
-      DynamicRange dynRange() const    { return _dynRange; }
-      void setDynRange(DynamicRange t) { _dynRange = t;    }
-      void undoSetDynRange(DynamicRange t);
+      Range dynRange() const    { return _dynRange; }
+      void setDynRange(Range t) { _dynRange = t;    }
+      void undoSetDynRange(Range t);
 
       virtual QLineF dragAnchor() const override;
 
@@ -111,4 +115,7 @@ class Dynamic : public Text {
 
 
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::Dynamic::Range);
+
 #endif

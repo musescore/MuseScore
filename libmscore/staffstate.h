@@ -44,8 +44,8 @@ class StaffState : public Element {
 
    public:
       StaffState(Score*);
-      virtual StaffState* clone() const { return new StaffState(*this); }
-      virtual ElementType type() const   { return ElementType::STAFF_STATE; }
+      virtual StaffState* clone() const  { return new StaffState(*this); }
+      virtual Element::Type type() const { return Element::Type::STAFF_STATE; }
 
       void setStaffStateType(const QString&);
       void setStaffStateType(StaffStateType st) { _staffStateType = st; }

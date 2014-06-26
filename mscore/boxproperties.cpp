@@ -38,11 +38,11 @@ BoxProperties::BoxProperties(Box* b, QWidget* parent)
 
       qreal _spatium = b->spatium();
 
-      if (b->type() == ElementType::HBOX) {     // enable width and set it to box width
+      if (b->type() == Element::Type::HBOX) {     // enable width and set it to box width
             frameWidth->setEnabled(true);
             frameWidth->setValue(b->boxWidth().val());
             }
-      if(b->type() == ElementType::VBOX) {     // enable height and set it to box height
+      if(b->type() == Element::Type::VBOX) {     // enable height and set it to box height
             frameHeight->setEnabled(true);
             frameHeight->setValue(b->boxHeight().val());
             }
@@ -62,7 +62,7 @@ BoxProperties::BoxProperties(Box* b, QWidget* parent)
 
 void BoxProperties::ok()
       {
-      ElementType type = _box->type();
+      Element::Type type = _box->type();
       // scan selection and update each element of the same type of this one
       qreal _spatium = _box->spatium();
       foreach (Element* elem, _box->score()->selection().elements()) {

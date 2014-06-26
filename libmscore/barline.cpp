@@ -94,7 +94,7 @@ QPointF BarLine::pagePos() const
       if (parent() == 0)
             return pos();
       System* system;
-      if (parent()->type() != ElementType::SEGMENT)
+      if (parent()->type() != Element::Type::SEGMENT)
             system = static_cast<System*>(parent());
       else
             system = static_cast<Segment*>(parent())->measure()->system();
@@ -124,7 +124,7 @@ QPointF BarLine::canvasPos() const
       QPointF p(pagePos());
       Element* e = parent();
       while (e) {
-            if (e->type() == ElementType::PAGE) {
+            if (e->type() == Element::Type::PAGE) {
                   p += e->pos();
                   break;
                   }
@@ -150,7 +150,7 @@ void BarLine::getY(qreal* y1, qreal* y2) const
             Measure* measure;
             System* system;
             qreal yp = 0.0;
-            if (parent()->type() == ElementType::SEGMENT) {
+            if (parent()->type() == Element::Type::SEGMENT) {
                   Segment* segment = static_cast<Segment*>(parent());
                   measure = segment->measure();
                   system  = measure->system();
@@ -229,7 +229,7 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
             drawSymbol(SymId::repeatDot, painter, QPointF(x, 2.0 * _spatium));
             drawSymbol(SymId::repeatDot, painter, QPointF(x, 3.0 * _spatium));
             }
-      else if (parent()->type() == ElementType::SEGMENT) {
+      else if (parent()->type() == Element::Type::SEGMENT) {
             System* s = static_cast<Segment*>(parent())->measure()->system();
             int staffIdx1    = staffIdx();
             int staffIdx2    = staffIdx1 + _span - 1;
@@ -459,7 +459,7 @@ void BarLine::read(XmlReader& e)
                               }
                         setBarLineType(ct);
                         }
-                  if (parent() && parent()->type() == ElementType::SEGMENT) {
+                  if (parent() && parent()->type() == Element::Type::SEGMENT) {
                         Measure* m = static_cast<Segment*>(parent())->measure();
                         if (barLineType() != m->endBarLineType())
                               _customSubtype = true;
@@ -501,11 +501,11 @@ Space BarLine::space() const
 
 bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      ElementType type = e->type();
-      if (type == ElementType::BAR_LINE) {
-            if (parent() && parent()->type() == ElementType::SEGMENT)
+      Element::Type type = e->type();
+      if (type == Element::Type::BAR_LINE) {
+            if (parent() && parent()->type() == Element::Type::SEGMENT)
                   return true;
-            if (parent() && parent()->type() == ElementType::SYSTEM) {
+            if (parent() && parent()->type() == Element::Type::SYSTEM) {
                   BarLine* b = static_cast<BarLine*>(e);
                   return (b->barLineType() == BarLineType::BROKEN || b->barLineType() == BarLineType::DOTTED
                      || b->barLineType() == BarLineType::NORMAL || b->barLineType() == BarLineType::DOUBLE
@@ -513,10 +513,10 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
                   }
             }
       else {
-            return (type == ElementType::ARTICULATION
+            return (type == Element::Type::ARTICULATION
                && parent()
-               && parent()->type() == ElementType::SEGMENT
-               && static_cast<Segment*>(parent())->segmentType() == SegmentType::EndBarLine);
+               && parent()->type() == Element::Type::SEGMENT
+               && static_cast<Segment*>(parent())->segmentType() == Segment::Type::EndBarLine);
             }
       return false;
       }
@@ -528,8 +528,8 @@ bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
 Element* BarLine::drop(const DropData& data)
       {
       Element* e = data.element;
-      ElementType type = e->type();
-      if (type == ElementType::BAR_LINE) {
+      Element::Type type = e->type();
+      if (type == Element::Type::BAR_LINE) {
             BarLine* bl = static_cast<BarLine*>(e);
             BarLineType st = bl->barLineType();
             // if no change in subtype or no change in span, do nothing
@@ -538,7 +538,7 @@ Element* BarLine::drop(const DropData& data)
                   return 0;
                   }
             // system left-side bar line
-            if (parent()->type() == ElementType::SYSTEM) {
+            if (parent()->type() == Element::Type::SYSTEM) {
                   BarLine* b = static_cast<System*>(parent())->barLine();
                   score()->undoChangeProperty(b, P_ID::SUBTYPE, int(bl->barLineType()));
                   delete e;
@@ -584,7 +584,7 @@ Element* BarLine::drop(const DropData& data)
                   }
             m->drop(data);
             }
-      else if (type == ElementType::ARTICULATION) {
+      else if (type == Element::Type::ARTICULATION) {
             Articulation* atr = static_cast<Articulation*>(e);
             atr->setParent(this);
             atr->setTrack(track());
@@ -731,7 +731,7 @@ void BarLine::endEditDrag()
       int staffIdx1 = staffIdx();
       int staffIdx2;
       System* syst;
-      if (parent()->type() == ElementType::SYSTEM) {
+      if (parent()->type() == Element::Type::SYSTEM) {
             syst = static_cast<System*>(parent());
             }
       else {
@@ -865,7 +865,7 @@ void BarLine::layout()
       getY(&y1, &y2);
 
       // if bar line does not belong to a system, has a staff and staff is set to hide bar lines, set null bbox
-      if (parent() && parent()->type() != ElementType::SYSTEM && staff() && !staff()->staffType()->showBarlines())
+      if (parent() && parent()->type() != Element::Type::SYSTEM && staff() && !staff()->staffType()->showBarlines())
             setbbox(QRectF());
 
       // bar lines not hidden
@@ -912,12 +912,12 @@ void BarLine::layout()
       // in any case, lay out attached elements
       foreach(Element* e, _el) {
             e->layout();
-            if (e->type() == ElementType::ARTICULATION) {
-                  Articulation* a   = static_cast<Articulation*>(e);
-                  Direction dir     = a->direction();
-                  qreal distance    = 0.5 * spatium();
-                  qreal x           = width() * .5;
-                  if (dir == Direction::DOWN) {
+            if (e->type() == Element::Type::ARTICULATION) {
+                  Articulation* a       = static_cast<Articulation*>(e);
+                  MScore::Direction dir = a->direction();
+                  qreal distance        = 0.5 * spatium();
+                  qreal x               = width() * .5;
+                  if (dir == MScore::Direction::DOWN) {
                         qreal botY = y2 + distance;
                         a->setPos(QPointF(x, botY));
                         }
@@ -947,7 +947,7 @@ QPainterPath BarLine::shape() const
 
 int BarLine::tick() const
       {
-      return (parent() && parent()->type() == ElementType::SEGMENT)
+      return (parent() && parent()->type() == Element::Type::SEGMENT)
          ? static_cast<Segment*>(parent())->tick() : 0;
       }
 
@@ -995,13 +995,13 @@ void BarLine::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void BarLine::add(Element* e)
       {
-      if (parent() && parent()->type() != ElementType::SEGMENT) {
+      if (parent() && parent()->type() != Element::Type::SEGMENT) {
             delete e;
             return;
             }
       e->setParent(this);
       switch(e->type()) {
-            case ElementType::ARTICULATION:
+            case Element::Type::ARTICULATION:
                   _el.push_back(e);
                   setGenerated(false);
                   if (parent() && parent()->parent())
@@ -1021,7 +1021,7 @@ void BarLine::add(Element* e)
 void BarLine::remove(Element* e)
       {
       switch(e->type()) {
-            case ElementType::ARTICULATION:
+            case Element::Type::ARTICULATION:
                   if (!_el.remove(e))
                         qDebug("BarLine::remove(): cannot find %s", e->name());
                   break;
@@ -1104,7 +1104,7 @@ QVariant BarLine::propertyDefault(P_ID propertyId) const
       switch(propertyId) {
             case P_ID::SUBTYPE:
                   // default subtype is the subtype of the measure, if any
-                  if (parent() && parent()->type() == ElementType::SEGMENT && static_cast<Segment*>(parent())->measure() )
+                  if (parent() && parent()->type() == Element::Type::SEGMENT && static_cast<Segment*>(parent())->measure() )
                       return int(static_cast<Segment*>(parent())->measure()->endBarLineType());
                   return int(BarLineType::NORMAL);
             case P_ID::BARLINE_SPAN:

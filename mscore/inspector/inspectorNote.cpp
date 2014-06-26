@@ -34,21 +34,21 @@ InspectorNote::InspectorNote(QWidget* parent)
       c.setupUi(addWidget());
       n.setupUi(addWidget());
 
-      static const NoteHeadGroup heads[] = {
-            NoteHeadGroup::HEAD_NORMAL,
-            NoteHeadGroup::HEAD_CROSS,
-            NoteHeadGroup::HEAD_DIAMOND,
-            NoteHeadGroup::HEAD_TRIANGLE,
-            NoteHeadGroup::HEAD_SLASH,
-            NoteHeadGroup::HEAD_XCIRCLE,
-            NoteHeadGroup::HEAD_DO,
-            NoteHeadGroup::HEAD_RE,
-            NoteHeadGroup::HEAD_MI,
-            NoteHeadGroup::HEAD_FA,
-            NoteHeadGroup::HEAD_SOL,
-            NoteHeadGroup::HEAD_LA,
-            NoteHeadGroup::HEAD_TI,
-            NoteHeadGroup::HEAD_BREVIS_ALT
+      static const NoteHead::Group heads[] = {
+            NoteHead::Group::HEAD_NORMAL,
+            NoteHead::Group::HEAD_CROSS,
+            NoteHead::Group::HEAD_DIAMOND,
+            NoteHead::Group::HEAD_TRIANGLE,
+            NoteHead::Group::HEAD_SLASH,
+            NoteHead::Group::HEAD_XCIRCLE,
+            NoteHead::Group::HEAD_DO,
+            NoteHead::Group::HEAD_RE,
+            NoteHead::Group::HEAD_MI,
+            NoteHead::Group::HEAD_FA,
+            NoteHead::Group::HEAD_SOL,
+            NoteHead::Group::HEAD_LA,
+            NoteHead::Group::HEAD_TI,
+            NoteHead::Group::HEAD_BREVIS_ALT
             };
 
       //
@@ -58,7 +58,7 @@ InspectorNote::InspectorNote(QWidget* parent)
             n.noteHeadGroup->setItemData(i, QVariant(int(heads[i])));
 
       // noteHeadType starts at -1: correct values and count one item more (HEAD_AUTO)
-      for (int i = 0; i <= int(NoteHeadType::HEAD_TYPES); ++i)
+      for (int i = 0; i <= int(NoteHead::Type::HEAD_TYPES); ++i)
             n.noteHeadType->setItemData(i, i-1);
 
       iList = {

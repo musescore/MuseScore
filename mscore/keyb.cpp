@@ -59,7 +59,7 @@ void ScoreView::editCmd(const QString& cmd)
       if (!editObject)
             return;
 
-      if (editObject->type() == ElementType::LYRICS) {
+      if (editObject->type() == Element::Type::LYRICS) {
             if (cmd == "next-lyric")
                   lyricsTab(false, true, false);
             else if (cmd == "prev-lyric")
@@ -145,13 +145,13 @@ void ScoreView::editKey(QKeyEvent* ev)
       if (!editObject)
             return;
 
-      if (editObject->type() == ElementType::LYRICS) {
+      if (editObject->type() == Element::Type::LYRICS) {
             if (editKeyLyrics(ev)) {
                   ev->accept();
                   return;
                   }
             }
-      else if (editObject->type() == ElementType::HARMONY) {
+      else if (editObject->type() == Element::Type::HARMONY) {
 /*
             if (key == Qt::Key_Tab || key == Qt::Key_Backtab) {
                   harmonyTab(key == Qt::Key_Backtab ? true : (modifiers & Qt::ShiftModifier));
@@ -178,7 +178,7 @@ void ScoreView::editKey(QKeyEvent* ev)
                   }
 */
             }
-      else if (editObject->type() == ElementType::FIGURED_BASS) {
+      else if (editObject->type() == Element::Type::FIGURED_BASS) {
             int found = false;
             if (key == Qt::Key_Space && !(modifiers & CONTROL_MODIFIER)) {
                   figuredBassTab(false, modifiers & Qt::ShiftModifier);
@@ -222,7 +222,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       qreal _spatium = editObject->spatium();
 
       qreal xval, yval;
-      if (editObject->type() == ElementType::BEAM) {
+      if (editObject->type() == Element::Type::BEAM) {
             xval = 0.25 * _spatium;
             if (modifiers & Qt::ControlModifier)
                   xval = _spatium;
@@ -334,11 +334,11 @@ void MuseScore::updateInputState(Score* score)
       getAction("grace8after")->setChecked(is.noteType()  == NoteType::GRACE8_AFTER);
       getAction("grace16after")->setChecked(is.noteType() == NoteType::GRACE16_AFTER);
       getAction("grace32after")->setChecked(is.noteType() == NoteType::GRACE32_AFTER);
-      getAction("beam-start")->setChecked(is.beamMode() == BeamMode::BEGIN);
-      getAction("beam-mid")->setChecked(is.beamMode()   == BeamMode::MID);
-      getAction("no-beam")->setChecked(is.beamMode()    == BeamMode::NONE);
-      getAction("beam32")->setChecked(is.beamMode()     == BeamMode::BEGIN32);
-      getAction("auto-beam")->setChecked(is.beamMode()  == BeamMode::AUTO);
+      getAction("beam-start")->setChecked(is.beamMode() == Beam::Mode::BEGIN);
+      getAction("beam-mid")->setChecked(is.beamMode()   == Beam::Mode::MID);
+      getAction("no-beam")->setChecked(is.beamMode()    == Beam::Mode::NONE);
+      getAction("beam32")->setChecked(is.beamMode()     == Beam::Mode::BEGIN32);
+      getAction("auto-beam")->setChecked(is.beamMode()  == Beam::Mode::AUTO);
       getAction("repitch")->setChecked(is.repitchMode());
       }
 }

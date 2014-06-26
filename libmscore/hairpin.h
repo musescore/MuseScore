@@ -14,6 +14,7 @@
 #define __HAIRPIN_H__
 
 #include "element.h"
+#include "dynamic.h"
 #include "line.h"
 #include "mscore.h"
 
@@ -40,9 +41,9 @@ class HairpinSegment : public LineSegment {
    protected:
    public:
       HairpinSegment(Score* s) : LineSegment(s) {}
-      Hairpin* hairpin() const                  { return (Hairpin*)spanner(); }
+      Hairpin* hairpin() const                       { return (Hairpin*)spanner(); }
       virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
-      virtual ElementType type() const override { return ElementType::HAIRPIN_SEGMENT; }
+      virtual Element::Type type() const override    { return Element::Type::HAIRPIN_SEGMENT; }
       virtual void draw(QPainter*) const override;
       virtual void updateGrips(int*, int*, QRectF*) const override;
       virtual void editDrag(const EditData&) override;
@@ -57,27 +58,28 @@ class HairpinSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Hairpin
-//   @P hairpinType  Ms::Hairpin::HairpinType  (CRESCENDO, DECRESCENDO)
+//   @P hairpinType  Ms::Hairpin::Type  (CRESCENDO, DECRESCENDO)
 //   @P veloChange   int
-//   @P dynRange     Ms::DynamicRange          (STAFF, PART, SYSTEM)
+//   @P dynRange     Ms::Dynamic::Range (STAFF, PART, SYSTEM)
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
       Q_OBJECT
-      Q_ENUMS(HairpinType)
+      Q_ENUMS(Type)
+      Q_ENUMS(Ms::Dynamic::Range)
 
    public:
-      enum class HairpinType : char { CRESCENDO, DECRESCENDO };
+      enum class Type : char { CRESCENDO, DECRESCENDO };
 
    private:
-      Q_PROPERTY(HairpinType                 hairpinType READ hairpinType WRITE undoSetHairpinType)
-      Q_PROPERTY(int                         veloChange  READ veloChange  WRITE undoSetVeloChange)
-      Q_PROPERTY(Ms::DynamicRange   dynRange    READ dynRange    WRITE undoSetDynRange)
+      Q_PROPERTY(Ms::Hairpin::Type  hairpinType READ  hairpinType WRITE undoSetHairpinType)
+      Q_PROPERTY(int                veloChange  READ  veloChange  WRITE undoSetVeloChange)
+      Q_PROPERTY(Ms::Dynamic::Range dynRange    READ  dynRange    WRITE undoSetDynRange)
 
       bool  _hairpinCircledTip;
-      HairpinType _hairpinType;
+      Type _hairpinType;
       int _veloChange;
-      DynamicRange _dynRange;
+      Dynamic::Range _dynRange;
       PropertyStyle lineWidthStyle;
 
       Spatium _hairpinHeight;
@@ -88,14 +90,14 @@ class Hairpin : public SLine {
 
    public:
       Hairpin(Score* s);
-      virtual Hairpin* clone() const override   { return new Hairpin(*this); }
-      virtual ElementType type() const override { return ElementType::HAIRPIN;  }
+      virtual Hairpin* clone() const override     { return new Hairpin(*this); }
+      virtual Element::Type type() const override { return Element::Type::HAIRPIN;  }
 
-      HairpinType hairpinType() const      { return _hairpinType; }
-      void setHairpinType(HairpinType val) { _hairpinType = val;  }
-      void undoSetHairpinType(HairpinType);
+      Type hairpinType() const      { return _hairpinType; }
+      void setHairpinType(Type val) { _hairpinType = val;  }
+      void undoSetHairpinType(Type);
 
-      Segment* segment() const             { return (Segment*)parent(); }
+      Segment* segment() const      { return (Segment*)parent(); }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
 
@@ -106,9 +108,9 @@ class Hairpin : public SLine {
       void setVeloChange(int v)        { _veloChange = v;    }
       void undoSetVeloChange(int v);
 
-      DynamicRange dynRange() const          { return _dynRange; }
-      void setDynRange(DynamicRange t)       { _dynRange = t;    }
-      void undoSetDynRange(DynamicRange t);
+      Dynamic::Range dynRange() const        { return _dynRange; }
+      void setDynRange(Dynamic::Range t)     { _dynRange = t;    }
+      void undoSetDynRange(Dynamic::Range t);
 
       Spatium hairpinHeight() const          { return _hairpinHeight; }
       void setHairpinHeight(Spatium val)     { _hairpinHeight = val; }
@@ -132,7 +134,7 @@ class Hairpin : public SLine {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Hairpin::HairpinType);
+Q_DECLARE_METATYPE(Ms::Hairpin::Type);
 
 #endif
 

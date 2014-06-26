@@ -134,10 +134,10 @@ void NoteGroups::resetClicked()
 void NoteGroups::noteClicked(Note* note)
       {
       Chord* chord = note->chord();
-      if (chord->beamMode() == BeamMode::AUTO)
-            chord->setBeamMode(BeamMode::BEGIN);
-      else if (chord->beamMode() == BeamMode::BEGIN)
-            chord->setBeamMode(BeamMode::AUTO);
+      if (chord->beamMode() == Beam::Mode::AUTO)
+            chord->setBeamMode(Beam::Mode::BEGIN);
+      else if (chord->beamMode() == Beam::Mode::BEGIN)
+            chord->setBeamMode(Beam::Mode::AUTO);
       chord->score()->doLayout();
       view8->update();
       view16->update();

@@ -78,7 +78,7 @@ void TestMeasure::insertMeasureMiddle()
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
-      score->insertMeasure(ElementType::MEASURE, m);
+      score->insertMeasure(Element::Type::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure-1.mscx", DIR + "measure-1-ref.mscx"));
       delete score;
@@ -97,7 +97,7 @@ void TestMeasure::insertMeasureBegin()
 
       Measure* m = score->firstMeasure();
       score->startCmd();
-      score->insertMeasure(ElementType::MEASURE, m);
+      score->insertMeasure(Element::Type::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure-2.mscx", DIR + "measure-2-ref.mscx"));
       delete score;
@@ -115,7 +115,7 @@ void TestMeasure::insertMeasureEnd()
             e->score()->doLayout();
 
       score->startCmd();
-      score->insertMeasure(ElementType::MEASURE, 0);
+      score->insertMeasure(Element::Type::MEASURE, 0);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure-3.mscx", DIR + "measure-3-ref.mscx"));
       delete score;
@@ -133,7 +133,7 @@ void TestMeasure::insertBfClefChange()
       Measure* m = score->firstMeasure()->nextMeasure();
       m = m->nextMeasure()->nextMeasure();
       score->startCmd();
-      score->insertMeasure(ElementType::MEASURE, m);
+      score->insertMeasure(Element::Type::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure-insert_bf_clef.mscx", DIR + "measure-insert_bf_clef-ref.mscx"));
       score->undo()->undo();
@@ -155,7 +155,7 @@ void TestMeasure::insertBfKeyChange()
       Measure* m = score->firstMeasure()->nextMeasure();
       m = m->nextMeasure()->nextMeasure();
       score->startCmd();
-      score->insertMeasure(ElementType::MEASURE, m);
+      score->insertMeasure(Element::Type::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure-insert_bf_key.mscx", DIR + "measure-insert_bf_key-ref.mscx"));
       score->undo()->undo();
@@ -213,7 +213,7 @@ void TestMeasure::spanner_a()
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
-      score->insertMeasure(ElementType::MEASURE, m);
+      score->insertMeasure(Element::Type::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure-4.mscx", DIR + "measure-4-ref.mscx"));
       delete score;
@@ -236,7 +236,7 @@ void TestMeasure::spanner_b()
 
       Measure* m = score->firstMeasure();
       score->startCmd();
-      score->insertMeasure(ElementType::MEASURE, m);
+      score->insertMeasure(Element::Type::MEASURE, m);
       score->endCmd();
       QVERIFY(saveCompareScore(score, "measure-5.mscx", DIR + "measure-5-ref.mscx"));
       delete score;

@@ -21,7 +21,7 @@ namespace Ms {
 
 class Segment;
 class ScoreFont;
-enum class SymId : short;
+enum class SymId;
 
 //---------------------------------------------------------
 //   @@ Symbol
@@ -41,11 +41,11 @@ class Symbol : public BSymbol {
 
       Symbol &operator=(const Symbol&);
 
-      virtual Symbol* clone() const     { return new Symbol(*this); }
-      virtual ElementType type() const  { return ElementType::SYMBOL; }
+      virtual Symbol* clone() const      { return new Symbol(*this); }
+      virtual Element::Type type() const { return Element::Type::SYMBOL; }
 
       void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf;    }
-      SymId sym() const                 { return _sym;  }
+      SymId sym() const                  { return _sym;  }
 
       virtual void draw(QPainter*) const override;
       virtual void write(Xml& xml) const override;
@@ -53,8 +53,8 @@ class Symbol : public BSymbol {
       virtual void layout() override;
       void setAbove(bool);
 
-      virtual qreal baseLine() const    { return 0.0; }
-      Segment* segment() const          { return (Segment*)parent(); }
+      virtual qreal baseLine() const     { return 0.0; }
+      Segment* segment() const           { return (Segment*)parent(); }
       };
 
 //---------------------------------------------------------
@@ -73,7 +73,7 @@ class FSymbol : public BSymbol {
       FSymbol(const FSymbol&);
 
       virtual FSymbol* clone() const    { return new FSymbol(*this); }
-      virtual ElementType type() const  { return ElementType::FSYMBOL; }
+      virtual Element::Type type() const  { return Element::Type::FSYMBOL; }
 
       virtual void draw(QPainter*) const;
       virtual void write(Xml& xml) const;

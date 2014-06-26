@@ -25,21 +25,21 @@ namespace Ms {
 //   @@ LayoutBreak
 ///    symbols for line break, page break etc.
 //
-//   @P layoutBreakType  Ms::LayoutBreak::LayoutBreakType  (PAGE, LINE, SECTION)
+//   @P layoutBreakType  Ms::LayoutBreak::Type  (PAGE, LINE, SECTION)
 //---------------------------------------------------------
 
 class LayoutBreak : public Element {
       Q_OBJECT
 
    public:
-      enum class LayoutBreakType : char {
+      enum class Type : char {
             PAGE, LINE, SECTION
             };
    private:
-      Q_PROPERTY(LayoutBreakType layoutBreakType READ layoutBreakType WRITE undoSetLayoutBreakType)
-      Q_ENUMS(LayoutBreakType)
+      Q_PROPERTY(Ms::LayoutBreak::Type layoutBreakType READ layoutBreakType WRITE undoSetLayoutBreakType)
+      Q_ENUMS(Type)
 
-      LayoutBreakType _layoutBreakType;
+      Type _layoutBreakType;
       qreal lw;
       QPainterPath path;
       QPainterPath path2;
@@ -55,12 +55,12 @@ class LayoutBreak : public Element {
       LayoutBreak(Score* = 0);
       virtual LayoutBreak* clone() const { return new LayoutBreak(*this); }
 
-      virtual ElementType type() const { return ElementType::LAYOUT_BREAK; }
-      virtual bool systemFlag() const  { return true;  }
+      virtual Element::Type type() const { return Element::Type::LAYOUT_BREAK; }
+      virtual bool systemFlag() const    { return true;  }
 
-      void setLayoutBreakType(LayoutBreakType);
-      LayoutBreakType layoutBreakType() const  { return _layoutBreakType; }
-      void undoSetLayoutBreakType(LayoutBreakType);
+      void setLayoutBreakType(Type);
+      Type layoutBreakType() const  { return _layoutBreakType; }
+      void undoSetLayoutBreakType(Type);
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
@@ -82,6 +82,6 @@ class LayoutBreak : public Element {
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::LayoutBreak::LayoutBreakType);
+Q_DECLARE_METATYPE(Ms::LayoutBreak::Type);
 
 #endif

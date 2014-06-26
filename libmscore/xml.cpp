@@ -410,58 +410,58 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   break;
 
             case P_TYPE::DIRECTION:
-                  switch(Direction(data.toInt())) {
-                        case Direction::UP:
+                  switch(MScore::Direction(data.toInt())) {
+                        case MScore::Direction::UP:
                               tag(name, QVariant("up"));
                               break;
-                        case Direction::DOWN:
+                        case MScore::Direction::DOWN:
                               tag(name, QVariant("down"));
                               break;
-                        case Direction::AUTO:
+                        case MScore::Direction::AUTO:
                               break;
                         }
                   break;
             case P_TYPE::DIRECTION_H:
-                  switch(DirectionH(data.toInt())) {
-                        case DirectionH::DH_LEFT:
+                  switch(MScore::DirectionH(data.toInt())) {
+                        case MScore::DirectionH::LEFT:
                               tag(name, QVariant("left"));
                               break;
-                        case DirectionH::DH_RIGHT:
+                        case MScore::DirectionH::RIGHT:
                               tag(name, QVariant("right"));
                               break;
-                        case DirectionH::DH_AUTO:
+                        case MScore::DirectionH::AUTO:
                               break;
                         }
                   break;
             case P_TYPE::LAYOUT_BREAK:
-                  switch(LayoutBreak::LayoutBreakType(data.toInt())) {
-                        case LayoutBreak::LayoutBreakType::LINE:
+                  switch(LayoutBreak::Type(data.toInt())) {
+                        case LayoutBreak::Type::LINE:
                               tag(name, QVariant("line"));
                               break;
-                        case LayoutBreak::LayoutBreakType::PAGE:
+                        case LayoutBreak::Type::PAGE:
                               tag(name, QVariant("page"));
                               break;
-                        case LayoutBreak::LayoutBreakType::SECTION:
+                        case LayoutBreak::Type::SECTION:
                               tag(name, QVariant("section"));
                               break;
                         }
                   break;
             case P_TYPE::VALUE_TYPE:
-                  switch(ValueType(data.toInt())) {
-                        case ValueType::OFFSET_VAL:
+                  switch(Note::ValueType(data.toInt())) {
+                        case Note::ValueType::OFFSET_VAL:
                               tag(name, QVariant("offset"));
                               break;
-                        case ValueType::USER_VAL:
+                        case Note::ValueType::USER_VAL:
                               tag(name, QVariant("user"));
                               break;
                         }
                   break;
             case P_TYPE::PLACEMENT:
-                  switch(Placement(data.toInt())) {
-                        case Placement::ABOVE:
+                  switch(Element::Placement(data.toInt())) {
+                        case Element::Placement::ABOVE:
                               tag(name, QVariant("above"));
                               break;
-                        case Placement::BELOW:
+                        case Element::Placement::BELOW:
                               tag(name, QVariant("below"));
                               break;
                         }

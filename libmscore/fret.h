@@ -52,7 +52,7 @@ class FretDiagram : public Element {
       virtual void draw(QPainter*) const;
       virtual FretDiagram* clone() const { return new FretDiagram(*this); }
 
-      virtual ElementType type() const   { return ElementType::FRET_DIAGRAM; }
+      virtual Element::Type type() const { return Element::Type::FRET_DIAGRAM; }
       virtual void layout();
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);

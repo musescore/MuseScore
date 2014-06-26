@@ -39,10 +39,10 @@ class Stem : public Element {
       Stem(Score*);
       Stem &operator=(const Stem&);
 
-      virtual Stem* clone() const      { return new Stem(*this); }
-      virtual ElementType type() const { return ElementType::STEM; }
+      virtual Stem* clone() const        { return new Stem(*this); }
+      virtual Element::Type type() const { return Element::Type::STEM; }
       virtual void draw(QPainter*) const;
-      virtual bool isEditable() const  { return true; }
+      virtual bool isEditable() const    { return true; }
       virtual void layout();
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
 

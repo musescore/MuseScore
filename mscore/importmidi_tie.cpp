@@ -32,7 +32,7 @@ bool isTied(const Segment *seg, int strack, int voice,
             Ms::Tie*(Note::*tieFunc)() const)
       {
       ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
-      if (cr && cr->type() == ElementType::CHORD) {
+      if (cr && cr->type() == Element::Type::CHORD) {
             Chord *chord = static_cast<Chord *>(cr);
             const auto &notes = chord->notes();
             for (const Note *note: notes) {
@@ -59,7 +59,7 @@ void TieStateMachine::addSeg(const Segment *seg, int strack)
       bool isChord = false;
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
-            if (!cr || cr->type() != ElementType::CHORD)
+            if (!cr || cr->type() != Element::Type::CHORD)
                   continue;
             if (!isChord)
                   isChord = true;
@@ -108,10 +108,10 @@ bool areTiesConsistent(const Staff *staff)
       for (int voice = 0; voice < VOICES; ++voice) {
             bool isTie = false;
             for (Segment *seg = staff->score()->firstSegment(); seg; seg = seg->next1()) {
-                  if (seg->segmentType() == SegmentType::ChordRest) {
+                  if (seg->segmentType() == Segment::Type::ChordRest) {
                         ChordRest *cr = static_cast<ChordRest *>(seg->element(strack + voice));
 
-                        if (cr && cr->type() == ElementType::REST && isTie) {
+                        if (cr && cr->type() == Element::Type::REST && isTie) {
                               printInconsistentTieLocation(seg->measure()->no(), staff->idx());
                               return false;
                               }

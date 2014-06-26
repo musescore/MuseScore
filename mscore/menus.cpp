@@ -226,24 +226,24 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
       sp->setDrawGrid(true);
 
       if (basic) {
-            static Accidental::AccidentalType types[] = {
-                  Accidental::AccidentalType::NONE,
-                  Accidental::AccidentalType::SHARP,
-                  Accidental::AccidentalType::FLAT,
-                  Accidental::AccidentalType::SHARP2,
-                  Accidental::AccidentalType::FLAT2,
-                  Accidental::AccidentalType::NATURAL
+            static Accidental::Type types[] = {
+                  Accidental::Type::NONE,
+                  Accidental::Type::SHARP,
+                  Accidental::Type::FLAT,
+                  Accidental::Type::SHARP2,
+                  Accidental::Type::FLAT2,
+                  Accidental::Type::NATURAL
                   };
             for (auto i : types) {
                   Accidental* s = new Accidental(gscore);
-                  s->setAccidentalType(Accidental::AccidentalType(i));
+                  s->setAccidentalType(Accidental::Type(i));
                   sp->append(s, s->subtypeUserName());
                   }
             }
       else {
-            for (int i = int(Accidental::AccidentalType::SHARP); i < int(Accidental::AccidentalType::END); ++i) {
+            for (int i = int(Accidental::Type::SHARP); i < int(Accidental::Type::END); ++i) {
                   Accidental* s = new Accidental(gscore);
-                  s->setAccidentalType(Accidental::AccidentalType(i));
+                  s->setAccidentalType(Accidental::Type(i));
                   if (s->symbol() != SymId::noSym)
                         sp->append(s, s->subtypeUserName());
                   else
@@ -322,55 +322,55 @@ Palette* MuseScore::newRepeatsPalette()
       sp->append(rm, tr("Repeat measure sign"));
 
       Marker* mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::SEGNO);
+      mk->setMarkerType(Marker::Type::SEGNO);
       sp->append(mk, tr("Segno"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::VARSEGNO);
+      mk->setMarkerType(Marker::Type::VARSEGNO);
       sp->append(mk, tr("Segno Variation"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::CODA);
+      mk->setMarkerType(Marker::Type::CODA);
       sp->append(mk, tr("Coda"));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::VARCODA);
+      mk->setMarkerType(Marker::Type::VARCODA);
       sp->append(mk, tr("Varied coda"));
 
 /*      mk = new Marker(gscore);                      // not in smufl
-      mk->setMarkerType(MarkerType::CODETTA);
+      mk->setMarkerType(Marker::Type::CODETTA);
       sp->append(mk, tr("Codetta"));
   */
       mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::FINE);
+      mk->setMarkerType(Marker::Type::FINE);
       sp->append(mk, tr("Fine"));
 
       Jump* jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DC);
+      jp->setJumpType(Jump::Type::DC);
       sp->append(jp, tr("Da Capo"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DC_AL_FINE);
+      jp->setJumpType(Jump::Type::DC_AL_FINE);
       sp->append(jp, tr("Da Capo al Fine"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DC_AL_CODA);
+      jp->setJumpType(Jump::Type::DC_AL_CODA);
       sp->append(jp, tr("Da Capo al Coda"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DS_AL_CODA);
+      jp->setJumpType(Jump::Type::DS_AL_CODA);
       sp->append(jp, tr("D.S. al Coda"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DS_AL_FINE);
+      jp->setJumpType(Jump::Type::DS_AL_FINE);
       sp->append(jp, tr("D.S. al Fine"));
 
       jp = new Jump(gscore);
-      jp->setJumpType(JumpType::DS);
+      jp->setJumpType(Jump::Type::DS);
       sp->append(jp, tr("D.S."));
 
       mk = new Marker(gscore);
-      mk->setMarkerType(MarkerType::TOCODA);
+      mk->setMarkerType(Marker::Type::TOCODA);
       sp->append(mk, tr("To Coda"));
       return sp;
       }
@@ -389,17 +389,17 @@ Palette* MuseScore::newBreaksPalette()
       sp->setDrawGrid(true);
 
       LayoutBreak* lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
+      lb->setLayoutBreakType(LayoutBreak::Type::LINE);
       PaletteCell* cell = sp->append(lb, tr("Line break"));
       cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::PAGE);
+      lb->setLayoutBreakType(LayoutBreak::Type::PAGE);
       cell = sp->append(lb, tr("Page break"));
       cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
-      lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::SECTION);
+      lb->setLayoutBreakType(LayoutBreak::Type::SECTION);
       cell = sp->append(lb, tr("Section break"));
       cell->mag = 1.2;
 
@@ -489,11 +489,11 @@ Palette* MuseScore::newNoteHeadsPalette()
       sp->setGrid(33, 36);
       sp->setDrawGrid(true);
 
-      for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
-            SymId sym = Note::noteHead(0, NoteHeadGroup(i), NoteHeadType::HEAD_HALF);
+      for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
+            SymId sym = Note::noteHead(0, NoteHead::Group(i), NoteHead::Type::HEAD_HALF);
             // HEAD_BREVIS_ALT shows up only for brevis value
-            if (i == int(NoteHeadGroup::HEAD_BREVIS_ALT) )
-                  sym = Note::noteHead(0, NoteHeadGroup(i), NoteHeadType::HEAD_BREVIS);
+            if (i == int(NoteHead::Group::HEAD_BREVIS_ALT) )
+                  sym = Note::noteHead(0, NoteHead::Group(i), NoteHead::Type::HEAD_BREVIS);
             NoteHead* nh = new NoteHead(gscore);
             nh->setSym(sym);
             sp->append(nh, Sym::id2userName(sym));
@@ -608,7 +608,7 @@ Palette* MuseScore::newArpeggioPalette()
             }
       for (int i = 0; i < 2; ++i) {
             Glissando* a = new Glissando(gscore);
-            a->setGlissandoType(GlissandoType(i));
+            a->setGlissandoType(Glissando::Type(i));
             sp->append(a, tr("Glissando"));
             }
 
@@ -731,17 +731,17 @@ Palette* MuseScore::newLinesPalette()
       sp->append(slur, qApp->translate("lines", "Slur"));
 
       Hairpin* gabel0 = new Hairpin(gscore);
-      gabel0->setHairpinType(Hairpin::HairpinType::CRESCENDO);
+      gabel0->setHairpinType(Hairpin::Type::CRESCENDO);
       gabel0->setLen(w);
       sp->append(gabel0, qApp->translate("lines", "Crescendo"));
 
       Hairpin* gabel1 = new Hairpin(gscore);
-      gabel1->setHairpinType(Hairpin::HairpinType::DECRESCENDO);
+      gabel1->setHairpinType(Hairpin::Type::DECRESCENDO);
       gabel1->setLen(w);
       sp->append(gabel1, QT_TRANSLATE_NOOP("Palette", "Diminuendo"));
 
       Volta* volta = new Volta(gscore);
-      volta->setVoltaType(VoltaType::CLOSED);
+      volta->setVoltaType(Volta::Type::CLOSED);
       volta->setLen(w);
       volta->setText("1.");
       QList<int> il;
@@ -750,7 +750,7 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, QT_TRANSLATE_NOOP("Palette", "Prima volta"));
 
       volta = new Volta(gscore);
-      volta->setVoltaType(VoltaType::CLOSED);
+      volta->setVoltaType(Volta::Type::CLOSED);
       volta->setLen(w);
       volta->setText("2.");
       il.clear();
@@ -759,7 +759,7 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, QT_TRANSLATE_NOOP("Palette", "Seconda volta"));
 
       volta = new Volta(gscore);
-      volta->setVoltaType(VoltaType::CLOSED);
+      volta->setVoltaType(Volta::Type::CLOSED);
       volta->setLen(w);
       volta->setText("3.");
       il.clear();
@@ -768,7 +768,7 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, QT_TRANSLATE_NOOP("Palette", "Terza volta"));
 
       volta = new Volta(gscore);
-      volta->setVoltaType(VoltaType::OPEN);
+      volta->setVoltaType(Volta::Type::OPEN);
       volta->setLen(w);
       volta->setText("2.");
       il.clear();
@@ -777,34 +777,34 @@ Palette* MuseScore::newLinesPalette()
       sp->append(volta, QT_TRANSLATE_NOOP("Palette", "Seconda volta 2"));
 
       Ottava* ottava = new Ottava(gscore);
-      ottava->setOttavaType(OttavaType::OTTAVA_8VA);
+      ottava->setOttavaType(Ottava::Type::OTTAVA_8VA);
       ottava->setLen(w);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8va"));
 
       ottava = new Ottava(gscore);
-      ottava->setOttavaType(OttavaType::OTTAVA_8VB);
+      ottava->setOttavaType(Ottava::Type::OTTAVA_8VB);
       ottava->setLen(w);
-      ottava->setPlacement(Placement::BELOW);
+      ottava->setPlacement(Element::Placement::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8vb"));
 
       ottava = new Ottava(gscore);
-      ottava->setOttavaType(OttavaType::OTTAVA_15MA);
+      ottava->setOttavaType(Ottava::Type::OTTAVA_15MA);
       ottava->setLen(w);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15ma"));
 
       ottava = new Ottava(gscore);
-      ottava->setOttavaType(OttavaType::OTTAVA_15MB);
+      ottava->setOttavaType(Ottava::Type::OTTAVA_15MB);
       ottava->setLen(w);
-      ottava->setPlacement(Placement::BELOW);
+      ottava->setPlacement(Element::Placement::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15mb"));
 
       ottava = new Ottava(gscore);
-      ottava->setOttavaType(OttavaType::OTTAVA_22MA);
+      ottava->setOttavaType(Ottava::Type::OTTAVA_22MA);
       ottava->setLen(w);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22ma"));
 
       ottava = new Ottava(gscore);
-      ottava->setOttavaType(OttavaType::OTTAVA_22MB);
+      ottava->setOttavaType(Ottava::Type::OTTAVA_22MB);
       ottava->setLen(w);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22mb"));
 

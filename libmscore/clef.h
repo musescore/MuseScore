@@ -135,13 +135,13 @@ class Clef : public Element {
    public:
       Clef(Score*);
       Clef(const Clef&);
-      virtual Clef* clone() const      { return new Clef(*this); }
-      virtual ElementType type() const { return ElementType::CLEF; }
+      virtual Clef* clone() const        { return new Clef(*this); }
+      virtual Element::Type type() const { return Element::Type::CLEF; }
       virtual void setSelected(bool f);
       virtual qreal mag() const;
 
-      Segment* segment() const         { return (Segment*)parent(); }
-      Measure* measure() const         { return (Measure*)parent()->parent(); }
+      Segment* segment() const           { return (Segment*)parent(); }
+      Measure* measure() const           { return (Measure*)parent()->parent(); }
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);

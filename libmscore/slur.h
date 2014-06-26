@@ -82,7 +82,7 @@ class SlurSegment : public SpannerSegment {
       SlurSegment(Score*);
       SlurSegment(const SlurSegment&);
       virtual SlurSegment* clone() const { return new SlurSegment(*this); }
-      virtual ElementType type() const   { return ElementType::SLUR_SEGMENT; }
+      virtual Element::Type type() const { return Element::Type::SLUR_SEGMENT; }
 
       void layout(const QPointF& p1, const QPointF& p2);
       virtual QPainterPath shape() const { return shapePath; }
@@ -119,14 +119,15 @@ class SlurSegment : public SpannerSegment {
 
 //-------------------------------------------------------------------
 //   @@ SlurTie
-//   @P lineType       int        (0 - solid, 1 - dotted, 2 - dashed)
-//   @P slurDirection  Direction  (AUTO, UP, DOWN)
+//   @P lineType       int                    (0 - solid, 1 - dotted, 2 - dashed)
+//   @P slurDirection  Ms::MScore::Direction  (AUTO, UP, DOWN)
 //-------------------------------------------------------------------
 
 class SlurTie : public Spanner {
       Q_OBJECT
-      Q_PROPERTY(int lineType                 READ lineType       WRITE undoSetLineType)
-      Q_PROPERTY(Ms::Direction slurDirection  READ slurDirection  WRITE undoSetSlurDirection)
+      Q_PROPERTY(int lineType                         READ lineType       WRITE undoSetLineType)
+      Q_PROPERTY(Ms::MScore::Direction slurDirection  READ slurDirection  WRITE undoSetSlurDirection)
+      Q_ENUMS(Ms::MScore::Direction)
 
       int _lineType;    // 0 = solid, 1 = dotted, 2 = dashed
 
@@ -134,7 +135,7 @@ class SlurTie : public Spanner {
       bool _up;               // actual direction
 
       QQueue<SlurSegment*> delSegments;   // "deleted" segments
-      Direction _slurDirection;
+      MScore::Direction _slurDirection;
       qreal firstNoteRestSegmentX(System* system);
       void fixupSegments(unsigned nsegs);
 
@@ -143,15 +144,15 @@ class SlurTie : public Spanner {
       SlurTie(const SlurTie&);
       ~SlurTie();
 
-      virtual ElementType type() const = 0;
-      bool up() const                            { return _up; }
+      virtual Element::Type type() const = 0;
+      bool up() const                             { return _up; }
 
-      Direction slurDirection() const            { return _slurDirection; }
-      void setSlurDirection(Direction d)         { _slurDirection = d; }
-      void undoSetSlurDirection(Direction d);
+      MScore::Direction slurDirection() const     { return _slurDirection; }
+      void setSlurDirection(MScore::Direction d)  { _slurDirection = d; }
+      void undoSetSlurDirection(MScore::Direction d);
 
       virtual void layout2(const QPointF, int, struct UP&)  {}
-      virtual bool contains(const QPointF&) const     { return false; }  // not selectable
+      virtual bool contains(const QPointF&) const { return false; }  // not selectable
 
       void writeProperties(Xml& xml) const;
       bool readProperties(XmlReader&);
@@ -188,7 +189,7 @@ class Slur : public SlurTie {
       Slur(Score* = 0);
       ~Slur();
       virtual Slur* clone() const      { return new Slur(*this); }
-      virtual ElementType type() const { return ElementType::SLUR; }
+      virtual Element::Type type() const { return Element::Type::SLUR; }
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       virtual void layout();

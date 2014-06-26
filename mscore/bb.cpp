@@ -422,7 +422,7 @@ Score::FileError importBB(Score* score, const QString& name)
 
       if (tracks->isEmpty()) {
             for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-                  if (mb->type() != ElementType::MEASURE)
+                  if (mb->type() != Element::Type::MEASURE)
                         continue;
                   Measure* measure = (Measure*)mb;
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
@@ -439,10 +439,10 @@ Score::FileError importBB(Score* score, const QString& name)
             }
 
       for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            if (mb->type() != ElementType::MEASURE)
+            if (mb->type() != Element::Type::MEASURE)
                   continue;
             Measure* measure = (Measure*)mb;
-            Segment* s = measure->findSegment(SegmentType::ChordRest, measure->tick());
+            Segment* s = measure->findSegment(Segment::Type::ChordRest, measure->tick());
             if (s == 0) {
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   rest->setDuration(measure->len());
@@ -464,7 +464,7 @@ Score::FileError importBB(Score* score, const QString& name)
       text->setText(bb.title());
 
       MeasureBase* measure = score->first();
-      if (measure->type() != ElementType::VBOX) {
+      if (measure->type() != Element::Type::VBOX) {
             measure = new VBox(score);
             measure->setTick(0);
             measure->setNext(score->first());
@@ -487,7 +487,7 @@ Score::FileError importBB(Score* score, const QString& name)
                   qDebug("import BB: measure for tick %d not found", tick);
                   continue;
                   }
-            Segment* s = m->getSegment(SegmentType::ChordRest, tick);
+            Segment* s = m->getSegment(Segment::Type::ChordRest, tick);
             Harmony* h = new Harmony(score);
             h->setTrack(0);
             h->setRootTpc(table[c.root-1]);
@@ -511,12 +511,12 @@ Score::FileError importBB(Score* score, const QString& name)
 
       int n = 0;
       for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-            if (mb->type() != ElementType::MEASURE)
+            if (mb->type() != Element::Type::MEASURE)
                   continue;
             Measure* measure = (Measure*)mb;
             if (n && (n % 4) == 0) {
                   LayoutBreak* lb = new LayoutBreak(score);
-                  lb->setLayoutBreakType(LayoutBreak::LayoutBreakType::LINE);
+                  lb->setLayoutBreakType(LayoutBreak::Type::LINE);
                   measure->add(lb);
                   }
             if (startChorus == n)

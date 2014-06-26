@@ -34,8 +34,8 @@ class Bend : public Element {
 
    public:
       Bend(Score* s);
-      virtual Bend* clone() const      { return new Bend(*this); }
-      virtual ElementType type() const { return ElementType::BEND; }
+      virtual Bend* clone() const        { return new Bend(*this); }
+      virtual Element::Type type() const { return Element::Type::BEND; }
       virtual void layout();
       virtual void draw(QPainter*) const;
       virtual void write(Xml&) const;

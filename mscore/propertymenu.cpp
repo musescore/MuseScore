@@ -77,7 +77,7 @@ namespace Ms {
 
 void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
       {
-      if (!e->generated() || e->type() == ElementType::BAR_LINE) {
+      if (!e->generated() || e->type() == Element::Type::BAR_LINE) {
             if (e->flag(ElementFlag::HAS_TAG)) {
                   popup->addSeparator();
 
@@ -127,37 +127,37 @@ void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
 
 void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
       {
-      if (e->type() == ElementType::BAR_LINE) {
+      if (e->type() == Element::Type::BAR_LINE) {
             genPropertyMenu1(e, popup);
             }
-      else if (e->type() == ElementType::ARTICULATION) {
+      else if (e->type() == Element::Type::ARTICULATION) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Articulation Properties..."))->setData("a-props");
             }
-      else if (e->type() == ElementType::BEAM) {
+      else if (e->type() == Element::Type::BEAM) {
             popup->addAction(getAction("flip"));
             }
-      else if (e->type() == ElementType::STEM) {
+      else if (e->type() == Element::Type::STEM) {
             popup->addAction(getAction("flip"));
             }
-      else if (e->type() == ElementType::HOOK) {
+      else if (e->type() == Element::Type::HOOK) {
             popup->addAction(getAction("flip"));
             }
-      else if (e->type() == ElementType::BEND) {
+      else if (e->type() == Element::Type::BEND) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Bend Properties..."))->setData("b-props");
             }
-      else if (e->type() == ElementType::TREMOLOBAR) {
+      else if (e->type() == Element::Type::TREMOLOBAR) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Tremolo Bar Properties..."))->setData("tr-props");
             }
-      else if (e->type() == ElementType::HBOX) {
+      else if (e->type() == Element::Type::HBOX) {
             QMenu* textMenu = popup->addMenu(tr("Add"));
             textMenu->addAction(getAction("frame-text"));
             textMenu->addAction(getAction("picture"));
             popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
-      else if (e->type() == ElementType::VBOX) {
+      else if (e->type() == Element::Type::VBOX) {
             QMenu* textMenu = popup->addMenu(tr("Add"));
             textMenu->addAction(getAction("frame-text"));
             textMenu->addAction(getAction("title-text"));
@@ -168,15 +168,15 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             textMenu->addAction(getAction("picture"));
             popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
-      else if (e->type() == ElementType::TBOX) {
+      else if (e->type() == Element::Type::TBOX) {
             popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
-      else if (e->type() == ElementType::VOLTA_SEGMENT) {
+      else if (e->type() == Element::Type::VOLTA_SEGMENT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Line Properties..."))->setData("l-props");
             popup->addAction(tr("Volta Properties..."))->setData("v-props");
             }
-      else if (e->type() == ElementType::TIMESIG) {
+      else if (e->type() == Element::Type::TIMESIG) {
             genPropertyMenu1(e, popup);
             TimeSig* ts = static_cast<TimeSig*>(e);
             int _track = ts->track();
@@ -192,7 +192,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addSeparator();
             popup->addAction(tr("Time Signature Properties..."))->setData("ts-props");
             }
-      else if (e->type() == ElementType::CLEF) {
+      else if (e->type() == Element::Type::CLEF) {
             genPropertyMenu1(e, popup);
             Clef* clef = static_cast<Clef*>(e);
             // if the clef is not generated (= not courtesy) add the specific menu item
@@ -203,7 +203,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                         a->setData("clef-courtesy");
                   }
             }
-      else if (e->type() == ElementType::DYNAMIC) {
+      else if (e->type() == Element::Type::DYNAMIC) {
             popup->addSeparator();
             if (e->visible())
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
@@ -212,16 +212,16 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
-      else if (e->type() == ElementType::TEXTLINE_SEGMENT
-                  || e->type() == ElementType::OTTAVA_SEGMENT
-                  || e->type() == ElementType::PEDAL_SEGMENT) {
+      else if (e->type() == Element::Type::TEXTLINE_SEGMENT
+                  || e->type() == Element::Type::OTTAVA_SEGMENT
+                  || e->type() == Element::Type::PEDAL_SEGMENT) {
             if (e->visible())
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
             else
                   popup->addAction(tr("Set Visible"))->setData("invisible");
             popup->addAction(tr("Line Properties..."))->setData("l-props");
             }
-      else if (e->type() == ElementType::STAFF_TEXT) {
+      else if (e->type() == Element::Type::STAFF_TEXT) {
             genPropertyMenuText(e, popup);
             Text* t = static_cast<Text*>(e);
             if (t->systemFlag())
@@ -229,25 +229,25 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             else
                   popup->addAction(tr("Staff Text Properties..."))->setData("st-props");
             }
-      else if (e->type() == ElementType::TEXT
-               || e->type() == ElementType::REHEARSAL_MARK
-               || e->type() == ElementType::MARKER
-               || e->type() == ElementType::JUMP
-               || e->type() == ElementType::FINGERING
-               || e->type() == ElementType::LYRICS
-               || e->type() == ElementType::FIGURED_BASS) {
+      else if (e->type() == Element::Type::TEXT
+               || e->type() == Element::Type::REHEARSAL_MARK
+               || e->type() == Element::Type::MARKER
+               || e->type() == Element::Type::JUMP
+               || e->type() == Element::Type::FINGERING
+               || e->type() == Element::Type::LYRICS
+               || e->type() == Element::Type::FIGURED_BASS) {
             genPropertyMenuText(e, popup);
             }
-      else if (e->type() == ElementType::HARMONY) {
+      else if (e->type() == Element::Type::HARMONY) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Text Style..."))->setData("text-style");
             }
-      else if (e->type() == ElementType::TEMPO_TEXT) {
+      else if (e->type() == Element::Type::TEMPO_TEXT) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
-      else if (e->type() == ElementType::KEYSIG) {
+      else if (e->type() == Element::Type::KEYSIG) {
             genPropertyMenu1(e, popup);
             KeySig* ks = static_cast<KeySig*>(e);
             if (!e->generated() && ks->measure() != score()->firstMeasure()) {
@@ -257,19 +257,19 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   a->setData("key-courtesy");
                   }
             }
-      else if (e->type() == ElementType::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == StaffStateType::INSTRUMENT) {
+      else if (e->type() == Element::Type::STAFF_STATE && static_cast<StaffState*>(e)->staffStateType() == StaffStateType::INSTRUMENT) {
             popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Text Properties..."))->setData("text-props");
             popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
             }
-      else if (e->type() == ElementType::SLUR_SEGMENT) {
+      else if (e->type() == Element::Type::SLUR_SEGMENT) {
             genPropertyMenu1(e, popup);
             //popup->addAction(tr("Edit Mode"))->setData("edit");
             }
-      else if (e->type() == ElementType::REST) {
+      else if (e->type() == Element::Type::REST) {
             genPropertyMenu1(e, popup);
             }
-      else if (e->type() == ElementType::NOTE) {
+      else if (e->type() == Element::Type::NOTE) {
             QAction* b = popup->actions()[0];
             QAction* a = popup->insertSeparator(b);
             a->setText(tr("Staff"));
@@ -290,16 +290,16 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             if (enableExperimental)
                   popup->addAction(tr("Chord Articulation..."))->setData("articulation");
             }
-      else if (e->type() == ElementType::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() == LayoutBreak::LayoutBreakType::SECTION) {
+      else if (e->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() == LayoutBreak::Type::SECTION) {
             popup->addAction(tr("Section Break Properties..."))->setData("break-props");
             }
-      else if (e->type() == ElementType::INSTRUMENT_CHANGE) {
+      else if (e->type() == Element::Type::INSTRUMENT_CHANGE) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Text Properties..."))->setData("text-props");
             popup->addAction(tr("Change Instrument..."))->setData("ch-instr");
             }
-      else if (e->type() == ElementType::FRET_DIAGRAM) {
+      else if (e->type() == Element::Type::FRET_DIAGRAM) {
             if (e->visible())
                   popup->addAction(tr("Set Invisible"))->setData("invisible");
             else
@@ -307,11 +307,11 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("Color..."))->setData("color");
             popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
             }
-      else if (e->type() == ElementType::GLISSANDO) {
+      else if (e->type() == Element::Type::GLISSANDO) {
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Glissando Properties..."))->setData("gliss-props");
             }
-      else if (e->type() == ElementType::INSTRUMENT_NAME) {
+      else if (e->type() == Element::Type::INSTRUMENT_NAME) {
             popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
             }

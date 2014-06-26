@@ -37,7 +37,7 @@ class LedgerLine : public Line {
       LedgerLine(Score*);
       LedgerLine &operator=(const LedgerLine&);
       virtual LedgerLine* clone() const { return new LedgerLine(*this); }
-      virtual ElementType type() const  { return ElementType::LEDGER_LINE; }
+      virtual Element::Type type() const{ return Element::Type::LEDGER_LINE; }
       virtual QPointF pagePos() const;      ///< position in page coordinates
       Chord* chord() const { return (Chord*)parent(); }
       virtual void layout();

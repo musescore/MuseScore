@@ -80,7 +80,7 @@ Ms::Element* QmlPlugin::newElement(int t)
       Score* score = curScore();
       if (score == 0)
             return 0;
-      Element* e = Element::create(ElementType(t), score);
+      Element* e = Element::create(Element::Type(t), score);
       Ms::MScore::qml()->setObjectOwnership(e, QQmlEngine::CppOwnership);
       return e;
       }

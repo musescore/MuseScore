@@ -143,8 +143,8 @@ class Measure : public MeasureBase {
       Measure(Score* = 0);
       Measure(const Measure&);
       ~Measure();
-      virtual Measure* clone() const override   { return new Measure(*this); }
-      virtual ElementType type() const override { return ElementType::MEASURE; }
+      virtual Measure* clone() const override     { return new Measure(*this); }
+      virtual Element::Type type() const override { return Element::Type::MEASURE; }
       virtual void setScore(Score* s) override;
       Measure* cloneMeasure(Score*, TieMap*);
 
@@ -194,7 +194,7 @@ class Measure : public MeasureBase {
 
       int size() const                     { return _segments.size();        }
       Q_INVOKABLE Ms::Segment* first() const   { return _segments.first();       }
-      Segment* first(SegmentType t) const { return _segments.first(t);      }
+      Segment* first(Segment::Type t) const { return _segments.first(t);      }
 
       Q_INVOKABLE Ms::Segment* last() const    { return _segments.last(); }
       void remove(Segment* s);
@@ -235,10 +235,10 @@ class Measure : public MeasureBase {
       int repeatCount() const         { return _repeatCount; }
       void setRepeatCount(int val)    { _repeatCount = val; }
 
-      Segment* undoGetSegment(SegmentType st, int tick);
+      Segment* undoGetSegment(Segment::Type st, int tick);
       Segment* getSegment(Element* el, int tick);
-      Segment* getSegment(SegmentType st, int tick);
-      Segment* findSegment(SegmentType st, int t);
+      Segment* getSegment(Segment::Type st, int tick);
+      Segment* findSegment(Segment::Type st, int t);
 
       bool createEndBarLines();
 

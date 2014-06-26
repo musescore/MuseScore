@@ -80,47 +80,47 @@ void TestNote::note()
       delete n;
 
    // mirror
-      note->setUserMirror(DirectionH::DH_LEFT);
+      note->setUserMirror(MScore::DirectionH::LEFT);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_LEFT);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::LEFT);
       delete n;
 
-      note->setUserMirror(DirectionH::DH_RIGHT);
+      note->setUserMirror(MScore::DirectionH::RIGHT);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_RIGHT);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::RIGHT);
       delete n;
 
-      note->setUserMirror(DirectionH::DH_AUTO);
+      note->setUserMirror(MScore::DirectionH::AUTO);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_AUTO);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::AUTO);
       delete n;
 
    // dot position
-      note->setUserDotPosition(Direction::UP);
+      note->setUserDotPosition(MScore::Direction::UP);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::UP);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::UP);
       delete n;
 
-      note->setUserDotPosition(Direction::DOWN);
+      note->setUserDotPosition(MScore::Direction::DOWN);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::DOWN);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::DOWN);
       delete n;
 
-      note->setUserDotPosition(Direction::AUTO);
+      note->setUserDotPosition(MScore::Direction::AUTO);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::AUTO);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::AUTO);
       delete n;
   // headGroup
-      for (int i = 0; i < int (NoteHeadGroup::HEAD_GROUPS); ++i) {
-            note->setHeadGroup(NoteHeadGroup(i));
+      for (int i = 0; i < int (NoteHead::Group::HEAD_GROUPS); ++i) {
+            note->setHeadGroup(NoteHead::Group(i));
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headGroup()), i);
             delete n;
             }
 
   // headType
-      for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i) {
-            note->setHeadType(NoteHeadType(i));
+      for (int i = 0; i < int(NoteHead::Type::HEAD_TYPES); ++i) {
+            note->setHeadType(NoteHead::Type(i));
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headType()), i);
             delete n;
@@ -157,14 +157,14 @@ void TestNote::note()
       delete n;
 
    // velo type
-      note->setVeloType(ValueType::USER_VAL);
+      note->setVeloType(Note::ValueType::USER_VAL);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), ValueType::USER_VAL);
+      QCOMPARE(n->veloType(), Note::ValueType::USER_VAL);
       delete n;
 
-      note->setVeloType(ValueType::OFFSET_VAL);
+      note->setVeloType(Note::ValueType::OFFSET_VAL);
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), ValueType::OFFSET_VAL);
+      QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
       delete n;
 
       //================================================
@@ -201,39 +201,39 @@ void TestNote::note()
       delete n;
 
    // mirror
-      note->setProperty(P_ID::MIRROR_HEAD, int(DirectionH::DH_LEFT));
+      note->setProperty(P_ID::MIRROR_HEAD, int(MScore::DirectionH::LEFT));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_LEFT);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::LEFT);
       delete n;
 
-      note->setProperty(P_ID::MIRROR_HEAD, int(DirectionH::DH_RIGHT));
+      note->setProperty(P_ID::MIRROR_HEAD, int(MScore::DirectionH::RIGHT));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_RIGHT);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::RIGHT);
       delete n;
 
-      note->setProperty(P_ID::MIRROR_HEAD, int(DirectionH::DH_AUTO));
+      note->setProperty(P_ID::MIRROR_HEAD, int(MScore::DirectionH::AUTO));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userMirror(), DirectionH::DH_AUTO);
+      QCOMPARE(n->userMirror(), MScore::DirectionH::AUTO);
       delete n;
 
    // dot position
-      note->setProperty(P_ID::DOT_POSITION, int(Direction::UP));
+      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::UP));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::UP);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::UP);
       delete n;
 
-      note->setProperty(P_ID::DOT_POSITION, int(Direction::DOWN));
+      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::DOWN));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::DOWN);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::DOWN);
       delete n;
 
-      note->setProperty(P_ID::DOT_POSITION, int(Direction::AUTO));
+      note->setProperty(P_ID::DOT_POSITION, int(MScore::Direction::AUTO));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->userDotPosition(), Direction::AUTO);
+      QCOMPARE(n->userDotPosition(), MScore::Direction::AUTO);
       delete n;
 
   // headGroup
-      for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
+      for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
             note->setProperty(P_ID::HEAD_GROUP, i);
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headGroup()), i);
@@ -241,7 +241,7 @@ void TestNote::note()
             }
 
   // headType
-      for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i) {
+      for (int i = 0; i < int(NoteHead::Type::HEAD_TYPES); ++i) {
             note->setProperty(P_ID::HEAD_TYPE, i);
             n = static_cast<Note*>(writeReadElement(note));
             QCOMPARE(int(n->headType()), i);
@@ -284,14 +284,14 @@ void TestNote::note()
       delete n;
 
    // velo type
-      note->setProperty(P_ID::VELO_TYPE, int(ValueType::USER_VAL));
+      note->setProperty(P_ID::VELO_TYPE, int(Note::ValueType::USER_VAL));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), ValueType::USER_VAL);
+      QCOMPARE(n->veloType(), Note::ValueType::USER_VAL);
       delete n;
 
-      note->setProperty(P_ID::VELO_TYPE, int(ValueType::OFFSET_VAL));
+      note->setProperty(P_ID::VELO_TYPE, int(Note::ValueType::OFFSET_VAL));
       n = static_cast<Note*>(writeReadElement(note));
-      QCOMPARE(n->veloType(), ValueType::OFFSET_VAL);
+      QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
       delete n;
       }
 
