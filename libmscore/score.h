@@ -560,7 +560,9 @@ class Score : public QObject {
 
       void cmdAddSpanner(Spanner* e, const QPointF& pos);
 
-      Note* addNote(Chord*, NoteVal &noteVal);
+      Note* addPitch(NoteVal&, bool addFlag);
+      void addPitch(int pitch, bool addFlag);
+      Note* addNote(Chord*, NoteVal& noteVal);
 
       void deleteItem(Element*);
       void cmdDeleteSelectedMeasures();
@@ -570,6 +572,7 @@ class Score : public QObject {
       void putNote(const QPointF& pos, bool replace);
       void putNote(const Position& pos, bool replace);
       void repitchNote(const Position& pos, bool replace);
+      void cmdAddPitch(int pitch, bool addFlag);
 
       Q_INVOKABLE void startCmd();        // start undoable command
       Q_INVOKABLE void endCmd();          // end undoable command
@@ -816,7 +819,6 @@ class Score : public QObject {
       FiguredBass* addFiguredBass();
       void expandVoice(Segment* s, int track);
       void expandVoice();
-      Note* addPitch(int pitch, bool addFlag);
 
       int customKeySigIdx(KeySig*) const;
       int addCustomKeySig(KeySig*);

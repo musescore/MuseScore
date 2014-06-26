@@ -80,7 +80,7 @@ void PaletteBox::addPalette(Palette* w)
       vbox->insertWidget(slotIdx, b);
       vbox->insertWidget(slotIdx+1, w, 1000);
 
-      connect(b, SIGNAL(paletteCmd(int,int)), SLOT(paletteCmd(int,int)));
+      connect(b, SIGNAL(paletteCmd(PaletteCommand,int)), SLOT(paletteCmd(PaletteCommand,int)));
       connect(b, SIGNAL(closeAll()), SLOT(closeAll()));
       connect(w, SIGNAL(changed()), SIGNAL(changed()));
       }
