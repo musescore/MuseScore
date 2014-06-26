@@ -24,7 +24,7 @@ macro( precompiled_header includes header_name build_pch)
             list( APPEND all_define_flags "-D${item}" )
         endforeach()
 
-        list( APPEND compile_flags ${all_define_flags} ) 
+        list( APPEND compile_flags ${all_define_flags} )
 
         # Prepare the compile flags var for passing to GCC
         separate_arguments( compile_flags )
@@ -43,17 +43,17 @@ macro( precompiled_header includes header_name build_pch)
              )
         else ( ${build_pch} )
             message(STATUS "No precompiled header")
-        endif( ${build_pch} )        
+        endif( ${build_pch} )
     endif()
 endmacro()
 
-# Xcode PCH support. Has to be called *AFTER* the target is created.  
+# Xcode PCH support. Has to be called *AFTER* the target is created.
 # "header_name" - the name of the PCH header, without the extension; "all" or something similar;
-#                  note that the source file compiling the header needs to have the same name 
+#                  note that the source file compiling the header needs to have the same name
 macro( xcode_pch target_name header_name )
-    if( APPLE )                   
+    if( APPLE )
         set_target_properties(
-            ${target_name} 
+            ${target_name}
             PROPERTIES
             XCODE_ATTRIBUTE_GCC_PREFIX_HEADER "${PROJECT_BINARY_DIR}/${header_name}.h"
             XCODE_ATTRIBUTE_GCC_PRECOMPILE_PREFIX_HEADER "YES"
