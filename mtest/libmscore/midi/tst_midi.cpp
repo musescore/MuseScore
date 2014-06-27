@@ -66,15 +66,15 @@ void TestMidi::events_data()
       {
       QTest::addColumn<QString>("file");
       // Test Eighth Swing
-      QTest::newRow("testEighthSimple") <<  "testEighthSimple";
-      QTest::newRow("testEighthTies") <<  "testEighthTies";
-      QTest::newRow("testEighthTriplets") <<  "testEighthTriplets";
-      QTest::newRow("testEighthDots") <<  "testEighthDots";
+      QTest::newRow("testSwing8thSimple") <<  "testSwing8thSimple";
+      QTest::newRow("testSwing8thTies") <<  "testSwing8thTies";
+      QTest::newRow("testSwing8thTriplets") <<  "testSwing8thTriplets";
+      QTest::newRow("testSwing8thDots") <<  "testSwing8thDots";
       // Test Sixteenth Swing
-      QTest::newRow("testSixteenthSimple") <<  "testSixteenthSimple";
-      QTest::newRow("testSixteenthTies") <<  "testSixteenthTies";
-      QTest::newRow("testSixteenthTriplets") <<  "testSixteenthTriplets";
-      QTest::newRow("testSixteenthDots") <<  "testSixteenthDots";
+      QTest::newRow("testSwing16thSimple") <<  "testSwing16thSimple";
+      QTest::newRow("testSwing16thTies") <<  "testSwing16thTies";
+      QTest::newRow("testSwing16thTriplets") <<  "testSwing16thTriplets";
+      QTest::newRow("testSwing16thDots") <<  "testSwing16thDots";
       }
 
 //---------------------------------------------------------
@@ -308,36 +308,6 @@ void TestMidi::midi03()
 
       delete score;
       delete score2;
-      }
-bool compareDump(const QString& filename1, const QString& filename2)
-      {
-            QCryptographicHash hash1( QCryptographicHash::Sha1);
-            QFile file1(filename1);
-            if (file1.open (QIODevice::ReadOnly)) {
-                  hash1.addData(file1.readAll());
-                  }
-            else {
-                  qDebug() << "Error opening file1\n";
-                  }
-            QByteArray sig1 = hash1.result();
-            QCryptographicHash hash2( QCryptographicHash::Sha1);
-            QFile file2(filename2);
-            if (file2.open (QIODevice::ReadOnly)) {
-                  hash2.addData(file2.readAll());
-                  }
-            else {
-                  qDebug() << "Error opening file2\n";
-                  }
-            QByteArray sig2 = hash2.result();
-            if (sig1 == sig2) {
-                 // printf("Equal!\n");
-                  return true;
-                  }
-            else {
-                 // printf("Not equal!\n");
-                  return false;
-                  }
-
       }
 
 //---------------------------------------------------------
