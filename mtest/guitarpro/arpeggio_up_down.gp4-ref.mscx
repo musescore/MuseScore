@@ -128,36 +128,38 @@
             <string>2</string>
             </Note>
           <Arpeggio>
+            <lid>9</lid>
             <subtype>2</subtype>
             </Arpeggio>
           </Chord>
         </Measure>
       <Measure number="2">
         <Chord>
-          <lid>10</lid>
+          <lid>11</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>11</lid>
+            <lid>12</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>12</lid>
+            <lid>13</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>3</fret>
             <string>3</string>
             </Note>
           <Note>
-            <lid>13</lid>
+            <lid>14</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
             <string>2</string>
             </Note>
           <Arpeggio>
+            <lid>15</lid>
             <subtype>1</subtype>
             </Arpeggio>
           </Chord>
@@ -295,14 +297,14 @@
             <lid>5</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>7</lid>
+              <lid>6</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -316,36 +318,38 @@
               <string>2</string>
               </Note>
             <Arpeggio>
+              <lid>9</lid>
               <subtype>2</subtype>
               </Arpeggio>
             </Chord>
           </Measure>
         <Measure number="2">
           <Chord>
-            <lid>10</lid>
+            <lid>11</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>11</lid>
+              <lid>12</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>12</lid>
+              <lid>13</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>13</lid>
+              <lid>14</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Arpeggio>
+              <lid>15</lid>
               <subtype>1</subtype>
               </Arpeggio>
             </Chord>
@@ -369,14 +373,14 @@
             <lid>5</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>7</lid>
+              <lid>6</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -390,36 +394,38 @@
               <string>2</string>
               </Note>
             <Arpeggio>
+              <lid>9</lid>
               <subtype>2</subtype>
               </Arpeggio>
             </Chord>
           </Measure>
         <Measure number="2">
           <Chord>
-            <lid>10</lid>
+            <lid>11</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>11</lid>
+              <lid>12</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>12</lid>
+              <lid>13</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>13</lid>
+              <lid>14</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Arpeggio>
+              <lid>15</lid>
               <subtype>1</subtype>
               </Arpeggio>
             </Chord>
