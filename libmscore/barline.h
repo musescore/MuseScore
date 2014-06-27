@@ -62,7 +62,7 @@ class BarLine : public Element {
 
    public:
       BarLine(Score*);
-      BarLine &operator=(const BarLine&);
+      BarLine &operator=(const BarLine&) = delete;
 
       virtual BarLine* clone() const     { return new BarLine(*this); }
       virtual Element::Type type() const { return Element::Type::BAR_LINE; }

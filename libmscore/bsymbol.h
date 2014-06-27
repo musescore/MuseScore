@@ -36,7 +36,7 @@ class BSymbol : public Element, public ElementLayout {
       BSymbol(Score* s);
       BSymbol(const BSymbol&);
 
-      BSymbol &operator=(const BSymbol&);
+      BSymbol &operator=(const BSymbol&) = delete;
 
       virtual void add(Element*);
       virtual void remove(Element*);

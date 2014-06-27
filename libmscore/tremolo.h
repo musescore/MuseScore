@@ -51,7 +51,7 @@ class Tremolo : public Element {
    public:
       Tremolo(Score*);
       Tremolo(const Tremolo&);
-      Tremolo &operator=(const Tremolo&);
+      Tremolo &operator=(const Tremolo&) = delete;
       virtual Tremolo* clone() const     { return new Tremolo(*this); }
       virtual Element::Type type() const { return Element::Type::TREMOLO; }
 

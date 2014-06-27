@@ -77,7 +77,7 @@ class Articulation : public Element {
 
    public:
       Articulation(Score*);
-      Articulation &operator=(const Articulation&);
+      Articulation &operator=(const Articulation&) = delete;
 
       virtual Articulation* clone() const   { return new Articulation(*this); }
       virtual Element::Type type() const    { return Element::Type::ARTICULATION; }

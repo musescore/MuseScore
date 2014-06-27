@@ -215,7 +215,7 @@ class Text : public Element {
       virtual Element::Type type() const override  { return Element::Type::TEXT; }
       virtual bool mousePress(const QPointF&, QMouseEvent* ev) override;
 
-      Text &operator=(const Text&);
+      Text &operator=(const Text&) = delete;
 
       virtual void draw(QPainter*) const override;
 

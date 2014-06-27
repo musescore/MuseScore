@@ -201,16 +201,24 @@ Chord::Chord(Score* s)
       setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
       }
 
-Chord::Chord(const Chord& c)
-   : ChordRest(c)
+Chord::Chord(const Chord& c, bool link)
+   : ChordRest(c, link)
       {
+      if (link)
+            linkTo((Chord*)&c);      // HACK!
       _ledgerLines = 0;
       int n = c._notes.size();
-      for (int i = 0; i < n; ++i)
-            add(new Note(*c._notes.at(i)));
+      for (int i = 0; i < n; ++i) {
+            Note* onote = c._notes[i];
+            Note* nnote = new Note(*onote);
+            add(nnote);
+            if (link)
+                  nnote->linkTo(onote);
+            }
 
       for (Chord* gn : c.graceNotes()) {
-            add(new Chord(*gn));
+            Chord* nc = new Chord(*gn, link);
+            add(nc);
             }
 
       _stem          = 0;
@@ -223,52 +231,45 @@ Chord::Chord(const Chord& c)
       _graceIndex     = c._graceIndex;
       _noStem         = c._noStem;
       _playEventType  = c._playEventType;
+      _stemDirection  = c._stemDirection;
+      _noteType       = c._noteType;
+      _crossMeasure   = CrossMeasure::UNKNOWN;
 
       if (c._stem)
             add(new Stem(*(c._stem)));
       if (c._hook)
             add(new Hook(*(c._hook)));
-      if (c._glissando)
-            add(new Glissando(*(c._glissando)));
-      if (c._arpeggio)
-            add(new Arpeggio(*(c._arpeggio)));
       if (c._stemSlash)
             add(new StemSlash(*(c._stemSlash)));
-      _stemDirection    = c._stemDirection;
-      if (c._tremolo && !c._tremolo->twoNotes())
-            add(new Tremolo(*(c._tremolo)));
-      _noteType         = c._noteType;
-      _crossMeasure     = CrossMeasure::UNKNOWN;
+
+      if (c._glissando) {
+            Glissando* g = new Glissando(*(c._glissando));
+            add(g);
+            if (link)
+                  g->linkTo(c._glissando);
+            }
+      if (c._arpeggio) {
+            Arpeggio* a = new Arpeggio(*(c._arpeggio));
+            add(a);
+            if (link)
+                  a->linkTo(c._arpeggio);
+            }
+      if (c._tremolo && !c._tremolo->twoNotes()) {
+            Tremolo* t = new Tremolo(*(c._tremolo));
+            add(t);
+            if (link)
+                  t->linkTo(c._tremolo);
+            }
+
       for (Element* e : c.el()) {
             if (e->type() == Element::Type::CHORDLINE) {
-                   ChordLine* cl = static_cast<ChordLine*>(e);
-                   add(new ChordLine(*cl));
-                   }
-            // TODO deal with slurs
-            }
-      }
-
-//---------------------------------------------------------
-//   linkedClone
-//---------------------------------------------------------
-
-Chord* Chord::linkedClone()
-      {
-      Chord* chord = new Chord(*this);
-      linkTo(chord);
-      int n = notes().size();
-      for (int i = 0; i < n; ++i)
-            _notes[i]->linkTo(chord->_notes[i]);
-      n = _graceNotes.size();
-      for (int i = 0; i < n; ++i)
-            _graceNotes[i]->linkTo(chord->_graceNotes[i]);
-      for (int i = 0; i < _el.size(); ++i) { // TODO deal with slurs
-            if (_el[i]->type() == Element::Type::CHORDLINE) {
-                  _el[i]->linkTo(chord->el()[i]);
+                  ChordLine* cl = static_cast<ChordLine*>(e);
+                  ChordLine* ncl = new ChordLine(*cl);
+                  add(ncl);
+                  if (link)
+                        cl->linkTo(ncl);
                   }
             }
-
-      return chord;
       }
 
 //---------------------------------------------------------

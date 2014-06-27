@@ -101,12 +101,12 @@ class Chord : public ChordRest {
 
    public:
       Chord(Score* s = 0);
-      Chord(const Chord&);
+      Chord(const Chord&, bool link = false);
       ~Chord();
-      Chord &operator=(const Chord&);
+      Chord &operator=(const Chord&) = delete;
 
-      virtual Chord* clone() const       { return new Chord(*this); }
-      virtual Chord* linkedClone();
+      virtual Chord* clone() const       { return new Chord(*this, false); }
+      virtual Chord* linkedClone()       { return new Chord(*this, true); }
 
       virtual void setScore(Score* s);
       virtual Element::Type type() const         { return Element::Type::CHORD; }

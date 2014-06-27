@@ -39,7 +39,7 @@ class Symbol : public BSymbol {
       Symbol(Score* s);
       Symbol(const Symbol&);
 
-      Symbol &operator=(const Symbol&);
+      Symbol &operator=(const Symbol&) = delete;
 
       virtual Symbol* clone() const      { return new Symbol(*this); }
       virtual Element::Type type() const { return Element::Type::SYMBOL; }

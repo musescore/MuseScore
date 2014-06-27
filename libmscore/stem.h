@@ -37,7 +37,7 @@ class Stem : public Element {
 
    public:
       Stem(Score*);
-      Stem &operator=(const Stem&);
+      Stem &operator=(const Stem&) = delete;
 
       virtual Stem* clone() const        { return new Stem(*this); }
       virtual Element::Type type() const { return Element::Type::STEM; }

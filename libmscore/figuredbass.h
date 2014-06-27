@@ -164,7 +164,7 @@ class FiguredBassItem : public Element {
       FiguredBassItem(const FiguredBassItem&);
       ~FiguredBassItem();
 
-      FiguredBassItem &operator=(const FiguredBassItem&);
+      FiguredBassItem &operator=(const FiguredBassItem&) = delete;
 
       FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
 
