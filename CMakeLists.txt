@@ -153,7 +153,7 @@ SET(QT_USE_QTWEBKIT      TRUE)
 SET(QT_USE_QTXMLPATTERNS TRUE)
 SET(QT_USE_QTDECLARATIVE TRUE)
 
-find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer WebKit Declarative)
+#find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer WebKit Declarative)
 
 
 ##
