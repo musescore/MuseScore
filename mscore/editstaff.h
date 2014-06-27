@@ -30,6 +30,7 @@ namespace Ms {
 
 class Staff;
 class InstrumentTemplate;
+enum class ClefType : signed char;
 
 //---------------------------------------------------------
 //   EditStaff
@@ -42,6 +43,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       Staff*      staff;
       Staff*      orgStaff;
       Instrument  instrument;
+      std::pair<bool,ClefType>      instrumentClefChanged;
       int         _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
 
       void apply();
