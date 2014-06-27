@@ -73,8 +73,8 @@ class ChordRest : public DurationElement {
 
    public:
       ChordRest(Score*);
-      ChordRest(const ChordRest&);
-      ChordRest &operator=(const ChordRest&);
+      ChordRest(const ChordRest&, bool link = false);
+      ChordRest &operator=(const ChordRest&) = delete;
       ~ChordRest();
       virtual Element::Type type() const = 0;
       virtual Element* drop(const DropData&);

@@ -33,19 +33,11 @@ Symbol::Symbol(Score* s)
       setZ(int(Element::Type::SYMBOL) * 100);
       }
 
-#if 0
-Symbol::Symbol(Score* s, SymId sy)
-   : BSymbol(s)
-      {
-      _sym = sy;
-      setZ(SYMBOL * 100);
-      }
-#endif
-
 Symbol::Symbol(const Symbol& s)
    : BSymbol(s)
       {
-      _sym   = s._sym;
+      _sym       = s._sym;
+      _scoreFont = s._scoreFont;
       setZ(int(Element::Type::SYMBOL) * 100);
       }
 

@@ -57,6 +57,16 @@ Rest::Rest(Score* s, const TDuration& d)
             setDuration(d.fraction());
       }
 
+Rest::Rest(const Rest& r, bool link)
+   : ChordRest(r, link)
+      {
+      if (link)
+            linkTo((Rest*)&r);      // HACK!
+      _sym     = r._sym;
+      dotline  = r.dotline;
+      _mmWidth = r._mmWidth;
+      }
+
 //---------------------------------------------------------
 //   Rest::draw
 //---------------------------------------------------------

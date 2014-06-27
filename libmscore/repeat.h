@@ -32,7 +32,7 @@ class RepeatMeasure : public Rest {
 
    public:
       RepeatMeasure(Score*);
-      RepeatMeasure &operator=(const RepeatMeasure&);
+      RepeatMeasure &operator=(const RepeatMeasure&) = delete;
       virtual RepeatMeasure* clone() const  { return new RepeatMeasure(*this); }
       virtual Element::Type type() const     { return Element::Type::REPEAT_MEASURE; }
       virtual void draw(QPainter*) const;

@@ -80,7 +80,7 @@ class NoteHead : public Symbol {
             };
 
       NoteHead(Score* s) : Symbol(s) {}
-      NoteHead &operator=(const NoteHead&);
+      NoteHead &operator=(const NoteHead&) = delete;
       virtual NoteHead* clone() const    { return new NoteHead(*this); }
       virtual Element::Type type() const { return Element::Type::NOTEHEAD; }
 
@@ -228,7 +228,7 @@ class Note : public Element {
    public:
       Note(Score* s = 0);
       Note(const Note&);
-      Note& operator=(const Note&);
+      Note& operator=(const Note&) = delete;
       ~Note();
       Note* clone() const        { return new Note(*this); }
       Element::Type type() const { return Element::Type::NOTE; }

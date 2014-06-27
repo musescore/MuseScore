@@ -311,7 +311,7 @@ class Element : public QObject {
       Element(Score* s = 0);
       Element(const Element&);
       virtual ~Element();
-      Element &operator=(const Element&);
+      Element &operator=(const Element&) = delete;
       Q_INVOKABLE virtual Ms::Element* clone() const = 0;
       virtual Element* linkedClone();
       QList<Element*> linkList() const;
