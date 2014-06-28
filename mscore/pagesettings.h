@@ -41,6 +41,7 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
       void updateValues();
       void updatePreview(int);
       void blockSignals(bool);
+      void applyToScore(Score*);
 
    private slots:
       void mmClicked();
@@ -48,6 +49,7 @@ class PageSettings : public QDialog, private Ui::PageSettingsBase {
       void pageFormatSelected(int);
 
       void apply();
+      void applyToAllParts();
       void ok();
       void done(int val);
 

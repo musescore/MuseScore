@@ -545,6 +545,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="buttonApplyToAllParts">
+       <property name="text">
+        <string>Apply to all Parts</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="buttonApply">
        <property name="text">
         <string>Apply</string>

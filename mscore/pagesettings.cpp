@@ -25,6 +25,7 @@
 #include "libmscore/score.h"
 #include "navigator.h"
 #include "libmscore/mscore.h"
+#include "libmscore/excerpt.h"
 #include "musescore.h"
 
 namespace Ms {
@@ -54,6 +55,7 @@ PageSettings::PageSettings(QWidget* parent)
       connect(mmButton,             SIGNAL(clicked()),            SLOT(mmClicked()));
       connect(inchButton,           SIGNAL(clicked()),            SLOT(inchClicked()));
       connect(buttonApply,          SIGNAL(clicked()),            SLOT(apply()));
+      connect(buttonApplyToAllParts,SIGNAL(clicked()),            SLOT(applyToAllParts()));
       connect(buttonOk,             SIGNAL(clicked()),            SLOT(ok()));
       connect(landscape,            SIGNAL(toggled(bool)),        SLOT(landscapeToggled(bool)));
       connect(twosided,             SIGNAL(toggled(bool)),        SLOT(twosidedToggled(bool)));
@@ -91,9 +93,6 @@ void PageSettings::setScore(Score* s)
       preview->setScore(sl);
 
       const PageFormat* pf = s->pageFormat();
-//      sl->setPageFormat(*pf);
-//      sl->setSpatium(s->spatium());
-
       pageGroup->clear();
       int index = 0;
       const PaperSize* ps = pf->paperSize();
@@ -106,6 +105,7 @@ void PageSettings::setScore(Score* s)
             }
 
       pageGroup->setCurrentIndex(index);
+      buttonApplyToAllParts->setEnabled(s->parentScore() != nullptr);
       updatePreview(0);
       }
 
@@ -281,6 +281,16 @@ void PageSettings::twosidedToggled(bool flag)
 
 void PageSettings::apply()
       {
+      applyToScore(cs);
+      mscore->endCmd();
+      }
+
+//---------------------------------------------------------
+//   applyToScore
+//---------------------------------------------------------
+
+void PageSettings::applyToScore(Score* s)
+      {
       double f  = mmUnit ? 1.0/INCH : 1.0;
       double f1 = mmUnit ? MScore::DPMM : MScore::DPI;
 
@@ -298,9 +308,20 @@ void PageSettings::apply()
 
       double sp = spatiumEntry->value() * f1;
 
-      cs->startCmd();
-      cs->undoChangePageFormat(&pf, sp, pageOffsetEntry->value()-1);
-      cs->endCmd();
+      s->startCmd();
+      s->undoChangePageFormat(&pf, sp, pageOffsetEntry->value()-1);
+      s->endCmd();
+      }
+
+//---------------------------------------------------------
+//   applyToAllParts
+//---------------------------------------------------------
+
+void PageSettings::applyToAllParts()
+      {
+      QList<Excerpt*>& el = cs->rootScore()->excerpts();
+      for (Excerpt* e : el)
+            applyToScore(e->score());
       mscore->endCmd();
       }
 
@@ -407,7 +428,7 @@ void PageSettings::ormChanged(double val)
             }
 
       pf.setPrintableWidth(pf.width() - pf.oddLeftMargin() - val);
-      
+
       preview->score()->setPageFormat(pf);
       updatePreview(0);
       }
