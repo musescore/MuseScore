@@ -1084,7 +1084,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                     string += (up ? -1 : 1);
                                     if (string < 0 || string >= stringData->strings())
                                           return;           // no next string to move to
-                                    string = stt->VisualStringToPhys(string);
+                                    string = stt->visualStringToPhys(string);
                                     fret = stringData->fret(pitch, string);
                                     if (fret == -1)          // can't have that note on that string
                                           return;
