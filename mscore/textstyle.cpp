@@ -26,6 +26,7 @@
 #include "textprop.h"
 #include "musescore.h"
 #include "libmscore/undo.h"
+#include "libmscore/excerpt.h"
 
 namespace Ms {
 
@@ -39,7 +40,10 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      cs     = score;
+      cs = score;
+      buttonApplyToAllParts = bb->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
+      buttonApplyToAllParts->setEnabled(cs->parentScore() != nullptr);
+
       styles = cs->style()->textStyles();
       tp->setScore(true, cs);
 
@@ -128,12 +132,17 @@ void TextStyleDialog::buttonClicked(QAbstractButton* b)
                   apply();
                   done(1);
                   break;
-            default:
+            case QDialogButtonBox::Cancel:
                   if (cs->undo()->current()) {
                         cs->undo()->current()->unwind();
                         cs->setLayoutAll(true);
                         }
                   done(0);
+                  break;
+            case QDialogButtonBox::NoButton:
+            default:
+                  if (b == buttonApplyToAllParts)
+                        applyToAllParts();
                   break;
             }
       }
@@ -144,23 +153,42 @@ void TextStyleDialog::buttonClicked(QAbstractButton* b)
 
 void TextStyleDialog::apply()
       {
-      saveStyle(current);                 // update local copy of style list
+      saveStyle(current);     // update local copy of style list
+      applyToScore(cs);
+      }
 
+//---------------------------------------------------------
+//   applyToScore
+//---------------------------------------------------------
+
+void TextStyleDialog::applyToScore(Score* s)
+      {
       int count = textNames->count();
-      int numOfStyles = cs->style()->textStyles().size();
+      int numOfStyles = s->style()->textStyles().size();
       for (int i = 0; i < count; ++i) {
             int listIdx = textNames->item(i)->data(Qt::UserRole).toInt();
-            if(listIdx < numOfStyles) {         // style already exists in score text styles
-                  const TextStyle& os = cs->textStyle(listIdx);
+            if (listIdx < numOfStyles) {         // style already exists in score text styles
+                  const TextStyle& os = s->textStyle(listIdx);
                   const TextStyle& ns = styles[listIdx];
-                  if (os != ns) {
-                        cs->undo(new ChangeTextStyle(cs, ns));
-                        }
+                  if (os != ns)
+                        cs->undo(new ChangeTextStyle(s, ns));
                   }
-            else                                // style does not exist in score text styles yet
-                  cs->undo(new AddTextStyle(cs, styles[listIdx]));
+            else  // style does not exist in score text styles yet
+                  s->undo(new AddTextStyle(s, styles[listIdx]));
             }
-      cs->update();
+      s->update();
+      }
+
+//---------------------------------------------------------
+//   applyToAllParts
+//---------------------------------------------------------
+
+void TextStyleDialog::applyToAllParts()
+      {
+      saveStyle(current);     // update local copy of style list
+      QList<Excerpt*>& el = cs->rootScore()->excerpts();
+      for (Excerpt* e : el)
+            applyToScore(e->score());
       }
 
 //---------------------------------------------------------

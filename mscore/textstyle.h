@@ -34,12 +34,16 @@ class Score;
 
 class TextStyleDialog : public QDialog, Ui::TextStyleDialog {
       Q_OBJECT
+
+      QPushButton* buttonApplyToAllParts;
       QList<TextStyle> styles;   // local copy of text style
       Score* cs;
       int current;
 
       void saveStyle(int);
       void apply();
+      void applyToAllParts();
+      void applyToScore(Score*);
 
    private slots:
       void nameSelected(int);
