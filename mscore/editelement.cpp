@@ -156,17 +156,18 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
       data.lastPos = data.pos;
       data.pos     = toLogical(ev->pos());
 
-      if (qApp->keyboardModifiers() & Qt::ShiftModifier) {
-            if (editObject->type() == Element::Type::BAR_LINE)
+      // on bar lines, Ctrl (single bar line) and Shift (precision drag) modifiers can be active independently
+      if (editObject->type() == Element::Type::BAR_LINE) {
+            if (qApp->keyboardModifiers() & Qt::ShiftModifier)
                   BarLine::setShiftDrag(true);
-            else
-                  data.pos.setX(data.lastPos.x());
-            }
-
-      if (qApp->keyboardModifiers() & Qt::ControlModifier) {
-            if (editObject->type() == Element::Type::BAR_LINE)
+            if (qApp->keyboardModifiers() & Qt::ControlModifier)
                   BarLine::setCtrlDrag(true);
-            else
+            }
+      // on other elements, BOTH Ctrl (vert. constrain) and Shift (horiz. constrain) modifiers = NO constrain
+      else {
+            if (qApp->keyboardModifiers() == Qt::ShiftModifier)
+                  data.pos.setX(data.lastPos.x());
+            if (qApp->keyboardModifiers() == Qt::ControlModifier)
                   data.pos.setY(data.lastPos.y());
             }
       data.delta = data.pos - data.lastPos;
