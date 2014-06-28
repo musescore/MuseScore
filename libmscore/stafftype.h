@@ -259,7 +259,7 @@ class StaffType {
 
       // functions to cope with tabulature visual order (top down or upside down)
       int physStringToVisual(int strg) const;       // return the string in visual order from physical string
-      int VisualStringToPhys(int strg) const;       // return the string in physical order from visual string
+      int visualStringToPhys(int strg) const;       // return the string in physical order from visual string
 
       // properties getters (some getters require updated metrics)
       qreal durationBoxH();

@@ -1416,8 +1416,28 @@ void ScoreView::moveCursor()
       // draw cursor around single string
       if (staff->isTabStaff() && strg > VISUAL_STRING_NONE && strg < lines) {
             h = lineDist * 1.5;       // 1 space above strg for letters and 1/2 sp. below strg for numbers
-            y += lineDist * (strg-1); // star 1 sp. above strg to include letter position
-            }
+            y += lineDist * (strg-1); // start 1 sp. above strg to include letter position
+            // look for a note on this string in this staff
+            bool        done  = false;
+            Segment*    seg   = is.segment();
+            int         minTrack = (is.track() / VOICES) * VOICES;
+            int         maxTrack = minTrack + VOICES;
+            // get the physical string corresponding to current visual string
+            strg = staff->staffType()->visualStringToPhys(strg);
+            for (int track = minTrack; track < maxTrack; track++) {
+                  Element* e = seg->element(track);
+                  if (e != nullptr && e->type() == Element::Type::CHORD)
+                        for (Note* n : static_cast<Chord*>(e)->notes())
+                              // if note found on this string, make it current
+                              if (n->string() == strg) {
+                                    _score->select(n);
+                                    done = true;
+                                    break;
+                                    }
+                  if (done)
+                        break;
+                  }
+      }
       // otherwise, draw cursor across whole staff
       else {
             h = (lines - 1) * lineDist + 4 * _spatium;
@@ -2917,11 +2937,11 @@ void ScoreView::cmd(const QAction* a)
                   }
             }
       else if(cmd == "string-below") {
-            InputState  is          = _score->inputState();
+            InputState& is          = _score->inputState();
             int         maxStrg     = _score->staff(is.track() / VOICES)->lines() - 1;
             int         strg        = is.string();
             if(strg < maxStrg) {
-                  _score->inputState().setString(strg+1);
+                  is.setString(strg+1);
                   moveCursor();
                   }
             }
