@@ -32,6 +32,7 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/clef.h"
+#include "libmscore/excerpt.h"
 
 namespace Ms {
 
@@ -45,6 +46,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs     = s;
+
+      buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
+      buttonApplyToAllParts->setEnabled(cs->parentScore() != nullptr);
+
       lstyle = *s->style();
       setModal(true);
 
@@ -201,12 +206,17 @@ void EditStyle::buttonClicked(QAbstractButton* b)
                   apply();
                   done(1);
                   break;
-            default:
+            case QDialogButtonBox::Cancel:
                   if(cs->undo() && cs->undo()->current()) {
                         cs->undo()->current()->unwind();
                         cs->setLayoutAll(true);
                         }
                   done(0);
+                  break;
+            case QDialogButtonBox::NoButton:
+            default:
+                  if (b == buttonApplyToAllParts)
+                        applyToAllParts();
                   break;
             }
       }
@@ -234,6 +244,20 @@ void EditStyle::apply()
       getValues();
       cs->undo(new ChangeStyle(cs, lstyle));
       cs->update();
+      }
+
+//---------------------------------------------------------
+//   applyToAllParts
+//---------------------------------------------------------
+
+void EditStyle::applyToAllParts()
+      {
+      getValues();
+      QList<Excerpt*>& el = cs->rootScore()->excerpts();
+      for (Excerpt* e : el) {
+            e->score()->undo(new ChangeStyle(e->score(), lstyle));
+            e->score()->update();
+            }
       }
 
 //---------------------------------------------------------

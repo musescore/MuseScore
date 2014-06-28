@@ -37,6 +37,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       Q_OBJECT
 
       Score* cs;
+      QPushButton* buttonApplyToAllParts;
       MStyle lstyle;    // local copy of style
 
       QButtonGroup* stemGroups[VOICES];
@@ -47,6 +48,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void setFooterText(StyleIdx idx, QTextEdit* te);
 
       void apply();
+      void applyToAllParts();
 
    private slots:
       void selectChordDescriptionFile();
