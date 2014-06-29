@@ -63,6 +63,8 @@ enum class SelectionFilterType {
       ARTICULATION            = 1 << 8,
       SLUR                    = 1 << 9,
       FIGURED_BASS            = 1 << 10,
+      OTTAVA                  = 1 << 11,
+      PEDAL_LINE              = 1 << 12,
       ALL                     = -1
       };
 

@@ -535,6 +535,7 @@ void TextLine::setEndText(const QString& s)
 
 void TextLine::write(Xml& xml) const
       {
+      if (!xml.canWrite(this)) return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       writeProperties(xml);
       xml.etag();

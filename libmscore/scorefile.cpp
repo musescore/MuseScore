@@ -1304,7 +1304,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         auto endIt = spanner().upper_bound(endTick);
                         for (auto i = spanner().begin(); i != endIt; ++i) {
                               Spanner* s = i->second;
-                              if (s->generated())
+                              if (s->generated() || !xml.canWrite(s))
                                     continue;
 
                               if (s->track() == track) {
