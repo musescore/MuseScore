@@ -130,21 +130,20 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
+        <Trill id="2">
+          <subtype>trill</subtype>
+          <lineWidth>0.15</lineWidth>
+          </Trill>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>staccato</subtype>
-            </Articulation>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>sforzato</subtype>
-            </Articulation>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>
