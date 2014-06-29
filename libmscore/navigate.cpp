@@ -323,23 +323,25 @@ Element* Score::nextElement(Element *e)
             goToNextSeg = false;
             }
       else{
-            //if it is a note attached element, I'm returning the note
-            if(e->parent()->type() == ElementType::NOTE){
+            //if it is a note, or rest (for fermata) attached element, I'm returning the note/rest
+            if(e->parent()->type() == ElementType::NOTE || e->parent()->inherits("Ms::Rest")){
                   return e->parent();
                   }
 
-            //if it is a note, I'm looking for the first note below it
-            //in that staff
-            if(e->type() == ElementType::NOTE){
-                  Note* n = static_cast<Note*>(e);
-                  if(n->noteType() == NoteType::NORMAL){
-                        re = firstNoteBelow(n);
-                        if(re){
-                              return re;
-                              }
+            if(e->type() == ElementType::NOTE || e->inherits("Ms::Rest")){
+                  Note* n = qobject_cast<Note*>(e);
+                  if(n && n->noteType() != NoteType::NORMAL){
+                        goToNextSeg = false;
                         }
                   else{
-                        goToNextSeg = false;
+                        re = downAlt(e);
+                        if(re && re != e && (re->track()/VOICES == e->track()/VOICES)) {
+                              Segment* reSeg = (re->type() == ElementType::NOTE) ? static_cast<Note*>(re)->chord()->segment() : static_cast<Segment*>(re->parent());
+                              Segment* eSeg  = (e->type()  == ElementType::NOTE) ? static_cast<Note*>(e)->chord()->segment()  : static_cast<Segment*>(e->parent());
+                              if (eSeg == reSeg ){
+                                    return re;
+                                    }
+                              }
                         }
                   }
 
@@ -367,8 +369,7 @@ Element* Score::nextElement(Element *e)
       if(goToNextSeg){
             bool ok = false;
             do{
-
-                  seg = seg->next1MM(SegmentType::All);
+                seg = seg->next1MM(SegmentType::All);
                   if(!seg){//end of staff, or score
                         break;
                         }
@@ -396,23 +397,17 @@ Element* Score::nextElement(Element *e)
       //if the segment is a ChordRest, I'm looking for the highest note first,
       //if it doesn't exist, I'm returning the rest
       if(seg->segmentType() == SegmentType::ChordRest){
-            Note* highest = 0;
             for(int voice = e->track()/VOICES * VOICES; voice/VOICES * VOICES == e->track()/VOICES * VOICES; voice++){
                   Element* el = seg->element(voice);
                   if(!el){      //there is no chord or rest on this voice
                         continue;
                         }
-                  if(el->type() != ElementType::CHORD){ //found a rest in another voice
-                        continue;
-                  }
-                  Chord* ch = static_cast<Chord*>(el);
-                  Note* n = ch->notes().back();
-                  if( (highest == 0) || (n->pitch() > highest->pitch()) ){
-                        highest = n;
+                  if(el->type() == ElementType::CHORD){
+                        return static_cast<Chord*>(el)->notes().back();
                         }
-                  }
-            if(highest){
-                  return highest;
+                  else{
+                        return el;
+                        }
                   }
             }
 
@@ -442,23 +437,25 @@ Element* Score::prevElement(Element *e)
             goToPrevSeg = false;
             }
       else{
-            //if it is a note attached element, I'm returning the note
-            if(e->parent()->type() == ElementType::NOTE){
-                  return e->parent();
-                  }
+            //if it is a note, or rest (for fermata) attached element, I'm returning the note/rest
+            if(e->parent()->type() == ElementType::NOTE || e->parent()->inherits("Ms::Rest")){
+                   return e->parent();
+                   }
 
-            //if it is a note, I'm looking for the first note below it
-            //in that staff
-            if(e->type() == ElementType::NOTE){
-                  Note* n = static_cast<Note*>(e);
-                  if(n->noteType() == NoteType::NORMAL){
-                        re = firstNoteAbove(n);
-                        if(re){
-                              return re;
-                              }
+            if(e->type() == ElementType::NOTE || e->inherits("Ms::Rest")){
+                  Note* n = qobject_cast<Note*>(e);
+                  if(n && n->noteType() != NoteType::NORMAL){
+                        goToPrevSeg = false;
                         }
                   else{
-                        goToPrevSeg = false;
+                        re = upAlt(e);
+                        if(re && re != e && (re->track()/VOICES == e->track()/VOICES)) {
+                              Segment* reSeg = (re->type() == ElementType::NOTE) ? static_cast<Note*>(re)->chord()->segment() : static_cast<Segment*>(re->parent());
+                              Segment* eSeg  = (e->type()  == ElementType::NOTE) ? static_cast<Note*>(e)->chord()->segment()  : static_cast<Segment*>(e->parent());
+                              if (eSeg == reSeg ){
+                                    return re;
+                                    }
+                              }
                         }
                   }
 
@@ -504,7 +501,6 @@ Element* Score::prevElement(Element *e)
       if(goToPrevSeg){
             bool ok = false;
             do{
-
                   seg = seg->prev1MM(SegmentType::All);
                   if(!seg){//end of staff, or score
                         break;
@@ -550,24 +546,18 @@ Element* Score::prevElement(Element *e)
       //if the segment is a ChordRest, I'm looking for the highest note first,
       //if it doesn't exist, I'm returning the rest
       if(seg->segmentType() == SegmentType::ChordRest){
-            Note* lowest = 0;
-            for(int voice = e->track()/VOICES * VOICES; voice/VOICES * VOICES == e->track()/VOICES * VOICES; voice++){
-                  Element* el = seg->element(voice);
-                  if(!el){      //there is no chord or rest on this voice
-                        continue;
-                        }
-                  if(el->type() != ElementType::CHORD){ //found a rest in another voice
-                        continue;
-                  }
-                  Chord* ch = static_cast<Chord*>(el);
-                  Note* n = ch->notes().front();
-                  if( (lowest == 0) || (n->pitch() < lowest->pitch()) ){
-                        lowest = n;
-                        }
-                  }
-            if(lowest){
-                  return lowest;
-                  }
+          for(int voice = e->track()/VOICES * VOICES + (VOICES - 1); voice/VOICES * VOICES == e->track()/VOICES * VOICES; voice--){
+                Element* el = seg->element(voice);
+                if(!el){      //there is no chord or rest on this voice
+                      continue;
+                      }
+                if(el->type() == ElementType::CHORD){
+                      return static_cast<Chord*>(el)->notes().front();
+                      }
+                else{
+                      return el;
+                      }
+                }
             }
 
       //if a segment is not a ChordRest, I'm returning its element
