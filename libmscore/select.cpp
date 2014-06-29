@@ -296,6 +296,8 @@ bool Selection::canSelect(Element* e) const
           && !this->selectionFilter().isFiltered(SelectionFilterType::PEDAL_LINE)) return false;
       if (e->type() == Element::Type::ARPEGGIO
           && !this->selectionFilter().isFiltered(SelectionFilterType::ARPEGGIO)) return false;
+      if (e->type() == Element::Type::FRET_DIAGRAM
+          && !this->selectionFilter().isFiltered(SelectionFilterType::FRET_DIAGRAM)) return false;
       return true;
       }
 
