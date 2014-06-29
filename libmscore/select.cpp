@@ -16,6 +16,7 @@
 */
 
 #include "mscore.h"
+#include "arpeggio.h"
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
@@ -293,6 +294,8 @@ bool Selection::canSelect(Element* e) const
           && !this->selectionFilter().isFiltered(SelectionFilterType::OTTAVA)) return false;
       if (e->type() == Element::Type::PEDAL
           && !this->selectionFilter().isFiltered(SelectionFilterType::PEDAL_LINE)) return false;
+      if (e->type() == Element::Type::ARPEGGIO
+          && !this->selectionFilter().isFiltered(SelectionFilterType::ARPEGGIO)) return false;
       return true;
       }
 
@@ -343,6 +346,7 @@ void Selection::updateSelectedElements()
                         Chord* chord = static_cast<Chord*>(e);
                         if (chord->beam()) _el.append(chord->beam());
                         if (chord->stem()) _el.append(chord->stem());
+                        if (chord->arpeggio()) appendFiltered(chord->arpeggio());
                         foreach(Note* note, chord->notes()) {
                               _el.append(note);
                               if (note->accidental()) _el.append(note->accidental());
@@ -632,6 +636,8 @@ void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) co
                                           if (!canSelect(el))
                                                 note->remove(el);
                                     }
+                              if (chord->arpeggio() && !canSelect(chord->arpeggio()))
+                                    chord->remove(chord->arpeggio());
                               }
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         foreach (Element* articulation, cr->articulations()) {
