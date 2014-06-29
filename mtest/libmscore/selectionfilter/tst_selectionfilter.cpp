@@ -40,6 +40,7 @@ class TestSelectionFilter : public QObject, public MTest
       void filterFiguredBass()      { testFilter(7,SelectionFilterType::FIGURED_BASS); }
       void filterOttava()           { testFilter(8,SelectionFilterType::OTTAVA); }
       void filterPedalLine()        { testFilter(9,SelectionFilterType::PEDAL_LINE); }
+      void filterArpeggio()         { testFilter(10,SelectionFilterType::ARPEGGIO); }
       };
 
 //---------------------------------------------------------
