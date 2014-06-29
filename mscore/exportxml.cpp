@@ -981,8 +981,6 @@ static void writePageFormat(const PageFormat* pf, Xml& xml, double conversion)
       {
       xml.stag("page-layout");
 
-      //qreal t = 2 * PPI * 10 / 9;
-
       xml.tag("page-height", pf->size().height() * conversion);
       xml.tag("page-width", pf->size().width() * conversion);
       QString type("both");
@@ -1010,12 +1008,6 @@ static void writePageFormat(const PageFormat* pf, Xml& xml, double conversion)
 //   defaults
 //---------------------------------------------------------
 
-static void dumpStyleInfo(const TextStyle& st)
-      {
-      qDebug("dumpStyleInfo name '%s' family '%s' size %f",
-             qPrintable(st.name()), qPrintable(st.family()), st.size());
-      }
-
 // _spatium = MScore::DPMM * (millimeter * 10.0 / tenths);
 
 static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
@@ -1038,10 +1030,6 @@ static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
       // and LYRIC1 to get MusicXML defaults
       const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
       const TextStyle tsLyric = s->textStyle(TextStyleType::LYRIC1);
-      dumpStyleInfo(s->textStyle(TextStyleType::TITLE));
-      dumpStyleInfo(tsLyric);
-      dumpStyleInfo(tsStaff);
-      dumpStyleInfo(s->textStyle(TextStyleType::SYSTEM));
       // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
       xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(tsStaff.family()).arg(tsStaff.size()));
       xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(tsLyric.family()).arg(tsLyric.size()));
@@ -1064,7 +1052,24 @@ static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QS
       mttm.write(xml);
       xml.etag();
       }
+      
+//---------------------------------------------------------
+//   parentHeight
+//---------------------------------------------------------
 
+static double parentHeight(const Element* element)
+      {
+            const Element* parent = element->parent();
+            
+            if (!parent)
+                  return 0;
+            
+            if (parent->type() == Element::Type::VBOX) {
+                  return parent->height();
+                  }
+
+            return 0;
+      }
 
 //---------------------------------------------------------
 //   credits
@@ -1072,69 +1077,70 @@ static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QS
 
 void ExportMusicXml::credits(Xml& xml)
       {
-      // debug
-      qDebug("credits:");
       const MeasureBase* measure = _score->measures()->first();
-      if (measure) {
-            foreach(const Element* element, *measure->el()) {
-                  if (element->type() == Element::Type::TEXT) {
-                        const Text* text = (const Text*)element;
-                        bool mustPrint = true;
-                        if (mustPrint) qDebug("text style %d(%s) '%s' at %f,%f",
-                                              text->textStyleType(),
-                                              qPrintable(text->textStyle().name()),
-                                              qPrintable(text->text()),
-                                              text->pagePos().x(),
-                                              text->pagePos().y()
-                                              );
-                        }
-                  }
-            }
       QString rights = _score->metaTag("copyright");
-      if (!rights.isEmpty())
-            qDebug("copyright '%s'", qPrintable(rights));
-      qDebug("end credits");
-      // determine formatting
+
+      // determine page formatting
       const PageFormat* pf = _score->pageFormat();
       if (!pf) return;
-      //const double t  = 2 * PPI * 10 / 9;
-      //const double t  = INCH / millimeters * tenths;
       const double h  = getTenthsFromInches(pf->size().height());
       const double w  = getTenthsFromInches(pf->size().width());
       const double lm = getTenthsFromInches(pf->oddLeftMargin());
       const double rm = getTenthsFromInches(pf->oddRightMargin());
       const double tm = getTenthsFromInches(pf->oddTopMargin());
       const double bm = getTenthsFromInches(pf->oddBottomMargin());
-      qDebug(" h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
+      //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
       // write the credits
       if (measure) {
             foreach(const Element* element, *measure->el()) {
                   if (element->type() == Element::Type::TEXT) {
                         const Text* text = (const Text*)element;
-                        qDebug("x=%g, y=%g fs=%d",
-                               text->pagePos().x(),
-                               h - text->pagePos().y(),
-                               int(text->textStyle().size())
-                               );
-                        const double ty = h - getTenthsFromDots(text->pagePos().y());
-                        // MusicXML credit-words are untyped and simple list position and font info.
-                        // TODO: these parameters should be extracted from text layout and style
-                        //       instead of relying on the style name
+                        const double ph = getTenthsFromDots(parentHeight(text));
+
+                        double tx = w / 2;
+                        double ty = h - getTenthsFromDots(text->pagePos().y());
                         QString styleName = text->textStyle().name();
-                        if (styleName == "Title")
-                              creditWords(xml, _score, w / 2, ty, "center", "top", text->text(), text->textStyle());
-                        else if (styleName == "Subtitle")
-                              creditWords(xml, _score, w / 2, ty, "center", "top", text->text(), text->textStyle());
-                        else if (styleName == "Composer")
-                              creditWords(xml,  _score,w - rm, ty, "right", "top", text->text(), text->textStyle());
-                        else if (styleName == "Lyricist")
-                              creditWords(xml, _score, lm, ty, "left", "top", text->text(), text->textStyle());
-                        else
-                              qDebug("credits: text style %s not supported", qPrintable(styleName));
+
+                        Align al = text->textStyle().align();
+                        QString just;
+                        QString val;
+                        
+                        if (al & AlignmentFlags::RIGHT) {
+                              just = "right";
+                              tx   = w - rm;
+                              }
+                        else if (al & AlignmentFlags::HCENTER) {
+                              just = "center";
+                              // tx already set correctly
+                              }
+                        else {
+                              just = "left";
+                              tx   = lm;
+                              }
+                        
+                        if (al & AlignmentFlags::BOTTOM) {
+                              val = "bottom";
+                              ty -= ph;
+                              }
+                        else if (al & AlignmentFlags::VCENTER) {
+                              val = "middle";
+                              ty -= ph / 2;
+                              }
+                        else if (al & AlignmentFlags::BASELINE) {
+                              val = "baseline";
+                              ty -= ph / 2;
+                              }
+                        else {
+                              val = "top";
+                              // ty already set correctly
+                              }
+                        
+                        creditWords(xml, _score, tx, ty, just, val, text->text(), text->textStyle());
                         }
                   }
             }
+
       if (!rights.isEmpty()) {
             creditWords(xml, _score, w / 2, bm, "center", "bottom", rights, _score->textStyle(TextStyleType::FOOTER));
             }
