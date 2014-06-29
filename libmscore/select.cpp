@@ -22,6 +22,7 @@
 #include "chord.h"
 #include "element.h"
 #include "figuredbass.h"
+#include "glissando.h"
 #include "harmony.h"
 #include "input.h"
 #include "limits.h"
@@ -296,6 +297,8 @@ bool Selection::canSelect(Element* e) const
           && !this->selectionFilter().isFiltered(SelectionFilterType::PEDAL_LINE)) return false;
       if (e->type() == Element::Type::ARPEGGIO
           && !this->selectionFilter().isFiltered(SelectionFilterType::ARPEGGIO)) return false;
+      if (e->type() == Element::Type::GLISSANDO
+          && !this->selectionFilter().isFiltered(SelectionFilterType::GLISSANDO)) return false;
       if (e->type() == Element::Type::FRET_DIAGRAM
           && !this->selectionFilter().isFiltered(SelectionFilterType::FRET_DIAGRAM)) return false;
       return true;
@@ -349,6 +352,7 @@ void Selection::updateSelectedElements()
                         if (chord->beam()) _el.append(chord->beam());
                         if (chord->stem()) _el.append(chord->stem());
                         if (chord->arpeggio()) appendFiltered(chord->arpeggio());
+                        if (chord->glissando()) appendFiltered(chord->glissando());
                         foreach(Note* note, chord->notes()) {
                               _el.append(note);
                               if (note->accidental()) _el.append(note->accidental());
@@ -640,6 +644,8 @@ void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) co
                                     }
                               if (chord->arpeggio() && !canSelect(chord->arpeggio()))
                                     chord->remove(chord->arpeggio());
+                              if (chord->glissando() && !canSelect(chord->glissando()))
+                                    chord->remove(chord->glissando());
                               }
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         foreach (Element* articulation, cr->articulations()) {
