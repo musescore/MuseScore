@@ -16,6 +16,7 @@
 */
 
 #include "mscore.h"
+#include "arpeggio.h"
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
@@ -293,6 +294,8 @@ bool SelectionFilter::canSelect(const Element* e) const
           && !isFiltered(SelectionFilterType::OTTAVA)) return false;
       if (e->type() == Element::Type::PEDAL
           && !isFiltered(SelectionFilterType::PEDAL_LINE)) return false;
+      if (e->type() == Element::Type::ARPEGGIO
+          && !isFiltered(SelectionFilterType::ARPEGGIO)) return false;
       return true;
       }
 
@@ -343,6 +346,7 @@ void Selection::updateSelectedElements()
                         Chord* chord = static_cast<Chord*>(e);
                         if (chord->beam()) _el.append(chord->beam());
                         if (chord->stem()) _el.append(chord->stem());
+                        if (chord->arpeggio()) appendFiltered(chord->arpeggio());
                         foreach(Note* note, chord->notes()) {
                               _el.append(note);
                               if (note->accidental()) _el.append(note->accidental());

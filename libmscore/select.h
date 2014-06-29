@@ -65,6 +65,7 @@ enum class SelectionFilterType {
       FIGURED_BASS            = 1 << 10,
       OTTAVA                  = 1 << 11,
       PEDAL_LINE              = 1 << 12,
+      ARPEGGIO                = 1 << 13,
       ALL                     = -1
       };
 
