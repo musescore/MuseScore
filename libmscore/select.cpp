@@ -289,6 +289,10 @@ bool SelectionFilter::canSelect(const Element* e) const
           && !isFiltered(SelectionFilterType::SLUR)) return false;
       if (e->type() == Element::Type::FIGURED_BASS
           && !isFiltered(SelectionFilterType::FIGURED_BASS)) return false;
+      if (e->type() == Element::Type::OTTAVA
+          && !isFiltered(SelectionFilterType::OTTAVA)) return false;
+      if (e->type() == Element::Type::PEDAL
+          && !isFiltered(SelectionFilterType::PEDAL_LINE)) return false;
       return true;
       }
 
