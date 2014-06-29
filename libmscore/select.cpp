@@ -22,6 +22,7 @@
 #include "chord.h"
 #include "element.h"
 #include "figuredbass.h"
+#include "glissando.h"
 #include "harmony.h"
 #include "input.h"
 #include "limits.h"
@@ -296,8 +297,10 @@ bool SelectionFilter::canSelect(const Element* e) const
           && !isFiltered(SelectionFilterType::PEDAL_LINE)) return false;
       if (e->type() == Element::Type::ARPEGGIO
           && !isFiltered(SelectionFilterType::ARPEGGIO)) return false;
+      if (e->type() == Element::Type::GLISSANDO
+          && !isFiltered(SelectionFilterType::GLISSANDO)) return false;
       if (e->type() == Element::Type::FRET_DIAGRAM
-          && !this->selectionFilter().isFiltered(SelectionFilterType::FRET_DIAGRAM)) return false;
+          && !isFiltered(SelectionFilterType::FRET_DIAGRAM)) return false;
       return true;
       }
 
@@ -349,6 +352,7 @@ void Selection::updateSelectedElements()
                         if (chord->beam()) _el.append(chord->beam());
                         if (chord->stem()) _el.append(chord->stem());
                         if (chord->arpeggio()) appendFiltered(chord->arpeggio());
+                        if (chord->glissando()) appendFiltered(chord->glissando());
                         foreach(Note* note, chord->notes()) {
                               _el.append(note);
                               if (note->accidental()) _el.append(note->accidental());
