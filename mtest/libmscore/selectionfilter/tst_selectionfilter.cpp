@@ -41,6 +41,7 @@ class TestSelectionFilter : public QObject, public MTest
       void filterOttava()           { testFilter(8,SelectionFilterType::OTTAVA); }
       void filterPedalLine()        { testFilter(9,SelectionFilterType::PEDAL_LINE); }
       void filterArpeggio()         { testFilter(10,SelectionFilterType::ARPEGGIO); }
+      void filterFretDiagram()      { testFilter(11,SelectionFilterType::FRET_DIAGRAM); }
       };
 
 //---------------------------------------------------------
