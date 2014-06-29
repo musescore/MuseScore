@@ -37,7 +37,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">selection-filter-dynamics</metaTag>
+    <metaTag name="workTitle">selection-filter-lyrics</metaTag>
     <PageList>
       <Page>
         <System>
@@ -94,7 +94,7 @@
         <height>10</height>
         <Text>
           <style>Title</style>
-          <text>selection-filter-dynamics</text>
+          <text>selection-filter-pedals</text>
           </Text>
         </VBox>
       <Measure number="1">
@@ -110,10 +110,14 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Dynamic>
-          <subtype>f</subtype>
-          <velocity>96</velocity>
-          </Dynamic>
+        <Pedal id="2">
+          <endHook>1</endHook>
+          <endHookHeight>-1.2</endHookHeight>
+          <beginText>
+            <style>Text Line</style>
+            <text><sym>keyboardPedalPed</sym></text>
+            </beginText>
+          </Pedal>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -121,10 +125,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <HairPin id="2">
-          <subtype>0</subtype>
-          <veloChange>10</veloChange>
-          </HairPin>
         <Chord>
           <durationType>quarter</durationType>
           <Note>

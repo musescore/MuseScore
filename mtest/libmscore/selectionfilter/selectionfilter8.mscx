@@ -37,7 +37,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">selection-filter-dynamics</metaTag>
+    <metaTag name="workTitle">selection-filter-hairpins</metaTag>
     <PageList>
       <Page>
         <System>
@@ -62,6 +62,13 @@
         <maxPitchP>103</maxPitchP>
         <minPitchA>55</minPitchA>
         <maxPitchA>88</maxPitchA>
+        <StringData>
+          <frets>24</frets>
+          <string>55</string>
+          <string>62</string>
+          <string>69</string>
+          <string>76</string>
+          </StringData>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -94,7 +101,7 @@
         <height>10</height>
         <Text>
           <style>Title</style>
-          <text>selection-filter-dynamics</text>
+          <text>selection-filter-ottava</text>
           </Text>
         </VBox>
       <Measure number="1">
@@ -110,10 +117,10 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Dynamic>
-          <subtype>f</subtype>
-          <velocity>96</velocity>
-          </Dynamic>
+        <Ottava id="2">
+          <subtype>8va</subtype>
+          <endHook>1</endHook>
+          </Ottava>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -121,10 +128,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <HairPin id="2">
-          <subtype>0</subtype>
-          <veloChange>10</veloChange>
-          </HairPin>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
