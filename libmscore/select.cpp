@@ -275,9 +275,9 @@ void Selection::add(Element* el)
 
 bool Selection::canSelect(Element* e) const
       {
-      if (e->type() == Element::Type::DYNAMIC
+      if ((e->type() == Element::Type::DYNAMIC || e->type() == Element::Type::HAIRPIN)
           && !this->selectionFilter().isFiltered(SelectionFilterType::DYNAMIC)) return false;
-      if (e->type() == Element::Type::ARTICULATION
+      if ((e->type() == Element::Type::ARTICULATION || e->type() == Element::Type::TRILL)
           && !this->selectionFilter().isFiltered(SelectionFilterType::ARTICULATION)) return false;
       if (e->type() == Element::Type::LYRICS
           && !this->selectionFilter().isFiltered(SelectionFilterType::LYRICS)) return false;
@@ -289,6 +289,10 @@ bool Selection::canSelect(Element* e) const
           && !this->selectionFilter().isFiltered(SelectionFilterType::SLUR)) return false;
       if (e->type() == Element::Type::FIGURED_BASS
           && !this->selectionFilter().isFiltered(SelectionFilterType::FIGURED_BASS)) return false;
+      if (e->type() == Element::Type::OTTAVA
+          && !this->selectionFilter().isFiltered(SelectionFilterType::OTTAVA)) return false;
+      if (e->type() == Element::Type::PEDAL
+          && !this->selectionFilter().isFiltered(SelectionFilterType::PEDAL_LINE)) return false;
       return true;
       }
 
