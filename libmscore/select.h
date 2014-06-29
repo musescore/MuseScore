@@ -66,7 +66,8 @@ enum class SelectionFilterType {
       OTTAVA                  = 1 << 11,
       PEDAL_LINE              = 1 << 12,
       ARPEGGIO                = 1 << 13,
-      FRET_DIAGRAM            = 1 << 14,
+      GLISSANDO               = 1 << 14,
+      FRET_DIAGRAM            = 1 << 15,
       ALL                     = -1
       };
 
