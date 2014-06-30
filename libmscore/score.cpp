@@ -2831,38 +2831,40 @@ void Score::selectRange(Element* e, int staffIdx)
                                                   etick);
                   }
             else if (_selection.isSingle()) {
-                  Segment* seg = 0;
-                  Element* oe  = _selection.element();
-                  bool reverse = false;
-                  int ticks    = 0;
-                  if (oe->isChordRest())
-                        ticks = static_cast<ChordRest*>(oe)->actualTicks();
-                  int oetick = 0;
-                  if (oe->parent()->type() == Element::Type::SEGMENT)
-                        oetick = static_cast<Segment*>(oe->parent())->tick();
-                  if (tick < oetick)
-                        seg = m->first();
-                  else if (etick >= oetick + ticks) {
-                        seg = m->last();
-                        reverse = true;
+                  Element* oe = selection().element();
+                  if (oe->type() == Element::Element::Type::NOTE || oe->isChordRest()) {
+                        if (oe->type() == Element::Element::Type::NOTE)
+                              oe = oe->parent();
+
+                        ChordRest* cr = static_cast<ChordRest*>(oe);
+                        int oetick = cr->segment()->tick();
+                        if (tick < oetick) {
+                              _selection.setStartSegment(m->tick2segment(tick));
+                              if (etick >= oetick)
+                                    _selection.setEndSegment(m->last());
+                              else
+                                    _selection.setEndSegment(cr->segment()->next1MM());
+                                    //change this to call nextSegmentAfterCR
+                              }
+                        else {
+                              _selection.setStartSegment(cr->segment());
+                              _selection.setEndSegment(m->last());
+                              }
+
+                        _selection.setStaffStart(staffIdx);
+                        _selection.setStaffEnd(staffIdx + 1);
+                        if(_selection.staffStart() > cr->staffIdx())
+                              _selection.setStaffStart(cr->staffIdx());
+                        else if (cr->staffIdx() >= _selection.staffEnd())
+                              _selection.setStaffEnd(cr->staffIdx() + 1);
                         }
-                  int track = staffIdx * VOICES;
-                  Element* el = 0;
-                  // find first or last chord/rest in measure
-                  for (;;) {
-                        el = seg->element(track);
-                        if (el && el->isChordRest())
-                              break;
-                        if (reverse)
-                              seg = seg->prev1MM();
-                        else
-                              seg = seg->next1MM();
-                        if (!seg)
-                              break;
+                  else {
+                        deselectAll();
+                        _selection.setRange(m->tick2segment(tick),
+                                            m == lastMeasure() ? 0 : m->last(),
+                                            staffIdx,
+                                            staffIdx + 1);
                         }
-                  if (el)
-                        select(el, SelectType::RANGE, staffIdx);
-                  return;
                   }
             else {
                   qDebug("SELECT_RANGE: measure: sel state %hhd", _selection.state());
