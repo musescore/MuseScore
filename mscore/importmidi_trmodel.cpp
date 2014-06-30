@@ -6,7 +6,7 @@ namespace Ms {
 
 TracksModel::TracksModel()
       : trackCount_(0)
-      , colCount_(TrackCol::COL_COUNT)
+      , colCount_(TrackCol::TCOL_COUNT)
       {
       }
 

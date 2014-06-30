@@ -11,15 +11,13 @@ struct TrackData;
 struct TrackOperations;
 struct DefinedTrackOperations;
 
-struct TrackCol {
-      enum {
+enum TrackCol : char {
             DO_IMPORT = 0,
             TRACK_NUMBER,
             STAFF_NAME,
             INSTRUMENT,
             LYRICS,
-            COL_COUNT
-            };
+            TCOL_COUNT
       };
 
 class TracksModel : public QAbstractTableModel
