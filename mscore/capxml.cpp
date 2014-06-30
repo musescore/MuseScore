@@ -269,7 +269,7 @@ void ChordObj::readCapx(XmlReader& e)
       rightTie     = false;
       beamShift    = 0;
       beamSlope    = 0;
-      beamMode      = AUTO_BEAM;
+      beamMode      = BeamMode::AUTO;
       notationStave = 0;
 
       while (e.readNextStartElement()) {
@@ -710,7 +710,7 @@ void Capella::readCapxSystem(XmlReader& e)
       s->bBarCountReset = 0;
       s->explLeftIndent = 0; // ?? TODO ?? use in capella.cpp commented out
 
-      s->beamMode = 0;
+      s->beamMode = BeamMode::AUTO;
       s->tempo    = 0;
       s->color    = Qt::black;
 
