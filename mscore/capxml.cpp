@@ -62,15 +62,15 @@ static QFont capxReadFont(XmlReader& e)
 
 static bool qstring2timestep(QString& str, TIMESTEP& tstp)
       {
-      if      (str == "1/1")   { tstp = D1;      return true; }
-      else if (str == "1/2")   { tstp = D2;      return true; }
-      else if (str == "1/4")   { tstp = D4;      return true; }
-      else if (str == "1/8")   { tstp = D8;      return true; }
-      else if (str == "1/16")  { tstp = D16;     return true; }
-      else if (str == "1/32")  { tstp = D32;     return true; }
-      else if (str == "1/64")  { tstp = D64;     return true; }
-      else if (str == "1/128") { tstp = D128;    return true; }
-      else if (str == "2/1")   { tstp = D_BREVE; return true; }
+      if      (str == "1/1")   { tstp = TIMESTEP::D1;      return true; }
+      else if (str == "1/2")   { tstp = TIMESTEP::D2;      return true; }
+      else if (str == "1/4")   { tstp = TIMESTEP::D4;      return true; }
+      else if (str == "1/8")   { tstp = TIMESTEP::D8;      return true; }
+      else if (str == "1/16")  { tstp = TIMESTEP::D16;     return true; }
+      else if (str == "1/32")  { tstp = TIMESTEP::D32;     return true; }
+      else if (str == "1/64")  { tstp = TIMESTEP::D64;     return true; }
+      else if (str == "1/128") { tstp = TIMESTEP::D128;    return true; }
+      else if (str == "2/1")   { tstp = TIMESTEP::D_BREVE; return true; }
       return false;
       }
 
@@ -109,7 +109,7 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
       invisible  = false;
       notBlack   = false;
       color = Qt::black;
-      t = D1;
+      t = TIMESTEP::D1;
       horizontalShift = 0;
       count = 0;
       tripartite   = 0;
