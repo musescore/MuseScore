@@ -433,16 +433,16 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         chord->setTrack(track);
                         switch (o->stemDir) {
-                              case ChordObj::DOWN:
+                              case ChordObj::StemDir::DOWN:
                                     chord->setStemDirection(MScore::Direction::DOWN);
                                     break;
-                              case ChordObj::UP:
+                              case ChordObj::StemDir::UP:
                                     chord->setStemDirection(MScore::Direction::UP);
                                     break;
-                              case ChordObj::NONE:
+                              case ChordObj::StemDir::NONE:
                                     chord->setNoStem(true);
                                     break;
-                              case ChordObj::AUTO:
+                              case ChordObj::StemDir::AUTO:
                               default:
                                     break;
                               }
@@ -1504,7 +1504,7 @@ ChordObj::ChordObj(Capella* c)
 
 void ChordObj::read()
       {
-      stemDir      = 0;
+      stemDir      = StemDir::AUTO;
       dStemLength  = 0;
       nTremoloBars = 0;
       articulation = 0;
@@ -1521,7 +1521,7 @@ void ChordObj::read()
       Q_ASSERT(notationStave >= -1 && notationStave <= 1);
 
       if (flags & 0x04) {
-            stemDir     = cap->readChar();
+            stemDir     = StemDir(cap->readChar());
             dStemLength = cap->readChar();
             }
       if (flags & 0x08) {
