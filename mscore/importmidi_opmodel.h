@@ -18,12 +18,10 @@ struct Controller;
 struct TrackOperations;
 struct DefinedTrackOperations;
 
-struct OperationCol {
-      enum {
+enum OperationCol {
             OPER_NAME,
             VALUE,
-            COL_COUNT
-            };
+            OCOL_COUNT
       };
 
 class OperationsModel : public QAbstractItemModel
