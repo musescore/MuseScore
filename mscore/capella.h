@@ -76,7 +76,7 @@ enum class ClefLine : char {
       L5, L4, L3, L2, L1
       };
 
-enum OCT  {
+enum class Oct : char {
       OCT_ALTA, OCT_NULL, OCT_BASSA
       };
 
@@ -98,8 +98,8 @@ class CapClef : public NoteObj, public CapellaObj {
       ClefType clef() const;
 
       ClefLine line;
-      OCT  oct;
-      static ClefType clefType(Form, ClefLine, OCT);
+      Oct  oct;
+      static ClefType clefType(Form, ClefLine, Oct);
       };
 
 //---------------------------------------------------------
@@ -195,7 +195,7 @@ struct CapStaffLayout {
 
       Form form;
       ClefLine line;
-      OCT oct;                // clef
+      Oct oct;                // clef
 
       // Schlagzeuginformation
       bool bPercussion;             // use drum channel
