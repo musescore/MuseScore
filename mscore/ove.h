@@ -455,12 +455,12 @@ enum class DynamicsType : char {
       SFP
       };
 
-enum WedgeType {
-      Wedge_Cres_Line = 0,	// <
-      Wedge_Double_Line,		// <>, not appear in xml
-      Wedge_Decresc_Line,		// >
-      Wedge_Cres,				// cresc., not appear in xml, will create Expression
-      Wedge_Decresc			// decresc., not appear in xml, will create Expression
+enum class WedgeType : char {
+      Cres_Line = 0, // <
+      Double_Line,   // <>, not appear in xml
+      Decresc_Line,  // >
+      Cres,          // cresc., not appear in xml, will create Expression
+      Decresc        // decresc., not appear in xml, will create Expression
       };
 
 enum KuoHaoType {

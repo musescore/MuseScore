@@ -2307,7 +2307,7 @@ int Dynamics::getVelocity() const {
 WedgeEndPoint::WedgeEndPoint() {
       musicDataType_ = MusicDataType::Wedge_EndPoint;
 
-      wedgeType_ = Wedge_Cres;
+      wedgeType_ = WedgeType::Cres;
       height_ = 24;
       wedgeStart_ = true;
       }
@@ -2340,7 +2340,7 @@ bool WedgeEndPoint::getWedgeStart() const {
 Wedge::Wedge() {
       musicDataType_ = MusicDataType::Wedge;
 
-      wedgeType_ = Wedge_Cres;
+      wedgeType_ = WedgeType::Cres;
       height_ = 24;
       }
 
@@ -6245,29 +6245,29 @@ bool BarsParse::parseWedge(MeasureData* measureData, int length) {
 
       // wedge type
       if( !readBuffer(placeHolder, 1) ) { return false; }
-      WedgeType wedgeType = Wedge_Cres_Line;
+      WedgeType wedgeType = WedgeType::Cres_Line;
       bool wedgeOrExpression = true;
       unsigned int highHalfByte = getHighNibble(placeHolder.toUnsignedInt());
       unsigned int lowHalfByte = getLowNibble(placeHolder.toUnsignedInt());
 
       switch (highHalfByte) {
             case 0x0: {
-                  wedgeType = Wedge_Cres_Line;
+                  wedgeType = WedgeType::Cres_Line;
                   wedgeOrExpression = true;
                   break;
                   }
             case 0x4: {
-                  wedgeType = Wedge_Decresc_Line;
+                  wedgeType = WedgeType::Decresc_Line;
                   wedgeOrExpression = true;
                   break;
                   }
             case 0x6: {
-                  wedgeType = Wedge_Decresc;
+                  wedgeType = WedgeType::Decresc;
                   wedgeOrExpression = false;
                   break;
                   }
             case 0x2: {
-                  wedgeType = Wedge_Cres;
+                  wedgeType = WedgeType::Cres;
                   wedgeOrExpression = false;
                   break;
                   }
@@ -6277,7 +6277,7 @@ bool BarsParse::parseWedge(MeasureData* measureData, int length) {
 
       // 0xb | 0x8(ove3) , else 3, 0(ove3)
       if( (lowHalfByte & 0x8) == 0x8 ) {
-            wedgeType = Wedge_Double_Line;
+            wedgeType = WedgeType::Double_Line;
             wedgeOrExpression = true;
             }
 
@@ -6326,7 +6326,7 @@ bool BarsParse::parseWedge(MeasureData* measureData, int length) {
                         express->setText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
                         }
                   } else {
-                  QString str = wedgeType==Wedge_Cres ? "cresc" : "decresc";
+                  QString str = wedgeType==WedgeType::Cres ? "cresc" : "decresc";
                   express->setText(str);
 
                   if( !jump(8) ) { return false; }
@@ -7683,8 +7683,8 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
       MeasureData* measureData2 = ove_->getMeasureData(part, track, bar2Index);
       WedgeType wedgeType = wedge->getWedgeType();
 
-      if( wedge->getWedgeType() == Wedge_Double_Line ) {
-            wedgeType = Wedge_Cres_Line;
+      if( wedge->getWedgeType() == WedgeType::Double_Line ) {
+            wedgeType = WedgeType::Cres_Line;
             }
 
       wedge->start()->setMeasure(bar1Index);
@@ -7710,7 +7710,7 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
             measureData2->addMusicData(stopPoint);
             }
 
-      if( wedge->getWedgeType() == Wedge_Double_Line ) {
+      if( wedge->getWedgeType() == WedgeType::Double_Line ) {
             Measure* middleMeasure = NULL;
             int middleUnit = 0;
 
@@ -7727,7 +7727,7 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
                   midStopPoint->setTick(wedge->getTick());
                   midStopPoint->start()->setOffset(middleUnit);
                   midStopPoint->setWedgeStart(false);
-                  midStopPoint->setWedgeType(Wedge_Cres_Line);
+                  midStopPoint->setWedgeType(WedgeType::Cres_Line);
                   midStopPoint->setHeight(wedge->getHeight());
 
                   WedgeEndPoint* midStartPoint = new WedgeEndPoint();
@@ -7736,7 +7736,7 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
                   midStartPoint->setTick(wedge->getTick());
                   midStartPoint->start()->setOffset(middleUnit);
                   midStartPoint->setWedgeStart(true);
-                  midStartPoint->setWedgeType(Wedge_Decresc_Line);
+                  midStartPoint->setWedgeType(WedgeType::Decresc_Line);
                   midStartPoint->setHeight(wedge->getHeight());
                   }
             }
