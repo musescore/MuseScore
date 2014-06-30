@@ -939,43 +939,43 @@ const OVE::Tuplet* getTuplet(const QList<OVE::MusicData*>& tuplets, int unit){
 TDuration OveNoteType_To_Duration(OVE::NoteType noteType){
       TDuration d;
       switch(noteType){
-            case OVE::Note_DoubleWhole: {
+            case OVE::NoteType::Note_DoubleWhole: {
                   d.setType(TDuration::DurationType::V_BREVE);
                   break;
                   }
-            case OVE::Note_Whole: {
+            case OVE::NoteType::Note_Whole: {
                   d.setType(TDuration::DurationType::V_WHOLE);
                   break;
                   }
-            case OVE::Note_Half: {
+            case OVE::NoteType::Note_Half: {
                   d.setType(TDuration::DurationType::V_HALF);
                   break;
                   }
-            case OVE::Note_Quarter: {
+            case OVE::NoteType::Note_Quarter: {
                   d.setType(TDuration::DurationType::V_QUARTER);
                   break;
                   }
-            case OVE::Note_Eight: {
+            case OVE::NoteType::Note_Eight: {
                   d.setType(TDuration::DurationType::V_EIGHT);
                   break;
                   }
-            case OVE::Note_Sixteen: {
+            case OVE::NoteType::Note_Sixteen: {
                   d.setType(TDuration::DurationType::V_16TH);
                   break;
                   }
-            case OVE::Note_32: {
+            case OVE::NoteType::Note_32: {
                   d.setType(TDuration::DurationType::V_32ND);
                   break;
                   }
-            case OVE::Note_64: {
+            case OVE::NoteType::Note_64: {
                   d.setType(TDuration::DurationType::V_64TH);
                   break;
                   }
-            case OVE::Note_128: {
+            case OVE::NoteType::Note_128: {
                   d.setType(TDuration::DurationType::V_128TH);
                   break;
                   }
-            case OVE::Note_256: {
+            case OVE::NoteType::Note_256: {
                   d.setType(TDuration::DurationType::V_256TH);
                   break;
                   }
@@ -1314,31 +1314,31 @@ int getGraceLevel(const QList<OVE::NoteContainer*>& containers, int tick, int un
 bool isRestDefaultLine(OVE::Note* rest, OVE::NoteType noteType) {
       bool isDefault = true;
       switch (noteType) {
-            case OVE::Note_DoubleWhole:
-            case OVE::Note_Whole:
-            case OVE::Note_Half:
-            case OVE::Note_Quarter: {
+            case OVE::NoteType::Note_DoubleWhole:
+            case OVE::NoteType::Note_Whole:
+            case OVE::NoteType::Note_Half:
+            case OVE::NoteType::Note_Quarter: {
                   if(rest->getLine() != 0)
                         isDefault = false;
                   break;
                   }
-            case OVE::Note_Eight: {
+            case OVE::NoteType::Note_Eight: {
                   if(rest->getLine() != 1)
                         isDefault = false;
                   break;
                   }
-            case OVE::Note_Sixteen:
-            case OVE::Note_32: {
+            case OVE::NoteType::Note_Sixteen:
+            case OVE::NoteType::Note_32: {
                   if(rest->getLine() != -1)
                         isDefault = false;
                   break;
                   }
-            case OVE::Note_64: {
+            case OVE::NoteType::Note_64: {
                   if(rest->getLine() != -3)
                         isDefault = false;
                   break;
                   }
-            case OVE::Note_128: {
+            case OVE::NoteType::Note_128: {
                   if(rest->getLine() != -4)
                         isDefault = false;
                   break;
@@ -1506,13 +1506,13 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                         cr->add(note);
 
                         cr->setVisible(oveNote->getShow());
-                        ((Ms::Chord*) cr)->setNoStem((int) container->getNoteType() <= OVE::Note_Whole);
+                        ((Ms::Chord*) cr)->setNoStem(int(container->getNoteType()) <= int(OVE::NoteType::Note_Whole));
                         if(!setDirection)
                               ((Ms::Chord*) cr)->setStemDirection(container->getStemUp() ? MScore::Direction::UP : MScore::Direction::DOWN);
 
                         // cross staff
                         int staffMove = 0;
-                        if(partStaffCount == 2){/*treble-bass*/
+                        if(partStaffCount == 2) { /*treble-bass*/
                               staffMove = oveNote->getOffsetStaff();
                               }
                         cr->setStaffMove(staffMove);
@@ -1549,7 +1549,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                         bool create = true;
 
                         // check tuplet start
-                        if(container->getNoteType() < OVE::Note_Eight) {
+                        if(container->getNoteType() < OVE::NoteType::Note_Eight) {
                               const OVE::Tuplet* oveTuplet = getTuplet(tuplets, container->start()->getOffset());
                               if(oveTuplet == 0) {
                                     create = false;

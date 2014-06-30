@@ -341,23 +341,23 @@ enum class ArticulationType : char {
       Caesura,*/
       };
 
-enum NoteType {
-      Note_DoubleWhole= 0x0,
-      Note_Whole		= 0x1,
-      Note_Half		= 0x2,
-      Note_Quarter	= 0x3,
-      Note_Eight		= 0x4,
-      Note_Sixteen	= 0x5,
-      Note_32			= 0x6,
-      Note_64			= 0x7,
-      Note_128		= 0x8,
-      Note_256		= 0x9,
+enum class NoteType : char {
+      Note_DoubleWhole = 0x0,
+      Note_Whole       = 0x1,
+      Note_Half        = 0x2,
+      Note_Quarter     = 0x3,
+      Note_Eight       = 0x4,
+      Note_Sixteen     = 0x5,
+      Note_32          = 0x6,
+      Note_64          = 0x7,
+      Note_128         = 0x8,
+      Note_256         = 0x9,
 
       Note_None
       };
 
 inline int NoteTypeToTick(NoteType type, int quarter) {
-      int c = int(pow(2.0, (int)type)) ;
+      int c = int(pow(2.0, int(type))) ;
       return quarter * 4 * 2 / c ;
       }
 
