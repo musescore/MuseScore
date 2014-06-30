@@ -177,10 +177,10 @@ void CapExplicitBarline::readCapx(XmlReader& e)
 void CapClef::readCapx(XmlReader& e)
       {
       QString clef = e.attribute("clef");
-      if (clef == "G2-") { form = Form::G; line = ClefLine::L2; oct = OCT_BASSA; }
-      else if (clef == "treble") { form = Form::G; line = ClefLine::L2; oct = OCT_NULL; }
-      else if (clef == "bass") { form = Form::F; line = ClefLine::L4; oct = OCT_NULL; }
-      else { /* default */ form = Form::G; line = ClefLine::L2; oct = OCT_NULL; }
+      if (clef == "G2-") { form = Form::G; line = ClefLine::L2; oct = Oct::OCT_BASSA; }
+      else if (clef == "treble") { form = Form::G; line = ClefLine::L2; oct = Oct::OCT_NULL; }
+      else if (clef == "bass") { form = Form::F; line = ClefLine::L4; oct = Oct::OCT_NULL; }
+      else { /* default */ form = Form::G; line = ClefLine::L2; oct = Oct::OCT_NULL; }
       qDebug("Clef::read '%s' -> form %d line %d oct %d", qPrintable(clef), form, line, oct);
       e.readNext();
       }
@@ -805,7 +805,7 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
       unsigned char clef = 0;
       sl->form = Form(clef & 7);
       sl->line = ClefLine((clef >> 3) & 7);
-      sl->oct  = OCT((clef >> 6));
+      sl->oct  = Oct((clef >> 6));
       // qDebug("   clef %x  form %d, line %d, oct %d", clef, sl->form, sl->line, sl->oct);
 
       // Schlagzeuginformation
