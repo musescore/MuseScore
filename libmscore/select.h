@@ -68,6 +68,7 @@ enum class SelectionFilterType {
       ARPEGGIO                = 1 << 13,
       GLISSANDO               = 1 << 14,
       FRET_DIAGRAM            = 1 << 15,
+      BREATH                  = 1 << 16,
       ALL                     = -1
       };
 
