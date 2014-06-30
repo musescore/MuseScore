@@ -649,7 +649,7 @@ int StaffType::physStringToVisual(int strg) const
       return (_upsideDown ? _lines - 1 - strg : strg);
       }
 
-int StaffType::VisualStringToPhys(int strg) const
+int StaffType::visualStringToPhys(int strg) const
       {
       if(strg <= VISUAL_STRING_NONE || strg >= _lines)      // if no visual string, return topmost physical string
             return 0;

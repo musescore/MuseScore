@@ -894,7 +894,7 @@ void Score::putNote(const Position& p, bool replace)
                         return;
                   stringData = instr->stringData();
                   tab = st->staffType();
-                  int string = tab->VisualStringToPhys(line);
+                  int string = tab->visualStringToPhys(line);
                   if (string < 0 || string >= stringData->strings())
                       return;
                   // build a default NoteVal for that line
