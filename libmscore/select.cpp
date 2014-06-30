@@ -301,6 +301,8 @@ bool SelectionFilter::canSelect(const Element* e) const
           && !isFiltered(SelectionFilterType::GLISSANDO)) return false;
       if (e->type() == Element::Type::FRET_DIAGRAM
           && !isFiltered(SelectionFilterType::FRET_DIAGRAM)) return false;
+      if (e->type() == Element::Type::BREATH
+          && !isFiltered(SelectionFilterType::BREATH)) return false;
       return true;
       }
 

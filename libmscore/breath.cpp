@@ -53,6 +53,7 @@ void Breath::layout()
 
 void Breath::write(Xml& xml) const
       {
+      if (!xml.canWrite(this)) return;
       xml.stag("Breath");
       xml.tag("subtype", _breathType);
       Element::writeProperties(xml);
