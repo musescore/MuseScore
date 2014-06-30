@@ -1286,7 +1286,7 @@ Note::Note() {
       showAccidental_ = false;
       offVelocity_ = 0x40;
       onVelocity_ = 0x50;
-      headType_ = NoteHead_Standard;
+      headType_ = NoteHeadType::Standard;
       tiePos_ = Tie_None;
       offsetStaff_ = 0;
       show_ = true;
