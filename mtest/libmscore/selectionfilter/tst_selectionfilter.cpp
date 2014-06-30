@@ -43,6 +43,7 @@ class TestSelectionFilter : public QObject, public MTest
       void filterArpeggio()         { testFilter(10,SelectionFilterType::ARPEGGIO); }
       void filterFretDiagram()      { testFilter(11,SelectionFilterType::FRET_DIAGRAM); }
       void filterGlissando()        { testFilter(12,SelectionFilterType::GLISSANDO); }
+      void filterBreath()           { testFilter(13,SelectionFilterType::BREATH); }
       };
 
 //---------------------------------------------------------
