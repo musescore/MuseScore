@@ -4438,55 +4438,55 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
             if( !getCondElementType(thisByte, type) ) { return false; }
 
             switch (type) {
-                  case Cond_Bar_Number: {
+                  case CondType::Bar_Number: {
                         if (!parseBarNumber(measure, twoByte - 1)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Repeat: {
+                  case CondType::Repeat: {
                         if (!parseRepeatSymbol(measureData, oldBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Numeric_Ending: {
+                  case CondType::Numeric_Ending: {
                         if (!parseNumericEndings(measureData, oldBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Decorator: {
+                  case CondType::Decorator: {
                         if (!parseDecorators(measureData, newBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Tempo: {
+                  case CondType::Tempo: {
                         if (!parseTempo(measureData, newBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Text: {
+                  case CondType::Text: {
                         if (!parseText(measureData, newBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Expression: {
+                  case CondType::Expression: {
                         if (!parseExpressions(measureData, newBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Time_Parameters: {
+                  case CondType::Time_Parameters: {
                         if (!parseTimeSignatureParameters(measure, newBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Barline_Parameters: {
+                  case CondType::Barline_Parameters: {
                         if (!parseBarlineParameters(measure, newBlockSize)) {
                               return false;
                               }
@@ -6928,23 +6928,23 @@ bool BarsParse::parseOffsetElement(OffsetElement* ptr) {
 
 bool BarsParse::getCondElementType(unsigned int byteData, CondType& type) {
       if( byteData == 0x09 ) {
-            type = Cond_Time_Parameters;
+            type = CondType::Time_Parameters;
             } else if (byteData == 0x0A) {
-            type = Cond_Bar_Number;
+            type = CondType::Bar_Number;
             } else if (byteData == 0x16) {
-            type = Cond_Decorator;
+            type = CondType::Decorator;
             } else if (byteData == 0x1C) {
-            type = Cond_Tempo;
+            type = CondType::Tempo;
             } else if (byteData == 0x1D) {
-            type = Cond_Text;
+            type = CondType::Text;
             } else if (byteData == 0x25) {
-            type = Cond_Expression;
+            type = CondType::Expression;
             } else if (byteData == 0x30) {
-            type = Cond_Barline_Parameters;
+            type = CondType::Barline_Parameters;
             } else if (byteData == 0x31) {
-            type = Cond_Repeat;
+            type = CondType::Repeat;
             } else if (byteData == 0x32) {
-            type = Cond_Numeric_Ending;
+            type = CondType::Numeric_Ending;
             } else {
             return false;
             }
