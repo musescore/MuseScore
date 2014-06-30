@@ -57,7 +57,7 @@ static QString charFormat2QString(const CharFormat& f)
 MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, const QString& t, const TextStyle& defTs, const TextStyle& actTs)
       : attribs(attr), tagname(tag)
       {
-      qDebug("MScoreTextToMXML('%s')", qPrintable(t));
+      //qDebug("MScoreTextToMXML('%s')", qPrintable(t));
       // handle difference between style for words / lyric and actual type
       oldFormat.setFontFamily(defTs.family());
       newFormat.setFontFamily(actTs.family());
