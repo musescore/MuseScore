@@ -645,7 +645,7 @@ ScoreView::ScoreView(QWidget* parent)
       double mag  = preferences.mag;
       _matrix     = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
       imatrix     = _matrix.inverted();
-      _magIdx     = preferences.mag == 1.0 ? MAG_100 : MAG_FREE;
+      _magIdx     = preferences.mag == 1.0 ? MagIdx::MAG_100 : MagIdx::MAG_FREE;
       focusFrame  = 0;
       dragElement = 0;
       curElement  = 0;
@@ -1163,7 +1163,7 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
 
 void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
       {
-      if (_magIdx == MAG_PAGE_WIDTH || _magIdx == MAG_PAGE || _magIdx == MAG_DBL_PAGE) {
+      if (_magIdx == MagIdx::MAG_PAGE_WIDTH || _magIdx == MagIdx::MAG_PAGE || _magIdx == MagIdx::MAG_DBL_PAGE) {
             double m = mscore->getMag(this);
             setMag(m);
             }
@@ -1978,7 +1978,7 @@ void ScoreView::zoom(qreal _mag, const QPointF& pos)
 
       mscore->setMag(_mag);
       setMag(_mag);
-      _magIdx = MAG_FREE;
+      _magIdx = MagIdx::MAG_FREE;
 
       QPointF p2 = imatrix.map(pos);
       QPointF p3 = p2 - p1;
@@ -2288,7 +2288,7 @@ void ScoreView::setMag(qreal nmag)
 //   setMagIdx
 //---------------------------------------------------------
 
-void ScoreView::setMag(int idx, double mag)
+void ScoreView::setMag(MagIdx idx, double mag)
       {
       _magIdx = idx;
       setMag(mag);

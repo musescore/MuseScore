@@ -25,6 +25,7 @@ namespace Ms {
 
 class ScoreView;
 class Score;
+enum class MagIdx : char;
 
 //---------------------------------------------------------
 //   TabScoreView
@@ -74,7 +75,7 @@ class ScoreTab : public QWidget {
 
       ScoreView* view() const { return view(currentIndex()); }
       bool contains(ScoreView*) const;
-      void initScoreView(int idx, double mag, int magIdx, double xoffset, double yoffset);
+      void initScoreView(int idx, double mag, MagIdx magIdx, double xoffset, double yoffset);
       };
 
 

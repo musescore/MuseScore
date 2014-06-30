@@ -52,6 +52,7 @@ class ContinuousPanel;
 class Tuplet;
 
 enum class POS : char;
+enum class MagIdx : char;
 
 enum {
       TEXT_TITLE,
@@ -138,7 +139,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       QLineF dropAnchor;            ///< line to current anchor point during dragMove
 
       QTransform _matrix, imatrix;
-      int _magIdx;
+      MagIdx _magIdx;
 
       QStateMachine* sm;
       QState* states[STATES];
@@ -366,8 +367,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void setDropAnchor(const QLineF&);
       const QTransform& matrix() const  { return _matrix; }
       qreal mag() const;
-      int magIdx() const                         { return _magIdx; }
-      void setMag(int idx, double mag);
+      MagIdx magIdx() const             { return _magIdx; }
+      void setMag(MagIdx idx, double mag);
       qreal xoffset() const;
       qreal yoffset() const;
       void setOffset(qreal x, qreal y);
@@ -377,15 +378,15 @@ class ScoreView : public QWidget, public MuseScoreView {
       void pageTop();
       void pageEnd();
       QPointF toLogical(const QPoint& p) const { return imatrix.map(QPointF(p)); }
-      QRectF  toLogical(const QRectF& r) const { return imatrix.mapRect(r);      }
-      QRect toPhysical(const QRectF& r) const { return _matrix.mapRect(r).toRect(); }
+      QRectF toLogical(const QRectF& r) const  { return imatrix.mapRect(r); }
+      QRect toPhysical(const QRectF& r) const  { return _matrix.mapRect(r).toRect(); }
 
       void search(const QString& s);
       void searchMeasure(int i);
       void searchPage(int i);
       void gotoMeasure(Measure*);
       void selectMeasure(int m);
-      void postCmd(const char* cmd)   { sm->postEvent(new CommandEvent(cmd));  }
+      void postCmd(const char* cmd)   { sm->postEvent(new CommandEvent(cmd)); }
       void setFocusRect();
       Element* getDragElement() const { return dragElement; }
       void changeVoice(int voice);

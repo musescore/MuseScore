@@ -1562,10 +1562,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       getAction("show-pageborders")->setChecked(cs->showPageborders());
       updateUndoRedo();
 
-      if (view->magIdx() == MAG_FREE)
+      if (view->magIdx() == MagIdx::MAG_FREE)
             mag->setMag(view->mag());
       else
-            mag->setCurrentIndex(view->magIdx());
+            mag->setCurrentIndex(int(view->magIdx()));
 
       setWindowTitle("MuseScore: " + cs->name());
 
@@ -2890,7 +2890,7 @@ void MuseScore::dirtyChanged(Score* s)
 //   magChanged
 //---------------------------------------------------------
 
-void MuseScore::magChanged(int idx)
+void MuseScore::magChanged(MagIdx idx)
       {
       if (cv)
             cv->setMag(idx, mag->getMag(cv));
@@ -2906,7 +2906,7 @@ void MuseScore::incMag()
             qreal _mag = cv->mag() * 1.7;
             if (_mag > 16.0)
                   _mag = 16.0;
-            cv->setMag(MAG_FREE, _mag);
+            cv->setMag(MagIdx::MAG_FREE, _mag);
             setMag(_mag);
             }
       }
@@ -2921,7 +2921,7 @@ void MuseScore::decMag()
             qreal _mag = cv->mag() / 1.7;
             if (_mag < 0.05)
                   _mag = 0.05;
-            cv->setMag(MAG_FREE, _mag);
+            cv->setMag(MagIdx::MAG_FREE, _mag);
             setMag(_mag);
             }
       }
@@ -2942,7 +2942,7 @@ double MuseScore::getMag(ScoreView* canvas) const
 void MuseScore::setMag(double d)
       {
       mag->setMag(d);
-      mag->setMagIdx(MAG_FREE);
+      mag->setMagIdx(MagIdx::MAG_FREE);
       }
 
 //---------------------------------------------------------
@@ -3164,10 +3164,10 @@ void MuseScore::writeSessionFile(bool cleanExit)
                   xml.stag("ScoreView");
                   xml.tag("tab", tab);    // 0 instead of "tab" does not work
                   xml.tag("idx", i);
-                  if (v->magIdx() == MAG_FREE)
+                  if (v->magIdx() == MagIdx::MAG_FREE)
                         xml.tag("mag", v->mag());
                   else
-                        xml.tag("magIdx", v->magIdx());
+                        xml.tag("magIdx", int(v->magIdx()));
                   xml.tag("x",   v->xoffset() / MScore::DPMM);
                   xml.tag("y",   v->yoffset() / MScore::DPMM);
                   xml.etag();
@@ -3184,10 +3184,10 @@ void MuseScore::writeSessionFile(bool cleanExit)
                         xml.stag("ScoreView");
                         xml.tag("tab", 1);
                         xml.tag("idx", i);
-                        if (v->magIdx() == MAG_FREE)
+                        if (v->magIdx() == MagIdx::MAG_FREE)
                               xml.tag("mag", v->mag());
                         else
-                              xml.tag("magIdx", v->magIdx());
+                              xml.tag("magIdx", int(v->magIdx()));
                         xml.tag("x",   v->xoffset() / MScore::DPMM);
                         xml.tag("y",   v->yoffset() / MScore::DPMM);
                         xml.etag();
@@ -3340,7 +3340,7 @@ bool MuseScore::restoreSession(bool always)
                               }
                         else if (tag == "ScoreView") {
                               double x = .0, y = .0, vmag = .0;
-                              int magIdx = MAG_FREE;
+                              MagIdx magIdx = MagIdx::MAG_FREE;
                               int tab = 0, idx = 0;
                               while (e.readNextStartElement()) {
                                     const QStringRef& tag(e.name());
@@ -3351,7 +3351,7 @@ bool MuseScore::restoreSession(bool always)
                                     else if (tag == "mag")
                                           vmag = e.readDouble();
                                     else if (tag == "magIdx")
-                                          magIdx = e.readInt();
+                                          magIdx = MagIdx(e.readInt());
                                     else if (tag == "x")
                                           x = e.readDouble() * MScore::DPMM;
                                     else if (tag == "y")
@@ -3361,7 +3361,7 @@ bool MuseScore::restoreSession(bool always)
                                           return false;
                                           }
                                     }
-                              if (magIdx != MAG_FREE)
+                              if (magIdx != MagIdx::MAG_FREE)
                                     vmag = mag->getMag(cv);
                               (tab == 0 ? tab1 : tab2)->initScoreView(idx, vmag, magIdx, x, y);
                               }
