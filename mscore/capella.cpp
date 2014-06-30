@@ -1517,7 +1517,7 @@ ChordObj::ChordObj(Capella* c)
       : BasicDurationalObj(c), NoteObj(CapellaNoteObjectType::CHORD)
       {
       cap      = c;
-      beamMode = AUTO_BEAM;
+      beamMode = BeamMode::AUTO;
       }
 
 //---------------------------------------------------------
@@ -1538,7 +1538,7 @@ void ChordObj::read()
       BasicDurationalObj::read();
 
       unsigned char flags = cap->readByte();
-      beamMode      = (flags & 0x01) ? (BEAM_MODE)(cap->readByte()) : AUTO_BEAM;
+      beamMode      = (flags & 0x01) ? BeamMode(cap->readByte()) : BeamMode::AUTO;
       notationStave = (flags & 0x02) ? cap->readChar() : 0;
       Q_ASSERT(notationStave >= -1 && notationStave <= 1);
 
@@ -2201,7 +2201,7 @@ void Capella::readSystem()
       s->bBarCountReset = readByte();
       s->explLeftIndent = readByte();
 
-      s->beamMode = readByte();
+      s->beamMode = BeamMode(readByte());
       s->tempo    = readUnsigned();
       s->color    = readColor();
       readExtra();
