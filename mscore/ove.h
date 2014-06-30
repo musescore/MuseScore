@@ -190,21 +190,21 @@ enum class MidiType : signed char {
    Pitch_Wheel,
 };
 
-enum ClefType {
-	Clef_Treble = 0x00,	//0x00
-	Clef_Bass,			//0x01
-	Clef_Alto,			//0x02
-	Clef_UpAlto,		//0x03
-	Clef_DownDownAlto,	//0x04
-	Clef_DownAlto,		//0x05
-	Clef_UpUpAlto,		//0x06
-	Clef_Treble8va,		//0x07
-	Clef_Bass8va,		//0x08
-	Clef_Treble8vb,		//0x09
-	Clef_Bass8vb,		//0x0A
-	Clef_Percussion1,	//0x0B
-	Clef_Percussion2,	//0x0C
-	Clef_TAB			//0x0D
+enum class ClefType : char {
+   Treble = 0x00, //0x00
+   Bass,          //0x01
+   Alto,         //0x02
+   UpAlto,        //0x03
+   DownDownAlto,  //0x04
+   DownAlto,      //0x05
+   UpUpAlto,      //0x06
+   Treble8va,     //0x07
+   Bass8va,       //0x08
+   Treble8vb,     //0x09
+   Bass8vb,       //0x0A
+   Percussion1,   //0x0B
+   Percussion2,   //0x0C
+   TAB            //0x0D
 };
 
 enum GroupType {
@@ -954,11 +954,11 @@ public:
 	void setNoteShift(int shift);
 	int getNoteShift() const;
 
-	void setStartClef(int clef/*in ClefType*/);
+   void setStartClef(int clef/*in ClefType*/);
 	ClefType getStartClef() const;
 
-	void setTransposeClef(int clef);
-	int getTansposeClef() const;
+   void setTransposeClef(int clef/*in ClefType*/);
+   ClefType getTansposeClef() const;
 
 	void setStartKey(int key/*in KeyType*/);
 	int getStartKey() const;
@@ -1017,8 +1017,8 @@ private:
 	int transpose_;
 	bool showTranspose_;
 	int noteShift_;
-	int startClef_;
-	int transposeClef_;
+   ClefType startClef_;
+   ClefType transposeClef_;
 	unsigned int displayPercent_;
 	int startKey_;
 	int voiceCount_;

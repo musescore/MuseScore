@@ -403,59 +403,59 @@ void OveToMScore::convertGroups() {
 ClefType OveClefToClef(OVE::ClefType type){
 	ClefType clef = ClefType::G;
 	switch(type){
-	case OVE::Clef_Treble:{
+   case OVE::ClefType::Treble:{
 		clef = ClefType::G;
 		break;
 	}
-	case OVE::Clef_Bass:{
+   case OVE::ClefType::Bass:{
 		clef = ClefType::F;
 		break;
 	}
-	case OVE::Clef_Alto:{
+   case OVE::ClefType::Alto:{
 		clef = ClefType::C3;
 		break;
 	}
-	case OVE::Clef_UpAlto:{
+   case OVE::ClefType::UpAlto:{
 		clef = ClefType::C4;
 		break;
 	}
-	case OVE::Clef_DownDownAlto:{
+   case OVE::ClefType::DownDownAlto:{
 		clef = ClefType::C1;
 		break;
 	}
-	case OVE::Clef_DownAlto:{
+   case OVE::ClefType::DownAlto:{
 		clef = ClefType::C2;
 		break;
 	}
-	case OVE::Clef_UpUpAlto:{
+   case OVE::ClefType::UpUpAlto:{
 		clef = ClefType::C5;
 		break;
 	}
-	case OVE::Clef_Treble8va:{
+   case OVE::ClefType::Treble8va:{
 		clef = ClefType::G1;
 		break;
 	}
-	case OVE::Clef_Bass8va:{
+   case OVE::ClefType::Bass8va:{
 		clef = ClefType::F_8VA;
 		break;
 	}
-	case OVE::Clef_Treble8vb:{
+   case OVE::ClefType::Treble8vb:{
 		clef = ClefType::G3;
 		break;
 	}
-	case OVE::Clef_Bass8vb:{
+   case OVE::ClefType::Bass8vb:{
 		clef = ClefType::F8;
 		break;
 	}
-	case OVE::Clef_Percussion1:{
+   case OVE::ClefType::Percussion1:{
 		clef = ClefType::PERC;
 		break;
 	}
-	case OVE::Clef_Percussion2:{
+   case OVE::ClefType::Percussion2:{
 		clef = ClefType::PERC2;
 		break;
 	}
-	case OVE::Clef_TAB:{
+   case OVE::ClefType::TAB:{
 		clef = ClefType::TAB;
 		break;
 	}
@@ -584,7 +584,7 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
 	}
 
 	// DrumSet
-	if(track->getStartClef()==OVE::Clef_Percussion1 || track->getStartClef()==OVE::Clef_Percussion2) {
+   if(track->getStartClef()==OVE::ClefType::Percussion1 || track->getStartClef()==OVE::ClefType::Percussion2) {
 		//use overture drumset
 		Drumset* drumset = new Drumset();
         for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
@@ -1029,72 +1029,72 @@ void getMiddleToneOctave(OVE::ClefType clef, OVE::ToneType& tone, int& octave) {
 	octave = 4;
 
 	switch ( clef ) {
-	case OVE::Clef_Treble: {
+   case OVE::ClefType::Treble: {
 			tone = OVE::Tone_B;
 			octave = 4;
 			break;
 		}
-	case OVE::Clef_Treble8va: {
+   case OVE::ClefType::Treble8va: {
 			tone = OVE::Tone_B;
 			octave = 5;
 			break;
 		}
-	case OVE::Clef_Treble8vb: {
+   case OVE::ClefType::Treble8vb: {
 			tone = OVE::Tone_B;
 			octave = 3;
 			break;
 		}
-	case OVE::Clef_Bass: {
+   case OVE::ClefType::Bass: {
 			tone = OVE::Tone_D;
 			octave = 3;
 			break;
 		}
-	case OVE::Clef_Bass8va: {
+   case OVE::ClefType::Bass8va: {
 			tone = OVE::Tone_D;
 			octave = 4;
 			break;
 		}
-	case OVE::Clef_Bass8vb: {
+   case OVE::ClefType::Bass8vb: {
 			tone = OVE::Tone_D;
 			octave = 2;
 			break;
 		}
-	case OVE::Clef_Alto: {
+   case OVE::ClefType::Alto: {
 			tone = OVE::Tone_C;
 			octave = 4;
 			break;
 		}
-	case OVE::Clef_UpAlto: {
+   case OVE::ClefType::UpAlto: {
 			tone = OVE::Tone_A;
 			octave = 3;
 			break;
 		}
-	case OVE::Clef_DownDownAlto: {
+   case OVE::ClefType::DownDownAlto: {
 			tone = OVE::Tone_G;
 			octave = 4;
 			break;
 		}
-	case OVE::Clef_DownAlto: {
+   case OVE::ClefType::DownAlto: {
 			tone = OVE::Tone_E;
 			octave = 4;
 			break;
 		}
-	case OVE::Clef_UpUpAlto: {
+   case OVE::ClefType::UpUpAlto: {
 			tone = OVE::Tone_F;
 			octave = 3;
 			break;
 		}
-	case OVE::Clef_Percussion1: {
+   case OVE::ClefType::Percussion1: {
 			tone = OVE::Tone_A;
 			octave = 3;
 			break;
 		}
-	case OVE::Clef_Percussion2: {
+   case OVE::ClefType::Percussion2: {
 			tone = OVE::Tone_A;
 			octave = 3;
 			break;
 		}
-	case OVE::Clef_TAB: {
+   case OVE::ClefType::TAB: {
 			break;
 		}
 	default:
@@ -1466,7 +1466,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 				// tpc
 				bool setDirection = false;
 				OVE::ClefType clefType = getClefType(measureData, container->getTick());
-				if(clefType == OVE::Clef_Percussion1 || clefType == OVE::Clef_Percussion2) {
+            if(clefType == OVE::ClefType::Percussion1 || clefType == OVE::ClefType::Percussion2) {
 					Drumset* drumset = getDrumset(score_, part);
 					if(drumset != 0) {
 						if (!drumset->isValid(pitch) || pitch == -1) {
