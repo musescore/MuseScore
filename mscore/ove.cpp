@@ -1398,7 +1398,7 @@ Articulation::Articulation() {
       extraLength_ = 0;
 
       trillNoteLength_ = 60;
-      trillRate_ = Note_Sixteen;
+      trillRate_ = NoteType::Note_Sixteen;
       accelerateType_ = Accelerate_None;
       auxiliaryFirst_ = false;
       trillInterval_ = TrillInterval_Chromatic;
@@ -1709,9 +1709,9 @@ NoteContainer::NoteContainer() {
       cue_ = false;
       rest_ = false;
       raw_ = false;
-      noteType_ = Note_Quarter;
+      noteType_ = NoteType::Note_Quarter;
       dot_ = 0;
-      graceNoteType_ = Note_Eight;
+      graceNoteType_ = NoteType::Note_Eight;
       stemUp_ = true;
       showStem_ = true;
       stemLength_ = 7;
@@ -1765,19 +1765,19 @@ bool NoteContainer::getIsRaw() const {
       }
 
 void NoteContainer::setNoteType(NoteType type) {
-      noteType_ = Note_Quarter;
+      noteType_ = NoteType::Note_Quarter;
 
       switch (type) {
-            case Note_DoubleWhole:
-            case Note_Whole:
-            case Note_Half:
-            case Note_Quarter:
-            case Note_Eight:
-            case Note_Sixteen:
-            case Note_32:
-            case Note_64:
-            case Note_128:
-            case Note_256: {
+            case NoteType::Note_DoubleWhole:
+            case NoteType::Note_Whole:
+            case NoteType::Note_Half:
+            case NoteType::Note_Quarter:
+            case NoteType::Note_Eight:
+            case NoteType::Note_Sixteen:
+            case NoteType::Note_32:
+            case NoteType::Note_64:
+            case NoteType::Note_128:
+            case NoteType::Note_256: {
                   noteType_ = type;
                   break;
                   }
@@ -1897,43 +1897,43 @@ int NoteContainer::getDuration() const {
       int duration = (int) NoteDuration_4;
 
       switch (noteType_) {
-            case Note_DoubleWhole: {
+            case NoteType::Note_DoubleWhole: {
                   duration = (int) NoteDuration_Double_Whole;
                   break;
                   }
-            case Note_Whole: {
+            case NoteType::Note_Whole: {
                   duration = (int) NoteDuration_Whole;
                   break;
                   }
-            case Note_Half: {
+            case NoteType::Note_Half: {
                   duration = (int) NoteDuration_2;
                   break;
                   }
-            case Note_Quarter: {
+            case NoteType::Note_Quarter: {
                   duration = (int) NoteDuration_4;
                   break;
                   }
-            case Note_Eight: {
+            case NoteType::Note_Eight: {
                   duration = (int) NoteDuration_8;
                   break;
                   }
-            case Note_Sixteen: {
+            case NoteType::Note_Sixteen: {
                   duration = (int) NoteDuration_16;
                   break;
                   }
-            case Note_32: {
+            case NoteType::Note_32: {
                   duration = (int) NoteDuration_32;
                   break;
                   }
-            case Note_64: {
+            case NoteType::Note_64: {
                   duration = (int) NoteDuration_64;
                   break;
                   }
-            case Note_128: {
+            case NoteType::Note_128: {
                   duration = (int) NoteDuration_128;
                   break;
                   }
-            case Note_256: {
+            case NoteType::Note_256: {
                   duration = (int) NoteDuration_256;
                   break;
                   }
@@ -2086,7 +2086,7 @@ bool MeasureRepeat::getSingleRepeat() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Tuplet::Tuplet() :
-      tuplet_(3), space_(2), height_(0), noteType_(Note_Quarter){
+      tuplet_(3), space_(2), height_(0), noteType_(NoteType::Note_Quarter){
       musicDataType_ = MusicDataType::Tuplet;
       mark_ = new OffsetElement();
       }
@@ -2619,7 +2619,7 @@ int Tempo::getTypeTempo() const {
       }
 
 int Tempo::getQuarterTempo() const {
-      double factor = pow(2.0, (int) Note_Quarter - (int) getLeftNoteType());
+      double factor = pow(2.0, int(NoteType::Note_Quarter) - int(getLeftNoteType()));
       int tempo = int((double) getTypeTempo() * factor);
 
       return tempo;
@@ -5374,22 +5374,22 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
                         // trill rate
                         if( !readBuffer(placeHolder, 1) ) { return false; }
                         thisByte = placeHolder.toUnsignedInt();
-                        NoteType trillNoteType = Note_Sixteen;
+                        NoteType trillNoteType = NoteType::Note_Sixteen;
                         switch ( getHighNibble(thisByte) ) {
                               case 0:
-                                    trillNoteType = Note_None;
+                                    trillNoteType = NoteType::Note_None;
                                     break;
                               case 1:
-                                    trillNoteType = Note_Sixteen;
+                                    trillNoteType = NoteType::Note_Sixteen;
                                     break;
                               case 2:
-                                    trillNoteType = Note_32;
+                                    trillNoteType = NoteType::Note_32;
                                     break;
                               case 3:
-                                    trillNoteType = Note_64;
+                                    trillNoteType = NoteType::Note_64;
                                     break;
                               case 4:
-                                    trillNoteType = Note_128;
+                                    trillNoteType = NoteType::Note_128;
                                     break;
                               default:
                                     break;
