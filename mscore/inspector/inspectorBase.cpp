@@ -223,75 +223,8 @@ void InspectorBase::setElement()
             blockSignals = true;
             setValue(ii, val);
             blockSignals = false;
-            checkDifferentValues(ii);
             }
       postInit();
-      }
-
-//---------------------------------------------------------
-//   checkDifferentValues
-//    enable/disable reset button
-//    enable/disable value widget for multi selection
-//---------------------------------------------------------
-
-void InspectorBase::checkDifferentValues(const InspectorItem& ii)
-      {
-      bool valuesAreDifferent = false;
-      if (inspector->el().size() > 1) {
-            P_ID id      = ii.t;
-            P_TYPE pt    = propertyType(id);
-            QVariant val = getValue(ii);
-
-            foreach(Element* e, inspector->el()) {
-                  for (int k = 0; k < ii.parent; ++k)
-                        e = e->parent();
-                  if (pt == P_TYPE::SIZE || pt == P_TYPE::SCALE || pt == P_TYPE::SIZE_MM) {
-                        QSizeF sz = e->getProperty(id).toSizeF();
-                        if (ii.sv == 0)
-                              valuesAreDifferent = sz.width() != val.toDouble();
-                        else
-                              valuesAreDifferent = sz.height() != val.toDouble();
-                        }
-                  else if (pt == P_TYPE::POINT || pt == P_TYPE::POINT_MM) {
-                        QPointF sz = e->getProperty(id).toPointF();
-                        if (ii.sv == 0)
-                              valuesAreDifferent = sz.x() != val.toDouble();
-                        else
-                              valuesAreDifferent = sz.y() != val.toDouble();
-                        }
-                  else if (pt == P_TYPE::FRACTION) {
-                        Fraction f = e->getProperty(id).value<Fraction>();
-                        if (ii.sv == 0)
-                              valuesAreDifferent = f.numerator() != val.toInt();
-                        else
-                              valuesAreDifferent = f.denominator() != val.toInt();
-                        }
-                  else
-                        valuesAreDifferent = e->getProperty(id) != val;
-                  if (valuesAreDifferent)
-                        break;
-                  }
-            ii.w->setEnabled(!valuesAreDifferent);
-            if (ii.r)
-                  ii.r->setEnabled(valuesAreDifferent);
-            }
-      else {
-            PropertyStyle styledValue = inspector->el().front()->propertyStyle(ii.t);
-            bool reset;
-            if (styledValue == PropertyStyle::STYLED) {
-                  // does not work for QComboBox:
-                  ii.w->setStyleSheet("* { color: gray }");
-                  reset = false;
-                  }
-            else if (styledValue == PropertyStyle::UNSTYLED) {
-                  ii.w->setStyleSheet("");
-                  reset = true;
-                  }
-            else
-                  reset = !isDefault(ii);
-            if (ii.r)
-                  ii.r->setEnabled(reset);
-            }
       }
 
 //---------------------------------------------------------
@@ -371,7 +304,6 @@ void InspectorBase::valueChanged(int idx, bool reset)
                   }
             }
       inspector->setInspectorEdit(true);
-      checkDifferentValues(ii);
       score->endCmd();
       mscore->endCmd();
       inspector->setInspectorEdit(false);
