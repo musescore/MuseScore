@@ -2274,13 +2274,13 @@ int Slur::getNoteTimePercent() const {
 Dynamics::Dynamics() {
       musicDataType_ = MusicDataType::Dynamics;
 
-      dynamicsType_ = Dynamics_pppp;
+      dynamicsType_ = DynamicsType::PPPP;
       playback_ = true;
       velocity_ = 30;
       }
 
 void Dynamics::setDynamicsType(int type) {
-      dynamicsType_ = (DynamicsType) type;
+      dynamicsType_ = DynamicsType(type);
       }
 
 DynamicsType Dynamics::getDynamicsType() const {
