@@ -103,29 +103,29 @@ static void SetCapGraceDuration(Chord* chord,ChordObj* o)
       {
       NoteType nt = NoteType::APPOGGIATURA;
       ((Chord*)chord)->setNoteType(nt);
-      if (o->t == D4) {
+      if (o->t == TIMESTEP::D4) {
             ((Chord*)chord)->setNoteType(NoteType::GRACE4);
             chord->setDurationType(TDuration::DurationType::V_QUARTER);
             }
-      else if (o->t == D_BREVE)
+      else if (o->t == TIMESTEP::D_BREVE)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_BREVE);
-      else if (o->t == D1)
+      else if (o->t == TIMESTEP::D1)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_WHOLE);
-      else if (o->t == D2)
+      else if (o->t == TIMESTEP::D2)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_HALF);
-      else if (o->t == D16) {
+      else if (o->t == TIMESTEP::D16) {
             ((Chord*)chord)->setNoteType(NoteType::GRACE16);
             chord->setDurationType(TDuration::DurationType::V_16TH);
             }
-      else if (o->t == D32) {
+      else if (o->t == TIMESTEP::D32) {
             ((Chord*)chord)->setNoteType(NoteType::GRACE32);
             chord->setDurationType(TDuration::DurationType::V_32ND);
             }
-      else if (o->t == D64)
+      else if (o->t == TIMESTEP::D64)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_64TH);
-      else if (o->t == D128)
+      else if (o->t == TIMESTEP::D128)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_128TH);
-      else if (o->t == D256)
+      else if (o->t == TIMESTEP::D256)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_256TH);
       else
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_EIGHT);
@@ -2227,16 +2227,16 @@ int BasicDurationalObj::ticks() const
             return 0;
       int len = 0;
       switch (t) {
-            case D1:          len = 4 * MScore::division; break;
-            case D2:          len = 2 * MScore::division; break;
-            case D4:          len = MScore::division; break;
-            case D8:          len = MScore::division >> 1; break;
-            case D16:         len = MScore::division >> 2; break;
-            case D32:         len = MScore::division >> 3; break;
-            case D64:         len = MScore::division >> 4; break;
-            case D128:        len = MScore::division >> 5; break;
-            case D256:        len = MScore::division >> 6; break;
-            case D_BREVE:     len = MScore::division * 8; break;
+            case TIMESTEP::D1:          len = 4 * MScore::division; break;
+            case TIMESTEP::D2:          len = 2 * MScore::division; break;
+            case TIMESTEP::D4:          len = MScore::division; break;
+            case TIMESTEP::D8:          len = MScore::division >> 1; break;
+            case TIMESTEP::D16:         len = MScore::division >> 2; break;
+            case TIMESTEP::D32:         len = MScore::division >> 3; break;
+            case TIMESTEP::D64:         len = MScore::division >> 4; break;
+            case TIMESTEP::D128:        len = MScore::division >> 5; break;
+            case TIMESTEP::D256:        len = MScore::division >> 6; break;
+            case TIMESTEP::D_BREVE:     len = MScore::division * 8; break;
             default:
                   qDebug("BasicDurationalObj::ticks: illegal duration value %d", t);
                   break;
