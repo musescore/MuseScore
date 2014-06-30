@@ -468,88 +468,88 @@ ClefType OveClefToClef(OVE::ClefType type){
 NoteHead::Group getHeadGroup(OVE::NoteHeadType type) {
       NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
       switch (type) {
-            case OVE::NoteHead_Standard: {
+            case OVE::NoteHeadType::Standard: {
                   headGroup = NoteHead::Group::HEAD_NORMAL;
                   break;
                   }
-            case OVE::NoteHead_Invisible: {
+            case OVE::NoteHeadType::Invisible: {
                   break;
                   }
-            case OVE::NoteHead_Rhythmic_Slash: {
+            case OVE::NoteHeadType::Rhythmic_Slash: {
                   headGroup = NoteHead::Group::HEAD_SLASH;
                   break;
                   }
-            case OVE::NoteHead_Percussion: {
+            case OVE::NoteHeadType::Percussion: {
                   headGroup = NoteHead::Group::HEAD_XCIRCLE;
                   break;
                   }
-            case OVE::NoteHead_Closed_Rhythm: {
+            case OVE::NoteHeadType::Closed_Rhythm: {
                   headGroup = NoteHead::Group::HEAD_CROSS;
                   break;
                   }
-            case OVE::NoteHead_Open_Rhythm: {
+            case OVE::NoteHeadType::Open_Rhythm: {
                   headGroup = NoteHead::Group::HEAD_CROSS;
                   break;
                   }
-            case OVE::NoteHead_Closed_Slash: {
+            case OVE::NoteHeadType::Closed_Slash: {
                   headGroup = NoteHead::Group::HEAD_SLASH;
                   break;
                   }
-            case OVE::NoteHead_Open_Slash: {
+            case OVE::NoteHeadType::Open_Slash: {
                   headGroup = NoteHead::Group::HEAD_SLASH;
                   break;
                   }
-            case OVE::NoteHead_Closed_Do: {
+            case OVE::NoteHeadType::Closed_Do: {
                   headGroup = NoteHead::Group::HEAD_DO;
                   break;
                   }
-            case OVE::NoteHead_Open_Do: {
+            case OVE::NoteHeadType::Open_Do: {
                   headGroup = NoteHead::Group::HEAD_DO;
                   break;
                   }
-            case OVE::NoteHead_Closed_Re: {
+            case OVE::NoteHeadType::Closed_Re: {
                   headGroup = NoteHead::Group::HEAD_RE;
                   break;
                   }
-            case OVE::NoteHead_Open_Re: {
+            case OVE::NoteHeadType::Open_Re: {
                   headGroup = NoteHead::Group::HEAD_RE;
                   break;
                   }
-            case OVE::NoteHead_Closed_Mi: {
+            case OVE::NoteHeadType::Closed_Mi: {
                   headGroup = NoteHead::Group::HEAD_MI;
                   break;
                   }
-            case OVE::NoteHead_Open_Mi: {
+            case OVE::NoteHeadType::Open_Mi: {
                   headGroup = NoteHead::Group::HEAD_MI;
                   break;
                   }
-            case OVE::NoteHead_Closed_Fa: {
+            case OVE::NoteHeadType::Closed_Fa: {
                   headGroup = NoteHead::Group::HEAD_FA;
                   break;
                   }
-            case OVE::NoteHead_Open_Fa: {
+            case OVE::NoteHeadType::Open_Fa: {
                   headGroup = NoteHead::Group::HEAD_FA;
                   break;
                   }
-            case OVE::NoteHead_Closed_Sol: {
+            case OVE::NoteHeadType::Closed_Sol: {
                   break;
                   }
-            case OVE::NoteHead_Open_Sol: {
+            case OVE::NoteHeadType::Open_Sol: {
                   break;
                   }
-            case OVE::NoteHead_Closed_La: {
+            case OVE::NoteHeadType::Closed_La: {
                   headGroup = NoteHead::Group::HEAD_LA;
                   break;
                   }
-            case OVE::NoteHead_Open_La: {
+            case OVE::NoteHeadType::Open_La: {
                   headGroup = NoteHead::Group::HEAD_LA;
                   break;
                   }
-            case OVE::NoteHead_Closed_Ti: {
+            case OVE::NoteHeadType::Closed_Ti: {
                   headGroup = NoteHead::Group::HEAD_TI;
                   break;
                   }
-            case OVE::NoteHead_Open_Ti: {
+            case OVE::NoteHeadType::Open_Ti: {
                   headGroup = NoteHead::Group::HEAD_TI;
                   break;
                   }

@@ -227,29 +227,29 @@ enum class AccidentalType : char {
       DoubleFlat_Caution  = 0xD
       };
 
-enum NoteHeadType {
-      NoteHead_Standard	= 0x00,
-      NoteHead_Invisible,
-      NoteHead_Rhythmic_Slash,
-      NoteHead_Percussion,
-      NoteHead_Closed_Rhythm,
-      NoteHead_Open_Rhythm,
-      NoteHead_Closed_Slash,
-      NoteHead_Open_Slash,
-      NoteHead_Closed_Do,
-      NoteHead_Open_Do,
-      NoteHead_Closed_Re,
-      NoteHead_Open_Re,
-      NoteHead_Closed_Mi,
-      NoteHead_Open_Mi,
-      NoteHead_Closed_Fa,
-      NoteHead_Open_Fa,
-      NoteHead_Closed_Sol,
-      NoteHead_Open_Sol,
-      NoteHead_Closed_La,
-      NoteHead_Open_La,
-      NoteHead_Closed_Ti,
-      NoteHead_Open_Ti
+enum class NoteHeadType : char {
+      Standard = 0x00,
+      Invisible,
+      Rhythmic_Slash,
+      Percussion,
+      Closed_Rhythm,
+      Open_Rhythm,
+      Closed_Slash,
+      Open_Slash,
+      Closed_Do,
+      Open_Do,
+      Closed_Re,
+      Open_Re,
+      Closed_Mi,
+      Open_Mi,
+      Closed_Fa,
+      Open_Fa,
+      Closed_Sol,
+      Open_Sol,
+      Closed_La,
+      Open_La,
+      Closed_Ti,
+      Open_Ti
       };
 
 enum TiePos {
