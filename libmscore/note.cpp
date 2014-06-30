@@ -1565,7 +1565,6 @@ void Note::layout2()
             if (!score()->tagIsValid(e->tag()))
                   continue;
             e->setMag(mag());
-            e->layout();
             if (e->type() == Element::Type::SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
                   qreal w = headWidth();
                   if (staff()->isTabStaff()) {
@@ -1574,6 +1573,7 @@ void Note::layout2()
                         }
                   e->setPos(w, 0.0);
                   }
+            e->layout();
             }
       }
 
