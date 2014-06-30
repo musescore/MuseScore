@@ -213,18 +213,18 @@ enum class GroupType : char {
       Bracket
       };
 
-enum AccidentalType {
-      Accidental_Normal				= 0x0,
-      Accidental_Sharp				= 0x1,
-      Accidental_Flat					= 0x2,
-      Accidental_Natural				= 0x3,
-      Accidental_DoubleSharp			= 0x4,
-      Accidental_DoubleFlat			= 0x5,
-      Accidental_Sharp_Caution		= 0x9,
-      Accidental_Flat_Caution			= 0xA,
-      Accidental_Natural_Caution		= 0xB,
-      Accidental_DoubleSharp_Caution	= 0xC,
-      Accidental_DoubleFlat_Caution	= 0xD
+enum class AccidentalType : char {
+      Normal              = 0x0,
+      Sharp               = 0x1,
+      Flat                = 0x2,
+      Natural             = 0x3,
+      DoubleSharp         = 0x4,
+      DoubleFlat          = 0x5,
+      Sharp_Caution       = 0x9,
+      Flat_Caution        = 0xA,
+      Natural_Caution     = 0xB,
+      DoubleSharp_Caution = 0xC,
+      DoubleFlat_Caution  = 0xD
       };
 
 enum NoteHeadType {
