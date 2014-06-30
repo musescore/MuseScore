@@ -80,6 +80,7 @@
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/stafftype.h"
+#include "libmscore/repeatlist.h"
 
 #include "inspector/inspector.h"
 
@@ -243,7 +244,7 @@ class SeekTransition : public QMouseEventTransition
             }
       virtual void onTransition(QEvent*) {
             if (seq)
-                  seq->seek(cr->tick());
+                  seq->seek(seq->score()->repeatList()->tick2utick(cr->tick()));
             canvas->setCursorVisible(true);
             }
    public:
