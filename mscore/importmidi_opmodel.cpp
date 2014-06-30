@@ -288,7 +288,7 @@ void OperationsModel::reset(int trackCount)
 
 QModelIndex OperationsModel::index(int row, int column, const QModelIndex &parent) const
       {
-      if (!root || row < 0 || column < 0 || column >= OperationCol::COL_COUNT)
+      if (!root || row < 0 || column < 0 || column >= OperationCol::OCOL_COUNT)
             return QModelIndex();
       const Node *parentNode = nodeFromIndex(parent);
       if (!parentNode)
@@ -329,7 +329,7 @@ QModelIndex OperationsModel::parent(const QModelIndex &child) const
 
 int OperationsModel::rowCount(const QModelIndex &parent) const
       {
-      if (parent.column() >= OperationCol::COL_COUNT)
+      if (parent.column() >= OperationCol::OCOL_COUNT)
             return 0;
       const Node *parentNode = nodeFromIndex(parent);
       if (!parentNode)
@@ -344,7 +344,7 @@ int OperationsModel::rowCount(const QModelIndex &parent) const
 
 int OperationsModel::columnCount(const QModelIndex &/*parent*/) const
       {
-      return OperationCol::COL_COUNT;
+      return OperationCol::OCOL_COUNT;
       }
 
 // All nodes can have either bool value or list of possible values
