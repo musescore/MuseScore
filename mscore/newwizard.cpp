@@ -906,11 +906,11 @@ NewWizard::NewWizard(QWidget* parent)
       p4 = new NewWizardPage4;
       p5 = new NewWizardPage5;
 
-      setPage(Page_Type, p1);
-      setPage(Page_Instruments, p2);
-      setPage(Page_Template, p4);
-      setPage(Page_Timesig, p3);
-      setPage(Page_Keysig, p5);
+      setPage(int(Page::Type), p1);
+      setPage(int(Page::Instruments), p2);
+      setPage(int(Page::Template), p4);
+      setPage(int(Page::Timesig), p3);
+      setPage(int(Page::Keysig), p5);
       p2->setFinalPage(true);
       p3->setFinalPage(true);
       p4->setFinalPage(true);
@@ -924,18 +924,18 @@ NewWizard::NewWizard(QWidget* parent)
 
 int NewWizard::nextId() const
       {
-      switch(currentId()) {
-            case Page_Type:
-                  return useTemplate() ? Page_Template : Page_Instruments;
-            case Page_Instruments:
-                  return Page_Keysig;
-            case Page_Keysig:
-                  return Page_Timesig;
-            case Page_Template:
-                  return Page_Keysig;
-            case Page_Timesig:
+      switch(Page(currentId())) {
+            case Page::Type:
+                  return useTemplate() ? int(Page::Template) : int(Page::Instruments);
+            case Page::Instruments:
+                  return int(Page::Keysig);
+            case Page::Keysig:
+                  return int(Page::Timesig);
+            case Page::Template:
+                  return int(Page::Keysig);
+            case Page::Timesig:
             default:
-                  return -1;
+                  return int(Page::Invalid);
             }
       }
 
