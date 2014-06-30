@@ -150,7 +150,7 @@ void KeySig::layout()
       int coffset = 0;
       Key t2      = Key::C;
       if (naturalsOn) {
-            t2 = staff()->prevKey(segment()->tick());
+            t2 = staff()->key(segment()->tick() - 1);
             if (t2 == Key::C)
                   naturalsOn = false;
             else {
