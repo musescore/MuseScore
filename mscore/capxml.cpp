@@ -249,9 +249,9 @@ void CapMeter::readCapx(XmlReader& e)
 void ChordObj::readCapxStem(XmlReader& e)
       {
       QString dir = e.attribute("dir");
-      if (dir == "up") stemDir = UP;
-      else if (dir == "down") stemDir = DOWN;
-      else if (dir == "none") stemDir = NONE;
+      if (dir == "up") stemDir = StemDir::UP;
+      else if (dir == "down") stemDir = StemDir::DOWN;
+      else if (dir == "none") stemDir = StemDir::NONE;
       e.readNext();
       }
 
@@ -261,7 +261,7 @@ void ChordObj::readCapxStem(XmlReader& e)
 
 void ChordObj::readCapx(XmlReader& e)
       {
-      stemDir      = AUTO;
+      stemDir      = StemDir::AUTO;
       dStemLength  = 0;
       nTremoloBars = 0;
       articulation = 0;

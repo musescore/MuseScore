@@ -563,7 +563,7 @@ struct CNote {
 
 class ChordObj : public BasicDurationalObj, public NoteObj {
    public:
-      enum StemDir { DOWN = -1, AUTO = 0, UP = 1, NONE = 3 };
+      enum class StemDir : signed char { DOWN = -1, AUTO = 0, UP = 1, NONE = 3 };
       BeamMode beamMode;
       char notationStave;
       char dStemLength;
@@ -583,7 +583,7 @@ class ChordObj : public BasicDurationalObj, public NoteObj {
       void readCapxStem(XmlReader& e);
       QList<Verse> verse;
       QList<CNote> notes;
-      char stemDir;           // -1 down, 0 auto, 1 up, 3 no stem
+      StemDir stemDir;
       };
 
 //---------------------------------------------------------
