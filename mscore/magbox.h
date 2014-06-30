@@ -30,7 +30,7 @@ class ScoreView;
 //    list of strings shown in QComboBox "MagBox"
 //---------------------------------------------------------
 
-enum {
+enum class MagIdx : char {
        MAG_25, MAG_50, MAG_75, MAG_100, MAG_150, MAG_200, MAG_400, MAG_800, MAG_1600,
        MAG_PAGE_WIDTH, MAG_PAGE, MAG_DBL_PAGE,
        MAG_FREE
@@ -67,7 +67,7 @@ class MagBox : public QComboBox {
    public:
       MagBox(QWidget* parent = 0);
       void setMag(double);
-      void setMagIdx(int);
+      void setMagIdx(MagIdx);
       double getMag(ScoreView*);
       };
 

@@ -382,7 +382,7 @@ void ScoreTab::removeTab(int idx)
 //   initScoreView
 //---------------------------------------------------------
 
-void ScoreTab::initScoreView(int idx, double mag, int magIdx, double xoffset, double yoffset)
+void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset, double yoffset)
       {
       ScoreView* v = view(idx);
       if (!v)  {
