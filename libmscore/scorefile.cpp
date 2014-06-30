@@ -1309,7 +1309,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                               }
                         }
 
-                  if (!e)
+                  if (!e || !xml.canWrite(e))
                         continue;
 
                   if (e->generated()) {
