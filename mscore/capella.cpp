@@ -1591,7 +1591,7 @@ void Capella::read(void* p, qint64 len)
             return;
       qint64 rv = f->read((char*)p, len);
       if (rv != len)
-            throw CAP_EOF;
+            throw Capella::Error::CAP_EOF;
       curPos += len;
       }
 
@@ -2063,7 +2063,7 @@ void Capella::readVoice(CapStaff* cs, int idx)
       qDebug("      readVoice %d", idx);
 
       if (readChar() != 'C')
-            throw CAP_BAD_VOICE_SIG;
+            throw Capella::Error::BAD_VOICE_SIG;
 
       CapVoice* v   = new CapVoice;
       v->voiceNo    = idx;
@@ -2142,7 +2142,7 @@ void Capella::readVoice(CapStaff* cs, int idx)
 void Capella::readStaff(CapSystem* system)
       {
       if (readChar() != 'V')
-            throw CAP_BAD_STAFF_SIG;
+            throw Capella::Error::BAD_STAFF_SIG;
 
       CapStaff* staff = new CapStaff;
       //Meter
@@ -2172,7 +2172,7 @@ void Capella::readStaff(CapSystem* system)
 void Capella::readSystem()
       {
       if (readChar() != 'S')
-            throw CAP_BAD_SYSTEM_SIG;
+            throw Capella::Error::BAD_SYSTEM_SIG;
 
       CapSystem* s = new CapSystem;
       s->nAddBarCount   = readInt();
@@ -2252,7 +2252,7 @@ void Capella::read(QFile* fp)
       read(signature, 8);
       signature[8] = 0;
       if (memcmp(signature, "cap3-v:", 7) != 0)
-            throw CAP_BAD_SIG;
+            throw Capella::Error::BAD_SIG;
 
       // qDebug("read Capella file signature <%s>", signature);
 
@@ -2314,7 +2314,7 @@ void Capella::read(QFile* fp)
       char esig[4];
       read(esig, 4);
       if (memcmp (esig, "\0\0\0\0", 4) != 0)
-            throw CAP_BAD_SIG;
+            throw Capella::Error::BAD_SIG;
       }
 
 //---------------------------------------------------------
@@ -2333,7 +2333,7 @@ Score::FileError importCapella(Score* score, const QString& name)
       try {
             cf.read(&fp);
             }
-      catch (Capella::CapellaError errNo) {
+      catch (Capella::Error errNo) {
             if (!MScore::noGui) {
                   QMessageBox::warning(0,
                      QWidget::tr("MuseScore: Import Capella"),

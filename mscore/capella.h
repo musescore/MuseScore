@@ -675,14 +675,14 @@ class Capella {
       void readLayout();
 
    public:
-      enum CapellaError { CAP_NO_ERROR, CAP_BAD_SIG, CAP_EOF, CAP_BAD_VOICE_SIG,
-            CAP_BAD_STAFF_SIG, CAP_BAD_SYSTEM_SIG
+      enum class Error : char { CAP_NO_ERROR, BAD_SIG, CAP_EOF, BAD_VOICE_SIG,
+            BAD_STAFF_SIG, BAD_SYSTEM_SIG
             };
 
       Capella();
       ~Capella();
       void read(QFile*);
-      QString error(CapellaError n) const { return QString(errmsg[int(n)]); }
+      QString error(Error n) const { return QString(errmsg[int(n)]); }
 
       unsigned char readByte();
       char readChar();
