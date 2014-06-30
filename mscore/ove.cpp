@@ -874,18 +874,18 @@ int Track::getNoteShift() const {
       }
 
 void Track::setStartClef(int clef/*in Clef*/) {
-      startClef_ = clef;
+      startClef_ = ClefType(clef);
       }
 
 ClefType Track::getStartClef() const {
-      return (ClefType)startClef_;
+      return startClef_;
       }
 
 void Track::setTransposeClef(int clef) {
-      transposeClef_ = clef;
+      transposeClef_ = ClefType(clef);
       }
 
-int Track::getTansposeClef() const {
+ClefType Track::getTansposeClef() const {
       return transposeClef_;
       }
 
@@ -1000,8 +1000,8 @@ void Track::clear(void) {
       transpose_ = 0;
       showTranspose_ = false;
       noteShift_ = 0;
-      startClef_ = Clef_Treble;
-      transposeClef_ = Clef_Treble;
+      startClef_ = ClefType::Treble;
+      transposeClef_ = ClefType::Treble;
       displayPercent_ = 100;
       startKey_ = 0;
       voiceCount_ = 8;
@@ -1231,7 +1231,7 @@ int Line::getRightXOffset() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Staff::Staff() {
-      clef_ = Clef_Treble;
+      clef_ = ClefType::Treble;
       key_ = 0;
       visible_ = true;
       groupType_ = Group_None;
@@ -2186,7 +2186,7 @@ int Harmony::getAngle() const {
 Clef::Clef() {
       musicDataType_ = MusicDataType::Clef;
 
-      clefType_ = Clef_Treble;
+      clefType_ = ClefType::Treble;
       }
 
 void Clef::setClefType(int type) {
@@ -7368,7 +7368,7 @@ void OveOrganizer::organizeAttributes() {
       if( ove_->getLineCount() > 0 ) {
             Line* line = ove_->getLine(0);
             int partBarCount = ove_->getPartBarCount();
-            ClefType lastClefType = Clef_Treble;
+            ClefType lastClefType = ClefType::Treble;
 
             if(line != 0){
                   for( i=0; i<line->getStaffCount(); ++i ) {
@@ -7427,8 +7427,8 @@ void OveOrganizer::organizeTracks() {
                   }
 
             /*if( i < tracks.size() - 1 ) {
-         if( tracks[i]->getStartClef() == Clef_Treble &&
-            tracks[i+1]->getStartClef() == Clef_Bass &&
+         if( tracks[i]->getStartClef() == ClefType::Treble &&
+            tracks[i+1]->getStartClef() == ClefType::Bass &&
             tracks[i]->getChannel() == tracks[i+1]->get_channel() ) {
          }
       }*/
