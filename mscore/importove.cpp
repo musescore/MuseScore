@@ -2298,23 +2298,23 @@ void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int t
 static Hairpin::Type OveWedgeType_To_Type(OVE::WedgeType type) {
       Hairpin::Type subtype = Hairpin::Type::CRESCENDO;
       switch(type) {
-            case OVE::Wedge_Cres_Line: {
+            case OVE::WedgeType::Cres_Line: {
                   subtype = Hairpin::Type::CRESCENDO;
                   break;
                   }
-            case OVE::Wedge_Double_Line: {
+            case OVE::WedgeType::Double_Line: {
                   subtype = Hairpin::Type::CRESCENDO;
                   break;
                   }
-            case OVE::Wedge_Decresc_Line: {
+            case OVE::WedgeType::Decresc_Line: {
                   subtype = Hairpin::Type::DECRESCENDO;
                   break;
                   }
-            case OVE::Wedge_Cres: {
+            case OVE::WedgeType::Cres: {
                   subtype = Hairpin::Type::CRESCENDO;
                   break;
                   }
-            case OVE::Wedge_Decresc: {
+            case OVE::WedgeType::Decresc: {
                   subtype = Hairpin::Type::DECRESCENDO;
                   break;
                   }
