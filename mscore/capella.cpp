@@ -140,22 +140,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
       Score* score = s->score();
       foreach(BasicDrawObj* oo, objects) {
             switch (oo->type) {
-                  case CAP_GROUP:
-                  case CAP_TRANSPOSABLE:
-                  case CAP_METAFILE:
-                  case CAP_RECT_ELLIPSE:
-                  case CAP_LINE:
-                  case CAP_POLYGON:
-                  case CAP_WAVY_LINE:
-                  case CAP_SLUR:
-                  case CAP_NOTE_LINES:
-                  case CAP_WEDGE:
-                  case CAP_VOLTA:
-                  case CAP_BRACKET:
-                  case CAP_GUITAR:
-                  case CAP_TRILL:
-                        break;
-                  case CAP_SIMPLE_TEXT:
+                  case CapellaType::SIMPLE_TEXT:
                         {
                         SimpleTextObj* st = static_cast<SimpleTextObj*>(oo);
                         if (st->font().family() == "capella3") {
@@ -238,8 +223,10 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         s->add(text);
                         }
                         break;
-                  case CAP_TEXT:
+                  case CapellaType::TEXT:
                         qDebug("======================Text:");
+                        break;
+                  default:
                         break;
                   }
             }
@@ -676,12 +663,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                   continue;
             foreach(BasicDrawObj* o, d->objects) {
                   switch (o->type) {
-                        case CAP_SIMPLE_TEXT:
+                        case CapellaType::SIMPLE_TEXT:
                               // qDebug("simple text at %d", tick);
                               break;
-                        case CAP_WAVY_LINE:
+                        case CapellaType::WAVY_LINE:
                               break;
-                        case CAP_SLUR:
+                        case CapellaType::SLUR:
                               {
                               // SlurObj* so = static_cast<SlurObj*>(o);
                               // qDebug("slur tick %d  %d-%d-%d-%d   %d-%d", tick, so->nEnd, so->nMid,
@@ -708,7 +695,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     }
                               }
                               break;
-                        case CAP_TEXT: {
+                        case CapellaType::TEXT: {
 
                               TextObj* to = static_cast<TextObj*>(o);
                               Text* s = new Text(score);
@@ -727,7 +714,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               measure->add(s);
                               }
                               break;
-                        case CAP_VOLTA:
+                        case CapellaType::VOLTA:
                               {
                               VoltaObj* vo = static_cast<VoltaObj*>(o);
                               ChordRest* cr1 = 0; // ChordRest where volta begins
@@ -911,7 +898,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
       foreach(BasicDrawObj* o, cap->backgroundChord->objects) {
             switch (o->type) {
-                  case CAP_SIMPLE_TEXT:
+                  case CapellaType::SIMPLE_TEXT:
                         {
                         SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
                         Text* s = new Text(score);
@@ -928,7 +915,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         measure->setTick(0);
                         score->addMeasure(measure, score->measures()->first());
                         measure->add(s);
-                        // qDebug("page background object type %d (CAP_SIMPLE_TEXT) text %s", o->type, qPrintable(ss));
+                        // qDebug("page background object type %d (CapellaType::SIMPLE_TEXT) text %s", o->type, qPrintable(ss));
                         }
                         break;
                   default:
@@ -1291,101 +1278,101 @@ QList<BasicDrawObj*> Capella::readDrawObjectArray()
 
       // qDebug("readDrawObjectArray %d elements", n);
       for (int i = 0; i < n; ++i) {
-            unsigned char type = readByte();
+            CapellaType type = CapellaType(readByte());
 
             // qDebug("   readDrawObject %d of %d, type %d", i, n, type);
             switch (type) {
-                  case  0: {
+                  case  CapellaType::GROUP: {
                         GroupObj* o = new GroupObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  1: {
+                  case  CapellaType::TRANSPOSABLE: {
                         TransposableObj* o = new TransposableObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  2: {
+                  case  CapellaType::METAFILE: {
                         MetafileObj* o = new MetafileObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  CAP_SIMPLE_TEXT: {
+                  case  CapellaType::SIMPLE_TEXT: {
                         SimpleTextObj* o = new SimpleTextObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  4: {
+                  case  CapellaType::TEXT: {
                         TextObj* o = new TextObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  5: {
+                  case  CapellaType::RECT_ELLIPSE: {
                         RectEllipseObj* o = new RectEllipseObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case 6: {
+                  case CapellaType::LINE: {
                         LineObj* o = new LineObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  7: {
+                  case  CapellaType::POLYGON: {
                         PolygonObj* o = new PolygonObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  8: {
+                  case  CapellaType::WAVY_LINE: {
                         WavyLineObj* o = new WavyLineObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case 9: {
+                  case CapellaType::SLUR: {
                         SlurObj* o = new SlurObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  10: {
+                  case  CapellaType::NOTE_LINES: {
                         NotelinesObj* o = new NotelinesObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case 11: {
+                  case CapellaType::WEDGE: {
                         WedgeObj* o = new WedgeObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  12: {
+                  case  CapellaType::VOLTA: {
                         VoltaObj* o = new VoltaObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case 13: {
+                  case CapellaType::BRACKET: {
                         BracketObj* o = new BracketObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  14: {
+                  case  CapellaType::GUITAR: {
                         GuitarObj* o = new GuitarObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  15: {
+                  case  CapellaType::TRILL: {
                         TrillObj* o = new TrillObj(this);
                         o->read();
                         ol.append(o);
