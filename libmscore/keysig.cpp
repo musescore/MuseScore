@@ -49,6 +49,7 @@ KeySig::KeySig(Score* s)
       {
       setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _showCourtesy = true;
+      _hideNaturals = false;
       }
 
 KeySig::KeySig(const KeySig& k)
@@ -58,6 +59,7 @@ KeySig::KeySig(const KeySig& k)
       foreach(KeySym* ks, k.keySymbols)
             keySymbols.append(new KeySym(*ks));
       _sig = k._sig;
+      _hideNaturals = false;
       }
 
 //---------------------------------------------------------
@@ -142,8 +144,12 @@ void KeySig::layout()
       // AND style says they are not off
       // OR key sig is CMaj/Amin (in which case they are always shown)
 
+      bool naturalsOn = false;
       Measure* prevMeas = measure() ? measure()->prevMeasure() : nullptr;
-      bool naturalsOn =
+
+      // If we're not force hiding naturals (Continuous panel), use score style settings
+      if (!_hideNaturals)
+          naturalsOn =
             (prevMeas && prevMeas->sectionBreak() == nullptr
             && (score()->styleI(StyleIdx::keySigNaturals) != int(KeySigNatural::NONE) || t1 == 0) );
 
