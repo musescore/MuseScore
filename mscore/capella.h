@@ -135,19 +135,16 @@ class CapMeter : public NoteObj, public CapellaObj {
 //---------------------------------------------------------
 
 class CapExplicitBarline : public NoteObj, public CapellaObj {
-      int _type;
+      BarLineType _type;
       int _barMode;      // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
 
    public:
       CapExplicitBarline(Capella* c) : NoteObj(CapellaNoteObjectType::EXPL_BARLINE), CapellaObj(c) {}
       void read();
       void readCapx(XmlReader& e);
-      int type() const    { return _type; }
-      int barMode() const { return _barMode; }
+      BarLineType type() const { return _type; }
+      int barMode() const      { return _barMode; }
 
-      enum { BAR_SINGLE, BAR_DOUBLE, BAR_END,
-             BAR_REPEND, BAR_REPSTART, BAR_REPENDSTART,
-             BAR_DASHED};
       };
 
 //---------------------------------------------------------

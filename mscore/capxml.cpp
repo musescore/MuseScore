@@ -158,14 +158,14 @@ void BasicDurationalObj::readCapxObjectArray(XmlReader& e)
 void CapExplicitBarline::readCapx(XmlReader& e)
       {
       QString type = e.attribute("type", "single");
-      if (type == "single") _type = BAR_SINGLE;
-      else if (type == "double") _type = BAR_DOUBLE;
-      else if (type == "end") _type = BAR_END;
-      else if (type == "repEnd") _type = BAR_REPEND;
-      else if (type == "repBegin") _type = BAR_REPSTART;
-      else if (type == "repEndBegin") _type = BAR_REPENDSTART;
-      else if (type == "dashed") _type = BAR_DASHED;
-      else _type = BAR_SINGLE; // default
+      if (type == "single") _type = BarLineType::NORMAL;
+      else if (type == "double") _type = BarLineType::DOUBLE;
+      else if (type == "end") _type = BarLineType::END;
+      else if (type == "repEnd") _type = BarLineType::END_REPEAT;
+      else if (type == "repBegin") _type = BarLineType::START_REPEAT;
+      else if (type == "repEndBegin") _type = BarLineType::END_START_REPEAT;
+      else if (type == "dashed") _type = BarLineType::BROKEN;
+      else _type = BarLineType::NORMAL; // default
       _barMode = 0;
       e.readNext();
       }

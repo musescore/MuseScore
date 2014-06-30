@@ -633,16 +633,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         // qDebug("pm %p", pm);
 
-                        BarLineType st = BarLineType::NORMAL;
-                        switch (o->type()) {
-                              case CapExplicitBarline::BAR_SINGLE:      st = BarLineType::NORMAL; break;
-                              case CapExplicitBarline::BAR_DOUBLE:      st = BarLineType::DOUBLE; break;
-                              case CapExplicitBarline::BAR_END:         st = BarLineType::END; break;
-                              case CapExplicitBarline::BAR_REPEND:      st = BarLineType::END_REPEAT; break;
-                              case CapExplicitBarline::BAR_REPSTART:    st = BarLineType::START_REPEAT; break;
-                              case CapExplicitBarline::BAR_REPENDSTART: st = BarLineType::END_START_REPEAT; break;
-                              case CapExplicitBarline::BAR_DASHED:      st = BarLineType::BROKEN; break;
-                              }
+                        BarLineType st = o->type();
                         if (st == BarLineType::NORMAL)
                               break;
 
@@ -2068,9 +2059,9 @@ void WedgeObj::read()
 void CapExplicitBarline::read()
       {
       unsigned char b = cap->readByte();
-      _type = b & 0x0f;
+      _type = BarLineType(b & 0x0f);
       _barMode = b >> 4;         // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
-      Q_ASSERT(_type <= BAR_REPENDSTART);
+      Q_ASSERT(_type <= BarLineType::END_START_REPEAT);
       Q_ASSERT(_barMode <= 2);
 
       qDebug("         Expl.Barline type %d mode %d", _type, _barMode);
