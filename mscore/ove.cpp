@@ -2135,9 +2135,9 @@ NoteType Tuplet::getNoteType() const {
 Harmony::Harmony() {
       musicDataType_ = MusicDataType::Harmony;
 
-      harmonyType_ = Harmony_maj;
+      harmonyType_ = HarmonyType::H_maj;
       root_ = 0;
-      bass_ = -1;//0xff
+      bass_ = -1; //0xff
       bassOnBottom_ = false;
       angle_ = 0;
       }
@@ -5641,135 +5641,135 @@ bool BarsParse::parseTuplet(MeasureData* measureData, int /*length*/) {
       }
 
 HarmonyType binaryToHarmonyType(int bin) {
-      HarmonyType type = Harmony_maj;
+      HarmonyType type = HarmonyType::H_maj;
       if( bin == 0x0091 ) {
-            type = Harmony_maj;
+            type = HarmonyType::H_maj;
             } else if( bin == 0x0089 ) {
-            type = Harmony_min;
+            type = HarmonyType::H_min;
             } else if( bin == 0x0489 ) {
-            type = Harmony_min7;
+            type = HarmonyType::H_min7;
             } else if( bin == 0x0491 ) {
-            type = Harmony_7;
+            type = HarmonyType::H_7;
             } else if( bin == 0x0495 ) {
-            type = Harmony_9;
+            type = HarmonyType::H_9;
             } else if( bin == 0x0449 ) {
-            type = Harmony_min7b5;
+            type = HarmonyType::H_min7b5;
             } else if( bin == 0x04A1 ) {
-            type = Harmony_7sus4;
+            type = HarmonyType::H_7sus4;
             } else if( bin == 0x00A1 ) {
-            type = Harmony_sus4;
+            type = HarmonyType::H_sus4;
             } else if( bin == 0x0049 ) {
-            type = Harmony_dim;
+            type = HarmonyType::H_dim;
             } else if( bin == 0x0249 ) {
-            type = Harmony_dim7;
+            type = HarmonyType::H_dim7;
             } else if( bin == 0x0111 ) {
-            type = Harmony_aug;
+            type = HarmonyType::H_aug;
             } else if( bin == 0x0511 ) {
-            type = Harmony_aug7;
+            type = HarmonyType::H_aug7;
             } else if( bin == 0x044D ) {
-            type = Harmony_min9_b5;
+            type = HarmonyType::H_min9_b5;
             } else if( bin == 0x0499 ) {
-            type = Harmony_7s9;
+            type = HarmonyType::H_7s9;
             } else if( bin == 0x0615 ) {
-            type = Harmony_13;
+            type = HarmonyType::H_13;
             } else if( bin == 0x0289 ) {
-            type = Harmony_min6;
+            type = HarmonyType::H_min6;
             } else if( bin == 0x0291 ) {
-            type = Harmony_6;
+            type = HarmonyType::H_6;
             } else if( bin == 0x0295 ) {
-            type = Harmony_6;         //6add9
+            type = HarmonyType::H_6;         //6add9
             } else if( bin == 0x0095 ) {
-            type = Harmony_min;       //minor add9
+            type = HarmonyType::H_min;       //minor add9
             } else if( bin == 0x008D ) {
-            type = Harmony_maj7;
+            type = HarmonyType::H_maj7;
             } else if( bin == 0x0891 ) {
-            type = Harmony_maj7;
+            type = HarmonyType::H_maj7;
             } else if( bin == 0x0881 ) {
-            type = Harmony_maj7_s5;   //maj7#5
+            type = HarmonyType::H_maj7_s5;   //maj7#5
             } else if( bin == 0x0911 ) {
-            type = Harmony_maj7_s5;   //maj7#5
+            type = HarmonyType::H_maj7_s5;   //maj7#5
             } else if( bin == 0x0991 ) {
-            type = Harmony_maj7_s11;  //maj7#11
+            type = HarmonyType::H_maj7_s11;  //maj7#11
             } else if( bin == 0x0851 ) {
-            type = Harmony_maj7_s11;  //maj7#11
+            type = HarmonyType::H_maj7_s11;  //maj7#11
             } else if( bin == 0x08D1 ) {
-            type = Harmony_maj9;
+            type = HarmonyType::H_maj9;
             } else if( bin == 0x0895 ) {
-            type = Harmony_maj9_s5;   //maj9#5
+            type = HarmonyType::H_maj9_s5;   //maj9#5
             } else if( bin == 0x0995 ) {
-            type = Harmony_maj13_s11; //maj9#11
+            type = HarmonyType::H_maj13_s11; //maj9#11
             } else if( bin == 0x0855 ) {
-            type = Harmony_maj9_s11;  //maj9#11
+            type = HarmonyType::H_maj9_s11;  //maj9#11
             } else if( bin == 0x08D5 ) {
-            type = Harmony_maj13;
+            type = HarmonyType::H_maj13;
             } else if( bin == 0x0A95 ) {
-            type = Harmony_maj13_s11; //maj13#11
+            type = HarmonyType::H_maj13_s11; //maj13#11
             } else if( bin == 0x0A55 ) {
-            type = Harmony_maj13;     //maj13(no3)
+            type = HarmonyType::H_maj13;     //maj13(no3)
             } else if( bin == 0x0A85 ) {
-            type = Harmony_maj9_s5;   //maj13#5#11(no4)
+            type = HarmonyType::H_maj9_s5;   //maj13#5#11(no4)
             } else if( bin == 0x0B45 ) {
-            type = Harmony_7b9;
+            type = HarmonyType::H_7b9;
             } else if( bin == 0x0493 ) {
-            type = Harmony_7b5;
+            type = HarmonyType::H_7b5;
             } else if( bin == 0x0451 ) {
-            type = Harmony_9b5;
+            type = HarmonyType::H_9b5;
             } else if( bin == 0x0455 ) {
-            type = Harmony_7s9;       //7#5#9
+            type = HarmonyType::H_7s9;       //7#5#9
             } else if( bin == 0x0519 ) {
-            type = Harmony_7b9;       //7#5b9
+            type = HarmonyType::H_7b9;       //7#5b9
             } else if( bin == 0x0513 ) {
-            type = Harmony_aug7;      //aug9
+            type = HarmonyType::H_aug7;      //aug9
             } else if( bin == 0x0515 ) {
-            type = Harmony_sus4;      //sus9
+            type = HarmonyType::H_sus4;      //sus9
             } else if( bin == 0x04A5 ) {
-            type = Harmony_13b9;
+            type = HarmonyType::H_13b9;
             } else if( bin == 0x0613 ) {
-            type = Harmony_13b9;      //13b9#11
+            type = HarmonyType::H_13b9;      //13b9#11
             } else if( bin == 0x0611 ) {
-            type = Harmony_13;
+            type = HarmonyType::H_13;
             } else if( bin == 0x0653 ) {
-            type = Harmony_min;       //m(natural7)
+            type = HarmonyType::H_min;       //m(natural7)
             } else if( bin == 0x0889 ) {
-            type = Harmony_min9;      //m9(natural7)
+            type = HarmonyType::H_min9;      //m9(natural7)
             } else if( bin == 0x088D ) {
-            type = Harmony_min11;
+            type = HarmonyType::H_min11;
             } else if( bin == 0x04AD ) {
-            type = Harmony_9s11;
+            type = HarmonyType::H_9s11;
             } else if( bin == 0x04D5 ) {
-            type = Harmony_7sus4;     //sus7
+            type = HarmonyType::H_7sus4;     //sus7
             } else if( bin == 0x0421 ) {
-            type = Harmony_min11;
+            type = HarmonyType::H_min11;
             } else if( bin == 0x04A9 ) {
-            type = Harmony_min9;
+            type = HarmonyType::H_min9;
             } else if( bin == 0x048D ) {
-            type = Harmony_7b5b9;
+            type = HarmonyType::H_7b5b9;
             } else if( bin == 0x0453 ) {
-            type = Harmony_maj;       //(no5)
+            type = HarmonyType::H_maj;       //(no5)
             } else if( bin == 0x0011 ) {
-            type = Harmony_maj7;      //(no3)
+            type = HarmonyType::H_maj7;      //(no3)
             } else if( bin == 0x0081 ) {
-            type = Harmony_7;         //7(no3)
+            type = HarmonyType::H_7;         //7(no3)
             } else if( bin == 0x0481 ) {
-            type = Harmony_7;         //7(no5)
+            type = HarmonyType::H_7;         //7(no5)
             } else if( bin == 0x0411 ) {
-            type = Harmony_6;
+            type = HarmonyType::H_6;
             } else if( bin == 0x0291 ) {
-            type = Harmony_sus4;      //sus(add9)
+            type = HarmonyType::H_sus4;      //sus(add9)
             } else if( bin == 0x00A5 ) {
-            type = Harmony_13s9;      //13#9b5
+            type = HarmonyType::H_13s9;      //13#9b5
             } else if( bin == 0x0659 ) {
-            type = Harmony_sus4;      //sus(no5)
+            type = HarmonyType::H_sus4;      //sus(no5)
             } else if( bin == 0x0021 ) {
-            type = Harmony_7b5b9;     //7b5b9#9
+            type = HarmonyType::H_7b5b9;     //7b5b9#9
             } else if( bin == 0x045B ) {
-            type = Harmony_13b5;      //13b5b9#9
+            type = HarmonyType::H_13b5;      //13b5b9#9
             } else if( bin == 0x065B ) {
-            type = Harmony_13b9;      //13b9#9
+            type = HarmonyType::H_13b9;      //13b9#9
             } else if( bin == 0x061B ) {
-            type = Harmony_7b9s9;     //7b9#9
+            type = HarmonyType::H_7b9s9;     //7b9#9
             } else if( bin == 0x04B5 ) {
-            type = Harmony_7;
+            type = HarmonyType::H_7;
             }
 
       return type;
