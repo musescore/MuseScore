@@ -233,9 +233,9 @@ struct CapSystem {
 //   BasicDrawObj
 //---------------------------------------------------------
 
-enum { CAP_GROUP, CAP_TRANSPOSABLE, CAP_METAFILE, CAP_SIMPLE_TEXT, CAP_TEXT, CAP_RECT_ELLIPSE,
-      CAP_LINE, CAP_POLYGON, CAP_WAVY_LINE, CAP_SLUR, CAP_NOTE_LINES, CAP_WEDGE, CAP_VOLTA,
-      CAP_BRACKET, CAP_GUITAR, CAP_TRILL
+enum class CapellaType : unsigned char { GROUP, TRANSPOSABLE, METAFILE, SIMPLE_TEXT, TEXT, RECT_ELLIPSE,
+      LINE, POLYGON, WAVY_LINE, SLUR, NOTE_LINES, WEDGE, VOLTA,
+      BRACKET, GUITAR, TRILL
       };
 
 class BasicDrawObj : public CapellaObj {
@@ -245,9 +245,9 @@ class BasicDrawObj : public CapellaObj {
       int nNotes;
       bool background;
       int pageRange;
-      int type;
+      CapellaType type;
 
-      BasicDrawObj(int t, Capella* c)
+      BasicDrawObj(CapellaType t, Capella* c)
          : CapellaObj(c), modeX(0), modeY(0), distY(0), flags(0),
            nRefNote(0), nNotes(0), background(0), pageRange(0), type(t) {}
       void read();
@@ -260,7 +260,7 @@ class BasicDrawObj : public CapellaObj {
 
 class BasicRectObj : public BasicDrawObj {
    public:
-      BasicRectObj(int t, Capella* c) : BasicDrawObj(t, c) {}
+      BasicRectObj(CapellaType t, Capella* c) : BasicDrawObj(t, c) {}
       void read();
 
       QPointF relPos;
@@ -275,7 +275,7 @@ class BasicRectObj : public BasicDrawObj {
 
 class GroupObj : public BasicDrawObj {
    public:
-      GroupObj(Capella* c) : BasicDrawObj(CAP_GROUP, c) {}
+      GroupObj(Capella* c) : BasicDrawObj(CapellaType::GROUP, c) {}
       void read();
 
       QPointF relPos;
@@ -288,7 +288,7 @@ class GroupObj : public BasicDrawObj {
 
 class TransposableObj : public BasicDrawObj {
    public:
-      TransposableObj(Capella* c) : BasicDrawObj(CAP_TRANSPOSABLE, c) {}
+      TransposableObj(Capella* c) : BasicDrawObj(CapellaType::TRANSPOSABLE, c) {}
       void read();
 
       QPointF relPos;
@@ -302,7 +302,7 @@ class TransposableObj : public BasicDrawObj {
 
 class MetafileObj : public BasicRectObj {
    public:
-      MetafileObj(Capella* c) : BasicRectObj(CAP_METAFILE, c) {}
+      MetafileObj(Capella* c) : BasicRectObj(CapellaType::METAFILE, c) {}
       void read();
       };
 
@@ -313,8 +313,8 @@ class MetafileObj : public BasicRectObj {
 class LineObj : public BasicDrawObj {
 
    public:
-      LineObj(Capella* c) : BasicDrawObj(CAP_LINE, c) {}
-      LineObj(int t, Capella* c) : BasicDrawObj(t, c) {}
+      LineObj(Capella* c) : BasicDrawObj(CapellaType::LINE, c) {}
+      LineObj(CapellaType t, Capella* c) : BasicDrawObj(t, c) {}
       void read();
 
       QPointF pt1, pt2;
@@ -328,7 +328,7 @@ class LineObj : public BasicDrawObj {
 
 class RectEllipseObj : public LineObj {    // special
    public:
-      RectEllipseObj(Capella* c) : LineObj(CAP_RECT_ELLIPSE, c) {}
+      RectEllipseObj(Capella* c) : LineObj(CapellaType::RECT_ELLIPSE, c) {}
       void read();
 
       int radius;
@@ -342,7 +342,7 @@ class RectEllipseObj : public LineObj {    // special
 
 class PolygonObj : public BasicDrawObj {
    public:
-      PolygonObj(Capella* c) : BasicDrawObj(CAP_POLYGON, c) {}
+      PolygonObj(Capella* c) : BasicDrawObj(CapellaType::POLYGON, c) {}
       void read();
 
       bool bFilled;
@@ -357,7 +357,7 @@ class PolygonObj : public BasicDrawObj {
 
 class WavyLineObj : public LineObj {
    public:
-      WavyLineObj(Capella* c) : LineObj(CAP_WAVY_LINE, c) {}
+      WavyLineObj(Capella* c) : LineObj(CapellaType::WAVY_LINE, c) {}
       void read();
 
       unsigned waveLen;
@@ -370,7 +370,7 @@ class WavyLineObj : public LineObj {
 
 class NotelinesObj : public BasicDrawObj {
    public:
-      NotelinesObj(Capella* c) : BasicDrawObj(CAP_NOTE_LINES, c) {}
+      NotelinesObj(Capella* c) : BasicDrawObj(CapellaType::NOTE_LINES, c) {}
       void read();
 
       int x0, x1, y;
@@ -384,7 +384,7 @@ class NotelinesObj : public BasicDrawObj {
 class VoltaObj : public BasicDrawObj {
    public:
       VoltaObj(Capella* c)
-         : BasicDrawObj(CAP_VOLTA, c), x0(0), x1(0), y(0),
+         : BasicDrawObj(CapellaType::VOLTA, c), x0(0), x1(0), y(0),
            bLeft(false), bRight(false), bDotted(false),
            allNumbers(false), from(0), to(0) {}
       void read();
@@ -407,7 +407,7 @@ class VoltaObj : public BasicDrawObj {
 
 class GuitarObj : public BasicDrawObj {
    public:
-      GuitarObj(Capella* c) : BasicDrawObj(CAP_GUITAR, c) {}
+      GuitarObj(Capella* c) : BasicDrawObj(CapellaType::GUITAR, c) {}
       void read();
 
       QPointF relPos;
@@ -422,7 +422,7 @@ class GuitarObj : public BasicDrawObj {
 
 class TrillObj : public BasicDrawObj {
    public:
-      TrillObj(Capella* c) : BasicDrawObj(CAP_TRILL, c) {}
+      TrillObj(Capella* c) : BasicDrawObj(CapellaType::TRILL, c) {}
       void read();
 
       int x0, x1, y;
@@ -440,7 +440,7 @@ class SlurObj : public BasicDrawObj {
 
    public:
       SlurObj(Capella* c)
-         : BasicDrawObj(CAP_SLUR, c), color(Qt::black), nEnd(0), nMid(0), nDotDist(0), nDotWidth(0) {}
+         : BasicDrawObj(CapellaType::SLUR, c), color(Qt::black), nEnd(0), nMid(0), nDotDist(0), nDotWidth(0) {}
       void read();
       void readCapx(XmlReader& e);
       unsigned char nEnd, nMid, nDotDist, nDotWidth;
@@ -453,7 +453,7 @@ class SlurObj : public BasicDrawObj {
 class TextObj : public BasicRectObj {
 
    public:
-      TextObj(Capella* c) : BasicRectObj(CAP_TEXT, c) {}
+      TextObj(Capella* c) : BasicRectObj(CapellaType::TEXT, c) {}
       ~TextObj() {}
       void read();
 
@@ -472,7 +472,7 @@ class SimpleTextObj : public BasicDrawObj {
 
    public:
       SimpleTextObj(Capella* c)
-         : BasicDrawObj(CAP_SIMPLE_TEXT, c), relPos(0, 0), align(0) {}
+         : BasicDrawObj(CapellaType::SIMPLE_TEXT, c), relPos(0, 0), align(0) {}
       void read();
       void readCapx(XmlReader& e);
       QString text() const { return _text; }
@@ -487,7 +487,7 @@ class SimpleTextObj : public BasicDrawObj {
 class BracketObj : public LineObj {
 
    public:
-      BracketObj(Capella* c) : LineObj(CAP_BRACKET, c) {}
+      BracketObj(Capella* c) : LineObj(CapellaType::BRACKET, c) {}
       void read();
 
       char orientation, number;
@@ -500,7 +500,7 @@ class BracketObj : public LineObj {
 class WedgeObj : public LineObj {
 
    public:
-      WedgeObj(Capella* c) : LineObj(CAP_WEDGE, c) {}
+      WedgeObj(Capella* c) : LineObj(CapellaType::WEDGE, c) {}
       void read();
 
       int height;
