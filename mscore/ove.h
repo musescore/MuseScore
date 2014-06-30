@@ -463,10 +463,10 @@ enum class WedgeType : char {
       Decresc        // decresc., not appear in xml, will create Expression
       };
 
-enum KuoHaoType {
-      KuoHao_Parentheses = 0,
-      KuoHao_Brace,
-      KuoHao_Bracket
+enum class KuoHaoType : char {
+      Parentheses = 0,
+      Brace,
+      Bracket
       };
 
 enum OctaveShiftType {

@@ -2407,7 +2407,7 @@ int Pedal::getPlayOffset() const {
 KuoHao::KuoHao() {
       musicDataType_ = MusicDataType::KuoHao;
 
-      kuohaoType_ = KuoHao_Parentheses;
+      kuohaoType_ = KuoHaoType::Parentheses;
       height_ = 0;
       }
 
