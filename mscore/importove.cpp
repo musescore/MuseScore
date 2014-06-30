@@ -386,7 +386,7 @@ void OveToMScore::convertGroups() {
 
                   // bracket
                   OVE::Staff* staffPtr = getStaff(ove_, staffIndex);
-                  if(staffPtr != 0 && staffPtr->getGroupType() == OVE::Group_Bracket) {
+                  if(staffPtr != 0 && staffPtr->getGroupType() == OVE::GroupType::Bracket) {
                         int span = staffPtr->getGroupStaffCount() + 1;
                         int endStaff = staffIndex + span;
                         if(span > 0 && endStaff >= staffIndex && endStaff <= ove_->getTrackCount()) {
