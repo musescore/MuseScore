@@ -2172,70 +2172,54 @@ QString OveDynamics_To_Dynamics(OVE::DynamicsType type){
       QString dynamic = "other-dynamics";
 
       switch( type ){
-            case OVE::Dynamics_pppp:{
+            case OVE::DynamicsType::PPPP:
                   dynamic = "pppp";
                   break;
-                  }
-            case OVE::Dynamics_ppp:{
+            case OVE::DynamicsType::PPP:
                   dynamic = "ppp";
                   break;
-                  }
-            case OVE::Dynamics_pp:{
+            case OVE::DynamicsType::PP:
                   dynamic = "pp";
                   break;
-                  }
-            case OVE::Dynamics_p:{
+            case OVE::DynamicsType::P:
                   dynamic = "p";
                   break;
-                  }
-            case OVE::Dynamics_mp:{
+            case OVE::DynamicsType::MP:
                   dynamic = "mp";
                   break;
-                  }
-            case OVE::Dynamics_mf:{
+            case OVE::DynamicsType::MF:
                   dynamic = "mf";
                   break;
-                  }
-            case OVE::Dynamics_f:{
+            case OVE::DynamicsType::F:
                   dynamic = "f";
                   break;
-                  }
-            case OVE::Dynamics_ff:{
+            case OVE::DynamicsType::FF:
                   dynamic = "ff";
                   break;
-                  }
-            case OVE::Dynamics_fff:{
+            case OVE::DynamicsType::FFF:
                   dynamic = "fff";
                   break;
-                  }
-            case OVE::Dynamics_ffff:{
+            case OVE::DynamicsType::FFFF:
                   dynamic = "ffff";
                   break;
-                  }
-            case OVE::Dynamics_sf:{
+            case OVE::DynamicsType::SF:
                   dynamic = "sf";
                   break;
-                  }
-            case OVE::Dynamics_fz:{
+            case OVE::DynamicsType::FZ:
                   dynamic = "fz";
                   break;
-                  }
-            case OVE::Dynamics_sfz:{
+            case OVE::DynamicsType::SFZ:
                   dynamic = "sfz";
                   break;
-                  }
-            case OVE::Dynamics_sffz:{
+            case OVE::DynamicsType::SFFZ:
                   dynamic = "sffz";
                   break;
-                  }
-            case OVE::Dynamics_fp:{
+            case OVE::DynamicsType::FP:
                   dynamic = "fp";
                   break;
-                  }
-            case OVE::Dynamics_sfp:{
+            case OVE::DynamicsType::SFP:
                   dynamic = "sfp";
                   break;
-                  }
             default:
                   break;
             }

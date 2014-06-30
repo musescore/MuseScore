@@ -436,23 +436,23 @@ enum class HarmonyType : char {
       H_None
       };
 
-enum DynamicsType {
-      Dynamics_pppp = 0,
-      Dynamics_ppp,
-      Dynamics_pp,
-      Dynamics_p,
-      Dynamics_mp,
-      Dynamics_mf,
-      Dynamics_f,
-      Dynamics_ff,
-      Dynamics_fff,
-      Dynamics_ffff,
-      Dynamics_sf,
-      Dynamics_fz,
-      Dynamics_sfz,
-      Dynamics_sffz,
-      Dynamics_fp,
-      Dynamics_sfp
+enum class DynamicsType : char {
+      PPPP = 0,
+      PPP,
+      PP,
+      P,
+      MP,
+      MF,
+      F,
+      FF,
+      FFF,
+      FFFF,
+      SF,
+      FZ,
+      SFZ,
+      SFFZ,
+      FP,
+      SFP
       };
 
 enum WedgeType {
