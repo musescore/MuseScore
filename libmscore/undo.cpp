@@ -814,6 +814,7 @@ void Score::undoAddElement(Element* element)
          || (et == Element::Type::JUMP)
          || (et == Element::Type::MARKER)
          || (et == Element::Type::TEMPO_TEXT)
+         || (et == Element::Type::VOLTA)
          ) {
             foreach(Score* s, scoreList())
                   staffList.append(s->staff(0));
@@ -830,12 +831,17 @@ void Score::undoAddElement(Element* element)
                         ne->setSelected(false);
                         ne->setTrack(staffIdx * VOICES + element->voice());
                         }
-                  if (et == Element::Type::REHEARSAL_MARK
-                     || et == Element::Type::STAFF_TEXT
-                     || (et == Element::Type::JUMP)
-                     || (et == Element::Type::MARKER)
-                     || (et == Element::Type::TEMPO_TEXT)
-                     ) {
+
+                  if (et == Element::Type::VOLTA) {
+                        Spanner* nsp = static_cast<Spanner*>(ne);
+                        Spanner* sp = static_cast<Spanner*>(element);
+                        int staffIdx1 = sp->track() / VOICES;
+                        int staffIdx2 = sp->track2() / VOICES;
+                        int diff = staffIdx2 - staffIdx1;
+                        nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
+                        undo(new AddElement(nsp));
+                        }
+                  else {
                         Segment* segment  = static_cast<Segment*>(element->parent());
                         int tick          = segment->tick();
                         Measure* m        = score->tick2measure(tick);
@@ -906,7 +912,6 @@ void Score::undoAddElement(Element* element)
          && et != Element::Type::OTTAVA
          && et != Element::Type::TRILL
          && et != Element::Type::TEXTLINE
-         && et != Element::Type::VOLTA
          && et != Element::Type::PEDAL
          && et != Element::Type::BREATH
          && et != Element::Type::DYNAMIC
@@ -1023,8 +1028,7 @@ void Score::undoAddElement(Element* element)
                || element->type() == Element::Type::OTTAVA
                || element->type() == Element::Type::TRILL
                || element->type() == Element::Type::TEXTLINE
-               || element->type() == Element::Type::PEDAL
-               || element->type() == Element::Type::VOLTA) {
+               || element->type() == Element::Type::PEDAL) {
                   Spanner* sp   = static_cast<Spanner*>(element);
                   Spanner* nsp  = static_cast<Spanner*>(ne);
                   int staffIdx1 = sp->track() / VOICES;
@@ -3456,4 +3460,3 @@ void ChangeStartEndSpanner::flip()
       }
 
 }
-
