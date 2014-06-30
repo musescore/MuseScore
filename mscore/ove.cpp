@@ -1282,7 +1282,7 @@ int Staff::getGroupStaffCount() const {
 Note::Note() {
       rest_ = false;
       note_ = 60;
-      accidental_ = Accidental_Normal;
+      accidental_ = AccidentalType::Normal;
       showAccidental_ = false;
       offVelocity_ = 0x40;
       onVelocity_ = 0x50;

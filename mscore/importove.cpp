@@ -991,29 +991,29 @@ int accidentalToAlter(OVE::AccidentalType type) {
       int alter = 0;
 
       switch( type ) {
-            case OVE::Accidental_Normal:
-            case OVE::Accidental_Natural:
-            case OVE::Accidental_Natural_Caution: {
+            case OVE::AccidentalType::Normal:
+            case OVE::AccidentalType::Natural:
+            case OVE::AccidentalType::Natural_Caution: {
                   alter = 0;
                   break;
                   }
-            case OVE::Accidental_Sharp:
-            case OVE::Accidental_Sharp_Caution: {
+            case OVE::AccidentalType::Sharp:
+            case OVE::AccidentalType::Sharp_Caution: {
                   alter = 1;
                   break;
                   }
-            case OVE::Accidental_Flat:
-            case OVE::Accidental_Flat_Caution: {
+            case OVE::AccidentalType::Flat:
+            case OVE::AccidentalType::Flat_Caution: {
                   alter = -1;
                   break;
                   }
-            case OVE::Accidental_DoubleSharp:
-            case OVE::Accidental_DoubleSharp_Caution: {
+            case OVE::AccidentalType::DoubleSharp:
+            case OVE::AccidentalType::DoubleSharp_Caution: {
                   alter = 2;
                   break;
                   }
-            case OVE::Accidental_DoubleFlat:
-            case OVE::Accidental_DoubleFlat_Caution: {
+            case OVE::AccidentalType::DoubleFlat:
+            case OVE::AccidentalType::DoubleFlat_Caution: {
                   alter = -2;
                   break;
                   }
