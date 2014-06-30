@@ -67,8 +67,8 @@ class NoteObj {
       CapellaNoteObjectType type() const  { return _type; }
       };
 
-enum FORM {
-      FORM_G, FORM_C, FORM_F, FORM_PERCUSSION,
+enum class Form : char {
+      G, C, F, PERCUSSION,
       FORM_NULL, CLEF_UNCHANGED
       };
 
@@ -85,7 +85,7 @@ enum OCT  {
 //---------------------------------------------------------
 
 class CapClef : public NoteObj, public CapellaObj {
-      FORM form;
+      Form form;
 
    public:
       CapClef(Capella* c) : NoteObj(CapellaNoteObjectType::CLEF), CapellaObj(c) {}
@@ -93,13 +93,13 @@ class CapClef : public NoteObj, public CapellaObj {
       void readCapx(XmlReader& e);
       const char* name() {
             static const char* formName[] = { "G", "C", "F", "=", " ", "*" };
-            return formName[form];
+            return formName[int(form)];
             }
       ClefType clef() const;
 
       CLEF_LINE line;
       OCT  oct;
-      static ClefType clefType(FORM, CLEF_LINE, OCT);
+      static ClefType clefType(Form, CLEF_LINE, OCT);
       };
 
 //---------------------------------------------------------
@@ -193,7 +193,7 @@ struct CapStaffLayout {
       uchar barlineFrom;
       uchar barlineTo;
 
-      FORM form;
+      Form form;
       CLEF_LINE line;
       OCT oct;                // clef
 
