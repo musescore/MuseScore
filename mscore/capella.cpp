@@ -1864,7 +1864,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
 
       unsigned char clef = readByte();
       sl->form = Form(clef & 7);
-      sl->line = CLEF_LINE((clef >> 3) & 7);
+      sl->line = ClefLine((clef >> 3) & 7);
       sl->oct  = OCT((clef >> 6));
       qDebug("   clef %x  form %d, line %d, oct %d", clef, sl->form, sl->line, sl->oct);
 
@@ -1977,7 +1977,7 @@ void CapClef::read()
       {
       unsigned char b = cap->readByte();
       form            = Form(b & 7);
-      line            = (CLEF_LINE) ((b >> 3) & 7);
+      line            = ClefLine((b >> 3) & 7);
       oct             = (OCT)  (b >> 6);
       qDebug("Clef::read form %d line %d oct %d", form, line, oct);
       }
@@ -1991,24 +1991,24 @@ ClefType CapClef::clef() const
       return clefType(form, line, oct);
       }
 
-ClefType CapClef::clefType(Form form, CLEF_LINE line, OCT oct)
+ClefType CapClef::clefType(Form form, ClefLine line, OCT oct)
       {
-      int idx = int(form) + (line << 3) + (oct << 5);
+      int idx = int(form) + (int(line) << 3) + (oct << 5);
       switch (idx) {
-            case int(Form::G) + (LINE_2 << 3) + (OCT_NULL << 5):  return ClefType::G;
-            case int(Form::G) + (LINE_2 << 3) + (OCT_ALTA << 5):  return ClefType::G1;
-            case int(Form::G) + (LINE_2 << 3) + (OCT_BASSA << 5): return ClefType::G3;
+            case int(Form::G) + (int(ClefLine::L2) << 3) + (OCT_NULL << 5):  return ClefType::G;
+            case int(Form::G) + (int(ClefLine::L2) << 3) + (OCT_ALTA << 5):  return ClefType::G1;
+            case int(Form::G) + (int(ClefLine::L2) << 3) + (OCT_BASSA << 5): return ClefType::G3;
 
-            case int(Form::C) + (LINE_1 << 3) + (OCT_NULL << 5):  return ClefType::C1;
-            case int(Form::C) + (LINE_2 << 3) + (OCT_NULL << 5):  return ClefType::C2;
-            case int(Form::C) + (LINE_3 << 3) + (OCT_NULL << 5):  return ClefType::C3;
-            case int(Form::C) + (LINE_4 << 3) + (OCT_NULL << 5):  return ClefType::C4;
-            case int(Form::C) + (LINE_5 << 3) + (OCT_NULL << 5):  return ClefType::C5;
+            case int(Form::C) + (int(ClefLine::L1) << 3) + (OCT_NULL << 5):  return ClefType::C1;
+            case int(Form::C) + (int(ClefLine::L2) << 3) + (OCT_NULL << 5):  return ClefType::C2;
+            case int(Form::C) + (int(ClefLine::L3) << 3) + (OCT_NULL << 5):  return ClefType::C3;
+            case int(Form::C) + (int(ClefLine::L4) << 3) + (OCT_NULL << 5):  return ClefType::C4;
+            case int(Form::C) + (int(ClefLine::L5) << 3) + (OCT_NULL << 5):  return ClefType::C5;
 
-            case int(Form::F) + (LINE_4 << 3) + (OCT_NULL << 5):  return ClefType::F;
-            case int(Form::F) + (LINE_4 << 3) + (OCT_BASSA << 5): return ClefType::F8;
-            case int(Form::F) + (LINE_3 << 3) + (OCT_NULL << 5):  return ClefType::F_B;
-            case int(Form::F) + (LINE_5 << 3) + (OCT_NULL << 5):  return ClefType::F_C;
+            case int(Form::F) + (int(ClefLine::L4) << 3) + (OCT_NULL << 5):  return ClefType::F;
+            case int(Form::F) + (int(ClefLine::L4) << 3) + (OCT_BASSA << 5): return ClefType::F8;
+            case int(Form::F) + (int(ClefLine::L3) << 3) + (OCT_NULL << 5):  return ClefType::F_B;
+            case int(Form::F) + (int(ClefLine::L5) << 3) + (OCT_NULL << 5):  return ClefType::F_C;
 
             default:
                   if (form == Form::FORM_NULL)

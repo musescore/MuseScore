@@ -72,8 +72,8 @@ enum class Form : char {
       FORM_NULL, CLEF_UNCHANGED
       };
 
-enum CLEF_LINE {
-      LINE_5, LINE_4, LINE_3, LINE_2, LINE_1
+enum class ClefLine : char {
+      L5, L4, L3, L2, L1
       };
 
 enum OCT  {
@@ -97,9 +97,9 @@ class CapClef : public NoteObj, public CapellaObj {
             }
       ClefType clef() const;
 
-      CLEF_LINE line;
+      ClefLine line;
       OCT  oct;
-      static ClefType clefType(Form, CLEF_LINE, OCT);
+      static ClefType clefType(Form, ClefLine, OCT);
       };
 
 //---------------------------------------------------------
@@ -194,7 +194,7 @@ struct CapStaffLayout {
       uchar barlineTo;
 
       Form form;
-      CLEF_LINE line;
+      ClefLine line;
       OCT oct;                // clef
 
       // Schlagzeuginformation
