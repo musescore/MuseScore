@@ -4987,120 +4987,120 @@ bool BarsParse::parseBdat(Measure* /*measure*/, MeasureData* measureData, SizeCh
             if( !getBdatElementType(thisByte, type) ) { return false; }
 
             switch( type ) {
-                  case Bdat_Raw_Note :
-                  case Bdat_Rest :
-                  case Bdat_Note : {
+                  case BdatType::Raw_Note :
+                  case BdatType::Rest :
+                  case BdatType::Note : {
                         if( !parseNoteRest(measureData, count, type) ) { return false; }
                         break;
                         }
-                  case Bdat_Beam : {
+                  case BdatType::Beam : {
                         if( !parseBeam(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Harmony : {
+                  case BdatType::Harmony : {
                         if( !parseHarmony(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Clef : {
+                  case BdatType::Clef : {
                         if( !parseClef(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Dynamics : {
+                  case BdatType::Dynamics : {
                         if( !parseDynamics(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Wedge : {
+                  case BdatType::Wedge : {
                         if( !parseWedge(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Glissando : {
+                  case BdatType::Glissando : {
                         if( !parseGlissando(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Decorator : {
+                  case BdatType::Decorator : {
                         if( !parseDecorators(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Key : {
+                  case BdatType::Key : {
                         if( !parseKey(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Lyric : {
+                  case BdatType::Lyric : {
                         if( !parseLyric(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Octave_Shift: {
+                  case BdatType::Octave_Shift: {
                         if( !parseOctaveShift(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Slur : {
+                  case BdatType::Slur : {
                         if( !parseSlur(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Text : {
+                  case BdatType::Text : {
                         if( !parseText(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Tie : {
+                  case BdatType::Tie : {
                         if( !parseTie(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Tuplet : {
+                  case BdatType::Tuplet : {
                         if( !parseTuplet(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Guitar_Bend :
-                  case Bdat_Guitar_Barre : {
+                  case BdatType::Guitar_Bend :
+                  case BdatType::Guitar_Barre : {
                         if( !parseSizeBlock(count) ) { return false; }
                         break;
                         }
-                  case Bdat_Pedal: {
+                  case BdatType::Pedal: {
                         if( !parsePedal(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_KuoHao: {
+                  case BdatType::KuoHao: {
                         if( !parseKuohao(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Expressions: {
+                  case BdatType::Expressions: {
                         if( !parseExpressions(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Harp_Pedal: {
+                  case BdatType::Harp_Pedal: {
                         if( !parseHarpPedal(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Multi_Measure_Rest: {
+                  case BdatType::Multi_Measure_Rest: {
                         if( !parseMultiMeasureRest(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Harmony_GuitarFrame: {
+                  case BdatType::Harmony_GuitarFrame: {
                         if( !parseHarmonyGuitarFrame(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Graphics_40:
-                  case Bdat_Graphics_RoundRect:
-                  case Bdat_Graphics_Rect:
-                  case Bdat_Graphics_Round:
-                  case Bdat_Graphics_Line:
-                  case Bdat_Graphics_Curve:
-                  case Bdat_Graphics_WedgeSymbol: {
+                  case BdatType::Graphics_40:
+                  case BdatType::Graphics_RoundRect:
+                  case BdatType::Graphics_Rect:
+                  case BdatType::Graphics_Round:
+                  case BdatType::Graphics_Line:
+                  case BdatType::Graphics_Curve:
+                  case BdatType::Graphics_WedgeSymbol: {
                         if( !parseSizeBlock(count) ) { return false; }
                         break;
                         }
-                  case Bdat_Midi_Controller : {
+                  case BdatType::Midi_Controller : {
                         if( !parseMidiController(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Midi_Program_Change : {
+                  case BdatType::Midi_Program_Change : {
                         if( !parseMidiProgramChange(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Midi_Channel_Pressure : {
+                  case BdatType::Midi_Channel_Pressure : {
                         if( !parseMidiChannelPressure(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Midi_Pitch_Wheel : {
+                  case BdatType::Midi_Pitch_Wheel : {
                         if( !parseMidiPitchWheel(measureData, count) ) { return false; }
                         break;
                         }
@@ -5142,8 +5142,8 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
       measureData->addMusicData(container);
 
       // note|rest & grace
-      container->setIsRest(type==Bdat_Rest);
-      container->setIsRaw(type==Bdat_Raw_Note);
+      container->setIsRest(type==BdatType::Rest);
+      container->setIsRaw(type==BdatType::Raw_Note);
 
       if( !readBuffer(placeHolder, 2) ) { return false; }
       thisByte = placeHolder.toUnsignedInt();
@@ -5188,7 +5188,7 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
 
       int cursor = 0;
 
-      if( type == Bdat_Rest ) {
+      if( type == BdatType::Rest ) {
             Note* restPtr = new Note();
             container->addNoteRest(restPtr);
             restPtr->setIsRest(true);
@@ -6954,79 +6954,79 @@ bool BarsParse::getCondElementType(unsigned int byteData, CondType& type) {
 
 bool BarsParse::getBdatElementType(unsigned int byteData, BdatType& type) {
       if (byteData == 0x70) {
-            type = Bdat_Raw_Note;
+            type = BdatType::Raw_Note;
             } else if (byteData == 0x80) {
-            type = Bdat_Rest;
+            type = BdatType::Rest;
             } else if (byteData == 0x90) {
-            type = Bdat_Note;
+            type = BdatType::Note;
             } else if (byteData == 0x10) {
-            type = Bdat_Beam;
+            type = BdatType::Beam;
             } else if (byteData == 0x11) {
-            type = Bdat_Harmony;
+            type = BdatType::Harmony;
             } else if (byteData == 0x12) {
-            type = Bdat_Clef;
+            type = BdatType::Clef;
             } else if (byteData == 0x13) {
-            type = Bdat_Wedge;
+            type = BdatType::Wedge;
             } else if (byteData == 0x14) {
-            type = Bdat_Dynamics;
+            type = BdatType::Dynamics;
             } else if (byteData == 0x15) {
-            type = Bdat_Glissando;
+            type = BdatType::Glissando;
             } else if (byteData == 0x16) {
-            type = Bdat_Decorator;
+            type = BdatType::Decorator;
             } else if (byteData == 0x17) {
-            type = Bdat_Key;
+            type = BdatType::Key;
             } else if (byteData == 0x18) {
-            type = Bdat_Lyric;
+            type = BdatType::Lyric;
             } else if (byteData == 0x19) {
-            type = Bdat_Octave_Shift;
+            type = BdatType::Octave_Shift;
             } else if (byteData == 0x1B) {
-            type = Bdat_Slur;
+            type = BdatType::Slur;
             } else if (byteData == 0x1D) {
-            type = Bdat_Text;
+            type = BdatType::Text;
             } else if (byteData == 0x1E) {
-            type = Bdat_Tie;
+            type = BdatType::Tie;
             } else if (byteData == 0x1F) {
-            type = Bdat_Tuplet;
+            type = BdatType::Tuplet;
             } else if (byteData == 0x21) {
-            type = Bdat_Guitar_Bend;
+            type = BdatType::Guitar_Bend;
             } else if (byteData == 0x22) {
-            type = Bdat_Guitar_Barre;
+            type = BdatType::Guitar_Barre;
             } else if (byteData == 0x23) {
-            type = Bdat_Pedal;
+            type = BdatType::Pedal;
             } else if (byteData == 0x24) {
-            type = Bdat_KuoHao;
+            type = BdatType::KuoHao;
             } else if (byteData == 0x25) {
-            type = Bdat_Expressions;
+            type = BdatType::Expressions;
             } else if (byteData == 0x26) {
-            type = Bdat_Harp_Pedal;
+            type = BdatType::Harp_Pedal;
             } else if (byteData == 0x27) {
-            type = Bdat_Multi_Measure_Rest;
+            type = BdatType::Multi_Measure_Rest;
             } else if (byteData == 0x28) {
-            type = Bdat_Harmony_GuitarFrame;
+            type = BdatType::Harmony_GuitarFrame;
             } else if (byteData == 0x40) {
-            type = Bdat_Graphics_40;
+            type = BdatType::Graphics_40;
             } else if (byteData == 0x41) {
-            type = Bdat_Graphics_RoundRect;
+            type = BdatType::Graphics_RoundRect;
             } else if (byteData == 0x42) {
-            type = Bdat_Graphics_Rect;
+            type = BdatType::Graphics_Rect;
             } else if (byteData == 0x43) {
-            type = Bdat_Graphics_Round;
+            type = BdatType::Graphics_Round;
             } else if (byteData == 0x44) {
-            type = Bdat_Graphics_Line;
+            type = BdatType::Graphics_Line;
             } else if (byteData == 0x45) {
-            type = Bdat_Graphics_Curve;
+            type = BdatType::Graphics_Curve;
             } else if (byteData == 0x46) {
-            type = Bdat_Graphics_WedgeSymbol;
+            type = BdatType::Graphics_WedgeSymbol;
             } else if (byteData == 0xAB) {
-            type = Bdat_Midi_Controller;
+            type = BdatType::Midi_Controller;
             } else if (byteData == 0xAC) {
-            type = Bdat_Midi_Program_Change;
+            type = BdatType::Midi_Program_Change;
             } else if (byteData == 0xAD) {
-            type = Bdat_Midi_Channel_Pressure;
+            type = BdatType::Midi_Channel_Pressure;
             } else if (byteData == 0xAE) {
-            type = Bdat_Midi_Pitch_Wheel;
+            type = BdatType::Midi_Pitch_Wheel;
             } else if (byteData == 0xFF) {
-            type = Bdat_Bar_End;
+            type = BdatType::Bar_End;
             } else {
             return false;
             }

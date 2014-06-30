@@ -95,46 +95,45 @@ enum class CondType : char {
    Numeric_Ending     = 0x32,
 };
 
-enum BdatType {
-	Bdat_Raw_Note				= 0x70,
-	Bdat_Rest					= 0x80,
-	Bdat_Note					= 0x90,
-	Bdat_Beam					= 0x10,
-	Bdat_Harmony				= 0x11,
-	Bdat_Clef					= 0x12,
-	Bdat_Dynamics				= 0x13,
-	Bdat_Wedge					= 0x14,	// cresendo, decresendo
-	Bdat_Glissando				= 0x15,
-	Bdat_Decorator				= 0x16,	// measure repeat | piano pedal | dotted barline
-	Bdat_Key					= 0x17,
-	Bdat_Lyric					= 0x18,
-	Bdat_Octave_Shift			= 0x19,
-	Bdat_Slur					= 0x1B,
-	Bdat_Text					= 0x1D,
-	Bdat_Tie					= 0x1E,
-	Bdat_Tuplet					= 0x1F,
-	Bdat_Guitar_Bend			= 0x21,	//
-	Bdat_Guitar_Barre			= 0x22,	//
-	Bdat_Pedal					= 0x23,
-	Bdat_KuoHao					= 0x24,	// () [] {}
-	Bdat_Expressions			= 0x25,
-	Bdat_Harp_Pedal				= 0x26,
-	Bdat_Multi_Measure_Rest		= 0x27,
-	Bdat_Harmony_GuitarFrame	= 0x28,
-	Bdat_Graphics_40			= 0x40,	// unknown
-	Bdat_Graphics_RoundRect		= 0x41,
-	Bdat_Graphics_Rect			= 0x42,
-	Bdat_Graphics_Round			= 0x43,
-	Bdat_Graphics_Line			= 0x44,
-	Bdat_Graphics_Curve			= 0x45,
-	Bdat_Graphics_WedgeSymbol	= 0x46,
-	Bdat_Midi_Controller		= 0xAB,
-	Bdat_Midi_Program_Change	= 0xAC,
-	Bdat_Midi_Channel_Pressure	= 0xAD,
-	Bdat_Midi_Pitch_Wheel		= 0xAE,
-	Bdat_Bar_End				= 0xFF,
-
-	Bdat_None
+enum class BdatType : unsigned char {
+   None,
+   Raw_Note              = 0x70,
+   Rest                  = 0x80,
+   Note                  = 0x90,
+   Beam                  = 0x10,
+   Harmony               = 0x11,
+   Clef                  = 0x12,
+   Dynamics              = 0x13,
+   Wedge                 = 0x14, // cresendo, decresendo
+   Glissando             = 0x15,
+   Decorator             = 0x16, // measure repeat | piano pedal | dotted barline
+   Key                   = 0x17,
+   Lyric                 = 0x18,
+   Octave_Shift          = 0x19,
+   Slur                  = 0x1B,
+   Text                  = 0x1D,
+   Tie                   = 0x1E,
+   Tuplet                = 0x1F,
+   Guitar_Bend           = 0x21, //
+   Guitar_Barre          = 0x22, //
+   Pedal                 = 0x23,
+   KuoHao                = 0x24, // () [] {}
+   Expressions           = 0x25,
+   Harp_Pedal            = 0x26,
+   Multi_Measure_Rest    = 0x27,
+   Harmony_GuitarFrame   = 0x28,
+   Graphics_40           = 0x40, // unknown
+   Graphics_RoundRect    = 0x41,
+   Graphics_Rect         = 0x42,
+   Graphics_Round        = 0x43,
+   Graphics_Line         = 0x44,
+   Graphics_Curve        = 0x45,
+   Graphics_WedgeSymbol  = 0x46,
+   Midi_Controller       = 0xAB,
+   Midi_Program_Change   = 0xAC,
+   Midi_Channel_Pressure = 0xAD,
+   Midi_Pitch_Wheel      = 0xAE,
+   Bar_End               = 0xFF,
 };
 
 ////////////////////////////////////////
