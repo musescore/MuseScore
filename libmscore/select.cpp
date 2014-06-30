@@ -386,12 +386,19 @@ void Selection::updateSelectedElements()
                   }
 #endif
             }
-      foreach(::Interval<Spanner*> i, score()->spannerMap().findContained(startSegment()->tick(),previousEndSegment->tick())) {
-            Spanner* sp = i.value;
+      int stick = startSegment()->tick();
+      int etick = tickEnd();
+
+      for (auto i = score()->spanner().begin(); i != score()->spanner().end(); ++i) {
+            Spanner* sp = (*i).second;
             // ignore spanners belonging to other tracks
             if (sp->track() < startTrack || sp->track() >= endTrack)
                   continue;
-            _el.append(sp);
+            if (sp->type() == Element::Type::SLUR
+                && ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick)))
+                  _el.append(sp); // slur with start or end in range selection
+            else if((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
+                  _el.append(sp); // spanner with start and end in range selection
             }
       update();
       }

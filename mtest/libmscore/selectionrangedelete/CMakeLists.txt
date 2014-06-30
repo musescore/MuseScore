@@ -11,10 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-subdirs(
-      barline beam chordsymbol clef clef_courtesy compat concertpitch copypaste
-      copypastesymbollist dynamic element hairpin instrumentchange join keysig layout parts measure midi
-      note plugins repeat selectionrangedelete split splitstaff timesig transpose tuplet text
-      )
+set(TARGET tst_selectionrangedelete)
 
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 
