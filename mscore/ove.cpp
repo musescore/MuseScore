@@ -1287,7 +1287,7 @@ Note::Note() {
       offVelocity_ = 0x40;
       onVelocity_ = 0x50;
       headType_ = NoteHeadType::Standard;
-      tiePos_ = Tie_None;
+      tiePos_ = TiePos::None;
       offsetStaff_ = 0;
       show_ = true;
       offsetTick_ = 0;

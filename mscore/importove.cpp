@@ -1494,7 +1494,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               }
 
                         // tie
-                        if ((oveNote->getTiePos() & OVE::Tie_LeftEnd) == OVE::Tie_LeftEnd) {
+                        if ((int(oveNote->getTiePos()) & int(OVE::TiePos::LeftEnd)) == int(OVE::TiePos::LeftEnd)) {
                               Tie* tie = new Tie(score_);
                               note->setTieFor(tie);
                               tie->setStartNote(note);

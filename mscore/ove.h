@@ -252,10 +252,10 @@ enum class NoteHeadType : char {
       Open_Ti
       };
 
-enum TiePos {
-      Tie_None		= 0x0,
-      Tie_LeftEnd		= 0x1,
-      Tie_RightEnd	= 0x2
+enum class TiePos : char {
+      None     = 0x0,
+      LeftEnd  = 0x1,
+      RightEnd = 0x2
       };
 
 enum ArticulationType {
