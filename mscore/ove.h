@@ -193,7 +193,7 @@ enum class MidiType : signed char {
 enum class ClefType : char {
       Treble = 0x00, //0x00
       Bass,          //0x01
-      Alto,         //0x02
+      Alto,          //0x02
       UpAlto,        //0x03
       DownDownAlto,  //0x04
       DownAlto,      //0x05
@@ -207,10 +207,10 @@ enum class ClefType : char {
       TAB            //0x0D
       };
 
-enum GroupType {
-      Group_None = 0,
-      Group_Brace,
-      Group_Bracket
+enum class GroupType : char {
+      None = 0,
+      Brace,
+      Bracket
       };
 
 enum AccidentalType {

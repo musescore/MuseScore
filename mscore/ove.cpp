@@ -1234,7 +1234,7 @@ Staff::Staff() {
       clef_ = ClefType::Treble;
       key_ = 0;
       visible_ = true;
-      groupType_ = Group_None;
+      groupType_ = GroupType::None;
       groupStaffCount_ = 0;
       }
 
@@ -4239,11 +4239,11 @@ bool LineGroupParse::parseStaff(SizeChunk* chunk, Staff* staff) {
 
       // group type
       if( !readBuffer(placeHolder, 1) ) { return false; }
-      GroupType groupType = Group_None;
+      GroupType groupType = GroupType::None;
       if(placeHolder.toUnsignedInt() == 1) {
-            groupType = Group_Brace;
+            groupType = GroupType::Brace;
             } else if(placeHolder.toUnsignedInt() == 2) {
-            groupType = Group_Bracket;
+            groupType = GroupType::Bracket;
             }
       staff->setGroupType(groupType);
 
@@ -7421,7 +7421,7 @@ void OveOrganizer::organizeTracks() {
       for( i=0; i<tracks.size(); ++i ) {
             Staff* staff = getStaff(ove_, i);
             if(staff != 0) {
-                  if(staff->getGroupType() == Group_Brace && staff->getGroupStaffCount() == 1 ) {
+                  if(staff->getGroupType() == GroupType::Brace && staff->getGroupStaffCount() == 1 ) {
                         comboStaveStarts[i] = true;
                         }
                   }
