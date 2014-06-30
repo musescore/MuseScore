@@ -66,13 +66,17 @@ void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
       QVERIFY(m1 != 0);
 
       score->select(m1);
+
+      QVERIFY(score->selection().canCopy());
+      QVERIFY(score->selection().mimeType() == mimeStaffListFormat);
+
+      QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1-base.xml").arg(idx),
+         DIR + QString("selectionfilter%1-base-ref.xml").arg(idx)));
+
       score->selectionFilter().setFiltered(filter,false);
 
       QVERIFY(score->selection().canCopy());
-      QString mimeType = score->selection().mimeType();
-      QVERIFY(mimeType == mimeStaffListFormat);
-
-      //qDebug("%s",score->selection().mimeData().data());
+      QVERIFY(score->selection().mimeType() == mimeStaffListFormat);
 
       QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1.xml").arg(idx),
          DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
