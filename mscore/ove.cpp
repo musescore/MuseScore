@@ -1383,7 +1383,7 @@ int Note::getOffsetTick() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Articulation::Articulation() {
-      type_ = Articulation_Marcato;
+      type_ = ArticulationType::Marcato;
       above_ = true;
 
       changeSoundEffect_ = false;
@@ -1524,79 +1524,79 @@ bool Articulation::willAffectNotes() const {
       bool affect = false;
 
       switch (getArtType()) {
-            case Articulation_Major_Trill:
-            case Articulation_Minor_Trill:
-            case Articulation_Trill_Section:
-            case Articulation_Inverted_Short_Mordent:
-            case Articulation_Inverted_Long_Mordent:
-            case Articulation_Short_Mordent:
-            case Articulation_Turn:
+            case ArticulationType::Major_Trill:
+            case ArticulationType::Minor_Trill:
+            case ArticulationType::Trill_Section:
+            case ArticulationType::Inverted_Short_Mordent:
+            case ArticulationType::Inverted_Long_Mordent:
+            case ArticulationType::Short_Mordent:
+            case ArticulationType::Turn:
 
-            case Articulation_Arpeggio:
-            case Articulation_Tremolo_Eighth:
-            case Articulation_Tremolo_Sixteenth:
-            case Articulation_Tremolo_Thirty_Second:
-            case Articulation_Tremolo_Sixty_Fourth: {
+            case ArticulationType::Arpeggio:
+            case ArticulationType::Tremolo_Eighth:
+            case ArticulationType::Tremolo_Sixteenth:
+            case ArticulationType::Tremolo_Thirty_Second:
+            case ArticulationType::Tremolo_Sixty_Fourth: {
                   affect = true;
                   break;
                   }
-            case Articulation_Finger_1:
-            case Articulation_Finger_2:
-            case Articulation_Finger_3:
-            case Articulation_Finger_4:
-            case Articulation_Finger_5:
-            case Articulation_Flat_Accidental_For_Trill:
-            case Articulation_Sharp_Accidental_For_Trill:
-            case Articulation_Natural_Accidental_For_Trill:
-            case Articulation_Marcato:
-            case Articulation_Marcato_Dot:
-            case Articulation_Heavy_Attack:
-            case Articulation_SForzando:
-            case Articulation_SForzando_Dot:
-            case Articulation_Heavier_Attack:
-            case Articulation_SForzando_Inverted:
-            case Articulation_SForzando_Dot_Inverted:
-            case Articulation_Staccatissimo:
-            case Articulation_Staccato:
-            case Articulation_Tenuto:
-            case Articulation_Up_Bow:
-            case Articulation_Down_Bow:
-            case Articulation_Up_Bow_Inverted:
-            case Articulation_Down_Bow_Inverted:
-            case Articulation_Natural_Harmonic:
-            case Articulation_Artificial_Harmonic:
-            case Articulation_Plus_Sign:
-            case Articulation_Fermata:
-            case Articulation_Fermata_Inverted:
-            case Articulation_Pedal_Down:
-            case Articulation_Pedal_Up:
-            case Articulation_Pause:
-            case Articulation_Grand_Pause:
-            case Articulation_Toe_Pedal:
-            case Articulation_Heel_Pedal:
-            case Articulation_Toe_To_Heel_Pedal:
-            case Articulation_Heel_To_Toe_Pedal:
-            case Articulation_Open_String:
-            case Articulation_Guitar_Lift:
-            case Articulation_Guitar_Slide_Up:
-            case Articulation_Guitar_Rip:
-            case Articulation_Guitar_Fall_Off:
-            case Articulation_Guitar_Slide_Down:
-            case Articulation_Guitar_Spill:
-            case Articulation_Guitar_Flip:
-            case Articulation_Guitar_Smear:
-            case Articulation_Guitar_Bend:
-            case Articulation_Guitar_Doit:
-            case Articulation_Guitar_Plop:
-            case Articulation_Guitar_Wow_Wow:
-            case Articulation_Guitar_Thumb:
-            case Articulation_Guitar_Index_Finger:
-            case Articulation_Guitar_Middle_Finger:
-            case Articulation_Guitar_Ring_Finger:
-            case Articulation_Guitar_Pinky_Finger:
-            case Articulation_Guitar_Tap:
-            case Articulation_Guitar_Hammer:
-            case Articulation_Guitar_Pluck: {
+            case ArticulationType::Finger_1:
+            case ArticulationType::Finger_2:
+            case ArticulationType::Finger_3:
+            case ArticulationType::Finger_4:
+            case ArticulationType::Finger_5:
+            case ArticulationType::Flat_Accidental_For_Trill:
+            case ArticulationType::Sharp_Accidental_For_Trill:
+            case ArticulationType::Natural_Accidental_For_Trill:
+            case ArticulationType::Marcato:
+            case ArticulationType::Marcato_Dot:
+            case ArticulationType::Heavy_Attack:
+            case ArticulationType::SForzando:
+            case ArticulationType::SForzando_Dot:
+            case ArticulationType::Heavier_Attack:
+            case ArticulationType::SForzando_Inverted:
+            case ArticulationType::SForzando_Dot_Inverted:
+            case ArticulationType::Staccatissimo:
+            case ArticulationType::Staccato:
+            case ArticulationType::Tenuto:
+            case ArticulationType::Up_Bow:
+            case ArticulationType::Down_Bow:
+            case ArticulationType::Up_Bow_Inverted:
+            case ArticulationType::Down_Bow_Inverted:
+            case ArticulationType::Natural_Harmonic:
+            case ArticulationType::Artificial_Harmonic:
+            case ArticulationType::Plus_Sign:
+            case ArticulationType::Fermata:
+            case ArticulationType::Fermata_Inverted:
+            case ArticulationType::Pedal_Down:
+            case ArticulationType::Pedal_Up:
+            case ArticulationType::Pause:
+            case ArticulationType::Grand_Pause:
+            case ArticulationType::Toe_Pedal:
+            case ArticulationType::Heel_Pedal:
+            case ArticulationType::Toe_To_Heel_Pedal:
+            case ArticulationType::Heel_To_Toe_Pedal:
+            case ArticulationType::Open_String:
+            case ArticulationType::Guitar_Lift:
+            case ArticulationType::Guitar_Slide_Up:
+            case ArticulationType::Guitar_Rip:
+            case ArticulationType::Guitar_Fall_Off:
+            case ArticulationType::Guitar_Slide_Down:
+            case ArticulationType::Guitar_Spill:
+            case ArticulationType::Guitar_Flip:
+            case ArticulationType::Guitar_Smear:
+            case ArticulationType::Guitar_Bend:
+            case ArticulationType::Guitar_Doit:
+            case ArticulationType::Guitar_Plop:
+            case ArticulationType::Guitar_Wow_Wow:
+            case ArticulationType::Guitar_Thumb:
+            case ArticulationType::Guitar_Index_Finger:
+            case ArticulationType::Guitar_Middle_Finger:
+            case ArticulationType::Guitar_Ring_Finger:
+            case ArticulationType::Guitar_Pinky_Finger:
+            case ArticulationType::Guitar_Tap:
+            case ArticulationType::Guitar_Hammer:
+            case ArticulationType::Guitar_Pluck: {
                   break;
                   }
             default:
@@ -1610,9 +1610,9 @@ bool Articulation::isTrill(ArticulationType type) {
       bool isTrill = false;
 
       switch (type) {
-            case Articulation_Major_Trill:
-            case Articulation_Minor_Trill:
-            case Articulation_Trill_Section: {
+            case ArticulationType::Major_Trill:
+            case ArticulationType::Minor_Trill:
+            case ArticulationType::Trill_Section: {
                   isTrill = true;
                   break;
                   }
@@ -1627,73 +1627,73 @@ Articulation::XmlType Articulation::getXmlType() const {
       XmlType xmlType = Xml_Unknown;
 
       switch (type_) {
-            case Articulation_Major_Trill:
-            case Articulation_Minor_Trill:
-            case Articulation_Trill_Section:
-            case Articulation_Inverted_Short_Mordent:
-            case Articulation_Inverted_Long_Mordent:
-            case Articulation_Short_Mordent:
-            case Articulation_Turn:
-                  // case Articulation_Flat_Accidental_For_Trill :
-                  // case Articulation_Sharp_Accidental_For_Trill :
-                  // case Articulation_Natural_Accidental_For_Trill :
-            case Articulation_Tremolo_Eighth:
-            case Articulation_Tremolo_Sixteenth:
-            case Articulation_Tremolo_Thirty_Second:
-            case Articulation_Tremolo_Sixty_Fourth: {
+            case ArticulationType::Major_Trill:
+            case ArticulationType::Minor_Trill:
+            case ArticulationType::Trill_Section:
+            case ArticulationType::Inverted_Short_Mordent:
+            case ArticulationType::Inverted_Long_Mordent:
+            case ArticulationType::Short_Mordent:
+            case ArticulationType::Turn:
+                  // case ArticulationType::Flat_Accidental_For_Trill :
+                  // case ArticulationType::Sharp_Accidental_For_Trill :
+                  // case ArticulationType::Natural_Accidental_For_Trill :
+            case ArticulationType::Tremolo_Eighth:
+            case ArticulationType::Tremolo_Sixteenth:
+            case ArticulationType::Tremolo_Thirty_Second:
+            case ArticulationType::Tremolo_Sixty_Fourth: {
                   xmlType = Xml_Ornament;
                   break;
                   }
-            case Articulation_Marcato:
-            case Articulation_Marcato_Dot:
-            case Articulation_Heavy_Attack:
-            case Articulation_SForzando:
-            case Articulation_SForzando_Inverted:
-            case Articulation_SForzando_Dot:
-            case Articulation_SForzando_Dot_Inverted:
-            case Articulation_Heavier_Attack:
-            case Articulation_Staccatissimo:
-            case Articulation_Staccato:
-            case Articulation_Tenuto:
-            case Articulation_Pause:
-            case Articulation_Grand_Pause: {
+            case ArticulationType::Marcato:
+            case ArticulationType::Marcato_Dot:
+            case ArticulationType::Heavy_Attack:
+            case ArticulationType::SForzando:
+            case ArticulationType::SForzando_Inverted:
+            case ArticulationType::SForzando_Dot:
+            case ArticulationType::SForzando_Dot_Inverted:
+            case ArticulationType::Heavier_Attack:
+            case ArticulationType::Staccatissimo:
+            case ArticulationType::Staccato:
+            case ArticulationType::Tenuto:
+            case ArticulationType::Pause:
+            case ArticulationType::Grand_Pause: {
                   xmlType = Xml_Articulation;
                   break;
                   }
-            case Articulation_Up_Bow:
-            case Articulation_Down_Bow:
-            case Articulation_Up_Bow_Inverted:
-            case Articulation_Down_Bow_Inverted:
-            case Articulation_Natural_Harmonic:
-            case Articulation_Artificial_Harmonic:
-            case Articulation_Finger_1:
-            case Articulation_Finger_2:
-            case Articulation_Finger_3:
-            case Articulation_Finger_4:
-            case Articulation_Finger_5:
-            case Articulation_Plus_Sign: {
+            case ArticulationType::Up_Bow:
+            case ArticulationType::Down_Bow:
+            case ArticulationType::Up_Bow_Inverted:
+            case ArticulationType::Down_Bow_Inverted:
+            case ArticulationType::Natural_Harmonic:
+            case ArticulationType::Artificial_Harmonic:
+            case ArticulationType::Finger_1:
+            case ArticulationType::Finger_2:
+            case ArticulationType::Finger_3:
+            case ArticulationType::Finger_4:
+            case ArticulationType::Finger_5:
+            case ArticulationType::Plus_Sign: {
                   xmlType = Xml_Technical;
                   break;
                   }
-            case Articulation_Arpeggio: {
+            case ArticulationType::Arpeggio: {
                   xmlType = Xml_Arpeggiate;
                   break;
                   }
-            case Articulation_Fermata:
-            case Articulation_Fermata_Inverted: {
+            case ArticulationType::Fermata:
+            case ArticulationType::Fermata_Inverted: {
                   xmlType = Xml_Fermata;
                   break;
                   }
-            case Articulation_Pedal_Down:
-            case Articulation_Pedal_Up: {
+            case ArticulationType::Pedal_Down:
+            case ArticulationType::Pedal_Up: {
                   xmlType = Xml_Direction;
                   break;
                   }
-                  // case Articulation_Toe_Pedal :
-                  // case Articulation_Heel_Pedal :
-                  // case Articulation_Toe_To_Heel_Pedal :
-                  // case Articulation_Heel_To_Toe_Pedal :
-                  // case Articulation_Open_String :
+                  // case ArticulationType::Toe_Pedal :
+                  // case ArticulationType::Heel_Pedal :
+                  // case ArticulationType::Toe_To_Heel_Pedal :
+                  // case ArticulationType::Heel_To_Toe_Pedal :
+                  // case ArticulationType::Open_String :
             default:
                   break;
             }
@@ -2045,7 +2045,7 @@ int Glissando::getLineThick() const {
 ///////////////////////////////////////////////////////////////////////////////
 Decorator::Decorator() :
       decoratorType_(Decorator_Articulation),
-      artType_(Articulation_Marcato) {
+      artType_(ArticulationType::Marcato) {
       musicDataType_ = MusicDataType::Decorator;
       }
 
@@ -5992,7 +5992,7 @@ bool getDecoratorType(
       measureRepeat = false;
       decoratorType = Decorator::Decorator_Articulation;
       singleRepeat = true;
-      artType = Articulation_None;
+      artType = ArticulationType::None;
 
       switch (thisByte) {
             case 0x00: {
@@ -6000,39 +6000,39 @@ bool getDecoratorType(
                   break;
                   }
             case 0x30: {
-                  artType = Articulation_Open_String;
+                  artType = ArticulationType::Open_String;
                   break;
                   }
             case 0x31: {
-                  artType = Articulation_Finger_1;
+                  artType = ArticulationType::Finger_1;
                   break;
                   }
             case 0x32: {
-                  artType = Articulation_Finger_2;
+                  artType = ArticulationType::Finger_2;
                   break;
                   }
             case 0x33: {
-                  artType = Articulation_Finger_3;
+                  artType = ArticulationType::Finger_3;
                   break;
                   }
             case 0x34: {
-                  artType = Articulation_Finger_4;
+                  artType = ArticulationType::Finger_4;
                   break;
                   }
             case 0x35: {
-                  artType = Articulation_Finger_5;
+                  artType = ArticulationType::Finger_5;
                   break;
                   }
             case 0x6B: {
-                  artType = Articulation_Flat_Accidental_For_Trill;
+                  artType = ArticulationType::Flat_Accidental_For_Trill;
                   break;
                   }
             case 0x6C: {
-                  artType = Articulation_Sharp_Accidental_For_Trill;
+                  artType = ArticulationType::Sharp_Accidental_For_Trill;
                   break;
                   }
             case 0x6D: {
-                  artType = Articulation_Natural_Accidental_For_Trill;
+                  artType = ArticulationType::Natural_Accidental_For_Trill;
                   break;
                   }
             case 0x8d: {
@@ -6046,131 +6046,131 @@ bool getDecoratorType(
                   break;
                   }
             case 0xA0: {
-                  artType = Articulation_Minor_Trill;
+                  artType = ArticulationType::Minor_Trill;
                   break;
                   }
             case 0xA1: {
-                  artType = Articulation_Major_Trill;
+                  artType = ArticulationType::Major_Trill;
                   break;
                   }
             case 0xA2: {
-                  artType = Articulation_Trill_Section;
+                  artType = ArticulationType::Trill_Section;
                   break;
                   }
             case 0xA6: {
-                  artType = Articulation_Turn;
+                  artType = ArticulationType::Turn;
                   break;
                   }
             case 0xA8: {
-                  artType = Articulation_Tremolo_Eighth;
+                  artType = ArticulationType::Tremolo_Eighth;
                   break;
                   }
             case 0xA9: {
-                  artType = Articulation_Tremolo_Sixteenth;
+                  artType = ArticulationType::Tremolo_Sixteenth;
                   break;
                   }
             case 0xAA: {
-                  artType = Articulation_Tremolo_Thirty_Second;
+                  artType = ArticulationType::Tremolo_Thirty_Second;
                   break;
                   }
             case 0xAB: {
-                  artType = Articulation_Tremolo_Sixty_Fourth;
+                  artType = ArticulationType::Tremolo_Sixty_Fourth;
                   break;
                   }
             case 0xB2: {
-                  artType = Articulation_Fermata;
+                  artType = ArticulationType::Fermata;
                   break;
                   }
             case 0xB3: {
-                  artType = Articulation_Fermata_Inverted;
+                  artType = ArticulationType::Fermata_Inverted;
                   break;
                   }
             case 0xB9: {
-                  artType = Articulation_Pause;
+                  artType = ArticulationType::Pause;
                   break;
                   }
             case 0xBA: {
-                  artType = Articulation_Grand_Pause;
+                  artType = ArticulationType::Grand_Pause;
                   break;
                   }
             case 0xC0: {
-                  artType = Articulation_Marcato;
+                  artType = ArticulationType::Marcato;
                   break;
                   }
             case 0xC1: {
-                  artType = Articulation_Marcato_Dot;
+                  artType = ArticulationType::Marcato_Dot;
                   break;
                   }
             case 0xC2: {
-                  artType = Articulation_SForzando;
+                  artType = ArticulationType::SForzando;
                   break;
                   }
             case 0xC3: {
-                  artType = Articulation_SForzando_Dot;
+                  artType = ArticulationType::SForzando_Dot;
                   break;
                   }
             case 0xC4: {
-                  artType = Articulation_SForzando_Inverted;
+                  artType = ArticulationType::SForzando_Inverted;
                   break;
                   }
             case 0xC5: {
-                  artType = Articulation_SForzando_Dot_Inverted;
+                  artType = ArticulationType::SForzando_Dot_Inverted;
                   break;
                   }
             case 0xC6: {
-                  artType = Articulation_Staccatissimo;
+                  artType = ArticulationType::Staccatissimo;
                   break;
                   }
             case 0xC7: {
-                  artType = Articulation_Staccato;
+                  artType = ArticulationType::Staccato;
                   break;
                   }
             case 0xC8: {
-                  artType = Articulation_Tenuto;
+                  artType = ArticulationType::Tenuto;
                   break;
                   }
             case 0xC9: {
-                  artType = Articulation_Natural_Harmonic;
+                  artType = ArticulationType::Natural_Harmonic;
                   break;
                   }
             case 0xCA: {
-                  artType = Articulation_Artificial_Harmonic;
+                  artType = ArticulationType::Artificial_Harmonic;
                   break;
                   }
             case 0xCB: {
-                  artType = Articulation_Plus_Sign;
+                  artType = ArticulationType::Plus_Sign;
                   break;
                   }
             case 0xCC: {
-                  artType = Articulation_Up_Bow;
+                  artType = ArticulationType::Up_Bow;
                   break;
                   }
             case 0xCD: {
-                  artType = Articulation_Down_Bow;
+                  artType = ArticulationType::Down_Bow;
                   break;
                   }
             case 0xCE: {
-                  artType = Articulation_Up_Bow_Inverted;
+                  artType = ArticulationType::Up_Bow_Inverted;
                   break;
                   }
             case 0xCF: {
-                  artType = Articulation_Down_Bow_Inverted;
+                  artType = ArticulationType::Down_Bow_Inverted;
                   break;
                   }
             case 0xD0: {
-                  artType = Articulation_Pedal_Down;
+                  artType = ArticulationType::Pedal_Down;
                   break;
                   }
             case 0xD1: {
-                  artType = Articulation_Pedal_Up;
+                  artType = ArticulationType::Pedal_Up;
                   break;
                   }
             case 0xD6: {
-                  artType = Articulation_Heavy_Attack;
+                  artType = ArticulationType::Heavy_Attack;
                   break;
                   }
             case 0xD7: {
-                  artType = Articulation_Heavier_Attack;
+                  artType = ArticulationType::Heavier_Attack;
                   break;
                   }
             default:
@@ -6205,7 +6205,7 @@ bool BarsParse::parseDecorators(MeasureData* measureData, int length) {
       Decorator::DecoratorType decoratorType;
       bool isMeasureRepeat;
       bool isSingleRepeat = true;
-      ArticulationType artType = Articulation_None;
+      ArticulationType artType = ArticulationType::None;
 
       getDecoratorType(thisByte, isMeasureRepeat, decoratorType, isSingleRepeat, artType);
 

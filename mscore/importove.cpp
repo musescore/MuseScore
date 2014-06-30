@@ -1597,69 +1597,69 @@ void OveToMScore::convertArticulation(
             int track, int absTick, OVE::Articulation* art){
 
       switch ( art->getArtType() ) {
-            case OVE::Articulation_Major_Trill :
-            case OVE::Articulation_Minor_Trill :{
+            case OVE::ArticulationType::Major_Trill :
+            case OVE::ArticulationType::Minor_Trill :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Trill);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Trill_Section :{
+            case OVE::ArticulationType::Trill_Section :{
                   break;
                   }
-            case OVE::Articulation_Inverted_Short_Mordent :
-            case OVE::Articulation_Inverted_Long_Mordent :{
+            case OVE::ArticulationType::Inverted_Short_Mordent :
+            case OVE::ArticulationType::Inverted_Long_Mordent :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Prall);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Short_Mordent :{
+            case OVE::ArticulationType::Short_Mordent :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Mordent);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Turn :{
+            case OVE::ArticulationType::Turn :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Turn);
                   cr->add(a);
                   break;
                   }
-                  //	case OVE::Articulation_Flat_Accidental_For_Trill :
-                  //	case OVE::Articulation_Sharp_Accidental_For_Trill :
-                  //	case OVE::Articulation_Natural_Accidental_For_Trill :
-            case OVE::Articulation_Tremolo_Eighth :{
+                  //	case OVE::ArticulationType::Flat_Accidental_For_Trill :
+                  //	case OVE::ArticulationType::Sharp_Accidental_For_Trill :
+                  //	case OVE::ArticulationType::Natural_Accidental_For_Trill :
+            case OVE::ArticulationType::Tremolo_Eighth :{
                   Tremolo* t = new Tremolo(score_);
                   t->setTremoloType(TremoloType::R8);
                   cr->add(t);
                   break;
                   }
-            case OVE::Articulation_Tremolo_Sixteenth :{
+            case OVE::ArticulationType::Tremolo_Sixteenth :{
                   Tremolo* t = new Tremolo(score_);
                   t->setTremoloType(TremoloType::R16);
                   cr->add(t);
                   break;
                   }
-            case OVE::Articulation_Tremolo_Thirty_Second :{
+            case OVE::ArticulationType::Tremolo_Thirty_Second :{
                   Tremolo* t = new Tremolo(score_);
                   t->setTremoloType(TremoloType::R32);
                   cr->add(t);
                   break;
                   }
-            case OVE::Articulation_Tremolo_Sixty_Fourth :{
+            case OVE::ArticulationType::Tremolo_Sixty_Fourth :{
                   Tremolo* t = new Tremolo(score_);
                   t->setTremoloType(TremoloType::R64);
                   cr->add(t);
                   break;
                   }
-            case OVE::Articulation_Marcato :{
+            case OVE::ArticulationType::Marcato :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Sforzatoaccent);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Marcato_Dot :{
+            case OVE::ArticulationType::Marcato_Dot :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Sforzatoaccent);
                   cr->add(a);
@@ -1669,7 +1669,7 @@ void OveToMScore::convertArticulation(
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Heavy_Attack :{
+            case OVE::ArticulationType::Heavy_Attack :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Sforzatoaccent);
                   cr->add(a);
@@ -1679,21 +1679,21 @@ void OveToMScore::convertArticulation(
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_SForzando :{
+            case OVE::ArticulationType::SForzando :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(true);
                   a->setArticulationType(ArticulationType::Marcato);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_SForzando_Inverted :{
+            case OVE::ArticulationType::SForzando_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(false);
                   a->setArticulationType(ArticulationType::Marcato);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_SForzando_Dot :{
+            case OVE::ArticulationType::SForzando_Dot :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(true);
                   a->setArticulationType(ArticulationType::Marcato);
@@ -1704,7 +1704,7 @@ void OveToMScore::convertArticulation(
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_SForzando_Dot_Inverted :{
+            case OVE::ArticulationType::SForzando_Dot_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(false);
                   a->setArticulationType(ArticulationType::Marcato);
@@ -1715,7 +1715,7 @@ void OveToMScore::convertArticulation(
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Heavier_Attack :{
+            case OVE::ArticulationType::Heavier_Attack :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(true);
                   a->setArticulationType(ArticulationType::Marcato);
@@ -1726,81 +1726,81 @@ void OveToMScore::convertArticulation(
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Staccatissimo :{
+            case OVE::ArticulationType::Staccatissimo :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(true);
                   a->setArticulationType(ArticulationType::Staccatissimo);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Staccato :{
+            case OVE::ArticulationType::Staccato :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Staccato);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Tenuto :{
+            case OVE::ArticulationType::Tenuto :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Tenuto);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Pause :{
+            case OVE::ArticulationType::Pause :{
                   Breath* b = new Breath(score_);
                   b->setTrack(track);
                   Segment* seg = measure->getSegment(Segment::Type::Breath, absTick);
                   seg->add(b);
                   break;
                   }
-            case OVE::Articulation_Grand_Pause :{
+            case OVE::ArticulationType::Grand_Pause :{
                   break;
                   }
-            case OVE::Articulation_Up_Bow :{
+            case OVE::ArticulationType::Up_Bow :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Upbow);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Down_Bow :{
+            case OVE::ArticulationType::Down_Bow :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Downbow);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Up_Bow_Inverted :{
+            case OVE::ArticulationType::Up_Bow_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Upbow);
                   a->setUserYoffset(5.3);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Down_Bow_Inverted :{
+            case OVE::ArticulationType::Down_Bow_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Downbow);
                   a->setUserYoffset(5.3);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Natural_Harmonic :{
+            case OVE::ArticulationType::Natural_Harmonic :{
                   break;
                   }
-            case OVE::Articulation_Artificial_Harmonic :{
+            case OVE::ArticulationType::Artificial_Harmonic :{
                   break;
                   }
-            case OVE::Articulation_Finger_1 :
-            case OVE::Articulation_Finger_2 :
-            case OVE::Articulation_Finger_3 :
-            case OVE::Articulation_Finger_4 :
-            case OVE::Articulation_Finger_5 :{
+            case OVE::ArticulationType::Finger_1 :
+            case OVE::ArticulationType::Finger_2 :
+            case OVE::ArticulationType::Finger_3 :
+            case OVE::ArticulationType::Finger_4 :
+            case OVE::ArticulationType::Finger_5 :{
                   break;
                   }
-            case OVE::Articulation_Plus_Sign :{
+            case OVE::ArticulationType::Plus_Sign :{
                   Articulation* a = new Articulation(score_);
                   a->setArticulationType(ArticulationType::Plusstop);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Arpeggio :{
+            case OVE::ArticulationType::Arpeggio :{
                   // there can be only one
                   if (!(static_cast<Ms::Chord*>(cr))->arpeggio()) {
                         Arpeggio* a = new Arpeggio(score_);
@@ -1815,21 +1815,21 @@ void OveToMScore::convertArticulation(
 
                   break;
                   }
-            case OVE::Articulation_Fermata :{
+            case OVE::ArticulationType::Fermata :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(true);
                   a->setArticulationType(ArticulationType::Fermata);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Fermata_Inverted :{
+            case OVE::ArticulationType::Fermata_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setUp(false);
                   a->setArticulationType(ArticulationType::Fermata);
                   cr->add(a);
                   break;
                   }
-            case OVE::Articulation_Pedal_Down :{
+            case OVE::ArticulationType::Pedal_Down :{
                   if (pedal_) {
                         delete pedal_;
                         pedal_ = 0;
@@ -1843,7 +1843,7 @@ void OveToMScore::convertArticulation(
                         }
                   break;
                   }
-            case OVE::Articulation_Pedal_Up :{
+            case OVE::ArticulationType::Pedal_Up :{
                   if(pedal_){
                         Segment* seg = measure->getSegment(Segment::Type::ChordRest, absTick);
                         pedal_->setTick2(seg->tick());
@@ -1851,11 +1851,11 @@ void OveToMScore::convertArticulation(
                         }
                   break;
                   }
-                  //	case OVE::Articulation_Toe_Pedal :
-                  //	case OVE::Articulation_Heel_Pedal :
-                  //	case OVE::Articulation_Toe_To_Heel_Pedal :
-                  //	case OVE::Articulation_Heel_To_Toe_Pedal :
-                  //	case OVE::Articulation_Open_String :
+                  //	case OVE::ArticulationType::Toe_Pedal :
+                  //	case OVE::ArticulationType::Heel_Pedal :
+                  //	case OVE::ArticulationType::Toe_To_Heel_Pedal :
+                  //	case OVE::ArticulationType::Heel_To_Toe_Pedal :
+                  //	case OVE::ArticulationType::Open_String :
             default:
                   break;
             }
