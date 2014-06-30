@@ -182,13 +182,12 @@ enum class MusicDataType : char {
    Multi_Measure_Rest,
 };
 
-enum MidiType {
-	Midi_Controller = 0,
-	Midi_Program_Change,
-	Midi_Channel_Pressure,
-	Midi_Pitch_Wheel,
-
-	Midi_None
+enum class MidiType : signed char {
+   None = -1,
+   Controller,
+   Program_Change,
+   Channel_Pressure,
+   Pitch_Wheel,
 };
 
 enum ClefType {
