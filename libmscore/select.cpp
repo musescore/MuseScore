@@ -301,6 +301,8 @@ bool Selection::canSelect(Element* e) const
           && !this->selectionFilter().isFiltered(SelectionFilterType::GLISSANDO)) return false;
       if (e->type() == Element::Type::FRET_DIAGRAM
           && !this->selectionFilter().isFiltered(SelectionFilterType::FRET_DIAGRAM)) return false;
+      if (e->type() == Element::Type::BREATH
+          && !this->selectionFilter().isFiltered(SelectionFilterType::BREATH)) return false;
       return true;
       }
 
@@ -628,6 +630,7 @@ void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) co
                   Element* e = segment->element(track);
                   if (!e)
                         continue;
+                  if (!canSelect(e)) segment->remove(e);
                   if (e->isChordRest()) {
                         if (e->type() == Element::Type::CHORD) {
                               Chord* chord = static_cast<Chord*>(e);
