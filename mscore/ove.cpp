@@ -320,7 +320,7 @@ void MusicData::copyCommonBlock(const MusicData& source) {
 
 ///////////////////////////////////////////////////////////////////////////////
 MidiData::MidiData() {
-      midiType_ = Midi_None;
+      midiType_ = MidiType::None;
       }
 
 MidiType MidiData::getMidiType() const {
@@ -3064,7 +3064,7 @@ QString BarNumber::getPrefix() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MidiController::MidiController() {
-      midiType_ = Midi_Controller;
+      midiType_ = MidiType::Controller;
       controller_ = 64; // pedal
       value_ = 0;
       }
@@ -3087,7 +3087,7 @@ int MidiController::getValue() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MidiProgramChange::MidiProgramChange() {
-      midiType_ = Midi_Program_Change;
+      midiType_ = MidiType::Program_Change;
       patch_ = 0; // grand piano
       }
 
@@ -3102,7 +3102,7 @@ int MidiProgramChange::getPatch() const {
 ///////////////////////////////////////////////////////////////////////////////
 MidiChannelPressure::MidiChannelPressure() :
       pressure_(0) {
-      midiType_ = Midi_Channel_Pressure;
+      midiType_ = MidiType::Channel_Pressure;
       }
 
 void MidiChannelPressure::setPressure(int pressure) {
@@ -3115,7 +3115,7 @@ int MidiChannelPressure::getPressure() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MidiPitchWheel::MidiPitchWheel() {
-      midiType_ = Midi_Pitch_Wheel;
+      midiType_ = MidiType::Pitch_Wheel;
       value_ = 0;
       }
 
@@ -3314,7 +3314,7 @@ QList<MidiData*> MeasureData::getMidiDatas(MidiType type) {
       QList<MidiData*> datas;
 
       for (i = 0; i < midiDatas_.size(); ++i) {
-            if (type == Midi_None || midiDatas_[i]->getMidiType() == type) {
+            if (type == MidiType::None || midiDatas_[i]->getMidiType() == type) {
                   datas.push_back(midiDatas_[i]);
                   }
             }
