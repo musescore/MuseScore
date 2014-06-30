@@ -1091,7 +1091,13 @@ QList<Note*> Selection::uniqueNotes(int track) const
 
 void Selection::extendRangeSelection(ChordRest* cr)
       {
-            extendRangeSelection(cr->segment(),cr->segment()->nextCR(cr->track()),cr->staffIdx(),cr->tick(),cr->tick());
+            extendRangeSelection(cr->segment(),
+                                 cr->nextSegmentAfterCR(Segment::Type::ChordRest
+                                                             | Segment::Type::EndBarLine
+                                                             | Segment::Type::Clef),
+                                 cr->staffIdx(),
+                                 cr->tick(),
+                                 cr->tick());
       }
 
 //---------------------------------------------------------

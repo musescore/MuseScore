@@ -16,6 +16,7 @@
 #include "symbol.h"
 #include "duration.h"
 #include "beam.h"
+#include "segment.h"
 
 namespace Ms {
 
@@ -158,6 +159,8 @@ class ChordRest : public DurationElement {
       bool isGraceBefore() const;
       bool isGraceAfter() const;
       void writeBeam(Xml& xml);
+
+      Segment* nextSegmentAfterCR(Segment::Type types);
       };
 
 
