@@ -2880,7 +2880,9 @@ void Score::selectRange(Element* e, int staffIdx)
                   if (_selection.isList())
                         deselectAll();
                   _selection.setRange(cr->segment(),
-                                      cr->segment()->nextCR(cr->track()),
+                                      cr->nextSegmentAfterCR(Segment::Type::ChordRest
+                                                             | Segment::Type::EndBarLine
+                                                             | Segment::Type::Clef),
                                       e->staffIdx(),
                                       e->staffIdx() + 1);
                   activeTrack = cr->track();
