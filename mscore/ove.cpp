@@ -213,7 +213,7 @@ int LengthElement::getLength() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MusicData::MusicData() {
-      musicDataType_ = MusicData_None;
+      musicDataType_ = MusicDataType::None;
       show_ = true;
       color_ = 0;
       voice_ = 0;
@@ -227,27 +227,27 @@ MusicData::XmlDataType MusicData::getXmlDataType(MusicDataType type) {
       XmlDataType xmlType = None;
 
       switch (type) {
-            case MusicData_Measure_Repeat: {
+            case MusicDataType::Measure_Repeat: {
                   xmlType = Attributes;
                   break;
                   }
-            case MusicData_Beam: {
+            case MusicDataType::Beam: {
                   xmlType = NoteBeam;
                   break;
                   }
-            case MusicData_Slur:
-            case MusicData_Glissando:
-            case MusicData_Tuplet:
-            case MusicData_Tie: {
+            case MusicDataType::Slur:
+            case MusicDataType::Glissando:
+            case MusicDataType::Tuplet:
+            case MusicDataType::Tie: {
                   xmlType = Notations;
                   break;
                   }
-            case MusicData_Text:
-            case MusicData_Repeat:
-            case MusicData_Wedge:
-            case MusicData_Dynamics:
-            case MusicData_Pedal:
-            case MusicData_OctaveShift_EndPoint: {
+            case MusicDataType::Text:
+            case MusicDataType::Repeat:
+            case MusicDataType::Wedge:
+            case MusicDataType::Dynamics:
+            case MusicDataType::Pedal:
+            case MusicDataType::OctaveShift_EndPoint: {
                   xmlType = Direction;
                   break;
                   }
@@ -266,17 +266,17 @@ MusicData::XmlDataType MusicData::getXmlDataType(MusicDataType type) {
 
  switch ( type )
  {
- case MusicData_Numeric_Ending :
- case MusicData_Measure_Repeat :
- case MusicData_Wedge :
- case MusicData_OctaveShift :
- //case MusicData_OctaveShift_EndPoint :
- case MusicData_Pedal :
- case MusicData_Beam :
- case MusicData_Glissando :
- case MusicData_Slur :
- case MusicData_Tie :
- case MusicData_Tuplet :
+ case MusicDataType::Numeric_Ending :
+ case MusicDataType::Measure_Repeat :
+ case MusicDataType::Wedge :
+ case MusicDataType::OctaveShift :
+ //case MusicDataType::OctaveShift_EndPoint :
+ case MusicDataType::Pedal :
+ case MusicDataType::Beam :
+ case MusicDataType::Glissando :
+ case MusicDataType::Slur :
+ case MusicDataType::Tie :
+ case MusicDataType::Tuplet :
  {
  pair = true;
  break;
@@ -1703,7 +1703,7 @@ Articulation::XmlType Articulation::getXmlType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 NoteContainer::NoteContainer() {
-      musicDataType_ = MusicData_Note_Container;
+      musicDataType_ = MusicDataType::Note_Container;
 
       grace_ = false;
       cue_ = false;
@@ -1956,7 +1956,7 @@ int NoteContainer::getDuration() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Beam::Beam() {
-      musicDataType_ = MusicData_Beam;
+      musicDataType_ = MusicDataType::Beam;
       grace_ = false;
       }
 
@@ -1978,7 +1978,7 @@ const QList<QPair<MeasurePos, MeasurePos> > Beam::getLines() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Tie::Tie() {
-      musicDataType_ = MusicData_Tie;
+      musicDataType_ = MusicDataType::Tie;
 
       showOnTop_ = true;
       note_ = 72;
@@ -2011,7 +2011,7 @@ int Tie::getHeight() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Glissando::Glissando() {
-      musicDataType_ = MusicData_Glissando;
+      musicDataType_ = MusicDataType::Glissando;
 
       straight_ = true;
       text_ = "gliss.";
@@ -2046,7 +2046,7 @@ int Glissando::getLineThick() const {
 Decorator::Decorator() :
       decoratorType_(Decorator_Articulation),
       artType_(Articulation_Marcato) {
-      musicDataType_ = MusicData_Decorator;
+      musicDataType_ = MusicDataType::Decorator;
       }
 
 void Decorator::setDecoratorType(DecoratorType type) {
@@ -2067,7 +2067,7 @@ ArticulationType Decorator::getArticulationType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MeasureRepeat::MeasureRepeat() {
-      musicDataType_ = MusicData_Measure_Repeat;
+      musicDataType_ = MusicDataType::Measure_Repeat;
       singleRepeat_ = true;
       }
 
@@ -2087,7 +2087,7 @@ bool MeasureRepeat::getSingleRepeat() const {
 ///////////////////////////////////////////////////////////////////////////////
 Tuplet::Tuplet() :
       tuplet_(3), space_(2), height_(0), noteType_(Note_Quarter){
-      musicDataType_ = MusicData_Tuplet;
+      musicDataType_ = MusicDataType::Tuplet;
       mark_ = new OffsetElement();
       }
 
@@ -2133,7 +2133,7 @@ NoteType Tuplet::getNoteType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Harmony::Harmony() {
-      musicDataType_ = MusicData_Harmony;
+      musicDataType_ = MusicDataType::Harmony;
 
       harmonyType_ = Harmony_maj;
       root_ = 0;
@@ -2184,7 +2184,7 @@ int Harmony::getAngle() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Clef::Clef() {
-      musicDataType_ = MusicData_Clef;
+      musicDataType_ = MusicDataType::Clef;
 
       clefType_ = Clef_Treble;
       }
@@ -2199,7 +2199,7 @@ ClefType Clef::getClefType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Lyric::Lyric() {
-      musicDataType_ = MusicData_Lyric;
+      musicDataType_ = MusicDataType::Lyric;
 
       lyric_ = QString();
       verse_ = 0;
@@ -2223,7 +2223,7 @@ int Lyric::getVerse() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Slur::Slur() {
-      musicDataType_ = MusicData_Slur;
+      musicDataType_ = MusicDataType::Slur;
 
       containerCount_ = 1;
       showOnTop_ = true;
@@ -2272,7 +2272,7 @@ int Slur::getNoteTimePercent() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Dynamics::Dynamics() {
-      musicDataType_ = MusicData_Dynamics;
+      musicDataType_ = MusicDataType::Dynamics;
 
       dynamicsType_ = Dynamics_pppp;
       playback_ = true;
@@ -2305,7 +2305,7 @@ int Dynamics::getVelocity() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 WedgeEndPoint::WedgeEndPoint() {
-      musicDataType_ = MusicData_Wedge_EndPoint;
+      musicDataType_ = MusicDataType::Wedge_EndPoint;
 
       wedgeType_ = Wedge_Cres;
       height_ = 24;
@@ -2338,7 +2338,7 @@ bool WedgeEndPoint::getWedgeStart() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Wedge::Wedge() {
-      musicDataType_ = MusicData_Wedge;
+      musicDataType_ = MusicDataType::Wedge;
 
       wedgeType_ = Wedge_Cres;
       height_ = 24;
@@ -2362,7 +2362,7 @@ int Wedge::getHeight() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Pedal::Pedal() {
-      musicDataType_ = MusicData_Pedal;
+      musicDataType_ = MusicDataType::Pedal;
 
       half_ = false;
       playback_ = false;
@@ -2405,7 +2405,7 @@ int Pedal::getPlayOffset() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 KuoHao::KuoHao() {
-      musicDataType_ = MusicData_KuoHao;
+      musicDataType_ = MusicDataType::KuoHao;
 
       kuohaoType_ = KuoHao_Parentheses;
       height_ = 0;
@@ -2429,7 +2429,7 @@ KuoHaoType KuoHao::getKuohaoType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Expressions::Expressions() {
-      musicDataType_ = MusicData_Expressions;
+      musicDataType_ = MusicDataType::Expressions;
 
       text_ = QString();
       }
@@ -2446,7 +2446,7 @@ QString Expressions::getText() const {
 HarpPedal::HarpPedal() :
       showType_(0),
       showCharFlag_(0) {
-      musicDataType_ = MusicData_Harp_Pedal;
+      musicDataType_ = MusicDataType::Harp_Pedal;
       }
 
 void HarpPedal::setShowType(int type) {
@@ -2470,7 +2470,7 @@ OctaveShift::OctaveShift() :
       octaveShiftType_(OctaveShift_8),
       octaveShiftPosition_(OctavePosition_Start),
       endTick_(0) {
-      musicDataType_ = MusicData_OctaveShift;
+      musicDataType_ = MusicDataType::OctaveShift;
       }
 
 void OctaveShift::setOctaveShiftType(int type) {
@@ -2518,7 +2518,7 @@ int OctaveShift::getEndTick() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 OctaveShiftEndPoint::OctaveShiftEndPoint() {
-      musicDataType_ = MusicData_OctaveShift_EndPoint;
+      musicDataType_ = MusicDataType::OctaveShift_EndPoint;
 
       octaveShiftType_ = OctaveShift_8;
       octaveShiftPosition_ = OctavePosition_Start;
@@ -2551,7 +2551,7 @@ int OctaveShiftEndPoint::getEndTick() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MultiMeasureRest::MultiMeasureRest() {
-      musicDataType_ = MusicData_Multi_Measure_Rest;
+      musicDataType_ = MusicDataType::Multi_Measure_Rest;
       measureCount_ = 0;
       }
 
@@ -2565,7 +2565,7 @@ int MultiMeasureRest::getMeasureCount() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Tempo::Tempo() {
-      musicDataType_ = MusicData_Tempo;
+      musicDataType_ = MusicDataType::Tempo;
 
       leftNoteType_ = 3;
       showMark_ = false;
@@ -2659,7 +2659,7 @@ int Tempo::getRightNoteType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Text::Text() {
-      musicDataType_ = MusicData_Text;
+      musicDataType_ = MusicDataType::Text;
 
       textType_ = Text_Rehearsal;
       horiMargin_ = 8;
@@ -2922,7 +2922,7 @@ int Key::getSymbolCount() const {
 ///////////////////////////////////////////////////////////////////////////////
 RepeatSymbol::RepeatSymbol() :
       text_("#1"), repeatType_(Repeat_Segno) {
-      musicDataType_ = MusicData_Repeat;
+      musicDataType_ = MusicDataType::Repeat;
       }
 
 void RepeatSymbol::setText(const QString& text) {
@@ -2943,7 +2943,7 @@ RepeatType RepeatSymbol::getRepeatType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 NumericEnding::NumericEnding() {
-      musicDataType_ = MusicData_Numeric_Ending;
+      musicDataType_ = MusicDataType::Numeric_Ending;
 
       height_ = 0;
       text_ = QString();
@@ -3276,7 +3276,7 @@ QList<MusicData*> MeasureData::getMusicDatas(MusicDataType type) {
       QList<MusicData*> notations;
 
       for (i = 0; i < musicDatas_.size(); ++i) {
-            if (type == MusicData_None || musicDatas_[i]->getMusicDataType() == type) {
+            if (type == MusicDataType::None || musicDatas_[i]->getMusicDataType() == type) {
                   notations.push_back(musicDatas_[i]);
                   }
             }
@@ -3295,7 +3295,7 @@ QList<MusicData*> MeasureData::getCrossMeasureElements(
       QList<MusicData*> pairs;
 
       for (i = 0; i < crossMeasureElements_.size(); ++i) {
-            if ((type == MusicData_None || crossMeasureElements_[i].first->getMusicDataType() == type)
+            if ((type == MusicDataType::None || crossMeasureElements_[i].first->getMusicDataType() == type)
                 && (pairType == PairType_All || ((crossMeasureElements_[i].second && pairType == PairType_Start)
                                                  || (!crossMeasureElements_[i].second && pairType == PairType_Stop)))) {
                   pairs.push_back(crossMeasureElements_[i].first);
@@ -7160,7 +7160,7 @@ void LyricChunkParse::processLyricInfo(const LyricInfo& info) {
 
             if( measureData == 0 ) { return; }
             QList<NoteContainer*> containers = measureData->getNoteContainers();
-            QList<MusicData*> lyrics = measureData->getMusicDatas(MusicData_Lyric);
+            QList<MusicData*> lyrics = measureData->getMusicDatas(MusicDataType::Lyric);
 
             for( i=0; i<containers.size() && index<words.size(); ++i ) {
                   if( containers[i]->getIsRest() ) {
@@ -7383,7 +7383,7 @@ void OveOrganizer::organizeAttributes() {
                                     Clef* clefPtr = measureData->getClef();
                                     clefPtr->setClefType((int)lastClefType);
 
-                                    const QList<MusicData*>& clefs = measureData->getMusicDatas(MusicData_Clef);
+                                    const QList<MusicData*>& clefs = measureData->getMusicDatas(MusicDataType::Clef);
 
                                     for( k=0; k<clefs.size(); ++k ) {
                                           Clef* clef = dynamic_cast<Clef*>(clefs[k]);
@@ -7524,7 +7524,7 @@ void OveOrganizer::organizeContainers(int /*part*/, int /*track*/,
 void OveOrganizer::organizeMusicDatas(int /*part*/, int /*track*/, Measure* measure, MeasureData* measureData) {
       int i;
       int barIndex = measure->getBarNumber()->getIndex();
-      QList<MusicData*> datas = measureData->getMusicDatas(MusicData_None);
+      QList<MusicData*> datas = measureData->getMusicDatas(MusicDataType::None);
 
       for(i=0; i<datas.size(); ++i) {
             datas[i]->start()->setMeasure(barIndex);
@@ -7533,30 +7533,30 @@ void OveOrganizer::organizeMusicDatas(int /*part*/, int /*track*/, Measure* meas
 
 void OveOrganizer::organizeCrossMeasureElements(int part, int track, Measure* measure, MeasureData* measureData) {
       int i;
-      QList<MusicData*> pairs = measureData->getCrossMeasureElements(MusicData_None, MeasureData::PairType_Start);
+      QList<MusicData*> pairs = measureData->getCrossMeasureElements(MusicDataType::None, MeasureData::PairType_Start);
 
       for(i=0; i<pairs.size(); ++i) {
             MusicData* pair = pairs[i];
 
             switch ( pair->getMusicDataType() ) {
-                  case MusicData_Beam :
-                  case MusicData_Glissando :
-                  case MusicData_Slur :
-                  case MusicData_Tie :
-                  case MusicData_Tuplet :
-                  case MusicData_Pedal :
-                  case MusicData_Numeric_Ending :
-                        //case MusicData_OctaveShift_EndPoint :
-                  case MusicData_Measure_Repeat : {
+                  case MusicDataType::Beam :
+                  case MusicDataType::Glissando :
+                  case MusicDataType::Slur :
+                  case MusicDataType::Tie :
+                  case MusicDataType::Tuplet :
+                  case MusicDataType::Pedal :
+                  case MusicDataType::Numeric_Ending :
+                        //case MusicDataType::OctaveShift_EndPoint :
+                  case MusicDataType::Measure_Repeat : {
                         organizePairElement(pair, part, track, measure, measureData);
                         break;
                         }
-                  case MusicData_OctaveShift : {
+                  case MusicDataType::OctaveShift : {
                         OctaveShift* octave = dynamic_cast<OctaveShift*>(pair);
                         organizeOctaveShift(octave, measure, measureData);
                         break;
                         }
-                  case MusicData_Wedge : {
+                  case MusicDataType::Wedge : {
                         Wedge* wedge = dynamic_cast<Wedge*>(pair);
                         organizeWedge(wedge, part, track, measure, measureData);
                         break;
@@ -7583,7 +7583,7 @@ void OveOrganizer::organizePairElement(
             measureData2->addCrossMeasureElement(data, false);
             }
 
-      if( data->getMusicDataType() == MusicData_Tuplet ){
+      if( data->getMusicDataType() == MusicDataType::Tuplet ){
             Tuplet* tuplet = dynamic_cast<Tuplet*>(data);
             const QList<NoteContainer*> containers = measureData->getNoteContainers();
 

@@ -138,48 +138,48 @@ enum class BdatType : unsigned char {
 
 ////////////////////////////////////////
 
-enum MusicDataType {
-	// attributes
-	MusicData_Clef,
-	MusicData_Key,
-	MusicData_Measure_Repeat,
+enum class MusicDataType : char {
+   None,
 
-	// sound
-	MusicData_Tempo,
+   // attributes
+   Clef,
+   Key,
+   Measure_Repeat,
 
-	// direction
-	MusicData_Dynamics,
-	MusicData_Wedge,
-	MusicData_Wedge_EndPoint,
-	MusicData_OctaveShift,
-	MusicData_OctaveShift_EndPoint,
-	MusicData_Expressions,
-	MusicData_Repeat,
-	MusicData_Text,
-	MusicData_Harp_Pedal,
-	MusicData_Pedal,
+   // sound
+   Tempo,
 
-	// note & harmony
-	MusicData_Note_Container,
-	MusicData_Harmony,
+   // direction
+   Dynamics,
+   Wedge,
+   Wedge_EndPoint,
+   OctaveShift,
+   OctaveShift_EndPoint,
+   Expressions,
+   Repeat,
+   Text,
+   Harp_Pedal,
+   Pedal,
 
-	// note's children
-	MusicData_Beam,
-	MusicData_Glissando,
-	MusicData_Lyric,
-	MusicData_Slur,
-	MusicData_Tie,
-	MusicData_Tuplet,
+   // note & harmony
+   Note_Container,
+   Harmony,
 
-	// barline
-	MusicData_Numeric_Ending,
+   // note's children
+   Beam,
+   Glissando,
+   Lyric,
+   Slur,
+   Tie,
+   Tuplet,
 
-	MusicData_KuoHao,
-	MusicData_Bar_End,
-	MusicData_Decorator,
-	MusicData_Multi_Measure_Rest,
+   // barline
+   Numeric_Ending,
 
-	MusicData_None
+   KuoHao,
+   Bar_End,
+   Decorator,
+   Multi_Measure_Rest,
 };
 
 enum MidiType {
