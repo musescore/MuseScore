@@ -82,18 +82,17 @@ const int TWELVE_TONE = 12 ;
 const int INVALID_NOTE = -1 ;
 const int OCTAVE = 7 ;
 
-enum CondType {
-	Cond_Time_Parameters	= 0x09,	// size - 7, TimeSignature
-	Cond_Bar_Number			= 0x0A,	// size, compatible with previous version
-	Cond_Decorator			= 0x16,
-	Cond_Tempo				= 0x1C,	// size - 7
-	Cond_Text				= 0x1D,	// size - 7, Rehearsal | SystemText
-	Cond_Expression			= 0x25,	// size - 7, if set playback parameters in Expression, will store in COND
-	Cond_Barline_Parameters	= 0x30, // size - 7, include :|| repeat count
-	Cond_Repeat				= 0x31,	//
-	Cond_Numeric_Ending		= 0x32, //
-
-	Cond_None
+enum class CondType : char {
+   None,
+   Time_Parameters    = 0x09, // size - 7, TimeSignature
+   Bar_Number         = 0x0A, // size, compatible with previous version
+   Decorator          = 0x16,
+   Tempo              = 0x1C, // size - 7
+   Text               = 0x1D, // size - 7, Rehearsal | SystemText
+   Expression         = 0x25, // size - 7, if set playback parameters in Expression, will store in COND
+   Barline_Parameters = 0x30, // size - 7, include :|| repeat count
+   Repeat             = 0x31, //
+   Numeric_Ending     = 0x32,
 };
 
 enum BdatType {
