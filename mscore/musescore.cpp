@@ -4234,6 +4234,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "repeat") {
             MScore::playRepeats = !MScore::playRepeats;
             cs->updateRepeatList(MScore::playRepeats);
+            emit cs->playlistChanged();
             }
       else if (cmd == "pan")
             MScore::panPlayback = !MScore::panPlayback;
