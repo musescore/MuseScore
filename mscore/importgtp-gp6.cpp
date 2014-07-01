@@ -1009,11 +1009,9 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
 
             // read the beats that occur in the bar
             tick = readBeats(voice.firstChild().toElement().text(), partInfo, measure, tick, staffIdx, voiceNum, tuplets);
-            qDebug("finished readBeats");
             // increment the counter for parts
             staffIdx++;
             }
-      qDebug("finished read bars");
       }
 
 //---------------------------------------------------------
@@ -1055,7 +1053,6 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
             measure = measure->nextMeasure();
             bar++;
             } while (!nextMasterBar.isNull());
-      qDebug("finished reading master bars");
       }
 
 //---------------------------------------------------------
