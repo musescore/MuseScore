@@ -58,8 +58,8 @@ enum class MuseScoreStyleType : char {
       };
 
 // MusicXML export break values
-enum MusicxmlExportBreaks {
-      ALL_BREAKS, MANUAL_BREAKS, NO_BREAKS
+enum class MusicxmlExportBreaks : char {
+      ALL, MANUAL, NO
       };
 
 //---------------------------------------------------------

@@ -155,7 +155,7 @@ void Preferences::init()
       musicxmlImportLayout     = true;
       musicxmlImportBreaks     = true;
       musicxmlExportLayout     = true;
-      musicxmlExportBreaks     = ALL_BREAKS;
+      musicxmlExportBreaks     = MusicxmlExportBreaks::ALL;
 
       alternateNoteEntryMethod = false;
       proximity                = 6;
@@ -286,9 +286,9 @@ void Preferences::write()
       s.setValue("musicxmlImportBreaks",  musicxmlImportBreaks);
       s.setValue("musicxmlExportLayout",  musicxmlExportLayout);
       switch(musicxmlExportBreaks) {
-            case ALL_BREAKS:     s.setValue("musicxmlExportBreaks", "all"); break;
-            case MANUAL_BREAKS:  s.setValue("musicxmlExportBreaks", "manual"); break;
-            case NO_BREAKS:      s.setValue("musicxmlExportBreaks", "no"); break;
+            case MusicxmlExportBreaks::ALL:     s.setValue("musicxmlExportBreaks", "all"); break;
+            case MusicxmlExportBreaks::MANUAL:  s.setValue("musicxmlExportBreaks", "manual"); break;
+            case MusicxmlExportBreaks::NO:      s.setValue("musicxmlExportBreaks", "no"); break;
             }
 
       s.setValue("alternateNoteEntry", alternateNoteEntryMethod);
@@ -436,11 +436,11 @@ void Preferences::read()
       musicxmlExportLayout     = s.value("musicxmlExportLayout", musicxmlExportLayout).toBool();
       QString br(s.value("musicxmlExportBreaks", "all").toString());
       if (br == "all")
-            musicxmlExportBreaks = ALL_BREAKS;
+            musicxmlExportBreaks = MusicxmlExportBreaks::ALL;
       else if (br == "manual")
-            musicxmlExportBreaks = MANUAL_BREAKS;
+            musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       else if (br == "no")
-            musicxmlExportBreaks = NO_BREAKS;
+            musicxmlExportBreaks = MusicxmlExportBreaks::NO;
 
       mag                    = s.value("mag", mag).toDouble();
 
@@ -854,9 +854,9 @@ void PreferenceDialog::updateValues()
       importBreaks->setChecked(prefs.musicxmlImportBreaks);
       exportLayout->setChecked(prefs.musicxmlExportLayout);
       switch(prefs.musicxmlExportBreaks) {
-            case ALL_BREAKS:     exportAllBreaks->setChecked(true); break;
-            case MANUAL_BREAKS:  exportManualBreaks->setChecked(true); break;
-            case NO_BREAKS:      exportNoBreaks->setChecked(true); break;
+            case MusicxmlExportBreaks::ALL:     exportAllBreaks->setChecked(true); break;
+            case MusicxmlExportBreaks::MANUAL:  exportManualBreaks->setChecked(true); break;
+            case MusicxmlExportBreaks::NO:      exportNoBreaks->setChecked(true); break;
             }
 
       midiPorts->setValue(prefs.midiPorts);
@@ -1348,11 +1348,11 @@ void PreferenceDialog::apply()
       prefs.musicxmlImportBreaks  = importBreaks->isChecked();
       prefs.musicxmlExportLayout  = exportLayout->isChecked();
       if (exportAllBreaks->isChecked())
-            prefs.musicxmlExportBreaks = ALL_BREAKS;
+            prefs.musicxmlExportBreaks = MusicxmlExportBreaks::ALL;
       else if (exportManualBreaks->isChecked())
-            prefs.musicxmlExportBreaks = MANUAL_BREAKS;
+            prefs.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       else if (exportNoBreaks->isChecked())
-            prefs.musicxmlExportBreaks = NO_BREAKS;
+            prefs.musicxmlExportBreaks = MusicxmlExportBreaks::NO;
 
       prefs.midiPorts          = midiPorts->value();
       prefs.rememberLastMidiConnections = rememberLastMidiConnections->isChecked();

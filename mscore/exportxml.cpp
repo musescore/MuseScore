@@ -4211,13 +4211,13 @@ void ExportMusicXml::write(QIODevice* dev)
 
                         // determine if a new-system or new-page is required
                         QString newThing; // new-[system|page]="yes" or empty
-                        if (preferences.musicxmlExportBreaks == ALL_BREAKS) {
+                        if (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::ALL) {
                               if (currentSystem == NewSystem)
                                     newThing = " new-system=\"yes\"";
                               else if (currentSystem == NewPage)
                                     newThing = " new-page=\"yes\"";
                               }
-                        else if (preferences.musicxmlExportBreaks == MANUAL_BREAKS) {
+                        else if (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::MANUAL) {
                               if (currentSystem == NewSystem && prevMeasLineBreak)
                                     newThing = " new-system=\"yes\"";
                               else if (currentSystem == NewPage && prevMeasPageBreak)
@@ -4228,7 +4228,7 @@ void ExportMusicXml::write(QIODevice* dev)
                         bool doLayout = false;
                         if (preferences.musicxmlExportLayout) {
                               if (currentSystem == TopSystem
-                                  || (preferences.musicxmlExportBreaks == ALL_BREAKS && newThing != "")) {
+                                  || (preferences.musicxmlExportBreaks == MusicxmlExportBreaks::ALL && newThing != "")) {
                                     doLayout = true;
                                     }
                               }
