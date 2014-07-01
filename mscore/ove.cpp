@@ -3296,8 +3296,8 @@ QList<MusicData*> MeasureData::getCrossMeasureElements(
 
       for (i = 0; i < crossMeasureElements_.size(); ++i) {
             if ((type == MusicDataType::None || crossMeasureElements_[i].first->getMusicDataType() == type)
-                && (pairType == PairType_All || ((crossMeasureElements_[i].second && pairType == PairType_Start)
-                                                 || (!crossMeasureElements_[i].second && pairType == PairType_Stop)))) {
+                && (pairType == PairType::All || ((crossMeasureElements_[i].second && pairType == PairType::Start)
+                                                 || (!crossMeasureElements_[i].second && pairType == PairType::Stop)))) {
                   pairs.push_back(crossMeasureElements_[i].first);
                   }
             }
@@ -7533,7 +7533,7 @@ void OveOrganizer::organizeMusicDatas(int /*part*/, int /*track*/, Measure* meas
 
 void OveOrganizer::organizeCrossMeasureElements(int part, int track, Measure* measure, MeasureData* measureData) {
       int i;
-      QList<MusicData*> pairs = measureData->getCrossMeasureElements(MusicDataType::None, MeasureData::PairType_Start);
+      QList<MusicData*> pairs = measureData->getCrossMeasureElements(MusicDataType::None, MeasureData::PairType::Start);
 
       for(i=0; i<pairs.size(); ++i) {
             MusicData* pair = pairs[i];
