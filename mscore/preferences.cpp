@@ -180,7 +180,7 @@ void Preferences::init()
       singlePalette           = false;
 
       styleName               = "light";   // ??
-      globalStyle             = STYLE_LIGHT;
+      globalStyle             = MuseScoreStyleType::LIGHT;
       animations              = true;
 
       QString wd      = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName());
@@ -456,9 +456,9 @@ void Preferences::read()
       oscPort                = s.value("oscPort", oscPort).toInt();
       styleName              = s.value("style", styleName).toString();
       if (styleName == "dark")
-            globalStyle  = STYLE_DARK;
+            globalStyle  = MuseScoreStyleType::DARK;
       else
-            globalStyle  = STYLE_LIGHT;
+            globalStyle  = MuseScoreStyleType::LIGHT;
 
       animations       = s.value("animations",       animations).toBool();
       singlePalette    = s.value("singlePalette",    singlePalette).toBool();
@@ -976,7 +976,7 @@ void PreferenceDialog::updateValues()
       oscServer->setChecked(prefs.useOsc);
       oscPort->setValue(prefs.oscPort);
 
-      styleName->setCurrentIndex(prefs.globalStyle);
+      styleName->setCurrentIndex(int(prefs.globalStyle));
       animations->setChecked(prefs.animations);
 
       defaultStyle->setText(prefs.defaultStyleFile);
@@ -1410,13 +1410,13 @@ void PreferenceDialog::apply()
 
       prefs.useOsc  = oscServer->isChecked();
       prefs.oscPort = oscPort->value();
-      if (styleName->currentIndex() == STYLE_DARK) {
+      if (styleName->currentIndex() == int(MuseScoreStyleType::DARK)) {
             prefs.styleName = "dark";
-            prefs.globalStyle = STYLE_DARK;
+            prefs.globalStyle = MuseScoreStyleType::DARK;
             }
       else {
             prefs.styleName = "light";
-            prefs.globalStyle = STYLE_LIGHT;
+            prefs.globalStyle = MuseScoreStyleType::LIGHT;
             }
 
       prefs.animations = animations->isChecked();
