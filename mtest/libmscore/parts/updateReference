@@ -1,49 +1,103 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-1.mscx   part-symbol.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-add.mscx   part-symbol-add.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-del.mscx   part-symbol-del.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-parts.mscx   part-symbol-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-uadd.mscx   part-symbol-uadd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-udel.mscx   part-symbol-udel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-uradd.mscx   part-symbol-uradd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-urdel.mscx   part-symbol-urdel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-all-1.mscx   part-all.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-all-appendmeasures.mscx   part-all-appendmeasures.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-all-parts.mscx   part-all-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-all-uappendmeasures.mscx   part-all-uappendmeasures.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-all-uinsertmeasures.mscx   part-all-uinsertmeasures.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-1.mscx   part-breath.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-add.mscx   part-breath-add.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-del.mscx   part-breath-del.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-parts.mscx   part-breath-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-uadd.mscx   part-breath-uadd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-udel.mscx   part-breath-udel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-uradd.mscx   part-breath-uradd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-urdel.mscx   part-breath-urdel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-empty-1.mscx   part-empty.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-empty-parts.mscx   part-empty-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-1.mscx   part-fingering.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-add.mscx   part-fingering-add.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-del.mscx   part-fingering-del.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-parts.mscx   part-fingering-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-uadd.mscx   part-fingering-uadd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-udel.mscx   part-fingering-udel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-uradd.mscx   part-fingering-uradd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-urdel.mscx   part-fingering-urdel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-reload-test.mscx   partStyle-score-reload-test.mscx
-cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-test.mscx   partStyle-score-test.mscx
+DIR=../MuseScore-build
 
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-1.mscx   	part-chordline.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-add.mscx   part-chordline-add.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-del.mscx   part-chordline-del.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-parts.mscx part-chordline-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-uadd.mscx  part-chordline-uadd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-udel.mscx  part-chordline-udel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-uradd.mscx part-chordline-uradd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-urdel.mscx part-chordline-urdel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-symbol-1.mscx     part-symbol.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-symbol-add.mscx   part-symbol-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-symbol-del.mscx   part-symbol-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-symbol-parts.mscx part-symbol-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-symbol-uadd.mscx  part-symbol-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-symbol-udel.mscx  part-symbol-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-symbol-uradd.mscx part-symbol-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-symbol-urdel.mscx part-symbol-urdel.mscx
 
+cp ../../../$DIR/mtest/libmscore/parts/part-text-1.mscx     part-text.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-text-add.mscx   part-text-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-text-del.mscx   part-text-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-text-parts.mscx part-text-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-text-uadd.mscx  part-text-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-text-udel.mscx  part-text-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-text-uradd.mscx part-text-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-text-urdel.mscx part-text-urdel.mscx
 
+cp ../../../$DIR/mtest/libmscore/parts/part-arpeggio-1.mscx     part-arpeggio.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-arpeggio-add.mscx   part-arpeggio-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-arpeggio-del.mscx   part-arpeggio-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-arpeggio-parts.mscx part-arpeggio-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-arpeggio-uadd.mscx  part-arpeggio-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-arpeggio-udel.mscx  part-arpeggio-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-arpeggio-uradd.mscx part-arpeggio-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-arpeggio-urdel.mscx part-arpeggio-urdel.mscx
 
+cp ../../../$DIR/mtest/libmscore/parts/part-breath-1.mscx     part-breath.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-breath-add.mscx   part-breath-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-breath-del.mscx   part-breath-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-breath-parts.mscx part-breath-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-breath-uadd.mscx  part-breath-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-breath-udel.mscx  part-breath-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-breath-uradd.mscx part-breath-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-breath-urdel.mscx part-breath-urdel.mscx
 
+cp ../../../$DIR/mtest/libmscore/parts/part-glissando-1.mscx     part-glissando.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-glissando-add.mscx   part-glissando-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-glissando-del.mscx   part-glissando-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-glissando-parts.mscx part-glissando-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-glissando-uadd.mscx  part-glissando-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-glissando-udel.mscx  part-glissando-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-glissando-uradd.mscx part-glissando-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-glissando-urdel.mscx part-glissando-urdel.mscx
 
+cp ../../../$DIR/mtest/libmscore/parts/part-articulation-1.mscx     part-articulation.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-articulation-add.mscx   part-articulation-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-articulation-del.mscx   part-articulation-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-articulation-parts.mscx part-articulation-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-articulation-uadd.mscx  part-articulation-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-articulation-udel.mscx  part-articulation-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-articulation-uradd.mscx part-articulation-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-articulation-urdel.mscx part-articulation-urdel.mscx
+
+cp ../../../$DIR/mtest/libmscore/parts/part-chordline-1.mscx     part-chordline.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-chordline-add.mscx   part-chordline-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-chordline-del.mscx   part-chordline-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-chordline-parts.mscx part-chordline-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-chordline-uadd.mscx  part-chordline-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-chordline-udel.mscx  part-chordline-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-chordline-uradd.mscx part-chordline-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-chordline-urdel.mscx part-chordline-urdel.mscx
+
+cp ../../../$DIR/mtest/libmscore/parts/part-dynamic-1.mscx     part-dynamic.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-dynamic-add.mscx   part-dynamic-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-dynamic-del.mscx   part-dynamic-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-dynamic-parts.mscx part-dynamic-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-dynamic-uadd.mscx  part-dynamic-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-dynamic-udel.mscx  part-dynamic-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-dynamic-uradd.mscx part-dynamic-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-dynamic-urdel.mscx part-dynamic-urdel.mscx
+
+cp ../../../$DIR/mtest/libmscore/parts/part-fingering-1.mscx     part-fingering.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-fingering-add.mscx   part-fingering-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-fingering-del.mscx   part-fingering-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-fingering-parts.mscx part-fingering-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-fingering-uadd.mscx  part-fingering-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-fingering-udel.mscx  part-fingering-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-fingering-uradd.mscx part-fingering-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-fingering-urdel.mscx part-fingering-urdel.mscx
+
+cp ../../../$DIR/mtest/libmscore/parts/part-stafftext-1.mscx     part-stafftext.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-stafftext-add.mscx   part-stafftext-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-stafftext-del.mscx   part-stafftext-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-stafftext-parts.mscx part-stafftext-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-stafftext-uadd.mscx  part-stafftext-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-stafftext-udel.mscx  part-stafftext-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-stafftext-uradd.mscx part-stafftext-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-stafftext-urdel.mscx part-stafftext-urdel.mscx
+
+cp ../../../$DIR/mtest/libmscore/parts/part-all-1.mscx   part-all.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-all-appendmeasures.mscx   part-all-appendmeasures.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-all-parts.mscx   part-all-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-all-uappendmeasures.mscx   part-all-uappendmeasures.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-all-uinsertmeasures.mscx   part-all-uinsertmeasures.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-empty-1.mscx   part-empty.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-empty-parts.mscx   part-empty-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/partStyle-score-reload-test.mscx   partStyle-score-reload-test.mscx
+cp ../../../$DIR/mtest/libmscore/parts/partStyle-score-test.mscx   partStyle-score-test.mscx

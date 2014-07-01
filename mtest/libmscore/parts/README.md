@@ -29,16 +29,20 @@ Linked Parts
 6. remove undo
 7. remove redo
 
+X = test passes and code works
+U = test passes but code does not work (master will need updating once code works)
+F = test fails
+
 ```
 1 234 567 ELEMENT
-x xxx xxx SYMBOL
-- --- --- TEXT
+x xxx UxU SYMBOL
+x xxx xxx TEXT
 - --- --- INSTRUMENT_NAME
 - --- --- BAR_LINE
 - --- --- STEM_SLASH
 - --- --- LINE
 - --- --- BRACKET
-- --- --- ARPEGGIO
+x xxx xxx ARPEGGIO
 - --- --- ACCIDENTAL
 x --- --- NOTE
 x --- --- STEM
@@ -47,23 +51,23 @@ x --- --- KEYSIG
 x --- --- TIMESIG
 x --- --- REST
 x xxx xxx BREATH
-- --- --- GLISSANDO
+x xxx xxx GLISSANDO
 - --- --- REPEAT_MEASURE
 - --- --- IMAGE
 - --- --- TIE
-- --- --- ARTICULATION
-- --- --- CHORDLINE
-- --- --- DYNAMIC
+x UxU xxU ARTICULATION
+x xxx xxx CHORDLINE
+x xxx xxx DYNAMIC
 - --- --- BEAM
 - --- --- HOOK
 - --- --- LYRICS
 - --- --- FIGURED_BASS
 - --- --- MARKER
 - --- --- JUMP
-x xxx xxx FINGERING
+x xxx UxU FINGERING
 - --- --- TUPLET
 - --- --- TEMPO_TEXT
-- --- --- STAFF_TEXT
+x xxx xxx STAFF_TEXT
 - --- --- REHEARSAL_MARK
 - --- --- INSTRUMENT_CHANGE
 - --- --- HARMONY
