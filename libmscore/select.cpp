@@ -24,6 +24,7 @@
 #include "figuredbass.h"
 #include "glissando.h"
 #include "harmony.h"
+#include "hook.h"
 #include "input.h"
 #include "limits.h"
 #include "lyrics.h"
@@ -38,6 +39,7 @@
 #include "sig.h"
 #include "slur.h"
 #include "stem.h"
+#include "stemslash.h"
 #include "tie.h"
 #include "system.h"
 #include "text.h"
@@ -312,6 +314,33 @@ void Selection::appendFiltered(Element* e)
             _el.append(e);
       }
 
+void Selection::appendChord(Chord* chord)
+      {
+      if (chord->beam()) _el.append(chord->beam());
+      if (chord->stem()) _el.append(chord->stem());
+      if (chord->hook()) _el.append(chord->hook());
+      if (chord->arpeggio()) appendFiltered(chord->arpeggio());
+      if (chord->glissando()) appendFiltered(chord->glissando());
+      if (chord->stemSlash()) _el.append(chord->stemSlash());
+      foreach(Note* note, chord->notes()) {
+            _el.append(note);
+            if (note->accidental()) _el.append(note->accidental());
+            foreach(Element* el, note->el())
+                  appendFiltered(el);
+            for(int x = 0; x < MAX_DOTS; x++)
+                  if (note->dot(x) != 0) _el.append(note->dot(x));
+
+            if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
+                  if (note->tieFor()->endElement()->type() == Element::Type::NOTE) {
+                        Note* endNote = static_cast<Note*>(note->tieFor()->endElement());
+                        Segment* s = endNote->chord()->segment();
+                        if (_endSegment && (s->tick() < _endSegment->tick()))
+                              _el.append(note->tieFor());
+                        }
+                  }
+            }
+      }
+
 //---------------------------------------------------------
 //   updateSelectedElements
 //---------------------------------------------------------
@@ -351,27 +380,9 @@ void Selection::updateSelectedElements()
                         }
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
-                        if (chord->beam()) _el.append(chord->beam());
-                        if (chord->stem()) _el.append(chord->stem());
-                        if (chord->arpeggio()) appendFiltered(chord->arpeggio());
-                        if (chord->glissando()) appendFiltered(chord->glissando());
-                        foreach(Note* note, chord->notes()) {
-                              _el.append(note);
-                              if (note->accidental()) _el.append(note->accidental());
-                              foreach(Element* el, note->el())
-                                    appendFiltered(el);
-                              for(int x = 0; x < MAX_DOTS; x++) {
-                                    if (note->dot(x) != 0) _el.append(note->dot(x));
-                                                                        }
-                                    if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
-                                          if (note->tieFor()->endElement()->type() == Element::Type::NOTE) {
-                                          Note* endNote = static_cast<Note*>(note->tieFor()->endElement());
-                                          Segment* s = endNote->chord()->segment();
-                                          if (_endSegment && (s->tick() < _endSegment->tick()))
-                                                _el.append(note->tieFor());
-                                          }
-                                    }
-                              }
+                        for (Chord* graceNote : chord->graceNotes())
+                              appendChord(graceNote);
+                        appendChord(chord);
                         }
                   else {
                         appendFiltered(e);

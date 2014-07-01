@@ -109,6 +109,7 @@ class Selection {
       SelectionFilter& selectionFilter() const;
       bool canSelect(Element*) const;
       void appendFiltered(Element* e);
+      void appendChord(Chord* chord);
       void filterRange(QList<Segment*>, int strack, int etrack) const;
       void filterSpanners(std::multimap<int, Spanner*>& spannerMapCopy) const;
 
