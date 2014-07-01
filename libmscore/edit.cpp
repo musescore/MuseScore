@@ -1792,7 +1792,7 @@ void Score::cmdDeleteSelection()
                         }
                   }
             s1 = tick2segment(stick1);
-            s2 = tick2segment(stick2);
+            s2 = tick2segment(stick2,true);
             if (s1 == 0 || s2 == 0)
                   deselectAll();
             else {
