@@ -264,7 +264,7 @@ void GuitarPro::setTuplet(Tuplet* tuplet, int tuple)
                   tuplet->setRatio(Fraction(13,8));
                   break;
             default:
-                  qFatal("unsupported tuplet %d", tuple);
+                  qFatal("unsupported tuplet %d\n", tuple);
             }
       }
 
