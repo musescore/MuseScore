@@ -2825,7 +2825,7 @@ void MuseScore::about()
 AboutBoxDialog::AboutBoxDialog()
       {
       setupUi(this);
-      if (preferences.globalStyle == STYLE_DARK)
+      if (preferences.globalStyle == MuseScoreStyleType::DARK)
             museLogo->setPixmap(QPixmap(":/data/musescore_logo_full1.png"));
       else
             museLogo->setPixmap(QPixmap(":/data/musescore_logo_full.png"));
@@ -4794,7 +4794,7 @@ int main(int argc, char* av[])
 
       if (!converterMode) {
             switch(preferences.globalStyle) {
-                  case STYLE_DARK: {
+                  case MuseScoreStyleType::DARK: {
                         MgStyle* st = new MgStyle;
                         QApplication::setStyle(st);
                         QPalette p(QApplication::palette());
@@ -4816,7 +4816,7 @@ int main(int argc, char* av[])
 
                         break;
                         }
-                  case STYLE_LIGHT:
+                  case MuseScoreStyleType::LIGHT:
                         MgStyle* st = new MgStyle;
                         QApplication::setStyle(st);
                         QPalette p(QApplication::palette());

@@ -52,9 +52,9 @@ enum {
       MIDI_REMOTES
       };
 
-enum MuseScoreStyleType {
-      STYLE_DARK,
-      STYLE_LIGHT
+enum class MuseScoreStyleType : char {
+      DARK,
+      LIGHT
       };
 
 // MusicXML export break values
@@ -153,7 +153,7 @@ struct Preferences {
       int oscPort;
       bool singlePalette;
       QString styleName;
-      int globalStyle;        // 0 - dark, 1 - light
+      MuseScoreStyleType globalStyle;
       bool animations;
 
       QString myScoresPath;
