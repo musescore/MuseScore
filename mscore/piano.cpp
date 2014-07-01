@@ -265,7 +265,7 @@ Piano::Piano(QWidget* parent)
       curPitch = -1;
       _ypos    = 0;
       curKeyPressed = -1;
-      _orientation = PIANO_VERTICAL;
+      _orientation = PianoOrientation::VERTICAL;
       }
 
 //---------------------------------------------------------
@@ -324,7 +324,7 @@ void Piano::paintEvent(QPaintEvent* event)
       QPainter p(this);
       const QRect& rr = event->rect();
       QRect r;
-      if (_orientation == PIANO_HORIZONTAL) {
+      if (_orientation == PianoOrientation::HORIZONTAL) {
             int w = keyHeight * 52;
             p.translate(w, 0);
             p.rotate(90.0);
