@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.24">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <page-layout>
+        <page-height>1683.78</page-height>
+        <page-width>1190.55</page-width>
+        <page-margins type="even">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        <page-margins type="odd">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <PageList>
+      <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        </Page>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
+      <trackName>Track 1</trackName>
+      <Instrument>
+        <longName pos="0">Track 1</longName>
+        <trackName></trackName>
+        <StringData>
+          <frets>32</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Channel>
+          <program value="25"/>
+          <controller ctrl="7" value="127"/>
+          <controller ctrl="10" value="63"/>
+          <controller ctrl="93" value="255"/>
+          <controller ctrl="91" value="255"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <lid>0</lid>
+        </VBox>
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G8vb</concertClefType>
+          <transposingClefType>G8vb</transposingClefType>
+          <lid>1</lid>
+          </Clef>
+        <KeySig>
+          <lid>2</lid>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <lid>3</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Dynamic>
+          <subtype>mf</subtype>
+          <velocity>80</velocity>
+          <lid>4</lid>
+          </Dynamic>
+        <Tempo>
+          <tempo>2</tempo>
+          <lid>5</lid>
+          <text><sym>noteQuarterUp</sym> = 120</text>
+          </Tempo>
+        <Chord>
+          <lid>6</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>7</lid>
+            <pitch>45</pitch>
+            <tpc>17</tpc>
+            <fret>5</fret>
+            <string>5</string>
+            </Note>
+          <ChordLine>
+            <subtype>3</subtype>
+            <straight>1</straight>
+            <lid>8</lid>
+            </ChordLine>
+          </Chord>
+        <Chord>
+          <lid>9</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>10</lid>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
+            <fret>7</fret>
+            <string>3</string>
+            </Note>
+          <ChordLine>
+            <subtype>3</subtype>
+            <straight>1</straight>
+            <lid>11</lid>
+            </ChordLine>
+          </Chord>
+        <Chord>
+          <lid>12</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>13</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <fret>5</fret>
+            <string>2</string>
+            </Note>
+          <ChordLine>
+            <subtype>3</subtype>
+            <straight>1</straight>
+            <lid>14</lid>
+            </ChordLine>
+          </Chord>
+        <Chord>
+          <lid>15</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>16</lid>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          <ChordLine>
+            <subtype>3</subtype>
+            <straight>1</straight>
+            <lid>17</lid>
+            </ChordLine>
+          </Chord>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          </BarLine>
+        <tick>0</tick>
+        <Rest>
+          <lid>18</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>19</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>20</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>21</lid>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        </Measure>
+      </Staff>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <page-layout>
+          <page-height>1683.78</page-height>
+          <page-width>1190.55</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>1</linkedTo>
+          <StaffType group="pitched">
+            </StaffType>
+          <bracket type="0" span="2"/>
+          </Staff>
+        <Staff id="2">
+          <linkedTo>1</linkedTo>
+          <StaffType group="tablature">
+            <name>Tab. 6-str common</name>
+            <lines>6</lines>
+            <lineDistance>1.5</lineDistance>
+            <timesig>0</timesig>
+            <durations>0</durations>
+            <durationFontName>MuseScore Tab Modern</durationFontName>
+            <durationFontSize>15</durationFontSize>
+            <durationFontY>0</durationFontY>
+            <fretFontName>MuseScore Tab Serif</fretFontName>
+            <fretFontSize>9</fretFontSize>
+            <fretFontY>0</fretFontY>
+            <linesThrough>0</linesThrough>
+            <minimStyle>1</minimStyle>
+            <onLines>1</onLines>
+            <showRests>0</showRests>
+            <stemsDown>1</stemsDown>
+            <stemsThrough>0</stemsThrough>
+            <upsideDown>0</upsideDown>
+            <useNumbers>1</useNumbers>
+            </StaffType>
+          <bracket type="-1" span="0"/>
+          </Staff>
+        <trackName></trackName>
+        <Instrument>
+          <longName pos="0">Track 1</longName>
+          <trackName></trackName>
+          <StringData>
+            <frets>32</frets>
+            <string>40</string>
+            <string>45</string>
+            <string>50</string>
+            <string>55</string>
+            <string>59</string>
+            <string>64</string>
+            </StringData>
+          <Channel>
+            <program value="25"/>
+            <controller ctrl="7" value="127"/>
+            <controller ctrl="10" value="63"/>
+            <controller ctrl="93" value="255"/>
+            <controller ctrl="91" value="255"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>0</lid>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Track 1</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <lid>1</lid>
+            </Clef>
+          <KeySig>
+            <lid>2</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <lid>3</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <lid>4</lid>
+            </Dynamic>
+          <Tempo>
+            <tempo>2</tempo>
+            <lid>5</lid>
+            <text><sym>noteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Chord>
+            <lid>6</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>7</lid>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <fret>5</fret>
+              <string>5</string>
+              </Note>
+            <ChordLine>
+              <subtype>3</subtype>
+              <straight>1</straight>
+              <lid>8</lid>
+              </ChordLine>
+            </Chord>
+          <Chord>
+            <lid>9</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>10</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>7</fret>
+              <string>3</string>
+              </Note>
+            <ChordLine>
+              <subtype>3</subtype>
+              <straight>1</straight>
+              <lid>11</lid>
+              </ChordLine>
+            </Chord>
+          <Chord>
+            <lid>12</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>13</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
+              <string>2</string>
+              </Note>
+            <ChordLine>
+              <subtype>3</subtype>
+              <straight>1</straight>
+              <lid>14</lid>
+              </ChordLine>
+            </Chord>
+          <Chord>
+            <lid>15</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>16</lid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <fret>3</fret>
+              <string>0</string>
+              </Note>
+            <ChordLine>
+              <subtype>3</subtype>
+              <straight>1</straight>
+              <lid>17</lid>
+              </ChordLine>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          <tick>0</tick>
+          <Rest>
+            <lid>18</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>19</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>20</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>21</lid>
+            <track>1</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          </Measure>
+        </Staff>
+      <Staff id="2">
+        <Measure number="1">
+          <Clef>
+            <concertClefType>TAB</concertClefType>
+            <transposingClefType>TAB</transposingClefType>
+            </Clef>
+          <KeySig>
+            <lid>2</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <Chord>
+            <lid>6</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>7</lid>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <fret>5</fret>
+              <string>5</string>
+              </Note>
+            <ChordLine>
+              <subtype>3</subtype>
+              <straight>1</straight>
+              <lid>8</lid>
+              </ChordLine>
+            </Chord>
+          <Chord>
+            <lid>9</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>10</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>7</fret>
+              <string>3</string>
+              </Note>
+            <ChordLine>
+              <subtype>3</subtype>
+              <straight>1</straight>
+              <lid>11</lid>
+              </ChordLine>
+            </Chord>
+          <Chord>
+            <lid>12</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>13</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
+              <string>2</string>
+              </Note>
+            <ChordLine>
+              <subtype>3</subtype>
+              <straight>1</straight>
+              <lid>14</lid>
+              </ChordLine>
+            </Chord>
+          <Chord>
+            <lid>15</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>16</lid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <fret>3</fret>
+              <string>0</string>
+              </Note>
+            <ChordLine>
+              <subtype>3</subtype>
+              <straight>1</straight>
+              <lid>17</lid>
+              </ChordLine>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          <tick>0</tick>
+          <Rest>
+            <lid>18</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>19</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>20</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>21</lid>
+            <track>5</track>
+            <durationType>quarter</durationType>
+            </Rest>
+          </Measure>
+        </Staff>
+      <name>Track 1</name>
+      </Score>
+    </Score>
+  </museScore>
