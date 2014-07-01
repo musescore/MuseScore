@@ -28,6 +28,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/clef.h"
 #include "libmscore/keysig.h"
+#include "libmscore/chordrest.h"
 
 namespace Ms {
 
@@ -88,6 +89,7 @@ class GuitarPro {
       int previousTempo;
       int previousDynamic;
       int tempo;
+      QMap<int,int> slides;
 
       int voltaSequence;
       QTextCodec* _codec;
@@ -118,6 +120,7 @@ class GuitarPro {
       void readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader);
       void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, int tick);
       void createSlur(bool hasSlur, int staffIdx, ChordRest* cr);
+      void createSlide(int slide, ChordRest* cr, int staffIdx);
 
    public:
       QString title, subtitle, artist, album, composer;
@@ -182,10 +185,12 @@ class GuitarPro3 : public GuitarPro1 {
 
 class GuitarPro4 : public GuitarPro {
 
+      int slide;
       void readInfo();
       bool readNote(int string, Note* note);
       virtual int readBeatEffects(int track, Segment* segment);
       virtual void readMixChange(Measure* measure);
+      int convertGP4SlideNum(int slide);
 
    public:
       GuitarPro4(Score* s, int v) : GuitarPro(s, v) {}
@@ -198,6 +203,7 @@ class GuitarPro4 : public GuitarPro {
 
 class GuitarPro5 : public GuitarPro {
 
+      int slide;
       void readInfo();
       void readPageSetup();
       virtual int readBeatEffects(int track, Segment* segment);
@@ -227,6 +233,7 @@ class GuitarPro6 : public GuitarPro {
       // an integer stored in the header indicating that the file is not compressed (BCFZ).
       const int GPX_HEADER_COMPRESSED = 1514554178;
       int position=0;
+      QMap<int, int>* slides;
       QByteArray* buffer;
       // a constant storing the amount of bits per byte
       const int BITS_IN_BYTE = 8;
@@ -262,6 +269,7 @@ class GuitarPro6 : public GuitarPro {
       Fraction rhythmToDuration(QString value);
       QDomNode getNode(QString id, QDomNode nodes);
       void unhandledNode(QString nodeName);
+      void makeTie(Note* note);
 
    protected:
       void readNote(int string, Note* note);

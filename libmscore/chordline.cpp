@@ -29,6 +29,7 @@ ChordLine::ChordLine(Score* s)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       modified = false;
       _chordLineType = ChordLineType::NOTYPE;
+      _straight = false;
       }
 
 ChordLine::ChordLine(const ChordLine& cl)
@@ -37,6 +38,7 @@ ChordLine::ChordLine(const ChordLine& cl)
       path     = cl.path;
       modified = cl.modified;
       _chordLineType = cl._chordLineType;
+      _straight = cl._straight;
       }
 
 //---------------------------------------------------------
@@ -160,6 +162,8 @@ void ChordLine::read(XmlReader& e)
                   }
             else if (tag == "subtype")
                   setChordLineType(ChordLineType(e.readInt()));
+             else if (tag == "straight")
+                  setStraight(e.readInt());
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -173,6 +177,7 @@ void ChordLine::write(Xml& xml) const
       {
       xml.stag(name());
       xml.tag("subtype", int(_chordLineType));
+      xml.tag("straight", _straight, false);
       Element::writeProperties(xml);
       if (modified) {
             int n = path.elementCount();
@@ -194,11 +199,34 @@ void ChordLine::write(Xml& xml) const
 void ChordLine::draw(QPainter* painter) const
       {
       qreal _spatium = spatium();
-      painter->scale(_spatium, _spatium);
-      painter->setPen(QPen(curColor(), .15, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-      painter->setBrush(Qt::NoBrush);
-      painter->drawPath(path);
-      painter->scale(1.0/_spatium, 1.0/_spatium);
+
+      if (this->isStraight()) {
+            painter->save();
+            QPen pen(curColor());
+            pen.setWidthF(_spatium * .15);
+            pen.setCapStyle(Qt::RoundCap);
+            painter->setPen(pen);
+            if (_chordLineType == ChordLineType::FALL)
+                  painter->drawLine(QLineF(20.0, -4.0, 30.0, 4.0));
+            else if (_chordLineType == ChordLineType::DOIT)
+                  painter->drawLine(QLineF(20.0, 4.0, 30.0, -4.0));
+            else if (_chordLineType == ChordLineType::SCOOP) {
+                  painter->translate(-50.0, -5.0);
+                  painter->drawLine(QLineF(20.0, -4.0, 30.0, 4.0));
+                  }
+            else if (_chordLineType == ChordLineType::PLOP) {
+                  painter->translate(-50.0, 5.0);
+                  painter->drawLine(QLineF(20.0, 4.0, 30.0, -4.0));
+                  }
+            painter->restore();
+            }
+      else  {
+            painter->scale(_spatium, _spatium);
+            painter->setPen(QPen(curColor(), .15, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            painter->setBrush(Qt::NoBrush);
+            painter->drawPath(path);
+            painter->scale(1.0/_spatium, 1.0/_spatium);
+            }
       }
 
 //---------------------------------------------------------

@@ -37,6 +37,7 @@ class ChordLine : public Element {
       Q_OBJECT
 
       ChordLineType _chordLineType;
+      bool _straight;
       QPainterPath path;
       bool modified;
 
@@ -49,6 +50,8 @@ class ChordLine : public Element {
       virtual void setChordLineType(ChordLineType);
       ChordLineType chordLineType() const { return _chordLineType; }
       Chord* chord() const                { return (Chord*)(parent()); }
+      virtual bool isStraight() const     { return _straight; }
+      virtual void setStraight(bool straight)   { _straight =  straight; }
 
       virtual void read(XmlReader&);
       virtual void write(Xml& xml) const;

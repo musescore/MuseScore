@@ -240,7 +240,7 @@ add_executable ( ${ExecutableName}
       textproperties.cpp synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
       updatechecker.cpp importove.cpp ove.cpp ruler.cpp
-      importgtp.cpp fotomode.cpp drumtools.cpp
+      importgtp.cpp importgtp-gp4.cpp importgtp-gp5.cpp importgtp-gp6.cpp fotomode.cpp drumtools.cpp
       selinstrument.cpp texteditor.cpp editstafftype.cpp texttools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
       workspace.cpp exportmp3.cpp chordview.cpp

@@ -70,6 +70,24 @@ private slots:
       void gpxCentered()     { gpReadTest("rest-centered", "gpx"); }
       void gp5Centered()     { gpReadTest("rest-centered", "gp5"); }
       void gp4Centered()     { gpReadTest("rest-centered", "gp4"); }
+      void gp4SlideInAbove() { gpReadTest("slide-in-above", "gp4"); }
+      void gp5SlideInAbove() { gpReadTest("slide-in-above", "gp5"); }
+      void gpxSlideInAbove() { gpReadTest("slide-in-above", "gpx"); }
+      void gp4SlideInBelow() { gpReadTest("slide-in-below", "gp4"); }
+      void gp5SlideInBelow() { gpReadTest("slide-in-below", "gp5"); }
+      void gpxSlideInBelow() { gpReadTest("slide-in-below", "gpx"); }
+      void gp4SlideOutUp()   { gpReadTest("slide-out-up", "gp4"); }
+      void gp5SlideOutUp()   { gpReadTest("slide-out-up", "gp5"); }
+      void gpxSlideOutUp()   { gpReadTest("slide-out-up", "gpx"); }
+      void gp4SlideOutDown() { gpReadTest("slide-out-down", "gp4"); }
+      void gp5SlideOutDown() { gpReadTest("slide-out-down", "gp5"); }
+      void gpxSlideOutDown() { gpReadTest("slide-out-down", "gpx"); }
+      void gp4LegatoSlide()  { gpReadTest("legato-slide", "gp4"); }
+      void gp5LegatoSlide()  { gpReadTest("legato-slide", "gp5"); }
+      void gpxLegatoSlide()  { gpReadTest("legato-slide", "gpx"); }
+      void gp4ShiftSlide()   { gpReadTest("shift-slide", "gp4"); }
+      void gp5ShiftSlide()   { gpReadTest("shift-slide", "gp5"); }
+      void gpxShiftSlide()   { gpReadTest("shift-slide", "gpx"); }
       };
 
 //---------------------------------------------------------
