@@ -27,7 +27,7 @@ class HelpBrowser;
 class PluginCreator : public QMainWindow, public Ui::PluginCreatorBase {
       Q_OBJECT
 
-      enum PCState { S_INIT, S_EMPTY, S_CLEAN, S_DIRTY };
+      enum class PCState : char { INIT, EMPTY, CLEAN, DIRTY };
       PCState state;
       bool created;
 
