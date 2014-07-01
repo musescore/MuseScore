@@ -2661,7 +2661,7 @@ int Tempo::getRightNoteType() const {
 Text::Text() {
       musicDataType_ = MusicDataType::Text;
 
-      textType_ = Text_Rehearsal;
+      textType_ = Type::Rehearsal;
       horiMargin_ = 8;
       vertMargin_ = 8;
       lineThick_ = 4;
@@ -2670,11 +2670,11 @@ Text::Text() {
       height_ = 0;
       }
 
-void Text::setTextType(TextType type) {
+void Text::setTextType(Type type) {
       textType_ = type;
       }
 
-Text::TextType Text::getTextType() const {
+Text::Type Text::getTextType() const {
       return textType_;
       }
 
@@ -4836,15 +4836,15 @@ bool BarsParse::parseText(MeasureData* measureData, int length) {
       unsigned int thisByte = placeHolder.toUnsignedInt();
       bool includeLineBreak = ( (getHighNibble(thisByte)&0x2) != 0x2 );
       unsigned int id = getLowNibble(thisByte);
-      Text::TextType textType = Text::Text_Rehearsal;
+      Text::Type textType = Text::Type::Rehearsal;
 
       if (id == 0) {
-            textType = Text::Text_MeasureText;
+            textType = Text::Type::MeasureText;
             } else if (id == 1) {
-            textType = Text::Text_SystemText;
+            textType = Text::Type::SystemText;
             } else // id ==2
             {
-            textType = Text::Text_Rehearsal;
+            textType = Text::Type::Rehearsal;
             }
 
       text->setTextType(textType);

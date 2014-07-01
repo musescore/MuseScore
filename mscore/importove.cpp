@@ -1258,7 +1258,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
       QList<OVE::MusicData*> texts = measureData->getMusicDatas(OVE::MusicDataType::Text);
       for(i=0; i<texts.size(); ++i){
             OVE::Text* textPtr = static_cast<OVE::Text*>(texts[i]);
-            if(textPtr->getTextType() == OVE::Text::Text_Rehearsal){
+            if(textPtr->getTextType() == OVE::Text::Type::Rehearsal){
                   Text* text = new RehearsalMark(score_);
                   text->setText(textPtr->getText());
                   text->setAbove(true);
