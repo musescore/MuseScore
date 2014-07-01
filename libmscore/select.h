@@ -23,6 +23,7 @@ class Element;
 class Segment;
 class Note;
 class Measure;
+class Chord;
 
 //---------------------------------------------------------
 //   ElementPattern
@@ -109,6 +110,7 @@ class Selection {
       SelectionFilter selectionFilter() const;
       bool canSelect(Element* e) { return selectionFilter().canSelect(e); }
       void appendFiltered(Element* e);
+      void appendChord(Chord* chord);
 
    public:
       Selection()                      { _score = 0; _state = SelState::NONE; }
