@@ -22,7 +22,7 @@ class Chord;
 class Note;
 class NoteEvent;
 
-enum { PianoItemType = QGraphicsItem::UserType + 1 };
+const int PianoItemType = QGraphicsItem::UserType + 1;
 
 //---------------------------------------------------------
 //   PianoItem
