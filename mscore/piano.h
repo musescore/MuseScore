@@ -26,7 +26,7 @@ namespace Ms {
 static const int pianoWidth = 40;
 static const int keyHeight = 13;
 
-enum PianoOrientation { PIANO_HORIZONTAL, PIANO_VERTICAL };
+enum class PianoOrientation : char { HORIZONTAL, VERTICAL };
 
 //---------------------------------------------------------
 //   Piano
