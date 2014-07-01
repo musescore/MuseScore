@@ -1360,8 +1360,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
       int j;
       OVE::MeasureData* measureData = ove_->getMeasureData(part, staff, measure->no());
       QList<OVE::NoteContainer*> containers = measureData->getNoteContainers();
-      QList<OVE::MusicData*> tuplets = measureData->getCrossMeasureElements(OVE::MusicDataType::Tuplet, OVE::MeasureData::PairType_Start);
-      QList<OVE::MusicData*> beams = measureData->getCrossMeasureElements(OVE::MusicDataType::Beam, OVE::MeasureData::PairType_Start);
+      QList<OVE::MusicData*> tuplets = measureData->getCrossMeasureElements(OVE::MusicDataType::Tuplet, OVE::MeasureData::PairType::Start);
+      QList<OVE::MusicData*> beams = measureData->getCrossMeasureElements(OVE::MusicDataType::Beam, OVE::MeasureData::PairType::Start);
       Tuplet* tuplet = 0;
       ChordRest* cr = 0;
       int partStaffCount = ove_->getStaffCount(part);
@@ -2006,7 +2006,7 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
 OVE::MusicData* OveToMScore::getCrossMeasureElementByPos(int part, int staff, const OVE::MeasurePos& pos, int voice, OVE::MusicDataType type){
       OVE::MeasureData* measureData = ove_->getMeasureData(part, staff, pos.getMeasure());
       if(measureData != 0) {
-            const QList<OVE::MusicData*>& datas = measureData->getCrossMeasureElements(type, OVE::MeasureData::PairType_All);
+            const QList<OVE::MusicData*>& datas = measureData->getCrossMeasureElements(type, OVE::MeasureData::PairType::All);
             for(int i=0; i<datas.size(); ++i){
                   OVE::MeasurePos dataStart = datas[i]->start()->shiftMeasure(0);
                   OVE::MeasurePos dataStop = datas[i]->stop()->shiftMeasure(datas[i]->start()->getMeasure());
@@ -2111,7 +2111,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 
       QList<OVE::MusicData*> endings = measureData->getCrossMeasureElements(
                         OVE::MusicDataType::Numeric_Ending,
-                        OVE::MeasureData::PairType_Start);
+                        OVE::MeasureData::PairType::Start);
 
       for(i=0; i<endings.size(); ++i){
             OVE::NumericEnding* ending = static_cast<OVE::NumericEnding*>(endings[i]);
@@ -2141,7 +2141,7 @@ void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
       if(measureData == 0)
             return;
 
-      QList<OVE::MusicData*> slurs = measureData->getCrossMeasureElements(OVE::MusicDataType::Slur, OVE::MeasureData::PairType_Start);
+      QList<OVE::MusicData*> slurs = measureData->getCrossMeasureElements(OVE::MusicDataType::Slur, OVE::MeasureData::PairType::Start);
 
       for(int i=0; i<slurs.size(); ++i){
             OVE::Slur* slurPtr = static_cast<OVE::Slur*>(slurs[i]);
@@ -2273,7 +2273,7 @@ void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int t
       if(measureData == 0)
             return;
 
-      QList<OVE::MusicData*> glissandos = measureData->getCrossMeasureElements(OVE::MusicDataType::Glissando, OVE::MeasureData::PairType_All);
+      QList<OVE::MusicData*> glissandos = measureData->getCrossMeasureElements(OVE::MusicDataType::Glissando, OVE::MeasureData::PairType::All);
 
       for(int i=0; i<glissandos.size(); ++i){
             OVE::Glissando* glissandoPtr = static_cast<OVE::Glissando*>(glissandos[i]);
@@ -2330,7 +2330,7 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
       if(measureData == 0)
             return;
 
-      QList<OVE::MusicData*> wedges = measureData->getCrossMeasureElements(OVE::MusicDataType::Wedge, OVE::MeasureData::PairType_All);
+      QList<OVE::MusicData*> wedges = measureData->getCrossMeasureElements(OVE::MusicDataType::Wedge, OVE::MeasureData::PairType::All);
 
       for(int i=0; i<wedges.size(); ++i){
             OVE::Wedge* wedgePtr = static_cast<OVE::Wedge*>(wedges[i]);

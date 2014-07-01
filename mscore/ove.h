@@ -2201,10 +2201,10 @@ public:
 
       // put NumericEnding to MeasureData at part=0 && staff=0
       void addCrossMeasureElement(MusicData* ptr, bool start);
-      enum PairType {
-            PairType_Start,
-            PairType_Stop,
-            PairType_All
+      enum class PairType : char {
+            Start,
+            Stop,
+            All
             };
       QList<MusicData*> getCrossMeasureElements(MusicDataType type, PairType pairType);
 
