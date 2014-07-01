@@ -1854,14 +1854,14 @@ public:
       virtual ~Text() {}
 
 public:
-      enum TextType {
-            Text_Rehearsal,
-            Text_SystemText,
-            Text_MeasureText
+      enum Type : char {
+            Rehearsal,
+            SystemText,
+            MeasureText
             };
 
-      void setTextType(TextType type);
-      TextType getTextType() const;
+      void setTextType(Type type);
+      Type getTextType() const;
 
       void setHorizontalMargin(int margin);
       int getHorizontalMargin() const;
@@ -1882,7 +1882,7 @@ public:
       int getHeight() const;
 
 private:
-      TextType textType_;
+      Type textType_;
       int horiMargin_;
       int vertMargin_;
       int lineThick_;
