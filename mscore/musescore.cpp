@@ -2104,7 +2104,7 @@ static void loadScores(const QStringList& argv)
                   mscore->newFile();
             else {
                   switch (preferences.sessionStart) {
-                        case LAST_SESSION:
+                        case SessionStart::LAST:
                               {
                               QSettings settings;
                               int n = settings.value("scores", 0).toInt();
@@ -2120,12 +2120,12 @@ static void loadScores(const QStringList& argv)
                                     }
                               }
                               break;
-                        case EMPTY_SESSION:
+                        case SessionStart::EMPTY:
                               break;
-                        case NEW_SESSION:
+                        case SessionStart::NEW:
                               mscore->newFile();
                               break;
-                        case SCORE_SESSION:
+                        case SessionStart::SCORE:
                               {
                               Score* score = mscore->readScore(preferences.startScore);
                               if (score == 0)
@@ -4959,7 +4959,7 @@ int main(int argc, char* av[])
             //
             // TODO: delete old session backups
             //
-            if (!mscore->restoreSession((preferences.sessionStart == LAST_SESSION) && (files == 0)) || files)
+            if (!mscore->restoreSession((preferences.sessionStart == SessionStart::LAST) && (files == 0)) || files)
                   loadScores(argv);
             }
       errorMessage = new QErrorMessage(mscore);
@@ -4980,7 +4980,7 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
 
-      if (preferences.sessionStart == EMPTY_SESSION && files == 0) {
+      if (preferences.sessionStart == SessionStart::EMPTY && files == 0) {
             QDialog* start = new StartDialog(0);
             switch(start->exec()) {
                   case 1:
