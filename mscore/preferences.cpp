@@ -137,7 +137,7 @@ void Preferences::init()
       portMidiInput      = "";
 
       antialiasedDrawing       = true;
-      sessionStart             = SCORE_SESSION;
+      sessionStart             = SessionStart::SCORE;
       startScore               = ":/data/Promenade_Example.mscz";
       defaultStyleFile         = "";
       showSplashScreen         = true;
@@ -267,10 +267,10 @@ void Preferences::write()
       s.setValue("frameMarginColor",   MScore::frameMarginColor);
       s.setValue("antialiasedDrawing", antialiasedDrawing);
       switch(sessionStart) {
-            case EMPTY_SESSION:  s.setValue("sessionStart", "empty"); break;
-            case LAST_SESSION:   s.setValue("sessionStart", "last"); break;
-            case NEW_SESSION:    s.setValue("sessionStart", "new"); break;
-            case SCORE_SESSION:  s.setValue("sessionStart", "score"); break;
+            case SessionStart::EMPTY:  s.setValue("sessionStart", "empty"); break;
+            case SessionStart::LAST:   s.setValue("sessionStart", "last"); break;
+            case SessionStart::NEW:    s.setValue("sessionStart", "new"); break;
+            case SessionStart::SCORE:  s.setValue("sessionStart", "score"); break;
             }
       s.setValue("startScore",         startScore);
       s.setValue("defaultStyle",       defaultStyleFile);
@@ -500,13 +500,13 @@ void Preferences::read()
 
       QString ss(s.value("sessionStart", "score").toString());
       if (ss == "last")
-            sessionStart = LAST_SESSION;
+            sessionStart = SessionStart::LAST;
       else if (ss == "new")
-            sessionStart = NEW_SESSION;
+            sessionStart = SessionStart::NEW;
       else if (ss == "score")
-            sessionStart = SCORE_SESSION;
+            sessionStart = SessionStart::SCORE;
       else if (ss == "empty")
-            sessionStart = EMPTY_SESSION;
+            sessionStart = SessionStart::EMPTY;
 
       startScore     = s.value("startScore", startScore).toString();
       instrumentList1 = s.value("instrumentList",  instrumentList1).toString();
@@ -839,10 +839,10 @@ void PreferenceDialog::updateValues()
       alsaFragments->setValue(prefs.alsaFragments);
       drawAntialiased->setChecked(prefs.antialiasedDrawing);
       switch(prefs.sessionStart) {
-            case EMPTY_SESSION:  emptySession->setChecked(true); break;
-            case LAST_SESSION:   lastSession->setChecked(true); break;
-            case NEW_SESSION:    newSession->setChecked(true); break;
-            case SCORE_SESSION:  scoreSession->setChecked(true); break;
+            case SessionStart::EMPTY:  emptySession->setChecked(true); break;
+            case SessionStart::LAST:   lastSession->setChecked(true); break;
+            case SessionStart::NEW:    newSession->setChecked(true); break;
+            case SessionStart::SCORE:  scoreSession->setChecked(true); break;
             }
       sessionScore->setText(prefs.startScore);
       showSplashScreen->setChecked(prefs.showSplashScreen);
@@ -1320,13 +1320,13 @@ void PreferenceDialog::apply()
 #endif
 
       if (lastSession->isChecked())
-            prefs.sessionStart = LAST_SESSION;
+            prefs.sessionStart = SessionStart::LAST;
       else if (newSession->isChecked())
-            prefs.sessionStart = NEW_SESSION;
+            prefs.sessionStart = SessionStart::NEW;
       else if (scoreSession->isChecked())
-            prefs.sessionStart = SCORE_SESSION;
+            prefs.sessionStart = SessionStart::SCORE;
       else if (emptySession->isChecked())
-            prefs.sessionStart = EMPTY_SESSION;
+            prefs.sessionStart = SessionStart::EMPTY;
       prefs.startScore         = sessionScore->text();
       prefs.myScoresPath       = myScores->text();
       prefs.myStylesPath       = myStyles->text();

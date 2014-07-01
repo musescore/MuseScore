@@ -27,8 +27,8 @@
 
 namespace Ms {
 
-enum SessionStart {
-      EMPTY_SESSION, LAST_SESSION, NEW_SESSION, SCORE_SESSION
+enum class SessionStart : char {
+      EMPTY, LAST, NEW, SCORE
       };
 
 // midi remote control values:
