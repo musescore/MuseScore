@@ -482,17 +482,17 @@ enum OctaveShiftPosition {
       OctavePosition_Stop
       };
 
-enum RepeatType {
-      Repeat_Segno = 0,
-      Repeat_Coda,
-      Repeat_ToCoda,
-      Repeat_DSAlCoda,
-      Repeat_DSAlFine,
-      Repeat_DCAlCoda,
-      Repeat_DCAlFine,
-      Repeat_Fine,
+enum class RepeatType : char {
+      Segno = 0,
+      Coda,
+      ToCoda,
+      DSAlCoda,
+      DSAlFine,
+      DCAlCoda,
+      DCAlFine,
+      Fine,
 
-      Repeat_Null
+      Null
       };
 
 enum class BarLineType : char {

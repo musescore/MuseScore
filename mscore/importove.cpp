@@ -2049,49 +2049,49 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
             Element* e = 0;
 
             switch(type) {
-                  case OVE::Repeat_Segno:{
+                  case OVE::RepeatType::Segno:{
                         Marker* marker = new Marker(score_);
                         marker->setMarkerType(Marker::Type::SEGNO);
                         e = marker;
                         break;
                         }
-                  case OVE::Repeat_Coda:{
+                  case OVE::RepeatType::Coda:{
                         Marker* marker = new Marker(score_);
                         marker->setMarkerType(Marker::Type::CODA);
                         e = marker;
                         break;
                         }
-                  case OVE::Repeat_DSAlCoda:{
+                  case OVE::RepeatType::DSAlCoda:{
                         Jump* jp = new Jump(score_);
                         jp->setJumpType(Jump::Type::DS_AL_CODA);
                         e = jp;
                         break;
                         }
-                  case OVE::Repeat_DSAlFine:{
+                  case OVE::RepeatType::DSAlFine:{
                         Jump* jp = new Jump(score_);
                         jp->setJumpType(Jump::Type::DS_AL_FINE);
                         e = jp;
                         break;
                         }
-                  case OVE::Repeat_DCAlCoda:{
+                  case OVE::RepeatType::DCAlCoda:{
                         Jump* jp = new Jump(score_);
                         jp->setJumpType(Jump::Type::DC_AL_CODA);
                         e = jp;
                         break;
                         }
-                  case OVE::Repeat_DCAlFine:{
+                  case OVE::RepeatType::DCAlFine:{
                         Jump* jp = new Jump(score_);
                         jp->setJumpType(Jump::Type::DC_AL_FINE);
                         e = jp;
                         break;
                         }
-                  case OVE::Repeat_ToCoda:{
+                  case OVE::RepeatType::ToCoda:{
                         Marker* m = new Marker(score_);
                         m->setMarkerType(Marker::Type::TOCODA);
                         e = m;
                         break;
                         }
-                  case OVE::Repeat_Fine:{
+                  case OVE::RepeatType::Fine:{
                         Marker* m = new Marker(score_);
                         m->setMarkerType(Marker::Type::FINE);
                         e = m;
