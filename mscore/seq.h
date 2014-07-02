@@ -214,6 +214,7 @@ class Seq : public QObject, public Sequencer {
       void setDriver(Driver* d)                        { _driver = d;    }
       MasterSynthesizer* synti() const                 { return _synti;  }
       void setMasterSynthesizer(MasterSynthesizer* ms) { _synti = ms;    }
+      void setPlayTime(int t)                          { playTime = t;   }
 
       int getCurTick();
       double curTempo() const;

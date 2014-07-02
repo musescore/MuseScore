@@ -26,6 +26,7 @@
 #include "seq.h"
 #include "libmscore/score.h"
 #include "libmscore/repeatlist.h"
+#include "mscore/playpanel.h"
 
 #include <jack/midiport.h>
 
@@ -227,6 +228,9 @@ bool JackAudio::start()
 
 bool JackAudio::stop()
       {
+      // if (preferences.UseJackTimebaseMaster) { // not yet implemented
+      if (jack_release_timebase(client) == 0)
+            qDebug("Unregistered as JACK Timebase Master");
       if (preferences.useJackMidi && preferences.rememberLastMidiConnections) {
             QSettings settings;
             //settings.setValue("midiPorts", midiOutputPorts.size());
@@ -327,27 +331,33 @@ static int graph_callback(void*)
 void JackAudio::timebase(jack_transport_state_t state, jack_nframes_t /*nframes*/, jack_position_t *pos, int /*new_pos*/, void *arg)
       {
       JackAudio* audio = (JackAudio*)arg;
-      if(!audio->seq->score()) {
-            if(state==JackTransportLooping || state==JackTransportRolling)
+      if (!audio->seq->score()) {
+            if (state==JackTransportLooping || state==JackTransportRolling)
                   audio->stopTransport();
             }
-      else if(audio->seq->isRunning() && audio->timeSigTempoChanged) {
+      else if (audio->seq->isRunning()) {
+
+            if (!audio->seq->score()->repeatList() || !audio->seq->score()->sigmap())
+                  return;
+
             pos->valid = JackPositionBBT;
-
-            int curTick = audio->seq->getCurTick();
-            Fraction    timeSig = audio->seq->score()->sigmap()->timesig(curTick).nominal();
-            pos->beats_per_bar =  timeSig.numerator();
-            pos->beat_type = timeSig.denominator();
-
+            int curTick = audio->seq->score()->repeatList()->utick2tick(audio->seq->getCurTick());
             int bar,beat,tick;
             audio->seq->score()->sigmap()->tickValues(curTick, &bar, &beat, &tick);
-            pos->ticks_per_beat = MScore::division;
-            pos->tick = tick;
-            pos->bar = bar+1;
-            pos->beat = beat+1;
-            pos->beats_per_minute = audio->seq->curTempo()*60;
-            qDebug()<<"Time signature and tempo changed: "<< pos->beats_per_minute<<", bar: "<< pos->bar<<",beat: "<<pos->beat<<", tick:"<<pos->tick<<", time sig: "<<pos->beats_per_bar<<"/"<<pos->beat_type;
-            audio->timeSigTempoChanged = false;
+            // Providing the final tempo
+            pos->beats_per_minute = 60 * audio->seq->curTempo() * audio->seq->score()->tempomap()->relTempo();
+            pos->ticks_per_beat   = MScore::division;
+            pos->tick             = tick;
+            pos->bar              = bar+1;
+            pos->beat             = beat+1;
+
+            if (audio->timeSigTempoChanged) {
+                  Fraction timeSig = audio->seq->score()->sigmap()->timesig(curTick).nominal();
+                  pos->beats_per_bar =  timeSig.numerator();
+                  pos->beat_type = timeSig.denominator();
+                  audio->timeSigTempoChanged = false;
+                  qDebug()<<"Time signature changed: "<< pos->beats_per_minute<<", bar: "<< pos->bar<<",beat: "<<pos->beat<<", tick:"<<pos->tick<<", time sig: "<<pos->beats_per_bar<<"/"<<pos->beat_type;
+                  }
             }
       // TODO: Handle new_pos
       }
@@ -472,8 +482,14 @@ bool JackAudio::init()
       jack_set_port_registration_callback(client, registration_callback, this);
       jack_set_graph_order_callback(client, graph_callback, this);
       jack_set_freewheel_callback (client, freewheel_callback, this);
-      if (jack_set_timebase_callback(client, 1, timebase, this) != 0)
-          qDebug("Unable to take over timebase.");
+      if (jack_set_timebase_callback(client, 0, timebase, this) == 0) { // 0: force set timebase
+            // TODO: change preferences here
+            if (MScore::debugMode)
+                  qDebug("Registered as JACK Timebase Master");
+          }
+      else if (MScore::debugMode) {
+            qDebug("Unable to take over JACK Timebase.");
+            }
       if( jack_set_buffer_size_callback (client, bufferSizeCallback, this) != 0)
           qDebug("Can not set bufferSizeCallback");
       _segmentSize  = jack_get_buffer_size(client);
@@ -662,22 +678,45 @@ void JackAudio::handleTimeSigTempoChanged()
 
 //---------------------------------------------------------
 //   checkTransportSeek
+//   The opposite of Timebase master:
+//   check JACK Transport for a new position or tempo.
 //---------------------------------------------------------
 
 void JackAudio::checkTransportSeek(int cur_frame, int nframes)
       {
+      if (!seq || !seq->score() || !seq->score()->repeatList())
+            return;
       // Obtaining the current JACK Transport position
       jack_position_t pos;
       jack_transport_query(client, &pos);
 
-      int srate = MScore::sampleRate;
-      int cur_utick = seq->score()->utime2utick((qreal)cur_frame / srate);
-      int utick     = seq->score()->utime2utick((qreal)pos.frame / srate);
+      int cur_utick = seq->score()->utime2utick((qreal)cur_frame / MScore::sampleRate);
+      int utick     = seq->score()->utime2utick((qreal)pos.frame / MScore::sampleRate);
 
       // Conversion is not precise, should check frames and uticks
-      if (labs((long int)cur_frame-(long int)pos.frame)>nframes+1 && abs(utick - cur_utick)> seq->score()->utime2utick((qreal)nframes / srate)+1) {
+      if (labs((long int)cur_frame-(long int)pos.frame)>nframes+1 && abs(utick - cur_utick)> seq->score()->utime2utick((qreal)nframes / MScore::sampleRate)+1) {
             qDebug()<<"JACK Transport position changed, cur_frame: "<<cur_frame<<",pos.frame: "<<pos.frame<<", frame diff: "<<labs((long int)cur_frame-(long int)pos.frame)<<"cur utick:"<<cur_utick<<",seek to utick: "<<utick<<", tick diff: "<<abs(utick - cur_utick);
             seq->seek(utick, false);
+            }
+
+      // Tempo
+      if (pos.valid & JackPositionBBT) {
+            if (!seq->score()->tempomap()) {
+                  return;
+                  }
+            if (int(pos.beats_per_minute) != int(60 * seq->curTempo() * seq->score()->tempomap()->relTempo())) {
+                  qDebug()<<"JACK Transport tempo changed! JACK bpm: "<<(int)pos.beats_per_minute<<", current bpm: "<<int(60 * seq->curTempo() * seq->score()->tempomap()->relTempo());
+                  // Seems like MuseScore is not Timebase Master, syncing to JACK
+                  qreal newRelTempo = pos.beats_per_minute / (60* seq->curTempo());
+                  int utick = seq->getCurTick();
+                  seq->score()->tempomap()->setRelTempo(newRelTempo);
+                  seq->score()->repeatList()->update();
+                  seq->setPlayTime(seq->score()->utick2utime(utick) * MScore::sampleRate);
+                  if (mscore->getPlayPanel()) {
+                        mscore->getPlayPanel()->setRelTempo(newRelTempo);
+                        mscore->getPlayPanel()->setTempo(seq->curTempo() * newRelTempo);
+                        }
+                  }
             }
       }
 
