@@ -2468,7 +2468,7 @@ int HarpPedal::getShowCharFlag() const {
 ///////////////////////////////////////////////////////////////////////////////
 OctaveShift::OctaveShift() :
       octaveShiftType_(OctaveShift_8),
-      octaveShiftPosition_(OctavePosition_Start),
+      octaveShiftPosition_(OctaveShiftPosition::Start),
       endTick_(0) {
       musicDataType_ = MusicDataType::OctaveShift;
       }
@@ -2521,7 +2521,7 @@ OctaveShiftEndPoint::OctaveShiftEndPoint() {
       musicDataType_ = MusicDataType::OctaveShift_EndPoint;
 
       octaveShiftType_ = OctaveShift_8;
-      octaveShiftPosition_ = OctavePosition_Start;
+      octaveShiftPosition_ = OctaveShiftPosition::Start;
       endTick_ = 0;
       }
 
@@ -2533,8 +2533,8 @@ OctaveShiftType OctaveShiftEndPoint::getOctaveShiftType() const {
       return octaveShiftType_;
       }
 
-void OctaveShiftEndPoint::setOctaveShiftPosition(int position) {
-      octaveShiftPosition_ = (OctaveShiftPosition) position;
+void OctaveShiftEndPoint::setOctaveShiftPosition(OctaveShiftPosition position) {
+      octaveShiftPosition_ = position;
       }
 
 OctaveShiftPosition OctaveShiftEndPoint::getOctaveShiftPosition() const {
@@ -6612,87 +6612,87 @@ void extractOctave(unsigned int Bits, OctaveShiftType& octaveShiftType, QList<Oc
       switch (Bits) {
             case 0x0: {
                   octaveShiftType = OctaveShift_8;
-                  positions.push_back(OctavePosition_Continue);
+                  positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x1: {
                   octaveShiftType = OctaveShift_Minus_8;
-                  positions.push_back(OctavePosition_Continue);
+                  positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x2: {
                   octaveShiftType = OctaveShift_15;
-                  positions.push_back(OctavePosition_Continue);
+                  positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x3: {
                   octaveShiftType = OctaveShift_Minus_15;
-                  positions.push_back(OctavePosition_Continue);
+                  positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x4: {
                   octaveShiftType = OctaveShift_8;
-                  positions.push_back(OctavePosition_Stop);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x5: {
                   octaveShiftType = OctaveShift_Minus_8;
-                  positions.push_back(OctavePosition_Stop);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x6: {
                   octaveShiftType = OctaveShift_15;
-                  positions.push_back(OctavePosition_Stop);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x7: {
                   octaveShiftType = OctaveShift_Minus_15;
-                  positions.push_back(OctavePosition_Stop);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x8: {
                   octaveShiftType = OctaveShift_8;
-                  positions.push_back(OctavePosition_Start);
+                  positions.push_back(OctaveShiftPosition::Start);
                   break;
                   }
             case 0x9: {
                   octaveShiftType = OctaveShift_Minus_8;
-                  positions.push_back(OctavePosition_Start);
+                  positions.push_back(OctaveShiftPosition::Start);
                   break;
                   }
             case 0xA: {
                   octaveShiftType = OctaveShift_15;
-                  positions.push_back(OctavePosition_Start);
+                  positions.push_back(OctaveShiftPosition::Start);
                   break;
                   }
             case 0xB: {
                   octaveShiftType = OctaveShift_Minus_15;
-                  positions.push_back(OctavePosition_Start);
+                  positions.push_back(OctaveShiftPosition::Start);
                   ;
                   break;
                   }
             case 0xC: {
                   octaveShiftType = OctaveShift_8;
-                  positions.push_back(OctavePosition_Start);
-                  positions.push_back(OctavePosition_Stop);
+                  positions.push_back(OctaveShiftPosition::Start);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0xD: {
                   octaveShiftType = OctaveShift_Minus_8;
-                  positions.push_back(OctavePosition_Start);
-                  positions.push_back(OctavePosition_Stop);
+                  positions.push_back(OctaveShiftPosition::Start);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0xE: {
                   octaveShiftType = OctaveShift_15;
-                  positions.push_back(OctavePosition_Start);
-                  positions.push_back(OctavePosition_Stop);
+                  positions.push_back(OctaveShiftPosition::Start);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0xF: {
                   octaveShiftType = OctaveShift_Minus_15;
-                  positions.push_back(OctavePosition_Start);
-                  positions.push_back(OctavePosition_Stop);
+                  positions.push_back(OctaveShiftPosition::Start);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             default:
@@ -6748,7 +6748,7 @@ bool BarsParse::parseOctaveShift(MeasureData* measureData, int /*length*/) {
             octavePoint->setEndTick(octave->getEndTick());
 
             // stop
-            if( i==0 && position == OctavePosition_Stop ) {
+            if( i==0 && position == OctaveShiftPosition::Stop ) {
                   octavePoint->start()->setOffset(octave->start()->getOffset()+octave->getLength());
                   }
 
