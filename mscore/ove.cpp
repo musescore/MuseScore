@@ -1399,7 +1399,7 @@ Articulation::Articulation() {
 
       trillNoteLength_ = 60;
       trillRate_ = NoteType::Note_Sixteen;
-      accelerateType_ = Accelerate_None;
+      accelerateType_ = AccelerateType::None;
       auxiliaryFirst_ = false;
       trillInterval_ = TrillInterval_Chromatic;
       }

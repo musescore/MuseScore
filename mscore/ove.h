@@ -1303,11 +1303,11 @@ public:
       void setTrillNoteLength(int length);
       int getTrillNoteLength() const;
 
-      enum AccelerateType {
-            Accelerate_None = 0 ,
-            Accelerate_Slow,
-            Accelerate_Normal,
-            Accelerate_Fast
+      enum class AccelerateType : char {
+            None = 0 ,
+            Slow,
+            Normal,
+            Fast
             };
       void setAccelerateType(int type);
       AccelerateType getAccelerateType() const;
