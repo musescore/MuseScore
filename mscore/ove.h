@@ -1853,7 +1853,7 @@ public:
       virtual ~Text() {}
 
 public:
-      enum Type : char {
+      enum class Type : char {
             Rehearsal,
             SystemText,
             MeasureText
