@@ -6907,12 +6907,10 @@
                   </Channel>
             </Instrument>
             <Instrument id="pipe-organ">
-                  <longName pos="2">Man.</longName>
-                  <longName pos="5">Ped.</longName>
-                  <shortName pos="2">Man.</shortName>
-                  <shortName pos="5">Ped.</shortName>
+                  <longName>Pipe Organ</longName>
+                  <shortName>Org.</shortName>
                   <trackName>Pipe Organ</trackName>
-                  <description>Pipe Organ</description>
+                  <description>GM Pipe Organ</description>
                   <musicXMLid>keyboard.organ.pipe</musicXMLid>
                   <staves>3</staves>
                   <clef>G</clef>
@@ -6920,7 +6918,29 @@
                   <bracketSpan>2</bracketSpan>
                   <barlineSpan>2</barlineSpan>
                   <clef staff="2">F</clef>
-                  <clef staff="3">F</clef>
+                  <clef staff="3">F8vb</clef>
+                  <barlineSpan staff="3">1</barlineSpan>
+                  <Channel>
+                        <program value="75"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="aeolus-organ">
+                  <longName pos="2">Man.</longName>
+                  <longName pos="5">Ped.</longName>
+                  <shortName pos="2">Man.</shortName>
+                  <shortName pos="5">Ped.</shortName>
+                  <trackName>Aeolus Organ</trackName>
+                  <description>Aeolus Organ</description>
+                  <musicXMLid>keyboard.organ.pipe</musicXMLid>
+                  <staves>3</staves>
+                  <clef>G</clef>
+                  <bracket>1</bracket>
+                  <bracketSpan>2</bracketSpan>
+                  <barlineSpan>2</barlineSpan>
+                  <clef staff="2">F</clef>
+                  <clef staff="3">F8vb</clef>
                   <barlineSpan staff="3">1</barlineSpan>
                   <Channel name="I">
                         <descr>Division I</descr>
