@@ -998,4 +998,75 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
             }
       }
 
+Element* Segment::firstElement(int staff)
+      {
+      if(this->segmentType() == SegmentType::ChordRest){
+            for(int v = staff * VOICES; v/VOICES == staff; v++){
+                Element* el = this->element(v);
+                if(!el){      //there is no chord or rest on this voice
+                      continue;
+                      }
+                if(el->type() == ElementType::CHORD){
+                      return static_cast<Chord*>(el)->notes().back();
+                      }
+                else{
+                      return el;
+                      }
+                }
+            }
+      else{
+            return this->getElement(staff);
+            }
+
+      return 0;
+      }
+
+Element* Segment::lastElement(int staff)
+      {
+      if(this->segmentType() == SegmentType::ChordRest){
+            for(int voice = staff * VOICES + (VOICES - 1); voice/VOICES == staff; voice--){
+                  Element* el = this->element(voice);
+                  if(!el){      //there is no chord or rest on this voice
+                        continue;
+                        }
+                  if(el->type() == ElementType::CHORD){
+                        return static_cast<Chord*>(el)->notes().front();
+                        }
+                  else{
+                        return el;
+                        }
+                 }
+            }
+      else{
+            return this->getElement(staff);
+            }
+
+      return 0;
+      }
+
+
+ Element* Segment::getElement(int staff)
+      {
+      if(this->segmentType() == SegmentType::ChordRest){
+            return this->firstElement(staff);
+            }
+      else if(this->segmentType() == SegmentType::EndBarLine        ||
+              this->segmentType() == SegmentType::BarLine           ||
+              this->segmentType() == SegmentType::StartRepeatBarLine){
+            for(int i = staff; i >= 0; i--){
+                  if(!this->element(i*VOICES)){
+                        continue;
+                        }
+                  BarLine* b = static_cast<BarLine*>(this->element(i*VOICES));
+                  if(i + b->span() - 1 >= staff){
+                        return this->element(i*VOICES);
+                        }
+                  }
+            }
+      else{
+            return this->element(staff*VOICES);
+            }
+      return 0;
+      }
+
 }           // namespace Ms

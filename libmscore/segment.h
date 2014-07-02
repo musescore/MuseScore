@@ -200,6 +200,11 @@ public:
 
       bool operator<(const Segment&) const;
       bool operator>(const Segment&) const;
+
+      Element* firstElement(int staff); //
+      Element* lastElement(int staff);  //This functions return elements the elements from a staff
+protected:
+      Element* getElement(int staff);   //but also a barline if it spans over the staff
       };
 
 constexpr Segment::Type operator| (Segment::Type t1, Segment::Type t2) {

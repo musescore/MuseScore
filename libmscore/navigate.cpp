@@ -31,6 +31,7 @@
 #include "spanner.h"
 #include "system.h"
 #include "staff.h"
+#include "barline.h"
 
 namespace Ms {
 
@@ -308,9 +309,19 @@ Element* Score::nextElement(Element *e)
           return this->firstElement();
           }
 
+      int  activeTrack;
+      int  activeStaff;
       bool goToNextSeg = true;
       Segment* seg;
       Element* re = 0;
+
+      if(e->type() == ElementType::BAR_LINE){
+            activeTrack = _is.prevTrack();
+            }
+      else {
+            activeTrack = e->track();
+            }
+      activeStaff = activeTrack/VOICES;
 
       if(e->inherits("Ms::Spanner")){
             Spanner* s = static_cast<Spanner*>(e);
@@ -335,7 +346,7 @@ Element* Score::nextElement(Element *e)
                         }
                   else{
                         re = downAlt(e);
-                        if(re && re != e && (re->track()/VOICES == e->track()/VOICES)) {
+                        if(re && re != e && (re->track()/VOICES == activeStaff)) {
                               Segment* reSeg = (re->type() == ElementType::NOTE) ? static_cast<Note*>(re)->chord()->segment() : static_cast<Segment*>(re->parent());
                               Segment* eSeg  = (e->type()  == ElementType::NOTE) ? static_cast<Note*>(e)->chord()->segment()  : static_cast<Segment*>(e->parent());
                               if (eSeg == reSeg ){
@@ -364,55 +375,28 @@ Element* Score::nextElement(Element *e)
                   }
             }
 
-      //if necesary I'm moving to the next segment that has elements
+      //if necesary I'm moving to the previous segment that has elements
       //on the current staff
       if(goToNextSeg){
-            bool ok = false;
             do{
                 seg = seg->next1MM(SegmentType::All);
                   if(!seg){//end of staff, or score
                         break;
                         }
-                  if(seg->segmentType() == SegmentType::ChordRest){
-                        for(int v = e->track()/VOICES * VOICES; v/VOICES * VOICES == e->track()/VOICES * VOICES; v++){
-                              if(seg->element(v)){
-                                  ok = true;
-                                  break;
-                                  }
-                              }
-                        }
-                  else{
-                        ok = seg->element(e->track()/VOICES*VOICES) != 0;
-                        }
-                  }while(!ok);
+                   re = seg->firstElement(activeStaff);
+                  }while(!re);
+            }
+      else {
+            re = seg->firstElement(activeStaff);
             }
 
       if(!seg){ //end of staff
             seg = this->firstSegment();
             //if there are no more staffs it will return NULL,
-            //else the first element of the first segment of the next staff
-            return seg->element( (e->track()/VOICES + 1) * VOICES );
+            //else the ;ast element of the last segment of the previous staff
+            return seg->element( (activeStaff + 1) * VOICES );
             }
 
-      //if the segment is a ChordRest, I'm looking for the highest note first,
-      //if it doesn't exist, I'm returning the rest
-      if(seg->segmentType() == SegmentType::ChordRest){
-            for(int voice = e->track()/VOICES * VOICES; voice/VOICES * VOICES == e->track()/VOICES * VOICES; voice++){
-                  Element* el = seg->element(voice);
-                  if(!el){      //there is no chord or rest on this voice
-                        continue;
-                        }
-                  if(el->type() == ElementType::CHORD){
-                        return static_cast<Chord*>(el)->notes().back();
-                        }
-                  else{
-                        return el;
-                        }
-                  }
-            }
-
-      //if a segment is not a ChordRest, I'm returning its element
-      re = seg->element(e->track()/VOICES * VOICES);
       return re;
       }
 
@@ -424,6 +408,16 @@ Element* Score::prevElement(Element *e)
       if(!e){
             return this->lastElement();
             }
+
+      int activeTrack;
+      int activeStaff;
+      if(e->type() == ElementType::BAR_LINE){
+            activeTrack = _is.prevTrack();
+            }
+      else {
+            activeTrack = e->track();
+            }
+      activeStaff = activeTrack/VOICES;
 
       bool goToPrevSeg = true;
       if(e->inherits("Ms::Spanner")){
@@ -449,7 +443,7 @@ Element* Score::prevElement(Element *e)
                         }
                   else{
                         re = upAlt(e);
-                        if(re && re != e && (re->track()/VOICES == e->track()/VOICES)) {
+                        if(re && re != e && (re->track()/VOICES == activeStaff)) {
                               Segment* reSeg = (re->type() == ElementType::NOTE) ? static_cast<Note*>(re)->chord()->segment() : static_cast<Segment*>(re->parent());
                               Segment* eSeg  = (e->type()  == ElementType::NOTE) ? static_cast<Note*>(e)->chord()->segment()  : static_cast<Segment*>(e->parent());
                               if (eSeg == reSeg ){
@@ -487,6 +481,10 @@ Element* Score::prevElement(Element *e)
                                     }
                                return re;
                                }
+                         if(seg->segmentType() == SegmentType::EndBarLine){
+                               _is.setTrack(this->staves().size() - 1);
+                               return seg->element(0);
+                               }
                         }while(true);
                   }
             seg = static_cast<Segment*>(p);
@@ -496,72 +494,46 @@ Element* Score::prevElement(Element *e)
                   }
             }
 
-      //if necesary I'm moving to the next segment that has elements
-      //on the current staff
       if(goToPrevSeg){
-            bool ok = false;
             do{
                   seg = seg->prev1MM(SegmentType::All);
                   if(!seg){//end of staff, or score
                         break;
                         }
-                  if(seg->segmentType() == SegmentType::ChordRest){
-                        for(int v = e->track()/VOICES * VOICES; v/VOICES * VOICES == e->track()/VOICES * VOICES; v++){
-                              if(seg->element(v)){
-                                  ok = true;
-                                  break;
-                                  }
-                              }
-                        }
-                  else{
-                        ok = seg->element(e->track()/VOICES*VOICES) != 0;
-                        }
-                  }while(!ok);
+                  re = seg->lastElement(activeStaff);
+                  }while(!re);
+            }
+      else {
+            re = seg->lastElement(activeStaff);
             }
 
       if(!seg){ //end of staff
-            if(e->track()/VOICES -1 < 0){
+            if(activeStaff -1 < 0){
                   return 0;
                   }
             re = 0;
             seg = this->lastSegment();
             do {
-                  for(int i = (e->track()/VOICES-1)*VOICES; i/VOICES * VOICES == (e->track()/VOICES -1) * VOICES; i++){
+                  if(seg->segmentType() == SegmentType::EndBarLine){
+                        _is.setTrack( (activeStaff -1) * VOICES );
+                        return seg->lastElement(activeStaff);
+                        }
+                  for(int i = (activeStaff-1)*VOICES; i/VOICES == activeStaff -1; i++){
                         if(seg->element(i) != 0){
                               re = seg->element(i);
                               }
                         }
-
-
                   if(re){
                         if(re->type() == ElementType::CHORD){
                               return static_cast<Chord*>(re)->notes().first();
                               }
                         return re;
                         }
+
                   seg = seg->prev1(SegmentType::All);
                   }while(true);
             }
 
-      //if the segment is a ChordRest, I'm looking for the highest note first,
-      //if it doesn't exist, I'm returning the rest
-      if(seg->segmentType() == SegmentType::ChordRest){
-          for(int voice = e->track()/VOICES * VOICES + (VOICES - 1); voice/VOICES * VOICES == e->track()/VOICES * VOICES; voice--){
-                Element* el = seg->element(voice);
-                if(!el){      //there is no chord or rest on this voice
-                      continue;
-                      }
-                if(el->type() == ElementType::CHORD){
-                      return static_cast<Chord*>(el)->notes().front();
-                      }
-                else{
-                      return el;
-                      }
-                }
-            }
-
-      //if a segment is not a ChordRest, I'm returning its element
-      re = seg->element(e->track()/VOICES * VOICES);
       return re;
       }
 
