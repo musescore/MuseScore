@@ -1025,72 +1025,72 @@ int accidentalToAlter(OVE::AccidentalType type) {
       }
 
 void getMiddleToneOctave(OVE::ClefType clef, OVE::ToneType& tone, int& octave) {
-      tone = OVE::Tone_B;
+      tone = OVE::ToneType::B;
       octave = 4;
 
       switch ( clef ) {
             case OVE::ClefType::Treble: {
-                  tone = OVE::Tone_B;
+                  tone = OVE::ToneType::B;
                   octave = 4;
                   break;
                   }
             case OVE::ClefType::Treble8va: {
-                  tone = OVE::Tone_B;
+                  tone = OVE::ToneType::B;
                   octave = 5;
                   break;
                   }
             case OVE::ClefType::Treble8vb: {
-                  tone = OVE::Tone_B;
+                  tone = OVE::ToneType::B;
                   octave = 3;
                   break;
                   }
             case OVE::ClefType::Bass: {
-                  tone = OVE::Tone_D;
+                  tone = OVE::ToneType::D;
                   octave = 3;
                   break;
                   }
             case OVE::ClefType::Bass8va: {
-                  tone = OVE::Tone_D;
+                  tone = OVE::ToneType::D;
                   octave = 4;
                   break;
                   }
             case OVE::ClefType::Bass8vb: {
-                  tone = OVE::Tone_D;
+                  tone = OVE::ToneType::D;
                   octave = 2;
                   break;
                   }
             case OVE::ClefType::Alto: {
-                  tone = OVE::Tone_C;
+                  tone = OVE::ToneType::C;
                   octave = 4;
                   break;
                   }
             case OVE::ClefType::UpAlto: {
-                  tone = OVE::Tone_A;
+                  tone = OVE::ToneType::A;
                   octave = 3;
                   break;
                   }
             case OVE::ClefType::DownDownAlto: {
-                  tone = OVE::Tone_G;
+                  tone = OVE::ToneType::G;
                   octave = 4;
                   break;
                   }
             case OVE::ClefType::DownAlto: {
-                  tone = OVE::Tone_E;
+                  tone = OVE::ToneType::E;
                   octave = 4;
                   break;
                   }
             case OVE::ClefType::UpUpAlto: {
-                  tone = OVE::Tone_F;
+                  tone = OVE::ToneType::F;
                   octave = 3;
                   break;
                   }
             case OVE::ClefType::Percussion1: {
-                  tone = OVE::Tone_A;
+                  tone = OVE::ToneType::A;
                   octave = 3;
                   break;
                   }
             case OVE::ClefType::Percussion2: {
-                  tone = OVE::Tone_A;
+                  tone = OVE::ToneType::A;
                   octave = 3;
                   break;
                   }
