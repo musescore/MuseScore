@@ -2921,7 +2921,7 @@ int Key::getSymbolCount() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 RepeatSymbol::RepeatSymbol() :
-      text_("#1"), repeatType_(Repeat_Segno) {
+      text_("#1"), repeatType_(RepeatType::Segno) {
       musicDataType_ = MusicDataType::Repeat;
       }
 
