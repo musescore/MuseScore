@@ -224,22 +224,22 @@ MusicDataType MusicData::getMusicDataType() const {
       }
 
 MusicData::XmlDataType MusicData::getXmlDataType(MusicDataType type) {
-      XmlDataType xmlType = None;
+      XmlDataType xmlType = XmlDataType::None;
 
       switch (type) {
             case MusicDataType::Measure_Repeat: {
-                  xmlType = Attributes;
+                  xmlType = XmlDataType::Attributes;
                   break;
                   }
             case MusicDataType::Beam: {
-                  xmlType = NoteBeam;
+                  xmlType = XmlDataType::NoteBeam;
                   break;
                   }
             case MusicDataType::Slur:
             case MusicDataType::Glissando:
             case MusicDataType::Tuplet:
             case MusicDataType::Tie: {
-                  xmlType = Notations;
+                  xmlType = XmlDataType::Notations;
                   break;
                   }
             case MusicDataType::Text:
@@ -248,11 +248,11 @@ MusicData::XmlDataType MusicData::getXmlDataType(MusicDataType type) {
             case MusicDataType::Dynamics:
             case MusicDataType::Pedal:
             case MusicDataType::OctaveShift_EndPoint: {
-                  xmlType = Direction;
+                  xmlType = XmlDataType::Direction;
                   break;
                   }
             default: {
-                  xmlType = None;
+                  xmlType = XmlDataType::None;
                   break;
                   }
             }

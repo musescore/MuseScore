@@ -703,7 +703,7 @@ public:
 public:
       MusicDataType getMusicDataType() const;
 
-      enum XmlDataType {
+      enum class XmlDataType : char {
             Attributes = 0, NoteBeam, Notations, Direction, None
             };
       static XmlDataType getXmlDataType(MusicDataType type);
