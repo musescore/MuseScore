@@ -1208,33 +1208,33 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
       BarLineType bartype = BarLineType::NORMAL;
 
       switch(measurePtr->getRightBarline()) {
-            case OVE::Barline_Default:{
+            case OVE::BarLineType::Default:{
                   bartype = BarLineType::NORMAL;
                   break;
                   }
-            case OVE::Barline_Double:{
+            case OVE::BarLineType::Double:{
                   bartype = BarLineType::DOUBLE;
                   break;
                   }
-            case OVE::Barline_Final:{
+            case OVE::BarLineType::Final:{
                   bartype = BarLineType::END;
                   break;
                   }
-            case OVE::Barline_Null:{
+            case OVE::BarLineType::Null:{
                   bartype = BarLineType::NORMAL;
                   break;
                   }
-            case OVE::Barline_RepeatLeft:{
+            case OVE::BarLineType::RepeatLeft:{
                   bartype = BarLineType::START_REPEAT;
                   measure->setRepeatFlags(Repeat::START);
                   break;
                   }
-            case OVE::Barline_RepeatRight:{
+            case OVE::BarLineType::RepeatRight:{
                   bartype = BarLineType::END_REPEAT;
                   measure->setRepeatFlags(Repeat::END);
                   break;
                   }
-            case OVE::Barline_Dashed:{
+            case OVE::BarLineType::Dashed:{
                   bartype = BarLineType::BROKEN;
                   break;
                   }
@@ -1248,7 +1248,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 
       measure->setEndBarLineType(bartype, false);
 
-      if(measurePtr->getLeftBarline() == OVE::Barline_RepeatLeft){
+      if(measurePtr->getLeftBarline() == OVE::BarLineType::RepeatLeft){
             //bartype = BarLineType::START_REPEAT;
             measure->setRepeatFlags(measure->repeatFlags()|Repeat::START);
             }

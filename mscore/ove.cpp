@@ -3208,8 +3208,8 @@ int Measure::getMultiMeasureRestCount() const {
       }
 
 void Measure::clear() {
-      leftBarline_ = Barline_Default;
-      rightBarline_ = Barline_Default;
+      leftBarline_ = BarLineType::Default;
+      rightBarline_ = BarLineType::Default;
       repeatCount_ = 1;
       typeTempo_ = 96.00;
       setLength(0x780); //time = 4/4

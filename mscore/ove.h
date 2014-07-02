@@ -495,14 +495,14 @@ enum RepeatType {
       Repeat_Null
       };
 
-enum BarLineType {
-      Barline_Default = 0,	//0x00 will be | or final (at last measure)
-      Barline_Double,			//0x01 ||
-      Barline_RepeatLeft,		//0x02 ||:
-      Barline_RepeatRight,	//0x03 :||
-      Barline_Final,			//0x04
-      Barline_Dashed,			//0x05
-      Barline_Null			//0x06
+enum class BarLineType : char {
+      Default = 0, //0x00 will be | or final (at last measure)
+      Double,      //0x01 ||
+      RepeatLeft,  //0x02 ||:
+      RepeatRight, //0x03 :||
+      Final,       //0x04
+      Dashed,      //0x05
+      Null         //0x06
       } ;
 
 enum class NoteDuration {
