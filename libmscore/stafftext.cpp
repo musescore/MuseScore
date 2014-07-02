@@ -37,6 +37,7 @@ StaffText::StaffText(Score* s)
 
 void StaffText::write(Xml& xml) const
       {
+      if (!xml.canWrite(this)) return;
       xml.stag("StaffText");
       foreach(ChannelActions s, _channelActions) {
             int channel = s.channel;
