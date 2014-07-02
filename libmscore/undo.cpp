@@ -2441,12 +2441,9 @@ void ChangePart::flip()
       score->setInstrumentsChanged(true);
       score->setPlaylistDirty(true);
 
-      Interval oint = oi.transpose();
-      Interval nint = part->instr()->transpose();
-      if (oint != nint) {
-            printf("ChangePart transpose %d %d    %d %d\n", oint.diatonic, oint.chromatic,
-               nint.diatonic, nint.chromatic);
-            }
+//      Interval oint = oi.transpose();
+//      Interval nint = part->instr()->transpose();
+
       // check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another
 

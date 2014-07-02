@@ -689,7 +689,7 @@ void Slur::slurPosChord(SlurPos* sp)
       {
       Chord* stChord;
       Chord* enChord ;
-      if(startChord()->isGraceAfter()){     // grace notes after, coming in reverse order
+      if (startChord()->isGraceAfter()){     // grace notes after, coming in reverse order
             stChord = endChord();
             enChord = startChord();
             _up = false;
@@ -778,8 +778,8 @@ void Slur::slurPos(SlurPos* sp)
       if (sp->system1 == 0 || sp->system2 == 0)
             return;
 
-      sp->p1      = scr->pagePos() - sp->system1->pagePos();
-      sp->p2      = ecr->pagePos() - sp->system2->pagePos();
+      sp->p1 = scr->pagePos() - sp->system1->pagePos();
+      sp->p2 = ecr->pagePos() - sp->system2->pagePos();
 
       qreal xo, yo;
 
