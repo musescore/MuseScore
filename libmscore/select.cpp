@@ -279,32 +279,34 @@ void Selection::add(Element* el)
 
 bool Selection::canSelect(Element* e) const
       {
-      if ((e->type() == Element::Type::DYNAMIC || e->type() == Element::Type::HAIRPIN)
-          && !this->selectionFilter().isFiltered(SelectionFilterType::DYNAMIC)) return false;
-      if ((e->type() == Element::Type::ARTICULATION || e->type() == Element::Type::TRILL)
-          && !this->selectionFilter().isFiltered(SelectionFilterType::ARTICULATION)) return false;
-      if (e->type() == Element::Type::LYRICS
-          && !this->selectionFilter().isFiltered(SelectionFilterType::LYRICS)) return false;
-      if (e->type() == Element::Type::FINGERING
-          && !this->selectionFilter().isFiltered(SelectionFilterType::FINGERING)) return false;
-      if (e->type() == Element::Type::HARMONY
-          && !this->selectionFilter().isFiltered(SelectionFilterType::CHORD_SYMBOL)) return false;
-      if (e->type() == Element::Type::SLUR
-          && !this->selectionFilter().isFiltered(SelectionFilterType::SLUR)) return false;
-      if (e->type() == Element::Type::FIGURED_BASS
-          && !this->selectionFilter().isFiltered(SelectionFilterType::FIGURED_BASS)) return false;
-      if (e->type() == Element::Type::OTTAVA
-          && !this->selectionFilter().isFiltered(SelectionFilterType::OTTAVA)) return false;
-      if (e->type() == Element::Type::PEDAL
-          && !this->selectionFilter().isFiltered(SelectionFilterType::PEDAL_LINE)) return false;
-      if (e->type() == Element::Type::ARPEGGIO
-          && !this->selectionFilter().isFiltered(SelectionFilterType::ARPEGGIO)) return false;
-      if (e->type() == Element::Type::GLISSANDO
-          && !this->selectionFilter().isFiltered(SelectionFilterType::GLISSANDO)) return false;
-      if (e->type() == Element::Type::FRET_DIAGRAM
-          && !this->selectionFilter().isFiltered(SelectionFilterType::FRET_DIAGRAM)) return false;
-      if (e->type() == Element::Type::BREATH
-          && !this->selectionFilter().isFiltered(SelectionFilterType::BREATH)) return false;
+      if (e->type() == Element::Type::DYNAMIC || e->type() == Element::Type::HAIRPIN)
+          return this->selectionFilter().isFiltered(SelectionFilterType::DYNAMIC);
+      if (e->type() == Element::Type::ARTICULATION || e->type() == Element::Type::TRILL)
+          return this->selectionFilter().isFiltered(SelectionFilterType::ARTICULATION);
+      if (e->type() == Element::Type::LYRICS)
+          return this->selectionFilter().isFiltered(SelectionFilterType::LYRICS);
+      if (e->type() == Element::Type::FINGERING)
+          return this->selectionFilter().isFiltered(SelectionFilterType::FINGERING);
+      if (e->type() == Element::Type::HARMONY)
+          return this->selectionFilter().isFiltered(SelectionFilterType::CHORD_SYMBOL);
+      if (e->type() == Element::Type::SLUR)
+          return this->selectionFilter().isFiltered(SelectionFilterType::SLUR);
+      if (e->type() == Element::Type::FIGURED_BASS)
+          return this->selectionFilter().isFiltered(SelectionFilterType::FIGURED_BASS);
+      if (e->type() == Element::Type::OTTAVA)
+          return this->selectionFilter().isFiltered(SelectionFilterType::OTTAVA);
+      if (e->type() == Element::Type::PEDAL)
+          return this->selectionFilter().isFiltered(SelectionFilterType::PEDAL_LINE);
+      if (e->type() == Element::Type::ARPEGGIO)
+          return this->selectionFilter().isFiltered(SelectionFilterType::ARPEGGIO);
+      if (e->type() == Element::Type::GLISSANDO)
+          return this->selectionFilter().isFiltered(SelectionFilterType::GLISSANDO);
+      if (e->type() == Element::Type::FRET_DIAGRAM)
+          return this->selectionFilter().isFiltered(SelectionFilterType::FRET_DIAGRAM);
+      if (e->type() == Element::Type::BREATH)
+          return this->selectionFilter().isFiltered(SelectionFilterType::BREATH);
+      if (e->isText()) //turns out that only TEXT INSTRCHANGE AND STAFFTEXT are caught here, rest are system thus not in selection
+          return this->selectionFilter().isFiltered(SelectionFilterType::OTHER_TEXT);
       return true;
       }
 
