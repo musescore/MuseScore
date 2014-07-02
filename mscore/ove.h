@@ -505,17 +505,17 @@ enum BarLineType {
       Barline_Null			//0x06
       } ;
 
-enum NoteDuration {
-      NoteDuration_256 = 15,
-      NoteDuration_128 = NoteDuration_256 * 2,			// 30
-      NoteDuration_64 = NoteDuration_128 * 2,				// 60
-      NoteDuration_32 = NoteDuration_64 * 2,				// 120
-      NoteDuration_16 = NoteDuration_32 * 2,				// 240
-      NoteDuration_8 = NoteDuration_16 * 2,				// 480
-      NoteDuration_4 = NoteDuration_8 * 2,				// 960
-      NoteDuration_2 = NoteDuration_4 * 2,				// 1920
-      NoteDuration_Whole = NoteDuration_2 * 2,			// 3840
-      NoteDuration_Double_Whole = NoteDuration_Whole * 2	// 7680
+enum class NoteDuration {
+      D_256 = 15,
+      D_128 = NoteDuration::D_256 * 2,           // 30
+      D_64 = NoteDuration::D_128 * 2,            // 60
+      D_32 = NoteDuration::D_64 * 2,             // 120
+      D_16 = NoteDuration::D_32 * 2,             // 240
+      D_8 = NoteDuration::D_16 * 2,              // 480
+      D_4 = NoteDuration::D_8 * 2,               // 960
+      D_2 = NoteDuration::D_4 * 2,               // 1920
+      D_Whole = NoteDuration::D_2 * 2,           // 3840
+      D_Double_Whole = NoteDuration::D_Whole * 2 // 7680
       };
 
 enum class ToneType : char {
