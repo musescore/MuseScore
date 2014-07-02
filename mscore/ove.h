@@ -1477,18 +1477,18 @@ public:
       virtual ~Decorator(){}
 
 public:
-      enum DecoratorType {
-            Decorator_Dotted_Barline = 0,
-            Decorator_Articulation
+      enum class Type : char {
+            Dotted_Barline = 0,
+            Articulation
             };
-      void setDecoratorType(DecoratorType type);
-      DecoratorType getDecoratorType() const;
+      void setDecoratorType(Type type);
+      Type getDecoratorType() const;
 
       void setArticulationType(ArticulationType type);
       ArticulationType getArticulationType() const;
 
 private:
-      DecoratorType decoratorType_;
+      Type decoratorType_;
       ArticulationType artType_;
       };
 

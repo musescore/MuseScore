@@ -2044,16 +2044,16 @@ int Glissando::getLineThick() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Decorator::Decorator() :
-      decoratorType_(Decorator_Articulation),
+      decoratorType_(Type::Articulation),
       artType_(ArticulationType::Marcato) {
       musicDataType_ = MusicDataType::Decorator;
       }
 
-void Decorator::setDecoratorType(DecoratorType type) {
+void Decorator::setDecoratorType(Type type) {
       decoratorType_ = type;
       }
 
-Decorator::DecoratorType Decorator::getDecoratorType() const {
+Decorator::Type Decorator::getDecoratorType() const {
       return decoratorType_;
       }
 
@@ -5986,17 +5986,17 @@ bool BarsParse::parseGlissando(MeasureData* measureData, int /*length*/) {
 bool getDecoratorType(
             unsigned int thisByte,
             bool& measureRepeat,
-            Decorator::DecoratorType& decoratorType,
+            Decorator::Type& decoratorType,
             bool& singleRepeat,
             ArticulationType& artType) {
       measureRepeat = false;
-      decoratorType = Decorator::Decorator_Articulation;
+      decoratorType = Decorator::Type::Articulation;
       singleRepeat = true;
       artType = ArticulationType::None;
 
       switch (thisByte) {
             case 0x00: {
-                  decoratorType = Decorator::Decorator_Dotted_Barline;
+                  decoratorType = Decorator::Type::Dotted_Barline;
                   break;
                   }
             case 0x30: {
@@ -6202,7 +6202,7 @@ bool BarsParse::parseDecorators(MeasureData* measureData, int length) {
       if( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int thisByte = placeHolder.toUnsignedInt();
 
-      Decorator::DecoratorType decoratorType;
+      Decorator::Type decoratorType;
       bool isMeasureRepeat;
       bool isSingleRepeat = true;
       ArticulationType artType = ArticulationType::None;
