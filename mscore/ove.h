@@ -1286,10 +1286,10 @@ public:
       int getExtraLength() const;
 
       // trill
-      enum TrillInterval {
-            TrillInterval_Diatonic = 0,
-            TrillInterval_Chromatic,
-            TrillInterval_Whole
+      enum class TrillInterval : char {
+            Diatonic = 0,
+            Chromatic,
+            Whole
             };
       void setTrillInterval(int interval);
       TrillInterval getTrillInterval() const;

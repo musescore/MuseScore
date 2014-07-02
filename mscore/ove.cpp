@@ -1401,7 +1401,7 @@ Articulation::Articulation() {
       trillRate_ = NoteType::Note_Sixteen;
       accelerateType_ = AccelerateType::None;
       auxiliaryFirst_ = false;
-      trillInterval_ = TrillInterval_Chromatic;
+      trillInterval_ = TrillInterval::Chromatic;
       }
 
 void Articulation::setArtType(int type) {
