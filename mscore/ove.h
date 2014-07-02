@@ -1247,15 +1247,15 @@ public:
       static bool isTrill(ArticulationType type);
 
       // for xml
-      enum XmlType {
-            Xml_Articulation,
-            Xml_Technical,
-            Xml_Arpeggiate,
-            Xml_Ornament,
-            Xml_Fermata,
-            Xml_Direction,
+      enum class XmlType : char {
+            Articulation,
+            Technical,
+            Arpeggiate,
+            Ornament,
+            Fermata,
+            Direction,
 
-            Xml_Unknown
+            Unknown
             };
       XmlType getXmlType() const;
 
