@@ -652,7 +652,7 @@ void OveSong::clear(void)
       showRuler_ = false;
       showColor_ = true;
       playRepeat_ = true;
-      playStyle_ = Record;
+      playStyle_ = PlayStyle::Record;
 
       annotates_.clear();
       copyrights_.clear();
@@ -3749,12 +3749,12 @@ bool OvscParse::parse() {
 
       // play style
       if (!readBuffer(placeHolder, 1)) { return false; }
-      OveSong::PlayStyle style = OveSong::Record;
+      OveSong::PlayStyle style = OveSong::PlayStyle::Record;
       if(placeHolder.toUnsignedInt() == 1){
-            style = OveSong::Swing;
+            style = OveSong::PlayStyle::Swing;
             }
       else if(placeHolder.toUnsignedInt() == 2){
-            style = OveSong::Notation;
+            style = OveSong::PlayStyle::Notation;
             }
       ove_->setPlayStyle(style);
 

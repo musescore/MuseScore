@@ -775,8 +775,8 @@ public:
       void setPlayRepeat(bool play);
       bool getPlayRepeat() const;
 
-      enum PlayStyle{
-            Record,	Swing, Notation
+      enum class PlayStyle : char {
+            Record, Swing, Notation
             };
       void setPlayStyle(PlayStyle style);
       PlayStyle getPlayStyle() const;
