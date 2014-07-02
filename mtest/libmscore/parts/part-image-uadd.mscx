@@ -121,16 +121,11 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
-        <Text>
-          <lid>1</lid>
-          <style>Title</style>
-          <text>test-part</text>
-          </Text>
+        <lid>1</lid>
         <Text>
           <lid>2</lid>
-          <style>Subtitle</style>
-          <text>image</text>
+          <style>Title</style>
+          <text>testpart1</text>
           </Text>
         </VBox>
       <Measure number="1">
@@ -149,11 +144,6 @@
           <durationType>quarter</durationType>
           <Note>
             <lid>5</lid>
-            <Image>
-              <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-              <linkPath>schnee.png</linkPath>
-              <size w="48.15" h="48.3"/>
-              </Image>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -183,24 +173,29 @@
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>12</lid>
+          <lid>11</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="3">
         <Rest>
-          <lid>14</lid>
+          <lid>12</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="4">
         <Rest>
-          <lid>16</lid>
+          <lid>13</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          <lid>14</lid>
+          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">
@@ -210,43 +205,43 @@
           <transposingClefType>G8vb</transposingClefType>
           </Clef>
         <TimeSig>
-          <lid>18</lid>
+          <lid>15</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>19</lid>
+          <lid>16</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>20</lid>
+            <lid>17</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
-          <lid>21</lid>
+          <lid>18</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>22</lid>
+            <lid>19</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             </Note>
           </Chord>
         <Chord>
-          <lid>23</lid>
+          <lid>20</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>24</lid>
+            <lid>21</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             </Note>
           </Chord>
         <Chord>
-          <lid>25</lid>
+          <lid>22</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>26</lid>
+            <lid>23</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             </Note>
@@ -254,24 +249,29 @@
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>27</lid>
+          <lid>24</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="3">
         <Rest>
-          <lid>28</lid>
+          <lid>25</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="4">
         <Rest>
-          <lid>29</lid>
+          <lid>26</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          <lid>27</lid>
+          </BarLine>
         </Measure>
       </Staff>
     <Score>
@@ -318,7 +318,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Alto</trackName>
         <Instrument>
           <longName pos="0">Alto</longName>
           <shortName pos="0">A.</shortName>
@@ -350,16 +350,11 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
-          <Text>
-            <lid>1</lid>
-            <style>Title</style>
-            <text>test-part</text>
-            </Text>
+          <lid>1</lid>
           <Text>
             <lid>2</lid>
-            <style>Subtitle</style>
-            <text>image</text>
+            <style>Title</style>
+            <text>testpart1</text>
             </Text>
           <Text>
             <style>Instrument Name (Part)</style>
@@ -382,11 +377,6 @@
             <durationType>quarter</durationType>
             <Note>
               <lid>5</lid>
-              <Image>
-                <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                <linkPath>/home/marc/Desktop/MuseScore/mtest/libmscore/parts/schnee.png</linkPath>
-                <size w="48.15" h="48.3"/>
-                </Image>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -416,24 +406,41 @@
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>12</lid>
+            <lid>11</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
+        <Measure number="2" len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            </Rest>
+          <tick>7680</tick>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>3840</tick>
         <Measure number="3">
           <Rest>
-            <lid>14</lid>
+            <lid>12</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
         <Measure number="4">
           <Rest>
-            <lid>16</lid>
+            <lid>13</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <lid>14</lid>
+            </BarLine>
           </Measure>
         </Staff>
       <name>Alto</name>
@@ -482,7 +489,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Tenor</trackName>
         <Instrument>
           <longName pos="0">Tenor</longName>
           <shortName pos="0">T.</shortName>
@@ -514,16 +521,11 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
-          <Text>
-            <lid>1</lid>
-            <style>Title</style>
-            <text>test-part</text>
-            </Text>
+          <lid>1</lid>
           <Text>
             <lid>2</lid>
-            <style>Subtitle</style>
-            <text>image</text>
+            <style>Title</style>
+            <text>testpart1</text>
             </Text>
           <Text>
             <style>Instrument Name (Part)</style>
@@ -536,43 +538,43 @@
             <transposingClefType>G8vb</transposingClefType>
             </Clef>
           <TimeSig>
-            <lid>18</lid>
+            <lid>15</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Chord>
-            <lid>19</lid>
+            <lid>16</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>20</lid>
+              <lid>17</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <lid>21</lid>
+            <lid>18</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>22</lid>
+              <lid>19</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <lid>23</lid>
+            <lid>20</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>24</lid>
+              <lid>21</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
-            <lid>25</lid>
+            <lid>22</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>26</lid>
+              <lid>23</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -580,24 +582,41 @@
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>27</lid>
+            <lid>24</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
+        <Measure number="2" len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            </Rest>
+          <tick>7680</tick>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>3840</tick>
         <Measure number="3">
           <Rest>
-            <lid>28</lid>
+            <lid>25</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
         <Measure number="4">
           <Rest>
-            <lid>29</lid>
+            <lid>26</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <lid>27</lid>
+            </BarLine>
           </Measure>
         </Staff>
       <name>Tenor</name>

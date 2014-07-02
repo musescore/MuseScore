@@ -47,6 +47,24 @@ cp ../../../$DIR/mtest/libmscore/parts/part-glissando-udel.mscx  part-glissando-
 cp ../../../$DIR/mtest/libmscore/parts/part-glissando-uradd.mscx part-glissando-uradd.mscx
 cp ../../../$DIR/mtest/libmscore/parts/part-glissando-urdel.mscx part-glissando-urdel.mscx
 
+cp ../../../$DIR/mtest/libmscore/parts/part-mrepeat-1.mscx     part-mrepeat.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-mrepeat-add.mscx   part-mrepeat-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-mrepeat-del.mscx   part-mrepeat-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-mrepeat-parts.mscx part-mrepeat-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-mrepeat-uadd.mscx  part-mrepeat-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-mrepeat-udel.mscx  part-mrepeat-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-mrepeat-uradd.mscx part-mrepeat-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-mrepeat-urdel.mscx part-mrepeat-urdel.mscx
+
+cp ../../../$DIR/mtest/libmscore/parts/part-image-1.mscx     part-image.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-image-add.mscx   part-image-add.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-image-del.mscx   part-image-del.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-image-parts.mscx part-image-parts.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-image-uadd.mscx  part-image-uadd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-image-udel.mscx  part-image-udel.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-image-uradd.mscx part-image-uradd.mscx
+cp ../../../$DIR/mtest/libmscore/parts/part-image-urdel.mscx part-image-urdel.mscx
+
 cp ../../../$DIR/mtest/libmscore/parts/part-articulation-1.mscx     part-articulation.mscx
 cp ../../../$DIR/mtest/libmscore/parts/part-articulation-add.mscx   part-articulation-add.mscx
 cp ../../../$DIR/mtest/libmscore/parts/part-articulation-del.mscx   part-articulation-del.mscx

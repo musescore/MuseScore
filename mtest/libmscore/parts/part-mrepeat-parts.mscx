@@ -130,7 +130,7 @@
         <Text>
           <lid>2</lid>
           <style>Subtitle</style>
-          <text>image</text>
+          <text>measure repeat</text>
           </Text>
         </VBox>
       <Measure number="1">
@@ -149,11 +149,6 @@
           <durationType>quarter</durationType>
           <Note>
             <lid>5</lid>
-            <Image>
-              <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-              <linkPath>schnee.png</linkPath>
-              <size w="48.15" h="48.3"/>
-              </Image>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -182,11 +177,10 @@
           </Rest>
         </Measure>
       <Measure number="2">
-        <Rest>
+        <RepeatMeasure>
           <lid>12</lid>
-          <durationType>measure</durationType>
           <duration z="4" n="4"/>
-          </Rest>
+          </RepeatMeasure>
         </Measure>
       <Measure number="3">
         <Rest>
@@ -359,7 +353,7 @@
           <Text>
             <lid>2</lid>
             <style>Subtitle</style>
-            <text>image</text>
+            <text>measure repeat</text>
             </Text>
           <Text>
             <style>Instrument Name (Part)</style>
@@ -382,11 +376,6 @@
             <durationType>quarter</durationType>
             <Note>
               <lid>5</lid>
-              <Image>
-                <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                <linkPath>/home/marc/Desktop/MuseScore/mtest/libmscore/parts/schnee.png</linkPath>
-                <size w="48.15" h="48.3"/>
-                </Image>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -415,11 +404,10 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <Rest>
+          <RepeatMeasure>
             <lid>12</lid>
-            <durationType>measure</durationType>
             <duration z="4" n="4"/>
-            </Rest>
+            </RepeatMeasure>
           </Measure>
         <Measure number="3">
           <Rest>
@@ -523,7 +511,7 @@
           <Text>
             <lid>2</lid>
             <style>Subtitle</style>
-            <text>image</text>
+            <text>measure repeat</text>
             </Text>
           <Text>
             <style>Instrument Name (Part)</style>

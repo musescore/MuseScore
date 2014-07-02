@@ -29,14 +29,14 @@ Linked Parts
 6. remove undo
 7. remove redo
 
-X = test passes and code works
+x = test passes and code works
 U = test passes but code does not work (master will need updating once code works)
 F = test fails
 
 ```
 1 234 567 ELEMENT
 x xxx UxU SYMBOL
-x xxx xxx TEXT
+x UxU xxx TEXT
 - --- --- INSTRUMENT_NAME
 - --- --- BAR_LINE
 - --- --- STEM_SLASH
@@ -52,8 +52,8 @@ x --- --- TIMESIG
 x --- --- REST
 x xxx xxx BREATH
 x xxx xxx GLISSANDO
-- --- --- REPEAT_MEASURE
-- --- --- IMAGE
+x xxx xxx REPEAT_MEASURE
+x xxx UxU IMAGE
 - --- --- TIE
 x UxU xxU ARTICULATION
 x xxx xxx CHORDLINE

@@ -32,6 +32,8 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/breath.h"
 #include "libmscore/glissando.h"
+#include "libmscore/repeat.h"
+#include "libmscore/image.h"
 #include "libmscore/articulation.h"
 #include "libmscore/chordline.h"
 #include "libmscore/dynamic.h"
@@ -70,6 +72,12 @@ class TestParts : public QObject, public MTest
       Score* doAddGlissando();
       Score* doRemoveGlissando();
 
+      Score* doAddMrepeat();
+      Score* doRemoveMrepeat();
+
+      Score* doAddImage();
+      Score* doRemoveImage();
+
       Score* doAddArticulation();
       Score* doRemoveArticulation();
 
@@ -84,9 +92,6 @@ class TestParts : public QObject, public MTest
 
       Score* doAddStaffText();
       Score* doRemoveStaffText();
-
-//      Score* doAddImage();
-//      Score* doRemoveImage();
 
    private slots:
       void initTestCase();
@@ -134,6 +139,22 @@ class TestParts : public QObject, public MTest
       void undoRemoveGlissando();
       void undoRedoRemoveGlissando();
 
+      void createPartMrepeat();
+      void addMrepeat();
+      void undoAddMrepeat();
+      void undoRedoAddMrepeat();
+      void removeMrepeat();
+      void undoRemoveMrepeat();
+      void undoRedoRemoveMrepeat();
+
+      void createPartImage();
+      void addImage();
+      void undoAddImage();
+      void undoRedoAddImage();
+      void removeImage();
+      void undoRemoveImage();
+      void undoRedoRemoveImage();
+
       void createPartArticulation();
       void addArticulation();
       void undoAddArticulation();
@@ -173,14 +194,6 @@ class TestParts : public QObject, public MTest
       void removeStaffText();
       void undoRemoveStaffText();
       void undoRedoRemoveStaffText();
-
-//      void createPartImage();
-//      void addImage();
-//      void undoAddImage();
-//      void undoRedoAddImage();
-//      void removeImage();
-//      void undoRemoveImage();
-//      void undoRedoRemoveImage();
 
       void appendMeasure();
       void insertMeasure();
@@ -397,6 +410,16 @@ void TestParts::createPartBreath()
 void TestParts::createPartGlissando()
       {
       testPartCreation("part-glissando");
+      }
+
+void TestParts::createPartMrepeat()
+      {
+      testPartCreation("part-mrepeat");
+      }
+
+void TestParts::createPartImage()
+      {
+      testPartCreation("part-image");
       }
 
 void TestParts::createPartArticulation()
@@ -1108,6 +1131,276 @@ void TestParts::undoRedoRemoveGlissando()
       score->undo()->redo();
       score->endUndoRedo();
       QVERIFY(saveCompareScore(score, "part-glissando-urdel.mscx", DIR + "part-glissando-urdel.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   doAddMrepeat
+//---------------------------------------------------------
+
+Score* TestParts::doAddMrepeat()
+      {
+      Score* score = readScore(DIR + "part-empty-parts.mscx");
+      score->doLayout();
+      foreach (Excerpt* e, score->excerpts())
+            e->score()->doLayout();
+
+      Measure* m = score->firstMeasure()->nextMeasure();
+      Segment* s = m->first();
+      Rest* rest = static_cast<Rest*>(s->element(0));
+
+      DropData dd;
+      dd.view = 0;
+      RepeatMeasure* e = new RepeatMeasure(score);
+      dd.element = e;
+
+      score->startCmd();
+      rest->drop(dd);
+      score->endCmd();        // does layout
+      return score;
+      }
+
+//---------------------------------------------------------
+//   addMrepeat
+//---------------------------------------------------------
+
+void TestParts::addMrepeat()
+      {
+      Score* score = doAddMrepeat();
+      QVERIFY(saveCompareScore(score, "part-mrepeat-add.mscx", DIR + "part-mrepeat-add.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoAddMrepeat
+//---------------------------------------------------------
+
+void TestParts::undoAddMrepeat()
+      {
+      Score* score = doAddMrepeat();
+      score->undo()->undo();
+      score->endUndoRedo();
+      QVERIFY(saveCompareScore(score, "part-mrepeat-uadd.mscx", DIR + "part-mrepeat-uadd.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoRedoAddMrepeat
+//---------------------------------------------------------
+
+void TestParts::undoRedoAddMrepeat()
+      {
+      Score* score = doAddMrepeat();
+      score->undo()->undo();
+      score->endUndoRedo();
+      score->undo()->redo();
+      score->endUndoRedo();
+      QVERIFY(saveCompareScore(score, "part-mrepeat-uradd.mscx", DIR + "part-mrepeat-uradd.mscx"));
+      delete score;
+      }
+
+
+//---------------------------------------------------------
+//   doRemoveMrepeat
+//---------------------------------------------------------
+
+Score* TestParts::doRemoveMrepeat()
+      {
+      Score* score = readScore(DIR + "part-mrepeat-parts.mscx");
+      score->doLayout();
+      foreach(Excerpt* e, score->excerpts())
+            e->score()->doLayout();
+
+      Measure* m        = score->firstMeasure()->nextMeasure();
+      Segment* s        = m->first(Segment::Type::ChordRest);
+      RepeatMeasure* se = static_cast<RepeatMeasure*>(s->element(0));
+      score->select(se);
+
+      score->startCmd();
+      score->cmdDeleteSelection();
+      score->setLayoutAll(true);
+      score->endCmd();
+      return score;
+      }
+
+//---------------------------------------------------------
+//   removeMrepeat
+//---------------------------------------------------------
+
+void TestParts::removeMrepeat()
+      {
+      Score* score = doRemoveMrepeat();
+      QVERIFY(saveCompareScore(score, "part-mrepeat-del.mscx", DIR + "part-mrepeat-del.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoRemoveMrepeat
+//---------------------------------------------------------
+
+void TestParts::undoRemoveMrepeat()
+      {
+      Score* score = doRemoveMrepeat();
+      score->undo()->undo();
+      score->endUndoRedo();
+//      score->doLayout();
+      QVERIFY(saveCompareScore(score, "part-mrepeat-udel.mscx", DIR + "part-mrepeat-udel.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoRedoRemoveMrepeat
+//---------------------------------------------------------
+
+void TestParts::undoRedoRemoveMrepeat()
+      {
+      Score* score = doRemoveMrepeat();
+      score->undo()->undo();
+      score->endUndoRedo();
+      score->undo()->redo();
+      score->endUndoRedo();
+      QVERIFY(saveCompareScore(score, "part-mrepeat-urdel.mscx", DIR + "part-mrepeat-urdel.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   doAddImage
+//---------------------------------------------------------
+
+Score* TestParts::doAddImage()
+      {
+      Score* score = readScore(DIR + "part-empty-parts.mscx");
+      score->doLayout();
+      foreach (Excerpt* e, score->excerpts())
+            e->score()->doLayout();
+
+      Measure* m   = score->firstMeasure();
+      Segment* s   = m->first(Segment::Type::ChordRest)->next();
+      Chord* chord = static_cast<Chord*>(s->element(0));
+      Note* note   = chord->upNote();
+
+      DropData dd;
+      dd.view = 0;
+      Image* e = new Image(score);
+      e->load("schnee.png");
+      dd.element = e;
+
+      score->startCmd();
+      note->drop(dd);
+      score->endCmd();        // does layout
+      return score;
+      }
+
+//---------------------------------------------------------
+//   addImage
+//---------------------------------------------------------
+
+void TestParts::addImage()
+      {
+      Score* score = doAddImage();
+      QVERIFY(saveCompareScore(score, "part-image-add.mscx", DIR + "part-image-add.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoAddImage
+//---------------------------------------------------------
+
+void TestParts::undoAddImage()
+      {
+      Score* score = doAddImage();
+      score->undo()->undo();
+      score->endUndoRedo();
+      QVERIFY(saveCompareScore(score, "part-image-uadd.mscx", DIR + "part-image-uadd.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoRedoAddImage
+//---------------------------------------------------------
+
+void TestParts::undoRedoAddImage()
+      {
+      Score* score = doAddImage();
+      score->undo()->undo();
+      score->endUndoRedo();
+      score->undo()->redo();
+      score->endUndoRedo();
+      QVERIFY(saveCompareScore(score, "part-image-uradd.mscx", DIR + "part-image-uradd.mscx"));
+      delete score;
+      }
+
+
+//---------------------------------------------------------
+//   doRemoveImage
+//---------------------------------------------------------
+
+Score* TestParts::doRemoveImage()
+      {
+      Score* score = readScore(DIR + "part-image-parts.mscx");
+      score->doLayout();
+      foreach(Excerpt* e, score->excerpts())
+            e->score()->doLayout();
+
+      Measure* m   = score->firstMeasure();
+      Segment* s   = m->first(Segment::Type::ChordRest);
+      Chord* chord = static_cast<Chord*>(s->element(0));
+      Note* note   = chord->upNote();
+      Element* se = 0;
+      foreach (Element* e, note->el()) {
+            if (e->type() == Element::Type::IMAGE) {
+                  se = e;
+                  break;
+                  }
+            }
+      if (!se)
+            qFatal("no annotation");
+      score->select(se);
+
+      score->startCmd();
+      score->cmdDeleteSelection();
+      score->setLayoutAll(true);
+      score->endCmd();
+      return score;
+      }
+
+//---------------------------------------------------------
+//   removeImage
+//---------------------------------------------------------
+
+void TestParts::removeImage()
+      {
+      Score* score = doRemoveImage();
+      QVERIFY(saveCompareScore(score, "part-image-del.mscx", DIR + "part-image-del.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoRemoveImage
+//---------------------------------------------------------
+
+void TestParts::undoRemoveImage()
+      {
+      Score* score = doRemoveImage();
+      score->undo()->undo();
+      score->endUndoRedo();
+//      score->doLayout();
+      QVERIFY(saveCompareScore(score, "part-image-udel.mscx", DIR + "part-image-udel.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoRedoRemoveImage
+//---------------------------------------------------------
+
+void TestParts::undoRedoRemoveImage()
+      {
+      Score* score = doRemoveImage();
+      score->undo()->undo();
+      score->endUndoRedo();
+      score->undo()->redo();
+      score->endUndoRedo();
+      QVERIFY(saveCompareScore(score, "part-image-urdel.mscx", DIR + "part-image-urdel.mscx"));
       delete score;
       }
 
