@@ -54,14 +54,14 @@ class Tuplet;
 enum class POS : char;
 enum class MagIdx : char;
 
-enum {
-      TEXT_TITLE,
-      TEXT_SUBTITLE,
-      TEXT_COMPOSER,
-      TEXT_POET,
-      TEXT_SYSTEM,
-      TEXT_STAFF,
-      TEXT_REHEARSAL_MARK
+enum class TEXT : char {
+      TITLE,
+      SUBTITLE,
+      COMPOSER,
+      POET,
+      SYSTEM,
+      STAFF,
+      REHEARSAL_MARK
       };
 
 //---------------------------------------------------------
@@ -231,7 +231,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdAddPitch(int note, bool addFlag);
       void cmdAddFret(int fret);
       void cmdAddChordName();
-      void cmdAddText(int style);
+      void cmdAddText(TEXT style);
       void cmdEnterRest(const TDuration&);
       void cmdEnterRest();
       void cmdTuplet(int n, ChordRest*);

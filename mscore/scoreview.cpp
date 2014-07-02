@@ -2543,19 +2543,19 @@ void ScoreView::cmd(const QAction* a)
             cmdAddChordName();
 
       else if (cmd == "title-text")
-            cmdAddText(TEXT_TITLE);
+            cmdAddText(TEXT::TITLE);
       else if (cmd == "subtitle-text")
-            cmdAddText(TEXT_SUBTITLE);
+            cmdAddText(TEXT::SUBTITLE);
       else if (cmd == "composer-text")
-            cmdAddText(TEXT_COMPOSER);
+            cmdAddText(TEXT::COMPOSER);
       else if (cmd == "poet-text")
-            cmdAddText(TEXT_POET);
+            cmdAddText(TEXT::POET);
       else if (cmd == "system-text")
-            cmdAddText(TEXT_SYSTEM);
+            cmdAddText(TEXT::SYSTEM);
       else if (cmd == "staff-text")
-            cmdAddText(TEXT_STAFF);
+            cmdAddText(TEXT::STAFF);
       else if (cmd == "rehearsalmark-text")
-            cmdAddText(TEXT_REHEARSAL_MARK);
+            cmdAddText(TEXT::REHEARSAL_MARK);
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
@@ -4843,34 +4843,35 @@ void ScoreView::cmdAddChordName()
 //   cmdAddText
 //---------------------------------------------------------
 
-void ScoreView::cmdAddText(int type)
+void ScoreView::cmdAddText(TEXT type)
       {
       if (!_score->checkHasMeasures())
             return;
       Text* s = 0;
       _score->startCmd();
       switch(type) {
-            case TEXT_TITLE:
-            case TEXT_SUBTITLE:
-            case TEXT_COMPOSER:
-            case TEXT_POET:
+            case TEXT::TITLE:
+            case TEXT::SUBTITLE:
+            case TEXT::COMPOSER:
+            case TEXT::POET:
                   {
                   MeasureBase* measure = _score->first();
                   if (measure->type() != Element::Type::VBOX)
                         measure = _score->insertMeasure(Element::Type::VBOX, measure);
                   s = new Text(_score);
                   switch(type) {
-                        case TEXT_TITLE:    s->setTextStyleType(TextStyleType::TITLE);    break;
-                        case TEXT_SUBTITLE: s->setTextStyleType(TextStyleType::SUBTITLE); break;
-                        case TEXT_COMPOSER: s->setTextStyleType(TextStyleType::COMPOSER); break;
-                        case TEXT_POET:     s->setTextStyleType(TextStyleType::POET);     break;
+                        case TEXT::TITLE:    s->setTextStyleType(TextStyleType::TITLE);    break;
+                        case TEXT::SUBTITLE: s->setTextStyleType(TextStyleType::SUBTITLE); break;
+                        case TEXT::COMPOSER: s->setTextStyleType(TextStyleType::COMPOSER); break;
+                        case TEXT::POET:     s->setTextStyleType(TextStyleType::POET);     break;
+                        default: /* can't happen, but need to keep compiler happy */ break;
                         }
                   s->setParent(measure);
                   adjustCanvasPosition(measure, false);
                   }
                   break;
 
-            case TEXT_REHEARSAL_MARK:
+            case TEXT::REHEARSAL_MARK:
                   {
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
@@ -4880,14 +4881,14 @@ void ScoreView::cmdAddText(int type)
                   s->setParent(cr->segment());
                   }
                   break;
-            case TEXT_STAFF:
-            case TEXT_SYSTEM:
+            case TEXT::STAFF:
+            case TEXT::SYSTEM:
                   {
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
                         break;
                   s = new StaffText(_score);
-                  if (type == TEXT_SYSTEM) {
+                  if (type == TEXT::SYSTEM) {
                         s->setTrack(0);
                         s->setTextStyleType(TextStyleType::SYSTEM);
                         }
