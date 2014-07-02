@@ -616,19 +616,19 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
 static Ottava::Type OctaveShiftTypeToInt(OVE::OctaveShiftType type) {
       Ottava::Type subtype = Ottava::Type::OTTAVA_8VA;
       switch (type) {
-            case OVE::OctaveShift_8: {
+            case OVE::OctaveShiftType::OS_8: {
                   subtype = Ottava::Type::OTTAVA_8VA;
                   break;
                   }
-            case OVE::OctaveShift_15: {
+            case OVE::OctaveShiftType::OS_15: {
                   subtype = Ottava::Type::OTTAVA_15MA;
                   break;
                   }
-            case OVE::OctaveShift_Minus_8: {
+            case OVE::OctaveShiftType::OS_Minus_8: {
                   subtype = Ottava::Type::OTTAVA_8VB;
                   break;
                   }
-            case OVE::OctaveShift_Minus_15: {
+            case OVE::OctaveShiftType::OS_Minus_15: {
                   subtype = Ottava::Type::OTTAVA_15MB;
                   break;
                   }
@@ -661,13 +661,13 @@ void OveToMScore::convertTrackElements(int track) {
 
                               int y_off = 0;
                               switch (octave->getOctaveShiftType()) {
-                                    case OVE::OctaveShift_8:
-                                    case OVE::OctaveShift_15: {
+                                    case OVE::OctaveShiftType::OS_8:
+                                    case OVE::OctaveShiftType::OS_15: {
                                           y_off = -3;
                                           break;
                                           }
-                                    case OVE::OctaveShift_Minus_8:
-                                    case OVE::OctaveShift_Minus_15: {
+                                    case OVE::OctaveShiftType::OS_Minus_8:
+                                    case OVE::OctaveShiftType::OS_Minus_15: {
                                           y_off = 8;
                                           break;
                                           }

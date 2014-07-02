@@ -2467,14 +2467,14 @@ int HarpPedal::getShowCharFlag() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 OctaveShift::OctaveShift() :
-      octaveShiftType_(OctaveShift_8),
+      octaveShiftType_(OctaveShiftType::OS_8),
       octaveShiftPosition_(OctaveShiftPosition::Start),
       endTick_(0) {
       musicDataType_ = MusicDataType::OctaveShift;
       }
 
-void OctaveShift::setOctaveShiftType(int type) {
-      octaveShiftType_ = (OctaveShiftType) type;
+void OctaveShift::setOctaveShiftType(OctaveShiftType type) {
+      octaveShiftType_ = type;
       }
 
 OctaveShiftType OctaveShift::getOctaveShiftType() const {
@@ -2485,19 +2485,19 @@ int OctaveShift::getNoteShift() const {
       int shift = 12;
 
       switch (getOctaveShiftType()) {
-            case OctaveShift_8: {
+            case OctaveShiftType::OS_8: {
                   shift = 12;
                   break;
                   }
-            case OctaveShift_Minus_8: {
+            case OctaveShiftType::OS_Minus_8: {
                   shift = -12;
                   break;
                   }
-            case OctaveShift_15: {
+            case OctaveShiftType::OS_15: {
                   shift = 24;
                   break;
                   }
-            case OctaveShift_Minus_15: {
+            case OctaveShiftType::OS_Minus_15: {
                   shift = -24;
                   break;
                   }
@@ -2520,13 +2520,13 @@ int OctaveShift::getEndTick() const {
 OctaveShiftEndPoint::OctaveShiftEndPoint() {
       musicDataType_ = MusicDataType::OctaveShift_EndPoint;
 
-      octaveShiftType_ = OctaveShift_8;
+      octaveShiftType_ = OctaveShiftType::OS_8;
       octaveShiftPosition_ = OctaveShiftPosition::Start;
       endTick_ = 0;
       }
 
-void OctaveShiftEndPoint::setOctaveShiftType(int type) {
-      octaveShiftType_ = (OctaveShiftType) type;
+void OctaveShiftEndPoint::setOctaveShiftType(OctaveShiftType type) {
+      octaveShiftType_ = type;
       }
 
 OctaveShiftType OctaveShiftEndPoint::getOctaveShiftType() const {
@@ -6606,91 +6606,91 @@ bool BarsParse::parseHarmonyGuitarFrame(MeasureData* measureData, int length) {
       }
 
 void extractOctave(unsigned int Bits, OctaveShiftType& octaveShiftType, QList<OctaveShiftPosition>& positions) {
-      octaveShiftType = OctaveShift_8;
+      octaveShiftType = OctaveShiftType::OS_8;
       positions.clear();
 
       switch (Bits) {
             case 0x0: {
-                  octaveShiftType = OctaveShift_8;
+                  octaveShiftType = OctaveShiftType::OS_8;
                   positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x1: {
-                  octaveShiftType = OctaveShift_Minus_8;
+                  octaveShiftType = OctaveShiftType::OS_Minus_8;
                   positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x2: {
-                  octaveShiftType = OctaveShift_15;
+                  octaveShiftType = OctaveShiftType::OS_15;
                   positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x3: {
-                  octaveShiftType = OctaveShift_Minus_15;
+                  octaveShiftType = OctaveShiftType::OS_Minus_15;
                   positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x4: {
-                  octaveShiftType = OctaveShift_8;
+                  octaveShiftType = OctaveShiftType::OS_8;
                   positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x5: {
-                  octaveShiftType = OctaveShift_Minus_8;
+                  octaveShiftType = OctaveShiftType::OS_Minus_8;
                   positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x6: {
-                  octaveShiftType = OctaveShift_15;
+                  octaveShiftType = OctaveShiftType::OS_15;
                   positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x7: {
-                  octaveShiftType = OctaveShift_Minus_15;
+                  octaveShiftType = OctaveShiftType::OS_Minus_15;
                   positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x8: {
-                  octaveShiftType = OctaveShift_8;
+                  octaveShiftType = OctaveShiftType::OS_8;
                   positions.push_back(OctaveShiftPosition::Start);
                   break;
                   }
             case 0x9: {
-                  octaveShiftType = OctaveShift_Minus_8;
+                  octaveShiftType = OctaveShiftType::OS_Minus_8;
                   positions.push_back(OctaveShiftPosition::Start);
                   break;
                   }
             case 0xA: {
-                  octaveShiftType = OctaveShift_15;
+                  octaveShiftType = OctaveShiftType::OS_15;
                   positions.push_back(OctaveShiftPosition::Start);
                   break;
                   }
             case 0xB: {
-                  octaveShiftType = OctaveShift_Minus_15;
+                  octaveShiftType = OctaveShiftType::OS_Minus_15;
                   positions.push_back(OctaveShiftPosition::Start);
                   ;
                   break;
                   }
             case 0xC: {
-                  octaveShiftType = OctaveShift_8;
+                  octaveShiftType = OctaveShiftType::OS_8;
                   positions.push_back(OctaveShiftPosition::Start);
                   positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0xD: {
-                  octaveShiftType = OctaveShift_Minus_8;
+                  octaveShiftType = OctaveShiftType::OS_Minus_8;
                   positions.push_back(OctaveShiftPosition::Start);
                   positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0xE: {
-                  octaveShiftType = OctaveShift_15;
+                  octaveShiftType = OctaveShiftType::OS_15;
                   positions.push_back(OctaveShiftPosition::Start);
                   positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0xF: {
-                  octaveShiftType = OctaveShift_Minus_15;
+                  octaveShiftType = OctaveShiftType::OS_Minus_15;
                   positions.push_back(OctaveShiftPosition::Start);
                   positions.push_back(OctaveShiftPosition::Stop);
                   break;
@@ -6714,7 +6714,7 @@ bool BarsParse::parseOctaveShift(MeasureData* measureData, int /*length*/) {
       // octave
       if( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int type = getLowNibble(placeHolder.toUnsignedInt());
-      OctaveShiftType octaveShiftType = OctaveShift_8;
+      OctaveShiftType octaveShiftType = OctaveShiftType::OS_8;
       QList<OctaveShiftPosition> positions;
       extractOctave(type, octaveShiftType, positions);
 

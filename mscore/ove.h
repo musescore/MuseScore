@@ -469,11 +469,11 @@ enum class KuoHaoType : char {
       Bracket
       };
 
-enum OctaveShiftType {
-      OctaveShift_8 = 0,
-      OctaveShift_Minus_8,
-      OctaveShift_15,
-      OctaveShift_Minus_15
+enum class OctaveShiftType : char {
+      OS_8 = 0,
+      OS_Minus_8,
+      OS_15,
+      OS_Minus_15
       };
 
 enum class OctaveShiftPosition : char {
@@ -1753,7 +1753,7 @@ public:
       virtual ~OctaveShift() {}
 
 public:
-      void setOctaveShiftType(int type);
+      void setOctaveShiftType(OctaveShiftType type);
       OctaveShiftType getOctaveShiftType() const;
 
       int getNoteShift() const;
@@ -1773,7 +1773,7 @@ public:
       virtual ~OctaveShiftEndPoint() {}
 
 public:
-      void setOctaveShiftType(int type);
+      void setOctaveShiftType(OctaveShiftType type);
       OctaveShiftType getOctaveShiftType() const;
 
       void setOctaveShiftPosition(OctaveShiftPosition position);
