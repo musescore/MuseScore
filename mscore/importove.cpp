@@ -653,7 +653,7 @@ void OveToMScore::convertTrackElements(int track) {
                   OVE::OctaveShiftEndPoint* octave = static_cast<OVE::OctaveShiftEndPoint*>(octaves[j]);
                   int absTick = mtt_->getTick(i, octave->getTick());
 
-                  if(octave->getOctaveShiftPosition() == OVE::OctavePosition_Start) {
+                  if(octave->getOctaveShiftPosition() == OVE::OctaveShiftPosition::Start) {
                         if(ottava == 0) {
                               ottava = new Ottava(score_);
                               ottava->setTrack(track * VOICES);
@@ -687,7 +687,7 @@ void OveToMScore::convertTrackElements(int track) {
                               delete ottava;
                               ottava = 0;
                               }
-                        } else if (octave->getOctaveShiftPosition() == OVE::OctavePosition_Stop) {
+                        } else if (octave->getOctaveShiftPosition() == OVE::OctaveShiftPosition::Stop) {
                         if(ottava != 0) {
                               int absTick = mtt_->getTick(i, octave->getEndTick());
 

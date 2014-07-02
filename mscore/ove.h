@@ -476,10 +476,10 @@ enum OctaveShiftType {
       OctaveShift_Minus_15
       };
 
-enum OctaveShiftPosition {
-      OctavePosition_Start = 0 ,
-      OctavePosition_Continue,
-      OctavePosition_Stop
+enum class OctaveShiftPosition : char {
+      Start = 0 ,
+      Continue,
+      Stop
       };
 
 enum class RepeatType : char {
@@ -1776,7 +1776,7 @@ public:
       void setOctaveShiftType(int type);
       OctaveShiftType getOctaveShiftType() const;
 
-      void setOctaveShiftPosition(int position);
+      void setOctaveShiftPosition(OctaveShiftPosition position);
       OctaveShiftPosition getOctaveShiftPosition() const;
 
       void setEndTick(int tick);
