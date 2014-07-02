@@ -527,10 +527,10 @@ void Seq::processMessages()
                         if (!cs)
                               continue;
                         if (playTime != 0) {
-                              int tick = cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate));
+                              int utick = cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate));
                               cs->tempomap()->setRelTempo(msg.realVal);
                               cs->repeatList()->update();
-                              playTime = cs->utick2utime(tick) * MScore::sampleRate;
+                              playTime = cs->utick2utime(utick) * MScore::sampleRate;
                               }
                         else
                               cs->tempomap()->setRelTempo(msg.realVal);
@@ -996,6 +996,12 @@ void Seq::seek(int utick, bool can_wait)
       if (cs == 0)
             return;
 
+      if (utick > endTick) {
+            utick = 0;
+            can_wait = true;
+            }
+
+      qDebug()<<"Seq::seek, utick: "<<utick<<", can_wait: "<<can_wait;
       // If driver can't seek immediately, just send a signal to seek.
       if (!_driver->instantSeek() && can_wait) {
             _driver->seekTransport(utick);
