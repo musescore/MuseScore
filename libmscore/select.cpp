@@ -279,32 +279,34 @@ void Selection::add(Element* el)
 
 bool SelectionFilter::canSelect(const Element* e) const
       {
-      if (e->type() == Element::Type::DYNAMIC
-          && !isFiltered(SelectionFilterType::DYNAMIC)) return false;
-      if (e->type() == Element::Type::ARTICULATION
-          && !isFiltered(SelectionFilterType::ARTICULATION)) return false;
-      if (e->type() == Element::Type::LYRICS
-          && !isFiltered(SelectionFilterType::LYRICS)) return false;
-      if (e->type() == Element::Type::FINGERING
-          && !isFiltered(SelectionFilterType::FINGERING)) return false;
-      if (e->type() == Element::Type::HARMONY
-          && !isFiltered(SelectionFilterType::CHORD_SYMBOL)) return false;
-      if (e->type() == Element::Type::SLUR
-          && !isFiltered(SelectionFilterType::SLUR)) return false;
-      if (e->type() == Element::Type::FIGURED_BASS
-          && !isFiltered(SelectionFilterType::FIGURED_BASS)) return false;
-      if (e->type() == Element::Type::OTTAVA
-          && !isFiltered(SelectionFilterType::OTTAVA)) return false;
-      if (e->type() == Element::Type::PEDAL
-          && !isFiltered(SelectionFilterType::PEDAL_LINE)) return false;
-      if (e->type() == Element::Type::ARPEGGIO
-          && !isFiltered(SelectionFilterType::ARPEGGIO)) return false;
-      if (e->type() == Element::Type::GLISSANDO
-          && !isFiltered(SelectionFilterType::GLISSANDO)) return false;
-      if (e->type() == Element::Type::FRET_DIAGRAM
-          && !isFiltered(SelectionFilterType::FRET_DIAGRAM)) return false;
-      if (e->type() == Element::Type::BREATH
-          && !isFiltered(SelectionFilterType::BREATH)) return false;
+      if (e->type() == Element::Type::DYNAMIC || e->type() == Element::Type::HAIRPIN)
+          return isFiltered(SelectionFilterType::DYNAMIC);
+      if (e->type() == Element::Type::ARTICULATION || e->type() == Element::Type::TRILL)
+          return isFiltered(SelectionFilterType::ARTICULATION);
+      if (e->type() == Element::Type::LYRICS)
+          return isFiltered(SelectionFilterType::LYRICS);
+      if (e->type() == Element::Type::FINGERING)
+          return isFiltered(SelectionFilterType::FINGERING);
+      if (e->type() == Element::Type::HARMONY)
+          return isFiltered(SelectionFilterType::CHORD_SYMBOL);
+      if (e->type() == Element::Type::SLUR)
+          return isFiltered(SelectionFilterType::SLUR);
+      if (e->type() == Element::Type::FIGURED_BASS)
+          return isFiltered(SelectionFilterType::FIGURED_BASS);
+      if (e->type() == Element::Type::OTTAVA)
+          return isFiltered(SelectionFilterType::OTTAVA);
+      if (e->type() == Element::Type::PEDAL)
+          return isFiltered(SelectionFilterType::PEDAL_LINE);
+      if (e->type() == Element::Type::ARPEGGIO)
+          return isFiltered(SelectionFilterType::ARPEGGIO);
+      if (e->type() == Element::Type::GLISSANDO)
+          return isFiltered(SelectionFilterType::GLISSANDO);
+      if (e->type() == Element::Type::FRET_DIAGRAM)
+          return isFiltered(SelectionFilterType::FRET_DIAGRAM);
+      if (e->type() == Element::Type::BREATH)
+          return isFiltered(SelectionFilterType::BREATH);
+      if (e->isText()) //turns out that only TEXT INSTRCHANGE AND STAFFTEXT are caught here, rest are system thus not in selection
+          return isFiltered(SelectionFilterType::OTHER_TEXT);
       return true;
       }
 
