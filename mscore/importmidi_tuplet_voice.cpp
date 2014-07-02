@@ -108,28 +108,71 @@ void setTupletVoices(
             }
       }
 
+int findPitchDist(
+            const QList<MidiNote> &notes,
+            const std::vector<TupletInfo> &tuplets,
+            int voice)
+      {
+      int pitchDist = std::numeric_limits<int>::max();      // bad value - only for the last choice
+      if (tuplets.empty())
+            return pitchDist;
+
+      int tupletPitch = 0;
+      for (const auto &tuplet: tuplets) {
+            if (tuplet.chords.begin()->second->second.voice != voice)
+                  continue;
+            int counter = 0;
+            for (const auto &chord: tuplet.chords) {
+                  const MidiChord &c = chord.second->second;
+                  tupletPitch += MChord::chordAveragePitch(c.notes);
+                  ++counter;
+                  }
+            tupletPitch = qRound(tupletPitch * 1.0 / counter);
+            break;
+            }
+
+      if (tupletPitch == 0)
+            return pitchDist;
+
+      const int chordPitch = MChord::chordAveragePitch(notes);
+      pitchDist = qAbs(chordPitch - tupletPitch);
+
+      return pitchDist;
+      }
+
 void setNonTupletVoices(
             std::set<std::pair<const ReducedFraction, MidiChord> *> &pendingNonTuplets,
             const std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> &tupletIntervals,
+            const std::vector<TupletInfo> &tuplets,
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &basicQuant)
       {
       const int limit = MidiVoice::voiceLimit();
-      int voice = 0;
-      while (!pendingNonTuplets.empty() && voice < limit) {
-            for (auto it = pendingNonTuplets.begin(); it != pendingNonTuplets.end(); ) {
-                  auto chord = *it;
-                  const auto interval = chordInterval(*chord, chords, basicQuant);
+      while (!pendingNonTuplets.empty()) {
+            auto chord = *pendingNonTuplets.begin();
+            const auto interval = chordInterval(*chord, chords, basicQuant);
+                        // pick the voice such that the average pitch difference
+                        // between the non-tuplet chord and tuplets with this voice
+                        // is the smallest
+            int bestVoice = -1;
+            int minPitchDist = -1;
+            for (int voice = 0; voice < limit; ++voice) {
                   const auto fit = tupletIntervals.find(voice);
                   if (fit == tupletIntervals.end() || !haveIntersection(interval, fit->second)) {
-                        chord->second.voice = voice;
-                        it = pendingNonTuplets.erase(it);
-                                    // don't insert chord interval here
-                        continue;
+                        const int pitchDist = findPitchDist(chord->second.notes, tuplets, voice);
+                        if (minPitchDist == -1 || pitchDist < minPitchDist) {
+                              minPitchDist = pitchDist;
+                              bestVoice = voice;
+                              }
                         }
-                  ++it;
                   }
-            ++voice;
+
+            Q_ASSERT_X(bestVoice >= 0,
+                       "MidiTuplet::setNonTupletVoices", "Best voice not found");
+
+            chord->second.voice = bestVoice;
+            pendingNonTuplets.erase(pendingNonTuplets.begin());
+            // don't insert chord interval here
             }
       }
 
@@ -822,7 +865,7 @@ void assignVoices(
                   }
             }
 
-      setNonTupletVoices(pendingNonTuplets, tupletIntervals, chords, basicQuant);
+      setNonTupletVoices(pendingNonTuplets, tupletIntervals, tuplets, chords, basicQuant);
 
       Q_ASSERT_X(pendingNonTuplets.empty(),
                  "MIDI tuplets: assignVoices", "Unused non-tuplets");
