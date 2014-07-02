@@ -361,10 +361,6 @@ void Tie::layout()
       QPointF off1(xo1, yo);
       QPointF off2(0.0, yo);
 
-#if 0 // yet(?) unused
-      QPointF ppos(pagePos());
-#endif
-
       // TODO: cleanup
 
       SlurPos sPos;

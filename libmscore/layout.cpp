@@ -1377,11 +1377,10 @@ void Score::doLayout()
 
       rebuildBspTree();
 
-      int n = viewer.size();
-      for (int i = 0; i < n; ++i) {
-            viewer.at(i)->layoutChanged();
-            viewer.at(i)->updateLoopCursors();
-      }
+      for (MuseScoreView* v : viewer) {
+            v->layoutChanged();
+            v->updateLoopCursors();
+            }
 
       _layoutAll = false;
       }
@@ -1401,26 +1400,21 @@ void Score::layoutSpanner()
                         for (int i = 0; i < n; ++i)
                               segment->annotations().at(i)->layout();
                         }
-                  Element* e = segment->element(track);
-                  if (!e)
-                        continue;
-                  if (e->isChordRest()) {
-                        Chord* c = static_cast<Chord*>(e);
-                        if (c->type() == Element::Type::CHORD) {
-                              for (Chord* cc : c->graceNotes()) {
-                                    for (Element* e : cc->el()) {
-                                          if (e->type() == Element::Type::SLUR)
-                                                e->layout();
-                                          }
+                  Chord* c = static_cast<Chord*>(segment->element(track));
+                  if (c && c->type() == Element::Type::CHORD) {
+                        for (Chord* cc : c->graceNotes()) {
+                              for (Element* e : cc->el()) {
+                                    if (e->type() == Element::Type::SLUR)
+                                          e->layout();
                                     }
-                              c->layoutStem();
-                              for (Note* n : c->notes()) {
-                                    Tie* tie = n->tieFor();
-                                    if (tie)
-                                          tie->layout();
-                                    for (Spanner* sp : n->spannerFor())
-                                          sp->layout();
-                                    }
+                              }
+                        c->layoutStem();
+                        for (Note* n : c->notes()) {
+                              Tie* tie = n->tieFor();
+                              if (tie)
+                                    tie->layout();
+                              for (Spanner* sp : n->spannerFor())
+                                    sp->layout();
                               }
                         }
                   }
@@ -3243,7 +3237,7 @@ void Score::doLayoutSystems()
       rebuildBspTree();
       _updateAll = true;
 
-      foreach(MuseScoreView* v, viewer)
+      for (MuseScoreView* v : viewer)
             v->layoutChanged();
       }
 

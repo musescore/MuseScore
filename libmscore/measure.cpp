@@ -650,21 +650,24 @@ void Measure::layout2()
                         track += VOICES-1;
                         continue;
                         }
-                  Element* el = s->element(track);
-                  if (el) {
-                        ChordRest* cr = static_cast<ChordRest*>(el);
-                        if (cr->type() == Element::Type::CHORD) {
-                              Chord* c = static_cast<Chord*>(cr);
-                              foreach(const Note* note, c->notes()) {
-                                    foreach (Spanner* sp, note->spannerFor())
-                                          sp->layout();
-                                    }
+                  ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                  if (!cr)
+                        continue;
+
+                  if (cr->type() == Element::Type::CHORD) {
+                        Chord* c = static_cast<Chord*>(cr);
+                        for (const Note* note : c->notes()) {
+                              Tie* tie = note->tieFor();
+                              if (tie)
+                                    tie->layout();
+                              foreach (Spanner* sp, note->spannerFor())
+                                    sp->layout();
                               }
-                        DurationElement* de = cr;
-                        while (de->tuplet() && de->tuplet()->elements().front() == de) {
-                              de->tuplet()->layout();
-                              de = de->tuplet();
-                              }
+                        }
+                  DurationElement* de = cr;
+                  while (de->tuplet() && de->tuplet()->elements().front() == de) {
+                        de->tuplet()->layout();
+                        de = de->tuplet();
                         }
                   }
             }
