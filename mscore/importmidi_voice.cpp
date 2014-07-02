@@ -796,18 +796,18 @@ void sortVoices(
             // then this tuplet belongs to the same bar as the chord off time;
             // same is for chord on time
 
-            if (chord.barIndex <= maxBarIndex) {
-                  voiceChords[chord.voice].push_back(it);
-                  const int barIndex = findBarIndexForOffTime(
-                                          MChord::maxNoteOffTime(chord.notes), sigmap);
-                  if (barIndex > maxBarIndex)
-                        maxBarIndex = barIndex;
-                  }
-
             Q_ASSERT_X(chord.barIndex != -1,
                        "MidiVoice::sortVoices", "Chord bar index is undefined");
+            Q_ASSERT_X((!voiceChords.empty()) ? chord.barIndex <= maxBarIndex : true,
+                       "MidiVoice::sortVoices", "Chord bar index is greater than current index");
 
-            if (std::next(it) == chords.end() || chord.barIndex > maxBarIndex) {
+            voiceChords[chord.voice].push_back(it);
+            const int barIndex = findBarIndexForOffTime(
+                                    MChord::maxNoteOffTime(chord.notes), sigmap);
+            if (barIndex > maxBarIndex)
+                  maxBarIndex = barIndex;
+
+            if (std::next(it) == chords.end() || std::next(it)->second.barIndex > maxBarIndex) {
                   sortVoicesByPitch(voiceChords);
                   voiceChords.clear();
                   }
