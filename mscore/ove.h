@@ -518,14 +518,14 @@ enum NoteDuration {
       NoteDuration_Double_Whole = NoteDuration_Whole * 2	// 7680
       };
 
-enum ToneType {
-      Tone_C = 0 ,
-      Tone_D,
-      Tone_E,
-      Tone_F,
-      Tone_G,
-      Tone_A,
-      Tone_B
+enum class ToneType : char {
+      C = 0,
+      D,
+      E,
+      F,
+      G,
+      A,
+      B
       };
 
 enum class KeyType : char {
