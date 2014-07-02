@@ -44,6 +44,7 @@ class TestSelectionFilter : public QObject, public MTest
       void filterFretDiagram()      { testFilter(11,SelectionFilterType::FRET_DIAGRAM); }
       void filterGlissando()        { testFilter(12,SelectionFilterType::GLISSANDO); }
       void filterBreath()           { testFilter(13,SelectionFilterType::BREATH); }
+      void filterOtherText()        { testFilter(14,SelectionFilterType::OTHER_TEXT); }
       };
 
 //---------------------------------------------------------
