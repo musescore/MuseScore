@@ -1894,47 +1894,47 @@ int NoteContainer::getOffsetStaff() const {
       }
 
 int NoteContainer::getDuration() const {
-      int duration = (int) NoteDuration_4;
+      int duration = (int) NoteDuration::D_4;
 
       switch (noteType_) {
             case NoteType::Note_DoubleWhole: {
-                  duration = (int) NoteDuration_Double_Whole;
+                  duration = (int) NoteDuration::D_Double_Whole;
                   break;
                   }
             case NoteType::Note_Whole: {
-                  duration = (int) NoteDuration_Whole;
+                  duration = (int) NoteDuration::D_Whole;
                   break;
                   }
             case NoteType::Note_Half: {
-                  duration = (int) NoteDuration_2;
+                  duration = (int) NoteDuration::D_2;
                   break;
                   }
             case NoteType::Note_Quarter: {
-                  duration = (int) NoteDuration_4;
+                  duration = (int) NoteDuration::D_4;
                   break;
                   }
             case NoteType::Note_Eight: {
-                  duration = (int) NoteDuration_8;
+                  duration = (int) NoteDuration::D_8;
                   break;
                   }
             case NoteType::Note_Sixteen: {
-                  duration = (int) NoteDuration_16;
+                  duration = (int) NoteDuration::D_16;
                   break;
                   }
             case NoteType::Note_32: {
-                  duration = (int) NoteDuration_32;
+                  duration = (int) NoteDuration::D_32;
                   break;
                   }
             case NoteType::Note_64: {
-                  duration = (int) NoteDuration_64;
+                  duration = (int) NoteDuration::D_64;
                   break;
                   }
             case NoteType::Note_128: {
-                  duration = (int) NoteDuration_128;
+                  duration = (int) NoteDuration::D_128;
                   break;
                   }
             case NoteType::Note_256: {
-                  duration = (int) NoteDuration_256;
+                  duration = (int) NoteDuration::D_256;
                   break;
                   }
             default:
