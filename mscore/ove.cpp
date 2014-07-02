@@ -1393,7 +1393,7 @@ Articulation::Articulation() {
 
       soundEffect_ = qMakePair(0, 0);
       lengthPercentage_ = 100;
-      velocityType_ = Velocity_Offset;
+      velocityType_ = VelocityType::Offset;
       velocityValue_ = 0;
       extraLength_ = 0;
 

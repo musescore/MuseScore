@@ -1269,11 +1269,10 @@ public:
       int getLengthPercentage() const;
 
       bool getChangeVelocity() const;
-      enum VelocityType
-            {
-            Velocity_Offset,
-            Velocity_SetValue,
-            Velocity_Percentage
+      enum class VelocityType : char {
+            Offset,
+            SetValue,
+            Percentage
             };
       void setVelocityType(VelocityType type);
       VelocityType getVelocityType() const;
