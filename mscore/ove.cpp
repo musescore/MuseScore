@@ -1624,7 +1624,7 @@ bool Articulation::isTrill(ArticulationType type) {
       }
 
 Articulation::XmlType Articulation::getXmlType() const {
-      XmlType xmlType = Xml_Unknown;
+      XmlType xmlType = XmlType::Unknown;
 
       switch (type_) {
             case ArticulationType::Major_Trill:
@@ -1641,7 +1641,7 @@ Articulation::XmlType Articulation::getXmlType() const {
             case ArticulationType::Tremolo_Sixteenth:
             case ArticulationType::Tremolo_Thirty_Second:
             case ArticulationType::Tremolo_Sixty_Fourth: {
-                  xmlType = Xml_Ornament;
+                  xmlType = XmlType::Ornament;
                   break;
                   }
             case ArticulationType::Marcato:
@@ -1657,7 +1657,7 @@ Articulation::XmlType Articulation::getXmlType() const {
             case ArticulationType::Tenuto:
             case ArticulationType::Pause:
             case ArticulationType::Grand_Pause: {
-                  xmlType = Xml_Articulation;
+                  xmlType = XmlType::Articulation;
                   break;
                   }
             case ArticulationType::Up_Bow:
@@ -1672,21 +1672,21 @@ Articulation::XmlType Articulation::getXmlType() const {
             case ArticulationType::Finger_4:
             case ArticulationType::Finger_5:
             case ArticulationType::Plus_Sign: {
-                  xmlType = Xml_Technical;
+                  xmlType = XmlType::Technical;
                   break;
                   }
             case ArticulationType::Arpeggio: {
-                  xmlType = Xml_Arpeggiate;
+                  xmlType = XmlType::Arpeggiate;
                   break;
                   }
             case ArticulationType::Fermata:
             case ArticulationType::Fermata_Inverted: {
-                  xmlType = Xml_Fermata;
+                  xmlType = XmlType::Fermata;
                   break;
                   }
             case ArticulationType::Pedal_Down:
             case ArticulationType::Pedal_Up: {
-                  xmlType = Xml_Direction;
+                  xmlType = XmlType::Direction;
                   break;
                   }
                   // case ArticulationType::Toe_Pedal :
