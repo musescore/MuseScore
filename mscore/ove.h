@@ -528,7 +528,7 @@ enum ToneType {
       Tone_B
       };
 
-enum KeyType {
+enum class KeyType : char {
       Key_C = 0,		// C
       Key_Bass_1,		// F
       Key_Bass_2,		// Bb
