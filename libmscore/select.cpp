@@ -307,6 +307,8 @@ bool SelectionFilter::canSelect(const Element* e) const
           return isFiltered(SelectionFilterType::BREATH);
       if (e->isText()) //turns out that only TEXT INSTRCHANGE AND STAFFTEXT are caught here, rest are system thus not in selection
           return isFiltered(SelectionFilterType::OTHER_TEXT);
+      if (e->isSLine()) // NoteLine, Volta
+          return isFiltered(SelectionFilterType::OTHER_LINE);
       return true;
       }
 
