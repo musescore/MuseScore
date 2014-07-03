@@ -37,6 +37,7 @@ class MidiDriver;
 
 class JackAudio : public Driver {
       unsigned _segmentSize;
+      Transport fakeState; // Use this if preferences.useJackTransport = false
 
       jack_client_t* client;
       char _jackName[8];
@@ -63,7 +64,6 @@ class JackAudio : public Driver {
       virtual void stopTransport();
       virtual Transport getState() override;
       virtual void seekTransport(int);
-      virtual bool instantSeek() {return false;} // False only in JackAudio
       virtual int sampleRate() const    { return jack_get_sample_rate(client); }
       virtual void putEvent(const NPlayEvent&, unsigned framePos);
       virtual void midiRead();
@@ -73,7 +73,10 @@ class JackAudio : public Driver {
       virtual void handleTimeSigTempoChanged();
       virtual void checkTransportSeek(int, int);
       virtual int bufferSize() {return _segmentSize;}
+      virtual void update();
       void setBufferSize(int nframes) { _segmentSize = nframes;}
+      void setTimebaseCallback();
+      void releaseTimebaseCallback();
       };
 
 
