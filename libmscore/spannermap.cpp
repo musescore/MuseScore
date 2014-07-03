@@ -70,6 +70,14 @@ const std::vector<Interval<Spanner*>>& SpannerMap::findOverlapping(int start, in
 
 void SpannerMap::addSpanner(Spanner* s)
       {
+#ifndef NDEBUG
+      // check if spanner already in list
+      for (auto i = begin(); i != end(); ++i) {
+            if (i->second == s) {
+                  qFatal("SpannerMap::addSpanner: already in list %p", s);
+                  }
+            }
+#endif
       insert(std::pair<int,Spanner*>(s->tick(), s));
       dirty = true;
       }

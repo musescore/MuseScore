@@ -1377,16 +1377,6 @@ void Score::deleteItem(Element* el)
                   cmdUpdateNotes();
                   break;
 
-            case Element::Type::OTTAVA_SEGMENT:
-            case Element::Type::HAIRPIN_SEGMENT:
-            case Element::Type::TRILL_SEGMENT:
-            case Element::Type::TEXTLINE_SEGMENT:
-            case Element::Type::VOLTA_SEGMENT:
-            case Element::Type::SLUR_SEGMENT:
-            case Element::Type::PEDAL_SEGMENT:
-                  undoRemoveElement(static_cast<SpannerSegment*>(el)->spanner());
-                  break;
-
             case Element::Type::NOTE:
                   {
                   Chord* chord = static_cast<Chord*>(el->parent());
@@ -1580,6 +1570,14 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
+            case Element::Type::OTTAVA_SEGMENT:
+            case Element::Type::HAIRPIN_SEGMENT:
+            case Element::Type::TRILL_SEGMENT:
+            case Element::Type::TEXTLINE_SEGMENT:
+            case Element::Type::VOLTA_SEGMENT:
+            case Element::Type::SLUR_SEGMENT:
+            case Element::Type::PEDAL_SEGMENT:
+                  el = static_cast<SpannerSegment*>(el)->spanner();
             default:
                   undoRemoveElement(el);
                   break;

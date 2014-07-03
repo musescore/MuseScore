@@ -506,7 +506,7 @@ qDebug("staff %d group %d timesig %d", staffIdx, int(staffType->group()), staffT
                         }
             }
 
-            score->add(m);
+            score->measures()->add(m);
             tick += nts.ticks();
             ts = nts;
             }
@@ -616,7 +616,7 @@ void GuitarPro1::read(QFile* fp)
                         }
                   }
 
-            score->add(m);
+            score->measures()->add(m);
             tick += nts.ticks();
             ts = nts;
             }
@@ -890,7 +890,7 @@ qDebug("BeginRepeat=============================================");
                         }
                   }
 
-            score->add(m);
+            score->measures()->add(m);
             tick += nts.ticks();
             ts = nts;
             }
@@ -1181,10 +1181,10 @@ void GuitarPro1::readNote(int string, Note* note)
                   gn->setTpcFromPitch();
 
                   Chord* gc = new Chord(score);
-                  gc->setTrack(note->chord()->track());
+                  // gc->setTrack(note->chord()->track());
                   gc->add(gn);
-                  gc->setParent(note->chord());
-                  note->chord()->add(gc);
+                  // gc->setParent(note->chord());
+                  note->chord()->add(gc); // sets parent + track
 
                   // TODO: Add dynamic. Dynamic now can be added only to a segment, not directly to a grace note
                   addDynamic(gn, dynamic);
@@ -1468,7 +1468,7 @@ void GuitarPro3::read(QFile* fp)
                         }
                   }
 
-            score->add(m);
+            score->measures()->add(m);
             tick += nts.ticks();
             ts = nts;
             }
@@ -2418,11 +2418,11 @@ void GuitarPro5::readNoteEffects(Note* note)
       if (modMask1 & 0x8) {         // let ring
             }
       if (modMask1 & 0x10) {
-            int fret = readUChar();            // grace fret
-            int dynamic = readUChar();            // grace dynamic
-            int transition = readUChar();            // grace transition
-            int duration = readUChar();            // grace duration
-            int gflags = readUChar();
+            int fret       = readUChar();       // grace fret
+            int dynamic    = readUChar();       // grace dynamic
+            int transition = readUChar();       // grace transition
+            int duration   = readUChar();       // grace duration
+            int gflags     = readUChar();
 
             int grace_len = MScore::division/8;
             NoteType note_type =  NoteType::ACCIACCATURA;
@@ -2450,9 +2450,7 @@ void GuitarPro5::readNoteEffects(Note* note)
             gn->setTpcFromPitch();
 
             Chord* gc = new Chord(score);
-            gc->setTrack(note->chord()->track());
             gc->add(gn);
-            gc->setParent(note->chord());
             note->chord()->add(gc);
 
             // TODO: Add dynamic. Dynamic now can be added only to a segment, not directly to a grace note
@@ -2499,7 +2497,8 @@ void GuitarPro5::readNoteEffects(Note* note)
                    slur->setTrack(cr1->track());
                    slur->setTrack2(cr2->track());
                    slur->setParent(cr1);
-                   score->undoAddElement(slur);
+                   // score->undoAddElement(slur);
+                   score->addElement(slur);
                    }
             }
       if (modMask2 & 0x1) {   // staccato - palm mute
@@ -2799,6 +2798,7 @@ void GuitarPro5::readPageSetup()
 
 int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets)
       {
+// qDebug("readBeat tick %d voice %d staffIdx %d", tick, voice, staffIdx);
       uchar beatBits = readUChar();
       bool dotted    = beatBits & 0x1;
 
@@ -2920,6 +2920,8 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             int rrr = readChar();
 qDebug("  3beat read 0x%02x", rrr);
             }
+      if (segment->isEmpty())
+            qDebug("==============================empty segment %d", tick);
       return cr ? cr->actualTicks() : measure->ticks();
       }
 

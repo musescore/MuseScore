@@ -234,7 +234,7 @@ void Score::readStaff(XmlReader& e)
                               }
                         measure->read(e, staff);
                         if (!measure->isMMRest()) {
-                              add(measure);
+                              measures()->add(measure);
                               e.setLastMeasure(measure);
                               e.setTick(measure->tick() + measure->ticks());
                               }
@@ -243,7 +243,7 @@ void Score::readStaff(XmlReader& e)
                         MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, this));
                         mb->read(e);
                         mb->setTick(e.tick());
-                        add(mb);
+                        measures()->add(mb);
                         }
                   else if (tag == "tick")
                         e.setTick(e.readInt());
@@ -261,7 +261,7 @@ void Score::readStaff(XmlReader& e)
                               qDebug("Score::readStaff(): missing measure!");
                               measure = new Measure(this);
                               measure->setTick(e.tick());
-                              add(measure);
+                              measures()->add(measure);
                               }
                         e.setTick(measure->tick());
                         measure->read(e, staff);
@@ -1301,7 +1301,9 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                     }
                               if (s->tick2() == segment->tick()
                                  && (s->track2() == track || s->track2() == -1)
-                                 && (!clip || s->tick() >= fs->tick())) {
+                                 && (!clip || s->tick() >= fs->tick())
+                                 && (!(s->type() == Element::Type::SLUR && s->anchor() == Spanner::Anchor::CHORD))
+                                 ) {
                                     if (needTick) {
                                           xml.tag("tick", segment->tick() - xml.tickDiff);
                                           xml.curTick = segment->tick();

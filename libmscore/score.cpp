@@ -1278,7 +1278,7 @@ Measure* Score::getCreateMeasure(int tick)
                   m->setTick(lastTick);
                   m->setTimesig(ts);
                   m->setLen(ts);
-                  add(m);
+                  measures()->add(static_cast<MeasureBase*>(m));
                   lastTick += ts.ticks();
                   }
             }
@@ -1319,17 +1319,24 @@ void Score::addElement(Element* element)
          || et == Element::Type::FBOX
          ) {
             setLayoutAll(true);
-            add(element);
+            measures()->add(static_cast<MeasureBase*>(element));
             addLayoutFlags(LayoutFlag::FIX_TICKS);
             return;
             }
 
-      if (element->parent() == 0)
-            add(element);
-      else
+      if (element->parent())
             element->parent()->add(element);
 
       switch(et) {
+            case Element::Type::BEAM:
+                  {
+                  Beam* b = static_cast<Beam*>(element);
+                  int n = b->elements().size();
+                  for (int i = 0; i < n; ++i)
+                        b->elements().at(i)->setBeam(b);
+                  }
+                  break;
+
             case Element::Type::SLUR:
                   addLayoutFlags(LayoutFlag::PLAY_EVENTS);
                   // fall through
@@ -1341,6 +1348,7 @@ void Score::addElement(Element* element)
             case Element::Type::HAIRPIN:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
+                  addSpanner(spanner);
                   if (et == Element::Type::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE)
                         break;
                   foreach(SpannerSegment* ss, spanner->spannerSegments()) {
@@ -1353,6 +1361,7 @@ void Score::addElement(Element* element)
             case Element::Type::OTTAVA:
                   {
                   Ottava* o = static_cast<Ottava*>(element);
+                  addSpanner(o);
                   foreach(SpannerSegment* ss, o->spannerSegments()) {
                         if (ss->system())
                               ss->system()->add(ss);
@@ -1445,7 +1454,7 @@ void Score::removeElement(Element* element)
          || et == Element::Type::TBOX
          || et == Element::Type::FBOX
             ) {
-            remove(element);
+            measures()->remove(static_cast<MeasureBase*>(element));
             addLayoutFlags(LayoutFlag::FIX_TICKS);
             setLayoutAll(true);
             return;
@@ -1456,10 +1465,16 @@ void Score::removeElement(Element* element)
 
       if (parent)
             parent->remove(element);
-      else
-            remove(element);
 
       switch(et) {
+            case Element::Type::BEAM:
+                  {
+                  Beam* b = static_cast<Beam*>(element);
+                  foreach(ChordRest* cr, b->elements())
+                        cr->setBeam(0);
+                  }
+                  break;
+
             case Element::Type::SLUR:
                   addLayoutFlags(LayoutFlag::PLAY_EVENTS);
                   // fall through
@@ -1471,7 +1486,8 @@ void Score::removeElement(Element* element)
             case Element::Type::HAIRPIN:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
-                  foreach(SpannerSegment* ss, spanner->spannerSegments()) {
+                  removeSpanner(spanner);
+                  for (SpannerSegment* ss : spanner->spannerSegments()) {
                         if (ss->system())
                               ss->system()->remove(ss);
                         }
@@ -1481,6 +1497,7 @@ void Score::removeElement(Element* element)
             case Element::Type::OTTAVA:
                   {
                   Ottava* o = static_cast<Ottava*>(element);
+                  removeSpanner(o);
                   foreach(SpannerSegment* ss, o->spannerSegments()) {
                         if (ss->system())
                               ss->system()->remove(ss);
