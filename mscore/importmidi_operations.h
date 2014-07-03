@@ -3,12 +3,15 @@
 
 #include "importmidi_operation.h"
 #include "midi/midifile.h"
-#include "importmidi_inner.h"
 
 
 namespace Ms {
 
 class ReducedFraction;
+
+namespace MidiCharset {
+      QString defaultCharset();
+}
 
 namespace MidiOperations {
 

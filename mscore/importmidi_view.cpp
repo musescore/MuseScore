@@ -181,13 +181,16 @@ void TracksView::setModel(QAbstractItemModel *model)
 
       connect(_frozenVTableView->selectionModel(),
               SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
-              SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
+              SLOT(currentChanged(const QModelIndex &, const QModelIndex &)),
+              Qt::UniqueConnection);
       connect(_frozenHTableView->selectionModel(),
               SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
-              SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
+              SLOT(currentChanged(const QModelIndex &, const QModelIndex &)),
+              Qt::UniqueConnection);
       connect(_frozenCornerTableView->selectionModel(),
               SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
-              SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
+              SLOT(currentChanged(const QModelIndex &, const QModelIndex &)),
+              Qt::UniqueConnection);
 
       setFrozenRowCount(_frozenRowCount);
       setFrozenColCount(_frozenColCount);
@@ -196,8 +199,6 @@ void TracksView::setModel(QAbstractItemModel *model)
               this, SLOT(updateFrozenSectionWidth(int,int,int)), Qt::UniqueConnection);
       connect(_frozenHTableView->verticalHeader(),SIGNAL(sectionResized(int,int,int)),
               this, SLOT(updateFrozenSectionHeight(int,int,int)), Qt::UniqueConnection);
-
-      updateFrozenTableGeometry();
       }
 
 void TracksView::setFrozenRowCount(int count)
@@ -219,6 +220,8 @@ void TracksView::setFrozenRowCount(int count)
       for (int row = count; row < model()->rowCount(); ++row) {
             _frozenHTableView->setRowHidden(row, true);
             }
+
+      updateFrozenTableGeometry();
       }
 
 void TracksView::setFrozenColCount(int count)
@@ -240,6 +243,8 @@ void TracksView::setFrozenColCount(int count)
       for (int col = count; col < model()->columnCount(); ++col) {
             _frozenVTableView->setColumnHidden(col, true);
             }
+
+      updateFrozenTableGeometry();
       }
 
 void TracksView::updateMainViewSectionWidth(int logicalIndex, int /*oldSize*/, int newSize)
@@ -310,6 +315,27 @@ void TracksView::resizeEvent(QResizeEvent *event)
       {
       QTableView::resizeEvent(event);
       updateFrozenTableGeometry();
+      }
+
+// show tooltip if the text is wider than the table cell
+
+bool TracksView::viewportEvent(QEvent *event)
+      {
+      if (event->type() == QEvent::ToolTip) {
+            QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+            QModelIndex index = indexAt(helpEvent->pos());
+            if (index.isValid()) {
+                  QSize sizeHint = itemDelegate(index)->sizeHint(viewOptions(), index);
+                  QRect rItem(0, 0, sizeHint.width(), sizeHint.height());
+                  QRect rVisual = visualRect(index);
+                  if (rItem.width() <= rVisual.width()) {
+                        QToolTip::hideText();
+                        return false;
+                        }
+                  }
+            }
+
+      return QTableView::viewportEvent(event);
       }
 
 void TracksView::currentChanged(const QModelIndex &current, const QModelIndex &previous)

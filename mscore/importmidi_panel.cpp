@@ -4,6 +4,7 @@
 #include "importmidi_lyrics.h"
 #include "importmidi_operations.h"
 #include "importmidi_delegate.h"
+#include "importmidi_inner.h"
 #include "preferences.h"
 #include "musescore.h"
 
@@ -52,6 +53,9 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                     MidiLyrics::makeLyricsListForUI(),
                     opers.data()->trackCount);
 
+      _ui->tracksView->setFrozenRowCount(_model->frozenRowCount());
+      _ui->tracksView->setFrozenColCount(_model->frozenColCount());
+
       if (opers.data()->processingsOfOpenedFile == 1) {     // initial processing of MIDI file
             resetTableViewState();
             saveTableViewState();
@@ -60,8 +64,6 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
             restoreTableViewState();
             }
 
-      _ui->tracksView->setFrozenRowCount(_model->frozenRowCount());
-      _ui->tracksView->setFrozenColCount(_model->frozenColCount());
       _ui->comboBoxCharset->setCurrentText(preferences.midiImportOperations.data()->charset);
       _ui->tracksView->selectRow(opers.data()->selectedRow);
       _ui->tracksView->selectColumn(0);
@@ -69,23 +71,28 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
 
 void ImportMidiPanel::saveTableViewState()
       {
+      MidiOperations::Data &opers = preferences.midiImportOperations;
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+
       const QByteArray hData = _ui->tracksView->horizontalHeader()->saveState();
       const QByteArray vData = _ui->tracksView->verticalHeader()->saveState();
-      preferences.midiImportOperations.data()->HHeaderData = hData;
-      preferences.midiImportOperations.data()->VHeaderData = vData;
+      opers.data()->HHeaderData = hData;
+      opers.data()->VHeaderData = vData;
       }
 
 void ImportMidiPanel::restoreTableViewState()
       {
-      const QByteArray hData = preferences.midiImportOperations.data()->HHeaderData;
-      const QByteArray vData = preferences.midiImportOperations.data()->VHeaderData;
+      MidiOperations::Data &opers = preferences.midiImportOperations;
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+
+      const QByteArray hData = opers.data()->HHeaderData;
+      const QByteArray vData = opers.data()->VHeaderData;
       _ui->tracksView->horizontalHeader()->restoreState(hData);
       _ui->tracksView->verticalHeader()->restoreState(vData);
       }
 
 void ImportMidiPanel::resetTableViewState()
       {
-      _model->clear();
       _ui->tracksView->verticalHeader()->reset();
       }
 
@@ -104,7 +111,7 @@ void ImportMidiPanel::setupUi()
       connect(_ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
 
       const QItemSelectionModel *sm = _ui->tracksView->selectionModel();
-      connect(sm, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+      connect(sm, SIGNAL(currentChanged(QModelIndex,QModelIndex)),
               SLOT(onCurrentTrackChanged(QModelIndex)));
 
       _updateUiTimer->start(100);
@@ -124,8 +131,11 @@ void ImportMidiPanel::setupUi()
 
 void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
       {
-      if (currentIndex.isValid())
-            preferences.midiImportOperations.data()->selectedRow = currentIndex.row();
+      if (currentIndex.isValid()) {
+            MidiOperations::Data &opers = preferences.midiImportOperations;
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+            opers.data()->selectedRow = currentIndex.row();
+            }
       }
 
 void ImportMidiPanel::fillCharsetList()
@@ -206,10 +216,10 @@ bool ImportMidiPanel::canMoveTrackDown(int visualIndex) const
 
 int ImportMidiPanel::currentVisualIndex() const
       {
-      const auto selectedRows = _ui->tracksView->selectionModel()->selectedRows();
+      const auto selectedItems = _ui->tracksView->selectionModel()->selection().indexes();
       int curRow = -1;
-      if (!selectedRows.isEmpty())
-            curRow = _ui->tracksView->selectionModel()->selectedRows()[0].row();
+      if (!selectedItems.isEmpty())
+            curRow = selectedItems[0].row();
       const int visIndex = _ui->tracksView->verticalHeader()->visualIndex(curRow);
 
       return visIndex;

@@ -1,4 +1,5 @@
 #include "importmidi_model.h"
+#include "importmidi_inner.h"
 
 
 //struct TrackCol {
@@ -62,6 +63,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         const QList<std::string> &lyricsList,
                         int trackCount)
       {
+      beginResetModel();
       _trackOpers = opers;
       _columns.clear();
       _trackCount = trackCount;
@@ -184,6 +186,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   }
             };
       _columns.push_back(std::unique_ptr<Column>(new QuantValue(_trackOpers)));
+
+      endResetModel();
       }
 
 void TracksModel::clear()
@@ -202,7 +206,7 @@ const MidiOperations::Opers& TracksModel::trackOpers() const
 
 void TracksModel::setTrackShuffleIndex(int trackIndex, int newIndex)
       {
-      if (!isTrackIndexValid(trackIndex))
+      if (!isTrackIndexValid(trackIndex) || trackIndex < 0)
             return;
       _trackOpers.trackIndexAfterShuffle.setValue(trackIndex, newIndex);
       }
@@ -288,8 +292,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                   break;
             case Qt::EditRole:
                   if (_columns[index.column()]->isEditable()) {
-                        QVariant value = _columns[index.column()]->value(trackIndex);
-                        if (value.type() == QVariant::StringList)
+                        if (!_columns[index.column()]->valueList().isEmpty())
                               return _columns[index.column()]->valueList();
                         }
                   break;
@@ -368,7 +371,7 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
             forceColumnDataChanged(index.column());
             }
       else {
-            _columns[index.column()]->setValue(value, index.row());
+            _columns[index.column()]->setValue(value, trackIndex);
             emit dataChanged(index, index);
             if (_trackCount > 1)    // update 'all tracks' row
                   forceRowDataChanged(0);
@@ -379,12 +382,15 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
 QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int role) const
       {
       if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-            return QCoreApplication::translate("MIDI import track list",
+            return QCoreApplication::translate("MIDI import: tracks model",
                                                _columns[section]->headerName().toStdString().c_str());
             }
       else if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
-            if (_trackCount > 1 && section == 0)
-                  return QCoreApplication::translate("MIDI import operations", "All");
+            if (_trackCount > 1) {
+                  if (section == 0)
+                        return QCoreApplication::translate("MIDI import: tracks model", "All");
+                  return section;
+                  }
             return section + 1;
             }
       return QVariant();
@@ -392,7 +398,7 @@ QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int r
 
 bool TracksModel::isTrackIndexValid(int trackIndex) const
       {
-      return trackIndex >= 0 && trackIndex < _trackCount;
+      return trackIndex >= -1 && trackIndex < _trackCount;
       }
 
 bool TracksModel::isColumnValid(int column) const
