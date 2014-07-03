@@ -52,7 +52,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                     MidiLyrics::makeLyricsListForUI(),
                     opers.data()->trackCount);
 
-      if (opers.data()->isNewlyOpened) {     // open new MIDI file
+      if (opers.data()->processingsOfOpenedFile == 1) {     // initial processing of MIDI file
             resetTableViewState();
             saveTableViewState();
             }

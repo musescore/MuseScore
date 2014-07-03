@@ -247,7 +247,7 @@ void setLyricsFromOperations(const QList<MTrack> &tracks)
 void setLyricsToScore(const QList<MTrack> &tracks)
       {
       const auto *data = preferences.midiImportOperations.data();
-      if (data->isNewlyOpened)
+      if (data->processingsOfOpenedFile == 0)
             setInitialLyricsFromMidiData(tracks);
       else
             setLyricsFromOperations(tracks);
