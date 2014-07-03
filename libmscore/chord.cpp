@@ -463,11 +463,12 @@ void Chord::add(Element* e)
             case Element::Type::SLUR:
                   {
                   _el.push_back(e);
-                  Spanner* s = static_cast<Spanner*>(e);
-                  foreach (SpannerSegment* ss, s->spannerSegments()) {
+/*                  Spanner* s = static_cast<Spanner*>(e);
+                  for (SpannerSegment* ss : s->spannerSegments()) {
                         if (ss->system())
                               ss->system()->add(ss);
                         }
+*/
                   }
                   break;
             case Element::Type::STEM_SLASH:
@@ -552,11 +553,13 @@ void Chord::remove(Element* e)
             case Element::Type::SLUR:
                   {
                   _el.remove(e);
-                  Slur* gs = static_cast<Slur*>(e);
+/*                  Slur* gs = static_cast<Slur*>(e);
                   foreach (SpannerSegment* ss, gs->spannerSegments()) {
                         if (ss->system())
                               ss->system()->remove(ss);
                         }
+                  score()->removeSpanner(gs);
+*/
                   }
                   break;
             case Element::Type::STEM_SLASH:
@@ -970,18 +973,24 @@ void Chord::write(Xml& xml) const
             _tremolo->write(xml);
       for (Element* e : _el) {
             if (e->type() == Element::Type::SLUR) {
-                  Slur* gs = static_cast<Slur*>(e);
-                  xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(gs->id()));
+                  Slur* slur = static_cast<Slur*>(e);
+                  xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(slur->id()));
                   }
             else
                   e->write(xml);
             }
-      for (Chord* c : _graceNotes) {
-            for (Element* e : c->el()) {
-                  if (e->type() == Element::Type::SLUR) {
-                        Slur* gs = static_cast<Slur*>(e);
-                        xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(gs->id()));
-                        }
+      for (auto i : score()->spanner()) {     // TODO: dont search whole list
+            Spanner* s = i.second;
+            if (s->generated())
+                  continue;
+
+            if (s->tick2() == tick()
+               && (s->track2() == track() || s->track2() == -1)
+               && (s->type() == Element::Type::SLUR && s->anchor() == Spanner::Anchor::CHORD)
+               ) {
+                  if (s->id() == -1)
+                        s->setId(++xml.spannerId);
+                  xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(s->id()));
                   }
             }
       xml.etag();
@@ -1057,6 +1066,48 @@ void Chord::read(XmlReader& e)
                   else
                         _stemDirection = MScore::Direction(val.toInt());
                   }
+            else if (tag == "Slur") {
+                  int id = e.intAttribute("number");
+                  Spanner* spanner = score()->findSpanner(id);
+                  if (!spanner)
+                        qDebug("ChordRest::read(): Slur id %d not found", id);
+                  else {
+                        QString atype(e.attribute("type"));
+                        Slur* slur = static_cast<Slur*>(spanner);
+                        if (atype == "start") {
+                              slur->setTick(e.tick());
+                              slur->setTrack(track());
+                              slur->setStartElement(this);
+                              if (isGrace()) {
+                                    slur->setAnchor(Spanner::Anchor::CHORD);
+                                    slur->setParent(this);
+                                    add(slur);
+                                    }
+                              else
+                                    slur->setAnchor(Spanner::Anchor::SEGMENT);
+                              //spanner was added in read114 with wrong tick
+                              score()->removeSpanner(slur);
+                              score()->addSpanner(slur);
+                              }
+                        else if (atype == "stop") {
+                              slur->setTick2(e.tick());
+                              slur->setTrack2(track());
+                              slur->setEndElement(this);
+                              Chord* start = static_cast<Chord*>(slur->startElement());
+                              if (start) {
+                                    slur->setTrack(start->track());
+                                    if (start->type() == Element::Type::CHORD && start->isGrace()) {
+                                          if (!start->_el.contains(slur))
+                                                start->add(slur);
+                                          slur->setAnchor(Spanner::Anchor::CHORD);
+                                          }
+                                    }
+                              }
+                        else
+                              qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(atype));
+                        }
+                  e.readNext();
+                  }
             else if (tag == "noStem")
                   _noStem = e.readInt();
             else if (tag == "Arpeggio") {
@@ -1104,16 +1155,6 @@ void Chord::read(XmlReader& e)
                         }
                   }
             }
-      // hack:
-#if 0
-      if (_notes.size() == 1 && readPos().isNull()) {
-            Note* note = _notes.front();
-            if (!note->readPos().isNull()) {
-                  setUserOff(QPointF(note->readPos().x(), 0.0));
-                  note->setReadPos(QPointF(0.0, note->readPos().y()));
-                  }
-            }
-#endif
       }
 
 //---------------------------------------------------------

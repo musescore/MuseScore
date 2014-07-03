@@ -105,7 +105,7 @@ void addTitle(Score *score, const QString &string, int *textCounter)
                   measure = new VBox(score);
                   measure->setTick(0);
                   measure->setNext(score->first());
-                  score->add(measure);
+                  score->measures()->add(measure);
                   }
             measure->add(text);
             }

@@ -410,7 +410,7 @@ Score::FileError importBB(Score* score, const QString& name)
             Fraction ts = score->sigmap()->timesig(tick).timesig();
             measure->setTimesig(ts);
             measure->setLen(ts);
-            score->add(measure);
+            score->measures()->add(measure);
             }
 
       //---------------------------------------------------
@@ -468,7 +468,7 @@ Score::FileError importBB(Score* score, const QString& name)
             measure = new VBox(score);
             measure->setTick(0);
             measure->setNext(score->first());
-            score->add(measure);
+            score->measures()->add(measure);
             }
       measure->add(text);
 

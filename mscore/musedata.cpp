@@ -163,7 +163,7 @@ void MuseData::openSlur(int idx, int tick, Staff* staff, int voice)
       slur[idx] = new Slur(score);
       slur[idx]->setTick(tick);
       slur[idx]->setTrack(staffIdx * VOICES + voice);
-      score->add(slur[idx]);
+      score->addElement(slur[idx]);
       }
 
 //---------------------------------------------------------
@@ -535,7 +535,7 @@ Measure* MuseData::createMeasure()
                   }
             }
 #endif
-      score->add(measure);
+      score->measures()->add(measure);
       return measure;
       }
 

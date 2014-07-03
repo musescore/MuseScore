@@ -843,7 +843,7 @@ void Score::undoAddElement(Element* element)
          || (et == Element::Type::SYMBOL && element->parent()->type() != Element::Type::SEGMENT)
          || et == Element::Type::NOTE
          || et == Element::Type::GLISSANDO
-         || (et == Element::Type::SLUR && element->parent() && element->parent()->type() == Element::Type::CHORD)
+//         || (et == Element::Type::SLUR && element->parent() && element->parent()->type() == Element::Type::CHORD)
          || (et == Element::Type::CHORD && static_cast<Chord*>(element)->isGrace())
             ) {
             Element* parent       = element->parent();
@@ -881,11 +881,12 @@ void Score::undoAddElement(Element* element)
 #endif
                         ne->score()->updateNotes();
                         }
-                  else if (ne->type() == Element::Type::SLUR) {
+/*                  else if (ne->type() == Element::Type::SLUR) {
                         Slur* slur = static_cast<Slur*>(ne);
                         slur->setStartElement(e);
                         slur->setEndElement(e->parent());
                         }
+ */
                   }
             return;
             }
@@ -1210,7 +1211,6 @@ void Score::undoRemoveElement(Element* element)
       QList<Segment*> segments;
       for (Element* e : element->linkList()) {
             undo(new RemoveElement(e));
-//            if (!e->isChordRest() && e->parent() && (e->parent()->type() == Element::SEGMENT)) {
             if (e->parent() && (e->parent()->type() == Element::Type::SEGMENT)) {
                   Segment* s = static_cast<Segment*>(e->parent());
                   if (!segments.contains(s))
@@ -1611,7 +1611,7 @@ void RemoveMStaff::redo()
 void InsertMeasure::undo()
       {
       Score* score = measure->score();
-      score->remove(measure);
+      score->measures()->remove(measure);
       score->addLayoutFlags(LayoutFlag::FIX_TICKS);
       score->setLayoutAll(true);
       }

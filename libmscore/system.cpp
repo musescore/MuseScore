@@ -595,7 +595,7 @@ void System::add(Element* el)
                   break;
 
             case Element::Type::BEAM:
-                  score()->add(el);
+                  score()->addElement(el);
                   break;
 
             case Element::Type::BRACKET:
@@ -623,7 +623,7 @@ void System::add(Element* el)
             case Element::Type::VBOX:
             case Element::Type::TBOX:
             case Element::Type::FBOX:
-                  score()->add(static_cast<MeasureBase*>(el));
+                  score()->addElement(static_cast<MeasureBase*>(el));
                   break;
             case Element::Type::TEXTLINE_SEGMENT:
             case Element::Type::HAIRPIN_SEGMENT:
@@ -636,7 +636,7 @@ void System::add(Element* el)
                   SpannerSegment* ss = static_cast<SpannerSegment*>(el);
 #ifndef NDEBUG
                   if (_spannerSegments.contains(ss))
-                        qDebug("System::add() spanner already there");
+                        qDebug("System::add() %s %p already there", ss->name(), ss);
                   else
 #endif
                   _spannerSegments.append(ss);
@@ -659,15 +659,13 @@ void System::add(Element* el)
 
 void System::remove(Element* el)
       {
-// qDebug("%p System::remove: %p %s", this, el, el->name());
-
 //no!      el->setParent(0);
       switch (el->type()) {
             case Element::Type::INSTRUMENT_NAME:
                   _staves[el->staffIdx()]->instrumentNames.removeOne(static_cast<InstrumentName*>(el));
                   break;
             case Element::Type::BEAM:
-                  score()->remove(el);
+                  score()->removeElement(el);
                   break;
             case Element::Type::BRACKET:
                   {
@@ -682,7 +680,7 @@ void System::remove(Element* el)
             case Element::Type::VBOX:
             case Element::Type::TBOX:
             case Element::Type::FBOX:
-                  score()->remove(el);
+                  score()->removeElement(el);
                   break;
             case Element::Type::TEXTLINE_SEGMENT:
             case Element::Type::HAIRPIN_SEGMENT:
@@ -691,11 +689,8 @@ void System::remove(Element* el)
             case Element::Type::VOLTA_SEGMENT:
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
-// qDebug("System::remove: %p %s spanner %p %s", el, el->name(),
-//            ((SpannerSegment*)el)->spanner(), ((SpannerSegment*)el)->spanner()->name());
-
                   if (!_spannerSegments.removeOne(static_cast<SpannerSegment*>(el))) {
-                        qDebug("System::remove: %p(%s) not found, score %p == %p", el, el->name(), score(), el->score());
+                        qDebug("System::remove: %p(%s) not found, score %p", el, el->name(), score());
                         Q_ASSERT(score() == el->score());
                         }
                   break;

@@ -240,7 +240,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                         measure = new VBox(cs);
                         measure->setTick(0);
                         measure->setNext(cs->first());
-                        cs->add(measure);
+                        cs->measures()->add(measure);
                         }
                   measure->add(text);
                   }
@@ -757,7 +757,7 @@ void createMeasures(ReducedFraction &lastTick, Score *score)
                   }
             measure->setTimesig(nominalTs);
             measure->setLen(ts);
-            score->add(measure);
+            score->measures()->add(measure);
             }
       const Measure *m = score->lastMeasure();
       if (m) {

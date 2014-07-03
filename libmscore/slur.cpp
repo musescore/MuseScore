@@ -200,26 +200,50 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
       {
       if (curGrip == int(GripSlurSegment::START)) {
             spanner()->setStartElement(element);
-            if (spanner()->anchor() == Spanner::Anchor::NOTE) {
-                  Tie* tie = static_cast<Tie*>(spanner());
-                  tie->startNote()->setTieFor(0);
-                  tie->setStartNote(static_cast<Note*>(element));
-                  static_cast<Note*>(element)->setTieFor(tie);
+            switch(spanner()->anchor()) {
+                  case Spanner::Anchor::NOTE: {
+                        Tie* tie = static_cast<Tie*>(spanner());
+                        tie->startNote()->setTieFor(0);
+                        tie->setStartNote(static_cast<Note*>(element));
+                        static_cast<Note*>(element)->setTieFor(tie);
+                        break;
+                        }
+                  case Spanner::Anchor::CHORD:
+                        spanner()->setTick(static_cast<Chord*>(element)->tick());
+                        spanner()->setStartChord(static_cast<Chord*>(element));
+                        break;
+                  case Spanner::Anchor::SEGMENT:
+                        spanner()->setTick(static_cast<Chord*>(element)->tick());
+                        break;
+                  case Spanner::Anchor::MEASURE:
+                        qDebug("SlurSegment::changeAnchor: bad anchor");
+                        break;
                   }
-            else if (spanner()->anchor() == Spanner::Anchor::SEGMENT)
-                  spanner()->setTick(static_cast<Chord*>(element)->tick());
             }
       else {
             spanner()->setEndElement(element);
-            if (spanner()->anchor() == Spanner::Anchor::NOTE) {
-                  Tie* tie = static_cast<Tie*>(spanner());
-                  tie->endNote()->setTieBack(0);
-                  tie->setEndNote(static_cast<Note*>(element));
-                  static_cast<Note*>(element)->setTieBack(tie);
-                  }
-            else if (spanner()->anchor() == Spanner::Anchor::SEGMENT) {
-                  spanner()->setTick2(static_cast<Chord*>(element)->tick());
-                  spanner()->setTrack2(element->track());
+            switch(spanner()->anchor()) {
+                  case Spanner::Anchor::NOTE: {
+                        Tie* tie = static_cast<Tie*>(spanner());
+                        tie->endNote()->setTieBack(0);
+                        tie->setEndNote(static_cast<Note*>(element));
+                        static_cast<Note*>(element)->setTieBack(tie);
+                        break;
+                        }
+                  case Spanner::Anchor::CHORD:
+                        spanner()->setTick2(static_cast<Chord*>(element)->tick());
+                        spanner()->setTrack2(element->track());
+                        spanner()->setEndChord(static_cast<Chord*>(element));
+                        break;
+
+                  case Spanner::Anchor::SEGMENT:
+                        spanner()->setTick2(static_cast<Chord*>(element)->tick());
+                        spanner()->setTrack2(element->track());
+                        break;
+
+                  case Spanner::Anchor::MEASURE:
+                        qDebug("SlurSegment::changeAnchor: bad anchor");
+                        break;
                   }
             }
 
@@ -704,7 +728,11 @@ void Slur::slurPosChord(SlurPos* sp)
       qreal __up       = _up ? -1.0 : 1.0;
       qreal _spatium = spatium();
 
-      sp->system1 = endChord()->measure()->system();
+      Measure* measure = endChord()->measure();
+      sp->system1 = measure->system();
+      if (!sp->system1)             // DEBUG
+            return;
+      Q_ASSERT(sp->system1);
       sp->system2 = sp->system1;
       QPointF pp(sp->system1->pagePos());
 
