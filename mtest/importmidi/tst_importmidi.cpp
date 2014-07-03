@@ -178,7 +178,7 @@ class TestImportMidi : public QObject, public MTest
             {
                         // requires 1/32 quantization
             const int defaultQuant = preferences.shortestNote;
-            dontSimplify("tuplet_2_voices_3_5_tuplets");
+            mf("tuplet_2_voices_3_5_tuplets");
             preferences.shortestNote = defaultQuant;
             }
       void tuplet2VoicesTupletNon() { mf("tuplet_2_voices_tuplet_non"); }
