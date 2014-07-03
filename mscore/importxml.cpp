@@ -754,7 +754,7 @@ void MusicXml::import(Score* s)
 //   addText
 //---------------------------------------------------------
 
-static void addText(VBox*& vbx, Score* s, QString strTxt, int stl)
+static void addText(VBox*& vbx, Score* s, QString strTxt, TextStyleType stl)
       {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
@@ -4050,7 +4050,7 @@ static NoteHead::Group convertNotehead(QString mxmlName)
  Add Text to Note.
  */
 
-static void addTextToNote(QString txt, int style, Score* score, Note* note)
+static void addTextToNote(QString txt, TextStyleType style, Score* score, Note* note)
       {
       if (!txt.isEmpty()) {
             Text* t = new Fingering(score);

@@ -1123,7 +1123,7 @@ void StyleData::save(Xml& xml, bool optimize) const
                   }
             }
       for (int i = 0; i < int(TextStyleType::TEXT_STYLES); ++i) {
-            if (!optimize || _textStyles[i] != MScore::baseStyle()->textStyle(i))
+            if (!optimize || _textStyles[i] != MScore::baseStyle()->textStyle(TextStyleType(i)))
                   _textStyles[i].write(xml);
             }
       for (int i = int(TextStyleType::TEXT_STYLES); i < _textStyles.size(); ++i)
@@ -1178,10 +1178,10 @@ void StyleData::setChordList(ChordList* cl, bool custom)
 //   textStyle
 //---------------------------------------------------------
 
-const TextStyle& StyleData::textStyle(int idx) const
+const TextStyle& StyleData::textStyle(TextStyleType idx) const
       {
-      Q_ASSERT(idx >= 0 && idx < _textStyles.count());
-      return _textStyles[idx];
+      Q_ASSERT(int(idx) >= 0 && int(idx) < _textStyles.count());
+      return _textStyles[int(idx)];
       }
 
 //---------------------------------------------------------
@@ -1247,11 +1247,11 @@ const TextStyle& StyleData::textStyle(const QString& name) const
 //   textStyleType
 //---------------------------------------------------------
 
-int StyleData::textStyleType(const QString& name) const
+TextStyleType StyleData::textStyleType(const QString& name) const
       {
       for (int i = 0; i < _textStyles.size(); ++i) {
             if (_textStyles[i].name() == name)
-                  return i;
+                  return TextStyleType(i);
             }
       if (name == "Dynamics2")
             return TextStyleType::DYNAMICS;
@@ -1372,7 +1372,7 @@ void MStyle::set(StyleIdx id, const QVariant& v)
 //   TextStyle
 //---------------------------------------------------------
 
-const TextStyle& MStyle::textStyle(int idx) const
+const TextStyle& MStyle::textStyle(TextStyleType idx) const
       {
       return d->textStyle(idx);
       }
@@ -1386,7 +1386,7 @@ const TextStyle& MStyle::textStyle(const QString& name) const
 //   textStyleType
 //---------------------------------------------------------
 
-int MStyle::textStyleType(const QString& name) const
+TextStyleType MStyle::textStyleType(const QString& name) const
       {
       return d->textStyleType(name);
       }

@@ -53,10 +53,10 @@ class TextProp : public QWidget, public Ui::TextProperties {
       void setScore(bool _onlyStyle, Score*);
 
       void setTextStyle(const TextStyle&);
-      void setStyle(int styleType, const TextStyle&);
+      void setStyle(TextStyleType styleType, const TextStyle&);
 
       TextStyle textStyle() const;
-      int textStyleType() const;
+      TextStyleType textStyleType() const;
       };
 }
 

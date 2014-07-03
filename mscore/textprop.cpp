@@ -104,12 +104,12 @@ void TextProp::mmToggled(bool val)
 //   setStyle
 //---------------------------------------------------------
 
-void TextProp::setStyle(int st, const TextStyle& ts)
+void TextProp::setStyle(TextStyleType st, const TextStyle& ts)
       {
-      st = styles->findData(st);          // find a combo item with that style idx
-      if (st < 0)                         // if none found...
-            st = 0;                       // ...=> first combo item
-      styles->setCurrentIndex(st);        // set current combo item
+      st = TextStyleType(styles->findData(int(st))); // find a combo item with that style idx
+      if (int(st) < 0)                    // if none found...
+            st = TextStyleType::DEFAULT;  // ...=> first combo item
+      styles->setCurrentIndex(int(st));   // set current combo item
       setTextStyle(ts);
       }
 
@@ -117,9 +117,9 @@ void TextProp::setStyle(int st, const TextStyle& ts)
 //   textStyleType
 //---------------------------------------------------------
 
-int TextProp::textStyleType() const
+TextStyleType TextProp::textStyleType() const
       {
-      return styles->itemData(styles->currentIndex()).toInt();
+      return TextStyleType(styles->itemData(styles->currentIndex()).toInt());
       }
 
 //---------------------------------------------------------

@@ -448,7 +448,7 @@ void TextLine::createEndTextElement()
 //   setBeginText
 //---------------------------------------------------------
 
-void TextLine::setBeginText(const QString& s, int textStyle)
+void TextLine::setBeginText(const QString& s, TextStyleType textStyle)
       {
       if (!_beginText) {
             _beginText = new Text(score());
@@ -473,7 +473,7 @@ void TextLine::setBeginText(const QString& s)
 //   setContinueText
 //---------------------------------------------------------
 
-void TextLine::setContinueText(const QString& s, int textStyle)
+void TextLine::setContinueText(const QString& s, TextStyleType textStyle)
       {
       if (!_continueText) {
             _continueText = new Text(score());
@@ -498,7 +498,7 @@ void TextLine::setContinueText(const QString& s)
 //   setEndText
 //---------------------------------------------------------
 
-void TextLine::setEndText(const QString& s, int textStyle)
+void TextLine::setEndText(const QString& s, TextStyleType textStyle)
       {
       if (s.isEmpty()) {
             delete _endText;

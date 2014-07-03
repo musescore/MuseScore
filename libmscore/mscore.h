@@ -247,7 +247,7 @@ const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avo
 //    Must be in sync with list in setDefaultStyle().
 //---------------------------------------------------------
 
-enum TextStyleType : char {
+enum class TextStyleType : char {
       DEFAULT = 0,
       TITLE,
       SUBTITLE,
@@ -416,7 +416,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 
 Q_DECLARE_METATYPE(Ms::MScore::Direction);
 Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
-
+Q_DECLARE_METATYPE(Ms::TextStyleType);
 
 #endif
 

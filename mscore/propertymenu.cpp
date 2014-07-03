@@ -485,7 +485,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   qDebug("text-props %d %d", int(ot->textStyleType()), int(nText->textStyleType()));
                   if (ot->textStyleType() != nText->textStyleType()) {
                         nText->restyle(ot->textStyleType());
-                        ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, nText->textStyleType());
+                        ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, int(nText->textStyleType()));
                         }
                   if (ot->textStyle() != nText->textStyle())
                         ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
