@@ -316,13 +316,13 @@ void Seq::start()
       if ((mscore->loop())) {
             if(cs->selection().isRange())
                   setLoopSelection();
-            if (state == Transport::STOP) {
+            if (!preferences.useJackTransport || (preferences.useJackTransport && state == Transport::STOP)) {
                   qDebug()<<"___calling seek from start with LoopInTick utick = "<<cs->repeatList()->tick2utick(cs->loopInTick());
                   seek(cs->repeatList()->tick2utick(cs->loopInTick()));
                   }
             }
       else {
-            if (state == Transport::STOP) {
+            if (!preferences.useJackTransport || (preferences.useJackTransport && state == Transport::STOP)) {
                   qDebug()<<"___calling seek from start with playpos utick = "<<cs->repeatList()->tick2utick(cs->playPos());
                   seek(cs->repeatList()->tick2utick(cs->playPos()));
                   }
@@ -346,7 +346,7 @@ void Seq::stop()
             }
       if (!_driver)
             return;
-      if(_driver->getState() == Transport::PLAY)
+      if (!preferences.useJackTransport || (preferences.useJackTransport && _driver->getState() == Transport::PLAY))
             _driver->stopTransport();
       if (cv)
             cv->setCursorOn(false);
@@ -672,13 +672,12 @@ void Seq::process(unsigned n, float* buffer)
       {
       unsigned frames = n;
       Transport driverState = _driver->getState();
-      // Checking for the reposition from Transport
+      // Checking for the reposition from JACK Transport
       _driver->checkTransportSeek(playTime, frames);
 
       if (driverState != state) {
             // Got a message from JACK Transport panel: Play
             if (state == Transport::STOP && driverState == Transport::PLAY) {
-
                   if((preferences.useJackMidi || preferences.useJackAudio) && !getAction("play")->isChecked()) {
                         // Do not play while editing elements
                         if (mscore->state() == STATE_NORMAL && isRunning() && canStart()) {
@@ -783,16 +782,16 @@ void Seq::process(unsigned n, float* buffer)
                                     if ((*pPlayPos)->first >= utickLoop) {
                                           qDebug ("Process playPos = %d  in/out tick = %d/%d  getCurTick() = %d   tickLoop = %d   playTime = %d",
                                              (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), utickLoop, *pPlayTime);
-                                          if (_driver->instantSeek()) {
-                                                emit toGui('3');
-                                                }
-                                          else { // JACK
+                                          if (preferences.useJackTransport) {
                                                 int loopInUtick = cs->repeatList()->tick2utick(cs->loopInTick());
                                                 seek(loopInUtick);
                                                 if (loopInUtick != 0) {
                                                       int seekto = loopInUtick-2*cs->utime2utick((qreal)_driver->bufferSize() / MScore::sampleRate);
                                                       seek((seekto>0)?seekto:0,false);
                                                       }
+                                                }
+                                          else {
+                                                emit toGui('3');
                                                 }
                                           // Exit this function to avoid segmentation fault in Scoreview
                                           return;
@@ -1003,7 +1002,7 @@ void Seq::seek(int utick, bool can_wait)
 
       qDebug()<<"Seq::seek, utick: "<<utick<<", can_wait: "<<can_wait;
       // If driver can't seek immediately, just send a signal to seek.
-      if (!_driver->instantSeek() && can_wait) {
+      if (preferences.useJackTransport && can_wait) {
             _driver->seekTransport(utick);
             if (utick != 0)
                   return; // rewind to 0 immediately
@@ -1502,5 +1501,10 @@ void Seq::setLoopSelection()
 void Seq::handleTimeSigTempoChanged()
       {
       _driver->handleTimeSigTempoChanged();
+      }
+
+void Seq::updateDriver() //  Would be deleted after implementing hot driver plugging
+      {
+      _driver->update();
       }
 }

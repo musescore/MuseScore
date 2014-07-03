@@ -101,6 +101,8 @@ struct Preferences {
       bool usePortaudioAudio;
       bool usePulseAudio;
       bool useJackMidi;
+      bool useJackTransport;
+      bool JackTimebaseMaster;
       int midiPorts;
       bool rememberLastMidiConnections;
 

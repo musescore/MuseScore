@@ -224,6 +224,7 @@ class Seq : public QObject, public Sequencer {
       void startNote(int channel, int, int, double nt);
       void eventToGui(NPlayEvent);
       void stopNoteTimer();
+      void updateDriver(); // Would be deleted after implementing hot driver plugging
       };
 
 extern Seq* seq;

@@ -48,7 +48,6 @@ class Driver {
       virtual void startTransport() = 0;
       virtual Transport getState() = 0;
       virtual void seekTransport(int) {}
-      virtual bool instantSeek() {return true;} // False only in JackAudio
       virtual int sampleRate() const = 0;
       virtual void registerPort(const QString& /*name*/, bool /*input*/, bool /*midi*/) {}
       virtual void unregisterPort(int) {}
@@ -57,6 +56,7 @@ class Driver {
       virtual void handleTimeSigTempoChanged() {}
       virtual void checkTransportSeek(int, int) {}
       virtual int bufferSize() {return 0;}
+      virtual void update() {}
       };
 
 

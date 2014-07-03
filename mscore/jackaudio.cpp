@@ -160,6 +160,7 @@ bool JackAudio::start()
             qDebug("JACK: cannot activate client");
             return false;
             }
+      // TODO: remember last connections for JACK audio
       if (preferences.useJackAudio) {
             /* connect the ports. Note: you can't do this before
                the client is activated, because we can't allow
@@ -183,7 +184,6 @@ bool JackAudio::start()
                            src, qPrintable(rport), rv);
                         }
                   }
-
             }
       if (preferences.useJackMidi && preferences.rememberLastMidiConnections) {
             QSettings settings;
@@ -228,9 +228,8 @@ bool JackAudio::start()
 
 bool JackAudio::stop()
       {
-      // if (preferences.UseJackTimebaseMaster) { // not yet implemented
-      if (jack_release_timebase(client) == 0)
-            qDebug("Unregistered as JACK Timebase Master");
+      if (preferences.JackTimebaseMaster)
+            releaseTimebaseCallback();
       if (preferences.useJackMidi && preferences.rememberLastMidiConnections) {
             QSettings settings;
             //settings.setValue("midiPorts", midiOutputPorts.size());
@@ -465,6 +464,7 @@ bool JackAudio::init()
 
       client = 0;
       timeSigTempoChanged = false;
+      fakeState = Transport::STOP;
       strcpy(_jackName, "mscore");
 
       jack_options_t options = (jack_options_t)0;
@@ -482,14 +482,7 @@ bool JackAudio::init()
       jack_set_port_registration_callback(client, registration_callback, this);
       jack_set_graph_order_callback(client, graph_callback, this);
       jack_set_freewheel_callback (client, freewheel_callback, this);
-      if (jack_set_timebase_callback(client, 0, timebase, this) == 0) { // 0: force set timebase
-            // TODO: change preferences here
-            if (MScore::debugMode)
-                  qDebug("Registered as JACK Timebase Master");
-          }
-      else if (MScore::debugMode) {
-            qDebug("Unable to take over JACK Timebase.");
-            }
+      setTimebaseCallback();
       if( jack_set_buffer_size_callback (client, bufferSizeCallback, this) != 0)
           qDebug("Can not set bufferSizeCallback");
       _segmentSize  = jack_get_buffer_size(client);
@@ -541,7 +534,10 @@ bool JackAudio::init()
 
 void JackAudio::startTransport()
       {
-      jack_transport_start(client);
+      if (preferences.useJackTransport)
+            jack_transport_start(client);
+      else
+            fakeState = Transport::PLAY;
       }
 
 //---------------------------------------------------------
@@ -550,7 +546,10 @@ void JackAudio::startTransport()
 
 void JackAudio::stopTransport()
       {
-      jack_transport_stop(client);
+      if (preferences.useJackTransport)
+            jack_transport_stop(client);
+      else
+            fakeState = Transport::STOP;
       }
 
 //---------------------------------------------------------
@@ -559,6 +558,8 @@ void JackAudio::stopTransport()
 
 Transport JackAudio::getState()
       {
+      if (!preferences.useJackTransport)
+            return fakeState;
       int transportState = jack_transport_query(client, NULL);
       switch (transportState) {
             case JackTransportStopped:  return Transport::STOP;
@@ -684,7 +685,7 @@ void JackAudio::handleTimeSigTempoChanged()
 
 void JackAudio::checkTransportSeek(int cur_frame, int nframes)
       {
-      if (!seq || !seq->score() || !seq->score()->repeatList())
+      if (!preferences.useJackTransport || !seq || !seq->score() || !seq->canStart())
             return;
       // Obtaining the current JACK Transport position
       jack_position_t pos;
@@ -700,7 +701,7 @@ void JackAudio::checkTransportSeek(int cur_frame, int nframes)
             }
 
       // Tempo
-      if (pos.valid & JackPositionBBT) {
+      if (!preferences.JackTimebaseMaster  && (pos.valid & JackPositionBBT)) {
             if (!seq->score()->tempomap()) {
                   return;
                   }
@@ -712,6 +713,7 @@ void JackAudio::checkTransportSeek(int cur_frame, int nframes)
                   seq->score()->tempomap()->setRelTempo(newRelTempo);
                   seq->score()->repeatList()->update();
                   seq->setPlayTime(seq->score()->utick2utime(utick) * MScore::sampleRate);
+                  // Update UI
                   if (mscore->getPlayPanel()) {
                         mscore->getPlayPanel()->setRelTempo(newRelTempo);
                         mscore->getPlayPanel()->setTempo(seq->curTempo() * newRelTempo);
@@ -728,5 +730,49 @@ void JackAudio::seekTransport(int utick)
       {
       qDebug()<<"jack locate to utick: "<<utick<<", frame: "<<seq->score()->utick2utime(utick) * MScore::sampleRate;
       jack_transport_locate(client, seq->score()->utick2utime(utick) * MScore::sampleRate);
+      }
+
+//---------------------------------------------------------
+//   setTimebaseCallback
+//---------------------------------------------------------
+
+void JackAudio::setTimebaseCallback()
+      {
+      if (preferences.JackTimebaseMaster) {
+            int errCode = jack_set_timebase_callback(client, 0, timebase, this); // 0: force set timebase
+            if (errCode == 0) {
+                  qDebug("Registered as JACK Timebase Master.");
+                  }
+            else {
+                  preferences.JackTimebaseMaster = false;
+                  qDebug("Unable to take over JACK Timebase, error code: %i",errCode);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   releaseTimebaseCallback
+//---------------------------------------------------------
+
+void JackAudio::releaseTimebaseCallback()
+      {
+      int errCode = jack_release_timebase(client);
+      if (errCode == 0)
+            qDebug("Unregistered as JACK Timebase Master");
+      else
+            qDebug("Unable to unregister as JACK Timebase Master (Not a Timebase Master?), error code: %i", errCode);
+      }
+
+//---------------------------------------------------------
+//   update
+//   Would be deleted after implementing hot driver plugging
+//---------------------------------------------------------
+
+void JackAudio::update()
+      {
+      if (preferences.JackTimebaseMaster)
+            setTimebaseCallback();
+      else
+            releaseTimebaseCallback();
       }
 }
