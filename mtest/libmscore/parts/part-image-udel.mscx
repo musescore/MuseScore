@@ -150,7 +150,7 @@
           <Note>
             <lid>6</lid>
             <Image>
-              <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
+              <path>schnee.png</path>
               <linkPath>schnee.png</linkPath>
               <size w="48.15" h="48.3"/>
               </Image>
@@ -383,8 +383,8 @@
             <Note>
               <lid>6</lid>
               <Image>
-                <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                <linkPath>/home/marc/Desktop/MuseScore/mtest/libmscore/parts/schnee.png</linkPath>
+                <path>schnee.png</path>
+                <linkPath>schnee.png</linkPath>
                 <size w="48.15" h="48.3"/>
                 </Image>
               <pitch>72</pitch>

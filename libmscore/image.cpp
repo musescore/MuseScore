@@ -307,7 +307,7 @@ void Image::write(Xml& xml) const
       // TODO : on Save As, _score->fileInfo() still contains the old path and fname
       //          if the Save As path is different, image relative path will be wrong!
       //
-      QString relativeFilePath= QString();
+      QString relativeFilePath = QString();
       if (!_linkPath.isEmpty() && _linkIsValid) {
             QFileInfo fi(_linkPath);
             // _score->fileInfo()->canonicalPath() would be better
@@ -317,7 +317,10 @@ void Image::write(Xml& xml) const
             QString scorePath = _score->fileInfo()->absolutePath();
             QString imgFPath  = fi.canonicalFilePath();
             // if imgFPath is in (or below) the directory of scorePath
-            if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
+            if (MScore::testMode) {
+                  relativeFilePath = fi.fileName();
+                  }
+            else if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
                   // relative img path is the part exceeding scorePath
                   imgFPath.remove(0, scorePath.size());
                   if(imgFPath.startsWith('/'))
@@ -348,7 +351,7 @@ void Image::write(Xml& xml) const
       BSymbol::writeProperties(xml);
       // keep old "path" tag, for backward compatibility and because it is used elsewhere
       // (for instance by Box:read(), Measure:read(), Note:read(), ...)
-      xml.tag("path", _storeItem ? _storeItem->hashName() : relativeFilePath);
+      xml.tag("path", _storeItem && !MScore::testMode ? _storeItem->hashName() : relativeFilePath);
       xml.tag("linkPath", relativeFilePath);
 
       writeProperty(xml, P_ID::AUTOSCALE);
