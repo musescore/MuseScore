@@ -1,5 +1,6 @@
 #include "importmidi_model.h"
 #include "importmidi_inner.h"
+#include "preferences.h"
 
 
 //struct TrackCol {
@@ -61,13 +62,15 @@ TracksModel::~TracksModel()
 
 void TracksModel::reset(const MidiOperations::Opers &opers,
                         const QList<std::string> &lyricsList,
-                        int trackCount)
+                        int trackCount,
+                        const QString &midiFile)
       {
       beginResetModel();
       _trackOpers = opers;
       _columns.clear();
       _trackCount = trackCount;
       _frozenColCount = 0;
+      _midiFile = midiFile;
       if (trackCount == 0)
             return;
 
@@ -114,7 +117,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             }
       if (hasStaffName) {
             struct StaffName : Column {
-                  StaffName(MidiOperations::Opers &opers) : Column(opers)
+                  StaffName(MidiOperations::Opers &opers, const QString &midiFile)
+                        : Column(opers), _midiFile(midiFile)
                         {
                         _isEditable = false;
                         _hasCharset = true;
@@ -122,19 +126,27 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   QString headerName() const { return "Staff name"; }
                   QVariant value(int trackIndex) const
                         {
+                        MidiOperations::Data &opers = preferences.midiImportOperations;
+                        MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+
                         return MidiCharset::convertToCharset(_opers.staffName.value(trackIndex));
                         }
                   void setValue(const QVariant &/*value*/, int /*trackIndex*/) {}
+
+               private:
+                  QString _midiFile;
                   };
             ++_frozenColCount;
-            _columns.push_back(std::unique_ptr<Column>(new StaffName(_trackOpers)));
+            _columns.push_back(std::unique_ptr<Column>(new StaffName(_trackOpers, _midiFile)));
             }
 
       //-----------------------------------------------------------------------
       if (!lyricsList.isEmpty()) {
             struct Lyrics : Column {
-                  Lyrics(MidiOperations::Opers &opers, const QList<std::string> &lyricsList)
-                        : Column(opers), _lyricsList(lyricsList)
+                  Lyrics(MidiOperations::Opers &opers,
+                         const QList<std::string> &lyricsList,
+                         const QString &midiFile)
+                        : Column(opers), _lyricsList(lyricsList), _midiFile(midiFile)
                         {
                         _hasCharset = true;
                         }
@@ -142,8 +154,12 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   QVariant value(int trackIndex) const
                         {
                         int index = _opers.lyricTrackIndex.value(trackIndex);
-                        if (index >= 0)
+                        if (index >= 0) {
+                              MidiOperations::Data &opers = preferences.midiImportOperations;
+                              MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+
                               return MidiCharset::convertToCharset(_lyricsList[index]);
+                              }
                         return "";
                         }
                   void setValue(const QVariant &value, int trackIndex)
@@ -152,6 +168,9 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         }
                   QStringList valueList() const
                         {
+                        MidiOperations::Data &opers = preferences.midiImportOperations;
+                        MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+
                         auto list = QStringList("");
                         for (const auto &lyric: _lyricsList)
                               list.append(MidiCharset::convertToCharset(lyric));
@@ -159,8 +178,9 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         }
                private:
                   QList<std::string> _lyricsList;
+                  QString _midiFile;
                   };
-            _columns.push_back(std::unique_ptr<Column>(new Lyrics(_trackOpers, lyricsList)));
+            _columns.push_back(std::unique_ptr<Column>(new Lyrics(_trackOpers, lyricsList, _midiFile)));
             }
 
       //-----------------------------------------------------------------------
@@ -323,6 +343,9 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                         QVariant value = _columns[index.column()]->value(trackIndex);
                         if (value.type() == QVariant::String
                                     && _columns[index.column()]->valueList().empty()) {
+                              MidiOperations::Data &opers = preferences.midiImportOperations;
+                              MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+
                               return MidiCharset::convertToCharset(value.toString().toStdString());
                               }
                         }

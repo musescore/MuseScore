@@ -51,7 +51,8 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
 
       _model->reset(opers.data()->trackOpers,
                     MidiLyrics::makeLyricsListForUI(),
-                    opers.data()->trackCount);
+                    opers.data()->trackCount,
+                    _midiFile);
 
       _ui->tracksView->setFrozenRowCount(_model->frozenRowCount());
       _ui->tracksView->setFrozenColCount(_model->frozenColCount());

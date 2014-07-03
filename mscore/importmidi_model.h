@@ -16,7 +16,8 @@ class TracksModel : public QAbstractTableModel
 
       void reset(const MidiOperations::Opers &opers,
                  const QList<std::string> &lyricsList,
-                 int trackCount);
+                 int trackCount,
+                 const QString &midiFile);
       void clear();
       void setTrackShuffleIndex(int trackIndex, int newIndex);
       void updateCharset();
@@ -45,6 +46,7 @@ class TracksModel : public QAbstractTableModel
       MidiOperations::Opers _trackOpers;
       int _trackCount;
       int _frozenColCount;
+      QString _midiFile;
       class Column;
       std::vector<std::unique_ptr<Column>> _columns;
       };
