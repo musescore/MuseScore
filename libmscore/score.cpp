@@ -2004,6 +2004,9 @@ void Score::cmdUpdateNotes()
 
 void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
       {
+      if(property("AltModifier").toBool())
+            return;
+
       for (Measure* m = beginMeasure; m; m = m->nextMeasureMM()) {
             m->cmdUpdateNotes(staffIdx);
             if (m == beginMeasure)
@@ -2015,6 +2018,23 @@ void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
                   }
             }
       }
+
+
+//---------------------------------------------------------
+//   updatePitches
+//---------------------------------------------------------
+
+void Score::updatePitches(Segment* segment, int staffIdx, int pitch, int tpc1, int tpc2, int line, Accidental::Type accidental)
+       {
+       Measure* m = segment->measure();
+       for (Segment* seg = segment->next(); seg; seg = seg->next()) {           // alters the following notes on the same line
+             if(seg->measure() == m->nextMeasure())
+                   return;
+             if (seg->segmentType() & (Segment::Type::ChordRest))
+                    if(! m->updatePitches(seg, staffIdx, pitch, tpc1, tpc2, line, accidental))
+                          break;
+             }
+       }
 
 //---------------------------------------------------------
 //   clone

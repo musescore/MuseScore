@@ -1865,6 +1865,19 @@ void Note::endEdit()
             }
       }
 
+
+//---------------------------------------------------------
+//   updatePitch
+//---------------------------------------------------------
+
+void Note::updatePitch(int pitch, int tcp)
+      {
+//      undoSetPitch(pitch);
+//      undoSetTpc(tcp);
+      setPitch(pitch);
+      setTpc(tcp);
+      }
+
 //---------------------------------------------------------
 //   updateAccidental
 //    set _accidental and _line depending on tpc
@@ -1872,6 +1885,9 @@ void Note::endEdit()
 
 void Note::updateAccidental(AccidentalState* as)
       {
+      // avoid "in between" update in case of update acc. with alt key pressed
+      if(score()->property("AltModifier").toBool())
+            return;
       int relLine = absStep(tpc(), epitch());
 
       // don't touch accidentals that don't concern tpc such as

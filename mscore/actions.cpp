@@ -2185,6 +2185,14 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "alt-delete",
+         QT_TRANSLATE_NOOP("action","Alt-Del pressed"),
+         QT_TRANSLATE_NOOP("action","Alt-Del pressed"),
+         QT_TRANSLATE_NOOP("action","Alt-Del pressed")
+         ),
+      Shortcut(
+         STATE_NORMAL,
          0,
          "lock",
          QT_TRANSLATE_NOOP("action","Lock Score")

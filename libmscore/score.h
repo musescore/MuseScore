@@ -873,7 +873,7 @@ class Score : public QObject {
       QMap<QString, QString>& metaTags();
       Q_INVOKABLE QString metaTag(const QString& s) const;
       Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val);
-
+      void updatePitches(Segment*, int, int, int, int, int, Accidental::Type);
       void updateNotes();
       void cmdUpdateNotes();
       void cmdUpdateAccidentals(Measure* m, int staffIdx);

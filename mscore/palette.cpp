@@ -291,6 +291,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       Score* score   = mscore->currentScore();
       if (score == 0)
             return;
+      score->setProperty("AltModifier", qApp->keyboardModifiers().testFlag(Qt::AltModifier));
       const Selection& sel = score->selection();
 
       if (sel.isNone())
@@ -355,6 +356,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
          && viewer->mscoreState() != STATE_TEXT_EDIT) { //Already in startCmd mode in this case
             score->endCmd();
             }
+      score->setProperty("AltModifier", false);
       mscore->endCmd();
       }
 

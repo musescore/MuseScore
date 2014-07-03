@@ -452,6 +452,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case Element::Type::AMBITUS:
                         {
                         Element* el = 0;
+                        _score->setProperty("AltModifier", qApp->keyboardModifiers().testFlag(Qt::AltModifier));
                         for (const Element* e : elementsAt(pos)) {
                               if (e->acceptDrop(this, pos, dragElement)) {
                                     el = const_cast<Element*>(e);
