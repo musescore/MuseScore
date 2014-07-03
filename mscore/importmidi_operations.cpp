@@ -23,7 +23,6 @@ const FileData* Data::data() const
 void Data::addNewFile(const QString &fileName)
       {
       _data.insert({fileName, FileData()});
-      _currentMidiFile = fileName;
       }
 
 const MidiFile* Data::midiFile(const QString &fileName)
@@ -37,11 +36,6 @@ const MidiFile* Data::midiFile(const QString &fileName)
 void Data::setMidiFileData(const QString &fileName, const MidiFile &midiFile)
       {
       _data[fileName].midiFile = midiFile;
-      }
-
-void Data::setCurrentMidiFile(const QString &fileName)
-      {
-      _currentMidiFile = fileName;
       }
 
 void Data::excludeFile(const QString &fileName)

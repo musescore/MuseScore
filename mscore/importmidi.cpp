@@ -991,11 +991,11 @@ Score::FileError importMidi(Score *score, const QString &name)
 
       if (!opers.hasFile(name)) {
             opers.addNewFile(name);
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, name);
             opers.data()->isNewlyOpened = true;
             }
-      else {
-            opers.setCurrentMidiFile(name);
-            }
+
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, name);
 
       if (opers.data()->isNewlyOpened) {
 
