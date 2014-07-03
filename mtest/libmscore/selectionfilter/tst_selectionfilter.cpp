@@ -29,6 +29,7 @@ class TestSelectionFilter : public QObject, public MTest
       Q_OBJECT
 
       void testFilter(int idx, SelectionFilterType filter);
+      void testFilterSpanner(int idx, SelectionFilterType filter);
    private slots:
       void initTestCase();
       void filterDynamic()          { testFilter(1,SelectionFilterType::DYNAMIC); }
@@ -45,6 +46,7 @@ class TestSelectionFilter : public QObject, public MTest
       void filterGlissando()        { testFilter(12,SelectionFilterType::GLISSANDO); }
       void filterBreath()           { testFilter(13,SelectionFilterType::BREATH); }
       void filterOtherText()        { testFilter(14,SelectionFilterType::OTHER_TEXT); }
+      void filterOtherLine()        { testFilterSpanner(15,SelectionFilterType::OTHER_LINE); }
       };
 
 //---------------------------------------------------------
@@ -68,6 +70,32 @@ void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
       QVERIFY(m1 != 0);
 
       score->select(m1);
+
+      QVERIFY(score->selection().canCopy());
+      QVERIFY(score->selection().mimeType() == mimeStaffListFormat);
+
+      QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1-base.xml").arg(idx),
+         DIR + QString("selectionfilter%1-base-ref.xml").arg(idx)));
+
+      score->selectionFilter().setFiltered(filter,false);
+
+      QVERIFY(score->selection().canCopy());
+      QVERIFY(score->selection().mimeType() == mimeStaffListFormat);
+
+      QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1.xml").arg(idx),
+         DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
+      }
+
+void TestSelectionFilter::testFilterSpanner(int idx, SelectionFilterType filter)
+      {
+      Score* score = readScore(DIR + QString("selectionfilter%1.mscx").arg(idx));
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = score->firstMeasure()->nextMeasure();
+
+      QVERIFY(m1 != 0 && m2 != 0);
+
+      score->select(m1);
+      score->select(m2,SelectType::RANGE);
 
       QVERIFY(score->selection().canCopy());
       QVERIFY(score->selection().mimeType() == mimeStaffListFormat);
