@@ -151,13 +151,13 @@ class Data
       void addNewFile(const QString &fileName);
       int currentTrack() const;
       void setMidiFileData(const QString &fileName, const MidiFile &midiFile);
-      void setCurrentMidiFile(const QString &fileName);
       void excludeFile(const QString &fileName);
       bool hasFile(const QString &fileName);
       const MidiFile* midiFile(const QString &fileName);
 
    private:
       friend class CurrentTrackSetter;
+      friend class CurrentMidiFileSetter;
 
       QString _currentMidiFile;
       int _currentTrack = -1;
@@ -172,15 +172,42 @@ class CurrentTrackSetter
       CurrentTrackSetter(Data &opers, int track)
             : _opers(opers)
             {
+            _oldValue = _opers._currentTrack;
             _opers._currentTrack = track;
             }
 
       ~CurrentTrackSetter()
             {
-            _opers._currentTrack = -1;
+            _opers._currentTrack = _oldValue;
             }
    private:
       Data &_opers;
+      int _oldValue;
+                  // disallow heap allocation - for stack-only usage
+      void* operator new(size_t);               // standard new
+      void* operator new(size_t, void*);        // placement new
+      void* operator new[](size_t);             // array new
+      void* operator new[](size_t, void*);      // placement array new
+      };
+
+// scoped setter of current MIDI file
+class CurrentMidiFileSetter
+      {
+public:
+      CurrentMidiFileSetter(Data &opers, const QString &fileName)
+            : _opers(opers)
+            {
+            _oldValue = _opers._currentMidiFile;
+            _opers._currentMidiFile = fileName;
+            }
+
+      ~CurrentMidiFileSetter()
+            {
+            _opers._currentMidiFile = _oldValue;
+            }
+private:
+      Data &_opers;
+      QString _oldValue;
                   // disallow heap allocation - for stack-only usage
       void* operator new(size_t);               // standard new
       void* operator new(size_t, void*);        // placement new

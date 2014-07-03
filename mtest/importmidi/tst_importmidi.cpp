@@ -58,8 +58,10 @@ class TestImportMidi : public QObject, public MTest
                   // functions that modify default settings
       void dontSimplify(const char *file)
             {
-            preferences.midiImportOperations.addNewFile(midiFilePath(file));
-            auto &data = *preferences.midiImportOperations.data();
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewFile(midiFilePath(file));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(file));
+            auto &data = *opers.data();
 
             data.canRedefineDefaultsLater = false;
             data.trackOpers.simplifyDurations.setDefaultValue(false);
@@ -69,8 +71,10 @@ class TestImportMidi : public QObject, public MTest
             }
       void voiceSeparation(const char *file, bool simplify = false)
             {
-            preferences.midiImportOperations.addNewFile(midiFilePath(file));
-            auto &data = *preferences.midiImportOperations.data();
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewFile(midiFilePath(file));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(file));
+            auto &data = *opers.data();
 
             data.canRedefineDefaultsLater = false;
             data.trackOpers.doStaffSplit.setDefaultValue(false);
@@ -80,8 +84,10 @@ class TestImportMidi : public QObject, public MTest
             }
       void simplification(const char *file)
             {
-            preferences.midiImportOperations.addNewFile(midiFilePath(file));
-            auto &data = *preferences.midiImportOperations.data();
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewFile(midiFilePath(file));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(file));
+            auto &data = *opers.data();
 
             data.canRedefineDefaultsLater = false;
             data.trackOpers.doStaffSplit.setDefaultValue(false);
@@ -91,8 +97,10 @@ class TestImportMidi : public QObject, public MTest
             }
       void staffSplit(const char *file)
             {
-            preferences.midiImportOperations.addNewFile(midiFilePath(file));
-            auto &data = *preferences.midiImportOperations.data();
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewFile(midiFilePath(file));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(file));
+            auto &data = *opers.data();
 
             data.canRedefineDefaultsLater = false;
             data.trackOpers.doStaffSplit.setDefaultValue(true);
@@ -123,9 +131,10 @@ class TestImportMidi : public QObject, public MTest
       void human4_4()
             {
             QString midiFile("human_4-4");
-            preferences.midiImportOperations.addNewFile(midiFilePath(midiFile));
-            preferences.midiImportOperations.addNewFile(midiFile);
-            auto &data = *preferences.midiImportOperations.data();
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
 
             data.trackOpers.doStaffSplit.setDefaultValue(false);
             data.trackOpers.simplifyDurations.setDefaultValue(false);
@@ -185,8 +194,10 @@ class TestImportMidi : public QObject, public MTest
       void tuplet3_5_7tuplets()
             {
             QString midiFile("tuplet_3_5_7_tuplets");
-            preferences.midiImportOperations.addNewFile(midiFilePath(midiFile));
-            auto &data = *preferences.midiImportOperations.data();
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
 
             data.canRedefineDefaultsLater = false;
             data.trackOpers.changeClef.setDefaultValue(false);
@@ -252,8 +263,10 @@ class TestImportMidi : public QObject, public MTest
       void swingTriplets()
             {
             QString midiFile("swing_triplets");
-            preferences.midiImportOperations.addNewFile(midiFilePath(midiFile));
-            auto &data = *preferences.midiImportOperations.data();
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
 
             data.canRedefineDefaultsLater = false;
             data.trackOpers.swing.setDefaultValue(MidiOperations::Swing::SWING);
@@ -265,8 +278,10 @@ class TestImportMidi : public QObject, public MTest
       void swingShuffle()
             {
             QString midiFile("swing_shuffle");
-            preferences.midiImportOperations.addNewFile(midiFilePath(midiFile));
-            auto &data = *preferences.midiImportOperations.data();
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
 
             data.canRedefineDefaultsLater = false;
             data.trackOpers.swing.setDefaultValue(MidiOperations::Swing::SHUFFLE);
@@ -278,8 +293,10 @@ class TestImportMidi : public QObject, public MTest
       void swingClef()
             {
             QString midiFile("swing_clef");
-            preferences.midiImportOperations.addNewFile(midiFilePath(midiFile));
-            auto &data = *preferences.midiImportOperations.data();
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
 
             data.canRedefineDefaultsLater = false;
             data.trackOpers.swing.setDefaultValue(MidiOperations::Swing::SWING);
@@ -478,6 +495,11 @@ void isTupletErrorAllowed(int tupletSumError,
 
 void TestImportMidi::isTupletAllowed()
       {
+      auto &opers = preferences.midiImportOperations;
+      const QString fileName = "dummy";
+      opers.addNewFile(fileName);
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, fileName);
+
       // special cases
       //
 

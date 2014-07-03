@@ -46,7 +46,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
             return;
 
       MidiOperations::Data &opers = preferences.midiImportOperations;
-      opers.setCurrentMidiFile(_midiFile);
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
 
       _model->reset(opers.data()->trackOpers,
                     MidiLyrics::makeLyricsListForUI(),
@@ -173,15 +173,17 @@ void ImportMidiPanel::applyMidiImport()
             return;
 
       _importInProgress = true;
-      MidiOperations::FileData *midiData = preferences.midiImportOperations.data();
+
+      auto &opers = preferences.midiImportOperations;
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
                   // update charset
-      if (midiData->charset != _ui->comboBoxCharset->currentText()) {
-            midiData->charset = _ui->comboBoxCharset->currentText();
+      if (opers.data()->charset != _ui->comboBoxCharset->currentText()) {
+            opers.data()->charset = _ui->comboBoxCharset->currentText();
                         // need to update model because of charset change
             _model->updateCharset();
             }
       mscore->openScore(_midiFile);
-      midiData->trackOpers = _model->trackOpers();
+      opers.data()->trackOpers = _model->trackOpers();
       saveTableViewState();
       _importInProgress = false;
       }
@@ -223,10 +225,8 @@ void ImportMidiPanel::excludeMidiFile(const QString &fileName)
 
       auto &opers = preferences.midiImportOperations;
       opers.excludeFile(fileName);
-      if (fileName == _midiFile) {
-            opers.setCurrentMidiFile("");
+      if (fileName == _midiFile)
             _midiFile = "";
-            }
       }
 
 void ImportMidiPanel::setPrefferedVisible(bool visible)
