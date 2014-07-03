@@ -155,7 +155,7 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                         // for further usage
             MidiOperations::CurrentTrackSetter setCurrentTrack{opers, mtrack.indexOfOperation};
 
-            if (opers.data()->isNewlyOpened) {
+            if (opers.data()->processingsOfOpenedFile == 0) {
                   opers.data()->trackOpers.isDrumTrack.setValue(
                                           opers.currentTrack(), mtrack.mtrack->drumTrack());
                   if (mtrack.mtrack->drumTrack()) {
@@ -657,7 +657,7 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
             if (events != 0) {
                   ++trackIndex;
                   const auto *data = preferences.midiImportOperations.data();
-                  if (!data->isNewlyOpened) {
+                  if (data->processingsOfOpenedFile > 0) {
                         if (data->trackOpers.doImport.value(trackIndex)) {
                               track.indexOfOperation = trackIndex;
                               tracks.insert({data->trackOpers.trackIndexAfterShuffle.value(trackIndex),
@@ -912,13 +912,13 @@ void convertMidi(Score *score, const MidiFile *mf)
       cleanUpMidiEvents(tracks);
       auto &opers = preferences.midiImportOperations;
 
-      if (opers.data()->isNewlyOpened) {       // for newly opened MIDI file
+      if (opers.data()->processingsOfOpenedFile == 0) {       // for newly opened MIDI file
             opers.data()->trackCount = tracks.size();
             MidiLyrics::extractLyricsToMidiData(mf);
             }
                   // for newly opened MIDI file - detect if it is a human performance
                   // if so - detect beats and set initial time signature
-      if (opers.data()->isNewlyOpened && opers.data()->canRedefineDefaultsLater)
+      if (opers.data()->processingsOfOpenedFile == 0 && opers.data()->canRedefineDefaultsLater)
             Quantize::setIfHumanPerformance(tracks, sigmap);
       else        // user value
             MidiBeat::setTimeSignature(sigmap);
@@ -934,7 +934,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
 
                   // for newly opened MIDI file
-      if (opers.data()->isNewlyOpened && opers.data()->canRedefineDefaultsLater)
+      if (opers.data()->processingsOfOpenedFile == 0 && opers.data()->canRedefineDefaultsLater)
             setLeftRightHandSplit(tracks);
 
       MChord::removeOverlappingNotes(tracks);
@@ -969,8 +969,6 @@ void convertMidi(Score *score, const MidiFile *mf)
       createTimeSignatures(score);
       score->connectTies();
       MidiLyrics::setLyricsToScore(trackList);
-
-      opers.data()->isNewlyOpened = false;
       }
 
 void loadMidiData(MidiFile &mf)
@@ -989,15 +987,11 @@ Score::FileError importMidi(Score *score, const QString &name)
 
       auto &opers = preferences.midiImportOperations;
 
-      if (!opers.hasFile(name)) {
-            opers.addNewFile(name);
-            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, name);
-            opers.data()->isNewlyOpened = true;
-            }
-
       MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, name);
+      if (!opers.hasFile(name))
+            opers.addNewFile(name);
 
-      if (opers.data()->isNewlyOpened) {
+      if (opers.data()->processingsOfOpenedFile == 0) {
 
             QFile fp(name);
             if (!fp.open(QIODevice::ReadOnly)) {
@@ -1026,6 +1020,7 @@ Score::FileError importMidi(Score *score, const QString &name)
             }
 
       convertMidi(score, opers.midiFile(name));
+      ++opers.data()->processingsOfOpenedFile;
 
       return Score::FileError::FILE_NO_ERROR;
       }

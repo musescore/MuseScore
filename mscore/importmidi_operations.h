@@ -125,7 +125,7 @@ struct HumanBeatData
 struct FileData
       {
       MidiFile midiFile;
-      bool isNewlyOpened = true;
+      int processingsOfOpenedFile = 0;
       bool canRedefineDefaultsLater = true;
       QByteArray HHeaderData;
       QByteArray VHeaderData;
