@@ -21,6 +21,7 @@ class TracksView : public QTableView
 
    protected:
       void resizeEvent(QResizeEvent *event);
+      bool viewportEvent(QEvent *event);
 
    private slots:
       void currentChanged(const QModelIndex &, const QModelIndex &);
@@ -38,6 +39,7 @@ class TracksView : public QTableView
       void initCornerView();
       void initMainView();
       void initConnections();
+      void updateFrozenTableGeometry();
 
       void keepVisible(const QModelIndex &previous, const QModelIndex &current);
 
@@ -47,7 +49,6 @@ class TracksView : public QTableView
       int frozenVTableWidth();
       int frozenHTableHeight();
 
-      void updateFrozenTableGeometry();
       void updateFocus(int currentRow, int currentColumn);
 
       QTableView *_frozenHTableView;

@@ -795,15 +795,22 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
       {
       if (mt.staff->isTop()) {
             Part *part  = mt.staff->part();
+            auto &data = *preferences.midiImportOperations.data();
+            const QString instrName = instrumentName(midiType, mt.program, mt.mtrack->drumTrack());
+
+            if (data.processingsOfOpenedFile == 0) {
+                  data.trackOpers.instrumentName = instrName;
+                  data.trackOpers.staffName = mt.name.toStdString();
+                  }
             if (mt.name.isEmpty()) {
-                  QString name = instrumentName(midiType, mt.program, mt.mtrack->drumTrack());
-                  if (!name.isEmpty()) {
-                        mt.name = name;
-                        part->setLongName(name);
+                  if (!instrName.isEmpty()) {
+                        mt.name = instrName;
+                        part->setLongName(instrName);
                         }
                   }
-            else
+            else {
                   part->setLongName(mt.name);
+                  }
             part->setPartName(part->longName());
             part->setMidiChannel(mt.mtrack->outChannel());
             int bank = 0;
