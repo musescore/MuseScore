@@ -67,10 +67,11 @@ enum class SelectionFilterType {
       FIGURED_BASS            = 1 << 11,
       OTTAVA                  = 1 << 12,
       PEDAL_LINE              = 1 << 13,
-      ARPEGGIO                = 1 << 14,
-      GLISSANDO               = 1 << 15,
-      FRET_DIAGRAM            = 1 << 16,
-      BREATH                  = 1 << 17,
+      OTHER_LINE              = 1 << 14,
+      ARPEGGIO                = 1 << 15,
+      GLISSANDO               = 1 << 16,
+      FRET_DIAGRAM            = 1 << 17,
+      BREATH                  = 1 << 18,
       ALL                     = -1
       };
 
