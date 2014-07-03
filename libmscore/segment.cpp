@@ -998,72 +998,86 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
             }
       }
 
+//---------------------------------------------------------
+//   firstElement
+//---------------------------------------------------------
+
 Element* Segment::firstElement(int staff)
       {
-      if(this->segmentType() == SegmentType::ChordRest){
-            for(int v = staff * VOICES; v/VOICES == staff; v++){
+      if (this->segmentType() == Segment::Type::ChordRest) {
+            for (int v = staff * VOICES; v/VOICES == staff; v++) {
                 Element* el = this->element(v);
-                if(!el){      //there is no chord or rest on this voice
+                if (!el) {      //there is no chord or rest on this voice
                       continue;
                       }
-                if(el->type() == ElementType::CHORD){
+                if (el->type() == Element::Type::CHORD) {
                       return static_cast<Chord*>(el)->notes().back();
                       }
-                else{
+                else {
                       return el;
                       }
                 }
             }
-      else{
+      else {
             return this->getElement(staff);
             }
 
       return 0;
       }
 
+//---------------------------------------------------------
+//   lastElement
+//---------------------------------------------------------
+
 Element* Segment::lastElement(int staff)
       {
-      if(this->segmentType() == SegmentType::ChordRest){
-            for(int voice = staff * VOICES + (VOICES - 1); voice/VOICES == staff; voice--){
+      if (this->segmentType() == Segment::Type::ChordRest) {
+            for (int voice = staff * VOICES + (VOICES - 1); voice/VOICES == staff; voice--) {
                   Element* el = this->element(voice);
-                  if(!el){      //there is no chord or rest on this voice
+                  if (!el) {      //there is no chord or rest on this voice
                         continue;
                         }
-                  if(el->type() == ElementType::CHORD){
+                  if (el->type() == Element::Type::CHORD) {
                         return static_cast<Chord*>(el)->notes().front();
                         }
-                  else{
+                  else {
                         return el;
                         }
                  }
             }
-      else{
+      else {
             return this->getElement(staff);
             }
 
       return 0;
       }
 
+//---------------------------------------------------------
+//   lastElement
+//   protected because it is used by the firstElement and
+//   lastElement functions when segment types that have
+//   just one elemnt to avoid duplicated code
+//---------------------------------------------------------
 
  Element* Segment::getElement(int staff)
       {
-      if(this->segmentType() == SegmentType::ChordRest){
+      if (this->segmentType() == Segment::Type::ChordRest) {
             return this->firstElement(staff);
             }
-      else if(this->segmentType() == SegmentType::EndBarLine        ||
-              this->segmentType() == SegmentType::BarLine           ||
-              this->segmentType() == SegmentType::StartRepeatBarLine){
-            for(int i = staff; i >= 0; i--){
-                  if(!this->element(i*VOICES)){
+      else if (this->segmentType() == Segment::Type::EndBarLine        ||
+               this->segmentType() == Segment::Type::BarLine           ||
+               this->segmentType() == Segment::Type::StartRepeatBarLine) {
+            for (int i = staff; i >= 0; i--) {
+                  if (!this->element(i*VOICES)) {
                         continue;
                         }
                   BarLine* b = static_cast<BarLine*>(this->element(i*VOICES));
-                  if(i + b->span() - 1 >= staff){
+                  if (i + b->span() - 1 >= staff) {
                         return this->element(i*VOICES);
                         }
                   }
             }
-      else{
+      else {
             return this->element(staff*VOICES);
             }
       return 0;
