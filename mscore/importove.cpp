@@ -321,7 +321,7 @@ OVE::Staff* getStaff(const OVE::OveSong* ove, int track) {
       return 0;
       }
 
-void addText(VBox* & vbox, Score* s, QString strTxt, int stl) {
+void addText(VBox* & vbox, Score* s, QString strTxt, TextStyleType stl) {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);

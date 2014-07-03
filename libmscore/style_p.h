@@ -100,9 +100,9 @@ class StyleData : public QSharedData {
 
       void set(StyleIdx id, const QVariant& v)            { _values[int(id)] = v; }
       QVariant value(StyleIdx idx) const                  { return _values[int(idx)];     }
-      const TextStyle& textStyle(int idx) const;
+      const TextStyle& textStyle(TextStyleType idx) const;
       const TextStyle& textStyle(const QString&) const;
-      int textStyleType(const QString&) const;
+      TextStyleType textStyleType(const QString&) const;
       void setTextStyle(const TextStyle& ts);
 
    public:

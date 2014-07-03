@@ -1251,7 +1251,7 @@ Element* Note::drop(const DropData& data)
                   {
                   // set style
                   Fingering* f = static_cast<Fingering*>(e);
-                  int st = f->textStyleType();
+                  TextStyleType st = f->textStyleType();
                   f->setTextStyleType(st);
                   }
                   return e;
