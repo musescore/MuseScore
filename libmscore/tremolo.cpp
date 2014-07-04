@@ -251,6 +251,7 @@ void Tremolo::layout()
 
 void Tremolo::write(Xml& xml) const
       {
+      if (!xml.canWrite(this)) return;
       xml.stag(name());
       xml.tag("subtype", tremoloTypeName());
       Element::writeProperties(xml);
