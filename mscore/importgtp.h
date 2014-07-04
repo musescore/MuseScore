@@ -24,6 +24,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/fraction.h"
 #include "libmscore/fret.h"
+#include "libmscore/chordrest.h"
 
 namespace Ms {
 
@@ -113,6 +114,7 @@ class GuitarPro {
       void applyBeatEffects(Chord*, int beatEffects);
       void readTremoloBar(int track, Segment*);
       void readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader);
+      void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, int tick);
 
    public:
       QString title, subtitle, artist, album, composer;
