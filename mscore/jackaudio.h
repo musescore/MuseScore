@@ -49,10 +49,16 @@ class JackAudio : public Driver {
 
       static int processAudio(jack_nframes_t, void*);
       static void timebase (jack_transport_state_t, jack_nframes_t, jack_position_t*, int, void *);
+      void hotPlug();
+      void setTimebaseCallback();
+      void releaseTimebaseCallback();
+      void restoreAudioConnections();
+      void rememberMidiConnections();
+      void restoreMidiConnections();
    public:
       JackAudio(Seq*);
       virtual ~JackAudio();
-      virtual bool init();
+      virtual bool init(bool hot = false);
       virtual QList<QString> inputPorts();
       virtual bool start();
       virtual bool stop();
@@ -69,14 +75,11 @@ class JackAudio : public Driver {
       virtual void midiRead();
 
       virtual void registerPort(const QString& name, bool input, bool midi);
-      virtual void unregisterPort(int);
+      virtual void unregisterPort(jack_port_t*);
       virtual void handleTimeSigTempoChanged();
       virtual void checkTransportSeek(int, int);
       virtual int bufferSize() {return _segmentSize;}
-      virtual void update();
       void setBufferSize(int nframes) { _segmentSize = nframes;}
-      void setTimebaseCallback();
-      void releaseTimebaseCallback();
       };
 
 

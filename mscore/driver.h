@@ -40,7 +40,7 @@ class Driver {
    public:
       Driver(Seq* s)    { seq = s; }
       virtual ~Driver() {}
-      virtual bool init() = 0;
+      virtual bool init(bool hot = false) = 0;
       virtual bool start() = 0;
       virtual bool stop() = 0;
       virtual QList<QString> inputPorts() { return QList<QString>(); }
@@ -56,7 +56,6 @@ class Driver {
       virtual void handleTimeSigTempoChanged() {}
       virtual void checkTransportSeek(int, int) {}
       virtual int bufferSize() {return 0;}
-      virtual void update() {}
       };
 
 

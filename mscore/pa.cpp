@@ -81,7 +81,7 @@ Portaudio::~Portaudio()
 //    return false on error
 //---------------------------------------------------------
 
-bool Portaudio::init()
+bool Portaudio::init(bool)
       {
       PaError err = Pa_Initialize();
       if (err != paNoError) {

@@ -1502,9 +1502,4 @@ void Seq::handleTimeSigTempoChanged()
       {
       _driver->handleTimeSigTempoChanged();
       }
-
-void Seq::updateDriver() //  Would be deleted after implementing hot driver plugging
-      {
-      _driver->update();
-      }
 }

@@ -48,7 +48,7 @@ class Portaudio : public Driver {
    public:
       Portaudio(Seq*);
       virtual ~Portaudio();
-      virtual bool init();
+      virtual bool init(bool hot = false);
       virtual bool start();
       virtual bool stop();
       virtual QList<QString> inputPorts();
