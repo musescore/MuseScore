@@ -309,6 +309,8 @@ bool Selection::canSelect(Element* e) const
           return this->selectionFilter().isFiltered(SelectionFilterType::OTHER_TEXT);
       if (e->isSLine()) // NoteLine, Volta
           return this->selectionFilter().isFiltered(SelectionFilterType::OTHER_LINE);
+      if (e->type() == Element::Type::TREMOLO)
+          return this->selectionFilter().isFiltered(SelectionFilterType::TREMOLO);
       return true;
       }
 
@@ -326,6 +328,7 @@ void Selection::appendChord(Chord* chord)
       if (chord->arpeggio()) appendFiltered(chord->arpeggio());
       if (chord->glissando()) appendFiltered(chord->glissando());
       if (chord->stemSlash()) _el.append(chord->stemSlash());
+      if (chord->tremolo()) appendFiltered(chord->tremolo());
       foreach(Note* note, chord->notes()) {
             _el.append(note);
             if (note->accidental()) _el.append(note->accidental());
@@ -664,7 +667,10 @@ void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) co
                                     chord->remove(chord->arpeggio());
                               if (chord->glissando() && !canSelect(chord->glissando()))
                                     chord->remove(chord->glissando());
+                              if (chord->tremolo() && !canSelect(chord->tremolo()))
+                                    chord->remove(chord->tremolo());
                               }
+
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         foreach (Element* articulation, cr->articulations()) {
                               if (!canSelect(articulation))
