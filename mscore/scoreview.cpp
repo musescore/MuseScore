@@ -3653,7 +3653,7 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             return;
             }
 
-      const Measure* m;
+      const MeasureBase* m;
       if (!el)
             return;
       else if (el->type() == Element::Type::NOTE)
@@ -3672,8 +3672,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       else if (el->type() == Element::Type::HARMONY && el->parent()->type() == Element::Type::FRET_DIAGRAM
          && el->parent()->parent()->type() == Element::Type::SEGMENT)
             m = static_cast<const Segment*>(el->parent()->parent())->measure();
-      else if (el->type() == Element::Type::MEASURE)
-            m = static_cast<const Measure*>(el);
+      else if (el->type() == Element::Type::MEASURE || el->type() == Element::Type::VBOX)
+            m = static_cast<const MeasureBase*>(el);
       else
             return;
 
@@ -4899,6 +4899,7 @@ void ScoreView::cmdAddText(int type)
                         case TEXT_POET:     s->setTextStyleType(TextStyleType::POET);     break;
                         }
                   s->setParent(measure);
+                  adjustCanvasPosition(measure, false);
                   }
                   break;
 
