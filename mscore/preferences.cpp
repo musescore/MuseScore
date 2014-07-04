@@ -116,7 +116,7 @@ void Preferences::init()
       useJackAudio       = false;
       useJackMidi        = false;
       useJackTransport   = false;
-      JackTimebaseMaster  = false;
+      JackTimebaseMaster = false;
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       usePortaudioAudio  = true;
       usePulseAudio      = false;
@@ -1280,12 +1280,28 @@ void PreferenceDialog::apply()
       prefs.showWebPanel       = webPanelShow->isChecked();
       prefs.antialiasedDrawing = drawAntialiased->isChecked();
 
-      if (
+      prefs.useJackTransport   = jackDriver->isChecked() && useJackTransport->isChecked();
+      prefs.JackTimebaseMaster = becomeTimebaseMaster->isChecked();
+      prefs.midiPorts          = midiPorts->value();
+      prefs.rememberLastMidiConnections = rememberLastMidiConnections->isChecked();
+
+      bool wasJack = (prefs.useJackMidi || prefs.useJackAudio);
+      bool nowJack = jackDriver->isChecked() && (useJackAudio->isChecked() || useJackMidi->isChecked());
+      bool jackChanged = wasJack == nowJack && nowJack ==true;
+
+      prefs.useJackAudio       = jackDriver->isChecked() && useJackAudio->isChecked();
+      prefs.useJackMidi        = jackDriver->isChecked() && useJackMidi->isChecked();
+
+      if (jackChanged) {
+            //Keep JACK driver without unload
+            preferences = prefs;
+            seq->driver()->init(true);
+            }
+      else if (
          (prefs.useAlsaAudio != alsaDriver->isChecked())
-         || (prefs.useJackAudio != (jackDriver->isChecked() && useJackAudio->isChecked()))
+         || (wasJack != nowJack)
          || (prefs.usePortaudioAudio != portaudioDriver->isChecked())
          || (prefs.usePulseAudio != pulseaudioDriver->isChecked())
-         || (prefs.useJackMidi != (jackDriver->isChecked() && useJackMidi->isChecked()))
          || (prefs.alsaDevice != alsaDevice->text())
          || (prefs.alsaSampleRate != alsaSampleRate->currentText().toInt())
          || (prefs.alsaPeriodSize != alsaPeriodSize->currentText().toInt())
@@ -1294,10 +1310,8 @@ void PreferenceDialog::apply()
             if (seq)
                   seq->exit();
             prefs.useAlsaAudio       = alsaDriver->isChecked();
-            prefs.useJackAudio       = jackDriver->isChecked() && useJackAudio->isChecked();
             prefs.usePortaudioAudio  = portaudioDriver->isChecked();
             prefs.usePulseAudio      = pulseaudioDriver->isChecked();
-            prefs.useJackMidi        = jackDriver->isChecked() && useJackMidi->isChecked();
             prefs.alsaDevice         = alsaDevice->text();
             prefs.alsaSampleRate     = alsaSampleRate->currentText().toInt();
             prefs.alsaPeriodSize     = alsaPeriodSize->currentText().toInt();
@@ -1313,7 +1327,7 @@ void PreferenceDialog::apply()
             }
 
 #ifdef USE_PORTAUDIO
-      if(usePortaudio) {
+      if (usePortaudio) {
             Portaudio* audio = static_cast<Portaudio*>(seq->driver());
             prefs.portaudioDevice = audio->deviceIndex(portaudioApi->currentIndex(),
                portaudioDevice->currentIndex());
@@ -1359,10 +1373,6 @@ void PreferenceDialog::apply()
       else if (exportNoBreaks->isChecked())
             prefs.musicxmlExportBreaks = NO_BREAKS;
 
-      prefs.useJackTransport   = jackDriver->isChecked() && useJackTransport->isChecked();
-      prefs.JackTimebaseMaster = becomeTimebaseMaster->isChecked();
-      prefs.midiPorts          = midiPorts->value();
-      prefs.rememberLastMidiConnections = rememberLastMidiConnections->isChecked();
       prefs.proximity          = proximity->value();
       prefs.autoSave           = autoSave->isChecked();
       prefs.autoSaveTime       = autoSaveTime->value();
@@ -1446,7 +1456,6 @@ void PreferenceDialog::apply()
       emit preferencesChanged();
       preferences.write();
       mscore->startAutoSave();
-      seq->updateDriver();
       }
 
 //---------------------------------------------------------
