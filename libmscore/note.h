@@ -133,8 +133,8 @@ struct NoteVal {
 //   @P elements         array[Ms::Element]      list of elements attached to note head
 //   @P accidental      Ms::Accidental          note accidental (null if none)
 //   @P dots            array[Ms::NoteDot]      list of note dots (empty if none)
-//   @P tieFor          Ms::Tie                 note forwatd tie (null if none)
-//   @P tieBack         Ms::Tie                 note backwad tie (null if none)
+//   @P tieFor          Ms::Tie                 note forward tie (null if none, read only)
+//   @P tieBack         Ms::Tie                 note backward tie (null if none, read only)
 //---------------------------------------------------------------------------------------
 
 class Note : public Element {
