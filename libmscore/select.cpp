@@ -309,6 +309,8 @@ bool SelectionFilter::canSelect(const Element* e) const
           return isFiltered(SelectionFilterType::OTHER_TEXT);
       if (e->isSLine()) // NoteLine, Volta
           return isFiltered(SelectionFilterType::OTHER_LINE);
+      if (e->type() == Element::Type::TREMOLO && static_cast<const Tremolo*>(e)->twoNotes() == false)
+          return isFiltered(SelectionFilterType::TREMOLO);
       return true;
       }
 
@@ -326,6 +328,7 @@ void Selection::appendChord(Chord* chord)
       if (chord->arpeggio()) appendFiltered(chord->arpeggio());
       if (chord->glissando()) appendFiltered(chord->glissando());
       if (chord->stemSlash()) _el.append(chord->stemSlash());
+      if (chord->tremolo()) appendFiltered(chord->tremolo());
       foreach(Note* note, chord->notes()) {
             _el.append(note);
             if (note->accidental()) _el.append(note->accidental());
