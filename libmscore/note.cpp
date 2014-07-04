@@ -2328,7 +2328,8 @@ NoteVal Note::noteVal() const
       }
 
 //---------------------------------------------------------
-//   noteVal
+//   qmlDots
+//    returns dots as a list property for plugins
 //---------------------------------------------------------
 
 QQmlListProperty<Ms::NoteDot> Note::qmlDots()
