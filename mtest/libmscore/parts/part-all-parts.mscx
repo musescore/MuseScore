@@ -1182,6 +1182,7 @@
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
+            <Slur type="start" id="6"/>
             </Chord>
           <Chord>
             <lid>36</lid>
@@ -1209,6 +1210,7 @@
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
+            <Slur type="stop" id="6"/>
             </Chord>
           </Measure>
         <Measure number="5">
