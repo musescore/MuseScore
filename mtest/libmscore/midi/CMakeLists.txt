@@ -14,4 +14,3 @@
 set(TARGET tst_midi)
 
 include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
-

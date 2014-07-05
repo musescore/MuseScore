@@ -12,7 +12,9 @@
 //=============================================================================
 
 #include <QtTest/QtTest>
-
+#include <QFile>
+#include <QCoreApplication>
+#include <QTextStream>
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
 #include "libmscore/durationtype.h"
@@ -25,6 +27,7 @@
 
 #include "libmscore/mcursor.h"
 #include "mtest/testutils.h"
+#define DIR QString("libmscore/midi/")
 
 namespace Ms {
       extern Score::FileError importMidi(Score*, const QString&);
@@ -45,6 +48,8 @@ class TestMidi : public QObject, public MTest
       void midi01();
       void midi02();
       void midi03();
+      void events_data();
+      void events();
       };
 
 //---------------------------------------------------------
@@ -57,6 +62,21 @@ void TestMidi::initTestCase()
       }
 
 
+void TestMidi::events_data()
+      {
+      QTest::addColumn<QString>("file");
+      // Test Eighth Swing
+      QTest::newRow("testSwing8thSimple") <<  "testSwing8thSimple";
+      QTest::newRow("testSwing8thTies") <<  "testSwing8thTies";
+      QTest::newRow("testSwing8thTriplets") <<  "testSwing8thTriplets";
+      QTest::newRow("testSwing8thDots") <<  "testSwing8thDots";
+      // Test Sixteenth Swing
+      QTest::newRow("testSwing16thSimple") <<  "testSwing16thSimple";
+      QTest::newRow("testSwing16thTies") <<  "testSwing16thTies";
+      QTest::newRow("testSwing16thTriplets") <<  "testSwing16thTriplets";
+      QTest::newRow("testSwing16thDots") <<  "testSwing16thDots";
+      }
+
 //---------------------------------------------------------
 //   saveMidi
 //---------------------------------------------------------
@@ -66,6 +86,7 @@ bool saveMidi(Score* score, const QString& name)
       ExportMidi em(score);
       return em.write(name, true);
       }
+
 
 //---------------------------------------------------------
 //   compareElements
@@ -287,6 +308,47 @@ void TestMidi::midi03()
 
       delete score;
       delete score2;
+      }
+
+//---------------------------------------------------------
+//   events
+//---------------------------------------------------------
+
+void TestMidi::events()
+      {
+      QFETCH(QString, file);
+
+      QString readFile(DIR   + file + ".mscx");
+      QString writeFile(file + "-test.txt");
+      QString reference(DIR + file + "-ref.txt");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+      EventMap events;
+      score->renderMidi(&events);
+      //qDebug() << "Opened score " << readFile;
+      QFile filehandler(writeFile);
+      filehandler.open(QIODevice::WriteOnly | QIODevice::Text);
+      QTextStream out(&filehandler);
+      multimap<int, NPlayEvent> ::iterator iter;
+      for (auto iter = events.begin(); iter!= events.end(); ++iter){
+            out << qSetFieldWidth(5) << "Tick  =  ";
+            out << qSetFieldWidth(5) << iter->first;
+            out << qSetFieldWidth(5) << "   Type  = ";
+            out << qSetFieldWidth(5) << iter->second.type();
+            out << qSetFieldWidth(5) << "   Pitch  = ";
+            out << qSetFieldWidth(5) << iter->second.dataA();
+            out << qSetFieldWidth(5) << "   Velocity  = ";
+            out << qSetFieldWidth(5) << iter->second.dataB();
+            out << qSetFieldWidth(5) << "   Channel  = ";
+            out << qSetFieldWidth(5) << iter->second.channel();
+            out << endl;
+            }
+      filehandler.close();
+
+      QVERIFY(score);
+      QVERIFY(compareFiles(writeFile, reference));
+     // QVERIFY(saveCompareScore(score, writeFile, reference));
       }
 
 QTEST_MAIN(TestMidi)

@@ -56,6 +56,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void toggleHeaderOddEven(bool);
       void toggleFooterOddEven(bool);
       void buttonClicked(QAbstractButton*);
+      void setSwingParams(bool);
       void editTextClicked(int id);
       void resetStyleValue(int i);
 

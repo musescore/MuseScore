@@ -164,7 +164,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(chordsStandard, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
       connect(chordsJazz, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
       connect(chordsCustom, SIGNAL(toggled(bool)), SLOT(setChordStyle(bool)));
-
+      connect(SwingOff, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
+      connect(swingEighth, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
+      connect(swingSixteenth, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
       connect(hideEmptyStaves, SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
 
       connect(bg, SIGNAL(buttonClicked(int)), SLOT(editTextClicked(int)));
@@ -326,6 +328,7 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::genCourtesyTimesig,      genCourtesyTimesig->isChecked());
       lstyle.set(StyleIdx::genCourtesyKeysig,       genCourtesyKeysig->isChecked());
       lstyle.set(StyleIdx::genCourtesyClef,         genCourtesyClef->isChecked());
+      lstyle.set(StyleIdx::swingRatio,              swingBox->value());
 
       bool customChords = false;
       if (chordsStandard->isChecked())
@@ -590,7 +593,20 @@ void EditStyle::setValues()
       genCourtesyTimesig->setChecked(lstyle.value(StyleIdx::genCourtesyTimesig).toBool());
       genCourtesyKeysig->setChecked(lstyle.value(StyleIdx::genCourtesyKeysig).toBool());
       genCourtesyClef->setChecked(lstyle.value(StyleIdx::genCourtesyClef).toBool());
-
+      swingBox->setValue(lstyle.value(StyleIdx::swingRatio).toInt());
+      QVariant unit(lstyle.value(StyleIdx::swingUnit).toInt());
+      if (unit == 240) {
+            swingEighth->setChecked(true);
+            swingBox->setEnabled(true);
+            }
+      else if (unit == 120) {
+            swingSixteenth->setChecked(true);
+            swingBox->setEnabled(true);
+            }
+      else if (unit == 0) {
+            SwingOff->setChecked(true);
+            swingBox->setEnabled(false);
+      }
       QString s(lstyle.value(StyleIdx::chordDescriptionFile).toString());
       chordDescriptionFile->setText(s);
       chordsXmlFile->setChecked(lstyle.value(StyleIdx::chordsXmlFile).toBool());
@@ -772,6 +788,24 @@ void EditStyle::selectChordDescriptionFile()
       if (fn.isEmpty())
             return;
       chordDescriptionFile->setText(fn);
+      }
+
+void EditStyle::setSwingParams(bool checked)
+      {
+      if( !checked)
+            return;
+      if (SwingOff->isChecked()) {
+            lstyle.set(StyleIdx::swingUnit, 0);
+            swingBox->setEnabled(false);
+            }
+      else if (swingEighth->isChecked()) {
+            lstyle.set(StyleIdx::swingUnit, 240);
+            swingBox->setEnabled(true);
+            }
+      else if (swingSixteenth->isChecked()) {
+            lstyle.set(StyleIdx::swingUnit, 120);
+            swingBox->setEnabled(true);
+            }
       }
 
 //---------------------------------------------------------
