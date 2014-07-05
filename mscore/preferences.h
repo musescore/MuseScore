@@ -89,8 +89,6 @@ struct Preferences {
       QColor dropColor;
       bool enableMidiInput;
       bool playNotes;         // play notes on click
-      QString lPort;          // audio port left
-      QString rPort;          // audio port right
       bool showNavigator;
       bool showPlayPanel;
       bool showWebPanel;
@@ -104,7 +102,7 @@ struct Preferences {
       bool useJackTransport;
       bool JackTimebaseMaster;
       int midiPorts;
-      bool rememberLastMidiConnections;
+      bool rememberLastConnections;
 
       QString alsaDevice;
       int alsaSampleRate;

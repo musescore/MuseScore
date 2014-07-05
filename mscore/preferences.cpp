@@ -103,8 +103,6 @@ void Preferences::init()
 
       enableMidiInput    = true;
       playNotes          = true;
-      lPort              = "";
-      rPort              = "";
 
       showNavigator      = true;
       showPlayPanel      = false;
@@ -126,7 +124,7 @@ void Preferences::init()
 #endif
 
       midiPorts          = 2;
-      rememberLastMidiConnections = true;
+      rememberLastConnections = true;
 
       alsaDevice         = "default";
       alsaSampleRate     = 48000;
@@ -240,8 +238,6 @@ void Preferences::write()
       s.setValue("enableMidiInput",    enableMidiInput);
       s.setValue("playNotes",          playNotes);
 
-      s.setValue("lPort",              lPort);
-      s.setValue("rPort",              rPort);
       s.setValue("showNavigator",      showNavigator);
       s.setValue("showPlayPanel",      showPlayPanel);
       s.setValue("showWebPanel",       showWebPanel);
@@ -255,7 +251,7 @@ void Preferences::write()
       s.setValue("usePortaudioAudio",  usePortaudioAudio);
       s.setValue("usePulseAudio",      usePulseAudio);
       s.setValue("midiPorts",          midiPorts);
-      s.setValue("rememberLastMidiConnections", rememberLastMidiConnections);
+      s.setValue("rememberLastMidiConnections", rememberLastConnections);
 
       s.setValue("alsaDevice",         alsaDevice);
       s.setValue("alsaSampleRate",     alsaSampleRate);
@@ -392,8 +388,6 @@ void Preferences::read()
 
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
       playNotes               = s.value("playNotes", playNotes).toBool();
-      lPort                   = s.value("lPort", lPort).toString();
-      rPort                   = s.value("rPort", rPort).toString();
 
       showNavigator   = s.value("showNavigator", showNavigator).toBool();
       showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
@@ -426,7 +420,7 @@ void Preferences::read()
       MScore::panPlayback      = s.value("panPlayback", MScore::panPlayback).toBool();
       alternateNoteEntryMethod = s.value("alternateNoteEntry", alternateNoteEntryMethod).toBool();
       midiPorts                = s.value("midiPorts", midiPorts).toInt();
-      rememberLastMidiConnections = s.value("rememberLastMidiConnections", rememberLastMidiConnections).toBool();
+      rememberLastConnections  = s.value("rememberLastMidiConnections", rememberLastConnections).toBool();
       proximity                = s.value("proximity", proximity).toInt();
       autoSave                 = s.value("autoSave", autoSave).toBool();
       autoSaveTime             = s.value("autoSaveTime", autoSaveTime).toInt();
@@ -804,23 +798,6 @@ void PreferenceDialog::updateValues()
             }
       checkUpdateStartup->setCurrentIndex(curPeriodIdx);
 
-      if (seq && seq->isRunning()) {
-            QList<QString> sl = seq->inputPorts();
-            int idx = 0;
-            for (QList<QString>::iterator i = sl.begin(); i != sl.end(); ++i, ++idx) {
-                  jackRPort->addItem(*i);
-                  jackLPort->addItem(*i);
-                  if (prefs.rPort == *i)
-                        jackRPort->setCurrentIndex(idx);
-                  if (prefs.lPort == *i)
-                        jackLPort->setCurrentIndex(idx);
-                  }
-            }
-      else {
-            jackRPort->setEnabled(false);
-            jackLPort->setEnabled(false);
-            }
-
       navigatorShow->setChecked(prefs.showNavigator);
       playPanelShow->setChecked(prefs.showPlayPanel);
       webPanelShow->setChecked(prefs.showWebPanel);
@@ -865,7 +842,7 @@ void PreferenceDialog::updateValues()
             }
 
       midiPorts->setValue(prefs.midiPorts);
-      rememberLastMidiConnections->setChecked(prefs.rememberLastMidiConnections);
+      rememberLastMidiConnections->setChecked(prefs.rememberLastConnections);
       proximity->setValue(prefs.proximity);
       autoSave->setChecked(prefs.autoSave);
       autoSaveTime->setValue(prefs.autoSaveTime);
@@ -1269,12 +1246,7 @@ void PreferenceDialog::apply()
       prefs.fgUseColor     = fgColorButton->isChecked();
       prefs.enableMidiInput = enableMidiInput->isChecked();
       prefs.playNotes      = playNotes->isChecked();
-      if (prefs.lPort != jackLPort->currentText()
-         || prefs.rPort != jackRPort->currentText()) {
-            // TODO: change ports
-            prefs.lPort = jackLPort->currentText();
-            prefs.rPort = jackRPort->currentText();
-            }
+
       prefs.showNavigator      = navigatorShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
       prefs.showWebPanel       = webPanelShow->isChecked();
@@ -1283,7 +1255,7 @@ void PreferenceDialog::apply()
       prefs.useJackTransport   = jackDriver->isChecked() && useJackTransport->isChecked();
       prefs.JackTimebaseMaster = becomeTimebaseMaster->isChecked();
       prefs.midiPorts          = midiPorts->value();
-      prefs.rememberLastMidiConnections = rememberLastMidiConnections->isChecked();
+      prefs.rememberLastConnections = rememberLastMidiConnections->isChecked();
 
       bool wasJack = (prefs.useJackMidi || prefs.useJackAudio);
       bool nowJack = jackDriver->isChecked() && (useJackAudio->isChecked() || useJackMidi->isChecked());

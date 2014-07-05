@@ -198,7 +198,6 @@ class Seq : public QObject, public Sequencer {
 
       void processMessages();
       void process(unsigned, float*);
-      QList<QString> inputPorts();
       int getEndTick() const    { return endTick;  }
       bool isRealtime() const   { return true;     }
       void sendMessage(SeqMsg&) const;
