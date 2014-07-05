@@ -304,6 +304,7 @@
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
+          <Slur type="start" id="3"/>
           </Chord>
         <Chord>
           <lid>36</lid>
@@ -323,7 +324,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <endSpanner id="3"/>
         <Chord>
           <lid>40</lid>
           <durationType>quarter</durationType>
@@ -332,6 +332,7 @@
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
+          <Slur type="stop" id="3"/>
           </Chord>
         </Measure>
       <Measure number="5">
@@ -1196,7 +1197,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <endSpanner id="6"/>
           <Chord>
             <lid>40</lid>
             <durationType>quarter</durationType>

@@ -141,13 +141,13 @@
           </Chord>
         </Measure>
       <Measure number="3">
-        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
+          <Slur type="stop" id="2"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>

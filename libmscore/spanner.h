@@ -165,11 +165,11 @@ class Spanner : public Element {
       void setStartChord(Chord*);
       void setEndChord(Chord*);
 
-      Chord* startChord() const;
-      Chord* endChord() const;
+      Chord* startChord();
+      Chord* endChord();
 
-      ChordRest* startCR() const;
-      ChordRest* endCR() const;
+      ChordRest* startCR();
+      ChordRest* endCR();
 
       Segment* startSegment() const;
       Segment* endSegment() const;

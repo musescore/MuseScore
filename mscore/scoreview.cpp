@@ -4024,7 +4024,7 @@ void ScoreView::cmdAddNoteLine()
       }
 
 //---------------------------------------------------------
-//   addSlur
+//   cmdAddSlur
 //---------------------------------------------------------
 
 void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
@@ -4037,28 +4037,6 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
       else
             cr2 = lastNote ? lastNote->chord() : nextChordRest(cr1);
 
-#if 0
-      if (cr1->isGrace()) {
-            // slur from a gracenote
-            //
-            Q_ASSERT(cr1->type() == Element::Type::CHORD);
-            Q_ASSERT(cr2->type() == Element::Type::CHORD);
-            Slur* slur = new Slur(score());
-            slur->setAnchor(Spanner::Anchor::CHORD);
-
-            slur->setStartChord(static_cast<Chord*>(cr1));
-            slur->setEndChord(static_cast<Chord*>(cr2));
-            slur->setTick(cr1->tick());
-            slur->setTick2(cr2->tick());
-            slur->setTrack(cr1->track());
-            slur->setTrack2(cr2->track());
-            slur->setParent(cr1);
-            score()->undoAddElement(slur);
-            _score->endCmd();
-            return;
-            }
-#endif
-
       if (cr2 == 0)
             cr2 = cr1;
 
@@ -4070,16 +4048,10 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
             slur->setTrack2(cr2->track());
       else
             slur->setTrack2(cr1->track());
-      if (cr1->isGrace()) {
-            slur->setAnchor(Spanner::Anchor::CHORD);
-            Q_ASSERT(cr1->type() == Element::Type::CHORD);
-            Q_ASSERT(cr2->type() == Element::Type::CHORD);
-            slur->setStartChord(static_cast<Chord*>(cr1));
-            slur->setEndChord(static_cast<Chord*>(cr2));
-            slur->setParent(cr1);
-            }
-      else
-            slur->setParent(0);
+
+      slur->setStartElement(cr1);
+      slur->setEndElement(cr2);
+
       _score->undoAddElement(slur);
       slur->layout();
 

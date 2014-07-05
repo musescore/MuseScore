@@ -184,9 +184,9 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             int endTrack   = part->endTrack();
             cr = searchCR(e->segment(), startTrack, endTrack);
             }
-      if (cr && cr != e1 &&
-            ((curGrip == int(GripSlurSegment::END) && cr->tick() > sl->tick())
-             || (curGrip == int(GripSlurSegment::START) && cr->tick() < sl->tick2() ))
+      if (cr && cr != e1
+//            && ((curGrip == int(GripSlurSegment::END) && cr->tick() > sl->tick())
+//             || (curGrip == int(GripSlurSegment::START) && cr->tick() < sl->tick2() ))
             )
             changeAnchor(viewer, curGrip, cr);
       return true;
@@ -213,8 +213,6 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                         spanner()->setStartChord(static_cast<Chord*>(element));
                         break;
                   case Spanner::Anchor::SEGMENT:
-                        spanner()->setTick(static_cast<Chord*>(element)->tick());
-                        break;
                   case Spanner::Anchor::MEASURE:
                         qDebug("SlurSegment::changeAnchor: bad anchor");
                         break;
@@ -237,10 +235,6 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                         break;
 
                   case Spanner::Anchor::SEGMENT:
-                        spanner()->setTick2(static_cast<Chord*>(element)->tick());
-                        spanner()->setTrack2(element->track());
-                        break;
-
                   case Spanner::Anchor::MEASURE:
                         qDebug("SlurSegment::changeAnchor: bad anchor");
                         break;
@@ -1156,7 +1150,7 @@ Slur::Slur(Score* s)
    : SlurTie(s)
       {
       setId(-1);
-      setAnchor(Anchor::SEGMENT);
+      setAnchor(Anchor::CHORD);
       }
 
 //---------------------------------------------------------
@@ -1245,10 +1239,6 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 
 void Slur::layout()
       {
-      if (anchor() == Anchor::CHORD) {
-            layoutChord();
-            return;
-            }
       if (track2() == -1)
             setTrack2(track());
 
@@ -1275,15 +1265,14 @@ void Slur::layout()
             return;
             }
 
-      if (anchor() == Spanner::Anchor::SEGMENT) {
-            computeStartElement();
-            computeEndElement();
-            }
-
-      if (startCR() == 0 || endCR() == 0) {
-            qDebug("Slur::layout(): id %d  track %d-%d  %p - %p tick %d-%d null anchor",
+      if (startCR() == 0) {
+            qDebug("Slur::layout(): id %d  track %d-%d  %p - %p tick %d-%d null start anchor",
                id(), track(), track2(), startCR(), endCR(), tick(), tick2());
             return;
+            }
+      if (endCR() == 0) {
+            setEndElement(startCR());
+            setTick2(tick());
             }
       switch (_slurDirection) {
             case MScore::Direction::UP:
@@ -1302,7 +1291,7 @@ void Slur::layout()
                         _up = true;
                         break;
                         }
-                  Measure* m1    = startCR()->measure();
+                  Measure* m1 = startCR()->measure();
 
                   Chord* c1 = (startCR()->type() == Element::Type::CHORD) ? static_cast<Chord*>(startCR()) : 0;
                   Chord* c2 = (endCR()->type() == Element::Type::CHORD) ? static_cast<Chord*>(endCR()) : 0;
@@ -1461,103 +1450,6 @@ void SlurTie::fixupSegments(unsigned nsegs)
                   s->setSystem(0);
                   delSegments.enqueue(s);  // cannot delete: used in SlurSegment->edit()
                   }
-            }
-      }
-
-//---------------------------------------------------------
-//   layoutChord
-//---------------------------------------------------------
-
-void Slur::layoutChord()
-      {
-      qreal _spatium = spatium();
-
-      //
-      //    show short bow
-      //
-      if (startChord() == 0 || endChord() == 0) {
-            qDebug("no start/end chord");
-            return;
-            }
-
-      Chord* c1 = startChord();
-//      Chord* c2 = endChord();
-      Note* startNote = c1->upNote();
-      // Note* endNote = c2->upNote();
-
-      if (_slurDirection == MScore::Direction::AUTO)
-            _up = false;
-      else
-            _up = _slurDirection == MScore::Direction::UP ? true : false;
-
-      qreal w   = startNote->headWidth();
-      qreal xo1 = w * 1.12;
-      qreal h   = w * 0.3;
-      qreal yo  = _up ? -h : h;
-
-      QPointF off1(xo1, yo);
-      QPointF off2(0.0, yo);
-
-#if 0 // yet(?) unused
-      QPointF ppos(pagePos());
-#endif
-
-      // TODO: cleanup
-
-      SlurPos sPos;
-      slurPos(&sPos);
-
-      // p1, p2, s1, s2
-
-      QList<System*>* systems = score()->systems();
-      setPos(0, 0);
-
-      //---------------------------------------------------------
-      //   count number of segments, if no change, all
-      //    user offsets (drags) are retained
-      //---------------------------------------------------------
-
-      int sysIdx1 = systems->indexOf(sPos.system1);
-      if (sysIdx1 == -1) {
-            qDebug("system not found");
-            foreach(System* s, *systems)
-                  qDebug("   search %p in %p", sPos.system1, s);
-            return;
-            }
-
-      int sysIdx2     = systems->indexOf(sPos.system2);
-      if (sysIdx2 < 0)
-            sysIdx2 = sysIdx1;
-      unsigned nsegs  = sysIdx2 - sysIdx1 + 1;
-      fixupSegments(nsegs);
-
-      int i = 0;
-      for (uint ii = 0; ii < nsegs; ++ii) {
-            System* system = (*systems)[sysIdx1++];
-            if (system->isVbox())
-                  continue;
-            SlurSegment* segment = segmentAt(i);
-            segment->setSystem(system);
-
-            // case 1: one segment
-            if (sPos.system1 == sPos.system2) {
-                  segment->layout(sPos.p1, sPos.p2);
-                  segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-                  }
-            // case 2: start segment
-            else if (i == 0) {
-                  qreal x = system->bbox().width();
-                  segment->layout(sPos.p1, QPointF(x, sPos.p1.y()));
-                  segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
-                  }
-            // case 4: end segment
-            else {
-                  qreal x = firstNoteRestSegmentX(system) - 2 * _spatium;
-
-                  segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
-                  segment->setSpannerSegmentType(SpannerSegmentType::END);
-                  }
-            ++i;
             }
       }
 

@@ -117,8 +117,8 @@
             <fret>3</fret>
             <string>1</string>
             </Note>
+          <Slur type="start" id="2"/>
           </Chord>
-        <endSpanner id="2"/>
         <Chord>
           <lid>7</lid>
           <durationType>quarter</durationType>
@@ -129,6 +129,7 @@
             <fret>0</fret>
             <string>1</string>
             </Note>
+          <Slur type="stop" id="2"/>
           </Chord>
         <Rest>
           <lid>9</lid>
@@ -282,8 +283,8 @@
               <fret>3</fret>
               <string>1</string>
               </Note>
+            <Slur type="start" id="3"/>
             </Chord>
-          <endSpanner id="3"/>
           <Chord>
             <lid>7</lid>
             <durationType>quarter</durationType>
@@ -294,6 +295,7 @@
               <fret>0</fret>
               <string>1</string>
               </Note>
+            <Slur type="stop" id="3"/>
             </Chord>
           <Rest>
             <lid>9</lid>
@@ -333,8 +335,8 @@
               <fret>3</fret>
               <string>1</string>
               </Note>
+            <Slur type="start" id="4"/>
             </Chord>
-          <endSpanner id="4"/>
           <Chord>
             <lid>7</lid>
             <durationType>quarter</durationType>
@@ -345,6 +347,7 @@
               <fret>0</fret>
               <string>1</string>
               </Note>
+            <Slur type="stop" id="4"/>
             </Chord>
           <Rest>
             <lid>9</lid>
