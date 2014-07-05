@@ -51,7 +51,6 @@ class Portaudio : public Driver {
       virtual bool init(bool hot = false);
       virtual bool start();
       virtual bool stop();
-      virtual QList<QString> inputPorts();
       virtual void startTransport();
       virtual void stopTransport();
       virtual Transport getState() override;

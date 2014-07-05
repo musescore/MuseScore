@@ -87,8 +87,12 @@ void JackAudio::registerPort(const QString& name, bool input, bool midi)
 
 void JackAudio::unregisterPort(jack_port_t* port)
       {
-      jack_port_unregister(client, port);
-      port = 0;
+      if (jack_port_is_mine(client,port)) {
+            jack_port_unregister(client, port);
+            port = 0;
+            }
+      else
+            qDebug("Trying to unregister port that is not my!");
       }
 
 //---------------------------------------------------------
@@ -133,6 +137,20 @@ void JackAudio::connect(void* src, void* dst)
       }
 
 //---------------------------------------------------------
+//   connect
+//---------------------------------------------------------
+
+void JackAudio::connect(const char* src, const char* dst)
+      {
+      if (src == 0 || dst == 0) {
+            qDebug("JackAudio::connect: unknown jack ports");
+            return;
+            }
+      int rv = jack_connect(client, src, dst);
+      if (rv)
+            qDebug("jack connect port <%s> - <%s> failed: %d", src, dst, rv);
+      }
+//---------------------------------------------------------
 //   disconnect
 //---------------------------------------------------------
 
@@ -160,16 +178,14 @@ bool JackAudio::start()
             qDebug("JACK: cannot activate client");
             return false;
             }
-      // TODO: remember last connections for JACK audio
-      if (preferences.useJackAudio) {
-            /* connect the ports. Note: you can't do this before
-               the client is activated, because we can't allow
-               connections to be made to clients that aren't
-               running.
-             */
+      /* connect the ports. Note: you can't do this before
+         the client is activated, because we can't allow
+         connections to be made to clients that aren't
+         running.
+       */
+      if (preferences.useJackAudio)
             restoreAudioConnections();
-            }
-      if (preferences.useJackMidi && preferences.rememberLastMidiConnections)
+      if (preferences.useJackMidi)
             restoreMidiConnections();
       return true;
       }
@@ -181,10 +197,10 @@ bool JackAudio::start()
 
 bool JackAudio::stop()
       {
-      if (preferences.JackTimebaseMaster)
-            releaseTimebaseCallback();
-      if (preferences.useJackMidi && preferences.rememberLastMidiConnections)
+      if (preferences.useJackMidi)
             rememberMidiConnections();
+      if (preferences.useJackAudio)
+            rememberAudioConnections();
 
       if (jack_deactivate(client)) {
             qDebug("cannot deactivate client");
@@ -252,7 +268,6 @@ void JackAudio::timebase(jack_transport_state_t state, jack_nframes_t /*nframes*
                   audio->stopTransport();
             }
       else if (audio->seq->isRunning()) {
-
             if (!audio->seq->score()->repeatList() || !audio->seq->score()->sigmap())
                   return;
 
@@ -414,32 +429,6 @@ bool JackAudio::init(bool hot)
       if (preferences.useJackAudio) {
             registerPort("left", false, false);
             registerPort("right", false, false);
-
-            // connect mscore output ports to jack input ports
-            QString lport = preferences.lPort;
-            QString rport = preferences.rPort;
-            QList<QString> ports = inputPorts();
-            QList<QString>::iterator pi = ports.begin();
-            if (lport.isEmpty()) {
-                  if (pi != ports.end()) {
-                        preferences.lPort = *pi;
-                        ++pi;
-                        }
-                  else {
-                        qDebug("no jack ports found");
-                        jack_client_close(client);
-                        client = 0;
-                        return false;
-                        }
-                  }
-            if (rport.isEmpty()) {
-                  if (pi != ports.end()) {
-                        preferences.rPort = *pi;
-                        }
-                  else {
-                        qDebug("no jack port for right channel found!");
-                        }
-                  }
             }
 
       if (preferences.useJackMidi) {
@@ -514,7 +503,9 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
       jack_port_t* port = midiOutputPorts[portIdx];
       if (midiOutputTrace) {
             const char* portName = jack_port_name(port);
-            qDebug("MidiOut<%s>: jackMidi: ", portName);
+            int a     = e.dataA();
+            int b     = e.dataB();
+            qDebug("MidiOut<%s>: jackMidi: %02x %i %i", portName, e.type(), a, b);
             // e.dump();
             }
       void* pb = jack_port_get_buffer(port, _segmentSize);
@@ -662,7 +653,8 @@ void JackAudio::setTimebaseCallback()
       {
       int errCode = jack_set_timebase_callback(client, 0, timebase, this); // 0: force set timebase
       if (errCode == 0) {
-            qDebug("Registered as JACK Timebase Master.");
+            if (MScore::debugMode)
+                  qDebug("Registered as JACK Timebase Master.");
             }
       else {
             preferences.JackTimebaseMaster = false;
@@ -684,28 +676,80 @@ void JackAudio::releaseTimebaseCallback()
       }
 
 //---------------------------------------------------------
+//   rememberAudioConnections
+//---------------------------------------------------------
+
+void JackAudio::rememberAudioConnections()
+      {
+      if (!preferences.rememberLastConnections)
+            return;
+      if (MScore::debugMode)
+            qDebug("Saving audio connections...");
+      QSettings settings;
+      int port = 0;
+      foreach(jack_port_t* mp, ports) {
+            const char** cc = jack_port_get_connections(mp);
+            const char** c = cc;
+            int idx = 0;
+            while (c) {
+                  const char* p = *c++;
+                  if (p == 0)
+                        break;
+                  settings.setValue(QString("audio-%1-%2").arg(port).arg(idx), p);
+                  ++idx;
+                  }
+            settings.setValue(QString("audio-%1-connections").arg(port), idx);
+            free((void*)cc);
+            ++port;
+            }
+      }
+
+//---------------------------------------------------------
 //   restoreAudioConnections
 //   Connect to the ports in Preferences->I/O
 //---------------------------------------------------------
 
 void JackAudio::restoreAudioConnections()
       {
-      jack_port_disconnect(client, ports[0]);
-      jack_port_disconnect(client, ports[1]);
+      foreach(jack_port_t* p, ports)
+            jack_port_disconnect(client,p);
 
-      QString lport = preferences.lPort;
-      QString rport = preferences.rPort;
+      QList<QString> portList = inputPorts();
+      QList<QString>::iterator pi = portList.begin();
 
-      const char* src = jack_port_name(ports[0]);
-      int rv = jack_connect(client, src, qPrintable(lport));
-      if (rv)
-            qDebug("jack connect lport <%s> - <%s> failed: %d", src, qPrintable(lport), rv);
+      QSettings settings;
+      // Number of saved ports
+      int n = settings.value(QString("audio-0-connections"), 0).toInt() + settings.value(QString("audio-1-connections"), 0).toInt();
 
-      src = jack_port_name(ports[1]);
-      if (!rport.isEmpty()) {
-            rv = jack_connect(client, src, qPrintable(rport));
-            if (rv)
-                  qDebug("jack connect rport <%s> - <%s> failed: %d", src, qPrintable(rport), rv);
+      // Connecting to system ports
+      if (!preferences.rememberLastConnections || n == 0) {
+            if (MScore::debugMode)
+                  qDebug("Connecting to system ports...");
+            for (int i = 0; i<ports.size(); i++) {
+                  const char* src = jack_port_name(ports[i]);
+                  if (pi != portList.end()) {
+                        connect(src, qPrintable(*pi));
+                        ++pi;
+                        }
+                  }
+            return;
+            }
+      if (MScore::debugMode)
+            qDebug("Restoring audio connections...");
+      // Connecting to saved ports
+      int nPorts = ports.size();
+      for (int i = 0; i < nPorts; ++i) {
+            int n = settings.value(QString("audio-%1-connections").arg(i), 0).toInt();
+            const char* src = jack_port_name(ports[i]);
+            for (int k = 0; k < n; ++k) {
+                  QString dst = settings.value(QString("audio-%1-%2").arg(i).arg(k), "").toString();
+                  if (!dst.isEmpty()) {
+                        if (jack_port_connected_to(ports[i], qPrintable(dst)))
+                              qDebug()<<"Audio port "<<src<<" ("<<i<<") already connected to "<<qPrintable(dst);
+                        else
+                              connect(src, qPrintable(dst));
+                        }
+                  }
             }
       }
 
@@ -715,6 +759,8 @@ void JackAudio::restoreAudioConnections()
 
 void JackAudio::rememberMidiConnections()
       {
+      if (!preferences.rememberLastConnections)
+            return;
       if (MScore::debugMode)
             qDebug("Saving midi connections...");
       QSettings settings;
@@ -734,7 +780,7 @@ void JackAudio::rememberMidiConnections()
             free((void*)cc);
             ++port;
             }
-      // We don't use it now
+
       port = 0;
       foreach(jack_port_t* mp, midiInputPorts) {
             const char** cc = jack_port_get_connections(mp);
@@ -760,6 +806,10 @@ void JackAudio::rememberMidiConnections()
 
 void JackAudio::restoreMidiConnections()
       {
+      if (!preferences.rememberLastConnections)
+            return;
+      if (MScore::debugMode)
+            qDebug("Restoring midi connections...");
       QSettings settings;
       int nPorts = midiOutputPorts.size();
       for (int i = 0; i < nPorts; ++i) {
@@ -770,9 +820,7 @@ void JackAudio::restoreMidiConnections()
                   if (!dst.isEmpty()) {
                         if (jack_port_connected_to(midiOutputPorts[i], qPrintable(dst)))
                               continue;
-                        int rv = jack_connect(client, src, qPrintable(dst));
-                        if (rv)
-                              qDebug("jack connect midi output <%s> - <%s> failed: %d", src, qPrintable(dst), rv);
+                        connect(src, qPrintable(dst));
                         }
                   }
             }
@@ -785,9 +833,7 @@ void JackAudio::restoreMidiConnections()
                   if (!src.isEmpty()) {
                         if (jack_port_connected_to(midiInputPorts[i], qPrintable(src)))
                               continue;
-                        int rv = jack_connect(client, qPrintable(src), dst);
-                        if (rv)
-                              qDebug("jack connect midi input <%s> - <%s> failed: %d",qPrintable(src), dst, rv);
+                        connect(qPrintable(src), dst);
                         }
                   }
             }
@@ -800,19 +846,17 @@ void JackAudio::restoreMidiConnections()
 
 void JackAudio::hotPlug()
       {
+      bool oldremember = preferences.rememberLastConnections;
+      preferences.rememberLastConnections = true;
       // Remember connections before calling jack_deactivate() - it disconnects all ports
-      if (preferences.useJackMidi && preferences.rememberLastMidiConnections && midiOutputPorts.size() != 0 && midiInputPorts.size() != 0)
+      if (preferences.useJackMidi && midiOutputPorts.size() != 0 && midiInputPorts.size() != 0)
             rememberMidiConnections();
+      if (preferences.useJackAudio && ports.size() != 0)
+            rememberAudioConnections();
 
       // We must set callbacks only on inactive client
       if (jack_deactivate(client))
             qDebug("cannot deactivate client");
-
-      // Timebase Master
-      if (preferences.JackTimebaseMaster)
-            setTimebaseCallback();
-      else
-            releaseTimebaseCallback();
 
       // Audio connections
       if (preferences.useJackAudio) {
@@ -855,13 +899,21 @@ void JackAudio::hotPlug()
                   midiInputPorts.removeOne(midiInputPorts[0]);
                   }
             }
+
+      // Timebase Master callback
+      if (preferences.JackTimebaseMaster)
+            setTimebaseCallback();
+      else
+            releaseTimebaseCallback();
+
       if (jack_activate(client)) {
             qDebug("JACK: cannot activate client");
             }
 
       if (preferences.useJackAudio)
             restoreAudioConnections();
-      if (preferences.useJackMidi && preferences.rememberLastMidiConnections)
+      if (preferences.useJackMidi)
             restoreMidiConnections();
+      preferences.rememberLastConnections = oldremember;
       }
 }

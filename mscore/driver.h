@@ -43,7 +43,6 @@ class Driver {
       virtual bool init(bool hot = false) = 0;
       virtual bool start() = 0;
       virtual bool stop() = 0;
-      virtual QList<QString> inputPorts() { return QList<QString>(); }
       virtual void stopTransport() = 0;
       virtual void startTransport() = 0;
       virtual Transport getState() = 0;

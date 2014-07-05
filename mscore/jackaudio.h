@@ -52,18 +52,20 @@ class JackAudio : public Driver {
       void hotPlug();
       void setTimebaseCallback();
       void releaseTimebaseCallback();
+      void rememberAudioConnections();
       void restoreAudioConnections();
       void rememberMidiConnections();
       void restoreMidiConnections();
+      QList<QString> inputPorts();
    public:
       JackAudio(Seq*);
       virtual ~JackAudio();
       virtual bool init(bool hot = false);
-      virtual QList<QString> inputPorts();
       virtual bool start();
       virtual bool stop();
       int framePos() const;
       void connect(void*, void*);
+      void connect(const char* src, const char* dst);
       void disconnect(void* src, void* dst);
       virtual bool isRealtime() const   { return jack_is_realtime(client); }
       virtual void startTransport();

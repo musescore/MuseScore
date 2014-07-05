@@ -123,7 +123,6 @@ class AlsaAudio : public Driver {
       AlsaAudio(Seq*);
       virtual ~AlsaAudio();
       virtual bool init(bool hot = false);
-      virtual QList<QString> inputPorts();
       virtual bool start();
       virtual bool stop();
       void connect(void*, void*) {}
