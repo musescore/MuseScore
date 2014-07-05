@@ -292,10 +292,8 @@ void Selection::updateSelectedElements()
       int startTrack = _staffStart * VOICES;
       int endTrack   = _staffEnd * VOICES;
 
-      Segment* previousEndSegment = 0;
       for (int st = startTrack; st < endTrack; ++st) {
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
-                  previousEndSegment = s;
                   if (s->segmentType() == Segment::Type::EndBarLine)  // do not select end bar line
                         continue;
                   Element* e = s->element(st);
