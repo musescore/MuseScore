@@ -25,7 +25,7 @@ MuseScore {
             var segment = m.first()
             while (segment) {
                 var element
-                element = segment.element(0)
+                element = segment.elementAt(0)
                 if (element && element.type == Element.CHORD) {
                     console.log(qsTr("    element"))
                     console.log(element.beamMode)

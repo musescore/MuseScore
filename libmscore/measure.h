@@ -94,10 +94,16 @@ enum class MeasureNumberMode : char {
 //---------------------------------------------------------
 //   @@ Measure
 ///    one measure in a system
+//
+//   @P firstSegment    Ms::Segment       the first segment of the measure (read-only)
+//   @P lastSegment     Ms::Segment       the last segment of the measure (read-only)
 //---------------------------------------------------------
 
 class Measure : public MeasureBase {
       Q_OBJECT
+
+      Q_PROPERTY(Ms::Segment* fistSegment       READ last)
+      Q_PROPERTY(Ms::Segment* lastSegment       READ first)
 
       SegmentList _segments;
 
@@ -192,16 +198,16 @@ class Measure : public MeasureBase {
       // actual length of measure in ticks
       virtual int ticks() const override;
 
-      int size() const                     { return _segments.size();        }
-      Q_INVOKABLE Ms::Segment* first() const   { return _segments.first();       }
-      Segment* first(Segment::Type t) const { return _segments.first(t);      }
+      int size() const                          { return _segments.size();        }
+      Ms::Segment* first() const                { return _segments.first();       }
+      Segment* first(Segment::Type t) const     { return _segments.first(t);      }
 
-      Q_INVOKABLE Ms::Segment* last() const    { return _segments.last(); }
+      Ms::Segment* last() const                 { return _segments.last(); }
       void remove(Segment* s);
-      SegmentList* segments()              { return &_segments; }
+      SegmentList* segments()                   { return &_segments; }
 
       qreal userStretch() const;
-      void setUserStretch(qreal v)         { _userStretch = v;    }
+      void setUserStretch(qreal v)              { _userStretch = v;    }
 
       void layoutX(qreal stretch);
       void layout(qreal width);
