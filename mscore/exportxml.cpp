@@ -1087,7 +1087,7 @@ void ExportMusicXml::credits(Xml& xml)
       const double w  = getTenthsFromInches(pf->size().width());
       const double lm = getTenthsFromInches(pf->oddLeftMargin());
       const double rm = getTenthsFromInches(pf->oddRightMargin());
-      const double tm = getTenthsFromInches(pf->oddTopMargin());
+      //const double tm = getTenthsFromInches(pf->oddTopMargin());
       const double bm = getTenthsFromInches(pf->oddBottomMargin());
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
