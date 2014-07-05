@@ -1223,15 +1223,13 @@ void GuitarPro1::readNote(int string, Note* note)
                          ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                          Slur* slur = new Slur(score);
-                         slur->setAnchor(Spanner::Anchor::CHORD);
                          slur->setStartChord(static_cast<Chord*>(cr1));
                          slur->setEndChord(static_cast<Chord*>(cr2));
                          slur->setTick(cr1->tick());
                          slur->setTick2(cr2->tick());
                          slur->setTrack(cr1->track());
                          slur->setTrack2(cr2->track());
-                         slur->setParent(cr1);
-                         score->undoAddElement(slur);
+                         score->addElement(slur);
                          }
                   }
             if (modMask1 & 0x2) {         // hammer on / pull off
@@ -1958,15 +1956,13 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
                          ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                          Slur* slur = new Slur(score);
-                         slur->setAnchor(Spanner::Anchor::CHORD);
                          slur->setStartChord(static_cast<Chord*>(cr1));
                          slur->setEndChord(static_cast<Chord*>(cr2));
                          slur->setTick(cr1->tick());
                          slur->setTick2(cr2->tick());
                          slur->setTrack(cr1->track());
                          slur->setTrack2(cr2->track());
-                         slur->setParent(cr1);
-                         score->undoAddElement(slur);
+                         score->addElement(slur);
                          }
                   }
             if (modMask2 & 0x1) {   // staccato
@@ -2356,7 +2352,6 @@ void GuitarPro4::read(QFile* fp)
                               }
                         if (hasSlur && (slurs[staffIdx] == 0)) {
                               Slur* slur = new Slur(score);
-                              slur->setParent(0);
                               slur->setTrack(staffIdx * VOICES);
                               slur->setTrack2(staffIdx * VOICES);
                               slur->setTick(cr->tick());
@@ -2489,15 +2484,12 @@ void GuitarPro5::readNoteEffects(Note* note)
                    ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                    Slur* slur = new Slur(score);
-                   slur->setAnchor(Spanner::Anchor::CHORD);
                    slur->setStartChord(static_cast<Chord*>(cr1));
                    slur->setEndChord(static_cast<Chord*>(cr2));
                    slur->setTick(cr1->tick());
                    slur->setTick2(cr2->tick());
                    slur->setTrack(cr1->track());
                    slur->setTrack2(cr2->track());
-                   slur->setParent(cr1);
-                   // score->undoAddElement(slur);
                    score->addElement(slur);
                    }
             }

@@ -183,7 +183,6 @@ class Slur : public SlurTie {
       Q_OBJECT
 
       void slurPosChord(SlurPos*);
-      void layoutChord();
 
    public:
       Slur(Score* = 0);

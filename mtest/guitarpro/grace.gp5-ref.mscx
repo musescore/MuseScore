@@ -245,10 +245,6 @@
           <lid>44</lid>
           <track>0</track>
           </Slur>
-        <Slur id="3">
-          <lid>44</lid>
-          <track>0</track>
-          </Slur>
         <Chord>
           <lid>30</lid>
           <durationType>16th</durationType>
@@ -263,8 +259,7 @@
             <fret>2</fret>
             <string>0</string>
             </Note>
-          <Slur type="start" number="3"/>
-          <Slur type="stop" number="3"/>
+          <Slur type="start" id="2"/>
           </Chord>
         <Chord>
           <lid>28</lid>
@@ -276,7 +271,7 @@
             <fret>3</fret>
             <string>0</string>
             </Note>
-          <Slur type="stop" number="3"/>
+          <Slur type="stop" id="2"/>
           </Chord>
         <Chord>
           <lid>32</lid>
@@ -605,7 +600,7 @@
             <velocity>96</velocity>
             <lid>27</lid>
             </Dynamic>
-          <Slur id="4">
+          <Slur id="3">
             <lid>44</lid>
             <track>0</track>
             </Slur>
@@ -623,7 +618,6 @@
               <fret>2</fret>
               <string>0</string>
               </Note>
-            <Slur type="stop" number="4"/>
             </Chord>
           <Chord>
             <lid>28</lid>
@@ -635,7 +629,6 @@
               <fret>3</fret>
               <string>0</string>
               </Note>
-            <Slur type="stop" number="4"/>
             </Chord>
           <Chord>
             <lid>32</lid>
@@ -821,7 +814,7 @@
               <string>0</string>
               </Note>
             </Chord>
-          <Slur id="5">
+          <Slur id="4">
             <lid>44</lid>
             <track>4</track>
             </Slur>
@@ -836,7 +829,6 @@
               <fret>2</fret>
               <string>0</string>
               </Note>
-            <Slur type="stop" number="5"/>
             </Chord>
           <Chord>
             <lid>28</lid>
@@ -848,7 +840,6 @@
               <fret>3</fret>
               <string>0</string>
               </Note>
-            <Slur type="stop" number="5"/>
             </Chord>
           <Chord>
             <lid>32</lid>

@@ -460,17 +460,6 @@ void Chord::add(Element* e)
             case Element::Type::CHORDLINE:
                   _el.push_back(e);
                   break;
-            case Element::Type::SLUR:
-                  {
-                  _el.push_back(e);
-/*                  Spanner* s = static_cast<Spanner*>(e);
-                  for (SpannerSegment* ss : s->spannerSegments()) {
-                        if (ss->system())
-                              ss->system()->add(ss);
-                        }
-*/
-                  }
-                  break;
             case Element::Type::STEM_SLASH:
                   _stemSlash = static_cast<StemSlash*>(e);
                   break;
@@ -550,18 +539,6 @@ void Chord::remove(Element* e)
             case Element::Type::HOOK:
                   _hook = 0;
                   break;
-            case Element::Type::SLUR:
-                  {
-                  _el.remove(e);
-/*                  Slur* gs = static_cast<Slur*>(e);
-                  foreach (SpannerSegment* ss, gs->spannerSegments()) {
-                        if (ss->system())
-                              ss->system()->remove(ss);
-                        }
-                  score()->removeSpanner(gs);
-*/
-                  }
-                  break;
             case Element::Type::STEM_SLASH:
                   _stemSlash = 0;
                   break;
@@ -585,6 +562,7 @@ void Chord::remove(Element* e)
 //---------------------------------------------------------
 //   maxHeadWidth
 //---------------------------------------------------------
+
 qreal Chord::maxHeadWidth() const
       {
       // determine max head width in chord
@@ -913,13 +891,6 @@ void Chord::write(Xml& xml) const
             c->writeBeam(xml);
             c->write(xml);
             }
-      for (Element* e : _el) {
-            if (e->type() == Element::Type::SLUR) {
-                  static_cast<Slur*>(e)->setId(++xml.spannerId);
-                  e->write(xml);
-                  }
-            }
-
       xml.stag("Chord");
       ChordRest::writeProperties(xml);
       switch (_noteType) {
@@ -972,25 +943,23 @@ void Chord::write(Xml& xml) const
       if (_tremolo && tremoloChordType() != TremoloChordType::TremoloSecondNote)
             _tremolo->write(xml);
       for (Element* e : _el) {
-            if (e->type() == Element::Type::SLUR) {
-                  Slur* slur = static_cast<Slur*>(e);
-                  xml.tagE(QString("Slur type=\"start\" number=\"%1\"").arg(slur->id()));
-                  }
-            else
+            if (e->type() != Element::Type::SLUR)
                   e->write(xml);
             }
       for (auto i : score()->spanner()) {     // TODO: dont search whole list
             Spanner* s = i.second;
-            if (s->generated())
+            if (s->generated() || s->type() != Element::Type::SLUR)
                   continue;
 
-            if (s->tick2() == tick()
-               && (s->track2() == track() || s->track2() == -1)
-               && (s->type() == Element::Type::SLUR && s->anchor() == Spanner::Anchor::CHORD)
-               ) {
+            if (s->startElement() == this) {
                   if (s->id() == -1)
                         s->setId(++xml.spannerId);
-                  xml.tagE(QString("Slur type=\"stop\" number=\"%1\"").arg(s->id()));
+                  xml.tagE(QString("Slur type=\"start\" id=\"%1\"").arg(s->id()));
+                  }
+            else if (s->endElement() == this) {
+                  if (s->id() == -1)
+                        s->setId(++xml.spannerId);
+                  xml.tagE(QString("Slur type=\"stop\" id=\"%1\"").arg(s->id()));
                   }
             }
       xml.etag();
@@ -1067,7 +1036,9 @@ void Chord::read(XmlReader& e)
                         _stemDirection = MScore::Direction(val.toInt());
                   }
             else if (tag == "Slur") {
-                  int id = e.intAttribute("number");
+                  int id = e.intAttribute("id");
+                  if (id == 0)
+                        id = e.intAttribute("number");                  // obsolete
                   Spanner* spanner = score()->findSpanner(id);
                   if (!spanner)
                         qDebug("ChordRest::read(): Slur id %d not found", id);
@@ -1078,13 +1049,6 @@ void Chord::read(XmlReader& e)
                               slur->setTick(e.tick());
                               slur->setTrack(track());
                               slur->setStartElement(this);
-                              if (isGrace()) {
-                                    slur->setAnchor(Spanner::Anchor::CHORD);
-                                    slur->setParent(this);
-                                    add(slur);
-                                    }
-                              else
-                                    slur->setAnchor(Spanner::Anchor::SEGMENT);
                               //spanner was added in read114 with wrong tick
                               score()->removeSpanner(slur);
                               score()->addSpanner(slur);
@@ -1094,14 +1058,8 @@ void Chord::read(XmlReader& e)
                               slur->setTrack2(track());
                               slur->setEndElement(this);
                               Chord* start = static_cast<Chord*>(slur->startElement());
-                              if (start) {
+                              if (start)
                                     slur->setTrack(start->track());
-                                    if (start->type() == Element::Type::CHORD && start->isGrace()) {
-                                          if (!start->_el.contains(slur))
-                                                start->add(slur);
-                                          slur->setAnchor(Spanner::Anchor::CHORD);
-                                          }
-                                    }
                               }
                         else
                               qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(atype));

@@ -426,9 +426,11 @@ void Spanner::setStartChord(Chord* c)
 //   startChord
 //---------------------------------------------------------
 
-Chord* Spanner::startChord() const
+Chord* Spanner::startChord()
       {
       Q_ASSERT(_anchor == Anchor::CHORD);
+      if (!_startElement)
+            _startElement = score()->findCR(tick(), track());
       return static_cast<Chord*>(_startElement);
       }
 
@@ -445,9 +447,16 @@ void Spanner::setEndChord(Chord* c)
 //   endChord
 //---------------------------------------------------------
 
-Chord* Spanner::endChord() const
+Chord* Spanner::endChord()
       {
       Q_ASSERT(_anchor == Anchor::CHORD);
+
+      if (!_endElement && type() == Element::Type::SLUR) {
+            Segment* s = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
+            _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
+            if (_endElement->type() != Element::Type::CHORD)
+                  _endElement = nullptr;
+            }
       return static_cast<Chord*>(_endElement);
       }
 
@@ -455,9 +464,11 @@ Chord* Spanner::endChord() const
 //   startCR
 //---------------------------------------------------------
 
-ChordRest* Spanner::startCR() const
+ChordRest* Spanner::startCR()
       {
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+      if (!_startElement)
+            _startElement = score()->findCR(tick(), track());
       return static_cast<ChordRest*>(_startElement);
       }
 
@@ -465,9 +476,13 @@ ChordRest* Spanner::startCR() const
 //   endCR
 //---------------------------------------------------------
 
-ChordRest* Spanner::endCR() const
+ChordRest* Spanner::endCR()
       {
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
+      if (!_endElement && type() == Element::Type::SLUR) {
+            Segment* s = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
+            _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
+            }
       return static_cast<ChordRest*>(_endElement);
       }
 

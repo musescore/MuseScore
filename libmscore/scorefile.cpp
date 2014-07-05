@@ -1302,7 +1302,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                               if (s->tick2() == segment->tick()
                                  && (s->track2() == track || s->track2() == -1)
                                  && (!clip || s->tick() >= fs->tick())
-                                 && (!(s->type() == Element::Type::SLUR && s->anchor() == Spanner::Anchor::CHORD))
+                                 && (s->type() != Element::Type::SLUR)
                                  ) {
                                     if (needTick) {
                                           xml.tag("tick", segment->tick() - xml.tickDiff);

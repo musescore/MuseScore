@@ -139,7 +139,6 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                            || tag == "Ottava"
                            || tag == "Trill"
                            || tag == "TextLine"
-                           || tag == "Slur"
                            || tag == "Volta") {
                               Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
                               sp->setAnchor(Spanner::Anchor::SEGMENT);
@@ -148,6 +147,13 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               sp->setTrack2(dstStaffIdx * VOICES);
                               sp->setTick(e.tick() - tickStart + dstTick);
                               addSpanner(sp);
+                              }
+                        else if (tag == "Slur") {
+                              Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
+                              sp->read(e);
+                              sp->setTrack(dstStaffIdx * VOICES);
+                              sp->setTick(e.tick() - tickStart + dstTick);
+                              undoAddElement(sp);
                               }
                         else if (tag == "endSpanner") {
                               int id = e.intAttribute("id");

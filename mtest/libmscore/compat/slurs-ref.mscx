@@ -144,14 +144,15 @@
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="start" id="2"/>
           </Chord>
-        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="stop" id="2"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -178,6 +179,7 @@
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="start" id="3"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -186,13 +188,13 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <endSpanner id="3"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="stop" id="3"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -212,6 +214,7 @@
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="start" id="4"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -227,13 +230,13 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <endSpanner id="4"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="stop" id="4"/>
           </Chord>
         </Measure>
       <Measure number="4">
@@ -250,6 +253,7 @@
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="start" id="5"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -295,13 +299,13 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <endSpanner id="5"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="stop" id="5"/>
           </Chord>
         </Measure>
       <Measure number="6">
@@ -315,6 +319,7 @@
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
+          <Slur type="start" id="6"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -330,13 +335,13 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <endSpanner id="7"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
+          <Slur type="stop" id="7"/>
           </Chord>
         <tick>9600</tick>
         <Chord>
@@ -348,7 +353,6 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <endSpanner id="6"/>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -357,6 +361,7 @@
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
+          <Slur type="stop" id="6"/>
           </Chord>
         <Slur id="7">
           <track>1</track>
@@ -370,6 +375,7 @@
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
+          <Slur type="start" id="7"/>
           </Chord>
         <Chord>
           <track>1</track>
@@ -391,6 +397,7 @@
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
+          <Slur type="start" id="8"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -406,13 +413,13 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <endSpanner id="8"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
+          <Slur type="stop" id="8"/>
           </Chord>
         <tick>11520</tick>
         <Slur id="9">
@@ -426,6 +433,7 @@
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
+          <Slur type="start" id="9"/>
           </Chord>
         <Chord>
           <track>1</track>
@@ -445,7 +453,6 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <endSpanner id="9"/>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -454,6 +461,7 @@
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
+          <Slur type="stop" id="9"/>
           </Chord>
         </Measure>
       <Measure number="8">
@@ -470,14 +478,15 @@
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
+          <Slur type="start" id="10"/>
           </Chord>
-        <endSpanner id="10"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
+          <Slur type="stop" id="10"/>
           </Chord>
         <Slur id="11">
           <track>0</track>
@@ -488,14 +497,15 @@
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
+          <Slur type="start" id="11"/>
           </Chord>
-        <endSpanner id="11"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
             </Note>
+          <Slur type="stop" id="11"/>
           </Chord>
         <tick>13440</tick>
         <Slur id="12">
@@ -509,8 +519,8 @@
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
+          <Slur type="start" id="12"/>
           </Chord>
-        <endSpanner id="12"/>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -519,6 +529,7 @@
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
+          <Slur type="stop" id="12"/>
           </Chord>
         <Slur id="13">
           <track>1</track>
@@ -531,8 +542,8 @@
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
+          <Slur type="start" id="13"/>
           </Chord>
-        <endSpanner id="13"/>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -541,6 +552,7 @@
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
+          <Slur type="stop" id="13"/>
           </Chord>
         </Measure>
       <Measure number="9">
@@ -551,13 +563,13 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <endSpanner id="14"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="stop" id="14"/>
           </Chord>
         <Slur id="15">
           <track>0</track>
@@ -569,6 +581,7 @@
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="start" id="15"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -617,7 +630,6 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <endSpanner id="16"/>
         <Chord>
           <track>1</track>
           <durationType>quarter</durationType>
@@ -626,6 +638,7 @@
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
+          <Slur type="stop" id="16"/>
           </Chord>
         <Slur id="17">
           <track>1</track>
@@ -639,6 +652,7 @@
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
+          <Slur type="start" id="17"/>
           </Chord>
         <Chord>
           <track>1</track>
@@ -743,6 +757,7 @@
             <pitch>48</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="start" id="14"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -758,13 +773,13 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <endSpanner id="15"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>48</pitch>
             <tpc>14</tpc>
             </Note>
+          <Slur type="stop" id="15"/>
           </Chord>
         </Measure>
       <Measure number="10">
@@ -778,6 +793,7 @@
             <pitch>52</pitch>
             <tpc>18</tpc>
             </Note>
+          <Slur type="start" id="16"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -793,13 +809,13 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <endSpanner id="17"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
             <pitch>52</pitch>
             <tpc>18</tpc>
             </Note>
+          <Slur type="stop" id="17"/>
           </Chord>
         <tick>17280</tick>
         <Chord>

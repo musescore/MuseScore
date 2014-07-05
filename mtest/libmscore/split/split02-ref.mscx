@@ -132,7 +132,6 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
