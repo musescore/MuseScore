@@ -15,6 +15,8 @@
 #include "musescoreCore.h"
 #include "libmscore/score.h"
 
+#include <QQmlEngine>
+
 namespace Ms {
 
 extern MuseScoreCore* mscoreCore;
@@ -68,7 +70,11 @@ bool QmlPlugin::writeScore(Score* s, const QString& name, const QString& ext)
 
 Score* QmlPlugin::readScore(const QString& name)
       {
-      return msc->openScore(name);
+      Score * score = msc->openScore(name);
+      // tell QML not to garbage collect this score
+      if (score)
+            QQmlEngine::setObjectOwnership(score, QQmlEngine::CppOwnership);
+      return score;
       }
 
 //---------------------------------------------------------
@@ -81,6 +87,7 @@ Ms::Element* QmlPlugin::newElement(int t)
       if (score == 0)
             return 0;
       Element* e = Element::create(Element::Type(t), score);
+      // tell QML not to garbage collect this score
       Ms::MScore::qml()->setObjectOwnership(e, QQmlEngine::CppOwnership);
       return e;
       }
@@ -103,6 +110,8 @@ Score* QmlPlugin::newScore(const QString& name, const QString& part, int measure
       int view = msc->appendScore(score);
       msc->setCurrentView(0, view);
       qApp->processEvents();
+      // tell QML not to garbage collect this score
+      QQmlEngine::setObjectOwnership(score, QQmlEngine::CppOwnership);
       score->startCmd();
       return score;
       }

@@ -36,7 +36,11 @@ class System;
 ///    A segment holds all vertical aligned staff elements.
 ///    Segments are typed and contain only Elements of the same type.
 //
-//   @P segmentType  Ms::Segment::Type  (Invalid, Clef, KeySig, Ambitus, TimeSig, StartRepeatBarLine, BarLine, ChordRest, Breath, EndBarLine TimeSigAnnounce, KeySigAnnounce, All)
+//   @P next            Ms::Segment       the next segment in the whole score; null at last score segment (read-only)
+//   @P nextInMeasure   Ms::Segment       the next segment in measure; null at last measure segment (read-only)
+//   @P prev            Ms::Segment       the previous segment in the whole score; null at first score segment (read-only)
+//   @P prevInMeasure   Ms::Segment       the previous segment in measure; null at first measure segment (read-only)
+//   @P segmentType     Ms::Segment::Type (Invalid, Clef, KeySig, Ambitus, TimeSig, StartRepeatBarLine, BarLine, ChordRest, Breath, EndBarLine TimeSigAnnounce, KeySigAnnounce, All)
 //------------------------------------------------------------------------
 
 /**
@@ -51,7 +55,11 @@ class System;
 
 class Segment : public Element {
       Q_OBJECT
-      Q_PROPERTY(Ms::Segment::Type segmentType READ segmentType WRITE setSegmentType)
+      Q_PROPERTY(Ms::Segment*       next              READ next1)
+      Q_PROPERTY(Ms::Segment*       nextInMeasure     READ next)
+      Q_PROPERTY(Ms::Segment*       prev              READ prev1)
+      Q_PROPERTY(Ms::Segment*       prevInMeasure     READ prev)
+      Q_PROPERTY(Ms::Segment::Type  segmentType       READ segmentType WRITE setSegmentType)
       Q_ENUMS(Type)
 
 public:
@@ -103,19 +111,19 @@ public:
 
       virtual void setScore(Score*);
 
-      Q_INVOKABLE Ms::Segment* next() const             { return _next;   }
+      Ms::Segment* next() const           { return _next;   }
       Segment* next(Type) const;
 
       void setNext(Segment* e)           { _next = e;      }
-      Q_INVOKABLE Ms::Segment* prev() const { return _prev;   }
+      Ms::Segment* prev() const           { return _prev;   }
       Segment* prev(Type) const;
       void setPrev(Segment* e)           { _prev = e;      }
 
-      Q_INVOKABLE Ms::Segment* next1() const;
+      Ms::Segment* next1() const;
       Ms::Segment* next1MM() const;
       Segment* next1(Type) const;
       Segment* next1MM(Type) const;
-      Q_INVOKABLE Ms::Segment* prev1() const;
+      Ms::Segment* prev1() const;
       Ms::Segment* prev1MM() const;
       Segment* prev1(Type) const;
       Segment* prev1MM(Type) const;
@@ -124,7 +132,9 @@ public:
 
       ChordRest* nextChordRest(int track, bool backwards = false) const;
 
-      Q_INVOKABLE Ms::Element* element(int track) const { return _elist.value(track);  }
+      Ms::Element* element(int track) const { return _elist.value(track);  }
+      // a variant of the above function, specifically designed to be called from QML
+      Q_INVOKABLE Ms::Element* elementAt(int track) const;
       ChordRest* cr(int track) const                    {
             Q_ASSERT(_segmentType == Type::ChordRest);
             return (ChordRest*)(_elist.value(track));

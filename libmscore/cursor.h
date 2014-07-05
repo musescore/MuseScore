@@ -96,7 +96,7 @@ class Cursor : public QObject {
       Q_INVOKABLE bool nextMeasure();
       Q_INVOKABLE void add(Ms::Element*);
 
-      Q_INVOKABLE Ms::Note* addNote(int pitch);
+      Q_INVOKABLE void addNote(int pitch);
 
       //@ set duration
       //@   z: numerator
