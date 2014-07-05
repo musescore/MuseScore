@@ -373,6 +373,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               }
                         }
                   }
+
             nmb->linkTo(mb);
             foreach (Element* e, *mb->el()) {
                   if (e->type() == Element::Type::LAYOUT_BREAK) {
@@ -414,18 +415,18 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             }
 
       for (auto i : oscore->spanner()) {
-            Spanner* s = i.second;
-            int staffIdx = s->staffIdx();
-            int dstTrack = -1;
+            Spanner* s    = i.second;
+            int staffIdx  = s->staffIdx();
+            int dstTrack  = -1;
             int dstTrack2 = -1;
-            int st = 0;
+            int           st = 0;
             //always export voltas to first staff in part
             if (s->type() == Element::Type::VOLTA)
                   dstTrack = s->voice();
-            else { //export other spanner if staffidx matches
+            else {            //export other spanner if staffidx matches
                   for (int index : map) {
                         if (index == staffIdx) {
-                              dstTrack = st * VOICES + s->voice();
+                              dstTrack  = st * VOICES + s->voice();
                               dstTrack2 = st * VOICES + (s->track2() % VOICES);
                               break;
                               }
@@ -439,6 +440,38 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             ns->setParent(0);
             ns->setTrack(dstTrack);
             ns->setTrack2(dstTrack2);
+            if (ns->type() == Element::Type::SLUR) {
+                  //
+                  // set start/end element for slur
+                  //
+                  ChordRest* cr1 = s->startCR();
+                  ChordRest* cr2 = s->endCR();
+
+                  ns->setStartElement(0);
+                  ns->setEndElement(0);
+                  for (Element* e : *cr1->links()) {
+                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        if (cr == cr1)
+                              continue;
+                        if ((cr->score() == score) && (cr->tick() == ns->tick())) {
+                              ns->setStartElement(cr);
+                              break;
+                              }
+                        }
+                  for (Element* e : *cr2->links()) {
+                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        if (cr == cr2)
+                              continue;
+                        if ((cr->score() == score) && (cr->tick() == ns->tick2())) {
+                              ns->setEndElement(cr);
+                              break;
+                              }
+                        }
+                  if (!ns->startElement())
+                        printf("clone Slur: no start element\n");
+                  if (!ns->endElement())
+                        printf("clone Slur: no end element\n");
+                  }
             score->addSpanner(ns);
             }
       }
