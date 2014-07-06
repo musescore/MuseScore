@@ -79,6 +79,14 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             "marcato", QT_TRANSLATE_NOOP("articulation", "marcato"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
+      { SymId::guitarFadeIn, SymId::guitarFadeIn,
+            "fadein", QT_TRANSLATE_NOOP("articulation", "fadein"),
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            },
+      { SymId::guitarFadeOut, SymId::guitarFadeOut,
+            "fadeout", QT_TRANSLATE_NOOP("articulation", "fadeout"),
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            },
       { SymId::brassMuteOpen, SymId::brassMuteOpen,
             "ouvert", QT_TRANSLATE_NOOP("articulation", "ouvert"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
@@ -291,6 +299,8 @@ void Articulation::setSubtype(const QString& s)
                   bool up;
                   ArticulationType type;
                   } al[] = {
+                  { "fadein",           true,  ArticulationType::FadeIn },
+                  { "fadeout",          true,  ArticulationType::FadeOut },
                   { "umarcato",         true,  ArticulationType::Marcato },
                   { "dmarcato",         false, ArticulationType::Marcato },
                   { "ufermata",         true,  ArticulationType::Fermata },

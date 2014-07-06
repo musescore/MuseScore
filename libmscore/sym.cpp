@@ -5011,6 +5011,8 @@ QVector<oldName> oldNames = {
       {"dportato",                              SymId::articTenutoStaccatoBelow },  // scripts.dportato    
       {"umarcato",                              SymId::articMarcatoAbove },         // scripts.umarcato    
       {"dmarcato",                              SymId::articMarcatoBelow },         // scripts.dmarcato    
+      {"fadein",                                SymId::guitarFadeIn },              // scripts.fadein
+      {"fadeout",                               SymId::guitarFadeOut },             // scripts.fadein
       {"ouvert",                                SymId::brassMuteOpen },             // scripts.open       
       {"halfopen",                              SymId::brassMuteHalfClosed },       // scripts.halfopen CHECK!!! pre 2.0 only
       {"plus stop",                             SymId::brassMuteClosed },           // scripts.stopped     
