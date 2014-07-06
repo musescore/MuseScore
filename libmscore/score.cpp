@@ -1665,7 +1665,7 @@ Segment* Score::firstSegment(Segment::Type segType) const
       if (seg)
             QQmlEngine::setObjectOwnership(seg, QQmlEngine::CppOwnership);
 #endif
-      return m ? m->first(segType) : 0;
+      return seg;
       }
 
 //---------------------------------------------------------
