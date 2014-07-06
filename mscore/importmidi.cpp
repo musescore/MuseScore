@@ -197,6 +197,13 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             case META_TRACK_NAME:
                   {
                   const std::string text = MidiCharset::fromUchar(data);
+
+                  auto &opers = preferences.midiImportOperations;
+                  if (opers.data()->processingsOfOpenedFile == 0) {
+                        const int currentTrack = opers.currentTrack();
+                        opers.data()->trackOpers.staffName.setValue(currentTrack, text);
+                        }
+
                   if (name.isEmpty())
                         name = MidiCharset::convertToCharset(text);
                   }
@@ -660,8 +667,9 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   if (data->processingsOfOpenedFile > 0) {
                         if (data->trackOpers.doImport.value(trackIndex)) {
                               track.indexOfOperation = trackIndex;
-                              tracks.insert({data->trackOpers.trackIndexAfterShuffle.value(trackIndex),
-                                             track});
+                              const int movedIndex
+                                    = data->trackOpers.trackIndexAfterShuffle.value(trackIndex);
+                              tracks.insert({movedIndex, track});
                               }
                         }
                   else {            // if it is an initial track-list query from MIDI import panel
@@ -795,12 +803,12 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
       {
       if (mt.staff->isTop()) {
             Part *part  = mt.staff->part();
-            auto &data = *preferences.midiImportOperations.data();
+            auto &opers = preferences.midiImportOperations;
             const QString instrName = instrumentName(midiType, mt.program, mt.mtrack->drumTrack());
 
-            if (data.processingsOfOpenedFile == 0) {
-                  data.trackOpers.instrumentName = instrName;
-                  data.trackOpers.staffName = mt.name.toStdString();
+            if (opers.data()->processingsOfOpenedFile == 0) {
+                  const int currentTrack = opers.currentTrack();
+                  opers.data()->trackOpers.instrumentName.setValue(currentTrack, instrName);
                   }
             if (mt.name.isEmpty()) {
                   if (!instrName.isEmpty()) {
@@ -871,6 +879,11 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
       {
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
+                        // pass current track index to the convertTrack function
+                        //   through MidiImportOperations
+            auto &opers = preferences.midiImportOperations;
+            MidiOperations::CurrentTrackSetter setCurrentTrack(opers, mt.indexOfOperation);
+
             processMeta(mt, false);
             if (midiType == MidiType::UNKNOWN)
                   midiType = MidiType::GM;
@@ -887,10 +900,6 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
                         }
                   }
             setTrackInfo(midiType, mt);
-                        // pass current track index to the convertTrack function
-                        //   through MidiImportOperations
-            auto &opers = preferences.midiImportOperations;
-            MidiOperations::CurrentTrackSetter setCurrentTrack(opers, mt.indexOfOperation);
             mt.convertTrack(lastTick);
             processMeta(mt, true);
             }

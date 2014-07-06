@@ -76,7 +76,10 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
 
       //-----------------------------------------------------------------------
       struct Import : Column {
-            Import(MidiOperations::Opers &opers) : Column(opers) {}
+            Import(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  _isEditable = false;
+                  }
 
             QString headerName() const { return "Import"; }
             QVariant value(int trackIndex) const
@@ -90,22 +93,6 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             };
       ++_frozenColCount;
       _columns.push_back(std::unique_ptr<Column>(new Import(_trackOpers)));
-
-      //-----------------------------------------------------------------------
-      struct InstrumentName : Column {
-            InstrumentName(MidiOperations::Opers &opers) : Column(opers)
-                  {
-                  _isEditable = false;
-                  }
-            QString headerName() const { return "Sound"; }
-            QVariant value(int trackIndex) const
-                  {
-                  return _opers.instrumentName.value(trackIndex);
-                  }
-            void setValue(const QVariant &/*value*/, int /*trackIndex*/) {}
-            };
-      ++_frozenColCount;
-      _columns.push_back(std::unique_ptr<Column>(new InstrumentName(_trackOpers)));
 
       //-----------------------------------------------------------------------
       bool hasStaffName = false;
@@ -141,6 +128,22 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             }
 
       //-----------------------------------------------------------------------
+      struct InstrumentName : Column {
+            InstrumentName(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  _isEditable = false;
+                  }
+            QString headerName() const { return "Sound"; }
+            QVariant value(int trackIndex) const
+                  {
+                  return _opers.instrumentName.value(trackIndex);
+                  }
+            void setValue(const QVariant &/*value*/, int /*trackIndex*/) {}
+            };
+      ++_frozenColCount;
+      _columns.push_back(std::unique_ptr<Column>(new InstrumentName(_trackOpers)));
+
+      //-----------------------------------------------------------------------
       if (!lyricsList.isEmpty()) {
             struct Lyrics : Column {
                   Lyrics(MidiOperations::Opers &opers,
@@ -164,7 +167,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         }
                   void setValue(const QVariant &value, int trackIndex)
                         {
-                        _opers.lyricTrackIndex.setValue(trackIndex, value.toInt());
+                                    // GUI lyrics list always have "" row, so: (index - 1)
+                        _opers.lyricTrackIndex.setValue(trackIndex, value.toInt() - 1);
                         }
                   QStringList valueList() const
                         {
@@ -295,13 +299,15 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
       switch (role) {
             case Qt::DisplayRole:
                   if (trackIndex == -1) {       // all tracks
-                        QVariant value = _columns[index.column()]->value(0);
-                        if (value.type() == QVariant::String) {
-                              for (int i = 1; i < _trackCount; ++i) {
-                                    if (_columns[index.column()]->value(i).toString() != value.toString())
-                                          return "...";
+                        if (_columns[index.column()]->isEditable()) {
+                              QVariant value = _columns[index.column()]->value(0);
+                              if (value.type() == QVariant::String) {
+                                    for (int i = 1; i < _trackCount; ++i) {
+                                          if (_columns[index.column()]->value(i).toString() != value.toString())
+                                                return "...";
+                                          }
+                                    return value.toString();
                                     }
-                              return value.toString();
                               }
                         }
                   else {
@@ -405,8 +411,10 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
 QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int role) const
       {
       if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-            return QCoreApplication::translate("MIDI import: tracks model",
-                                               _columns[section]->headerName().toStdString().c_str());
+            if (!_columns.empty()) {
+                  return QCoreApplication::translate("MIDI import: tracks model",
+                                      _columns[section]->headerName().toStdString().c_str());
+                  }
             }
       else if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
             if (_trackCount > 1) {

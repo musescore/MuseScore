@@ -31,18 +31,6 @@ class TrackOp
             : _operation{{-1, defaultValue}}
             {}
 
-      TrackOp<T>& operator=(const TrackOp<T> &op)
-            {
-            if (this == &op)
-                  return *this;
-            for (const auto &pair: op._operation) {
-                  if (pair.second != value(pair.first) && pair.second != defaultValue()) {
-                        _operation[pair.first] = pair.second;
-                        }
-                  }
-            return *this;
-            }
-
       T value(int trackIndex) const
             {
             const auto it = _operation.find(trackIndex);
@@ -55,7 +43,7 @@ class TrackOp
             {
             Q_ASSERT_X(trackIndex >= 0, "TrackOperation", "Invalid track index");
 
-            if (value != defaultValue())
+            if (value != this->value(trackIndex))
                   _operation[trackIndex] = value;
             }
 
@@ -132,7 +120,6 @@ struct FileData
       bool canRedefineDefaultsLater = true;
       QByteArray HHeaderData;
       QByteArray VHeaderData;
-      int selectedRow = 0;
       int trackCount = 0;
       MidiOperations::Opers trackOpers;
       QString charset = MidiCharset::defaultCharset();
