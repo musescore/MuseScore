@@ -22,7 +22,7 @@ ImportMidiPanel::ImportMidiPanel(QWidget *parent)
       _ui->setupUi(this);
 
       _model = new TracksModel();
-      _delegate = new OperationsDelegate(parentWidget(), false);
+      _delegate = new OperationsDelegate(parentWidget(), true);
       _ui->tracksView->setModel(_model);
       _ui->tracksView->setItemDelegate(_delegate);
 
@@ -49,25 +49,27 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
       MidiOperations::Data &opers = preferences.midiImportOperations;
       MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
 
-      _model->reset(opers.data()->trackOpers,
-                    MidiLyrics::makeLyricsListForUI(),
-                    opers.data()->trackCount,
-                    _midiFile);
-
-      _ui->tracksView->setFrozenRowCount(_model->frozenRowCount());
-      _ui->tracksView->setFrozenColCount(_model->frozenColCount());
-
       if (opers.data()->processingsOfOpenedFile == 1) {     // initial processing of MIDI file
+            ++opers.data()->processingsOfOpenedFile;
+            _model->clear();        // need to be called before resetTableViewState
             resetTableViewState();
+            _model->reset(opers.data()->trackOpers,
+                          MidiLyrics::makeLyricsListForUI(),
+                          opers.data()->trackCount,
+                          _midiFile);
             saveTableViewState();
             }
       else {            // switch to already opened MIDI file
+            _model->reset(opers.data()->trackOpers,
+                          MidiLyrics::makeLyricsListForUI(),
+                          opers.data()->trackCount,
+                          _midiFile);
             restoreTableViewState();
             }
 
+      _ui->tracksView->setFrozenRowCount(_model->frozenRowCount());
+      _ui->tracksView->setFrozenColCount(_model->frozenColCount());
       _ui->comboBoxCharset->setCurrentText(preferences.midiImportOperations.data()->charset);
-      _ui->tracksView->selectRow(opers.data()->selectedRow);
-      _ui->tracksView->selectColumn(0);
       }
 
 void ImportMidiPanel::saveTableViewState()
@@ -135,7 +137,6 @@ void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
       if (currentIndex.isValid()) {
             MidiOperations::Data &opers = preferences.midiImportOperations;
             MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
-            opers.data()->selectedRow = currentIndex.row();
             }
       }
 
@@ -178,6 +179,17 @@ void ImportMidiPanel::hidePanel()
             }
       }
 
+void ImportMidiPanel::setShuffledIndexes()
+      {
+      auto &opers = preferences.midiImportOperations;
+      for (int i = 0; i != _model->trackCount(); ++i) {
+            const int trackRow = _model->rowFromTrackIndex(i);
+            const int reorderedRow = _ui->tracksView->verticalHeader()->logicalIndex(trackRow);
+            const int reorderedIndex = _model->trackIndexFromRow(reorderedRow);
+            opers.data()->trackOpers.trackIndexAfterShuffle.setValue(reorderedIndex, i);
+            }
+      }
+
 void ImportMidiPanel::applyMidiImport()
       {
       if (!canImportMidi())
@@ -193,8 +205,11 @@ void ImportMidiPanel::applyMidiImport()
                         // need to update model because of charset change
             _model->updateCharset();
             }
-      mscore->openScore(_midiFile);
+
       opers.data()->trackOpers = _model->trackOpers();
+      setShuffledIndexes();
+
+      mscore->openScore(_midiFile);
       saveTableViewState();
       _importInProgress = false;
       }
@@ -213,6 +228,20 @@ bool ImportMidiPanel::canMoveTrackDown(int visualIndex) const
       {
       return _model->trackCount() > 1
                   && visualIndex < _model->trackCount() && visualIndex > 0;
+      }
+
+void ImportMidiPanel::moveTrackUp()
+      {
+      int visIndex = currentVisualIndex();
+      if (canMoveTrackUp(visIndex))
+            _ui->tracksView->verticalHeader()->moveSection(visIndex, visIndex - 1);
+      }
+
+void ImportMidiPanel::moveTrackDown()
+      {
+      const int visIndex = currentVisualIndex();
+      if (canMoveTrackDown(visIndex))
+            _ui->tracksView->verticalHeader()->moveSection(visIndex, visIndex + 1);
       }
 
 int ImportMidiPanel::currentVisualIndex() const

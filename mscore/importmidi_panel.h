@@ -36,12 +36,15 @@ class ImportMidiPanel : public QWidget
       void hidePanel();
       void applyMidiImport();
       void onCurrentTrackChanged(const QModelIndex &);
+      void moveTrackUp();
+      void moveTrackDown();
 
    private:
       void setupUi();
       bool canImportMidi() const;
       bool canMoveTrackUp(int visualIndex) const;
       bool canMoveTrackDown(int visualIndex) const;
+      void setShuffledIndexes();
       int currentVisualIndex() const;
       void saveTableViewState();
       void restoreTableViewState();

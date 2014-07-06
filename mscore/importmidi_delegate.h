@@ -25,7 +25,7 @@ class OperationsDelegate : public QStyledItemDelegate
 
    private:
       QWidget *appWindow;
-      bool rightArrowAlign;
+      const bool rightArrowAlign;
       };
 
 } // namespace Ms

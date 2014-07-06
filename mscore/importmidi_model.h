@@ -27,6 +27,8 @@ class TracksModel : public QAbstractTableModel
       int trackCountForImport() const;
       int frozenRowCount() const;
       int frozenColCount() const;
+      int rowFromTrackIndex(int trackIndex) const;
+      int trackIndexFromRow(int row) const;
 
       int rowCount(const QModelIndex &/*parent*/) const;
       int columnCount(const QModelIndex &/*parent*/) const;
@@ -38,8 +40,6 @@ class TracksModel : public QAbstractTableModel
    private:
       bool isTrackIndexValid(int trackIndex) const;
       bool isColumnValid(int column) const;
-      int rowFromTrackIndex(int trackIndex) const;
-      int trackIndexFromRow(int row) const;
       void forceRowDataChanged(int row);
       void forceColumnDataChanged(int col);
 
