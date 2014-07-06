@@ -75,7 +75,6 @@ class MTrack {
       bool hasKey = false;
       int indexOfOperation = 0;
       int division = 0;
-      int initLyricTrackIndex = -1;
 
       std::multimap<ReducedFraction, MidiChord> chords;
       std::multimap<ReducedFraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
