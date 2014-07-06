@@ -61,6 +61,26 @@ extractLyricsFromTrack(const MidiTrack &track, int division)
       return lyrics;
       }
 
+
+#ifdef QT_DEBUG
+
+bool areEqualIndexesSuccessive(const QList<MTrack> &tracks)
+      {
+      std::map<int, int> indexes;   // <index of operation, track index>
+
+      for (int i = 0; i != tracks.size(); ++i) {
+            const auto it = indexes.find(tracks[i].indexOfOperation);
+            if (it == indexes.end())
+                  indexes.insert({tracks[i].indexOfOperation, i});
+            else if (it->second != i - 1)
+                  return false;
+            }
+      return true;
+      }
+
+#endif
+
+
 struct BestTrack
       {
       int index = -1;
@@ -79,8 +99,14 @@ BestTrack findBestTrack(
       BestTrack bestTrack;
       int maxMatches = 0;
 
+      Q_ASSERT_X(areEqualIndexesSuccessive(tracks),
+                 "MidiLyrics::findBestTrack", "Equal indexes of operations are not successive");
+
       for (int i = 0; i != tracks.size(); ++i) {
             if (tracks[i].mtrack->drumTrack() || usedTracks.find(i) != usedTracks.end())
+                  continue;
+                        // due to staff split there can be equal indexes of operation
+            if (i > 0 && tracks[i].indexOfOperation == tracks[i - 1].indexOfOperation)
                   continue;
 
             int matches = 0;
@@ -96,7 +122,7 @@ BestTrack findBestTrack(
                   }
             if (matches > maxMatches) {
                   maxMatches = matches;
-                  bestTrack.index = i;
+                  bestTrack.index = tracks[i].indexOfOperation;
                   }
             }
 
@@ -179,15 +205,16 @@ void extractLyricsToMidiData(const MidiFile *mf)
 void assignLyricsToTracks(QList<MTrack> &tracks)
       {
       std::set<int> usedTracks;
-      const auto &lyricTracks = preferences.midiImportOperations.data()->lyricTracks;
+      auto &data = *preferences.midiImportOperations.data();
+      const auto &lyricTracks = data.lyricTracks;
+
       if (lyricTracks.isEmpty())
             return;
-
       for (int i = 0; i != lyricTracks.size(); ++i) {
             const BestTrack bestTrack = findBestTrack(tracks, lyricTracks[i], usedTracks);
             if (bestTrack.index >= 0) {
                   usedTracks.insert(bestTrack.index);
-                  tracks[bestTrack.index].initLyricTrackIndex = i;
+                  data.trackOpers.lyricTrackIndex.setValue(bestTrack.index, i);
                   }
             }
       }
@@ -244,13 +271,16 @@ void setLyricsFromOperations(const QList<MTrack> &tracks)
             }
       }
 
-void setLyricsToScore(const QList<MTrack> &tracks)
+void setLyricsToScore(QList<MTrack> &tracks)
       {
       const auto *data = preferences.midiImportOperations.data();
-      if (data->processingsOfOpenedFile == 0)
+      if (data->processingsOfOpenedFile == 0) {
             setInitialLyricsFromMidiData(tracks);
-      else
+            assignLyricsToTracks(tracks);
+            }
+      else {
             setLyricsFromOperations(tracks);
+            }
       }
 
 QList<std::string> makeLyricsListForUI()
