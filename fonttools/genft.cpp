@@ -195,6 +195,8 @@ QMap<QString, QString> nmap {
       { "scripts.dportato",         "articTenutoSlurAbove" },
       { "scripts.umarcato",         "articMarcatoAbove" },
       { "scripts.dmarcato",         "articMarcatoBelow" },
+      { "scripts.fadein",           "guitarFadeIn" },
+      { "scripts.fadeout",          "guitarFadeOut" },
       { "scripts.open",             "brassMuteOpen" },
       { "scripts.stopped",          "brassMuteClosed" },
       { "scripts.upbow",            "stringsUpBow" },

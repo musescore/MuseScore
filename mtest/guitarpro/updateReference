@@ -33,4 +33,7 @@ cp   $MSCORE/beams-stems-ledger-lines.gp5.mscx beams-stems-ledger-lines.gp5-ref.
 cp   $MSCORE/fret-diagram.gpx.mscx fret-diagram.gpx-ref.mscx
 cp   $MSCORE/fret-diagram.gp5.mscx fret-diagram.gp5-ref.mscx
 cp   $MSCORE/fret-diagram.gp4.mscx fret-diagram.gp4-ref.mscx
+cp   $MSCORE/fade-in.gp5.mscx fade-in.gp5-ref.mscx
+cp   $MSCORE/fade-in.gp4.mscx fade-in.gp4-ref.mscx
+
 
