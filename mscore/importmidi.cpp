@@ -911,6 +911,8 @@ void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
       for (const auto &track: tracks) {
             int trackIndex = track.first;
             const MTrack &mtrack = track.second;
+            if (mtrack.mtrack->drumTrack())
+                  continue;
             bool needToSplit = false;
             if (LRHand::needToSplit(mtrack.chords, mtrack.program))
                   needToSplit = true;
