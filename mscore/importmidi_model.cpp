@@ -340,8 +340,6 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                         }
                   break;
             case Qt::TextAlignmentRole:
-//                  if (!columns[index.column()]->valuesList.empty())
-//                        return Qt::AlignLeft + Qt::AlignVCenter;
                   return Qt::AlignCenter;
                   break;
             case Qt::ToolTipRole:

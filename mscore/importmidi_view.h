@@ -39,6 +39,7 @@ class TracksView : public QTableView
       void initCornerView();
       void initMainView();
       void initConnections();
+      void setupEditTriggers();
       void updateFrozenTableGeometry();
 
       void keepVisible(const QModelIndex &previous, const QModelIndex &current);

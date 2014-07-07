@@ -250,9 +250,6 @@
    </item>
    <item>
     <widget class="TracksView" name="tracksView">
-     <property name="editTriggers">
-      <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
-     </property>
      <property name="cornerButtonEnabled">
       <bool>false</bool>
      </property>
