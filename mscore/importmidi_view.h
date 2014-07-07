@@ -22,6 +22,7 @@ class TracksView : public QTableView
    protected:
       void resizeEvent(QResizeEvent *event);
       bool viewportEvent(QEvent *event);
+      void wheelEvent(QWheelEvent *event);
 
    private slots:
       void currentChanged(const QModelIndex &, const QModelIndex &);
