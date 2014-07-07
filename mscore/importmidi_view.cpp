@@ -62,10 +62,34 @@ TracksView::TracksView(QWidget *parent)
       initCornerView();
       initMainView();
       initConnections();
+
+      setupEditTriggers();
       }
 
 TracksView::~TracksView()
       {
+      }
+
+void TracksView::setupEditTriggers()
+      {
+      const EditTriggers triggers = QAbstractItemView::DoubleClicked
+                                  | QAbstractItemView::EditKeyPressed
+                                  | QAbstractItemView::SelectedClicked;
+      setEditTriggers(triggers);
+      _frozenHTableView->setEditTriggers(triggers);
+      _frozenVTableView->setEditTriggers(triggers);
+      _frozenCornerTableView->setEditTriggers(triggers);
+
+                  // QAbstractItemView::CurrentChanged trigger doesn't work as expected
+                  // so we emulate this behaviour
+      connect(this, SIGNAL(clicked(const QModelIndex &)),
+              this, SLOT(edit(const QModelIndex &)));
+      connect(_frozenHTableView, SIGNAL(clicked(const QModelIndex &)),
+              _frozenHTableView, SLOT(edit(const QModelIndex &)));
+      connect(_frozenVTableView, SIGNAL(clicked(const QModelIndex &)),
+              _frozenVTableView, SLOT(edit(const QModelIndex &)));
+      connect(_frozenCornerTableView, SIGNAL(clicked(const QModelIndex &)),
+              _frozenCornerTableView, SLOT(edit(const QModelIndex &)));
       }
 
 void TracksView::initHorizontalView()
