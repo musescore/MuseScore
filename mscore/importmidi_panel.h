@@ -35,7 +35,6 @@ class ImportMidiPanel : public QWidget
       void updateUi();
       void hidePanel();
       void applyMidiImport();
-      void onCurrentTrackChanged(const QModelIndex &);
       void moveTrackUp();
       void moveTrackDown();
 
