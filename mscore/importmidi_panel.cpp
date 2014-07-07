@@ -114,10 +114,6 @@ void ImportMidiPanel::setupUi()
       connect(_ui->pushButtonDown, SIGNAL(clicked()), SLOT(moveTrackDown()));
       connect(_ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
 
-      const QItemSelectionModel *sm = _ui->tracksView->selectionModel();
-      connect(sm, SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-              SLOT(onCurrentTrackChanged(QModelIndex)));
-
       _updateUiTimer->start(100);
       updateUi();
                   // tracks view
@@ -125,14 +121,6 @@ void ImportMidiPanel::setupUi()
                   // charset
       _ui->comboBoxCharset->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
       fillCharsetList();
-      }
-
-void ImportMidiPanel::onCurrentTrackChanged(const QModelIndex &currentIndex)
-      {
-      if (currentIndex.isValid()) {
-            MidiOperations::Data &opers = preferences.midiImportOperations;
-            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
-            }
       }
 
 void ImportMidiPanel::fillCharsetList()
