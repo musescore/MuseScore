@@ -70,6 +70,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
       _ui->tracksView->setFrozenRowCount(_model->frozenRowCount());
       _ui->tracksView->setFrozenColCount(_model->frozenColCount());
       _ui->comboBoxCharset->setCurrentText(preferences.midiImportOperations.data()->charset);
+      _ui->tracksView->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
       }
 
 void ImportMidiPanel::saveTableViewState()
@@ -121,12 +122,6 @@ void ImportMidiPanel::setupUi()
       updateUi();
                   // tracks view
       _ui->tracksView->verticalHeader()->setDefaultSectionSize(24);
-//      _ui->tracksView->horizontalHeader()->setResizeMode(TrackCol::DO_IMPORT,
-//                                                        QHeaderView::ResizeToContents);
-//      _ui->tracksView->horizontalHeader()->setResizeMode(TrackCol::STAFF_NAME,
-//                                                        QHeaderView::Stretch);
-//      _ui->tracksView->horizontalHeader()->setResizeMode(TrackCol::INSTRUMENT,
-//                                                        QHeaderView::Stretch);
                   // charset
       _ui->comboBoxCharset->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
       fillCharsetList();
