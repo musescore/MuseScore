@@ -46,6 +46,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       cachedTickPosition = -1;
       cachedTimePosition = -1;
       cs                 = 0;
+      tempoSliderIsPressed = false;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -65,6 +66,8 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
+      connect(tempoSlider,  SIGNAL(sliderPressed(int)),       SLOT(tempoSliderPressed(int)));
+      connect(tempoSlider,  SIGNAL(sliderReleased(int)),      SLOT(tempoSliderReleased(int)));
       connect(relTempoBox,  SIGNAL(editingFinished()),        SLOT(relTempoChanged()));
       connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));
       }
@@ -280,6 +283,24 @@ void PlayPanel::updatePosLabel(int utick)
       char buffer[32];
       sprintf(buffer, "%03d.%02d", bar+1, beat+1);
       posLabel->setText(QString(buffer));
+      }
+
+//---------------------------------------------------------
+//   tempoSliderPressed
+//---------------------------------------------------------
+
+void PlayPanel::tempoSliderPressed(int)
+      {
+      tempoSliderIsPressed = true;
+      }
+
+//---------------------------------------------------------
+//   tempoSliderReleased
+//---------------------------------------------------------
+
+void PlayPanel::tempoSliderReleased(int)
+      {
+      tempoSliderIsPressed = false;
       }
 }
 
