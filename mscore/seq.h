@@ -103,6 +103,12 @@ class Seq : public QObject, public Sequencer {
       bool running;                       // true if sequencer is available
       Transport state;                    // STOP, PLAY, STARTING=3
       bool inCountIn;
+                                          // When we begin playing count in, JACK should play the ticks, but shouldn't run
+                                          // JACK Transport to prevent playing in other applications. Before playing
+                                          // count in we have to disconnect from JACK Transport by switching to the fake transport.
+                                          // Also we save current preferences.useJackTransport value to useJackTransportSavedFlag
+                                          // to restore it when count in ends. After this all applications start playing in sync.
+      bool useJackTransportSavedFlag;
       Fraction prevTimeSig;
       double prevTempo;
 
@@ -143,13 +149,13 @@ class Seq : public QObject, public Sequencer {
       void playEvent(const NPlayEvent&);
       void guiToSeq(const SeqMsg& msg);
       void metronome(unsigned n, float* l, bool force);
-      void seek(int utick, Segment* seg);
+      void seekCommon(int utick);
       void unmarkNotes();
       void updateSynthesizerState(int tick1, int tick2);
       void addCountInClicks();
 
    private slots:
-      void seqMessage(int msg);
+      void seqMessage(int msg, int arg = 0);
       void heartBeatTimeout();
       void midiInputReady();
       void setPlaylistChanged() { playlistChanged = true; }
@@ -157,7 +163,8 @@ class Seq : public QObject, public Sequencer {
 
    public slots:
       void setRelTempo(double);
-      void seek(int, bool can_wait = true);
+      void seek(int utick);
+      void seekRT(int utick);
       void stopNotes(int channel = -1);
       void start();
       void stop();
@@ -166,7 +173,7 @@ class Seq : public QObject, public Sequencer {
    signals:
       void started();
       void stopped();
-      int toGui(int);
+      int toGui(int, int arg = 0);
       void heartBeat(int, int, int);
       void tempoChanged();
       void timeSigChanged();
@@ -213,7 +220,6 @@ class Seq : public QObject, public Sequencer {
       void setDriver(Driver* d)                        { _driver = d;    }
       MasterSynthesizer* synti() const                 { return _synti;  }
       void setMasterSynthesizer(MasterSynthesizer* ms) { _synti = ms;    }
-      void setPlayTime(int t)                          { playTime = t;   }
 
       int getCurTick();
       double curTempo() const;

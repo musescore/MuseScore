@@ -37,7 +37,11 @@ class MidiDriver;
 
 class JackAudio : public Driver {
       unsigned _segmentSize;
-      Transport fakeState; // Use this if preferences.useJackTransport = false
+                              // We use fakeState if preferences.useJackTransport = false to emulate JACK Transport.
+                              // ALSA, PortAudio do the same thing because of they don't have any transport.
+                              // Also this implements fake transport when we have to temporarily disconnect from JACK Transport.
+                              // It may be useful when playing count in to let JACK Transport wait before playing score.
+      Transport fakeState;
 
       jack_client_t* client;
       char _jackName[8];
@@ -79,7 +83,7 @@ class JackAudio : public Driver {
       virtual void registerPort(const QString& name, bool input, bool midi);
       virtual void unregisterPort(jack_port_t*);
       virtual void handleTimeSigTempoChanged();
-      virtual void checkTransportSeek(int, int);
+      virtual void checkTransportSeek(int, int, bool);
       virtual int bufferSize() {return _segmentSize;}
       void setBufferSize(int nframes) { _segmentSize = nframes;}
       };

@@ -151,6 +151,7 @@ Seq::Seq()
 
       playTime  = 0;
       metronomeVolume = 0.3;
+      useJackTransportSavedFlag = false;
 
       inCountIn         = false;
       countInPlayPos    = countInEvents.cbegin();
@@ -171,7 +172,7 @@ Seq::Seq()
       connect(noteTimer, SIGNAL(timeout()), this, SLOT(stopNotes()));
       noteTimer->stop();
 
-      connect(this, SIGNAL(toGui(int)), this, SLOT(seqMessage(int)), Qt::QueuedConnection);
+      connect(this, SIGNAL(toGui(int, int)), this, SLOT(seqMessage(int, int)), Qt::QueuedConnection);
 
       prevTimeSig.setNumerator(0);
       prevTempo = 0;
@@ -302,18 +303,20 @@ void Seq::start()
                   }
             }
       if ((mscore->loop())) {
-            if(cs->selection().isRange())
+            if (cs->selection().isRange())
                   setLoopSelection();
-            if (!preferences.useJackTransport || (preferences.useJackTransport && state == Transport::STOP)) {
-                  qDebug()<<"___calling seek from start with LoopInTick utick = "<<cs->repeatList()->tick2utick(cs->loopInTick());
+            if (!preferences.useJackTransport || (preferences.useJackTransport && state == Transport::STOP))
                   seek(cs->repeatList()->tick2utick(cs->loopInTick()));
-                  }
             }
       else {
-            if (!preferences.useJackTransport || (preferences.useJackTransport && state == Transport::STOP)) {
-                  qDebug()<<"___calling seek from start with playpos utick = "<<cs->repeatList()->tick2utick(cs->playPos());
+            if (!preferences.useJackTransport || (preferences.useJackTransport && state == Transport::STOP))
                   seek(cs->repeatList()->tick2utick(cs->playPos()));
-                  }
+            }
+      if (preferences.useJackTransport && mscore->countIn() && state == Transport::STOP) {
+            // Ready to start playing count in, switching to fake transport
+            // to prevent playing in other applications with our ticks simultaneously
+            useJackTransportSavedFlag    = true;
+            preferences.useJackTransport = false;
             }
       _driver->startTransport();
       }
@@ -424,9 +427,18 @@ void Seq::guiStop()
 //    execution environment: gui thread
 //---------------------------------------------------------
 
-void Seq::seqMessage(int msg)
+void Seq::seqMessage(int msg, int arg)
       {
       switch(msg) {
+            case '5': {
+                  // Update the screen after seeking from the realtime thread
+                  Segment* seg = cs->tick2segment(arg);
+                  if (seg)
+                        mscore->currentScoreView()->moveCursor(seg->tick());
+                  cs->setPlayPos(arg);
+                  cs->end();
+                  break;
+                  }
             case '4':   // Restart the playback at the end of the score
                   loopStart();
                   break;
@@ -501,6 +513,7 @@ void Seq::playEvent(const NPlayEvent& event)
 
 //---------------------------------------------------------
 //   processMessages
+//   from gui to process thread
 //---------------------------------------------------------
 
 void Seq::processMessages()
@@ -519,6 +532,8 @@ void Seq::processMessages()
                               cs->tempomap()->setRelTempo(msg.realVal);
                               cs->repeatList()->update();
                               playTime = cs->utick2utime(utick) * MScore::sampleRate;
+                              if (preferences.JackTimebaseMaster && preferences.useJackTransport)
+                                    _driver->seekTransport(utick + 2 * cs->utime2utick(qreal((_driver->bufferSize()) + 1) / qreal(MScore::sampleRate)));
                               }
                         else
                               cs->tempomap()->setRelTempo(msg.realVal);
@@ -613,16 +628,16 @@ void Seq::addCountInClicks()
       // if not at the beginning of a measure, add clicks for the initial measure part
       if (msrTick < plPos) {
             int delta    = plPos - msrTick;
-            int addClick = (delta + clickTicks-1) / clickTicks;     // round num. of clicks up
+            int addClick = (delta + clickTicks - 1) / clickTicks;     // round num. of clicks up
             numOfClicks += addClick;
-            lastPause    = delta - (addClick-1) * clickTicks;       // anything after last click time is final pause
+            lastPause    = delta - (addClick - 1) * clickTicks;       // anything after last click time is final pause
             }
       // or if measure not complete (anacrusis), add clicks for the missing measure part
       else if (m->ticks() < clickTicks * numerator) {
-            int delta    = clickTicks*numerator - m->ticks();
-            int addClick = (delta + clickTicks-1) / clickTicks;
+            int delta    = clickTicks * numerator - m->ticks();
+            int addClick = (delta + clickTicks - 1) / clickTicks;
             numOfClicks += addClick;
-            lastPause    = delta - (addClick-1) * clickTicks;
+            lastPause    = delta - (addClick - 1) * clickTicks;
             }
 /*
       // MIN_CLICKS: be sure to have at least MIN_CLICKS clicks: if less, add full measures
@@ -661,21 +676,31 @@ void Seq::process(unsigned n, float* buffer)
       unsigned frames = n;
       Transport driverState = _driver->getState();
       // Checking for the reposition from JACK Transport
-      _driver->checkTransportSeek(playTime, frames);
-
+      _driver->checkTransportSeek(playTime, frames, inCountIn);
       if (driverState != state) {
             // Got a message from JACK Transport panel: Play
             if (state == Transport::STOP && driverState == Transport::PLAY) {
-                  if((preferences.useJackMidi || preferences.useJackAudio) && !getAction("play")->isChecked()) {
+                  if ((preferences.useJackMidi || preferences.useJackAudio) && !getAction("play")->isChecked()) {
                         // Do not play while editing elements
-                        if (mscore->state() == STATE_NORMAL && isRunning() && canStart()) {
-                              if (playlistChanged)
-                                          collectEvents();
-                              getAction("play")->setChecked(true);
-                              getAction("play")->triggered(true);
-                              }
-                        else {
+                        if (mscore->state() != STATE_NORMAL || !isRunning() || !canStart())
                               return;
+                        getAction("play")->setChecked(true);
+                        getAction("play")->triggered(true);
+
+                        // If we just launch MuseScore and press "Play" on JACK Transport with time 0:00
+                        // MuseScore doesn't seek to 0 and guiPos is uninitialized, so let's make it manually
+                        if (preferences.useJackTransport && getCurTick() == 0)
+                              seekRT(0);
+
+                        // Switching to fake transport while playing count in
+                        // to prevent playing in other applications with our ticks simultaneously
+                        if (preferences.useJackTransport && mscore->countIn()) {
+                              // Stopping real JACK Transport
+                              _driver->stopTransport();
+                              // Starting fake transport
+                              useJackTransportSavedFlag = preferences.useJackTransport;
+                              preferences.useJackTransport = false;
+                              _driver->startTransport();
                               }
                         }
                   // Need to change state after calling collectEvents()
@@ -716,7 +741,7 @@ void Seq::process(unsigned n, float* buffer)
       processMessages();
 
       if (state == Transport::PLAY) {
-            if(!cs)
+            if (!cs)
                   return;
             EventMap::const_iterator* pPlayPos = &playPos;
             EventMap* pEvents   = &events;
@@ -772,10 +797,10 @@ void Seq::process(unsigned n, float* buffer)
                                              (*pPlayPos)->first, cs->loopInTick(), cs->loopOutTick(), getCurTick(), utickLoop, *pPlayTime);
                                           if (preferences.useJackTransport) {
                                                 int loopInUtick = cs->repeatList()->tick2utick(cs->loopInTick());
-                                                seek(loopInUtick);
+                                                _driver->seekTransport(loopInUtick);
                                                 if (loopInUtick != 0) {
-                                                      int seekto = loopInUtick-2*cs->utime2utick((qreal)_driver->bufferSize() / MScore::sampleRate);
-                                                      seek((seekto>0)?seekto:0,false);
+                                                      int seekto = loopInUtick - 2 * cs->utime2utick((qreal)_driver->bufferSize() / MScore::sampleRate);
+                                                      seekRT((seekto > 0) ? seekto : 0 );
                                                       }
                                                 }
                                           else {
@@ -849,8 +874,17 @@ void Seq::process(unsigned n, float* buffer)
                         }
                   }
             if (*pPlayPos == pEvents->cend()) {
-                  if (inCountIn)
+                  if (inCountIn) {
                         inCountIn = false;
+                        // Connecting to JACK Transport if MuseScore was temporarily disconnected from it
+                        if (useJackTransportSavedFlag) {
+                              // Stopping fake driver
+                              _driver->stopTransport();
+                              preferences.useJackTransport = true;
+                              // Starting the real JACK Transport. All applications play in sync now
+                              _driver->startTransport();
+                              }
+                        }
                   else
                         _driver->stopTransport();
                   }
@@ -974,60 +1008,69 @@ void Seq::setPos(int utick)
       }
 
 //---------------------------------------------------------
-//   seek
-//    send seek message to sequencer
+//   seekCommon
+//   a common part of seek() and seekRT(), contains code
+//   that could be safely called from any thread.
+//   Do not use explicitly, use seek() or seekRT()
 //---------------------------------------------------------
 
-void Seq::seek(int utick, bool can_wait)
+void Seq::seekCommon(int utick)
       {
       if (cs == 0)
             return;
 
-      if (utick > endTick) {
-            utick = 0;
-            can_wait = true;
-            }
-
-      qDebug()<<"Seq::seek, utick: "<<utick<<", can_wait: "<<can_wait;
-      // If driver can't seek immediately, just send a signal to seek.
-      if (preferences.useJackTransport && can_wait) {
-            _driver->seekTransport(utick);
-            if (utick != 0)
-                  return; // rewind to 0 immediately
-            }
-
       if (playlistChanged)
             collectEvents();
-      int tick     = cs->repeatList()->utick2tick(utick);
-      Segment* seg = cs->tick2segment(tick);
-      seek(utick, seg);
-      }
-
-//---------------------------------------------------------
-//   seek
-//    send seek message to sequencer
-//---------------------------------------------------------
-
-void Seq::seek(int utick, Segment* seg)
-      {
-      if (seg)
-            mscore->currentScoreView()->moveCursor(seg->tick());
-
-      int tick = cs->repeatList()->utick2tick(utick);
-      cs->setPlayPos(tick);
-      cs->setLayoutAll(false);
-      cs->end();
 
       if (cs->playMode() == PlayMode::AUDIO) {
             ogg_int64_t sp = cs->utick2utime(utick) * MScore::sampleRate;
             ov_pcm_seek(&vf, sp);
             }
 
-      guiToSeq(SeqMsg(SeqMsgId::SEEK, utick));
       guiPos = events.lower_bound(utick);
-      mscore->setPos(tick);
+      mscore->setPos(cs->repeatList()->utick2tick(utick));
       unmarkNotes();
-      cs->update();
+      }
+
+//---------------------------------------------------------
+//   seek
+//   send seek message to sequencer
+//   gui thread
+//---------------------------------------------------------
+
+void Seq::seek(int utick)
+      {
+      if (preferences.useJackTransport) {
+            if (utick > endTick)
+                  utick = 0;
+            _driver->seekTransport(utick);
+            if (utick != 0)
+                  return;
+            }
+      seekCommon(utick);
+
+      int tick = cs->repeatList()->utick2tick(utick);
+      Segment* seg = cs->tick2segment(tick);
+      if (seg)
+            mscore->currentScoreView()->moveCursor(seg->tick());
+      cs->setPlayPos(tick);
+      cs->end();
+      guiToSeq(SeqMsg(SeqMsgId::SEEK, utick));
+      }
+
+//---------------------------------------------------------
+//   seekRT
+//   realtime thread
+//---------------------------------------------------------
+
+void Seq::seekRT(int utick)
+      {
+      if (preferences.useJackTransport && utick > endTick)
+                  utick = 0;
+      seekCommon(utick);
+      setPos(utick);
+      // Update the screen in GUI thread
+      emit toGui('5', cs->repeatList()->utick2tick(utick));
       }
 
 //---------------------------------------------------------
@@ -1092,7 +1135,7 @@ void Seq::stopNotes(int channel)
             for(int i=0; i<128; i++)
                   putEvent(NPlayEvent(ME_NOTEOFF,channel,i,0));
             }
-      if(preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
+      if (preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
             _synti->allNotesOff(channel);
       }
 
@@ -1304,8 +1347,8 @@ void Seq::putEvent(const NPlayEvent& event)
             }
       int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
       _synti->play(event, syntiIdx);
-      if (preferences.useJackMidi)
-            driver()->putEvent(event,0);
+      if (preferences.useJackMidi && _driver != 0)
+            _driver->putEvent(event,0);
       }
 
 //---------------------------------------------------------
@@ -1348,11 +1391,11 @@ void Seq::heartBeatTimeout()
             --ppos;
       mutex.unlock();
 
-      if(cs && cs->sigmap()->timesig(getCurTick()).nominal()!=prevTimeSig) {
+      if (cs && cs->sigmap()->timesig(getCurTick()).nominal()!=prevTimeSig) {
             prevTimeSig = cs->sigmap()->timesig(getCurTick()).nominal();
             emit timeSigChanged();
             }
-      if(cs && curTempo()!=prevTempo) {
+      if (cs && curTempo()!=prevTempo) {
             prevTempo = curTempo();
             emit tempoChanged();
             }
@@ -1374,7 +1417,6 @@ void Seq::heartBeatTimeout()
                               r |= note1->canvasBoundingRect();
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
                               }
-
                         }
                   else {
                         while (note1) {
@@ -1458,7 +1500,7 @@ void Seq::setLoopOut()
             tick = cs->repeatList()->utick2tick(playPos->first);
             }
       else
-            tick = cs->pos()+cs->inputState().ticks();   // Otherwise, use the selected note.
+            tick = cs->pos() + cs->inputState().ticks();   // Otherwise, use the selected note.
       if (tick <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
             cs->setPos(POS::LEFT, 0);
       cs->setPos(POS::RIGHT, tick);

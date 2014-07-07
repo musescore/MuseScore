@@ -1268,6 +1268,9 @@ void PreferenceDialog::apply()
             //Keep JACK driver without unload
             preferences = prefs;
             seq->driver()->init(true);
+            if (!seq->init()) {
+                  qDebug("sequencer init failed");
+                  }
             }
       else if (
          (prefs.useAlsaAudio != alsaDriver->isChecked())
@@ -1496,15 +1499,19 @@ void PreferenceDialog::midiRemoteControlClearClicked()
 
 void PreferenceDialog::exclusiveAudioDriver(bool on)
       {
-      if(on) {
-            if(portaudioDriver != QObject::sender())
+      if (on) {
+            if (portaudioDriver != QObject::sender())
                   portaudioDriver->setChecked(false);
-            if(pulseaudioDriver != QObject::sender())
+            if (pulseaudioDriver != QObject::sender())
                   pulseaudioDriver->setChecked(false);
-            if(alsaDriver != QObject::sender())
+            if (alsaDriver != QObject::sender())
                   alsaDriver->setChecked(false);
-            if(jackDriver != QObject::sender())
+            if (jackDriver != QObject::sender())
                   jackDriver->setChecked(false);
+            if (jackDriver == QObject::sender() && !useJackMidi->isChecked() && !useJackAudio->isChecked()) {
+                  useJackMidi->setChecked(true);
+                  useJackAudio->setChecked(true);
+                  }
             }
       }
 

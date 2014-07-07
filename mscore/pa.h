@@ -55,13 +55,9 @@ class Portaudio : public Driver {
       virtual void stopTransport();
       virtual Transport getState() override;
       virtual int sampleRate() const { return _sampleRate; }
-      virtual void registerPort(const QString& name, bool input, bool midi);
-      virtual void unregisterPort(int);
       virtual void midiRead();
 
       int framePos() const;
-      void connect(void*, void*);
-      void disconnect(void* src, void* dst);
       float* getLBuffer(long n);
       float* getRBuffer(long n);
       virtual bool isRealtime() const   { return false; }

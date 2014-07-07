@@ -2002,7 +2002,7 @@
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout7">
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="useJackAudio">
             <property name="text">
