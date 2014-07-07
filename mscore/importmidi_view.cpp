@@ -170,9 +170,9 @@ void TracksView::initMainView()
 
 void TracksView::initConnections()
       {
-      connect(horizontalHeader(),SIGNAL(sectionResized(int,int,int)),
+      connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)),
               this, SLOT(updateMainViewSectionWidth(int,int,int)));
-      connect(verticalHeader(),SIGNAL(sectionResized(int,int,int)),
+      connect(verticalHeader(), SIGNAL(sectionResized(int,int,int)),
               this, SLOT(updateMainViewSectionHeight(int,int,int)));
 
       connect(verticalHeader(), SIGNAL(sectionMoved(int,int,int)),
@@ -360,6 +360,19 @@ bool TracksView::viewportEvent(QEvent *event)
             }
 
       return QTableView::viewportEvent(event);
+}
+
+void TracksView::wheelEvent(QWheelEvent *event)
+      {
+      if ((event->modifiers() & Qt::ShiftModifier) || (event->modifiers() & Qt::ControlModifier)) {
+            const int degrees = event->delta() / 8;
+            const int steps = degrees / 15;
+            const int pixelsToScroll = steps * 60;
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - pixelsToScroll);
+            }
+      else {
+            QTableView::wheelEvent(event);
+            }
       }
 
 void TracksView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
