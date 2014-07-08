@@ -38,8 +38,8 @@ class TracksModel::Column
       virtual QVariant value(int trackIndex) const = 0;
       virtual void setValue(const QVariant &value, int trackIndex) = 0;
       virtual QString headerName() const = 0;
-      virtual bool isVisibleForTrack(int /*trackIndex*/) const { return true; }
-      virtual QStringList valueList() const { return _values; }
+      virtual bool isVisible(int /*trackIndex*/) const { return true; }
+      virtual QStringList valueList(int /*trackIndex*/) const { return _values; }
 
       bool isEditable() const { return _isEditable; }
       bool hasCharset() const { return _hasCharset; }
@@ -171,7 +171,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                                     // GUI lyrics list always have "" row, so: (index - 1)
                         _opers.lyricTrackIndex.setValue(trackIndex, value.toInt() - 1);
                         }
-                  QStringList valueList() const
+                  QStringList valueList(int /*trackIndex*/) const
                         {
                         MidiOperations::Data &opers = preferences.midiImportOperations;
                         MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
@@ -249,7 +249,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   {
                   _opers.maxVoiceCount.setValue(trackIndex, (MidiOperations::VoiceCount)value.toInt());
                   }
-            bool isVisibleForTrack(int trackIndex) const
+            bool isVisible(int trackIndex) const
                   {
                   if (_opers.isDrumTrack.value(trackIndex))
                         return false;
@@ -257,6 +257,85 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   }
             };
       _columns.push_back(std::unique_ptr<Column>(new VoiceCount(_trackOpers)));
+
+      //-----------------------------------------------------------------------
+      struct Tuplets : Column {
+            Tuplets(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  _values.push_back("2");
+                  _values.push_back("3");
+                  _values.push_back("4");
+                  _values.push_back("5");
+                  _values.push_back("7");
+                  _values.push_back("9");
+                  }
+            QString headerName() const { return "Tuplets"; }
+            QVariant value(int trackIndex) const
+                  {
+                  QString val;
+                  if (_opers.search2plets.value(trackIndex)) {
+                        if (val != "")
+                              val += ", ";
+                        val += "2";
+                        }
+                  if (_opers.search3plets.value(trackIndex)) {
+                        if (val != "")
+                              val += ", ";
+                        val += "3";
+                        }
+                  if (_opers.search4plets.value(trackIndex)) {
+                        if (val != "")
+                              val += ", ";
+                        val += "4";
+                        }
+                  if (_opers.search5plets.value(trackIndex)) {
+                        if (val != "")
+                              val += ", ";
+                        val += "5";
+                        }
+                  if (_opers.search7plets.value(trackIndex)) {
+                        if (val != "")
+                              val += ", ";
+                        val += "7";
+                        }
+                  if (_opers.search9plets.value(trackIndex)) {
+                        if (val != "")
+                              val += ", ";
+                        val += "9";
+                        }
+                  return val;
+                  }
+            void setValue(const QVariant &value, int trackIndex)
+                  {
+                  const QStringList list = value.toStringList();
+                  _opers.search2plets.setValue(trackIndex, list[0] == "true");
+                  _opers.search3plets.setValue(trackIndex, list[1] == "true");
+                  _opers.search4plets.setValue(trackIndex, list[2] == "true");
+                  _opers.search5plets.setValue(trackIndex, list[3] == "true");
+                  _opers.search7plets.setValue(trackIndex, list[4] == "true");
+                  _opers.search9plets.setValue(trackIndex, list[5] == "true");
+                  }
+            QStringList valueList(int trackIndex) const
+                  {
+                  auto list = QStringList("__MultiValue__");
+
+                  list.append(_values[0]);
+                  list.append(_opers.search2plets.value(trackIndex) ? "true" : "false");
+                  list.append(_values[1]);
+                  list.append(_opers.search3plets.value(trackIndex) ? "true" : "false");
+                  list.append(_values[2]);
+                  list.append(_opers.search4plets.value(trackIndex) ? "true" : "false");
+                  list.append(_values[3]);
+                  list.append(_opers.search5plets.value(trackIndex) ? "true" : "false");
+                  list.append(_values[4]);
+                  list.append(_opers.search7plets.value(trackIndex) ? "true" : "false");
+                  list.append(_values[5]);
+                  list.append(_opers.search9plets.value(trackIndex) ? "true" : "false");
+
+                  return list;
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new Tuplets(_trackOpers)));
 
       endResetModel();
       }
@@ -356,20 +435,20 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                               if (value.type() == QVariant::String) {
                                     if (!_columns[index.column()]->isForAllTracksOnly()) {
                                           for (int i = 1; i < _trackCount; ++i) {
-                                                if (_columns[index.column()]->isVisibleForTrack(i)
+                                                if (_columns[index.column()]->isVisible(i)
                                                             && _columns[index.column()]->value(i).toString()
                                                                         != value.toString()) {
                                                       return "...";
                                                       }
                                                 }
                                           }
-                                    if (_columns[index.column()]->isVisibleForTrack(0))
+                                    if (_columns[index.column()]->isVisible(0))
                                           return value.toString();
                                     }
                               }
                         }
                   else if (editableSingleTrack(trackIndex, index.column())
-                           && _columns[index.column()]->isVisibleForTrack(trackIndex)) {
+                           && _columns[index.column()]->isVisible(trackIndex)) {
                         QVariant value = _columns[index.column()]->value(trackIndex);
                         if (value.type() == QVariant::String)
                               return value.toString();
@@ -378,9 +457,9 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
             case Qt::EditRole:
                   if (_columns[index.column()]->isEditable()
                               && editableSingleTrack(trackIndex, index.column())
-                              && _columns[index.column()]->isVisibleForTrack(trackIndex)) {
-                        if (!_columns[index.column()]->valueList().isEmpty())
-                              return _columns[index.column()]->valueList();
+                              && _columns[index.column()]->isVisible(trackIndex)) {
+                        if (!_columns[index.column()]->valueList(trackIndex).isEmpty())
+                              return _columns[index.column()]->valueList(trackIndex);
                         }
                   break;
             case Qt::CheckStateRole:
@@ -395,7 +474,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                                                 }
                                           }
                                     }
-                              if (_columns[index.column()]->isVisibleForTrack(0))
+                              if (_columns[index.column()]->isVisible(0))
                                     return (value.toBool()) ? Qt::Checked : Qt::Unchecked;
                               }
                         }
@@ -409,10 +488,10 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                   return Qt::AlignCenter;
                   break;
             case Qt::ToolTipRole:
-                  if (trackIndex != -1 && _columns[index.column()]->isVisibleForTrack(trackIndex)) {
+                  if (trackIndex != -1 && _columns[index.column()]->isVisible(trackIndex)) {
                         QVariant value = _columns[index.column()]->value(trackIndex);
                         if (value.type() == QVariant::String
-                                    && _columns[index.column()]->valueList().empty()) {
+                                    && _columns[index.column()]->valueList(trackIndex).empty()) {
                               MidiOperations::Data &opers = preferences.midiImportOperations;
                               MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
 
@@ -434,7 +513,7 @@ Qt::ItemFlags TracksModel::flags(const QModelIndex &index) const
       Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
       const int trackIndex = trackIndexFromRow(index.row());
 
-      if (_columns[index.column()]->isVisibleForTrack(trackIndex)) {
+      if (_columns[index.column()]->isVisible(trackIndex)) {
             if (_columns[index.column()]->value(0).type() == QVariant::Bool)
                   flags |= Qt::ItemIsUserCheckable;
 
@@ -472,7 +551,7 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
       if (trackIndex == -1) {   // all tracks row
             if (!_columns[index.column()]->isForAllTracksOnly()) {
                   for (int i = 0; i != _trackCount; ++i) {
-                        if (_columns[index.column()]->isVisibleForTrack(trackIndex))
+                        if (_columns[index.column()]->isVisible(trackIndex))
                               _columns[index.column()]->setValue(value, i);
                         }
                   forceColumnDataChanged(index.column());
@@ -482,7 +561,7 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
                   }
             }
       else if (editableSingleTrack(trackIndex, index.column())
-               && _columns[index.column()]->isVisibleForTrack(trackIndex)) {
+               && _columns[index.column()]->isVisible(trackIndex)) {
             _columns[index.column()]->setValue(value, trackIndex);
             emit dataChanged(index, index);
             if (_trackCount > 1)    // update 'all tracks' row
