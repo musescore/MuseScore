@@ -2356,6 +2356,10 @@ void Score::connectTies()
                               else {
                                     nc->setTremolo(tremolo);
                                     tremolo->setChords(c, nc);
+                                    // remove 2 note tremolos
+                                    // which have chords in two different measures
+                                    if(c->measure() != nc->measure())
+                                          c->remove(tremolo);
                                     }
                               break;
                               }
