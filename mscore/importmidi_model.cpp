@@ -31,7 +31,7 @@ class TracksModel::Column
       {
    public:
       Column(MidiOperations::Opers &opers)
-            : _opers(opers), _isEditable(true), _hasCharset(false)
+            : _opers(opers), _isEditable(true), _hasCharset(false), _forAllTracksOnly(false)
             {}
       virtual ~Column() {}
 
@@ -41,12 +41,14 @@ class TracksModel::Column
       virtual QStringList valueList() const { return _values; }
       bool isEditable() const { return _isEditable; }
       bool hasCharset() const { return _hasCharset; }
+      bool isForAllTracksOnly() const { return _forAllTracksOnly; }
 
    protected:
       MidiOperations::Opers &_opers;
       QStringList _values;
       bool _isEditable;
       bool _hasCharset;
+      bool _forAllTracksOnly;
       };
 
 
@@ -76,10 +78,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
 
       //-----------------------------------------------------------------------
       struct Import : Column {
-            Import(MidiOperations::Opers &opers) : Column(opers)
-                  {
-                  _isEditable = false;
-                  }
+            Import(MidiOperations::Opers &opers) : Column(opers) {}
 
             QString headerName() const { return "Import"; }
             QVariant value(int trackIndex) const
@@ -211,6 +210,25 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             };
       _columns.push_back(std::unique_ptr<Column>(new QuantValue(_trackOpers)));
 
+      //-----------------------------------------------------------------------
+      struct Human : Column {
+            Human(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  _forAllTracksOnly = true;
+                  }
+
+            QString headerName() const { return "Human"; }
+            QVariant value(int /*trackIndex*/) const
+                  {
+                  return _opers.isHumanPerformance;
+                  }
+            void setValue(const QVariant &value, int /*trackIndex*/)
+                  {
+                  _opers.isHumanPerformance = value.toBool();
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new Human(_trackOpers)));
+
       endResetModel();
       }
 
@@ -288,6 +306,11 @@ int TracksModel::columnCount(const QModelIndex &/*parent*/) const
       return _columns.size();
       }
 
+bool TracksModel::editableSingleTrack(int trackIndex, int column) const
+      {
+      return !(trackIndex >= 0 && _trackCount != 1 && _columns[column]->isForAllTracksOnly());
+      }
+
 QVariant TracksModel::data(const QModelIndex &index, int role) const
       {
       if (!index.isValid())
@@ -302,22 +325,27 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                         if (_columns[index.column()]->isEditable()) {
                               QVariant value = _columns[index.column()]->value(0);
                               if (value.type() == QVariant::String) {
-                                    for (int i = 1; i < _trackCount; ++i) {
-                                          if (_columns[index.column()]->value(i).toString() != value.toString())
-                                                return "...";
+                                    if (!_columns[index.column()]->isForAllTracksOnly()) {
+                                          for (int i = 1; i < _trackCount; ++i) {
+                                                if (_columns[index.column()]->value(i).toString()
+                                                            != value.toString()) {
+                                                      return "...";
+                                                      }
+                                                }
                                           }
                                     return value.toString();
                                     }
                               }
                         }
-                  else {
+                  else if (editableSingleTrack(trackIndex, index.column())) {
                         QVariant value = _columns[index.column()]->value(trackIndex);
                         if (value.type() == QVariant::String)
                               return value.toString();
                         }
                   break;
             case Qt::EditRole:
-                  if (_columns[index.column()]->isEditable()) {
+                  if (_columns[index.column()]->isEditable()
+                              && editableSingleTrack(trackIndex, index.column())) {
                         if (!_columns[index.column()]->valueList().isEmpty())
                               return _columns[index.column()]->valueList();
                         }
@@ -326,14 +354,18 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                   if (trackIndex == -1) {
                         QVariant value = _columns[index.column()]->value(0);
                         if (value.type() == QVariant::Bool) {
-                              for (int i = 1; i < _trackCount; ++i) {
-                                    if (_columns[index.column()]->value(i).toBool() != value.toBool())
-                                          return Qt::PartiallyChecked;
+                              if (!_columns[index.column()]->isForAllTracksOnly()) {
+                                    for (int i = 1; i < _trackCount; ++i) {
+                                          if (_columns[index.column()]->value(i).toBool()
+                                                      != value.toBool()) {
+                                                return Qt::PartiallyChecked;
+                                                }
+                                          }
                                     }
                               return (value.toBool()) ? Qt::Checked : Qt::Unchecked;
                               }
                         }
-                  else {
+                  else if (editableSingleTrack(trackIndex, index.column())) {
                         QVariant value = _columns[index.column()]->value(trackIndex);
                         if (value.type() == QVariant::Bool)
                               return (value.toBool()) ? Qt::Checked : Qt::Unchecked;
@@ -367,8 +399,15 @@ Qt::ItemFlags TracksModel::flags(const QModelIndex &index) const
       Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
       if (_columns[index.column()]->value(0).type() == QVariant::Bool)
             flags |= Qt::ItemIsUserCheckable;
-      if (_columns[index.column()]->isEditable())
-            flags |= Qt::ItemIsEditable;
+
+      const int trackIndex = trackIndexFromRow(index.row());
+      if (_columns[index.column()]->isEditable()
+                  && editableSingleTrack(trackIndex, index.column())) {
+                        // not for checkboxes (value type is bool)
+            QVariant value = _columns[index.column()]->value(0);
+            if (value.type() != QVariant::Bool)
+                  flags |= Qt::ItemIsEditable;
+            }
       return flags;
       }
 
@@ -393,11 +432,16 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
             return false;
 
       if (trackIndex == -1) {   // all tracks row
-            for (int i = 0; i != _trackCount; ++i)
-                  _columns[index.column()]->setValue(value, i);
-            forceColumnDataChanged(index.column());
+            if (!_columns[index.column()]->isForAllTracksOnly()) {
+                  for (int i = 0; i != _trackCount; ++i)
+                        _columns[index.column()]->setValue(value, i);
+                  forceColumnDataChanged(index.column());
+                  }
+            else {
+                  _columns[index.column()]->setValue(value, 0);
+                  }
             }
-      else {
+      else if (editableSingleTrack(trackIndex, index.column())) {
             _columns[index.column()]->setValue(value, trackIndex);
             emit dataChanged(index, index);
             if (_trackCount > 1)    // update 'all tracks' row
