@@ -38,7 +38,9 @@ class TracksModel::Column
       virtual QVariant value(int trackIndex) const = 0;
       virtual void setValue(const QVariant &value, int trackIndex) = 0;
       virtual QString headerName() const = 0;
+      virtual bool isVisibleForTrack(int /*trackIndex*/) const { return true; }
       virtual QStringList valueList() const { return _values; }
+
       bool isEditable() const { return _isEditable; }
       bool hasCharset() const { return _hasCharset; }
       bool isForAllTracksOnly() const { return _forAllTracksOnly; }
@@ -229,6 +231,33 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             };
       _columns.push_back(std::unique_ptr<Column>(new Human(_trackOpers)));
 
+      //-----------------------------------------------------------------------
+      struct VoiceCount : Column {
+            VoiceCount(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  _values.push_back("1");
+                  _values.push_back("2");
+                  _values.push_back("3");
+                  _values.push_back("4");
+                  }
+            QString headerName() const { return "Voice count (max)"; }
+            QVariant value(int trackIndex) const
+                  {
+                  return _values[(int)_opers.maxVoiceCount.value(trackIndex)];
+                  }
+            void setValue(const QVariant &value, int trackIndex)
+                  {
+                  _opers.maxVoiceCount.setValue(trackIndex, (MidiOperations::VoiceCount)value.toInt());
+                  }
+            bool isVisibleForTrack(int trackIndex) const
+                  {
+                  if (_opers.isDrumTrack.value(trackIndex))
+                        return false;
+                  return true;
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new VoiceCount(_trackOpers)));
+
       endResetModel();
       }
 
@@ -327,17 +356,20 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                               if (value.type() == QVariant::String) {
                                     if (!_columns[index.column()]->isForAllTracksOnly()) {
                                           for (int i = 1; i < _trackCount; ++i) {
-                                                if (_columns[index.column()]->value(i).toString()
-                                                            != value.toString()) {
+                                                if (_columns[index.column()]->isVisibleForTrack(i)
+                                                            && _columns[index.column()]->value(i).toString()
+                                                                        != value.toString()) {
                                                       return "...";
                                                       }
                                                 }
                                           }
-                                    return value.toString();
+                                    if (_columns[index.column()]->isVisibleForTrack(0))
+                                          return value.toString();
                                     }
                               }
                         }
-                  else if (editableSingleTrack(trackIndex, index.column())) {
+                  else if (editableSingleTrack(trackIndex, index.column())
+                           && _columns[index.column()]->isVisibleForTrack(trackIndex)) {
                         QVariant value = _columns[index.column()]->value(trackIndex);
                         if (value.type() == QVariant::String)
                               return value.toString();
@@ -345,7 +377,8 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                   break;
             case Qt::EditRole:
                   if (_columns[index.column()]->isEditable()
-                              && editableSingleTrack(trackIndex, index.column())) {
+                              && editableSingleTrack(trackIndex, index.column())
+                              && _columns[index.column()]->isVisibleForTrack(trackIndex)) {
                         if (!_columns[index.column()]->valueList().isEmpty())
                               return _columns[index.column()]->valueList();
                         }
@@ -362,7 +395,8 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                                                 }
                                           }
                                     }
-                              return (value.toBool()) ? Qt::Checked : Qt::Unchecked;
+                              if (_columns[index.column()]->isVisibleForTrack(0))
+                                    return (value.toBool()) ? Qt::Checked : Qt::Unchecked;
                               }
                         }
                   else if (editableSingleTrack(trackIndex, index.column())) {
@@ -375,7 +409,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                   return Qt::AlignCenter;
                   break;
             case Qt::ToolTipRole:
-                  if (trackIndex != -1) {
+                  if (trackIndex != -1 && _columns[index.column()]->isVisibleForTrack(trackIndex)) {
                         QVariant value = _columns[index.column()]->value(trackIndex);
                         if (value.type() == QVariant::String
                                     && _columns[index.column()]->valueList().empty()) {
@@ -396,17 +430,21 @@ Qt::ItemFlags TracksModel::flags(const QModelIndex &index) const
       {
       if (!index.isValid())
             return 0;
-      Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-      if (_columns[index.column()]->value(0).type() == QVariant::Bool)
-            flags |= Qt::ItemIsUserCheckable;
 
+      Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
       const int trackIndex = trackIndexFromRow(index.row());
-      if (_columns[index.column()]->isEditable()
-                  && editableSingleTrack(trackIndex, index.column())) {
-                        // not for checkboxes (value type is bool)
-            QVariant value = _columns[index.column()]->value(0);
-            if (value.type() != QVariant::Bool)
-                  flags |= Qt::ItemIsEditable;
+
+      if (_columns[index.column()]->isVisibleForTrack(trackIndex)) {
+            if (_columns[index.column()]->value(0).type() == QVariant::Bool)
+                  flags |= Qt::ItemIsUserCheckable;
+
+            if (_columns[index.column()]->isEditable()
+                        && editableSingleTrack(trackIndex, index.column())) {
+                              // not for checkboxes (value type is bool)
+                  QVariant value = _columns[index.column()]->value(0);
+                  if (value.type() != QVariant::Bool)
+                        flags |= Qt::ItemIsEditable;
+                  }
             }
       return flags;
       }
@@ -433,15 +471,18 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
 
       if (trackIndex == -1) {   // all tracks row
             if (!_columns[index.column()]->isForAllTracksOnly()) {
-                  for (int i = 0; i != _trackCount; ++i)
-                        _columns[index.column()]->setValue(value, i);
+                  for (int i = 0; i != _trackCount; ++i) {
+                        if (_columns[index.column()]->isVisibleForTrack(trackIndex))
+                              _columns[index.column()]->setValue(value, i);
+                        }
                   forceColumnDataChanged(index.column());
                   }
             else {
                   _columns[index.column()]->setValue(value, 0);
                   }
             }
-      else if (editableSingleTrack(trackIndex, index.column())) {
+      else if (editableSingleTrack(trackIndex, index.column())
+               && _columns[index.column()]->isVisibleForTrack(trackIndex)) {
             _columns[index.column()]->setValue(value, trackIndex);
             emit dataChanged(index, index);
             if (_trackCount > 1)    // update 'all tracks' row
