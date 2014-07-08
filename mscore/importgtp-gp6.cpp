@@ -490,7 +490,7 @@ QDomNode GuitarPro6::getNode(QString id, QDomNode currentNode)
                   }
             currentNode = (currentNode).nextSibling();
             }
-      qDebug("WARNING: A null node was returned when search for an identifier. Your Guitar Pro file may be corrupted.");
+      qDebug() << "WARNING: A null node was returned when search for the identifier" << id << ". Your Guitar Pro file may be corrupted.";
       return currentNode;
       }
 
@@ -500,19 +500,31 @@ QDomNode GuitarPro6::getNode(QString id, QDomNode currentNode)
 
 int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
       {
-      QDomNode finalMasterBar = partInfo->masterBars.nextSibling();
-      while (!finalMasterBar.isNull()) {
+      QDomNode masterBar = partInfo->masterBars.nextSibling();
+      QDomNode masterBarElement;
+      while (!masterBar.isNull()) {
             GpBar gpBar;
-            gpBar.keysig = finalMasterBar.firstChild().toElement().text().toInt();
-            QString timeSignature = finalMasterBar.firstChild().nextSibling().toElement().text();
-            QList<QString> timeSignatureList = timeSignature.split("/");
-            gpBar.timesig = Fraction(timeSignatureList.first().toInt(), timeSignatureList.last().toInt());
+            masterBarElement = masterBar.firstChild();
+            while (!masterBarElement.isNull()) {
+                  if (!masterBarElement.nodeName().compare("Key"))
+                        gpBar.keysig = masterBarElement.firstChild().toElement().text().toInt();
+                  else if (!masterBarElement.nodeName().compare("Time")) {
+                        QString timeSignature = masterBarElement.toElement().text();
+                        QList<QString> timeSignatureList = timeSignature.split("/");
+                        gpBar.timesig = Fraction(timeSignatureList.first().toInt(), timeSignatureList.last().toInt());
+                        }
+                  else if (!masterBarElement.nodeName().compare("DoubleBar"))
+                        gpBar.barLine = BarLineType::DOUBLE;
+                  else
+                        unhandledNode(masterBarElement.nodeName());
+                  masterBarElement = masterBarElement.nextSibling();
+                  }
             bars.append(gpBar);
-            if (finalMasterBar.nextSibling().isNull())
+            if (masterBar.nextSibling().isNull())
                   break;
-            finalMasterBar = finalMasterBar.nextSibling();
+            masterBar = masterBar.nextSibling();
             }
-      QString bars = finalMasterBar.lastChildElement("Bars").toElement().text();
+      QString bars = masterBar.lastChildElement("Bars").toElement().text();
       //work out the number of measures (add 1 as couning from 0, and divide by number of parts)
       int numMeasures = (bars.split(" ").last().toInt() + 1) / score->parts().length();
       return numMeasures;
