@@ -39,6 +39,7 @@
 #include "system.h"
 #include "text.h"
 #include "textline.h"
+#include "tremolo.h"
 #include "tuplet.h"
 #include "utils.h"
 #include "xml.h"
@@ -595,6 +596,18 @@ QByteArray Selection::staffMimeData() const
       Segment* seg2 = _endSegment;
 
       QList<Segment*> segments = cloneRange(seg1, seg2);
+
+      //Remove 2-note tremolo if at last segment
+      Segment* last = segments.last();
+      if (last->segmentType() == Segment::Type::ChordRest) {
+            foreach (Element* e, last->elist()) {
+                  if(e && e->type() == Element::Type::CHORD) {
+                        Chord* c = static_cast<Chord*>(e);
+                        if (c->tremolo() && c->tremolo()->twoNotes())
+                              c->remove(c->tremolo());
+                        }
+                  }
+            }
 
       std::multimap<int, Spanner*> sp_copy = spannerMapCopy(seg1,seg2,segments.first(),score()->spanner());
       sp_copy.swap(score()->spannerMap().mapModify());
