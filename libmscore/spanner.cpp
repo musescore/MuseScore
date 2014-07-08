@@ -431,6 +431,7 @@ Chord* Spanner::startChord()
       Q_ASSERT(_anchor == Anchor::CHORD);
       if (!_startElement)
             _startElement = score()->findCR(tick(), track());
+      Q_ASSERT(_startElement->type() == Element::Type::CHORD);
       return static_cast<Chord*>(_startElement);
       }
 
@@ -457,6 +458,7 @@ Chord* Spanner::endChord()
             if (_endElement->type() != Element::Type::CHORD)
                   _endElement = nullptr;
             }
+      Q_ASSERT(_endElement->type() == Element::Type::CHORD);
       return static_cast<Chord*>(_endElement);
       }
 

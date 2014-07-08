@@ -764,10 +764,10 @@ void Slur::slurPosChord(SlurPos* sp)
 
 void Slur::slurPos(SlurPos* sp)
       {
-      if (anchor() == Anchor::CHORD) {
-            slurPosChord(sp);
-            return;
-            }
+//      if (anchor() == Anchor::CHORD) {
+//            slurPosChord(sp);
+//            return;
+//            }
       qreal _spatium = spatium();
 
       if (endCR() == 0) {
@@ -780,10 +780,10 @@ void Slur::slurPos(SlurPos* sp)
             return;
             }
 
-      ChordRest* scr   = startCR();
-      ChordRest* ecr   = endCR();
-      Chord* sc   = 0;
-      Note* note1 = 0;
+      ChordRest* scr = startCR();
+      ChordRest* ecr = endCR();
+      Chord* sc      = 0;
+      Note* note1    = 0;
       if (startCR()->type() == Element::Type::CHORD) {
             sc = static_cast<Chord*>(startCR());
             note1 = _up ? sc->upNote() : sc->downNote();
