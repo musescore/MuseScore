@@ -219,7 +219,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _forAllTracksOnly = true;
                   }
 
-            QString headerName() const { return "Human"; }
+            QString headerName() const { return "Is human"; }
             QVariant value(int /*trackIndex*/) const
                   {
                   return _opers.isHumanPerformance;
