@@ -80,11 +80,11 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::guitarFadeIn, SymId::guitarFadeIn,
-            "fadein", QT_TRANSLATE_NOOP("articulation", "fadein"),
+            "fadein", QT_TRANSLATE_NOOP("articulation", "fade in"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::guitarFadeOut, SymId::guitarFadeOut,
-            "fadeout", QT_TRANSLATE_NOOP("articulation", "fadeout"),
+            "fadeout", QT_TRANSLATE_NOOP("articulation", "fade out"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::brassMuteOpen, SymId::brassMuteOpen,
