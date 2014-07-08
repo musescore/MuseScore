@@ -1396,9 +1396,7 @@ void Score::deleteItem(Element* el)
                   Chord* chord = static_cast<Chord*>(el);
                   removeChordRest(chord, false);
 
-                  // replace with rest if voice 0 or if in tuplet
-                  Tuplet* tuplet = chord->tuplet();
-                  // if ((el->voice() == 0 || tuplet) && (chord->noteType() == NoteType::NORMAL)) {
+                  // replace with rest
                   if (chord->noteType() == NoteType::NORMAL) {
                         Rest* rest = new Rest(this, chord->durationType());
                         rest->setDurationType(chord->durationType());
@@ -1409,7 +1407,7 @@ void Score::deleteItem(Element* el)
                         Segment* segment = chord->segment();
                         undoAddCR(rest, segment->measure(), segment->tick());
 
-                        // undoAddElement(rest);
+                        Tuplet* tuplet = chord->tuplet();
                         if (tuplet) {
                               tuplet->add(rest);
                               rest->setTuplet(tuplet);
@@ -2074,15 +2072,15 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
       QList<Segment*> segments;
       for (Element* e : cr->linkList()) {
             undo(new RemoveElement(e));
-            Segment* s = cr->segment();
-            if (!segments.contains(s))
-                  segments.append(s);
-            }
-      if (clearSegment) {
-            for (Segment* s : segments) {
-                  if (s->isEmpty())
-                        undo(new RemoveElement(s));
+            if (clearSegment) {
+                  Segment* s = cr->segment();
+                  if (!segments.contains(s))
+                        segments.append(s);
                   }
+            }
+      for (Segment* s : segments) {
+            if (s->isEmpty())
+                  undo(new RemoveElement(s));
             }
       if (cr->beam()) {
             Beam* beam = cr->beam();
