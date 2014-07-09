@@ -2092,6 +2092,8 @@ void GuitarPro4::read(QFile* fp)
       readUChar();      // triplet feeling
       readLyrics();
 
+      previousDynamic = -1;
+      previousTempo = -1;
       int tempo  = readInt();
       key        = readInt();
       /*int octave =*/ readUChar();    // octave
@@ -3129,6 +3131,8 @@ void GuitarPro5::read(QFile* fp)
       readLyrics();
       readPageSetup();
 
+      previousDynamic = -1;
+      previousTempo = -1;
       int tempo = readInt();
       if (version > 500)
             skip(1);
