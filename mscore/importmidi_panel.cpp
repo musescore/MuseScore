@@ -70,7 +70,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
       _ui->tracksView->setFrozenRowCount(_model->frozenRowCount());
       _ui->tracksView->setFrozenColCount(_model->frozenColCount());
       _ui->comboBoxCharset->setCurrentText(preferences.midiImportOperations.data()->charset);
-      _ui->tracksView->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+      _ui->tracksView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
       }
 
 void ImportMidiPanel::saveTableViewState()

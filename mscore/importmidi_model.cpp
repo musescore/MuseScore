@@ -40,6 +40,7 @@ class TracksModel::Column
       virtual QString headerName() const = 0;
       virtual bool isVisible(int /*trackIndex*/) const { return true; }
       virtual QStringList valueList(int /*trackIndex*/) const { return _values; }
+      virtual int width() const { return -1; }
 
       bool isEditable() const { return _isEditable; }
       bool isForAllTracksOnly() const { return _forAllTracksOnly; }
@@ -108,6 +109,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         {
                         _isEditable = false;
                         }
+                  int width() const { return 180; }
                   QString headerName() const { return "Staff name"; }
                   QVariant value(int trackIndex) const
                         {
@@ -131,6 +133,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   {
                   _isEditable = false;
                   }
+            int width() const { return 130; }
             QString headerName() const { return "Sound"; }
             QVariant value(int trackIndex) const
                   {
@@ -150,6 +153,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         : Column(opers), _lyricsList(lyricsList), _midiFile(midiFile)
                         {
                         }
+                  int width() const { return 185; }
                   QString headerName() const { return "Lyrics"; }
                   QVariant value(int trackIndex) const
                         {
@@ -213,7 +217,6 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   {
                   _forAllTracksOnly = true;
                   }
-
             QString headerName() const { return "Is human"; }
             QVariant value(int /*trackIndex*/) const
                   {
@@ -264,6 +267,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _values.push_back("7");
                   _values.push_back("9");
                   }
+            int width() const { return 150; }
             QString headerName() const { return "Tuplets"; }
             QVariant value(int trackIndex) const
                   {
@@ -490,6 +494,9 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                               return MidiCharset::convertToCharset(value.toString().toStdString());
                               }
                         }
+                  break;
+            case Qt::SizeHintRole:
+                  return QSize(_columns[index.column()]->width(), -1);
                   break;
             default:
                   break;
