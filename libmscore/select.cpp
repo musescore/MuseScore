@@ -301,8 +301,10 @@ void Selection::updateSelectedElements()
                         continue;
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
-                        foreach (Element* e, cr->lyricsList())
-                              _el.append(e);
+                        for (Element* e : cr->lyricsList()) {
+                              if (e)
+                                    _el.append(e);
+                              }
                         }
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
