@@ -46,6 +46,7 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/volta.h"
 #include "libmscore/instrtemplate.h"
+#include "libmscore/hairpin.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -757,6 +758,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     QDomNode note = getNode(*iter, partInfo->notes);
                                     QDomNode currentNode = (note).firstChild();
                                     bool tie = false;
+                                    bool trill = false;
                                     // if a <Notes> tag is used but there is no <Note>, then we add a rest. This flag will allow us to check this.
                                     while (!currentNode.isNull()) {
                                           if (currentNode.nodeName() == "Properties") {
@@ -832,10 +834,22 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       makeTie(note);
                                                       tie = false;
                                                       }
+
+                                                if (trill) {
+                                                      Articulation* art = new Articulation(note->score());
+                                                      art->setArticulationType(ArticulationType::Trill);
+                                                      if (!note->score()->addArticulation(note, art))
+                                                            delete art;
+                                                      }
+
                                                 createSlide(slide, cr, staffIdx);
+
 
                                                 note->setTpcFromPitch();
                                                 currentNode = currentNode.nextSibling();
+                                                }
+                                          else if (!currentNode.nodeName().compare("Trill")) {
+                                                trill = true;
                                                 }
                                           else if (!currentNode.nodeName().compare("Accent")) {
                                                 // marcato
@@ -903,6 +917,18 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     currentNode = currentNode.nextSibling();
                               }
                         }
+                        else if (currentNode.nodeName() == "Hairpin") {
+                              Segment* seg = segment->prev1(SegmentType::ChordRest);
+                              bool isCrec = !currentNode.toElement().text().compare("Crescendo");
+                              if (seg && hairpins[staffIdx]) {
+                                    if (hairpins[staffIdx]->tick2() == seg->tick())
+                                          hairpins[staffIdx]->setTick2(tick);
+                                    else
+                                          createCrecDim(staffIdx, staffIdx * VOICES + voiceNum, tick, isCrec);
+                                    }
+                              else
+                                    createCrecDim(staffIdx, staffIdx * VOICES + voiceNum, tick, isCrec);
+                              }
                         else
                               qDebug() << "WARNING: Not handling beat XML tag:" << currentNode.nodeName();
                         currentNode = currentNode.nextSibling();
@@ -1038,6 +1064,9 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
       nextMasterBar = nextMasterBar.nextSibling();
       int measureCounter = 0;
       ClefType oldClefId[staves];
+      hairpins = new Hairpin*[staves];
+      for (int i = 0; i < staves; i++)
+            hairpins[i] = 0;
       do    {
             const GpBar& gpbar = bars[bar];
 

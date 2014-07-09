@@ -89,6 +89,8 @@ private slots:
       void gp5ShiftSlide()   { gpReadTest("shift-slide", "gp5"); }
       void gpxShiftSlide()   { gpReadTest("shift-slide", "gpx"); }
       void gpDoubleBar()     { gpReadTest("double-bar", "gpx"); }
+      void gpxTrill()        { gpReadTest("trill", "gpx"); }
+      void gpxCrecDim()      { gpReadTest("crescendo-diminuendo", "gpx"); }
       };
 
 //---------------------------------------------------------

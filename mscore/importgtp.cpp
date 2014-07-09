@@ -1867,6 +1867,23 @@ void GuitarPro::readTremoloBar(int /*track*/, Segment* /*segment*/)
       }
 
 //---------------------------------------------------------
+//   createCrecDim
+//---------------------------------------------------------
+
+void GuitarPro::createCrecDim(int staffIdx, int track, int tick, bool crec)
+      {
+      hairpins[staffIdx] = new Hairpin(score);
+      if (crec)
+            hairpins[staffIdx]->setHairpinType(Hairpin::HairpinType::CRESCENDO);
+      else
+            hairpins[staffIdx]->setHairpinType(Hairpin::HairpinType::DECRESCENDO);
+      hairpins[staffIdx]->setTick(tick);
+      hairpins[staffIdx]->setTick2(tick);
+      hairpins[staffIdx]->setTrack(track);
+      score->undoAddElement(hairpins[staffIdx]);
+      }
+
+//---------------------------------------------------------
 //   importGTP
 //---------------------------------------------------------
 
