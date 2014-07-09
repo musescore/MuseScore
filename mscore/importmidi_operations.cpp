@@ -33,6 +33,14 @@ const MidiFile* Data::midiFile(const QString &fileName)
       return nullptr;
       }
 
+QStringList Data::allMidiFiles() const
+      {
+      QStringList list;
+      for (const auto &d: _data)
+            list.append(d.first);
+      return list;
+      }
+
 void Data::setMidiFileData(const QString &fileName, const MidiFile &midiFile)
       {
       _data[fileName].midiFile = midiFile;

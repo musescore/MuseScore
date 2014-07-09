@@ -163,7 +163,7 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                                           opers.currentTrack(), MidiOperations::VoiceCount::V_1);
                         }
                   }
-            const auto basicQuant = Quantize::userQuantNoteToFraction(
+            const auto basicQuant = Quantize::quantValueToFraction(
                                     opers.data()->trackOpers.quantValue.defaultValue());
 
             MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, lastTick, basicQuant);

@@ -42,6 +42,7 @@ class TracksModel : public QAbstractTableModel
       bool isColumnValid(int column) const;
       void forceRowDataChanged(int row);
       void forceColumnDataChanged(int col);
+      void forceAllChanged();
       bool editableSingleTrack(int trackIndex, int column) const;
 
       MidiOperations::Opers _trackOpers;
