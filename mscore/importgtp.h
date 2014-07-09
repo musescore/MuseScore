@@ -31,6 +31,7 @@
 #include "libmscore/chordrest.h"
 #include "libmscore/clef.h"
 #include "libmscore/keysig.h"
+#include "libmscore/hairpin.h"
 
 namespace Ms {
 
@@ -85,6 +86,7 @@ class GuitarPro {
       int version;
       int key;
 
+      Hairpin** hairpins;
       Score* score;
       QFile* f;
       int curPos;
@@ -123,6 +125,7 @@ class GuitarPro {
       void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, int tick);
       void createSlur(bool hasSlur, int staffIdx, ChordRest* cr);
       void createSlide(int slide, ChordRest* cr, int staffIdx);
+      void createCrecDim(int staffIdx, int track, int tick, bool crec);
 
    public:
       QString title, subtitle, artist, album, composer;
