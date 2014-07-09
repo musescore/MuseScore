@@ -36,26 +36,24 @@ class TextLineSegment : public LineSegment {
       void setText(Text*);
 
    public:
-      TextLineSegment(Score* s);
+      TextLineSegment(Score* s) : LineSegment(s) {}
       TextLineSegment(const TextLineSegment&);
       ~TextLineSegment();
 
-      virtual TextLineSegment* clone() const { return new TextLineSegment(*this); }
-      virtual Element::Type type() const     { return Element::Type::TEXTLINE_SEGMENT; }
+      virtual TextLineSegment* clone() const override { return new TextLineSegment(*this); }
+      virtual Element::Type type() const override     { return Element::Type::TEXTLINE_SEGMENT; }
       TextLine* textLine() const             { return (TextLine*)spanner(); }
-      virtual void draw(QPainter*) const;
+      virtual void draw(QPainter*) const override;
 
-      virtual void layout();
+      virtual void layout() override;
       void layout1();
       virtual void setSelected(bool f);
 
-//      Text* text() const { return _text; }
+      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
-
-      virtual QVariant getProperty(P_ID id) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 enum class HookType : char { HOOK_90, HOOK_45 };
@@ -83,15 +81,15 @@ class TextLine : public SLine {
       TextLine(const TextLine&);
       ~TextLine();
 
-      virtual TextLine* clone() const           { return new TextLine(*this); }
-      virtual Element::Type type() const         { return Element::Type::TEXTLINE; }
-      virtual LineSegment* createLineSegment();
-      virtual void layout();
+      virtual TextLine* clone() const override            { return new TextLine(*this); }
+      virtual Element::Type type() const override         { return Element::Type::TEXTLINE; }
+      virtual LineSegment* createLineSegment() override;
 
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
-      void writeProperties(Xml& xml) const;
-      bool readProperties(XmlReader& node);
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
+
+      virtual void writeProperties(Xml& xml) const override;
+      virtual bool readProperties(XmlReader& node) override;
 
       bool beginHook() const                  { return _beginHook;            }
       bool endHook() const                    { return _endHook;              }
@@ -133,11 +131,11 @@ class TextLine : public SLine {
       PlaceText endTextPlace() const          { return _endTextPlace;    }
       void setEndTextPlace(PlaceText p)       { _endTextPlace = p;       }
 
-      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-      virtual QVariant getProperty(P_ID id) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 

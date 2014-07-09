@@ -13,7 +13,6 @@
 #ifndef __ARTICULATION_H__
 #define __ARTICULATION_H__
 
-#include "mscore.h"
 #include "element.h"
 
 class QPainter;

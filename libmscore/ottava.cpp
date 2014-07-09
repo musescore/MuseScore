@@ -56,11 +56,12 @@ static const OttavaDefault ottavaDefault[] = {
 void OttavaSegment::layout()
       {
       TextLineSegment::layout1();
-      if (parent()) {     // for palette
+      if (parent()) {
             qreal yo(score()->styleS(StyleIdx::ottavaY).val() * spatium());
             if (ottava()->placement() == Element::Placement::BELOW)
                   yo = -yo + staff()->height();
             rypos() += yo;
+            return;
             }
       adjustReadPos();
       }
@@ -175,6 +176,7 @@ Ottava::Ottava(Score* s)
       lineWidthStyle = PropertyStyle::STYLED;
       setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::ottavaLineStyle)));
       lineStyleStyle = PropertyStyle::STYLED;
+      setFlag(ElementFlag::ON_STAFF, true);
       }
 
 Ottava::Ottava(const Ottava& o)

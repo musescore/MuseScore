@@ -14,7 +14,6 @@
 #define __BRACKET_H__
 
 #include "element.h"
-#include "mscore.h"
 
 class QPainter;
 

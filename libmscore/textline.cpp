@@ -27,11 +27,6 @@ namespace Ms {
 //   TextLineSegment
 //---------------------------------------------------------
 
-TextLineSegment::TextLineSegment(Score* s)
-   : LineSegment(s)
-      {
-      }
-
 TextLineSegment::TextLineSegment(const TextLineSegment& seg)
    : LineSegment(seg)
       {
@@ -563,16 +558,6 @@ void TextLine::read(XmlReader& e)
 LineSegment* TextLine::createLineSegment()
       {
       return new TextLineSegment(score());
-      }
-
-//---------------------------------------------------------
-//   layout
-//    compute segments from tick() to _tick2
-//---------------------------------------------------------
-
-void TextLine::layout()
-      {
-      SLine::layout();
       }
 
 //---------------------------------------------------------

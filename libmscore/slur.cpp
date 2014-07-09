@@ -613,6 +613,8 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
                         }
                   }
             }
+      if (system() && staffIdx() != -1)
+            setPos(QPointF(0.0, -system()->staff(staffIdx())->y()));
       setbbox(path.boundingRect());
       adjustReadPos();
       }
@@ -1452,6 +1454,5 @@ void SlurTie::fixupSegments(unsigned nsegs)
                   }
             }
       }
-
 }
 

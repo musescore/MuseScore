@@ -1679,8 +1679,9 @@ void ScoreView::paintEvent(QPaintEvent* ev)
                         vp.setBrush(Qt::NoBrush);
                   vp.drawRect(grip[i]);
                   }
-            if (editObject)      // if object is moved, it may not be covered by bsp
+            if (editObject) {      // if object is moved, it may not be covered by bsp
                   paintElement(&vp, editObject);
+                  }
             }
       }
 
@@ -2243,12 +2244,10 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
 
 void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
       {
-      foreach(const Element* e, el) {
+      for (const Element* e : el) {
             e->itemDiscovered = 0;
-            if (!e->visible()) {
-                  if (score()->printing() || !score()->showInvisible())
-                        continue;
-                  }
+            if (!e->visible() && (score()->printing() || !score()->showInvisible()))
+                  continue;
             QPointF pos(e->pagePos());
             painter.translate(pos);
             e->draw(&painter);

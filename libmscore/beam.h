@@ -15,7 +15,6 @@
 
 #include "element.h"
 #include "durationtype.h"
-#include "spanner.h"
 
 class QPainter;
 
@@ -24,6 +23,8 @@ namespace Ms {
 class ChordRest;
 class MuseScoreView;
 class Chord;
+class System;
+enum class SpannerSegmentType : char;
 
 struct BeamFragment;
 

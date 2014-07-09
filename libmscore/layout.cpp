@@ -1375,6 +1375,13 @@ void Score::doLayout()
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM())
             m->layout2();
 
+      for (auto s : _spanner.map()) {           // DEBUG
+            Spanner* sp = s.second;
+            if (sp->type() == Element::Type::SLUR) {
+                  sp->layout();
+                  }
+            }
+
       rebuildBspTree();
 
       for (MuseScoreView* v : viewer) {
@@ -1402,12 +1409,6 @@ void Score::layoutSpanner()
                         }
                   Chord* c = static_cast<Chord*>(segment->element(track));
                   if (c && c->type() == Element::Type::CHORD) {
-                        for (Chord* cc : c->graceNotes()) {
-                              for (Element* e : cc->el()) {
-                                    if (e->type() == Element::Type::SLUR)
-                                          e->layout();
-                                    }
-                              }
                         c->layoutStem();
                         for (Note* n : c->notes()) {
                               Tie* tie = n->tieFor();
