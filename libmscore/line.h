@@ -61,13 +61,12 @@ class LineSegment : public SpannerSegment {
       virtual QPointF gripAnchor(int) const override;
 
    public:
-      LineSegment(Score* s);
+      LineSegment(Score* s) : SpannerSegment(s) {}
       LineSegment(const LineSegment&);
       virtual LineSegment* clone() const = 0;
       virtual void draw(QPainter*) const = 0;
       SLine* line() const                         { return (SLine*)spanner(); }
       virtual void spatiumChanged(qreal, qreal) override;
-      virtual QPointF pagePos() const override;
 
       friend class SLine;
       virtual void read(XmlReader&) override;

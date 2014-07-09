@@ -28,11 +28,6 @@ namespace Ms {
 //   LineSegment
 //---------------------------------------------------------
 
-LineSegment::LineSegment(Score* s)
-   : SpannerSegment(s)
-      {
-      }
-
 LineSegment::LineSegment(const LineSegment& s)
    : SpannerSegment(s)
       {
@@ -145,27 +140,14 @@ QPointF LineSegment::getGrip(int grip) const
       }
 
 //---------------------------------------------------------
-//   pagePos
-//    return position in canvas coordinates
-//---------------------------------------------------------
-
-QPointF LineSegment::pagePos() const
-      {
-      QPointF pt(pos());
-      if (parent())
-            pt += parent()->pos();
-      return pt;
-      }
-
-//---------------------------------------------------------
 //   gripAnchor
 //    return page coordinates
 //---------------------------------------------------------
 
 QPointF LineSegment::gripAnchor(int grip) const
       {
+      qreal y = system()->staffYpage(staffIdx());
       if (spannerSegmentType() == SpannerSegmentType::MIDDLE) {
-            qreal y = system()->staffYpage(staffIdx());
             qreal x;
             switch((GripLine)grip) {
                   case GripLine::START:
@@ -189,6 +171,7 @@ QPointF LineSegment::gripAnchor(int grip) const
             else {
                   System* s;
                   QPointF p(line()->linePos((GripLine)grip, &s));
+                  p.ry() += y - system()->pos().y();
                   if (s)
                         p += s->pos();
                   return p;
@@ -318,6 +301,7 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
             _score->rebuildBspTree();
       if (ls)
             _score->undoRemoveElement(ls);
+
       return true;
       }
 
@@ -452,7 +436,7 @@ SLine::SLine(const SLine& s)
 
 //---------------------------------------------------------
 //   linePos
-//    return System() coordinates
+//    return System/Staff coordinates
 //---------------------------------------------------------
 
 QPointF SLine::linePos(GripLine grip, System** sys)
@@ -524,21 +508,15 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                   {
                   System* s = static_cast<Note*>(startElement())->chord()->segment()->system();
                   *sys = s;
-                  if (grip == GripLine::START)
-                        return startElement()->pagePos() - s->pagePos();
-                  else
-                        return endElement()->pagePos() - s->pagePos();
+                  Element* e = grip == GripLine::START ? startElement() : endElement();
+                  return e->pagePos() - QPointF(s->pagePos().x(), s->staffYpage(e->staffIdx()));
                   }
 
             case Spanner::Anchor::CHORD:
                   qFatal("Sline::linePos(): anchor not implemented");
                   break;
             }
-      qreal y = 0.0;
-      if (*sys)
-            y = (*sys)->staffYpage(staffIdx()) - (*sys)->pos().y();
-//      x += (*sys)->pos().x();
-      return QPointF(x, y);
+      return QPointF(x, 0.0);
       }
 
 //---------------------------------------------------------

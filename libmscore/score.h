@@ -19,26 +19,19 @@
 */
 
 #include "input.h"
-#include "mscore.h"
-#include "style.h"
-#include "durationtype.h"
 #include "select.h"
-#include "fraction.h"
-#include "interval.h"
 #include "synthesizerstate.h"
 #include "mscoreview.h"
 #include "segment.h"
 #include "accidental.h"
-#include "note.h"
 #include "ottava.h"
 #include "spannermap.h"
-#include "pitchspelling.h"
-#include "beam.h"
 
 class QPainter;
 
 namespace Ms {
 
+class Interval;
 class TempoMap;
 struct TEvent;
 class SigEvent;

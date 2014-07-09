@@ -39,11 +39,10 @@ class OttavaSegment : public TextLineSegment {
    protected:
 
    public:
-      // OttavaSegment(Score* s) : TextLineSegment(s) { setFlag(ElementFlag::ON_STAFF, true); }
-      OttavaSegment(Score* s) : TextLineSegment(s) { }
+      OttavaSegment(Score* s) : TextLineSegment(s)  { }
       virtual Element::Type type() const override   { return Element::Type::OTTAVA_SEGMENT; }
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
-      Ottava* ottava() const               { return (Ottava*)spanner(); }
+      Ottava* ottava() const                        { return (Ottava*)spanner(); }
       virtual void layout() override;
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

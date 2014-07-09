@@ -942,10 +942,8 @@ void Chord::write(Xml& xml) const
             _glissando->write(xml);
       if (_tremolo && tremoloChordType() != TremoloChordType::TremoloSecondNote)
             _tremolo->write(xml);
-      for (Element* e : _el) {
-            if (e->type() != Element::Type::SLUR)
-                  e->write(xml);
-            }
+      for (Element* e : _el)
+            e->write(xml);
       for (auto i : score()->spanner()) {     // TODO: dont search whole list
             Spanner* s = i.second;
             if (s->generated() || s->type() != Element::Type::SLUR)

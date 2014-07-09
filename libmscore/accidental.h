@@ -19,7 +19,6 @@
 */
 
 #include "element.h"
-#include "mscore.h"
 
 class QPainter;
 
