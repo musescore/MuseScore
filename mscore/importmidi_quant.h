@@ -13,7 +13,9 @@ class ReducedFraction;
 
 namespace Quantize {
 
-ReducedFraction userQuantNoteToFraction(MidiOperations::QuantValue quantNote);
+ReducedFraction quantValueToFraction(MidiOperations::QuantValue quantValue);
+MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction &fraction);
+MidiOperations::QuantValue defaultQuantValueFromPreferences();
 
 ReducedFraction findQuantForRange(
             const std::multimap<ReducedFraction, MidiChord>::const_iterator &beg,

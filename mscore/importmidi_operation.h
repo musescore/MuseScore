@@ -14,8 +14,7 @@ namespace Ms {
 namespace MidiOperations {
 
 enum class QuantValue {
-      FROM_PREFERENCES = 0,
-      Q_4,
+      Q_4 = 0,
       Q_8,
       Q_16,
       Q_32,

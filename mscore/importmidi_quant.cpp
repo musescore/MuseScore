@@ -21,36 +21,65 @@ extern Preferences preferences;
 
 namespace Quantize {
 
-ReducedFraction userQuantNoteToFraction(MidiOperations::QuantValue quantNote)
+ReducedFraction quantValueToFraction(MidiOperations::QuantValue quantValue)
       {
       const auto division = ReducedFraction::fromTicks(MScore::division);
-      auto userQuantValue = ReducedFraction::fromTicks(preferences.shortestNote);
-                  // specified quantization value
-      switch (quantNote) {
+      ReducedFraction fraction;
+
+      switch (quantValue) {
             case MidiOperations::QuantValue::Q_4:
-                  userQuantValue = division;
+                  fraction = division;
                   break;
             case MidiOperations::QuantValue::Q_8:
-                  userQuantValue = division / 2;
+                  fraction = division / 2;
                   break;
             case MidiOperations::QuantValue::Q_16:
-                  userQuantValue = division / 4;
+                  fraction = division / 4;
                   break;
             case MidiOperations::QuantValue::Q_32:
-                  userQuantValue = division / 8;
+                  fraction = division / 8;
                   break;
             case MidiOperations::QuantValue::Q_64:
-                  userQuantValue = division / 16;
+                  fraction = division / 16;
                   break;
             case MidiOperations::QuantValue::Q_128:
-                  userQuantValue = division / 32;
+                  fraction = division / 32;
                   break;
-            case MidiOperations::QuantValue::FROM_PREFERENCES:
             default:
+                  Q_ASSERT_X(false, "Quantize::quantValueToFraction", "Unknown quant value");
                   break;
             }
 
-      return userQuantValue;
+      return fraction;
+      }
+
+MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction &fraction)
+      {
+      const auto division = ReducedFraction::fromTicks(MScore::division);
+       MidiOperations::QuantValue quantValue;
+
+      if (fraction == division)
+            quantValue = MidiOperations::QuantValue::Q_4;
+      else if (fraction == division / 2)
+            quantValue = MidiOperations::QuantValue::Q_8;
+      else if (fraction == division / 4)
+            quantValue = MidiOperations::QuantValue::Q_16;
+      else if (fraction == division / 8)
+            quantValue = MidiOperations::QuantValue::Q_32;
+      else if (fraction == division / 16)
+            quantValue = MidiOperations::QuantValue::Q_64;
+      else if (fraction == division / 32)
+            quantValue = MidiOperations::QuantValue::Q_128;
+      else
+            Q_ASSERT_X(false, "Quantize::fractionToQuantValue", "Unknown quant fraction");
+
+      return quantValue;
+      }
+
+MidiOperations::QuantValue defaultQuantValueFromPreferences()
+      {
+      const auto fraction = ReducedFraction::fromTicks(preferences.shortestNote);
+      return fractionToQuantValue(fraction);
       }
 
 ReducedFraction shortestQuantizedNoteInRange(

@@ -12,6 +12,9 @@ class ReducedFraction;
 namespace MidiCharset {
       QString defaultCharset();
 }
+namespace Quantize {
+      MidiOperations::QuantValue defaultQuantValueFromPreferences();
+}
 
 namespace MidiOperations {
 
@@ -80,7 +83,7 @@ struct Opers
                   // operations for individual tracks
       TrackOp<int> trackIndexAfterShuffle = 0;
       TrackOp<bool> doImport = true;
-      TrackOp<QuantValue> quantValue = QuantValue::FROM_PREFERENCES;
+      TrackOp<QuantValue> quantValue = Quantize::defaultQuantValueFromPreferences();
       TrackOp<bool> searchTuplets = true;
       TrackOp<bool> search2plets = false;
       TrackOp<bool> search3plets = true;
@@ -144,6 +147,7 @@ class Data
       void excludeFile(const QString &fileName);
       bool hasFile(const QString &fileName);
       const MidiFile* midiFile(const QString &fileName);
+      QStringList allMidiFiles() const;
 
    private:
       friend class CurrentTrackSetter;

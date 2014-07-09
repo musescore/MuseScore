@@ -31,7 +31,7 @@ class TracksModel::Column
       {
    public:
       Column(MidiOperations::Opers &opers)
-            : _opers(opers), _isEditable(true), _hasCharset(false), _forAllTracksOnly(false)
+            : _opers(opers), _isEditable(true), _forAllTracksOnly(false)
             {}
       virtual ~Column() {}
 
@@ -42,14 +42,12 @@ class TracksModel::Column
       virtual QStringList valueList(int /*trackIndex*/) const { return _values; }
 
       bool isEditable() const { return _isEditable; }
-      bool hasCharset() const { return _hasCharset; }
       bool isForAllTracksOnly() const { return _forAllTracksOnly; }
 
    protected:
       MidiOperations::Opers &_opers;
       QStringList _values;
       bool _isEditable;
-      bool _hasCharset;
       bool _forAllTracksOnly;
       };
 
@@ -109,7 +107,6 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         : Column(opers), _midiFile(midiFile)
                         {
                         _isEditable = false;
-                        _hasCharset = true;
                         }
                   QString headerName() const { return "Staff name"; }
                   QVariant value(int trackIndex) const
@@ -152,7 +149,6 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                          const QString &midiFile)
                         : Column(opers), _lyricsList(lyricsList), _midiFile(midiFile)
                         {
-                        _hasCharset = true;
                         }
                   QString headerName() const { return "Lyrics"; }
                   QVariant value(int trackIndex) const
@@ -192,7 +188,6 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
       struct QuantValue : Column {
             QuantValue(MidiOperations::Opers &opers) : Column(opers)
                   {
-                  _values.push_back("Default");
                   _values.push_back("Quarter");
                   _values.push_back("Eighth");
                   _values.push_back("16th");
@@ -363,10 +358,7 @@ void TracksModel::setTrackShuffleIndex(int trackIndex, int newIndex)
 
 void TracksModel::updateCharset()
       {
-      for (int i = 0; i != (int)_columns.size(); ++i) {
-            if (_columns[i]->hasCharset())
-                  forceColumnDataChanged(i);
-            }
+      forceAllChanged();
       }
 
 int TracksModel::rowFromTrackIndex(int trackIndex) const
@@ -539,6 +531,13 @@ void TracksModel::forceColumnDataChanged(int col)
       {
       const auto begIndex = this->index(0, col);
       const auto endIndex = this->index(rowCount(QModelIndex()), col);
+      emit dataChanged(begIndex, endIndex);
+      }
+
+void TracksModel::forceAllChanged()
+      {
+      const auto begIndex = this->index(0, 0);
+      const auto endIndex = this->index(rowCount(QModelIndex()), columnCount(QModelIndex()));
       emit dataChanged(begIndex, endIndex);
       }
 
