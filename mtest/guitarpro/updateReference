@@ -61,3 +61,4 @@ cp   $MSCORE/shift-slide.gpx.mscx shift-slide.gpx-ref.mscx
 cp   $MSCORE/double-bar.gpx.mscx double-bar.gpx-ref.mscx
 cp   $MSCORE/trill.gpx.mscx trill.gpx-ref.mscx
 cp   $MSCORE/crescendo-diminuendo.gpx.mscx crescendo-diminuendo.gpx-ref.mscx
+cp   $MSCORE/tremolos.gpx.mscx tremolos.gpx-ref.mscx

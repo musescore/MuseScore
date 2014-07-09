@@ -756,13 +756,13 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               for (auto iter = notesList.begin(); iter != notesList.end(); ++iter) {
                                     // we have found a note
                                     QDomNode note = getNode(*iter, partInfo->notes);
-                                    QDomNode currentNode = (note).firstChild();
+                                    QDomNode currentNote = (note).firstChild();
                                     bool tie = false;
                                     bool trill = false;
                                     // if a <Notes> tag is used but there is no <Note>, then we add a rest. This flag will allow us to check this.
-                                    while (!currentNode.isNull()) {
-                                          if (currentNode.nodeName() == "Properties") {
-                                                QDomNode currentProperty = currentNode.firstChild();
+                                    while (!currentNote.isNull()) {
+                                          if (currentNote.nodeName() == "Properties") {
+                                                QDomNode currentProperty = currentNote.firstChild();
                                                 // these should not be in this scope - they may not even exist.
                                                 QString stringNum;
                                                 QString fretNum;
@@ -795,7 +795,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       else if (argument == "Midi")
                                                             midi = currentProperty.firstChild().toElement().text();
                                                       else
-                                                            qDebug() << "WARNING: Not handling node argument: " << argument << "in node" << currentNode.nodeName();
+                                                            qDebug() << "WARNING: Not handling node argument: " << argument << "in node" << currentNote.nodeName();
                                                       currentProperty = currentProperty.nextSibling();
                                                 }
 
@@ -834,35 +834,52 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       makeTie(note);
                                                       tie = false;
                                                       }
-
                                                 if (trill) {
                                                       Articulation* art = new Articulation(note->score());
                                                       art->setArticulationType(ArticulationType::Trill);
                                                       if (!note->score()->addArticulation(note, art))
                                                             delete art;
                                                       }
+                                                QDomNode tremoloNode = currentNode.parentNode().firstChildElement("Tremolo");
+                                                if (!tremoloNode.isNull()) {
+                                                      QString value = tremoloNode.toElement().text();
+                                                      Tremolo* t = new Tremolo(chord->score());
+                                                      if (!value.compare("1/2")) {
+                                                            t->setTremoloType(TremoloType::R8);
+                                                            chord->add(t);
+                                                            }
+                                                      else if (!value.compare("1/4")) {
+                                                            t->setTremoloType(TremoloType::R16);
+                                                            chord->add(t);
+                                                            }
+                                                      else if (!value.compare("1/8")) {
+                                                            t->setTremoloType(TremoloType::R32);
+                                                            chord->add(t);
+                                                            }
+                                                      }
+
 
                                                 createSlide(slide, cr, staffIdx);
 
 
                                                 note->setTpcFromPitch();
-                                                currentNode = currentNode.nextSibling();
+                                                currentNote = currentNote.nextSibling();
                                                 }
-                                          else if (!currentNode.nodeName().compare("Trill")) {
+                                          else if (!currentNote.nodeName().compare("Trill")) {
                                                 trill = true;
                                                 }
-                                          else if (!currentNode.nodeName().compare("Accent")) {
+                                          else if (!currentNote.nodeName().compare("Accent")) {
                                                 // marcato
-                                                if (!currentNode.toElement().text().compare("4"))
+                                                if (!currentNote.toElement().text().compare("4"))
                                                       accent = 4;
                                                 }
-                                          else if (!currentNode.nodeName().compare("Tie")) {
-                                                if (!currentNode.attributes().namedItem("destination").toAttr().value().compare("true"))
+                                          else if (!currentNote.nodeName().compare("Tie")) {
+                                                if (!currentNote.attributes().namedItem("destination").toAttr().value().compare("true"))
                                                       tie = true;
                                                 }
                                           else
-                                                unhandledNode(currentNode.nodeName());
-                                          currentNode = currentNode.nextSibling();
+                                                unhandledNode(currentNote.nodeName());
+                                          currentNote = currentNote.nextSibling();
                                     }
                               }
                         }
@@ -929,8 +946,6 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               else
                                     createCrecDim(staffIdx, staffIdx * VOICES + voiceNum, tick, isCrec);
                               }
-                        else
-                              qDebug() << "WARNING: Not handling beat XML tag:" << currentNode.nodeName();
                         currentNode = currentNode.nextSibling();
                         dotted = 0;
                   }
