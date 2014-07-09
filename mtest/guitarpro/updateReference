@@ -31,7 +31,6 @@ cp   $MSCORE/keysig.gp4.mscx keysig.gp4-ref.mscx
 cp   $MSCORE/dotted-tuplets.gp5.mscx dotted-tuplets.gp5-ref.mscx
 cp   $MSCORE/tuplet-with-slur.gp4.mscx tuplet-with-slur.gp4-ref.mscx
 cp   $MSCORE/beams-stems-ledger-lines.gp5.mscx beams-stems-ledger-lines.gp5-ref.mscx
-<<<<<<< HEAD
 cp   $MSCORE/fret-diagram.gpx.mscx fret-diagram.gpx-ref.mscx
 cp   $MSCORE/fret-diagram.gp5.mscx fret-diagram.gp5-ref.mscx
 cp   $MSCORE/fret-diagram.gp4.mscx fret-diagram.gp4-ref.mscx
@@ -59,6 +58,6 @@ cp   $MSCORE/legato-slide.gpx.mscx legato-slide.gpx-ref.mscx
 cp   $MSCORE/shift-slide.gp4.mscx shift-slide.gp4-ref.mscx
 cp   $MSCORE/shift-slide.gp5.mscx shift-slide.gp5-ref.mscx
 cp   $MSCORE/shift-slide.gpx.mscx shift-slide.gpx-ref.mscx
-=======
 cp   $MSCORE/double-bar.gpx.mscx double-bar.gpx-ref.mscx
->>>>>>> Added support for double bars in Guitar Pro 6
+cp   $MSCORE/trill.gpx.mscx trill.gpx-ref.mscx
+cp   $MSCORE/crescendo-diminuendo.gpx.mscx crescendo-diminuendo.gpx-ref.mscx
