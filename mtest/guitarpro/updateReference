@@ -62,3 +62,5 @@ cp   $MSCORE/double-bar.gpx.mscx double-bar.gpx-ref.mscx
 cp   $MSCORE/trill.gpx.mscx trill.gpx-ref.mscx
 cp   $MSCORE/crescendo-diminuendo.gpx.mscx crescendo-diminuendo.gpx-ref.mscx
 cp   $MSCORE/tremolos.gpx.mscx tremolos.gpx-ref.mscx
+cp   $MSCORE/dead-note.gpx.mscx dead-note.gpx-ref.mscx
+cp   $MSCORE/wah.gpx.mscx wah.gpx-ref.mscx

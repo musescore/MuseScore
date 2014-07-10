@@ -771,6 +771,11 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 QString midi;
                                                 QString element;
                                                 QString variation;
+
+                                                Note* note = new Note(score);
+                                                Chord* chord = static_cast<Chord*>(cr);
+                                                chord->add(note);
+
                                                 while (!currentProperty.isNull()) {
                                                       QString argument = currentProperty.attributes().namedItem("name").toAttr().value();
                                                       if (argument == "String")
@@ -794,14 +799,16 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             octave = currentProperty.firstChild().toElement().text();
                                                       else if (argument == "Midi")
                                                             midi = currentProperty.firstChild().toElement().text();
+                                                      else if (argument == "Muted") {
+                                                            if (!currentProperty.firstChild().nodeName().compare("Enable")) {
+                                                                  note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+                                                                  note->setGhost(true);
+                                                                  }
+                                                            }
                                                       else
                                                             qDebug() << "WARNING: Not handling node argument: " << argument << "in node" << currentNote.nodeName();
                                                       currentProperty = currentProperty.nextSibling();
                                                 }
-
-                                                Note* note = new Note(score);
-                                                Chord* chord = static_cast<Chord*>(cr);
-                                                chord->add(note);
 
                                                 if (midi != "")
                                                       note->setPitch(midi.toInt());
@@ -857,6 +864,23 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             chord->add(t);
                                                             }
                                                       }
+                                                QDomNode wahNode = currentNode.parentNode().firstChildElement("Wah");
+                                                if (!wahNode.isNull()) {
+                                                      QString value = wahNode.toElement().text();
+                                                      if (!value.compare("Open")) {
+                                                            Articulation* art = new Articulation(note->score());
+                                                            art->setArticulationType(ArticulationType::Ouvert);
+                                                            if (!note->score()->addArticulation(note, art))
+                                                                  delete art;
+                                                            }
+                                                      else if (!value.compare("Closed")) {
+                                                            Articulation* art = new Articulation(note->score());
+                                                            art->setArticulationType(ArticulationType::Plusstop);
+                                                            if (!note->score()->addArticulation(note, art))
+                                                                  delete art;
+                                                            }
+                                                      }
+
 
 
                                                 createSlide(slide, cr, staffIdx);
