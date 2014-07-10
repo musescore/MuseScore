@@ -115,6 +115,8 @@ class Spanner : public Element {
 
    protected:
       static int editTick, editTick2, editTrack2;
+      static Element* editStartElement;
+      static Element* editEndElement;
 
    public:
       Spanner(Score* = 0);

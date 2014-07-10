@@ -1420,6 +1420,22 @@ class Unlink : public UndoCommand {
       virtual void redo();
       };
 
+//---------------------------------------------------------
+//   ChangeStartEndSpanner
+//---------------------------------------------------------
+
+class ChangeStartEndSpanner : public UndoCommand {
+      Spanner* spanner;
+      Element* start;
+      Element* end;
+
+      void flip();
+
+   public:
+      ChangeStartEndSpanner(Spanner* sp, Element*s, Element*e) : spanner(sp), start(s), end(e) {}
+      };
+
+
 }     // namespace Ms
 #endif
 
