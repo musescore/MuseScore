@@ -253,14 +253,15 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
 
       //-----------------------------------------------------------------------
       struct Tuplets : Column {
-            Tuplets(MidiOperations::Opers &opers) : Column(opers)
+            Tuplets(MidiOperations::Opers &opers, int trackCount)
+                  : Column(opers), _trackCount(trackCount)
                   {
-                  _values.push_back("2");
-                  _values.push_back("3");
-                  _values.push_back("4");
-                  _values.push_back("5");
-                  _values.push_back("7");
-                  _values.push_back("9");
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Duplets (2)"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Triplets (3)"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Quadruplets (4)"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Quintuplets (5)"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Septuplets (7)"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Nonuplets (9)"));
                   }
             int width() const { return 150; }
             QString headerName() const { return "Tuplets"; }
@@ -302,34 +303,83 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             void setValue(const QVariant &value, int trackIndex)
                   {
                   const QStringList list = value.toStringList();
-                  _opers.search2plets.setValue(trackIndex, list[0] == "true");
-                  _opers.search3plets.setValue(trackIndex, list[1] == "true");
-                  _opers.search4plets.setValue(trackIndex, list[2] == "true");
-                  _opers.search5plets.setValue(trackIndex, list[3] == "true");
-                  _opers.search7plets.setValue(trackIndex, list[4] == "true");
-                  _opers.search9plets.setValue(trackIndex, list[5] == "true");
+                  bool searchTuplets = false;
+                  if (list[0] != "undefined") {
+                        const bool doSearch = (list[0] == "true");
+                        _opers.search2plets.setValue(trackIndex, doSearch);
+                        if (!searchTuplets && doSearch)
+                              searchTuplets = true;
+                        }
+                  if (list[1] != "undefined") {
+                        const bool doSearch = (list[1] == "true");
+                        _opers.search3plets.setValue(trackIndex, doSearch);
+                        if (!searchTuplets && doSearch)
+                              searchTuplets = true;
+                        }
+                  if (list[2] != "undefined") {
+                        const bool doSearch = (list[2] == "true");
+                        _opers.search4plets.setValue(trackIndex, doSearch);
+                        if (!searchTuplets && doSearch)
+                              searchTuplets = true;
+                        }
+                  if (list[3] != "undefined") {
+                        const bool doSearch = (list[3] == "true");
+                        _opers.search5plets.setValue(trackIndex, doSearch);
+                        if (!searchTuplets && doSearch)
+                              searchTuplets = true;
+                        }
+                  if (list[4] != "undefined") {
+                        const bool doSearch = (list[4] == "true");
+                        _opers.search7plets.setValue(trackIndex, doSearch);
+                        if (!searchTuplets && doSearch)
+                              searchTuplets = true;
+                        }
+                  if (list[5] != "undefined") {
+                        const bool doSearch = (list[5] == "true");
+                        _opers.search9plets.setValue(trackIndex, doSearch);
+                        if (!searchTuplets && doSearch)
+                              searchTuplets = true;
+                        }
+                  _opers.searchTuplets.setValue(trackIndex, searchTuplets);
                   }
             QStringList valueList(int trackIndex) const
                   {
                   auto list = QStringList("__MultiValue__");
 
                   list.append(_values[0]);
-                  list.append(_opers.search2plets.value(trackIndex) ? "true" : "false");
+                  list.append(checkBoxValue(trackIndex, _opers.search2plets));
                   list.append(_values[1]);
-                  list.append(_opers.search3plets.value(trackIndex) ? "true" : "false");
+                  list.append(checkBoxValue(trackIndex, _opers.search3plets));
                   list.append(_values[2]);
-                  list.append(_opers.search4plets.value(trackIndex) ? "true" : "false");
+                  list.append(checkBoxValue(trackIndex, _opers.search4plets));
                   list.append(_values[3]);
-                  list.append(_opers.search5plets.value(trackIndex) ? "true" : "false");
+                  list.append(checkBoxValue(trackIndex, _opers.search5plets));
                   list.append(_values[4]);
-                  list.append(_opers.search7plets.value(trackIndex) ? "true" : "false");
+                  list.append(checkBoxValue(trackIndex, _opers.search7plets));
                   list.append(_values[5]);
-                  list.append(_opers.search9plets.value(trackIndex) ? "true" : "false");
+                  list.append(checkBoxValue(trackIndex, _opers.search9plets));
 
                   return list;
                   }
+
+         private:
+            QString checkBoxValue(int trackIndex,
+                                  const MidiOperations::TrackOp<bool> &operation) const
+                  {
+                  if (trackIndex == -1) {       // symbolizes all tracks
+                        const bool firstValue = operation.value(0);
+                        for (int i = 1; i < _trackCount; ++i) {
+                              if (operation.value(i) != firstValue)
+                                    return "undefined";
+                              }
+                        trackIndex = 0;   // to pick the first track value on return
+                        }
+                  return operation.value(trackIndex) ? "true" : "false";
+                  }
+
+            int _trackCount;
             };
-      _columns.push_back(std::unique_ptr<Column>(new Tuplets(_trackOpers)));
+      _columns.push_back(std::unique_ptr<Column>(new Tuplets(_trackOpers, _trackCount)));
 
       endResetModel();
       }
