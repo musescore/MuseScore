@@ -17,6 +17,7 @@
 #include "chord.h"
 #include "segment.h"
 #include "measure.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -25,6 +26,8 @@ int Spanner::editTick2;
 int Spanner::editTrack2;
 QList<QPointF> Spanner::userOffsets2;
 QList<QPointF> Spanner::userOffsets;
+Element* Spanner::editEndElement;
+Element* Spanner::editStartElement;
 
 //---------------------------------------------------------
 //   SpannerSegment
@@ -251,9 +254,12 @@ void Spanner::setScore(Score* s)
 
 void Spanner::startEdit(MuseScoreView*, const QPointF&)
       {
-      editTick  = _tick;
-      editTick2 = _tick2;
+      editTick   = _tick;
+      editTick2  = _tick2;
       editTrack2 = _track2;
+
+      editStartElement = _startElement;
+      editEndElement   = _endElement;
 
       userOffsets.clear();
       userOffsets2.clear();
@@ -281,6 +287,43 @@ void Spanner::endEdit()
       if (editTrack2 != track2()) {
             score()->undoPropertyChanged(this, P_ID::SPANNER_TRACK2, editTrack2);
             rebuild = true;
+            }
+
+      if (type() == Element::Type::SLUR) {
+            if ((editStartElement != _startElement) || (editEndElement != _endElement)) {
+                  //
+                  // handle parts:
+                  //    search new start/end elements
+                  //
+                  for (Element* e : linkList()) {
+                        Spanner* spanner = static_cast<Spanner*>(e);
+                        if (spanner == this)
+                              score()->undo()->push1(new ChangeStartEndSpanner(this, editStartElement, editEndElement));
+                        else {
+                              Element* se = 0;
+                              Element* ee = 0;
+                              if (_startElement) {
+                                    QList<Element*> sel = _startElement->linkList();
+                                    for (Element* e : sel) {
+                                          if (e->score() == spanner->score() && e->track() == spanner->track()) {
+                                                se = e;
+                                                break;
+                                                }
+                                          }
+                                    }
+                              if (_endElement) {
+                                    QList<Element*> sel = _endElement->linkList();
+                                    for (Element* e : sel) {
+                                          if (e->score() == spanner->score() && e->track() == spanner->track2()) {
+                                                ee = e;
+                                                break;
+                                                }
+                                          }
+                                    }
+                              score()->undo(new ChangeStartEndSpanner(spanner, se, ee));
+                              }
+                        }
+                  }
             }
 
       if (rebuild)

@@ -184,10 +184,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             int endTrack   = part->endTrack();
             cr = searchCR(e->segment(), startTrack, endTrack);
             }
-      if (cr && cr != e1
-//            && ((curGrip == int(GripSlurSegment::END) && cr->tick() > sl->tick())
-//             || (curGrip == int(GripSlurSegment::START) && cr->tick() < sl->tick2() ))
-            )
+      if (cr && cr != e1)
             changeAnchor(viewer, curGrip, cr);
       return true;
       }

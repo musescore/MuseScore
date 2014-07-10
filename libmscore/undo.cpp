@@ -880,12 +880,6 @@ void Score::undoAddElement(Element* element)
 #endif
                         ne->score()->updateNotes();
                         }
-/*                  else if (ne->type() == Element::Type::SLUR) {
-                        Slur* slur = static_cast<Slur*>(ne);
-                        slur->setStartElement(e);
-                        slur->setEndElement(e->parent());
-                        }
- */
                   }
             return;
             }
@@ -1020,13 +1014,39 @@ void Score::undoAddElement(Element* element)
                || element->type() == Element::Type::TEXTLINE
                || element->type() == Element::Type::PEDAL
                || element->type() == Element::Type::VOLTA) {
-                  // ne->setParent(0);  ???
-                  Spanner* nsp = static_cast<Spanner*>(ne);
-                  Spanner* sp = static_cast<Spanner*>(element);
+                  Spanner* sp   = static_cast<Spanner*>(element);
+                  Spanner* nsp  = static_cast<Spanner*>(ne);
                   int staffIdx1 = sp->track() / VOICES;
                   int staffIdx2 = sp->track2() / VOICES;
-                  int diff = staffIdx2 - staffIdx1;
+                  int diff      = staffIdx2 - staffIdx1;
                   nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
+
+                  // determine start/end element for slurs
+                  // this is only necessary if start/end element is
+                  //   a grace note, otherwise the element can be set to zero
+                  //   and will later be calculated from tick/track values
+                  //
+                  if (element->type() == Element::Type::SLUR && sp != nsp) {
+                        if (sp->startElement()) {
+                              QList<Element*> sel = sp->startElement()->linkList();
+                              for (Element* e : sel) {
+                                    if (e->score() == nsp->score() && e->track() == nsp->track()) {
+                                          nsp->setStartElement(e);
+                                          break;
+                                          }
+                                    }
+                              }
+                        if (sp->endElement()) {
+                              QList<Element*> eel = sp->endElement()->linkList();
+                              for (Element* e : eel) {
+                                    if (e->score() == nsp->score() && e->track() == nsp->track2()) {
+                                          nsp->setEndElement(e);
+                                          break;
+                                          }
+                                    }
+                              }
+                        }
+
                   undo(new AddElement(nsp));
                   }
             else if (element->type() == Element::Type::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {
@@ -3396,5 +3416,20 @@ void Unlink::redo()
       Q_ASSERT(le);
       e->unlink();
       }
+
+//---------------------------------------------------------
+//   ChangeStartEndSpanner::flip
+//---------------------------------------------------------
+
+void ChangeStartEndSpanner::flip()
+      {
+      Element* s = spanner->startElement();
+      Element* e = spanner->endElement();
+      spanner->setStartElement(start);
+      spanner->setEndElement(end);
+      start = s;
+      end   = e;
+      }
+
 }
 
