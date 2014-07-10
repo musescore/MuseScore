@@ -3,6 +3,19 @@
 
 namespace Ms {
 
+SizedListWidget::SizedListWidget(QWidget *parent)
+      : QListWidget(parent)
+      {
+      }
+
+QSize SizedListWidget::sizeHint() const
+      {
+      const int extraHeight = 8;
+      return QSize(width(), count() * visualItemRect(item(0)).height() + extraHeight);
+      }
+
+//----------------------------------------------------------------------------------
+
 // values:
 //    [0] == "__MultiValue__"
 //  the rule for next values:
@@ -16,71 +29,152 @@ MultiValue::MultiValue(const QStringList &values, QWidget *parent)
       Q_ASSERT_X(values[0] == "__MultiValue__",
                  "Midi delegate - MultiValue class", "Invalid input values");
 
-      QHBoxLayout *contentLayout = new QHBoxLayout();
+      QVBoxLayout *contentLayout = new QVBoxLayout();
       contentLayout->setSpacing(0);
       contentLayout->setContentsMargins(0, 0, 0, 0);
 
-      _allButton = new QPushButton(QCoreApplication::translate(
-                                         "Multi value editor", "All"));
-      _allButton->setMinimumWidth(24);
-      _allButton->setMinimumHeight(24);
-      _allButton->setCheckable(true);
-      contentLayout->addWidget(_allButton);
+      _listWidget = new SizedListWidget();
+      QListWidgetItem *allCheckBoxItem = new QListWidgetItem(QCoreApplication::translate(
+                                                      "Multi value editor", "All"), _listWidget);
+      allCheckBoxItem->setCheckState(Qt::Unchecked);
+      _listWidget->addItem(allCheckBoxItem);
+      contentLayout->addWidget(_listWidget);
 
       for (int i = 1; i < values.size() - 1; i += 2) {
-            QPushButton *button = new QPushButton;
-            button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-            button->setMinimumWidth(24);
-            button->setMinimumHeight(24);
-            button->setText(values[i]);
-            button->setCheckable(true);
-            button->setChecked(values[i + 1] == "true");
-            if (button->isChecked() && !_allButton->isChecked())
-                  _allButton->setChecked(true);
-            connect(button, SIGNAL(clicked()), SLOT(buttonClicked()));
-            contentLayout->addWidget(button);
-            _buttons.append(button);
+            QListWidgetItem *item = new QListWidgetItem(values[i]);
+
+            if (values[i + 1] == "true")
+                  item->setCheckState(Qt::Checked);
+            else if (values[i + 1] == "false")
+                  item->setCheckState(Qt::Unchecked);
+            else if (values[i + 1] == "undefined")
+                  item->setCheckState(Qt::PartiallyChecked);
+            else
+                  Q_ASSERT_X(false, "Midi delegate - MultiValue class", "Unknown value");
+
+            _listWidget->addItem(item);
             }
 
-      connect(_allButton, SIGNAL(toggled(bool)), SLOT(checkBoxToggled(bool)));
+      setAllCheckBox();
+      _states.resize(_listWidget->count());
+      updateStates();
 
+      connect(_listWidget, SIGNAL(itemClicked(QListWidgetItem *)),
+              this, SLOT(itemClicked(QListWidgetItem *)));
+      connectCheckBoxes();
+
+      QHBoxLayout *buttonLayout = new QHBoxLayout();
+      buttonLayout->addStretch();
       QPushButton *okButton = new QPushButton(QCoreApplication::translate(
                                                     "Multi value editor", "OK"));
-      okButton->setMinimumWidth(22);
+      okButton->setMinimumWidth(50);
+      okButton->setMinimumHeight(30);
       connect(okButton, SIGNAL(clicked()), SIGNAL(okClicked()));
-      contentLayout->addWidget(okButton);
+      buttonLayout->addWidget(okButton);
+      buttonLayout->addStretch();
+      contentLayout->addLayout(buttonLayout);
 
       setLayout(contentLayout);
+
+      setAutoFillBackground(true);
       }
 
 QStringList MultiValue::data() const
       {
       QStringList values;
-      for (const auto *b: _buttons)
-            values.append(b->isChecked() ? "true" : "false");
+      for (int i = 1; i < _listWidget->count(); ++i) {
+            switch (_listWidget->item(i)->checkState()) {
+                  case Qt::Checked:
+                        values.append("true");
+                        break;
+                  case Qt::Unchecked:
+                        values.append("false");
+                        break;
+                  case Qt::PartiallyChecked:
+                        values.append("undefined");
+                        break;
+                  }
+            }
       return values;
       }
 
-void MultiValue::buttonClicked()
+// The problem: we need to toggle the item state by clicking not only on the checkbox
+// but on every point of the item for convenience;
+// so if we clicked on the checkbox - we do not change the item state
+// (because it is managed by the framework for us),
+// if we clicked outside the checkbox - we change the state manually;
+// after clicking on the checkbox the state is changed immediately, and after that
+// the itemClicked signal is emitted; to detect this case we use the helper array
+// of old checkbox states - if the item didn't change since the last time then the click
+// was outside the checkbox and we set the state manually
+
+void MultiValue::itemClicked(QListWidgetItem *item)
       {
-      disconnect(_allButton, SIGNAL(toggled(bool)), this, SLOT(checkBoxToggled(bool)));
-      for (const auto *b: _buttons) {
-            if (b->isChecked()) {
-                  _allButton->setChecked(true);
-                  return;
+      if (item->checkState() == _states[_listWidget->row(item)]) {      // clicked outside the checkbox
+            disconnectCheckBoxes();
+            switch (item->checkState()) {
+                  case Qt::Checked:
+                        item->setCheckState(Qt::Unchecked);
+                        break;
+                  case Qt::Unchecked:
+                        item->setCheckState(Qt::Checked);
+                        break;
+                  case Qt::PartiallyChecked:
+                        item->setCheckState(Qt::Checked);
+                        break;
                   }
+            connectCheckBoxes();
+            checkBoxClicked(item);
             }
-      _allButton->setChecked(false);
-      connect(_allButton, SIGNAL(toggled(bool)), SLOT(checkBoxToggled(bool)));
+      updateStates();
       }
 
-void MultiValue::checkBoxToggled(bool value)
+void MultiValue::checkBoxClicked(QListWidgetItem *item)
       {
-      for (auto *b: _buttons) {
-            disconnect(b, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-            b->setChecked(value);
-            connect(b, SIGNAL(clicked()), SLOT(buttonClicked()));
+      disconnectCheckBoxes();
+      if (_listWidget->row(item) == 0) {           // "All" checkbox
+            for (int i = 1; i < _listWidget->count(); ++i)
+                  _listWidget->item(i)->setCheckState(_listWidget->item(0)->checkState());
             }
+      else {
+            setAllCheckBox();
+            }
+      connectCheckBoxes();
+      }
+
+void MultiValue::setAllCheckBox()
+      {
+      disconnectCheckBoxes();
+      const auto firstValue = _listWidget->item(1)->checkState();
+      bool wasSet = false;
+      for (int i = 2; i < _listWidget->count(); ++i) {
+            if (_listWidget->item(i)->checkState() != firstValue) {
+                  _listWidget->item(0)->setCheckState(Qt::PartiallyChecked);
+                  wasSet = true;
+                  break;
+                  }
+            }
+      if (!wasSet)
+            _listWidget->item(0)->setCheckState(firstValue);
+      connectCheckBoxes();
+      }
+
+void MultiValue::updateStates()
+      {
+      for (int i = 0; i < _listWidget->count(); ++i)
+            _states[i] = _listWidget->item(i)->checkState();
+      }
+
+void MultiValue::connectCheckBoxes()
+      {
+      connect(_listWidget, SIGNAL(itemChanged(QListWidgetItem *)),
+              this, SLOT(checkBoxClicked(QListWidgetItem *)));
+      }
+
+void MultiValue::disconnectCheckBoxes()
+      {
+      disconnect(_listWidget, SIGNAL(itemChanged(QListWidgetItem *)),
+                 this, SLOT(checkBoxClicked(QListWidgetItem *)));
       }
 
 //----------------------------------------------------------------------------------
@@ -206,15 +300,19 @@ void OperationsDelegate::setEditorData(QWidget *editor,
 
                   Q_ASSERT_X(mv, "Midi delegate - setEditorData", "Unknown editor type");
 
+                              // to prevent possible hiding bottom part of the checkbox list
+                  const int h = mv->sizeHint().height();
+                  const int y = (mv->parentWidget() && (mv->parentWidget()->rect().bottom() < mv->y() + h))
+                              ? mv->parentWidget()->rect().bottom() - h : mv->y();
+                  mv->setGeometry(mv->x(), y, mv->width(), h);
+
                               // now mv can be partially hidden behind the view
                               // if the view has small rect, so set parent of mv
                               // to app window and map coordinates accordingly to leave mv in place
                   const auto globalCoord = mv->parentWidget()->mapToGlobal(mv->geometry().topLeft());
                   mv->setParent(appWindow);
                   const auto newLocalCoord = appWindow->mapFromGlobal(globalCoord);
-                  const int newWidth = mv->sizeHint().width();
-                  mv->setGeometry(newLocalCoord.x() + (mv->width() - newWidth) / 2, newLocalCoord.y(),
-                                  newWidth, mv->height());
+                  mv->setGeometry(newLocalCoord.x(), newLocalCoord.y(), mv->width(), h);
                   }
             }
       else {       // single value

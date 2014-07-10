@@ -4,6 +4,16 @@
 
 namespace Ms {
 
+class SizedListWidget : public QListWidget
+      {
+      Q_OBJECT
+
+   public:
+      SizedListWidget(QWidget *parent = nullptr);
+
+      virtual QSize sizeHint () const;
+      };
+
 // class for multiple value representation
 // each value is a button that can be checked or unchecked
 
@@ -20,12 +30,17 @@ class MultiValue : public QWidget
       void okClicked();
 
    private slots:
-      void buttonClicked();
-      void checkBoxToggled(bool);
+      void checkBoxClicked(QListWidgetItem *);
+      void itemClicked(QListWidgetItem *);
 
    private:
-      QList<QPushButton *> _buttons;
-      QPushButton *_allButton;
+      void setAllCheckBox();
+      void updateStates();
+      void connectCheckBoxes();
+      void disconnectCheckBoxes();
+
+      SizedListWidget *_listWidget;
+      std::vector<Qt::CheckState> _states;
       };
 
 
