@@ -30,9 +30,7 @@ namespace Ms {
 class TracksModel::Column
       {
    public:
-      Column(MidiOperations::Opers &opers)
-            : _opers(opers), _isEditable(true), _forAllTracksOnly(false)
-            {}
+      explicit Column(MidiOperations::Opers &opers) : _opers(opers) {}
       virtual ~Column() {}
 
       virtual QVariant value(int trackIndex) const = 0;
@@ -41,15 +39,12 @@ class TracksModel::Column
       virtual bool isVisible(int /*trackIndex*/) const { return true; }
       virtual QStringList valueList(int /*trackIndex*/) const { return _values; }
       virtual int width() const { return -1; }
-
-      bool isEditable() const { return _isEditable; }
-      bool isForAllTracksOnly() const { return _forAllTracksOnly; }
+      virtual bool isEditable() const { return true; }
+      virtual bool isForAllTracksOnly() const { return false; }
 
    protected:
       MidiOperations::Opers &_opers;
       QStringList _values;
-      bool _isEditable;
-      bool _forAllTracksOnly;
       };
 
 
@@ -107,10 +102,10 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   StaffName(MidiOperations::Opers &opers, const QString &midiFile)
                         : Column(opers), _midiFile(midiFile)
                         {
-                        _isEditable = false;
                         }
                   int width() const { return 180; }
                   QString headerName() const { return "Staff name"; }
+                  bool isEditable() const { return false; }
                   QVariant value(int trackIndex) const
                         {
                         MidiOperations::Data &opers = preferences.midiImportOperations;
@@ -131,10 +126,10 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
       struct InstrumentName : Column {
             InstrumentName(MidiOperations::Opers &opers) : Column(opers)
                   {
-                  _isEditable = false;
                   }
             int width() const { return 130; }
             QString headerName() const { return "Sound"; }
+            bool isEditable() const { return false; }
             QVariant value(int trackIndex) const
                   {
                   return _opers.instrumentName.value(trackIndex);
@@ -215,9 +210,9 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
       struct Human : Column {
             Human(MidiOperations::Opers &opers) : Column(opers)
                   {
-                  _forAllTracksOnly = true;
                   }
             QString headerName() const { return "Is human"; }
+            bool isForAllTracksOnly() const { return true; }
             QVariant value(int /*trackIndex*/) const
                   {
                   return _opers.isHumanPerformance;
