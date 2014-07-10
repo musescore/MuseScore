@@ -209,9 +209,11 @@ Note::~Note()
       delete _dots[2];
       }
 
-Note::Note(const Note& n)
+Note::Note(const Note& n, bool link)
    : Element(n)
       {
+      if (link)
+            linkTo((Note*)&n);      // HACK!
       _subchannel        = n._subchannel;
       _line              = n._line;
       _fret              = n._fret;
@@ -238,8 +240,13 @@ Note::Note(const Note& n)
       if (n._accidental)
             add(new Accidental(*(n._accidental)));
 
-      for (const Element* e : n._el)
-            add(e->clone());
+      // types in _el: SYMBOL, IMAGE, FINGERING, TEXT, BEND
+      for (Element* e : n._el) {
+            Element* ce = e->clone();
+            add(ce);
+            if (link)
+                  ce->linkTo(e);
+            }
 
       _playEvents = n._playEvents;
 

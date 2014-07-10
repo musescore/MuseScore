@@ -227,11 +227,12 @@ class Note : public Element {
 
    public:
       Note(Score* s = 0);
-      Note(const Note&);
-      Note& operator=(const Note&) = delete;
+      Note(const Note&, bool link = false);
       ~Note();
-      Note* clone() const        { return new Note(*this); }
-      Element::Type type() const { return Element::Type::NOTE; }
+
+      Note& operator=(const Note&) = delete;
+      virtual Note* clone() const  { return new Note(*this, false); }
+      Element::Type type() const   { return Element::Type::NOTE; }
 
       virtual qreal mag() const;
 

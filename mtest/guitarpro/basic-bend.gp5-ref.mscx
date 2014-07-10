@@ -123,15 +123,15 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>7</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
           <lid>8</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
           <lid>9</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>10</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -284,15 +284,15 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>7</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <lid>8</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <lid>9</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -328,15 +328,15 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>7</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <lid>8</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <lid>9</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
