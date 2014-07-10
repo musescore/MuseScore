@@ -350,7 +350,7 @@ void GuitarPro::readBend(Note* note)
       // there are no notes in the bend, exit the function
       if (numPoints == 0)
             return;
-      Bend* bend = new Bend(gscore);
+      Bend* bend = new Bend(note->score());
       for (int i = 0; i < numPoints; ++i) {
             int bendTime  = readInt();
             int bendPitch = readInt();

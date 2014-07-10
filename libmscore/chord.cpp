@@ -210,10 +210,8 @@ Chord::Chord(const Chord& c, bool link)
       int n = c._notes.size();
       for (int i = 0; i < n; ++i) {
             Note* onote = c._notes[i];
-            Note* nnote = new Note(*onote);
+            Note* nnote = new Note(*onote, link);
             add(nnote);
-            if (link)
-                  nnote->linkTo(onote);
             }
 
       for (Chord* gn : c.graceNotes()) {
