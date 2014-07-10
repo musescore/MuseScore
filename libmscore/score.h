@@ -374,6 +374,7 @@ class Score : public QObject {
       PlayMode _playMode;
 
       qreal _noteHeadWidth;
+      QString accInfo;             ///< information used by the screen-reader
 
       //------------------
 
@@ -989,6 +990,8 @@ class Score : public QObject {
       Element* lastElement();
 
       void cmdInsertClef(Clef* clef, ChordRest* cr);
+      void setAccessibleInfo(QString s) { accInfo = s.remove(":"); }
+      QString accessibleInfo()          { return accInfo;          }
 
       friend class ChangeSynthesizerState;
       friend class Chord;

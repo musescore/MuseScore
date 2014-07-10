@@ -2816,6 +2816,7 @@ TremoloChordType Chord::tremoloChordType() const
       return TremoloChordType::TremoloSingle;
       }
 
+
 //---------------------------------------------------------
 //   nextElement
 //---------------------------------------------------------
@@ -2854,5 +2855,31 @@ Element* Chord::prevElement()
       return ChordRest::prevElement();
       }
 
+QString Chord::accessibleExtraInfo()
+      {
+      QString rez = "";
+
+      if (!isGrace()) {
+            foreach (Chord* c, graceNotes()) {
+                  foreach (Note* n, c->notes()) {
+                        rez = " " + n->screenReaderInfo();
+                        }
+                  }
+            }
+
+      if (arpeggio())
+            rez = rez + " " + arpeggio()->screenReaderInfo();
+
+      if (tremolo())
+            rez = rez + " " + tremolo()->screenReaderInfo();
+
+      if (glissando())
+            rez = rez + " " + glissando()->screenReaderInfo();
+
+      foreach (Element* e, el())
+            rez = rez + " " + e->screenReaderInfo();
+
+      return rez + " " + ChordRest::accessibleExtraInfo();
+      }
 }
 

@@ -21,23 +21,19 @@ namespace Ms {
 //   JumpTypeTable
 //---------------------------------------------------------
 
-struct JumpTypeTable {
-      Jump::Type type;
-      TextStyleType textStyleType;
-      const char* text;
-      const char* jumpTo;
-      const char* playUntil;
-      const char* continueAt;
+const JumpTypeTable jumpTypeTable[] = {
+      { Jump::Type::DC,         TextStyleType::REPEAT_RIGHT, "D.C.",         "start", "end",  "",      QObject::tr("Da Capo")        },
+      { Jump::Type::DC_AL_FINE, TextStyleType::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" ,     QObject::tr("Da Capo al Fine")},
+      { Jump::Type::DC_AL_CODA, TextStyleType::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab", QObject::tr("Da Capo al Coda")},
+      { Jump::Type::DS_AL_CODA, TextStyleType::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab", QObject::tr("D.S. al Coda")   },
+      { Jump::Type::DS_AL_FINE, TextStyleType::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "",      QObject::tr("D.S. al Fine")   },
+      { Jump::Type::DS,         TextStyleType::REPEAT_RIGHT, "D.S.",         "segno", "end",  "",      QObject::tr("D.S.")           }
       };
 
-static const JumpTypeTable jumpTypeTable[] = {
-      { Jump::Type::DC,         TextStyleType::REPEAT_RIGHT, "D.C.",         "start", "end",  "" },
-      { Jump::Type::DC_AL_FINE, TextStyleType::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" },
-      { Jump::Type::DC_AL_CODA, TextStyleType::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab" },
-      { Jump::Type::DS_AL_CODA, TextStyleType::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab" },
-      { Jump::Type::DS_AL_FINE, TextStyleType::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "" },
-      { Jump::Type::DS,         TextStyleType::REPEAT_RIGHT, "D.S.",         "segno", "end",  "" }
-      };
+int jumpTypeTableSize()
+      {
+      return sizeof(jumpTypeTable)/sizeof(JumpTypeTable);
+      }
 
 //---------------------------------------------------------
 //   Jump
@@ -80,6 +76,14 @@ Jump::Type Jump::jumpType() const
                   return t.type;
             }
       return Type::USER;
+      }
+
+QString Jump::jumpTypeUserName() const
+      {
+      int idx = static_cast<int>(this->jumpType());
+      if(idx < jumpTypeTableSize())
+            return jumpTypeTable[idx].userText;
+      return QString("Custom");
       }
 
 //---------------------------------------------------------
@@ -222,6 +226,15 @@ Element* Jump::nextElement()
 Element* Jump::prevElement()
       {
       return nextElement();
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Jump::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + this->jumpTypeUserName();
       }
 
 }

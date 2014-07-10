@@ -79,6 +79,7 @@
 #include "texttools.h"
 #include "textpalette.h"
 #include "resourceManager.h"
+#include "scoreaccessibility.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -462,7 +463,9 @@ MuseScore::MuseScore()
       _modeText = new QLabel;
       _modeText->setAutoFillBackground(false);
       _modeText->setObjectName("modeLabel");
+
       _statusBar = new QStatusBar;
+
       hRasterAction = getAction("hraster");
       hRasterAction->setCheckable(true);
       vRasterAction = getAction("vraster");
@@ -508,6 +511,7 @@ MuseScore::MuseScore()
       _statusBar->addPermanentWidget(_positionLabel, 0);
 
       setStatusBar(_statusBar);
+      ScoreAccessibility::createInstance(this);
 
       _progressBar = 0;
 
@@ -1613,9 +1617,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       a->setChecked(cs->styleB(StyleIdx::concertPitch));
 
       setPos(cs->inputPos());
-      showMessage(cs->filePath(), 2000);
+      //showMessage(cs->filePath(), 2000);
       if (_navigator && _navigator->widget())
             navigator()->setScoreView(view);
+      ScoreAccessibility::instance()->updateAccessibilityInfo();
       }
 
 //---------------------------------------------------------
@@ -2413,7 +2418,7 @@ bool MuseScoreApplication::event(QEvent *event)
                   paths.append(static_cast<QFileOpenEvent *>(event)->file());
                   return true;
             default:
-                  return QApplication::event(event);
+                  return QtSingleApplication::event(event);
             }
       }
 
@@ -2431,7 +2436,7 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                   handleMessage(static_cast<QFileOpenEvent *>(event)->file());
                   return true;
             default:
-                  return QObject::eventFilter(obj, event);
+                  return QMainWindow::eventFilter(obj, event);
             }
       }
 
@@ -2779,7 +2784,9 @@ void MuseScore::readSettings()
       mainWindow->setOpaqueResize(false);
 
       move(settings.value("pos", QPoint(10, 10)).toPoint());
-      if (settings.value("maximized", false).toBool())
+      //for some reason when MuseScore starts maximized the screen-reader
+      //doesn't respond to QAccessibleEvents
+      if (settings.value("maximized", false).toBool() && !QAccessible::isActive())
             showMaximized();
       mscore->showPalette(settings.value("showPanel", "1").toBool());
       mscore->showInspector(settings.value("showInspector", "0").toBool());
@@ -4003,6 +4010,7 @@ void MuseScore::endCmd()
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
             cs->end();
+            ScoreAccessibility::instance()->updateAccessibilityInfo();
             }
       else {
             if (inspector)
@@ -4553,6 +4561,8 @@ namespace Ms {
 
 using namespace Ms;
 
+
+
 //---------------------------------------------------------
 //   main
 //---------------------------------------------------------
@@ -4577,6 +4587,7 @@ int main(int argc, char* av[])
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
+      QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
       Q_INIT_RESOURCE(zita);
       Q_INIT_RESOURCE(noeffect);
 //      Q_INIT_RESOURCE(freeverb);
@@ -5021,6 +5032,7 @@ int main(int argc, char* av[])
                         break;
                   }
             }
+
       return qApp->exec();
       }
 

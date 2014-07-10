@@ -718,5 +718,26 @@ Element* Ambitus::prevElement()
       {
       return segment()->lastInPrevSegments(staffIdx());
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+QString Ambitus::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " +
+                  tr("Top pitch: %1%2").arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, false, false)).arg(QString::number(topOctave())) + " " +
+                  tr("Bottom pitch: %1%2").arg(tpc2name(bottomTpc(), NoteSpellingType::STANDARD, false, false)).arg(QString::number(bottomOctave()));
+      }
+
+//---------------------------------------------------------
+//   screenReaderInfo
+//---------------------------------------------------------
+
+QString Ambitus::screenReaderInfo()
+      {
+      return Element::screenReaderInfo() + " " +
+                  tr("Top pitch: %1%2").arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, false, true)).arg(QString::number(topOctave())) + " " +
+                  tr("Bottom pitch: %1%2").arg(tpc2name(bottomTpc(), NoteSpellingType::STANDARD, false, true)).arg(QString::number(bottomOctave()));
+      }
 }
 

@@ -338,9 +338,22 @@ Fraction Tremolo::tremoloLen() const
       return f;
       }
 
+//---------------------------------------------------------
+//   subtypeName
+//---------------------------------------------------------
+
 QString Tremolo::subtypeName() const
       {
       return tremoloName[subtype() - int(TremoloType::R8)];
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Tremolo::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + subtypeName();
       }
 
 }

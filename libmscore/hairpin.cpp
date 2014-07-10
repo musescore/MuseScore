@@ -572,5 +572,20 @@ void Hairpin::reset()
       SLine::reset();
       }
 
+QString Hairpin::accessibleInfo()
+      {
+      QString rez = SLine::accessibleInfo();
+      switch (hairpinType()) {
+            case Type::CRESCENDO:
+                  rez += " " + tr("Crescendo");
+                  break;
+            case Type::DECRESCENDO:
+                  rez += " " + tr("Descrescendo");
+                  break;
+            default:
+                  rez += " " + tr("Custom");
+            }
+      return rez;
+      }
 }
 

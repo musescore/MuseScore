@@ -9,7 +9,8 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
-
+#include <QLabel>
+#include <QList>
 /**
  \file
  Implementation of classes Note and ShadowNote.
@@ -414,6 +415,13 @@ void Note::undoSetTpc(int v)
 int Note::tpc() const
       {
       return _tpc[concertPitchIdx()];
+      }
+
+QString Note::tpcUserName(bool explicitAccidental)
+      {
+      QString pitch = tr("Pitch: %1").arg(tpc2name(tpc(), NoteSpellingType::STANDARD, false, explicitAccidental));
+      QString octave = QString::number((this->pitch() / 12) - 2);
+      return pitch + (explicitAccidental ? " " : "") + octave;
       }
 
 //---------------------------------------------------------
@@ -1736,6 +1744,32 @@ NoteType Note::noteType() const
       }
 
 //---------------------------------------------------------
+//   noteTypeUserName
+//---------------------------------------------------------
+
+QString Note::noteTypeUserName()
+      {
+      switch (noteType()) {
+            case NoteType::ACCIACCATURA:
+                  return tr("Accaciatura");
+            case NoteType::APPOGGIATURA:
+                  return tr("Appoggiatura");
+            case NoteType::GRACE8_AFTER:
+            case NoteType::GRACE16_AFTER:
+            case NoteType::GRACE32_AFTER:
+                  return tr("Grace note after");
+            case NoteType::GRACE4:
+            case NoteType::GRACE16:
+            case NoteType::GRACE32:            
+                  return tr("Grace note before");
+            case NoteType::INVALID:
+                  return tr("Invalid note");
+            default:
+                  return tr("Note");
+            }
+      }
+
+//---------------------------------------------------------
 //   pagePos
 //---------------------------------------------------------
 
@@ -2368,6 +2402,64 @@ void Note::setScore(Score* s)
       Element::setScore(s);
       if (_tieFor)
             _tieFor->setScore(s);
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Note::accessibleInfo()
+      {
+      QString duration = chord()->durationUserName();
+      QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      return noteTypeUserName() + " " + tpcUserName(false) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
+      }
+
+//---------------------------------------------------------
+//   screenReaderInfo
+//---------------------------------------------------------
+
+QString Note::screenReaderInfo()
+      {
+      QString duration = chord()->durationUserName();
+      QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      return noteTypeUserName() + " " + tpcUserName(true) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
+      }
+
+//---------------------------------------------------------
+//   accessibleExtraInfo
+//---------------------------------------------------------
+
+QString Note::accessibleExtraInfo()
+      {
+      QString rez = "";
+      if (accidental()) {
+            rez += " " + accidental()->screenReaderInfo();
+            }
+      if (!el().isEmpty()) {
+            foreach (Element* e, el()) {
+                  rez = rez + " " + e->screenReaderInfo();
+                  }
+            }
+      if (tieFor())
+            rez += " " + tr("Start of %1").arg(tieFor()->screenReaderInfo());
+
+      if (tieBack())
+            rez += " " + tr("End of %1").arg(tieBack()->screenReaderInfo());
+
+      if (!spannerFor().isEmpty()) {
+            foreach (Spanner* s, spannerFor()) {
+                  rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                  }
+            }
+      if (!spannerBack().isEmpty()) {
+            foreach (Spanner* s, spannerBack()) {
+                  rez += " " + tr("End of %2").arg(s->screenReaderInfo());
+                  }
+            }
+
+      rez = rez + " " + chord()->accessibleExtraInfo();
+      return rez;
       }
 
 //---------------------------------------------------------

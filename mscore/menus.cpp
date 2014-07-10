@@ -292,23 +292,10 @@ Palette* MuseScore::newBarLinePalette()
       sp->setGrid(42, 38);
 
       // bar line styles
-      struct {
-            BarLineType type;
-            const char* name;
-            } t[] = {
-            { BarLineType::NORMAL,       QT_TRANSLATE_NOOP("Palette", "Normal") },
-            { BarLineType::BROKEN,       QT_TRANSLATE_NOOP("Palette", "Dashed style") },
-            { BarLineType::DOTTED,       QT_TRANSLATE_NOOP("Palette", "Dotted style") },
-            { BarLineType::END,          QT_TRANSLATE_NOOP("Palette", "End Bar style") },
-            { BarLineType::DOUBLE,       QT_TRANSLATE_NOOP("Palette", "Double Bar style") },
-            { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start Repeat") },
-            { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End Repeat") },
-            { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-Start Repeat") },
-            };
-      for (unsigned i = 0; i < sizeof(t)/sizeof(*t); ++i) {
+      for (unsigned i = 0; i < barLineTableSize(); ++i) {
             BarLine* b  = new BarLine(gscore);
-            b->setBarLineType(t[i].type);
-            sp->append(b, t[i].name);
+            b->setBarLineType(barLineTable[i].type);
+            sp->append(b, barLineTable[i].name);
             }
 
       // bar line spans
@@ -346,57 +333,21 @@ Palette* MuseScore::newRepeatsPalette()
       RepeatMeasure* rm = new RepeatMeasure(gscore);
       sp->append(rm, tr("Repeat measure sign"));
 
-      Marker* mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::SEGNO);
-      sp->append(mk, tr("Segno"));
+      for (int i = 0; i < markerTypeTableSize(); i++) {
+            if(markerTypeTable[i].type == Marker::Type::CODETTA) //not in smufl
+                  continue;
 
-      mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::VARSEGNO);
-      sp->append(mk, tr("Segno Variation"));
+            Marker* mk = new Marker(gscore);
+            mk->setMarkerType(markerTypeTable[i].type);
+            sp->append(mk, markerTypeTable[i].name);
+            }
 
-      mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::CODA);
-      sp->append(mk, tr("Coda"));
+      for (int i = 0; i < jumpTypeTableSize(); i++) {
+            Jump* jp = new Jump(gscore);
+            jp->setJumpType(jumpTypeTable[i].type);
+            sp->append(jp, jumpTypeTable[i].userText);
+            }
 
-      mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::VARCODA);
-      sp->append(mk, tr("Varied coda"));
-
-/*      mk = new Marker(gscore);                      // not in smufl
-      mk->setMarkerType(Marker::Type::CODETTA);
-      sp->append(mk, tr("Codetta"));
-  */
-      mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::FINE);
-      sp->append(mk, tr("Fine"));
-
-      Jump* jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DC);
-      sp->append(jp, tr("Da Capo"));
-
-      jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DC_AL_FINE);
-      sp->append(jp, tr("Da Capo al Fine"));
-
-      jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DC_AL_CODA);
-      sp->append(jp, tr("Da Capo al Coda"));
-
-      jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DS_AL_CODA);
-      sp->append(jp, tr("D.S. al Coda"));
-
-      jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DS_AL_FINE);
-      sp->append(jp, tr("D.S. al Fine"));
-
-      jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DS);
-      sp->append(jp, tr("D.S."));
-
-      mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::TOCODA);
-      sp->append(mk, tr("To Coda"));
       return sp;
       }
 
@@ -629,12 +580,6 @@ Palette* MuseScore::newArpeggioPalette()
             }
 
       //fall and doits
-      const char* scorelineNames[] = {
-            QT_TR_NOOP("fall"),
-            QT_TR_NOOP("doit"),
-            QT_TR_NOOP("plop"),
-            QT_TR_NOOP("scoop"),
-            };
 
       ChordLine* cl = new ChordLine(gscore);
       cl->setChordLineType(ChordLineType::FALL);
@@ -879,29 +824,13 @@ Palette* MuseScore::newLinesPalette()
       pedal->setEndHook(true);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
-      Trill* trill = new Trill(gscore);
-      trill->setLen(w);
-      sp->append(trill, QT_TRANSLATE_NOOP("Palette", "Trill line"));
 
-      trill = new Trill(gscore);
-      trill->setTrillType("upprall");
-      trill->setLen(w);
-      sp->append(trill, QT_TRANSLATE_NOOP("Palette", "Upprall line"));
-
-      trill = new Trill(gscore);
-      trill->setTrillType("downprall");
-      trill->setLen(w);
-      sp->append(trill, QT_TRANSLATE_NOOP("Palette", "Downprall line"));
-
-      trill = new Trill(gscore);
-      trill->setTrillType("prallprall");
-      trill->setLen(w);
-      sp->append(trill, QT_TRANSLATE_NOOP("Palette", "Prallprall line"));
-
-      trill = new Trill(gscore);
-      trill->setTrillType("pure");
-      trill->setLen(w);
-      sp->append(trill, QT_TRANSLATE_NOOP("Palette", "Wavy line"));
+      for (int i = 0; i < trillTableSize(); i++) {
+            Trill* trill = new Trill(gscore);
+            trill->setTrillType(trillTable[i].type);
+            trill->setLen(w);
+            sp->append(trill, trillTable[i].userName);
+            }
 
       TextLine* textLine = new TextLine(gscore);
       textLine->setLen(w);

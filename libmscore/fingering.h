@@ -36,6 +36,8 @@ class Fingering : public Text {
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
       virtual void reset() override;
+
+      virtual QString accessibleInfo() override;
       };
 
 

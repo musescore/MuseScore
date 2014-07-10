@@ -624,5 +624,16 @@ qreal Rest::stemPosX() const
       else
             return bbox().left();
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Rest::accessibleInfo()
+      {
+      QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      return Element::accessibleInfo() + " " + durationUserName() + " " + voice ;
+      }
+
 }
 

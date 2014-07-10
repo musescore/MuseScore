@@ -49,7 +49,6 @@ class Rest : public ChordRest {
 
       virtual Rest* clone() const override        { return new Rest(*this, false); }
       virtual Rest* linkedClone() const           { return new Rest(*this, true); }
-
       virtual Measure* measure() const override   { return parent() ? (Measure*)(parent()->parent()) : 0; }
       virtual qreal mag() const override;
       virtual void draw(QPainter*) const override;
@@ -75,8 +74,9 @@ class Rest : public ChordRest {
       virtual QPointF stemPos() const;
       virtual qreal stemPosX() const;
       virtual QPointF stemPosBeam() const;
-      };
 
+      virtual QString accessibleInfo() override;
+      };
 
 }     // namespace Ms
 #endif

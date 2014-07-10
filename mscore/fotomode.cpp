@@ -402,10 +402,10 @@ void ScoreView::doDragFoto(QMouseEvent* ev)
       QRectF rr(_foto->rect());
       r = _matrix.mapRect(rr);
       QSize sz(r.size().toSize());
-      mscore->statusBar()->showMessage(QString("%1 x %2").arg(sz.width()).arg(sz.height()), 3000);
+      //mscore->statusBar()->showMessage(QString("%1 x %2").arg(sz.width()).arg(sz.height()), 3000);
 
       update();
-      mscore->showMessage("drag", 2000);
+      //mscore->showMessage("drag", 2000);
       }
 
 //---------------------------------------------------------

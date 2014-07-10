@@ -213,8 +213,10 @@ class Chord : public ChordRest {
 
       void sortNotes();
 
+
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
+      virtual QString accessibleExtraInfo() override;
       };
 
 

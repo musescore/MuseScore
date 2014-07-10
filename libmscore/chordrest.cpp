@@ -925,6 +925,56 @@ void ChordRest::setDurationType(const TDuration& v)
       _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
+QString ChordRest::durationUserName()
+      {
+      QString duration = tr("Duration:");
+      QString tupletType = "";
+      if(tuplet()) {
+              switch (tuplet()->ratio().numerator()) {
+                  case 2:
+                        tupletType += " " + tr("Duplet");
+                        break;
+                  case 3:
+                        tupletType += " " + tr("Triplet");
+                        break;
+                  case 4:
+                        tupletType += " " + tr("Quadruplet");
+                        break;
+                  case 5:
+                        tupletType += " " + tr("Quinplet");
+                        break;
+                  case 6:
+                        tupletType += " " + tr("Sextuplet");
+                        break;
+                  case 7:
+                        tupletType += " " + tr("Septuplet");
+                        break;
+                  case 8:
+                        tupletType += " " + tr("Octuplet");
+                        break;
+                  case 9:
+                        tupletType += " " + tr("Nontuplet");
+                        break;
+                  default:
+                        tupletType += " " + tr("Custom Tuplet");
+                  }
+            }
+      QString dotString = "";
+
+      switch (dots()) {
+            case 1:
+                  dotString += " " + tr("Dotted");
+                  break;
+            case 2:
+                  dotString += " " + tr("Double dotted");
+                  break;
+            case 3:
+                  dotString += " " + tr("Triple dotted");
+                  break;
+            }
+      return duration + tupletType + dotString + " " + durationType().durationTypeUserName() + " " + tr("note");
+      }
+
 //---------------------------------------------------------
 //   setTrack
 //---------------------------------------------------------
@@ -1192,5 +1242,49 @@ Element* ChordRest::prevElement()
       return segment()->lastInPrevSegments(staffIdx());
       }
 
+QString ChordRest::accessibleExtraInfo()
+      {
+      QString rez = "";
+      foreach (Articulation* a, articulations())
+            rez = rez + " " + a->screenReaderInfo();
+
+      foreach (Element* l, lyricsList())
+            rez = rez + " " + l->screenReaderInfo();
+
+      if(segment()) {
+            foreach (Element* e, segment()->annotations()) {
+                  if (e->staffIdx() == staffIdx() )
+                        rez = rez + " " + e->screenReaderInfo();
+                  }
+
+            SpannerMap smap = score()->spannerMap();
+            std::vector< ::Interval<Spanner*> > spanners = smap.findOverlapping(tick(), tick());
+            for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
+                  ::Interval<Spanner*> interval = *i;
+                  Spanner* s = interval.value;
+                  if (s->type() == Element::Type::VOLTA || //voltas are added for barlines
+                      s->type() == Element::Type::TIE    ) //ties are added in notes
+                        continue;
+
+                  Segment* seg = 0;
+                  if (s->type() == Element::Type::SLUR) {
+                        if(s->tick() == tick() && s->track() == track())
+                              rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                        if(s->tick2() == tick() && s->track2() == track())
+                              rez += " " + tr("End of %1").arg(s->screenReaderInfo());
+                        }
+                  else  {
+                        if(s->tick() == tick() && s->staffIdx() == staffIdx())
+                              rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                        seg = segment()->next1MM(Segment::Type::ChordRest);
+                        if (!seg)
+                              continue;
+                        if(s->tick2() == seg->tick() && s->staffIdx() == staffIdx())
+                              rez += " " + tr("End of %1").arg(s->screenReaderInfo());
+                        }
+                  }
+            }
+      return rez;
+      }
 }
 
