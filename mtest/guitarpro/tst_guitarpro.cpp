@@ -92,6 +92,8 @@ private slots:
       void gpxTrill()        { gpReadTest("trill", "gpx"); }
       void gpxCrecDim()      { gpReadTest("crescendo-diminuendo", "gpx"); }
       void gpxTremolos()     { gpReadTest("tremolos", "gpx"); }
+      void gpxDeadNote()     { gpReadTest("dead-note", "gpx"); }
+      void gpxWah()          { gpReadTest("wah", "gpx"); }
       };
 
 //---------------------------------------------------------
