@@ -72,7 +72,6 @@
 #include "stringdata.h"
 #include "tiemap.h"
 #include "tupletmap.h"
-#include "accidental.h"
 #include "layout.h"
 #include "icon.h"
 #include "ambitus.h"
@@ -3694,6 +3693,67 @@ void Measure::cmdUpdateNotes(int staffIdx)
                   chord->cmdUpdateNotes(&as);
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   updatePitches
+//---------------------------------------------------------
+
+bool Measure::updatePitches(Segment* segment, int staffIdx, int pitch, int tpc1, int tpc2, int line, Accidental::Type newAccType)
+      {
+      Staff* staff            = score()->staff(staffIdx);
+      int startTrack          = staffIdx * VOICES;
+      int endTrack            = startTrack + VOICES;
+      StaffGroup staffGroup   = staff->staffType()->group();
+      const Instrument* instrument = staff->part()->instr();
+
+      for (int track = startTrack; track < endTrack; ++track) {
+            Chord* chord = static_cast<Chord*>(segment->element(track));
+            if (!chord || chord->type() != Element::Type::CHORD)
+                 continue;
+
+            // TAB_STAFF is different, as each note has to be fretted
+            // in the context of the whole chord
+
+            if (staffGroup == StaffGroup::TAB) {
+                  for (Chord* ch : chord->graceNotes())
+                        instrument->stringData()->fretChords(ch);
+                  instrument->stringData()->fretChords(chord);
+                  continue;               // skip other staff type cases
+                  }
+            // PITCHED_ and PERCUSSION_STAFF can go note by note
+            int n = chord->notes().size();
+            for (int i = 0; i < n; ++i) {
+                  Note* note = chord->notes().at(i);
+                  if(note->staffIdx() == staffIdx && note->line() == line){
+                        if (staffGroup == StaffGroup::STANDARD){
+                              if (note->tieBack()) {
+                                    int line = note->tieBack()->startNote()->line();
+                                    note->setLine(line);
+                                    if (note->accidental()) {
+                                          // TODO: remove accidental only if note is not
+                                          // on new system
+                                          score()->undoRemoveElement(note->accidental());
+                                          }
+                                    }
+                              else {
+                                    if(note->accidental()) {
+                                          if(note->accidental()->accidentalType() == newAccType)
+                                                score()->undoRemoveElement(note->accidental());
+                                          else
+                                                return false;
+                                          }
+                                    else {
+                                          note->undoSetPitch(pitch);
+                                          note->undoSetTpc1(tpc1);
+                                          note->undoSetTpc2(tpc2);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+      return true;
       }
 
 //---------------------------------------------------------

@@ -21,6 +21,7 @@
 #include "measurebase.h"
 #include "fraction.h"
 #include "segmentlist.h"
+#include "accidental.h"
 
 namespace Ms {
 
@@ -280,6 +281,7 @@ class Measure : public MeasureBase {
 
       void updateNotes(int staffIdx);
       void cmdUpdateNotes(int staffIdx);
+      bool updatePitches(Segment* segment, int staffIdx, int pitch, int tcp1, int tcp2, int line, Accidental::Type newAccType);
 
       void layoutStage1();
       int playbackCount() const      { return _playbackCount; }

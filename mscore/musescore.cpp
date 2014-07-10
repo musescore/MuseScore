@@ -4300,11 +4300,20 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (_textTools)
                   _textTools->toggleUnderline();
             }
-
+      else if (cmd == "alt-delete"){
+           cv->score()->setProperty("AltModifier", true);
+           foreach(Element* el, cv->score()->selection().elements()) {
+                 if(el->type() == Element::Type::ACCIDENTAL)
+                       cv->score()->changeAccidental(static_cast<Note*>(el->parent()), Accidental::Type::NONE);
+                 }
+            cv->score()->setProperty("AltModifier", false);
+            }
       else {
             if (cv) {
+                  cv->score()->setProperty("AltModifier", qApp->keyboardModifiers().testFlag(Qt::AltModifier));
                   cv->setFocus();
                   cv->cmd(a);
+                  cv->score()->setProperty("AltModifier", false);
                   }
             else
                   qDebug("2:unknown cmd <%s>", qPrintable(cmd));
