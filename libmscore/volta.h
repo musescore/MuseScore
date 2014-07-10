@@ -97,6 +97,7 @@ private:
       virtual void setYoff(qreal);
       virtual void reset() override;
       virtual bool systemFlag() const override  { return true;  }
+      virtual QString accessibleInfo() override;
       };
 
 }     // namespace Ms

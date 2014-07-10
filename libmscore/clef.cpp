@@ -55,6 +55,7 @@ const ClefInfo ClefInfo::clefTable[] = {
 { "TAB2", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Tablature2"),             StaffGroup::TAB       },
       };
 
+
 //---------------------------------------------------------
 //   tag2type
 //---------------------------------------------------------
@@ -650,5 +651,15 @@ Element* Clef::prevElement()
       {
       return segment()->lastInPrevSegments(staffIdx());
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Clef::accessibleInfo()
+      {
+      return ClefInfo::name(clefType());
+      }
+
 }
 

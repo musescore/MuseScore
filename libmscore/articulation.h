@@ -134,8 +134,9 @@ class Articulation : public Element {
                                 _articulationType == ArticulationType::Shortfermata ||
                                 _articulationType == ArticulationType::Longfermata ||
                                 _articulationType == ArticulationType::Verylongfermata; }
-      };
 
+      QString accessibleInfo() override;
+      };
 
 }     // namespace Ms
 #endif

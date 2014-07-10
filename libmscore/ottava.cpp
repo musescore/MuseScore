@@ -540,5 +540,14 @@ void Ottava::reset()
 
       TextLine::reset();
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Ottava::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + ottavaDefault[static_cast<int>(ottavaType())].name;
+      }
 }
 

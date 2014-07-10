@@ -1943,4 +1943,13 @@ Element* Element::prevElement()
             }
       return score()->firstElement();
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Element::accessibleInfo()
+      {
+      return userName();
+      }
 }

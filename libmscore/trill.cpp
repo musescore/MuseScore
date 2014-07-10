@@ -23,6 +23,20 @@
 
 namespace Ms {
 
+
+// must be in sync with Trill::Type
+const TrillTableItem trillTable[] = {
+      { Trill::Type::TRILL_LINE,      "trill",      QObject::tr("Trill line")          },
+      { Trill::Type::UPPRALL_LINE,    "upprall",    QObject::tr("Upprall line")        },
+      { Trill::Type::DOWNPRALL_LINE,  "downprall",  QObject::tr("Downprall line")      },
+      { Trill::Type::PRALLPRALL_LINE, "prallprall", QObject::tr("Prallprall line")     },
+      { Trill::Type::PURE_LINE      , "pure",       QObject::tr("Wavy line")           }
+};
+
+int trillTableSize() {
+      return sizeof(trillTable)/sizeof(TrillTableItem);
+      }
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -415,6 +429,15 @@ QString Trill::trillTypeName() const
       }
 
 //---------------------------------------------------------
+//   trillTypeName
+//---------------------------------------------------------
+
+QString Trill::trillTypeUserName()
+      {
+      return trillTable[static_cast<int>(trillType())].userName;
+      }
+
+//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 
@@ -493,5 +516,13 @@ void Trill::setYoff(qreal val)
       rUserYoffset() += (val - score()->styleS(StyleIdx::trillY).val()) * spatium();
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Trill::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + trillTypeUserName();
+      }
 }
 

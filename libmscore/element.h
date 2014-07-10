@@ -39,9 +39,11 @@ class TextStyle;
 class Element;
 enum class SymId;
 
+
 //---------------------------------------------------------
 //   ElementFlag
 //---------------------------------------------------------
+
 
 enum class ElementFlag : char {
       DROP_TARGET  = 0x2,
@@ -301,11 +303,9 @@ class Element : public QObject {
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
-
    protected:
       Score* _score;
       QPointF _startDragPosition;   ///< used during drag
-
    public:
       Element(Score* s = 0);
       Element(const Element&);
@@ -497,6 +497,8 @@ class Element : public QObject {
       qreal magS() const;
 
       bool isText() const;
+      virtual bool isSpanner() const           { return false; }
+      virtual bool isSpannerSegment() const    { return false; }
 
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
@@ -573,6 +575,11 @@ class Element : public QObject {
       virtual Element* prevElement();  //< next-element and prev-element command
 
       bool concertPitch() const;
+      virtual QString accessibleInfo();                                  //< used to populate the status bar
+      virtual QString screenReaderInfo()    { return accessibleInfo(); } //< by default returns accessibleInfo, but can be overriden
+                                                                         //  if the screen-reader needs a special string (see note for example)
+      virtual QString accessibleExtraInfo() { return QString();        } //< used to return info that will be appended to accessibleInfo
+                                                                         // and passed only to the screen-reader
       };
 
 //---------------------------------------------------------
@@ -704,6 +711,8 @@ extern void collectElements(void* data, Element* e);
 
 
 }     // namespace Ms
+
+
 
 Q_DECLARE_METATYPE(Ms::Element::Type);
 Q_DECLARE_METATYPE(Ms::Element::Placement);

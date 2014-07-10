@@ -60,6 +60,7 @@ class TempoText : public Text  {
       QVariant getProperty(P_ID propertyId) const override;
       bool setProperty(P_ID propertyId, const QVariant&) override;
       QVariant propertyDefault(P_ID id) const override;
+      virtual QString accessibleInfo() override;
       };
 
 

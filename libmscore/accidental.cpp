@@ -474,5 +474,15 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
       score()->setLayoutAll(true);  // spacing changes
       return true;
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Accidental::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + QString(Accidental::subtype2name(accidentalType()));
+      }
+
 }
 

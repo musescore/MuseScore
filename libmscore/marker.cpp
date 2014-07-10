@@ -18,6 +18,23 @@
 
 namespace Ms {
 
+//must be in sync with Marker::Type enum
+const MarkerTypeItem markerTypeTable[] = {
+      { Marker::Type::SEGNO   , QObject::tr("Segno")          },
+      { Marker::Type::VARSEGNO, QObject::tr("Segno Variation")},
+      { Marker::Type::CODA    , QObject::tr("Coda")           },
+      { Marker::Type::VARCODA , QObject::tr("Varied coda")    },
+      { Marker::Type::CODETTA , QObject::tr("Codetta")        },
+      { Marker::Type::FINE    , QObject::tr("Fine")           },
+      { Marker::Type::TOCODA  , QObject::tr("To Coda")        },
+      { Marker::Type::USER    , QObject::tr("Custom")         }
+      };
+
+int markerTypeTableSize()
+      {
+      return sizeof(markerTypeTable)/sizeof(MarkerTypeItem) - 1; //-1 for the user defined
+      }
+
 //---------------------------------------------------------
 //   Marker
 //---------------------------------------------------------
@@ -86,6 +103,11 @@ void Marker::setMarkerType(Type t)
             }
       if (isEmpty() && txt)
             setText(txt);
+      }
+
+QString Marker::markerTypeUserName()
+      {
+      return markerTypeTable[static_cast<int>(_markerType)].name;
       }
 
 //---------------------------------------------------------
@@ -274,6 +296,7 @@ QVariant Marker::propertyDefault(P_ID propertyId) const
       return Text::propertyDefault(propertyId);
       }
 
+
 //---------------------------------------------------------
 //   nextElement
 //---------------------------------------------------------
@@ -301,6 +324,15 @@ Element* Marker::prevElement()
       {
       //it's the same barline
       return nextElement();
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Marker::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + markerTypeUserName();
       }
 
 }

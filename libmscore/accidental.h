@@ -144,7 +144,10 @@ class Accidental : public Element {
       static const char* subtype2name(Type);
       static Type value2subtype(AccidentalVal);
       static Type name2subtype(const QString&);
+
+      QString accessibleInfo() override;
       };
+
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Accidental::Role);

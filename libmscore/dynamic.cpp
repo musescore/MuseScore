@@ -440,5 +440,14 @@ QVariant Dynamic::propertyDefault(P_ID id) const
             }
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Dynamic::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + this->dynamicTypeName();
+      }
+
 }
 
