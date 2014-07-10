@@ -137,6 +137,7 @@ class ChordRest : public DurationElement {
       int actualDots() const  { return _durationType.dots(); }
       int durationTypeTicks() { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks()
                                     : _durationType.ticks(); }
+      QString durationUserName();
 
       virtual void setTrack(int val);
       virtual int tick() const;
@@ -161,11 +162,11 @@ class ChordRest : public DurationElement {
       bool isGraceBefore() const;
       bool isGraceAfter() const;
       void writeBeam(Xml& xml);
-
       Segment* nextSegmentAfterCR(Segment::Type types) const;
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
+      virtual QString accessibleExtraInfo() override;
       };
 
 

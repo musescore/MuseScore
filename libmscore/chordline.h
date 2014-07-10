@@ -64,8 +64,11 @@ class ChordLine : public Element {
 
       virtual void editDrag(const EditData&);
       virtual void updateGrips(int*, int*, QRectF*) const override;
+
+      virtual QString accessibleInfo() override;
       };
 
+extern const char* scorelineNames[];
 
 }     // namespace Ms
 #endif

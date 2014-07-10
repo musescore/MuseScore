@@ -565,5 +565,23 @@ Element* TimeSig::prevElement()
       return segment()->lastInPrevSegments(staffIdx());
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString TimeSig::accessibleInfo()
+      {
+      QString timeSigString;
+      switch (timeSigType()) {
+            case TimeSigType::FOUR_FOUR:
+                  timeSigString = tr("Common time");
+            case TimeSigType::ALLA_BREVE:
+                  timeSigString = tr("Cut time");
+            default:
+                  timeSigString = tr("%1/%2 time").arg(QString::number(numerator())).arg(QString::number(denominator()));
+            }
+      return Element::accessibleInfo() + " " + timeSigString;
+      }
+
 }
 

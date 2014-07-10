@@ -178,6 +178,9 @@ class Harmony : public Text {
       void setHarmony(const QString& s);
       virtual QPainterPath shape() const;
       void calculateBoundingRect();
+
+      virtual QString accessibleInfo() override;
+      virtual QString screenReaderInfo() override;
       };
 
 

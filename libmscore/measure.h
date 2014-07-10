@@ -323,6 +323,7 @@ class Measure : public MeasureBase {
 
       Element* nextElement(int staff);
       Element* prevElement(int staff);
+      virtual QString accessibleInfo() override;
       };
 
 }     // namespace Ms

@@ -126,5 +126,20 @@ Element* Breath::prevElement()
       {
       return segment()->lastInPrevSegments(staffIdx());
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Breath::accessibleInfo()
+      {
+      switch (breathType()) {
+            case 2:
+            case 3:
+                  return tr("Caesura");
+            default:
+                  return tr("Breath");
+            }
+      }
 }
 

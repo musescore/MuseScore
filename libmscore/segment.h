@@ -201,7 +201,7 @@ public:
       bool operator<(const Segment&) const;
       bool operator>(const Segment&) const;
 
-
+      virtual QString accessibleExtraInfo() override;
       Element* firstInNextSegments(int activeStaff); //<
       Element* lastInPrevSegments(int activeStaff);   //<
       Element* firstElement(int staff);              //<  These methods are used for navigation

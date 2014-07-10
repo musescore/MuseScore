@@ -66,7 +66,7 @@ class TDuration {
       int dots() const    { return _dots; }
       void setDots(int v);
       Fraction fraction() const;
-      void print() const;
+      QString durationTypeUserName() const;
       };
 
 extern QList<TDuration> toDurationList(

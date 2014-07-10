@@ -412,5 +412,12 @@ void Volta::reset()
       TextLine::reset();
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Volta::accessibleInfo(){
+      return Element::accessibleInfo() + " " + text();
+      }
 }
 

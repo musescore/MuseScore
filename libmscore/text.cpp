@@ -2504,5 +2504,38 @@ QString Text::convertToHtml(const QString& s, const TextStyle& st)
       QString family = st.family();
       return QString("<html><body style=\"font-family:'%1'; font-size:%2pt;\">%3</body></html>").arg(family).arg(size).arg(s);
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Text::accessibleInfo()
+      {
+      QString rez;
+      switch (textStyleType()) {
+            case TextStyleType::TITLE:
+                  rez = tr ("Title");
+                  break;
+            case TextStyleType::SUBTITLE:
+                  rez = tr ("Subtitle");
+                  break;
+            case TextStyleType::COMPOSER:
+                  rez = tr("Composer");
+                  break;
+            case TextStyleType::POET:
+                  rez = tr ("Poet");
+                  break;
+            case TextStyleType::TRANSLATOR:
+                  rez = tr ("Translator");
+                  break;
+            case TextStyleType::MEASURE_NUMBER:
+                  rez = tr ("Measure number");
+                  break;
+            default:
+                  rez = Element::accessibleInfo();
+                  break;
+            }
+      return  rez + " " + text();
+      }
 }
 

@@ -4038,5 +4038,14 @@ Element* Measure::prevElement(int staff)
       return score()->lastElement();
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Measure::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + QString::number(no() + 1);
+      }
+
 }
 
