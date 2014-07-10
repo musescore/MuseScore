@@ -747,8 +747,7 @@ bool GuitarPro5::readNote(int string, Note* note)
       bool tieNote = false;
       if (noteBits & 0x20) {
             uchar noteType = readUChar();
-            if (noteType == 1) {
-                  }
+            if (noteType == 1) {} //standard note
             else if (noteType == 2) {
                   tieNote = true;
                   }
@@ -777,8 +776,10 @@ bool GuitarPro5::readNote(int string, Note* note)
             int b = readUChar();
             qDebug("   Fingering=========%d %d", a, b);
             }
-      if (noteBits & 0x1)
+      if (noteBits & 0x1) {
+            qDebug("Detected 0x1 mask, skipped 8");
             skip(8);
+            }
 
       // check if a note is supposed to be accented, and give it the marcato type
       if (noteBits & 0x02) {
