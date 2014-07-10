@@ -67,7 +67,7 @@
             <item>
              <widget class="QLabel" name="label_63">
               <property name="text">
-               <string>Musical symbols font: </string>
+               <string>Musical symbols font:</string>
               </property>
               <property name="buddy">
                <cstring>musicalSymbolFont</cstring>
@@ -263,7 +263,7 @@
             <item>
              <widget class="QLabel" name="SwingLabel">
               <property name="text">
-               <string>Swing :</string>
+               <string>Swing:</string>
               </property>
              </widget>
             </item>
@@ -314,7 +314,7 @@
             <item>
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>Select swing ratio :     </string>
+               <string>Select swing ratio:</string>
               </property>
              </widget>
             </item>
