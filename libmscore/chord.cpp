@@ -252,9 +252,12 @@ Chord::Chord(const Chord& c, bool link)
             if (link)
                   a->linkTo(c._arpeggio);
             }
-      if (c._tremolo && !c._tremolo->twoNotes()) {
+      if (c._tremolo
+          && (!c._tremolo->twoNotes() || c._tremolo->chord1() == &c)) {
             Tremolo* t = new Tremolo(*(c._tremolo));
-            add(t);
+            t->setChords(this,0);
+            //add(t);
+            _tremolo = t;
             if (link)
                   t->linkTo(c._tremolo);
             }
@@ -521,9 +524,10 @@ void Chord::remove(Element* e)
                               d = TDuration(f);
                         if (tremolo->chord1())
                               tremolo->chord1()->setDurationType(d);
-                        if (tremolo->chord2())
+                        if (tremolo->chord2()) {
                               tremolo->chord2()->setDurationType(d);
-                        tremolo->chord2()->setTremolo(0);
+                              tremolo->chord2()->setTremolo(0);
+                              }
                         }
                   _tremolo = 0;
                   }
