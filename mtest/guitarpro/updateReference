@@ -73,3 +73,11 @@ cp   $MSCORE/pick-up-down.gp4.mscx pick-up-down.gp4-ref.mscx
 cp   $MSCORE/fingering.gpx.mscx fingering.gpx-ref.mscx
 cp   $MSCORE/fingering.gp5.mscx fingering.gp5-ref.mscx
 cp   $MSCORE/fingering.gp4.mscx fingering.gp4-ref.mscx
+cp   $MSCORE/arpeggio.gpx.mscx arpeggio.gpx-ref.mscx
+cp   $MSCORE/brush.gpx.mscx brush.gpx-ref.mscx
+cp   $MSCORE/brush.gp5.mscx brush.gp5-ref.mscx
+cp   $MSCORE/brush.gp4.mscx brush.gp4-ref.mscx
+cp   $MSCORE/repeats.gp4.mscx repeats.gp4-ref.mscx
+cp   $MSCORE/volta.gpx.mscx volta.gpx-ref.mscx
+cp   $MSCORE/grace-before-beat.gpx.mscx grace-before-beat.gpx-ref.mscx
+cp   $MSCORE/grace-on-beat.gpx.mscx grace-on-beat.gpx-ref.mscx

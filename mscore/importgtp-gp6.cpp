@@ -738,7 +738,6 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                   ChordRest* cr = segment->cr(staffIdx * VOICES + voiceNum);
                   bool tupletSet = false;
                   Tuplet* tuplet = tuplets[staffIdx * 2 + voiceNum];
-                  bool grace = false;
                   while (!currentNode.isNull()) {
                         if (currentNode.nodeName() == "Notes") {
                               noteSpecified = true;
@@ -830,10 +829,18 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       }
                                                 else if (tone != "")
                                                       note->setPitch((octave.toInt() * 12) + tone.toInt()); // multiply octaves by 12 as 12 semitones in octave
-                                                if (grace) {
-                                                      // chord->setDurationType(MScore::division/8);
-                                                      // chord->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
-                                                      // chord->setNoteType(NoteType::ACCIACCATURA);
+                                                QDomNode graceNode = currentNode.parentNode().firstChildElement("GraceNotes");
+                                                if (!graceNode.isNull()) {
+                                                      if (!graceNode.toElement().text().compare("BeforeBeat")) {
+                                                            chord->setDurationType(MScore::division/2);
+                                                            chord->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
+                                                            chord->setNoteType(NoteType::ACCIACCATURA);
+                                                           }
+                                                      if (!graceNode.toElement().text().compare("OnBeat")) {
+                                                            chord->setDurationType(MScore::division/2);
+                                                            chord->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
+                                                            chord->setNoteType(NoteType::GRACE4);
+                                                           }
                                                       }
                                                 if (tie) {
                                                       makeTie(note);
@@ -942,6 +949,15 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                               delete art;
                                                                         }
                                                                   }
+                                                            else if (!argument.compare("Brush")) {
+                                                                  Arpeggio* a = new Arpeggio(score);
+                                                                  // directions in arpeggion type are reversed, they are correct below
+                                                                  if (!currentProperty.firstChild().toElement().text().compare("Up"))
+                                                                        a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
+                                                                  else if (!currentProperty.firstChild().toElement().text().compare("Down"))
+                                                                        a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
+                                                                  chord->add(a);
+                                                                  }
                                                             currentProperty = currentProperty.nextSibling();
                                                             }
                                                       }
@@ -995,7 +1011,18 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       f->setText(finger);
                                                       note->add(f);
                                                       }
+                                                QDomNode arpeggioNode = currentNode.parentNode().firstChildElement("Arpeggio");
+                                                if (!arpeggioNode.isNull()) {
+                                                      QString arpeggioStr = arpeggioNode.toElement().text();
+                                                      Arpeggio* a = new Arpeggio(score);
+                                                      if (!arpeggioStr.compare("Up"))
+                                                            a->setArpeggioType(ArpeggioType::UP);
+                                                      else
+                                                            a->setArpeggioType(ArpeggioType::DOWN);
+                                                      chord->add(a);
+                                                      }
                                                 createSlide(slide, cr, staffIdx);
+
                                                 note->setTpcFromPitch();
                                                 currentNote = currentNote.nextSibling();
                                                 }
@@ -1214,17 +1241,39 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   segment->add(s);
                   }
 
-            QDomNode key = nextMasterBar.firstChild();
-            KeySig* t = new KeySig(score);
-            t->setKey(Key(key.firstChild().toElement().text().toInt()));
-            t->setTrack(0);
-            measure->getSegment(Segment::Type::KeySig, measure->tick())->add(t);
-
-            QDomNode time = key.nextSibling();
-            measure->setTimesig(bars[measureCounter].timesig);
-            measure->setLen(bars[measureCounter].timesig);
-            QDomNode barList = time.nextSibling();
-            readBars(&barList, measure, oldClefId, partInfo, t);
+            QDomNode masterBarElement = nextMasterBar.firstChild();
+            while (!masterBarElement.isNull()) {
+                  measure->setTimesig(bars[measureCounter].timesig);
+                  measure->setLen(bars[measureCounter].timesig);
+                  KeySig* t = new KeySig(score);
+                  if (!masterBarElement.nodeName().compare("Key")) {
+                        t->setKey(masterBarElement.firstChild().toElement().text().toInt());
+                        t->setTrack(0);
+                        measure->getSegment(SegmentType::KeySig, measure->tick())->add(t);
+                        }
+                  else if (!masterBarElement.nodeName().compare("Repeat")) {
+                        bool start = !masterBarElement.attributes().namedItem("start").toAttr().value().compare("true");
+                        int count = masterBarElement.attributes().namedItem("count").toAttr().value().toInt();
+                        if (start)
+                              measure->setRepeatFlags(Repeat::START);
+                        else
+                              measure->setRepeatFlags(Repeat::END);
+                        measure->setRepeatCount(count);
+                        }
+                  else if (!masterBarElement.nodeName().compare("AlternateEndings")) {
+                        QString endNumbers = masterBarElement.toElement().text();
+                        Ms::Volta* volta = new Ms::Volta(score);
+                        volta->endings().clear();
+                        volta->setText(endNumbers.replace(" ",","));
+                        volta->setTick(measure->tick());
+                        volta->setTick2(measure->tick() + measure->ticks());
+                        score->addElement(volta);
+                        }
+                  else if (!masterBarElement.nodeName().compare("Bars")) {
+                        readBars(&masterBarElement, measure, oldClefId, partInfo, t);
+                        }
+                  masterBarElement = masterBarElement.nextSibling();
+                  }
             measureCounter++;
             nextMasterBar = nextMasterBar.nextSibling();
             measure = measure->nextMeasure();
