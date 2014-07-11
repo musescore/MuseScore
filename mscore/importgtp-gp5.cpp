@@ -118,8 +118,8 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
                         }
                   }
       if (fxBits2 & 0x02) {
-            int a = readChar();            // stroke pick direction
-            qDebug("  0x02: 0x%02x", a);
+            effects = readChar();            // stroke pick direction
+            effects += 4; //1 or 2 for effects becomes 4 or 5
             }
       return effects;
       }
@@ -761,8 +761,8 @@ bool GuitarPro5::readNote(int string, Note* note)
 
       if (noteBits & 0x10) {          // velocity
             int d = readChar();
-            if (previousDynamic != d) {
-                  previousDynamic = d;
+            if (previousDynamic[staffIdx * VOICES] != d) {
+                  previousDynamic[staffIdx * VOICES] = d;
                   addDynamic(note, d);
                   }
             }

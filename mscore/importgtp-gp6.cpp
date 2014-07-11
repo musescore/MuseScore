@@ -474,6 +474,10 @@ void GuitarPro6::readTracks(QDomNode* track)
             trackCounter++;
             nextTrack = nextTrack.nextSibling();
             }
+      previousDynamic = new int[score->staves().length() * VOICES];
+      // initialise the dynamics to 0
+      for (int i = 0; i < score->staves().length() * VOICES; i++)
+            previousDynamic[i] = 0;
       // set the number of staves we need
       staves = score->staves().length();
       }
@@ -734,7 +738,6 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                   bool tupletSet = false;
                   Tuplet* tuplet = tuplets[staffIdx * 2 + voiceNum];
                   bool grace = false;
-                  int accent = 0;
                   while (!currentNode.isNull()) {
                         if (currentNode.nodeName() == "Notes") {
                               noteSpecified = true;
@@ -823,13 +826,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       // we need to turn this string number for GP to the the correct string number for musescore
                                                       note->setString(musescoreString);
                                                       note->setPitch(pitch);
-                                                if (accent == 4) {
-                                                      Articulation* art = new Articulation(note->score());
-                                                      art->setArticulationType(ArticulationType::Marcato);
-                                                      if (!note->score()->addArticulation(note, art))
-                                                            delete art;
                                                       }
-                                                }
                                                 else if (tone != "")
                                                       note->setPitch((octave.toInt() * 12) + tone.toInt()); // multiply octaves by 12 as 12 semitones in octave
                                                 if (grace) {
@@ -880,11 +877,99 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                   delete art;
                                                             }
                                                       }
-
-
-
+                                                QDomNode accentNode = currentNote.parentNode().firstChildElement("Accent");
+                                                if (!accentNode.isNull()) {
+                                                      int value = accentNode.toElement().text().toInt();
+                                                      if (value == 4) {
+                                                            Articulation* art = new Articulation(note->score());
+                                                            art->setArticulationType(ArticulationType::Marcato);
+                                                            if (!note->score()->addArticulation(note, art))
+                                                                  delete art;
+                                                            }
+                                                      else if (value == 8) {
+                                                            Articulation* art = new Articulation(note->score());
+                                                            art->setArticulationType(ArticulationType::Sforzatoaccent);
+                                                            if (!note->score()->addArticulation(note, art))
+                                                                  delete art;
+                                                            }
+                                                }
+                                                QDomNode ornamentNode = currentNote.parentNode().firstChildElement("Ornament");
+                                                if (!ornamentNode.isNull()) {
+                                                      QString value = ornamentNode.toElement().text();
+                                                      // guitar pro represents the turns the other way to what we do
+                                                      if (!value.compare("InvertedTurn")) {
+                                                            Articulation* art = new Articulation(note->score());
+                                                            art->setArticulationType(ArticulationType::Turn);
+                                                            if (!note->score()->addArticulation(note, art))
+                                                                  delete art;
+                                                            }
+                                                      else if (!value.compare("Turn")) {
+                                                            Articulation* art = new Articulation(note->score());
+                                                            art->setArticulationType(ArticulationType::Reverseturn);
+                                                            if (!note->score()->addArticulation(note, art))
+                                                                  delete art;
+                                                            }
+                                                      else if (!value.compare("LowerMordent")) {
+                                                            Articulation* art = new Articulation(note->score());
+                                                            art->setArticulationType(ArticulationType::Mordent);
+                                                            if (!note->score()->addArticulation(note, art))
+                                                                  delete art;
+                                                            }
+                                                      else if (!value.compare("UpperMordent")) {
+                                                            Articulation* art = new Articulation(note->score());
+                                                            art->setArticulationType(ArticulationType::Prall);
+                                                            if (!note->score()->addArticulation(note, art))
+                                                                  delete art;
+                                                            }
+                                                      }
+                                                QDomNode propertiesNode = currentNode.parentNode().firstChildElement("Properties");
+                                                if (!propertiesNode.isNull()) {
+                                                      QDomNode currentProperty = propertiesNode.firstChild();
+                                                      while (!currentProperty.isNull()) {
+                                                            QString argument = currentProperty.attributes().namedItem("name").toAttr().value();
+                                                            if (!argument.compare("PickStroke")) {
+                                                                  if (!currentProperty.firstChild().toElement().text().compare("Up")) {
+                                                                        Articulation* art = new Articulation(note->score());
+                                                                        art->setArticulationType(ArticulationType::Upbow);
+                                                                        if (!note->score()->addArticulation(note, art))
+                                                                              delete art;
+                                                                        }
+                                                                  else if (!currentProperty.firstChild().toElement().text().compare("Down")) {
+                                                                        Articulation* art = new Articulation(note->score());
+                                                                        art->setArticulationType(ArticulationType::Downbow);
+                                                                        if (!note->score()->addArticulation(note, art))
+                                                                              delete art;
+                                                                        }
+                                                                  }
+                                                            currentProperty = currentProperty.nextSibling();
+                                                            }
+                                                      }
+                                                QDomNode dynamicsNode = currentNode.parentNode().firstChildElement("Dynamic");
+                                                if (!dynamicsNode.isNull()) {
+                                                      QString dynamicStr = dynamicsNode.toElement().text();
+                                                      int dynamic = 0;
+                                                      if (!dynamicStr.compare("PPP"))
+                                                            dynamic = 1;
+                                                      else if (!dynamicStr.compare("PP"))
+                                                            dynamic = 2;
+                                                      else if (!dynamicStr.compare("P"))
+                                                            dynamic = 3;
+                                                      else if (!dynamicStr.compare("MP"))
+                                                            dynamic = 4;
+                                                      else if (!dynamicStr.compare("MF"))
+                                                            dynamic = 5;
+                                                      else if (!dynamicStr.compare("F"))
+                                                            dynamic = 6;
+                                                      else if (!dynamicStr.compare("FF"))
+                                                            dynamic = 7;
+                                                      else if (!dynamicStr.compare("FFF"))
+                                                            dynamic = 8;
+                                                      if (previousDynamic[staffIdx * VOICES + voiceNum] != dynamic) {
+                                                            previousDynamic[staffIdx * VOICES + voiceNum] = dynamic;
+                                                            addDynamic(note, dynamic);
+                                                            }
+                                                      }
                                                 createSlide(slide, cr, staffIdx);
-
 
                                                 note->setTpcFromPitch();
                                                 currentNote = currentNote.nextSibling();
@@ -892,27 +977,14 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                           else if (!currentNote.nodeName().compare("Trill")) {
                                                 trill = true;
                                                 }
-                                          else if (!currentNote.nodeName().compare("Accent")) {
-                                                // marcato
-                                                if (!currentNote.toElement().text().compare("4"))
-                                                      accent = 4;
-                                                }
                                           else if (!currentNote.nodeName().compare("Tie")) {
                                                 if (!currentNote.attributes().namedItem("destination").toAttr().value().compare("true"))
                                                       tie = true;
                                                 }
-                                          else
-                                                unhandledNode(currentNote.nodeName());
                                           currentNote = currentNote.nextSibling();
                                     }
                               }
                         }
-                        else if (!currentNode.nodeName().compare("Properties")) {
-                              currentNode = currentNode.firstChild();
-                              while (!currentNode.isNull()) {
-                                    unhandledNode(currentNode.nodeName());
-                                    }
-                              }
                         else if (!currentNode.nodeName().compare("GraceNotes")) {
                               if (!currentNode.toElement().text().compare("BeforeBeat"))
                                     grace = true;

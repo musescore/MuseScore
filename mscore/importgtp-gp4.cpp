@@ -127,8 +127,10 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
                   segment->add(cr);
                   }
             }
-      if (fxBits2 & 0x02)
-            readUChar();            // stroke pick direction
+      if (fxBits2 & 0x02) {
+            effects = readUChar();            // stroke pick direction
+            effects += 4;    //1 or 2 for effects becomes 4 or 5
+            }
       if (fxBits1 & 0x01) {         // GP3 column-wide vibrato
             }
       if (fxBits1 & 0x2) {          // GP3 column-wide wide vibrato (="tremolo" in GP3)
@@ -191,8 +193,8 @@ bool GuitarPro4::readNote(int string, Note* note)
       // set dynamic information on note if different from previous note
       if (noteBits & 0x10) {
             int d = readChar();
-            if (previousDynamic != d) {
-                  previousDynamic = d;
+            if (previousDynamic[staffIdx * VOICES] != d) {
+                  previousDynamic[staffIdx * VOICES] = d;
                   addDynamic(note, d);
                   }
             }
@@ -460,8 +462,6 @@ void GuitarPro4::read(QFile* fp)
       readUChar();      // triplet feeling
       readLyrics();
 
-      previousDynamic = -1;
-      previousTempo = -1;
       int tempo  = readInt();
       key        = readInt();
       /*int octave =*/ readUChar();    // octave
@@ -469,6 +469,11 @@ void GuitarPro4::read(QFile* fp)
       readChannels();
       measures = readInt();
       staves   = readInt();
+
+      previousDynamic = new int [staves * VOICES];
+      // initialise the dynamics to 0
+      for (int i = 0; i < staves * VOICES; i++)
+            previousDynamic[i] = 0;
 
       int tnumerator   = 4;
       int tdenominator = 4;

@@ -91,7 +91,7 @@ class GuitarPro {
       QFile* f;
       int curPos;
       int previousTempo;
-      int previousDynamic;
+      int* previousDynamic;
       int tempo;
       QMap<int,int> slides;
 
