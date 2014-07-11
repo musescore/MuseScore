@@ -602,6 +602,12 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
             case 4:
                   a->setArticulationType(ArticulationType::FadeIn);
                   break;
+            case 5:
+                  a->setArticulationType(ArticulationType::Upbow);
+                  break;
+            case 6:
+                  a->setArticulationType(ArticulationType::Downbow);
+                  break;
             default:
                   qDebug("GuitarPro import: unknown beat effect %d", beatEffect);
             }
@@ -786,7 +792,7 @@ void GuitarPro1::read(QFile* fp)
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
                                     static_cast<Chord*>(cr)->add(note);
-                                    readNote(6-i, note);
+                                    readNote(6-i, staffIdx, note);
                                     note->setTpcFromPitch();
                                     }
                               }
@@ -1184,7 +1190,7 @@ qDebug("BeginRepeat=============================================");
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
                                     static_cast<Chord*>(cr)->add(note);
-                                    readNote(6-i, note);
+                                    readNote(6-i, staffIdx, note);
                                     note->setTpcFromPitch();
                                     }
                               }
@@ -1200,7 +1206,7 @@ qDebug("BeginRepeat=============================================");
 //   readNote
 //---------------------------------------------------------
 
-void GuitarPro1::readNote(int string, Note* note)
+void GuitarPro1::readNote(int string, int staffIdx, Note* note)
       {
       uchar noteBits = readUChar();
 
@@ -1249,8 +1255,8 @@ void GuitarPro1::readNote(int string, Note* note)
       // set dynamic information on note if different from previous note
       if (noteBits & 0x10) {
             int d = readChar();
-            if (previousDynamic != d) {
-                  previousDynamic = d;
+            if (previousDynamic[staffIdx * VOICES] != d) {
+                  previousDynamic[staffIdx * VOICES] = d;
                   addDynamic(note, d);
                   }
             }
@@ -1487,6 +1493,11 @@ void GuitarPro3::read(QFile* fp)
             }
       measures   = readInt();
       staves = readInt();
+
+      previousDynamic = new int [staves * VOICES];
+      // initialise the dynamics to 0
+      for (int i = 0; i < staves * VOICES; i++)
+            previousDynamic[i] = 0;
 
       int tnumerator   = 4;
       int tdenominator = 4;
@@ -1782,7 +1793,7 @@ void GuitarPro3::read(QFile* fp)
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
                                     static_cast<Chord*>(cr)->add(note);
-                                    readNote(6-i, note);
+                                    readNote(6-i, staffIdx, note);
                                     note->setTpcFromPitch();
                                     }
                               }

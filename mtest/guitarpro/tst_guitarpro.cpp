@@ -94,6 +94,12 @@ private slots:
       void gpxTremolos()     { gpReadTest("tremolos", "gpx"); }
       void gpxDeadNote()     { gpReadTest("dead-note", "gpx"); }
       void gpxWah()          { gpReadTest("wah", "gpx"); }
+      void gpxSforzato()     { gpReadTest("accent", "gpx"); }
+      void gpxTurn()         { gpReadTest("turn", "gpx"); }
+      void gpxMordents()     { gpReadTest("mordents", "gpx"); }
+      void gpxPickUpDown()   { gpReadTest("pick-up-down", "gpx"); }
+      void gp5PickUpDown()   { gpReadTest("pick-up-down", "gp5"); }
+      void gp4PickUpDown()   { gpReadTest("pick-up-down", "gp4"); }
       };
 
 //---------------------------------------------------------
