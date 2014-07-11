@@ -100,6 +100,9 @@ private slots:
       void gpxPickUpDown()   { gpReadTest("pick-up-down", "gpx"); }
       void gp5PickUpDown()   { gpReadTest("pick-up-down", "gp5"); }
       void gp4PickUpDown()   { gpReadTest("pick-up-down", "gp4"); }
+      void gpxFingering()   { gpReadTest("fingering", "gpx"); }
+      void gp5Fingering()   { gpReadTest("fingering", "gp5"); }
+      void gp4Fingering()   { gpReadTest("fingering", "gp4"); }
       };
 
 //---------------------------------------------------------

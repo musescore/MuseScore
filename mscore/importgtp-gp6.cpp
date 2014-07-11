@@ -47,6 +47,7 @@
 #include "libmscore/volta.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/hairpin.h"
+#include "libmscore/fingering.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -969,8 +970,32 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             addDynamic(note, dynamic);
                                                             }
                                                       }
+                                                /* while left and right fingering nodes have distinct values, they are represented
+                                                 * the same way w.r.t. identifying digit/char in the score file. */
+                                                QDomNode leftFingeringNode = currentNote.parentNode().firstChildElement("LeftFingering");
+                                                QDomNode rightFingeringNode = currentNote.parentNode().firstChildElement("RightFingering");
+                                                if (!leftFingeringNode.isNull() || !rightFingeringNode.isNull()) {
+                                                      QDomNode fingeringNode = leftFingeringNode.isNull() ? rightFingeringNode : leftFingeringNode;
+                                                      QString finger = fingeringNode.toElement().text();
+                                                      Fingering* f = new Fingering(score);
+                                                      if (!leftFingeringNode.isNull()) {
+                                                            if (!finger.compare("Open"))
+                                                                  finger = "O";
+                                                            else if (!finger.compare("P"))
+                                                                  finger = "t";
+                                                            else if (!finger.compare("I"))
+                                                                  finger = "1";
+                                                            else if (!finger.compare("M"))
+                                                                  finger = "2";
+                                                            else if (!finger.compare("A"))
+                                                                  finger = "3";
+                                                            else if (!finger.compare("C"))
+                                                                  finger = "4";
+                                                            }
+                                                      f->setText(finger);
+                                                      note->add(f);
+                                                      }
                                                 createSlide(slide, cr, staffIdx);
-
                                                 note->setTpcFromPitch();
                                                 currentNote = currentNote.nextSibling();
                                                 }
