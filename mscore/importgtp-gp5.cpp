@@ -100,11 +100,12 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
                   int strokedown = readUChar();            // down stroke length
 
                   Arpeggio* a = new Arpeggio(score);
+                  // representation is different in guitar pro 5 - the up/down order below is correct
                   if( strokeup > 0 ) {
-                        a->setArpeggioType(ArpeggioType::UP);
+                        a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
                         }
                   else if( strokedown > 0 ) {
-                        a->setArpeggioType(ArpeggioType::DOWN);
+                        a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
                         }
                   else {
                         delete a;

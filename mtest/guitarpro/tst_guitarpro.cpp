@@ -40,7 +40,6 @@ private slots:
       void gpTremolos()      { gpReadTest("tremolos", "gp5"); }
       void gpTrill()         { gpReadTest("trill", "gp4"); }
       void gpDynamic()       { gpReadTest("dynamic", "gp5"); }
-      void gpArpeggio()      { gpReadTest("arpeggio_up_down", "gp4"); }
       void gpGhostNote()     { gpReadTest("ghost_note", "gp3"); }
       void gpGraceNote()     { /*gpReadTest("grace", "gp5");*/ } // doesn't work
       void gp5Volta()        { gpReadTest("volta", "gp5"); }
@@ -100,9 +99,17 @@ private slots:
       void gpxPickUpDown()   { gpReadTest("pick-up-down", "gpx"); }
       void gp5PickUpDown()   { gpReadTest("pick-up-down", "gp5"); }
       void gp4PickUpDown()   { gpReadTest("pick-up-down", "gp4"); }
-      void gpxFingering()   { gpReadTest("fingering", "gpx"); }
-      void gp5Fingering()   { gpReadTest("fingering", "gp5"); }
-      void gp4Fingering()   { gpReadTest("fingering", "gp4"); }
+      void gpxFingering()    { gpReadTest("fingering", "gpx"); }
+      void gp5Fingering()    { gpReadTest("fingering", "gp5"); }
+      void gp4Fingering()    { gpReadTest("fingering", "gp4"); }
+      void gpxArpeggio()     { gpReadTest("arpeggio", "gpx"); }
+      void gpxBrush()        { gpReadTest("brush", "gpx"); }
+      void gp5Brush()        { gpReadTest("brush", "gp5"); }
+      void gp4Brush()        { gpReadTest("brush", "gp4"); }
+      void gpxRepeats()      { gpReadTest("repeats", "gpx"); }
+      void gpxVolta()        { gpReadTest("volta", "gpx"); }
+      void gpxGraceBefore()  { gpReadTest("grace-before-beat", "gpx"); }
+      void gpxGraceOn()      { gpReadTest("grace-on-beat", "gpx"); }
       };
 
 //---------------------------------------------------------
