@@ -39,6 +39,7 @@
 #include "system.h"
 #include "text.h"
 #include "textline.h"
+#include "tremolo.h"
 #include "tuplet.h"
 #include "utils.h"
 #include "xml.h"
@@ -520,6 +521,62 @@ QByteArray Selection::mimeData() const
       return a;
       }
 
+QList<Segment*> cloneRange(Segment* fs, Segment* ls)
+      {
+      QList<Segment*> segments;
+      Segment* prev = 0;
+      for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
+            Segment* newSegment = segment->clone();
+            newSegment->setPrev(prev);
+            if(prev != 0)
+                  prev->setNext(newSegment);
+            segments.append(newSegment);
+            prev = newSegment;
+            }
+      segments.last()->setNext(ls); //HACK
+      return segments;
+      }
+
+std::multimap<int, Spanner*> spannerMapCopy(Segment* seg1, Segment* seg2, Segment* destSegment, std::multimap<int, Spanner*> scoreSpannerMap)
+      {
+      // pairing up elements with clones
+      std::map<Element*,Element*> paired_elements;
+      for (Segment* sourceSegment = seg1; sourceSegment && sourceSegment != seg2; sourceSegment = sourceSegment->next1()) {
+            if (sourceSegment->segmentType() == Segment::Type::ChordRest) {
+                  for (int i = 0; i < sourceSegment->elist().size(); i++) {
+                        if (sourceSegment->element(i) != 0) {
+                              paired_elements.insert(std::pair<Element*,Element*>(sourceSegment->element(i),destSegment->element(i)));
+                              if (sourceSegment->element(i)->type() == Element::Type::CHORD) {
+                                    Chord* schord = static_cast<Chord*>(sourceSegment->element(i));
+                                    Chord* dchord = static_cast<Chord*>(destSegment->element(i));
+                                    QList<Chord*>& graceNotes = schord->graceNotes();
+                                    for (int i = 0; i < graceNotes.size(); i++) {
+                                          paired_elements.insert(std::pair<Element*,Element*>(graceNotes.at(i),dchord->graceNotes().at(i)));
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            destSegment = destSegment->next1();
+            }
+
+      std::multimap<int, Spanner*> sp_copy;
+      std::map<Element*,Element*>::iterator it;
+
+      // replace start and end element pointers with clones
+      for (auto i : scoreSpannerMap) {
+            Spanner* spanner = i.second;
+            Spanner* spannerCopy = static_cast<Spanner*>(spanner->clone());
+            sp_copy.insert(std::pair<int,Spanner*>(i.first,spannerCopy));
+
+            it = paired_elements.find(spanner->startElement());
+            if (it != paired_elements.end()) spannerCopy->setStartElement(paired_elements[spanner->startElement()]);
+            it = paired_elements.find(spanner->endElement());
+            if (it != paired_elements.end()) spannerCopy->setEndElement(paired_elements[spanner->endElement()]);
+            }
+      return sp_copy;
+      }
+
 //---------------------------------------------------------
 //   staffMimeData
 //---------------------------------------------------------
@@ -538,6 +595,23 @@ QByteArray Selection::staffMimeData() const
       Segment* seg1 = _startSegment;
       Segment* seg2 = _endSegment;
 
+      QList<Segment*> segments = cloneRange(seg1, seg2);
+
+      //Remove 2-note tremolo if at last segment
+      Segment* last = segments.last();
+      if (last->segmentType() == Segment::Type::ChordRest) {
+            foreach (Element* e, last->elist()) {
+                  if(e && e->type() == Element::Type::CHORD) {
+                        Chord* c = static_cast<Chord*>(e);
+                        if (c->tremolo() && c->tremolo()->twoNotes())
+                              c->remove(c->tremolo());
+                        }
+                  }
+            }
+
+      std::multimap<int, Spanner*> sp_copy = spannerMapCopy(seg1,seg2,segments.first(),score()->spanner());
+      sp_copy.swap(score()->spannerMap().mapModify());
+
       for (int staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {
             xml.stag(QString("Staff id=\"%1\"").arg(staffIdx));
             int startTrack = staffIdx * VOICES;
@@ -549,8 +623,15 @@ QByteArray Selection::staffMimeData() const
                   xml.tag("transposeChromatic", interval.chromatic);
             if (interval.diatonic)
                   xml.tag("transposeDiatonic", interval.diatonic);
-            score()->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
+
+            score()->writeSegments(xml, startTrack, endTrack, segments.first(), seg2, false, true, true);
+            //score()->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
             xml.etag();
+            }
+
+      sp_copy.swap(score()->spannerMap().mapModify());
+      for (auto i : sp_copy) {
+            delete i.second;
             }
 
       xml.etag();

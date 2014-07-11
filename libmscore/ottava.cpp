@@ -184,6 +184,7 @@ Ottava::Ottava(const Ottava& o)
       {
       _numbersOnly = o._numbersOnly;
       _pitchShift  = o._pitchShift;
+      lineStyleStyle = o.lineStyleStyle;
       setOttavaType(o._ottavaType);
       }
 
