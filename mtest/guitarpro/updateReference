@@ -70,3 +70,6 @@ cp   $MSCORE/mordents.gpx.mscx mordents.gpx-ref.mscx
 cp   $MSCORE/pick-up-down.gpx.mscx pick-up-down.gpx-ref.mscx
 cp   $MSCORE/pick-up-down.gp5.mscx pick-up-down.gp5-ref.mscx
 cp   $MSCORE/pick-up-down.gp4.mscx pick-up-down.gp4-ref.mscx
+cp   $MSCORE/fingering.gpx.mscx fingering.gpx-ref.mscx
+cp   $MSCORE/fingering.gp5.mscx fingering.gp5-ref.mscx
+cp   $MSCORE/fingering.gp4.mscx fingering.gp4-ref.mscx
