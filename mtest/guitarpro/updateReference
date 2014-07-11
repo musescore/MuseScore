@@ -64,3 +64,9 @@ cp   $MSCORE/crescendo-diminuendo.gpx.mscx crescendo-diminuendo.gpx-ref.mscx
 cp   $MSCORE/tremolos.gpx.mscx tremolos.gpx-ref.mscx
 cp   $MSCORE/dead-note.gpx.mscx dead-note.gpx-ref.mscx
 cp   $MSCORE/wah.gpx.mscx wah.gpx-ref.mscx
+cp   $MSCORE/accent.gpx.mscx accent.gpx-ref.mscx
+cp   $MSCORE/turn.gpx.mscx turn.gpx-ref.mscx
+cp   $MSCORE/mordents.gpx.mscx mordents.gpx-ref.mscx
+cp   $MSCORE/pick-up-down.gpx.mscx pick-up-down.gpx-ref.mscx
+cp   $MSCORE/pick-up-down.gp5.mscx pick-up-down.gp5-ref.mscx
+cp   $MSCORE/pick-up-down.gp4.mscx pick-up-down.gp4-ref.mscx
