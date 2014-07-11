@@ -76,7 +76,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
       struct Import : Column {
             Import(MidiOperations::Opers &opers) : Column(opers) {}
 
-            QString headerName() const { return "Import"; }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Import"); }
             QVariant value(int trackIndex) const
                   {
                   return _opers.doImport.value(trackIndex);
@@ -104,7 +105,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         {
                         }
                   int width() const { return 180; }
-                  QString headerName() const { return "Staff name"; }
+                  QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Staff name"); }
                   bool isEditable() const { return false; }
                   QVariant value(int trackIndex) const
                         {
@@ -128,7 +130,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   {
                   }
             int width() const { return 130; }
-            QString headerName() const { return "Sound"; }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Sound"); }
             bool isEditable() const { return false; }
             QVariant value(int trackIndex) const
                   {
@@ -149,7 +152,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         {
                         }
                   int width() const { return 185; }
-                  QString headerName() const { return "Lyrics"; }
+                  QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Lyrics"); }
                   QVariant value(int trackIndex) const
                         {
                         int index = _opers.lyricTrackIndex.value(trackIndex);
@@ -187,14 +191,15 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
       struct QuantValue : Column {
             QuantValue(MidiOperations::Opers &opers) : Column(opers)
                   {
-                  _values.push_back("Quarter");
-                  _values.push_back("Eighth");
-                  _values.push_back("16th");
-                  _values.push_back("32nd");
-                  _values.push_back("64th");
-                  _values.push_back("128th");
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Quarter"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Eighth"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "16th"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "32nd"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "64th"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "128th"));
                   }
-            QString headerName() const { return "Quantization"; }
+            QString headerName() const { return QCoreApplication::translate(
+                                                "MIDI import operations", "Quantization"); }
             QVariant value(int trackIndex) const
                   {
                   return _values[(int)_opers.quantValue.value(trackIndex)];
@@ -211,7 +216,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             Human(MidiOperations::Opers &opers) : Column(opers)
                   {
                   }
-            QString headerName() const { return "Is human"; }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Is human"); }
             bool isForAllTracksOnly() const { return true; }
             QVariant value(int /*trackIndex*/) const
                   {
@@ -233,7 +239,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _values.push_back("3");
                   _values.push_back("4");
                   }
-            QString headerName() const { return "Voice count (max)"; }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Voice count (max)"); }
             QVariant value(int trackIndex) const
                   {
                   return _values[(int)_opers.maxVoiceCount.value(trackIndex)];
@@ -264,7 +271,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _values.push_back(QCoreApplication::translate("MIDI import operations", "Nonuplets (9)"));
                   }
             int width() const { return 150; }
-            QString headerName() const { return "Tuplets"; }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Tuplets"); }
             QVariant value(int trackIndex) const
                   {
                   QString val;
