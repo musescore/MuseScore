@@ -937,5 +937,20 @@ void Segment::clearAnnotations()
       _annotations.clear();
       }
 
-}
+//---------------------------------------------------------
+//   elementAt
+//    A variant of the element(int) function,
+//    specifically intended to be called from QML plugins
+//---------------------------------------------------------
 
+Ms::Element* Segment::elementAt(int track) const {
+      Element* e = _elist.value(track);
+#ifdef SCRIPT_INTERFACE
+// if called from QML/JS, tell QML engine not to garbage collect this object
+      if (e)
+            QQmlEngine::setObjectOwnership(e, QQmlEngine::CppOwnership);
+#endif
+      return e;
+      }
+
+}           // namespace Ms

@@ -294,7 +294,7 @@ class FiguredBass : public Text {
       void              writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const;
 
 //DEBUG
-Q_INVOKABLE Ms::FiguredBassItem* addItem();
+//Q_INVOKABLE Ms::FiguredBassItem* addItem();
 
       // getters / setters / properties
 //      void qmlItemsAppend(QDeclarativeListProperty<FiguredBassItem> *list, FiguredBassItem * pItem)

@@ -131,6 +131,10 @@ struct NoteVal {
 //   @P headGroup        Ms::NoteHead::Group     (HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT)
 //   @P headType         Ms::NoteHead::Type      (HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS)
 //   @P elements         array[Ms::Element]      list of elements attached to note head
+//   @P accidental      Ms::Accidental          note accidental (null if none)
+//   @P dots            array[Ms::NoteDot]      list of note dots (empty if none)
+//   @P tieFor          Ms::Tie                 note forward tie (null if none, read only)
+//   @P tieBack         Ms::Tie                 note backward tie (null if none, read only)
 //---------------------------------------------------------------------------------------
 
 class Note : public Element {
@@ -157,6 +161,10 @@ class Note : public Element {
       Q_PROPERTY(Ms::NoteHead::Group headGroup           READ headGroup        WRITE undoSetHeadGroup)
       Q_PROPERTY(Ms::NoteHead::Type headType             READ headType         WRITE undoSetHeadType)
       Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
+      Q_PROPERTY(Ms::Accidental* accidental              READ accidental)
+      Q_PROPERTY(QQmlListProperty<Ms::NoteDot> dots      READ qmlDots)
+      Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
+      Q_PROPERTY(Ms::Tie* tieBack                        READ tieBack)
       Q_ENUMS(ValueType)
       Q_ENUMS(Ms::NoteHead::Group)
       Q_ENUMS(Ms::NoteHead::Type)
@@ -283,7 +291,7 @@ class Note : public Element {
       void undoSetTpc2(int tpc)      { undoChangeProperty(P_ID::TPC2, tpc); }
       int transposeTpc(int tpc);
 
-      Q_INVOKABLE Ms::Accidental* accidental() const    { return _accidental; }
+      Accidental* accidental() const    { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a;    }
 
       int line() const                { return _line + _lineOffset;   }
@@ -310,8 +318,8 @@ class Note : public Element {
       bool play() const               { return _play;    }
       void setPlay(bool val)          { _play = val;     }
 
-      Q_INVOKABLE Ms::Tie* tieFor() const  { return _tieFor;  }
-      Q_INVOKABLE Ms::Tie* tieBack() const { return _tieBack; }
+      Ms::Tie* tieFor() const       { return _tieFor;  }
+      Ms::Tie* tieBack() const      { return _tieBack; }
       void setTieFor(Tie* t)          { _tieFor = t;     }
       void setTieBack(Tie* t)         { _tieBack = t;    }
 
@@ -358,7 +366,8 @@ class Note : public Element {
       void setOffTimeOffset(int v);
 
       int customizeVelocity(int velo) const;
-      Q_INVOKABLE Ms::NoteDot* dot(int n)       { return _dots[n];           }
+      NoteDot* dot(int n)                       { return _dots[n];           }
+      QQmlListProperty<Ms::NoteDot> qmlDots();
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(const NoteVal&);
