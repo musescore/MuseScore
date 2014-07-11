@@ -29,6 +29,19 @@ Fingering::Fingering(Score* s)
       }
 
 //---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Fingering::layout()
+      {
+      Text::layout();
+      /* draw fingering just to the bottom right of applied note, we
+       * don't want to draw directly above as it'll get messy when
+       * chords are involved */
+      setPos(QPointF(15.0, 10.0));
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 

@@ -46,6 +46,7 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/volta.h"
 #include "libmscore/instrtemplate.h"
+#include "libmscore/fingering.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -212,9 +213,37 @@ bool GuitarPro4::readNote(int string, Note* note)
             }
 
       if (noteBits & 0x80) {              // fingering
-            int a = readUChar();
-            int b = readUChar();
-            qDebug("Fingering=========%d %d", a, b);
+            int leftFinger = readUChar();
+            int rightFinger = readUChar();
+            Fingering* f = new Fingering(score);
+            QString finger;
+            // if there is a valid left hand fingering
+            if (leftFinger < 5) {
+                  if (leftFinger == 0)
+                        finger = "T";
+                  else if (leftFinger == 1)
+                        finger = "1";
+                  else if (leftFinger == 2)
+                        finger = "2";
+                  else if (leftFinger == 3)
+                        finger = "3";
+                  else if (leftFinger == 4)
+                        finger = "4";
+                  }
+            else  {
+                  if (rightFinger == 0)
+                        finger = "T";
+                  else if (rightFinger == 1)
+                        finger = "I";
+                  else if (rightFinger == 2)
+                        finger = "M";
+                  else if (rightFinger == 3)
+                        finger = "A";
+                  else if (rightFinger == 4)
+                        finger = "O";
+                  }
+            f->setText(finger);
+            note->add(f);
             }
       bool slur = false;
       if (noteBits & 0x8) {
