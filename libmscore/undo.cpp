@@ -1395,12 +1395,15 @@ RemoveElement::RemoveElement(Element* e)
       Score* score = element->score();
       if (element->isChordRest()) {
             // remove any slurs pointing to this chor/rest
+            QList<Spanner*> sl;
             for (auto i : score->spanner()) {     // TODO: dont search whole list
                   Spanner* s = i.second;
                   if (s->type() == Element::Type::SLUR && (s->startElement() == e || s->endElement() == e)) {
-                        score->undoRemoveElement(s);
+                        sl.append(s);
                         }
                   }
+            for (auto s : sl)
+                  score->undoRemoveElement(s);
 
             ChordRest* cr = static_cast<ChordRest*>(element);
             if (cr->tuplet() && cr->tuplet()->elements().empty())
