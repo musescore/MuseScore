@@ -28,15 +28,14 @@ class Fingering : public Text {
 
    public:
       Fingering(Score* s);
-      virtual Fingering* clone() const   { return new Fingering(*this); }
-      virtual Element::Type type() const { return Element::Type::FINGERING; }
+      virtual Fingering* clone() const override   { return new Fingering(*this); }
+      virtual Element::Type type() const override { return Element::Type::FINGERING; }
 
       Note* note() const { return (Note*)parent(); }
 
-      virtual void layout();
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader&);
-      virtual void reset();
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader&) override;
+      virtual void reset() override;
       };
 
 
