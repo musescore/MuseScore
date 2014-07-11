@@ -155,10 +155,10 @@ void Cursor::add(Element* s)
 //   addNote
 //---------------------------------------------------------
 
-Note* Cursor::addNote(int pitch)
+void Cursor::addNote(int pitch)
       {
       NoteVal nval(pitch);
-      return _score->addPitch(nval, false);
+      _score->addPitch(nval, false);
       }
 
 //---------------------------------------------------------

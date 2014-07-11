@@ -22,6 +22,9 @@
 #include "sym.h"
 #include "xml.h"
 
+// trying to do without it
+//#include <QQmlEngine>
+
 namespace Ms {
 
 // the array of configured fonts
@@ -1324,15 +1327,17 @@ QVariant FiguredBass::propertyDefault(P_ID id) const
 //---------------------------------------------------------
 //   TEMPORARY HACK!!!
 //---------------------------------------------------------
-
+/*
 FiguredBassItem * FiguredBass::addItem()
       {
       int line = items.size();
       FiguredBassItem* fib = new FiguredBassItem(score(), line);
+      // tell QML not to garbage collect this item
+      QQmlEngine::setObjectOwnership(fib, QQmlEngine::CppOwnership);
       items.push_back(fib);
       return fib;
       }
-
+*/
 //---------------------------------------------------------
 //   STATIC FUNCTION
 //    adding a new FiguredBass to a Segment;

@@ -226,18 +226,28 @@ enum class PasteStatus : char {
 
 //---------------------------------------------------------
 //   @@ Score
-//   @P name     QString  name of the score
-//   @P nstaves  int      number of staves (read only)
-//   @P ntracks  int      number of tracks (staves * 4) (read only)
-//   @P npages   int      number of pages (read only)
+//   @P firstMeasure    Ms::Measure       the first measure of the score (read only)
+//   @P firstMeasureMM  Ms::Measure       the first multi-measure rest measure of the score (read only)
+//   @P lastMeasure     Ms::Measure       the last measure of the score (read only)
+//   @P lastMeasureMM   Ms::Measure       the last multi-measure rest measure of the score (read only)
+//   @P lastSegment     Ms::Segment       the last score segment (read-only)
+//   @P name            QString           name of the score
+//   @P npages          int               number of pages (read only)
+//   @P nstaves         int               number of staves (read only)
+//   @P ntracks         int               number of tracks (staves * 4) (read only)
 //---------------------------------------------------------
 
 class Score : public QObject {
       Q_OBJECT
-      Q_PROPERTY(QString name READ name WRITE setName)
-      Q_PROPERTY(int nstaves  READ nstaves)
-      Q_PROPERTY(int ntracks  READ ntracks)
-      Q_PROPERTY(int npages   READ npages)
+      Q_PROPERTY(Ms::Measure*       firstMeasure      READ firstMeasure)
+      Q_PROPERTY(Ms::Measure*       firstMeasureMM    READ firstMeasure)
+      Q_PROPERTY(Ms::Measure*       lastMeasure       READ firstMeasure)
+      Q_PROPERTY(Ms::Measure*       lastMeasureMM     READ firstMeasure)
+      Q_PROPERTY(Ms::Segment*       lastSegment       READ lastSegment)
+      Q_PROPERTY(QString            name              READ name               WRITE setName)
+      Q_PROPERTY(int                npages            READ npages)
+      Q_PROPERTY(int                nstaves           READ nstaves)
+      Q_PROPERTY(int                ntracks           READ ntracks)
 
    public:
       enum class FileError : char {
@@ -789,16 +799,16 @@ class Score : public QObject {
       MeasureBase* first() const;
       MeasureBase* firstMM() const;
       MeasureBase* last()  const;
-      Q_INVOKABLE Ms::Measure* firstMeasure() const;
+      Ms::Measure* firstMeasure() const;
       Ms::Measure* firstMeasureMM() const;
-      Q_INVOKABLE Ms::Measure* lastMeasure() const;
+      Ms::Measure* lastMeasure() const;
       Ms::Measure* lastMeasureMM() const;
 //      int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;
 
       Q_INVOKABLE Ms::Segment* firstSegment(Segment::Type s = Segment::Type::All) const;
       Ms::Segment* firstSegmentMM(Segment::Type s = Segment::Type::All) const;
-      Q_INVOKABLE Ms::Segment* lastSegment() const;
+      Ms::Segment* lastSegment() const;
 
       void connectTies();
 

@@ -28,12 +28,12 @@ MuseScore {
                   var segment = curScore.firstSegment();
                   while (segment) {
                         console.log("segment: " + segment + "  type " + segment.segmentType);
-                        var element = segment.element(track);
+                        var element = segment.elementAt(track);
                         if (element) {
                               var type    = element.type;
 	                        console.log(type);
                               }
-                        segment = segment.next1();
+                        segment = segment.next;
                         }
                   }
             Qt.quit();
