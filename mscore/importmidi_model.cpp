@@ -240,7 +240,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _values.push_back("4");
                   }
             QString headerName() const { return QCoreApplication::translate(
-                                                      "MIDI import operations", "Voice count (max)"); }
+                                                      "MIDI import operations", "Max voices"); }
             QVariant value(int trackIndex) const
                   {
                   return _values[(int)_opers.maxVoiceCount.value(trackIndex)];
