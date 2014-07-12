@@ -311,6 +311,8 @@ bool SelectionFilter::canSelect(const Element* e) const
           return isFiltered(SelectionFilterType::OTHER_LINE);
       if (e->type() == Element::Type::TREMOLO && static_cast<const Tremolo*>(e)->twoNotes() == false)
           return isFiltered(SelectionFilterType::TREMOLO);
+      if (e->type() == Element::Type::CHORD && static_cast<const Chord*>(e)->isGrace())
+          return isFiltered(SelectionFilterType::GRACE_NOTE);
       return true;
       }
 
@@ -388,7 +390,7 @@ void Selection::updateSelectedElements()
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
                         for (Chord* graceNote : chord->graceNotes())
-                              appendChord(graceNote);
+                              if(canSelect(graceNote)) appendChord(graceNote);
                         appendChord(chord);
                         }
                   else {
@@ -455,9 +457,11 @@ void Selection::updateSelectedElements()
             // ignore spanners belonging to other tracks
             if (sp->track() < startTrack || sp->track() >= endTrack)
                   continue;
-            if (sp->type() == Element::Type::SLUR
-                && ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick)))
-                  appendFiltered(sp); // slur with start or end in range selection
+            if (sp->type() == Element::Type::SLUR) {
+                if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
+                      if (canSelect(sp->startChord()) && canSelect(sp->endChord()))
+                        appendFiltered(sp); // slur with start or end in range selection
+            }
             else if((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
                   appendFiltered(sp); // spanner with start and end in range selection
             }
