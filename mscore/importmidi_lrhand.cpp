@@ -360,8 +360,7 @@ void insertNewLeftHandTrack(std::multimap<int, MTrack> &tracks,
 // maybe todo later: if range of right-hand chords > OCTAVE
 // => assign all bottom right-hand chords to another, third track
 
-void splitByHandWidth(std::multimap<int, MTrack> &tracks,
-                      std::multimap<int, MTrack>::iterator &it)
+void splitStaff(std::multimap<int, MTrack> &tracks, std::multimap<int, MTrack>::iterator &it)
       {
       auto &chords = it->second.chords;
       MChord::sortNotesByPitch(chords);
@@ -383,60 +382,19 @@ void addNewLeftHandChord(std::multimap<ReducedFraction, MidiChord> &leftHandChor
       leftHandChords.insert({it->first, leftHandChord});
       }
 
-void splitByFixedPitch(std::multimap<int, MTrack> &tracks,
-                       std::multimap<int, MTrack>::iterator &it)
-      {
-      auto &srcTrack = it->second;
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      const int splitPitch = 12 * (int)opers.staffSplitOctave.value(srcTrack.indexOfOperation)
-                           + (int)opers.staffSplitNote.value(srcTrack.indexOfOperation);
-      std::multimap<ReducedFraction, MidiChord> leftHandChords;
-
-      for (auto i = srcTrack.chords.begin(); i != srcTrack.chords.end(); ) {
-            auto &notes = i->second.notes;
-            QList<MidiNote> leftHandNotes;
-            for (auto j = notes.begin(); j != notes.end(); ) {
-                  auto &note = *j;
-                  if (note.pitch < splitPitch) {
-                        leftHandNotes.push_back(note);
-                        j = notes.erase(j);
-                        continue;
-                        }
-                  ++j;
-                  }
-            if (!leftHandNotes.empty())
-                  addNewLeftHandChord(leftHandChords, leftHandNotes, i);
-            if (notes.isEmpty()) {
-                  i = srcTrack.chords.erase(i);
-                  continue;
-                  }
-            ++i;
-            }
-      if (!leftHandChords.empty())
-            insertNewLeftHandTrack(tracks, it, leftHandChords);
-      }
-
 void splitIntoLeftRightHands(std::multimap<int, MTrack> &tracks)
       {
       for (auto it = tracks.begin(); it != tracks.end(); ++it) {
             if (it->second.mtrack->drumTrack())
                   continue;
             const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-            if (!opers.doStaffSplit.value(it->second.indexOfOperation))
-                  continue;
                         // iterator 'it' will change after track split to ++it
                         // C++11 guarantees that newely inserted item with equal key will go after:
                         //    "The relative ordering of elements with equivalent keys is preserved,
                         //     and newly inserted elements follow those with equivalent keys
                         //     already in the container"
-            switch (opers.staffSplitMethod.value(it->second.indexOfOperation)) {
-                  case MidiOperations::StaffSplitMethod::HAND_WIDTH:
-                        splitByHandWidth(tracks, it);
-                        break;
-                  case MidiOperations::StaffSplitMethod::SPECIFIED_PITCH:
-                        splitByFixedPitch(tracks, it);
-                        break;
-                  }
+            if (opers.doStaffSplit.value(it->second.indexOfOperation))
+                  splitStaff(tracks, it);
             }
       }
 
