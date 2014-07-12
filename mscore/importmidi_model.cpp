@@ -217,7 +217,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   {
                   }
             QString headerName() const { return QCoreApplication::translate(
-                                                      "MIDI import operations", "Is human"); }
+                                                      "MIDI import operations", "Is human\nperformance"); }
             bool isForAllTracksOnly() const { return true; }
             QVariant value(int /*trackIndex*/) const
                   {
@@ -406,6 +406,119 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   }
             };
       _columns.push_back(std::unique_ptr<Column>(new StaffSplit(_trackOpers)));
+
+      //-----------------------------------------------------------------------
+      struct ClefChanges : Column {
+            ClefChanges(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Clef\nchanges"); }
+            QVariant value(int trackIndex) const
+                  {
+                  return _opers.changeClef.value(trackIndex);
+                  }
+            void setValue(const QVariant &value, int trackIndex)
+                  {
+                  _opers.changeClef.setValue(trackIndex, value.toBool());
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new ClefChanges(_trackOpers)));
+
+      //-----------------------------------------------------------------------
+      struct Simplify : Column {
+            Simplify(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Simplify\ndurations"); }
+            QVariant value(int trackIndex) const
+                  {
+                  return _opers.simplifyDurations.value(trackIndex);
+                  }
+            void setValue(const QVariant &value, int trackIndex)
+                  {
+                  _opers.simplifyDurations.setValue(trackIndex, value.toBool());
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new Simplify(_trackOpers)));
+
+      //-----------------------------------------------------------------------
+      struct ShowStaccato : Column {
+            ShowStaccato(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Show\nstaccato"); }
+            QVariant value(int trackIndex) const
+                  {
+                  return _opers.showStaccato.value(trackIndex);
+                  }
+            void setValue(const QVariant &value, int trackIndex)
+                  {
+                  _opers.showStaccato.setValue(trackIndex, value.toBool());
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new ShowStaccato(_trackOpers)));
+
+      //-----------------------------------------------------------------------
+      struct DottedNotes : Column {
+            DottedNotes(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Dotted\nnotes"); }
+            QVariant value(int trackIndex) const
+                  {
+                  return _opers.useDots.value(trackIndex);
+                  }
+            void setValue(const QVariant &value, int trackIndex)
+                  {
+                  _opers.useDots.setValue(trackIndex, value.toBool());
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new DottedNotes(_trackOpers)));
+
+      //-----------------------------------------------------------------------
+      struct PickupBar : Column {
+            PickupBar(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  }
+            QString headerName() const { return QCoreApplication::translate(
+                                           "MIDI import operations", "Recognize\npickup measure"); }
+            bool isForAllTracksOnly() const { return true; }
+            QVariant value(int /*trackIndex*/) const
+                  {
+                  return _opers.searchPickupMeasure;
+                  }
+            void setValue(const QVariant &value, int /*trackIndex*/)
+                  {
+                  _opers.searchPickupMeasure = value.toBool();
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new PickupBar(_trackOpers)));
+
+      //-----------------------------------------------------------------------
+      struct Swing : Column {
+            Swing(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "None (1:1)"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Swing (2:1)"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Shuffle (3:1)"));
+                  }
+            QString headerName() const { return QCoreApplication::translate(
+                                                       "MIDI import operations", "Detect swing"); }
+            int width() const { return 130; }
+            QVariant value(int trackIndex) const
+                  {
+                  return _values[(int)_opers.swing.value(trackIndex)];
+                  }
+            void setValue(const QVariant &value, int trackIndex)
+                  {
+                  _opers.swing.setValue(trackIndex, (MidiOperations::Swing)value.toInt());
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new Swing(_trackOpers)));
 
       endResetModel();
       }
