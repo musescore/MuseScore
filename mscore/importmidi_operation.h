@@ -22,40 +22,6 @@ enum class QuantValue {
       Q_128
       };
 
-enum class StaffSplitMethod {
-      HAND_WIDTH = 0,
-      SPECIFIED_PITCH
-      };
-
-enum class StaffSplitOctave {
-      C_1 = 0,
-      C0,
-      C1,
-      C2,
-      C3,
-      C4,
-      C5,
-      C6,
-      C7,
-      C8,
-      C9
-      };
-
-enum class StaffSplitNote {
-      C = 0,
-      Cis,
-      D,
-      Dis,
-      E,
-      F,
-      Fis,
-      G,
-      Gis,
-      A,
-      Ais,
-      H
-      };
-
 enum class VoiceCount {
       V_1 = 0,
       V_2,

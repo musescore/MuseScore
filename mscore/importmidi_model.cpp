@@ -389,6 +389,24 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             };
       _columns.push_back(std::unique_ptr<Column>(new Tuplets(_trackOpers, _trackCount)));
 
+      //-----------------------------------------------------------------------
+      struct StaffSplit : Column {
+            StaffSplit(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Split staff"); }
+            QVariant value(int trackIndex) const
+                  {
+                  return _opers.doStaffSplit.value(trackIndex);
+                  }
+            void setValue(const QVariant &value, int trackIndex)
+                  {
+                  _opers.doStaffSplit.setValue(trackIndex, value.toBool());
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new StaffSplit(_trackOpers)));
+
       endResetModel();
       }
 
