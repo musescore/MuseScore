@@ -73,6 +73,7 @@ enum class SelectionFilterType {
       FRET_DIAGRAM            = 1 << 17,
       BREATH                  = 1 << 18,
       TREMOLO                 = 1 << 19,
+      GRACE_NOTE              = 1 << 20,
       ALL                     = -1
       };
 
