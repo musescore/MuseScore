@@ -712,14 +712,43 @@ QByteArray Selection::staffMimeData() const
 
       QList<Segment*> segments = cloneRange(seg1, seg2);
 
+      // find and fix 2-note tremolo end chord
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* s = segments.first(); s && s != seg2; s = s->next1(st)) {
+            if (s->segmentType() == Segment::Type::ChordRest) {
+                  for (int i = 0; i < staves*VOICES; ++i) {
+                        if(s->element(i) && s->element(i)->type() == Element::Type::CHORD) {
+                              Chord* c = static_cast<Chord*>(s->element(i));
+                              Tremolo* tremolo = c->tremolo();
+                              if (tremolo && tremolo->twoNotes() && !tremolo->chord2()) {
+                                    for (Segment* ls = s->next1(st); ls && ls != seg2; ls = ls->next1(st)) {
+                                          Chord* nc = static_cast<Chord*>(ls->element(i));
+                                          if (nc == 0)
+                                                continue;
+                                          if (nc->type() != Element::Type::CHORD)
+                                                qDebug("cannot connect tremolo");
+                                          else {
+                                                nc->setTremolo(tremolo);
+                                                tremolo->setChords(c, nc);
+                                                }
+                                          break;
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+
       //Remove 2-note tremolo if at last segment
       Segment* last = segments.last();
       if (last->segmentType() == Segment::Type::ChordRest) {
             foreach (Element* e, last->elist()) {
                   if(e && e->type() == Element::Type::CHORD) {
                         Chord* c = static_cast<Chord*>(e);
-                        if (c->tremolo() && c->tremolo()->twoNotes())
+                        if (c->tremolo() && c->tremolo()->twoNotes()
+                            && c->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
                               c->remove(c->tremolo());
+                              }
                         }
                   }
             }
