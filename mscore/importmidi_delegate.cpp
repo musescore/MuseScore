@@ -3,6 +3,89 @@
 
 namespace Ms {
 
+TimeSigEditor::TimeSigEditor(const QStringList &values, QWidget *parent)
+      : QWidget(parent)
+      {
+
+      Q_ASSERT_X(values.size() >= 7,
+                 "Midi delegate - TimeSigEditor class", "Too small value count");
+      Q_ASSERT_X(values[0] == "__TimeSig__",
+      "Midi delegate - TimeSigEditor class", "Invalid input values");
+
+      QVBoxLayout *contentLayout = new QVBoxLayout();
+      contentLayout->setSpacing(0);
+      contentLayout->setContentsMargins(0, 0, 0, 0);
+
+      QHBoxLayout *comboBoxLayout = new QHBoxLayout();
+      comboBoxLayout->setSpacing(0);
+      comboBoxLayout->setContentsMargins(0, 0, 0, 0);
+
+      _comboBoxNumerator = new QComboBox();
+      QLabel *fractionLabel = new QLabel("/");
+      _comboBoxDenominator = new QComboBox();
+
+      comboBoxLayout->addWidget(_comboBoxNumerator);
+      comboBoxLayout->addWidget(fractionLabel);
+      comboBoxLayout->addWidget(_comboBoxDenominator);
+
+      contentLayout->addLayout(comboBoxLayout);
+
+      Q_ASSERT_X(values[1] == "__Numerator__",
+                 "Midi delegate - TimeSigEditor class", "Invalid numerator");
+
+      bool ok = false;
+      const int currentNumeratorIndex = values[2].toInt(&ok);
+
+      Q_ASSERT_X(ok, "Midi delegate - TimeSigEditor class", "Invalid numerator current index");
+
+      int i = 3;
+      while (values[i] != "__Denominator__") {
+            _comboBoxNumerator->addItem(values[i]);
+            ++i;
+            }
+      _comboBoxNumerator->setCurrentIndex(currentNumeratorIndex);
+
+      Q_ASSERT_X(i < values.size() && values[i] == "__Denominator__",
+                 "Midi delegate - TimeSigEditor class", "Invalid denominator");
+      ++i;
+      ok = false;
+      const int currentDenominatorIndex = values[i].toInt(&ok);
+
+      Q_ASSERT_X(ok, "Midi delegate - TimeSigEditor class", "Invalid denominator current index");
+
+      ++i;
+      while (i < values.size()) {
+            _comboBoxDenominator->addItem(values[i]);
+            ++i;
+            }
+      _comboBoxDenominator->setCurrentIndex(currentDenominatorIndex);
+
+      QHBoxLayout *buttonLayout = new QHBoxLayout();
+      buttonLayout->addStretch();
+      QPushButton *okButton = new QPushButton(QCoreApplication::translate(
+                                                    "Time signature editor", "OK"));
+      okButton->setMinimumWidth(50);
+      okButton->setMinimumHeight(30);
+      connect(okButton, SIGNAL(clicked()), SIGNAL(okClicked()));
+      buttonLayout->addWidget(okButton);
+      buttonLayout->addStretch();
+      contentLayout->addLayout(buttonLayout);
+
+      setLayout(contentLayout);
+
+      setAutoFillBackground(true);
+      }
+
+QStringList TimeSigEditor::data() const
+      {
+      QStringList values;
+      values.append(QString::number(_comboBoxNumerator->currentIndex()));
+      values.append(QString::number(_comboBoxDenominator->currentIndex()));
+      return values;
+      }
+
+//----------------------------------------------------------------------------------
+
 SizedListWidget::SizedListWidget(QWidget *parent)
       : QListWidget(parent)
       {
@@ -22,12 +105,16 @@ QSize SizedListWidget::sizeHint() const
 //    odd index - value to show
 //    even index - "true" or "false" to define is the previous value checked or not
 
-MultiValue::MultiValue(const QStringList &values, QWidget *parent)
+MultiValueEditor::MultiValueEditor(const QStringList &values, QWidget *parent)
       : QWidget(parent)
       {
 
+      Q_ASSERT_X(values.size() >= 3,
+                 "Midi delegate - MultiValueEditor class", "Too small value count");
+      Q_ASSERT_X(values.size() % 2 == 1,
+                 "Midi delegate - MultiValueEditor class", "Value count should be odd");
       Q_ASSERT_X(values[0] == "__MultiValue__",
-                 "Midi delegate - MultiValue class", "Invalid input values");
+                 "Midi delegate - MultiValueEditor class", "Invalid input values");
 
       QVBoxLayout *contentLayout = new QVBoxLayout();
       contentLayout->setSpacing(0);
@@ -79,7 +166,7 @@ MultiValue::MultiValue(const QStringList &values, QWidget *parent)
       setAutoFillBackground(true);
       }
 
-QStringList MultiValue::data() const
+QStringList MultiValueEditor::data() const
       {
       QStringList values;
       for (int i = 1; i < _listWidget->count(); ++i) {
@@ -108,7 +195,7 @@ QStringList MultiValue::data() const
 // of old checkbox states - if the item didn't change since the last time then the click
 // was outside the checkbox and we set the state manually
 
-void MultiValue::itemClicked(QListWidgetItem *item)
+void MultiValueEditor::itemClicked(QListWidgetItem *item)
       {
       if (item->checkState() == _states[_listWidget->row(item)]) {      // clicked outside the checkbox
             disconnectCheckBoxes();
@@ -129,7 +216,7 @@ void MultiValue::itemClicked(QListWidgetItem *item)
       updateStates();
       }
 
-void MultiValue::checkBoxClicked(QListWidgetItem *item)
+void MultiValueEditor::checkBoxClicked(QListWidgetItem *item)
       {
       disconnectCheckBoxes();
       if (_listWidget->row(item) == 0) {           // "All" checkbox
@@ -142,7 +229,7 @@ void MultiValue::checkBoxClicked(QListWidgetItem *item)
       connectCheckBoxes();
       }
 
-void MultiValue::setAllCheckBox()
+void MultiValueEditor::setAllCheckBox()
       {
       disconnectCheckBoxes();
       const auto firstValue = _listWidget->item(1)->checkState();
@@ -159,19 +246,19 @@ void MultiValue::setAllCheckBox()
       connectCheckBoxes();
       }
 
-void MultiValue::updateStates()
+void MultiValueEditor::updateStates()
       {
       for (int i = 0; i < _listWidget->count(); ++i)
             _states[i] = _listWidget->item(i)->checkState();
       }
 
-void MultiValue::connectCheckBoxes()
+void MultiValueEditor::connectCheckBoxes()
       {
       connect(_listWidget, SIGNAL(itemChanged(QListWidgetItem *)),
               this, SLOT(checkBoxClicked(QListWidgetItem *)));
       }
 
-void MultiValue::disconnectCheckBoxes()
+void MultiValueEditor::disconnectCheckBoxes()
       {
       disconnect(_listWidget, SIGNAL(itemChanged(QListWidgetItem *)),
                  this, SLOT(checkBoxClicked(QListWidgetItem *)));
@@ -247,10 +334,16 @@ QWidget* OperationsDelegate::createEditor(QWidget *parent,
                   QWidget *editor = nullptr;
 
                   if (list[0] == "__MultiValue__") {
-                        MultiValue *mv = new MultiValue(list, parent);
+                        MultiValueEditor *mv = new MultiValueEditor(list, parent);
                         connect(mv, SIGNAL(okClicked()),
                                 this, SLOT(commitAndCloseEditor()));
                         editor = mv;
+                        }
+                  else if (list[0] == "__TimeSig__") {
+                        TimeSigEditor *ts = new TimeSigEditor(list, parent);
+                        connect(ts, SIGNAL(okClicked()),
+                                this, SLOT(commitAndCloseEditor()));
+                        editor = ts;
                         }
                   else {
                         QListWidget *lw = new QListWidget(parent);
@@ -272,7 +365,11 @@ void OperationsDelegate::setEditorData(QWidget *editor,
       {
       const QVariant value = index.data(Qt::EditRole);
       if (value.type() == QVariant::StringList) {
+
             QListWidget *lw = qobject_cast<QListWidget *>(editor);
+            MultiValueEditor *mv = qobject_cast<MultiValueEditor *>(editor);
+            TimeSigEditor *ts = qobject_cast<TimeSigEditor *>(editor);
+
             if (lw) {
                   const auto items = lw->findItems(index.data(Qt::DisplayRole).toString(), Qt::MatchExactly);
                   lw->setCurrentItem(items.empty() ? lw->item(0) : items.first());
@@ -295,11 +392,7 @@ void OperationsDelegate::setEditorData(QWidget *editor,
                   const auto newLocalCoord = appWindow->mapFromGlobal(globalCoord);
                   lw->setGeometry(newLocalCoord.x(), newLocalCoord.y(), lw->width(), h);
                   }
-            else {
-                  MultiValue *mv = qobject_cast<MultiValue *>(editor);
-
-                  Q_ASSERT_X(mv, "Midi delegate - setEditorData", "Unknown editor type");
-
+            else if (mv) {
                               // to prevent possible hiding bottom part of the checkbox list
                   const int h = mv->sizeHint().height();
                   const int y = (mv->parentWidget() && (mv->parentWidget()->rect().bottom() < mv->y() + h))
@@ -314,6 +407,24 @@ void OperationsDelegate::setEditorData(QWidget *editor,
                   const auto newLocalCoord = appWindow->mapFromGlobal(globalCoord);
                   mv->setGeometry(newLocalCoord.x(), newLocalCoord.y(), mv->width(), h);
                   }
+            else if (ts) {
+                              // to prevent possible hiding bottom part of the editor
+                  const int h = ts->sizeHint().height();
+                  const int y = (ts->parentWidget() && (ts->parentWidget()->rect().bottom() < ts->y() + h))
+                              ? ts->parentWidget()->rect().bottom() - h : ts->y();
+                  ts->setGeometry(ts->x(), y, ts->width(), h);
+
+                              // now mv can be partially hidden behind the view
+                              // if the view has small rect, so set parent of mv
+                              // to app window and map coordinates accordingly to leave mv in place
+                  const auto globalCoord = ts->parentWidget()->mapToGlobal(ts->geometry().topLeft());
+                  ts->setParent(appWindow);
+                  const auto newLocalCoord = appWindow->mapFromGlobal(globalCoord);
+                  ts->setGeometry(newLocalCoord.x(), newLocalCoord.y(), ts->width(), h);
+                  }
+            else {
+                  Q_ASSERT_X(false, "Midi delegate - setEditorData", "Unknown editor type");
+                  }
             }
       else {       // single value
             QStyledItemDelegate::setEditorData(editor, index);
@@ -326,17 +437,19 @@ void OperationsDelegate::setModelData(QWidget *editor,
       {
       const QVariant value = index.data(Qt::EditRole);
       if (value.type() == QVariant::StringList) {
-            const QListWidget *lw = qobject_cast<QListWidget *>(editor);
-            if (lw) {
+
+            QListWidget *lw = qobject_cast<QListWidget *>(editor);
+            MultiValueEditor *mv = qobject_cast<MultiValueEditor *>(editor);
+            TimeSigEditor *ts = qobject_cast<TimeSigEditor *>(editor);
+
+            if (lw)
                   model->setData(index, lw->currentRow());
-                  }
-            else {
-                  const MultiValue *mv = qobject_cast<MultiValue *>(editor);
-
-                  Q_ASSERT_X(mv, "Midi delegate - setModelData", "Unknown editor type");
-
+            else if (mv)
                   model->setData(index, mv->data());
-                  }
+            else if (ts)
+                  model->setData(index, ts->data());
+            else
+                  Q_ASSERT_X(false, "Midi delegate - setModelData", "Unknown editor type");
             }
       else {
             QStyledItemDelegate::setModelData(editor, model, index);
