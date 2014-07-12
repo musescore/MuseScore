@@ -3,28 +3,6 @@
 #include "preferences.h"
 
 
-//struct TrackCol {
-//      enum {
-//            DO_IMPORT = 0,
-//            STAFF_NAME,
-//            INSTRUMENT,
-//            LYRICS,
-//            QUANTIZATION,
-//            HUMAN,
-//            VOICE_COUNT,
-//            TUPLETS,
-//            SPLIT_STAFF,
-//            CHANGE_CLEF,
-//            SIMPLIFY,
-//            STACCATO,
-//            USE_DOTS,
-//            TIME_SIG,
-//            PICKUP_BAR,
-//            SWING,
-//            COL_COUNT
-//            };
-//      };
-
 namespace Ms {
 
 class TracksModel::Column
