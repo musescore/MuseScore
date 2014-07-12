@@ -367,7 +367,7 @@ void TracksView::wheelEvent(QWheelEvent *event)
       if ((event->modifiers() & Qt::ShiftModifier) || (event->modifiers() & Qt::ControlModifier)) {
             const int degrees = event->delta() / 8;
             const int steps = degrees / 15;
-            const int pixelsToScroll = steps * 60;
+            const int pixelsToScroll = steps * 30;
             horizontalScrollBar()->setValue(horizontalScrollBar()->value() - pixelsToScroll);
             }
       else {
