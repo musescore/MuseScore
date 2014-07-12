@@ -4,6 +4,23 @@
 
 namespace Ms {
 
+class TimeSigEditor : public QWidget
+      {
+      Q_OBJECT
+
+   public:
+      TimeSigEditor(const QStringList &values, QWidget *parent = nullptr);
+
+      QStringList data() const;
+
+   signals:
+      void okClicked();
+
+   private:
+      QComboBox *_comboBoxNumerator;
+      QComboBox *_comboBoxDenominator;
+      };
+
 class SizedListWidget : public QListWidget
       {
       Q_OBJECT
@@ -17,12 +34,12 @@ class SizedListWidget : public QListWidget
 // class for multiple value representation
 // each value is a button that can be checked or unchecked
 
-class MultiValue : public QWidget
+class MultiValueEditor : public QWidget
       {
       Q_OBJECT
 
    public:
-      MultiValue(const QStringList &values, QWidget *parent = nullptr);
+      MultiValueEditor(const QStringList &values, QWidget *parent = nullptr);
 
       QStringList data() const;
 

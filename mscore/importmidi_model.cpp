@@ -61,7 +61,8 @@ TracksModel::~TracksModel()
 void TracksModel::reset(const MidiOperations::Opers &opers,
                         const QList<std::string> &lyricsList,
                         int trackCount,
-                        const QString &midiFile)
+                        const QString &midiFile,
+                        bool hasHumanBeats)
       {
       beginResetModel();
       _trackOpers = opers;
@@ -210,25 +211,6 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   }
             };
       _columns.push_back(std::unique_ptr<Column>(new QuantValue(_trackOpers)));
-
-      //-----------------------------------------------------------------------
-      struct Human : Column {
-            Human(MidiOperations::Opers &opers) : Column(opers)
-                  {
-                  }
-            QString headerName() const { return QCoreApplication::translate(
-                                                      "MIDI import operations", "Is human\nperformance"); }
-            bool isForAllTracksOnly() const { return true; }
-            QVariant value(int /*trackIndex*/) const
-                  {
-                  return _opers.isHumanPerformance;
-                  }
-            void setValue(const QVariant &value, int /*trackIndex*/)
-                  {
-                  _opers.isHumanPerformance = value.toBool();
-                  }
-            };
-      _columns.push_back(std::unique_ptr<Column>(new Human(_trackOpers)));
 
       //-----------------------------------------------------------------------
       struct VoiceCount : Column {
@@ -388,6 +370,95 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             int _trackCount;
             };
       _columns.push_back(std::unique_ptr<Column>(new Tuplets(_trackOpers, _trackCount)));
+
+      //-----------------------------------------------------------------------
+      if (hasHumanBeats) {
+            struct TimeSig : Column {
+                  TimeSig(MidiOperations::Opers &opers) : Column(opers)
+                        {
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "3"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "4"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "5"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "6"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "7"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "9"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "12"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "15"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "21"));
+                        _numeratorCount = _values.size();
+
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "2"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "4"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "8"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "16"));
+                        _values.push_back(QCoreApplication::translate("MIDI import operations", "32"));
+                        }
+                  QString headerName() const { return QCoreApplication::translate(
+                                                            "MIDI import operations", "Time signature"); }
+                  bool isForAllTracksOnly() const { return true; }
+                  QVariant value(int /*trackIndex*/) const
+                        {
+                        const int numeratorIndex = (int)_opers.timeSigNumerator;
+                        const int denominatorIndex = (int)_opers.timeSigDenominator;
+
+                        return _values[numeratorIndex] + " / " + _values[_numeratorCount + denominatorIndex];
+                        }
+                  void setValue(const QVariant &value, int /*trackIndex*/)
+                        {
+                        const QStringList list = value.toStringList();
+
+                        Q_ASSERT_X(list.size() == 2, "Midi import operations",
+                                   "Invalid size of the time signature value list");
+
+                        bool ok = false;
+                        _opers.timeSigNumerator = (MidiOperations::TimeSigNumerator)list[0].toInt(&ok);
+
+                        Q_ASSERT_X(ok, "Midi import operations", "Invalid numerator value");
+
+                        ok = false;
+                        _opers.timeSigDenominator = (MidiOperations::TimeSigDenominator)list[1].toInt(&ok);
+
+                        Q_ASSERT_X(ok, "Midi import operations", "Invalid denominator value");
+
+                        }
+                  QStringList valueList(int /*trackIndex*/) const
+                        {
+                        auto list = QStringList("__TimeSig__");
+                        list.append("__Numerator__");
+                        list.append(QString::number((int)_opers.timeSigNumerator));
+                        for (int i = 0; i != _numeratorCount; ++i)
+                              list.append(_values[i]);
+                        list.append("__Denominator__");
+                        list.append(QString::number((int)_opers.timeSigDenominator));
+                        for (int i = _numeratorCount; i != _values.size(); ++i)
+                              list.append(_values[i]);
+                        return list;
+                        }
+               private:
+                  int _numeratorCount;
+                  };
+            _columns.push_back(std::unique_ptr<Column>(new TimeSig(_trackOpers)));
+            }
+
+      //-----------------------------------------------------------------------
+      struct Human : Column {
+            Human(MidiOperations::Opers &opers) : Column(opers)
+                  {
+                  }
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Is human\nperformance"); }
+            bool isForAllTracksOnly() const { return true; }
+            QVariant value(int /*trackIndex*/) const
+                  {
+                  return _opers.isHumanPerformance;
+                  }
+            void setValue(const QVariant &value, int /*trackIndex*/)
+                  {
+                  _opers.isHumanPerformance = value.toBool();
+                  }
+            };
+      _columns.push_back(std::unique_ptr<Column>(new Human(_trackOpers)));
 
       //-----------------------------------------------------------------------
       struct StaffSplit : Column {

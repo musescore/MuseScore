@@ -17,7 +17,8 @@ class TracksModel : public QAbstractTableModel
       void reset(const MidiOperations::Opers &opers,
                  const QList<std::string> &lyricsList,
                  int trackCount,
-                 const QString &midiFile);
+                 const QString &midiFile,
+                 bool hasHumanBeats);
       void clear();
       void setTrackShuffleIndex(int trackIndex, int newIndex);
       void updateCharset();
