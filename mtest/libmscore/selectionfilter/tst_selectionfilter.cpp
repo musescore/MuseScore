@@ -47,6 +47,7 @@ class TestSelectionFilter : public QObject, public MTest
       void filterBreath()           { testFilter(13,SelectionFilterType::BREATH); }
       void filterOtherText()        { testFilter(14,SelectionFilterType::OTHER_TEXT); }
       void filterOtherLine()        { testFilterSpanner(15,SelectionFilterType::OTHER_LINE); }
+      void filterTremolo()          { testFilter(16,SelectionFilterType::TREMOLO); }
       };
 
 //---------------------------------------------------------
