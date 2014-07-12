@@ -28,7 +28,8 @@ static const char* labels[] = {
       QT_TRANSLATE_NOOP("selectionfilter", "Glissando"),
       QT_TRANSLATE_NOOP("selectionfilter", "Fret Diagram"),
       QT_TRANSLATE_NOOP("selectionfilter", "Breath"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Tremolo")
+      QT_TRANSLATE_NOOP("selectionfilter", "Tremolo"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Grace Notes")
       };
 
 const int numLabels = sizeof(labels)/sizeof(labels[0]);

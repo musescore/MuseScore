@@ -311,6 +311,8 @@ bool Selection::canSelect(Element* e) const
           return this->selectionFilter().isFiltered(SelectionFilterType::OTHER_LINE);
       if (e->type() == Element::Type::TREMOLO)
           return this->selectionFilter().isFiltered(SelectionFilterType::TREMOLO);
+      if (e->type() == Element::Type::CHORD && static_cast<Chord*>(e)->isGrace())
+          return this->selectionFilter().isFiltered(SelectionFilterType::GRACE_NOTE);
       return true;
       }
 
@@ -388,7 +390,7 @@ void Selection::updateSelectedElements()
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
                         for (Chord* graceNote : chord->graceNotes())
-                              appendChord(graceNote);
+                              if(canSelect(graceNote)) appendChord(graceNote);
                         appendChord(chord);
                         }
                   else {
@@ -455,9 +457,11 @@ void Selection::updateSelectedElements()
             // ignore spanners belonging to other tracks
             if (sp->track() < startTrack || sp->track() >= endTrack)
                   continue;
-            if (sp->type() == Element::Type::SLUR
-                && ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick)))
-                  appendFiltered(sp); // slur with start or end in range selection
+            if (sp->type() == Element::Type::SLUR) {
+                if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
+                      if (canSelect(sp->startChord()) && canSelect(sp->endChord()))
+                        appendFiltered(sp); // slur with start or end in range selection
+            }
             else if((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
                   appendFiltered(sp); // spanner with start and end in range selection
             }
@@ -652,6 +656,9 @@ void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) co
                   if (e->isChordRest()) {
                         if (e->type() == Element::Type::CHORD) {
                               Chord* chord = static_cast<Chord*>(e);
+                              foreach(Chord* c, chord->graceNotes())
+                                    if(!canSelect(c)) chord->remove(c);
+
                               foreach(Element* el, chord->el()) {
                                     if (el->type() == Element::Type::SLUR) {
                                           if (!canSelect(el))
@@ -688,8 +695,14 @@ void Selection::filterRange(QList<Segment*> segments, int strack, int etrack) co
 void Selection::filterSpanners(std::multimap<int, Spanner*>& spannerMapCopy) const
       {
       for (auto i = spannerMapCopy.begin(); i != spannerMapCopy.end(); ++i) {
-            if (!canSelect(i->second))
+            Spanner* spanner = i->second;
+            if (!canSelect(spanner))
+                spannerMapCopy.erase(i);
+            if ((spanner->type() == Element::Type::SLUR)
+                  && ((spanner->startChord() && !canSelect(spanner->startChord()))
+                      || (spanner->endChord() && !canSelect(spanner->endChord())))) {
                   spannerMapCopy.erase(i);
+                  }
             }
       }
 //---------------------------------------------------------
