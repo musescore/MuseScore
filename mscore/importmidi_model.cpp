@@ -263,14 +263,14 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             Tuplets(MidiOperations::Opers &opers, int trackCount)
                   : Column(opers), _trackCount(trackCount)
                   {
-                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Duplets (2)"));
-                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Triplets (3)"));
-                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Quadruplets (4)"));
-                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Quintuplets (5)"));
-                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Septuplets (7)"));
-                  _values.push_back(QCoreApplication::translate("MIDI import operations", "Nonuplets (9)"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "2-plets"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "3-plets"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "4-plets"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "5-plets"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "7-plets"));
+                  _values.push_back(QCoreApplication::translate("MIDI import operations", "9-plets"));
                   }
-            int width() const { return 150; }
+            int width() const { return 140; }
             QString headerName() const { return QCoreApplication::translate(
                                                       "MIDI import operations", "Tuplets"); }
             QVariant value(int trackIndex) const

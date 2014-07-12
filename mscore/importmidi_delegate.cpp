@@ -208,7 +208,7 @@ void OperationsDelegate::drawArrow(
 
       QFontMetrics fm(painter->font());
 
-      const int gap = 10;
+      const int gap = 9;
       const int height = 4;
       const int width = 8;
 
