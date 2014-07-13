@@ -30,6 +30,8 @@ class InstrumentTemplate;
 //   @P show       bool     check/set whether or not a part is shown
 //   @P longName   QString
 //   @P shortName  QString
+//   @P volume     int
+//   @P mute       bool
 //---------------------------------------------------------
 
 class Part : public QObject {
@@ -39,6 +41,8 @@ class Part : public QObject {
       Q_PROPERTY(bool show READ show WRITE setShow)
       Q_PROPERTY(QString longName READ longName WRITE setLongName)
       Q_PROPERTY(QString shortName READ shortName WRITE setShortName)
+      Q_PROPERTY(int volume READ volume WRITE setVolume)
+      Q_PROPERTY(bool mute READ mute WRITE setMute)
 
       Score* _score;
 
@@ -81,8 +85,11 @@ class Part : public QObject {
 
       void setStaves(int);
 
-      Q_INVOKABLE int volume() const;
-      Q_INVOKABLE void setVolume(int volume);
+      int volume() const;
+      void setVolume(int volume);
+      bool mute() const;
+      void setMute(bool mute);
+      
       int reverb() const;
       int chorus() const;
       int pan() const;
