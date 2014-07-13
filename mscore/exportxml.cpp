@@ -2915,6 +2915,13 @@ void ExportMusicXml::words(Text const* const text, int staff)
       qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f text='%s'",
              text->userOff().x(), text->userOff().y(), qPrintable(text->text()));
       */
+
+      if (text->text() == "") {
+            // sometimes empty Texts are present, exporting would result
+            // in invalid MusicXML (as an empty direction-type would be created)
+            return;
+            }
+
       directionTag(xml, attr, text);
       if (text->type() == Element::Type::REHEARSAL_MARK) {
             // TODO: check if dead code (see rehearsal below)
