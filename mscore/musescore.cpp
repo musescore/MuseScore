@@ -135,7 +135,7 @@ QString revision;
 QErrorMessage* errorMessage;
 const char* voiceActions[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
 
-extern bool savePositions(Score*, const QString& name);
+extern bool savePositions(Score*, const QString& name, bool segments );
 extern TextPalette* textPalette;
 
 //---------------------------------------------------------
@@ -2237,8 +2237,10 @@ static bool processNonGui()
 #endif
             if (fn.endsWith(".mp3"))
                   return mscore->saveMp3(cs, fn);
-            if (fn.endsWith(".pos"))
-                  return savePositions(cs, fn);
+            if (fn.endsWith(".spos"))
+                  return savePositions(cs, fn, true);
+            if (fn.endsWith(".mpos"))
+                  return savePositions(cs, fn, false);
             else {
                   qDebug("dont know how to convert to %s", qPrintable(outFileName));
                   return false;

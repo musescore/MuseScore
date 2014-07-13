@@ -17,6 +17,7 @@
 #include "libmscore/repeatlist.h"
 #include "libmscore/system.h"
 #include "libmscore/xml.h"
+#include "mscore/globals.h"
 
 namespace Ms {
 
@@ -44,7 +45,7 @@ static void saveMeasureEvents(Xml& xml, Measure* m, int offset)
 //    output in 100 dpi
 //---------------------------------------------------------
 
-bool savePositions(Score* score, const QString& name)
+bool savePositions(Score* score, const QString& name, bool segments)
       {
       segs.clear();
       QFile fp(name);
@@ -57,37 +58,63 @@ bool savePositions(Score* score, const QString& name)
       xml.stag("score");
       xml.stag("elements");
       int id = 0;
-      for (Segment* s = score->firstMeasure()->first(Segment::Type::ChordRest);
-         s; s = s->next1(Segment::Type::ChordRest)) {
-            qreal sx   = 0;
-            int tracks = score->nstaves() * VOICES;
-            for (int track = 0; track < tracks; track++) {
-                  Element* e = s->element(track);
-                  if (e)
-                        sx = qMax(sx, e->width());
+
+      qreal ndpi = ((qreal)converterDpi / MScore::DPI) * 12.0;
+      if (segments) {
+            for (Segment* s = score->firstMeasure()->first(Segment::Type::ChordRest);
+               s; s = s->next1(Segment::Type::ChordRest)) {
+                  qreal sx   = 0;
+                  int tracks = score->nstaves() * VOICES;
+                  for (int track = 0; track < tracks; track++) {
+                        Element* e = s->element(track);
+                        if (e)
+                              sx = qMax(sx, e->width());
+                        }
+
+                  sx      *= ndpi;
+                  int sy   = s->measure()->system()->height() * ndpi;
+                  int x    = s->pagePos().x() * ndpi;
+                  int y    = s->pagePos().y() * ndpi;
+
+                  Page* p  = s->measure()->system()->page();
+                  int page = score->pageIdx(p);
+
+                  xml.tagE(QString("element id=\"%1\" x=\"%2\" y=\"%3\" sx=\"%4\""
+                  " sy=\"%5\" page=\"%6\"")
+                     .arg(id)
+                     .arg(x)
+                     .arg(y)
+                     .arg(sx)
+                     .arg(sy)
+                     .arg(page));
+
+                  segs[(void*)s] = id++;
                   }
-            qreal ndpi = 100.0 / MScore::DPI;
-
-            sx      *= ndpi;
-            int sy   = s->measure()->system()->height() * ndpi;
-            int x    = s->pagePos().x() * ndpi;
-            int y    = s->pagePos().y() * ndpi;
-
-            Page* p  = s->measure()->system()->page();
-            int page = score->pageIdx(p);
-
-            xml.tagE(QString("element id=\"%1\" x=\"%2\" y=\"%3\" sx=\"%4\""
-            " sy=\"%5\" page=\"%6\"")
-               .arg(id)
-               .arg(x)
-               .arg(y)
-               .arg(sx)
-               .arg(sy)
-               .arg(page));
-
-            segs[(void*)s] = id++;
+            xml.etag();
             }
-      xml.etag();
+      else {
+            for (Measure* m = score->firstMeasureMM(); m; m = m->nextMeasureMM()) {
+                  qreal sx   = m->bbox().width() * ndpi;
+                  qreal sy   = m->system()->height() * ndpi;
+                  qreal x    = m->pagePos().x() * ndpi;
+                  qreal y    = m->system()->pagePos().y() * ndpi;
+
+                  Page* p  = m->system()->page();
+                  int page = score->pageIdx(p);
+
+                  xml.tagE(QString("element id=\"%1\" x=\"%2\" y=\"%3\" sx=\"%4\""
+                  " sy=\"%5\" page=\"%6\"")
+                     .arg(id)
+                     .arg(x)
+                     .arg(y)
+                     .arg(sx)
+                     .arg(sy)
+                     .arg(page));
+
+                  segs[(void*)m] = id++;
+                  }
+            xml.etag();
+            }
 
       xml.stag("events");
       score->updateRepeatList(true);
@@ -95,14 +122,18 @@ bool savePositions(Score* score, const QString& name)
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
-            for (Measure* m = score->tick2measure(startTick); m; m = m->nextMeasure()) {
-//                  if (lastMeasure && m->isRepeatMeasure(part)) {
-//                        int offset = m->tick() - lastMeasure->tick();
-//                        saveMeasureEvents(xml, lastMeasure, tickOffset + offset);
-//                        }
-//                  else {
-                        saveMeasureEvents(xml, m, tickOffset);
-//                        }
+            for (Measure* m = score->tick2measureMM(startTick); m; m = m->nextMeasureMM()) {
+                        if (segments)
+                              saveMeasureEvents(xml, m, tickOffset);
+                        else {
+                              int tick = m->tick() + tickOffset;
+                              int id = segs[(void*)m];
+                              int time = lrint(m->score()->repeatList()->utick2utime(tick) * 1000);
+                              xml.tagE(QString("event elid=\"%1\" position=\"%2\"")
+                                 .arg(id)
+                                 .arg(time)
+                                 );
+                              }
                   if (m->tick() + m->ticks() >= endTick)
                         break;
                   }
