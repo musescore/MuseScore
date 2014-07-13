@@ -200,6 +200,16 @@ void Part::setVolume(int volume)
       instr(0)->channel(0).volume = volume;
       }
 
+bool Part::mute() const
+{
+      return instr(0)->channel(0).mute;
+}
+      
+void Part::setMute(bool mute)
+{
+      instr(0)->channel(0).mute = mute;
+}
+
 int Part::reverb() const
       {
       return instr(0)->channel(0).reverb;
