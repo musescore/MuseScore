@@ -30,7 +30,6 @@
         <file alias="data/tab_sample.mscx">../share/templates/tab_sample.mscx</file>
         <file>data/style.qss</file>
         <file>data/mscore.png</file>
-        <file>data/bg1.jpg</file>
         <file>data/cancel.png</file>
         <file>data/close.png</file>
         <file>revision.h</file>

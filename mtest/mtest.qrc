@@ -21,7 +21,6 @@
       <file alias="instruments.xml">../share/templates/instruments.xml</file>
 
       <file>../mscore/data/mscore.png</file>
-      <file>../mscore/data/bg1.jpg</file>
       <file>../mscore/data/cancel.png</file>
       <file>../mscore/revision.h</file>
       <file>../mscore/data/musescore_logo_full1.png</file>
