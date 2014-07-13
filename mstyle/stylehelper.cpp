@@ -1525,15 +1525,19 @@ TileSet* StyleHelper::slope(const QColor& color, qreal shade, int size) const {
             QPainter p(&image);
             p.setPen(Qt::NoPen);
 
+            //lasconic: add bottom, remove gradient
             // edges
             TileSet* slabTileSet = slab(color, shade, size);
-            slabTileSet->render(QRect(0, 0, size * 4, size * 5), &p,
-                                TileSet::Left | TileSet::Right | TileSet::Top);
+            slabTileSet->render(QRect(0, 0, size * 4, size * 4), &p,
+                                TileSet::Left | TileSet::Right | TileSet::Top | TileSet::Bottom);
+            
+            //slabTileSet->render(QRect(0, 0, size * 4, size * 5), &p,
+            //                    TileSet::Left | TileSet::Right | TileSet::Top);
 
-            p.setWindow(0, 0, 28, 28);
+            //p.setWindow(0, 0, 28, 28);
 
             // bottom
-            QColor light = ColorUtils::shade(calcLightColor(color), shade);
+            /*QColor light = ColorUtils::shade(calcLightColor(color), shade);
             QLinearGradient fillGradient(0, -28, 0, 28);
             light.setAlphaF(0.4);
             fillGradient.setColorAt(0.0, light);
@@ -1541,17 +1545,17 @@ TileSet* StyleHelper::slope(const QColor& color, qreal shade, int size) const {
             fillGradient.setColorAt(1.0, light);
             p.setBrush(fillGradient);
             p.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-            p.drawRect(3, 9, 22, 17);
+            p.drawRect(3, 9, 22, 17);*/
 
             // fade bottom
-            QLinearGradient maskGradient(0, 7, 0, 28);
+            /*QLinearGradient maskGradient(0, 7, 0, 28);
             maskGradient.setColorAt(0.0, Qt::black);
             maskGradient.setColorAt(1.0, Qt::transparent);
 
             p.setBrush(maskGradient);
             p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
             p.drawRect(0, 9, 28, 19);
-            p.end();
+            p.end();*/
 
             tileSet = new TileSet(QPixmap::fromImage(image), size, size, size * 2, 2);
             m_slopeCache.insert(key, tileSet);
