@@ -1268,7 +1268,8 @@ bool MgStyle::drawFrameGroupBoxPrimitive(const QStyleOption* option, QPainter* p
       painter->setRenderHint(QPainter::Antialiasing);
       painter->setPen(Qt::NoPen);
 
-      QLinearGradient innerGradient(0, r.top() - r.height() + 12, 0, r.bottom() + r.height() - 19);
+      //lasconic : no gradient
+      /*QLinearGradient innerGradient(0, r.top() - r.height() + 12, 0, r.bottom() + r.height() - 19);
       QColor light(_helper.calcLightColor(base));
       light.setAlphaF(0.4);
       innerGradient.setColorAt(0.0, light);
@@ -1276,7 +1277,7 @@ bool MgStyle::drawFrameGroupBoxPrimitive(const QStyleOption* option, QPainter* p
       innerGradient.setColorAt(1.0, light);
       painter->setBrush(innerGradient);
       painter->setClipRect(r.adjusted(0, 0, 0, -19));
-      _helper.fillSlab(*painter, r);
+      _helper.fillSlab(*painter, r);*/
 
       TileSet* slopeTileSet = _helper.slope(base, 0.0);
       painter->setClipping(false);
@@ -8010,8 +8011,6 @@ QRect MgStyle::subElementRect(SubElement element, const QStyleOption* option, co
 //---------------------------------------------------------
 
 QRect MgStyle::subControlRect(ComplexControl element, const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget ) const {
-      if (!widget)
-           return QRect();
       switch (element) {
             case CC_GroupBox:
                   return groupBoxSubControlRect( option, subControl, widget );
