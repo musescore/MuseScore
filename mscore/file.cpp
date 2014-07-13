@@ -108,7 +108,7 @@ extern Score::FileError importCapXml(Score*, const QString& name);
 
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
-extern bool savePositions(Score*, const QString& name);
+extern bool savePositions(Score*, const QString& name, bool segments);
 extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
@@ -1705,9 +1705,13 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
 #endif
       else if (ext == "mp3")
             rv = saveMp3(cs, fn);
-      else if (ext == "pos") {
+      else if (ext == "spos") {
             // save positions of segments
-            rv = savePositions(cs, fn);
+            rv = savePositions(cs, fn, true);
+            }
+      else if (ext == "mpos") {
+            // save positions of measures
+            rv = savePositions(cs, fn, false);
             }
       else {
             qDebug("Internal error: unsupported extension <%s>",
