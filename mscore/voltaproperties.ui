@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
-    <height>261</height>
+    <width>358</width>
+    <height>200</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,22 +16,6 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="musescore.qrc">:/data/bg1.jpg</pixmap>
-       </property>
-      </widget>
-     </item>
      <item>
       <widget class="QGroupBox" name="groupBox">
        <property name="title">

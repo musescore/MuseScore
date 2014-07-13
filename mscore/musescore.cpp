@@ -4840,9 +4840,12 @@ int main(int argc, char* av[])
                   "*:disabled {\n"
                   "   color: gray\n"
                   "}\n"
+                  "QGroupBox {\n"
+                  "font-weight: bold;\n"
+                  "}\n"
                   "QGroupBox::title {\n"
                   "   subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px;\n"
-                  "   }\n");
+                  "}\n");
                   /*"QDockWidget {\n"
                   "   border: 1px solid lightgray;\n"
                   "   titlebar-close-icon: url(:/data/close.png);\n"

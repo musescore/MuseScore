@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>302</width>
-    <height>132</height>
+    <height>152</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -22,22 +22,6 @@
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label_5">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="musescore.qrc">:/data/bg1.jpg</pixmap>
-       </property>
-      </widget>
-     </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>

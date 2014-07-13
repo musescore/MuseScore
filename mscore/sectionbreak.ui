@@ -6,31 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>459</width>
-    <height>164</height>
+    <width>377</width>
+    <height>186</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MuseScore: Section Break Properties</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" rowspan="6">
-    <widget class="QLabel" name="label_3">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="_startWithLongNames">
      <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="musescore.qrc">:/data/bg1.jpg</pixmap>
+      <string>start new section with long instrument names</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="5" column="0" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -43,23 +44,7 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>30</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="1">
+   <item row="1" column="0">
     <layout class="QFormLayout" name="formLayout">
      <property name="fieldGrowthPolicy">
       <enum>QFormLayout::ExpandingFieldsGrow</enum>
@@ -86,7 +71,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="2">
+   <item row="1" column="1">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -102,24 +87,23 @@
      </property>
     </spacer>
    </item>
-   <item row="5" column="1" colspan="2">
-    <widget class="QDialogButtonBox" name="buttonBox">
+   <item row="0" column="0">
+    <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>30</height>
+      </size>
+     </property>
+    </spacer>
    </item>
-   <item row="2" column="1">
-    <widget class="QCheckBox" name="_startWithLongNames">
-     <property name="text">
-      <string>start new section with long instrument names</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
+   <item row="3" column="0">
     <widget class="QCheckBox" name="_startWithMeasureOne">
      <property name="text">
       <string>start new section with measure number one</string>

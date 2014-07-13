@@ -6,36 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>400</height>
+    <width>278</width>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>String Data</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
-   <item>
-    <widget class="QLabel" name="label_5">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="musescore.qrc">:/data/bg1.jpg</pixmap>
-     </property>
-     <property name="scaledContents">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
      <item>
