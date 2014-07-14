@@ -10,7 +10,7 @@ TimeSigEditor::TimeSigEditor(const QStringList &values, QWidget *parent)
       Q_ASSERT_X(values.size() >= 7,
                  "Midi delegate - TimeSigEditor class", "Too small value count");
       Q_ASSERT_X(values[0] == "__TimeSig__",
-      "Midi delegate - TimeSigEditor class", "Invalid input values");
+                  "Midi delegate - TimeSigEditor class", "Invalid input values");
 
       QVBoxLayout *contentLayout = new QVBoxLayout();
       contentLayout->setSpacing(0);
@@ -275,7 +275,7 @@ void OperationsDelegate::paint(QPainter *painter,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const
       {
-      QStyledItemDelegate::paint(painter, option, index);
+      SeparatorDelegate::paint(painter, option, index);
                   // draw small arrow that symbolizes list
       QVariant value = index.data(Qt::EditRole);
       if (value.type() == QVariant::StringList)
@@ -357,7 +357,7 @@ QWidget* OperationsDelegate::createEditor(QWidget *parent,
                   }
             }
                   // single value
-      return QStyledItemDelegate::createEditor(parent, option, index);
+      return SeparatorDelegate::createEditor(parent, option, index);
       }
 
 void OperationsDelegate::setEditorData(QWidget *editor,
@@ -427,7 +427,7 @@ void OperationsDelegate::setEditorData(QWidget *editor,
                   }
             }
       else {       // single value
-            QStyledItemDelegate::setEditorData(editor, index);
+            SeparatorDelegate::setEditorData(editor, index);
             }
       }
 
@@ -452,7 +452,7 @@ void OperationsDelegate::setModelData(QWidget *editor,
                   Q_ASSERT_X(false, "Midi delegate - setModelData", "Unknown editor type");
             }
       else {
-            QStyledItemDelegate::setModelData(editor, model, index);
+            SeparatorDelegate::setModelData(editor, model, index);
             }
       }
 

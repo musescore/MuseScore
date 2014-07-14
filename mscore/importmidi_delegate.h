@@ -1,6 +1,8 @@
 #ifndef IMPORTMIDI_DELEGATE_H
 #define IMPORTMIDI_DELEGATE_H
 
+#include "importmidi_view.h"
+
 
 namespace Ms {
 
@@ -61,7 +63,7 @@ class MultiValueEditor : public QWidget
       };
 
 
-class OperationsDelegate : public QStyledItemDelegate
+class OperationsDelegate : public SeparatorDelegate
       {
       Q_OBJECT
 

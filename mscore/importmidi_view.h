@@ -4,7 +4,47 @@
 #include <QTableView>
 
 
-class SeparatorDelegate;
+class SeparatorDelegate : public QStyledItemDelegate
+      {
+   public:
+      SeparatorDelegate(QObject *parent = 0)
+            : QStyledItemDelegate(parent)
+            , _frozenRowIndex(-1)
+            , _frozenColIndex(-1)
+            {}
+
+      void setFrozenRowIndex(int index)
+            {
+            _frozenRowIndex = index;
+            }
+
+      void setFrozenColIndex(int index)
+            {
+            _frozenColIndex = index;
+            }
+
+      void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+            {
+            this->QStyledItemDelegate::paint(painter, option, index);
+
+            if (index.row() == _frozenRowIndex) {
+                  painter->save();
+                  painter->setPen(option.palette.foreground().color());
+                  painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
+                  painter->restore();
+                  }
+            if (index.column() == _frozenColIndex) {
+                  painter->save();
+                  painter->setPen(option.palette.foreground().color());
+                  painter->drawLine(option.rect.topRight(), option.rect.bottomRight());
+                  painter->restore();
+                  }
+            }
+   private:
+      int _frozenRowIndex;
+      int _frozenColIndex;
+      };
+
 
 class TracksView : public QTableView
       {
@@ -18,6 +58,14 @@ class TracksView : public QTableView
 
       void setFrozenRowCount(int count);
       void setFrozenColCount(int count);
+      void setItemDelegate(SeparatorDelegate *delegate);
+
+      void restoreHHeaderState(const QByteArray &data);
+      void restoreVHeaderState(const QByteArray &data);
+      void setHHeaderResizeMode(QHeaderView::ResizeMode mode);
+      void setVHeaderDefaultSectionSize(int size);
+      void resetHHeader();
+      void resetVHeader();
 
    protected:
       void resizeEvent(QResizeEvent *event);

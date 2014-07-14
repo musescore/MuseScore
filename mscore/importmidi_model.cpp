@@ -271,6 +271,10 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             void setValue(const QVariant &value, int trackIndex)
                   {
                   const QStringList list = value.toStringList();
+
+                  Q_ASSERT_X(list.size() > 5, "Midi import operations",
+                             "Invalid size of the tuplets value list");
+
                   bool searchTuplets = false;
                   if (list[0] != "undefined") {
                         const bool doSearch = (list[0] == "true");
@@ -576,6 +580,7 @@ void TracksModel::clear()
       {
       beginResetModel();
       _trackCount = 0;
+      _frozenColCount = 0;
       _trackOpers = MidiOperations::Opers();
       _columns.clear();
       endResetModel();
@@ -687,8 +692,9 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                   if (_columns[index.column()]->isEditable()
                               && editableSingleTrack(trackIndex, index.column())
                               && _columns[index.column()]->isVisible(trackIndex)) {
-                        if (!_columns[index.column()]->valueList(trackIndex).isEmpty())
-                              return _columns[index.column()]->valueList(trackIndex);
+                        const auto list = _columns[index.column()]->valueList(trackIndex);
+                        if (!list.isEmpty())
+                              return list;
                         }
                   break;
             case Qt::CheckStateRole:
@@ -790,7 +796,7 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
       if (trackIndex == -1) {   // all tracks row
             if (!_columns[index.column()]->isForAllTracksOnly()) {
                   for (int i = 0; i != _trackCount; ++i) {
-                        if (_columns[index.column()]->isVisible(trackIndex))
+                        if (_columns[index.column()]->isVisible(i))
                               _columns[index.column()]->setValue(value, i);
                         }
                   forceColumnDataChanged(index.column());
@@ -811,6 +817,9 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
 
 QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int role) const
       {
+      if (section < 0 || section >= (int)_columns.size())
+            return QVariant();
+
       if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
             if (!_columns.empty()) {
                   return QCoreApplication::translate("MIDI import: tracks model",

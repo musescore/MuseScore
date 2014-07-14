@@ -1,48 +1,25 @@
 #include "importmidi_view.h"
 
 
-class SeparatorDelegate : public QStyledItemDelegate
+class SizedHHeaderView : public QHeaderView
       {
    public:
-      SeparatorDelegate(QObject *parent = 0)
-            : QStyledItemDelegate(parent)
-            , _frozenRowIndex(0)
-            , _frozenColIndex(0)
-            {}
-
-      void setFrozenRowIndex(int index)
+      explicit SizedHHeaderView(QHeaderView *mainView, QWidget *parent = 0)
+            : QHeaderView(Qt::Horizontal, parent)
+            , _mainView(mainView)
             {
-            _frozenRowIndex = index;
             }
 
-      void setFrozenColIndex(int index)
+      QSize sizeHint() const
             {
-            _frozenColIndex = index;
+            QSize size = QHeaderView::sizeHint();
+            size.setHeight(_mainView->sizeHint().height());
+            return size;
             }
 
-      void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
-            {
-            this->QStyledItemDelegate::paint(painter, option, index);
-
-            if (index.row() == _frozenRowIndex) {
-                  painter->save();
-                  painter->setPen(option.palette.foreground().color());
-                  painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
-                  painter->restore();
-                  }
-            if (index.column() == _frozenColIndex) {
-                  painter->save();
-                  painter->setPen(option.palette.foreground().color());
-                  painter->drawLine(option.rect.topRight(), option.rect.bottomRight());
-                  painter->restore();
-                  }
-            }
    private:
-      int _frozenRowIndex;
-      int _frozenColIndex;
+      QHeaderView *_mainView;
       };
-
-//----------------------------------------------------------------------------------
 
 TracksView::TracksView(QWidget *parent)
       : QTableView(parent)
@@ -94,6 +71,7 @@ void TracksView::setupEditTriggers()
 
 void TracksView::initHorizontalView()
       {
+      _frozenHTableView->setHorizontalHeader(new SizedHHeaderView(horizontalHeader()));
       _frozenHTableView->horizontalHeader()->hide();
       _frozenHTableView->setSelectionBehavior(SelectItems);
       _frozenHTableView->setSelectionMode(SingleSelection);
@@ -112,6 +90,7 @@ void TracksView::initHorizontalView()
 
 void TracksView::initVerticalView()
       {
+      _frozenVTableView->setHorizontalHeader(new SizedHHeaderView(horizontalHeader()));
       _frozenVTableView->verticalHeader()->hide();
       _frozenVTableView->setSelectionBehavior(SelectItems);
       _frozenVTableView->setSelectionMode(SingleSelection);
@@ -132,6 +111,7 @@ void TracksView::initVerticalView()
 
 void TracksView::initCornerView()
       {
+      _frozenCornerTableView->setHorizontalHeader(new SizedHHeaderView(horizontalHeader()));
       _frozenCornerTableView->horizontalHeader()->hide();
       _frozenCornerTableView->verticalHeader()->hide();
       _frozenCornerTableView->setAutoScroll(false);
@@ -227,112 +207,146 @@ void TracksView::setModel(QAbstractItemModel *model)
 
 void TracksView::setFrozenRowCount(int count)
       {
+      _frozenRowCount = count;
+      _delegate->setFrozenRowIndex(_frozenRowCount - 1);
+
       if (model()->rowCount() == 0)
             return;
 
       Q_ASSERT_X(count >= 0 && count < model()->rowCount(),
                  "TracksView::setFrozenRowCount", "Invalid frozen row count");
 
-      _frozenRowCount = count;
-      _delegate->setFrozenRowIndex(_frozenRowCount - 1);
-
       for (int row = 0; row != count; ++row) {
             _frozenHTableView->setRowHidden(row, false);
             _frozenHTableView->setRowHeight(row, rowHeight(row));
+            _frozenCornerTableView->setRowHidden(row, false);
             }
 
       for (int row = count; row < model()->rowCount(); ++row) {
             _frozenHTableView->setRowHidden(row, true);
+            _frozenCornerTableView->setRowHidden(row, true);
             }
-
-      updateFrozenTableGeometry();
       }
 
 void TracksView::setFrozenColCount(int count)
       {
+      _frozenColCount = count;
+      _delegate->setFrozenColIndex(_frozenColCount - 1);
+
       if (model()->columnCount() == 0)
             return;
 
       Q_ASSERT_X(count >= 0 && count < model()->columnCount(),
                  "TracksView::setFrozenColCount", "Invalid frozen column count");
 
-      _frozenColCount = count;
-      _delegate->setFrozenColIndex(_frozenColCount - 1);
-
       for (int col = 0; col != count; ++col) {
             _frozenVTableView->setColumnHidden(col, false);
             _frozenVTableView->setColumnWidth(col, columnWidth(col));
+            _frozenCornerTableView->setColumnHidden(col, false);
             }
 
       for (int col = count; col < model()->columnCount(); ++col) {
             _frozenVTableView->setColumnHidden(col, true);
+            _frozenCornerTableView->setColumnHidden(col, true);
             }
+      }
 
-      updateFrozenTableGeometry();
+void TracksView::setItemDelegate(SeparatorDelegate *delegate)
+      {
+      delete _delegate;
+      _delegate = delegate;
+      QTableView::setItemDelegate(delegate);
+      _frozenHTableView->setItemDelegate(delegate);
+      _frozenVTableView->setItemDelegate(delegate);
+      _frozenCornerTableView->setItemDelegate(delegate);
+      }
+
+void TracksView::restoreHHeaderState(const QByteArray &data)
+      {
+      horizontalHeader()->restoreState(data);
+      _frozenHTableView->horizontalHeader()->restoreState(data);
+      _frozenVTableView->horizontalHeader()->restoreState(data);
+      _frozenCornerTableView->horizontalHeader()->restoreState(data);
+      }
+
+void TracksView::restoreVHeaderState(const QByteArray &data)
+      {
+      verticalHeader()->restoreState(data);
+      _frozenHTableView->verticalHeader()->restoreState(data);
+      _frozenVTableView->verticalHeader()->restoreState(data);
+      _frozenCornerTableView->verticalHeader()->restoreState(data);
+      }
+
+void TracksView::setHHeaderResizeMode(QHeaderView::ResizeMode mode)
+      {
+      horizontalHeader()->setResizeMode(mode);
+      _frozenHTableView->horizontalHeader()->setResizeMode(mode);
+      _frozenVTableView->horizontalHeader()->setResizeMode(mode);
+      _frozenCornerTableView->horizontalHeader()->setResizeMode(mode);
+      }
+
+void TracksView::setVHeaderDefaultSectionSize(int size)
+      {
+      verticalHeader()->setDefaultSectionSize(size);
+      _frozenHTableView->verticalHeader()->setDefaultSectionSize(size);
+      _frozenVTableView->verticalHeader()->setDefaultSectionSize(size);
+      _frozenCornerTableView->verticalHeader()->setDefaultSectionSize(size);
+      }
+
+void TracksView::resetHHeader()
+      {
+      horizontalHeader()->reset();
+      _frozenHTableView->horizontalHeader()->reset();
+      _frozenVTableView->horizontalHeader()->reset();
+      _frozenCornerTableView->horizontalHeader()->reset();
+      }
+
+void TracksView::resetVHeader()
+      {
+      verticalHeader()->reset();
+      _frozenHTableView->verticalHeader()->reset();
+      _frozenVTableView->verticalHeader()->reset();
+      _frozenCornerTableView->verticalHeader()->reset();
       }
 
 void TracksView::updateMainViewSectionWidth(int logicalIndex, int /*oldSize*/, int newSize)
       {
-      bool changed = false;
-      for (int col = 0; col != _frozenColCount; ++col) {
-            if (logicalIndex == col) {
-                  changed = true;
-                  _frozenVTableView->setColumnWidth(col, newSize);
-                  _frozenCornerTableView->setColumnWidth(col, newSize);
-                  }
+      if (logicalIndex < _frozenColCount) {
+            _frozenVTableView->setColumnWidth(logicalIndex, newSize);
+            _frozenCornerTableView->setColumnWidth(logicalIndex, newSize);
             }
-      if (changed)
-            updateFrozenTableGeometry();
-
       _frozenHTableView->setColumnWidth(logicalIndex, newSize);
+      updateFrozenTableGeometry();
       }
 
 void TracksView::updateMainViewSectionHeight(int logicalIndex, int /*oldSize*/, int newSize)
       {
-      bool changed = false;
-      for (int row = 0; row != _frozenRowCount; ++row) {
-            if (logicalIndex == row) {
-                  changed = true;
-                  _frozenHTableView->setRowHeight(row, newSize);
-                  _frozenCornerTableView->setRowHeight(row, newSize);
-                  }
+      if (logicalIndex < _frozenRowCount) {
+            _frozenHTableView->setRowHeight(logicalIndex, newSize);
+            _frozenCornerTableView->setRowHeight(logicalIndex, newSize);
             }
-      if (changed)
-            updateFrozenTableGeometry();
-
       _frozenVTableView->setRowHeight(logicalIndex, newSize);
+      updateFrozenTableGeometry();
       }
 
 void TracksView::updateFrozenSectionWidth(int logicalIndex, int /*oldSize*/, int newSize)
       {
-      bool changed = false;
-      for (int col = 0; col != _frozenColCount; ++col) {
-            if (logicalIndex == col) {
-                  changed = true;
-                  setColumnWidth(col, newSize);
-                  _frozenCornerTableView->setColumnWidth(col, newSize);
-                  }
-            }
-      if (changed)
+      if (logicalIndex < _frozenColCount) {
+            setColumnWidth(logicalIndex, newSize);
+            _frozenCornerTableView->setColumnWidth(logicalIndex, newSize);
+            _frozenHTableView->setColumnWidth(logicalIndex, newSize);
             updateFrozenTableGeometry();
-
-      _frozenHTableView->setColumnWidth(logicalIndex, newSize);
+            }
       }
 
 void TracksView::updateFrozenSectionHeight(int logicalIndex, int /*oldSize*/, int newSize)
       {
-      bool changed = false;
-      for (int row = 0; row != _frozenRowCount; ++row) {
-            if (logicalIndex == row) {
-                  changed = true;
-                  setRowHeight(row, newSize);
-                  _frozenCornerTableView->setRowHeight(row, newSize);
-                  }
-            }
-      if (changed)
+      if (logicalIndex < _frozenRowCount) {
+            setRowHeight(logicalIndex, newSize);
+            _frozenCornerTableView->setRowHeight(logicalIndex, newSize);
+            _frozenVTableView->setRowHeight(logicalIndex, newSize);
             updateFrozenTableGeometry();
-
-      _frozenVTableView->setRowHeight(logicalIndex, newSize);
+            }
       }
 
 void TracksView::resizeEvent(QResizeEvent *event)
