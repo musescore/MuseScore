@@ -324,6 +324,7 @@ class TestImportMidi : public QObject, public MTest
       void simplify4thDottedTied() { simplification("simplify_4th_dotted_tied"); }
       void simplifyTripletStaccato() { simplification("simplify_triplet_staccato"); }
       void simplifyDotted3_4() { simplification("simplify_dotted_3-4"); }
+      void simplifyStaccato9_8() { simplification("simplify_staccato_9-8"); }
 
       // voice separation
       void voiceSeparationAcid() { voiceSeparation("voice_acid"); }
