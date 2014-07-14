@@ -548,8 +548,30 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
             }
       if (tie)
             connectTies();
-      if (nr)
+      if (nr) {
+            if (_is.slur() && nr->type() == Element::Type::NOTE) {
+                  //
+                  // extend slur
+                  //
+                  Chord* e = static_cast<Note*>(nr)->chord();
+                  int stick = 0;
+                  Element* ee = _is.slur()->startElement();
+                  if (ee->isChordRest())
+                        stick = static_cast<ChordRest*>(ee)->tick();
+                  else if (ee->type() == Element::Type::NOTE)
+                        stick = static_cast<Note*>(ee)->chord()->tick();
+                  if (stick == e->tick()) {
+                        _is.slur()->setTick(stick);
+                        _is.slur()->setStartElement(e);
+                        }
+                  else {
+                        _is.slur()->setTick2(e->tick());
+                        _is.slur()->setEndElement(e);
+                        }
+                  setLayoutAll(true);
+                  }
             select(nr, SelectType::SINGLE, 0);
+            }
       return segment;
       }
 

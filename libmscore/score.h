@@ -706,13 +706,14 @@ class Score : public QObject {
       int pos(POS pos) const                   {  return _pos[int(pos)]; }
       void setPos(POS pos, int tick);
 
-      bool noteEntryMode() const               { return _is.noteEntryMode(); }
-      void setNoteEntryMode(bool val)          { _is.setNoteEntryMode(val); }
+      bool noteEntryMode() const               { return inputState().noteEntryMode(); }
+      void setNoteEntryMode(bool val)          { inputState().setNoteEntryMode(val); }
       int inputPos() const;
-      int inputTrack() const                   { return _is.track(); }
-      InputState& inputState()                 { return _is;         }
-      void setInputState(const InputState& st) { _is = st;           }
-      void setInputTrack(int t)                { _is.setTrack(t);    }
+      int inputTrack() const                   { return inputState().track(); }
+      const InputState& inputState() const     { return _is;                  }
+      InputState& inputState()                 { return _is;                  }
+      void setInputState(const InputState& st) { _is = st;                    }
+      void setInputTrack(int t)                { inputState().setTrack(t);    }
 
       void spatiumChanged(qreal oldValue, qreal newValue);
 
