@@ -668,6 +668,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             chord->add(a);
             }
       if (modMask2 & 0x2) {   // palm mute - mute the whole column
+            addPalmMute(note);
             }
       if (modMask2 & 0x4) {    // tremolo picking length
             int tremoloDivision = readUChar();

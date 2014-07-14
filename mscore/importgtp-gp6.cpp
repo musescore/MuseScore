@@ -808,6 +808,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                   note->setGhost(true);
                                                                   }
                                                             }
+                                                      else if (argument == "PalmMuted") {
+                                                            if (!currentProperty.firstChild().nodeName().compare("Enable"))
+                                                                  addPalmMute(note);
+                                                            }
                                                       else
                                                             qDebug() << "WARNING: Not handling node argument: " << argument << "in node" << currentNote.nodeName();
                                                       currentProperty = currentProperty.nextSibling();
