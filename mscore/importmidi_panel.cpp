@@ -69,10 +69,12 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
             restoreTableViewState();
             }
 
-//      _ui->tracksView->setFrozenRowCount(_model->frozenRowCount());
-//      _ui->tracksView->setFrozenColCount(_model->frozenColCount());
+      _ui->tracksView->setFrozenRowCount(_model->frozenRowCount());
+      _ui->tracksView->setFrozenColCount(_model->frozenColCount());
       _ui->comboBoxCharset->setCurrentText(preferences.midiImportOperations.data()->charset);
-      _ui->tracksView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+                  // tracks view has multiple headers (need for frozen rows/columns)
+                  // so to set all headers special methods there have been implemented
+      _ui->tracksView->setHHeaderResizeMode(QHeaderView::ResizeToContents);
       }
 
 void ImportMidiPanel::saveTableViewState()
@@ -93,13 +95,16 @@ void ImportMidiPanel::restoreTableViewState()
 
       const QByteArray hData = opers.data()->HHeaderData;
       const QByteArray vData = opers.data()->VHeaderData;
-      _ui->tracksView->horizontalHeader()->restoreState(hData);
-      _ui->tracksView->verticalHeader()->restoreState(vData);
+      _ui->tracksView->restoreHHeaderState(hData);
+      _ui->tracksView->restoreVHeaderState(vData);
       }
 
 void ImportMidiPanel::resetTableViewState()
       {
-      _ui->tracksView->verticalHeader()->reset();
+      _ui->tracksView->setFrozenRowCount(0);
+      _ui->tracksView->setFrozenColCount(0);
+      _ui->tracksView->resetHHeader();
+      _ui->tracksView->resetVHeader();
       }
 
 bool ImportMidiPanel::isMidiFile(const QString &fileName)
@@ -118,9 +123,7 @@ void ImportMidiPanel::setupUi()
 
       _updateUiTimer->start(100);
       updateUi();
-                  // tracks view
-      _ui->tracksView->verticalHeader()->setDefaultSectionSize(24);
-                  // charset
+      _ui->tracksView->setVHeaderDefaultSectionSize(24);
       _ui->comboBoxCharset->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
       fillCharsetList();
       }
