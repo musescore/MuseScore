@@ -136,7 +136,7 @@ void lengthenNote(
       const double STACCATO_TOL = 0.3;
 
       if (addedPart >= STACCATO_TOL) {
-            if (noteOnTime == durationStart && minNoteDurationCount == 1)
+            if (noteOnTime == durationStart && minNoteDurationCount <= 1.5)
                   note.staccato = true;
             else
                   hasLossOfAccuracy = true;
