@@ -3705,69 +3705,14 @@ void MuseScore::loadFile(const QUrl& url)
       }
 
 //---------------------------------------------------------
-//   collectMatch
-//---------------------------------------------------------
-
-static void collectMatch(void* data, Element* e)
-      {
-      ElementPattern* p = static_cast<ElementPattern*>(data);
-/*      if (p->type == e->type() && p->subtype != e->subtype())
-            qDebug("%s subtype %d does not match", e->name(), e->subtype());
-      */
-//TODO      if ((p->type != e->type()) || (p->subtypeValid && p->subtype != e->subtype()))
-      if (p->type != int(e->type()))
-            return;
-      if ((p->staff != -1) && (p->staff != e->staffIdx()))
-            return;
-      if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS || e->type() == Element::Type::STEM) {
-            if (p->voice != -1 && p->voice != e->voice())
-                  return;
-            }
-      if (p->system) {
-            Element* ee = e;
-            do {
-                  if (ee->type() == Element::Type::SYSTEM) {
-                        if (p->system != ee)
-                              return;
-                        break;
-                        }
-                  ee = ee->parent();
-                  } while (ee);
-            }
-      p->el.append(e);
-      }
-
-//---------------------------------------------------------
 //   selectSimilar
 //---------------------------------------------------------
 
 void MuseScore::selectSimilar(Element* e, bool sameStaff)
       {
-      Element::Type type = e->type();
-//TODO      int subtype      = e->subtype();
-
-      ElementPattern pattern;
-      pattern.subtypeValid = true;
-//TODO      if (type == VOLTA_SEGMENT) {
-            // Volta* volta = static_cast<VoltaSegment*>(e)->volta();
-            // type    = volta->type();
-            // subtype = volta->subtype();
-            pattern.subtypeValid = false;
-//            }
-
       Score* score = e->score();
-      pattern.type    = int(type);
-      pattern.subtype = 0; // TODO subtype;
-      pattern.staff   = sameStaff ? e->staffIdx() : -1;
-      pattern.voice   = -1;
-      pattern.system  = 0;
+      score->selectSimilar(e, sameStaff);
 
-      score->scanElements(&pattern, collectMatch);
-
-      score->select(0, SelectType::SINGLE, 0);
-      foreach(Element* e, pattern.el) {
-            score->select(e, SelectType::ADD, 0);
-            }
       if (score->selectionChanged()) {
             score->setSelectionChanged(false);
             SelState ss = score->selection().state();
@@ -3777,23 +3722,9 @@ void MuseScore::selectSimilar(Element* e, bool sameStaff)
 
 void MuseScore::selectSimilarInRange(Element* e)
       {
-      Element::Type type = e->type();
-      ElementPattern pattern;
-
       Score* score = e->score();
-      pattern.type    = int(type);
-      pattern.subtype = 0;
-      pattern.staff   = -1;
-      pattern.voice   = -1;
-      pattern.system  = 0;
-      pattern.subtypeValid = false;
+      score->selectSimilarInRange(e);
 
-      score->scanElementsInRange(&pattern, collectMatch);
-
-      score->select(0, SelectType::SINGLE, 0);
-      foreach(Element* e, pattern.el) {
-                  score->select(e, SelectType::ADD, 0);
-            }
       if (score->selectionChanged()) {
             score->setSelectionChanged(false);
             SelState ss = score->selection().state();
@@ -3811,7 +3742,7 @@ void MuseScore::selectElementDialog(Element* e)
       if (sd.exec()) {
             ElementPattern pattern;
             sd.setPattern(&pattern);
-            score->scanElements(&pattern, collectMatch);
+            score->scanElements(&pattern, Score::collectMatch);
             if (sd.doReplace()) {
                   score->select(0, SelectType::SINGLE, 0);
                   foreach(Element* ee, pattern.el)
