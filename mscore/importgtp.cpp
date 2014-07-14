@@ -230,6 +230,29 @@ int GuitarPro::readInt()
       }
 
 //---------------------------------------------------------
+//   addTextToNote
+//---------------------------------------------------------
+
+void GuitarPro::addPalmMute(Note* note)
+      {
+      QString palmMute = "P.M.";
+      addTextToNote(palmMute, note);
+      }
+
+//---------------------------------------------------------
+//   addTextToNote
+//---------------------------------------------------------
+
+void GuitarPro::addTextToNote(QString string, Note* note)
+      {
+      Text* text = new Text(score);
+      text->setText(string);
+      text->setAbove(true);
+      note->add(text);
+      }
+
+
+//---------------------------------------------------------
 //   setTuplet
 //---------------------------------------------------------
 

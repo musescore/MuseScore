@@ -338,9 +338,14 @@ bool GuitarPro4::readNote(int string, Note* note)
                          }
                   }
             if (modMask2 & 0x1) {   // staccato
+                  Chord* chord = note->chord();
+                  Articulation* a = new Articulation(chord->score());
+                  a->setArticulationType(ArticulationType::Staccato);
+                  chord->add(a);
                   }
-            if (modMask2 & 0x2) {   // palm mute - mute the whole column
-                  }
+            if (modMask2 & 0x2)
+                  addPalmMute(note);
+
             if (modMask2 & 0x4) {    // tremolo picking length
                   int tremoloDivision = readUChar();
                   Chord* chord = note->chord();
