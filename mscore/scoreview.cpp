@@ -999,6 +999,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       QMenu* selMenu = popup->addMenu(tr("Select"));
       selMenu->addAction(getAction("select-similar"));
       selMenu->addAction(getAction("select-similar-staff"));
+      selMenu->addAction(getAction("select-similar-range"));
       a = selMenu->addAction(tr("More..."));
       a->setData("select-dialog");
       popup->addSeparator();
@@ -1036,6 +1037,8 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
             mscore->selectSimilar(obj, false);
       else if (cmd == "select-similar-staff")
             mscore->selectSimilar(obj, true);
+      else if (cmd == "select-similar-range")
+            mscore->selectSimilarInRange(obj);
       else if (cmd == "select-dialog")
             mscore->selectElementDialog(obj);
       else {

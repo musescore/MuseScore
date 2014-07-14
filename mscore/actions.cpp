@@ -1834,6 +1834,13 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Select all similar elements in same staff")
          ),
       Shortcut(
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "select-similar-range",
+         QT_TRANSLATE_NOOP("action","All Similar Elements in Range Selection"),
+         QT_TRANSLATE_NOOP("action","Select all similar elements in the range selection")
+         ),
+      Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "synth-control",
