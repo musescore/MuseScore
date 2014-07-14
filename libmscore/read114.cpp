@@ -735,10 +735,17 @@ Score::FileError Score::read114(XmlReader& e)
             }
 
 //      _mscVersion = MSCVERSION;     // for later drag & drop usage
+
       fixTicks();
       rebuildMidiMapping();
       updateChannel();
       updateNotes();    // only for parts needed?
+
+      // treat reading a 1.2 file as import
+      // on save warn if old file will be overwritten
+
+      setCreated(true);
+      setDirty(true);
 
       return FileError::FILE_NO_ERROR;
       }
