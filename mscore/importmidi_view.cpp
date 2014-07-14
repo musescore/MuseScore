@@ -378,14 +378,16 @@ bool TracksView::viewportEvent(QEvent *event)
 
 void TracksView::wheelEvent(QWheelEvent *event)
       {
+      const int degrees = event->delta() / 8;
+      const int steps = degrees / 15;
+
       if ((event->modifiers() & Qt::ShiftModifier) || (event->modifiers() & Qt::ControlModifier)) {
-            const int degrees = event->delta() / 8;
-            const int steps = degrees / 15;
             const int pixelsToScroll = steps * 30;
             horizontalScrollBar()->setValue(horizontalScrollBar()->value() - pixelsToScroll);
             }
       else {
-            QTableView::wheelEvent(event);
+            const int pixelsToScroll = steps * 15;
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - pixelsToScroll);
             }
       }
 
