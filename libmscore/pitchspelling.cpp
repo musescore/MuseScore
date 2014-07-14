@@ -30,8 +30,6 @@ namespace Ms {
 
 bool tpcIsValid(int val)
       {
-      if (!(val >= Tpc::TPC_MIN && val <= Tpc::TPC_MAX))
-            qDebug("invalid tpc %d", val);
       return val >= Tpc::TPC_MIN && val <= Tpc::TPC_MAX;
       }
 

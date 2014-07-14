@@ -861,10 +861,10 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
                   }
             }
 
-
 // _mscVersion is needed used during layout
 //      _mscVersion = MSCVERSION;     // for later drag & drop usage
 
+      setCreated(false);
       return FileError::FILE_NO_ERROR;
       }
 
