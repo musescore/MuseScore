@@ -818,9 +818,12 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
                         stick = static_cast<Note*>(ee)->chord()->tick();
                   if (stick == e->tick()) {
                         _is.slur()->setTick(stick);
+                        _is.slur()->setStartElement(e);
                         }
-                  else
+                  else {
                         _is.slur()->setTick2(e->tick());
+                        _is.slur()->setEndElement(e);
+                        }
                   }
             else
                   qDebug("addPitch: cannot find slur note");
@@ -863,8 +866,8 @@ void Score::putNote(const Position& p, bool replace)
       Staff* st       = staff(staffIdx);
       ClefType clef   = st->clef(tick);
 
-// qDebug("putNote at tick %d staff %d line %d clef %d",
-//   tick, staffIdx, line, clef);
+qDebug("putNote at tick %d staff %d line %d clef %d",
+   tick, staffIdx, line, clef);
 
       _is.setTrack(staffIdx * VOICES + _is.voice());
       _is.setSegment(s);

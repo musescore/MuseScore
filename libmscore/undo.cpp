@@ -1398,6 +1398,14 @@ RemoveElement::RemoveElement(Element* e)
             QList<Spanner*> sl;
             for (auto i : score->spanner()) {     // TODO: dont search whole list
                   Spanner* s = i.second;
+                  // do not delete slur if in note entry mode
+                  if (e->score()->inputState().noteEntryMode() && e->score()->inputState().slur() == s) {
+                        if (s->startElement() == e)
+                              s->setStartElement(nullptr);
+                        else if (s->endElement() == e)
+                              s->setEndElement(nullptr);
+                        continue;
+                        }
                   if (s->type() == Element::Type::SLUR && (s->startElement() == e || s->endElement() == e)) {
                         sl.append(s);
                         }
@@ -1416,7 +1424,7 @@ RemoveElement::RemoveElement(Element* e)
                         if (tremolo->twoNotes())
                               score->undoRemoveElement(tremolo);
                         }
-                  foreach(Note* note, chord->notes()) {
+                  for (const Note* note : chord->notes()) {
                         if (note->tieFor() && note->tieFor()->endNote())
                               score->undoRemoveElement(note->tieFor());
                         if (note->tieBack())
