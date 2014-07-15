@@ -953,4 +953,48 @@ Ms::Element* Segment::elementAt(int track) const {
       return e;
       }
 
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
+      {
+      // bar line visibility depends on spanned staves,
+      // not simply on visibility of first staff
+      if (segmentType() == Segment::Type::BarLine || segmentType() == Segment::Type::EndBarLine
+          || segmentType() == Segment::Type::StartRepeatBarLine) {
+            for (int staffIdx = 0; staffIdx < _score->nstaves(); ++staffIdx) {
+                  Element* e = element(staffIdx*VOICES);
+                  if (e == 0)             // if no element, skip
+                        continue;
+                  // if staff not visible
+                  if (!all && !(measure()->visible(staffIdx) && _score->staff(staffIdx)->show())) {
+                        // if bar line spans just this staff...
+                        if (static_cast<BarLine*>(e)->span() <= 1
+                            // ...or span another staff but without entering INTO it...
+                            || (static_cast<BarLine*>(e)->span() < 2 &&
+                                static_cast<BarLine*>(e)->spanTo() < 1) )
+                              continue;         // ...skip
+                        }
+                  e->scanElements(data, func, all);
+                  }
+            }
+      else
+            for (int track = 0; track < _score->nstaves() * VOICES; ++track) {
+                  int staffIdx = track/VOICES;
+                  if (!all && !(measure()->visible(staffIdx) && _score->staff(staffIdx)->show())) {
+                        track += VOICES - 1;
+                        continue;
+                        }
+                  Element* e = element(track);
+                  if (e == 0)
+                        continue;
+                  e->scanElements(data, func, all);
+                  }
+      foreach(Element* e, annotations()) {
+            if (all || e->systemFlag() || measure()->visible(e->staffIdx()))
+                  e->scanElements(data,  func, all);
+            }
+      }
+
 }           // namespace Ms
