@@ -110,6 +110,8 @@
             <lid>6</lid>
             <Text>
               <style></style>
+              <halign>center</halign>
+              <valign>center</valign>
               <xoffset>0</xoffset>
               <yoffset>-2</yoffset>
               <text>P.M.</text>
@@ -290,6 +292,8 @@
               <lid>6</lid>
               <Text>
                 <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
                 <xoffset>0</xoffset>
                 <yoffset>-2</yoffset>
                 <text>P.M.</text>
@@ -356,6 +360,8 @@
               <lid>6</lid>
               <Text>
                 <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
                 <xoffset>0</xoffset>
                 <yoffset>-2</yoffset>
                 <text>P.M.</text>
