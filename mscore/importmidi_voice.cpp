@@ -554,7 +554,7 @@ void updateTuplet(
                   tuplet = tuplets.insert({tupletOnTime, newTuplet});
                   insertedTuplets.insert({tupletOnTime, tuplet});
                               // maybe impossible due to intersection check but check anyway:
-                              // if there is a non-chord with on time = tuplet on time
+                              // if there is a non-tuplet chord with on time = tuplet on time
                               // then add that chord to the new tuplet
                   const auto range = chords.equal_range(tupletOnTime);
                   for (auto it = range.first; it != range.second; ++it) {
