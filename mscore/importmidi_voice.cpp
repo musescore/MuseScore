@@ -686,7 +686,7 @@ bool doVoiceSeparation(
 
                   if (newChord.isInTuplet) {
                         updateTuplet(newChord.tuplet, newChord.voice, onTime,
-                                     newChord.notes, chord.isInTuplet,
+                                     newChord.notes, newChord.isInTuplet,
                                      insertedTuplets, chords, tuplets, maxChordLengths);
                         }
 
