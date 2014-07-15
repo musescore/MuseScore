@@ -852,17 +852,14 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
             if (i->second->tick2() == -1)
                   sl.append(i->second);
             }
-      if (!sl.isEmpty()) {
-            int lastTick = lastMeasure()->endTick();
-            for (Spanner* s : sl) {
-                  s->setTick2(lastTick);
-                  _spanner.removeSpanner(s);
-                  _spanner.addSpanner(s);
-                  }
+      int lastTick = lastMeasure()->endTick();
+      for (Spanner* s : sl) {
+            s->setTick2(lastTick);
+            _spanner.removeSpanner(s);
+            _spanner.addSpanner(s);
             }
-
-// _mscVersion is needed used during layout
-//      _mscVersion = MSCVERSION;     // for later drag & drop usage
+      for (Staff* s : _staves)
+            s->updateOttava();
 
       setCreated(false);
       return FileError::FILE_NO_ERROR;

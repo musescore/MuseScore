@@ -1906,11 +1906,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                               // track is the same as the beginning of the slur
                         if (spanner->track2() == -1)
                               spanner->setTrack2(spanner->track() ? spanner->track() : e.track());
-                        if (spanner->type() == Element::Type::OTTAVA) {
-                              Ottava* o = static_cast<Ottava*>(spanner);
-                              o->staff()->updateOttava(o);
-                              }
-                        else if (spanner->type() == Element::Type::HAIRPIN) {
+                        if (spanner->type() == Element::Type::HAIRPIN) {
                               Hairpin* hp = static_cast<Hairpin*>(spanner);
                               score()->updateHairpin(hp);
                               }

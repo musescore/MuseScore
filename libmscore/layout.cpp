@@ -1357,7 +1357,7 @@ void Score::doLayout()
             Spanner* sp = s.second;
             if (sp->type() == Element::Type::OTTAVA && sp->tick2() == -1) {
                   sp->setTick2(lastMeasure()->endTick());
-                  sp->staff()->updateOttava(static_cast<Ottava*>(sp));
+                  sp->staff()->updateOttava();
                   }
             // 1.3 scores can have ties in this list
             if (sp->type() != Element::Type::TIE) {
