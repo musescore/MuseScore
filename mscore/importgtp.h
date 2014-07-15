@@ -126,8 +126,9 @@ class GuitarPro {
       void createSlur(bool hasSlur, int staffIdx, ChordRest* cr);
       void createSlide(int slide, ChordRest* cr, int staffIdx);
       void createCrecDim(int staffIdx, int track, int tick, bool crec);
-      void addTextToNote(QString string, Note* note);
+      void addTextToNote(QString string, TextStyle textStyle, Note* note);
       void addPalmMute(Note* note);
+      void addLetRing(Note* note);
 
    public:
       QString title, subtitle, artist, album, composer;

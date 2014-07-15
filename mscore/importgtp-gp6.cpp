@@ -1025,8 +1025,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             a->setArpeggioType(ArpeggioType::DOWN);
                                                       chord->add(a);
                                                       }
+                                                QDomNode letRingNode = currentNote.parentNode().firstChildElement("LetRing");
+                                                if (!letRingNode.isNull())
+                                                      addLetRing(note);
                                                 createSlide(slide, cr, staffIdx);
-
                                                 note->setTpcFromPitch();
                                                 currentNote = currentNote.nextSibling();
                                                 }

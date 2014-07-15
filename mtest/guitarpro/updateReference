@@ -84,3 +84,6 @@ cp   $MSCORE/grace-on-beat.gpx.mscx grace-on-beat.gpx-ref.mscx
 cp   $MSCORE/palm-mute.gpx.mscx palm-mute.gpx-ref.mscx
 cp   $MSCORE/palm-mute.gp5.mscx palm-mute.gp5-ref.mscx
 cp   $MSCORE/palm-mute.gp4.mscx palm-mute.gp4-ref.mscx
+cp   $MSCORE/let-ring.gpx.mscx let-ring.gpx-ref.mscx
+cp   $MSCORE/let-ring.gp5.mscx let-ring.gp5-ref.mscx
+cp   $MSCORE/let-ring.gp4.mscx let-ring.gp4-ref.mscx
