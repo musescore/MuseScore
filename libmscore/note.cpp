@@ -1582,9 +1582,18 @@ void Note::layout2()
                         StaffType* tab = staff()->staffType();
                         w = tabHeadWidth(tab);
                         }
-                  e->setPos(w, 0.0);
+                  QPointF rp = e->readPos();
+                  e->layout();
+                  e->rxpos() += w;
+                  // adjustReadPos() was called too early in layout(), adjust:
+                  if (!rp.isNull()) {
+                        e->setUserOff(QPointF());
+                        e->setReadPos(rp);
+                        e->adjustReadPos();
+                        }
                   }
-            e->layout();
+            else
+                  e->layout();
             }
       }
 

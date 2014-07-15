@@ -159,7 +159,7 @@ Element* BSymbol::drop(const DropData& data)
 
 void BSymbol::layout()
       {
-      foreach(Element* e, _leafs)
+      for (Element* e : _leafs)
             e->layout();
       adjustReadPos();
       }
