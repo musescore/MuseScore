@@ -1145,7 +1145,7 @@ void Note::endDrag()
             }
       else {
             // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch
-            int nLine       = _line + _lineOffset;
+            int nLine   = _line + _lineOffset;
             _lineOffset = 0;
             // get note context
             int tick      = chord()->tick();
@@ -1153,6 +1153,10 @@ void Note::endDrag()
             Key key       = staff->key(tick);
             // determine new pitch of dragged note
             int nPitch = line2pitch(nLine, clef, key);
+            if (!concertPitch()) {
+                  Interval interval = staff->part()->instr()->transpose();
+                  nPitch += interval.chromatic;
+                  }
             int tpc1   = pitch2tpc(nPitch, key, Prefer::NEAREST);
             int tpc2   = pitch2tpc(nPitch - transposition(), key, Prefer::NEAREST);
             // undefined for non-tablature staves
