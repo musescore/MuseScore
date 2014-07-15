@@ -1802,11 +1802,6 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
             if (rv != Score::FileError::FILE_NO_ERROR)
                   return rv;
-//            if(score->mscVersion() <= 114) {
-//                  score->setCreated(true); // force save as for imported files
-//                  }
-//            else
-//                  score->setCreated(false);
             }
       else {
             typedef Score::FileError (*ImportFunction)(Score*, const QString&);

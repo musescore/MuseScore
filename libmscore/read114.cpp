@@ -742,9 +742,7 @@ Score::FileError Score::read114(XmlReader& e)
 
       // treat reading a 1.2 file as import
       // on save warn if old file will be overwritten
-
       setCreated(true);
-      setDirty(true);
 
       return FileError::FILE_NO_ERROR;
       }
