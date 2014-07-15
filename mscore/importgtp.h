@@ -129,6 +129,9 @@ class GuitarPro {
       void addTextToNote(QString string, TextStyle textStyle, Note* note);
       void addPalmMute(Note* note);
       void addLetRing(Note* note);
+      void addTap(Note* note);
+      void addSlap(Note* note);
+      void addPop(Note* note);
 
    public:
       QString title, subtitle, artist, album, composer;

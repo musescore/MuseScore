@@ -87,3 +87,8 @@ cp   $MSCORE/palm-mute.gp4.mscx palm-mute.gp4-ref.mscx
 cp   $MSCORE/let-ring.gpx.mscx let-ring.gpx-ref.mscx
 cp   $MSCORE/let-ring.gp5.mscx let-ring.gp5-ref.mscx
 cp   $MSCORE/let-ring.gp4.mscx let-ring.gp4-ref.mscx
+cp   $MSCORE/tap-slap-pop.gpx.mscx tap-slap-pop.gpx-ref.mscx
+cp   $MSCORE/tap-slap-pop.gp5.mscx tap-slap-pop.gp5-ref.mscx
+cp   $MSCORE/barre.gpx.mscx barre.gpx-ref.mscx
+cp   $MSCORE/timer.gpx.mscx timer.gpx-ref.mscx
+cp   $MSCORE/text.gpx.mscx text.gpx-ref.mscx

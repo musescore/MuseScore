@@ -113,9 +113,14 @@ private slots:
       void gpxPalmMute()     { gpReadTest("palm-mute", "gpx"); }
       void gp5PalmMute()     { gpReadTest("palm-mute", "gp5"); }
       void gp4PalmMute()     { gpReadTest("palm-mute", "gp4"); }
-      void gpxLetRing()     { gpReadTest("let-ring", "gpx"); }
-      void gp5LetRing()     { gpReadTest("let-ring", "gp5"); }
-      void gp4LetRing()     { gpReadTest("let-ring", "gp4"); }
+      void gpxLetRing()      { gpReadTest("let-ring", "gpx"); }
+      void gp5LetRing()      { gpReadTest("let-ring", "gp5"); }
+      void gp4LetRing()      { gpReadTest("let-ring", "gp4"); }
+      void gpxTapSlapPop()   { gpReadTest("tap-slap-pop", "gpx"); }
+      void gp5TapSlapPop()   { gpReadTest("tap-slap-pop", "gp5"); }
+      void gpxBarre()        { gpReadTest("barre", "gpx"); }
+      void gpxTimer()        { gpReadTest("timer", "gpx"); }
+      void gpxText()         { gpReadTest("text", "gpx"); }
       };
 
 //---------------------------------------------------------
