@@ -225,10 +225,7 @@ void Ottava::endEdit()
       {
       if (editTick != tick() || editTick2 != tick2()) {
             Staff* s = staff();
-            s->pitchOffsets().remove(editTick);
-            s->pitchOffsets().remove(editTick2);
-
-            s->updateOttava(this);
+            s->updateOttava();
             score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             score()->setPlaylistDirty(true);
             }
@@ -353,15 +350,13 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
                   break;
 
             case P_ID::SPANNER_TICK2:
-                  staff()->pitchOffsets().remove(tick2());
                   setTick2(val.toInt());
-                  staff()->updateOttava(this);
+                  staff()->updateOttava();
                   break;
 
             case P_ID::SPANNER_TICK:
-                  staff()->pitchOffsets().remove(tick());
                   setTick(val.toInt());
-                  staff()->updateOttava(this);
+                  staff()->updateOttava();
                   break;
 
             default:

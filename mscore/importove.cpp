@@ -692,8 +692,8 @@ void OveToMScore::convertTrackElements(int track) {
 					int absTick = mtt_->getTick(i, octave->getEndTick());
 
                     ottava->setTick2(absTick);
-                    ottava->staff()->updateOttava(ottava);
                     score_->addSpanner(ottava);
+                    ottava->staff()->updateOttava();
                     ottava = 0;
 				} else {
                     qDebug("octave-shift stop without start");

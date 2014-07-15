@@ -1366,8 +1366,8 @@ void Score::addElement(Element* element)
                         if (ss->system())
                               ss->system()->add(ss);
                         }
-                  o->staff()->updateOttava(o);
                   layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
+                  o->staff()->updateOttava();
                   _playlistDirty = true;
                   }
                   break;
@@ -1504,9 +1504,7 @@ void Score::removeElement(Element* element)
                         if (ss->system())
                               ss->system()->remove(ss);
                         }
-                  Staff* s = o->staff();
-                  s->pitchOffsets().remove(o->tick());
-                  s->pitchOffsets().remove(o->tick2());
+                  o->staff()->updateOttava();
                   layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
                   }
