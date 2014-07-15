@@ -46,6 +46,13 @@ bool hasNonTrivialChord(
             const ReducedFraction &tupletOnTime,
             const ReducedFraction &tupletLen);
 
+bool isTupletUseless(
+            int voice,
+            const ReducedFraction &onTime,
+            const ReducedFraction &len,
+            const ReducedFraction &maxChordLength,
+            const std::multimap<ReducedFraction, MidiChord> &chords);
+
 std::multimap<ReducedFraction, TupletData>::iterator
 removeTupletIfEmpty(
             const std::multimap<ReducedFraction, TupletData>::iterator &tupletIt,
