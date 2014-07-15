@@ -812,6 +812,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             if (!currentProperty.firstChild().nodeName().compare("Enable"))
                                                                   addPalmMute(note);
                                                             }
+                                                      else if (argument == "Tapped") {
+                                                            if (!currentProperty.firstChild().nodeName().compare("Enable"))
+                                                                  addTap(note);
+                                                            }
                                                       else
                                                             qDebug() << "WARNING: Not handling node argument: " << argument << "in node" << currentNote.nodeName();
                                                       currentProperty = currentProperty.nextSibling();
@@ -937,6 +941,8 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 QDomNode propertiesNode = currentNode.parentNode().firstChildElement("Properties");
                                                 if (!propertiesNode.isNull()) {
                                                       QDomNode currentProperty = propertiesNode.firstChild();
+                                                      QString barreFret = "";
+                                                      bool halfBarre = false;
                                                       while (!currentProperty.isNull()) {
                                                             QString argument = currentProperty.attributes().namedItem("name").toAttr().value();
                                                             if (!argument.compare("PickStroke")) {
@@ -962,7 +968,46 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                         a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
                                                                   chord->add(a);
                                                                   }
+                                                            else if (!argument.compare("Slapped")) {
+                                                                  if (!currentProperty.firstChild().nodeName().compare("Enable"))
+                                                                        addSlap(note);
+                                                                  }
+                                                            else if (!argument.compare("Popped")) {
+                                                                  if (!currentProperty.firstChild().nodeName().compare("Enable"))
+                                                                        addPop(note);
+                                                                  }
+                                                            else if (!argument.compare("BarreFret")) {
+                                                                  // target can be anywhere from 1 to 36
+                                                                  int target = currentProperty.firstChild().toElement().text().toInt();
+                                                                  for (int i = 0; i < (target/10); i++)
+                                                                        barreFret += "X";
+                                                                  int targetMod10 = target % 10;
+                                                                  if (targetMod10 == 9)
+                                                                        barreFret += "IX";
+                                                                  else if (targetMod10 == 4)
+                                                                        barreFret += "IV";
+                                                                  else  {
+                                                                        if (targetMod10 >= 5) {
+                                                                              barreFret += "V";
+                                                                              targetMod10-=5;
+                                                                              }
+                                                                        for (int j = 0; j < targetMod10; j++)
+                                                                              barreFret += "I";
+                                                                        }
+                                                                  }
+                                                            else if (!argument.compare("BarreString"))
+                                                                  halfBarre = true;
+
                                                             currentProperty = currentProperty.nextSibling();
+                                                            }
+                                                      // if a barre fret has been specified
+                                                      if (barreFret.compare("")) {
+                                                            TextStyle textStyle;
+                                                            textStyle.setAlign(ALIGN_CENTER);
+                                                            if (halfBarre)
+                                                                  addTextToNote("1/2B " + barreFret, textStyle, note);
+                                                            else
+                                                                  addTextToNote("B " + barreFret, textStyle, note);
                                                             }
                                                       }
                                                 QDomNode dynamicsNode = currentNode.parentNode().firstChildElement("Dynamic");
@@ -1028,6 +1073,21 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 QDomNode letRingNode = currentNote.parentNode().firstChildElement("LetRing");
                                                 if (!letRingNode.isNull())
                                                       addLetRing(note);
+                                                QDomNode timerNode = currentNode.parentNode().firstChildElement("Timer");
+                                                if (!timerNode.isNull()) {
+                                                      int time = timerNode.toElement().text().toInt();
+                                                      TextStyle textStyle;
+                                                      textStyle.setAlign(ALIGN_CENTER);
+                                                      int minutes = time/60;
+                                                      int seconds = time % 60;
+                                                      addTextToNote(QString::number(minutes) + ":" + (seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds)), textStyle, note);
+                                                      }
+                                                QDomNode textNode = currentNode.parentNode().firstChildElement("FreeText");
+                                                if (!textNode.isNull()) {
+                                                      TextStyle textStyle;
+                                                      textStyle.setAlign(ALIGN_CENTER);
+                                                      addTextToNote(textNode.toElement().text(), textStyle, note);
+                                                      }
                                                 createSlide(slide, cr, staffIdx);
                                                 note->setTpcFromPitch();
                                                 currentNote = currentNote.nextSibling();
