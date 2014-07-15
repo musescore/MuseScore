@@ -1032,13 +1032,22 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
             QuantData &d = quantData[chordIndex];
             for (int pos = 0; pos != (int)d.positions.size(); ++pos) {
                   QuantPos &p = d.positions[pos];
-                  const auto timePenalty = (d.chord->first - p.time).absValue().toDouble();
-                  const double levelDiff = 1 + qAbs(d.metricalLevelForLen - p.metricalLevel);
 
-                  if (p.metricalLevel <= d.metricalLevelForLen)
-                        p.penalty = timePenalty * levelDiff;
-                  else
-                        p.penalty = (isHuman) ? timePenalty / levelDiff : timePenalty;
+                  const auto timePenalty = (d.chord->first - p.time).absValue().toDouble();
+                  const double levelDiff = qAbs(d.metricalLevelForLen - p.metricalLevel);
+
+                  if (isHuman) {
+                        if (p.metricalLevel <= d.metricalLevelForLen)
+                              p.penalty = timePenalty + levelDiff * d.quantForLen.toDouble();
+                        else
+                              p.penalty = timePenalty / (1 + levelDiff);
+                        }
+                  else {
+                        if (p.metricalLevel <= d.metricalLevelForLen)
+                              p.penalty = timePenalty * (1 + levelDiff);
+                        else
+                              p.penalty = timePenalty;
+                        }
 
                   if (chordIndex == 0)
                         continue;
