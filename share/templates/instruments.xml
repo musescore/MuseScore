@@ -7877,6 +7877,147 @@
                         <program value="105"/>
                   </Channel>
             </Instrument>
+            <Instrument id="balalaika">
+                  <longName>Balalaika</longName>
+                  <shortName>Bal.</shortName>
+                  <trackName> Balalaika</trackName>
+                  <description>Balalaika in fact the prima but a generic for simplicity</description>
+                  <musicXMLid>pluck.balalaika</musicXMLid>
+                  <StringData>
+                        <frets>17</frets>
+                        <string>69</string>
+                        <string>64</string>
+                        <string>62</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>64-86</aPitchRange>
+                  <pPitchRange>64-86</pPitchRange>
+                  <Channel>
+                        <program value="107"/>
+                  </Channel>
+                  <genre>ethnic</genre>
+            </Instrument>
+            <Instrument id="balalaika-piccolo">
+                  <longName>Piccolo Balalaika</longName>
+                  <shortName>Pic. Bal.</shortName>
+                  <trackName>Piccolo Balalaika</trackName>
+                  <description>Piccolo Balalaika (the smallest and rarest of the family)</description>
+                  <musicXMLid>pluck.balalaika.piccolo</musicXMLid>
+                  <StringData>
+                        <frets>17</frets>
+                        <string>81</string>
+                        <string>76</string>
+                        <string>71</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>71-98</aPitchRange>
+                  <pPitchRange>71-98</pPitchRange>
+                  <Channel>
+                        <program value="107"/>
+                  </Channel>
+            </Instrument>
+            <Instrument id="balalaika-prima">
+                  <longName>Prima Balalaika</longName>
+                  <shortName>Pr. Bal.</shortName>
+                  <trackName>Prima Balalaika</trackName>
+                  <description>Prima Balalaika (the most commonly played of the family)</description>
+                  <musicXMLid>pluck.balalaika.prima</musicXMLid>
+                  <StringData>
+                        <frets>17</frets>
+                        <string>69</string>
+                        <string>64</string>
+                        <string>62</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>64-86</aPitchRange>
+                  <pPitchRange>64-86</pPitchRange>
+                  <Channel>
+                        <program value="107"/>
+                  </Channel>
+            </Instrument>
+            <Instrument id="balalaika-secunda">
+                  <longName>Secunda Balalaika</longName>
+                  <shortName>Sec. Bal.</shortName>
+                  <trackName>Secunda Balalaika</trackName>
+                  <description>Secunda Balalaika</description>
+                  <musicXMLid>pluck.balalaika.secunda</musicXMLid>
+                  <StringData>
+                        <frets>17</frets>
+                        <string>62</string>
+                        <string>57</string>
+                        <string>57</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>57-79</aPitchRange>
+                  <pPitchRange>57-79</pPitchRange>
+                  <Channel>
+                        <program value="107"/>
+                  </Channel>
+            </Instrument>
+            <Instrument id="balalaika-alto">
+                  <longName>Alto Balalaika</longName>
+                  <shortName>Al. Bal.</shortName>
+                  <trackName>Alto Balalaika</trackName>
+                  <description>Alto Balalaika </description>
+                  <musicXMLid>pluck.balalaika.alto</musicXMLid>
+                  <StringData>
+                        <frets>17</frets>
+                        <string>57</string>
+                        <string>52</string>
+                        <string>52</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>52-74</aPitchRange>
+                  <pPitchRange>52-74</pPitchRange>
+                  <Channel>
+                        <program value="107"/>
+                  </Channel>
+            </Instrument>
+            <Instrument id="balalaika-bass">
+                  <longName>Bass Balalaika</longName>
+                  <shortName>B. Bal.</shortName>
+                  <trackName>Bass Balalaika</trackName>
+                  <description>Bass Balalaika </description>
+                  <musicXMLid>pluck.balalaika.bass</musicXMLid>
+                  <StringData>
+                        <frets>17</frets>
+                        <string>50</string>
+                        <string>45</string>
+                        <string>40</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-67</aPitchRange>
+                  <pPitchRange>40-67</pPitchRange>
+                  <Channel>
+                        <program value="107"/>
+                  </Channel>
+            </Instrument>
+            <Instrument id="balalaika-contrabass">
+                  <longName>Contrabass Balalaika</longName>
+                  <shortName>CB. Bal.</shortName>
+                  <trackName>Contrabass Balalaika</trackName>
+                  <description>Contrabass Balalaika </description>
+                  <musicXMLid>pluck.balalaika.contrabass</musicXMLid>
+                  <StringData>
+                        <frets>17</frets>
+                        <string>38</string>
+                        <string>33</string>
+                        <string>28</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>28-55</aPitchRange>
+                  <pPitchRange>28-55</pPitchRange>
+                  <Channel>
+                        <program value="107"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="bouzouki-3-course">
                   <longName>Bouzouki</longName>
                   <shortName>Bou.</shortName>
