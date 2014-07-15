@@ -255,6 +255,42 @@ void GuitarPro::addLetRing(Note* note)
       }
 
 //---------------------------------------------------------
+//   addTap
+//---------------------------------------------------------
+
+void GuitarPro::addTap(Note* note)
+      {
+      QString tap = "T";
+      TextStyle textStyle;
+      textStyle.setAlign(ALIGN_CENTER);
+      addTextToNote(tap, textStyle, note);
+      }
+
+//---------------------------------------------------------
+//   addSlap
+//---------------------------------------------------------
+
+void GuitarPro::addSlap(Note* note)
+      {
+      QString slap = "S";
+      TextStyle textStyle;
+      textStyle.setAlign(ALIGN_CENTER);
+      addTextToNote(slap, textStyle, note);
+      }
+
+//---------------------------------------------------------
+//   addPop
+//---------------------------------------------------------
+
+void GuitarPro::addPop(Note* note)
+      {
+      QString pop = "P";
+      TextStyle textStyle;
+      textStyle.setAlign(ALIGN_CENTER);
+      addTextToNote(pop, textStyle, note);
+      }
+
+//---------------------------------------------------------
 //   addTextToNote
 //---------------------------------------------------------
 
@@ -620,34 +656,34 @@ qDebug("staff %d group %d timesig %d", staffIdx, int(staffType->group()), staffT
 
 void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
       {
-      if (beatEffect == 0)
-            return;
-
-      Articulation* a = new Articulation(chord->score());
-      chord->add(a);
-      switch (beatEffect) {
-#if 0 // TODO-smufl
-            case 1:
-                  a->setArticulationType(ArticulationType::Tapping);
-                  break;
-            case 2:
-                  a->setArticulationType(ArticulationType::Slapping);
-                  break;
-            case 3:
-                  a->setArticulationType(ArticulationType::Popping);
-                  break;
-#endif
-            case 4:
-                  a->setArticulationType(ArticulationType::FadeIn);
-                  break;
-            case 5:
-                  a->setArticulationType(ArticulationType::Upbow);
-                  break;
-            case 6:
-                  a->setArticulationType(ArticulationType::Downbow);
-                  break;
-            default:
-                  qDebug("GuitarPro import: unknown beat effect %d", beatEffect);
+      /* tap/slap/pop implemented as text until SMuFL has
+       * specifications and we can add them to fonts. Note that
+       * tap/slap/pop are just added to the top note in the chord,
+       * technically these can be applied to individual notes on the
+       * UI, but Guitar Pro has no way to express that on the
+       * score. To get the same result, we should just add the marking
+       * to above the top note.
+       */
+      if (beatEffect == 1)
+            addTap(chord->upNote());
+      else if (beatEffect == 2)
+            addSlap(chord->upNote());
+      else if (beatEffect == 3)
+            addPop(chord->upNote());
+      else if (beatEffect == 4) {
+            Articulation* a = new Articulation(chord->score());
+            a->setArticulationType(ArticulationType::FadeIn);
+            chord->add(a);
+            }
+      else if (beatEffect == 5) {
+            Articulation* a = new Articulation(chord->score());
+            a->setArticulationType(ArticulationType::Upbow);
+            chord->add(a);
+            }
+      else if (beatEffect == 6) {
+            Articulation* art = new Articulation(chord->score());
+            art->setArticulationType(ArticulationType::Downbow);
+            chord->add(art);
             }
       }
 
