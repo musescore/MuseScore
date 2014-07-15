@@ -18,6 +18,7 @@
  Definition of classes Chord, HelpLine and NoteList.
 */
 
+#include <functional>
 #include "chordrest.h"
 
 class QPainter;
