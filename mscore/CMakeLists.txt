@@ -414,6 +414,7 @@ if (MINGW)
       ${CROSSQT}/bin/icuin52.dll
       ${CROSSQT}/bin/icuuc52.dll
       ${CROSSQT}/bin/icudt52.dll
+      ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
     install(FILES
