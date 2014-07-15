@@ -32,6 +32,7 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       Q_OBJECT
 
       void copypaste(const char*, Element::Type);
+      void copypastepart(const char*, Element::Type);
 
    private slots:
       void initTestCase();
@@ -40,6 +41,8 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       void copypasteChordNames1()    { copypaste("chordnames-01", Element::Type::HARMONY); }
       void copypasteFiguredBass()   { copypaste("figuredbass", Element::Type::FIGURED_BASS); }
       void copypasteLyrics()        { copypaste("lyrics", Element::Type::LYRICS); }
+
+      void copypasteArticulationPart()  { copypastepart("articulation-part", Element::Type::ARTICULATION); }
 
       };
 
@@ -64,6 +67,57 @@ void TestCopyPasteSymbolList::copypaste(const char* name, Element::Type type)
 
       Element* el = Element::create(type,score);
       score->selectSimilar(el,false);
+      delete el;
+
+      // copy selection to clipboard
+      QVERIFY(score->selection().canCopy());
+      QString mimeType = score->selection().mimeType();
+      QVERIFY(!mimeType.isEmpty());
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(mimeType, score->selection().mimeData());
+      QApplication::clipboard()->setMimeData(mimeData);
+
+      // select first chord in 4th measure
+      Measure* m = score->firstMeasure();
+      for (int i=0; i < 4; i++)
+            m = m->nextMeasure();
+      score->select(m->first()->element(0));
+
+      score->startCmd();
+      const QMimeData* ms = QApplication::clipboard()->mimeData();
+      if (!ms->hasFormat(mimeSymbolListFormat)) {
+            qDebug("wrong type mime data");
+            return;
+            }
+
+      PasteStatus status = score->cmdPaste(ms,0);
+      switch (status) {
+            case PasteStatus::NO_DEST:
+                  qDebug("no destination chord"); return;
+            case PasteStatus::DEST_TUPLET:
+                  qDebug("cannot paste mid-tuplet"); return;
+            default: ;
+      }
+
+      score->endCmd();
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("copypastesymbollist-%1.mscx").arg(name),
+         DIR + QString("copypastesymbollist-%1-ref.mscx").arg(name)));
+      delete score;
+      }
+
+void TestCopyPasteSymbolList::copypastepart(const char* name, Element::Type type)
+      {
+      Score* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
+      score->doLayout();
+
+      //select all
+      score->select(score->firstMeasure());
+      score->select(score->firstMeasure()->nextMeasure(),SelectType::RANGE);
+
+      Element* el = Element::create(type,score);
+      score->selectSimilarInRange(el);
       delete el;
 
       // copy selection to clipboard
