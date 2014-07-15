@@ -583,7 +583,6 @@ Score::FileError Score::read114(XmlReader& e)
                   qreal yo = 0;
                   if (s->type() == Element::Type::OTTAVA) {
                       // fix ottava position
-                      Ottava* ottava = static_cast<Ottava*>(s);
                       yo = styleS(StyleIdx::ottavaY).val() * spatium();
                       if (s->placement() == Element::Placement::BELOW)
                             yo = -yo + s->staff()->height();
