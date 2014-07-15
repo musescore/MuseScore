@@ -255,8 +255,8 @@ bool GuitarPro4::readNote(int string, Note* note)
             if (modMask1 & 0x2) {         // hammer on / pull off
                   slur = true;
                   }
-            if (modMask1 & 0x8) {         // let ring
-                  }
+            if (modMask1 & 0x8)
+                  addLetRing(note);
             if (modMask1 & 0x10) {
                   int fret = readUChar();            // grace fret
                   int dynamic = readUChar();            // grace dynamic

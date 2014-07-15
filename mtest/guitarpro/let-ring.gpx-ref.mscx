@@ -131,7 +131,8 @@
               <valign>center</valign>
               <xoffset>0</xoffset>
               <yoffset>-2</yoffset>
-              <text>P.M.</text>
+              <italic>1</italic>
+              <text>let ring</text>
               </Text>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -330,7 +331,8 @@
                 <valign>center</valign>
                 <xoffset>0</xoffset>
                 <yoffset>-2</yoffset>
-                <text>P.M.</text>
+                <italic>1</italic>
+                <text>let ring</text>
                 </Text>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -398,7 +400,8 @@
                 <valign>center</valign>
                 <xoffset>0</xoffset>
                 <yoffset>-2</yoffset>
-                <text>P.M.</text>
+                <italic>1</italic>
+                <text>let ring</text>
                 </Text>
               <pitch>60</pitch>
               <tpc>14</tpc>

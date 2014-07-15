@@ -113,6 +113,9 @@ private slots:
       void gpxPalmMute()     { gpReadTest("palm-mute", "gpx"); }
       void gp5PalmMute()     { gpReadTest("palm-mute", "gp5"); }
       void gp4PalmMute()     { gpReadTest("palm-mute", "gp4"); }
+      void gpxLetRing()     { gpReadTest("let-ring", "gpx"); }
+      void gp5LetRing()     { gpReadTest("let-ring", "gp5"); }
+      void gp4LetRing()     { gpReadTest("let-ring", "gp4"); }
       };
 
 //---------------------------------------------------------

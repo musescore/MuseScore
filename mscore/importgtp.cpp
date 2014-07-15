@@ -230,27 +230,42 @@ int GuitarPro::readInt()
       }
 
 //---------------------------------------------------------
-//   addTextToNote
+//   addPalmMate
 //---------------------------------------------------------
 
 void GuitarPro::addPalmMute(Note* note)
       {
       QString palmMute = "P.M.";
-      addTextToNote(palmMute, note);
+      TextStyle textStyle;
+      textStyle.setAlign(ALIGN_CENTER);
+      addTextToNote(palmMute, textStyle, note);
+      }
+
+//---------------------------------------------------------
+//   addLetRing
+//---------------------------------------------------------
+
+void GuitarPro::addLetRing(Note* note)
+      {
+      QString letRing = "let ring";
+      TextStyle textStyle;
+      textStyle.setItalic(true);
+      textStyle.setAlign(ALIGN_CENTER);
+      addTextToNote(letRing, textStyle, note);
       }
 
 //---------------------------------------------------------
 //   addTextToNote
 //---------------------------------------------------------
 
-void GuitarPro::addTextToNote(QString string, Note* note)
+void GuitarPro::addTextToNote(QString string, TextStyle textStyle, Note* note)
       {
       Text* text = new Text(score);
+      text->setTextStyle(textStyle);
       text->setText(string);
       text->setAbove(true);
       note->add(text);
       }
-
 
 //---------------------------------------------------------
 //   setTuplet
