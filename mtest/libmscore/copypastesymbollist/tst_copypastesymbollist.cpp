@@ -31,8 +31,10 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       {
       Q_OBJECT
 
+      void copypastecommon(Score*, const char*);
       void copypaste(const char*, Element::Type);
       void copypastepart(const char*, Element::Type);
+      void copypastedifferentvoice(const char*, Element::Type);
 
    private slots:
       void initTestCase();
@@ -42,7 +44,8 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       void copypasteFiguredBass()   { copypaste("figuredbass", Element::Type::FIGURED_BASS); }
       void copypasteLyrics()        { copypaste("lyrics", Element::Type::LYRICS); }
 
-      void copypasteArticulationPart()  { copypastepart("articulation-part", Element::Type::ARTICULATION); }
+      void copypasteRange()  { copypastepart("range", Element::Type::ARTICULATION); }
+      void copypasteRange1()  { copypastedifferentvoice("range-01", Element::Type::ARTICULATION); }
 
       };
 
@@ -56,8 +59,53 @@ void TestCopyPasteSymbolList::initTestCase()
       }
 
 //---------------------------------------------------------
+//   copypastecommon
+//   copy and paste to first chord in measure 4
+//---------------------------------------------------------
+
+void TestCopyPasteSymbolList::copypastecommon(Score* score, const char* name)
+      {
+      // copy selection to clipboard
+      QVERIFY(score->selection().canCopy());
+      QString mimeType = score->selection().mimeType();
+      QVERIFY(!mimeType.isEmpty());
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(mimeType, score->selection().mimeData());
+      QApplication::clipboard()->setMimeData(mimeData);
+
+      // select first chord in 5th measure
+      Measure* m = score->firstMeasure();
+      for (int i=0; i < 4; i++)
+            m = m->nextMeasure();
+      score->select(m->first()->element(0));
+
+      score->startCmd();
+      const QMimeData* ms = QApplication::clipboard()->mimeData();
+      if (!ms->hasFormat(mimeSymbolListFormat)) {
+            qDebug("wrong type mime data");
+            return;
+            }
+
+      PasteStatus status = score->cmdPaste(ms,0);
+      switch (status) {
+            case PasteStatus::NO_DEST:
+                  qDebug("no destination chord"); return;
+            case PasteStatus::DEST_TUPLET:
+                  qDebug("cannot paste mid-tuplet"); return;
+            default: ;
+      }
+
+      score->endCmd();
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("copypastesymbollist-%1.mscx").arg(name),
+         DIR + QString("copypastesymbollist-%1-ref.mscx").arg(name)));
+      delete score;
+      }
+
+//---------------------------------------------------------
 //   copypaste
-//    copy measure 2, paste into measure 4
+//    select all elements of type and copy paste
 //---------------------------------------------------------
 
 void TestCopyPasteSymbolList::copypaste(const char* name, Element::Type type)
@@ -69,43 +117,14 @@ void TestCopyPasteSymbolList::copypaste(const char* name, Element::Type type)
       score->selectSimilar(el,false);
       delete el;
 
-      // copy selection to clipboard
-      QVERIFY(score->selection().canCopy());
-      QString mimeType = score->selection().mimeType();
-      QVERIFY(!mimeType.isEmpty());
-      QMimeData* mimeData = new QMimeData;
-      mimeData->setData(mimeType, score->selection().mimeData());
-      QApplication::clipboard()->setMimeData(mimeData);
-
-      // select first chord in 4th measure
-      Measure* m = score->firstMeasure();
-      for (int i=0; i < 4; i++)
-            m = m->nextMeasure();
-      score->select(m->first()->element(0));
-
-      score->startCmd();
-      const QMimeData* ms = QApplication::clipboard()->mimeData();
-      if (!ms->hasFormat(mimeSymbolListFormat)) {
-            qDebug("wrong type mime data");
-            return;
-            }
-
-      PasteStatus status = score->cmdPaste(ms,0);
-      switch (status) {
-            case PasteStatus::NO_DEST:
-                  qDebug("no destination chord"); return;
-            case PasteStatus::DEST_TUPLET:
-                  qDebug("cannot paste mid-tuplet"); return;
-            default: ;
+      copypastecommon(score,name);
       }
 
-      score->endCmd();
-      score->doLayout();
-
-      QVERIFY(saveCompareScore(score, QString("copypastesymbollist-%1.mscx").arg(name),
-         DIR + QString("copypastesymbollist-%1-ref.mscx").arg(name)));
-      delete score;
-      }
+//---------------------------------------------------------
+//   copypastepart
+//    select all elements of type in 2 first measures
+//    in the first staff and copy paste
+//---------------------------------------------------------
 
 void TestCopyPasteSymbolList::copypastepart(const char* name, Element::Type type)
       {
@@ -116,48 +135,36 @@ void TestCopyPasteSymbolList::copypastepart(const char* name, Element::Type type
       score->select(score->firstMeasure());
       score->select(score->firstMeasure()->nextMeasure(),SelectType::RANGE);
 
+
       Element* el = Element::create(type,score);
       score->selectSimilarInRange(el);
       delete el;
 
-      // copy selection to clipboard
-      QVERIFY(score->selection().canCopy());
-      QString mimeType = score->selection().mimeType();
-      QVERIFY(!mimeType.isEmpty());
-      QMimeData* mimeData = new QMimeData;
-      mimeData->setData(mimeType, score->selection().mimeData());
-      QApplication::clipboard()->setMimeData(mimeData);
-
-      // select first chord in 4th measure
-      Measure* m = score->firstMeasure();
-      for (int i=0; i < 4; i++)
-            m = m->nextMeasure();
-      score->select(m->first()->element(0));
-
-      score->startCmd();
-      const QMimeData* ms = QApplication::clipboard()->mimeData();
-      if (!ms->hasFormat(mimeSymbolListFormat)) {
-            qDebug("wrong type mime data");
-            return;
-            }
-
-      PasteStatus status = score->cmdPaste(ms,0);
-      switch (status) {
-            case PasteStatus::NO_DEST:
-                  qDebug("no destination chord"); return;
-            case PasteStatus::DEST_TUPLET:
-                  qDebug("cannot paste mid-tuplet"); return;
-            default: ;
+      copypastecommon(score,name);
       }
 
-      score->endCmd();
+//---------------------------------------------------------
+//   copypastedifferentvoice
+//    select all elements of type in 2 first measures
+//    in both staves and copy paste
+//---------------------------------------------------------
+
+void TestCopyPasteSymbolList::copypastedifferentvoice(const char* name, Element::Type type)
+      {
+      Score* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
       score->doLayout();
 
-      QVERIFY(saveCompareScore(score, QString("copypastesymbollist-%1.mscx").arg(name),
-         DIR + QString("copypastesymbollist-%1-ref.mscx").arg(name)));
-      delete score;
-      }
+      //select all
+      score->select(score->firstMeasure());
+      score->select(score->firstMeasure()->nextMeasure(),SelectType::RANGE, 1);
 
+      Element* el = Element::create(type,score);
+      score->selectSimilarInRange(el);
+      delete el;
+
+      copypastecommon(score,name);
+
+      }
 
 QTEST_MAIN(TestCopyPasteSymbolList)
 #include "tst_copypastesymbollist.moc"
