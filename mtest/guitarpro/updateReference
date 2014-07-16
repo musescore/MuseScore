@@ -92,3 +92,4 @@ cp   $MSCORE/tap-slap-pop.gp5.mscx tap-slap-pop.gp5-ref.mscx
 cp   $MSCORE/barre.gpx.mscx barre.gpx-ref.mscx
 cp   $MSCORE/timer.gpx.mscx timer.gpx-ref.mscx
 cp   $MSCORE/text.gpx.mscx text.gpx-ref.mscx
+cp   $MSCORE/artificial-harmonic.gpx.mscx artificial-harmonic.gpx-ref.mscx
