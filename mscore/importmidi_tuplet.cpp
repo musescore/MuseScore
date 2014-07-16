@@ -662,7 +662,7 @@ bool checkForDanglingTuplets(
                                     break;
                                     }
                               }
-                        if (chordIt == chords.begin())
+                        if (hasReference || chordIt == chords.begin())
                               break;
                         --chordIt;
                         }
