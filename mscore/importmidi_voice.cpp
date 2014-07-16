@@ -633,8 +633,10 @@ void splitTuplet(
 
                   // insert new tuplet only if old tuplet was erased
                   // because parallel equal tuplets with different voices aren't pretty
-      if (needInsertTuplet && wasOldTupletDeleted)
+      if (needInsertTuplet && wasOldTupletDeleted) {
             insertNewTuplet(tuplet, tupletOnTime, newVoice, chords, tuplets, insertedTuplets);
+            isInTuplet = true;
+            }
       }
 
 bool updateChordTuplets(
