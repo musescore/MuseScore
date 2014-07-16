@@ -36,4 +36,7 @@ cp   $MSCORE/fret-diagram.gp4.mscx fret-diagram.gp4-ref.mscx
 cp   $MSCORE/fade-in.gp5.mscx fade-in.gp5-ref.mscx
 cp   $MSCORE/fade-in.gp4.mscx fade-in.gp4-ref.mscx
 cp   $MSCORE/slur-notes-effect-mask.mscx slur-notes-effect-mask.gp5-ref.mscx
+cp   $MSCORE/rest-centered.gpx.mscx rest-centered.gpx-ref.mscx
+cp   $MSCORE/rest-centered.gp5.mscx rest-centered.gp5-ref.mscx
+cp   $MSCORE/rest-centered.gp4.mscx rest-centered.gp4-ref.mscx
 

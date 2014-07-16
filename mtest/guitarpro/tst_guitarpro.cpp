@@ -67,6 +67,9 @@ private slots:
       void gp5FadeIn()       { gpReadTest("fade-in", "gp5"); }
       void gp4FadeIn()       { gpReadTest("fade-in", "gp4"); }
       void gpSlurNoteMask()  { gpReadTest("slur-notes-effect-mask", "gp5"); }
+      void gpxCentered()     { gpReadTest("rest-centered", "gpx"); }
+      void gp5Centered()     { gpReadTest("rest-centered", "gp5"); }
+      void gp4Centered()     { gpReadTest("rest-centered", "gp4"); }
       };
 
 //---------------------------------------------------------
