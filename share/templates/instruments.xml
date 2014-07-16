@@ -7885,9 +7885,9 @@
                   <musicXMLid>pluck.balalaika</musicXMLid>
                   <StringData>
                         <frets>17</frets>
-                        <string>69</string>
                         <string>64</string>
-                        <string>62</string>
+                        <string>64</string>
+                        <string>69</string>
                   </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -7906,9 +7906,9 @@
                   <musicXMLid>pluck.balalaika.piccolo</musicXMLid>
                   <StringData>
                         <frets>17</frets>
-                        <string>81</string>
-                        <string>76</string>
                         <string>71</string>
+                        <string>76</string>
+                        <string>81</string>
                   </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -7926,9 +7926,9 @@
                   <musicXMLid>pluck.balalaika.prima</musicXMLid>
                   <StringData>
                         <frets>17</frets>
-                        <string>69</string>
                         <string>64</string>
-                        <string>62</string>
+                        <string>64</string>
+                        <string>69</string>
                   </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -7946,9 +7946,9 @@
                   <musicXMLid>pluck.balalaika.secunda</musicXMLid>
                   <StringData>
                         <frets>17</frets>
+                        <string>57</string>
+                        <string>57</string>
                         <string>62</string>
-                        <string>57</string>
-                        <string>57</string>
                   </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -7966,11 +7966,11 @@
                   <musicXMLid>pluck.balalaika.alto</musicXMLid>
                   <StringData>
                         <frets>17</frets>
+                        <string>52</string>
+                        <string>52</string>
                         <string>57</string>
-                        <string>52</string>
-                        <string>52</string>
                   </StringData>
-                  <clef>G</clef>
+                  <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>52-74</aPitchRange>
                   <pPitchRange>52-74</pPitchRange>
@@ -7986,11 +7986,11 @@
                   <musicXMLid>pluck.balalaika.bass</musicXMLid>
                   <StringData>
                         <frets>17</frets>
-                        <string>50</string>
-                        <string>45</string>
                         <string>40</string>
+                        <string>45</string>
+                        <string>50</string>
                   </StringData>
-                  <clef>G</clef>
+                  <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-67</aPitchRange>
                   <pPitchRange>40-67</pPitchRange>
@@ -8006,11 +8006,11 @@
                   <musicXMLid>pluck.balalaika.contrabass</musicXMLid>
                   <StringData>
                         <frets>17</frets>
-                        <string>38</string>
-                        <string>33</string>
                         <string>28</string>
+                        <string>33</string>
+                        <string>38</string>
                   </StringData>
-                  <clef>G</clef>
+                  <clef>F8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-55</aPitchRange>
                   <pPitchRange>28-55</pPitchRange>
