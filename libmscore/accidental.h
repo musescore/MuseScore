@@ -110,6 +110,8 @@ class Accidental : public Element {
       void setSubtype(const QString& s);
       void setAccidentalType(Type t)        { _accidentalType = t;    }
       Type accidentalType() const           { return _accidentalType; }
+      virtual int subtype() const           { return (int)_accidentalType; }
+      virtual QString subtypeName() const   { return QString(subtype2name(_accidentalType)); }
 
       virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
       virtual Element* drop(const DropData&);
