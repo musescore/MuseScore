@@ -637,6 +637,9 @@ void splitTuplet(
             insertNewTuplet(tuplet, tupletOnTime, newVoice, chords, tuplets, insertedTuplets);
             isInTuplet = true;
             }
+
+      Q_ASSERT_X(!(needInsertTuplet && !wasOldTupletDeleted), "MidiVoice::splitTuplet",
+                 "Tuplet need to be added but the old tuplet was not deleted");
       }
 
 bool updateChordTuplets(
