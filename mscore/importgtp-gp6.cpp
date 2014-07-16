@@ -779,6 +779,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 Chord* chord = static_cast<Chord*>(cr);
                                                 chord->add(note);
 
+                                                QString harmonicText = "";
                                                 while (!currentProperty.isNull()) {
                                                       QString argument = currentProperty.attributes().namedItem("name").toAttr().value();
                                                       if (argument == "String")
@@ -815,6 +816,57 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       else if (argument == "Tapped") {
                                                             if (!currentProperty.firstChild().nodeName().compare("Enable"))
                                                                   addTap(note);
+                                                            }
+                                                      else if (!argument.compare("HarmonicType")) {
+                                                            QString type = currentProperty.toElement().text();
+                                                            // add the same text to the note that Guitar Pro does
+                                                            if (!type.compare("Feedback"))
+                                                                  harmonicText = "Fdbk.";
+                                                            else if (!type.compare("Semi"))
+                                                                  harmonicText = "S.H.";
+                                                            else if (!type.compare("Pinch"))
+                                                                  harmonicText = "P.H.";
+                                                            else if (!type.compare("Tap"))
+                                                                  harmonicText = "T.H.";
+                                                            else if (!type.compare("Artificial"))
+                                                                  harmonicText = "A.H.";
+                                                            }
+                                                      else if (!argument.compare("HarmonicFret")) {
+                                                            QString value = currentProperty.toElement().text();
+                                                            Note* harmonicNote = new Note(score);
+                                                            chord->add(harmonicNote);
+
+                                                            Staff* staff = note->staff();
+                                                            int harmonicFret = fretNum.toInt();
+                                                            int musescoreString = staff->part()->instr()->stringData()->strings() - 1 - stringNum.toInt();
+                                                            harmonicNote->setString(musescoreString);
+                                                            harmonicNote->setFret(harmonicFret); // add the octave for the harmonic
+                                                            harmonicNote->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
+                                                            if (!value.compare("12"))
+                                                                  harmonicFret += 12;
+                                                            else if (!value.compare("7") || !value.compare("19"))
+                                                                  harmonicFret += 19;
+                                                            else if (!value.compare("5") || !value.compare("24"))
+                                                                  harmonicFret += 24;
+                                                            else if (!value.compare("3.9") || !value.compare("4") || !value.compare("9") || !value.compare("16"))
+                                                                  harmonicFret += 28;
+                                                            else if (!value.compare("3.2"))
+                                                                  harmonicFret += 31;
+                                                            else if (!value.compare("2.7"))
+                                                                  harmonicFret += 34;
+                                                            else if (!value.compare("2.3") || !value.compare("2.4"))
+                                                                  harmonicFret += 36;
+                                                            else if (!value.compare("2"))
+                                                                  harmonicFret += 38;
+                                                            else if (!value.compare("1.8"))
+                                                                  harmonicFret += 40;
+                                                            harmonicNote->setFret(harmonicFret);
+                                                            harmonicNote->setPitch(staff->part()->instr()->stringData()->getPitch(musescoreString, harmonicFret));
+                                                            harmonicNote->setTpcFromPitch();
+                                                            harmonicNote->setFret(fretNum.toInt());
+                                                            TextStyle textStyle;
+                                                            textStyle.setAlign(ALIGN_CENTER);
+                                                            addTextToNote(harmonicText, textStyle, harmonicNote);
                                                             }
                                                       else
                                                             qDebug() << "WARNING: Not handling node argument: " << argument << "in node" << currentNote.nodeName();

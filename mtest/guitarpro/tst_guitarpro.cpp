@@ -121,6 +121,7 @@ private slots:
       void gpxBarre()        { gpReadTest("barre", "gpx"); }
       void gpxTimer()        { gpReadTest("timer", "gpx"); }
       void gpxText()         { gpReadTest("text", "gpx"); }
+      void gpxArtHarmonic()  { gpReadTest("artificial-harmonic", "gpx"); }
       };
 
 //---------------------------------------------------------
