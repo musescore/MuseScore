@@ -1159,7 +1159,7 @@ qreal Chord::centerX() const
 
 void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      bool slash = measure() && measure()->slashStyle(staffIdx());
+      bool slash = _noStem || (measure() && measure()->slashStyle(staffIdx()));
       if (_hook && !slash)
             func(data, _hook );
       if (_stem && !slash)
