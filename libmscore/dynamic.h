@@ -89,7 +89,9 @@ class Dynamic : public Text {
       void setDynamicType(Type val)      { _dynamicType = val; }
       void setDynamicType(const QString&);
       QString dynamicTypeName() const;
-      Type dynamicType() const           { return _dynamicType; }
+      Type dynamicType() const            { return _dynamicType; }
+      virtual int subtype() const         { return (int) _dynamicType; }
+      virtual QString subtypeName() const { return dynamicTypeName(); }
 
       virtual void layout() override;
       virtual void write(Xml& xml) const override;
