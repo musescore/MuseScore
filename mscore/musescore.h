@@ -569,6 +569,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       Tuplet* tupletDialog();
       void selectSimilar(Element*, bool);
+      void selectSimilarInRange(Element* e);
       void selectElementDialog(Element* e);
       void transpose();
 

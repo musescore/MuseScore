@@ -1745,6 +1745,14 @@ void Score::scanElements(void* data, void (*func)(void*, Element*), bool all)
             page->scanElements(data, func, all);
       }
 
+void Score::scanElementsInRange(void* data, void (*func)(void*, Element*), bool all)
+      {
+      Segment* startSeg = _selection.startSegment();
+      for (Segment* s = startSeg; s && s!=_selection.endSegment(); s = s->next1MM()) {
+            s->scanElements(data,func,all);
+            }
+      }
+
 //---------------------------------------------------------
 //   customKeySigIdx
 //    try to find custom key signature in table,
@@ -2956,6 +2964,91 @@ void Score::selectRange(Element* e, int staffIdx)
       _selection.setState(SelState::RANGE);
       }
 
+//---------------------------------------------------------
+//   collectMatch
+//---------------------------------------------------------
+
+void Score::collectMatch(void* data, Element* e)
+      {
+      ElementPattern* p = static_cast<ElementPattern*>(data);
+/*      if (p->type == e->type() && p->subtype != e->subtype())
+            qDebug("%s subtype %d does not match", e->name(), e->subtype());
+      */
+//TODO      if ((p->type != e->type()) || (p->subtypeValid && p->subtype != e->subtype()))
+      if (p->type != int(e->type()))
+            return;
+      if ((p->staffStart != -1)
+          && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
+            return;
+      if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS || e->type() == Element::Type::STEM) {
+            if (p->voice != -1 && p->voice != e->voice())
+                  return;
+            }
+      if (p->system) {
+            Element* ee = e;
+            do {
+                  if (ee->type() == Element::Type::SYSTEM) {
+                        if (p->system != ee)
+                              return;
+                        break;
+                        }
+                  ee = ee->parent();
+                  } while (ee);
+            }
+      p->el.append(e);
+      }
+
+void Score::selectSimilar(Element* e, bool sameStaff)
+      {
+      Element::Type type = e->type();
+//TODO      int subtype      = e->subtype();
+
+      ElementPattern pattern;
+      pattern.subtypeValid = true;
+//TODO      if (type == VOLTA_SEGMENT) {
+            // Volta* volta = static_cast<VoltaSegment*>(e)->volta();
+            // type    = volta->type();
+            // subtype = volta->subtype();
+            pattern.subtypeValid = false;
+//            }
+
+      Score* score = e->score();
+      pattern.type    = int(type);
+      pattern.subtype = 0; // TODO subtype;
+      pattern.staffStart = sameStaff ? e->staffIdx() : -1;
+      pattern.staffEnd = sameStaff ? e->staffIdx()+1 : -1;
+      pattern.voice   = -1;
+      pattern.system  = 0;
+
+      score->scanElements(&pattern, collectMatch);
+
+      score->select(0, SelectType::SINGLE, 0);
+      foreach(Element* e, pattern.el) {
+            score->select(e, SelectType::ADD, 0);
+            }
+      }
+
+void Score::selectSimilarInRange(Element* e)
+      {
+      Element::Type type = e->type();
+      ElementPattern pattern;
+
+      Score* score = e->score();
+      pattern.type    = int(type);
+      pattern.subtype = 0;
+      pattern.staffStart = selection().staffStart();
+      pattern.staffEnd = selection().staffEnd();
+      pattern.voice   = -1;
+      pattern.system  = 0;
+      pattern.subtypeValid = false;
+
+      score->scanElementsInRange(&pattern, collectMatch);
+
+      score->select(0, SelectType::SINGLE, 0);
+      foreach(Element* e, pattern.el) {
+                  score->select(e, SelectType::ADD, 0);
+            }
+      }
 //---------------------------------------------------------
 //   lassoSelect
 //---------------------------------------------------------

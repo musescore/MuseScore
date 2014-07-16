@@ -31,15 +31,21 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       {
       Q_OBJECT
 
-      void copypaste(const char*, const char*);
+      void copypastecommon(Score*, const char*);
+      void copypaste(const char*, Element::Type);
+      void copypastepart(const char*, Element::Type);
+      void copypastedifferentvoice(const char*, Element::Type);
 
    private slots:
       void initTestCase();
-      void copypasteArticulation()  { copypaste("articulation", "articulation"); }
-      void copypasteChordNames()    { copypaste("chordnames", "chordnames"); }
-      void copypasteChordNames1()    { copypaste("chordnames-01", "chordnames"); }
-      void copypasteFiguredBass()   { copypaste("figuredbass", "figuredbass"); }
-      void copypasteLyrics()        { copypaste("lyrics", "lyrics"); }
+      void copypasteArticulation()  { copypaste("articulation", Element::Type::ARTICULATION); }
+      void copypasteChordNames()    { copypaste("chordnames", Element::Type::HARMONY); }
+      void copypasteChordNames1()    { copypaste("chordnames-01", Element::Type::HARMONY); }
+      void copypasteFiguredBass()   { copypaste("figuredbass", Element::Type::FIGURED_BASS); }
+      void copypasteLyrics()        { copypaste("lyrics", Element::Type::LYRICS); }
+
+      void copypasteRange()  { copypastepart("range", Element::Type::ARTICULATION); }
+      void copypasteRange1()  { copypastedifferentvoice("range-01", Element::Type::ARTICULATION); }
 
       };
 
@@ -53,79 +59,12 @@ void TestCopyPasteSymbolList::initTestCase()
       }
 
 //---------------------------------------------------------
-//   collectMatch
-//
-//    (copied from mscore/musescore.cpp)
+//   copypastecommon
+//   copy and paste to first chord in measure 4
 //---------------------------------------------------------
 
-static void collectMatch(void* data, Element* e)
+void TestCopyPasteSymbolList::copypastecommon(Score* score, const char* name)
       {
-      ElementPattern* p = static_cast<ElementPattern*>(data);
-/*      if (p->type == e->type() && p->subtype != e->subtype())
-            qDebug("%s subtype %d does not match", e->name(), e->subtype());
-      */
-//TODO      if ((p->type != int(e->type())) || (p->subtypeValid && p->subtype != int(e->subtype())))
-      if (p->type != int(e->type()))
-            return;
-      if ((p->staff != -1) && (p->staff != e->staffIdx()))
-            return;
-      if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS) {
-            if (p->voice != -1 && p->voice != e->voice())
-                  return;
-            }
-      if (p->system) {
-            Element* ee = e;
-            do {
-                  if (ee->type() == Element::Type::SYSTEM) {
-                        if (p->system != ee)
-                              return;
-                        break;
-                        }
-                  ee = ee->parent();
-                  } while (ee);
-            }
-      p->el.append(e);
-      }
-
-//---------------------------------------------------------
-//   copypaste
-//    copy measure 2, paste into measure 4
-//---------------------------------------------------------
-
-void TestCopyPasteSymbolList::copypaste(const char* name, const char* idx)
-      {
-      Score* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
-      score->doLayout();
-
-      // select all elements of a certain type (copied and slightly adapted from
-      // MuseScore::selectSimilar(Element* e, bool sameStaff) in file mscore/musescore.cpp
-      ElementPattern pattern;
-      pattern.subtypeValid = true;
-//TODO      if (type == int(Element::Type::VOLTA_SEGMENT)) {
-            // Volta* volta = static_cast<VoltaSegment*>(e)->volta();
-            // type    = volta->type();
-            // subtype = volta->subtype();
-            pattern.subtypeValid = false;
-//            }
-      if (!strcmp(idx, "articulation"))
-            pattern.type = int(Element::Type::ARTICULATION);
-      else if (!strcmp(idx, "chordnames"))
-            pattern.type = int(Element::Type::HARMONY);
-      else if (!strcmp(idx, "figuredbass"))
-            pattern.type = int(Element::Type::FIGURED_BASS);
-      else if (!strcmp(idx, "lyrics"))
-            pattern.type = int(Element::Type::LYRICS);
-      else
-            return;
-      pattern.subtype = 0; // TODO subtype;
-      pattern.staff   = 0;                      // select from staff 0 only
-      pattern.voice   = -1;
-      pattern.system  = nullptr;
-      score->scanElements(&pattern, collectMatch);
-      foreach(Element* e, pattern.el) {
-            score->select(e, SelectType::ADD, 0);
-            }
-
       // copy selection to clipboard
       QVERIFY(score->selection().canCopy());
       QString mimeType = score->selection().mimeType();
@@ -134,7 +73,7 @@ void TestCopyPasteSymbolList::copypaste(const char* name, const char* idx)
       mimeData->setData(mimeType, score->selection().mimeData());
       QApplication::clipboard()->setMimeData(mimeData);
 
-      // select first chord in 4th measure
+      // select first chord in 5th measure
       Measure* m = score->firstMeasure();
       for (int i=0; i < 4; i++)
             m = m->nextMeasure();
@@ -164,6 +103,68 @@ void TestCopyPasteSymbolList::copypaste(const char* name, const char* idx)
       delete score;
       }
 
+//---------------------------------------------------------
+//   copypaste
+//    select all elements of type and copy paste
+//---------------------------------------------------------
+
+void TestCopyPasteSymbolList::copypaste(const char* name, Element::Type type)
+      {
+      Score* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
+      score->doLayout();
+
+      Element* el = Element::create(type,score);
+      score->selectSimilar(el,false);
+      delete el;
+
+      copypastecommon(score,name);
+      }
+
+//---------------------------------------------------------
+//   copypastepart
+//    select all elements of type in 2 first measures
+//    in the first staff and copy paste
+//---------------------------------------------------------
+
+void TestCopyPasteSymbolList::copypastepart(const char* name, Element::Type type)
+      {
+      Score* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
+      score->doLayout();
+
+      //select all
+      score->select(score->firstMeasure());
+      score->select(score->firstMeasure()->nextMeasure(),SelectType::RANGE);
+
+
+      Element* el = Element::create(type,score);
+      score->selectSimilarInRange(el);
+      delete el;
+
+      copypastecommon(score,name);
+      }
+
+//---------------------------------------------------------
+//   copypastedifferentvoice
+//    select all elements of type in 2 first measures
+//    in both staves and copy paste
+//---------------------------------------------------------
+
+void TestCopyPasteSymbolList::copypastedifferentvoice(const char* name, Element::Type type)
+      {
+      Score* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
+      score->doLayout();
+
+      //select all
+      score->select(score->firstMeasure());
+      score->select(score->firstMeasure()->nextMeasure(),SelectType::RANGE, 1);
+
+      Element* el = Element::create(type,score);
+      score->selectSimilarInRange(el);
+      delete el;
+
+      copypastecommon(score,name);
+
+      }
 
 QTEST_MAIN(TestCopyPasteSymbolList)
 #include "tst_copypastesymbollist.moc"
