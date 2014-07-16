@@ -989,39 +989,6 @@ int findLastChordPosition(const std::vector<QuantData> &quantData)
       return posIndex;
       }
 
-double findTempoPenalty(
-            const QuantPos &p,
-            const QuantPos &pPrev,
-            const QuantData &d,
-            const QuantData &dPrev,
-            const std::vector<QuantData> &quantData,
-            int chordIndex)
-      {
-      double penalty;
-      const QuantData &dPrevPrev = quantData[chordIndex - 2];
-      const QuantPos &pPrevPrev = dPrevPrev.positions[pPrev.prevPos];
-      if (pPrev.time != p.time && pPrevPrev.time != pPrev.time) {
-
-            Q_ASSERT_X(dPrev.chord->first != d.chord->first
-                        && dPrevPrev.chord->first != dPrev.chord->first,
-                       "Quantize::findTempoPenalty", "Chords have equal on times");
-
-            const double veloc = ((pPrev.time - p.time)
-                        / (dPrev.chord->first - d.chord->first)).toDouble();
-            const double prevVeloc = ((pPrevPrev.time - pPrev.time)
-                        / (dPrevPrev.chord->first - dPrev.chord->first)).toDouble();
-            const double timeDiff = ((p.time + pPrev.time) / 2
-                           - (pPrevPrev.time + pPrev.time) / 2).toDouble();
-            penalty = qAbs((veloc - prevVeloc) * timeDiff);
-            }
-      else {
-            const auto tempoChangePenalty = ((d.chord->first - p.time)
-                            - (dPrev.chord->first - pPrev.time)).absValue();
-            penalty = tempoChangePenalty.toDouble();
-            }
-      return penalty;
-      }
-
 void applyDynamicProgramming(std::vector<QuantData> &quantData)
       {
       const auto &opers = preferences.midiImportOperations.data()->trackOpers;
@@ -1055,20 +1022,17 @@ void applyDynamicProgramming(std::vector<QuantData> &quantData)
                   const QuantData &dPrev = quantData[chordIndex - 1];
                   double minPenalty = std::numeric_limits<double>::max();
                   int minPos = -1;
+
                   for (int posPrev = 0; posPrev != (int)dPrev.positions.size(); ++posPrev) {
                         const QuantPos &pPrev = dPrev.positions[posPrev];
                         if (pPrev.time > p.time)
                               continue;
+
                         double penalty = pPrev.penalty;
                         if (pPrev.time == p.time) {
                               if (!d.canMergeWithPrev)
                                     continue;
                               penalty += d.quant.toDouble() * MERGE_PENALTY_COEFF;
-                              }
-
-                        if (chordIndex > 1) {
-                              penalty += findTempoPenalty(p, pPrev, d, dPrev,
-                                                          quantData, chordIndex);
                               }
 
                         if (penalty < minPenalty) {
