@@ -815,6 +815,30 @@ void GuitarPro::restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr
       }
 
 //---------------------------------------------------------
+//   createSlur
+//---------------------------------------------------------
+
+void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
+      {
+      if (hasSlur && (slurs[staffIdx] == 0)) {
+            Slur* slur = new Slur(score);
+            slur->setParent(0);
+            slur->setTrack(staffIdx * VOICES);
+            slur->setTrack2(staffIdx * VOICES);
+            slur->setTick(cr->tick());
+            slur->setTick2(cr->tick());
+            slurs[staffIdx] = slur;
+            score->addElement(slur);
+            }
+      else if (slurs[staffIdx] && !hasSlur) {
+            Slur* s = slurs[staffIdx];
+            slurs[staffIdx] = 0;
+            s->setTick2(cr->tick());
+            s->setTrack2(cr->track());
+            }
+      }
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -1841,7 +1865,7 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
 //   readNote
 //---------------------------------------------------------
 
-void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
+bool GuitarPro4::readNote(int string, Note* note)
       {
       uchar noteBits = readUChar();
 
@@ -1912,14 +1936,14 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
             int b = readUChar();
             qDebug("Fingering=========%d %d", a, b);
             }
-      gpNote->slur = false;
+      bool slur = false;
       if (noteBits & 0x8) {
             uchar modMask1 = readUChar();
             uchar modMask2 = readUChar();
             if (modMask1 & 0x1)
                   readBend(note);
             if (modMask1 & 0x2) {         // hammer on / pull off
-                  gpNote->slur = true;
+                  slur = true;
                   }
             if (modMask1 & 0x8) {         // let ring
                   }
@@ -2084,6 +2108,7 @@ void GuitarPro4::readNote(int string, Note* note, GpNote* gpNote)
             if (!found)
                   qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
             }
+      return slur;
       }
 
 //---------------------------------------------------------
@@ -2263,7 +2288,7 @@ void GuitarPro4::read(QFile* fp)
             ch.updateInitList();
             }
 
-      Slur* slurs[staves];
+      slurs = new Slur*[staves];
       for (int i = 0; i < staves; ++i)
             slurs[i] = 0;
       Measure* measure = score->firstMeasure();
@@ -2385,14 +2410,11 @@ void GuitarPro4::read(QFile* fp)
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
                                     static_cast<Chord*>(cr)->add(note);
-
-                                    GpNote gpNote;
-                                    readNote(6-i, note, &gpNote);
-                                    if (gpNote.slur)
-                                          hasSlur = true;
+                                    hasSlur = readNote(6-i, note);
                                     note->setTpcFromPitch();
                                     }
                               }
+
                         if (hasSlur && (slurs[staffIdx] == 0)) {
                               Slur* slur = new Slur(score);
                               slur->setTrack(track);
@@ -2412,6 +2434,7 @@ void GuitarPro4::read(QFile* fp)
                         else if (slurs[staffIdx] && hasSlur) {
                               }
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
+                        createSlur(hasSlur, staffIdx, cr);
                         tick += cr->actualTicks();
                         }
                   }
@@ -2446,14 +2469,15 @@ void GuitarPro5::readInfo()
 //   readNoteEffects
 //---------------------------------------------------------
 
-void GuitarPro5::readNoteEffects(Note* note)
+bool GuitarPro5::readNoteEffects(Note* note)
       {
       uchar modMask1 = readUChar();
       uchar modMask2 = readUChar();
+      bool slur = false;
       if (modMask1 & 0x1)
             readBend(note);
-      if (modMask1 & 0x2) {         // hammer on / pull off
-            }
+      if (modMask1 & 0x2)         // hammer on / pull off
+            slur = true;
       if (modMask1 & 0x8) {         // let ring
             }
       if (modMask1 & 0x10) {
@@ -2590,13 +2614,14 @@ void GuitarPro5::readNoteEffects(Note* note)
                         break;
                   }
             }
+      return slur;
       }
 
 //---------------------------------------------------------
 //   readNote
 //---------------------------------------------------------
 
-void GuitarPro5::readNote(int string, Note* note)
+bool GuitarPro5::readNote(int string, Note* note)
       {
       uchar noteBits = readUChar();
       //
@@ -2681,9 +2706,10 @@ void GuitarPro5::readNote(int string, Note* note)
       note->setPitch(pitch);
 
       // This function uses string and fret number, so it should be set before this
-      if (noteBits & 0x8) {
-            readNoteEffects(note);
-            }
+      bool slur = false;
+      if (noteBits & 0x8)
+            slur = readNoteEffects(note);
+
       if (tieNote) {
             bool found = false;
             Chord* chord     = note->chord();
@@ -2714,6 +2740,7 @@ void GuitarPro5::readNote(int string, Note* note)
             if (!found)
                   qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
             }
+      return slur;
       }
 
 //---------------------------------------------------------
@@ -2869,6 +2896,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             lyrics = new Lyrics(score);
             lyrics->setText(txt);
             }
+
       int beatEffects = 0;
       if (beatBits & 0x8)
             beatEffects = readBeatEffects(track, segment);
@@ -2932,15 +2960,17 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
 
             Staff* staff = cr->staff();
             int numStrings = staff->part()->instr()->stringData()->strings();
+            bool hasSlur = false;
             for (int i = 6; i >= 0; --i) {
                   if (strings & (1 << i) && ((6-i) < numStrings)) {
                         Note* note = new Note(score);
                         static_cast<Chord*>(cr)->add(note);
-
-                        readNote(6-i, note);
+                        hasSlur = readNote(6-i, note);
                         note->setTpcFromPitch();
                         }
                   }
+            createSlur(hasSlur, staffIdx, cr);
+
             if (lyrics)
                   cr->add(lyrics);
             }
@@ -3178,6 +3208,10 @@ void GuitarPro5::read(QFile* fp)
 
       measures = readInt();
       staves  = readInt();
+
+      slurs = new Slur*[staves];
+      for (int i = 0; i < staves; ++i)
+            slurs[i] = 0;
 
       int tnumerator   = 4;
       int tdenominator = 4;

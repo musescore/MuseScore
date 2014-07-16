@@ -25,6 +25,7 @@
 #include "libmscore/fraction.h"
 #include "libmscore/fret.h"
 #include "libmscore/chordrest.h"
+#include "libmscore/slur.h"
 
 namespace Ms {
 
@@ -67,10 +68,6 @@ struct GpBar {
       GpBar();
       };
 
-struct GpNote {
-      bool slur;
-      };
-
 //---------------------------------------------------------
 //   GuitarPro
 //---------------------------------------------------------
@@ -90,6 +87,7 @@ class GuitarPro {
 
       int voltaSequence;
       QTextCodec* _codec;
+      Slur** slurs;
 
       void skip(qint64 len);
       void read(void* p, qint64 len);
@@ -115,6 +113,7 @@ class GuitarPro {
       void readTremoloBar(int track, Segment*);
       void readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader);
       void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, int tick);
+      void createSlur(bool hasSlur, int staffIdx, ChordRest* cr);
 
    public:
       QString title, subtitle, artist, album, composer;
@@ -180,7 +179,7 @@ class GuitarPro3 : public GuitarPro1 {
 class GuitarPro4 : public GuitarPro {
 
       void readInfo();
-      void readNote(int string, Note* note, GpNote*);
+      bool readNote(int string, Note* note);
       virtual int readBeatEffects(int track, Segment* segment);
       virtual void readMixChange(Measure* measure);
 
@@ -198,14 +197,14 @@ class GuitarPro5 : public GuitarPro {
       void readInfo();
       void readPageSetup();
       virtual int readBeatEffects(int track, Segment* segment);
-      void readNote(int string, Note* note);
+      bool readNote(int string, Note* note);
       virtual void readMixChange(Measure* measure);
       void readMeasure(Measure* measure, int staffIdx, Tuplet*[]);
       void readArtificialHarmonic();
       void readTracks();
       void readMeasures();
       int readBeat(int tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets);
-      void readNoteEffects(Note*);
+      bool readNoteEffects(Note*);
 
    public:
       GuitarPro5(Score* s, int v) : GuitarPro(s, v) {}
