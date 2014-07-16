@@ -2977,7 +2977,8 @@ void Score::collectMatch(void* data, Element* e)
 //TODO      if ((p->type != e->type()) || (p->subtypeValid && p->subtype != e->subtype()))
       if (p->type != int(e->type()))
             return;
-      if ((p->staff != -1) && (p->staff != e->staffIdx()))
+      if ((p->staffStart != -1)
+          && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
       if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS || e->type() == Element::Type::STEM) {
             if (p->voice != -1 && p->voice != e->voice())
@@ -3014,7 +3015,8 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       Score* score = e->score();
       pattern.type    = int(type);
       pattern.subtype = 0; // TODO subtype;
-      pattern.staff   = sameStaff ? e->staffIdx() : -1;
+      pattern.staffStart = sameStaff ? e->staffIdx() : -1;
+      pattern.staffEnd = sameStaff ? e->staffIdx()+1 : -1;
       pattern.voice   = -1;
       pattern.system  = 0;
 
@@ -3034,7 +3036,8 @@ void Score::selectSimilarInRange(Element* e)
       Score* score = e->score();
       pattern.type    = int(type);
       pattern.subtype = 0;
-      pattern.staff   = -1;
+      pattern.staffStart = selection().staffStart();
+      pattern.staffEnd = selection().staffEnd();
       pattern.voice   = -1;
       pattern.system  = 0;
       pattern.subtypeValid = false;
