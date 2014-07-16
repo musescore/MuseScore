@@ -1294,6 +1294,7 @@ void MuseScore::selectionChanged(SelState selectionState)
       bool enable = selectionState != SelState::NONE;
       getAction("cut")->setEnabled(enable);
       getAction("copy")->setEnabled(enable);
+      getAction("select-similar-range")->setEnabled(selectionState == SelState::RANGE);
       if (pianorollEditor)
             pianorollEditor->changeSelection(selectionState);
       if (drumrollEditor)
@@ -2531,6 +2532,8 @@ void MuseScore::changeState(ScoreState val)
                   a->setEnabled(cs && cs->selection().state() != SelState::NONE);
             else if (enable && strcmp(s->key(), "copy") == 0)
                   a->setEnabled(cs && cs->selection().state() != SelState::NONE);
+            else if (enable && strcmp(s->key(), "select-similar-range") == 0)
+                  a->setEnabled(cs && cs->selection().state() == SelState::RANGE);
             else if (enable && strcmp(s->key(), "synth-control") == 0) {
                   Driver* driver = seq ? seq->driver() : 0;
                   // a->setEnabled(driver && driver->getSynth());
@@ -3702,69 +3705,14 @@ void MuseScore::loadFile(const QUrl& url)
       }
 
 //---------------------------------------------------------
-//   collectMatch
-//---------------------------------------------------------
-
-static void collectMatch(void* data, Element* e)
-      {
-      ElementPattern* p = static_cast<ElementPattern*>(data);
-/*      if (p->type == e->type() && p->subtype != e->subtype())
-            qDebug("%s subtype %d does not match", e->name(), e->subtype());
-      */
-//TODO      if ((p->type != e->type()) || (p->subtypeValid && p->subtype != e->subtype()))
-      if (p->type != int(e->type()))
-            return;
-      if ((p->staff != -1) && (p->staff != e->staffIdx()))
-            return;
-      if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS || e->type() == Element::Type::STEM) {
-            if (p->voice != -1 && p->voice != e->voice())
-                  return;
-            }
-      if (p->system) {
-            Element* ee = e;
-            do {
-                  if (ee->type() == Element::Type::SYSTEM) {
-                        if (p->system != ee)
-                              return;
-                        break;
-                        }
-                  ee = ee->parent();
-                  } while (ee);
-            }
-      p->el.append(e);
-      }
-
-//---------------------------------------------------------
 //   selectSimilar
 //---------------------------------------------------------
 
 void MuseScore::selectSimilar(Element* e, bool sameStaff)
       {
-      Element::Type type = e->type();
-//TODO      int subtype      = e->subtype();
-
-      ElementPattern pattern;
-      pattern.subtypeValid = true;
-//TODO      if (type == VOLTA_SEGMENT) {
-            // Volta* volta = static_cast<VoltaSegment*>(e)->volta();
-            // type    = volta->type();
-            // subtype = volta->subtype();
-            pattern.subtypeValid = false;
-//            }
-
       Score* score = e->score();
-      pattern.type    = int(type);
-      pattern.subtype = 0; // TODO subtype;
-      pattern.staff   = sameStaff ? e->staffIdx() : -1;
-      pattern.voice   = -1;
-      pattern.system  = 0;
+      score->selectSimilar(e, sameStaff);
 
-      score->scanElements(&pattern, collectMatch);
-
-      score->select(0, SelectType::SINGLE, 0);
-      foreach(Element* e, pattern.el) {
-            score->select(e, SelectType::ADD, 0);
-            }
       if (score->selectionChanged()) {
             score->setSelectionChanged(false);
             SelState ss = score->selection().state();
@@ -3772,6 +3720,17 @@ void MuseScore::selectSimilar(Element* e, bool sameStaff)
             }
       }
 
+void MuseScore::selectSimilarInRange(Element* e)
+      {
+      Score* score = e->score();
+      score->selectSimilarInRange(e);
+
+      if (score->selectionChanged()) {
+            score->setSelectionChanged(false);
+            SelState ss = score->selection().state();
+            selectionChanged(ss);
+            }
+      }
 //---------------------------------------------------------
 //   selectElementDialog
 //---------------------------------------------------------
@@ -3783,7 +3742,7 @@ void MuseScore::selectElementDialog(Element* e)
       if (sd.exec()) {
             ElementPattern pattern;
             sd.setPattern(&pattern);
-            score->scanElements(&pattern, collectMatch);
+            score->scanElements(&pattern, Score::collectMatch);
             if (sd.doReplace()) {
                   score->select(0, SelectType::SINGLE, 0);
                   foreach(Element* ee, pattern.el)

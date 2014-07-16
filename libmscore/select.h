@@ -32,7 +32,8 @@ struct ElementPattern {
       QList<Element*> el;
       int type;
       int subtype;
-      int staff;
+      int staffStart;
+      int staffEnd; // exclusive
       int voice;
       const System* system;
       bool subtypeValid;

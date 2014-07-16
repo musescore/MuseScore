@@ -145,6 +145,7 @@ public:
       void removeElement(int track);
       void setElement(int track, Element* el);
       const QList<Lyrics*>* lyricsList(int track) const;
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
       Measure* measure() const            { return (Measure*)parent(); }
       System* system() const              { return (System*)parent()->parent(); }
