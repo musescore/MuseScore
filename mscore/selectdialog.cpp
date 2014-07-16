@@ -41,9 +41,9 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       e = _e;
       type->setText(e->name());
-//TODO      subtype->setText(e->subtypeName());
-      subtype->setEnabled(false);
-      sameSubtype->setEnabled(false);
+      subtype->setText(e->subtypeName());
+      //subtype->setEnabled(true);
+      //sameSubtype->setEnabled(false);
             
       }
 
@@ -54,7 +54,7 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
 void SelectDialog::setPattern(ElementPattern* p)
       {
       p->type    = int(e->type());
-      p->subtype = int(e->subType()); // TODO
+      p->subtype = int(e->subtype()); // TODO
       p->staffStart = sameStaff->isChecked() ? e->staffIdx() : -1;
       p->staffEnd = sameStaff->isChecked() ? e->staffIdx() + 1 : -1;
       p->voice   = sameVoice->isChecked() ? e->voice() : -1;
