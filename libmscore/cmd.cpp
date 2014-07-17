@@ -1958,6 +1958,12 @@ void Score::cmdAddBracket()
                   Accidental* acc = static_cast<Accidental*>(el);
                   acc->undoSetHasBracket(true);
                   }
+            else if (el->type() == Element::Type::HARMONY) {
+                  Harmony* h = static_cast<Harmony*>(el);
+                  h->setLeftParen(true);
+                  h->setRightParen(true);
+                  h->render();
+                  }
             }
       }
       
