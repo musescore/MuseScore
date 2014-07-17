@@ -846,9 +846,9 @@ void Note::read(XmlReader& e)
                   }
             else if (tag == "offTimeOffset") {// obsolete
                   if (_offTimeType == 1)
-                        setOffTimeOffset(e.readInt() * 1000 / chord()->actualTicks());
+                        setOffTimeOffset(1000 + (e.readInt() * 1000 / chord()->actualTicks()));
                   else
-                        setOffTimeOffset(e.readInt() * 10);
+                        setOffTimeOffset(1000 + (e.readInt() * 10));
                   }
             else if (tag == "head")
                   setProperty(P_ID::HEAD_GROUP, Ms::getProperty(P_ID::HEAD_GROUP, e));
