@@ -468,9 +468,9 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               }
                         }
                   if (!ns->startElement())
-                        printf("clone Slur: no start element\n");
+                        qDebug("clone Slur: no start element");
                   if (!ns->endElement())
-                        printf("clone Slur: no end element\n");
+                        qDebug("clone Slur: no end element");
                   }
             score->addSpanner(ns);
             }

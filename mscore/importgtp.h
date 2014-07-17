@@ -46,6 +46,8 @@ static const int GP_INVALID_KEYSIG = 127;
 static const int GP_VOLTA_BINARY = 1;
 static const int GP_VOLTA_FLAGS = 2;
 
+enum class Repeat : char;
+
 struct GpTrack {
       int patch;
       uchar volume, pan, chorus, reverb, phase, tremolo;
@@ -61,7 +63,7 @@ struct GpBar {
       int keysig;
       QString marker;
       BarLineType barLine;
-      int repeatFlags;
+      Repeat repeatFlags;
       int repeats;
       GPVolta volta;
 

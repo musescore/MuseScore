@@ -348,8 +348,15 @@ void SaveState::redo()
 
 void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st, PropertyStyle ps)
       {
-      if (propertyLink(t) && e->links()) {
-            foreach(Element* e, *e->links()) {
+      if (propertyLink(t)) {
+            if (e->links()) {
+                  foreach(Element* e, *e->links()) {
+                        if (e->getProperty(t) != st)
+                              undo(new ChangeProperty(e, t, st, ps));
+                        }
+                  }
+            else if (e->type() == Element::Type::MEASURE) {
+                  qDebug("change property for measure");
                   if (e->getProperty(t) != st)
                         undo(new ChangeProperty(e, t, st, ps));
                   }
@@ -2967,6 +2974,8 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
       foreach(Score* s, scoreList()) {
             Measure* measure = s->tick2measure(m->tick());
             Measure* nm      = m->nextMeasure();
+            Repeat flags = measure->repeatFlags();
+            Repeat nflags = nm->repeatFlags();
             switch(barType) {
                   case BarLineType::END:
                   case BarLineType::NORMAL:
@@ -2974,25 +2983,25 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                   case BarLineType::BROKEN:
                   case BarLineType::DOTTED:
                         {
-                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() & ~Repeat::END);
+                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags) & ~int(Repeat::END));
                         if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
+                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nflags) & ~int(Repeat::START));
                         s->undoChangeEndBarLineType(measure, barType);
                         measure->setEndBarLineGenerated (false);
                         }
                         break;
                   case BarLineType::START_REPEAT:
-                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::START);
+                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags | Repeat::START));
                         break;
                   case BarLineType::END_REPEAT:
-                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
+                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags | Repeat::END));
                         if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() & ~Repeat::START);
+                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nflags) & ~int(Repeat::START));
                         break;
                   case BarLineType::END_START_REPEAT:
-                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, measure->repeatFlags() | Repeat::END);
+                        s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags | Repeat::END));
                         if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, nm->repeatFlags() | Repeat::START);
+                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nflags | Repeat::START));
                         break;
                   }
             }

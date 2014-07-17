@@ -70,7 +70,7 @@ GpBar::GpBar()
       barLine = BarLineType::NORMAL;
       keysig  = GP_INVALID_KEYSIG;
       timesig = Fraction(4,4);
-      repeatFlags = 0;
+      repeatFlags = Repeat::NONE;
       repeats = 2;
       }
 
@@ -1435,9 +1435,9 @@ void GuitarPro3::read(QFile* fp)
             if (barBits & 0x2)
                   tdenominator = readUChar();
             if (barBits & 0x4)
-                  bar.repeatFlags |= Repeat::START;
+                  bar.repeatFlags = bar.repeatFlags | Repeat::START;
             if (barBits & 0x8) {                // number of repeats
-                  bar.repeatFlags |= Repeat::END;
+                  bar.repeatFlags = bar.repeatFlags | Repeat::END;
                   bar.repeats = readUChar();
                   }
             if (barBits & 0x10) {                      // a volta
@@ -2171,9 +2171,9 @@ void GuitarPro4::read(QFile* fp)
             if (barBits & 0x2)
                   tdenominator = readUChar();
             if (barBits & 0x4)
-                  bar.repeatFlags |= Repeat::START;
+                  bar.repeatFlags = bar.repeatFlags | Repeat::START;
             if (barBits & 0x8) {                // number of repeats
-                  bar.repeatFlags |= Repeat::END;
+                  bar.repeatFlags = bar.repeatFlags | Repeat::END;
                   bar.repeats = readUChar();
                   }
             if (barBits & 0x10) {                      // a volta
@@ -3229,9 +3229,9 @@ void GuitarPro5::read(QFile* fp)
             if (barBits & 0x2)
                   tdenominator = readUChar();
             if (barBits & 0x4)
-                  bar.repeatFlags |= Repeat::START;
+                  bar.repeatFlags = bar.repeatFlags | Repeat::START;
             if (barBits & 0x8) {                // number of repeats
-                  bar.repeatFlags |= Repeat::END;
+                  bar.repeatFlags = bar.repeatFlags | Repeat::END;
                   bar.repeats = readUChar();
                   }
             if (barBits & 0x20) {

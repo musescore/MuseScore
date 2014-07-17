@@ -540,7 +540,7 @@ void Segment::remove(Element* el)
                   break;
 
             case Element::Type::REPEAT_MEASURE:
-                  measure()->setRepeatFlags(measure()->repeatFlags() & ~Repeat::MEASURE);
+                  measure()->resetRepeatFlag(Repeat::MEASURE);
                   _elist[track] = 0;
                   break;
 
@@ -560,7 +560,7 @@ void Segment::remove(Element* el)
                   break;
 
             case Element::Type::JUMP:
-                  measure()->setRepeatFlags(measure()->repeatFlags() & ~Repeat::JUMP);
+                  measure()->resetRepeatFlag(Repeat::JUMP);
                   removeAnnotation(el);
                   break;
 
