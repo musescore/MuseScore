@@ -537,15 +537,33 @@ QList<Segment*> cloneRange(Segment* fs, Segment* ls)
       return segments;
       }
 
-std::multimap<int, Spanner*> spannerMapCopy(Segment* seg1, Segment* seg2, Segment* destSegment, std::multimap<int, Spanner*> scoreSpannerMap)
+//---------------------------------------------------------
+//   pairwiseCloneMap
+//    creates a map of Element* -> Element* by taking elements
+//    from seg1 up to seg2 mapping elements do their pairs in destSegment
+//---------------------------------------------------------
+std::map<Element*, Element*> pairwiseCloneMap(Segment* seg1, Segment* seg2, Segment* destSegment)
       {
-      // pairing up elements with clones
       std::map<Element*,Element*> paired_elements;
       for (Segment* sourceSegment = seg1; sourceSegment && sourceSegment != seg2; sourceSegment = sourceSegment->next1()) {
             if (sourceSegment->segmentType() == Segment::Type::ChordRest) {
                   for (int i = 0; i < sourceSegment->elist().size(); i++) {
                         if (sourceSegment->element(i) != 0) {
                               paired_elements.insert(std::pair<Element*,Element*>(sourceSegment->element(i),destSegment->element(i)));
+                              if (sourceSegment->element(i)->isChordRest()) {
+                                    DurationElement* de = static_cast<DurationElement*>(sourceSegment->element(i));
+                                    DurationElement* destDe = static_cast<DurationElement*>(destSegment->element(i));
+                                    do {
+                                          Tuplet* tup = de->tuplet();
+                                          Tuplet* dTup = destDe->tuplet();
+                                          if (tup && dTup)
+                                                paired_elements.insert(std::pair<Element*,Element*>(tup,dTup));
+                                          else
+                                                break;
+                                          de = tup;
+                                          destDe = dTup;
+                                          } while(de != 0);
+                                    }
                               if (sourceSegment->element(i)->type() == Element::Type::CHORD) {
                                     Chord* schord = static_cast<Chord*>(sourceSegment->element(i));
                                     Chord* dchord = static_cast<Chord*>(destSegment->element(i));
@@ -559,7 +577,37 @@ std::multimap<int, Spanner*> spannerMapCopy(Segment* seg1, Segment* seg2, Segmen
                   }
             destSegment = destSegment->next1();
             }
+      return paired_elements;
+      }
 
+void fixTuples(Segment* startSegment, Segment* endSeg, std::map<Element*, Element*>& elMap)
+      {
+      std::map<Element*,Element*>::iterator it;
+      for (Segment* destSegment = startSegment; destSegment && destSegment != endSeg; destSegment = destSegment->next1()) {
+            if (destSegment->segmentType() == Segment::Type::ChordRest) {
+                  for (int i = 0; i < destSegment->elist().size(); i++) {
+                        if (destSegment->element(i) != 0
+                            && destSegment->element(i)->isChordRest()) {
+                              DurationElement* de = static_cast<DurationElement*>(destSegment->element(i));
+                              do {
+                                    Tuplet* tup = de->tuplet();
+                                    if (tup && tup->elements().size() == 0) //tremolo already cloned, add to tup->_elist
+                                          tup->add(static_cast<Element*>(de));
+                                    it = elMap.find(tup);
+                                    if (it != elMap.end()) { //set element->tuplet and add to tup->_elist
+                                          de->setTuplet(static_cast<Tuplet*>(elMap[tup]));
+                                          de->tuplet()->add(static_cast<Element*>(de));
+                                          }
+                                    de = de->tuplet();
+                                    } while(de != 0);
+                              }
+                        }
+                  }
+            }
+      }
+
+std::multimap<int, Spanner*> spannerMapCopy(std::multimap<int, Spanner*> scoreSpannerMap, std::map<Element*, Element*>& elMap)
+      {
       std::multimap<int, Spanner*> sp_copy;
       std::map<Element*,Element*>::iterator it;
 
@@ -569,10 +617,10 @@ std::multimap<int, Spanner*> spannerMapCopy(Segment* seg1, Segment* seg2, Segmen
             Spanner* spannerCopy = static_cast<Spanner*>(spanner->clone());
             sp_copy.insert(std::pair<int,Spanner*>(i.first,spannerCopy));
 
-            it = paired_elements.find(spanner->startElement());
-            if (it != paired_elements.end()) spannerCopy->setStartElement(paired_elements[spanner->startElement()]);
-            it = paired_elements.find(spanner->endElement());
-            if (it != paired_elements.end()) spannerCopy->setEndElement(paired_elements[spanner->endElement()]);
+            it = elMap.find(spanner->startElement());
+            if (it != elMap.end()) spannerCopy->setStartElement(elMap[spanner->startElement()]);
+            it = elMap.find(spanner->endElement());
+            if (it != elMap.end()) spannerCopy->setEndElement(elMap[spanner->endElement()]);
             }
       return sp_copy;
       }
@@ -609,7 +657,10 @@ QByteArray Selection::staffMimeData() const
                   }
             }
 
-      std::multimap<int, Spanner*> sp_copy = spannerMapCopy(seg1,seg2,segments.first(),score()->spanner());
+      std::map<Element*,Element*> paired_elements = pairwiseCloneMap(seg1,seg2,segments.first());
+      std::multimap<int, Spanner*> sp_copy = spannerMapCopy(score()->spanner(),paired_elements);
+      fixTuples(segments.first(),seg2,paired_elements);
+
       sp_copy.swap(score()->spannerMap().mapModify());
 
       for (int staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {

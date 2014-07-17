@@ -36,7 +36,10 @@ DurationElement::DurationElement(Score* s)
 DurationElement::DurationElement(const DurationElement& e)
    : Element(e)
       {
-      _tuplet   = e._tuplet;
+      if (e._tuplet && e._tuplet->elements().first() == &e)
+            _tuplet = e._tuplet->clone();
+      else
+            _tuplet = e._tuplet;
       _duration = e._duration;
       }
 
