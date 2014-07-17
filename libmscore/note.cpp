@@ -2382,4 +2382,9 @@ const char* NoteHead::groupToGroupName(NoteHead::Group group)
       return noteHeadNames[int(group)];
       }
 
+QString Note::subtypeName() const
+      {
+      return NoteHead::groupToGroupName(_headGroup);
+      }
+
 }
