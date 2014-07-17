@@ -312,10 +312,6 @@ Key Staff::key(int tick) const
 void Staff::setKey(int tick, Key k)
       {
       _keys.setKey(tick, k);
-//      printf("setKey %d %d\n", tick, k);
-//      for (auto k : _keys)
-//            printf("   %d - %d\n", k.first, k.second);
-
       }
 
 //---------------------------------------------------------
@@ -324,12 +320,7 @@ void Staff::setKey(int tick, Key k)
 
 void Staff::removeKey(int tick)
       {
-      /*int n =*/ _keys.erase(tick);
-//      Q_ASSERT(n == 1);     there are scores with empty KeySig's (type 0)
-
-//      printf("remove key %d\n", tick);
-//      for (auto k : _keys)
-//            printf("   %d - %d\n", k.first, k.second);
+      _keys.erase(tick);
       }
 
 //---------------------------------------------------------

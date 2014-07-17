@@ -883,7 +883,7 @@ void Measure::add(Element* el)
                   break;
 
             case Element::Type::JUMP:
-                  _repeatFlags |= Repeat::JUMP;
+                  _repeatFlags = _repeatFlags | Repeat::JUMP;
                   _el.push_back(el);
                   break;
 
@@ -929,7 +929,7 @@ void Measure::remove(Element* el)
                   break;
 
             case Element::Type::JUMP:
-                  _repeatFlags &= ~Repeat::JUMP;
+                  resetRepeatFlag(Repeat::JUMP);
                   // fall through
 
             case Element::Type::HBOX:
@@ -2147,12 +2147,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.addTuplet(tuplet);
                   }
             else if (tag == "startRepeat") {
-                  _repeatFlags |= Repeat::START;
+                  _repeatFlags = _repeatFlags | Repeat::START;
                   e.readNext();
                   }
             else if (tag == "endRepeat") {
                   _repeatCount = e.readInt();
-                  _repeatFlags |= Repeat::END;
+                  _repeatFlags = _repeatFlags | Repeat::END;
                   }
             else if (tag == "vspacer" || tag == "vspacerDown") {
                   if (staves[staffIdx]->_vspacerDown == 0) {
@@ -2336,10 +2336,10 @@ void Measure::createVoice(int track)
 
 bool Measure::setStartRepeatBarLine(bool val)
       {
-      bool changed = false;
-      Segment* s = findSegment(Segment::Type::StartRepeatBarLine, tick());
-      bool  customSpan = false;
-      int   numStaves = score()->nstaves();
+      bool changed    = false;
+      Segment* s      = findSegment(Segment::Type::StartRepeatBarLine, tick());
+      bool customSpan = false;
+      int numStaves   = score()->nstaves();
 
       for (int staffIdx = 0; staffIdx < numStaves;) {
             int track    = staffIdx * VOICES;
@@ -2443,11 +2443,14 @@ bool Measure::createEndBarLines()
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff = score()->staff(staffIdx);
-            int track   = staffIdx * VOICES;
+            int track    = staffIdx * VOICES;
+
             // get existing bar line for this staff, if any
             BarLine* cbl = static_cast<BarLine*>(seg->element(track));
+
             // if span counter has been counted off, get new span values
             // and forget about any previous bar line
+
             if (span == 0) {
                   if(cbl && cbl->customSpan()) {      // if there is a bar line and has custom span,
                         span        = cbl->span();    // get span values from it
@@ -2496,7 +2499,7 @@ bool Measure::createEndBarLines()
                         bl = new BarLine(score());
                         bl->setVisible(_endBarLineVisible);
                         bl->setColor(_endBarLineColor);
-                        bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
+                        bl->setGenerated(_endBarLineGenerated);
                         bl->setBarLineType(_endBarLineType);
                         bl->setParent(seg);
                         bl->setTrack(track);
@@ -2514,6 +2517,7 @@ bool Measure::createEndBarLines()
                         // or clear custom subtype flag if same type as measure
                         if (bl->barLineType() == _endBarLineType && bl->customSubtype())
                               bl->setCustomSubtype(false);
+
                         // if a bar line exists for this staff (cbl) but
                         // it is not the bar line we are dealing with (bl),
                         // we are extending down the bar line of a staff above (bl)
@@ -2582,7 +2586,7 @@ void Measure::setEndBarLineType(BarLineType val, bool g, bool visible, QColor co
       _endBarLineType      = val;
       _endBarLineGenerated = g;
       _endBarLineVisible   = visible;
-      if(color.isValid())
+      if (color.isValid())
             _endBarLineColor = color;
       else
             _endBarLineColor = curColor();

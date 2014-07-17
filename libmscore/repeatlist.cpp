@@ -285,10 +285,10 @@ void RepeatList::unwind()
 
       for (Measure* m = fm; m;) {
             m->setPlaybackCount(m->playbackCount() + 1);
-            int flags = m->repeatFlags();
+            Repeat flags = m->repeatFlags();
 
 // qDebug("repeat m%d(%d) lc%d loop %d repeatCount %d isGoto %d endRepeat %p flags 0x%x",
-//               m->no(), m->tick(), m->playbackCount(), loop, repeatCount, isGoto, endRepeat, flags);
+//               m->no(), m->tick(), m->playbackCount(), loop, repeatCount, isGoto, endRepeat, int(flags));
 
             if (endRepeat) {
                   Volta* volta = _score->searchVolta(m->tick());

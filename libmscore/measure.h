@@ -73,13 +73,24 @@ struct MStaff {
       void setNoText(Text* t)      { _noText = t;        }
       };
 
-enum Repeat : char {
+//---------------------------------------------------------
+//   Repeat
+//---------------------------------------------------------
+
+enum class Repeat : char {
       NONE    = 0,
       END     = 1,
       START   = 2,
       MEASURE = 4,
       JUMP    = 8
       };
+
+constexpr Repeat operator| (Repeat t1, Repeat t2) {
+      return static_cast<Repeat>(static_cast<int>(t1) | static_cast<int>(t2));
+      }
+constexpr bool operator& (Repeat t1, Repeat t2) {
+      return static_cast<int>(t1) & static_cast<int>(t2);
+      }
 
 //---------------------------------------------------------
 //   MeasureNumberMode
@@ -111,7 +122,7 @@ class Measure : public MeasureBase {
       Fraction _len;          ///< actual length of measure
 
       int _repeatCount;       ///< end repeat marker und repeat count
-      int _repeatFlags;       ///< or'd Repeat's
+      Repeat _repeatFlags;    ///< or'd Repeat's
 
       QList<MStaff*>  staves;
 
@@ -262,8 +273,12 @@ class Measure : public MeasureBase {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       void createVoice(int track);
       void adjustToLen(Fraction);
-      int repeatFlags() const                   { return _repeatFlags; }
-      void setRepeatFlags(int val)              { _repeatFlags = val;  }
+
+      Repeat repeatFlags() const                   { return _repeatFlags; }
+      void setRepeatFlags(Repeat val)              { _repeatFlags = val;  }
+      void setRepeatFlag(Repeat val)               { _repeatFlags = _repeatFlags | val; }
+      void resetRepeatFlag(Repeat val)             { _repeatFlags = Repeat(int(_repeatFlags) & ~int(val)); }
+
       AccidentalVal findAccidental(Note*) const;
       AccidentalVal findAccidental(Segment* s, int staffIdx, int line) const;
       void exchangeVoice(int, int, int, int);

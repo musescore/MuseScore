@@ -755,7 +755,7 @@ void MeasureView::setElement(Element* e)
       mb.sectionBreak->setChecked(m->sectionBreak());
       mb.irregular->setChecked(m->irregular());
       mb.endRepeat->setValue(m->repeatCount());
-      mb.repeatFlags->setText(QString("0x%1").arg(m->repeatFlags(), 6, 16, QChar('0')));
+      mb.repeatFlags->setText(QString("0x%1").arg(int(m->repeatFlags()), 6, 16, QChar('0')));
       mb.breakMultiMeasureRest->setChecked(m->getBreakMultiMeasureRest());
       mb.breakMMRest->setChecked(m->breakMMRest());
       mb.endBarLineType->setValue(int(m->endBarLineType()));

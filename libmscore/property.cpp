@@ -149,7 +149,7 @@ static const PropertyData propertyList[] = {
       { P_ID::MARKER_TYPE,         false, 0,               P_TYPE::INT    },
       { P_ID::ARP_USER_LEN1,       false, 0,               P_TYPE::REAL   },
       { P_ID::ARP_USER_LEN2,       false, 0,               P_TYPE::REAL   },
-      { P_ID::REPEAT_FLAGS,        false, 0,               P_TYPE::INT    },
+      { P_ID::REPEAT_FLAGS,        false,  0,              P_TYPE::INT    },
       { P_ID::END_BARLINE_TYPE,    false, 0,               P_TYPE::INT    },
       { P_ID::END_BARLINE_VISIBLE, false, 0,               P_TYPE::BOOL   },
       { P_ID::END_BARLINE_COLOR,   false, 0,               P_TYPE::COLOR  },
