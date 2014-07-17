@@ -360,6 +360,10 @@ void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st, PropertyS
                   if (e->getProperty(t) != st)
                         undo(new ChangeProperty(e, t, st, ps));
                   }
+            else {
+                  if (e->getProperty(t) != st)
+                        undo(new ChangeProperty(e, t, st, ps));
+                  }
             }
       else {
             if (e->getProperty(t) != st)
