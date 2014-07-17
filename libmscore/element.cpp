@@ -178,7 +178,6 @@ static const ElementName elementNames[] = {
       ElementName("VBox",                 QT_TRANSLATE_NOOP("elementName", "Vertical Frame")),
       ElementName("TBox",                 QT_TRANSLATE_NOOP("elementName", "Text Frame")),
       ElementName("FBox",                 QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram Frame")),
-      ElementName("AccidentalBracket",    QT_TRANSLATE_NOOP("elementName", "Accidental Bracket")),
       ElementName("Icon",                 QT_TRANSLATE_NOOP("elementName", "Icon")),
       ElementName("Ossia",                QT_TRANSLATE_NOOP("elementName", "Ossia")),
       ElementName("BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName", "Bagpipe Embellishment"))
@@ -1367,7 +1366,6 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::FIGURED_BASS:      return new FiguredBass(score);
             case Element::Type::STEM:              return new Stem(score);
             case Element::Type::SLUR:              return new Slur(score);
-            case Element::Type::ACCIDENTAL_BRACKET: return new AccidentalBracket(score);
             case Element::Type::FINGERING:          return new Fingering(score);
             case Element::Type::HBOX:              return new HBox(score);
             case Element::Type::VBOX:              return new VBox(score);

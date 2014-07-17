@@ -1944,6 +1944,25 @@ void Score::cmdDoubleDuration()
       }
 
 //---------------------------------------------------------
+//   cmdAddBracket
+//---------------------------------------------------------
+      
+void Score::cmdAddBracket()
+      {
+      for(Element* el : selection().elements()) {
+            if (el->type() == Element::Type::NOTE) {
+                  Note* n = static_cast<Note*>(el);
+                  n->addBracket();
+                  }
+            else if (el->type() == Element::Type::ACCIDENTAL) {
+                  Accidental* acc = static_cast<Accidental*>(el);
+                  acc->undoSetHasBracket(true);
+                  }
+            }
+      }
+      
+
+//---------------------------------------------------------
 //   cmdMoveRest
 //---------------------------------------------------------
 
@@ -2256,9 +2275,11 @@ void Score::cmd(const QAction* a)
             bool val = !styleB(StyleIdx::createMultiMeasureRests);
             undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
             }
+      else if (cmd == "add-brackets") {
+            cmdAddBracket();
+      }
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
       }
-
 }
 

@@ -1345,14 +1345,7 @@ Element* Note::drop(const DropData& data)
                               break;
                         case IconType::BRACKETS:
                               {
-                              Symbol* s = new Symbol(score());
-                              s->setSym(SymId::noteheadParenthesisLeft);
-                              s->setParent(this);
-                              score()->undoAddElement(s);
-                              s = new Symbol(score());
-                              s->setSym(SymId::noteheadParenthesisRight);
-                              s->setParent(this);
-                              score()->undoAddElement(s);
+                              addBracket();
                               }
                               break;
                         default:
@@ -1445,6 +1438,22 @@ Element* Note::drop(const DropData& data)
       return 0;
       }
 
+//---------------------------------------------------------
+//   addBracket
+//---------------------------------------------------------
+      
+void Note::addBracket()
+      {
+      Symbol* s = new Symbol(score());
+      s->setSym(SymId::noteheadParenthesisLeft);
+      s->setParent(this);
+      score()->undoAddElement(s);
+      s = new Symbol(score());
+      s->setSym(SymId::noteheadParenthesisRight);
+      s->setParent(this);
+      score()->undoAddElement(s);
+      }
+      
 //---------------------------------------------------------
 //   setDotPosition
 //---------------------------------------------------------

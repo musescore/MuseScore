@@ -752,7 +752,6 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case Element::Type::VBOX:
                   case Element::Type::TBOX:
                   case Element::Type::FBOX:
-                  case Element::Type::ACCIDENTAL_BRACKET:
                   case Element::Type::ICON:
                   case Element::Type::OSSIA:
                   case Element::Type::BAGPIPE_EMBELLISHMENT:

@@ -400,6 +400,8 @@ class Score : public QObject {
 
       void cmdHalfDuration();
       void cmdDoubleDuration();
+      
+      void cmdAddBracket();
 
       void resetUserStretch();
 

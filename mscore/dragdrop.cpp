@@ -264,7 +264,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case Element::Type::CHORD:
                   case Element::Type::SPACER:
                   case Element::Type::SLUR:
-                  case Element::Type::ACCIDENTAL_BRACKET:
                   case Element::Type::HARMONY:
                   case Element::Type::BAGPIPE_EMBELLISHMENT:
                   case Element::Type::AMBITUS:
@@ -447,7 +446,6 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case Element::Type::CHORD:
                   case Element::Type::SPACER:
                   case Element::Type::SLUR:
-                  case Element::Type::ACCIDENTAL_BRACKET:
                   case Element::Type::BAGPIPE_EMBELLISHMENT:
                   case Element::Type::AMBITUS:
                         {

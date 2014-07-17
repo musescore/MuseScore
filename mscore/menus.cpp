@@ -250,8 +250,13 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
                         delete s;
                   }
             }
-      AccidentalBracket* ab = new AccidentalBracket(gscore);
-      sp->append(ab, QT_TRANSLATE_NOOP("Palette", "round brackets"));
+      Icon* ik = new Icon(gscore);
+      ik->setIconType(IconType::BRACKETS);
+      Shortcut* s = Shortcut::getShortcut("add-brackets");
+      QAction* action = s->action();
+      QIcon icon(action->icon());
+      ik->setAction("add-brackets", icon);
+            sp->append(ik, s->help());
       return sp;
       }
 

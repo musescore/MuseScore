@@ -273,7 +273,6 @@ class Element : public QObject {
             VBOX,
             TBOX,
             FBOX,
-            ACCIDENTAL_BRACKET,
             ICON,
             OSSIA,
             BAGPIPE_EMBELLISHMENT,
