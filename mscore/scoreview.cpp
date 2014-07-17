@@ -3012,17 +3012,17 @@ void ScoreView::startNoteEntry()
       Note* note  = 0;
       Element* el = _score->selection().activeCR() ? _score->selection().activeCR() : _score->selection().element();
       if (el == 0 || (el->type() != Element::Type::CHORD && el->type() != Element::Type::REST && el->type() != Element::Type::NOTE)) {
-            int track = is.track() == -1 ? 0 : is.track();
-            el = static_cast<ChordRest*>(_score->searchNote(0, track));
-            if (el == 0)
-                  return;
+            // if no note/rest is selected, start with voice 0
+            int track = is.track() == -1 ? 0 : (is.track() / VOICES) * VOICES;
+            el = _score->searchNote(0, track);
+            Q_ASSERT(el);
             }
       if (el->type() == Element::Type::CHORD) {
             Chord* c = static_cast<Chord*>(el);
             note = c->selectedNote();
             if (note == 0)
                   note = c->upNote();
-            el = note;
+            el    = note;
             }
       TDuration d(is.duration());
       if (!d.isValid() || d.isZero() || d.type() == TDuration::DurationType::V_MEASURE)
@@ -3030,9 +3030,8 @@ void ScoreView::startNoteEntry()
 
       _score->select(el, SelectType::SINGLE, 0);
       is.update(el);
-
-      is.setNoteEntryMode(true);
       is.setRest(false);
+      is.setNoteEntryMode(true);
 
       getAction("pad-rest")->setChecked(false);
       setMouseTracking(true);
@@ -4700,6 +4699,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             qDebug("cannot enter notes here (no chord rest at current position)");
             return;
             }
+printf("cmdAddPitch %p\n", is.segment());
       Drumset* ds = is.drumset();
       int octave = 4;
       if (ds) {
@@ -4736,6 +4736,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             else {
                   int curPitch = -1;
                   if (is.segment()) {
+printf("   cmdAddPitch1 %p\n", is.segment());
                         Staff* staff = score()->staff(is.track() / VOICES);
                         Segment* seg = is.segment()->prev1(Segment::Type::ChordRest | Segment::Type::Clef);
                         while(seg) {
@@ -4770,13 +4771,16 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                         --octave;
                   else if (delta < -6)
                         ++octave;
+printf("   cmdAddPitch2 %p\n", is.segment());
                   }
             }
 
       if (!noteEntryMode()) {
             sm->postEvent(new CommandEvent("note-input"));
             qApp->processEvents();
+printf("   cmdAddPitch3 %p\n", is.segment());
             }
+printf("   cmdAddPitch4 %p\n", is.segment());
       _score->cmdAddPitch(octave * 7 + note, addFlag);
       adjustCanvasPosition(is.cr(), false);
       }
