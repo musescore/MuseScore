@@ -1413,6 +1413,7 @@ static void usage()
         "   -e        enable experimental features\n"
         "   -c dir    override config/settings folder\n"
         "   -t        set testMode flag for all files\n"
+        "   -M file   specify MIDI import operations file\n"
         );
 
       exit(-1);
@@ -1637,7 +1638,6 @@ void MuseScore::showMidiImportPanel()
             importmidiPanel->setVisible(true);
       importmidiShowPanel->hide();
       }
-
 
 //---------------------------------------------------------
 //   dragEnterEvent
@@ -4633,6 +4633,13 @@ int main(int argc, char* av[])
                   case 't':
                         {
                         enableTestMode = true;
+                        }
+                        break;
+                  case 'M':
+                        {
+                        if (argv.size() - i < 2)
+                              usage();
+                        preferences.midiImportOperations.setOperationsFile(argv.takeAt(i + 1));
                         }
                         break;
                   default:
