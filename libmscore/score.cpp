@@ -3493,7 +3493,7 @@ void Score::undoInsertTime(int tick, int len)
                         //    +---add---
                         //
                         undoChangeProperty(s, P_ID::SPANNER_TICK2, s->tick2() + len);
-                       }
+                        }
                   else if (tick <= s->tick()) {
                         //
                         //  case b:
