@@ -293,6 +293,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString pluginPath;
 
       void createMenuEntry(PluginDescription*);
+      void removeMenuEntry(PluginDescription*);
 
       QTimer* autoSaveTimer;
       QList<QAction*> qmlPluginActions;
@@ -371,7 +372,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveFile();
       bool saveFile(Score* score);
       void fingeringMenu();
-      void registerPlugin(PluginDescription*);
       
       int  pluginIdxFromPath(QString pluginPath);
       void startDebugger();
@@ -650,6 +650,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreView* currentScoreView() const { return cv; }
       void showMessage(const QString& s, int timeout);
       void helpBrowser(const QString = QString()) const;
+      
+      void registerPlugin(PluginDescription*);
+      void unregisterPlugin(PluginDescription*);
       };
 
 extern MuseScore* mscore;

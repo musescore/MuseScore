@@ -124,6 +124,39 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       delete obj;
       }
 
+void MuseScore::unregisterPlugin(PluginDescription* plugin)
+      {
+      QString pluginPath = plugin->path;
+      QFileInfo np(pluginPath);
+      if (np.suffix() != "qml")
+            return;
+      QString baseName = np.baseName();
+      
+      bool found = false;
+      foreach(QString s, plugins) {
+            QFileInfo fi(s);
+            if (fi.baseName() == baseName) {
+                  found = true;
+                  break;
+                  }
+            }
+      if (!found) {
+            if (MScore::debugMode)
+                  qDebug("  Plugin <%s> not registered", qPrintable(pluginPath));
+            return;
+            }
+      plugins.removeAll(pluginPath);
+            
+
+      removeMenuEntry(plugin);
+      QAction* a = plugin->shortcut.action();
+      pluginActions.removeAll(a);
+      
+      disconnect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
+      pluginMapper->removeMappings(a);
+      
+      }
+
 //---------------------------------------------------------
 //   createMenuEntry
 //    syntax: "entry.entry.entry"
@@ -215,6 +248,70 @@ void MuseScore::createMenuEntry(PluginDescription* plugin)
                               qDebug("add menu <%s>", qPrintable(m));
                         }
                   }
+            }
+      }
+
+      
+void MuseScore::removeMenuEntry(PluginDescription* plugin)
+      {
+      if (!pluginMapper)
+            return;
+            
+      QString menu = plugin->menuPath;
+      QStringList ml;
+      QString s;
+      bool escape = false;
+      foreach (QChar c, menu) {
+            if (escape) {
+                  escape = false;
+                  s += c;
+                  }
+            else {
+                  if (c == '\\')
+                        escape = true;
+                  else {
+                        if (c == '.') {
+                              ml += s;
+                              s = "";
+                              }
+                        else {
+                              s += c;
+                              }
+                        }
+                  }
+            }
+      if (!s.isEmpty())
+            ml += s;
+      
+      int n            = ml.size();
+      QWidget* curMenu = menuBar();
+      
+      for(int i = 0; i < n-1; ++i) {
+            QString m  = ml[i];
+            QList<QObject*> ol = curMenu->children();
+            foreach(QObject* o, ol) {
+                  QMenu* menu = qobject_cast<QMenu*>(o);
+                  if (!menu)
+                        continue;
+                  if (menu->objectName() == m || menu->title() == m) {
+                        curMenu = menu;
+                        break;
+                        }
+                  }
+            }
+      QString m  = ml[n-1];
+      QStringList sl = m.split(":");
+      QAction* a = plugin->shortcut.action();
+      QMenu* cm = static_cast<QMenu*>(curMenu);
+      cm->removeAction(a);
+      for(int i = n-2; i >= 0; --i) {
+            
+            QMenu* menu = qobject_cast<QMenu*>(cm->parent());
+            if (cm->isEmpty())
+                  if(cm->isEmpty()) {
+                        delete cm;
+                        }
+            cm = menu;
             }
       }
 
