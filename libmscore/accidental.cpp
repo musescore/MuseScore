@@ -15,6 +15,7 @@
 #include "symbol.h"
 #include "sym.h"
 #include "score.h"
+#include "icon.h"
 #include "staff.h"
 #include "undo.h"
 #include "xml.h"
@@ -399,7 +400,7 @@ void Accidental::draw(QPainter* painter) const
 
 bool Accidental::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
-      return e->type() == Element::Type::ACCIDENTAL_BRACKET;
+      return e->type() == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS;
       }
 
 //---------------------------------------------------------
@@ -410,8 +411,8 @@ Element* Accidental::drop(const DropData& data)
       {
       Element* e = data.element;
       switch(e->type()) {
-            case Element::Type::ACCIDENTAL_BRACKET:
-                  if (!_hasBracket)
+            case Element::Type::ICON :
+                  if (static_cast<Icon*>(e)->iconType() == IconType::BRACKETS && !_hasBracket)
                         undoSetHasBracket(true);
                   break;
 
@@ -474,22 +475,5 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
       score()->setLayoutAll(true);  // spacing changes
       return true;
       }
-
-//---------------------------------------------------------
-//   AccidentalBracket
-//    used as icon in palette
-//---------------------------------------------------------
-
-AccidentalBracket::AccidentalBracket(Score* s)
-   : Compound(s)
-      {
-      Symbol* s1 = new Symbol(score());
-      Symbol* s2 = new Symbol(score());
-      s1->setSym(SymId::noteheadParenthesisLeft);
-      s2->setSym(SymId::noteheadParenthesisRight);
-      addElement(s1, -s1->bbox().x(), 0.0);
-      addElement(s2, s2->bbox().width() - s2->bbox().x(), 0.0);
-      }
-
 }
 

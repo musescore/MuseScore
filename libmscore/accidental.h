@@ -143,22 +143,6 @@ class Accidental : public Element {
       static Type value2subtype(AccidentalVal);
       static Type name2subtype(const QString&);
       };
-
-//---------------------------------------------------------
-//   @@ AccidentalBracket
-//!    used as icon in palette
-//---------------------------------------------------------
-
-class AccidentalBracket : public Compound {
-      Q_OBJECT
-
-   public:
-      AccidentalBracket(Score*);
-      virtual AccidentalBracket* clone() const { return new AccidentalBracket(*this); }
-      virtual Element::Type type() const       { return Element::Type::ACCIDENTAL_BRACKET; }
-      };
-
-
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Accidental::Role);

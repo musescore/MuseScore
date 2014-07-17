@@ -410,6 +410,8 @@ class Note : public Element {
       void setMark(bool v) const      { _mark = v;   }
       virtual void setScore(Score* s);
       void setDotY(MScore::Direction);
+      
+      void addBracket();
 
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
       NoteVal noteVal() const;

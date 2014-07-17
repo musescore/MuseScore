@@ -2531,7 +2531,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          ShortcutFlags::A_CMD,
          "add-brackets",
-         QT_TRANSLATE_NOOP("action","Add brackets to note head"),
+         QT_TRANSLATE_NOOP("action","Add brackets to element"),
          Icons::brackets_ICON
          ),
       Shortcut(
