@@ -112,9 +112,9 @@ class TextLine : public SLine {
       void createContinueTextElement();
       void createEndTextElement();
 
-      void setBeginText(const QString& s, int style);
-      void setContinueText(const QString& s, int style);
-      void setEndText(const QString& s, int style);
+      void setBeginText(const QString& s, TextStyleType style);
+      void setContinueText(const QString& s, TextStyleType style);
+      void setEndText(const QString& s, TextStyleType style);
 
       void setBeginText(const QString&);
       void setContinueText(const QString&);

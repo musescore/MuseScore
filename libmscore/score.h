@@ -695,7 +695,7 @@ class Score : public QObject {
       qreal    styleD(StyleIdx idx) const  { return _style.value(idx).toDouble();  }
       int      styleI(StyleIdx idx) const  { return _style.value(idx).toInt();  }
 
-      const TextStyle& textStyle(int idx) const { return _style.textStyle(idx); }
+      const TextStyle& textStyle(TextStyleType idx) const { return _style.textStyle(idx); }
       const TextStyle& textStyle(const QString& s) const  { return _style.textStyle(s); }
 
       // These position are in ticks and not uticks
@@ -758,7 +758,7 @@ class Score : public QObject {
 
       bool defaultsRead() const                      { return _defaultsRead;    }
       void setDefaultsRead(bool b)                   { _defaultsRead = b;       }
-      Text* getText(int subtype);
+      Text* getText(TextStyleType subtype);
 
       void lassoSelect(const QRectF&);
       void lassoSelectEnd();

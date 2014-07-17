@@ -37,7 +37,7 @@ class StaffType;
 class Score;
 class InstrumentGenre;
 
-enum { ITEM_KEEP, ITEM_DELETE, ITEM_ADD, ITEM_UPDATE };
+enum class ListItemOp : char { KEEP, I_DELETE, ADD, UPDATE };
 enum { PART_LIST_ITEM = QTreeWidgetItem::UserType, STAFF_LIST_ITEM };
 
 //---------------------------------------------------------
@@ -47,7 +47,7 @@ enum { PART_LIST_ITEM = QTreeWidgetItem::UserType, STAFF_LIST_ITEM };
 class PartListItem : public QTreeWidgetItem {
 
    public:
-      int op;
+      ListItemOp op;
       Part* part;
       const InstrumentTemplate* it;
 
@@ -76,7 +76,7 @@ class StaffListItem : public QObject, public QTreeWidgetItem {
       StaffListItem();
       StaffListItem(PartListItem* li);
 
-      int op;
+      ListItemOp op;
       Staff* staff;
       int partIdx() const                       { return _partIdx; }
       void setPartIdx(int val);

@@ -26,7 +26,7 @@
 
 namespace Ms {
 
-enum TIMESTEP { D1, D2, D4, D8, D16, D32, D64, D128, D256, D_BREVE };
+enum class TIMESTEP : char { D1, D2, D4, D8, D16, D32, D64, D128, D256, D_BREVE };
 
 #if 0
 static const char* timeNames[] = { "1/1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/64",
@@ -41,7 +41,7 @@ enum class CapellaNoteObjectType : char {
       PAGE_BKGR
       };
 
-enum BEAM_MODE { AUTO_BEAM, FORCE_BEAM, SPLIT_BEAM };
+enum class BeamMode : unsigned char { AUTO, FORCE, SPLIT };
 
 //---------------------------------------------------------
 //   CapellaObj
@@ -67,16 +67,16 @@ class NoteObj {
       CapellaNoteObjectType type() const  { return _type; }
       };
 
-enum FORM {
-      FORM_G, FORM_C, FORM_F, FORM_PERCUSSION,
+enum class Form : char {
+      G, C, F, PERCUSSION,
       FORM_NULL, CLEF_UNCHANGED
       };
 
-enum CLEF_LINE {
-      LINE_5, LINE_4, LINE_3, LINE_2, LINE_1
+enum class ClefLine : char {
+      L5, L4, L3, L2, L1
       };
 
-enum OCT  {
+enum class Oct : char {
       OCT_ALTA, OCT_NULL, OCT_BASSA
       };
 
@@ -85,7 +85,7 @@ enum OCT  {
 //---------------------------------------------------------
 
 class CapClef : public NoteObj, public CapellaObj {
-      FORM form;
+      Form form;
 
    public:
       CapClef(Capella* c) : NoteObj(CapellaNoteObjectType::CLEF), CapellaObj(c) {}
@@ -93,13 +93,13 @@ class CapClef : public NoteObj, public CapellaObj {
       void readCapx(XmlReader& e);
       const char* name() {
             static const char* formName[] = { "G", "C", "F", "=", " ", "*" };
-            return formName[form];
+            return formName[int(form)];
             }
       ClefType clef() const;
 
-      CLEF_LINE line;
-      OCT  oct;
-      static ClefType clefType(FORM, CLEF_LINE, OCT);
+      ClefLine line;
+      Oct  oct;
+      static ClefType clefType(Form, ClefLine, Oct);
       };
 
 //---------------------------------------------------------
@@ -135,19 +135,16 @@ class CapMeter : public NoteObj, public CapellaObj {
 //---------------------------------------------------------
 
 class CapExplicitBarline : public NoteObj, public CapellaObj {
-      int _type;
+      BarLineType _type;
       int _barMode;      // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
 
    public:
       CapExplicitBarline(Capella* c) : NoteObj(CapellaNoteObjectType::EXPL_BARLINE), CapellaObj(c) {}
       void read();
       void readCapx(XmlReader& e);
-      int type() const    { return _type; }
-      int barMode() const { return _barMode; }
+      BarLineType type() const { return _type; }
+      int barMode() const      { return _barMode; }
 
-      enum { BAR_SINGLE, BAR_DOUBLE, BAR_END,
-             BAR_REPEND, BAR_REPSTART, BAR_REPENDSTART,
-             BAR_DASHED};
       };
 
 //---------------------------------------------------------
@@ -193,9 +190,9 @@ struct CapStaffLayout {
       uchar barlineFrom;
       uchar barlineTo;
 
-      FORM form;
-      CLEF_LINE line;
-      OCT oct;                // clef
+      Form form;
+      ClefLine line;
+      Oct oct;                // clef
 
       // Schlagzeuginformation
       bool bPercussion;             // use drum channel
@@ -222,7 +219,7 @@ struct CapSystem {
       bool bBarCountReset;
       unsigned char explLeftIndent;      // < 0 --> Einrückung gemäß Stimmenbezeichnungen
                                          // >=  --> explizite Einrückung
-      unsigned char beamMode;
+      BeamMode beamMode;
       unsigned tempo;
       QColor color;                 // fuer Systemklammern
       bool bJustified;              // Randausgleich (Blocksatz)
@@ -236,9 +233,9 @@ struct CapSystem {
 //   BasicDrawObj
 //---------------------------------------------------------
 
-enum { CAP_GROUP, CAP_TRANSPOSABLE, CAP_METAFILE, CAP_SIMPLE_TEXT, CAP_TEXT, CAP_RECT_ELLIPSE,
-      CAP_LINE, CAP_POLYGON, CAP_WAVY_LINE, CAP_SLUR, CAP_NOTE_LINES, CAP_WEDGE, CAP_VOLTA,
-      CAP_BRACKET, CAP_GUITAR, CAP_TRILL
+enum class CapellaType : unsigned char { GROUP, TRANSPOSABLE, METAFILE, SIMPLE_TEXT, TEXT, RECT_ELLIPSE,
+      LINE, POLYGON, WAVY_LINE, SLUR, NOTE_LINES, WEDGE, VOLTA,
+      BRACKET, GUITAR, TRILL
       };
 
 class BasicDrawObj : public CapellaObj {
@@ -248,9 +245,9 @@ class BasicDrawObj : public CapellaObj {
       int nNotes;
       bool background;
       int pageRange;
-      int type;
+      CapellaType type;
 
-      BasicDrawObj(int t, Capella* c)
+      BasicDrawObj(CapellaType t, Capella* c)
          : CapellaObj(c), modeX(0), modeY(0), distY(0), flags(0),
            nRefNote(0), nNotes(0), background(0), pageRange(0), type(t) {}
       void read();
@@ -263,7 +260,7 @@ class BasicDrawObj : public CapellaObj {
 
 class BasicRectObj : public BasicDrawObj {
    public:
-      BasicRectObj(int t, Capella* c) : BasicDrawObj(t, c) {}
+      BasicRectObj(CapellaType t, Capella* c) : BasicDrawObj(t, c) {}
       void read();
 
       QPointF relPos;
@@ -278,7 +275,7 @@ class BasicRectObj : public BasicDrawObj {
 
 class GroupObj : public BasicDrawObj {
    public:
-      GroupObj(Capella* c) : BasicDrawObj(CAP_GROUP, c) {}
+      GroupObj(Capella* c) : BasicDrawObj(CapellaType::GROUP, c) {}
       void read();
 
       QPointF relPos;
@@ -291,7 +288,7 @@ class GroupObj : public BasicDrawObj {
 
 class TransposableObj : public BasicDrawObj {
    public:
-      TransposableObj(Capella* c) : BasicDrawObj(CAP_TRANSPOSABLE, c) {}
+      TransposableObj(Capella* c) : BasicDrawObj(CapellaType::TRANSPOSABLE, c) {}
       void read();
 
       QPointF relPos;
@@ -305,7 +302,7 @@ class TransposableObj : public BasicDrawObj {
 
 class MetafileObj : public BasicRectObj {
    public:
-      MetafileObj(Capella* c) : BasicRectObj(CAP_METAFILE, c) {}
+      MetafileObj(Capella* c) : BasicRectObj(CapellaType::METAFILE, c) {}
       void read();
       };
 
@@ -316,8 +313,8 @@ class MetafileObj : public BasicRectObj {
 class LineObj : public BasicDrawObj {
 
    public:
-      LineObj(Capella* c) : BasicDrawObj(CAP_LINE, c) {}
-      LineObj(int t, Capella* c) : BasicDrawObj(t, c) {}
+      LineObj(Capella* c) : BasicDrawObj(CapellaType::LINE, c) {}
+      LineObj(CapellaType t, Capella* c) : BasicDrawObj(t, c) {}
       void read();
 
       QPointF pt1, pt2;
@@ -331,7 +328,7 @@ class LineObj : public BasicDrawObj {
 
 class RectEllipseObj : public LineObj {    // special
    public:
-      RectEllipseObj(Capella* c) : LineObj(CAP_RECT_ELLIPSE, c) {}
+      RectEllipseObj(Capella* c) : LineObj(CapellaType::RECT_ELLIPSE, c) {}
       void read();
 
       int radius;
@@ -345,7 +342,7 @@ class RectEllipseObj : public LineObj {    // special
 
 class PolygonObj : public BasicDrawObj {
    public:
-      PolygonObj(Capella* c) : BasicDrawObj(CAP_POLYGON, c) {}
+      PolygonObj(Capella* c) : BasicDrawObj(CapellaType::POLYGON, c) {}
       void read();
 
       bool bFilled;
@@ -360,7 +357,7 @@ class PolygonObj : public BasicDrawObj {
 
 class WavyLineObj : public LineObj {
    public:
-      WavyLineObj(Capella* c) : LineObj(CAP_WAVY_LINE, c) {}
+      WavyLineObj(Capella* c) : LineObj(CapellaType::WAVY_LINE, c) {}
       void read();
 
       unsigned waveLen;
@@ -373,7 +370,7 @@ class WavyLineObj : public LineObj {
 
 class NotelinesObj : public BasicDrawObj {
    public:
-      NotelinesObj(Capella* c) : BasicDrawObj(CAP_NOTE_LINES, c) {}
+      NotelinesObj(Capella* c) : BasicDrawObj(CapellaType::NOTE_LINES, c) {}
       void read();
 
       int x0, x1, y;
@@ -387,7 +384,7 @@ class NotelinesObj : public BasicDrawObj {
 class VoltaObj : public BasicDrawObj {
    public:
       VoltaObj(Capella* c)
-         : BasicDrawObj(CAP_VOLTA, c), x0(0), x1(0), y(0),
+         : BasicDrawObj(CapellaType::VOLTA, c), x0(0), x1(0), y(0),
            bLeft(false), bRight(false), bDotted(false),
            allNumbers(false), from(0), to(0) {}
       void read();
@@ -410,7 +407,7 @@ class VoltaObj : public BasicDrawObj {
 
 class GuitarObj : public BasicDrawObj {
    public:
-      GuitarObj(Capella* c) : BasicDrawObj(CAP_GUITAR, c) {}
+      GuitarObj(Capella* c) : BasicDrawObj(CapellaType::GUITAR, c) {}
       void read();
 
       QPointF relPos;
@@ -425,7 +422,7 @@ class GuitarObj : public BasicDrawObj {
 
 class TrillObj : public BasicDrawObj {
    public:
-      TrillObj(Capella* c) : BasicDrawObj(CAP_TRILL, c) {}
+      TrillObj(Capella* c) : BasicDrawObj(CapellaType::TRILL, c) {}
       void read();
 
       int x0, x1, y;
@@ -443,7 +440,7 @@ class SlurObj : public BasicDrawObj {
 
    public:
       SlurObj(Capella* c)
-         : BasicDrawObj(CAP_SLUR, c), color(Qt::black), nEnd(0), nMid(0), nDotDist(0), nDotWidth(0) {}
+         : BasicDrawObj(CapellaType::SLUR, c), color(Qt::black), nEnd(0), nMid(0), nDotDist(0), nDotWidth(0) {}
       void read();
       void readCapx(XmlReader& e);
       unsigned char nEnd, nMid, nDotDist, nDotWidth;
@@ -456,7 +453,7 @@ class SlurObj : public BasicDrawObj {
 class TextObj : public BasicRectObj {
 
    public:
-      TextObj(Capella* c) : BasicRectObj(CAP_TEXT, c) {}
+      TextObj(Capella* c) : BasicRectObj(CapellaType::TEXT, c) {}
       ~TextObj() {}
       void read();
 
@@ -475,7 +472,7 @@ class SimpleTextObj : public BasicDrawObj {
 
    public:
       SimpleTextObj(Capella* c)
-         : BasicDrawObj(CAP_SIMPLE_TEXT, c), relPos(0, 0), align(0) {}
+         : BasicDrawObj(CapellaType::SIMPLE_TEXT, c), relPos(0, 0), align(0) {}
       void read();
       void readCapx(XmlReader& e);
       QString text() const { return _text; }
@@ -490,7 +487,7 @@ class SimpleTextObj : public BasicDrawObj {
 class BracketObj : public LineObj {
 
    public:
-      BracketObj(Capella* c) : LineObj(CAP_BRACKET, c) {}
+      BracketObj(Capella* c) : LineObj(CapellaType::BRACKET, c) {}
       void read();
 
       char orientation, number;
@@ -503,7 +500,7 @@ class BracketObj : public LineObj {
 class WedgeObj : public LineObj {
 
    public:
-      WedgeObj(Capella* c) : LineObj(CAP_WEDGE, c) {}
+      WedgeObj(Capella* c) : LineObj(CapellaType::WEDGE, c) {}
       void read();
 
       int height;
@@ -566,8 +563,8 @@ struct CNote {
 
 class ChordObj : public BasicDurationalObj, public NoteObj {
    public:
-      enum StemDir { DOWN = -1, AUTO = 0, UP = 1, NONE = 3 };
-      unsigned char beamMode;
+      enum class StemDir : signed char { DOWN = -1, AUTO = 0, UP = 1, NONE = 3 };
+      BeamMode beamMode;
       char notationStave;
       char dStemLength;
       unsigned char nTremoloBars;
@@ -586,7 +583,7 @@ class ChordObj : public BasicDurationalObj, public NoteObj {
       void readCapxStem(XmlReader& e);
       QList<Verse> verse;
       QList<CNote> notes;
-      char stemDir;           // -1 down, 0 auto, 1 up, 3 no stem
+      StemDir stemDir;
       };
 
 //---------------------------------------------------------
@@ -678,14 +675,14 @@ class Capella {
       void readLayout();
 
    public:
-      enum CapellaError { CAP_NO_ERROR, CAP_BAD_SIG, CAP_EOF, CAP_BAD_VOICE_SIG,
-            CAP_BAD_STAFF_SIG, CAP_BAD_SYSTEM_SIG
+      enum class Error : char { CAP_NO_ERROR, BAD_SIG, CAP_EOF, BAD_VOICE_SIG,
+            BAD_STAFF_SIG, BAD_SYSTEM_SIG
             };
 
       Capella();
       ~Capella();
       void read(QFile*);
-      QString error(CapellaError n) const { return QString(errmsg[int(n)]); }
+      QString error(Error n) const { return QString(errmsg[int(n)]); }
 
       unsigned char readByte();
       char readChar();

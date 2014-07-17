@@ -90,6 +90,7 @@ class ImportMidiPanel;
 struct PluginDescription;
 enum class SelState : char;
 enum class IconType : signed char;
+enum class MagIdx : char;
 
 extern QString mscoreGlobalShare;
 static const int PROJECT_LIST_LEN = 6;
@@ -417,7 +418,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void seqStopped();
       void cmdAppendMeasures();
       void cmdInsertMeasures();
-      void magChanged(int);
+      void magChanged(MagIdx);
       void showPageSettings();
       void removeTab(int);
       void removeTab();

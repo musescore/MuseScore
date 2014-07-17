@@ -1837,7 +1837,7 @@ void Score::setSelection(const Selection& s)
 //   getText
 //---------------------------------------------------------
 
-Text* Score::getText(int subtype)
+Text* Score::getText(TextStyleType subtype)
       {
       MeasureBase* m = first();
       if (m && m->type() == Element::Type::VBOX) {

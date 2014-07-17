@@ -137,7 +137,7 @@ void Preferences::init()
       portMidiInput      = "";
 
       antialiasedDrawing       = true;
-      sessionStart             = SCORE_SESSION;
+      sessionStart             = SessionStart::SCORE;
       startScore               = ":/data/Promenade_Example.mscz";
       defaultStyleFile         = "";
       showSplashScreen         = true;
@@ -155,7 +155,7 @@ void Preferences::init()
       musicxmlImportLayout     = true;
       musicxmlImportBreaks     = true;
       musicxmlExportLayout     = true;
-      musicxmlExportBreaks     = ALL_BREAKS;
+      musicxmlExportBreaks     = MusicxmlExportBreaks::ALL;
 
       alternateNoteEntryMethod = false;
       proximity                = 6;
@@ -180,7 +180,7 @@ void Preferences::init()
       singlePalette           = false;
 
       styleName               = "light";   // ??
-      globalStyle             = STYLE_LIGHT;
+      globalStyle             = MuseScoreStyleType::LIGHT;
       animations              = true;
 
       QString wd      = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName());
@@ -267,10 +267,10 @@ void Preferences::write()
       s.setValue("frameMarginColor",   MScore::frameMarginColor);
       s.setValue("antialiasedDrawing", antialiasedDrawing);
       switch(sessionStart) {
-            case EMPTY_SESSION:  s.setValue("sessionStart", "empty"); break;
-            case LAST_SESSION:   s.setValue("sessionStart", "last"); break;
-            case NEW_SESSION:    s.setValue("sessionStart", "new"); break;
-            case SCORE_SESSION:  s.setValue("sessionStart", "score"); break;
+            case SessionStart::EMPTY:  s.setValue("sessionStart", "empty"); break;
+            case SessionStart::LAST:   s.setValue("sessionStart", "last"); break;
+            case SessionStart::NEW:    s.setValue("sessionStart", "new"); break;
+            case SessionStart::SCORE:  s.setValue("sessionStart", "score"); break;
             }
       s.setValue("startScore",         startScore);
       s.setValue("defaultStyle",       defaultStyleFile);
@@ -286,9 +286,9 @@ void Preferences::write()
       s.setValue("musicxmlImportBreaks",  musicxmlImportBreaks);
       s.setValue("musicxmlExportLayout",  musicxmlExportLayout);
       switch(musicxmlExportBreaks) {
-            case ALL_BREAKS:     s.setValue("musicxmlExportBreaks", "all"); break;
-            case MANUAL_BREAKS:  s.setValue("musicxmlExportBreaks", "manual"); break;
-            case NO_BREAKS:      s.setValue("musicxmlExportBreaks", "no"); break;
+            case MusicxmlExportBreaks::ALL:     s.setValue("musicxmlExportBreaks", "all"); break;
+            case MusicxmlExportBreaks::MANUAL:  s.setValue("musicxmlExportBreaks", "manual"); break;
+            case MusicxmlExportBreaks::NO:      s.setValue("musicxmlExportBreaks", "no"); break;
             }
 
       s.setValue("alternateNoteEntry", alternateNoteEntryMethod);
@@ -436,11 +436,11 @@ void Preferences::read()
       musicxmlExportLayout     = s.value("musicxmlExportLayout", musicxmlExportLayout).toBool();
       QString br(s.value("musicxmlExportBreaks", "all").toString());
       if (br == "all")
-            musicxmlExportBreaks = ALL_BREAKS;
+            musicxmlExportBreaks = MusicxmlExportBreaks::ALL;
       else if (br == "manual")
-            musicxmlExportBreaks = MANUAL_BREAKS;
+            musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       else if (br == "no")
-            musicxmlExportBreaks = NO_BREAKS;
+            musicxmlExportBreaks = MusicxmlExportBreaks::NO;
 
       mag                    = s.value("mag", mag).toDouble();
 
@@ -456,9 +456,9 @@ void Preferences::read()
       oscPort                = s.value("oscPort", oscPort).toInt();
       styleName              = s.value("style", styleName).toString();
       if (styleName == "dark")
-            globalStyle  = STYLE_DARK;
+            globalStyle  = MuseScoreStyleType::DARK;
       else
-            globalStyle  = STYLE_LIGHT;
+            globalStyle  = MuseScoreStyleType::LIGHT;
 
       animations       = s.value("animations",       animations).toBool();
       singlePalette    = s.value("singlePalette",    singlePalette).toBool();
@@ -500,13 +500,13 @@ void Preferences::read()
 
       QString ss(s.value("sessionStart", "score").toString());
       if (ss == "last")
-            sessionStart = LAST_SESSION;
+            sessionStart = SessionStart::LAST;
       else if (ss == "new")
-            sessionStart = NEW_SESSION;
+            sessionStart = SessionStart::NEW;
       else if (ss == "score")
-            sessionStart = SCORE_SESSION;
+            sessionStart = SessionStart::SCORE;
       else if (ss == "empty")
-            sessionStart = EMPTY_SESSION;
+            sessionStart = SessionStart::EMPTY;
 
       startScore     = s.value("startScore", startScore).toString();
       instrumentList1 = s.value("instrumentList",  instrumentList1).toString();
@@ -839,10 +839,10 @@ void PreferenceDialog::updateValues()
       alsaFragments->setValue(prefs.alsaFragments);
       drawAntialiased->setChecked(prefs.antialiasedDrawing);
       switch(prefs.sessionStart) {
-            case EMPTY_SESSION:  emptySession->setChecked(true); break;
-            case LAST_SESSION:   lastSession->setChecked(true); break;
-            case NEW_SESSION:    newSession->setChecked(true); break;
-            case SCORE_SESSION:  scoreSession->setChecked(true); break;
+            case SessionStart::EMPTY:  emptySession->setChecked(true); break;
+            case SessionStart::LAST:   lastSession->setChecked(true); break;
+            case SessionStart::NEW:    newSession->setChecked(true); break;
+            case SessionStart::SCORE:  scoreSession->setChecked(true); break;
             }
       sessionScore->setText(prefs.startScore);
       showSplashScreen->setChecked(prefs.showSplashScreen);
@@ -854,9 +854,9 @@ void PreferenceDialog::updateValues()
       importBreaks->setChecked(prefs.musicxmlImportBreaks);
       exportLayout->setChecked(prefs.musicxmlExportLayout);
       switch(prefs.musicxmlExportBreaks) {
-            case ALL_BREAKS:     exportAllBreaks->setChecked(true); break;
-            case MANUAL_BREAKS:  exportManualBreaks->setChecked(true); break;
-            case NO_BREAKS:      exportNoBreaks->setChecked(true); break;
+            case MusicxmlExportBreaks::ALL:     exportAllBreaks->setChecked(true); break;
+            case MusicxmlExportBreaks::MANUAL:  exportManualBreaks->setChecked(true); break;
+            case MusicxmlExportBreaks::NO:      exportNoBreaks->setChecked(true); break;
             }
 
       midiPorts->setValue(prefs.midiPorts);
@@ -976,7 +976,7 @@ void PreferenceDialog::updateValues()
       oscServer->setChecked(prefs.useOsc);
       oscPort->setValue(prefs.oscPort);
 
-      styleName->setCurrentIndex(prefs.globalStyle);
+      styleName->setCurrentIndex(int(prefs.globalStyle));
       animations->setChecked(prefs.animations);
 
       defaultStyle->setText(prefs.defaultStyleFile);
@@ -1320,13 +1320,13 @@ void PreferenceDialog::apply()
 #endif
 
       if (lastSession->isChecked())
-            prefs.sessionStart = LAST_SESSION;
+            prefs.sessionStart = SessionStart::LAST;
       else if (newSession->isChecked())
-            prefs.sessionStart = NEW_SESSION;
+            prefs.sessionStart = SessionStart::NEW;
       else if (scoreSession->isChecked())
-            prefs.sessionStart = SCORE_SESSION;
+            prefs.sessionStart = SessionStart::SCORE;
       else if (emptySession->isChecked())
-            prefs.sessionStart = EMPTY_SESSION;
+            prefs.sessionStart = SessionStart::EMPTY;
       prefs.startScore         = sessionScore->text();
       prefs.myScoresPath       = myScores->text();
       prefs.myStylesPath       = myStyles->text();
@@ -1348,11 +1348,11 @@ void PreferenceDialog::apply()
       prefs.musicxmlImportBreaks  = importBreaks->isChecked();
       prefs.musicxmlExportLayout  = exportLayout->isChecked();
       if (exportAllBreaks->isChecked())
-            prefs.musicxmlExportBreaks = ALL_BREAKS;
+            prefs.musicxmlExportBreaks = MusicxmlExportBreaks::ALL;
       else if (exportManualBreaks->isChecked())
-            prefs.musicxmlExportBreaks = MANUAL_BREAKS;
+            prefs.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       else if (exportNoBreaks->isChecked())
-            prefs.musicxmlExportBreaks = NO_BREAKS;
+            prefs.musicxmlExportBreaks = MusicxmlExportBreaks::NO;
 
       prefs.midiPorts          = midiPorts->value();
       prefs.rememberLastMidiConnections = rememberLastMidiConnections->isChecked();
@@ -1410,13 +1410,13 @@ void PreferenceDialog::apply()
 
       prefs.useOsc  = oscServer->isChecked();
       prefs.oscPort = oscPort->value();
-      if (styleName->currentIndex() == STYLE_DARK) {
+      if (styleName->currentIndex() == int(MuseScoreStyleType::DARK)) {
             prefs.styleName = "dark";
-            prefs.globalStyle = STYLE_DARK;
+            prefs.globalStyle = MuseScoreStyleType::DARK;
             }
       else {
             prefs.styleName = "light";
-            prefs.globalStyle = STYLE_LIGHT;
+            prefs.globalStyle = MuseScoreStyleType::LIGHT;
             }
 
       prefs.animations = animations->isChecked();

@@ -1563,10 +1563,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       getAction("show-pageborders")->setChecked(cs->showPageborders());
       updateUndoRedo();
 
-      if (view->magIdx() == MAG_FREE)
+      if (view->magIdx() == MagIdx::MAG_FREE)
             mag->setMag(view->mag());
       else
-            mag->setCurrentIndex(view->magIdx());
+            mag->setCurrentIndex(int(view->magIdx()));
 
       setWindowTitle("MuseScore: " + cs->name());
 
@@ -2105,7 +2105,7 @@ static void loadScores(const QStringList& argv)
                   mscore->newFile();
             else {
                   switch (preferences.sessionStart) {
-                        case LAST_SESSION:
+                        case SessionStart::LAST:
                               {
                               QSettings settings;
                               int n = settings.value("scores", 0).toInt();
@@ -2121,12 +2121,12 @@ static void loadScores(const QStringList& argv)
                                     }
                               }
                               break;
-                        case EMPTY_SESSION:
+                        case SessionStart::EMPTY:
                               break;
-                        case NEW_SESSION:
+                        case SessionStart::NEW:
                               mscore->newFile();
                               break;
-                        case SCORE_SESSION:
+                        case SessionStart::SCORE:
                               {
                               Score* score = mscore->readScore(preferences.startScore);
                               if (score == 0)
@@ -2828,7 +2828,7 @@ void MuseScore::about()
 AboutBoxDialog::AboutBoxDialog()
       {
       setupUi(this);
-      if (preferences.globalStyle == STYLE_DARK)
+      if (preferences.globalStyle == MuseScoreStyleType::DARK)
             museLogo->setPixmap(QPixmap(":/data/musescore_logo_full1.png"));
       else
             museLogo->setPixmap(QPixmap(":/data/musescore_logo_full.png"));
@@ -2893,7 +2893,7 @@ void MuseScore::dirtyChanged(Score* s)
 //   magChanged
 //---------------------------------------------------------
 
-void MuseScore::magChanged(int idx)
+void MuseScore::magChanged(MagIdx idx)
       {
       if (cv)
             cv->setMag(idx, mag->getMag(cv));
@@ -2909,7 +2909,7 @@ void MuseScore::incMag()
             qreal _mag = cv->mag() * 1.7;
             if (_mag > 16.0)
                   _mag = 16.0;
-            cv->setMag(MAG_FREE, _mag);
+            cv->setMag(MagIdx::MAG_FREE, _mag);
             setMag(_mag);
             }
       }
@@ -2924,7 +2924,7 @@ void MuseScore::decMag()
             qreal _mag = cv->mag() / 1.7;
             if (_mag < 0.05)
                   _mag = 0.05;
-            cv->setMag(MAG_FREE, _mag);
+            cv->setMag(MagIdx::MAG_FREE, _mag);
             setMag(_mag);
             }
       }
@@ -2945,7 +2945,7 @@ double MuseScore::getMag(ScoreView* canvas) const
 void MuseScore::setMag(double d)
       {
       mag->setMag(d);
-      mag->setMagIdx(MAG_FREE);
+      mag->setMagIdx(MagIdx::MAG_FREE);
       }
 
 //---------------------------------------------------------
@@ -3167,10 +3167,10 @@ void MuseScore::writeSessionFile(bool cleanExit)
                   xml.stag("ScoreView");
                   xml.tag("tab", tab);    // 0 instead of "tab" does not work
                   xml.tag("idx", i);
-                  if (v->magIdx() == MAG_FREE)
+                  if (v->magIdx() == MagIdx::MAG_FREE)
                         xml.tag("mag", v->mag());
                   else
-                        xml.tag("magIdx", v->magIdx());
+                        xml.tag("magIdx", int(v->magIdx()));
                   xml.tag("x",   v->xoffset() / MScore::DPMM);
                   xml.tag("y",   v->yoffset() / MScore::DPMM);
                   xml.etag();
@@ -3187,10 +3187,10 @@ void MuseScore::writeSessionFile(bool cleanExit)
                         xml.stag("ScoreView");
                         xml.tag("tab", 1);
                         xml.tag("idx", i);
-                        if (v->magIdx() == MAG_FREE)
+                        if (v->magIdx() == MagIdx::MAG_FREE)
                               xml.tag("mag", v->mag());
                         else
-                              xml.tag("magIdx", v->magIdx());
+                              xml.tag("magIdx", int(v->magIdx()));
                         xml.tag("x",   v->xoffset() / MScore::DPMM);
                         xml.tag("y",   v->yoffset() / MScore::DPMM);
                         xml.etag();
@@ -3343,7 +3343,7 @@ bool MuseScore::restoreSession(bool always)
                               }
                         else if (tag == "ScoreView") {
                               double x = .0, y = .0, vmag = .0;
-                              int magIdx = MAG_FREE;
+                              MagIdx magIdx = MagIdx::MAG_FREE;
                               int tab = 0, idx = 0;
                               while (e.readNextStartElement()) {
                                     const QStringRef& tag(e.name());
@@ -3354,7 +3354,7 @@ bool MuseScore::restoreSession(bool always)
                                     else if (tag == "mag")
                                           vmag = e.readDouble();
                                     else if (tag == "magIdx")
-                                          magIdx = e.readInt();
+                                          magIdx = MagIdx(e.readInt());
                                     else if (tag == "x")
                                           x = e.readDouble() * MScore::DPMM;
                                     else if (tag == "y")
@@ -3364,7 +3364,7 @@ bool MuseScore::restoreSession(bool always)
                                           return false;
                                           }
                                     }
-                              if (magIdx != MAG_FREE)
+                              if (magIdx != MagIdx::MAG_FREE)
                                     vmag = mag->getMag(cv);
                               (tab == 0 ? tab1 : tab2)->initScoreView(idx, vmag, magIdx, x, y);
                               }
@@ -4753,7 +4753,7 @@ int main(int argc, char* av[])
 
       if (!converterMode) {
             switch(preferences.globalStyle) {
-                  case STYLE_DARK: {
+                  case MuseScoreStyleType::DARK: {
                         MgStyle* st = new MgStyle;
                         QApplication::setStyle(st);
                         QPalette p(QApplication::palette());
@@ -4775,7 +4775,7 @@ int main(int argc, char* av[])
 
                         break;
                         }
-                  case STYLE_LIGHT:
+                  case MuseScoreStyleType::LIGHT:
                         MgStyle* st = new MgStyle;
                         QApplication::setStyle(st);
                         QPalette p(QApplication::palette());
@@ -4918,7 +4918,7 @@ int main(int argc, char* av[])
             //
             // TODO: delete old session backups
             //
-            if (!mscore->restoreSession((preferences.sessionStart == LAST_SESSION) && (files == 0)) || files)
+            if (!mscore->restoreSession((preferences.sessionStart == SessionStart::LAST) && (files == 0)) || files)
                   loadScores(argv);
             }
       errorMessage = new QErrorMessage(mscore);
@@ -4939,7 +4939,7 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
 
-      if (preferences.sessionStart == EMPTY_SESSION && files == 0) {
+      if (preferences.sessionStart == SessionStart::EMPTY && files == 0) {
             QDialog* start = new StartDialog(0);
             switch(start->exec()) {
                   case 1:

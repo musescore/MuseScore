@@ -213,7 +213,7 @@ int LengthElement::getLength() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MusicData::MusicData() {
-      musicDataType_ = MusicData_None;
+      musicDataType_ = MusicDataType::None;
       show_ = true;
       color_ = 0;
       voice_ = 0;
@@ -224,35 +224,35 @@ MusicDataType MusicData::getMusicDataType() const {
       }
 
 MusicData::XmlDataType MusicData::getXmlDataType(MusicDataType type) {
-      XmlDataType xmlType = None;
+      XmlDataType xmlType = XmlDataType::None;
 
       switch (type) {
-            case MusicData_Measure_Repeat: {
-                  xmlType = Attributes;
+            case MusicDataType::Measure_Repeat: {
+                  xmlType = XmlDataType::Attributes;
                   break;
                   }
-            case MusicData_Beam: {
-                  xmlType = NoteBeam;
+            case MusicDataType::Beam: {
+                  xmlType = XmlDataType::NoteBeam;
                   break;
                   }
-            case MusicData_Slur:
-            case MusicData_Glissando:
-            case MusicData_Tuplet:
-            case MusicData_Tie: {
-                  xmlType = Notations;
+            case MusicDataType::Slur:
+            case MusicDataType::Glissando:
+            case MusicDataType::Tuplet:
+            case MusicDataType::Tie: {
+                  xmlType = XmlDataType::Notations;
                   break;
                   }
-            case MusicData_Text:
-            case MusicData_Repeat:
-            case MusicData_Wedge:
-            case MusicData_Dynamics:
-            case MusicData_Pedal:
-            case MusicData_OctaveShift_EndPoint: {
-                  xmlType = Direction;
+            case MusicDataType::Text:
+            case MusicDataType::Repeat:
+            case MusicDataType::Wedge:
+            case MusicDataType::Dynamics:
+            case MusicDataType::Pedal:
+            case MusicDataType::OctaveShift_EndPoint: {
+                  xmlType = XmlDataType::Direction;
                   break;
                   }
             default: {
-                  xmlType = None;
+                  xmlType = XmlDataType::None;
                   break;
                   }
             }
@@ -266,17 +266,17 @@ MusicData::XmlDataType MusicData::getXmlDataType(MusicDataType type) {
 
  switch ( type )
  {
- case MusicData_Numeric_Ending :
- case MusicData_Measure_Repeat :
- case MusicData_Wedge :
- case MusicData_OctaveShift :
- //case MusicData_OctaveShift_EndPoint :
- case MusicData_Pedal :
- case MusicData_Beam :
- case MusicData_Glissando :
- case MusicData_Slur :
- case MusicData_Tie :
- case MusicData_Tuplet :
+ case MusicDataType::Numeric_Ending :
+ case MusicDataType::Measure_Repeat :
+ case MusicDataType::Wedge :
+ case MusicDataType::OctaveShift :
+ //case MusicDataType::OctaveShift_EndPoint :
+ case MusicDataType::Pedal :
+ case MusicDataType::Beam :
+ case MusicDataType::Glissando :
+ case MusicDataType::Slur :
+ case MusicDataType::Tie :
+ case MusicDataType::Tuplet :
  {
  pair = true;
  break;
@@ -320,7 +320,7 @@ void MusicData::copyCommonBlock(const MusicData& source) {
 
 ///////////////////////////////////////////////////////////////////////////////
 MidiData::MidiData() {
-      midiType_ = Midi_None;
+      midiType_ = MidiType::None;
       }
 
 MidiType MidiData::getMidiType() const {
@@ -652,7 +652,7 @@ void OveSong::clear(void)
       showRuler_ = false;
       showColor_ = true;
       playRepeat_ = true;
-      playStyle_ = Record;
+      playStyle_ = PlayStyle::Record;
 
       annotates_.clear();
       copyrights_.clear();
@@ -874,18 +874,18 @@ int Track::getNoteShift() const {
       }
 
 void Track::setStartClef(int clef/*in Clef*/) {
-      startClef_ = clef;
+      startClef_ = ClefType(clef);
       }
 
 ClefType Track::getStartClef() const {
-      return (ClefType)startClef_;
+      return startClef_;
       }
 
 void Track::setTransposeClef(int clef) {
-      transposeClef_ = clef;
+      transposeClef_ = ClefType(clef);
       }
 
-int Track::getTansposeClef() const {
+ClefType Track::getTansposeClef() const {
       return transposeClef_;
       }
 
@@ -1000,8 +1000,8 @@ void Track::clear(void) {
       transpose_ = 0;
       showTranspose_ = false;
       noteShift_ = 0;
-      startClef_ = Clef_Treble;
-      transposeClef_ = Clef_Treble;
+      startClef_ = ClefType::Treble;
+      transposeClef_ = ClefType::Treble;
       displayPercent_ = 100;
       startKey_ = 0;
       voiceCount_ = 8;
@@ -1231,10 +1231,10 @@ int Line::getRightXOffset() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Staff::Staff() {
-      clef_ = Clef_Treble;
+      clef_ = ClefType::Treble;
       key_ = 0;
       visible_ = true;
-      groupType_ = Group_None;
+      groupType_ = GroupType::None;
       groupStaffCount_ = 0;
       }
 
@@ -1282,12 +1282,12 @@ int Staff::getGroupStaffCount() const {
 Note::Note() {
       rest_ = false;
       note_ = 60;
-      accidental_ = Accidental_Normal;
+      accidental_ = AccidentalType::Normal;
       showAccidental_ = false;
       offVelocity_ = 0x40;
       onVelocity_ = 0x50;
-      headType_ = NoteHead_Standard;
-      tiePos_ = Tie_None;
+      headType_ = NoteHeadType::Standard;
+      tiePos_ = TiePos::None;
       offsetStaff_ = 0;
       show_ = true;
       offsetTick_ = 0;
@@ -1383,7 +1383,7 @@ int Note::getOffsetTick() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Articulation::Articulation() {
-      type_ = Articulation_Marcato;
+      type_ = ArticulationType::Marcato;
       above_ = true;
 
       changeSoundEffect_ = false;
@@ -1393,15 +1393,15 @@ Articulation::Articulation() {
 
       soundEffect_ = qMakePair(0, 0);
       lengthPercentage_ = 100;
-      velocityType_ = Velocity_Offset;
+      velocityType_ = VelocityType::Offset;
       velocityValue_ = 0;
       extraLength_ = 0;
 
       trillNoteLength_ = 60;
-      trillRate_ = Note_Sixteen;
-      accelerateType_ = Accelerate_None;
+      trillRate_ = NoteType::Note_Sixteen;
+      accelerateType_ = AccelerateType::None;
       auxiliaryFirst_ = false;
-      trillInterval_ = TrillInterval_Chromatic;
+      trillInterval_ = TrillInterval::Chromatic;
       }
 
 void Articulation::setArtType(int type) {
@@ -1524,79 +1524,79 @@ bool Articulation::willAffectNotes() const {
       bool affect = false;
 
       switch (getArtType()) {
-            case Articulation_Major_Trill:
-            case Articulation_Minor_Trill:
-            case Articulation_Trill_Section:
-            case Articulation_Inverted_Short_Mordent:
-            case Articulation_Inverted_Long_Mordent:
-            case Articulation_Short_Mordent:
-            case Articulation_Turn:
+            case ArticulationType::Major_Trill:
+            case ArticulationType::Minor_Trill:
+            case ArticulationType::Trill_Section:
+            case ArticulationType::Inverted_Short_Mordent:
+            case ArticulationType::Inverted_Long_Mordent:
+            case ArticulationType::Short_Mordent:
+            case ArticulationType::Turn:
 
-            case Articulation_Arpeggio:
-            case Articulation_Tremolo_Eighth:
-            case Articulation_Tremolo_Sixteenth:
-            case Articulation_Tremolo_Thirty_Second:
-            case Articulation_Tremolo_Sixty_Fourth: {
+            case ArticulationType::Arpeggio:
+            case ArticulationType::Tremolo_Eighth:
+            case ArticulationType::Tremolo_Sixteenth:
+            case ArticulationType::Tremolo_Thirty_Second:
+            case ArticulationType::Tremolo_Sixty_Fourth: {
                   affect = true;
                   break;
                   }
-            case Articulation_Finger_1:
-            case Articulation_Finger_2:
-            case Articulation_Finger_3:
-            case Articulation_Finger_4:
-            case Articulation_Finger_5:
-            case Articulation_Flat_Accidental_For_Trill:
-            case Articulation_Sharp_Accidental_For_Trill:
-            case Articulation_Natural_Accidental_For_Trill:
-            case Articulation_Marcato:
-            case Articulation_Marcato_Dot:
-            case Articulation_Heavy_Attack:
-            case Articulation_SForzando:
-            case Articulation_SForzando_Dot:
-            case Articulation_Heavier_Attack:
-            case Articulation_SForzando_Inverted:
-            case Articulation_SForzando_Dot_Inverted:
-            case Articulation_Staccatissimo:
-            case Articulation_Staccato:
-            case Articulation_Tenuto:
-            case Articulation_Up_Bow:
-            case Articulation_Down_Bow:
-            case Articulation_Up_Bow_Inverted:
-            case Articulation_Down_Bow_Inverted:
-            case Articulation_Natural_Harmonic:
-            case Articulation_Artificial_Harmonic:
-            case Articulation_Plus_Sign:
-            case Articulation_Fermata:
-            case Articulation_Fermata_Inverted:
-            case Articulation_Pedal_Down:
-            case Articulation_Pedal_Up:
-            case Articulation_Pause:
-            case Articulation_Grand_Pause:
-            case Articulation_Toe_Pedal:
-            case Articulation_Heel_Pedal:
-            case Articulation_Toe_To_Heel_Pedal:
-            case Articulation_Heel_To_Toe_Pedal:
-            case Articulation_Open_String:
-            case Articulation_Guitar_Lift:
-            case Articulation_Guitar_Slide_Up:
-            case Articulation_Guitar_Rip:
-            case Articulation_Guitar_Fall_Off:
-            case Articulation_Guitar_Slide_Down:
-            case Articulation_Guitar_Spill:
-            case Articulation_Guitar_Flip:
-            case Articulation_Guitar_Smear:
-            case Articulation_Guitar_Bend:
-            case Articulation_Guitar_Doit:
-            case Articulation_Guitar_Plop:
-            case Articulation_Guitar_Wow_Wow:
-            case Articulation_Guitar_Thumb:
-            case Articulation_Guitar_Index_Finger:
-            case Articulation_Guitar_Middle_Finger:
-            case Articulation_Guitar_Ring_Finger:
-            case Articulation_Guitar_Pinky_Finger:
-            case Articulation_Guitar_Tap:
-            case Articulation_Guitar_Hammer:
-            case Articulation_Guitar_Pluck: {
+            case ArticulationType::Finger_1:
+            case ArticulationType::Finger_2:
+            case ArticulationType::Finger_3:
+            case ArticulationType::Finger_4:
+            case ArticulationType::Finger_5:
+            case ArticulationType::Flat_Accidental_For_Trill:
+            case ArticulationType::Sharp_Accidental_For_Trill:
+            case ArticulationType::Natural_Accidental_For_Trill:
+            case ArticulationType::Marcato:
+            case ArticulationType::Marcato_Dot:
+            case ArticulationType::Heavy_Attack:
+            case ArticulationType::SForzando:
+            case ArticulationType::SForzando_Dot:
+            case ArticulationType::Heavier_Attack:
+            case ArticulationType::SForzando_Inverted:
+            case ArticulationType::SForzando_Dot_Inverted:
+            case ArticulationType::Staccatissimo:
+            case ArticulationType::Staccato:
+            case ArticulationType::Tenuto:
+            case ArticulationType::Up_Bow:
+            case ArticulationType::Down_Bow:
+            case ArticulationType::Up_Bow_Inverted:
+            case ArticulationType::Down_Bow_Inverted:
+            case ArticulationType::Natural_Harmonic:
+            case ArticulationType::Artificial_Harmonic:
+            case ArticulationType::Plus_Sign:
+            case ArticulationType::Fermata:
+            case ArticulationType::Fermata_Inverted:
+            case ArticulationType::Pedal_Down:
+            case ArticulationType::Pedal_Up:
+            case ArticulationType::Pause:
+            case ArticulationType::Grand_Pause:
+            case ArticulationType::Toe_Pedal:
+            case ArticulationType::Heel_Pedal:
+            case ArticulationType::Toe_To_Heel_Pedal:
+            case ArticulationType::Heel_To_Toe_Pedal:
+            case ArticulationType::Open_String:
+            case ArticulationType::Guitar_Lift:
+            case ArticulationType::Guitar_Slide_Up:
+            case ArticulationType::Guitar_Rip:
+            case ArticulationType::Guitar_Fall_Off:
+            case ArticulationType::Guitar_Slide_Down:
+            case ArticulationType::Guitar_Spill:
+            case ArticulationType::Guitar_Flip:
+            case ArticulationType::Guitar_Smear:
+            case ArticulationType::Guitar_Bend:
+            case ArticulationType::Guitar_Doit:
+            case ArticulationType::Guitar_Plop:
+            case ArticulationType::Guitar_Wow_Wow:
+            case ArticulationType::Guitar_Thumb:
+            case ArticulationType::Guitar_Index_Finger:
+            case ArticulationType::Guitar_Middle_Finger:
+            case ArticulationType::Guitar_Ring_Finger:
+            case ArticulationType::Guitar_Pinky_Finger:
+            case ArticulationType::Guitar_Tap:
+            case ArticulationType::Guitar_Hammer:
+            case ArticulationType::Guitar_Pluck: {
                   break;
                   }
             default:
@@ -1610,9 +1610,9 @@ bool Articulation::isTrill(ArticulationType type) {
       bool isTrill = false;
 
       switch (type) {
-            case Articulation_Major_Trill:
-            case Articulation_Minor_Trill:
-            case Articulation_Trill_Section: {
+            case ArticulationType::Major_Trill:
+            case ArticulationType::Minor_Trill:
+            case ArticulationType::Trill_Section: {
                   isTrill = true;
                   break;
                   }
@@ -1624,76 +1624,76 @@ bool Articulation::isTrill(ArticulationType type) {
       }
 
 Articulation::XmlType Articulation::getXmlType() const {
-      XmlType xmlType = Xml_Unknown;
+      XmlType xmlType = XmlType::Unknown;
 
       switch (type_) {
-            case Articulation_Major_Trill:
-            case Articulation_Minor_Trill:
-            case Articulation_Trill_Section:
-            case Articulation_Inverted_Short_Mordent:
-            case Articulation_Inverted_Long_Mordent:
-            case Articulation_Short_Mordent:
-            case Articulation_Turn:
-                  // case Articulation_Flat_Accidental_For_Trill :
-                  // case Articulation_Sharp_Accidental_For_Trill :
-                  // case Articulation_Natural_Accidental_For_Trill :
-            case Articulation_Tremolo_Eighth:
-            case Articulation_Tremolo_Sixteenth:
-            case Articulation_Tremolo_Thirty_Second:
-            case Articulation_Tremolo_Sixty_Fourth: {
-                  xmlType = Xml_Ornament;
+            case ArticulationType::Major_Trill:
+            case ArticulationType::Minor_Trill:
+            case ArticulationType::Trill_Section:
+            case ArticulationType::Inverted_Short_Mordent:
+            case ArticulationType::Inverted_Long_Mordent:
+            case ArticulationType::Short_Mordent:
+            case ArticulationType::Turn:
+                  // case ArticulationType::Flat_Accidental_For_Trill :
+                  // case ArticulationType::Sharp_Accidental_For_Trill :
+                  // case ArticulationType::Natural_Accidental_For_Trill :
+            case ArticulationType::Tremolo_Eighth:
+            case ArticulationType::Tremolo_Sixteenth:
+            case ArticulationType::Tremolo_Thirty_Second:
+            case ArticulationType::Tremolo_Sixty_Fourth: {
+                  xmlType = XmlType::Ornament;
                   break;
                   }
-            case Articulation_Marcato:
-            case Articulation_Marcato_Dot:
-            case Articulation_Heavy_Attack:
-            case Articulation_SForzando:
-            case Articulation_SForzando_Inverted:
-            case Articulation_SForzando_Dot:
-            case Articulation_SForzando_Dot_Inverted:
-            case Articulation_Heavier_Attack:
-            case Articulation_Staccatissimo:
-            case Articulation_Staccato:
-            case Articulation_Tenuto:
-            case Articulation_Pause:
-            case Articulation_Grand_Pause: {
-                  xmlType = Xml_Articulation;
+            case ArticulationType::Marcato:
+            case ArticulationType::Marcato_Dot:
+            case ArticulationType::Heavy_Attack:
+            case ArticulationType::SForzando:
+            case ArticulationType::SForzando_Inverted:
+            case ArticulationType::SForzando_Dot:
+            case ArticulationType::SForzando_Dot_Inverted:
+            case ArticulationType::Heavier_Attack:
+            case ArticulationType::Staccatissimo:
+            case ArticulationType::Staccato:
+            case ArticulationType::Tenuto:
+            case ArticulationType::Pause:
+            case ArticulationType::Grand_Pause: {
+                  xmlType = XmlType::Articulation;
                   break;
                   }
-            case Articulation_Up_Bow:
-            case Articulation_Down_Bow:
-            case Articulation_Up_Bow_Inverted:
-            case Articulation_Down_Bow_Inverted:
-            case Articulation_Natural_Harmonic:
-            case Articulation_Artificial_Harmonic:
-            case Articulation_Finger_1:
-            case Articulation_Finger_2:
-            case Articulation_Finger_3:
-            case Articulation_Finger_4:
-            case Articulation_Finger_5:
-            case Articulation_Plus_Sign: {
-                  xmlType = Xml_Technical;
+            case ArticulationType::Up_Bow:
+            case ArticulationType::Down_Bow:
+            case ArticulationType::Up_Bow_Inverted:
+            case ArticulationType::Down_Bow_Inverted:
+            case ArticulationType::Natural_Harmonic:
+            case ArticulationType::Artificial_Harmonic:
+            case ArticulationType::Finger_1:
+            case ArticulationType::Finger_2:
+            case ArticulationType::Finger_3:
+            case ArticulationType::Finger_4:
+            case ArticulationType::Finger_5:
+            case ArticulationType::Plus_Sign: {
+                  xmlType = XmlType::Technical;
                   break;
                   }
-            case Articulation_Arpeggio: {
-                  xmlType = Xml_Arpeggiate;
+            case ArticulationType::Arpeggio: {
+                  xmlType = XmlType::Arpeggiate;
                   break;
                   }
-            case Articulation_Fermata:
-            case Articulation_Fermata_Inverted: {
-                  xmlType = Xml_Fermata;
+            case ArticulationType::Fermata:
+            case ArticulationType::Fermata_Inverted: {
+                  xmlType = XmlType::Fermata;
                   break;
                   }
-            case Articulation_Pedal_Down:
-            case Articulation_Pedal_Up: {
-                  xmlType = Xml_Direction;
+            case ArticulationType::Pedal_Down:
+            case ArticulationType::Pedal_Up: {
+                  xmlType = XmlType::Direction;
                   break;
                   }
-                  // case Articulation_Toe_Pedal :
-                  // case Articulation_Heel_Pedal :
-                  // case Articulation_Toe_To_Heel_Pedal :
-                  // case Articulation_Heel_To_Toe_Pedal :
-                  // case Articulation_Open_String :
+                  // case ArticulationType::Toe_Pedal :
+                  // case ArticulationType::Heel_Pedal :
+                  // case ArticulationType::Toe_To_Heel_Pedal :
+                  // case ArticulationType::Heel_To_Toe_Pedal :
+                  // case ArticulationType::Open_String :
             default:
                   break;
             }
@@ -1703,15 +1703,15 @@ Articulation::XmlType Articulation::getXmlType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 NoteContainer::NoteContainer() {
-      musicDataType_ = MusicData_Note_Container;
+      musicDataType_ = MusicDataType::Note_Container;
 
       grace_ = false;
       cue_ = false;
       rest_ = false;
       raw_ = false;
-      noteType_ = Note_Quarter;
+      noteType_ = NoteType::Note_Quarter;
       dot_ = 0;
-      graceNoteType_ = Note_Eight;
+      graceNoteType_ = NoteType::Note_Eight;
       stemUp_ = true;
       showStem_ = true;
       stemLength_ = 7;
@@ -1765,19 +1765,19 @@ bool NoteContainer::getIsRaw() const {
       }
 
 void NoteContainer::setNoteType(NoteType type) {
-      noteType_ = Note_Quarter;
+      noteType_ = NoteType::Note_Quarter;
 
       switch (type) {
-            case Note_DoubleWhole:
-            case Note_Whole:
-            case Note_Half:
-            case Note_Quarter:
-            case Note_Eight:
-            case Note_Sixteen:
-            case Note_32:
-            case Note_64:
-            case Note_128:
-            case Note_256: {
+            case NoteType::Note_DoubleWhole:
+            case NoteType::Note_Whole:
+            case NoteType::Note_Half:
+            case NoteType::Note_Quarter:
+            case NoteType::Note_Eight:
+            case NoteType::Note_Sixteen:
+            case NoteType::Note_32:
+            case NoteType::Note_64:
+            case NoteType::Note_128:
+            case NoteType::Note_256: {
                   noteType_ = type;
                   break;
                   }
@@ -1894,47 +1894,47 @@ int NoteContainer::getOffsetStaff() const {
       }
 
 int NoteContainer::getDuration() const {
-      int duration = (int) NoteDuration_4;
+      int duration = (int) NoteDuration::D_4;
 
       switch (noteType_) {
-            case Note_DoubleWhole: {
-                  duration = (int) NoteDuration_Double_Whole;
+            case NoteType::Note_DoubleWhole: {
+                  duration = (int) NoteDuration::D_Double_Whole;
                   break;
                   }
-            case Note_Whole: {
-                  duration = (int) NoteDuration_Whole;
+            case NoteType::Note_Whole: {
+                  duration = (int) NoteDuration::D_Whole;
                   break;
                   }
-            case Note_Half: {
-                  duration = (int) NoteDuration_2;
+            case NoteType::Note_Half: {
+                  duration = (int) NoteDuration::D_2;
                   break;
                   }
-            case Note_Quarter: {
-                  duration = (int) NoteDuration_4;
+            case NoteType::Note_Quarter: {
+                  duration = (int) NoteDuration::D_4;
                   break;
                   }
-            case Note_Eight: {
-                  duration = (int) NoteDuration_8;
+            case NoteType::Note_Eight: {
+                  duration = (int) NoteDuration::D_8;
                   break;
                   }
-            case Note_Sixteen: {
-                  duration = (int) NoteDuration_16;
+            case NoteType::Note_Sixteen: {
+                  duration = (int) NoteDuration::D_16;
                   break;
                   }
-            case Note_32: {
-                  duration = (int) NoteDuration_32;
+            case NoteType::Note_32: {
+                  duration = (int) NoteDuration::D_32;
                   break;
                   }
-            case Note_64: {
-                  duration = (int) NoteDuration_64;
+            case NoteType::Note_64: {
+                  duration = (int) NoteDuration::D_64;
                   break;
                   }
-            case Note_128: {
-                  duration = (int) NoteDuration_128;
+            case NoteType::Note_128: {
+                  duration = (int) NoteDuration::D_128;
                   break;
                   }
-            case Note_256: {
-                  duration = (int) NoteDuration_256;
+            case NoteType::Note_256: {
+                  duration = (int) NoteDuration::D_256;
                   break;
                   }
             default:
@@ -1956,7 +1956,7 @@ int NoteContainer::getDuration() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Beam::Beam() {
-      musicDataType_ = MusicData_Beam;
+      musicDataType_ = MusicDataType::Beam;
       grace_ = false;
       }
 
@@ -1978,7 +1978,7 @@ const QList<QPair<MeasurePos, MeasurePos> > Beam::getLines() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Tie::Tie() {
-      musicDataType_ = MusicData_Tie;
+      musicDataType_ = MusicDataType::Tie;
 
       showOnTop_ = true;
       note_ = 72;
@@ -2011,7 +2011,7 @@ int Tie::getHeight() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Glissando::Glissando() {
-      musicDataType_ = MusicData_Glissando;
+      musicDataType_ = MusicDataType::Glissando;
 
       straight_ = true;
       text_ = "gliss.";
@@ -2044,16 +2044,16 @@ int Glissando::getLineThick() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Decorator::Decorator() :
-      decoratorType_(Decorator_Articulation),
-      artType_(Articulation_Marcato) {
-      musicDataType_ = MusicData_Decorator;
+      decoratorType_(Type::Articulation),
+      artType_(ArticulationType::Marcato) {
+      musicDataType_ = MusicDataType::Decorator;
       }
 
-void Decorator::setDecoratorType(DecoratorType type) {
+void Decorator::setDecoratorType(Type type) {
       decoratorType_ = type;
       }
 
-Decorator::DecoratorType Decorator::getDecoratorType() const {
+Decorator::Type Decorator::getDecoratorType() const {
       return decoratorType_;
       }
 
@@ -2067,7 +2067,7 @@ ArticulationType Decorator::getArticulationType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MeasureRepeat::MeasureRepeat() {
-      musicDataType_ = MusicData_Measure_Repeat;
+      musicDataType_ = MusicDataType::Measure_Repeat;
       singleRepeat_ = true;
       }
 
@@ -2086,8 +2086,8 @@ bool MeasureRepeat::getSingleRepeat() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Tuplet::Tuplet() :
-      tuplet_(3), space_(2), height_(0), noteType_(Note_Quarter){
-      musicDataType_ = MusicData_Tuplet;
+      tuplet_(3), space_(2), height_(0), noteType_(NoteType::Note_Quarter){
+      musicDataType_ = MusicDataType::Tuplet;
       mark_ = new OffsetElement();
       }
 
@@ -2133,11 +2133,11 @@ NoteType Tuplet::getNoteType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Harmony::Harmony() {
-      musicDataType_ = MusicData_Harmony;
+      musicDataType_ = MusicDataType::Harmony;
 
-      harmonyType_ = Harmony_maj;
+      harmonyType_ = HarmonyType::H_maj;
       root_ = 0;
-      bass_ = -1;//0xff
+      bass_ = -1; //0xff
       bassOnBottom_ = false;
       angle_ = 0;
       }
@@ -2184,9 +2184,9 @@ int Harmony::getAngle() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Clef::Clef() {
-      musicDataType_ = MusicData_Clef;
+      musicDataType_ = MusicDataType::Clef;
 
-      clefType_ = Clef_Treble;
+      clefType_ = ClefType::Treble;
       }
 
 void Clef::setClefType(int type) {
@@ -2199,7 +2199,7 @@ ClefType Clef::getClefType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Lyric::Lyric() {
-      musicDataType_ = MusicData_Lyric;
+      musicDataType_ = MusicDataType::Lyric;
 
       lyric_ = QString();
       verse_ = 0;
@@ -2223,7 +2223,7 @@ int Lyric::getVerse() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Slur::Slur() {
-      musicDataType_ = MusicData_Slur;
+      musicDataType_ = MusicDataType::Slur;
 
       containerCount_ = 1;
       showOnTop_ = true;
@@ -2272,15 +2272,15 @@ int Slur::getNoteTimePercent() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Dynamics::Dynamics() {
-      musicDataType_ = MusicData_Dynamics;
+      musicDataType_ = MusicDataType::Dynamics;
 
-      dynamicsType_ = Dynamics_pppp;
+      dynamicsType_ = DynamicsType::PPPP;
       playback_ = true;
       velocity_ = 30;
       }
 
 void Dynamics::setDynamicsType(int type) {
-      dynamicsType_ = (DynamicsType) type;
+      dynamicsType_ = DynamicsType(type);
       }
 
 DynamicsType Dynamics::getDynamicsType() const {
@@ -2305,9 +2305,9 @@ int Dynamics::getVelocity() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 WedgeEndPoint::WedgeEndPoint() {
-      musicDataType_ = MusicData_Wedge_EndPoint;
+      musicDataType_ = MusicDataType::Wedge_EndPoint;
 
-      wedgeType_ = Wedge_Cres;
+      wedgeType_ = WedgeType::Cres;
       height_ = 24;
       wedgeStart_ = true;
       }
@@ -2338,9 +2338,9 @@ bool WedgeEndPoint::getWedgeStart() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Wedge::Wedge() {
-      musicDataType_ = MusicData_Wedge;
+      musicDataType_ = MusicDataType::Wedge;
 
-      wedgeType_ = Wedge_Cres;
+      wedgeType_ = WedgeType::Cres;
       height_ = 24;
       }
 
@@ -2362,7 +2362,7 @@ int Wedge::getHeight() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Pedal::Pedal() {
-      musicDataType_ = MusicData_Pedal;
+      musicDataType_ = MusicDataType::Pedal;
 
       half_ = false;
       playback_ = false;
@@ -2405,9 +2405,9 @@ int Pedal::getPlayOffset() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 KuoHao::KuoHao() {
-      musicDataType_ = MusicData_KuoHao;
+      musicDataType_ = MusicDataType::KuoHao;
 
-      kuohaoType_ = KuoHao_Parentheses;
+      kuohaoType_ = KuoHaoType::Parentheses;
       height_ = 0;
       }
 
@@ -2429,7 +2429,7 @@ KuoHaoType KuoHao::getKuohaoType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Expressions::Expressions() {
-      musicDataType_ = MusicData_Expressions;
+      musicDataType_ = MusicDataType::Expressions;
 
       text_ = QString();
       }
@@ -2446,7 +2446,7 @@ QString Expressions::getText() const {
 HarpPedal::HarpPedal() :
       showType_(0),
       showCharFlag_(0) {
-      musicDataType_ = MusicData_Harp_Pedal;
+      musicDataType_ = MusicDataType::Harp_Pedal;
       }
 
 void HarpPedal::setShowType(int type) {
@@ -2467,14 +2467,14 @@ int HarpPedal::getShowCharFlag() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 OctaveShift::OctaveShift() :
-      octaveShiftType_(OctaveShift_8),
-      octaveShiftPosition_(OctavePosition_Start),
+      octaveShiftType_(OctaveShiftType::OS_8),
+      octaveShiftPosition_(OctaveShiftPosition::Start),
       endTick_(0) {
-      musicDataType_ = MusicData_OctaveShift;
+      musicDataType_ = MusicDataType::OctaveShift;
       }
 
-void OctaveShift::setOctaveShiftType(int type) {
-      octaveShiftType_ = (OctaveShiftType) type;
+void OctaveShift::setOctaveShiftType(OctaveShiftType type) {
+      octaveShiftType_ = type;
       }
 
 OctaveShiftType OctaveShift::getOctaveShiftType() const {
@@ -2485,19 +2485,19 @@ int OctaveShift::getNoteShift() const {
       int shift = 12;
 
       switch (getOctaveShiftType()) {
-            case OctaveShift_8: {
+            case OctaveShiftType::OS_8: {
                   shift = 12;
                   break;
                   }
-            case OctaveShift_Minus_8: {
+            case OctaveShiftType::OS_Minus_8: {
                   shift = -12;
                   break;
                   }
-            case OctaveShift_15: {
+            case OctaveShiftType::OS_15: {
                   shift = 24;
                   break;
                   }
-            case OctaveShift_Minus_15: {
+            case OctaveShiftType::OS_Minus_15: {
                   shift = -24;
                   break;
                   }
@@ -2518,23 +2518,23 @@ int OctaveShift::getEndTick() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 OctaveShiftEndPoint::OctaveShiftEndPoint() {
-      musicDataType_ = MusicData_OctaveShift_EndPoint;
+      musicDataType_ = MusicDataType::OctaveShift_EndPoint;
 
-      octaveShiftType_ = OctaveShift_8;
-      octaveShiftPosition_ = OctavePosition_Start;
+      octaveShiftType_ = OctaveShiftType::OS_8;
+      octaveShiftPosition_ = OctaveShiftPosition::Start;
       endTick_ = 0;
       }
 
-void OctaveShiftEndPoint::setOctaveShiftType(int type) {
-      octaveShiftType_ = (OctaveShiftType) type;
+void OctaveShiftEndPoint::setOctaveShiftType(OctaveShiftType type) {
+      octaveShiftType_ = type;
       }
 
 OctaveShiftType OctaveShiftEndPoint::getOctaveShiftType() const {
       return octaveShiftType_;
       }
 
-void OctaveShiftEndPoint::setOctaveShiftPosition(int position) {
-      octaveShiftPosition_ = (OctaveShiftPosition) position;
+void OctaveShiftEndPoint::setOctaveShiftPosition(OctaveShiftPosition position) {
+      octaveShiftPosition_ = position;
       }
 
 OctaveShiftPosition OctaveShiftEndPoint::getOctaveShiftPosition() const {
@@ -2551,7 +2551,7 @@ int OctaveShiftEndPoint::getEndTick() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MultiMeasureRest::MultiMeasureRest() {
-      musicDataType_ = MusicData_Multi_Measure_Rest;
+      musicDataType_ = MusicDataType::Multi_Measure_Rest;
       measureCount_ = 0;
       }
 
@@ -2565,7 +2565,7 @@ int MultiMeasureRest::getMeasureCount() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Tempo::Tempo() {
-      musicDataType_ = MusicData_Tempo;
+      musicDataType_ = MusicDataType::Tempo;
 
       leftNoteType_ = 3;
       showMark_ = false;
@@ -2619,7 +2619,7 @@ int Tempo::getTypeTempo() const {
       }
 
 int Tempo::getQuarterTempo() const {
-      double factor = pow(2.0, (int) Note_Quarter - (int) getLeftNoteType());
+      double factor = pow(2.0, int(NoteType::Note_Quarter) - int(getLeftNoteType()));
       int tempo = int((double) getTypeTempo() * factor);
 
       return tempo;
@@ -2659,9 +2659,9 @@ int Tempo::getRightNoteType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 Text::Text() {
-      musicDataType_ = MusicData_Text;
+      musicDataType_ = MusicDataType::Text;
 
-      textType_ = Text_Rehearsal;
+      textType_ = Type::Rehearsal;
       horiMargin_ = 8;
       vertMargin_ = 8;
       lineThick_ = 4;
@@ -2670,11 +2670,11 @@ Text::Text() {
       height_ = 0;
       }
 
-void Text::setTextType(TextType type) {
+void Text::setTextType(Type type) {
       textType_ = type;
       }
 
-Text::TextType Text::getTextType() const {
+Text::Type Text::getTextType() const {
       return textType_;
       }
 
@@ -2921,8 +2921,8 @@ int Key::getSymbolCount() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 RepeatSymbol::RepeatSymbol() :
-      text_("#1"), repeatType_(Repeat_Segno) {
-      musicDataType_ = MusicData_Repeat;
+      text_("#1"), repeatType_(RepeatType::Segno) {
+      musicDataType_ = MusicDataType::Repeat;
       }
 
 void RepeatSymbol::setText(const QString& text) {
@@ -2943,7 +2943,7 @@ RepeatType RepeatSymbol::getRepeatType() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 NumericEnding::NumericEnding() {
-      musicDataType_ = MusicData_Numeric_Ending;
+      musicDataType_ = MusicDataType::Numeric_Ending;
 
       height_ = 0;
       text_ = QString();
@@ -3064,7 +3064,7 @@ QString BarNumber::getPrefix() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MidiController::MidiController() {
-      midiType_ = Midi_Controller;
+      midiType_ = MidiType::Controller;
       controller_ = 64; // pedal
       value_ = 0;
       }
@@ -3087,7 +3087,7 @@ int MidiController::getValue() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MidiProgramChange::MidiProgramChange() {
-      midiType_ = Midi_Program_Change;
+      midiType_ = MidiType::Program_Change;
       patch_ = 0; // grand piano
       }
 
@@ -3102,7 +3102,7 @@ int MidiProgramChange::getPatch() const {
 ///////////////////////////////////////////////////////////////////////////////
 MidiChannelPressure::MidiChannelPressure() :
       pressure_(0) {
-      midiType_ = Midi_Channel_Pressure;
+      midiType_ = MidiType::Channel_Pressure;
       }
 
 void MidiChannelPressure::setPressure(int pressure) {
@@ -3115,7 +3115,7 @@ int MidiChannelPressure::getPressure() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 MidiPitchWheel::MidiPitchWheel() {
-      midiType_ = Midi_Pitch_Wheel;
+      midiType_ = MidiType::Pitch_Wheel;
       value_ = 0;
       }
 
@@ -3208,8 +3208,8 @@ int Measure::getMultiMeasureRestCount() const {
       }
 
 void Measure::clear() {
-      leftBarline_ = Barline_Default;
-      rightBarline_ = Barline_Default;
+      leftBarline_ = BarLineType::Default;
+      rightBarline_ = BarLineType::Default;
       repeatCount_ = 1;
       typeTempo_ = 96.00;
       setLength(0x780); //time = 4/4
@@ -3276,7 +3276,7 @@ QList<MusicData*> MeasureData::getMusicDatas(MusicDataType type) {
       QList<MusicData*> notations;
 
       for (i = 0; i < musicDatas_.size(); ++i) {
-            if (type == MusicData_None || musicDatas_[i]->getMusicDataType() == type) {
+            if (type == MusicDataType::None || musicDatas_[i]->getMusicDataType() == type) {
                   notations.push_back(musicDatas_[i]);
                   }
             }
@@ -3295,9 +3295,9 @@ QList<MusicData*> MeasureData::getCrossMeasureElements(
       QList<MusicData*> pairs;
 
       for (i = 0; i < crossMeasureElements_.size(); ++i) {
-            if ((type == MusicData_None || crossMeasureElements_[i].first->getMusicDataType() == type)
-                && (pairType == PairType_All || ((crossMeasureElements_[i].second && pairType == PairType_Start)
-                                                 || (!crossMeasureElements_[i].second && pairType == PairType_Stop)))) {
+            if ((type == MusicDataType::None || crossMeasureElements_[i].first->getMusicDataType() == type)
+                && (pairType == PairType::All || ((crossMeasureElements_[i].second && pairType == PairType::Start)
+                                                 || (!crossMeasureElements_[i].second && pairType == PairType::Stop)))) {
                   pairs.push_back(crossMeasureElements_[i].first);
                   }
             }
@@ -3314,7 +3314,7 @@ QList<MidiData*> MeasureData::getMidiDatas(MidiType type) {
       QList<MidiData*> datas;
 
       for (i = 0; i < midiDatas_.size(); ++i) {
-            if (type == Midi_None || midiDatas_[i]->getMidiType() == type) {
+            if (type == MidiType::None || midiDatas_[i]->getMidiType() == type) {
                   datas.push_back(midiDatas_[i]);
                   }
             }
@@ -3749,12 +3749,12 @@ bool OvscParse::parse() {
 
       // play style
       if (!readBuffer(placeHolder, 1)) { return false; }
-      OveSong::PlayStyle style = OveSong::Record;
+      OveSong::PlayStyle style = OveSong::PlayStyle::Record;
       if(placeHolder.toUnsignedInt() == 1){
-            style = OveSong::Swing;
+            style = OveSong::PlayStyle::Swing;
             }
       else if(placeHolder.toUnsignedInt() == 2){
-            style = OveSong::Notation;
+            style = OveSong::PlayStyle::Notation;
             }
       ove_->setPlayStyle(style);
 
@@ -4239,11 +4239,11 @@ bool LineGroupParse::parseStaff(SizeChunk* chunk, Staff* staff) {
 
       // group type
       if( !readBuffer(placeHolder, 1) ) { return false; }
-      GroupType groupType = Group_None;
+      GroupType groupType = GroupType::None;
       if(placeHolder.toUnsignedInt() == 1) {
-            groupType = Group_Brace;
+            groupType = GroupType::Brace;
             } else if(placeHolder.toUnsignedInt() == 2) {
-            groupType = Group_Bracket;
+            groupType = GroupType::Bracket;
             }
       staff->setGroupType(groupType);
 
@@ -4438,55 +4438,55 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
             if( !getCondElementType(thisByte, type) ) { return false; }
 
             switch (type) {
-                  case Cond_Bar_Number: {
+                  case CondType::Bar_Number: {
                         if (!parseBarNumber(measure, twoByte - 1)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Repeat: {
+                  case CondType::Repeat: {
                         if (!parseRepeatSymbol(measureData, oldBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Numeric_Ending: {
+                  case CondType::Numeric_Ending: {
                         if (!parseNumericEndings(measureData, oldBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Decorator: {
+                  case CondType::Decorator: {
                         if (!parseDecorators(measureData, newBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Tempo: {
+                  case CondType::Tempo: {
                         if (!parseTempo(measureData, newBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Text: {
+                  case CondType::Text: {
                         if (!parseText(measureData, newBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Expression: {
+                  case CondType::Expression: {
                         if (!parseExpressions(measureData, newBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Time_Parameters: {
+                  case CondType::Time_Parameters: {
                         if (!parseTimeSignatureParameters(measure, newBlockSize)) {
                               return false;
                               }
                         break;
                         }
-                  case Cond_Barline_Parameters: {
+                  case CondType::Barline_Parameters: {
                         if (!parseBarlineParameters(measure, newBlockSize)) {
                               return false;
                               }
@@ -4836,15 +4836,15 @@ bool BarsParse::parseText(MeasureData* measureData, int length) {
       unsigned int thisByte = placeHolder.toUnsignedInt();
       bool includeLineBreak = ( (getHighNibble(thisByte)&0x2) != 0x2 );
       unsigned int id = getLowNibble(thisByte);
-      Text::TextType textType = Text::Text_Rehearsal;
+      Text::Type textType = Text::Type::Rehearsal;
 
       if (id == 0) {
-            textType = Text::Text_MeasureText;
+            textType = Text::Type::MeasureText;
             } else if (id == 1) {
-            textType = Text::Text_SystemText;
+            textType = Text::Type::SystemText;
             } else // id ==2
             {
-            textType = Text::Text_Rehearsal;
+            textType = Text::Type::Rehearsal;
             }
 
       text->setTextType(textType);
@@ -4987,120 +4987,120 @@ bool BarsParse::parseBdat(Measure* /*measure*/, MeasureData* measureData, SizeCh
             if( !getBdatElementType(thisByte, type) ) { return false; }
 
             switch( type ) {
-                  case Bdat_Raw_Note :
-                  case Bdat_Rest :
-                  case Bdat_Note : {
+                  case BdatType::Raw_Note :
+                  case BdatType::Rest :
+                  case BdatType::Note : {
                         if( !parseNoteRest(measureData, count, type) ) { return false; }
                         break;
                         }
-                  case Bdat_Beam : {
+                  case BdatType::Beam : {
                         if( !parseBeam(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Harmony : {
+                  case BdatType::Harmony : {
                         if( !parseHarmony(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Clef : {
+                  case BdatType::Clef : {
                         if( !parseClef(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Dynamics : {
+                  case BdatType::Dynamics : {
                         if( !parseDynamics(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Wedge : {
+                  case BdatType::Wedge : {
                         if( !parseWedge(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Glissando : {
+                  case BdatType::Glissando : {
                         if( !parseGlissando(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Decorator : {
+                  case BdatType::Decorator : {
                         if( !parseDecorators(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Key : {
+                  case BdatType::Key : {
                         if( !parseKey(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Lyric : {
+                  case BdatType::Lyric : {
                         if( !parseLyric(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Octave_Shift: {
+                  case BdatType::Octave_Shift: {
                         if( !parseOctaveShift(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Slur : {
+                  case BdatType::Slur : {
                         if( !parseSlur(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Text : {
+                  case BdatType::Text : {
                         if( !parseText(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Tie : {
+                  case BdatType::Tie : {
                         if( !parseTie(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Tuplet : {
+                  case BdatType::Tuplet : {
                         if( !parseTuplet(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Guitar_Bend :
-                  case Bdat_Guitar_Barre : {
+                  case BdatType::Guitar_Bend :
+                  case BdatType::Guitar_Barre : {
                         if( !parseSizeBlock(count) ) { return false; }
                         break;
                         }
-                  case Bdat_Pedal: {
+                  case BdatType::Pedal: {
                         if( !parsePedal(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_KuoHao: {
+                  case BdatType::KuoHao: {
                         if( !parseKuohao(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Expressions: {
+                  case BdatType::Expressions: {
                         if( !parseExpressions(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Harp_Pedal: {
+                  case BdatType::Harp_Pedal: {
                         if( !parseHarpPedal(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Multi_Measure_Rest: {
+                  case BdatType::Multi_Measure_Rest: {
                         if( !parseMultiMeasureRest(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Harmony_GuitarFrame: {
+                  case BdatType::Harmony_GuitarFrame: {
                         if( !parseHarmonyGuitarFrame(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Graphics_40:
-                  case Bdat_Graphics_RoundRect:
-                  case Bdat_Graphics_Rect:
-                  case Bdat_Graphics_Round:
-                  case Bdat_Graphics_Line:
-                  case Bdat_Graphics_Curve:
-                  case Bdat_Graphics_WedgeSymbol: {
+                  case BdatType::Graphics_40:
+                  case BdatType::Graphics_RoundRect:
+                  case BdatType::Graphics_Rect:
+                  case BdatType::Graphics_Round:
+                  case BdatType::Graphics_Line:
+                  case BdatType::Graphics_Curve:
+                  case BdatType::Graphics_WedgeSymbol: {
                         if( !parseSizeBlock(count) ) { return false; }
                         break;
                         }
-                  case Bdat_Midi_Controller : {
+                  case BdatType::Midi_Controller : {
                         if( !parseMidiController(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Midi_Program_Change : {
+                  case BdatType::Midi_Program_Change : {
                         if( !parseMidiProgramChange(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Midi_Channel_Pressure : {
+                  case BdatType::Midi_Channel_Pressure : {
                         if( !parseMidiChannelPressure(measureData, count) ) { return false; }
                         break;
                         }
-                  case Bdat_Midi_Pitch_Wheel : {
+                  case BdatType::Midi_Pitch_Wheel : {
                         if( !parseMidiPitchWheel(measureData, count) ) { return false; }
                         break;
                         }
@@ -5142,8 +5142,8 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
       measureData->addMusicData(container);
 
       // note|rest & grace
-      container->setIsRest(type==Bdat_Rest);
-      container->setIsRaw(type==Bdat_Raw_Note);
+      container->setIsRest(type==BdatType::Rest);
+      container->setIsRaw(type==BdatType::Raw_Note);
 
       if( !readBuffer(placeHolder, 2) ) { return false; }
       thisByte = placeHolder.toUnsignedInt();
@@ -5188,7 +5188,7 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
 
       int cursor = 0;
 
-      if( type == Bdat_Rest ) {
+      if( type == BdatType::Rest ) {
             Note* restPtr = new Note();
             container->addNoteRest(restPtr);
             restPtr->setIsRest(true);
@@ -5374,22 +5374,22 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
                         // trill rate
                         if( !readBuffer(placeHolder, 1) ) { return false; }
                         thisByte = placeHolder.toUnsignedInt();
-                        NoteType trillNoteType = Note_Sixteen;
+                        NoteType trillNoteType = NoteType::Note_Sixteen;
                         switch ( getHighNibble(thisByte) ) {
                               case 0:
-                                    trillNoteType = Note_None;
+                                    trillNoteType = NoteType::Note_None;
                                     break;
                               case 1:
-                                    trillNoteType = Note_Sixteen;
+                                    trillNoteType = NoteType::Note_Sixteen;
                                     break;
                               case 2:
-                                    trillNoteType = Note_32;
+                                    trillNoteType = NoteType::Note_32;
                                     break;
                               case 3:
-                                    trillNoteType = Note_64;
+                                    trillNoteType = NoteType::Note_64;
                                     break;
                               case 4:
-                                    trillNoteType = Note_128;
+                                    trillNoteType = NoteType::Note_128;
                                     break;
                               default:
                                     break;
@@ -5641,135 +5641,135 @@ bool BarsParse::parseTuplet(MeasureData* measureData, int /*length*/) {
       }
 
 HarmonyType binaryToHarmonyType(int bin) {
-      HarmonyType type = Harmony_maj;
+      HarmonyType type = HarmonyType::H_maj;
       if( bin == 0x0091 ) {
-            type = Harmony_maj;
+            type = HarmonyType::H_maj;
             } else if( bin == 0x0089 ) {
-            type = Harmony_min;
+            type = HarmonyType::H_min;
             } else if( bin == 0x0489 ) {
-            type = Harmony_min7;
+            type = HarmonyType::H_min7;
             } else if( bin == 0x0491 ) {
-            type = Harmony_7;
+            type = HarmonyType::H_7;
             } else if( bin == 0x0495 ) {
-            type = Harmony_9;
+            type = HarmonyType::H_9;
             } else if( bin == 0x0449 ) {
-            type = Harmony_min7b5;
+            type = HarmonyType::H_min7b5;
             } else if( bin == 0x04A1 ) {
-            type = Harmony_7sus4;
+            type = HarmonyType::H_7sus4;
             } else if( bin == 0x00A1 ) {
-            type = Harmony_sus4;
+            type = HarmonyType::H_sus4;
             } else if( bin == 0x0049 ) {
-            type = Harmony_dim;
+            type = HarmonyType::H_dim;
             } else if( bin == 0x0249 ) {
-            type = Harmony_dim7;
+            type = HarmonyType::H_dim7;
             } else if( bin == 0x0111 ) {
-            type = Harmony_aug;
+            type = HarmonyType::H_aug;
             } else if( bin == 0x0511 ) {
-            type = Harmony_aug7;
+            type = HarmonyType::H_aug7;
             } else if( bin == 0x044D ) {
-            type = Harmony_min9_b5;
+            type = HarmonyType::H_min9_b5;
             } else if( bin == 0x0499 ) {
-            type = Harmony_7s9;
+            type = HarmonyType::H_7s9;
             } else if( bin == 0x0615 ) {
-            type = Harmony_13;
+            type = HarmonyType::H_13;
             } else if( bin == 0x0289 ) {
-            type = Harmony_min6;
+            type = HarmonyType::H_min6;
             } else if( bin == 0x0291 ) {
-            type = Harmony_6;
+            type = HarmonyType::H_6;
             } else if( bin == 0x0295 ) {
-            type = Harmony_6;         //6add9
+            type = HarmonyType::H_6;         //6add9
             } else if( bin == 0x0095 ) {
-            type = Harmony_min;       //minor add9
+            type = HarmonyType::H_min;       //minor add9
             } else if( bin == 0x008D ) {
-            type = Harmony_maj7;
+            type = HarmonyType::H_maj7;
             } else if( bin == 0x0891 ) {
-            type = Harmony_maj7;
+            type = HarmonyType::H_maj7;
             } else if( bin == 0x0881 ) {
-            type = Harmony_maj7_s5;   //maj7#5
+            type = HarmonyType::H_maj7_s5;   //maj7#5
             } else if( bin == 0x0911 ) {
-            type = Harmony_maj7_s5;   //maj7#5
+            type = HarmonyType::H_maj7_s5;   //maj7#5
             } else if( bin == 0x0991 ) {
-            type = Harmony_maj7_s11;  //maj7#11
+            type = HarmonyType::H_maj7_s11;  //maj7#11
             } else if( bin == 0x0851 ) {
-            type = Harmony_maj7_s11;  //maj7#11
+            type = HarmonyType::H_maj7_s11;  //maj7#11
             } else if( bin == 0x08D1 ) {
-            type = Harmony_maj9;
+            type = HarmonyType::H_maj9;
             } else if( bin == 0x0895 ) {
-            type = Harmony_maj9_s5;   //maj9#5
+            type = HarmonyType::H_maj9_s5;   //maj9#5
             } else if( bin == 0x0995 ) {
-            type = Harmony_maj13_s11; //maj9#11
+            type = HarmonyType::H_maj13_s11; //maj9#11
             } else if( bin == 0x0855 ) {
-            type = Harmony_maj9_s11;  //maj9#11
+            type = HarmonyType::H_maj9_s11;  //maj9#11
             } else if( bin == 0x08D5 ) {
-            type = Harmony_maj13;
+            type = HarmonyType::H_maj13;
             } else if( bin == 0x0A95 ) {
-            type = Harmony_maj13_s11; //maj13#11
+            type = HarmonyType::H_maj13_s11; //maj13#11
             } else if( bin == 0x0A55 ) {
-            type = Harmony_maj13;     //maj13(no3)
+            type = HarmonyType::H_maj13;     //maj13(no3)
             } else if( bin == 0x0A85 ) {
-            type = Harmony_maj9_s5;   //maj13#5#11(no4)
+            type = HarmonyType::H_maj9_s5;   //maj13#5#11(no4)
             } else if( bin == 0x0B45 ) {
-            type = Harmony_7b9;
+            type = HarmonyType::H_7b9;
             } else if( bin == 0x0493 ) {
-            type = Harmony_7b5;
+            type = HarmonyType::H_7b5;
             } else if( bin == 0x0451 ) {
-            type = Harmony_9b5;
+            type = HarmonyType::H_9b5;
             } else if( bin == 0x0455 ) {
-            type = Harmony_7s9;       //7#5#9
+            type = HarmonyType::H_7s9;       //7#5#9
             } else if( bin == 0x0519 ) {
-            type = Harmony_7b9;       //7#5b9
+            type = HarmonyType::H_7b9;       //7#5b9
             } else if( bin == 0x0513 ) {
-            type = Harmony_aug7;      //aug9
+            type = HarmonyType::H_aug7;      //aug9
             } else if( bin == 0x0515 ) {
-            type = Harmony_sus4;      //sus9
+            type = HarmonyType::H_sus4;      //sus9
             } else if( bin == 0x04A5 ) {
-            type = Harmony_13b9;
+            type = HarmonyType::H_13b9;
             } else if( bin == 0x0613 ) {
-            type = Harmony_13b9;      //13b9#11
+            type = HarmonyType::H_13b9;      //13b9#11
             } else if( bin == 0x0611 ) {
-            type = Harmony_13;
+            type = HarmonyType::H_13;
             } else if( bin == 0x0653 ) {
-            type = Harmony_min;       //m(natural7)
+            type = HarmonyType::H_min;       //m(natural7)
             } else if( bin == 0x0889 ) {
-            type = Harmony_min9;      //m9(natural7)
+            type = HarmonyType::H_min9;      //m9(natural7)
             } else if( bin == 0x088D ) {
-            type = Harmony_min11;
+            type = HarmonyType::H_min11;
             } else if( bin == 0x04AD ) {
-            type = Harmony_9s11;
+            type = HarmonyType::H_9s11;
             } else if( bin == 0x04D5 ) {
-            type = Harmony_7sus4;     //sus7
+            type = HarmonyType::H_7sus4;     //sus7
             } else if( bin == 0x0421 ) {
-            type = Harmony_min11;
+            type = HarmonyType::H_min11;
             } else if( bin == 0x04A9 ) {
-            type = Harmony_min9;
+            type = HarmonyType::H_min9;
             } else if( bin == 0x048D ) {
-            type = Harmony_7b5b9;
+            type = HarmonyType::H_7b5b9;
             } else if( bin == 0x0453 ) {
-            type = Harmony_maj;       //(no5)
+            type = HarmonyType::H_maj;       //(no5)
             } else if( bin == 0x0011 ) {
-            type = Harmony_maj7;      //(no3)
+            type = HarmonyType::H_maj7;      //(no3)
             } else if( bin == 0x0081 ) {
-            type = Harmony_7;         //7(no3)
+            type = HarmonyType::H_7;         //7(no3)
             } else if( bin == 0x0481 ) {
-            type = Harmony_7;         //7(no5)
+            type = HarmonyType::H_7;         //7(no5)
             } else if( bin == 0x0411 ) {
-            type = Harmony_6;
+            type = HarmonyType::H_6;
             } else if( bin == 0x0291 ) {
-            type = Harmony_sus4;      //sus(add9)
+            type = HarmonyType::H_sus4;      //sus(add9)
             } else if( bin == 0x00A5 ) {
-            type = Harmony_13s9;      //13#9b5
+            type = HarmonyType::H_13s9;      //13#9b5
             } else if( bin == 0x0659 ) {
-            type = Harmony_sus4;      //sus(no5)
+            type = HarmonyType::H_sus4;      //sus(no5)
             } else if( bin == 0x0021 ) {
-            type = Harmony_7b5b9;     //7b5b9#9
+            type = HarmonyType::H_7b5b9;     //7b5b9#9
             } else if( bin == 0x045B ) {
-            type = Harmony_13b5;      //13b5b9#9
+            type = HarmonyType::H_13b5;      //13b5b9#9
             } else if( bin == 0x065B ) {
-            type = Harmony_13b9;      //13b9#9
+            type = HarmonyType::H_13b9;      //13b9#9
             } else if( bin == 0x061B ) {
-            type = Harmony_7b9s9;     //7b9#9
+            type = HarmonyType::H_7b9s9;     //7b9#9
             } else if( bin == 0x04B5 ) {
-            type = Harmony_7;
+            type = HarmonyType::H_7;
             }
 
       return type;
@@ -5986,53 +5986,53 @@ bool BarsParse::parseGlissando(MeasureData* measureData, int /*length*/) {
 bool getDecoratorType(
             unsigned int thisByte,
             bool& measureRepeat,
-            Decorator::DecoratorType& decoratorType,
+            Decorator::Type& decoratorType,
             bool& singleRepeat,
             ArticulationType& artType) {
       measureRepeat = false;
-      decoratorType = Decorator::Decorator_Articulation;
+      decoratorType = Decorator::Type::Articulation;
       singleRepeat = true;
-      artType = Articulation_None;
+      artType = ArticulationType::None;
 
       switch (thisByte) {
             case 0x00: {
-                  decoratorType = Decorator::Decorator_Dotted_Barline;
+                  decoratorType = Decorator::Type::Dotted_Barline;
                   break;
                   }
             case 0x30: {
-                  artType = Articulation_Open_String;
+                  artType = ArticulationType::Open_String;
                   break;
                   }
             case 0x31: {
-                  artType = Articulation_Finger_1;
+                  artType = ArticulationType::Finger_1;
                   break;
                   }
             case 0x32: {
-                  artType = Articulation_Finger_2;
+                  artType = ArticulationType::Finger_2;
                   break;
                   }
             case 0x33: {
-                  artType = Articulation_Finger_3;
+                  artType = ArticulationType::Finger_3;
                   break;
                   }
             case 0x34: {
-                  artType = Articulation_Finger_4;
+                  artType = ArticulationType::Finger_4;
                   break;
                   }
             case 0x35: {
-                  artType = Articulation_Finger_5;
+                  artType = ArticulationType::Finger_5;
                   break;
                   }
             case 0x6B: {
-                  artType = Articulation_Flat_Accidental_For_Trill;
+                  artType = ArticulationType::Flat_Accidental_For_Trill;
                   break;
                   }
             case 0x6C: {
-                  artType = Articulation_Sharp_Accidental_For_Trill;
+                  artType = ArticulationType::Sharp_Accidental_For_Trill;
                   break;
                   }
             case 0x6D: {
-                  artType = Articulation_Natural_Accidental_For_Trill;
+                  artType = ArticulationType::Natural_Accidental_For_Trill;
                   break;
                   }
             case 0x8d: {
@@ -6046,131 +6046,131 @@ bool getDecoratorType(
                   break;
                   }
             case 0xA0: {
-                  artType = Articulation_Minor_Trill;
+                  artType = ArticulationType::Minor_Trill;
                   break;
                   }
             case 0xA1: {
-                  artType = Articulation_Major_Trill;
+                  artType = ArticulationType::Major_Trill;
                   break;
                   }
             case 0xA2: {
-                  artType = Articulation_Trill_Section;
+                  artType = ArticulationType::Trill_Section;
                   break;
                   }
             case 0xA6: {
-                  artType = Articulation_Turn;
+                  artType = ArticulationType::Turn;
                   break;
                   }
             case 0xA8: {
-                  artType = Articulation_Tremolo_Eighth;
+                  artType = ArticulationType::Tremolo_Eighth;
                   break;
                   }
             case 0xA9: {
-                  artType = Articulation_Tremolo_Sixteenth;
+                  artType = ArticulationType::Tremolo_Sixteenth;
                   break;
                   }
             case 0xAA: {
-                  artType = Articulation_Tremolo_Thirty_Second;
+                  artType = ArticulationType::Tremolo_Thirty_Second;
                   break;
                   }
             case 0xAB: {
-                  artType = Articulation_Tremolo_Sixty_Fourth;
+                  artType = ArticulationType::Tremolo_Sixty_Fourth;
                   break;
                   }
             case 0xB2: {
-                  artType = Articulation_Fermata;
+                  artType = ArticulationType::Fermata;
                   break;
                   }
             case 0xB3: {
-                  artType = Articulation_Fermata_Inverted;
+                  artType = ArticulationType::Fermata_Inverted;
                   break;
                   }
             case 0xB9: {
-                  artType = Articulation_Pause;
+                  artType = ArticulationType::Pause;
                   break;
                   }
             case 0xBA: {
-                  artType = Articulation_Grand_Pause;
+                  artType = ArticulationType::Grand_Pause;
                   break;
                   }
             case 0xC0: {
-                  artType = Articulation_Marcato;
+                  artType = ArticulationType::Marcato;
                   break;
                   }
             case 0xC1: {
-                  artType = Articulation_Marcato_Dot;
+                  artType = ArticulationType::Marcato_Dot;
                   break;
                   }
             case 0xC2: {
-                  artType = Articulation_SForzando;
+                  artType = ArticulationType::SForzando;
                   break;
                   }
             case 0xC3: {
-                  artType = Articulation_SForzando_Dot;
+                  artType = ArticulationType::SForzando_Dot;
                   break;
                   }
             case 0xC4: {
-                  artType = Articulation_SForzando_Inverted;
+                  artType = ArticulationType::SForzando_Inverted;
                   break;
                   }
             case 0xC5: {
-                  artType = Articulation_SForzando_Dot_Inverted;
+                  artType = ArticulationType::SForzando_Dot_Inverted;
                   break;
                   }
             case 0xC6: {
-                  artType = Articulation_Staccatissimo;
+                  artType = ArticulationType::Staccatissimo;
                   break;
                   }
             case 0xC7: {
-                  artType = Articulation_Staccato;
+                  artType = ArticulationType::Staccato;
                   break;
                   }
             case 0xC8: {
-                  artType = Articulation_Tenuto;
+                  artType = ArticulationType::Tenuto;
                   break;
                   }
             case 0xC9: {
-                  artType = Articulation_Natural_Harmonic;
+                  artType = ArticulationType::Natural_Harmonic;
                   break;
                   }
             case 0xCA: {
-                  artType = Articulation_Artificial_Harmonic;
+                  artType = ArticulationType::Artificial_Harmonic;
                   break;
                   }
             case 0xCB: {
-                  artType = Articulation_Plus_Sign;
+                  artType = ArticulationType::Plus_Sign;
                   break;
                   }
             case 0xCC: {
-                  artType = Articulation_Up_Bow;
+                  artType = ArticulationType::Up_Bow;
                   break;
                   }
             case 0xCD: {
-                  artType = Articulation_Down_Bow;
+                  artType = ArticulationType::Down_Bow;
                   break;
                   }
             case 0xCE: {
-                  artType = Articulation_Up_Bow_Inverted;
+                  artType = ArticulationType::Up_Bow_Inverted;
                   break;
                   }
             case 0xCF: {
-                  artType = Articulation_Down_Bow_Inverted;
+                  artType = ArticulationType::Down_Bow_Inverted;
                   break;
                   }
             case 0xD0: {
-                  artType = Articulation_Pedal_Down;
+                  artType = ArticulationType::Pedal_Down;
                   break;
                   }
             case 0xD1: {
-                  artType = Articulation_Pedal_Up;
+                  artType = ArticulationType::Pedal_Up;
                   break;
                   }
             case 0xD6: {
-                  artType = Articulation_Heavy_Attack;
+                  artType = ArticulationType::Heavy_Attack;
                   break;
                   }
             case 0xD7: {
-                  artType = Articulation_Heavier_Attack;
+                  artType = ArticulationType::Heavier_Attack;
                   break;
                   }
             default:
@@ -6202,10 +6202,10 @@ bool BarsParse::parseDecorators(MeasureData* measureData, int length) {
       if( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int thisByte = placeHolder.toUnsignedInt();
 
-      Decorator::DecoratorType decoratorType;
+      Decorator::Type decoratorType;
       bool isMeasureRepeat;
       bool isSingleRepeat = true;
-      ArticulationType artType = Articulation_None;
+      ArticulationType artType = ArticulationType::None;
 
       getDecoratorType(thisByte, isMeasureRepeat, decoratorType, isSingleRepeat, artType);
 
@@ -6245,29 +6245,29 @@ bool BarsParse::parseWedge(MeasureData* measureData, int length) {
 
       // wedge type
       if( !readBuffer(placeHolder, 1) ) { return false; }
-      WedgeType wedgeType = Wedge_Cres_Line;
+      WedgeType wedgeType = WedgeType::Cres_Line;
       bool wedgeOrExpression = true;
       unsigned int highHalfByte = getHighNibble(placeHolder.toUnsignedInt());
       unsigned int lowHalfByte = getLowNibble(placeHolder.toUnsignedInt());
 
       switch (highHalfByte) {
             case 0x0: {
-                  wedgeType = Wedge_Cres_Line;
+                  wedgeType = WedgeType::Cres_Line;
                   wedgeOrExpression = true;
                   break;
                   }
             case 0x4: {
-                  wedgeType = Wedge_Decresc_Line;
+                  wedgeType = WedgeType::Decresc_Line;
                   wedgeOrExpression = true;
                   break;
                   }
             case 0x6: {
-                  wedgeType = Wedge_Decresc;
+                  wedgeType = WedgeType::Decresc;
                   wedgeOrExpression = false;
                   break;
                   }
             case 0x2: {
-                  wedgeType = Wedge_Cres;
+                  wedgeType = WedgeType::Cres;
                   wedgeOrExpression = false;
                   break;
                   }
@@ -6277,7 +6277,7 @@ bool BarsParse::parseWedge(MeasureData* measureData, int length) {
 
       // 0xb | 0x8(ove3) , else 3, 0(ove3)
       if( (lowHalfByte & 0x8) == 0x8 ) {
-            wedgeType = Wedge_Double_Line;
+            wedgeType = WedgeType::Double_Line;
             wedgeOrExpression = true;
             }
 
@@ -6326,7 +6326,7 @@ bool BarsParse::parseWedge(MeasureData* measureData, int length) {
                         express->setText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
                         }
                   } else {
-                  QString str = wedgeType==Wedge_Cres ? "cresc" : "decresc";
+                  QString str = wedgeType==WedgeType::Cres ? "cresc" : "decresc";
                   express->setText(str);
 
                   if( !jump(8) ) { return false; }
@@ -6606,93 +6606,93 @@ bool BarsParse::parseHarmonyGuitarFrame(MeasureData* measureData, int length) {
       }
 
 void extractOctave(unsigned int Bits, OctaveShiftType& octaveShiftType, QList<OctaveShiftPosition>& positions) {
-      octaveShiftType = OctaveShift_8;
+      octaveShiftType = OctaveShiftType::OS_8;
       positions.clear();
 
       switch (Bits) {
             case 0x0: {
-                  octaveShiftType = OctaveShift_8;
-                  positions.push_back(OctavePosition_Continue);
+                  octaveShiftType = OctaveShiftType::OS_8;
+                  positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x1: {
-                  octaveShiftType = OctaveShift_Minus_8;
-                  positions.push_back(OctavePosition_Continue);
+                  octaveShiftType = OctaveShiftType::OS_Minus_8;
+                  positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x2: {
-                  octaveShiftType = OctaveShift_15;
-                  positions.push_back(OctavePosition_Continue);
+                  octaveShiftType = OctaveShiftType::OS_15;
+                  positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x3: {
-                  octaveShiftType = OctaveShift_Minus_15;
-                  positions.push_back(OctavePosition_Continue);
+                  octaveShiftType = OctaveShiftType::OS_Minus_15;
+                  positions.push_back(OctaveShiftPosition::Continue);
                   break;
                   }
             case 0x4: {
-                  octaveShiftType = OctaveShift_8;
-                  positions.push_back(OctavePosition_Stop);
+                  octaveShiftType = OctaveShiftType::OS_8;
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x5: {
-                  octaveShiftType = OctaveShift_Minus_8;
-                  positions.push_back(OctavePosition_Stop);
+                  octaveShiftType = OctaveShiftType::OS_Minus_8;
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x6: {
-                  octaveShiftType = OctaveShift_15;
-                  positions.push_back(OctavePosition_Stop);
+                  octaveShiftType = OctaveShiftType::OS_15;
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x7: {
-                  octaveShiftType = OctaveShift_Minus_15;
-                  positions.push_back(OctavePosition_Stop);
+                  octaveShiftType = OctaveShiftType::OS_Minus_15;
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0x8: {
-                  octaveShiftType = OctaveShift_8;
-                  positions.push_back(OctavePosition_Start);
+                  octaveShiftType = OctaveShiftType::OS_8;
+                  positions.push_back(OctaveShiftPosition::Start);
                   break;
                   }
             case 0x9: {
-                  octaveShiftType = OctaveShift_Minus_8;
-                  positions.push_back(OctavePosition_Start);
+                  octaveShiftType = OctaveShiftType::OS_Minus_8;
+                  positions.push_back(OctaveShiftPosition::Start);
                   break;
                   }
             case 0xA: {
-                  octaveShiftType = OctaveShift_15;
-                  positions.push_back(OctavePosition_Start);
+                  octaveShiftType = OctaveShiftType::OS_15;
+                  positions.push_back(OctaveShiftPosition::Start);
                   break;
                   }
             case 0xB: {
-                  octaveShiftType = OctaveShift_Minus_15;
-                  positions.push_back(OctavePosition_Start);
+                  octaveShiftType = OctaveShiftType::OS_Minus_15;
+                  positions.push_back(OctaveShiftPosition::Start);
                   ;
                   break;
                   }
             case 0xC: {
-                  octaveShiftType = OctaveShift_8;
-                  positions.push_back(OctavePosition_Start);
-                  positions.push_back(OctavePosition_Stop);
+                  octaveShiftType = OctaveShiftType::OS_8;
+                  positions.push_back(OctaveShiftPosition::Start);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0xD: {
-                  octaveShiftType = OctaveShift_Minus_8;
-                  positions.push_back(OctavePosition_Start);
-                  positions.push_back(OctavePosition_Stop);
+                  octaveShiftType = OctaveShiftType::OS_Minus_8;
+                  positions.push_back(OctaveShiftPosition::Start);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0xE: {
-                  octaveShiftType = OctaveShift_15;
-                  positions.push_back(OctavePosition_Start);
-                  positions.push_back(OctavePosition_Stop);
+                  octaveShiftType = OctaveShiftType::OS_15;
+                  positions.push_back(OctaveShiftPosition::Start);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             case 0xF: {
-                  octaveShiftType = OctaveShift_Minus_15;
-                  positions.push_back(OctavePosition_Start);
-                  positions.push_back(OctavePosition_Stop);
+                  octaveShiftType = OctaveShiftType::OS_Minus_15;
+                  positions.push_back(OctaveShiftPosition::Start);
+                  positions.push_back(OctaveShiftPosition::Stop);
                   break;
                   }
             default:
@@ -6714,7 +6714,7 @@ bool BarsParse::parseOctaveShift(MeasureData* measureData, int /*length*/) {
       // octave
       if( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int type = getLowNibble(placeHolder.toUnsignedInt());
-      OctaveShiftType octaveShiftType = OctaveShift_8;
+      OctaveShiftType octaveShiftType = OctaveShiftType::OS_8;
       QList<OctaveShiftPosition> positions;
       extractOctave(type, octaveShiftType, positions);
 
@@ -6748,7 +6748,7 @@ bool BarsParse::parseOctaveShift(MeasureData* measureData, int /*length*/) {
             octavePoint->setEndTick(octave->getEndTick());
 
             // stop
-            if( i==0 && position == OctavePosition_Stop ) {
+            if( i==0 && position == OctaveShiftPosition::Stop ) {
                   octavePoint->start()->setOffset(octave->start()->getOffset()+octave->getLength());
                   }
 
@@ -6928,23 +6928,23 @@ bool BarsParse::parseOffsetElement(OffsetElement* ptr) {
 
 bool BarsParse::getCondElementType(unsigned int byteData, CondType& type) {
       if( byteData == 0x09 ) {
-            type = Cond_Time_Parameters;
+            type = CondType::Time_Parameters;
             } else if (byteData == 0x0A) {
-            type = Cond_Bar_Number;
+            type = CondType::Bar_Number;
             } else if (byteData == 0x16) {
-            type = Cond_Decorator;
+            type = CondType::Decorator;
             } else if (byteData == 0x1C) {
-            type = Cond_Tempo;
+            type = CondType::Tempo;
             } else if (byteData == 0x1D) {
-            type = Cond_Text;
+            type = CondType::Text;
             } else if (byteData == 0x25) {
-            type = Cond_Expression;
+            type = CondType::Expression;
             } else if (byteData == 0x30) {
-            type = Cond_Barline_Parameters;
+            type = CondType::Barline_Parameters;
             } else if (byteData == 0x31) {
-            type = Cond_Repeat;
+            type = CondType::Repeat;
             } else if (byteData == 0x32) {
-            type = Cond_Numeric_Ending;
+            type = CondType::Numeric_Ending;
             } else {
             return false;
             }
@@ -6954,79 +6954,79 @@ bool BarsParse::getCondElementType(unsigned int byteData, CondType& type) {
 
 bool BarsParse::getBdatElementType(unsigned int byteData, BdatType& type) {
       if (byteData == 0x70) {
-            type = Bdat_Raw_Note;
+            type = BdatType::Raw_Note;
             } else if (byteData == 0x80) {
-            type = Bdat_Rest;
+            type = BdatType::Rest;
             } else if (byteData == 0x90) {
-            type = Bdat_Note;
+            type = BdatType::Note;
             } else if (byteData == 0x10) {
-            type = Bdat_Beam;
+            type = BdatType::Beam;
             } else if (byteData == 0x11) {
-            type = Bdat_Harmony;
+            type = BdatType::Harmony;
             } else if (byteData == 0x12) {
-            type = Bdat_Clef;
+            type = BdatType::Clef;
             } else if (byteData == 0x13) {
-            type = Bdat_Wedge;
+            type = BdatType::Wedge;
             } else if (byteData == 0x14) {
-            type = Bdat_Dynamics;
+            type = BdatType::Dynamics;
             } else if (byteData == 0x15) {
-            type = Bdat_Glissando;
+            type = BdatType::Glissando;
             } else if (byteData == 0x16) {
-            type = Bdat_Decorator;
+            type = BdatType::Decorator;
             } else if (byteData == 0x17) {
-            type = Bdat_Key;
+            type = BdatType::Key;
             } else if (byteData == 0x18) {
-            type = Bdat_Lyric;
+            type = BdatType::Lyric;
             } else if (byteData == 0x19) {
-            type = Bdat_Octave_Shift;
+            type = BdatType::Octave_Shift;
             } else if (byteData == 0x1B) {
-            type = Bdat_Slur;
+            type = BdatType::Slur;
             } else if (byteData == 0x1D) {
-            type = Bdat_Text;
+            type = BdatType::Text;
             } else if (byteData == 0x1E) {
-            type = Bdat_Tie;
+            type = BdatType::Tie;
             } else if (byteData == 0x1F) {
-            type = Bdat_Tuplet;
+            type = BdatType::Tuplet;
             } else if (byteData == 0x21) {
-            type = Bdat_Guitar_Bend;
+            type = BdatType::Guitar_Bend;
             } else if (byteData == 0x22) {
-            type = Bdat_Guitar_Barre;
+            type = BdatType::Guitar_Barre;
             } else if (byteData == 0x23) {
-            type = Bdat_Pedal;
+            type = BdatType::Pedal;
             } else if (byteData == 0x24) {
-            type = Bdat_KuoHao;
+            type = BdatType::KuoHao;
             } else if (byteData == 0x25) {
-            type = Bdat_Expressions;
+            type = BdatType::Expressions;
             } else if (byteData == 0x26) {
-            type = Bdat_Harp_Pedal;
+            type = BdatType::Harp_Pedal;
             } else if (byteData == 0x27) {
-            type = Bdat_Multi_Measure_Rest;
+            type = BdatType::Multi_Measure_Rest;
             } else if (byteData == 0x28) {
-            type = Bdat_Harmony_GuitarFrame;
+            type = BdatType::Harmony_GuitarFrame;
             } else if (byteData == 0x40) {
-            type = Bdat_Graphics_40;
+            type = BdatType::Graphics_40;
             } else if (byteData == 0x41) {
-            type = Bdat_Graphics_RoundRect;
+            type = BdatType::Graphics_RoundRect;
             } else if (byteData == 0x42) {
-            type = Bdat_Graphics_Rect;
+            type = BdatType::Graphics_Rect;
             } else if (byteData == 0x43) {
-            type = Bdat_Graphics_Round;
+            type = BdatType::Graphics_Round;
             } else if (byteData == 0x44) {
-            type = Bdat_Graphics_Line;
+            type = BdatType::Graphics_Line;
             } else if (byteData == 0x45) {
-            type = Bdat_Graphics_Curve;
+            type = BdatType::Graphics_Curve;
             } else if (byteData == 0x46) {
-            type = Bdat_Graphics_WedgeSymbol;
+            type = BdatType::Graphics_WedgeSymbol;
             } else if (byteData == 0xAB) {
-            type = Bdat_Midi_Controller;
+            type = BdatType::Midi_Controller;
             } else if (byteData == 0xAC) {
-            type = Bdat_Midi_Program_Change;
+            type = BdatType::Midi_Program_Change;
             } else if (byteData == 0xAD) {
-            type = Bdat_Midi_Channel_Pressure;
+            type = BdatType::Midi_Channel_Pressure;
             } else if (byteData == 0xAE) {
-            type = Bdat_Midi_Pitch_Wheel;
+            type = BdatType::Midi_Pitch_Wheel;
             } else if (byteData == 0xFF) {
-            type = Bdat_Bar_End;
+            type = BdatType::Bar_End;
             } else {
             return false;
             }
@@ -7160,7 +7160,7 @@ void LyricChunkParse::processLyricInfo(const LyricInfo& info) {
 
             if( measureData == 0 ) { return; }
             QList<NoteContainer*> containers = measureData->getNoteContainers();
-            QList<MusicData*> lyrics = measureData->getMusicDatas(MusicData_Lyric);
+            QList<MusicData*> lyrics = measureData->getMusicDatas(MusicDataType::Lyric);
 
             for( i=0; i<containers.size() && index<words.size(); ++i ) {
                   if( containers[i]->getIsRest() ) {
@@ -7368,7 +7368,7 @@ void OveOrganizer::organizeAttributes() {
       if( ove_->getLineCount() > 0 ) {
             Line* line = ove_->getLine(0);
             int partBarCount = ove_->getPartBarCount();
-            ClefType lastClefType = Clef_Treble;
+            ClefType lastClefType = ClefType::Treble;
 
             if(line != 0){
                   for( i=0; i<line->getStaffCount(); ++i ) {
@@ -7383,7 +7383,7 @@ void OveOrganizer::organizeAttributes() {
                                     Clef* clefPtr = measureData->getClef();
                                     clefPtr->setClefType((int)lastClefType);
 
-                                    const QList<MusicData*>& clefs = measureData->getMusicDatas(MusicData_Clef);
+                                    const QList<MusicData*>& clefs = measureData->getMusicDatas(MusicDataType::Clef);
 
                                     for( k=0; k<clefs.size(); ++k ) {
                                           Clef* clef = dynamic_cast<Clef*>(clefs[k]);
@@ -7421,14 +7421,14 @@ void OveOrganizer::organizeTracks() {
       for( i=0; i<tracks.size(); ++i ) {
             Staff* staff = getStaff(ove_, i);
             if(staff != 0) {
-                  if(staff->getGroupType() == Group_Brace && staff->getGroupStaffCount() == 1 ) {
+                  if(staff->getGroupType() == GroupType::Brace && staff->getGroupStaffCount() == 1 ) {
                         comboStaveStarts[i] = true;
                         }
                   }
 
             /*if( i < tracks.size() - 1 ) {
-         if( tracks[i]->getStartClef() == Clef_Treble &&
-            tracks[i+1]->getStartClef() == Clef_Bass &&
+         if( tracks[i]->getStartClef() == ClefType::Treble &&
+            tracks[i+1]->getStartClef() == ClefType::Bass &&
             tracks[i]->getChannel() == tracks[i+1]->get_channel() ) {
          }
       }*/
@@ -7524,7 +7524,7 @@ void OveOrganizer::organizeContainers(int /*part*/, int /*track*/,
 void OveOrganizer::organizeMusicDatas(int /*part*/, int /*track*/, Measure* measure, MeasureData* measureData) {
       int i;
       int barIndex = measure->getBarNumber()->getIndex();
-      QList<MusicData*> datas = measureData->getMusicDatas(MusicData_None);
+      QList<MusicData*> datas = measureData->getMusicDatas(MusicDataType::None);
 
       for(i=0; i<datas.size(); ++i) {
             datas[i]->start()->setMeasure(barIndex);
@@ -7533,30 +7533,30 @@ void OveOrganizer::organizeMusicDatas(int /*part*/, int /*track*/, Measure* meas
 
 void OveOrganizer::organizeCrossMeasureElements(int part, int track, Measure* measure, MeasureData* measureData) {
       int i;
-      QList<MusicData*> pairs = measureData->getCrossMeasureElements(MusicData_None, MeasureData::PairType_Start);
+      QList<MusicData*> pairs = measureData->getCrossMeasureElements(MusicDataType::None, MeasureData::PairType::Start);
 
       for(i=0; i<pairs.size(); ++i) {
             MusicData* pair = pairs[i];
 
             switch ( pair->getMusicDataType() ) {
-                  case MusicData_Beam :
-                  case MusicData_Glissando :
-                  case MusicData_Slur :
-                  case MusicData_Tie :
-                  case MusicData_Tuplet :
-                  case MusicData_Pedal :
-                  case MusicData_Numeric_Ending :
-                        //case MusicData_OctaveShift_EndPoint :
-                  case MusicData_Measure_Repeat : {
+                  case MusicDataType::Beam :
+                  case MusicDataType::Glissando :
+                  case MusicDataType::Slur :
+                  case MusicDataType::Tie :
+                  case MusicDataType::Tuplet :
+                  case MusicDataType::Pedal :
+                  case MusicDataType::Numeric_Ending :
+                        //case MusicDataType::OctaveShift_EndPoint :
+                  case MusicDataType::Measure_Repeat : {
                         organizePairElement(pair, part, track, measure, measureData);
                         break;
                         }
-                  case MusicData_OctaveShift : {
+                  case MusicDataType::OctaveShift : {
                         OctaveShift* octave = dynamic_cast<OctaveShift*>(pair);
                         organizeOctaveShift(octave, measure, measureData);
                         break;
                         }
-                  case MusicData_Wedge : {
+                  case MusicDataType::Wedge : {
                         Wedge* wedge = dynamic_cast<Wedge*>(pair);
                         organizeWedge(wedge, part, track, measure, measureData);
                         break;
@@ -7583,7 +7583,7 @@ void OveOrganizer::organizePairElement(
             measureData2->addCrossMeasureElement(data, false);
             }
 
-      if( data->getMusicDataType() == MusicData_Tuplet ){
+      if( data->getMusicDataType() == MusicDataType::Tuplet ){
             Tuplet* tuplet = dynamic_cast<Tuplet*>(data);
             const QList<NoteContainer*> containers = measureData->getNoteContainers();
 
@@ -7683,8 +7683,8 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
       MeasureData* measureData2 = ove_->getMeasureData(part, track, bar2Index);
       WedgeType wedgeType = wedge->getWedgeType();
 
-      if( wedge->getWedgeType() == Wedge_Double_Line ) {
-            wedgeType = Wedge_Cres_Line;
+      if( wedge->getWedgeType() == WedgeType::Double_Line ) {
+            wedgeType = WedgeType::Cres_Line;
             }
 
       wedge->start()->setMeasure(bar1Index);
@@ -7710,7 +7710,7 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
             measureData2->addMusicData(stopPoint);
             }
 
-      if( wedge->getWedgeType() == Wedge_Double_Line ) {
+      if( wedge->getWedgeType() == WedgeType::Double_Line ) {
             Measure* middleMeasure = NULL;
             int middleUnit = 0;
 
@@ -7727,7 +7727,7 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
                   midStopPoint->setTick(wedge->getTick());
                   midStopPoint->start()->setOffset(middleUnit);
                   midStopPoint->setWedgeStart(false);
-                  midStopPoint->setWedgeType(Wedge_Cres_Line);
+                  midStopPoint->setWedgeType(WedgeType::Cres_Line);
                   midStopPoint->setHeight(wedge->getHeight());
 
                   WedgeEndPoint* midStartPoint = new WedgeEndPoint();
@@ -7736,7 +7736,7 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
                   midStartPoint->setTick(wedge->getTick());
                   midStartPoint->start()->setOffset(middleUnit);
                   midStartPoint->setWedgeStart(true);
-                  midStartPoint->setWedgeType(Wedge_Decresc_Line);
+                  midStartPoint->setWedgeType(WedgeType::Decresc_Line);
                   midStartPoint->setHeight(wedge->getHeight());
                   }
             }

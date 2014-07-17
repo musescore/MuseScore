@@ -27,8 +27,8 @@
 
 namespace Ms {
 
-enum SessionStart {
-      EMPTY_SESSION, LAST_SESSION, NEW_SESSION, SCORE_SESSION
+enum class SessionStart : char {
+      EMPTY, LAST, NEW, SCORE
       };
 
 // midi remote control values:
@@ -52,14 +52,14 @@ enum {
       MIDI_REMOTES
       };
 
-enum MuseScoreStyleType {
-      STYLE_DARK,
-      STYLE_LIGHT
+enum class MuseScoreStyleType : char {
+      DARK,
+      LIGHT
       };
 
 // MusicXML export break values
-enum MusicxmlExportBreaks {
-      ALL_BREAKS, MANUAL_BREAKS, NO_BREAKS
+enum class MusicxmlExportBreaks : char {
+      ALL, MANUAL, NO
       };
 
 //---------------------------------------------------------
@@ -153,7 +153,7 @@ struct Preferences {
       int oscPort;
       bool singlePalette;
       QString styleName;
-      int globalStyle;        // 0 - dark, 1 - light
+      MuseScoreStyleType globalStyle;
       bool animations;
 
       QString myScoresPath;

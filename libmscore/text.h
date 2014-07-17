@@ -180,7 +180,7 @@ class Text : public Element {
 
       QString _text;
       QList<TextBlock> _layout;
-      int _styleIndex;
+      TextStyleType _styleIndex;
 
       bool _layoutToParentWidth;
       bool _editMode;
@@ -225,9 +225,9 @@ class Text : public Element {
       virtual void setTextStyle(const TextStyle& st);
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
-      int textStyleType() const               { return _styleIndex; }
-      void setTextStyleType(int);
-      void restyle(int);
+      TextStyleType textStyleType() const     { return _styleIndex; }
+      void setTextStyleType(TextStyleType);
+      void restyle(TextStyleType);
 
       void setPlainText(const QString&);
       void setText(const QString&);

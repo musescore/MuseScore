@@ -27,7 +27,7 @@
 
 namespace Ms {
 
-static unsigned int startMag = MAG_100;
+static MagIdx startMag = MagIdx::MAG_100;
 
 //---------------------------------------------------------
 //   magTable
@@ -60,10 +60,10 @@ MagBox::MagBox(QWidget* parent)
       for (unsigned int i =  0; i < n; ++i) {
             QString ts(QCoreApplication::translate("magTable", magTable[i]));
             addItem(ts, i);
-            if (i == startMag)
+            if (MagIdx(i) == startMag)
                   setCurrentIndex(i);
             }
-      addItem(QString("%1%").arg(freeMag * 100), MAG_FREE);
+      addItem(QString("%1%").arg(freeMag * 100), int(MagIdx::MAG_FREE));
       connect(this, SIGNAL(currentIndexChanged(int)), SLOT(indexChanged(int)));
       }
 
@@ -82,17 +82,17 @@ void MagBox::indexChanged(int idx)
 
 double MagBox::getMag(ScoreView* canvas)
       {
-      switch(currentIndex()) {
-            case MAG_25:      return 0.25;
-            case MAG_50:      return 0.5;
-            case MAG_75:      return 0.75;
-            case MAG_100:     return 1.0;
-            case MAG_150:     return 1.5;
-            case MAG_200:     return 2.0;
-            case MAG_400:     return 4.0;
-            case MAG_800:     return 8.0;
-            case MAG_1600:    return 16.0;
-            default:          break;
+      switch(MagIdx(currentIndex())) {
+            case MagIdx::MAG_25:      return 0.25;
+            case MagIdx::MAG_50:      return 0.5;
+            case MagIdx::MAG_75:      return 0.75;
+            case MagIdx::MAG_100:     return 1.0;
+            case MagIdx::MAG_150:     return 1.5;
+            case MagIdx::MAG_200:     return 2.0;
+            case MagIdx::MAG_400:     return 4.0;
+            case MagIdx::MAG_800:     return 8.0;
+            case MagIdx::MAG_1600:    return 16.0;
+            default:               break;
             }
 
       QSizeF s(canvas->fsize());
@@ -103,26 +103,28 @@ double MagBox::getMag(ScoreView* canvas)
       if (score == 0)
             return 1.0;
       const PageFormat* pf = score->pageFormat();
-      switch(currentIndex()) {
-            case MAG_PAGE_WIDTH:      // page width
+      switch(MagIdx(currentIndex())) {
+            case MagIdx::MAG_PAGE_WIDTH:      // page width
                   nmag *= cw / (pf->width() * MScore::DPI);
                   break;
-            case MAG_PAGE:     // page
+            case MagIdx::MAG_PAGE:     // page
                   {
                   double mag1 = cw  / (pf->width() * MScore::DPI);
                   double mag2 = ch / (pf->height() * MScore::DPI);
                   nmag  *= (mag1 > mag2) ? mag2 : mag1;
                   }
                   break;
-            case MAG_DBL_PAGE:    // double page
+            case MagIdx::MAG_DBL_PAGE:    // double page
                   {
                   double mag1 = cw / (pf->width()*2*MScore::DPI+50.0);
                   double mag2 = ch / (pf->height() * MScore::DPI);
                   nmag  *= (mag1 > mag2) ? mag2 : mag1;
                   }
                   break;
-            case MAG_FREE:
+            case MagIdx::MAG_FREE:
                   return freeMag;
+            default:
+                  break;
             }
       if (nmag < 0.0001)
             nmag = canvas->mag();
@@ -176,9 +178,9 @@ QValidator::State MagValidator::validate(QString& input, int& /*pos*/) const
 void MagBox::setMag(double val)
       {
       blockSignals(true);
-      setCurrentIndex(MAG_FREE);
+      setCurrentIndex(int(MagIdx::MAG_FREE));
       freeMag = val;
-      setItemText(MAG_FREE, QString("%1%").arg(freeMag * 100));
+      setItemText(int(MagIdx::MAG_FREE), QString("%1%").arg(freeMag * 100));
       blockSignals(false);
       }
 
@@ -186,10 +188,10 @@ void MagBox::setMag(double val)
 //   setMagIdx
 //---------------------------------------------------------
 
-void MagBox::setMagIdx(int idx)
+void MagBox::setMagIdx(MagIdx idx)
       {
       blockSignals(true);
-      setCurrentIndex(idx);
+      setCurrentIndex(int(idx));
       blockSignals(false);
       }
 }

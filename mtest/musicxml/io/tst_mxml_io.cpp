@@ -205,7 +205,7 @@ static void fixupScore(Score* score)
 void TestMxmlIO::mxmlIoTest(const char* file)
       {
       MScore::debugMode = true;
-      preferences.musicxmlExportBreaks = MANUAL_BREAKS;
+      preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
       Score* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
@@ -224,7 +224,7 @@ void TestMxmlIO::mxmlIoTest(const char* file)
 void TestMxmlIO::mxmlIoTestRef(const char* file)
       {
       MScore::debugMode = true;
-      preferences.musicxmlExportBreaks = MANUAL_BREAKS;
+      preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
       Score* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
@@ -243,7 +243,7 @@ void TestMxmlIO::mxmlIoTestRef(const char* file)
 void TestMxmlIO::mxmlReadTestCompr(const char* file)
       {
       MScore::debugMode = true;
-      preferences.musicxmlExportBreaks = MANUAL_BREAKS;
+      preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
       Score* score = readScore(DIR + file + ".mxl");
       QVERIFY(score);
@@ -264,7 +264,7 @@ void TestMxmlIO::mxmlReadWriteTestCompr(const char* file)
       {
       // read xml
       MScore::debugMode = true;
-      preferences.musicxmlExportBreaks = MANUAL_BREAKS;
+      preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
       Score* score = readScore(DIR + file + ".xml");
       QVERIFY(score);

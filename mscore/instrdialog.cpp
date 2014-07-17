@@ -56,7 +56,7 @@ void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase 
 StaffListItem::StaffListItem(PartListItem* li)
    : QTreeWidgetItem(li, STAFF_LIST_ITEM)
       {
-      op       = ITEM_KEEP;
+      op       = ListItemOp::KEEP;
       staff    = 0;
       setPartIdx(0);
       staffIdx = 0;
@@ -69,7 +69,7 @@ StaffListItem::StaffListItem(PartListItem* li)
 StaffListItem::StaffListItem()
    : QTreeWidgetItem(STAFF_LIST_ITEM)
       {
-      op       = ITEM_KEEP;
+      op       = ListItemOp::KEEP;
       staff    = 0;
       setPartIdx(0);
       staffIdx = 0;
@@ -232,8 +232,8 @@ void StaffListItem::staffTypeChanged(int idx)
             setClef(ClefTypeList(clefType, clefType));
             }
       if (staff && staff->staffType()->name() != stfType->name())
-            if (op != ITEM_DELETE && op != ITEM_ADD)
-                  op = ITEM_UPDATE;
+            if (op != ListItemOp::I_DELETE && op != ListItemOp::ADD)
+                  op = ListItemOp::UPDATE;
       }
 
 //---------------------------------------------------------
@@ -263,7 +263,7 @@ PartListItem::PartListItem(Part* p, QTreeWidget* lv)
       {
       part = p;
       it   = 0;
-      op   = ITEM_KEEP;
+      op   = ListItemOp::KEEP;
       setText(0, p->partName());
       setFlags(flags() | Qt::ItemIsUserCheckable);
       }
@@ -273,7 +273,7 @@ PartListItem::PartListItem(const InstrumentTemplate* i, QTreeWidget* lv)
       {
       part = 0;
       it   = i;
-      op   = ITEM_ADD;
+      op   = ListItemOp::ADD;
       setText(0, it->trackName);
       }
 
@@ -549,12 +549,12 @@ void InstrumentsDialog::on_addButton_clicked()
                   return;
             PartListItem* pli = new PartListItem(it, partiturList);
             pli->setFirstColumnSpanned(true);
-            pli->op = ITEM_ADD;
+            pli->op = ListItemOp::ADD;
 
             int n = it->nstaves();
             for (int i = 0; i < n; ++i) {
                   StaffListItem* sli = new StaffListItem(pli);
-                  sli->op       = ITEM_ADD;
+                  sli->op       = ListItemOp::ADD;
                   sli->staff    = 0;
                   sli->setPartIdx(i);
                   sli->staffIdx = -1;
@@ -581,7 +581,7 @@ void InstrumentsDialog::on_removeButton_clicked()
       QTreeWidgetItem* parent = item->parent();
 
       if (parent) {
-            if (((StaffListItem*)item)->op == ITEM_ADD) {
+            if (((StaffListItem*)item)->op == ListItemOp::ADD) {
                   if (parent->childCount() == 1) {
                         partiturList->takeTopLevelItem(partiturList->indexOfTopLevelItem(parent));
                         delete parent;
@@ -592,15 +592,15 @@ void InstrumentsDialog::on_removeButton_clicked()
                         }
                   }
             else {
-                  ((StaffListItem*)item)->op = ITEM_DELETE;
+                  ((StaffListItem*)item)->op = ListItemOp::I_DELETE;
                   item->setHidden(true);
                   }
             }
       else {
-            if (((PartListItem*)item)->op == ITEM_ADD)
+            if (((PartListItem*)item)->op == ListItemOp::ADD)
                   delete item;
             else {
-                  ((PartListItem*)item)->op = ITEM_DELETE;
+                  ((PartListItem*)item)->op = ListItemOp::I_DELETE;
                   item->setHidden(true);
                   }
             }
@@ -808,7 +808,7 @@ void InstrumentsDialog::on_belowButton_clicked()
       nsli->staff         = staff;
       nsli->setDefaultClef(sli->defaultClef());
       if (staff)
-            nsli->op = ITEM_ADD;
+            nsli->op = ListItemOp::ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
       nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
       nsli->setStaffType(sli->staffType());     // before a widget can be set into it
@@ -837,7 +837,7 @@ void InstrumentsDialog::on_linkedButton_clicked()
       nsli->setDefaultClef(sli->defaultClef());
       nsli->setLinked(true);
       if (staff)
-            nsli->op = ITEM_ADD;
+            nsli->op = ListItemOp::ADD;
       pli->insertChild(pli->indexOfChild(sli)+1, nsli);
       nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
       nsli->setStaffType(sli->staffType());     // before a widget can be set into it
@@ -919,20 +919,20 @@ void MuseScore::editInstrList()
             int staves = 0;
             for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                   StaffListItem* sli = static_cast<StaffListItem*>(ci);
-                  if (sli->op != ITEM_DELETE)
+                  if (sli->op != ListItemOp::I_DELETE)
                         ++staves;
                   }
             if (staves == 0)
-                  pli->op = ITEM_DELETE;
+                  pli->op = ListItemOp::I_DELETE;
             }
 
       item = 0;
       for (int idx = 0; (item = pl->topLevelItem(idx)); ++idx) {
             rstaff = 0;
             PartListItem* pli = static_cast<PartListItem*>(item);
-            if (pli->op == ITEM_DELETE)
+            if (pli->op == ListItemOp::I_DELETE)
                   rootScore->cmdRemovePart(pli->part);
-            else if (pli->op == ITEM_ADD) {
+            else if (pli->op == ListItemOp::ADD) {
                   const InstrumentTemplate* t = ((PartListItem*)item)->it;
                   part = new Part(rootScore);
                   part->initFromInstrTemplate(t);
@@ -1001,7 +1001,7 @@ void MuseScore::editInstrList()
                   QTreeWidgetItem* ci = 0;
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                         StaffListItem* sli = (StaffListItem*)ci;
-                        if (sli->op == ITEM_DELETE) {
+                        if (sli->op == ListItemOp::I_DELETE) {
                               rootScore->systems()->clear();
                               Staff* staff = sli->staff;
                               int sidx = staff->idx();
@@ -1013,7 +1013,7 @@ void MuseScore::editInstrList()
                                     }
                               rootScore->cmdRemoveStaff(sidx);
                               }
-                        else if (sli->op == ITEM_ADD) {
+                        else if (sli->op == ListItemOp::ADD) {
                               Staff* staff = new Staff(rootScore, part, rstaff);
                               sli->staff   = staff;
                               staff->setRstaff(rstaff);
@@ -1044,7 +1044,7 @@ void MuseScore::editInstrList()
                               ++staffIdx;
                               ++rstaff;
                               }
-                        else if (sli->op == ITEM_UPDATE) {
+                        else if (sli->op == ListItemOp::UPDATE) {
                               // check changes in staff type
                               Staff* staff = sli->staff;
                               const StaffType* stfType = sli->staffType();
@@ -1075,12 +1075,12 @@ void MuseScore::editInstrList()
       QList<Staff*> dst;
       for (int idx = 0; idx < pl->topLevelItemCount(); ++idx) {
             PartListItem* pli = (PartListItem*)pl->topLevelItem(idx);
-            if (pli->op == ITEM_DELETE)
+            if (pli->op == ListItemOp::I_DELETE)
                   continue;
             QTreeWidgetItem* ci = 0;
             for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                   StaffListItem* sli = (StaffListItem*) ci;
-                  if (sli->op == ITEM_DELETE)
+                  if (sli->op == ListItemOp::I_DELETE)
                         continue;
                   dst.push_back(sli->staff);
                   }

@@ -168,7 +168,7 @@ void TextStyleDialog::applyToScore(Score* s)
       for (int i = 0; i < count; ++i) {
             int listIdx = textNames->item(i)->data(Qt::UserRole).toInt();
             if (listIdx < numOfStyles) {         // style already exists in score text styles
-                  const TextStyle& os = s->textStyle(listIdx);
+                  const TextStyle& os = s->textStyle(TextStyleType(listIdx));
                   const TextStyle& ns = styles[listIdx];
                   if (os != ns)
                         cs->undo(new ChangeTextStyle(s, ns));
