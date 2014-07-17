@@ -121,7 +121,7 @@ struct FileData
       QByteArray HHeaderData;
       QByteArray VHeaderData;
       int trackCount = 0;
-      MidiOperations::Opers trackOpers;
+      Opers trackOpers;
       QString charset = MidiCharset::defaultCharset();
                   // after the user apply MIDI import operations
                   // this value should be set to false
@@ -138,19 +138,21 @@ class Data
       FileData* data();
       const FileData* data() const;
 
-      void addNewFile(const QString &fileName);
+      void addNewMidiFile(const QString &fileName);
       int currentTrack() const;
       void setMidiFileData(const QString &fileName, const MidiFile &midiFile);
-      void excludeFile(const QString &fileName);
-      bool hasFile(const QString &fileName);
+      void excludeMidiFile(const QString &fileName);
+      bool hasMidiFile(const QString &fileName);
       const MidiFile* midiFile(const QString &fileName);
       QStringList allMidiFiles() const;
+      void setOperationsFile(const QString &fileName);
 
    private:
       friend class CurrentTrackSetter;
       friend class CurrentMidiFileSetter;
-
+      
       QString _currentMidiFile;
+      QString _midiOperationsFile;
       int _currentTrack = -1;
 
       std::map<QString, FileData> _data;    // <file name, tracks data>

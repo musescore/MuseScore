@@ -936,7 +936,7 @@ void convertMidi(Score *score, const MidiFile *mf)
             }
                   // for newly opened MIDI file - detect if it is a human performance
                   // if so - detect beats and set initial time signature
-      if (opers.data()->processingsOfOpenedFile == 0 && opers.data()->canRedefineDefaultsLater)
+      if (opers.data()->processingsOfOpenedFile == 0)
             Quantize::setIfHumanPerformance(tracks, sigmap);
       else        // user value
             MidiBeat::setTimeSignature(sigmap);
@@ -1006,8 +1006,8 @@ Score::FileError importMidi(Score *score, const QString &name)
       auto &opers = preferences.midiImportOperations;
 
       MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, name);
-      if (!opers.hasFile(name))
-            opers.addNewFile(name);
+      if (!opers.hasMidiFile(name))
+            opers.addNewMidiFile(name);
 
       if (opers.data()->processingsOfOpenedFile == 0) {
 

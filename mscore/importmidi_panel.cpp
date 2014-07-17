@@ -252,7 +252,7 @@ void ImportMidiPanel::excludeMidiFile(const QString &fileName)
             return;
 
       auto &opers = preferences.midiImportOperations;
-      opers.excludeFile(fileName);
+      opers.excludeMidiFile(fileName);
       if (fileName == _midiFile)
             _midiFile = "";
       }

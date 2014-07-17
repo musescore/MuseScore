@@ -396,11 +396,14 @@ void setIfHumanPerformance(
       if (allChords.empty())
             return;
       const bool isHuman = isHumanPerformance(allChords, sigmap);
+      const bool canSetDefaults = preferences.midiImportOperations.data()->canRedefineDefaultsLater;
       auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      opers.isHumanPerformance = isHuman;
+      if (canSetDefaults)
+            opers.isHumanPerformance = isHuman;
 
       if (isHuman) {
-            opers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_8);
+            if (canSetDefaults)
+                  opers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_8);
             const double ticksPerSec = MidiTempo::findBasicTempo(tracks) * MScore::division;
             MidiBeat::findBeatLocations(allChords, sigmap, ticksPerSec);      // and set time sig
             }
