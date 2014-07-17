@@ -704,7 +704,7 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   TempoText* tt = static_cast<TempoText*>(e);
                   tt->setParent(segment());
-                  int st = tt->textStyleType();
+                  TextStyleType st = tt->textStyleType();
                   tt->setTextStyleType(st);
                   score()->undoAddElement(tt);
                   }
@@ -741,7 +741,7 @@ Element* ChordRest::drop(const DropData& data)
                   e->setTrack((track() / VOICES) * VOICES);
                   {
                   Text* f = static_cast<Text*>(e);
-                  int st = f->textStyleType();
+                  TextStyleType st = f->textStyleType();
                   if (st >= TextStyleType::DEFAULT)
                         f->setTextStyleType(st);
                   }

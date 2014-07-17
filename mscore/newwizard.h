@@ -216,7 +216,7 @@ class NewWizard : public QWizard {
       friend class QWizardPage;
       virtual int nextId() const;
 
-      enum { Page_Type, Page_Instruments, Page_Template, Page_Keysig, Page_Timesig};
+      enum class Page : signed char { Invalid = -1, Type, Instruments, Template, Keysig, Timesig};
 
       QString templatePath() const       { return p4->templatePath(); }
       bool useTemplate() const;

@@ -1925,56 +1925,56 @@ bool Text::readProperties(XmlReader& e)
 
       if (tag == "style") {
             QString val(e.readElementText());
-            int st;
+            TextStyleType st;
             bool ok;
             int i = val.toInt(&ok);
             if (ok) {
                   // obsolete old text styles
                   switch (i) {
-                        case 2:  i = TextStyleType::TITLE;     break;
-                        case 3:  i = TextStyleType::SUBTITLE;  break;
-                        case 4:  i = TextStyleType::COMPOSER;  break;
-                        case 5:  i = TextStyleType::POET;      break;
-                        case 6:  i = TextStyleType::LYRIC1;    break;
-                        case 7:  i = TextStyleType::LYRIC2;    break;
-                        case 8:  i = TextStyleType::FINGERING; break;
-                        case 9:  i = TextStyleType::INSTRUMENT_LONG;    break;
-                        case 10: i = TextStyleType::INSTRUMENT_SHORT;   break;
-                        case 11: i = TextStyleType::INSTRUMENT_EXCERPT; break;
+                        case 2:  st = TextStyleType::TITLE;     break;
+                        case 3:  st = TextStyleType::SUBTITLE;  break;
+                        case 4:  st = TextStyleType::COMPOSER;  break;
+                        case 5:  st = TextStyleType::POET;      break;
+                        case 6:  st = TextStyleType::LYRIC1;    break;
+                        case 7:  st = TextStyleType::LYRIC2;    break;
+                        case 8:  st = TextStyleType::FINGERING; break;
+                        case 9:  st = TextStyleType::INSTRUMENT_LONG;    break;
+                        case 10: st = TextStyleType::INSTRUMENT_SHORT;   break;
+                        case 11: st = TextStyleType::INSTRUMENT_EXCERPT; break;
 
-                        case 12: i = TextStyleType::DYNAMICS;  break;
-                        case 13: i = TextStyleType::TECHNIQUE;   break;
-                        case 14: i = TextStyleType::TEMPO;     break;
-                        case 15: i = TextStyleType::METRONOME; break;
-                        case 16: i = TextStyleType::FOOTER;    break;  // TextStyleType::COPYRIGHT
-                        case 17: i = TextStyleType::MEASURE_NUMBER; break;
-                        case 18: i = TextStyleType::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
-                        case 19: i = TextStyleType::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
-                        case 20: i = TextStyleType::TRANSLATOR; break;
-                        case 21: i = TextStyleType::TUPLET;     break;
+                        case 12: st = TextStyleType::DYNAMICS;  break;
+                        case 13: st = TextStyleType::TECHNIQUE;   break;
+                        case 14: st = TextStyleType::TEMPO;     break;
+                        case 15: st = TextStyleType::METRONOME; break;
+                        case 16: st = TextStyleType::FOOTER;    break;  // TextStyleType::COPYRIGHT
+                        case 17: st = TextStyleType::MEASURE_NUMBER; break;
+                        case 18: st = TextStyleType::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
+                        case 19: st = TextStyleType::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
+                        case 20: st = TextStyleType::TRANSLATOR; break;
+                        case 21: st = TextStyleType::TUPLET;     break;
 
-                        case 22: i = TextStyleType::SYSTEM;         break;
-                        case 23: i = TextStyleType::STAFF;          break;
-                        case 24: i = TextStyleType::HARMONY;        break;
-                        case 25: i = TextStyleType::REHEARSAL_MARK; break;
-                        case 26: i = TextStyleType::REPEAT;         break;
-                        case 27: i = TextStyleType::VOLTA;          break;
-                        case 28: i = TextStyleType::FRAME;          break;
-                        case 29: i = TextStyleType::TEXTLINE;       break;
-                        case 30: i = TextStyleType::GLISSANDO;      break;
-                        case 31: i = TextStyleType::STRING_NUMBER;  break;
+                        case 22: st = TextStyleType::SYSTEM;         break;
+                        case 23: st = TextStyleType::STAFF;          break;
+                        case 24: st = TextStyleType::HARMONY;        break;
+                        case 25: st = TextStyleType::REHEARSAL_MARK; break;
+                        case 26: st = TextStyleType::REPEAT;         break;
+                        case 27: st = TextStyleType::VOLTA;          break;
+                        case 28: st = TextStyleType::FRAME;          break;
+                        case 29: st = TextStyleType::TEXTLINE;       break;
+                        case 30: st = TextStyleType::GLISSANDO;      break;
+                        case 31: st = TextStyleType::STRING_NUMBER;  break;
 
-                        case 32: i = TextStyleType::OTTAVA;  break;
-                        case 33: i = TextStyleType::BENCH;   break;
-                        case 34: i = TextStyleType::HEADER;  break;
-                        case 35: i = TextStyleType::FOOTER;  break;
+                        case 32: st = TextStyleType::OTTAVA;  break;
+                        case 33: st = TextStyleType::BENCH;   break;
+                        case 34: st = TextStyleType::HEADER;  break;
+                        case 35: st = TextStyleType::FOOTER;  break;
                         case 0:
                         default:
                               qDebug("Text:readProperties: style %d<%s> invalid", i, qPrintable(val));
-                              i = TextStyleType::DEFAULT;
+                              st = TextStyleType::DEFAULT;
                               break;
                         }
-                  st = i;
+                  //st = TextStyleType(i);
                   }
             else
                   st = score()->style()->textStyleType(val);
@@ -2034,7 +2034,7 @@ void Text::setTextStyle(const TextStyle& st)
 //   setTextStyleType
 //---------------------------------------------------------
 
-void Text::setTextStyleType(int st)
+void Text::setTextStyleType(TextStyleType st)
       {
       _styleIndex = st;
       setTextStyle(score()->textStyle(st));
@@ -2126,7 +2126,7 @@ QVariant Text::getProperty(P_ID propertyId) const
             case P_ID::TEXT_STYLE:
                   return QVariant::fromValue(_textStyle);
             case P_ID::TEXT_STYLE_TYPE:
-                  return QVariant(_styleIndex);
+                  return QVariant(int(_styleIndex));
             case P_ID::TEXT:
                   return text();
             default:
@@ -2147,7 +2147,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   setTextStyle(v.value<TextStyle>());
                   break;
             case P_ID::TEXT_STYLE_TYPE:
-                  setTextStyleType(v.toInt());
+                  setTextStyleType(v.value<TextStyleType>());
                   setGenerated(false);
                   break;
             case P_ID::TEXT:
@@ -2167,7 +2167,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Text::propertyDefault(P_ID id) const
       {
-      int idx;
+      TextStyleType idx;
       switch (type()) {
             case Element::Type::DYNAMIC:           idx = TextStyleType::DYNAMICS; break;
             case Element::Type::FIGURED_BASS:      idx = TextStyleType::FIGURED_BASS; break;
@@ -2188,7 +2188,7 @@ QVariant Text::propertyDefault(P_ID id) const
             }
       switch (id) {
             case P_ID::TEXT_STYLE_TYPE:
-                  return idx;
+                  return int(idx);
             case P_ID::TEXT_STYLE:
                   return score()->textStyle(idx).name();
             case P_ID::TEXT:
@@ -2371,7 +2371,7 @@ void Text::setFormat(FormatId id, QVariant val)
 //    restyle from old style type s
 //---------------------------------------------------------
 
-void Text::restyle(int oldType)
+void Text::restyle(TextStyleType oldType)
       {
       const TextStyle& os = score()->textStyle(oldType);
       const TextStyle& ns = score()->textStyle(textStyleType());

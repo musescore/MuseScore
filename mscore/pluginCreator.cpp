@@ -35,7 +35,7 @@ extern bool useFactorySettings;
 PluginCreator::PluginCreator(QWidget* parent)
    : QMainWindow(parent)
       {
-      state       = S_INIT;
+      state       = PCState::INIT;
       item        = 0;
       view        = 0;
       dock        = 0;
@@ -85,7 +85,7 @@ PluginCreator::PluginCreator(QWidget* parent)
       log->setMaximumBlockCount(1000);
 
       readSettings();
-      setState(S_EMPTY);
+      setState(PCState::EMPTY);
 
       connect(run,        SIGNAL(clicked()),     SLOT(runClicked()));
       connect(stop,       SIGNAL(clicked()),     SLOT(stopClicked()));
@@ -122,54 +122,54 @@ void PluginCreator::setState(PCState newState)
       if (state == newState)
             return;
       switch(state) {
-            case S_INIT:
+            case PCState::INIT:
                   switch(newState) {
-                        case S_INIT:
+                        case PCState::INIT:
                               break;
-                        case S_EMPTY:
+                        case PCState::EMPTY:
                               setTitle("");
                               actionSave->setEnabled(false);
                               run->setEnabled(false);
                               stop->setEnabled(false);
                               textEdit->setEnabled(false);
                               break;
-                        case S_CLEAN:
-                        case S_DIRTY:
+                        case PCState::CLEAN:
+                        case PCState::DIRTY:
                               break;
                         }
                   break;
-            case S_EMPTY:
+            case PCState::EMPTY:
                   switch(newState) {
-                        case S_INIT:
-                        case S_EMPTY:
+                        case PCState::INIT:
+                        case PCState::EMPTY:
                               break;
-                        case S_CLEAN:
+                        case PCState::CLEAN:
                               setTitle(path);
                               run->setEnabled(true);
                               textEdit->setEnabled(true);
                               break;
-                        case S_DIRTY:
+                        case PCState::DIRTY:
                               return;
                         }
                   break;
-            case S_CLEAN:
+            case PCState::CLEAN:
                   switch(newState) {
-                        case S_INIT:
-                        case S_EMPTY:
-                        case S_CLEAN:
+                        case PCState::INIT:
+                        case PCState::EMPTY:
+                        case PCState::CLEAN:
                               break;
-                        case S_DIRTY:
+                        case PCState::DIRTY:
                               actionSave->setEnabled(true);
                               break;
                         }
                   break;
-            case S_DIRTY:
+            case PCState::DIRTY:
                   switch(newState) {
-                        case S_INIT:
-                        case S_EMPTY:
-                        case S_CLEAN:
+                        case PCState::INIT:
+                        case PCState::EMPTY:
+                        case PCState::CLEAN:
                               actionSave->setEnabled(false);
-                        case S_DIRTY:
+                        case PCState::DIRTY:
                               break;
                         }
                   break;
@@ -226,7 +226,7 @@ void PluginCreator::readSettings()
 
 void PluginCreator::closeEvent(QCloseEvent* ev)
       {
-      if (state == S_DIRTY) {
+      if (state == PCState::DIRTY) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
                tr("Plugin \"%1\" has changes.\n"
                "Save before closing?").arg(path),
@@ -369,7 +369,7 @@ void PluginCreator::stopClicked()
 
 void PluginCreator::loadPlugin()
       {
-      if (state == S_DIRTY) {
+      if (state == PCState::DIRTY) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
                tr("Plugin \"%1\" has changes.\n"
                "Save before closing?").arg(path),
@@ -399,7 +399,7 @@ void PluginCreator::load()
             }
       created = false;
       setTitle(path);
-      setState(S_CLEAN);
+      setState(PCState::CLEAN);
       raise();
       }
 
@@ -420,7 +420,7 @@ void PluginCreator::savePlugin()
             f.close();
             textEdit->document()->setModified(false);
             created = false;
-            setState(S_CLEAN);
+            setState(PCState::CLEAN);
             }
       else {
             // TODO
@@ -434,7 +434,7 @@ void PluginCreator::savePlugin()
 
 void PluginCreator::newPlugin()
       {
-      if (state == S_DIRTY) {
+      if (state == PCState::DIRTY) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
                tr("Plugin \"%1\" has changes.\n"
                "Save before closing?").arg(path),
@@ -459,7 +459,7 @@ void PluginCreator::newPlugin()
          "            }\n"
          "      }\n");
       textEdit->setPlainText(s);
-      setState(S_CLEAN);
+      setState(PCState::CLEAN);
       raise();
       }
 
@@ -470,7 +470,7 @@ void PluginCreator::newPlugin()
 void PluginCreator::textChanged()
       {
       actionSave->setEnabled(textEdit->document()->isModified());
-      setState(S_DIRTY);
+      setState(PCState::DIRTY);
       }
 
 //---------------------------------------------------------

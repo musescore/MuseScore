@@ -137,7 +137,7 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
                    "You only need to do this once.\n\n"
                    "Would you like to locate %2 now?").arg(getLibraryName()).arg(getLibraryName()),
                    QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
-            if (ret == QMessageBox::Yes && askuser == MP3Exporter::Maybe && findLibrary()) {
+            if (ret == QMessageBox::Yes && askuser == MP3Exporter::AskUser::MAYBE && findLibrary()) {
                   mLibraryLoaded = initLibrary(mLibPath);
                   }
             }
@@ -618,7 +618,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             return false;
 
       MP3Exporter exporter;
-      if (!exporter.loadLibrary(MP3Exporter::Maybe)) {
+      if (!exporter.loadLibrary(MP3Exporter::AskUser::MAYBE)) {
             QSettings settings;
             settings.setValue("/Export/lameMP3LibPath", "");
             if(!MScore::noGui)

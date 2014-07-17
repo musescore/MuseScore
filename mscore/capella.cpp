@@ -103,29 +103,29 @@ static void SetCapGraceDuration(Chord* chord,ChordObj* o)
       {
       NoteType nt = NoteType::APPOGGIATURA;
       ((Chord*)chord)->setNoteType(nt);
-      if (o->t == D4) {
+      if (o->t == TIMESTEP::D4) {
             ((Chord*)chord)->setNoteType(NoteType::GRACE4);
             chord->setDurationType(TDuration::DurationType::V_QUARTER);
             }
-      else if (o->t == D_BREVE)
+      else if (o->t == TIMESTEP::D_BREVE)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_BREVE);
-      else if (o->t == D1)
+      else if (o->t == TIMESTEP::D1)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_WHOLE);
-      else if (o->t == D2)
+      else if (o->t == TIMESTEP::D2)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_HALF);
-      else if (o->t == D16) {
+      else if (o->t == TIMESTEP::D16) {
             ((Chord*)chord)->setNoteType(NoteType::GRACE16);
             chord->setDurationType(TDuration::DurationType::V_16TH);
             }
-      else if (o->t == D32) {
+      else if (o->t == TIMESTEP::D32) {
             ((Chord*)chord)->setNoteType(NoteType::GRACE32);
             chord->setDurationType(TDuration::DurationType::V_32ND);
             }
-      else if (o->t == D64)
+      else if (o->t == TIMESTEP::D64)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_64TH);
-      else if (o->t == D128)
+      else if (o->t == TIMESTEP::D128)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_128TH);
-      else if (o->t == D256)
+      else if (o->t == TIMESTEP::D256)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_256TH);
       else
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_EIGHT);
@@ -140,22 +140,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
       Score* score = s->score();
       foreach(BasicDrawObj* oo, objects) {
             switch (oo->type) {
-                  case CAP_GROUP:
-                  case CAP_TRANSPOSABLE:
-                  case CAP_METAFILE:
-                  case CAP_RECT_ELLIPSE:
-                  case CAP_LINE:
-                  case CAP_POLYGON:
-                  case CAP_WAVY_LINE:
-                  case CAP_SLUR:
-                  case CAP_NOTE_LINES:
-                  case CAP_WEDGE:
-                  case CAP_VOLTA:
-                  case CAP_BRACKET:
-                  case CAP_GUITAR:
-                  case CAP_TRILL:
-                        break;
-                  case CAP_SIMPLE_TEXT:
+                  case CapellaType::SIMPLE_TEXT:
                         {
                         SimpleTextObj* st = static_cast<SimpleTextObj*>(oo);
                         if (st->font().family() == "capella3") {
@@ -238,8 +223,10 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         s->add(text);
                         }
                         break;
-                  case CAP_TEXT:
+                  case CapellaType::TEXT:
                         qDebug("======================Text:");
+                        break;
+                  default:
                         break;
                   }
             }
@@ -446,16 +433,16 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         chord->setTrack(track);
                         switch (o->stemDir) {
-                              case ChordObj::DOWN:
+                              case ChordObj::StemDir::DOWN:
                                     chord->setStemDirection(MScore::Direction::DOWN);
                                     break;
-                              case ChordObj::UP:
+                              case ChordObj::StemDir::UP:
                                     chord->setStemDirection(MScore::Direction::UP);
                                     break;
-                              case ChordObj::NONE:
+                              case ChordObj::StemDir::NONE:
                                     chord->setNoStem(true);
                                     break;
-                              case ChordObj::AUTO:
+                              case ChordObj::StemDir::AUTO:
                               default:
                                     break;
                               }
@@ -633,16 +620,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
                         // qDebug("pm %p", pm);
 
-                        BarLineType st = BarLineType::NORMAL;
-                        switch (o->type()) {
-                              case CapExplicitBarline::BAR_SINGLE:      st = BarLineType::NORMAL; break;
-                              case CapExplicitBarline::BAR_DOUBLE:      st = BarLineType::DOUBLE; break;
-                              case CapExplicitBarline::BAR_END:         st = BarLineType::END; break;
-                              case CapExplicitBarline::BAR_REPEND:      st = BarLineType::END_REPEAT; break;
-                              case CapExplicitBarline::BAR_REPSTART:    st = BarLineType::START_REPEAT; break;
-                              case CapExplicitBarline::BAR_REPENDSTART: st = BarLineType::END_START_REPEAT; break;
-                              case CapExplicitBarline::BAR_DASHED:      st = BarLineType::BROKEN; break;
-                              }
+                        BarLineType st = o->type();
                         if (st == BarLineType::NORMAL)
                               break;
 
@@ -685,12 +663,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                   continue;
             foreach(BasicDrawObj* o, d->objects) {
                   switch (o->type) {
-                        case CAP_SIMPLE_TEXT:
+                        case CapellaType::SIMPLE_TEXT:
                               // qDebug("simple text at %d", tick);
                               break;
-                        case CAP_WAVY_LINE:
+                        case CapellaType::WAVY_LINE:
                               break;
-                        case CAP_SLUR:
+                        case CapellaType::SLUR:
                               {
                               // SlurObj* so = static_cast<SlurObj*>(o);
                               // qDebug("slur tick %d  %d-%d-%d-%d   %d-%d", tick, so->nEnd, so->nMid,
@@ -717,7 +695,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     }
                               }
                               break;
-                        case CAP_TEXT: {
+                        case CapellaType::TEXT: {
 
                               TextObj* to = static_cast<TextObj*>(o);
                               Text* s = new Text(score);
@@ -736,7 +714,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               measure->add(s);
                               }
                               break;
-                        case CAP_VOLTA:
+                        case CapellaType::VOLTA:
                               {
                               VoltaObj* vo = static_cast<VoltaObj*>(o);
                               ChordRest* cr1 = 0; // ChordRest where volta begins
@@ -920,7 +898,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
       foreach(BasicDrawObj* o, cap->backgroundChord->objects) {
             switch (o->type) {
-                  case CAP_SIMPLE_TEXT:
+                  case CapellaType::SIMPLE_TEXT:
                         {
                         SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
                         Text* s = new Text(score);
@@ -937,7 +915,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         measure->setTick(0);
                         score->addMeasure(measure, score->measures()->first());
                         measure->add(s);
-                        // qDebug("page background object type %d (CAP_SIMPLE_TEXT) text %s", o->type, qPrintable(ss));
+                        // qDebug("page background object type %d (CapellaType::SIMPLE_TEXT) text %s", o->type, qPrintable(ss));
                         }
                         break;
                   default:
@@ -1300,101 +1278,101 @@ QList<BasicDrawObj*> Capella::readDrawObjectArray()
 
       // qDebug("readDrawObjectArray %d elements", n);
       for (int i = 0; i < n; ++i) {
-            unsigned char type = readByte();
+            CapellaType type = CapellaType(readByte());
 
             // qDebug("   readDrawObject %d of %d, type %d", i, n, type);
             switch (type) {
-                  case  0: {
+                  case  CapellaType::GROUP: {
                         GroupObj* o = new GroupObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  1: {
+                  case  CapellaType::TRANSPOSABLE: {
                         TransposableObj* o = new TransposableObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  2: {
+                  case  CapellaType::METAFILE: {
                         MetafileObj* o = new MetafileObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  CAP_SIMPLE_TEXT: {
+                  case  CapellaType::SIMPLE_TEXT: {
                         SimpleTextObj* o = new SimpleTextObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  4: {
+                  case  CapellaType::TEXT: {
                         TextObj* o = new TextObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  5: {
+                  case  CapellaType::RECT_ELLIPSE: {
                         RectEllipseObj* o = new RectEllipseObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case 6: {
+                  case CapellaType::LINE: {
                         LineObj* o = new LineObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  7: {
+                  case  CapellaType::POLYGON: {
                         PolygonObj* o = new PolygonObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  8: {
+                  case  CapellaType::WAVY_LINE: {
                         WavyLineObj* o = new WavyLineObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case 9: {
+                  case CapellaType::SLUR: {
                         SlurObj* o = new SlurObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  10: {
+                  case  CapellaType::NOTE_LINES: {
                         NotelinesObj* o = new NotelinesObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case 11: {
+                  case CapellaType::WEDGE: {
                         WedgeObj* o = new WedgeObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  12: {
+                  case  CapellaType::VOLTA: {
                         VoltaObj* o = new VoltaObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case 13: {
+                  case CapellaType::BRACKET: {
                         BracketObj* o = new BracketObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  14: {
+                  case  CapellaType::GUITAR: {
                         GuitarObj* o = new GuitarObj(this);
                         o->read();
                         ol.append(o);
                         }
                         break;
-                  case  15: {
+                  case  CapellaType::TRILL: {
                         TrillObj* o = new TrillObj(this);
                         o->read();
                         ol.append(o);
@@ -1517,7 +1495,7 @@ ChordObj::ChordObj(Capella* c)
       : BasicDurationalObj(c), NoteObj(CapellaNoteObjectType::CHORD)
       {
       cap      = c;
-      beamMode = AUTO_BEAM;
+      beamMode = BeamMode::AUTO;
       }
 
 //---------------------------------------------------------
@@ -1526,7 +1504,7 @@ ChordObj::ChordObj(Capella* c)
 
 void ChordObj::read()
       {
-      stemDir      = 0;
+      stemDir      = StemDir::AUTO;
       dStemLength  = 0;
       nTremoloBars = 0;
       articulation = 0;
@@ -1538,12 +1516,12 @@ void ChordObj::read()
       BasicDurationalObj::read();
 
       unsigned char flags = cap->readByte();
-      beamMode      = (flags & 0x01) ? (BEAM_MODE)(cap->readByte()) : AUTO_BEAM;
+      beamMode      = (flags & 0x01) ? BeamMode(cap->readByte()) : BeamMode::AUTO;
       notationStave = (flags & 0x02) ? cap->readChar() : 0;
       Q_ASSERT(notationStave >= -1 && notationStave <= 1);
 
       if (flags & 0x04) {
-            stemDir     = cap->readChar();
+            stemDir     = StemDir(cap->readChar());
             dStemLength = cap->readChar();
             }
       if (flags & 0x08) {
@@ -1613,7 +1591,7 @@ void Capella::read(void* p, qint64 len)
             return;
       qint64 rv = f->read((char*)p, len);
       if (rv != len)
-            throw CAP_EOF;
+            throw Capella::Error::CAP_EOF;
       curPos += len;
       }
 
@@ -1863,9 +1841,9 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
       //        sl->topDist, sl->btmDist, sl->groupDist, sl->barlineFrom, sl->barlineTo);
 
       unsigned char clef = readByte();
-      sl->form = FORM(clef & 7);
-      sl->line = CLEF_LINE((clef >> 3) & 7);
-      sl->oct  = OCT((clef >> 6));
+      sl->form = Form(clef & 7);
+      sl->line = ClefLine((clef >> 3) & 7);
+      sl->oct  = Oct((clef >> 6));
       qDebug("   clef %x  form %d, line %d, oct %d", clef, sl->form, sl->line, sl->oct);
 
       // Schlagzeuginformation
@@ -1976,9 +1954,9 @@ void Capella::readExtra()
 void CapClef::read()
       {
       unsigned char b = cap->readByte();
-      form            = (FORM) (b & 7);
-      line            = (CLEF_LINE) ((b >> 3) & 7);
-      oct             = (OCT)  (b >> 6);
+      form            = Form(b & 7);
+      line            = ClefLine((b >> 3) & 7);
+      oct             = Oct(b >> 6);
       qDebug("Clef::read form %d line %d oct %d", form, line, oct);
       }
 
@@ -1991,27 +1969,27 @@ ClefType CapClef::clef() const
       return clefType(form, line, oct);
       }
 
-ClefType CapClef::clefType(FORM form, CLEF_LINE line, OCT oct)
+ClefType CapClef::clefType(Form form, ClefLine line, Oct oct)
       {
-      int idx = form + (line << 3) + (oct << 5);
+      int idx = int(form) + (int(line) << 3) + (int(oct) << 5);
       switch (idx) {
-            case FORM_G + (LINE_2 << 3) + (OCT_NULL << 5):  return ClefType::G;
-            case FORM_G + (LINE_2 << 3) + (OCT_ALTA << 5):  return ClefType::G1;
-            case FORM_G + (LINE_2 << 3) + (OCT_BASSA << 5): return ClefType::G3;
+            case int(Form::G) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::G;
+            case int(Form::G) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_ALTA) << 5):  return ClefType::G1;
+            case int(Form::G) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_BASSA) << 5): return ClefType::G3;
 
-            case FORM_C + (LINE_1 << 3) + (OCT_NULL << 5):  return ClefType::C1;
-            case FORM_C + (LINE_2 << 3) + (OCT_NULL << 5):  return ClefType::C2;
-            case FORM_C + (LINE_3 << 3) + (OCT_NULL << 5):  return ClefType::C3;
-            case FORM_C + (LINE_4 << 3) + (OCT_NULL << 5):  return ClefType::C4;
-            case FORM_C + (LINE_5 << 3) + (OCT_NULL << 5):  return ClefType::C5;
+            case int(Form::C) + (int(ClefLine::L1) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C1;
+            case int(Form::C) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C2;
+            case int(Form::C) + (int(ClefLine::L3) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C3;
+            case int(Form::C) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C4;
+            case int(Form::C) + (int(ClefLine::L5) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C5;
 
-            case FORM_F + (LINE_4 << 3) + (OCT_NULL << 5):  return ClefType::F;
-            case FORM_F + (LINE_4 << 3) + (OCT_BASSA << 5): return ClefType::F8;
-            case FORM_F + (LINE_3 << 3) + (OCT_NULL << 5):  return ClefType::F_B;
-            case FORM_F + (LINE_5 << 3) + (OCT_NULL << 5):  return ClefType::F_C;
+            case int(Form::F) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::F;
+            case int(Form::F) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_BASSA) << 5): return ClefType::F8;
+            case int(Form::F) + (int(ClefLine::L3) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::F_B;
+            case int(Form::F) + (int(ClefLine::L5) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::F_C;
 
             default:
-                  if (form == FORM_NULL)
+                  if (form == Form::FORM_NULL)
                         return ClefType::INVALID;
                   qDebug("unknown clef %d %d %d", form, line, oct);
                   break;
@@ -2068,9 +2046,9 @@ void WedgeObj::read()
 void CapExplicitBarline::read()
       {
       unsigned char b = cap->readByte();
-      _type = b & 0x0f;
+      _type = BarLineType(b & 0x0f);
       _barMode = b >> 4;         // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
-      Q_ASSERT(_type <= BAR_REPENDSTART);
+      Q_ASSERT(_type <= BarLineType::END_START_REPEAT);
       Q_ASSERT(_barMode <= 2);
 
       qDebug("         Expl.Barline type %d mode %d", _type, _barMode);
@@ -2085,7 +2063,7 @@ void Capella::readVoice(CapStaff* cs, int idx)
       qDebug("      readVoice %d", idx);
 
       if (readChar() != 'C')
-            throw CAP_BAD_VOICE_SIG;
+            throw Capella::Error::BAD_VOICE_SIG;
 
       CapVoice* v   = new CapVoice;
       v->voiceNo    = idx;
@@ -2164,7 +2142,7 @@ void Capella::readVoice(CapStaff* cs, int idx)
 void Capella::readStaff(CapSystem* system)
       {
       if (readChar() != 'V')
-            throw CAP_BAD_STAFF_SIG;
+            throw Capella::Error::BAD_STAFF_SIG;
 
       CapStaff* staff = new CapStaff;
       //Meter
@@ -2194,14 +2172,14 @@ void Capella::readStaff(CapSystem* system)
 void Capella::readSystem()
       {
       if (readChar() != 'S')
-            throw CAP_BAD_SYSTEM_SIG;
+            throw Capella::Error::BAD_SYSTEM_SIG;
 
       CapSystem* s = new CapSystem;
       s->nAddBarCount   = readInt();
       s->bBarCountReset = readByte();
       s->explLeftIndent = readByte();
 
-      s->beamMode = readByte();
+      s->beamMode = BeamMode(readByte());
       s->tempo    = readUnsigned();
       s->color    = readColor();
       readExtra();
@@ -2227,16 +2205,16 @@ int BasicDurationalObj::ticks() const
             return 0;
       int len = 0;
       switch (t) {
-            case D1:          len = 4 * MScore::division; break;
-            case D2:          len = 2 * MScore::division; break;
-            case D4:          len = MScore::division; break;
-            case D8:          len = MScore::division >> 1; break;
-            case D16:         len = MScore::division >> 2; break;
-            case D32:         len = MScore::division >> 3; break;
-            case D64:         len = MScore::division >> 4; break;
-            case D128:        len = MScore::division >> 5; break;
-            case D256:        len = MScore::division >> 6; break;
-            case D_BREVE:     len = MScore::division * 8; break;
+            case TIMESTEP::D1:          len = 4 * MScore::division; break;
+            case TIMESTEP::D2:          len = 2 * MScore::division; break;
+            case TIMESTEP::D4:          len = MScore::division; break;
+            case TIMESTEP::D8:          len = MScore::division >> 1; break;
+            case TIMESTEP::D16:         len = MScore::division >> 2; break;
+            case TIMESTEP::D32:         len = MScore::division >> 3; break;
+            case TIMESTEP::D64:         len = MScore::division >> 4; break;
+            case TIMESTEP::D128:        len = MScore::division >> 5; break;
+            case TIMESTEP::D256:        len = MScore::division >> 6; break;
+            case TIMESTEP::D_BREVE:     len = MScore::division * 8; break;
             default:
                   qDebug("BasicDurationalObj::ticks: illegal duration value %d", t);
                   break;
@@ -2274,7 +2252,7 @@ void Capella::read(QFile* fp)
       read(signature, 8);
       signature[8] = 0;
       if (memcmp(signature, "cap3-v:", 7) != 0)
-            throw CAP_BAD_SIG;
+            throw Capella::Error::BAD_SIG;
 
       // qDebug("read Capella file signature <%s>", signature);
 
@@ -2336,7 +2314,7 @@ void Capella::read(QFile* fp)
       char esig[4];
       read(esig, 4);
       if (memcmp (esig, "\0\0\0\0", 4) != 0)
-            throw CAP_BAD_SIG;
+            throw Capella::Error::BAD_SIG;
       }
 
 //---------------------------------------------------------
@@ -2355,7 +2333,7 @@ Score::FileError importCapella(Score* score, const QString& name)
       try {
             cf.read(&fp);
             }
-      catch (Capella::CapellaError errNo) {
+      catch (Capella::Error errNo) {
             if (!MScore::noGui) {
                   QMessageBox::warning(0,
                      QWidget::tr("MuseScore: Import Capella"),

@@ -147,7 +147,7 @@ typedef void beVersion_t(be_version *);
 class MP3Exporter {
 
    public:
-      enum AskUser { No, Maybe, Yes };
+      enum class AskUser : char { NO, MAYBE, YES };
 
       MP3Exporter();
       virtual ~MP3Exporter();

@@ -63,7 +63,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void on_comboFBFont_currentIndexChanged(int index);
 
 public:
-      enum { PAGE_NOTE = 6 };
+      static const int PAGE_NOTE = 6;
       EditStyle(Score*, QWidget*);
       void setPage(int no);
       };

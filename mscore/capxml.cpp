@@ -62,15 +62,15 @@ static QFont capxReadFont(XmlReader& e)
 
 static bool qstring2timestep(QString& str, TIMESTEP& tstp)
       {
-      if      (str == "1/1")   { tstp = D1;      return true; }
-      else if (str == "1/2")   { tstp = D2;      return true; }
-      else if (str == "1/4")   { tstp = D4;      return true; }
-      else if (str == "1/8")   { tstp = D8;      return true; }
-      else if (str == "1/16")  { tstp = D16;     return true; }
-      else if (str == "1/32")  { tstp = D32;     return true; }
-      else if (str == "1/64")  { tstp = D64;     return true; }
-      else if (str == "1/128") { tstp = D128;    return true; }
-      else if (str == "2/1")   { tstp = D_BREVE; return true; }
+      if      (str == "1/1")   { tstp = TIMESTEP::D1;      return true; }
+      else if (str == "1/2")   { tstp = TIMESTEP::D2;      return true; }
+      else if (str == "1/4")   { tstp = TIMESTEP::D4;      return true; }
+      else if (str == "1/8")   { tstp = TIMESTEP::D8;      return true; }
+      else if (str == "1/16")  { tstp = TIMESTEP::D16;     return true; }
+      else if (str == "1/32")  { tstp = TIMESTEP::D32;     return true; }
+      else if (str == "1/64")  { tstp = TIMESTEP::D64;     return true; }
+      else if (str == "1/128") { tstp = TIMESTEP::D128;    return true; }
+      else if (str == "2/1")   { tstp = TIMESTEP::D_BREVE; return true; }
       return false;
       }
 
@@ -109,7 +109,7 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
       invisible  = false;
       notBlack   = false;
       color = Qt::black;
-      t = D1;
+      t = TIMESTEP::D1;
       horizontalShift = 0;
       count = 0;
       tripartite   = 0;
@@ -158,14 +158,14 @@ void BasicDurationalObj::readCapxObjectArray(XmlReader& e)
 void CapExplicitBarline::readCapx(XmlReader& e)
       {
       QString type = e.attribute("type", "single");
-      if (type == "single") _type = BAR_SINGLE;
-      else if (type == "double") _type = BAR_DOUBLE;
-      else if (type == "end") _type = BAR_END;
-      else if (type == "repEnd") _type = BAR_REPEND;
-      else if (type == "repBegin") _type = BAR_REPSTART;
-      else if (type == "repEndBegin") _type = BAR_REPENDSTART;
-      else if (type == "dashed") _type = BAR_DASHED;
-      else _type = BAR_SINGLE; // default
+      if (type == "single") _type = BarLineType::NORMAL;
+      else if (type == "double") _type = BarLineType::DOUBLE;
+      else if (type == "end") _type = BarLineType::END;
+      else if (type == "repEnd") _type = BarLineType::END_REPEAT;
+      else if (type == "repBegin") _type = BarLineType::START_REPEAT;
+      else if (type == "repEndBegin") _type = BarLineType::END_START_REPEAT;
+      else if (type == "dashed") _type = BarLineType::BROKEN;
+      else _type = BarLineType::NORMAL; // default
       _barMode = 0;
       e.readNext();
       }
@@ -177,10 +177,10 @@ void CapExplicitBarline::readCapx(XmlReader& e)
 void CapClef::readCapx(XmlReader& e)
       {
       QString clef = e.attribute("clef");
-      if (clef == "G2-") { form = FORM_G; line = LINE_2; oct = OCT_BASSA; }
-      else if (clef == "treble") { form = FORM_G; line = LINE_2; oct = OCT_NULL; }
-      else if (clef == "bass") { form = FORM_F; line = LINE_4; oct = OCT_NULL; }
-      else { /* default */ form = FORM_G; line = LINE_2; oct = OCT_NULL; }
+      if (clef == "G2-") { form = Form::G; line = ClefLine::L2; oct = Oct::OCT_BASSA; }
+      else if (clef == "treble") { form = Form::G; line = ClefLine::L2; oct = Oct::OCT_NULL; }
+      else if (clef == "bass") { form = Form::F; line = ClefLine::L4; oct = Oct::OCT_NULL; }
+      else { /* default */ form = Form::G; line = ClefLine::L2; oct = Oct::OCT_NULL; }
       qDebug("Clef::read '%s' -> form %d line %d oct %d", qPrintable(clef), form, line, oct);
       e.readNext();
       }
@@ -249,9 +249,9 @@ void CapMeter::readCapx(XmlReader& e)
 void ChordObj::readCapxStem(XmlReader& e)
       {
       QString dir = e.attribute("dir");
-      if (dir == "up") stemDir = UP;
-      else if (dir == "down") stemDir = DOWN;
-      else if (dir == "none") stemDir = NONE;
+      if (dir == "up") stemDir = StemDir::UP;
+      else if (dir == "down") stemDir = StemDir::DOWN;
+      else if (dir == "none") stemDir = StemDir::NONE;
       e.readNext();
       }
 
@@ -261,7 +261,7 @@ void ChordObj::readCapxStem(XmlReader& e)
 
 void ChordObj::readCapx(XmlReader& e)
       {
-      stemDir      = AUTO;
+      stemDir      = StemDir::AUTO;
       dStemLength  = 0;
       nTremoloBars = 0;
       articulation = 0;
@@ -269,7 +269,7 @@ void ChordObj::readCapx(XmlReader& e)
       rightTie     = false;
       beamShift    = 0;
       beamSlope    = 0;
-      beamMode      = AUTO_BEAM;
+      beamMode      = BeamMode::AUTO;
       notationStave = 0;
 
       while (e.readNextStartElement()) {
@@ -710,7 +710,7 @@ void Capella::readCapxSystem(XmlReader& e)
       s->bBarCountReset = 0;
       s->explLeftIndent = 0; // ?? TODO ?? use in capella.cpp commented out
 
-      s->beamMode = 0;
+      s->beamMode = BeamMode::AUTO;
       s->tempo    = 0;
       s->color    = Qt::black;
 
@@ -803,9 +803,9 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
       sl->barlineTo   = 0;
 
       unsigned char clef = 0;
-      sl->form = FORM(clef & 7);
-      sl->line = CLEF_LINE((clef >> 3) & 7);
-      sl->oct  = OCT((clef >> 6));
+      sl->form = Form(clef & 7);
+      sl->line = ClefLine((clef >> 3) & 7);
+      sl->oct  = Oct((clef >> 6));
       // qDebug("   clef %x  form %d, line %d, oct %d", clef, sl->form, sl->line, sl->oct);
 
       // Schlagzeuginformation

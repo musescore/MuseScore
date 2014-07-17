@@ -53,7 +53,7 @@
 //   TODO: remove duplicate code
 //---------------------------------------------------------
 
-static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, int stl)
+static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, Ms::TextStyleType stl)
       {
       if (!strTxt.isEmpty()) {
             Ms::Text* text = new Ms::Text(s);
