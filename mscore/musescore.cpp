@@ -2893,10 +2893,10 @@ void MuseScore::dirtyChanged(Score* s)
 //   magChanged
 //---------------------------------------------------------
 
-void MuseScore::magChanged(MagIdx idx)
+void MuseScore::magChanged(int idx)
       {
       if (cv)
-            cv->setMag(idx, mag->getMag(cv));
+            cv->setMag((MagIdx)idx, mag->getMag(cv));
       }
 
 //---------------------------------------------------------

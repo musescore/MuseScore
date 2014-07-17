@@ -372,6 +372,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveFile(Score* score);
       void fingeringMenu();
       void registerPlugin(PluginDescription*);
+      
       int  pluginIdxFromPath(QString pluginPath);
       void startDebugger();
       void midiinToggled(bool);
@@ -418,7 +419,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void seqStopped();
       void cmdAppendMeasures();
       void cmdInsertMeasures();
-      void magChanged(MagIdx);
+      void magChanged(int);
       void showPageSettings();
       void removeTab(int);
       void removeTab();
