@@ -268,6 +268,9 @@ class Note : public Element {
       void setHeadGroup(NoteHead::Group val);
       void setHeadType(NoteHead::Type t);
 
+      virtual int subtype() const { return (int) _headGroup; }
+      virtual QString subtypeName() const;
+
       void setPitch(int val);
       void undoSetPitch(int val);
       void setPitch(int pitch, int tpc1, int tpc2);
