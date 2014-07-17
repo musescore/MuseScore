@@ -231,7 +231,7 @@ void TestCopyPaste::copyPaste2NoteTremolo2()
 
       // select 2 chord rests with a 2 note tremolo inbetween
       Segment* s = m1->first(Segment::Type::ChordRest);
-      score->select(static_cast<Chord*>(s->element(0))->notes().at(0));
+      score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
       s = s->next(Segment::Type::ChordRest);
       score->select(s->element(0), SelectType::RANGE);
 
