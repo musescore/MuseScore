@@ -73,7 +73,7 @@ void Score::updateChannel()
                         if (an.isEmpty())
                               continue;
                         Staff* staff = _staves[st->staffIdx()];
-                        int a = staff->part()->instr()->channelIdx(an);
+                        int a = staff->part()->instr(s->tick())->channelIdx(an);
                         if (a != -1)
                               staff->channelList(voice)->insert(s->tick(), a);
                         }
