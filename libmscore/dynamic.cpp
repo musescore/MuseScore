@@ -37,9 +37,9 @@ struct Dyn {
       const char* text;  // utf8 text of dynamic
       };
 
-#if 1
+#if 0
 
-// variant with ligatures, works for both emmentaler and bravura:
+// variant with ligatures, works for emmentaler, bravura and gonville:
 
 static Dyn dynList[] = {
       // dynamic:
@@ -77,7 +77,7 @@ static Dyn dynList[] = {
       {  0,   true,  "n",      "<sym>dynamicNiente</sym>" }
       };
 
-// variant with precomposed symbols, available only in bravura:
+// variant with precomposed symbols, available in bravura and meanwhile emmentaler to, but not (yet) gonville:
 
 #else
 static Dyn dynList[] = {
