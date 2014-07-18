@@ -299,7 +299,7 @@ QPointF Pedal::linePos(GripLine grip, System** sys)
                   x += nhw;
             }
       *sys = s;
-      return QPointF(x, s->staffYpage(staffIdx()) - s->pos().y());
+      return QPointF(x, 0);
       }
 
 }
