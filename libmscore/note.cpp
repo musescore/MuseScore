@@ -1059,10 +1059,15 @@ void Note::read(XmlReader& e)
       // ensure sane values:
       _pitch = limit(_pitch, 0, 127);
 
-      if (score()->mscVersion() < 117 && !concertPitch()) {
-            _pitch += transposition();
-            _tpc[1] = _tpc[0];
-            _tpc[0] = Tpc::TPC_INVALID;
+      if (score()->mscVersion() < 117) {
+            if (concertPitch()) {
+                  _tpc[1]  = Tpc::TPC_INVALID;
+                  }
+            else {
+                  _pitch += transposition();
+                  _tpc[1] = _tpc[0];
+                  _tpc[0] = Tpc::TPC_INVALID;
+                  }
             }
       if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
             Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
@@ -1441,7 +1446,7 @@ Element* Note::drop(const DropData& data)
 //---------------------------------------------------------
 //   addBracket
 //---------------------------------------------------------
-      
+
 void Note::addBracket()
       {
       Symbol* s = new Symbol(score());
@@ -1453,7 +1458,7 @@ void Note::addBracket()
       s->setParent(this);
       score()->undoAddElement(s);
       }
-      
+
 //---------------------------------------------------------
 //   setDotPosition
 //---------------------------------------------------------
