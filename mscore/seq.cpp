@@ -489,7 +489,7 @@ void Seq::playEvent(const NPlayEvent& event)
             const Note* note = event.note();
 
             if (note) {
-                  Instrument* instr = note->staff()->part()->instr();
+                  Instrument* instr = note->staff()->part()->instr(note->chord()->tick());
                   const Channel& a = instr->channel(note->subchannel());
                   mute = a.mute || a.soloMute;
                   }
