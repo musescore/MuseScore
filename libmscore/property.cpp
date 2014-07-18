@@ -76,6 +76,7 @@ static const PropertyData propertyList[] = {
       { P_ID::PLAY,                false, "play",          P_TYPE::BOOL  },
       { P_ID::TIMESIG_NOMINAL,     false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_ACTUAL,      true,  0,               P_TYPE::FRACTION },
+      
       { P_ID::NUMBER_TYPE,         false, "numberType",    P_TYPE::INT   },
       { P_ID::BRACKET_TYPE,        false, "bracketType",   P_TYPE::INT   },
       { P_ID::NORMAL_NOTES,        false, "normalNotes",   P_TYPE::INT   },
@@ -169,6 +170,7 @@ static const PropertyData propertyList[] = {
       { P_ID::TIMESIG,             false, 0,               P_TYPE::FRACTION },
 
       { P_ID::TIMESIG_GLOBAL,      false, 0,               P_TYPE::FRACTION },
+      { P_ID::TIMESIG_TYPE,        true,  0,               P_TYPE::INT },
       { P_ID::SPANNER_TICK,        true,  "tick",          P_TYPE::INT      },
       { P_ID::SPANNER_TICK2,       true,  "tick2",         P_TYPE::INT      },
       { P_ID::SPANNER_TRACK2,      true,  "track2",          P_TYPE::INT      },
