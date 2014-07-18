@@ -434,15 +434,41 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
             }
       }
 
+void updateFirstLastBeats(MidiOperations::HumanBeatData &beatData, const ReducedFraction &timeSig)
+      {
+      for (int i = 0; i != beatData.addedFirstBeats; ++i) {
+            
+            Q_ASSERT_X(!beatData.beatSet.empty(), "MidiBeat::updateFirstLastBeats",
+                       "Empty beat set after first beats deletion");
+            
+            beatData.beatSet.erase(beatData.beatSet.begin());
+            }
+      for (int i = 0; i != beatData.addedLastBeats; ++i) {
+            
+            Q_ASSERT_X(!beatData.beatSet.empty(), "MidiBeat::updateFirstLastBeats",
+                       "Empty beat set after last beats deletion");
+            
+            beatData.beatSet.erase(std::prev(beatData.beatSet.end()));
+            }
+      
+      const int beatsInBar = MidiBeat::beatsInBar(timeSig);
+      
+      MidiBeat::addFirstBeats(beatData.beatSet, beatData.firstChordTick,
+                              beatsInBar, beatData.addedFirstBeats);
+      MidiBeat::addLastBeats(beatData.beatSet, beatData.lastChordTick,
+                             beatsInBar, beatData.addedLastBeats);      
+      }
+
 void setTimeSignature(TimeSigMap *sigmap)
       {
-      const auto *data = preferences.midiImportOperations.data();
+      auto *data = preferences.midiImportOperations.data();
       const std::set<ReducedFraction> &beats = data->humanBeatData.beatSet;
       if (beats.empty())
             return;           // don't set time sig for non-human performed MIDI files
       const auto timeSig = Meter::userTimeSigToFraction(data->trackOpers.timeSigNumerator,
                                                         data->trackOpers.timeSigDenominator);
       setTimeSig(sigmap, timeSig);
+      updateFirstLastBeats(data->humanBeatData, timeSig);
       }
 
 } // namespace MidiBeat
