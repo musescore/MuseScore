@@ -11,6 +11,7 @@ class ReducedFraction;
 class MidiChord;
 class MTrack;
 class ReducedFraction;
+class Score;
 
 namespace MidiBeat {
 
@@ -24,6 +25,8 @@ void adjustChordsToBeats(
             ReducedFraction &lastTick);
 
 void setTimeSignature(TimeSigMap *sigmap);
+
+void updateTempo(const std::multimap<int, MTrack> &tracks, Score *score);
 
 } // namespace MidiBeat
 } // namespace Ms
