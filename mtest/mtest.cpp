@@ -63,7 +63,11 @@ int main(int argc, char* argv[])
             }
 #endif
       QDir wd(QDir::current());
+#ifdef Q_OS_MAC
+      wd.cdUp();
+#endif
       scanDir(wd);
+
       printf("\n");
       printf("================\n");
       printf("  processed %d  -- failed %d\n", processed, failed);

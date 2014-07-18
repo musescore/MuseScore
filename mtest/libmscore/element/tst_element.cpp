@@ -86,7 +86,6 @@ void TestElement::testIds()
             Element::Type::FIGURED_BASS,
             Element::Type::STEM,
             Element::Type::SLUR,
-            Element::Type::ACCIDENTAL_BRACKET,
             Element::Type::FINGERING,
             Element::Type::HBOX,
             Element::Type::VBOX,
