@@ -77,6 +77,7 @@ struct Opers
                   // operations for all tracks
       bool isHumanPerformance = false;
       bool searchPickupMeasure = true;
+      bool measureCount2xLess = false;
       TimeSigNumerator timeSigNumerator = TimeSigNumerator::_4;
       TimeSigDenominator timeSigDenominator = TimeSigDenominator::_4;
 
@@ -111,6 +112,7 @@ struct HumanBeatData
       ReducedFraction firstChordTick;
       ReducedFraction lastChordTick;
       ReducedFraction timeSig;
+      bool measureCount2xLess;
       };
 
 struct FileData

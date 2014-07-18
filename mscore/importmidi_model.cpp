@@ -421,6 +421,25 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   int _numeratorCount;
                   };
             _columns.push_back(std::unique_ptr<Column>(new TimeSig(_trackOpers)));
+            
+            //-----------------------------------------------------------------------
+            struct MeasureCount2xLess : Column {
+                  MeasureCount2xLess(MidiOperations::Opers &opers) : Column(opers)
+                        {
+                        }
+                  QString headerName() const { return QCoreApplication::translate(
+                                          "MIDI import operations", "2x less\nmeasure count"); }
+                  bool isForAllTracksOnly() const { return true; }
+                  QVariant value(int /*trackIndex*/) const
+                        {
+                        return _opers.measureCount2xLess;
+                        }
+                  void setValue(const QVariant &value, int /*trackIndex*/)
+                        {
+                        _opers.measureCount2xLess = value.toBool();
+                        }
+                  };
+            _columns.push_back(std::unique_ptr<Column>(new MeasureCount2xLess(_trackOpers)));
             }
 
       //-----------------------------------------------------------------------
