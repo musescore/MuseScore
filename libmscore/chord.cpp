@@ -1035,37 +1035,6 @@ void Chord::read(XmlReader& e)
                   else
                         _stemDirection = MScore::Direction(val.toInt());
                   }
-            else if (tag == "Slur") {
-                  int id = e.intAttribute("id");
-                  if (id == 0)
-                        id = e.intAttribute("number");                  // obsolete
-                  Spanner* spanner = score()->findSpanner(id);
-                  if (!spanner)
-                        qDebug("ChordRest::read(): Slur id %d not found", id);
-                  else {
-                        QString atype(e.attribute("type"));
-                        Slur* slur = static_cast<Slur*>(spanner);
-                        if (atype == "start") {
-                              slur->setTick(e.tick());
-                              slur->setTrack(track());
-                              slur->setStartElement(this);
-                              //spanner was added in read114 with wrong tick
-                              score()->removeSpanner(slur);
-                              score()->addSpanner(slur);
-                              }
-                        else if (atype == "stop") {
-                              slur->setTick2(e.tick());
-                              slur->setTrack2(track());
-                              slur->setEndElement(this);
-                              Chord* start = static_cast<Chord*>(slur->startElement());
-                              if (start)
-                                    slur->setTrack(start->track());
-                              }
-                        else
-                              qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(atype));
-                        }
-                  e.readNext();
-                  }
             else if (tag == "noStem")
                   _noStem = e.readInt();
             else if (tag == "Arpeggio") {
