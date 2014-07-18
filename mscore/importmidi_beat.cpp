@@ -309,15 +309,18 @@ void findBeatLocations(
                   MidiOperations::HumanBeatData beatData = prepareHumanBeatData(
                                                 beatTimes, allChords, ticksPerSec, beatsInBar);
                   beatData.timeSig = barFraction;
+                  beatData.measureCount2xLess = false;
                   double matchRank = findMatchRank(beatData.beatSet, events,
                                                    levels, beatsInBar, ticksPerSec);
                   beatResults.insert({matchRank, beatData});
 
                               // second case - remove every 2nd beat
-                  removeEvery2ndBeat(beatData.beatSet);
-                  matchRank = findMatchRank(beatData.beatSet, events, levels,
+                  auto beatSetHalved = beatData.beatSet;
+                  removeEvery2ndBeat(beatSetHalved);
+                  beatData.measureCount2xLess = true;
+                  matchRank = findMatchRank(beatSetHalved, events, levels,
                                             beatsInBar, ticksPerSec);
-                  beatResults.insert({matchRank, beatData});
+                  beatResults.insert({matchRank, beatData});    // add full beat set - not halved
                   }
             }
 
@@ -326,6 +329,7 @@ void findBeatLocations(
             const MidiOperations::HumanBeatData &beatData = beatResults.begin()->second;
             setTimeSig(sigmap, beatData.timeSig);
             data->humanBeatData = beatData;
+            data->trackOpers.measureCount2xLess = beatData.measureCount2xLess;
             }
       else {
             const auto currentTimeSig = ReducedFraction(sigmap->timesig(0).timesig());
@@ -381,11 +385,13 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
                          ReducedFraction &lastTick)
       {
       const auto &opers = preferences.midiImportOperations;
-      const std::set<ReducedFraction> &beats = opers.data()->humanBeatData.beatSet;
+      std::set<ReducedFraction> beats = opers.data()->humanBeatData.beatSet;  // copy
       if (beats.empty())
             return;
 
       if (opers.data()->trackOpers.isHumanPerformance) {
+            if (opers.data()->trackOpers.measureCount2xLess)
+                  removeEvery2ndBeat(beats);
 
             Q_ASSERT_X(beats.size() > 1, "MidiBeat::adjustChordsToBeats", "Human beat count < 2");
 

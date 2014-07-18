@@ -166,6 +166,13 @@ static bool setOperationsFromFile(const QString &fileName, Opers &opers)
                         result = true;
                         }
                   }
+            else if (xml.name() == "MeasureCount2xLess") {
+                  const int value = readBoolFromXml(xml);
+                  if (value >= 0) {
+                        opers.measureCount2xLess = value;
+                        result = true;
+                        }
+                  }
             else if (xml.name() == "SplitStaff") {
                   const int value = readBoolFromXml(xml);
                   if (value >= 0) {
