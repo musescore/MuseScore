@@ -437,6 +437,7 @@ QVariant TimeSig::getProperty(P_ID propertyId) const
             case P_ID::GROUPS:             return QVariant::fromValue(groups());
             case P_ID::TIMESIG:            return QVariant::fromValue(_sig);
             case P_ID::TIMESIG_GLOBAL:     return QVariant::fromValue(globalSig());
+            case P_ID::TIMESIG_TYPE: return QVariant::fromValue(int(_timeSigType));
             default:
                   return Element::getProperty(propertyId);
             }
@@ -467,6 +468,9 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::TIMESIG_GLOBAL:
                   setGlobalSig(v.value<Fraction>());
                   break;
+            case P_ID::TIMESIG_TYPE:
+                  _timeSigType = (TimeSigType)(v.toInt());
+                  break;
             default:
                   if (!Element::setProperty(propertyId, v))
                         return false;
@@ -490,6 +494,7 @@ QVariant TimeSig::propertyDefault(P_ID id) const
             case P_ID::DENOMINATOR_STRING: return QString();
             case P_ID::TIMESIG:            return QVariant::fromValue(Fraction(4,4));
             case P_ID::TIMESIG_GLOBAL:     return QVariant::fromValue(Fraction(1,1));
+            case P_ID::TIMESIG_TYPE:       return int(TimeSigType::NORMAL);
             default:                   return Element::propertyDefault(id);
             }
       }
