@@ -567,7 +567,8 @@ void Score::renderStaff(EventMap* events, Staff* staff)
 
 void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swingUnit, int swingRatio)
       {
-      int tick = chord->tick();
+   //   int tick = chord->tick();
+      int tick = chord->rtick();
       int swingBeat = swingUnit * 2;
       qreal ticksDuration = (qreal)chord->actualTicks();
       qreal swingTickAdjust = ((qreal)swingBeat) * (((qreal)(swingRatio-50))/100.0);
@@ -594,7 +595,7 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
 bool Score::isSubdivided(ChordRest* chord, int swingUnit)
       {
       ChordRest* prev = prevChordRest(chord);
-
+      if (chord == 0) return false;
       if (chord->actualTicks() < swingUnit || prev->actualTicks() < swingUnit)
             return true;
       else
