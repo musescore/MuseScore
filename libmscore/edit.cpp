@@ -547,7 +547,11 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               undoChangeProperty(m, P_ID::TIMESIG_ACTUAL,  QVariant::fromValue(ns));
                         }
                   }
-            undoChangeProperty(ots, P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
+            int n = nstaves();
+            for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+                  TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
+                  undoChangeProperty(nsig, P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
+                  }
             }
       else {
             Score* score = rootScore();
