@@ -43,14 +43,14 @@
       <item row="1" column="0">
        <widget class="QPushButton" name="arpeggioButton">
         <property name="text">
-         <string>Arpeggio</string>
+         <string notr="true">Arpeggio</string>
         </property>
        </widget>
       </item>
       <item row="1" column="4" colspan="2">
        <widget class="QPushButton" name="glissandoButton">
         <property name="text">
-         <string>Glissando</string>
+         <string notr="true">Glissando</string>
         </property>
        </widget>
       </item>
@@ -77,7 +77,7 @@
       <item row="1" column="1">
        <widget class="QPushButton" name="tremoloButton">
         <property name="text">
-         <string>Tremolo</string>
+         <string notr="true">Tremolo</string>
         </property>
        </widget>
       </item>

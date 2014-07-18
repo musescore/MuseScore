@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>0</string>
+   <string notr="true">0</string>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -359,7 +359,7 @@
       <item row="5" column="0">
        <widget class="QPushButton" name="slurTie">
         <property name="text">
-         <string>SlurTie</string>
+         <string notr="true">SlurTie</string>
         </property>
        </widget>
       </item>

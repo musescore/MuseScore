@@ -109,7 +109,7 @@
         <item row="0" column="4">
          <widget class="QLabel" name="label_13">
           <property name="text">
-           <string>Lyrics:</string>
+           <string notr="true">Lyrics:</string>
           </property>
           <property name="indent">
            <number>5</number>
@@ -372,7 +372,7 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="3" rowspan="2">
+      <item>
        <widget class="QLabel" name="label_131">
         <property name="text">
          <string notr="true">Lyrics:</string>
@@ -385,7 +385,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1" rowspan="2">
+      <item>
        <widget class="QLabel" name="label_21">
         <property name="toolTip">
          <string notr="true"/>
