@@ -987,6 +987,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       createTimeSignatures(score);
       score->connectTies();
       MidiLyrics::setLyricsToScore(trackList);
+      MidiBeat::updateTempo(tracks, score);
       }
 
 void loadMidiData(MidiFile &mf)

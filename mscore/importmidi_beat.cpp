@@ -10,6 +10,10 @@
 #include "preferences.h"
 #include "libmscore/mscore.h"
 #include "libmscore/sig.h"
+#include "libmscore/tempotext.h"
+#include "libmscore/tempo.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
 
 #include <functional>
 
@@ -443,26 +447,26 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
 void updateFirstLastBeats(MidiOperations::HumanBeatData &beatData, const ReducedFraction &timeSig)
       {
       for (int i = 0; i != beatData.addedFirstBeats; ++i) {
-            
+
             Q_ASSERT_X(!beatData.beatSet.empty(), "MidiBeat::updateFirstLastBeats",
                        "Empty beat set after first beats deletion");
-            
+
             beatData.beatSet.erase(beatData.beatSet.begin());
             }
       for (int i = 0; i != beatData.addedLastBeats; ++i) {
-            
+
             Q_ASSERT_X(!beatData.beatSet.empty(), "MidiBeat::updateFirstLastBeats",
                        "Empty beat set after last beats deletion");
-            
+
             beatData.beatSet.erase(std::prev(beatData.beatSet.end()));
             }
-      
+
       const int beatsInBar = MidiBeat::beatsInBar(timeSig);
-      
+
       MidiBeat::addFirstBeats(beatData.beatSet, beatData.firstChordTick,
                               beatsInBar, beatData.addedFirstBeats);
       MidiBeat::addLastBeats(beatData.beatSet, beatData.lastChordTick,
-                             beatsInBar, beatData.addedLastBeats);      
+                             beatsInBar, beatData.addedLastBeats);
       }
 
 void setTimeSignature(TimeSigMap *sigmap)
@@ -475,6 +479,51 @@ void setTimeSignature(TimeSigMap *sigmap)
                                                         data->trackOpers.timeSigDenominator);
       setTimeSig(sigmap, timeSig);
       updateFirstLastBeats(data->humanBeatData, timeSig);
+      }
+
+void updateTempo(const std::multimap<int, MTrack> &tracks, Score *score)
+      {
+      const auto *data = preferences.midiImportOperations.data();
+      std::set<ReducedFraction> beats = data->humanBeatData.beatSet;    // copy
+      if (beats.empty())
+            return;
+
+      if (data->trackOpers.measureCount2xLess)
+            removeEvery2ndBeat(beats);
+
+      Q_ASSERT_X(beats.size() > 1, "MidiBeat::updateTempo", "Human beat count < 2");
+
+      double averageTempoFactor = 0.0;
+      int counter = 0;
+      auto it = beats.begin();
+      auto beatStart = *it;
+      const auto newBeatLen = ReducedFraction::fromTicks(MScore::division);
+
+      for (++it; it != beats.end(); ++it) {
+            const auto &beatEnd = *it;
+
+            Q_ASSERT_X(beatEnd > beatStart, "MidiBeat::detectTempoChanges",
+                       "Beat end <= beat start that is incorrect");
+
+            averageTempoFactor += (newBeatLen / (beatEnd - beatStart)).toDouble();
+            ++counter;
+            beatStart = beatEnd;
+            }
+      averageTempoFactor /= counter;
+
+      const double basicTempo = MidiTempo::findBasicTempo(tracks);
+      const double tempo = basicTempo * averageTempoFactor;
+      const int tempoInBpm = qRound(tempo * 60.0 / 2) * 2;
+
+      score->tempomap()->clear();
+      TempoText *tempoText = new TempoText(score);
+      tempoText->setTempo(tempo);
+      tempoText->setText(QString("<sym>noteQuarterUp</sym> = %1").arg(tempoInBpm));
+
+      tempoText->setTrack(0);
+      Segment *segment = score->firstSegment(Segment::Type::ChordRest);
+      segment->add(tempoText);
+      score->setTempo(0, tempo);
       }
 
 } // namespace MidiBeat
