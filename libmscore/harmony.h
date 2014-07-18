@@ -110,7 +110,9 @@ class Harmony : public Text {
 
       bool leftParen() const                   { return _leftParen;    }
       bool rightParen() const                  { return _rightParen;   }
-
+      void setLeftParen(bool leftParen)        { _leftParen = leftParen; }
+      void setRightParen(bool rightParen)      { _rightParen = rightParen; }
+      
       const ChordDescription* descr() const;
       const ChordDescription* descr(const QString&, const ParsedChord* pc = 0) const;
       const ChordDescription* getDescription();
