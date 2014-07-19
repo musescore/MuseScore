@@ -636,7 +636,7 @@ void TracksModel::setTrackShuffleIndex(int trackIndex, int newIndex)
       {
       if (!isTrackIndexValid(trackIndex) || trackIndex < 0)
             return;
-      _trackOpers.trackIndexAfterShuffle.setValue(trackIndex, newIndex);
+      _trackOpers.trackIndexAfterReorder.setValue(trackIndex, newIndex);
       }
 
 void TracksModel::updateCharset()
