@@ -349,8 +349,6 @@ void KeyEditor::addClicked()
       ks->setCustom(symbols);
       sp->append(ks, "custom");
       _dirty = true;
-      sp->updateGeometry();
-      _keyPalette->adjustSize();
       }
 
 //---------------------------------------------------------

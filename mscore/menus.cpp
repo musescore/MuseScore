@@ -195,8 +195,8 @@ Palette* MuseScore::newKeySigPalette()
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Key Signatures"));
       sp->setMag(1.0);
-      sp->setGrid(56, 45);
-      sp->setYOffset(1.0);
+      sp->setGrid(56, 64);
+      sp->setYOffset(0.0);
 
       for (int i = 0; i < 7; ++i) {
             KeySig* k = new KeySig(gscore);

@@ -486,7 +486,10 @@ PaletteCell* Palette::append(Element* s, const QString& name, QString tag, qreal
             cells.append(cell);
             idx = cells.size() - 1;
             }
-      return add(idx, s, name, tag, mag);
+      PaletteCell* pc = add(idx, s, name, tag, mag);
+      setFixedHeight(heightForWidth(width()));
+      updateGeometry();
+      return pc;
       }
 
 //---------------------------------------------------------
@@ -558,7 +561,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
          bgColor = preferences.fgColor;
 #if 1
       p.setBrush(bgColor);
-      p.drawRoundedRect(0, 0, width()-3, height(), 2, 2);
+      p.drawRoundedRect(0, 0, width(), height(), 2, 2);
 #else
       p.fillRect(event->rect(), QColor(0xf6, 0xf0, 0xda));
 #endif
@@ -598,10 +601,15 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             QRect r = idxRect(idx);
             QRect rShift = r.translated(0, yoffset);
             p.setPen(pen);
-            if (idx == selectedIdx)
-                  p.fillRect(r, MScore::selectColor[0].lighter(225));
-            else if (idx == currentIdx)
-                  p.fillRect(r, bgColor.lighter(200));
+            QColor c(MScore::selectColor[0]);
+            if (idx == selectedIdx) {
+                  c.setAlpha(100);
+                  p.fillRect(r, c);
+                  }
+            else if (idx == currentIdx) {
+                  c.setAlpha(50);
+                  p.fillRect(r, c);
+                  }
             if (cells.isEmpty() || cells[idx] == 0)
                   continue;
 
@@ -1364,7 +1372,7 @@ void PaletteScrollArea::resizeEvent(QResizeEvent* re)
 
       Palette* palette = static_cast<Palette*>(widget());
       int h = palette->heightForWidth(width());
-      palette->resize(QSize(width(), h));
+      palette->resize(QSize(width() - 6, h));
       if (_restrictHeight) {
             setMaximumHeight(h+6);
             }
