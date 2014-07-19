@@ -26,9 +26,13 @@ void adjustChordsToBeats(
 
 void setTimeSignature(TimeSigMap *sigmap);
 
-void updateTempo(const std::multimap<int, MTrack> &tracks, Score *score);
-
 } // namespace MidiBeat
+
+namespace MidiTempo {
+
+void setTempo(const std::multimap<int, MTrack> &tracks, Score *score);
+
+} // namespace MidiTempo
 } // namespace Ms
 
 
