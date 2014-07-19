@@ -594,8 +594,9 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
 
 bool Score::isSubdivided(ChordRest* chord, int swingUnit)
       {
+      if (!chord)
+            return false;
       ChordRest* prev = prevChordRest(chord);
-      if (chord == 0) return false;
       if (chord->actualTicks() < swingUnit || prev->actualTicks() < swingUnit)
             return true;
       else
