@@ -714,23 +714,24 @@ InspectorEmpty::InspectorEmpty(QWidget* parent)
 InspectorBarLine::InspectorBarLine(QWidget* parent)
    : InspectorBase(parent)
       {
-      static const char* buildinSpanNames[BARLINE_BUILTIN_SPANS] = {
+      static const char* buildinSpanNames[BARLINE_BUILTIN_SPANS+1] = {
             QT_TRANSLATE_NOOP("inspector", "Staff default"),
-            QT_TRANSLATE_NOOP("inspector", "Tick"),
-            QT_TRANSLATE_NOOP("inspector", "Tick alt."),
-            QT_TRANSLATE_NOOP("inspector", "Short"),
-            QT_TRANSLATE_NOOP("inspector", "Short alt.")
+            QT_TRANSLATE_NOOP("inspector", "Tick 1"),
+            QT_TRANSLATE_NOOP("inspector", "Tick 2"),
+            QT_TRANSLATE_NOOP("inspector", "Short 1"),
+            QT_TRANSLATE_NOOP("inspector", "Short 2"),
+            QT_TRANSLATE_NOOP("inspector", "[Custom]")
             };
 
       BarLineType types[8] = {
             BarLineType::NORMAL,
-            BarLineType::DOUBLE,
-            BarLineType::START_REPEAT,
-            BarLineType::END_REPEAT,
             BarLineType::BROKEN,
+            BarLineType::DOTTED,
+            BarLineType::DOUBLE,
             BarLineType::END,
+            BarLineType::START_REPEAT,          // repeat types cannot be set for a single bar line
+            BarLineType::END_REPEAT,            // of a multi-staff scores
             BarLineType::END_START_REPEAT,
-            BarLineType::DOTTED
             };
 
       e.setupUi(addWidget());
@@ -760,19 +761,113 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
 //   setElement
 //---------------------------------------------------------
 
+#include <QStandardItem>
+
 void InspectorBarLine::setElement()
       {
       InspectorBase::setElement();
-//      BarLine* bl = static_cast<BarLine*>(inspector->element());
+      BarLine* bl = static_cast<BarLine*>(inspector->element());
+
+      // enable / disable individual type combo items according to score and selected bar line status
+      bool bMultiStaff  = bl->score()->nstaves() > 1;
+      BarLineType blt   = bl->barLineType();
+      bool bIsRepeat    = (blt == BarLineType::START_REPEAT
+            || blt == BarLineType::END_REPEAT
+            || blt == BarLineType::END_START_REPEAT);
+      // scan type combo items
+      const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(b.type->model());
+      for (int i = 0; i < b.type->count(); i++) {
+            BarLineType type = (BarLineType)(b.type->itemData(i).toInt());
+            QStandardItem* item = model->item(i);
+            // if combo item is repeat type, sould be disabled for multi-staff scores
+            if (type == BarLineType::START_REPEAT
+                        || type == BarLineType::END_REPEAT
+                        || type == BarLineType::END_START_REPEAT) {
+                  // disable / enable
+                  item->setFlags(bMultiStaff ?
+                        item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled) :
+                        item->flags() | (Qt::ItemFlags)(Qt::ItemIsSelectable|Qt::ItemIsEnabled) );
+/*                  visually disable by greying out (currently unnecessary, but kept for future reference)
+                  item->setData(bMultiStaff ?
+                              b.type->palette().color(QPalette::Disabled, QPalette::Text) :
+                              QVariant(),       // clear item data in order to use default color
+                        Qt::TextColorRole); */
+                  }
+            // if combo item is NOT repeat type, should be disabled if selected bar line is a repeat
+            else {
+                  item->setFlags(bIsRepeat ?
+                        item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled) :
+                        item->flags() | (Qt::ItemFlags)(Qt::ItemIsSelectable|Qt::ItemIsEnabled) );
+                  }
+            }
 //      Measure* m  = static_cast<Segment*>(bl->parent())->measure();
+      // set span type
+      if (!bl->customSpan())
+            b.spanType->setCurrentIndex(0);           // staff default
+      else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_TICK1_FROM  && bl->spanTo() == BARLINE_SPAN_TICK1_TO)
+            b.spanType->setCurrentIndex(1);
+      else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_TICK2_FROM  && bl->spanTo() == BARLINE_SPAN_TICK2_TO)
+            b.spanType->setCurrentIndex(2);
+      else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_SHORT1_FROM && bl->spanTo() == BARLINE_SPAN_SHORT1_TO)
+            b.spanType->setCurrentIndex(3);
+      else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_SHORT2_FROM && bl->spanTo() == BARLINE_SPAN_SHORT2_TO)
+            b.spanType->setCurrentIndex(4);
+      else
+            b.spanType->setCurrentIndex(5);           // custom
+      // make custom span type unselectable (it is informative only)
+      model = qobject_cast<const QStandardItemModel*>(b.spanType->model());
+      QStandardItem* item = model->item(5);
+      item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
       }
 
 //---------------------------------------------------------
 //   spanTypeActivated
 //---------------------------------------------------------
 
-void InspectorBarLine::spanTypeActivated(int /*idx*/)
+void InspectorBarLine::spanTypeActivated(int idx)
       {
+      BarLine* bl = static_cast<BarLine*>(inspector->element());
+      Score*      score = bl->score();
+pippo();
+      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
+                                                      // do not set element values again
+      score->startCmd();
+
+      int spanStaves, spanFrom, spanTo;
+      if (idx == 0) {                 // staff default selected
+            if(bl->staff()) {                               // if there is a staff
+                  Staff* st = bl->staff();                  // use its span values as selected values
+                  spanStaves  = st->barLineSpan();
+                  spanFrom    = st->barLineFrom();
+                  spanTo      = st->barLineTo();
+                  }
+            else {                                          // if no staff
+                  spanStaves  = 1;                          // use values for a 'standard' staff
+                  spanFrom    = 0;
+                  spanTo      = DEFAULT_BARLINE_TO;
+                  }
+            }
+      else {                              // specific value selected
+            if (idx == BARLINE_BUILTIN_SPANS+1) {      // selecting custom has no effect:
+                  spanStaves  = bl->span();                 // use values from bar line itself
+                  spanFrom    = bl->spanFrom();
+                  spanTo      = bl->spanTo();
+                  }
+            else {
+                  spanStaves  = builtinSpans[currSpan][0];  // use values from selected combo item
+                  spanFrom    = builtinSpans[currSpan][1];
+                  spanTo      = builtinSpans[currSpan][2];
+                  }
+            }
+      // if combo values different from bar line's, set them
+      if(bl->span() != spanStaves || bl->spanFrom() != spanFrom || bl->spanTo() != spanTo)
+            score->undoChangeSingleBarLineSpan(bl, spanStaves, spanFrom, spanTo);
+      // if value reverted to staff default, update combo box
+      if(!bl->customSpan())
+            span->setCurrentIndex(0);
+
+      score->endCmd();
+      mscore->endCmd();
       }
 
 //---------------------------------------------------------
