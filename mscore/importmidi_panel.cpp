@@ -169,14 +169,14 @@ void ImportMidiPanel::hidePanel()
             }
       }
 
-void ImportMidiPanel::setShuffledIndexes()
+void ImportMidiPanel::setReorderedIndexes()
       {
       auto &opers = preferences.midiImportOperations;
       for (int i = 0; i != _model->trackCount(); ++i) {
             const int trackRow = _model->rowFromTrackIndex(i);
             const int reorderedRow = _ui->tracksView->verticalHeader()->logicalIndex(trackRow);
             const int reorderedIndex = _model->trackIndexFromRow(reorderedRow);
-            opers.data()->trackOpers.trackIndexAfterShuffle.setValue(reorderedIndex, i);
+            opers.data()->trackOpers.trackIndexAfterReorder.setValue(reorderedIndex, i);
             }
       }
 
@@ -197,7 +197,7 @@ void ImportMidiPanel::applyMidiImport()
             }
 
       opers.data()->trackOpers = _model->trackOpers();
-      setShuffledIndexes();
+      setReorderedIndexes();
 
       mscore->openScore(_midiFile);
       saveTableViewState();

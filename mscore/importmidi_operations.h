@@ -83,7 +83,7 @@ struct Opers
       TimeSigDenominator timeSigDenominator = TimeSigDenominator::_4;
 
                   // operations for individual tracks
-      TrackOp<int> trackIndexAfterShuffle = 0;
+      TrackOp<int> trackIndexAfterReorder = 0;
       TrackOp<bool> doImport = true;
       TrackOp<QuantValue> quantValue = Quantize::defaultQuantValueFromPreferences();
       TrackOp<bool> searchTuplets = true;

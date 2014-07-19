@@ -661,9 +661,9 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   if (data->processingsOfOpenedFile > 0) {
                         if (data->trackOpers.doImport.value(trackIndex)) {
                               track.indexOfOperation = trackIndex;
-                              const int movedIndex
-                                    = data->trackOpers.trackIndexAfterShuffle.value(trackIndex);
-                              tracks.insert({movedIndex, track});
+                              const int reorderedIndex
+                                    = data->trackOpers.trackIndexAfterReorder.value(trackIndex);
+                              tracks.insert({reorderedIndex, track});
                               }
                         }
                   else {            // if it is an initial track-list query from MIDI import panel
