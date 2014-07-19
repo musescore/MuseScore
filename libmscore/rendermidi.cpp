@@ -567,7 +567,18 @@ void Score::renderStaff(EventMap* events, Staff* staff)
 
 void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swingUnit, int swingRatio)
       {
-      int tick = chord->tick();
+      int tick = chord->rtick();
+      // adjust for anacrusis
+     Measure* cm = chord->measure();
+     MeasureBase* pm = cm->prev();
+     Element::Type pt = pm ? pm->type() : Element::Type::INVALID;
+     if (!pm || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
+         || pt == Element::Type::VBOX || pt == Element::Type::HBOX
+         || pt == Element::Type::FBOX || pt == Element::Type::TBOX) {
+           int offset = (cm->timesig() - cm->len()).ticks();
+           if (offset > 0)
+                 tick += offset;
+           }
       int swingBeat = swingUnit * 2;
       qreal ticksDuration = (qreal)chord->actualTicks();
       qreal swingTickAdjust = ((qreal)swingBeat) * (((qreal)(swingRatio-50))/100.0);
@@ -593,8 +604,11 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
 
 bool Score::isSubdivided(ChordRest* chord, int swingUnit)
       {
+      if (!chord)
+            return false;
       ChordRest* prev = prevChordRest(chord);
-
+      if (!prev)
+            return false;
       if (chord->actualTicks() < swingUnit || prev->actualTicks() < swingUnit)
             return true;
       else
