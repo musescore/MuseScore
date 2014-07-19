@@ -1390,6 +1390,11 @@ void Score::doLayout()
             }
 
       _layoutAll = false;
+            
+      // _mscVersion is used during read and first layout
+      // but then it's used for drag and drop and should be set to new version
+      if (_mscVersion <= 114)
+            _mscVersion = MSCVERSION;     // for later drag & drop usage
       }
 
 //---------------------------------------------------------

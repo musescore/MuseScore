@@ -732,8 +732,6 @@ Score::FileError Score::read114(XmlReader& e)
                   }
             }
 
-//      _mscVersion = MSCVERSION;     // for later drag & drop usage
-
       fixTicks();
       rebuildMidiMapping();
       updateChannel();
