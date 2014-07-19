@@ -270,7 +270,7 @@ class InspectorBarLine : public InspectorBase {
       static int     builtinSpans[BARLINE_BUILTIN_SPANS][3];
 
    private slots:
-      void spanTypeActivated(int);
+      void spanTypeActivated(int idx);
       void resetSpanType();
 
    public:
