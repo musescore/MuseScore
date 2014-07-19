@@ -36,7 +36,7 @@ bool isTupletAllowed(const TupletInfo &tupletInfo)
       }
                   // for all tuplets
       const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      const int minAllowedNoteCount = (opers.isHumanPerformance)
+      const int minAllowedNoteCount = (opers.isHumanPerformance.value())
                   ? tupletLimits(tupletInfo.tupletNumber).minNoteCountHuman
                   : tupletLimits(tupletInfo.tupletNumber).minNoteCount;
       if ((int)tupletInfo.chords.size() < minAllowedNoteCount)

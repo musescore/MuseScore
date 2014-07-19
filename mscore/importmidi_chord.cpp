@@ -200,7 +200,7 @@ void collectChords(std::multimap<int, MTrack> &tracks)
             const auto &opers = preferences.midiImportOperations.data()->trackOpers;
             const auto minAllowedDur = minAllowedDuration();
 
-            const auto threshTime = (opers.isHumanPerformance)
+            const auto threshTime = (opers.isHumanPerformance.value())
                                           ? minAllowedDur * 2 : minAllowedDur / 2;
             const auto fudgeTime = threshTime / 4;
             const auto threshExtTime = threshTime / 2;
