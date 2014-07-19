@@ -426,8 +426,19 @@ void removeIntersection(
       if (it != chords.end()) {
             const auto ioi = it->first - chordIt->first;
             const auto cross = offTime - it->first;
-            if (cross > ReducedFraction(0, 1) && cross < ioi / 2 && cross < basicQuant / 2)
-                  offTime = it->first;
+
+            if (it->second.isInTuplet) {
+                              // while we don't split tuplet into voices we don't want to have
+                              // note intersections smaller than tuplet note length
+                  const auto &tuplet = it->second.tuplet->second;
+                  const auto tupletNoteLen = tuplet.len / tuplet.tupletNumber;
+                  if (cross > ReducedFraction(0, 1) && cross < tupletNoteLen)
+                        offTime = it->first;
+                  }
+            else {
+                  if (cross > ReducedFraction(0, 1) && cross < ioi / 2 && cross < basicQuant / 2)
+                        offTime = it->first;
+                  }
             }
       }
 
