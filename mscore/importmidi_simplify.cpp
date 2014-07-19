@@ -115,7 +115,7 @@ void lengthenNote(
 
             if (noteDurationCount + restDurationCount
                               < minNoteDurationCount + minRestDurationCount) {
-                  if (opers.isHumanPerformance || noteDurationCount <= 1.5) {
+                  if (opers.isHumanPerformance.value() || noteDurationCount <= 1.5) {
                         minNoteDurationCount = noteDurationCount;
                         minRestDurationCount = restDurationCount;
                         bestOffTime = offTime;
@@ -146,7 +146,7 @@ void lengthenNote(
       // discard change because it silently reduces duration accuracy
       // without significant improvement of readability
 
-      if (!opers.isHumanPerformance
+      if (!opers.isHumanPerformance.value()
                   && (origNoteDurations.size() + origRestDurations.size())
                        - (minNoteDurationCount + minRestDurationCount) <= 1
                   && !hasComplexBeamedDurations(origNoteDurations)

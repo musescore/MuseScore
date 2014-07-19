@@ -23,18 +23,17 @@ static int readBoolFromXml(QXmlStreamReader &xml)
 
 // Terms: <name attribute="value">text</name>
 
-static bool setOperationsFromFile(const QString &fileName, Opers &opers)
+static void setOperationsFromFile(const QString &fileName, Opers &opers)
       {
       if (fileName.isEmpty())
-            return false;
-      
+            return;
+
       QFile file(fileName);
       if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qDebug("Load MIDI import operations from file: cannot open input file");
-            return false;
+            return;
             }
 
-      bool result = false;
       QXmlStreamReader xml(&file);
 
       while (!xml.atEnd() && !xml.hasError()) {
@@ -55,28 +54,22 @@ static bool setOperationsFromFile(const QString &fileName, Opers &opers)
                         if (ok) {
                               switch (index) {
                                     case 0:
-                                          opers.quantValue.setDefaultValue(QuantValue::Q_4);
-                                          result = true;
+                                          opers.quantValue.setDefaultValue(QuantValue::Q_4, false);
                                           break;
                                     case 1:
-                                          opers.quantValue.setDefaultValue(QuantValue::Q_8);
-                                          result = true;
+                                          opers.quantValue.setDefaultValue(QuantValue::Q_8, false);
                                           break;
                                     case 2:
-                                          opers.quantValue.setDefaultValue(QuantValue::Q_16);
-                                          result = true;
+                                          opers.quantValue.setDefaultValue(QuantValue::Q_16, false);
                                           break;
                                     case 3:
-                                          opers.quantValue.setDefaultValue(QuantValue::Q_32);
-                                          result = true;
+                                          opers.quantValue.setDefaultValue(QuantValue::Q_32, false);
                                           break;
                                     case 4:
-                                          opers.quantValue.setDefaultValue(QuantValue::Q_64);
-                                          result = true;
+                                          opers.quantValue.setDefaultValue(QuantValue::Q_64, false);
                                           break;
                                     case 5:
-                                          opers.quantValue.setDefaultValue(QuantValue::Q_128);
-                                          result = true;
+                                          opers.quantValue.setDefaultValue(QuantValue::Q_128, false);
                                           break;
                                     default:
                                           qDebug("Load MIDI import operations from file: "
@@ -94,20 +87,16 @@ static bool setOperationsFromFile(const QString &fileName, Opers &opers)
                         if (ok) {
                               switch (index) {
                                     case 0:
-                                          opers.maxVoiceCount.setDefaultValue(VoiceCount::V_1);
-                                          result = true;
+                                          opers.maxVoiceCount.setDefaultValue(VoiceCount::V_1, false);
                                           break;
                                     case 1:
-                                          opers.maxVoiceCount.setDefaultValue(VoiceCount::V_2);
-                                          result = true;
+                                          opers.maxVoiceCount.setDefaultValue(VoiceCount::V_2, false);
                                           break;
                                     case 2:
-                                          opers.maxVoiceCount.setDefaultValue(VoiceCount::V_3);
-                                          result = true;
+                                          opers.maxVoiceCount.setDefaultValue(VoiceCount::V_3, false);
                                           break;
                                     case 3:
-                                          opers.maxVoiceCount.setDefaultValue(VoiceCount::V_4);
-                                          result = true;
+                                          opers.maxVoiceCount.setDefaultValue(VoiceCount::V_4, false);
                                           break;
                                     default:
                                           qDebug("Load MIDI import operations from file: "
@@ -119,101 +108,74 @@ static bool setOperationsFromFile(const QString &fileName, Opers &opers)
                   }
             else if (xml.name() == "Duplets") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.search2plets.setDefaultValue(value);
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.search2plets.setDefaultValue(value, false);
                   }
             else if (xml.name() == "Triplets") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.search3plets.setDefaultValue(value);
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.search3plets.setDefaultValue(value, false);
                   }
             else if (xml.name() == "Quadruplets") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.search4plets.setDefaultValue(value);
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.search4plets.setDefaultValue(value, false);
                   }
             else if (xml.name() == "Quintuplets") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.search5plets.setDefaultValue(value);
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.search5plets.setDefaultValue(value, false);
                   }
             else if (xml.name() == "Septuplets") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.search7plets.setDefaultValue(value);
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.search7plets.setDefaultValue(value, false);
                   }
             else if (xml.name() == "Nonuplets") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.search9plets.setDefaultValue(value);
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.search9plets.setDefaultValue(value, false);
                   }
             else if (xml.name() == "HumanPerformance") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.isHumanPerformance = value;
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.isHumanPerformance.setDefaultValue(value, false);
                   }
             else if (xml.name() == "MeasureCount2xLess") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.measureCount2xLess = value;
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.measureCount2xLess.setDefaultValue(value, false);
                   }
             else if (xml.name() == "SplitStaff") {
                   const int value = readBoolFromXml(xml);
                   if (value >= 0) {
-                        opers.doStaffSplit.setDefaultValue(value);
-                        result = true;
+                        opers.doStaffSplit.setDefaultValue(value, false);
                         }
                   }
             else if (xml.name() == "ClefChanges") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.changeClef.setDefaultValue(value);
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.changeClef.setDefaultValue(value, false);
                   }
             else if (xml.name() == "SimplifyDurations") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.simplifyDurations.setDefaultValue(value);
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.simplifyDurations.setDefaultValue(value, false);
                   }
             else if (xml.name() == "ShowStaccato") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.showStaccato.setDefaultValue(value);
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.showStaccato.setDefaultValue(value, false);
                   }
             else if (xml.name() == "DottedNotes") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.useDots.setDefaultValue(value);
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.useDots.setDefaultValue(value, false);
                   }
             else if (xml.name() == "RecognizePickupBar") {
                   const int value = readBoolFromXml(xml);
-                  if (value >= 0) {
-                        opers.searchPickupMeasure = value;
-                        result = true;
-                        }
+                  if (value >= 0)
+                        opers.searchPickupMeasure.setDefaultValue(value, false);
                   }
             else if (xml.name() == "Swing") {
                   xml.readNext();
@@ -223,16 +185,13 @@ static bool setOperationsFromFile(const QString &fileName, Opers &opers)
                         if (ok) {
                               switch (index) {
                                     case 0:
-                                          opers.swing.setDefaultValue(Swing::NONE);
-                                          result = true;
+                                          opers.swing.setDefaultValue(Swing::NONE, false);
                                           break;
                                     case 1:
-                                          opers.swing.setDefaultValue(Swing::SHUFFLE);
-                                          result = true;
+                                          opers.swing.setDefaultValue(Swing::SHUFFLE, false);
                                           break;
                                     case 2:
-                                          opers.swing.setDefaultValue(Swing::SWING);
-                                          result = true;
+                                          opers.swing.setDefaultValue(Swing::SWING, false);
                                           break;
                                     default:
                                           qDebug("Load MIDI import operations from file: "
@@ -245,11 +204,10 @@ static bool setOperationsFromFile(const QString &fileName, Opers &opers)
             }
       if (xml.hasError()) {
             qDebug("Load MIDI import operations from file: cannot parse input file");
-            return false;
+            return;
             }
 
       xml.clear();      // remove any device() or data from the reader; reset state to initial
-      return result;
       }
 
 //-------------------------------------------------------------------------------------------
@@ -272,10 +230,10 @@ const FileData* Data::data() const
 
 void Data::addNewMidiFile(const QString &fileName)
       {
+      if (_data.find(fileName) != _data.end())
+            return;
       FileData fileData;
-      if (setOperationsFromFile(_midiOperationsFile, fileData.trackOpers))
-            fileData.canRedefineDefaultsLater = false;
-      
+      setOperationsFromFile(_midiOperationsFile, fileData.trackOpers);
       _data.insert({fileName, fileData});
       }
 

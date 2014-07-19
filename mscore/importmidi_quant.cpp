@@ -396,13 +396,12 @@ void setIfHumanPerformance(
       if (allChords.empty())
             return;
       const bool isHuman = isHumanPerformance(allChords, sigmap);
-      const bool canSetDefaults = preferences.midiImportOperations.data()->canRedefineDefaultsLater;
       auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      if (canSetDefaults)
-            opers.isHumanPerformance = isHuman;
+      if (opers.isHumanPerformance.canRedefineDefaultLater())
+            opers.isHumanPerformance.setDefaultValue(isHuman);
 
       if (isHuman) {
-            if (canSetDefaults)
+            if (opers.quantValue.canRedefineDefaultLater())
                   opers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_8);
             const double ticksPerSec = MidiTempo::findBasicTempo(tracks) * MScore::division;
             MidiBeat::findBeatLocations(allChords, sigmap, ticksPerSec);      // and set time sig
@@ -1006,7 +1005,7 @@ int findLastChordPosition(const std::vector<QuantData> &quantData)
 void applyDynamicProgramming(std::vector<QuantData> &quantData)
       {
       const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      const bool isHuman = opers.isHumanPerformance;
+      const bool isHuman = opers.isHumanPerformance.value();
       const double MERGE_PENALTY_COEFF = 5.0;
 
       for (int chordIndex = 0; chordIndex != (int)quantData.size(); ++chordIndex) {

@@ -382,8 +382,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   bool isForAllTracksOnly() const { return true; }
                   QVariant value(int /*trackIndex*/) const
                         {
-                        const int numeratorIndex = (int)_opers.timeSigNumerator;
-                        const int denominatorIndex = (int)_opers.timeSigDenominator;
+                        const int numeratorIndex = (int)_opers.timeSigNumerator.value();
+                        const int denominatorIndex = (int)_opers.timeSigDenominator.value();
 
                         return _values[numeratorIndex] + " / " + _values[_numeratorCount + denominatorIndex];
                         }
@@ -395,12 +395,12 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                                    "Invalid size of the time signature value list");
 
                         bool ok = false;
-                        _opers.timeSigNumerator = (MidiOperations::TimeSigNumerator)list[0].toInt(&ok);
+                        _opers.timeSigNumerator.setValue((MidiOperations::TimeSigNumerator)list[0].toInt(&ok));
 
                         Q_ASSERT_X(ok, "Midi import operations", "Invalid numerator value");
 
                         ok = false;
-                        _opers.timeSigDenominator = (MidiOperations::TimeSigDenominator)list[1].toInt(&ok);
+                        _opers.timeSigDenominator.setValue((MidiOperations::TimeSigDenominator)list[1].toInt(&ok));
 
                         Q_ASSERT_X(ok, "Midi import operations", "Invalid denominator value");
 
@@ -409,11 +409,11 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         {
                         auto list = QStringList("__TimeSig__");
                         list.append("__Numerator__");
-                        list.append(QString::number((int)_opers.timeSigNumerator));
+                        list.append(QString::number((int)_opers.timeSigNumerator.value()));
                         for (int i = 0; i != _numeratorCount; ++i)
                               list.append(_values[i]);
                         list.append("__Denominator__");
-                        list.append(QString::number((int)_opers.timeSigDenominator));
+                        list.append(QString::number((int)_opers.timeSigDenominator.value()));
                         for (int i = _numeratorCount; i != _values.size(); ++i)
                               list.append(_values[i]);
                         return list;
@@ -433,11 +433,11 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   bool isForAllTracksOnly() const { return true; }
                   QVariant value(int /*trackIndex*/) const
                         {
-                        return _opers.measureCount2xLess;
+                        return _opers.measureCount2xLess.value();
                         }
                   void setValue(const QVariant &value, int /*trackIndex*/)
                         {
-                        _opers.measureCount2xLess = value.toBool();
+                        _opers.measureCount2xLess.setValue(value.toBool());
                         }
                   };
             _columns.push_back(std::unique_ptr<Column>(new MeasureCount2xLess(_trackOpers)));
@@ -453,11 +453,11 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             bool isForAllTracksOnly() const { return true; }
             QVariant value(int /*trackIndex*/) const
                   {
-                  return _opers.isHumanPerformance;
+                  return _opers.isHumanPerformance.value();
                   }
             void setValue(const QVariant &value, int /*trackIndex*/)
                   {
-                  _opers.isHumanPerformance = value.toBool();
+                  _opers.isHumanPerformance.setValue(value.toBool());
                   }
             };
       _columns.push_back(std::unique_ptr<Column>(new Human(_trackOpers)));
@@ -563,11 +563,11 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   bool isForAllTracksOnly() const { return true; }
                   QVariant value(int /*trackIndex*/) const
                         {
-                        return _opers.showTempoText;
+                        return _opers.showTempoText.value();
                         }
                   void setValue(const QVariant &value, int /*trackIndex*/)
                         {
-                        _opers.showTempoText = value.toBool();
+                        _opers.showTempoText.setValue(value.toBool());
                         }
                   };
             _columns.push_back(std::unique_ptr<Column>(new ShowTempoText(_trackOpers)));
@@ -583,11 +583,11 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             bool isForAllTracksOnly() const { return true; }
             QVariant value(int /*trackIndex*/) const
                   {
-                  return _opers.searchPickupMeasure;
+                  return _opers.searchPickupMeasure.value();
                   }
             void setValue(const QVariant &value, int /*trackIndex*/)
                   {
-                  _opers.searchPickupMeasure = value.toBool();
+                  _opers.searchPickupMeasure.setValue(value.toBool());
                   }
             };
       _columns.push_back(std::unique_ptr<Column>(new PickupBar(_trackOpers)));

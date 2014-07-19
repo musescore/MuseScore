@@ -30,8 +30,8 @@ template<typename T>
 class TrackOp
       {
    public:
-      TrackOp(T defaultValue)
-            : _operation{{-1, defaultValue}}
+      explicit TrackOp(T defaultValue)
+            : _operation{{-1, defaultValue}}, _canRedefineDefaultLater(true)
             {}
 
       T value(int trackIndex) const
@@ -55,14 +55,72 @@ class TrackOp
             return _operation.find(-1)->second;
             }
 
-      void setDefaultValue(T value)
+      bool canRedefineDefaultLater() const { return _canRedefineDefaultLater; }
+
+      void setDefaultValue(T value, bool canRedefineDefaultLater = true)
             {
+            Q_ASSERT_X(_canRedefineDefaultLater, "TrackOp::setDefaultValue",
+                       "Cannot set default value");
+
+            if (!_canRedefineDefaultLater)
+                  return;
             _operation[-1] = value;
+            _canRedefineDefaultLater = canRedefineDefaultLater;
             }
    private:
                   // <track index, operation value>
                   // if track index == -1 then it's default value (for all tracks)
       std::map<int, T> _operation;
+      bool _canRedefineDefaultLater;
+      };
+
+template<typename T>
+class Op
+      {
+   public:
+
+      explicit Op(T defaultValue)
+            : _value(defaultValue), _valueWasSet(false),
+              _defaultValue{defaultValue}, _canRedefineDefaultLater(true)
+            {}
+
+      T value() const
+            {
+            if (!_valueWasSet)
+                  return _defaultValue;
+            return _value;
+            }
+
+      void setValue(T value)
+            {
+            if (value != this->value()) {
+                  _value = value;
+                  _valueWasSet = true;
+                  }
+            }
+
+      T defaultValue() const
+            {
+            return _defaultValue;
+            }
+
+      bool canRedefineDefaultLater() const { return _canRedefineDefaultLater; }
+
+      void setDefaultValue(T value, bool canRedefineDefaultLater = true)
+            {
+            Q_ASSERT_X(_canRedefineDefaultLater, "Op::setDefaultValue",
+                       "Cannot set default value");
+
+            if (!_canRedefineDefaultLater)
+                  return;
+            _defaultValue = value;
+            _canRedefineDefaultLater = canRedefineDefaultLater;
+            }
+   private:
+      T _value;
+      bool _valueWasSet;
+      T _defaultValue;
+      bool _canRedefineDefaultLater;
       };
 
 // values that can be changed
@@ -70,38 +128,38 @@ class TrackOp
 struct Opers
       {
                   // data that cannot be changed by the user
-      TrackOp<std::string> staffName = std::string();       // will be converted to unicode later
-      TrackOp<QString> instrumentName = QString();
-      TrackOp<bool> isDrumTrack = false;
+      TrackOp<std::string> staffName = TrackOp<std::string>(std::string());       // will be converted to unicode later
+      TrackOp<QString> instrumentName = TrackOp<QString>(QString());
+      TrackOp<bool> isDrumTrack = TrackOp<bool>(false);
 
                   // operations for all tracks
-      bool isHumanPerformance = false;
-      bool searchPickupMeasure = true;
-      bool measureCount2xLess = false;
-      bool showTempoText = true;
-      TimeSigNumerator timeSigNumerator = TimeSigNumerator::_4;
-      TimeSigDenominator timeSigDenominator = TimeSigDenominator::_4;
+      Op<bool> isHumanPerformance = Op<bool>(false);
+      Op<bool> searchPickupMeasure = Op<bool>(true);
+      Op<bool> measureCount2xLess = Op<bool>(false);
+      Op<bool> showTempoText = Op<bool>(true);
+      Op<TimeSigNumerator> timeSigNumerator = Op<TimeSigNumerator>(TimeSigNumerator::_4);
+      Op<TimeSigDenominator> timeSigDenominator = Op<TimeSigDenominator>(TimeSigDenominator::_4);
 
                   // operations for individual tracks
-      TrackOp<int> trackIndexAfterReorder = 0;
-      TrackOp<bool> doImport = true;
-      TrackOp<QuantValue> quantValue = Quantize::defaultQuantValueFromPreferences();
-      TrackOp<bool> searchTuplets = true;
-      TrackOp<bool> search2plets = false;
-      TrackOp<bool> search3plets = true;
-      TrackOp<bool> search4plets = true;
-      TrackOp<bool> search5plets = true;
-      TrackOp<bool> search7plets = true;
-      TrackOp<bool> search9plets = true;
-      TrackOp<bool> useDots = true;
-      TrackOp<bool> simplifyDurations = true;   // for drum tracks - remove rests and ties
-      TrackOp<bool> showStaccato = true;
-      TrackOp<bool> doStaffSplit = false;       // for drum tracks - split by voices
-      TrackOp<VoiceCount> maxVoiceCount = VoiceCount::V_4;
-      TrackOp<bool> changeClef = true;
-      TrackOp<Swing> swing = Swing::NONE;
-      TrackOp<bool> removeDrumRests = true;
-      TrackOp<int> lyricTrackIndex = -1;        // empty lyric
+      TrackOp<int> trackIndexAfterReorder = TrackOp<int>(0);
+      TrackOp<bool> doImport = TrackOp<bool>(true);
+      TrackOp<QuantValue> quantValue = TrackOp<QuantValue>(Quantize::defaultQuantValueFromPreferences());
+      TrackOp<bool> searchTuplets = TrackOp<bool>(true);
+      TrackOp<bool> search2plets = TrackOp<bool>(false);
+      TrackOp<bool> search3plets = TrackOp<bool>(true);
+      TrackOp<bool> search4plets = TrackOp<bool>(true);
+      TrackOp<bool> search5plets = TrackOp<bool>(true);
+      TrackOp<bool> search7plets = TrackOp<bool>(true);
+      TrackOp<bool> search9plets = TrackOp<bool>(true);
+      TrackOp<bool> useDots = TrackOp<bool>(true);
+      TrackOp<bool> simplifyDurations = TrackOp<bool>(true);   // for drum tracks - remove rests and ties
+      TrackOp<bool> showStaccato = TrackOp<bool>(true);
+      TrackOp<bool> doStaffSplit = TrackOp<bool>(false);       // for drum tracks - split by voices
+      TrackOp<VoiceCount> maxVoiceCount = TrackOp<VoiceCount>(VoiceCount::V_4);
+      TrackOp<bool> changeClef = TrackOp<bool>(true);
+      TrackOp<Swing> swing = TrackOp<Swing>(Swing::NONE);
+      TrackOp<bool> removeDrumRests = TrackOp<bool>(true);
+      TrackOp<int> lyricTrackIndex = TrackOp<int>(-1);        // empty lyric
       };
 
 struct HumanBeatData
@@ -120,7 +178,6 @@ struct FileData
       {
       MidiFile midiFile;
       int processingsOfOpenedFile = 0;
-      bool canRedefineDefaultsLater = true;
       bool hasTempoText = false;
       QByteArray HHeaderData;
       QByteArray VHeaderData;

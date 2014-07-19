@@ -334,14 +334,14 @@ void findBeatLocations(
             const MidiOperations::HumanBeatData &beatData = beatResults.begin()->second;
             setTimeSig(sigmap, beatData.timeSig);
             data->humanBeatData = beatData;
-            data->trackOpers.measureCount2xLess = beatData.measureCount2xLess;
+            data->trackOpers.measureCount2xLess.setDefaultValue(beatData.measureCount2xLess);
             }
       else {
             const auto currentTimeSig = ReducedFraction(sigmap->timesig(0).timesig());
-            data->trackOpers.timeSigNumerator = Meter::fractionNumeratorToUserValue(
-                                                                  currentTimeSig.numerator());
-            data->trackOpers.timeSigDenominator = Meter::fractionDenominatorToUserValue(
-                                                                  currentTimeSig.denominator());
+            data->trackOpers.timeSigNumerator.setDefaultValue(
+                              Meter::fractionNumeratorToUserValue(currentTimeSig.numerator()));
+            data->trackOpers.timeSigDenominator.setDefaultValue(
+                              Meter::fractionDenominatorToUserValue(currentTimeSig.denominator()));
             }
       }
 
@@ -394,8 +394,8 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
       if (beats.empty())
             return;
 
-      if (opers.data()->trackOpers.isHumanPerformance) {
-            if (opers.data()->trackOpers.measureCount2xLess)
+      if (opers.data()->trackOpers.isHumanPerformance.value()) {
+            if (opers.data()->trackOpers.measureCount2xLess.value())
                   removeEvery2ndBeat(beats);
 
             Q_ASSERT_X(beats.size() > 1, "MidiBeat::adjustChordsToBeats", "Human beat count < 2");
@@ -476,8 +476,8 @@ void setTimeSignature(TimeSigMap *sigmap)
       const std::set<ReducedFraction> &beats = data->humanBeatData.beatSet;
       if (beats.empty())
             return;           // don't set time sig for non-human performed MIDI files
-      const auto timeSig = Meter::userTimeSigToFraction(data->trackOpers.timeSigNumerator,
-                                                        data->trackOpers.timeSigDenominator);
+      const auto timeSig = Meter::userTimeSigToFraction(data->trackOpers.timeSigNumerator.value(),
+                                                        data->trackOpers.timeSigDenominator.value());
       setTimeSig(sigmap, timeSig);
       updateFirstLastBeats(data->humanBeatData, timeSig);
       }
@@ -496,7 +496,7 @@ void setTempoToScore(Score *score, int tick, double beatsPerSecond)
       score->setTempo(tick, beatsPerSecond);
 
       auto *data = preferences.midiImportOperations.data();
-      if (data->trackOpers.showTempoText) {
+      if (data->trackOpers.showTempoText.value()) {
             const int tempoInBpm = qRound(beatsPerSecond * 60.0 / 2) * 2;
 
             TempoText *tempoText = new TempoText(score);
@@ -541,7 +541,7 @@ void setTempo(const std::multimap<int, MTrack> &tracks, Score *score)
                   }
             }
       else {            // calculate and set tempo from adjusted beat locations
-            if (midiData->trackOpers.measureCount2xLess)
+            if (midiData->trackOpers.measureCount2xLess.value())
                   MidiBeat::removeEvery2ndBeat(beats);
 
             Q_ASSERT_X(beats.size() > 1, "MidiBeat::updateTempo", "Human beat count < 2");

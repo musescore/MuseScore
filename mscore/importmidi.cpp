@@ -747,7 +747,7 @@ void createMeasures(ReducedFraction &lastTick, Score *score)
             ++bars;           // convert bar index to number of bars
 
       const auto& opers = preferences.midiImportOperations;
-      const bool pickupMeasure = opers.data()->trackOpers.searchPickupMeasure;
+      const bool pickupMeasure = opers.data()->trackOpers.searchPickupMeasure.value();
 
       for (int i = 0; i < bars; ++i) {
             Measure* measure  = new Measure(score);
@@ -833,7 +833,7 @@ void createTimeSignatures(Score *score)
             Fraction newTimeSig = se.timesig();
 
             const auto& opers = preferences.midiImportOperations;
-            const bool pickupMeasure = opers.data()->trackOpers.searchPickupMeasure;
+            const bool pickupMeasure = opers.data()->trackOpers.searchPickupMeasure.value();
 
             if (pickupMeasure && is == score->sigmap()->begin()) {
                   auto next = std::next(is);
@@ -935,9 +935,9 @@ void convertMidi(Score *score, const MidiFile *mf)
       else        // user value
             MidiBeat::setTimeSignature(sigmap);
 
-      Q_ASSERT_X((opers.data()->trackOpers.isHumanPerformance)
-                        ? Meter::userTimeSigToFraction(opers.data()->trackOpers.timeSigNumerator,
-                                                       opers.data()->trackOpers.timeSigDenominator)
+      Q_ASSERT_X((opers.data()->trackOpers.isHumanPerformance.value())
+                        ? Meter::userTimeSigToFraction(opers.data()->trackOpers.timeSigNumerator.value(),
+                                                       opers.data()->trackOpers.timeSigDenominator.value())
                           != ReducedFraction(0, 1) : true,
                  "convertMidi", "Null time signature for human-performed MIDI file");
 
@@ -946,8 +946,10 @@ void convertMidi(Score *score, const MidiFile *mf)
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
 
                   // for newly opened MIDI file
-      if (opers.data()->processingsOfOpenedFile == 0 && opers.data()->canRedefineDefaultsLater)
+      if (opers.data()->processingsOfOpenedFile == 0
+                  && opers.data()->trackOpers.doStaffSplit.canRedefineDefaultLater()) {
             setLeftRightHandSplit(tracks);
+            }
 
       MChord::removeOverlappingNotes(tracks);
 
