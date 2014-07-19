@@ -94,8 +94,6 @@ void TimeDialog::addClicked()
       // extend palette:
       sp->append(ts, "");
       _dirty = true;
-      sp->updateGeometry();
-      _timePalette->adjustSize();
       }
 
 //---------------------------------------------------------

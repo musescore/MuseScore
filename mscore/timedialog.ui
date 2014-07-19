@@ -26,12 +26,6 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
      </widget>
      <widget class="QGroupBox" name="groupBox">
       <property name="sizePolicy">
