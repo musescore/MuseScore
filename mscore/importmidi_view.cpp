@@ -227,6 +227,8 @@ void TracksView::setFrozenRowCount(int count)
             _frozenHTableView->setRowHidden(row, true);
             _frozenCornerTableView->setRowHidden(row, true);
             }
+
+      updateFrozenTableGeometry();
       }
 
 void TracksView::setFrozenColCount(int count)
@@ -250,6 +252,8 @@ void TracksView::setFrozenColCount(int count)
             _frozenVTableView->setColumnHidden(col, true);
             _frozenCornerTableView->setColumnHidden(col, true);
             }
+
+      updateFrozenTableGeometry();
       }
 
 void TracksView::setItemDelegate(SeparatorDelegate *delegate)
