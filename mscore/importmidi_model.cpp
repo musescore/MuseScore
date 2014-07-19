@@ -40,7 +40,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         const QList<std::string> &lyricsList,
                         int trackCount,
                         const QString &midiFile,
-                        bool hasHumanBeats)
+                        bool hasHumanBeats,
+                        bool hasTempoText)
       {
       beginResetModel();
       _trackOpers = opers;
@@ -421,7 +422,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   int _numeratorCount;
                   };
             _columns.push_back(std::unique_ptr<Column>(new TimeSig(_trackOpers)));
-            
+
             //-----------------------------------------------------------------------
             struct MeasureCount2xLess : Column {
                   MeasureCount2xLess(MidiOperations::Opers &opers) : Column(opers)
@@ -550,6 +551,27 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   }
             };
       _columns.push_back(std::unique_ptr<Column>(new DottedNotes(_trackOpers)));
+
+      //-----------------------------------------------------------------------
+      if (hasTempoText) {
+            struct ShowTempoText : Column {
+                  ShowTempoText(MidiOperations::Opers &opers) : Column(opers)
+                        {
+                        }
+                  QString headerName() const { return QCoreApplication::translate(
+                                          "MIDI import operations", "Show\ntempo text"); }
+                  bool isForAllTracksOnly() const { return true; }
+                  QVariant value(int /*trackIndex*/) const
+                        {
+                        return _opers.showTempoText;
+                        }
+                  void setValue(const QVariant &value, int /*trackIndex*/)
+                        {
+                        _opers.showTempoText = value.toBool();
+                        }
+                  };
+            _columns.push_back(std::unique_ptr<Column>(new ShowTempoText(_trackOpers)));
+            }
 
       //-----------------------------------------------------------------------
       struct PickupBar : Column {

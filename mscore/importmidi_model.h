@@ -18,7 +18,8 @@ class TracksModel : public QAbstractTableModel
                  const QList<std::string> &lyricsList,
                  int trackCount,
                  const QString &midiFile,
-                 bool hasHumanBeats);
+                 bool hasHumanBeats,
+                 bool hasTempoText);
       void clear();
       void setTrackShuffleIndex(int trackIndex, int newIndex);
       void updateCharset();

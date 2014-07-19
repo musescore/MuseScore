@@ -57,7 +57,8 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                           MidiLyrics::makeLyricsListForUI(),
                           opers.data()->trackCount,
                           _midiFile,
-                          !opers.data()->humanBeatData.beatSet.empty());
+                          !opers.data()->humanBeatData.beatSet.empty(),
+                          opers.data()->hasTempoText);
             saveTableViewState();
             }
       else {            // switch to already opened MIDI file
@@ -65,7 +66,8 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                           MidiLyrics::makeLyricsListForUI(),
                           opers.data()->trackCount,
                           _midiFile,
-                          !opers.data()->humanBeatData.beatSet.empty());
+                          !opers.data()->humanBeatData.beatSet.empty(),
+                          opers.data()->hasTempoText);
             restoreTableViewState();
             }
 

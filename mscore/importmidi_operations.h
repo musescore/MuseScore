@@ -78,6 +78,7 @@ struct Opers
       bool isHumanPerformance = false;
       bool searchPickupMeasure = true;
       bool measureCount2xLess = false;
+      bool showTempoText = true;
       TimeSigNumerator timeSigNumerator = TimeSigNumerator::_4;
       TimeSigDenominator timeSigDenominator = TimeSigDenominator::_4;
 
@@ -120,6 +121,7 @@ struct FileData
       MidiFile midiFile;
       int processingsOfOpenedFile = 0;
       bool canRedefineDefaultsLater = true;
+      bool hasTempoText = false;
       QByteArray HHeaderData;
       QByteArray VHeaderData;
       int trackCount = 0;
@@ -152,7 +154,7 @@ class Data
    private:
       friend class CurrentTrackSetter;
       friend class CurrentMidiFileSetter;
-      
+
       QString _currentMidiFile;
       QString _midiOperationsFile;
       int _currentTrack = -1;
