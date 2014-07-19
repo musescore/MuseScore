@@ -91,6 +91,7 @@ void TracksView::initHorizontalView()
 void TracksView::initVerticalView()
       {
       _frozenVTableView->setHorizontalHeader(new SizedHHeaderView(horizontalHeader()));
+      _frozenHTableView->horizontalHeader()->setSectionsMovable(false);
       _frozenVTableView->verticalHeader()->hide();
       _frozenVTableView->setSelectionBehavior(SelectItems);
       _frozenVTableView->setSelectionMode(SingleSelection);
@@ -133,7 +134,7 @@ void TracksView::initCornerView()
 
 void TracksView::initMainView()
       {
-      horizontalHeader()->setSectionsMovable(true);
+      horizontalHeader()->setSectionsMovable(false);
       verticalHeader()->setSectionsMovable(true);
 
       setHorizontalScrollMode(ScrollPerPixel);
