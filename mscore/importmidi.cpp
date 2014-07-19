@@ -208,13 +208,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                         name = MidiCharset::convertToCharset(text);
                   }
                   break;
-            case META_TEMPO:
-                  {
-                  const unsigned tempo = data[2] + (data[1] << 8) + (data[0] <<16);
-                  const double t = 1000000.0 / double(tempo);
-                  cs->setTempo(tick, t);
-                              // TODO: create TempoText
-                  }
+            case META_TEMPO:  // add later, after adding of notes
                   break;
             case META_KEY_SIGNATURE:
                   {
@@ -987,7 +981,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       createTimeSignatures(score);
       score->connectTies();
       MidiLyrics::setLyricsToScore(trackList);
-      MidiBeat::updateTempo(tracks, score);
+      MidiTempo::setTempo(tracks, score);
       }
 
 void loadMidiData(MidiFile &mf)

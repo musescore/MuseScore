@@ -14,6 +14,7 @@
 #include "libmscore/tempo.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
+#include "libmscore/measure.h"
 
 #include <functional>
 
@@ -481,50 +482,92 @@ void setTimeSignature(TimeSigMap *sigmap)
       updateFirstLastBeats(data->humanBeatData, timeSig);
       }
 
-void updateTempo(const std::multimap<int, MTrack> &tracks, Score *score)
+} // namespace MidiBeat
+
+namespace MidiTempo {
+
+void setTempoToScore(Score *score, int tick, double beatsPerSecond)
       {
-      const auto *data = preferences.midiImportOperations.data();
-      std::set<ReducedFraction> beats = data->humanBeatData.beatSet;    // copy
-      if (beats.empty())
+      if (score->tempomap()->find(tick) != score->tempomap()->end())
+            return;
+      if (score->tempo(tick) == beatsPerSecond)
             return;
 
-      if (data->trackOpers.measureCount2xLess)
-            removeEvery2ndBeat(beats);
-
-      Q_ASSERT_X(beats.size() > 1, "MidiBeat::updateTempo", "Human beat count < 2");
-
-      double averageTempoFactor = 0.0;
-      int counter = 0;
-      auto it = beats.begin();
-      auto beatStart = *it;
-      const auto newBeatLen = ReducedFraction::fromTicks(MScore::division);
-
-      for (++it; it != beats.end(); ++it) {
-            const auto &beatEnd = *it;
-
-            Q_ASSERT_X(beatEnd > beatStart, "MidiBeat::detectTempoChanges",
-                       "Beat end <= beat start that is incorrect");
-
-            averageTempoFactor += (newBeatLen / (beatEnd - beatStart)).toDouble();
-            ++counter;
-            beatStart = beatEnd;
-            }
-      averageTempoFactor /= counter;
-
-      const double basicTempo = MidiTempo::findBasicTempo(tracks);
-      const double tempo = basicTempo * averageTempoFactor;
-      const int tempoInBpm = qRound(tempo * 60.0 / 2) * 2;
+      const int tempoInBpm = qRound(beatsPerSecond * 60.0 / 2) * 2;
 
       score->tempomap()->clear();
       TempoText *tempoText = new TempoText(score);
-      tempoText->setTempo(tempo);
+      tempoText->setTempo(beatsPerSecond);
       tempoText->setText(QString("<sym>noteQuarterUp</sym> = %1").arg(tempoInBpm));
 
       tempoText->setTrack(0);
-      Segment *segment = score->firstSegment(Segment::Type::ChordRest);
+
+      Measure *measure = score->tick2measure(tick);
+      if (!measure) {
+            qDebug("MidiTempo::setTempoToScore: no measure for tick %d", tick);
+            return;
+            }
+      Segment *segment = measure->getSegment(Segment::Type::ChordRest, tick);
+      if (!segment) {
+            qDebug("MidiTempo::setTempoToScore: no chord/rest segment for tempo at %d", tick);
+            return;
+            }
       segment->add(tempoText);
-      score->setTempo(0, tempo);
+
+      score->setTempo(tick, beatsPerSecond);
       }
 
-} // namespace MidiBeat
+void setTempo(const std::multimap<int, MTrack> &tracks, Score *score)
+      {
+      const auto *data = preferences.midiImportOperations.data();
+      std::set<ReducedFraction> beats = data->humanBeatData.beatSet;    // copy
+
+      if (beats.empty()) {
+                        // it's most likely not a human performance;
+                        // we find all tempo events and set tempo changes to score
+            for (const auto &track: tracks) {
+                  for (const auto &ie : track.second.mtrack->events()) {
+                        const MidiEvent &e = ie.second;
+                        if (e.type() == ME_META && e.metaType() == META_TEMPO) {
+                              const auto tick = toMuseScoreTicks(ie.first, track.second.division);
+                              const uchar* data = (uchar*)e.edata();
+                              const unsigned tempo = data[2] + (data[1] << 8) + (data[0] << 16);
+                              const double beatsPerSecond = 1000000.0 / tempo;
+                              setTempoToScore(score, tick.ticks(), beatsPerSecond);
+                              }
+                        }
+                  }
+            }
+      else {            // calculate and set tempo from adjusted beat locations
+            if (data->trackOpers.measureCount2xLess)
+                  MidiBeat::removeEvery2ndBeat(beats);
+
+            Q_ASSERT_X(beats.size() > 1, "MidiBeat::updateTempo", "Human beat count < 2");
+
+            double averageTempoFactor = 0.0;
+            int counter = 0;
+            auto it = beats.begin();
+            auto beatStart = *it;
+            const auto newBeatLen = ReducedFraction::fromTicks(MScore::division);
+
+            for (++it; it != beats.end(); ++it) {
+                  const auto &beatEnd = *it;
+
+                  Q_ASSERT_X(beatEnd > beatStart, "MidiBeat::detectTempoChanges",
+                             "Beat end <= beat start that is incorrect");
+
+                  averageTempoFactor += (newBeatLen / (beatEnd - beatStart)).toDouble();
+                  ++counter;
+                  beatStart = beatEnd;
+                  }
+            averageTempoFactor /= counter;
+
+            const double basicTempo = MidiTempo::findBasicTempo(tracks);
+            const double tempo = basicTempo * averageTempoFactor;
+
+            setTempoToScore(score, 0, tempo);
+            }
+      }
+
+} // namespace MidiTempo
 } // namespace Ms
