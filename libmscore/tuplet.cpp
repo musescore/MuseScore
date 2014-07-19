@@ -679,6 +679,7 @@ void Tuplet::add(Element* e)
       foreach(DurationElement* el, _elements) {
             if (el == e) {
                   qFatal("Tuplet::add: %p %s already there", e, e->name());
+                  return;
                   }
             }
 #endif
