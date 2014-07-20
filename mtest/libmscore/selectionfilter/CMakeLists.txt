@@ -3,7 +3,7 @@
 #  Music Composition & Notation
 #  $Id:$
 #
-#  Copyright (C) 2011 Werner Schweer
+#  Copyright (C) 2014 Werner Schweer
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2
@@ -11,10 +11,6 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-subdirs(
-      barline beam chordsymbol clef clef_courtesy compat concertpitch copypaste
-      copypastesymbollist dynamic element hairpin instrumentchange join keysig layout parts measure midi
-      note plugins repeat selectionfilter selectionrangedelete split splitstaff timesig transpose tuplet text
-      )
+set(TARGET tst_selectionfilter)
 
-
+include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)

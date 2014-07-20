@@ -32,6 +32,7 @@
 #include "playpanel.h"
 #include "libmscore/page.h"
 #include "mixer.h"
+#include "selectionwindow.h"
 #include "palette.h"
 #include "palettebox.h"
 #include "libmscore/part.h"
@@ -386,6 +387,7 @@ MuseScore::MuseScore()
       masterPalette         = 0;
       mixer                 = 0;
       synthControl          = 0;
+      selectionWindow       = 0;
       debugger              = 0;
       measureListEdit       = 0;
       symbolDialog          = 0;
@@ -883,6 +885,10 @@ MuseScore::MuseScore()
       menuView->addAction(a);
 
       a = getAction("synth-control");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+      a = getAction("toggle-selection-window");
       a->setCheckable(true);
       menuView->addAction(a);
 
@@ -1512,6 +1518,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             playPanel->setScore(cs);
       if (synthControl)
             synthControl->setScore(cs);
+      if (selectionWindow)
+            selectionWindow->setScore(cs);
       if (mixer)
             mixer->updateAll(cs);
 #ifdef OMR
@@ -4083,6 +4091,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showMixer(a->isChecked());
       else if (cmd == "synth-control")
             showSynthControl(a->isChecked());
+      else if (cmd == "toggle-selection-window")
+            showSelectionWindow(a->isChecked());
       else if (cmd == "show-keys")
             ;
       else if (cmd == "toggle-transport")

@@ -23,6 +23,8 @@ class Element;
 class Segment;
 class Note;
 class Measure;
+class Spanner;
+class Chord;
 
 //---------------------------------------------------------
 //   ElementPattern
@@ -50,6 +52,44 @@ enum class SelState : char {
                   // is selected
       };
 
+enum class SelectionFilterType {
+      NONE                    = 0,
+      FIRST_VOICE             = 1 << 0,
+      SECOND_VOICE            = 1 << 1,
+      THIRD_VOICE             = 1 << 2,
+      FOURTH_VOICE            = 1 << 3,
+      DYNAMIC                 = 1 << 4,
+      FINGERING               = 1 << 5,
+      LYRICS                  = 1 << 6,
+      CHORD_SYMBOL            = 1 << 7,
+      OTHER_TEXT              = 1 << 8,
+      ARTICULATION            = 1 << 9,
+      SLUR                    = 1 << 10,
+      FIGURED_BASS            = 1 << 11,
+      OTTAVA                  = 1 << 12,
+      PEDAL_LINE              = 1 << 13,
+      OTHER_LINE              = 1 << 14,
+      ARPEGGIO                = 1 << 15,
+      GLISSANDO               = 1 << 16,
+      FRET_DIAGRAM            = 1 << 17,
+      BREATH                  = 1 << 18,
+      TREMOLO                 = 1 << 19,
+      GRACE_NOTE              = 1 << 20,
+      ALL                     = -1
+      };
+
+class SelectionFilter {
+      Score* _score;
+      int _filtered;
+
+public:
+      SelectionFilter()                      { _score = 0; _filtered = (int)SelectionFilterType::ALL;}
+      SelectionFilter(Score* score)          { _score = score; _filtered = (int)SelectionFilterType::ALL;}
+      int& filtered()                        { return _filtered; }
+      void setFiltered(SelectionFilterType type, bool set);
+      bool isFiltered(SelectionFilterType type)        { return _filtered & (int)type; }
+      };
+
 //-------------------------------------------------------------------
 //   Selection
 //    For SelState::LIST state only visible elements can be selected
@@ -71,6 +111,12 @@ class Selection {
 
       QByteArray staffMimeData() const;
       QByteArray symbolListMimeData() const;
+      SelectionFilter& selectionFilter() const;
+      bool canSelect(Element*) const;
+      void appendFiltered(Element* e);
+      void appendChord(Chord* chord);
+      void filterRange(QList<Segment*>, int strack, int etrack) const;
+      void filterSpanners(std::multimap<int, Spanner*>& spannerMapCopy) const;
 
    public:
       Selection()                      { _score = 0; _state = SelState::NONE; }

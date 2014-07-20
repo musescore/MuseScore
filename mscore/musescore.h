@@ -52,6 +52,7 @@ class PageSettings;
 class PaletteBox;
 class Palette;
 class PaletteScrollArea;
+class SelectionWindow;
 class Xml;
 class MagBox;
 class NewWizard;
@@ -253,6 +254,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       MasterPalette* masterPalette;
       PluginCreator* pluginCreator;
       PluginManager* pluginManager;
+      SelectionWindow* selectionWindow;
 
       QMenu* _fileMenu;
       QMenu* menuEdit;
@@ -385,6 +387,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showNavigator(bool);
       void showMixer(bool);
       void showSynthControl(bool);
+      void showSelectionWindow(bool);
       void showSearchDialog();
       void helpBrowser(const QUrl&) const;
       void splitWindow(bool horizontal);
