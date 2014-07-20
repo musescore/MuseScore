@@ -1228,6 +1228,11 @@ void quantizeOnTimes(
             std::deque<std::multimap<ReducedFraction, MidiChord>::const_iterator> chordsToQuant;
 
             for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
+
+                  Q_ASSERT_X(MChord::minNoteLen(*chordIt) >= MChord::minAllowedDuration(),
+                             "Quantize::quantizeOnTimes",
+                             "Note length is less than min allowed duration");
+
                   if (chordIt->second.voice > maxVoice)
                         maxVoice = chordIt->second.voice;
                   if (chordIt->second.voice != voice)
@@ -1382,6 +1387,8 @@ void quantizeChords(
                  "Chords of the same voices have equal on time values");
       Q_ASSERT_X(areTupletChordsConsistent(chords), "Quantize::quantizeChords",
                  "There are non-tuplet chords between tuplet chords");
+      Q_ASSERT_X(MChord::areNotesLongEnough(chords), "Quantize::quantizeChords",
+                 "There are too short notes");
 
       applyTupletStaccato(chords);     // apply staccato for tuplet off times
       std::map<const std::pair<const ReducedFraction, MidiChord> *, QuantInfo> foundOnTimes;

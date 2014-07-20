@@ -1122,6 +1122,10 @@ void findAllTuplets(
             const ReducedFraction &lastTick,
             const ReducedFraction &basicQuant)
       {
+
+      Q_ASSERT_X(MChord::areNotesLongEnough(chords),
+                 "MidiTuplet::findAllTuplets", "There are too short notes");
+
       ReducedFraction startBarTick = {0, 1};
 
       for (int i = 1;; ++i) {       // iterate over all measures by indexes
@@ -1154,6 +1158,8 @@ void findAllTuplets(
       Q_ASSERT_X(areAllTupletsReferenced(chords, tupletEvents),
                  "MidiTuplet::findAllTuplets",
                  "Not all tuplets are referenced in chords or notes");
+      Q_ASSERT_X(MChord::areNotesLongEnough(chords),
+                 "MidiTuplet::findAllTuplets", "There are too short notes");
       }
 
 } // namespace MidiTuplet
