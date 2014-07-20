@@ -166,12 +166,12 @@ struct HumanBeatData
       {
       std::set<ReducedFraction> beatSet;
                 // to adapt human beats to a different time sig, if necessary
-      int addedFirstBeats;
-      int addedLastBeats;
+      int addedFirstBeats = 0;
+      int addedLastBeats = 0;
       ReducedFraction firstChordTick;
       ReducedFraction lastChordTick;
       ReducedFraction timeSig;
-      bool measureCount2xLess;
+      bool measureCount2xLess = false;
       };
 
 struct FileData

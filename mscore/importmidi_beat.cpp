@@ -314,18 +314,9 @@ void findBeatLocations(
                   MidiOperations::HumanBeatData beatData = prepareHumanBeatData(
                                                 beatTimes, allChords, ticksPerSec, beatsInBar);
                   beatData.timeSig = barFraction;
-                  beatData.measureCount2xLess = false;
-                  double matchRank = findMatchRank(beatData.beatSet, events,
-                                                   levels, beatsInBar, ticksPerSec);
+                  const double matchRank = findMatchRank(beatData.beatSet, events,
+                                                         levels, beatsInBar, ticksPerSec);
                   beatResults.insert({matchRank, beatData});
-
-                              // second case - remove every 2nd beat
-                  auto beatSetHalved = beatData.beatSet;
-                  removeEvery2ndBeat(beatSetHalved);
-                  beatData.measureCount2xLess = true;
-                  matchRank = findMatchRank(beatSetHalved, events, levels,
-                                            beatsInBar, ticksPerSec);
-                  beatResults.insert({matchRank, beatData});    // add full beat set - not halved
                   }
             }
 
