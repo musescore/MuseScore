@@ -684,6 +684,9 @@ QByteArray Selection::staffMimeData() const
       for (auto i : sp_copy) {
             delete i.second;
             }
+      for (Segment* s : segments) {
+            delete s;
+            }
 
       xml.etag();
       buffer.close();
