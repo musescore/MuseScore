@@ -24,6 +24,7 @@
 #include "libmscore/note.h"
 #include "libmscore/keysig.h"
 #include "mscore/exportmidi.h"
+#include <QIODevice>
 
 #include "libmscore/mcursor.h"
 #include "mtest/testutils.h"
@@ -75,6 +76,9 @@ void TestMidi::events_data()
       QTest::newRow("testSwing16thTies") <<  "testSwing16thTies";
       QTest::newRow("testSwing16thTriplets") <<  "testSwing16thTriplets";
       QTest::newRow("testSwing16thDots") <<  "testSwing16thDots";
+      QTest::newRow("testSwingOdd") <<  "testSwingOdd";
+      QTest::newRow("testSwingPickup") <<  "testSwingPickup";
+
       }
 
 //---------------------------------------------------------
@@ -326,7 +330,7 @@ void TestMidi::events()
       score->doLayout();
       EventMap events;
       score->renderMidi(&events);
-      //qDebug() << "Opened score " << readFile;
+      qDebug() << "Opened score " << readFile;
       QFile filehandler(writeFile);
       filehandler.open(QIODevice::WriteOnly | QIODevice::Text);
       QTextStream out(&filehandler);
