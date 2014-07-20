@@ -167,6 +167,15 @@ bool areSingleNoteChords(const std::multimap<ReducedFraction, MidiChord> &chords
       return true;
       }
 
+bool areNotesLongEnough(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      for (const auto &chord: chords) {
+            if (minNoteLen(chord) < minAllowedDuration())
+                  return false;
+            }
+      return true;
+      }
+
 #endif
 
 
@@ -252,6 +261,8 @@ void collectChords(std::multimap<int, MTrack> &tracks)
             Q_ASSERT_X(areOnTimeValuesDifferent(chords),
                        "MChord: collectChords",
                        "onTime values of chords are equal but should be different");
+            Q_ASSERT_X(areNotesLongEnough(chords),
+                       "MChord::collectChords", "There are too short notes");
             }
       }
 

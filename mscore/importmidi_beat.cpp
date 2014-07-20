@@ -386,8 +386,7 @@ void scaleOffTimes(
             }
       }
 
-void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
-                         ReducedFraction &lastTick)
+void adjustChordsToBeats(std::multimap<int, MTrack> &tracks, ReducedFraction &lastTick)
       {
       const auto &opers = preferences.midiImportOperations;
       std::set<ReducedFraction> beats = opers.data()->humanBeatData.beatSet;  // copy
@@ -430,6 +429,10 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
                               scaleOffTimes(chordIt->second.notes, beats, it,
                                             newBeatStart, newBeatLen, lastTick);
                               const auto newOnTime = newBeatStart + newOnTimeInBeat;
+                              for (auto &note: chordIt->second.notes) {
+                                    if (note.offTime - newOnTime < MChord::minAllowedDuration())
+                                          note.offTime = newOnTime + MChord::minAllowedDuration();
+                                    }
                               newChords.insert({newOnTime, chordIt->second});
                               }
 
@@ -441,6 +444,9 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks,
                         }
 
                   std::swap(chords, newChords);
+
+                  Q_ASSERT_X(MChord::areNotesLongEnough(chords),
+                             "MidiBeat::adjustChordsToBeats", "There are too short notes");
                   }
             }
       }
