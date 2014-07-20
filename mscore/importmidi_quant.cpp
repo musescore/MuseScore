@@ -403,6 +403,8 @@ void setIfHumanPerformance(
       if (isHuman) {
             if (opers.quantValue.canRedefineDefaultLater())
                   opers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_8);
+            if (opers.maxVoiceCount.canRedefineDefaultLater())
+                  opers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_2);
             const double ticksPerSec = MidiTempo::findBasicTempo(tracks) * MScore::division;
             MidiBeat::findBeatLocations(allChords, sigmap, ticksPerSec);      // and set time sig
             }
