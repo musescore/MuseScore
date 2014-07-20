@@ -53,6 +53,8 @@ class TestCopyPaste : public QObject, public MTest
       void copyPaste2NoteTremolo();
       void copyPaste2NoteTremolo2();
 
+      void copypaste15() { copypaste("15"); }       // tuplets
+
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
       void copyPastePartial();

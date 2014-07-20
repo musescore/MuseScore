@@ -306,16 +306,19 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
 
                                     Tuplet* ot = ocr->tuplet();
                                     if (ot) {
-                                          Tuplet* nt = tupletMap.findNew(ot);
-                                          if (nt == 0) {
-                                                nt = new Tuplet(*ot);
+                                          Tuplet* nt = nullptr;
+                                          if (ot != ncr->tuplet()) { // ncr->tuplet is cloned from ot
+                                                nt = ncr->tuplet();
                                                 nt->clear();
                                                 nt->setTrack(track);
                                                 nt->setScore(score);
                                                 tupletMap.add(ot, nt);
                                                 }
-                                          nt->add(ncr);
-                                          ncr->setTuplet(nt);
+                                          else {
+                                                nt = tupletMap.findNew(ot);
+                                                Q_ASSERT(nt);
+                                                }
+                                          nt->add(ncr); // adds to tuplet and sets ncr->tuplet
                                           }
 
                                     if (oe->type() == Element::Type::CHORD) {
