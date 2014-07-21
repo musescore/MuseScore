@@ -627,18 +627,19 @@ void splitTuplet(
       Q_ASSERT_X(lengthIt != maxChordLengths.end(), "MidiVoice::splitTuplet",
                  "Max chord length for voice was not set");
 
-      const auto newTuplet = MidiTuplet::removeTupletIfEmpty(
-                                           oldTuplet, tuplets, lengthIt->second, chords);
-      const bool wasOldTupletDeleted = (newTuplet != oldTuplet);
-
+      const auto &t = oldTuplet->second;
+      const bool needDeleteOldTuplet = MidiTuplet::isTupletUseless(
+                                          t.voice, t.onTime, t.len, lengthIt->second, chords);
                   // insert new tuplet only if old tuplet was erased
                   // because parallel equal tuplets with different voices aren't pretty
-      if (needInsertTuplet && wasOldTupletDeleted) {
+      if (needInsertTuplet && needDeleteOldTuplet) {
             insertNewTuplet(tuplet, tupletOnTime, newVoice, chords, tuplets, insertedTuplets);
             isInTuplet = true;
             }
+      if (needDeleteOldTuplet)      // delete after insert, because oldTuplet can be used
+            MidiTuplet::removeTuplet(oldTuplet, tuplets, lengthIt->second, chords);
 
-      Q_ASSERT_X(!(needInsertTuplet && !wasOldTupletDeleted), "MidiVoice::splitTuplet",
+      Q_ASSERT_X(!(needInsertTuplet && !needDeleteOldTuplet), "MidiVoice::splitTuplet",
                  "Tuplet need to be added but the old tuplet was not deleted");
       }
 
