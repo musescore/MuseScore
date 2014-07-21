@@ -41,8 +41,11 @@ Image::Image(Score* s)
       _lockAspectRatio = defaultLockAspectRatio;
       _autoScale       = defaultAutoScale;
       _sizeIsSpatium   = defaultSizeIsSpatium;
-      setZ(int(Element::Type::IMAGE) * 100);
       _linkIsValid     = false;
+      // set default Z order high so image is drawn on top of everything else
+      // but not above MEASURE, or it won't be selectable while on staff
+      // use of transparent background allows image to coexist with staff and other elements
+      setZ(int(Element::Type::MEASURE) * 100 - 1);
       }
 
 Image::Image(const Image& img)
@@ -64,6 +67,7 @@ Image::Image(const Image& img)
             rasterDoc = img.rasterDoc;
       else if (imageType == ImageType::SVG)
             svgDoc = img.svgDoc;
+      setZ(img.z());
       }
 
 //---------------------------------------------------------
