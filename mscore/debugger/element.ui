@@ -424,12 +424,12 @@
           </property>
           <item>
            <property name="text">
-            <string>above</string>
+            <string notr="true">above</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>below</string>
+            <string notr="true">below</string>
            </property>
           </item>
          </widget>
