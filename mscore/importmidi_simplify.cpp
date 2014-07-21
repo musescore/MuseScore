@@ -227,9 +227,18 @@ void simplifyDurations(std::multimap<int, MTrack> &tracks, const TimeSigMap *sig
 
             if (opers.data()->trackOpers.simplifyDurations.value(mtrack.indexOfOperation)) {
                   MidiOperations::CurrentTrackSetter setCurrentTrack{opers, mtrack.indexOfOperation};
+
+                  Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, mtrack.tuplets),
+                             "Simplify::simplifyDurations", "Tuplet chord/note is outside tuplet "
+                             "or non-tuplet chord/note is inside tuplet before simplification");
+
                   minimizeNumberOfRests(chords, sigmap, mtrack.tuplets);
                         // empty tuplets may appear after simplification
                   MidiTuplet::removeEmptyTuplets(mtrack);
+
+                  Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, mtrack.tuplets),
+                             "Simplify::simplifyDurations", "Tuplet chord/note is outside tuplet "
+                             "or non-tuplet chord/note is inside tuplet after simplification");
                   }
             }
       }

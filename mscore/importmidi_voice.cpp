@@ -725,10 +725,17 @@ bool doVoiceSeparation(
             const TimeSigMap *sigmap,
             std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
       {
+
+      Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, tuplets),
+                 "MidiVoice::doVoiceSeparation",
+                 "Tuplet chord/note is outside tuplet "
+                 "or non-tuplet chord/note is inside tuplet before voice separation");
+
       MChord::sortNotesByPitch(chords);
       std::multimap<ReducedFraction,
                   std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> insertedTuplets;
       std::map<int, ReducedFraction> maxChordLengths = MChord::findMaxChordLengths(chords);
+
       bool changed = false;
       std::map<int, int> maxOccupiedVoices;   // <bar index, max occupied voice>
 
@@ -812,6 +819,12 @@ bool doVoiceSeparation(
             if (canDoSplit && bestSplit.voice > maxVoiceIt->second)
                   maxVoiceIt->second = bestSplit.voice;
             }
+
+      Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, tuplets),
+                 "MidiVoice::doVoiceSeparation",
+                 "Tuplet chord/note is outside tuplet "
+                 "or non-tuplet chord/note is inside tuplet after voice separation");
+
       return changed;
       }
 

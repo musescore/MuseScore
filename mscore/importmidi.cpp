@@ -174,6 +174,10 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
 
             Quantize::quantizeChords(mtrack.chords, sigmap, basicQuant);
             MidiTuplet::removeEmptyTuplets(mtrack);
+
+            Q_ASSERT_X(MidiTuplet::areTupletRangesOk(mtrack.chords, mtrack.tuplets),
+                       "quantizeAllTracks", "Tuplet chord/note is outside tuplet "
+                        "or non-tuplet chord/note is inside tuplet");
             }
       }
 

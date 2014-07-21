@@ -70,9 +70,9 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                         ++it;
                         }
                   if (!newChord.notes.isEmpty()) {
-                        const auto tupletIt = MidiTuplet::findTupletContainsTime(
+                        const auto tupletIt = MidiTuplet::findTupletContainingTime(
                                           chord.voice, onTime, track.tuplets);
-                        const auto newTupletIt = MidiTuplet::findTupletContainsTime(
+                        const auto newTupletIt = MidiTuplet::findTupletContainingTime(
                                           newChord.voice, onTime, track.tuplets);
                         if (tupletIt != track.tuplets.end()
                                     && newTupletIt == track.tuplets.end()) {
@@ -133,10 +133,10 @@ std::map<int, MTrack> splitDrumTrack(const MTrack &drumTrack)
                   MTrack &newTrack = getNewTrack(newTracks, drumTrack, note.pitch);
                   newTrack.chords.insert({onTime, newChord});
 
-                  const auto tupletIt = MidiTuplet::findTupletContainsTime(
+                  const auto tupletIt = MidiTuplet::findTupletContainingTime(
                                     chord.voice, onTime, drumTrack.tuplets);
                   if (tupletIt != drumTrack.tuplets.end()) {
-                        const auto newTupletIt = MidiTuplet::findTupletContainsTime(
+                        const auto newTupletIt = MidiTuplet::findTupletContainingTime(
                                           newChord.voice, onTime, newTrack.tuplets);
                         if (newTupletIt == newTrack.tuplets.end()) {
                               MidiTuplet::TupletData newTupletData = tupletIt->second;

@@ -128,17 +128,21 @@ MidiOperations::TimeSigDenominator fractionDenominatorToUserValue(int z)
 namespace MidiTuplet {
 
 bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval1,
-                      const std::pair<ReducedFraction, ReducedFraction> &interval2)
+                      const std::pair<ReducedFraction, ReducedFraction> &interval2,
+                      bool strictComparison)
       {
-      return interval1.second > interval2.first && interval1.first < interval2.second;
+      if (strictComparison)
+            return interval1.second > interval2.first && interval1.first < interval2.second;
+      return interval1.second >= interval2.first && interval1.first <= interval2.second;
       }
 
 bool haveIntersection(
             const std::pair<ReducedFraction, ReducedFraction> &interval,
-            const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals)
+            const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals,
+            bool strictComparison)
       {
       for (const auto &i: intervals) {
-            if (haveIntersection(i, interval))
+            if (haveIntersection(i, interval, strictComparison))
                   return true;
             }
       return false;

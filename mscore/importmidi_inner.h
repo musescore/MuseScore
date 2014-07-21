@@ -111,10 +111,11 @@ struct TupletInfo
       };
 
 bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval1,
-                      const std::pair<ReducedFraction, ReducedFraction> &interval2);
-bool haveIntersection(
-            const std::pair<ReducedFraction, ReducedFraction> &interval,
-            const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals);
+                      const std::pair<ReducedFraction, ReducedFraction> &interval2,
+                      bool strictComparison = true);
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval,
+                      const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals,
+                      bool strictComparison = true);
 
 } // namespace MidiTuplet
 
