@@ -117,7 +117,7 @@ extern MasterSynthesizer* synti;
 
 static void paintElements(QPainter& p, const QList<const Element*>& el)
       {
-      foreach(const Element* e, el) {
+      foreach (const Element* e, el) {
             if (!e->visible())
                   continue;
             QPointF pos(e->pagePos());
@@ -125,6 +125,7 @@ static void paintElements(QPainter& p, const QList<const Element*>& el)
             e->draw(&p);
             p.translate(-pos);
             }
+
       }
 
 //---------------------------------------------------------
@@ -2087,7 +2088,9 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             p.setRenderHint(QPainter::TextAntialiasing, true);
             p.scale(mag, mag);
 
-            paintElements(p, page->elements());
+            QList<const Element*> pel = page->elements();
+            qStableSort(pel.begin(), pel.end(), elementLessThan);
+            paintElements(p, pel);
 
             if (format == QImage::Format_Indexed8) {
                   //convert to grayscale & respect alpha
@@ -2264,7 +2267,9 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       p.scale(mag, mag);
 
       foreach (Page* page, score->pages()) {
-            paintElements(p, page->elements());
+            QList<const Element*> pel = page->elements();
+            qStableSort(pel.begin(), pel.end(), elementLessThan);
+            paintElements(p, pel);
             p.translate(QPointF(pf->width() * MScore::DPI, 0.0));
             }
 
