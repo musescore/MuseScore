@@ -148,16 +148,6 @@ ReducedFraction ReducedFraction::reduced() const
       return ReducedFraction(numerator_ / tmp, denominator_ / tmp);
       }
 
-ReducedFraction ReducedFraction::absValue() const
-      {
-      return ReducedFraction(qAbs(numerator_), qAbs(denominator_));
-      }
-
-double ReducedFraction::toDouble() const
-      {
-      return numerator_ * 1.0 / denominator_;
-      }
-
 int ReducedFraction::ticks() const
       {
       int integral = numerator_ / denominator_;
@@ -197,11 +187,6 @@ void ReducedFraction::reduce()
       numerator_ /= tmp;
       denominator_ /= tmp;
 }
-
-bool ReducedFraction::isIdenticalTo(const ReducedFraction &f) const
-      {
-      return (f.numerator_ == numerator_ && f.denominator_ == denominator_);
-      }
 
 void ReducedFraction::preventOverflow()
       {
