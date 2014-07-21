@@ -26,7 +26,7 @@ install(DIRECTORY
 install (DIRECTORY
       ${PROJECT_BINARY_DIR}/share/manual/plugins
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
-)
+      )
 
 install(FILES
       reference-en.pdf

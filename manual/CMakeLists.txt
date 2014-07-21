@@ -49,10 +49,11 @@ endif(APPLE)
 ADD_DEPENDENCIES(genManual mops1)
 
 add_custom_target(pluginDocumentation
-    ALL
-    DEPENDS genManual)
+      ALL
+      DEPENDS genManual
+      )
 
 add_custom_command(TARGET pluginDocumentation
-    POST_BUILD
-    COMMAND ${PROJECT_BINARY_DIR}/manual/${CMAKE_CFG_INTDIR}/genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}/share/manual
-    )
+      POST_BUILD
+      COMMAND ${PROJECT_BINARY_DIR}/manual/${CMAKE_CFG_INTDIR}/genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}/share/manual
+      )
