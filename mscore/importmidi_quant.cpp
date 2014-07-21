@@ -413,10 +413,10 @@ void setIfHumanPerformance(
 //--------------------------------------------------------------------------------------------
 
 // remove small intersection with the next chord
-// (preserve legato)
 
-void removeIntersection(
+void preserveLegato(
             ReducedFraction &offTime,
+            bool isOffTimeInTuplet,
             const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &basicQuant)
@@ -428,7 +428,7 @@ void removeIntersection(
             const auto ioi = it->first - chordIt->first;
             const auto cross = offTime - it->first;
 
-            if (it->second.isInTuplet) {
+            if (it->second.isInTuplet && isOffTimeInTuplet) {
                               // while we don't split tuplet into voices we don't want to have
                               // note intersections smaller than tuplet note length
                   const auto &tuplet = it->second.tuplet->second;
@@ -436,7 +436,7 @@ void removeIntersection(
                   if (cross > ReducedFraction(0, 1) && cross < tupletNoteLen)
                         offTime = it->first;
                   }
-            else {
+            else if (!it->second.isInTuplet && !isOffTimeInTuplet) {
                   if (cross > ReducedFraction(0, 1) && cross < ioi / 2 && cross < basicQuant / 2)
                         offTime = it->first;
                   }
@@ -461,7 +461,7 @@ quantizeOffTimeForTuplet(
       auto offTime = result.first;
       auto quant = result.second;
 
-      removeIntersection(offTime, chordIt, chords, basicQuant);   // preserve legato
+      preserveLegato(offTime, true, chordIt, chords, basicQuant);
 
                   // verify that offTime is still inside tuplet
       if (offTime < tuplet.onTime) {
@@ -491,7 +491,7 @@ quantizeOffTimeForNonTuplet(
       const auto result = findQuantizedNoteOffTime(*chordIt, noteOffTime, basicQuant);
       auto offTime = result.first;
       auto quant = result.second;
-      removeIntersection(offTime, chordIt, chords, basicQuant);
+      preserveLegato(offTime, false, chordIt, chords, basicQuant);
 
                   // verify that offTime is still outside tuplets
       if (chord.isInTuplet) {
