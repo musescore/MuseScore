@@ -108,7 +108,6 @@ class Spanner : public Element {
       int _tick = -1;
       int _tick2 = -1;
       int _track2 = -1;
-      int _id = -1;           // used for xml serialization
 
       static QList<QPointF> userOffsets;
       static QList<QPointF> userOffsets2;
@@ -133,9 +132,6 @@ class Spanner : public Element {
       void setTick2(int v)     { _tick2 = v;            }
       int track2() const       { return _track2;        }
       void setTrack2(int v)    { _track2 = v;           }
-
-      int id() const           { return _id; }
-      void setId(int v)        { _id = v;    }
 
       Anchor anchor() const    { return _anchor;   }
       void setAnchor(Anchor a) { _anchor = a;      }

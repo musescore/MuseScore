@@ -530,7 +530,7 @@ void TextLine::setEndText(const QString& s)
 
 void TextLine::write(Xml& xml) const
       {
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       writeProperties(xml);
       xml.etag();
       }
@@ -543,7 +543,7 @@ void TextLine::read(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
-      setId(e.intAttribute("id", -1));
+      e.addSpanner(e.intAttribute("id", -1), this);
 
       while (e.readNextStartElement()) {
             if (!readProperties(e))

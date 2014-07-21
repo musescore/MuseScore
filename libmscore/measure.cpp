@@ -1898,7 +1898,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "endSpanner") {
                   int id = e.attribute("id").toInt();
-                  Spanner* spanner = score()->findSpanner(id);
+                  Spanner* spanner = e.findSpanner(id);
                   if (spanner) {
                         spanner->setTick2(e.tick());
                         // if (spanner->track2() == -1)
@@ -1929,7 +1929,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   //
                   // check if we already saw "endSpanner"
                   //
-                  const SpannerValues* sv = e.spannerValues(sl->id());
+                  int id = e.spannerId(sl);
+                  const SpannerValues* sv = e.spannerValues(id);
                   if (sv) {
                         sl->setTick2(sv->tick2);
                         }
@@ -1949,7 +1950,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   //
                   // check if we already saw "endSpanner"
                   //
-                  const SpannerValues* sv = e.spannerValues(sp->id());
+                  int id = e.spannerId(sp);
+                  const SpannerValues* sv = e.spannerValues(id);
                   if (sv) {
                         sp->setTick2(sv->tick2);
                         sp->setTrack2(sv->track2);

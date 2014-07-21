@@ -225,7 +225,7 @@ void Tie::setStartNote(Note* note)
 
 void Tie::write(Xml& xml) const
       {
-      xml.stag(QString("Tie id=\"%1\"").arg(id()));
+      xml.stag(QString("Tie id=\"%1\"").arg(xml.spannerId(this)));
       SlurTie::writeProperties(xml);
       xml.etag();
       }
@@ -236,7 +236,7 @@ void Tie::write(Xml& xml) const
 
 void Tie::read(XmlReader& e)
       {
-      setId(e.intAttribute("id"));
+      e.addSpanner(e.intAttribute("id"), this);
       while (e.readNextStartElement()) {
             if (SlurTie::readProperties(e) || Element::readProperties(e))
                   ;

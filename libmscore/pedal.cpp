@@ -131,7 +131,8 @@ void Pedal::read(XmlReader& e)
             // setBeginSymbol(SymId::noSym);
             setEndHook(false);
             }
-      setId(e.intAttribute("id", -1));
+      int id = e.intAttribute("id", -1);
+      e.addSpanner(id, this);
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")          // obsolete

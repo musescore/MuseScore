@@ -325,7 +325,8 @@ LineSegment* Hairpin::createLineSegment()
 
 void Hairpin::write(Xml& xml) const
       {
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
+      int id = xml.spannerId(this);
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
       xml.tag("subtype", int(_hairpinType));
       xml.tag("veloChange", _veloChange);
       writeProperty(xml, P_ID::HAIRPIN_CIRCLEDTIP);
@@ -347,7 +348,9 @@ void Hairpin::read(XmlReader& e)
             delete seg;
       spannerSegments().clear();
 
-      setId(e.intAttribute("id", -1));
+      int id = e.intAttribute("id", -1);
+      e.addSpanner(id, this);
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")

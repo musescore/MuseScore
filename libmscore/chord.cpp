@@ -949,14 +949,12 @@ void Chord::write(Xml& xml) const
                   continue;
 
             if (s->startElement() == this) {
-                  if (s->id() == -1)
-                        s->setId(++xml.spannerId);
-                  xml.tagE(QString("Slur type=\"start\" id=\"%1\"").arg(s->id()));
+                  int id = xml.spannerId(s);
+                  xml.tagE(QString("Slur type=\"start\" id=\"%1\"").arg(id));
                   }
             else if (s->endElement() == this) {
-                  if (s->id() == -1)
-                        s->setId(++xml.spannerId);
-                  xml.tagE(QString("Slur type=\"stop\" id=\"%1\"").arg(s->id()));
+                  int id = xml.spannerId(s);
+                  xml.tagE(QString("Slur type=\"stop\" id=\"%1\"").arg(id));
                   }
             }
       xml.etag();
