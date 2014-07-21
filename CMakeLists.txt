@@ -461,13 +461,3 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
    DEPENDS genManual
    )
 
-add_custom_target(install_plugins_manual
-   COMMAND ${PROJECT_BINARY_DIR}/manual/${CMAKE_CFG_INTDIR}/genManual ${PROJECT_SOURCE_DIR} ${CMAKE_INSTALL_PREFIX}/${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual
-   )
-
-if (MINGW)
-   install(CODE "execute_process(COMMAND cmd /c \"mingw32-make install_plugins_manual\")")
-else (MINGW)
-   install(CODE "execute_process(COMMAND make install_plugins_manual)")
-endif (MINGW)
-
