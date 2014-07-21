@@ -3435,19 +3435,6 @@ void Score::removeSpanner(Spanner* s)
       }
 
 //---------------------------------------------------------
-//   findSpanner
-//---------------------------------------------------------
-
-Spanner* Score::findSpanner(int id) const
-      {
-      for (auto i = _spanner.crbegin(); i != _spanner.crend(); ++i) {
-            if (i->second->id() == id)
-                  return i->second;
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   isSpannerStartEnd
 //    does is spanner start or end at tick position tick
 //    for track ?

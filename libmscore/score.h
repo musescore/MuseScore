@@ -400,7 +400,7 @@ class Score : public QObject {
 
       void cmdHalfDuration();
       void cmdDoubleDuration();
-      
+
       void cmdAddBracket();
 
       void resetUserStretch();
@@ -960,11 +960,9 @@ class Score : public QObject {
 
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
       SpannerMap& spannerMap() { return _spanner; }
-      Spanner* findSpanner(int id) const;
       bool isSpannerStartEnd(int tick, int track) const;
       void removeSpanner(Spanner*);
       void addSpanner(Spanner*);
-      void clearSpannerIds();
 
       ChordRest* findCR(int tick, int track) const;
       void layoutSpanner();

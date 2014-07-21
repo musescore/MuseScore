@@ -732,7 +732,6 @@ Palette* MuseScore::newLinesPalette()
       qreal w = gscore->spatium() * 8;
 
       Slur* slur = new Slur(gscore);
-      slur->setId(0);
       sp->append(slur, qApp->translate("lines", "Slur"));
 
       Hairpin* gabel0 = new Hairpin(gscore);

@@ -37,7 +37,6 @@ namespace Ms {
 void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
       {
       Q_ASSERT(dst->segmentType() == Segment::Type::ChordRest);
-      clearSpannerIds();
       QList<Chord*> graceNotes;
       int dstStaffStart = staffIdx;
       int dstTick = dst->tick();
@@ -157,7 +156,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               }
                         else if (tag == "endSpanner") {
                               int id = e.intAttribute("id");
-                              Spanner* spanner = findSpanner(id);
+                              Spanner* spanner = e.findSpanner(id);
                               if (spanner) {
                                     // e.spanner().removeOne(spanner);
                                     spanner->setTick2(e.tick() - tickStart + dstTick);

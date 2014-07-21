@@ -717,23 +717,63 @@ const SpannerValues* XmlReader::spannerValues(int id)
       return 0;
       }
 
-void XmlReader::addSpanner(Spanner* t)
+void XmlReader::addSpanner(int id, Spanner* s)
       {
-      _spanner.append(t);
+      _spanner.append(std::pair<int, Spanner*>(id, s));
       }
 
-void XmlReader::removeSpanner(Spanner* t)
+void XmlReader::removeSpanner(const Spanner* s)
       {
-      _spanner.removeOne(t);
+      for (auto i : _spanner) {
+            if (i.second == s) {
+                  _spanner.removeOne(i);
+                  return;
+                  }
+            }
       }
 
 Spanner* XmlReader::findSpanner(int id)
       {
-      for (Spanner* spanner : _spanner) {
-            if (spanner->id() == id)
-                  return spanner;
+      for (auto i : _spanner) {
+            if (i.first == id)
+                  return i.second;
             }
-      return 0;
+      return nullptr;
+      }
+
+int XmlReader::spannerId(const Spanner* s)
+      {
+      for (auto i : _spanner) {
+            if (i.second == s)
+                  return i.first;
+            }
+      qDebug("XmlReader::spannerId not found");
+      return -1;
+      }
+
+int Xml::addSpanner(const Spanner* s)
+      {
+      ++_spannerId;
+      _spanner.append(std::pair<int, const Spanner*>(_spannerId, s));
+      return _spannerId;
+      }
+
+const Spanner* Xml::findSpanner(int id)
+      {
+      for (auto i : _spanner) {
+            if (i.first == id)
+                  return i.second;
+            }
+      return nullptr;
+      }
+
+int Xml::spannerId(const Spanner* s)
+      {
+      for (auto i : _spanner) {
+            if (i.second == s)
+                  return i.first;
+            }
+      return addSpanner(s);
       }
 
 }

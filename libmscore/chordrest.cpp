@@ -312,7 +312,7 @@ bool ChordRest::readProperties(XmlReader& e)
             int id = e.intAttribute("id");
             if (id == 0)
                   id = e.intAttribute("number");                  // obsolete
-            Spanner* spanner = score()->findSpanner(id);
+            Spanner* spanner = e.findSpanner(id);
             if (!spanner)
                   qDebug("ChordRest::read(): Slur id %d not found", id);
             else {

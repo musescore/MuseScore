@@ -336,7 +336,7 @@ LineSegment* Trill::createLineSegment()
 
 void Trill::write(Xml& xml) const
       {
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id()));
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       xml.tag("subtype", trillTypeName());
       SLine::writeProperties(xml);
       if (_accidental)
@@ -353,7 +353,7 @@ void Trill::read(XmlReader& e)
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
 
-      setId(e.intAttribute("id", -1));
+      e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")

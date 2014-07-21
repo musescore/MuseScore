@@ -754,12 +754,12 @@ void Note::write(Xml& xml) const
                         _dots[i]->write(xml);
                   }
             }
-      if (_tieFor) {
-            _tieFor->setId(++xml.spannerId);
+      if (_tieFor)
             _tieFor->write(xml);
+      if (_tieBack) {
+            int id = xml.spannerId(_tieBack);
+            xml.tagE(QString("endSpanner id=\"%1\"").arg(id));
             }
-      if (_tieBack)
-            xml.tagE(QString("endSpanner id=\"%1\"").arg(_tieBack->id()));
       if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.isEmpty()) {
             xml.stag("Events");
             foreach(const NoteEvent& e, _playEvents)
@@ -784,12 +784,10 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_ID::HEAD_TYPE);
       writeProperty(xml, P_ID::VELO_TYPE);
 
-      foreach (Spanner* e, _spannerFor) {
-            e->setId(++xml.spannerId);
+      foreach (Spanner* e, _spannerFor)
             e->write(xml);
-            }
       foreach (Spanner* e, _spannerBack)
-            xml.tagE(QString("endSpanner id=\"%1\"").arg(e->id()));
+            xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(e)));
 
       xml.etag();
       }
@@ -878,7 +876,6 @@ void Note::read(XmlReader& e)
                   _tieFor->setTrack(track());
                   _tieFor->read(e);
                   _tieFor->setStartNote(this);
-                  e.addSpanner(_tieFor);
                   }
             else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
                   Fingering* f = new Fingering(score());
@@ -1037,7 +1034,6 @@ void Note::read(XmlReader& e)
                   sp->setTick(e.tick());
                   addSpannerFor(sp);
                   sp->setParent(this);
-                  e.addSpanner(sp);
                   }
             else if (tag == "onTimeType")                   // obsolete
                   e.skipCurrentElement(); // _onTimeType = readValueType(e);

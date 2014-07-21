@@ -471,8 +471,8 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
             Measure* m1 = startCR()->segment()->measure();
             Measure* m2 = endCR()->segment()->measure();
-            qDebug("zero slur id%d at tick %d(%d) track %d in measure %d-%d",
-               id(), m1->tick(), tick(), track(), m1->no(), m2->no());
+            qDebug("zero slur at tick %d(%d) track %d in measure %d-%d",
+               m1->tick(), tick(), track(), m1->no(), m2->no());
             return;
             }
 
@@ -1148,7 +1148,6 @@ void SlurSegment::reset()
 Slur::Slur(Score* s)
    : SlurTie(s)
       {
-      setId(-1);
       setAnchor(Anchor::CHORD);
       }
 
@@ -1166,7 +1165,7 @@ Slur::~Slur()
 
 void Slur::write(Xml& xml) const
       {
-      xml.stag(QString("Slur id=\"%1\"").arg(id()));
+      xml.stag(QString("Slur id=\"%1\"").arg(xml.spannerId(this)));
       SlurTie::writeProperties(xml);
       xml.etag();
       }
@@ -1178,7 +1177,7 @@ void Slur::write(Xml& xml) const
 void Slur::read(XmlReader& e)
       {
       setTrack(e.track());      // set staff
-      setId(e.intAttribute("id"));
+      e.addSpanner(e.intAttribute("id"), this);
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "track2")
@@ -1265,8 +1264,8 @@ void Slur::layout()
             }
 
       if (startCR() == 0) {
-            qDebug("Slur::layout(): id %d  track %d-%d  %p - %p tick %d-%d null start anchor",
-               id(), track(), track2(), startCR(), endCR(), tick(), tick2());
+            qDebug("Slur::layout(): track %d-%d  %p - %p tick %d-%d null start anchor",
+               track(), track2(), startCR(), endCR(), tick(), tick2());
             return;
             }
       if (endCR() == 0) {

@@ -49,7 +49,7 @@ class XmlReader : public XmlStreamReader {
       QList<Beam*>    _beams;
       QList<Tuplet*>  _tuplets;
       QList<SpannerValues> _spannerValues;
-      QList<Spanner*> _spanner;
+      QList<std::pair<int,Spanner*>> _spanner;
       QList<StaffType> _staffTypes;
       void htmlToString(int level, QString*);
       Interval _transpose;
@@ -103,9 +103,10 @@ class XmlReader : public XmlStreamReader {
       QList<Tuplet*>& tuplets()                      { return _tuplets; }
       QList<Beam*>& beams()                          { return _beams; }
 
-      void removeSpanner(Spanner*);
-      void addSpanner(Spanner*);
+      void removeSpanner(const Spanner*);
+      void addSpanner(int id, Spanner*);
       Spanner* findSpanner(int id);
+      int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
 
       void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
       const SpannerValues* spannerValues(int id);
@@ -117,6 +118,7 @@ class XmlReader : public XmlStreamReader {
 
 //---------------------------------------------------------
 //   Xml
+//    xml writer
 //---------------------------------------------------------
 
 class Xml : public QTextStream {
@@ -124,7 +126,8 @@ class Xml : public QTextStream {
 
       QList<QString> stack;
       void putLevel();
-      QList<Spanner*> _spanner;
+      QList<std::pair<int,const Spanner*>> _spanner;
+      int _spannerId = 1;
 
    public:
       int curTick   =  0;           // used to optimize output
@@ -138,9 +141,10 @@ class Xml : public QTextStream {
 
       int tupletId  = 1;
       int beamId    = 1;
-      int spannerId = 1;
-      QList<Spanner*>& spanner() { return _spanner; }
-      void addSpanner(Spanner* s) { _spanner.append(s); }
+
+      int addSpanner(const Spanner*);     // returns allocated id
+      const Spanner* findSpanner(int id);
+      int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
 
       Xml(QIODevice* dev);
       Xml();

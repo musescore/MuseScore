@@ -192,7 +192,6 @@ Spanner::Spanner(const Spanner& s)
       _tick         = s._tick;
       _tick2        = s._tick2;
       _track2       = s._track2;
-      _id           = -1;
       }
 
 Spanner::~Spanner()
