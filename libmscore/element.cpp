@@ -765,7 +765,7 @@ bool Element::readProperties(XmlReader& e)
                   //   when we re-discover the issue that caused the check for SYMBOL to be added,
                   //   we will need to find a different solution if possible
                   if (score()->mscVersion() > 114 || (type() != Element::Type::GLISSANDO && type() != Element::Type::FINGERING))
-                        e.setTick(score()->fileDivision(val));
+                        e.initTick(score()->fileDivision(val));
                   }
             }
       else if (tag == "offset")

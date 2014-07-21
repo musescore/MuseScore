@@ -563,7 +563,7 @@ void Debugger::updateElement(Element* el)
       for (int i = 0;; ++i) {
             QTreeWidgetItem* item = list->topLevelItem(i);
             if (item == 0) {
-                  qDebug("Debugger::Element not found %s %p", el->name(), el);
+                  qDebug("Debugger::Element not found %s %p idx %d", el->name(), el, i);
                   break;
                   }
             if (item->type() == QTreeWidgetItem::Type)

@@ -206,7 +206,7 @@ void Score::write(Xml& xml, bool selectionOnly)
 void Score::readStaff(XmlReader& e)
       {
       int staff = e.intAttribute("id", 1) - 1;
-      e.setTick(0);
+      e.initTick(0);
       e.setTrack(staff * VOICES);
 
       if (staff == 0) {
@@ -235,7 +235,7 @@ void Score::readStaff(XmlReader& e)
                         if (!measure->isMMRest()) {
                               measures()->add(measure);
                               e.setLastMeasure(measure);
-                              e.setTick(measure->tick() + measure->ticks());
+                              e.initTick(measure->tick() + measure->ticks());
                               }
                         }
                   else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
@@ -245,7 +245,7 @@ void Score::readStaff(XmlReader& e)
                         measures()->add(mb);
                         }
                   else if (tag == "tick")
-                        e.setTick(e.readInt());
+                        e.initTick(e.readInt());
                   else
                         e.unknown();
                   }
@@ -262,7 +262,7 @@ void Score::readStaff(XmlReader& e)
                               measure->setTick(e.tick());
                               measures()->add(measure);
                               }
-                        e.setTick(measure->tick());
+                        e.initTick(measure->tick());
                         measure->read(e, staff);
                         if (measure->isMMRest())
                               measure = e.lastMeasure()->nextMeasure();
@@ -275,7 +275,7 @@ void Score::readStaff(XmlReader& e)
                               }
                         }
                   else if (tag == "tick")
-                        e.setTick(e.readInt());
+                        e.initTick(e.readInt());
                   else
                         e.unknown();
                   }

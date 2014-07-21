@@ -464,7 +464,7 @@ Score::FileError Score::read114(XmlReader& e)
                   if (s->tick() == -1)
                         s->setTick(e.tick());
                   else
-                        e.setTick(s->tick());      // update current tick
+                        e.initTick(s->tick());      // update current tick
                   if (s->track2() == -1)
                         s->setTrack2(s->track());
                   if (s->tick2() == -1) {
