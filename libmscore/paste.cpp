@@ -310,7 +310,9 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
             Element* e = 0;
             Segment* s = s1;
             bool found = false;
-            while (!found && s != s2->next1MM()) {
+            if (s2)
+                  s2 = s2->next1MM();
+            while (!found && s != s2) {
                   for (int i = dstStaffStart * VOICES; i < (endStaff + 1) * VOICES; i++) {
                         e = s->element(i);
                         if (e) {
