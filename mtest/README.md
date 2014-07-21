@@ -7,6 +7,7 @@ Adapt for your own platform
     make debug install
     cd build.debug/mtest
     make
+    (make install) on Windows
 
 running them all
 
