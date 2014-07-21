@@ -252,12 +252,9 @@ Chord::Chord(const Chord& c, bool link)
             if (link)
                   a->linkTo(c._arpeggio);
             }
-      if (c._tremolo
-          && (!c._tremolo->twoNotes() || c._tremolo->chord1() == &c)) {
+      if (c._tremolo && !c._tremolo->twoNotes()) {
             Tremolo* t = new Tremolo(*(c._tremolo));
-            t->setChords(this,0);
-            //add(t);
-            _tremolo = t;
+            add(t);
             if (link)
                   t->linkTo(c._tremolo);
             }
