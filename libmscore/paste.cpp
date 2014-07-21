@@ -51,13 +51,14 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                   break;
                   }
             QString version = e.attribute("version", "NONE");
-            if(version != MSC_VERSION)
+            if (version != MSC_VERSION)
                   break;
             int tickStart     = e.intAttribute("tick", 0);
                 tickLen       = e.intAttribute("len", 0);
             int srcStaffStart = e.intAttribute("staff", 0);
                 staves        = e.intAttribute("staves", 0);
-            e.setTick(tickStart);
+            e.setTickOffset(dstTick - tickStart);
+            e.initTick(0);
 
             while (e.readNextStartElement()) {
                   if (done)
@@ -89,7 +90,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               e.setTransposeDiatonic(e.readInt());
                         else if (tag == "tick") {
                               int tick = e.readInt();
-                              e.setTick(tick);
+                              e.initTick(tick);
                               int shift = tick - tickStart;
                               if (makeGap && !makeGap1(dstTick + shift, dstStaffIdx, Fraction::fromTicks(tickLen - shift))) {
                                     qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
@@ -102,7 +103,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               Tuplet* tuplet = new Tuplet(this);
                               tuplet->setTrack(e.track());
                               tuplet->read(e);
-                              int tick = e.tick() - tickStart + dstTick;
+                              int tick = e.tick();
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
@@ -116,11 +117,11 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               int voice = cr->voice();
                               int track = dstStaffIdx * VOICES + voice;
                               cr->setTrack(track);
-                              int tick = e.tick() - tickStart + dstTick;
+                              int tick = e.tick();
                               if (cr->isGrace())
                                     graceNotes.push_back(static_cast<Chord*>(cr));
                               else {
-                                    e.setTick(e.tick() + cr->actualTicks());
+                                    e.incTick(cr->actualTicks());
                                     if (cr->type() == Element::Type::CHORD) {
                                           Chord* chord = static_cast<Chord*>(cr);
                                           for (int i = 0; i < graceNotes.size(); ++i) {
@@ -144,14 +145,14 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               sp->read(e);
                               sp->setTrack(dstStaffIdx * VOICES);
                               sp->setTrack2(dstStaffIdx * VOICES);
-                              sp->setTick(e.tick() - tickStart + dstTick);
+                              sp->setTick(e.tick());
                               addSpanner(sp);
                               }
                         else if (tag == "Slur") {
                               Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
                               sp->read(e);
                               sp->setTrack(dstStaffIdx * VOICES);
-                              sp->setTick(e.tick() - tickStart + dstTick);
+                              sp->setTick(e.tick());
                               undoAddElement(sp);
                               }
                         else if (tag == "endSpanner") {
@@ -159,7 +160,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               Spanner* spanner = e.findSpanner(id);
                               if (spanner) {
                                     // e.spanner().removeOne(spanner);
-                                    spanner->setTick2(e.tick() - tickStart + dstTick);
+                                    spanner->setTick2(e.tick());
                                     removeSpanner(spanner);
                                     undoAddElement(spanner);
                                     if (spanner->type() == Element::Type::OTTAVA)
@@ -178,7 +179,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               lyrics->setTrack(e.track());
                               lyrics->read(e);
                               lyrics->setTrack(dstStaffIdx * VOICES);
-                              int tick = e.tick() - tickStart + dstTick;
+                              int tick = e.tick();
                               Segment* segment = tick2segment(tick);
                               if (segment) {
                                     lyrics->setParent(segment);
@@ -205,7 +206,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                                     undoTransposeHarmony(harmony, rootTpc, baseTpc);
                                     }
 
-                              int tick = e.tick() - tickStart + dstTick;
+                              int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
                               harmony->setParent(seg);
@@ -225,7 +226,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               Element* el = Element::name2Element(tag, this);
                               el->setTrack(dstStaffIdx * VOICES);             // a valid track might be necessary for el->read() to work
 
-                              int tick = e.tick() - tickStart + dstTick;
+                              int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
                               el->setParent(seg);
@@ -240,7 +241,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               Clef* clef = new Clef(this);
                               clef->read(e);
                               clef->setTrack(dstStaffIdx * VOICES);
-                              int tick = e.tick() - tickStart + dstTick;
+                              int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               if (m->tick() && m->tick() == tick)
                                     m = m->prevMeasure();
@@ -252,7 +253,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               Breath* breath = new Breath(this);
                               breath->read(e);
                               breath->setTrack(dstStaffIdx * VOICES);
-                              int tick = e.tick() - tickStart + dstTick;
+                              int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* segment = m->undoGetSegment(Segment::Type::Breath, tick);
                               breath->setParent(segment);

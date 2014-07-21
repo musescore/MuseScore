@@ -1733,7 +1733,7 @@ void Measure::read(XmlReader& e, int staffIdx)
 
       // tick is obsolete
       if (e.hasAttribute("tick"))
-            e.setTick(score()->fileDivision(e.intAttribute("tick")));
+            e.initTick(score()->fileDivision(e.intAttribute("tick")));
       // setTick(e.tick());
       // e.setTick(tick());
 
@@ -1758,7 +1758,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             const QStringRef& tag(e.name());
 
             if (tag == "tick")
-                  e.setTick(e.readInt());
+                  e.initTick(e.readInt());
             else if (tag == "BarLine") {
                   BarLine* barLine = new BarLine(score());
                   barLine->setTrack(e.track());
@@ -1871,7 +1871,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                                     tremolo->setParent(chord);
                                     }
                               }
-                        e.rtick() += crticks;
+                        e.incTick(crticks);
                         }
                   }
             else if (tag == "Rest") {
@@ -1887,7 +1887,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         rest->setDuration(timesig()/timeStretch);
                   Fraction ts(timeStretch * rest->globalDuration());
 
-                  e.rtick() += ts.ticks();
+                  e.incTick(ts.ticks());
                   }
             else if (tag == "Breath") {
                   Breath* breath = new Breath(score());
@@ -1963,7 +1963,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   rm->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
                   segment->add(rm);
-                  e.setTick(e.tick() + ticks());
+                  e.incTick(ticks());
                   }
             else if (tag == "Clef") {
                   Clef* clef = new Clef(score());
