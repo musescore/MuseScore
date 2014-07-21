@@ -118,9 +118,6 @@
         <Slur id="2">
           <track>0</track>
           </Slur>
-        <Slur id="3">
-          <track>0</track>
-          </Slur>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -191,6 +188,9 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <Slur id="3">
+          <track>0</track>
+          </Slur>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
