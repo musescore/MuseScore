@@ -54,6 +54,13 @@ bool isTupletUseless(
             const std::multimap<ReducedFraction, MidiChord> &chords);
 
 std::multimap<ReducedFraction, TupletData>::iterator
+removeTuplet(
+            const std::multimap<ReducedFraction, TupletData>::iterator &tupletIt,
+            std::multimap<ReducedFraction, TupletData> &tuplets,
+            const ReducedFraction &maxChordLength,
+            std::multimap<ReducedFraction, MidiChord> &chords);
+
+std::multimap<ReducedFraction, TupletData>::iterator
 removeTupletIfEmpty(
             const std::multimap<ReducedFraction, TupletData>::iterator &tupletIt,
             std::multimap<ReducedFraction, TupletData> &tuplets,

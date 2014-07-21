@@ -105,6 +105,34 @@ bool isTupletUseless(
       }
 
 std::multimap<ReducedFraction, TupletData>::iterator
+removeTuplet(
+            const std::multimap<ReducedFraction, TupletData>::iterator &tupletIt,
+            std::multimap<ReducedFraction, TupletData> &tuplets,
+            const ReducedFraction &maxChordLength,
+            std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+                  // remove references to this tuplet in chords and notes
+      auto chordIt = chords.lower_bound(tupletIt->second.onTime + tupletIt->second.len);
+      if (chordIt != chords.begin()) {
+            --chordIt;
+            while (chordIt->first + maxChordLength > tupletIt->first) {
+                  MidiChord &c = chordIt->second;
+                  if (c.isInTuplet && c.tuplet == tupletIt)
+                        c.isInTuplet = false;
+                  for (auto &note: c.notes) {
+                        if (note.isInTuplet && note.tuplet == tupletIt)
+                              note.isInTuplet = false;
+                        }
+                  if (chordIt == chords.begin())
+                        break;
+                  --chordIt;
+                  }
+            }
+
+      return tuplets.erase(tupletIt);
+      }
+
+std::multimap<ReducedFraction, TupletData>::iterator
 removeTupletIfEmpty(
             const std::multimap<ReducedFraction, TupletData>::iterator &tupletIt,
             std::multimap<ReducedFraction, TupletData> &tuplets,
@@ -114,27 +142,8 @@ removeTupletIfEmpty(
       auto resultIt = tupletIt;
       const auto &tuplet = tupletIt->second;
 
-      if (isTupletUseless(tuplet.voice, tuplet.onTime, tuplet.len, maxChordLength, chords)) {
-                        // remove references to this tuplet in chords and notes
-            auto chordIt = chords.lower_bound(tuplet.onTime + tuplet.len);
-            if (chordIt != chords.begin()) {
-                  --chordIt;
-                  while (chordIt->first + maxChordLength > tupletIt->first) {
-                        MidiChord &c = chordIt->second;
-                        if (c.isInTuplet && c.tuplet == tupletIt)
-                              c.isInTuplet = false;
-                        for (auto &note: c.notes) {
-                              if (note.isInTuplet && note.tuplet == tupletIt)
-                                    note.isInTuplet = false;
-                              }
-                        if (chordIt == chords.begin())
-                              break;
-                        --chordIt;
-                        }
-                  }
-
-            resultIt = tuplets.erase(tupletIt);
-            }
+      if (isTupletUseless(tuplet.voice, tuplet.onTime, tuplet.len, maxChordLength, chords))
+            resultIt = removeTuplet(tupletIt, tuplets, maxChordLength, chords);
 
       return resultIt;
       }
