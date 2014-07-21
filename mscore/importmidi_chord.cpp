@@ -101,6 +101,11 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
       {
       for (auto &track: tracks) {
             auto &chords = track.second.chords;
+
+            Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, track.second.tuplets),
+                       "MChord::removeOverlappingNotes", "Tuplet chord/note is outside tuplet "
+                        "or non-tuplet chord/note is inside tuplet before overlaps remove");
+
             for (auto i1 = chords.begin(); i1 != chords.end(); ) {
                   auto &chord1 = i1->second;
                   const auto &onTime1 = i1->first;
@@ -123,6 +128,17 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                                            onTime2.ticks(), note2.offTime.ticks());
 
                                     note1.offTime = onTime2;
+
+                                    if (!note1.isInTuplet && chord2.isInTuplet) {
+                                          if (note1.offTime > chord2.tuplet->second.onTime) {
+                                                note1.isInTuplet = true;
+                                                note1.tuplet = chord2.tuplet;
+                                                }
+                                          }
+                                    else if (note1.isInTuplet && !chord2.isInTuplet) {
+                                          note1.isInTuplet = false;
+                                          }
+
                                     i2 = std::prev(chords.end());
                                     break;
                                     }
@@ -139,6 +155,12 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                         }
                   ++i1;
                   }
+
+            MidiTuplet::removeEmptyTuplets(track.second);
+
+            Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, track.second.tuplets),
+                       "MChord::removeOverlappingNotes", "Tuplet chord/note is outside tuplet "
+                        "or non-tuplet chord/note is inside tuplet after overlaps remove");
             }
       }
 

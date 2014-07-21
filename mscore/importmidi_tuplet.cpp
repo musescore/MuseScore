@@ -287,7 +287,8 @@ findTupletsForTimeRange(
             int voice,
             const ReducedFraction &onTime,
             const ReducedFraction &len,
-            const std::multimap<ReducedFraction, TupletData> &tupletEvents)
+            const std::multimap<ReducedFraction, TupletData> &tupletEvents,
+            bool strictComparison)
       {
       Q_ASSERT_X(len >= ReducedFraction(0, 1),
                  "MidiTuplet::findTupletForTimeRange", "Negative length of the time range");
@@ -307,7 +308,7 @@ findTupletsForTimeRange(
                   const auto interval = std::make_pair(onTime, onTime + len);
                   const auto tupletInterval = std::make_pair(
                                     tupletData.onTime, tupletData.onTime + tupletData.len);
-                  if (haveIntersection(interval, tupletInterval)) {
+                  if (haveIntersection(interval, tupletInterval, strictComparison)) {
                         result.push_back(it);
                         }
                   }
@@ -319,7 +320,7 @@ findTupletsForTimeRange(
       }
 
 std::multimap<ReducedFraction, TupletData>::const_iterator
-findTupletContainsTime(
+findTupletContainingTime(
             int voice,
             const ReducedFraction &time,
             const std::multimap<ReducedFraction, TupletData> &tupletEvents)
@@ -797,6 +798,56 @@ bool areTupletNonTupletChordsDistinct(
       return true;
       }
 
+// should be called after quantization
+
+bool areTupletRangesOk(
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
+      {
+      for (const auto &chord: chords) {
+            const MidiChord &c = chord.second;
+            const auto foundTuplets = findTupletsForTimeRange(
+                                    c.voice, chord.first, ReducedFraction(0, 1), tuplets, false);
+            if (c.isInTuplet && foundTuplets.empty()) {
+                  qDebug() << "Tuplet chord is actually outside tuplets, "
+                              "bar number (from 1):" << (c.barIndex + 1);
+                  return false;
+                  }
+            if (!c.isInTuplet && !foundTuplets.empty()) {
+                              // chord can touch the tuplet at the end and doesn't belong to it
+                  for (const auto &t: foundTuplets) {
+                        if (chord.first != t->second.onTime + t->second.len) {
+                              qDebug() << "Non-tuplet chord is actually inside tuplet, "
+                                          "bar number (from 1):" << (c.barIndex + 1);
+                              return false;
+                              }
+                        }
+                  }
+            for (const auto &note: c.notes) {
+                  const auto foundTuplets = findTupletsForTimeRange(
+                                    c.voice, note.offTime, ReducedFraction(0, 1), tuplets, false);
+                  if (note.isInTuplet && foundTuplets.empty()) {
+                        qDebug() << "Tuplet note off time is actually outside tuplets, "
+                                    "bar number (from 1):" << (c.barIndex + 1);
+                        return false;
+                        }
+                  if (!note.isInTuplet && !foundTuplets.empty()) {
+                                    // note off time can touch the tuplet
+                                    // at the beg/end and doesn't belong to it
+                        for (const auto &t: foundTuplets) {
+                              if (note.offTime != t->second.onTime
+                                          && note.offTime != t->second.onTime + t->second.len) {
+                                    qDebug() << "Non-tuplet note off time is actually inside tuplet, "
+                                                "bar number (from 1):" << (c.barIndex + 1);
+                                    return false;
+                                    }
+                              }
+                        }
+                  }
+            }
+      return true;
+      }
+
 #endif
 
 
@@ -1112,7 +1163,7 @@ void setAllTupletOffTimes(
                   const auto barEnd = ReducedFraction::fromTicks(
                                     sigmap->bar2tick(chord.barIndex + 1, 0));
                   if (note.offTime > barEnd) {
-                        const auto it = findTupletContainsTime(
+                        const auto it = findTupletContainingTime(
                                           chord.voice, note.offTime, tupletEvents);
                         if (it != tupletEvents.end()) {
                               note.isInTuplet = true;
