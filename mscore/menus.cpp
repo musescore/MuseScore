@@ -463,21 +463,11 @@ Palette* MuseScore::newTremoloPalette()
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Tremolo"));
       sp->setGrid(27, 40);
       sp->setDrawGrid(true);
-      const char* tremoloName[] = {
-            QT_TR_NOOP("Eighth through stem"),
-            QT_TR_NOOP("16th through stem"),
-            QT_TR_NOOP("32nd through stem"),
-            QT_TR_NOOP("64th through stem"),
-            QT_TR_NOOP("Eighth between notes"),
-            QT_TR_NOOP("16th between notes"),
-            QT_TR_NOOP("32nd between notes"),
-            QT_TR_NOOP("64th between notes")
-            };
 
       for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
             Tremolo* tremolo = new Tremolo(gscore);
             tremolo->setTremoloType(TremoloType(i));
-            sp->append(tremolo, tr(tremoloName[i - int(TremoloType::R8)]));
+            sp->append(tremolo, tremolo->subtypeName());
             }
       return sp;
       }

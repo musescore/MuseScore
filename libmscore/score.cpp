@@ -2971,11 +2971,9 @@ void Score::selectRange(Element* e, int staffIdx)
 void Score::collectMatch(void* data, Element* e)
       {
       ElementPattern* p = static_cast<ElementPattern*>(data);
-/*      if (p->type == e->type() && p->subtype != e->subtype())
-            qDebug("%s subtype %d does not match", e->name(), e->subtype());
-      */
-//TODO      if ((p->type != e->type()) || (p->subtypeValid && p->subtype != e->subtype()))
       if (p->type != int(e->type()))
+            return;
+      if (p->subtypeValid && p->subtype != e->subtype())
             return;
       if ((p->staffStart != -1)
           && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
