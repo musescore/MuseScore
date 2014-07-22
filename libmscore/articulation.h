@@ -85,6 +85,7 @@ class Articulation : public Element {
 
       void setArticulationType(ArticulationType);
       ArticulationType articulationType() const { return _articulationType; }
+      virtual int subtype() const { return int(_articulationType); }
       void setSubtype(const QString& s);
       QString subtypeName() const;
 

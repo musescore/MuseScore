@@ -396,7 +396,7 @@ class Element : public QObject {
       virtual qreal baseLine() const          { return -height();       }
 
       virtual Element::Type type() const = 0;
-      virtual Element::Type subType() const   { return type(); }  // for select gui
+      virtual int subtype() const   { return -1; }  // for select gui
       bool isChordRest() const;
       bool isDurationElement() const;
       bool isSLine() const;
@@ -445,6 +445,7 @@ class Element : public QObject {
       // debug functions
       virtual void dump() const;
       Q_INVOKABLE const char* name() const;
+      virtual QString subtypeName() const;
       virtual QString userName() const;
       void dumpQPointF(const char*) const;
 

@@ -54,8 +54,10 @@ InspectorNote::InspectorNote(QWidget* parent)
       //
       // fix order of note heads
       //
-      for (unsigned i = 0; i < sizeof(heads)/sizeof(*heads); ++i)
+      for (unsigned i = 0; i < sizeof(heads)/sizeof(*heads); ++i) {
+            n.noteHeadGroup->addItem(NoteHead::groupToGroupName(heads[i]));
             n.noteHeadGroup->setItemData(i, QVariant(int(heads[i])));
+            }
 
       // noteHeadType starts at -1: correct values and count one item more (HEAD_AUTO)
       for (int i = 0; i <= int(NoteHead::Type::HEAD_TYPES); ++i)

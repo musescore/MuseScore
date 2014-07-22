@@ -26,6 +26,17 @@ namespace Ms {
 //   Tremolo
 //---------------------------------------------------------
 
+static const char* tremoloName[] = {
+      QT_TR_NOOP("Eighth through stem"),
+      QT_TR_NOOP("16th through stem"),
+      QT_TR_NOOP("32nd through stem"),
+      QT_TR_NOOP("64th through stem"),
+      QT_TR_NOOP("Eighth between notes"),
+      QT_TR_NOOP("16th between notes"),
+      QT_TR_NOOP("32nd between notes"),
+      QT_TR_NOOP("64th between notes")
+      };
+
 Tremolo::Tremolo(Score* score)
    : Element(score)
       {
@@ -323,6 +334,11 @@ Fraction Tremolo::tremoloLen() const
             case 4: f.set(1,64); break;
             }
       return f;
+      }
+
+QString Tremolo::subtypeName() const
+      {
+      return tr(tremoloName[subtype() - int(TremoloType::R8)]);
       }
 
 }

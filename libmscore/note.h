@@ -87,6 +87,8 @@ class NoteHead : public Symbol {
       virtual void write(Xml& xml) const;
 
       Group headGroup() const;
+
+      static const char* groupToGroupName(Group group);
       };
 
 //---------------------------------------------------------
@@ -265,6 +267,9 @@ class Note : public Element {
       NoteHead::Type headType() const     { return _headType;  }
       void setHeadGroup(NoteHead::Group val);
       void setHeadType(NoteHead::Type t);
+
+      virtual int subtype() const { return (int) _headGroup; }
+      virtual QString subtypeName() const;
 
       void setPitch(int val);
       void undoSetPitch(int val);
