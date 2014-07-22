@@ -898,6 +898,8 @@ void Slur::slurPos(SlurPos* sp)
                         yo = fixArticulations(yo, sc, __up);
                   }
             }
+      else if (sc->up() != _up)
+            yo = fixArticulations(yo, sc, __up);
 
       if (sa1 == SlurAnchor::NONE)
             sp->p1 += QPointF(xo, yo);
@@ -960,6 +962,8 @@ void Slur::slurPos(SlurPos* sp)
             else if (ec->up() != _up)
                   yo = fixArticulations(yo, ec, __up);
             }
+      else if (ec->up() != _up)
+            yo = fixArticulations(yo, ec, __up);
 
       if (sa2 == SlurAnchor::NONE)
             sp->p2 += QPointF(xo, yo);
