@@ -110,8 +110,7 @@ void splitUnequalChords(std::multimap<int, MTrack> &tracks);
 int chordAveragePitch(const QList<MidiNote> &notes, int beg, int end);
 int chordAveragePitch(const QList<MidiNote> &notes);
 
-std::map<int, ReducedFraction>
-findMaxChordLengths(const std::multimap<ReducedFraction, MidiChord> &chords);
+ReducedFraction findMaxChordLength(const std::multimap<ReducedFraction, MidiChord> &chords);
 
 std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator>
 findChordsForTimeRange(
