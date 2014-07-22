@@ -88,6 +88,8 @@ void TextPalette::pageChanged(int idx)
 
 void TextPalette::populateCommon()
       {
+      pCommon->clear();
+
       Symbol* s = new Symbol(gscore);
       s->setSym(SymId::gClef, gscore->scoreFont());
       pCommon->append(s, Sym::id2userName(SymId::gClef));
