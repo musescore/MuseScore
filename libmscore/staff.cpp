@@ -282,7 +282,8 @@ const Groups& Staff::group(int tick) const
 
 void Staff::addTimeSig(TimeSig* timesig)
       {
-      timesigs[timesig->segment()->tick()] = timesig;
+      if (timesig->segment()->segmentType() == Segment::Type::TimeSig)
+            timesigs[timesig->segment()->tick()] = timesig;
       }
 
 //---------------------------------------------------------
@@ -291,7 +292,8 @@ void Staff::addTimeSig(TimeSig* timesig)
 
 void Staff::removeTimeSig(TimeSig* timesig)
       {
-      timesigs.erase(timesig->segment()->tick());
+      if (timesig->segment()->segmentType() == Segment::Type::TimeSig)
+            timesigs.erase(timesig->segment()->tick());
       }
 
 //---------------------------------------------------------
