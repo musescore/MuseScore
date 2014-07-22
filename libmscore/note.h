@@ -87,6 +87,8 @@ class NoteHead : public Symbol {
       virtual void write(Xml& xml) const;
 
       Group headGroup() const;
+
+      static const char* groupToGroupName(Group group);
       };
 
 //---------------------------------------------------------
