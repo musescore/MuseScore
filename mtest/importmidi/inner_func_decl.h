@@ -17,8 +17,6 @@ bool isTupletAllowed(const TupletInfo &tupletInfo);
 
 std::vector<int> findTupletNumbers(const ReducedFraction &divLen, const ReducedFraction &barFraction);
 
-ReducedFraction findQuantizationError(const ReducedFraction &onTime, const ReducedFraction &quantValue);
-
 TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
                                    int tupletNumber,
                                    const ReducedFraction &quantValue,
