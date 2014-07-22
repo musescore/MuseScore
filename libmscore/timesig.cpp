@@ -311,12 +311,22 @@ void TimeSig::layout1()
             // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
 
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
+            
+            //align on the wider
+            if (numRect.width() >= denRect.width()) {
+                  // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
+                  pz = QPointF(0.0, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
 
-            // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            pz = QPointF(0.0, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
-
-            // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + _spatium);
+                  // denominator: horiz: centred around centre of numerator | vert: one space below centre line
+                  pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + _spatium);
+                  }
+            else {
+                  // denominator: horiz: centred around centre of numerator | vert: one space below centre line
+                  pn = QPointF(0.0, yoff + displ + _spatium);
+                  
+                  // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
+                  pz = QPointF((denRect.width() - numRect.width())*.5, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
+                  }
 
             setbbox(numRect.translated(pz));   // translate bounding boxes to actual string positions
             addbbox(denRect.translated(pn));
