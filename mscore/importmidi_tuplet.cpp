@@ -1031,6 +1031,21 @@ ReducedFraction findOnTimeBetweenChords(
       return onTime;
       }
 
+std::vector<TupletInfo>::const_iterator
+findTupletAtBarEnd(
+            int voice,
+            const ReducedFraction &endBarTick,
+            const std::vector<TupletInfo> &tuplets)
+      {
+      for (auto it = tuplets.begin(); it != tuplets.end(); ++it) {
+            if (it->chords.begin()->second->second.voice != voice)
+                  continue;
+            if (it->onTime + it->len == endBarTick)
+                  return it;
+            }
+      return tuplets.end();
+      }
+
 void setBarIndexes(
             std::vector<TupletInfo> &tuplets,
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
@@ -1047,10 +1062,22 @@ void setBarIndexes(
 
       for (auto &chord: nonTuplets) {
             const auto onTime = findOnTimeBetweenChords(*chord, chords, basicQuant);
-            if (onTime >= endBarTick)
+            if (onTime >= endBarTick) {
                   chord->second.barIndex = barIndex + 1;
-            else
-                  chord->second.barIndex = barIndex;
+                  continue;
+                  }
+            const auto tupletAtBarEnd = findTupletAtBarEnd(chord->second.voice, endBarTick, tuplets);
+            if (tupletAtBarEnd != tuplets.end()) {
+                  const auto lastTupletChordOnTime = std::prev(tupletAtBarEnd->chords.end())->first;
+                              // if non-tuplet intersects some tuplet at the end of the bar
+                              // and goes after all chords of that tuplet
+                              // then there is no place for this non-tuplet in the current bar
+                  if (chord->first > lastTupletChordOnTime) {
+                        chord->second.barIndex = barIndex + 1;
+                        continue;
+                        }
+                  }
+            chord->second.barIndex = barIndex;
             }
       }
 
