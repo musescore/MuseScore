@@ -3008,7 +3008,7 @@ void Score::layoutPages()
                   }
 
             tmargin     = qMax(tmargin, pC.prevDist);
-            pC.prevDist = bmargin;
+            
 
             qreal h = pC.sr.height();
             if (pC.lastSystem && (pC.y + h + tmargin + qMax(bmargin, slb) > pC.ey)) {
@@ -3030,6 +3030,7 @@ void Score::layoutPages()
 
             qreal x = pC.page->lm();
             pC.y   += tmargin;
+            pC.prevDist = bmargin;
 
             foreach(System* system, pC.sr.systems) {
                   system->setPos(x, pC.y);
