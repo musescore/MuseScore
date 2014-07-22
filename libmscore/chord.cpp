@@ -2485,7 +2485,11 @@ QPointF Chord::layoutArticulation(Articulation* a)
             QPointF pos;                        // computed articulation position
             if (stem())                         // if there is a stem, assume artic. will be beyond the stem
                   pos = stem()->hookPos();
-
+            else {                              // otherwise, compute horizontal position as if there were a stem
+                  pos.rx() = stemPosX();
+                  if (!_up)
+                        pos.rx() += point(score()->styleS(StyleIdx::stemWidth));
+                  }
             a->layout();
 
             qreal _spatium2 = _spatium * .5;
