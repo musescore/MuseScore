@@ -948,6 +948,9 @@ void cleanStaccatoOfNonTuplets(
             }
       }
 
+// chord on time shouldn't go before previous chord on time or after next chord on time
+// this function finds such on time value between previous and next chords
+
 ReducedFraction findOnTimeBetweenChords(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const std::multimap<ReducedFraction, MidiChord> &chords,
@@ -969,9 +972,8 @@ ReducedFraction findOnTimeBetweenChords(
       Q_ASSERT_X(chordIt != chords.end(),
                  "MidiTuplet::findOnTimeBetweenChords", "Chord iterator was not found");
 
-            // chords with equal voices here can have equal on time values
-            // so skip such chords
-
+                  // chords with equal voices here can have equal on time values
+                  // so skip such chords
       const int voice = chordIt->second.voice;
       while (true) {
             onTime = Quantize::findMinQuantizedOnTime(*chordIt, quant);
