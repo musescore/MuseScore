@@ -2258,7 +2258,7 @@ void Text::layoutEdit()
 bool Text::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
       {
       Element::Type type = e->type();
-      return type == Element::Type::SYMBOL;
+      return type == Element::Type::SYMBOL || type == Element::Type::FSYMBOL;
       }
 
 //---------------------------------------------------------
@@ -2284,6 +2284,27 @@ Element* Text::drop(const DropData& data)
                   else {
                         startEdit(data.view, data.pos);
                         curLine().insert(&_cursor, id);
+                        endEdit();
+                        }
+                  }
+                  return 0;
+
+            case Element::Type::FSYMBOL:
+                  {
+                  int code = static_cast<FSymbol*>(e)->code();
+                  delete e;
+
+                  printf("drop fsymbol %d\n", code);
+
+                  if (_editMode) {
+                        insert(&_cursor, QChar(code));
+                        layout1();
+                        static const qreal w = 2.0; // 8.0 / view->matrix().m11();
+                        score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
+                        }
+                  else {
+                        startEdit(data.view, data.pos);
+                        curLine().insert(&_cursor, QChar(code));
                         endEdit();
                         }
                   }
