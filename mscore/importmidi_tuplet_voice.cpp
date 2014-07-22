@@ -448,7 +448,7 @@ eraseBackTiedTuplet(const std::list<TiedTuplet>::iterator &it,
       return backTiedTuplets.erase(it);
       }
 
-void setVoicesFromPrevBar(
+void setVoicesFromPrevBars(
             std::list<TiedTuplet> &backTiedTuplets,
             std::vector<TupletInfo> &tuplets,
             std::set<int> &pendingTuplets,
@@ -622,9 +622,9 @@ void setBackTiedVoices(
       {
       auto backTupletIntervals = findBackTupletIntervals(backTiedTuplets, tuplets);
 
-                  // set voices that are already set from previous bar
-      setVoicesFromPrevBar(backTiedTuplets, tuplets, pendingTuplets, pendingNonTuplets,
-                           tupletIntervals, backTupletIntervals, chords, basicQuant);
+                  // set voices that are already set from one of previous bars
+      setVoicesFromPrevBars(backTiedTuplets, tuplets, pendingTuplets, pendingNonTuplets,
+                            tupletIntervals, backTupletIntervals, chords, basicQuant);
 
                   // set yet unset back tied voices
       const int limit = tupletVoiceLimit();
@@ -642,9 +642,9 @@ void setBackTiedVoices(
                         = (pendingNonTuplets.find(tiedTuplet.chord) != pendingNonTuplets.end());
 
             if (tiedTuplet.voice == -1) {
-                  int voice = findVoiceForBackTied(*tiedTuplet.chord, limit, backInterval,
-                                                   backTupletIntervals, chords,
-                                                   isNonTupletBackChord, basicQuant);
+                  const int voice = findVoiceForBackTied(*tiedTuplet.chord, limit, backInterval,
+                                                         backTupletIntervals, chords,
+                                                         isNonTupletBackChord, basicQuant);
                   if (voice < limit) {
                         tiedTuplet.voice = voice;
                         }
@@ -732,8 +732,7 @@ std::vector<int> findTiedNotes(
             const auto offTimeInTuplet = Quantize::findQuantizedTupletNoteOffTime(
                         chordIt->first, note.offTime, tuplet.len, tupletRatio, startBarTick).first;
 
-            if (offTimeInTuplet < startBarTick
-                        || offTimeInTuplet <= tuplet.onTime)
+            if (offTimeInTuplet < startBarTick || offTimeInTuplet <= tuplet.onTime)
                   continue;
 
             const auto regularOffTime = Quantize::findQuantizedNoteOffTime(
@@ -749,7 +748,7 @@ std::vector<int> findTiedNotes(
       return tiedNotes;
       }
 
-bool isChordFromPrevBar(
+bool isChordFromPrevBars(
             int chordBarIndex,
             int currentBarIndex,
             bool isInTupletOfThisBar)
@@ -789,7 +788,7 @@ findBackTiedTuplets(
                   --chordIt;
 
                   const auto tupletIt = tupletChords.find(&*chordIt);
-                  bool isInTupletOfThisBar = (tupletIt != tupletChords.end());
+                  const bool isInTupletOfThisBar = (tupletIt != tupletChords.end());
                               // don't make back tie to the chord in overlapping tuplet
                   if (isInTupletOfThisBar
                               && areTupletsIntersect(tuplets[tupletIt->second], tuplets[i])) {
@@ -797,24 +796,27 @@ findBackTiedTuplets(
                         }
                               // remember voices of tuplets that have tied chords from previous bar
                               // and that chords don't belong to the tuplets of this bar
-                  int voice = isChordFromPrevBar(chordIt->second.barIndex, barIndex,
-                                                 isInTupletOfThisBar)
-                              ? chordIt->second.voice : -1;
+                  const int voice = isChordFromPrevBars(chordIt->second.barIndex, barIndex,
+                                                        isInTupletOfThisBar)
+                                    ? chordIt->second.voice : -1;
                   const auto interval = std::make_pair(tuplets[i].onTime,
                                                        tuplets[i].onTime + tuplets[i].len);
-                  if (voice != -1 && haveIntersection(interval, backTupletIntervals[voice])) {
+                              // if voice is specified and the new interval have intersection
+                              // with already found back tuplets with the save voice
+                              // then discard the interval
+                  if (voice != -1 && haveIntersection(interval, backTupletIntervals[voice]))
                         continue;
-                        }
 
                   const auto tiedNotes = findTiedNotes(tuplets[i], chordIt, startBarTick, basicQuant);
                   if (!tiedNotes.empty()) {
                                     // don't tie back twice to the same chord or tuplet
                         if (usedChords.find(&*chordIt) != usedChords.end())
                               continue;
+                                    // don't tie back twice to the same tuplet
                         const int tupletIndex = findTupletWithChord(chordIt->second, tuplets);
                         if (usedTuplets.find(tupletIndex) != usedTuplets.end())
                               continue;
-                                    // we can add back-tied tuplet
+                                    // we can add back-tied tuplet; voice here can be -1
                         tiedTuplets.push_back({tuplets[i].id, voice, &*chordIt, tiedNotes});
                         backTupletIntervals[voice].push_back(interval);
                         usedChords.insert(&*chordIt);
