@@ -118,6 +118,12 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead:
    }
 };
 
+
+static const char* noteHeadNames[] = {
+      "normal","cross","diamond","triangle","slash","xcircle"
+      ,"do","re","mi","fa","sol","la","ti","alt. brevis"
+};
+
 //---------------------------------------------------------
 //   noteHead
 //---------------------------------------------------------
@@ -2369,6 +2375,11 @@ QQmlListProperty<Ms::NoteDot> Note::qmlDots()
             if (dot != nullptr)
                   list.append(dot);
       return QQmlListProperty<Ms::NoteDot>(this, list);
+      }
+
+const char* NoteHead::groupToGroupName(NoteHead::Group group)
+      {
+      return noteHeadNames[int(group)];
       }
 
 }
