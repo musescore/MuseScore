@@ -754,7 +754,7 @@ bool isChordFromPrevBar(
             int currentBarIndex,
             bool isInTupletOfThisBar)
       {
-      return chordBarIndex != -1 && chordBarIndex == currentBarIndex - 1 && !isInTupletOfThisBar;
+      return chordBarIndex != -1 && chordBarIndex <= currentBarIndex - 1 && !isInTupletOfThisBar;
       }
 
 // prepare tied tuplets - pairs of tuplet and chord back-tied to it
