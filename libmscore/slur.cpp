@@ -802,9 +802,9 @@ void Slur::slurPos(SlurPos* sp)
       sp->p1 = scr->pagePos() - sp->system1->pagePos();
       sp->p2 = ecr->pagePos() - sp->system2->pagePos();
       // account for centering or other adjustments (other than mirroring)
-      if (!note1->mirror())
+      if (note1 && !note1->mirror())
             sp->p1.rx() += note1->x();
-      if (!note2->mirror())
+      if (note2 && !note2->mirror())
             sp->p2.rx() += note2->x();
 
       qreal xo, yo;
@@ -903,7 +903,7 @@ void Slur::slurPos(SlurPos* sp)
                         yo = fixArticulations(yo, sc, __up);
                   }
             }
-      else if (sc->up() != _up)
+      else if (sc && sc->up() != _up)
             yo = fixArticulations(yo, sc, __up);
 
       if (sa1 == SlurAnchor::NONE)
@@ -968,7 +968,7 @@ void Slur::slurPos(SlurPos* sp)
             else if (ec->up() != _up)
                   yo = fixArticulations(yo, ec, __up);
             }
-      else if (ec->up() != _up)
+      else if (ec && ec->up() != _up)
             yo = fixArticulations(yo, ec, __up);
 
       if (sa2 == SlurAnchor::NONE)
