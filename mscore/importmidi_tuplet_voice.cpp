@@ -250,7 +250,8 @@ bool haveOverlappingVoices(
             const int voice = chord->second.voice;
             const auto interval = chordInterval(*chord, chords, basicQuant);
             if (haveIntersection(interval, intervals[voice])) {
-                  bool flag = false;      // if chord is tied then it can intersect tuplet
+                  bool flag = false;
+                              // if chord is tied then it can intersect tuplet
                   for (const TiedTuplet &tiedTuplet: backTiedTuplets) {
                         if (tiedTuplet.chord == (&*chord)
                                     && (tiedTuplet.voice == -1 || tiedTuplet.voice == voice)) {
