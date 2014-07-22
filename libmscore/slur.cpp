@@ -801,6 +801,11 @@ void Slur::slurPos(SlurPos* sp)
 
       sp->p1 = scr->pagePos() - sp->system1->pagePos();
       sp->p2 = ecr->pagePos() - sp->system2->pagePos();
+      // account for centering or other adjustments (other than mirroring)
+      if (!note1->mirror())
+            sp->p1.rx() += note1->x();
+      if (!note2->mirror())
+            sp->p2.rx() += note2->x();
 
       qreal xo, yo;
 
@@ -820,7 +825,6 @@ void Slur::slurPos(SlurPos* sp)
             }
 
       qreal __up = _up ? -1.0 : 1.0;
-      qreal hw   = note1 ? note1->headWidth() : startCR()->width();
       switch (sa1) {
             case SlurAnchor::STEM: //sc can't be null
                   sp->p1 += sc->stemPos() - sc->pagePos() + sc->stem()->p2();
@@ -845,6 +849,8 @@ void Slur::slurPos(SlurPos* sp)
       //
       //------p1
       bool stemPos = false;   // p1 starts at chord stem side
+      qreal hw = note1 ? note1->headWidth() : startCR()->width();
+      xo = hw * .5;
       if (note1)
             yo = note1->pos().y();
       else if(_up)
@@ -852,7 +858,6 @@ void Slur::slurPos(SlurPos* sp)
       else
             yo = startCR()->bbox().top() + startCR()->height();
       yo += _spatium * .9 * __up;
-      xo = hw * .5;
 
       if (stem1) { //sc not null
             Beam* beam1 = sc->beam();
@@ -898,11 +903,14 @@ void Slur::slurPos(SlurPos* sp)
                         yo = fixArticulations(yo, sc, __up);
                   }
             }
+      else if (sc->up() != _up)
+            yo = fixArticulations(yo, sc, __up);
 
       if (sa1 == SlurAnchor::NONE)
             sp->p1 += QPointF(xo, yo);
 
       //------p2
+      hw = note2 ? note2->headWidth() : endCR()->width();
       xo = hw * .5;
       if (note2)
             yo = note2->pos().y();
@@ -960,6 +968,8 @@ void Slur::slurPos(SlurPos* sp)
             else if (ec->up() != _up)
                   yo = fixArticulations(yo, ec, __up);
             }
+      else if (ec->up() != _up)
+            yo = fixArticulations(yo, ec, __up);
 
       if (sa2 == SlurAnchor::NONE)
             sp->p2 += QPointF(xo, yo);
