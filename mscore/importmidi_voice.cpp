@@ -301,7 +301,7 @@ bool hasIntersectionWithTuplets(
 
 void addGroupSplits(
             std::vector<VoiceSplit> &splits,
-            const std::map<int, ReducedFraction> &maxChordLengths,
+            const ReducedFraction &maxChordLength,
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets,
             const std::multimap<ReducedFraction,
@@ -324,13 +324,10 @@ void addGroupSplits(
             if (hasIntersectionWithTuplets(voice, onTime, groupOffTime,
                                            tuplets, insertedTuplets, tupletOnTime))
                   continue;
-            const auto it = maxChordLengths.find(voice);
-            if (it != maxChordLengths.end()) {
-                  const auto foundChords = MChord::findChordsForTimeRange(
-                                             voice, onTime, groupOffTime, chords, it->second);
-                  if (!foundChords.empty())
-                        continue;
-                  }
+            const auto foundChords = MChord::findChordsForTimeRange(
+                                       voice, onTime, groupOffTime, chords, maxChordLength);
+            if (!foundChords.empty())
+                  continue;
 
             splitAdded = true;
             VoiceSplit split;
@@ -387,15 +384,15 @@ std::vector<VoiceSplit> findPossibleVoiceSplits(
                   highGroupOffTime = tuplet.onTime + tuplet.len;
             }
 
-      const std::map<int, ReducedFraction> maxChordLengths = MChord::findMaxChordLengths(chords);
+      const ReducedFraction maxChordLength = MChord::findMaxChordLength(chords);
 
       if (splitPoint > 0) {
-            addGroupSplits(splits, maxChordLengths, chords, tuplets, insertedTuplets,
+            addGroupSplits(splits, maxChordLength, chords, tuplets, insertedTuplets,
                            tupletOnTime, onTime, lowGroupOffTime, origVoice,
                            ShiftedPitchGroup::LOW, maxOccupiedVoice);
             }
       if (splitPoint < notes.size()) {
-            addGroupSplits(splits, maxChordLengths, chords, tuplets, insertedTuplets,
+            addGroupSplits(splits, maxChordLength, chords, tuplets, insertedTuplets,
                            tupletOnTime, onTime, highGroupOffTime, origVoice,
                            ShiftedPitchGroup::HIGH, maxOccupiedVoice);
             }
@@ -559,7 +556,7 @@ bool canSplitTuplet(
             const std::multimap<ReducedFraction,
                   std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            const std::map<int, ReducedFraction> &maxChordLengths)
+            const ReducedFraction &maxChordLength)
       {
       const auto tupletOnTime = tuplet->first;
       const auto &t = tuplet->second;
@@ -571,13 +568,8 @@ bool canSplitTuplet(
             needInsertTuplet = true;
             }
 
-      const auto lengthIt = maxChordLengths.find(t.voice);
-
-      Q_ASSERT_X(lengthIt != maxChordLengths.end(), "MidiVoice::canSplitTuplet",
-                 "Max chord length for voice was not set");
-
       const bool needDeleteOldTuplet = MidiTuplet::isTupletUseless(t.voice, tupletOnTime,
-                                                                   t.len, lengthIt->second, chords);
+                                                                   t.len, maxChordLength, chords);
                   // insert new tuplet only if old tuplet should be deleted
                   // because parallel equal tuplets with different voices aren't pretty
       if (needInsertTuplet && !needDeleteOldTuplet) {
@@ -599,7 +591,7 @@ void splitTuplet(
             std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
             std::multimap<ReducedFraction, MidiChord> &chords,
             std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets,
-            const std::map<int, ReducedFraction> &maxChordLengths)
+            const ReducedFraction &maxChordLength)
       {
 
       Q_ASSERT_X(isInTuplet, "MidiVoice::splitTuplet",
@@ -622,14 +614,9 @@ void splitTuplet(
             tuplet = insertedTuplet->second;
             }
 
-      const auto lengthIt = maxChordLengths.find(oldTuplet->second.voice);
-
-      Q_ASSERT_X(lengthIt != maxChordLengths.end(), "MidiVoice::splitTuplet",
-                 "Max chord length for voice was not set");
-
       const auto &t = oldTuplet->second;
       const bool needDeleteOldTuplet = MidiTuplet::isTupletUseless(
-                                          t.voice, t.onTime, t.len, lengthIt->second, chords);
+                                          t.voice, t.onTime, t.len, maxChordLength, chords);
                   // insert new tuplet only if old tuplet was erased
                   // because parallel equal tuplets with different voices aren't pretty
       if (needInsertTuplet && needDeleteOldTuplet) {
@@ -637,7 +624,7 @@ void splitTuplet(
             isInTuplet = true;
             }
       if (needDeleteOldTuplet)      // delete after insert, because oldTuplet can be used
-            MidiTuplet::removeTuplet(oldTuplet, tuplets, lengthIt->second, chords);
+            MidiTuplet::removeTuplet(oldTuplet, tuplets, maxChordLength, chords);
 
       Q_ASSERT_X(!(needInsertTuplet && !needDeleteOldTuplet), "MidiVoice::splitTuplet",
                  "Tuplet need to be added but the old tuplet was not deleted");
@@ -650,20 +637,20 @@ bool updateChordTuplets(
                  std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
             std::multimap<ReducedFraction, MidiChord> &chords,
             std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets,
-            const std::map<int, ReducedFraction> &maxChordLengths)
+            const ReducedFraction &maxChordLength)
       {
       bool canDoSplit = true;
 
       if (chord.isInTuplet && !canSplitTuplet(chord.tuplet, chord.voice, onTime,
                                               chord.notes, insertedTuplets, chords,
-                                              maxChordLengths)) {
+                                              maxChordLength)) {
             canDoSplit = false;
             }
       if (canDoSplit) {
             for (auto &note: chord.notes) {
                   if (note.isInTuplet && !canSplitTuplet(note.tuplet, chord.voice, onTime,
                                                          {note}, insertedTuplets, chords,
-                                                         maxChordLengths)) {
+                                                         maxChordLength)) {
                         canDoSplit = false;
                         break;
                         }
@@ -677,14 +664,14 @@ bool updateChordTuplets(
             splitTuplet(chord.tuplet, chord.voice, onTime,
                         chord.notes, chord.isInTuplet,
                         insertedTuplets, chords,
-                        tuplets, maxChordLengths);
+                        tuplets, maxChordLength);
             }
       for (auto &note: chord.notes) {
             if (note.isInTuplet) {
                   splitTuplet(note.tuplet, chord.voice, onTime,
                               {note}, note.isInTuplet,
                               insertedTuplets, chords,
-                              tuplets, maxChordLengths);
+                              tuplets, maxChordLength);
                   }
             }
 
@@ -734,7 +721,7 @@ bool doVoiceSeparation(
       MChord::sortNotesByPitch(chords);
       std::multimap<ReducedFraction,
                   std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> insertedTuplets;
-      std::map<int, ReducedFraction> maxChordLengths = MChord::findMaxChordLengths(chords);
+      const ReducedFraction maxChordLength = MChord::findMaxChordLength(chords);
 
       bool changed = false;
       std::map<int, int> maxOccupiedVoices;   // <bar index, max occupied voice>
@@ -769,7 +756,7 @@ bool doVoiceSeparation(
                   chord.voice = bestSplit.voice;
 
                   if (!updateChordTuplets(chord, onTime, insertedTuplets,
-                                          chords, tuplets, maxChordLengths)) {
+                                          chords, tuplets, maxChordLength)) {
                         canDoSplit = false;
                         chord.voice = oldVoice;       // rollback
                         }
@@ -801,7 +788,7 @@ bool doVoiceSeparation(
                   notes = updatedOldNotes;
 
                   if (updateChordTuplets(newChord, onTime, insertedTuplets,
-                                         chords, tuplets, maxChordLengths)) {
+                                         chords, tuplets, maxChordLength)) {
 
                         Q_ASSERT_X(!notes.isEmpty(),
                                    "MidiVoice::doVoiceSeparation", "Old chord notes are empty");

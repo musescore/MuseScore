@@ -160,16 +160,10 @@ void removeEmptyTuplets(MTrack &track)
       if (tuplets.empty())
             return;
       auto &chords = track.chords;
-      std::map<int, ReducedFraction> maxChordLengths = MChord::findMaxChordLengths(chords);
+      const ReducedFraction maxChordLength = MChord::findMaxChordLength(chords);
 
       for (auto tupletIt = tuplets.begin(); tupletIt != tuplets.end(); ) {
-            const auto fit = maxChordLengths.find(tupletIt->second.voice);
-
-            Q_ASSERT_X(fit != maxChordLengths.end(),
-                       "MidiTuplet::removeEmptyTuplets",
-                       "Max chord length for voice was not set");
-
-            auto it = removeTupletIfEmpty(tupletIt, tuplets, fit->second, chords);
+            const auto it = removeTupletIfEmpty(tupletIt, tuplets, maxChordLength, chords);
             if (it != tupletIt) {
                   tupletIt = it;
                   continue;
@@ -645,19 +639,13 @@ bool checkForDanglingTuplets(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const std::multimap<ReducedFraction, TupletData> &tupletEvents)
       {
-      const std::map<int, ReducedFraction> maxChordLengths = MChord::findMaxChordLengths(chords);
+      const ReducedFraction maxChordLength = MChord::findMaxChordLength(chords);
 
       for (auto tupletIt = tupletEvents.begin(); tupletIt != tupletEvents.end(); ++tupletIt) {
             const auto &tuplet = tupletIt->second;
-            const auto maxLengthIt = maxChordLengths.find(tuplet.voice);
-
-            Q_ASSERT_X(maxLengthIt != maxChordLengths.end(),
-                       "MidiTuplet::checkForDanglingTuplets", "Max chord length not found");
-
-            const auto maxChordLength = maxLengthIt->second;
             bool hasReference = false;
-
             auto chordIt = chords.lower_bound(tuplet.onTime + tuplet.len);
+
             if (chordIt != chords.begin()) {
                   --chordIt;
                   while (chordIt->first + maxChordLength > tupletIt->first) {

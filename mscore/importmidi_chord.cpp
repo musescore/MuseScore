@@ -420,19 +420,17 @@ int chordAveragePitch(const QList<MidiNote> &notes)
 // it's an optimization function: we can don't check chords
 // with (on time + max chord len) < given time moment
 // because chord cannot be longer than found max length
-// result: <voice, max chord length>
 
-std::map<int, ReducedFraction> findMaxChordLengths(
-            const std::multimap<ReducedFraction, MidiChord> &chords)
+ReducedFraction findMaxChordLength(const std::multimap<ReducedFraction, MidiChord> &chords)
       {
-      std::map<int, ReducedFraction> maxLengths;
+      ReducedFraction maxChordLength;
 
       for (const auto &chord: chords) {
             const auto offTime = maxNoteOffTime(chord.second.notes);
-            if (offTime - chord.first > maxLengths[chord.second.voice])
-                  maxLengths[chord.second.voice] = offTime - chord.first;
+            if (offTime - chord.first > maxChordLength)
+                  maxChordLength = offTime - chord.first;
             }
-      return maxLengths;
+      return maxChordLength;
       }
 
 std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator>
