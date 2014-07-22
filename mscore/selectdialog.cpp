@@ -41,9 +41,10 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       e = _e;
       type->setText(e->name());
+
       subtype->setText(e->subtypeName());
-      //subtype->setEnabled(true);
-      //sameSubtype->setEnabled(false);
+      sameSubtype->setEnabled(e->subtype() != -1);
+      subtype->setEnabled(e->subtype() != -1);
             
       }
 
