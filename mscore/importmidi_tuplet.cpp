@@ -981,7 +981,9 @@ ReducedFraction findOnTimeBetweenChords(
                   auto it = std::prev(chordIt);
                   while (true) {
                         if (it->first < chord.first && it->second.voice == voice) {
-                              if (onTime < it->first) {
+                              const auto prevChordOnTime
+                                                = Quantize::findMinQuantizedOnTime(*it, quant);
+                              if (onTime < prevChordOnTime) {
 
                                     Q_ASSERT_X(quant >= MChord::minAllowedDuration() * 2,
                                                "MidiTuplet::findOnTimeBetweenChords",
@@ -1003,7 +1005,8 @@ ReducedFraction findOnTimeBetweenChords(
                               it != chords.end() && it->first < chord.first + basicQuant * 2; ++it) {
                         if (it->first == chord.first || it->second.voice != voice)
                               continue;
-                        if (onTime > it->first) {
+                        const auto nextChordOnTime = Quantize::findMinQuantizedOnTime(*it, quant);
+                        if (onTime > nextChordOnTime) {
 
                               Q_ASSERT_X(quant >= MChord::minAllowedDuration() * 2,
                                          "MidiTuplet::findOnTimeBetweenChords",
