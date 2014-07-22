@@ -26,6 +26,7 @@
 namespace Ms {
 
 class Text;
+class Palette;
 
 //---------------------------------------------------------
 //   TextPalette
@@ -35,16 +36,17 @@ class TextPalette : public QWidget, public Ui::TextPaletteBase {
       Q_OBJECT
 
       Text* _textElement;
-      QPushButton* buttons[256];;
-      QButtonGroup* sg;
-      int curPage;
       QFont _font;
+      Palette* pCommon;
+      Palette* pAll;
 
       void closeEvent(QCloseEvent* ev);
+      void populateCommon();
 
    private slots:
-      void symbolClicked(int);
-      void populate();
+      void commonToggled(bool);
+      void pageChanged(int);
+      void populateAll();
 
    public:
       TextPalette(QWidget* parent);

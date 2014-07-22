@@ -89,7 +89,6 @@ SymbolDialog::SymbolDialog(QWidget* parent)
       sp->setDrawGrid(true);
       sp->setSelectable(true);
 
-
       connect(systemFlag, SIGNAL(stateChanged(int)), SLOT(systemFlagChanged(int)));
       connect(fontList, SIGNAL(currentIndexChanged(int)), SLOT(systemFontChanged(int)));
 
