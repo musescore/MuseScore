@@ -124,6 +124,10 @@ findChordsForTimeRange(
 
 bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords);
 bool areNotesLongEnough(const std::multimap<ReducedFraction, MidiChord> &chords);
+bool isLastTickValid(const ReducedFraction &lastTick,
+                     const std::multimap<ReducedFraction, MidiChord> &chords);
+bool isLastTickValid(const ReducedFraction &lastTick,
+                     const std::multimap<int, MTrack> &tracks);
 
 #endif
 

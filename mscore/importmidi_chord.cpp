@@ -197,6 +197,26 @@ bool areNotesLongEnough(const std::multimap<ReducedFraction, MidiChord> &chords)
       return true;
       }
 
+bool isLastTickValid(const ReducedFraction &lastTick,
+                     const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      for (const auto &chord: chords) {
+            if (maxNoteOffTime(chord.second.notes) > lastTick)
+                  return false;
+            }
+      return true;
+      }
+
+bool isLastTickValid(const ReducedFraction &lastTick,
+                     const std::multimap<int, MTrack> &tracks)
+      {
+      for (const auto &track: tracks) {
+            if (!(isLastTickValid(lastTick, track.second.chords)))
+                  return false;
+            }
+      return true;
+      }
+
 #endif
 
 
