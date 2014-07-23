@@ -2418,7 +2418,7 @@ enum class SymId {
       windTrillKey,
       windVeryTightEmbouchure,
       windWeakAirPressure,
-      
+
 //    EXTENSIONS
 //    SMuFL stylistic alternates which we need to access directly
 
@@ -2509,6 +2509,7 @@ class ScoreFont {
       QString _family;
       QString _fontPath;
       QString _filename;
+      QString _textFace;
       bool loaded = false;
 
       static QVector<ScoreFont> _scoreFonts;
@@ -2517,8 +2518,8 @@ class ScoreFont {
 
    public:
       ScoreFont() {}
-      ScoreFont(const char* n, const char* f, const char* p, const char* fn)
-         : _name(n), _family(f), _fontPath(p), _filename(fn) {
+      ScoreFont(const char* n, const char* f, const char* p, const char* fn, const char* tf)
+         : _name(n), _family(f), _fontPath(p), _filename(fn), _textFace(tf) {
             _symbols = QVector<Sym>(int(SymId::lastSym) + 1);
             }
 
@@ -2551,6 +2552,7 @@ class ScoreFont {
       QPointF cutOutSW(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutSW() * mag; }
       bool isValid(SymId id) const                    { return _symbols[int(id)].isValid(); }
       const QString& family() const                   { return _family; }
+      const QString& textFace() const                 { return _textFace; }
       };
 
 extern void initScoreFonts();
