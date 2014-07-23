@@ -207,8 +207,6 @@ QFont TextFragment::font(const Text* t) const
             font.setWeight(QFont::Normal);  // if not set we get system default
             font.setStyleStrategy(QFont::NoFontMerging);
             font.setHintingPreference(QFont::PreferVerticalHinting);
-            // if (f->family() == "Bravura")       // HACK: why are bravura dynamics are so small?
-            //       m *= 1.9;
             }
       if (format.valign() != VerticalAlignment::AlignNormal)
             m *= subScriptSize;
