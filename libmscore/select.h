@@ -73,6 +73,7 @@ public:
       int& filtered()                        { return _filtered; }
       void setFiltered(int filter)           { _filtered = filter; }
       bool isFiltered(SelectionFilterType type)        { return _filtered & (int)type; }
+      bool canSelect(Element*);
       };
 
 //-------------------------------------------------------------------
@@ -96,8 +97,8 @@ class Selection {
 
       QByteArray staffMimeData() const;
       QByteArray symbolListMimeData() const;
-      SelectionFilter& selectionFilter() const;
-      bool canSelect(Element*) const;
+      SelectionFilter selectionFilter() const;
+      bool canSelect(Element* e) { return selectionFilter().canSelect(e); }
 
    public:
       Selection()                      { _score = 0; _state = SelState::NONE; }

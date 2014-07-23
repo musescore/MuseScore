@@ -272,10 +272,10 @@ void Selection::add(Element* el)
       update();
       }
 
-bool Selection::canSelect(Element* e) const
+bool SelectionFilter::canSelect(Element* e) const
       {
       if (e->type() == Element::Type::DYNAMIC
-          && !this->selectionFilter().isFiltered(SelectionFilterType::DYNAMIC)) return false;
+          && !isFiltered(SelectionFilterType::DYNAMIC)) return false;
       return true;
       }
 
@@ -339,7 +339,7 @@ void Selection::updateSelectedElements()
                               }
                         }
                   else {
-                        if (canSelect(e))
+                        if (selectionFilter().canSelect(e))
                               _el.append(e);
                         }
                   foreach(Element* e, s->annotations()) {
@@ -541,6 +541,7 @@ QByteArray Selection::staffMimeData() const
       Xml xml(&buffer);
       xml.header();
       xml.clipboardmode = true;
+      xml.setFilter(selectionFilter());
 
       int ticks  = tickEnd() - tickStart();
       int staves = staffEnd() - staffStart();
@@ -1025,7 +1026,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
       }
 
-SelectionFilter& Selection::selectionFilter() const
+SelectionFilter Selection::selectionFilter() const
       {
       return _score->selectionFilter();
       }
