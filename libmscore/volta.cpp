@@ -229,8 +229,11 @@ void Volta::read(XmlReader& e)
                   setLineWidth(Spatium(e.readDouble()));
                   lineWidthStyle = PropertyStyle::UNSTYLED;
                   }
-            else if (tag == "subtype")    // obsolete
-                  e.readInt();
+            else if (tag == "subtype") {  // obsolete
+                  int st = e.readInt();
+                  if (st == 1)
+                        setEndHook(true);
+                  }
             else if (!TextLine::readProperties(e))
                   e.unknown();
             }
