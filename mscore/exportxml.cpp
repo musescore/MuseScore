@@ -1187,9 +1187,16 @@ static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter,
 
 static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       {
+            
+      const Staff* st = note->staff();
+      const Instrument* instr = st->part()->instr();
+      const Interval intval = instr->transpose();
+            
       s      = tpc2stepName(note->tpc());
       alter  = tpc2alterByKey(note->tpc(), Key::C);
-      octave = (note->pitch() - alter) / 12 - 1;
+      // note that pitch must be converted to concert pitch
+      // in order to calculate the correct octave
+      octave = (note->pitch() - intval.chromatic - alter) / 12 - 1;
 
       //
       // HACK:
@@ -1198,7 +1205,6 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       // note->line() is determined by drumMap
       //
       int tick        = note->chord()->tick();
-      Staff* st       = note->staff();
       ClefType ct     = st->clef(tick);
       if (ct == ClefType::PERC || ct == ClefType::PERC2) {
             alter = 0;
