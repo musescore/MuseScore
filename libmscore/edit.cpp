@@ -520,8 +520,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //
             if ((ots->timeSigType() == ts->timeSigType())
                && (ots->sig().identical(ts->sig()))
-               && (ots->stretch() == ts->stretch())
-               && ots->groups() == ts->groups()) {
+               && (ots->stretch() == ts->stretch())) {
                   delete ts;
                   return;
                   }
@@ -546,7 +545,6 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         undoChangeProperty(m, P_ID::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                         if (changeActual)
                               undoChangeProperty(m, P_ID::TIMESIG_ACTUAL,  QVariant::fromValue(ns));
-                        undoChangeProperty(ots, P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
                         }
                   }
             int n = nstaves();
