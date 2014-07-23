@@ -4867,7 +4867,10 @@ int main(int argc, char* av[])
       Workspace::initWorkspace();
       mscore = new MuseScore();
       mscoreCore = mscore;
-      gscore = new Score(MScore::defaultStyle());
+
+      // create a score for internal use
+//      gscore = new Score(MScore::defaultStyle());
+      gscore = new Score(MScore::baseStyle());
       ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
       gscore->setScoreFont(scoreFont);
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / (MScore::DPI * SPATIUM20));

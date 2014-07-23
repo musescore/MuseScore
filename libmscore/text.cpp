@@ -30,6 +30,19 @@ static const qreal superScriptOffset = -0.5;       // of x-height
 TextCursor Text::_cursor;
 
 //---------------------------------------------------------
+//   mapFace
+//    map the virtual font name "ScoreFont" to the
+//    score font of the current score
+//---------------------------------------------------------
+
+static QString mapFace(Score* score, QString face)
+      {
+      if (face == "ScoreFont")
+            face = score->scoreFont()->textFace();
+      return face;
+      }
+
+//---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
 
@@ -62,9 +75,10 @@ void TextCursor::clearSelection()
 //   initFromStyle
 //---------------------------------------------------------
 
-void TextCursor::initFromStyle(const TextStyle& s)
+void TextCursor::initFromStyle(Score* score, const TextStyle& s)
       {
-      _format.setFontFamily(s.family());
+      QString face = mapFace(score, s.family());
+      _format.setFontFamily(face);
       _format.setFontSize(s.size());
       _format.setBold(s.bold());
       _format.setItalic(s.italic());
@@ -814,7 +828,7 @@ void Text::updateCursorFormat(TextCursor* cursor)
       if (format)
             cursor->setFormat(*format);
       else
-            cursor->initFromStyle(textStyle());
+            cursor->initFromStyle(score(), textStyle());
       }
 
 //---------------------------------------------------------
@@ -1035,7 +1049,7 @@ void Text::createLayout()
       {
       _layout.clear();
       TextCursor cursor;
-      cursor.initFromStyle(textStyle());
+      cursor.initFromStyle(score(), textStyle());
 
       int state = 0;
       QString token;
@@ -1093,8 +1107,11 @@ void Text::createLayout()
                               token = token.mid(5);
                               if (token.startsWith("size=\""))
                                     cursor.format()->setFontSize(parseNumProperty(token.mid(6)));
-                              else if (token.startsWith("face=\""))
-                                    cursor.format()->setFontFamily(parseStringProperty(token.mid(6)));
+                              else if (token.startsWith("face=\"")) {
+                                    QString face = parseStringProperty(token.mid(6));
+                                    face = mapFace(score(), face);
+                                    cursor.format()->setFontFamily(face);
+                                    }
                               else
                                     qDebug("cannot parse html property <%s>", qPrintable(token));
                               }
@@ -1275,7 +1292,7 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
       if (setCursor(pt))
             updateCursorFormat(&_cursor);
       else
-            _cursor.initFromStyle(textStyle());
+            _cursor.initFromStyle(score(), textStyle());
       undoPushProperty(P_ID::TEXT);
       }
 
@@ -1343,7 +1360,7 @@ void Text::genText()
                   }
             }
       TextCursor cursor;
-      cursor.initFromStyle(textStyle());
+      cursor.initFromStyle(score(), textStyle());
       XmlNesting xmlNesting(&_text);
       if (bold)
             xmlNesting.pushB();
@@ -2291,8 +2308,6 @@ Element* Text::drop(const DropData& data)
                   {
                   int code = static_cast<FSymbol*>(e)->code();
                   delete e;
-
-                  printf("drop fsymbol %d\n", code);
 
                   if (_editMode) {
                         insert(&_cursor, QChar(code));
