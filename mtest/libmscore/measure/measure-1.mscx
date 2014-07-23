@@ -378,18 +378,8 @@
           </Staff>
         <trackName>Piano</trackName>
         <Instrument>
-          <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Piano<!--EndFragment--></p></body></html>
-            </longName>
-          <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Pno.<!--EndFragment--></p></body></html>
-            </shortName>
+          <longName pos="0">Piano</longName>
+          <shortName pos="0">Pno.</shortName>
           <trackName>Piano</trackName>
           <minPitchP>21</minPitchP>
           <maxPitchP>108</maxPitchP>
@@ -622,18 +612,8 @@ p, li { white-space: pre-wrap; }
           </Staff>
         <trackName>Flute</trackName>
         <Instrument>
-          <longName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Flute<!--EndFragment--></p></body></html>
-            </longName>
-          <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment-->Fl.<!--EndFragment--></p></body></html>
-            </shortName>
+          <longName pos="0">Flute</longName>
+          <shortName pos="0">Fl.</shortName>
           <trackName>Flute</trackName>
           <minPitchP>59</minPitchP>
           <maxPitchP>98</maxPitchP>
