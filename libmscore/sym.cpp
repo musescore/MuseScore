@@ -5263,6 +5263,7 @@ void initScoreFonts()
       for (oldName i : oldNames)
             Sym::lonhash.insert(i.name, SymId(i.symId));
       QFont::insertSubstitution("MScore Text", "Bravura Text");
+      QFont::insertSubstitution("ScoreFont", "Bravura Text");
       }
 
 //---------------------------------------------------------
