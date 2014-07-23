@@ -4047,7 +4047,7 @@ bool MgStyle::drawSpinBoxComplexControl(const QStyleOptionComplex* option, QPain
       if ( sb->subControls & SC_SpinBoxFrame) {
 
             //WS QRect fr( r.adjusted(1, 1, -1, -1) );
-            QRect fr( r.adjusted(1, 0, -1, 0) );
+            QRect fr( r.adjusted(1, 0, 1, 0) );
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing);
             painter->setPen(Qt::NoPen);
@@ -4065,15 +4065,19 @@ bool MgStyle::drawSpinBoxComplexControl(const QStyleOptionComplex* option, QPain
                   painter->restore();
 
                   QColor local( palette.color(QPalette::Window) );
-                  animations().lineEditEngine().updateState( widget, AnimationHover, mouseOver );
-                  animations().lineEditEngine().updateState( widget, AnimationFocus, hasFocus );
+                  if (widget) {
+                        animations().lineEditEngine().updateState( widget, AnimationHover, mouseOver );
+                        animations().lineEditEngine().updateState( widget, AnimationFocus, hasFocus );
 
-                  if (enabled && animations().lineEditEngine().isAnimated(widget, AnimationFocus))
-                        _helper.renderHole(painter, local, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity(widget, AnimationFocus), AnimationFocus, TileSet::Ring);
-                  else if (enabled && animations().lineEditEngine().isAnimated(widget, AnimationHover))
-                        _helper.renderHole(painter, local, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity(widget, AnimationHover), AnimationHover, TileSet::Ring);
-                  else
+                        if (enabled && animations().lineEditEngine().isAnimated(widget, AnimationFocus))
+                              _helper.renderHole(painter, local, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity(widget, AnimationFocus), AnimationFocus, TileSet::Ring);
+                        else if (enabled && animations().lineEditEngine().isAnimated(widget, AnimationHover))
+                              _helper.renderHole(painter, local, fr, hasFocus, mouseOver, animations().lineEditEngine().opacity(widget, AnimationHover), AnimationHover, TileSet::Ring);
+                        }
+                  else {
+//                        sb
                         _helper.renderHole(painter, local, fr, hasFocus, mouseOver);
+                        }
                   }
             }
 
@@ -7454,7 +7458,7 @@ QRect MgStyle::spinBoxSubControlRect(const QStyleOptionComplex* option, SubContr
       const int buttonsLeft = r.right() - bw + bml + 1;
 
       // compute the height of each button...
-      const int availableButtonHeight = r.height() - bmt - bmb - bs;
+      const int availableButtonHeight = r.height() - bmt - bmb - 2 * fw;
       const int heightUp = availableButtonHeight / 2;
       const int heightDown = availableButtonHeight - heightUp;
 

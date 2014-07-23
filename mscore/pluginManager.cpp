@@ -30,6 +30,7 @@ PluginManager::PluginManager(QWidget* parent)
       connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
       connect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
          SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
+      connect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
       connect(pluginLoad, SIGNAL(toggled(bool)), SLOT(pluginLoadToggled(bool)));
 
       prefs = preferences;
@@ -49,6 +50,8 @@ PluginManager::PluginManager(QWidget* parent)
       for (int i = 0; i < n; ++i) {
             const PluginDescription& d = prefs.pluginList[i];
             QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).baseName(),  pluginList);
+            item->setFlags(item->flags() | Qt::ItemIsEnabled);
+            item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
             item->setData(Qt::UserRole, i);
             }
       if (n) {
@@ -108,6 +111,20 @@ void PluginManager::pluginListItemChanged(QListWidgetItem* item, QListWidgetItem
       pluginShortcut->setText(d.shortcut.keysToString());
       pluginDescription->setText(d.description);
       }
+
+//---------------------------------------------------------
+//   pluginLoadToggled
+//---------------------------------------------------------
+
+void PluginManager::pluginLoadToggled(QListWidgetItem* item)
+      {
+      int idx = item->data(Qt::UserRole).toInt();
+      PluginDescription* d = &prefs.pluginList[idx];
+      d->load = (item->checkState() == Qt::Checked);
+      prefs.dirty = true;
+      }
+
+
 
 //---------------------------------------------------------
 //   pluginLoadToggled

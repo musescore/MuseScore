@@ -41,6 +41,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       void definePluginShortcutClicked();
       void pluginListItemChanged(QListWidgetItem*, QListWidgetItem*);
       void pluginLoadToggled(bool);
+      void pluginLoadToggled(QListWidgetItem*);
 
    signals:
       void closed(bool);
