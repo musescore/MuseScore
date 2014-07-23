@@ -241,7 +241,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             Measure* m = static_cast<Measure*>(mb);
             QRectF b(m->canvasBoundingRect());
 
-            if (pos.x() >= (b.x() + b.width() * .5))
+            if (pos.x() >= (b.x() + b.width() * .5) && m != lastMeasureMM())
                   m = m->nextMeasure();
             spanner->setTick(m->tick());
             spanner->setTick2(m->endTick());
