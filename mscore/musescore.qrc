@@ -14,6 +14,7 @@
         <file alias="fonts/gonville/glyphnames.json">../fonts/gonville/glyphnames.json</file>
         <file alias="fonts/gonville/metadata.json">../fonts/gonville/metadata.json</file>
         <file alias="fonts/bravura/Bravura.otf">../fonts/bravura/Bravura.otf</file>
+        <file alias="fonts/bravura/BravuraText.otf">../fonts/bravura/BravuraText.otf</file>
         <file alias="fonts/bravura/glyphnames.json">../fonts/bravura/glyphnames.json</file>
         <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>
         <file alias="fonts/MuseJazz.ttf">../fonts/MuseJazz.ttf</file>

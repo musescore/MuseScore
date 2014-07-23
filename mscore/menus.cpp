@@ -169,7 +169,8 @@ Palette* MuseScore::newDynamicsPalette()
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Dynamics"));
-      sp->setMag(.8);
+//      sp->setMag(.8);
+      sp->setMag(.5);
       sp->setGrid(42, 28);
       sp->setDrawGrid(true);
 

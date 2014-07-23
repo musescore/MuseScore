@@ -39,6 +39,47 @@ struct Dyn {
 
 #if 1
 
+// variant with ligatures, using bravura-text
+
+static Dyn dynList[] = {
+      // dynamic:
+      {  -1,  true,  "other-dynamics", "" },
+      {   1,  false, "pppppp", "<font face=\"BravuraText\">\ue520\ue520\ue520\ue520\ue520\ue520</font>" },
+      {   5,  false, "ppppp",  "<font face=\"BravuraText\">\ue520\ue520\ue520\ue520\ue520</font>" },
+      {  10,  false, "pppp",   "<font face=\"BravuraText\">\ue520\ue520\ue520\ue520</font>" },
+      {  16,  false, "ppp",    "<font face=\"BravuraText\">\ue520\ue520\ue520</font>" },
+      {  33,  false, "pp",     "<font face=\"BravuraText\">\ue520\ue520</font>" },
+      {  49,  false, "p",      "<font face=\"BravuraText\">\ue520</font>" },
+      {  64,  false, "mp",     "<font face=\"BravuraText\">\ue521\ue520</font>" },
+      {  80,  false, "mf",     "<font face=\"BravuraText\">\ue521\ue522</font>" },
+      {  96,  false, "f",      "<font face=\"BravuraText\">\ue522</font>" },
+      { 112,  false, "ff",     "<font face=\"BravuraText\">\ue522\ue522</font>" },
+      { 126,  false, "fff",    "<font face=\"BravuraText\">\ue522\ue522\ue522</font>" },
+      { 127,  false, "ffff",   "<font face=\"BravuraText\">\ue522\ue522\ue522\ue522</font>" },
+      { 127,  false, "fffff",  "<font face=\"BravuraText\">\ue522\ue522\ue522\ue522\ue522</font>" },
+      { 127,  false, "ffffff", "<font face=\"BravuraText\">\ue522\ue522\ue522\ue522\ue522\ue522</font>" },
+
+      // accents:
+      {  0,   true,  "fp",     "<font face=\"BravuraText\">\ue522\ue520</font>" },
+      {  0,   true,  "sf",     "<font face=\"BravuraText\">\ue524\ue522</font>" },
+      {  0,   true,  "sfz",    "<font face=\"BravuraText\">\ue524\ue522\0e525</font>" },
+      {  0,   true,  "sff",    "<font face=\"BravuraText\">\ue524\ue522\ue522</font>" },
+      {  0,   true,  "sffz",   "<font face=\"BravuraText\">\ue524\ue522\ue522\ue525</font>" },
+      {  0,   true,  "sfp",    "<font face=\"BravuraText\">\ue524\ue522\ue520</font>" },
+      {  0,   true,  "sfpp",   "<font face=\"BravuraText\">\ue524\ue522\ue520\ue520</font>" },
+      {  0,   true,  "rfz",    "<font face=\"BravuraText\">\ue523\ue522\ue525</font>" },
+      {  0,   true,  "rf",     "<font face=\"BravuraText\">\ue523\ue522</font>" },
+      {  0,   true,  "fz",     "<font face=\"BravuraText\">\ue522\ue525</font>" },
+      {  0,   true,  "m",      "<font face=\"BravuraText\">\ue521</font>" },
+      {  0,   true,  "r",      "<font face=\"BravuraText\">\ue523</font>" },
+      {  0,   true,  "s",      "<font face=\"BravuraText\">\ue524</font>" },
+      {  0,   true,  "z",      "<font face=\"BravuraText\">\ue525</font>" },
+      {  0,   true,  "n",      "<font face=\"BravuraText\">\ue526</font>" },
+      };
+#endif
+
+#if 0
+
 // variant with ligatures, works for both emmentaler and bravura:
 
 static Dyn dynList[] = {
@@ -53,7 +94,8 @@ static Dyn dynList[] = {
       {  64,  false, "mp",     "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>" },
       {  80,  false, "mf",     "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>" },
       {  96,  false, "f",      "<sym>dynamicForte</sym>" },
-      { 112,  false, "ff",     "<sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+//      { 112,  false, "ff",     "<sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+      { 112,  false, "ff",     "<font face=\"BravuraText\">\ue522\ue522</font>" },
       { 126,  false, "fff",    "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
       { 127,  false, "ffff",   "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
       { 127,  false, "fffff",  "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
@@ -76,10 +118,10 @@ static Dyn dynList[] = {
       {  0,   true,  "z",      "<sym>dynamicZ</sym>"},
       {  0,   true,  "n",      "<sym>dynamicNiente</sym>" }
       };
+#endif
 
+#if 0
 // variant with precomposed symbols, available only in bravura:
-
-#else
 static Dyn dynList[] = {
       // dynamic:
       {  -1,  true,  "other-dynamics", ""     },

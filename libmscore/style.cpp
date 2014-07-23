@@ -265,7 +265,9 @@ void initStyle(MStyle* s)
       AS("Instrument Name (Long)",   ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OA, true);
       AS("Instrument Name (Short)",   ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OA, true);
       AS("Instrument Name (Part)", ff, 18, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::BOTTOM, QPointF(), OA);
-      AS("Dynamics", ff, 20, false,false,false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0.0, 8.0), OS, true);
+
+      // dynamics size is 12pt for bravura-text
+      AS("Dynamics",  ff, 12, false,false,false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0.0, 8.0), OS, true);
       AS("Technique", ff, 12, false, true, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OS);
 
       AS("Tempo", ff, 12, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -4.0), OS,
