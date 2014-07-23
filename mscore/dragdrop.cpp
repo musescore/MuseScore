@@ -97,7 +97,7 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
             QRectF b(m->canvasBoundingRect());
 
             QPointF anchor;
-            if (pos.x() < (b.x() + b.width() * .5))
+            if (pos.x() < (b.x() + b.width() * .5) || m == _score->lastMeasureMM())
                   anchor = m->canvasBoundingRect().topLeft();
             else
                   anchor = m->canvasBoundingRect().topRight();
