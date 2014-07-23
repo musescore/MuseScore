@@ -677,6 +677,9 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   }
             }
 
+      Q_ASSERT_X(MChord::isLastTickValid(lastTick, tracks),
+                 "createMTrackList", "Last tick is less than max note off time");
+
       return tracks;
       }
 

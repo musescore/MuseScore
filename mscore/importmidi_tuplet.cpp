@@ -1205,6 +1205,8 @@ void findAllTuplets(
 
       Q_ASSERT_X(MChord::areNotesLongEnough(chords),
                  "MidiTuplet::findAllTuplets", "There are too short notes");
+      Q_ASSERT_X(MChord::isLastTickValid(lastTick, chords),
+                 "MidiTuplet::findAllTuplets", "Last tick is less than max note off time");
 
       ReducedFraction startBarTick = {0, 1};
 

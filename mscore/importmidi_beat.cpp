@@ -391,14 +391,14 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks, ReducedFraction &la
             Q_ASSERT_X(beats.size() > 1, "MidiBeat::adjustChordsToBeats", "Human beat count < 2");
 
             const auto newBeatLen = ReducedFraction::fromTicks(MScore::division);
+            ReducedFraction newLastTick;
+
             for (auto trackIt = tracks.begin(); trackIt != tracks.end(); ++trackIt) {
                   auto &chords = trackIt->second.chords;
                   if (chords.empty())
                         continue;
                               // do chord alignment according to recognized beats
                   std::multimap<ReducedFraction, MidiChord> newChords;
-                  lastTick = {0, 1};
-
                   auto chordIt = chords.begin();
                   auto it = beats.begin();
                   auto beatStart = *it;
@@ -418,7 +418,7 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks, ReducedFraction &la
                               newOnTimeInBeat = Quantize::quantizeValue(
                                                  newOnTimeInBeat, MChord::minAllowedDuration());
                               scaleOffTimes(chordIt->second.notes, beats, it,
-                                            newBeatStart, newBeatLen, lastTick);
+                                            newBeatStart, newBeatLen, newLastTick);
                               const auto newOnTime = newBeatStart + newOnTimeInBeat;
                               for (auto &note: chordIt->second.notes) {
                                     if (note.offTime - newOnTime < MChord::minAllowedDuration())
@@ -439,6 +439,13 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks, ReducedFraction &la
                   Q_ASSERT_X(MChord::areNotesLongEnough(chords),
                              "MidiBeat::adjustChordsToBeats", "There are too short notes");
                   }
+
+            if (newLastTick > ReducedFraction(0, 1))
+                  lastTick = newLastTick;
+
+            Q_ASSERT_X(MChord::isLastTickValid(lastTick, tracks),
+                       "MidiBeat::adjustChordsToBeats",
+                       "Last tick is less than max note off time");
             }
       }
 
