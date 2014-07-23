@@ -117,6 +117,8 @@ bool ImportMidiPanel::isMidiFile(const QString &fileName)
 
 void ImportMidiPanel::setupUi()
       {
+      _ui->pushButtonApply->setIcon(*icons[int(Icons::checkmark_ICON)]);
+
       connect(_updateUiTimer, SIGNAL(timeout()), this, SLOT(updateUi()));
       connect(_ui->pushButtonApply, SIGNAL(clicked()), SLOT(applyMidiImport()));
       connect(_ui->pushButtonUp, SIGNAL(clicked()), SLOT(moveTrackUp()));

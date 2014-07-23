@@ -219,10 +219,6 @@
         <property name="text">
          <string>Apply</string>
         </property>
-        <property name="icon">
-         <iconset resource="musescore.qrc">
-          <normaloff>:/data/icons/checkmark.svg</normaloff>:/data/icons/checkmark.svg</iconset>
-        </property>
        </widget>
       </item>
       <item>
