@@ -48,6 +48,8 @@ ContinuousPanel::ContinuousPanel(ScoreView* sv)
       _widthClef              = 0.0;
       _widthKeySig            = 0.0;
       _widthTimeSig           = 0.0;
+      _leftMarginTotal        = 0.0;
+      _panelRightPadding      = 5;
       _xPosTimeSig            = 0.0;
       _currentMeasure         = nullptr;
       _currentMeasureTick     = 0;
@@ -238,7 +240,11 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                  }
             }
 
-      _newWidth = _heightName * 1.5 + _widthClef + _widthKeySig + _widthTimeSig + 5;
+      _leftMarginTotal = _score->styleP(StyleIdx::clefLeftMargin);
+      _leftMarginTotal += _score->styleP(StyleIdx::keysigLeftMargin);
+      _leftMarginTotal += _score->styleP(StyleIdx::timesigLeftMargin);
+
+      _newWidth = _heightName * 1.5 + _widthClef + _widthKeySig + _widthTimeSig + _leftMarginTotal + _panelRightPadding;
       _xPosMeasure -= _offsetPanel;
       //qDebug() << "_xPosMeasure="<< _xPosMeasure << "_width ="<<_width<< " offsetpanel ="<<_offsetPanel << "newWidth ="<<_newWidth  << "oldWidth ="<<_oldWidth << "_measureWidth ="<<_measureWidth;
       if (_oldWidth == 0) {
@@ -323,11 +329,14 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   //
                   // Draw staff lines
                   //
+                  StaffLines* newStaffLines = static_cast<StaffLines*>(e->clone());
+                  newStaffLines->setWidth(_width);
+                  newStaffLines->layout();
                   QPointF pos;
-                  pos = QPointF (_offsetPanel, 0);
-                  pos += QPointF (_heightName * 1.5, e->pagePos().y());
+                  pos = QPointF (_offsetPanel+_heightName * 1.5, e->pagePos().y());
                   painter.translate(pos);
-                  e->draw(&painter);
+                  newStaffLines->draw(&painter);
+                  delete newStaffLines;
                   painter.translate(-pos);
 
                   //
@@ -372,6 +381,8 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   ClefType currentClef = currentStaff->clef(_currentMeasureTick);
                   newClef->setClefType(currentClef);
                   newClef->layout();
+                  pos = QPointF(_score->styleP(StyleIdx::clefLeftMargin),0);
+                  painter.translate(pos);
                   newClef->draw(&painter);
                   pos = QPointF(_widthClef,0);
                   painter.translate(pos);
@@ -391,6 +402,8 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                         newKs->setTrack(e->track());
 
                         newKs->setHideNaturals(true);
+                        pos = QPointF(_score->styleP(StyleIdx::keysigLeftMargin),0);
+                        painter.translate(pos);
                         newKs->layout();
                         newKs->draw(&painter);
                         delete newKs;
@@ -410,8 +423,10 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   else
                         newTs->setSig(_currentTimeSig.numerator(), _currentTimeSig.denominator(), TimeSigType::NORMAL);
                   newTs->layout();
+                  pos = QPointF(_score->styleP(StyleIdx::timesigLeftMargin),0);
+                  painter.translate(pos);
                   newTs->draw(&painter);
-                  pos = QPointF(_offsetPanel + _heightName * 1.5 + _widthClef + _widthKeySig + _xPosTimeSig, e->pagePos().y());
+                  pos = QPointF(_offsetPanel + _heightName * 1.5 + _widthClef + _widthKeySig + _xPosTimeSig + _leftMarginTotal, e->pagePos().y());
                   painter.translate(-pos);
                   delete newTs;
                   }
