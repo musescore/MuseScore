@@ -815,5 +815,14 @@ QList<std::pair<int, ClefType>>& XmlReader::clefs(int idx)
       return _clefs[idx];
       }
 
+//---------------------------------------------------------
+//   canWrite
+//---------------------------------------------------------
+
+bool Xml::canWrite(const Element* e) const
+      {
+      return _filter.canSelect(e);
+      }
+
 }
 
