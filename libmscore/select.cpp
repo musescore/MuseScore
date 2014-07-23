@@ -272,7 +272,7 @@ void Selection::add(Element* el)
       update();
       }
 
-bool Selection::canSelect(Element* e)
+bool Selection::canSelect(Element* e) const
       {
       if (e->type() == Element::Type::DYNAMIC
           && !this->selectionFilter().isFiltered(SelectionFilterType::DYNAMIC)) return false;
@@ -1025,7 +1025,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
       }
 
-SelectionFilter& Selection::selectionFilter()
+SelectionFilter& Selection::selectionFilter() const
       {
       return _score->selectionFilter();
       }
