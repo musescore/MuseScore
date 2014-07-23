@@ -94,3 +94,4 @@ cp   $MSCORE/timer.gpx.mscx timer.gpx-ref.mscx
 cp   $MSCORE/text.gpx.mscx text.gpx-ref.mscx
 cp   $MSCORE/artificial-harmonic.gpx.mscx artificial-harmonic.gpx-ref.mscx
 cp   $MSCORE/ghost-note.gpx.mscx ghost-note.gpx-ref.mscx
+cp   $MSCORE/rasg.gpx.mscx rasg.gpx-ref.mscx
