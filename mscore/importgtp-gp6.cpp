@@ -48,6 +48,7 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/fingering.h"
+#include "libmscore/sym.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -1139,6 +1140,17 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       TextStyle textStyle;
                                                       textStyle.setAlign(ALIGN_CENTER);
                                                       addTextToNote(textNode.toElement().text(), textStyle, note);
+                                                      }
+                                                QDomNode ghostNode = currentNote.parentNode().firstChildElement("AntiAccent");
+                                                if (!ghostNode.isNull()) {
+                                                      Symbol* leftSym = new Symbol(note->score());
+                                                      Symbol* rightSym = new Symbol(note->score());
+                                                      leftSym->setSym(SymId::noteheadParenthesisLeft);
+                                                      rightSym->setSym(SymId::noteheadParenthesisRight);
+                                                      leftSym->setParent(note);
+                                                      rightSym->setParent(note);
+                                                      note->add(leftSym);
+                                                      note->add(rightSym);
                                                       }
                                                 createSlide(slide, cr, staffIdx);
                                                 note->setTpcFromPitch();
