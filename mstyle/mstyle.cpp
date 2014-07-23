@@ -35,9 +35,9 @@
 #define MgStyleConfigData_viewDrawTriangularExpander    true
 #define MgStyleConfigData_viewTriangularExpanderSize    ArrowNormal
 #define MgStyleConfigData_viewDrawTreeBranchLines       true
-#define MgStyleConfigData_checkBoxStyle_CS_CHECK        false
+#define MgStyleConfigData_checkBoxStyle_CS_CHECK        true
 #define MgStyleConfigData_scrollBarColored              true
-#define MgStyleConfigData_scrollBarBevel                true
+#define MgStyleConfigData_scrollBarBevel                false
 
 //---------------------------------------------------------
 //   MgStyle
