@@ -363,8 +363,12 @@ void insertNewLeftHandTrack(std::multimap<int, MTrack> &tracks,
 void splitStaff(std::multimap<int, MTrack> &tracks, std::multimap<int, MTrack>::iterator &it)
       {
       auto &chords = it->second.chords;
+      if (chords.empty())
+            return;
       MChord::sortNotesByPitch(chords);
       std::vector<ChordSplitData> splits = findSplits(chords);
+
+      Q_ASSERT_X(!splits.empty(), "LRHand::splitStaff", "Empty splits array");
 
       std::multimap<ReducedFraction, MidiChord> leftHandChords;
       splitChords(splits, leftHandChords, chords);
