@@ -3625,9 +3625,9 @@ void MuseScore::showPluginCreator(QAction* a)
 void MuseScore::showPluginManager(QAction* a)
       {
 #ifdef SCRIPT_INTERFACE
-      pluginManager = new PluginManager(0);
-      connect(pluginManager, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
-      pluginManager->show();
+            if (!pluginManager)
+                  pluginManager = new PluginManager(0);
+            pluginManager->show();
 #endif
       }
 

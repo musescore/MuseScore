@@ -31,7 +31,6 @@ PluginManager::PluginManager(QWidget* parent)
       connect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
          SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
       connect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
-      connect(pluginLoad, SIGNAL(toggled(bool)), SLOT(pluginLoadToggled(bool)));
 
       prefs = preferences;
       //
@@ -106,7 +105,6 @@ void PluginManager::pluginListItemChanged(QListWidgetItem* item, QListWidgetItem
       QFileInfo fi(d.path);
       pluginName->setText(fi.baseName());
       pluginPath->setText(fi.absolutePath());
-      pluginLoad->setChecked(d.load);
       pluginVersion->setText(d.version);
       pluginShortcut->setText(d.shortcut.keysToString());
       pluginDescription->setText(d.description);
