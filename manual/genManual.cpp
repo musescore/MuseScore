@@ -77,7 +77,7 @@ static void addHeader(QString& out)
 
 static void addFooter(QString& out)
       {
-      out += "<div class=\"footer\"><a href=\"http://musescore.org/\">MuseScore</a> - The OpenSource Musical Notation Programme<br />\n"
+      out += "<div class=\"footer\"><a href=\"http://musescore.org/\">MuseScore</a> - Free music notation software<br />\n"
              "&copy; 2002-2014 Werner Schweer &amp; others</div>\n"
              "</body>\n"
              "</html>\n";
