@@ -189,8 +189,10 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                      : QT_TRANSLATE_NOOP("TimeSig", "Show Courtesy Time Signature") );
                   a->setData("ts-courtesy");
                   }
-            popup->addSeparator();
-            popup->addAction(tr("Time Signature Properties..."))->setData("ts-props");
+            if (!ts->generated()) {
+                  popup->addSeparator();
+                  popup->addAction(tr("Time Signature Properties..."))->setData("ts-props");
+                  }
             }
       else if (e->type() == Element::Type::CLEF) {
             genPropertyMenu1(e, popup);
