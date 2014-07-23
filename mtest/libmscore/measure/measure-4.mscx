@@ -66,12 +66,7 @@
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
-        <shortName pos="0">
-<html><head><meta name="qrichtext" content="1" /><style type="text/css">
-p, li { white-space: pre-wrap; }
-</style></head><body>
-<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><span style=" font-family:'Times New Roman'; font-size:12pt;">Vo.</span><!--EndFragment--></p></body></html>
-          </shortName>
+        <shortName pos="0">Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
