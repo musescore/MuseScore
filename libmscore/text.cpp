@@ -1505,7 +1505,7 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
       switch (key) {
             case Qt::Key_Enter:
             case Qt::Key_Return:
-            {
+                  {
                   if (_cursor.hasSelection())
                         deleteSelectedText();
 
@@ -1518,7 +1518,7 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
                   s.clear();
                   _cursor.clearSelection();
                   break;
-            }
+                  }
 
             case Qt::Key_Backspace:
                   if (_cursor.hasSelection())
@@ -2067,7 +2067,8 @@ void Text::insertText(const QString& s)
       if (_cursor.hasSelection())
             deleteSelectedText();
       if (_cursor.format()->type() == CharFormatType::SYMBOL) {
-            _cursor.format()->setFontFamily(textStyle().family());
+            QString face = mapFace(score(), textStyle().family());
+            _cursor.format()->setFontFamily(face);
             _cursor.format()->setType(CharFormatType::TEXT);
             }
       curLine().insert(&_cursor, s);
