@@ -672,7 +672,7 @@ QString XmlReader::readXml()
                   case XmlStreamReader::EndElement:
                         return s;
                   case XmlStreamReader::Characters:
-                        if (!isWhitespace())
+                        if (!isWhitespace() || text().toString() == "\n")
                               s += text().toString().toHtmlEscaped();
                         break;
                   case XmlStreamReader::Comment:
