@@ -32,9 +32,10 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   pasteStaff
+//    return false if paste fails
 //---------------------------------------------------------
 
-void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
+bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
       {
       Q_ASSERT(dst->segmentType() == Segment::Type::ChordRest);
       QList<Chord*> graceNotes;
@@ -107,6 +108,13 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
+                              int ticks = tuplet->duration().ticks();
+                              int rticks = measure->endTick() - tick;
+                              if (rticks < ticks) {
+                                    qDebug("tuplet does not fit in measure");
+                                    delete tuplet;
+                                    return false;
+                                    }
                               e.addTuplet(tuplet);
                               }
                         else if (tag == "Chord" || tag == "Rest" || tag == "RepeatMeasure") {
@@ -328,6 +336,7 @@ void Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
             if (!selection().isRange())
                   _selection.setState(SelState::RANGE);
             }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -735,7 +744,9 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   QByteArray data(ms->data(mimeStaffListFormat));
 qDebug("paste <%s>", data.data());
                   XmlReader e(data);
-                  pasteStaff(e, cr->segment(),cr->staffIdx());
+                  if (!pasteStaff(e, cr->segment(),cr->staffIdx())) {
+                        return PasteStatus::TUPLET_CROSSES_BAR;
+                        }
                   }
             }
 
