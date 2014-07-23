@@ -3,6 +3,7 @@
    <qresource prefix="/">
       <file alias="fonts/mscore/mscore.ttf">../fonts/mscore/mscore.ttf</file>
       <file alias="fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
+      <file alias="fonts/mscore/mscore.ttf">../fonts/mscore/MScoreText.ttf</file>
       <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
       <file alias="fonts/gonville/Gonville.otf">../fonts/gonville/Gonville.otf</file>
       <file alias="fonts/gonville/glyphnames.json">../fonts/gonville/glyphnames.json</file>

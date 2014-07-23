@@ -13,7 +13,6 @@
 
       <file alias="/fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
       <file alias="/fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
-      <file alias="/fonts/mscore/MScoreText.ttf">../fonts/mscore/MScoreText.ttf</file>
 
       <file alias="/fonts/gonville/glyphnames.json">../fonts/gonville/glyphnames.json</file>
       <file alias="/fonts/gonville/metadata.json">../fonts/gonville/metadata.json</file>
