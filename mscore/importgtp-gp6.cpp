@@ -15,6 +15,7 @@
 #include "libmscore/score.h"
 #include "libmscore/measurebase.h"
 #include "libmscore/text.h"
+#include "libmscore/stafftext.h"
 #include "libmscore/box.h"
 #include "libmscore/staff.h"
 #include "libmscore/part.h"
@@ -1224,10 +1225,26 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               else
                                     createCrecDim(staffIdx, staffIdx * VOICES + voiceNum, tick, isCrec);
                               }
+                        else if (!currentNode.nodeName().compare("Properties")) {
+                              QDomNode currentProperty = currentNode.firstChild();
+                              while (!currentProperty.isNull()) {
+                                    QString argument = currentProperty.attributes().namedItem("name").toAttr().value();
+                                    if (!argument.compare("Rasgueado")) {
+                                          StaffText* st = new StaffText(score);
+                                          st->setTextStyleType(TextStyleType::STAFF);
+                                          st->setText("rasg.");
+                                          st->setParent(segment);
+                                          st->setTrack(staffIdx * VOICES + voiceNum);
+                                          score->addElement(st);
+                                          }
+                                    currentProperty = currentProperty.nextSibling();
+                                    }
+                              }
+
                         currentNode = currentNode.nextSibling();
                         dotted = 0;
                   }
-                  // we have handled the note - was there a note?
+                  // we have handled the beat - was there a note?
                   if (!noteSpecified) {
                         // add a rest with length of l
                         cr = new Rest(score);
