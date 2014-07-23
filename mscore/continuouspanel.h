@@ -43,6 +43,8 @@ class ContinuousPanel {
       qreal _widthClef;
       qreal _widthKeySig;
       qreal _widthTimeSig;
+      qreal _leftMarginTotal; // Sum of all elments left margin
+      qreal _panelRightPadding;  // Extra space for the panel after last element
       qreal _xPosTimeSig;     // X position of the time signature (because it is centered
       qreal _xPosMeasure;     // Position of the coming measure
 
