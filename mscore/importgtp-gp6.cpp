@@ -50,6 +50,7 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/fingering.h"
 #include "libmscore/sym.h"
+#include "libmscore/ottava.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -724,6 +725,7 @@ void GuitarPro6::makeTie(Note* note) {
 
 int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[])
       {
+            int track = staffIdx * VOICES + voiceNum;
             auto currentBeatList = beats.split(" ");
             for (auto currentBeat = currentBeatList.begin(); currentBeat != currentBeatList.end(); currentBeat++) {
                   int slide = -1;
@@ -732,12 +734,13 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 
                   Fraction l;
                   int dotted = 0;
+                  bool ottavaFound = false;
                   QDomNode beat = getNode(*currentBeat, partInfo->beats);
 
                   Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
                   QDomNode currentNode = beat.firstChild();
                   bool noteSpecified = false;
-                  ChordRest* cr = segment->cr(staffIdx * VOICES + voiceNum);
+                  ChordRest* cr = segment->cr(track);
                   bool tupletSet = false;
                   Tuplet* tuplet = tuplets[staffIdx * 2 + voiceNum];
                   while (!currentNode.isNull()) {
@@ -748,7 +751,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               // this could be set by rhythm if we dealt with a tuplet
                               if (!cr)
                                     cr = new Chord(score);
-                              cr->setTrack(staffIdx * VOICES + voiceNum);
+                              cr->setTrack(track);
                               cr->setDuration(l);
                               TDuration d(l);
                               d.setDots(dotted);
@@ -1084,8 +1087,8 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             dynamic = 7;
                                                       else if (!dynamicStr.compare("FFF"))
                                                             dynamic = 8;
-                                                      if (previousDynamic[staffIdx * VOICES + voiceNum] != dynamic) {
-                                                            previousDynamic[staffIdx * VOICES + voiceNum] = dynamic;
+                                                      if (previousDynamic[track] != dynamic) {
+                                                            previousDynamic[track] = dynamic;
                                                             addDynamic(note, dynamic);
                                                             }
                                                       }
@@ -1155,6 +1158,20 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       }
                                                 createSlide(slide, cr, staffIdx);
                                                 note->setTpcFromPitch();
+
+                                                if (ottava[track]) {
+                                                      int pitch = note->pitch();
+                                                      OttavaType type = ottava[track]->ottavaType();
+                                                      if (type == OttavaType::OTTAVA_8VA)
+                                                            note->setPitch(pitch-12);
+                                                      else if (type == OttavaType::OTTAVA_8VB)
+                                                            note->setPitch(pitch+12);
+                                                      else if (type == OttavaType::OTTAVA_15MA)
+                                                            note->setPitch(pitch-24);
+                                                      else if (type == OttavaType::OTTAVA_15MB)
+                                                            note->setPitch(pitch+24);
+                                                      }
+
                                                 currentNote = currentNote.nextSibling();
                                                 }
                                           else if (!currentNote.nodeName().compare("Trill")) {
@@ -1197,7 +1214,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     else if (currentNode.nodeName() == "PrimaryTuplet") {
                                           tupletSet = true;
                                           cr = new Chord(score);
-                                          cr->setTrack(staffIdx * VOICES + voiceNum);
+                                          cr->setTrack(track);
                                           if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                                                 tuplet = new Tuplet(score);
                                                 tuplets[staffIdx * 2 + voiceNum] = tuplet;
@@ -1220,10 +1237,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     if (hairpins[staffIdx]->tick2() == seg->tick())
                                           hairpins[staffIdx]->setTick2(tick);
                                     else
-                                          createCrecDim(staffIdx, staffIdx * VOICES + voiceNum, tick, isCrec);
+                                          createCrecDim(staffIdx, track, tick, isCrec);
                                     }
                               else
-                                    createCrecDim(staffIdx, staffIdx * VOICES + voiceNum, tick, isCrec);
+                                    createCrecDim(staffIdx, track, tick, isCrec);
                               }
                         else if (!currentNode.nodeName().compare("Properties")) {
                               QDomNode currentProperty = currentNode.firstChild();
@@ -1234,10 +1251,35 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                           st->setTextStyleType(TextStyleType::STAFF);
                                           st->setText("rasg.");
                                           st->setParent(segment);
-                                          st->setTrack(staffIdx * VOICES + voiceNum);
+                                          st->setTrack(track);
                                           score->addElement(st);
                                           }
                                     currentProperty = currentProperty.nextSibling();
+                                    }
+                              }
+                        else if (!currentNode.nodeName().compare("Ottavia")) {
+                              QString value = currentNode.toElement().text();
+                              ottavaFound = true;
+                              int track = track;
+                              if (ottava[track] == 0) {
+                                    ottava[track] = new Ottava(score);
+                                    ottava[track]->setTrack(track);
+                                    if (!value.compare("8va"))
+                                          ottava[track]->setOttavaType(OttavaType::OTTAVA_8VA);
+                                    else if (!value.compare("8vb"))
+                                          ottava[track]->setOttavaType(OttavaType::OTTAVA_8VB);
+                                    else if (!value.compare("15ma"))
+                                          ottava[track]->setOttavaType(OttavaType::OTTAVA_15MA);
+                                    else if (!value.compare("15mb"))
+                                          ottava[track]->setOttavaType(OttavaType::OTTAVA_15MB);
+                                    ottava[track]->setTick(tick);
+                                    ottava[track]->setTick2(tick);
+                                    }
+                              else  {
+                                    ottava[track]->setTick2(tick);
+                                    ottava[track]->setProperty(P_ID::LINE_WIDTH,0.1);
+                                    ottava[track]->staff()->updateOttava(ottava[track]);
+                                    score->add(ottava[track]);
                                     }
                               }
 
@@ -1248,15 +1290,24 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                   if (!noteSpecified) {
                         // add a rest with length of l
                         cr = new Rest(score);
-                        cr->setTrack(staffIdx * VOICES + voiceNum);
+                        cr->setTrack(track);
                         if (tupletSet)
                               tuplet->add(cr);
                         TDuration d(l);
                         cr->setDuration(l);
                         cr->setDurationType(d);
-                        if(!segment->cr(staffIdx * VOICES + voiceNum))
+                        if(!segment->cr(track))
                               segment->add(cr);
+                        if (ottava[track]) {
+                              ottava[track]->setTick2(tick);
+                              ottava[track]->setProperty(P_ID::LINE_WIDTH,0.1);
+                              ottava[track]->staff()->updateOttava(ottava[track]);
+                              score->add(ottava[track]);
+                              ottava[track] = 0;
+                              }
                   }
+                  if (!ottavaFound)
+                        ottava[track] = 0;
                   tick += cr->actualTicks();
             }
             return tick;
@@ -1453,6 +1504,9 @@ void GuitarPro6::readGpif(QByteArray* data)
       slurs = new Slur*[staves];
       for (int i = 0; i < staves; ++i)
             slurs[i] = 0;
+      ottava = new Ottava*[staves];
+      for (int staffIdx = 0; staffIdx < staves; ++staffIdx)
+            ottava[staffIdx] = 0;
 
       // MasterBars node
       GPPartInfo partInfo;
@@ -1494,6 +1548,7 @@ void GuitarPro6::read(QFile* fp)
       previousTempo = -1;
       this->buffer = new QByteArray();
       *(this->buffer) = fp->readAll();
+
       // decompress and read files contained within GPX file
       readGPX(this->buffer);
       delete this->buffer;
