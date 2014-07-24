@@ -40,7 +40,7 @@ class PulseAudio : public Driver {
    public:
       PulseAudio(Seq*);
       virtual ~PulseAudio();
-      virtual bool init();
+      virtual bool init(bool hot = false);
       virtual bool start();
       virtual bool stop();
       virtual Transport getState() override { return state; }
@@ -115,7 +115,7 @@ static void pa_state_cb(pa_context* c, void* data)
 //    return false on error
 //---------------------------------------------------------
 
-bool PulseAudio::init()
+bool PulseAudio::init(bool)
       {
       pa_ml                     = pa_mainloop_new();
       pa_mainloop_api* pa_mlapi = pa_mainloop_get_api(pa_ml);

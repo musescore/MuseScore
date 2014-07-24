@@ -249,7 +249,7 @@ DECL_FUNCTION(int, jack_set_timebase_callback, (jack_client_t *client,
 DECL_FUNCTION(int, jack_transport_locate, (jack_client_t *client, jack_nframes_t frame), (client, frame));
 DECL_FUNCTION(jack_transport_state_t, jack_transport_query, (const jack_client_t *client, jack_position_t *pos), (client, pos));
 DECL_FUNCTION(jack_nframes_t, jack_get_current_transport_frame, (const jack_client_t *client), (client));
-DECL_FUNCTION(int, jack_transport_reposition, (jack_client_t *client, jack_position_t *pos), (client, pos));
+DECL_FUNCTION(int, jack_transport_reposition, (jack_client_t *client, const jack_position_t *pos), (client, pos));
 DECL_VOID_FUNCTION(jack_transport_start, (jack_client_t *client), (client));
 DECL_VOID_FUNCTION(jack_transport_stop, (jack_client_t *client), (client));
 // DECL_VOID_FUNCTION(jack_get_transport_info, (jack_client_t *client, jack_transport_info_t *tinfo), (client,tinfo));

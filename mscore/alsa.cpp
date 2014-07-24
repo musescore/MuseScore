@@ -625,7 +625,7 @@ AlsaAudio::~AlsaAudio()
 //    return false on error
 //---------------------------------------------------------
 
-bool AlsaAudio::init()
+bool AlsaAudio::init(bool hot)
       {
       alsa = new AlsaDriver(
          preferences.alsaDevice,
@@ -727,40 +727,6 @@ bool AlsaAudio::stop()
             pthread_join(thread, 0);
             }
       return true;
-      }
-
-//---------------------------------------------------------
-//   registerPort
-//---------------------------------------------------------
-
-void AlsaAudio::registerPort(const QString&, bool, bool)
-      {
-      }
-
-//---------------------------------------------------------
-//   unregisterPort
-//---------------------------------------------------------
-
-void AlsaAudio::unregisterPort(int)
-      {
-      }
-
-//---------------------------------------------------------
-//   inputPorts
-//---------------------------------------------------------
-
-QList<QString> AlsaAudio::inputPorts()
-      {
-      QList<QString> l;
-      return l;
-      }
-
-//---------------------------------------------------------
-//   disconnect
-//---------------------------------------------------------
-
-void AlsaAudio::disconnect(void* /*src*/, void* /*dst*/)
-      {
       }
 
 //---------------------------------------------------------

@@ -81,7 +81,7 @@ Portaudio::~Portaudio()
 //    return false on error
 //---------------------------------------------------------
 
-bool Portaudio::init()
+bool Portaudio::init(bool)
       {
       PaError err = Pa_Initialize();
       if (err != paNoError) {
@@ -192,48 +192,6 @@ QStringList Portaudio::deviceList(int apiIdx)
 int Portaudio::deviceIndex(int apiIdx, int apiDevIdx)
       {
       return Pa_HostApiDeviceIndexToDeviceIndex(apiIdx, apiDevIdx);
-      }
-
-//---------------------------------------------------------
-//   registerPort
-//---------------------------------------------------------
-
-void Portaudio::registerPort(const QString&, bool, bool)
-      {
-      }
-
-//---------------------------------------------------------
-//   unregisterPort
-//---------------------------------------------------------
-
-void Portaudio::unregisterPort(int)
-      {
-      }
-
-//---------------------------------------------------------
-//   inputPorts
-//---------------------------------------------------------
-
-QList<QString> Portaudio::inputPorts()
-      {
-      QList<QString> clientList;
-      return clientList;
-      }
-
-//---------------------------------------------------------
-//   connect
-//---------------------------------------------------------
-
-void Portaudio::connect(void* /*src*/, void* /*dst*/)
-      {
-      }
-
-//---------------------------------------------------------
-//   disconnect
-//---------------------------------------------------------
-
-void Portaudio::disconnect(void* /*src*/, void* /*dst*/)
-      {
       }
 
 //---------------------------------------------------------

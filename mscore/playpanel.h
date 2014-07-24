@@ -35,6 +35,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       Q_OBJECT
       int cachedTickPosition;
       int cachedTimePosition;
+      bool tempoSliderIsPressed;
 
       Score* cs;
       virtual void closeEvent(QCloseEvent*);
@@ -46,6 +47,8 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       void volumeChanged(double,int);
       void relTempoChanged(double,int);
       void relTempoChanged();
+      void tempoSliderReleased(int);
+      void tempoSliderPressed(int);
 
    signals:
       void relTempoChanged(double);
@@ -67,6 +70,7 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
       void setEndpos(int);
       void setScore(Score* s);
+      bool isTempoSliderPressed() {return tempoSliderIsPressed;}
       };
 
 

@@ -122,12 +122,9 @@ class AlsaAudio : public Driver {
    public:
       AlsaAudio(Seq*);
       virtual ~AlsaAudio();
-      virtual bool init();
-      virtual QList<QString> inputPorts();
+      virtual bool init(bool hot = false);
       virtual bool start();
       virtual bool stop();
-      void connect(void*, void*) {}
-      void disconnect(void* src, void* dst);
       float* getLBuffer(long n);
       float* getRBuffer(long n);
       virtual bool isRealtime() const   { return false; }
@@ -139,9 +136,6 @@ class AlsaAudio : public Driver {
       void write(int n, void* l);
 
       virtual void midiRead();
-
-      virtual void registerPort(const QString& name, bool input, bool midi);
-      virtual void unregisterPort(int);
       };
 
 }

@@ -84,7 +84,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -1727,7 +1727,20 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
-        <widget class="QGroupBox" name="useJackMidi">
+        <widget class="QGroupBox" name="pulseaudioDriver">
+         <property name="title">
+          <string>PulseAudio</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="portaudioDriver">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -1735,60 +1748,63 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Use JACK MIDI</string>
+          <string>PortAudio</string>
          </property>
          <property name="flat">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <layout class="QFormLayout" name="formLayout_6">
-            <property name="fieldGrowthPolicy">
-             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_22">
-              <property name="text">
-               <string>Ports:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QSpinBox" name="midiPorts">
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>8</number>
-              </property>
-              <property name="value">
-               <number>1</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="rememberLastMidiConnections">
+           <widget class="QLabel" name="label_21">
             <property name="text">
-             <string>Remember last connection(s)</string>
+             <string>API:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_4">
+           <widget class="QComboBox" name="portaudioApi">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Device:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="portaudioDevice">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_6">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>705</width>
+              <width>40</width>
               <height>20</height>
              </size>
             </property>
@@ -1798,353 +1814,330 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="useSynthesizer">
+        <widget class="QGroupBox" name="alsaDriver">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Use internal synthesizer</string>
+          <string>ALSA audio</string>
          </property>
          <property name="flat">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QVBoxLayout">
-          <item>
-           <widget class="QGroupBox" name="pulseaudioDriver">
-            <property name="title">
-             <string>PulseAudio</string>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="4">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Period Size:</string>
             </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QGroupBox" name="portaudioDriver">
+          <item row="1" column="3">
+           <widget class="QSpinBox" name="alsaFragments">
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>8</number>
+            </property>
+            <property name="value">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Device:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Sample rate:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <widget class="QComboBox" name="alsaPeriodSize">
+            <item>
+             <property name="text">
+              <string>4096</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2048</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1024</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>512</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>256</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>128</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>64</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <spacer name="horizontalSpacer_9">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Fragments:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="alsaSampleRate">
+            <item>
+             <property name="text">
+              <string>192000</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>96000</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>88200</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>48000</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>44100</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>32000</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>22050</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="alsaDevice">
+            <property name="text">
+             <string>default</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="jackDriver">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>JACK audio server</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout7">
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="useJackAudio">
+            <property name="text">
+             <string>Use JACK Audio</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="useJackMidi">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="title">
-             <string>PortAudio</string>
+            <property name="text">
+             <string>Use JACK MIDI</string>
             </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item>
-              <widget class="QLabel" name="label_21">
-               <property name="text">
-                <string>API:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="portaudioApi">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>Device:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="portaudioDevice">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
            </widget>
           </item>
-          <item>
-           <widget class="QGroupBox" name="alsaDriver">
+          <item row="1" column="1">
+           <spacer name="horizontalSpacer_20">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>5</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>Ports:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QSpinBox" name="midiPorts">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="title">
-             <string>ALSA audio</string>
+            <property name="minimum">
+             <number>1</number>
             </property>
-            <property name="flat">
-             <bool>true</bool>
+            <property name="maximum">
+             <number>8</number>
             </property>
-            <property name="checkable">
-             <bool>true</bool>
+            <property name="value">
+             <number>1</number>
             </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_5">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_10">
-               <property name="text">
-                <string>Device:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="alsaDevice">
-               <property name="text">
-                <string>default</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_11">
-               <property name="text">
-                <string>Sample rate:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QComboBox" name="alsaSampleRate">
-               <item>
-                <property name="text">
-                 <string>192000</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>96000</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>88200</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>48000</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>44100</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>32000</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>22050</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QLabel" name="label_13">
-               <property name="text">
-                <string>Fragments:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="3">
-              <widget class="QSpinBox" name="alsaFragments">
-               <property name="minimum">
-                <number>2</number>
-               </property>
-               <property name="maximum">
-                <number>8</number>
-               </property>
-               <property name="value">
-                <number>2</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="4">
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string>Period Size:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="5">
-              <widget class="QComboBox" name="alsaPeriodSize">
-               <item>
-                <property name="text">
-                 <string>4096</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>2048</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>1024</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>512</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>256</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>128</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>64</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="1" column="6">
-              <spacer name="horizontalSpacer_9">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
            </widget>
           </item>
-          <item>
-           <widget class="QGroupBox" name="jackDriver">
-            <property name="title">
-             <string>JACK audio server</string>
+          <item row="1" column="4" colspan="3">
+           <spacer name="horizontalSpacer_19">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
-            <property name="flat">
-             <bool>true</bool>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
             </property>
-            <property name="checkable">
-             <bool>true</bool>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>606</width>
+              <height>20</height>
+             </size>
             </property>
-            <layout class="QHBoxLayout">
-             <item>
-              <widget class="QLabel" name="label_6">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Left-Port:</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::PlainText</enum>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="jackLPort"/>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_7">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Right-Port:</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::PlainText</enum>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="jackRPort"/>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_8">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+           </spacer>
+          </item>
+          <item row="2" column="0" colspan="4">
+           <widget class="QCheckBox" name="rememberLastMidiConnections">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Remember last connection(s)</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
            </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QCheckBox" name="useJackTransport">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Use JACK Transport</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="5">
+           <widget class="QCheckBox" name="becomeTimebaseMaster">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Timebase Master</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <spacer name="horizontalSpacer_8">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>324</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
