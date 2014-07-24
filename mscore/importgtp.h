@@ -33,6 +33,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/ottava.h"
+#include "libmscore/drumset.h"
 
 namespace Ms {
 
@@ -136,6 +137,7 @@ class GuitarPro {
       void addPop(Note* note);
 
    public:
+      void initGuitarProDrumset();
       QString title, subtitle, artist, album, composer;
       QString transcriber, instructions;
       QStringList comments;
@@ -293,5 +295,6 @@ class GuitarPro6 : public GuitarPro {
       virtual void read(QFile*);
       };
 
+extern Drumset* gpDrumset;
 } // namespace Ms
 #endif
