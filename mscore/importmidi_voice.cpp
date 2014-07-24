@@ -47,21 +47,21 @@ int voiceLimit()
 
 #ifdef QT_DEBUG
 
-bool areNotesSortedByPitchInAscOrder(const QList<MidiNote>& notes)
-      {
-      for (int i = 0; i != notes.size() - 1; ++i) {
-            if (notes[i].pitch > notes[i + 1].pitch)
-                  return false;
-            }
-      return true;
-      }
-
 bool areNotesSortedByOffTimeInAscOrder(
             const QList<MidiNote>& notes,
             const std::vector<int> &groupOfIndexes)
       {
       for (int i = 0; i != (int)groupOfIndexes.size() - 1; ++i) {
             if (notes[groupOfIndexes[i]].offTime > notes[groupOfIndexes[i + 1]].offTime)
+                  return false;
+            }
+      return true;
+      }
+
+bool areNotesSortedByOffTimeInAscOrder(const QList<MidiNote>& notes)
+      {
+      for (int i = 0; i != (int)notes.size() - 1; ++i) {
+            if (notes[i].offTime > notes[i].offTime)
                   return false;
             }
       return true;
@@ -209,9 +209,9 @@ int findOptimalSplitPoint(
 
       Q_ASSERT_X(!notes.isEmpty(),
                  "MidiVoice::findOptimalSplitPoint", "Notes are empty");
-      Q_ASSERT_X(areNotesSortedByPitchInAscOrder(notes),
+      Q_ASSERT_X(areNotesSortedByOffTimeInAscOrder(notes),
                  "MidiVoice::findOptimalSplitPoint",
-                 "Notes are not sorted by pitch in ascending order");
+                 "Notes are not sorted by length in ascending order");
 
       int optSplit = -1;
 
@@ -219,6 +219,9 @@ int findOptimalSplitPoint(
             int minNoteCount = std::numeric_limits<int>::max();
 
             for (int splitPoint = 1; splitPoint != notes.size(); ++splitPoint) {
+                              // optimization: don't split notes with equal durations
+                  if (notes[splitPoint - 1].offTime == notes[splitPoint].offTime)
+                        continue;
                   int noteCount = findDurationCount(notes, chordIt->second.voice, splitPoint,
                                                     chordIt->first, sigmap, tuplets);
                   if (noteCount < minNoteCount) {
@@ -247,15 +250,16 @@ int findOptimalSplitPoint(
       return optSplit;
       }
 
-// which part of chord - low notes or high notes - should be shifted to another voice
+// which part of chord notes, sorted by length - low note indexes or high note indexes
+// - should be moved to another voice
 
-enum class ShiftedPitchGroup {
+enum class MovedVoiceGroup {
       LOW,
       HIGH
       };
 
 struct VoiceSplit {
-      ShiftedPitchGroup group;
+      MovedVoiceGroup group;
       int voice = -1;
       };
 
@@ -310,7 +314,7 @@ void addGroupSplits(
             const ReducedFraction &onTime,
             const ReducedFraction &groupOffTime,
             int origVoice,
-            ShiftedPitchGroup groupType,
+            MovedVoiceGroup groupType,
             int maxOccupiedVoice)
       {
       const int limit = voiceLimit();
@@ -389,12 +393,12 @@ std::vector<VoiceSplit> findPossibleVoiceSplits(
       if (splitPoint > 0) {
             addGroupSplits(splits, maxChordLength, chords, tuplets, insertedTuplets,
                            tupletOnTime, onTime, lowGroupOffTime, origVoice,
-                           ShiftedPitchGroup::LOW, maxOccupiedVoice);
+                           MovedVoiceGroup::LOW, maxOccupiedVoice);
             }
       if (splitPoint < notes.size()) {
             addGroupSplits(splits, maxChordLength, chords, tuplets, insertedTuplets,
                            tupletOnTime, onTime, highGroupOffTime, origVoice,
-                           ShiftedPitchGroup::HIGH, maxOccupiedVoice);
+                           MovedVoiceGroup::HIGH, maxOccupiedVoice);
             }
 
       return splits;
@@ -492,14 +496,14 @@ VoiceSplit findBestSplit(
 
             if (splitPoint > 0) {
                   const int averageLowPitch = findAverageLowPitch(notes, splitPoint);
-                  const int lowVoice = (possibleSplits[i].group == ShiftedPitchGroup::LOW)
+                  const int lowVoice = (possibleSplits[i].group == MovedVoiceGroup::LOW)
                                           ? voice : chordIt->second.voice;
                   totalPitchDist += findMinPitchDist(averageLowPitch, lowVoice, chordIt, chords);
                   }
 
             if (splitPoint < notes.size()) {
                   const int averageHighPitch = findAverageHighPitch(notes, splitPoint);
-                  const int highVoice = (possibleSplits[i].group == ShiftedPitchGroup::HIGH)
+                  const int highVoice = (possibleSplits[i].group == MovedVoiceGroup::HIGH)
                                           ? voice : chordIt->second.voice;
                   totalPitchDist += findMinPitchDist(averageHighPitch, highVoice, chordIt, chords);
                   }
@@ -707,6 +711,93 @@ int findMaxOccupiedVoiceInBar(
       return maxVoice;
       }
 
+bool splitChordToVoice(
+            std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
+            const QSet<int> &notesToMove,
+            int newVoice,
+            std::multimap<ReducedFraction, MidiChord> &chords,
+            std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets,
+            std::multimap<ReducedFraction,
+                 std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
+            const ReducedFraction &maxChordLength)
+      {
+      bool splitDone = true;
+      const ReducedFraction onTime = chordIt->first;
+      MidiChord &chord = chordIt->second;
+      auto &notes = chord.notes;
+
+      if (notesToMove.size() == notes.size()) {
+                        // don't split chord, just move it to another voice
+            const int oldVoice = chord.voice;   // remember for possible undo
+            chord.voice = newVoice;
+
+            if (!updateChordTuplets(chord, onTime, insertedTuplets,
+                                    chords, tuplets, maxChordLength)) {
+                  splitDone = false;
+                  chord.voice = oldVoice;       // rollback
+                  }
+            }
+      else {            // split chord
+            MidiChord newChord(chord);
+            newChord.notes.clear();
+            newChord.voice = newVoice;
+            QList<MidiNote> updatedOldNotes;
+
+            for (int i = 0; i != notes.size(); ++i) {
+                  if (notesToMove.contains(i))
+                        newChord.notes.append(notes[i]);
+                  else
+                        updatedOldNotes.append(notes[i]);
+                  }
+
+            const auto rememberedNotes = notes;       // to undo split if necessary
+                        // update notes before tuplet update because there will be check
+                        // for empty tuplets
+            notes = updatedOldNotes;
+
+            if (updateChordTuplets(newChord, onTime, insertedTuplets,
+                                   chords, tuplets, maxChordLength)) {
+
+                  Q_ASSERT_X(!notes.isEmpty(),
+                             "MidiVoice::splitChordToVoice", "Old chord notes are empty");
+                  Q_ASSERT_X(!newChord.notes.isEmpty(),
+                             "MidiVoice::splitChordToVoice", "New chord notes are empty");
+
+                  chordIt = chords.insert({onTime, newChord});
+                  }
+            else {
+                  notes = rememberedNotes;      // rollback
+                  splitDone = false;
+                  }
+            }
+      return splitDone;
+      }
+
+QSet<int> findNotesToMove(const QList<MidiNote> &notes,
+                          int splitPoint,
+                          MovedVoiceGroup splitGroup)
+      {
+      QSet<int> notesToMove;
+      if (splitPoint == 0 || splitPoint == notes.size()) {
+                        // don't split chord, just move it to another voice
+            for (int i = 0; i != notes.size(); ++i)
+                  notesToMove.insert(i);
+            }
+      else {
+            switch (splitGroup) {
+                  case MovedVoiceGroup::LOW:
+                        for (int i = 0; i != splitPoint; ++i)
+                              notesToMove.insert(i);
+                        break;
+                  case MovedVoiceGroup::HIGH:
+                        for (int i = splitPoint; i != notes.size(); ++i)
+                              notesToMove.insert(i);
+                        break;
+                  }
+            }
+      return notesToMove;
+      }
+
 bool doVoiceSeparation(
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap,
@@ -718,7 +809,7 @@ bool doVoiceSeparation(
                  "Tuplet chord/note is outside tuplet "
                  "or non-tuplet chord/note is inside tuplet before voice separation");
 
-      MChord::sortNotesByPitch(chords);
+      MChord::sortNotesByLength(chords);
       std::multimap<ReducedFraction,
                   std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> insertedTuplets;
       const ReducedFraction maxChordLength = MChord::findMaxChordLength(chords);
@@ -727,7 +818,6 @@ bool doVoiceSeparation(
       std::map<int, int> maxOccupiedVoices;   // <bar index, max occupied voice>
 
       for (auto it = chords.begin(); it != chords.end(); ++it) {
-            const ReducedFraction onTime = it->first;
             MidiChord &chord = it->second;
             auto &notes = chord.notes;
 
@@ -749,61 +839,11 @@ bool doVoiceSeparation(
             const VoiceSplit bestSplit = findBestSplit(it, chords, possibleSplits, splitPoint);
             changed = true;
 
-            bool canDoSplit = true;
-            if (splitPoint == 0 || splitPoint == notes.size()) {
-                              // don't split chord, just move it to another voice
-                  const int oldVoice = chord.voice;   // remember for possible undo
-                  chord.voice = bestSplit.voice;
-
-                  if (!updateChordTuplets(chord, onTime, insertedTuplets,
-                                          chords, tuplets, maxChordLength)) {
-                        canDoSplit = false;
-                        chord.voice = oldVoice;       // rollback
-                        }
-                  }
-            else {            // split chord
-                  MidiChord newChord(chord);
-                  newChord.notes.clear();
-                  newChord.voice = bestSplit.voice;
-                  QList<MidiNote> updatedOldNotes;
-
-                  switch (bestSplit.group) {
-                        case ShiftedPitchGroup::LOW:
-                              for (int i = 0; i != splitPoint; ++i)
-                                    newChord.notes.append(notes[i]);
-                              for (int i = splitPoint; i != notes.size(); ++i)
-                                    updatedOldNotes.append(notes[i]);
-                              break;
-                        case ShiftedPitchGroup::HIGH:
-                              for (int i = splitPoint; i != notes.size(); ++i)
-                                    newChord.notes.append(notes[i]);
-                              for (int i = 0; i != splitPoint; ++i)
-                                    updatedOldNotes.append(notes[i]);
-                              break;
-                        }
-
-                  const auto rememberedNotes = notes;       // to undo split if necessary
-                              // update notes before tuplet update because there will be check
-                              // for empty tuplets
-                  notes = updatedOldNotes;
-
-                  if (updateChordTuplets(newChord, onTime, insertedTuplets,
-                                         chords, tuplets, maxChordLength)) {
-
-                        Q_ASSERT_X(!notes.isEmpty(),
-                                   "MidiVoice::doVoiceSeparation", "Old chord notes are empty");
-                        Q_ASSERT_X(!newChord.notes.isEmpty(),
-                                   "MidiVoice::doVoiceSeparation", "New chord notes are empty");
-
-                        it = chords.insert({onTime, newChord});
-                        }
-                  else {
-                        notes = rememberedNotes;      // rollback
-                        canDoSplit = false;
-                        }
-                  }
-
-            if (canDoSplit && bestSplit.voice > maxVoiceIt->second)
+            const QSet<int> notesToMove = findNotesToMove(notes, splitPoint, bestSplit.group);
+            const bool splitDone = splitChordToVoice(
+                                          it, notesToMove, bestSplit.voice, chords, tuplets,
+                                          insertedTuplets, maxChordLength);
+            if (splitDone && bestSplit.voice > maxVoiceIt->second)
                   maxVoiceIt->second = bestSplit.voice;
             }
 
