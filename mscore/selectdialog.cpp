@@ -27,6 +27,7 @@
 #include "selectdialog.h"
 #include "libmscore/element.h"
 #include "libmscore/system.h"
+#include "libmscore/score.h"
 
 namespace Ms {
 
@@ -45,6 +46,7 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
       subtype->setText(e->subtypeName());
       sameSubtype->setEnabled(e->subtype() != -1);
       subtype->setEnabled(e->subtype() != -1);
+      inSelection->setEnabled(e->score()->selection().isRange());
             
       }
 
@@ -55,9 +57,21 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
 void SelectDialog::setPattern(ElementPattern* p)
       {
       p->type    = int(e->type());
-      p->subtype = int(e->subtype()); // TODO
-      p->staffStart = sameStaff->isChecked() ? e->staffIdx() : -1;
-      p->staffEnd = sameStaff->isChecked() ? e->staffIdx() + 1 : -1;
+      p->subtype = int(e->subtype());
+
+      if (sameStaff->isChecked()) {
+            p->staffStart = e->staffIdx();
+            p->staffEnd = e->staffIdx() + 1;
+            }
+      else if (inSelection->isChecked()) {
+            p->staffStart = e->score()->selection().staffStart();
+            p->staffEnd = e->score()->selection().staffEnd();
+            }
+      else {
+            p->staffStart = -1;
+            p->staffEnd = -1;
+            }
+
       p->voice   = sameVoice->isChecked() ? e->voice() : -1;
       p->subtypeValid = sameSubtype->isChecked();
       p->system  = 0;
