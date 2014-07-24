@@ -32,6 +32,7 @@
 #include "libmscore/clef.h"
 #include "libmscore/keysig.h"
 #include "libmscore/hairpin.h"
+#include "libmscore/ottava.h"
 
 namespace Ms {
 
@@ -86,6 +87,7 @@ class GuitarPro {
       int version;
       int key;
 
+      Ottava** ottava;
       Hairpin** hairpins;
       Score* score;
       QFile* f;
