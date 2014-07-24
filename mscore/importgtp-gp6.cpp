@@ -835,10 +835,18 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                   harmonicText = "T.H.";
                                                             else if (!type.compare("Artificial"))
                                                                   harmonicText = "A.H.";
+                                                            else
+                                                                  harmonicText = "Natural";
                                                             }
                                                       else if (!argument.compare("HarmonicFret")) {
                                                             QString value = currentProperty.toElement().text();
-                                                            Note* harmonicNote = new Note(score);
+                                                            Note* harmonicNote;
+
+                                                            // natural harmonic = artificial harmonic?
+                                                            if (!harmonicText.compare("Natural"))
+                                                                  harmonicNote = note;
+                                                            else
+                                                                  harmonicNote = new Note(score);
                                                             chord->add(harmonicNote);
 
                                                             Staff* staff = note->staff();
@@ -868,10 +876,12 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             harmonicNote->setFret(harmonicFret);
                                                             harmonicNote->setPitch(staff->part()->instr()->stringData()->getPitch(musescoreString, harmonicFret));
                                                             harmonicNote->setTpcFromPitch();
-                                                            harmonicNote->setFret(fretNum.toInt());
-                                                            TextStyle textStyle;
-                                                            textStyle.setAlign(ALIGN_CENTER);
-                                                            addTextToNote(harmonicText, textStyle, harmonicNote);
+                                                            if (harmonicText.compare("Natural")) {
+                                                                  harmonicNote->setFret(fretNum.toInt());
+                                                                  TextStyle textStyle;
+                                                                  textStyle.setAlign(ALIGN_CENTER);
+                                                                  addTextToNote(harmonicText, textStyle, harmonicNote);
+                                                                  }
                                                             }
                                                       else
                                                             qDebug() << "WARNING: Not handling node argument: " << argument << "in node" << currentNote.nodeName();
@@ -882,7 +892,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       note->setPitch(midi.toInt());
                                                 else if (element != "")
                                                       readDrumNote(note, element.toInt(), variation.toInt());
-                                                else if (stringNum != "") {
+                                                else if (stringNum != "" && note->headGroup() != NoteHeadGroup::HEAD_DIAMOND) {
                                                       Staff* staff = note->staff();
                                                       int fretNumber = fretNum.toInt();
                                                       int musescoreString = staff->part()->instr()->stringData()->strings() - 1 - stringNum.toInt();
