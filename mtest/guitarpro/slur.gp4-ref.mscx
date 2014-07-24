@@ -284,7 +284,6 @@
               <string>1</string>
               </Note>
             <Slur type="start" id="3"/>
-            <Slur type="start" id="4"/>
             </Chord>
           <Chord>
             <lid>7</lid>
@@ -297,7 +296,6 @@
               <string>1</string>
               </Note>
             <Slur type="stop" id="3"/>
-            <Slur type="stop" id="4"/>
             </Chord>
           <Rest>
             <lid>9</lid>
@@ -337,6 +335,7 @@
               <fret>3</fret>
               <string>1</string>
               </Note>
+            <Slur type="start" id="4"/>
             </Chord>
           <Chord>
             <lid>7</lid>
@@ -348,6 +347,7 @@
               <fret>0</fret>
               <string>1</string>
               </Note>
+            <Slur type="stop" id="4"/>
             </Chord>
           <Rest>
             <lid>9</lid>

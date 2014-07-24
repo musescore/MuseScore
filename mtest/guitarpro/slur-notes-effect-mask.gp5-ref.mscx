@@ -457,7 +457,6 @@
               <string>0</string>
               </Note>
             <Slur type="start" id="4"/>
-            <Slur type="start" id="5"/>
             </Chord>
           <Chord>
             <lid>7</lid>
@@ -486,9 +485,8 @@
               <string>0</string>
               </Note>
             <Slur type="stop" id="4"/>
-            <Slur type="stop" id="5"/>
             </Chord>
-          <Slur id="6">
+          <Slur id="5">
             <lid>38</lid>
             <track>0</track>
             </Slur>
@@ -507,8 +505,7 @@
               <fret>9</fret>
               <string>1</string>
               </Note>
-            <Slur type="start" id="6"/>
-            <Slur type="start" id="7"/>
+            <Slur type="start" id="5"/>
             </Chord>
           <Chord>
             <lid>13</lid>
@@ -524,8 +521,7 @@
               <fret>11</fret>
               <string>1</string>
               </Note>
-            <Slur type="stop" id="6"/>
-            <Slur type="stop" id="7"/>
+            <Slur type="stop" id="5"/>
             </Chord>
           <Chord>
             <lid>16</lid>
@@ -671,7 +667,7 @@
             <lid>4</lid>
             <durationType>16th</durationType>
             </Rest>
-          <Slur id="5">
+          <Slur id="6">
             <lid>37</lid>
             <track>4</track>
             </Slur>
@@ -690,6 +686,7 @@
               <fret>12</fret>
               <string>0</string>
               </Note>
+            <Slur type="start" id="6"/>
             </Chord>
           <Chord>
             <lid>7</lid>
@@ -714,6 +711,7 @@
               <fret>9</fret>
               <string>0</string>
               </Note>
+            <Slur type="stop" id="6"/>
             </Chord>
           <Slur id="7">
             <lid>38</lid>
@@ -734,6 +732,7 @@
               <fret>9</fret>
               <string>1</string>
               </Note>
+            <Slur type="start" id="7"/>
             </Chord>
           <Chord>
             <lid>13</lid>
@@ -746,6 +745,7 @@
               <fret>11</fret>
               <string>1</string>
               </Note>
+            <Slur type="stop" id="7"/>
             </Chord>
           <Chord>
             <lid>16</lid>
