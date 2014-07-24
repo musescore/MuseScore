@@ -2983,7 +2983,6 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
             Measure* measure = s->tick2measure(m->tick());
             Measure* nm      = m->nextMeasure();
             Repeat flags = measure->repeatFlags();
-            Repeat nflags = nm->repeatFlags();
             switch(barType) {
                   case BarLineType::END:
                   case BarLineType::NORMAL:
@@ -2993,7 +2992,7 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                         {
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags) & ~int(Repeat::END));
                         if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nflags) & ~int(Repeat::START));
+                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nm->repeatFlags()) & ~int(Repeat::START));
                         s->undoChangeEndBarLineType(measure, barType);
                         measure->setEndBarLineGenerated (false);
                         }
@@ -3004,12 +3003,12 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
                   case BarLineType::END_REPEAT:
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags | Repeat::END));
                         if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nflags) & ~int(Repeat::START));
+                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nm->repeatFlags()) & ~int(Repeat::START));
                         break;
                   case BarLineType::END_START_REPEAT:
                         s->undoChangeProperty(measure, P_ID::REPEAT_FLAGS, int(flags | Repeat::END));
                         if (nm)
-                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nflags | Repeat::START));
+                              s->undoChangeProperty(nm, P_ID::REPEAT_FLAGS, int(nm->repeatFlags() | Repeat::START));
                         break;
                   }
             }
