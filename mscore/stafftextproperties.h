@@ -40,7 +40,6 @@ class StaffTextProperties : public QDialog, public Ui::StaffTextProperties {
       QComboBox* channelCombo[4];
       QPushButton* stops[4][16];
       int curTabIndex;
-
       void saveChannel(int channel);
 
    private slots:
@@ -48,6 +47,7 @@ class StaffTextProperties : public QDialog, public Ui::StaffTextProperties {
       void channelItemChanged(QTreeWidgetItem*, QTreeWidgetItem*);
       void voiceButtonClicked(int);
       void tabChanged(int tab);
+      void setSwingControls(bool);
 
    public:
       StaffTextProperties(StaffText*, QWidget* parent = 0);

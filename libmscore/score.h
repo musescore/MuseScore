@@ -748,6 +748,7 @@ class Score : public QObject {
       MidiMapping* midiMapping(int channel)   { return &_midiMapping[channel]; }
       void rebuildMidiMapping();
       void updateChannel();
+      void updateSwing();
 
       void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
 

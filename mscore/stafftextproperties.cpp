@@ -126,7 +126,30 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
                   mapper->setMapping(vb[col][row], (col << 8) + row);
                   }
             }
+
+      if (staffText->_setSwing) {
+            setSwingBox->setChecked(true);
+            if (st->swingParameters()->swingUnit == MScore::division/2) {
+                  swingBox->setEnabled(true);
+                  swingEighth->setChecked(true);
+                  swingBox->setValue(st->swingParameters()->swingRatio);
+                  }
+            else if (st->swingParameters()->swingUnit == MScore::division/4) {
+                  swingBox->setEnabled(true);
+                  swingSixteenth->setChecked(true);
+                  swingBox->setValue(st->swingParameters()->swingRatio);
+                  }
+            else if (st->swingParameters()->swingUnit == 0) {
+                 swingBox->setEnabled(false);
+                 SwingOff->setChecked(true);
+                 swingBox->setValue(st->swingParameters()->swingRatio);
+                 }
+            }
+
       connect(mapper, SIGNAL(mapped(int)), SLOT(voiceButtonClicked(int)));
+      connect(SwingOff, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
+      connect(swingEighth, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
+      connect(swingSixteenth, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
 
       //---------------------------------------------------
       //    setup midi actions
@@ -223,6 +246,22 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
 
       curTabIndex = tabWidget->currentIndex();
       connect(tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
+      }
+
+//---------------------------------------------------------
+//   setSwingParameters
+//---------------------------------------------------------
+
+void StaffTextProperties::setSwingControls(bool checked)
+      {
+      if (!checked)
+            return;
+      if (SwingOff->isChecked())
+            swingBox->setEnabled(false);
+      else if (swingEighth->isChecked())
+            swingBox->setEnabled(true);
+      else if (swingSixteenth->isChecked())
+            swingBox->setEnabled(true);
       }
 
 //---------------------------------------------------------
@@ -378,8 +417,23 @@ void StaffTextProperties::saveValues()
                         }
                   }
             }
-
+      if (setSwingBox->isChecked()) {
+            staffText->setSetSwing(true);
+            if (SwingOff->isChecked()) {
+                  staffText->setSwingParameters(0, swingBox->value());
+                  swingBox->setEnabled(false);
+                  }
+            else if (swingEighth->isChecked()) {
+                  staffText->setSwingParameters(MScore::division/2, swingBox->value());
+                  swingBox->setEnabled(true);
+                  }
+            else if (swingSixteenth->isChecked()) {
+                  staffText->setSwingParameters(MScore::division/4, swingBox->value());
+                  swingBox->setEnabled(true);
+                  }
+            }
       staffText->score()->updateChannel();
+      staffText->score()->updateSwing();
       staffText->score()->setPlaylistDirty(true);
       }
 }
