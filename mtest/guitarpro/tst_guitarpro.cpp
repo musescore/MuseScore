@@ -123,7 +123,8 @@ private slots:
       void gpxText()         { gpReadTest("text", "gpx"); }
       void gpxArtHarmonic()  { gpReadTest("artificial-harmonic", "gpx"); }
       void gpxGhost()        { gpReadTest("ghost-note", "gpx"); }
-      void gpxRasg()        { gpReadTest("rasg", "gpx"); }
+      void gpxRasg()         { gpReadTest("rasg", "gpx"); }
+      void gp5Percussion()   { gpReadTest("all-percussion", "gp5"); }
       };
 
 //---------------------------------------------------------

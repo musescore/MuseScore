@@ -30,9 +30,9 @@ class InstrumentData : public QSharedData {
       char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
       Interval _transpose;
 
-      bool       _useDrumset;
-      Drumset*   _drumset;
-      StringData _stringData;
+      DrumsetKind _useDrumset;
+      Drumset*    _drumset;
+      StringData  _stringData;
 
       QList<NamedEventList>   _midiActions;
       QList<MidiArticulation> _articulation;
@@ -62,8 +62,8 @@ class InstrumentData : public QSharedData {
 
       void setDrumset(Drumset* ds);       // drumset is now owned by Instrument
       Drumset* drumset() const                               { return _drumset;    }
-      bool useDrumset() const                                { return _useDrumset; }
-      void setUseDrumset(bool val);
+      DrumsetKind useDrumset() const                         { return _useDrumset; }
+      void setUseDrumset(DrumsetKind val);
       void setAmateurPitchRange(int a, int b)                { _minPitchA = a; _maxPitchA = b; }
       void setProfessionalPitchRange(int a, int b)           { _minPitchP = a; _maxPitchP = b; }
       Channel& channel(int idx)                              { return _channel[idx];  }
