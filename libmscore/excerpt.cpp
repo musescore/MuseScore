@@ -373,7 +373,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                 Note* on = och->notes().at(i);
                                                 Note* nn = nch->notes().at(i);
                                                 if (on->tieFor()) {
-                                                      Tie* tie = new Tie(score);
+                                                      Tie* tie = static_cast<Tie*>(on->tieFor()->linkedClone());
+                                                      tie->setScore(score);
                                                       nn->setTieFor(tie);
                                                       tie->setStartNote(nn);
                                                       tie->setTrack(nn->track());
@@ -577,7 +578,8 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           Note* on = och->notes().at(i);
                                           Note* nn = nch->notes().at(i);
                                           if (on->tieFor()) {
-                                                Tie* tie = new Tie(score);
+                                                Tie* tie = static_cast<Tie*>(on->tieFor()->linkedClone());
+                                                tie->setScore(score);
                                                 nn->setTieFor(tie);
                                                 tie->setStartNote(nn);
                                                 tie->setTrack(nn->track());
@@ -704,7 +706,8 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                                           Note* on = och->notes().at(i);
                                           Note* nn = nch->notes().at(i);
                                           if (on->tieFor()) {
-                                                Tie* tie = new Tie(score);
+                                                Tie* tie = static_cast<Tie*>(on->tieFor()->linkedClone());
+                                                tie->setScore(score);
                                                 nn->setTieFor(tie);
                                                 tie->setStartNote(nn);
                                                 tie->setTrack(nn->track());
