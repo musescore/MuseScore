@@ -3537,7 +3537,11 @@ void Measure::layoutStage1()
 
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
-                  if ((repeatFlags() & Repeat::START) || (prevMeasure() && (prevMeasure()->repeatFlags() & Repeat::END)))
+                  if (
+                        (repeatFlags() & Repeat::START)
+                     || (prevMeasure() && (prevMeasure()->repeatFlags() & Repeat::END))
+                     || (prevMeasure() && (prevMeasure()->sectionBreak()))
+                     )
                         setBreakMMRest(true);
                   else if (!breakMultiMeasureRest()) {
                         for (Segment* s = first(); s; s = s->next()) {

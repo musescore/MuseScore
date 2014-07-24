@@ -1680,7 +1680,6 @@ void Score::createMMRests()
                   mmr->setNo(m->no());
                   mmr->setPageBreak(lm->pageBreak());
                   mmr->setLineBreak(lm->lineBreak());
-                  mmr->setSectionBreak(lm->sectionBreak());
                   mmr->setRepeatFlags(m->repeatFlags());
 
                   BarLineType t = lm->endBarLineGenerated() ? BarLineType::NORMAL : lm->endBarLineType();
@@ -1752,7 +1751,6 @@ void Score::createMMRests()
                                     }
                               }
                         }
-//                  else if (ns && ns->isEmpty())
                   else if (ns)
                         undo(new RemoveElement(ns));
 
@@ -3008,7 +3006,7 @@ void Score::layoutPages()
                   }
 
             tmargin     = qMax(tmargin, pC.prevDist);
-            
+
 
             qreal h = pC.sr.height();
             if (pC.lastSystem && (pC.y + h + tmargin + qMax(bmargin, slb) > pC.ey)) {
