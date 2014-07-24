@@ -901,6 +901,24 @@ void Score::undoAddElement(Element* element)
             return;
             }
 
+      if (et == Element::Type::LAYOUT_BREAK) {
+            LayoutBreak* lb = static_cast<LayoutBreak*>(element);
+            if (lb->layoutBreakType() == LayoutBreak::Type::SECTION) {
+                  Measure* m = lb->measure();
+                  foreach(Score* s, scoreList()) {
+                        if (s == lb->score())
+                              undo(new AddElement(lb));
+                        else {
+                              Element* e = lb->linkedClone();
+                              Measure* nm = s->tick2measure(m->tick());
+                              e->setParent(nm);
+                              undo(new AddElement(e));
+                              }
+                        }
+                  return;
+                  }
+            }
+
       if (ostaff == 0 || (
          et    != Element::Type::ARTICULATION
          && et != Element::Type::CHORDLINE
