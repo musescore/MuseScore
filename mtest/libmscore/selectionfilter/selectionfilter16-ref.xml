@@ -22,16 +22,22 @@
       </Chord>
     <Chord>
       <track>0</track>
-      <durationType>quarter</durationType>
+      <durationType>half</durationType>
+      <duration z="1" n="4"/>
       <Note>
         <track>0</track>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
+      <Tremolo>
+        <subtype>c8</subtype>
+        <track>0</track>
+        </Tremolo>
       </Chord>
     <Chord>
       <track>0</track>
-      <durationType>quarter</durationType>
+      <durationType>half</durationType>
+      <duration z="1" n="4"/>
       <Note>
         <track>0</track>
         <pitch>77</pitch>
