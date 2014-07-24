@@ -137,6 +137,7 @@
           <Note>
             <lid>9</lid>
             <Tie id="2">
+              <lid>10</lid>
               </Tie>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -145,12 +146,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>10</lid>
+          <lid>11</lid>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>11</lid>
+            <lid>12</lid>
             <endSpanner id="2"/>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -159,12 +160,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>12</lid>
+          <lid>13</lid>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>13</lid>
+            <lid>14</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -340,6 +341,7 @@
             <Note>
               <lid>9</lid>
               <Tie id="3">
+                <lid>10</lid>
                 </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -348,12 +350,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>10</lid>
+            <lid>11</lid>
             <Tuplet>2</Tuplet>
             <durationType>eighth</durationType>
             <Beam>2</Beam>
             <Note>
-              <lid>11</lid>
+              <lid>12</lid>
               <endSpanner id="3"/>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -362,12 +364,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>12</lid>
+            <lid>13</lid>
             <Tuplet>2</Tuplet>
             <durationType>eighth</durationType>
             <Beam>2</Beam>
             <Note>
-              <lid>13</lid>
+              <lid>14</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -427,6 +429,7 @@
             <Note>
               <lid>9</lid>
               <Tie id="4">
+                <lid>10</lid>
                 </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -435,12 +438,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>10</lid>
+            <lid>11</lid>
             <Tuplet>3</Tuplet>
             <durationType>eighth</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>11</lid>
+              <lid>12</lid>
               <endSpanner id="4"/>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -449,12 +452,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>12</lid>
+            <lid>13</lid>
             <Tuplet>3</Tuplet>
             <durationType>eighth</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>13</lid>
+              <lid>14</lid>
               <pitch>75</pitch>
               <tpc>11</tpc>
               <fret>16</fret>
