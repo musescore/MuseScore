@@ -351,6 +351,7 @@ class TestImportMidi : public QObject, public MTest
       void voiceSeparationAcid() { voiceSeparation("voice_acid"); }
       void voiceSeparationIntersect() { voiceSeparation("voice_intersect"); }
       void voiceSeparationTuplet() { voiceSeparation("voice_tuplet", true); }
+      void voiceSeparationCentral() { voiceSeparation("voice_central"); }
       };
 
 //---------------------------------------------------------
