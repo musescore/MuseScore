@@ -53,7 +53,7 @@ static Dyn dynList[] = {
       {  64,  false, "mp",     "\ue521\ue520"                         },
       {  80,  false, "mf",     "\ue521\ue522"                         },
       {  96,  false, "f",      "\ue522"                               },
-      { 112,  false, "ff",     "\ue522"                                },
+      { 112,  false, "ff",     "\ue522\ue522"                          },
       { 126,  false, "fff",    "\ue522\ue522\ue522"                    },
       { 127,  false, "ffff",   "\ue522\ue522\ue522\ue522"              },
       { 127,  false, "fffff",  "\ue522\ue522\ue522\ue522\ue522"        },
@@ -62,7 +62,7 @@ static Dyn dynList[] = {
       // accents:
       {  0,   true,  "fp",     "\ue522\ue520"                          },
       {  0,   true,  "sf",     "\ue524\ue522"                          },
-      {  0,   true,  "sfz",    "\ue524\ue522\0e525"                    },
+      {  0,   true,  "sfz",    "\ue524\ue522\ue525"                    },
       {  0,   true,  "sff",    "\ue524\ue522\ue522"                    },
       {  0,   true,  "sffz",   "\ue524\ue522\ue522\ue525"              },
       {  0,   true,  "sfp",    "\ue524\ue522\ue520"                    },
