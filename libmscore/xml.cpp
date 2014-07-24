@@ -776,5 +776,10 @@ int Xml::spannerId(const Spanner* s)
       return addSpanner(s);
       }
 
+bool Xml::canWrite(const Element* e) const
+      {
+      return _filter.canSelect(e);
+      }
+
 }
 

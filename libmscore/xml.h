@@ -16,6 +16,8 @@
 #include "thirdparty/xmlstream/xmlstream.h"
 #include "stafftype.h"
 #include "interval.h"
+#include "element.h"
+#include "select.h"
 
 namespace Ms {
 
@@ -130,6 +132,7 @@ class Xml : public QTextStream {
       void putLevel();
       QList<std::pair<int,const Spanner*>> _spanner;
       int _spannerId = 1;
+      SelectionFilter _filter;
 
    public:
       int curTick   =  0;           // used to optimize output
@@ -175,6 +178,9 @@ class Xml : public QTextStream {
 
       void writeXml(const QString&, QString s);
       void dump(int len, const unsigned char* p);
+
+      void setFilter(SelectionFilter f) { _filter = f; }
+      bool canWrite(const Element*) const;
 
       static QString xmlString(const QString&);
       };

@@ -945,7 +945,7 @@ void Chord::write(Xml& xml) const
             e->write(xml);
       for (auto i : score()->spanner()) {     // TODO: dont search whole list
             Spanner* s = i.second;
-            if (s->generated() || s->type() != Element::Type::SLUR)
+            if (s->generated() || s->type() != Element::Type::SLUR || !xml.canWrite(s))
                   continue;
 
             if (s->startElement() == this) {

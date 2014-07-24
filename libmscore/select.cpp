@@ -16,11 +16,15 @@
 */
 
 #include "mscore.h"
+#include "arpeggio.h"
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
+#include "element.h"
 #include "figuredbass.h"
+#include "glissando.h"
 #include "harmony.h"
+#include "hook.h"
 #include "input.h"
 #include "limits.h"
 #include "lyrics.h"
@@ -35,6 +39,7 @@
 #include "sig.h"
 #include "slur.h"
 #include "stem.h"
+#include "stemslash.h"
 #include "tie.h"
 #include "system.h"
 #include "text.h"
@@ -272,6 +277,79 @@ void Selection::add(Element* el)
       update();
       }
 
+bool SelectionFilter::canSelect(const Element* e) const
+      {
+      if (e->type() == Element::Type::DYNAMIC || e->type() == Element::Type::HAIRPIN)
+          return isFiltered(SelectionFilterType::DYNAMIC);
+      if (e->type() == Element::Type::ARTICULATION || e->type() == Element::Type::TRILL)
+          return isFiltered(SelectionFilterType::ARTICULATION);
+      if (e->type() == Element::Type::LYRICS)
+          return isFiltered(SelectionFilterType::LYRICS);
+      if (e->type() == Element::Type::FINGERING)
+          return isFiltered(SelectionFilterType::FINGERING);
+      if (e->type() == Element::Type::HARMONY)
+          return isFiltered(SelectionFilterType::CHORD_SYMBOL);
+      if (e->type() == Element::Type::SLUR)
+          return isFiltered(SelectionFilterType::SLUR);
+      if (e->type() == Element::Type::FIGURED_BASS)
+          return isFiltered(SelectionFilterType::FIGURED_BASS);
+      if (e->type() == Element::Type::OTTAVA)
+          return isFiltered(SelectionFilterType::OTTAVA);
+      if (e->type() == Element::Type::PEDAL)
+          return isFiltered(SelectionFilterType::PEDAL_LINE);
+      if (e->type() == Element::Type::ARPEGGIO)
+          return isFiltered(SelectionFilterType::ARPEGGIO);
+      if (e->type() == Element::Type::GLISSANDO)
+          return isFiltered(SelectionFilterType::GLISSANDO);
+      if (e->type() == Element::Type::FRET_DIAGRAM)
+          return isFiltered(SelectionFilterType::FRET_DIAGRAM);
+      if (e->type() == Element::Type::BREATH)
+          return isFiltered(SelectionFilterType::BREATH);
+      if (e->isText()) //turns out that only TEXT INSTRCHANGE AND STAFFTEXT are caught here, rest are system thus not in selection
+          return isFiltered(SelectionFilterType::OTHER_TEXT);
+      if (e->isSLine()) // NoteLine, Volta
+          return isFiltered(SelectionFilterType::OTHER_LINE);
+      if (e->type() == Element::Type::TREMOLO && static_cast<const Tremolo*>(e)->twoNotes() == false)
+          return isFiltered(SelectionFilterType::TREMOLO);
+      if (e->type() == Element::Type::CHORD && static_cast<const Chord*>(e)->isGrace())
+          return isFiltered(SelectionFilterType::GRACE_NOTE);
+      return true;
+      }
+
+void Selection::appendFiltered(Element* e)
+      {
+      if (selectionFilter().canSelect(e))
+            _el.append(e);
+      }
+
+void Selection::appendChord(Chord* chord)
+      {
+      if (chord->beam()) _el.append(chord->beam());
+      if (chord->stem()) _el.append(chord->stem());
+      if (chord->hook()) _el.append(chord->hook());
+      if (chord->arpeggio()) appendFiltered(chord->arpeggio());
+      if (chord->glissando()) appendFiltered(chord->glissando());
+      if (chord->stemSlash()) _el.append(chord->stemSlash());
+      if (chord->tremolo()) appendFiltered(chord->tremolo());
+      foreach(Note* note, chord->notes()) {
+            _el.append(note);
+            if (note->accidental()) _el.append(note->accidental());
+            foreach(Element* el, note->el())
+                  appendFiltered(el);
+            for(int x = 0; x < MAX_DOTS; x++)
+                  if (note->dot(x) != 0) _el.append(note->dot(x));
+
+            if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
+                  if (note->tieFor()->endElement()->type() == Element::Type::NOTE) {
+                        Note* endNote = static_cast<Note*>(note->tieFor()->endElement());
+                        Segment* s = endNote->chord()->segment();
+                        if (_endSegment && (s->tick() < _endSegment->tick()))
+                              _el.append(note->tieFor());
+                        }
+                  }
+            }
+      }
+
 //---------------------------------------------------------
 //   updateSelectedElements
 //---------------------------------------------------------
@@ -304,42 +382,26 @@ void Selection::updateSelectedElements()
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         for (Element* e : cr->lyricsList()) {
                               if (e)
-                                    _el.append(e);
+                                    appendFiltered(e);
                               }
+                        foreach (Articulation* art, cr->articulations())
+                              appendFiltered(art);
                         }
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
-                        foreach (Articulation* art, chord->articulations()) {
-                              _el.append(art);
-                              }
-                        if (chord->beam()) _el.append(chord->beam());
-                        if (chord->stem()) _el.append(chord->stem());
-                        foreach(Note* note, chord->notes()) {
-                              _el.append(note);
-                              if (note->accidental()) _el.append(note->accidental());
-
-                              for(int x = 0; x < MAX_DOTS; x++) {
-                                    if (note->dot(x) != 0) _el.append(note->dot(x));
-                                                                        }
-                                    if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
-                                          if (note->tieFor()->endElement()->type() == Element::Type::NOTE) {
-                                          Note* endNote = static_cast<Note*>(note->tieFor()->endElement());
-                                          Segment* s = endNote->chord()->segment();
-                                          if (_endSegment && (s->tick() < _endSegment->tick()))
-                                                _el.append(note->tieFor());
-                                          }
-                                    }
-                              }
+                        for (Chord* graceNote : chord->graceNotes())
+                              if(canSelect(graceNote)) appendChord(graceNote);
+                        appendChord(chord);
                         }
                   else {
-                        _el.append(e);
+                        appendFiltered(e);
                         }
                   foreach(Element* e, s->annotations()) {
                         if (e->track() < startTrack || e->track() >= endTrack)
                               continue;
                         if (e->systemFlag()) //exclude system text
                               continue;
-                        _el.append(e);
+                        appendFiltered(e);
                         }
 #if 0 // TODO-S
                   for(Spanner* sp = s->spannerFor(); sp; sp = sp->next()) {
@@ -395,11 +457,13 @@ void Selection::updateSelectedElements()
             // ignore spanners belonging to other tracks
             if (sp->track() < startTrack || sp->track() >= endTrack)
                   continue;
-            if (sp->type() == Element::Type::SLUR
-                && ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick)))
-                  _el.append(sp); // slur with start or end in range selection
+            if (sp->type() == Element::Type::SLUR) {
+                if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
+                      if (canSelect(sp->startChord()) && canSelect(sp->endChord()))
+                        appendFiltered(sp); // slur with start or end in range selection
+            }
             else if((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
-                  _el.append(sp); // spanner with start and end in range selection
+                  appendFiltered(sp); // spanner with start and end in range selection
             }
       update();
       }
@@ -532,6 +596,7 @@ QByteArray Selection::staffMimeData() const
       Xml xml(&buffer);
       xml.header();
       xml.clipboardmode = true;
+      xml.setFilter(selectionFilter());
 
       int ticks  = tickEnd() - tickStart();
       int staves = staffEnd() - staffStart();
@@ -1016,6 +1081,17 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
       }
 
+SelectionFilter Selection::selectionFilter() const
+      {
+      return _score->selectionFilter();
+      }
 
+void SelectionFilter::setFiltered(SelectionFilterType type, bool set)
+      {
+      if (set)
+            _filtered = _filtered | (int)type;
+      else
+            _filtered = _filtered & ~(int)type;
+      }
 }
 
