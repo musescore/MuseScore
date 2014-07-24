@@ -46,6 +46,9 @@ PartEdit::PartEdit(QWidget* parent)
       connect(reverb,   SIGNAL(valueChanged(double,int)), SLOT(reverbChanged(double)));
       connect(mute,     SIGNAL(toggled(bool)),            SLOT(muteChanged(bool)));
       connect(solo,     SIGNAL(toggled(bool)),            SLOT(soloToggled(bool)));
+      connect(portN,    SIGNAL(valueChanged(int)),        SLOT(channelChanged(int)));
+      connect(channelN, SIGNAL(valueChanged(int)),        SLOT(channelChanged(int)));
+
       }
 
 //---------------------------------------------------------
@@ -74,6 +77,15 @@ void PartEdit::setPart(Part* p, Channel* a)
                   }
             }
       drumset->setVisible((p->instr()->useDrumset() != DrumsetKind::NONE));
+
+      // Update the controls. Block signals to prevent looping
+      channelN->blockSignals(true);
+      portN   ->blockSignals(true);
+      // Display channels in range 1..16
+      portN   ->setValue(part->score()->midiMapping(a->channel)->port + 1);
+      channelN->setValue(part->score()->midiMapping(a->channel)->channel + 1);
+      channelN->blockSignals(false);
+      portN   ->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -340,6 +352,41 @@ void Mixer::writeSettings()
       settings.setValue("size", size());
       settings.setValue("pos", pos());
       settings.endGroup();
+      }
+
+//---------------------------------------------------------
+//   channelChanged
+//   handles port & channel change
+//---------------------------------------------------------
+
+void PartEdit::channelChanged(int)
+      {
+      int p =    portN->value() - 1;
+      int c = channelN->value() - 1;
+      if (c == 16) {
+            c  = 0;
+            p += 1;
+            }
+
+      int newChannel = p*16+c;
+      if (part->instr()->useDrumset())
+            newChannel = p*16+9; // Port 10 is special for drums
+
+      // Set new channel
+      part->score()->midiMapping(channel->channel)->channel = newChannel % 16;
+      part->score()->midiMapping(channel->channel)->port    = newChannel / 16;
+
+      // Update the controls. Block signals to prevent looping
+      channelN->blockSignals(true);
+      portN   ->blockSignals(true);
+
+      channelN->setValue(newChannel % 16 + 1);
+      portN   ->setValue(newChannel / 16 + 1);
+
+      channelN->blockSignals(false);
+      portN   ->blockSignals(false);
+
+      seq->initInstruments();
       }
 }
 

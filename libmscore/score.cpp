@@ -887,6 +887,50 @@ void Score::appendPart(Part* p)
 
 void Score::rebuildMidiMapping()
       {
+      // Update channels if part of them is already assigned
+      if (_midiMapping.size() != 0) {
+            foreach(Part* part, _parts) {
+                  InstrumentList* il = part->instrList();
+                  for (auto i = il->begin(); i != il->end(); ++i) {
+                        bool drum = i->second.useDrumset();
+                        for (int k = 0; k < i->second.channel().size(); ++k) {
+                              bool found = false;
+                              int maxport = 0, maxchannel = 0;
+                              foreach(MidiMapping mm, _midiMapping) {
+                                    if (i->second.channel(k).channel == mm.articulation->channel) {
+                                          found = true;
+                                          break;
+                                          }
+                                    if (mm.port > maxport)
+                                          maxport = mm.port;
+                                    if (mm.channel >maxchannel)
+                                          maxchannel = mm.channel;
+                                    }
+                              if (!found) {
+                                    if (MScore::debugMode)
+                                          qDebug()<<"Found unassigned channel, k: "<<k;
+                                    Channel* a = &(i->second.channel(k));
+                                    MidiMapping mm;
+                                    if (drum) {
+                                          mm.port    = maxport;
+                                          mm.channel = 9;
+                                          }
+                                    else {
+                                          mm.port    = (maxchannel == 15) ? maxport + 1 :maxport;
+                                          mm.channel = (maxchannel == 15) ? 0 :maxchannel + 1;
+                                          }
+                                    mm.part         = part;
+                                    mm.articulation = a;
+                                    _midiMapping.append(mm);
+                                    a->channel = _midiMapping.size()-1;
+                                    }
+                              }
+                        }
+                  }
+            dumpMidiMapping();
+            return;
+            }
+      // Channels was not assigned. Set default channels 1,2,3...
       _midiMapping.clear();
       int port    = 0;
       int channel = 0;
@@ -923,6 +967,7 @@ void Score::rebuildMidiMapping()
                         }
                   }
             }
+      dumpMidiMapping();
       }
 
 //---------------------------------------------------------

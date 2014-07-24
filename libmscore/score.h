@@ -745,6 +745,11 @@ class Score : public QObject {
       int midiChannel(int idx) const;
       QList<MidiMapping>* midiMapping()       { return &_midiMapping;          }
       MidiMapping* midiMapping(int channel)   { return &_midiMapping[channel]; }
+      void dumpMidiMapping() {
+            qDebug("====dump midi mapping ==");
+            foreach(MidiMapping mm, _midiMapping)
+                  qDebug()<<"mm port:"<<(int)mm.port<<", channel: "<<(int)mm.channel;
+            }
       void rebuildMidiMapping();
       void updateChannel();
       void updateSwing();
