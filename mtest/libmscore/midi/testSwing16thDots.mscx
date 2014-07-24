@@ -12,8 +12,10 @@
       <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <beamMinLen>1.32</beamMinLen>
       <beamNoSlope>0</beamNoSlope>
+      <smallNoteMag>0.7</smallNoteMag>
+      <graceNoteMag>0.7</graceNoteMag>
+      <smallStaffMag>0.7</smallStaffMag>
       <swingRatio>70</swingRatio>
-      <swingUnit>120</swingUnit>
       <page-layout>
         <page-height>1683.36</page-height>
         <page-width>1190.88</page-width>
@@ -116,6 +118,11 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <StaffText>
+          <swing swingUnit="16th" swingRatio= "70"/>
+          <style>System</style>
+          <text>system-text</text>
+          </StaffText>
         <Chord>
           <dots>1</dots>
           <durationType>eighth</durationType>

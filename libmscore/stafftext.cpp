@@ -28,7 +28,9 @@ StaffText::StaffText(Score* s)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setTextStyleType(TextStyleType::STAFF);
       _setAeolusStops = false;
+      _setSwing = false;
       clearAeolusStops();
+      setSwingParameters(MScore::division / 2, 60);
       }
 
 //---------------------------------------------------------
@@ -51,6 +53,17 @@ void StaffText::write(Xml& xml) const
       if (_setAeolusStops) {
             for (int i = 0; i < 4; ++i)
                   xml.tag(QString("aeolus group=\"%1\"").arg(i), aeolusStops[i]);
+            }
+      if (_setSwing) {
+            QString swingUnit;
+            if (swingParameters()->swingUnit == MScore::division / 2)
+                  swingUnit = TDuration(TDuration::DurationType::V_EIGHT).name();
+            else if (swingParameters()->swingUnit == MScore::division / 4)
+                  swingUnit = TDuration(TDuration::DurationType::V_16TH).name();
+            else
+                  swingUnit = TDuration(TDuration::DurationType::V_ZERO).name();
+            int swingRatio = swingParameters()->swingRatio;
+            xml.tagE(QString("swing swingUnit=\"%1\" swingRatio= \"%2\"").arg(swingUnit).arg(swingRatio));
             }
       Text::writeProperties(xml);
       xml.etag();
@@ -107,6 +120,20 @@ void StaffText::read(XmlReader& e)
                   else
                         e.readNext();
                   _setAeolusStops = true;
+                  }
+          else if (tag == "swing") {
+                  QString swingUnit = e.attribute("swingUnit","");
+                  int unit = 0;
+                  if (swingUnit == TDuration(TDuration::DurationType::V_EIGHT).name())
+                        unit = MScore::division / 2;
+                  else if (swingUnit == TDuration(TDuration::DurationType::V_16TH).name())
+                        unit = MScore:: division / 4;
+                  else if (swingUnit == TDuration(TDuration::DurationType::V_ZERO).name())
+                        unit = 0;
+                  int ratio = e.intAttribute("swingRatio", 60);
+                  setSetSwing(true);
+                  setSwingParameters(unit, ratio);
+                  e.readNext();
                   }
             else if (!Text::readProperties(e))
                   e.unknown();
