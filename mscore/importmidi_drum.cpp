@@ -76,6 +76,13 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
 
             if (changed)
                   MidiTuplet::removeEmptyTuplets(mtrack);
+
+            Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
+                       "MidiDrum::splitDrumVoices",
+                       "Not all tuplets are referenced in chords or notes after drum split");
+            Q_ASSERT_X(MidiVoice::areVoicesSame(mtrack.chords),
+                       "MidiDrum::splitDrumVoices", "Different voices of chord and tuplet "
+                       "after drum split");
             }
       }
 
