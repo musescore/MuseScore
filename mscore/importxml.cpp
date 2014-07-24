@@ -151,32 +151,35 @@ static int MusicXMLStepAltOct2Pitch(char step, int alter, int octave)
 /**
  Convert MusicXML \a step / \a alter / \a octave to midi pitch,
  set pitch and tpc.
+ Note that n's staff and track have not been set yet
  */
 
 static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* ottava, int track)
       {
-      // qDebug("xmlSetPitch(n=%p, st=%c, alter=%d, octave=%d)",
-      //        n, step, alter, octave);
+      //qDebug("xmlSetPitch(n=%p, st=%c, alter=%d, octave=%d)",
+      //       n, step, alter, octave);
+
+      const Staff* staff = n->score()->staff(track / VOICES);
+      const Instrument* instr = staff->part()->instr();
+      const Interval intval = instr->transpose();
+      //qDebug("  staff=%p instr=%p dia=%d chro=%d",
+      //       staff, instr, (int) intval.diatonic, (int) intval.chromatic);
 
       int pitch = MusicXMLStepAltOct2Pitch(step, alter, octave);
-
-      if (pitch < 0)
-            pitch = 0;
-      if (pitch > 127)
-            pitch = 127;
+      pitch += intval.chromatic; // assume not in concert pitch
+      // ensure sane values
+      pitch = limit(pitch, 0, 127);
 
       if (ottava != 0 && ottava->track() == track)
             pitch -= ottava->pitchShift();
 
-      n->setPitch(pitch);
-
-      int istep = step - 'A';
       //                        a  b  c  d  e  f  g
       static int table1[7]  = { 5, 6, 0, 1, 2, 3, 4 };
-      int tpc  = step2tpc(table1[istep], AccidentalVal(alter));
-      // alternativ: tpc = step2tpc((istep + 5) % 7, alter);      // rotate istep 5 steps
-      n->setTpc(tpc);
-      n->setLine(absStep(tpc, pitch));
+      int istep = step - 'A';
+      int tpc2 = step2tpc(table1[istep], AccidentalVal(alter));
+      int tpc1 = Ms::transposeTpc(tpc2, intval, false);
+      n->setPitch(pitch, tpc1, tpc2);
+      //qDebug("  pitch=%d tpc1=%d tpc2=%d", n->pitch(), n->tpc1(), n->tpc2());
       }
 
 //---------------------------------------------------------
