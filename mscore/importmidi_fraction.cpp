@@ -100,12 +100,12 @@ unsigned lcm(int a, int b)
       {
       const int tmp = gcd(a, b);
 
-      Q_ASSERT_X(!isMultiplicationOverflow(a, b),
-                 "ReducedFraction, lcm", "Multiplication overflow");
-      Q_ASSERT_X(!isDivisionOverflow(a * b, tmp),
+      Q_ASSERT_X(!isDivisionOverflow(a, tmp),
                  "ReducedFraction, lcm", "Division overflow");
+      Q_ASSERT_X(!isMultiplicationOverflow(a / tmp, b),
+                 "ReducedFraction, lcm", "Multiplication overflow");
 
-      return a * b / tmp;
+      return a / tmp * b;
       }
 
 } // namespace
