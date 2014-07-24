@@ -161,6 +161,7 @@
           <Note>
             <lid>12</lid>
             <Tie id="2">
+              <lid>13</lid>
               </Tie>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -169,10 +170,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>13</lid>
+          <lid>14</lid>
           <durationType>16th</durationType>
           <Note>
-            <lid>14</lid>
+            <lid>15</lid>
             <endSpanner id="2"/>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -370,6 +371,7 @@
             <Note>
               <lid>12</lid>
               <Tie id="3">
+                <lid>13</lid>
                 </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -378,11 +380,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>13</lid>
+            <lid>14</lid>
             <durationType>16th</durationType>
             <Beam>2</Beam>
             <Note>
-              <lid>14</lid>
+              <lid>15</lid>
               <endSpanner id="3"/>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -464,6 +466,7 @@
             <Note>
               <lid>12</lid>
               <Tie id="4">
+                <lid>13</lid>
                 </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -472,10 +475,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>13</lid>
+            <lid>14</lid>
             <durationType>16th</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>15</lid>
               <endSpanner id="4"/>
               <pitch>74</pitch>
               <tpc>16</tpc>
