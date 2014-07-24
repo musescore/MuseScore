@@ -1187,9 +1187,16 @@ static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter,
 
 static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       {
+            
+      const Staff* st = note->staff();
+      const Instrument* instr = st->part()->instr();
+      const Interval intval = instr->transpose();
+            
       s      = tpc2stepName(note->tpc());
       alter  = tpc2alterByKey(note->tpc(), Key::C);
-      octave = (note->pitch() - alter) / 12 - 1;
+      // note that pitch must be converted to concert pitch
+      // in order to calculate the correct octave
+      octave = (note->pitch() - intval.chromatic - alter) / 12 - 1;
 
       //
       // HACK:
@@ -1198,7 +1205,6 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       // note->line() is determined by drumMap
       //
       int tick        = note->chord()->tick();
-      Staff* st       = note->staff();
       ClefType ct     = st->clef(tick);
       if (ct == ClefType::PERC || ct == ClefType::PERC2) {
             alter = 0;
@@ -2588,6 +2594,7 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
             const LineSegment* seg = 0;
             if (el->type() == Element::Type::HAIRPIN || el->type() == Element::Type::OTTAVA
                 || el->type() == Element::Type::PEDAL || el->type() == Element::Type::TEXTLINE) {
+                  // handle elements derived from SLine
                   // find the system containing the first linesegment
                   const SLine* sl = static_cast<const SLine*>(el);
                   if (sl->spannerSegments().size() > 0) {
@@ -2602,15 +2609,19 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                         pel = seg->parent();
                         }
                   }
-            else if (el->type() == Element::Type::DYNAMIC || el->type() == Element::Type::REHEARSAL_MARK
-                     || el->type() == Element::Type::SYMBOL || el->type() == Element::Type::TEXT) {
+            else if (el->type() == Element::Type::DYNAMIC
+                     || el->type() == Element::Type::STAFF_TEXT
+                     || el->type() == Element::Type::REHEARSAL_MARK
+                     || el->type() == Element::Type::SYMBOL
+                     || el->type() == Element::Type::TEXT) {
+                  // handle other elements attached (e.g. via Segment / Measure) to a system
                   // find the system containing this element
                   for (const Element* e = el; e; e = e->parent()) {
                         if (e->type() == Element::Type::SYSTEM) pel = e;
                         }
                   }
             else
-                  qDebug("directionTag() element %p tp=%hhd (%s) not suported",
+                  qDebug("directionTag() element %p tp=%hhd (%s) not supported",
                          el, el->type(), el->name());
 
             /*
@@ -2910,6 +2921,13 @@ void ExportMusicXml::words(Text const* const text, int staff)
       qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f text='%s'",
              text->userOff().x(), text->userOff().y(), qPrintable(text->text()));
       */
+
+      if (text->text() == "") {
+            // sometimes empty Texts are present, exporting would result
+            // in invalid MusicXML (as an empty direction-type would be created)
+            return;
+            }
+
       directionTag(xml, attr, text);
       if (text->type() == Element::Type::REHEARSAL_MARK) {
             // TODO: check if dead code (see rehearsal below)
