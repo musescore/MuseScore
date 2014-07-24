@@ -59,7 +59,7 @@ enum class SelectionFilterType {
       DYNAMIC                 = 1 << 4,
       FINGERING               = 1 << 5,
       LYRICS                  = 1 << 6,
-      ARTICULATIONS           = 1 << 7,
+      ARTICULATION            = 1 << 7,
       ALL                     = -1
       };
 
@@ -72,8 +72,8 @@ public:
       SelectionFilter(Score* score)          { _score = score; _filtered = (int)SelectionFilterType::ALL;}
       int& filtered()                        { return _filtered; }
       void setFiltered(SelectionFilterType type, bool set);
-      bool isFiltered(SelectionFilterType type)        { return _filtered & (int)type; }
-      bool canSelect(Element*);
+      bool isFiltered(SelectionFilterType type) const        { return _filtered & (int)type; }
+      bool canSelect(const Element*) const;
       };
 
 //-------------------------------------------------------------------

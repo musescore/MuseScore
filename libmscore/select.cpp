@@ -272,13 +272,14 @@ void Selection::add(Element* el)
       update();
       }
 
-bool SelectionFilter::canSelect(Element* e) const
+bool SelectionFilter::canSelect(const Element* e) const
       {
       if (e->type() == Element::Type::DYNAMIC
           && !isFiltered(SelectionFilterType::DYNAMIC)) return false;
       if (e->type() == Element::Type::ARTICULATION
           && !isFiltered(SelectionFilterType::ARTICULATION)) return false;
-
+      if (e->type() == Element::Type::LYRICS
+          && !isFiltered(SelectionFilterType::LYRICS)) return false;
       return true;
       }
 
@@ -313,14 +314,15 @@ void Selection::updateSelectedElements()
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         for (Element* e : cr->lyricsList()) {
-                              if (e)
+                              if (e && canSelect(e))
                                     _el.append(e);
                               }
                         }
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
                         foreach (Articulation* art, chord->articulations()) {
-                              _el.append(art);
+                              if (canSelect(art))
+                                    _el.append(art);
                               }
                         if (chord->beam()) _el.append(chord->beam());
                         if (chord->stem()) _el.append(chord->stem());
