@@ -6,6 +6,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_tuplet.h"
 #include "importmidi_operations.h"
+#include "importmidi_voice.h"
 #include "libmscore/score.h"
 #include "midi/midifile.h"
 
@@ -35,18 +36,16 @@ bool haveNonZeroVoices(const std::multimap<ReducedFraction, MidiChord> &chords)
 
 void splitDrumVoices(std::multimap<int, MTrack> &tracks)
       {
-      for (auto &trackItem: tracks) {
-            MTrack &track = trackItem.second;
-            std::vector<std::pair<ReducedFraction, MidiChord>> newChordEvents;
-            auto &chords = track.chords;
-            const Drumset* const drumset = track.mtrack->drumTrack() ? smDrumset : 0;
+      for (auto &track: tracks) {
+            MTrack &mtrack = track.second;
+            auto &chords = mtrack.chords;
+            const Drumset* const drumset = mtrack.mtrack->drumTrack() ? smDrumset : 0;
             if (!drumset)
                   continue;
             bool changed = false;
                               // all chords of drum track should have voice == 0
                               // because allowedVoices == V_1 (see MidiImportOperations)
                               // also, all chords should have different onTime values
-
             Q_ASSERT_X(MChord::areOnTimeValuesDifferent(chords),
                        "MidiDrum::splitDrumVoices",
                        "onTime values of chords are equal but should be different");
@@ -54,47 +53,29 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                        "MidiDrum::splitDrumVoices",
                        "All voices of drum track should be zero here");
 
-            for (auto &chordEvent: chords) {
-                  const auto &onTime = chordEvent.first;
-                  auto &chord = chordEvent.second;
-                  auto &notes = chord.notes;
-                  MidiChord newChord;
-                  newChord.voice = 1;
+            std::multimap<ReducedFraction,
+                 std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> insertedTuplets;
+            const ReducedFraction maxChordLength = MChord::findMaxChordLength(chords);
+
+            for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
+                  const auto &notes = chordIt->second.notes;
                               // search for the drumset pitches with voice = 1
-                  for (auto it = notes.begin(); it != notes.end(); ) {
-                        if (drumset->isValid(it->pitch) && drumset->voice(it->pitch) == 1) {
-                              newChord.notes.push_back(*it);
-                              it = notes.erase(it);
-                              continue;
+                  QSet<int> notesToMove;
+                  for (int i = 0; i != notes.size(); ++i) {
+                        if (drumset->isValid(notes[i].pitch)
+                                    && drumset->voice(notes[i].pitch) == 1) {
+                              notesToMove.insert(i);
                               }
-                        ++it;
                         }
-                  if (!newChord.notes.isEmpty()) {
-                        const auto tupletIt = MidiTuplet::findTupletContainingTime(
-                                          chord.voice, onTime, track.tuplets);
-                        const auto newTupletIt = MidiTuplet::findTupletContainingTime(
-                                          newChord.voice, onTime, track.tuplets);
-                        if (tupletIt != track.tuplets.end()
-                                    && newTupletIt == track.tuplets.end()) {
-                              if (notes.isEmpty()) {
-                                    if (!changed)
-                                          changed = true;   // check for empty tuplets later
-                                    }
-                              MidiTuplet::TupletData newTupletData = tupletIt->second;
-                              newTupletData.voice = newChord.voice;
-                              track.tuplets.insert({tupletIt->first, newTupletData});
-                              }
-                        if (notes.isEmpty())
-                              chord = newChord;
-                        else
-                              newChordEvents.push_back({onTime, newChord});
+                  if (MidiVoice::splitChordToVoice(chordIt, notesToMove, 1,
+                                                   chords, mtrack.tuplets,
+                                                   insertedTuplets, maxChordLength, true)) {
+                        changed = true;
                         }
                   }
-            for (const auto &event: newChordEvents)
-                  chords.insert(event);
 
             if (changed)
-                  MidiTuplet::removeEmptyTuplets(track);
+                  MidiTuplet::removeEmptyTuplets(mtrack);
             }
       }
 
