@@ -3602,11 +3602,12 @@ ChordRest* Score::findCR(int tick, int track) const
       {
       Measure* m = tick2measureMM(tick);
       // attach to first rest all spanner when mmRest
-      if (m->isMMRest())
-            tick = m->tick();
       if (m == 0) {
             qDebug("findCR: no measure for tick %d", tick);
             return 0;
+            }
+      else if (m->isMMRest()) {
+            tick = m->tick();
             }
       Segment* s = m->first(Segment::Type::ChordRest);
       for (Segment* ns = s; ; ns = ns->next(Segment::Type::ChordRest)) {
