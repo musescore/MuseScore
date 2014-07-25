@@ -96,3 +96,4 @@ cp   $MSCORE/artificial-harmonic.gpx.mscx artificial-harmonic.gpx-ref.mscx
 cp   $MSCORE/ghost-note.gpx.mscx ghost-note.gpx-ref.mscx
 cp   $MSCORE/rasg.gpx.mscx rasg.gpx-ref.mscx
 cp   $MSCORE/all-percussion.gp5.mscx all-percussion.gp5-ref.mscx
+cp   $MSCORE/fermata.gpx.mscx fermata.gpx-ref.mscx
