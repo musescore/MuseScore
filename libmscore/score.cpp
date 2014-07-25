@@ -323,6 +323,7 @@ void Score::init()
       _tempomap               = 0;
       _layoutMode             = LayoutMode::PAGE;
       _noteHeadWidth          = 0.0;      // set in doLayout()
+      maxPortNumber           = 0;
       }
 
 //---------------------------------------------------------
@@ -927,6 +928,7 @@ void Score::rebuildMidiMapping()
                               }
                         }
                   }
+            updateMaxPort();
             dumpMidiMapping();
             return;
             }
@@ -967,7 +969,47 @@ void Score::rebuildMidiMapping()
                         }
                   }
             }
+      updateMaxPort();
       dumpMidiMapping();
+      }
+
+//---------------------------------------------------------
+//   updateMaxPort
+//   calculates maximum port number
+//---------------------------------------------------------
+
+void Score::updateMaxPort()
+      {
+      int maxport = 0;
+      foreach(Score* score, scoreList()) {
+            foreach(const MidiMapping& mm, *score->midiMapping()) {
+                  if (mm.port > maxport)
+                        maxport = mm.port;
+                  }
+            }
+      rootScore()->setMaxPortNumber(maxport);
+      }
+
+//---------------------------------------------------------
+//   getMaxPortNumber
+//---------------------------------------------------------
+
+int Score::getMaxPortNumber() const {
+      if (this == rootScore())
+            return maxPortNumber;
+      else
+            return rootScore()->getMaxPortNumber();
+      }
+
+//---------------------------------------------------------
+//   setMaxPortNumber
+//---------------------------------------------------------
+
+void Score::setMaxPortNumber(int maxport) {
+      if (this == rootScore())
+            maxPortNumber = maxport;
+      else
+            rootScore()->setMaxPortNumber(maxport);
       }
 
 //---------------------------------------------------------

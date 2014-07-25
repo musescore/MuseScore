@@ -374,6 +374,7 @@ class Score : public QObject {
       PlayMode _playMode;
 
       qreal _noteHeadWidth;
+      int maxPortNumber;
 
       //------------------
 
@@ -753,6 +754,9 @@ class Score : public QObject {
       void rebuildMidiMapping();
       void updateChannel();
       void updateSwing();
+      void updateMaxPort();
+      int getMaxPortNumber() const;
+      void setMaxPortNumber(int);
 
       void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
 

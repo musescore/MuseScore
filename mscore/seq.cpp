@@ -231,6 +231,9 @@ bool Seq::init(bool hotPlug)
             return false;
             }
       running = true;
+
+      if(cs)
+            cs->updateMaxPort();
       return true;
       }
 
@@ -518,6 +521,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
 
 void Seq::processMessages()
       {
+      _driver->updateOutPortNumber(seq->score()->getMaxPortNumber() + 1); // if equal, it does nothing
       for (;;) {
             if (toSeq.isEmpty())
                   break;
@@ -959,6 +963,8 @@ void Seq::collectEvents()
       playPos  = events.cbegin();
       mutex.unlock();
 
+      if(cs)
+            cs->updateMaxPort();
       playlistChanged = false;
       }
 
@@ -1122,7 +1128,7 @@ void Seq::stopNoteTimer()
 
 void Seq::stopNotes(int channel)
       {
-      // Stop motes in all channels
+      // Stop notes in all channels
       if (channel == -1) {
             for(int ch=0; ch<cs->midiMapping()->size();ch++) {
                   putEvent(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
@@ -1347,7 +1353,7 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
             }
       int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
       _synti->play(event, syntiIdx);
-      if (preferences.useJackMidi && _driver != 0)
+      if (_driver != 0 && (preferences.useJackMidi || preferences.useAlsaAudio))
             _driver->putEvent(event, framePos);
       }
 

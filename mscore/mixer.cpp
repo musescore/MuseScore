@@ -26,6 +26,7 @@
 #include "libmscore/undo.h"
 #include "synthcontrol.h"
 #include "synthesizer/msynthesizer.h"
+#include "mscore/preferences.h"
 
 namespace Ms {
 
@@ -387,6 +388,10 @@ void PartEdit::channelChanged(int)
       portN   ->blockSignals(false);
 
       seq->initInstruments();
+
+      // Add new JACK/ALSA MIDI Out ports if not enough
+      if (preferences.useJackMidi || preferences.useAlsaAudio)
+            part->score()->updateMaxPort();
       }
 }
 
