@@ -470,13 +470,22 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
                   setDenominatorString(v.toString());
                   break;
             case P_ID::GROUPS:
-                  setGroups(v.value<Groups>());
+                  if (v.canConvert<Groups>())
+                        setGroups(v.value<Groups>());
+                  else
+                        qDebug("TimeSig::setProperty: unable to set Groups");
                   break;
             case P_ID::TIMESIG:
-                  setSig(v.value<Fraction>());
+                  if (v.canConvert<Fraction>())
+                        setSig(v.value<Fraction>());
+                  else
+                        qDebug("TimeSig::setProperty: unable to set Sig");
                   break;
             case P_ID::TIMESIG_GLOBAL:
-                  setGlobalSig(v.value<Fraction>());
+                  if (v.canConvert<Fraction>())
+                        setGlobalSig(v.value<Fraction>());
+                  else
+                        qDebug("TimeSig::setProperty: unable to set GlobalSig");
                   break;
             case P_ID::TIMESIG_TYPE:
                   _timeSigType = (TimeSigType)(v.toInt());
