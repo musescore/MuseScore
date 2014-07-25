@@ -282,13 +282,23 @@ void collectChords(std::multimap<int, MTrack> &tracks)
                         if (it->first <= maxOffTime - minAllowedDur) {
                                           // add current note to the previous chord
                               auto prev = std::prev(it);
-                              prev->second.notes.push_back(note);
+
+                              bool hasNoteWithThisPitch = false;
+                              for (const auto &n: prev->second.notes) {
+                                    if (n.pitch == note.pitch) {
+                                          hasNoteWithThisPitch = true;
+                                          break;
+                                          }
+                                    }
+                              if (!hasNoteWithThisPitch) {
+                                    prev->second.notes.push_back(note);
+                                    if (note.offTime > maxOffTime)
+                                          maxOffTime = note.offTime;
+                                    }
                               if (it->first >= currentChordStart + curThreshTime - fudgeTime
                                           && curThreshTime == threshTime) {
                                     curThreshTime += threshExtTime;
                                     }
-                              if (note.offTime > maxOffTime)
-                                    maxOffTime = note.offTime;
                               it = chords.erase(it);
                               continue;
                               }
