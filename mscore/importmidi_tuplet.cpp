@@ -462,8 +462,7 @@ void minimizeOffTimeError(
             std::multimap<ReducedFraction, MidiChord> &chords,
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
             const ReducedFraction &startBarTick,
-            const ReducedFraction &basicQuant,
-            int barIndex)
+            const ReducedFraction &basicQuant)
       {
       for (auto it = tuplets.begin(); it != tuplets.end(); ) {
             TupletInfo &tupletInfo = *it;
@@ -510,7 +509,8 @@ void minimizeOffTimeError(
                   leavedIndexes.push_back(i);
                   }
             if (!removedIndexes.empty()) {
-                  MidiChord newTupletChord;
+                  MidiChord newTupletChord = midiChord;
+                  newTupletChord.notes.clear();
                   for (int i: leavedIndexes)
                         newTupletChord.notes.push_back(notes[i]);
 
@@ -518,12 +518,12 @@ void minimizeOffTimeError(
                   for (int i: removedIndexes)
                         newNotes.push_back(notes[i]);
                   notes = newNotes;
-                  if (isChordBelongToThisBar(firstChord->first, startBarTick,
-                                             firstChord->second->second.barIndex, barIndex)) {
-                        nonTuplets.push_back(firstChord->second);
+                              // force add chord to this bar, even if it has barIndex of another bar
+                  nonTuplets.push_back(firstChord->second);
+                  if (!newTupletChord.notes.empty()) {
+                        firstChord->second = chords.insert({firstChord->second->first,
+                                                            newTupletChord});
                         }
-                  if (!newTupletChord.notes.empty())
-                        firstChord->second = chords.insert({onTime, newTupletChord});
                   else {
                         tupletInfo.chords.erase(tupletInfo.chords.begin());
                         if (tupletInfo.chords.empty()) {
@@ -1146,7 +1146,7 @@ void findTuplets(
 
       if (tupletVoiceLimit() > 1) {
             splitFirstTupletChords(tuplets, chords);
-            minimizeOffTimeError(tuplets, chords, nonTuplets, startBarTick, basicQuant, barIndex);
+            minimizeOffTimeError(tuplets, chords, nonTuplets, startBarTick, basicQuant);
             }
 
       if (opers.simplifyDurations.value(currentTrack))
