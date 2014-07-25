@@ -109,6 +109,7 @@ class Seq : public QObject, public Sequencer {
                                           // Also we save current preferences.useJackTransport value to useJackTransportSavedFlag
                                           // to restore it when count in ends. After this all applications start playing in sync.
       bool useJackTransportSavedFlag;
+      int maxMidiOutPort;                 // Maximum count of midi out ports in all opened scores
       Fraction prevTimeSig;
       double prevTempo;
 
@@ -229,6 +230,7 @@ class Seq : public QObject, public Sequencer {
       void startNote(int channel, int, int, double nt);
       void eventToGui(NPlayEvent);
       void stopNoteTimer();
+      void recomputeMaxMidiOutPort();
       };
 
 extern Seq* seq;

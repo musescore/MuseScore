@@ -322,6 +322,7 @@ void Score::init()
       _tempomap               = 0;
       _layoutMode             = LayoutMode::PAGE;
       _noteHeadWidth          = 0.0;      // set in doLayout()
+      _midiPortCount          = 0;
       }
 
 //---------------------------------------------------------
@@ -402,6 +403,7 @@ Score::Score(Score* parent, const MStyle* s)
 
 Score::~Score()
       {
+      _midiPortCount = 0;
       foreach(MuseScoreView* v, viewer)
             v->removeScore();
       // deselectAll();
@@ -894,6 +896,7 @@ void Score::rebuildMidiMapping()
       int port    = 0;
       int channel = 0;
       int idx     = 0;
+      int maxport = 0;
       foreach(Part* part, _parts) {
             InstrumentList* il = part->instrList();
             for (auto i = il->begin(); i != il->end(); ++i) {
@@ -901,6 +904,8 @@ void Score::rebuildMidiMapping()
                   for (int k = 0; k < i->second.channel().size(); ++k) {
                         Channel* a = &(i->second.channel(k));
                         MidiMapping mm;
+                        if (port > maxport)
+                              maxport = port;
                         if (drum != DrumsetKind::NONE) {
                               mm.port    = port;
                               mm.channel = 9;
@@ -926,6 +931,31 @@ void Score::rebuildMidiMapping()
                         }
                   }
             }
+      setMidiPortCount(maxport);
+      }
+
+//---------------------------------------------------------
+//   midiPortCount
+//---------------------------------------------------------
+
+int Score::midiPortCount() const {
+      const Score* root = rootScore();
+      if (this == root)
+            return _midiPortCount;
+      else
+            return root->midiPortCount();
+      }
+
+//---------------------------------------------------------
+//   setMidiPortCount
+//---------------------------------------------------------
+
+void Score::setMidiPortCount(int maxport) {
+      Score* root = rootScore();
+      if (this == root)
+            _midiPortCount = maxport;
+      else
+            root->setMidiPortCount(maxport);
       }
 
 //---------------------------------------------------------

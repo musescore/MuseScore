@@ -101,7 +101,6 @@ struct Preferences {
       bool useJackMidi;
       bool useJackTransport;
       bool jackTimebaseMaster;
-      int midiPorts;
       bool rememberLastConnections;
 
       QString alsaDevice;
