@@ -556,7 +556,9 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   Chord* e = static_cast<Note*>(nr)->chord();
                   int stick = 0;
                   Element* ee = _is.slur()->startElement();
-                  if (ee->isChordRest())
+                  if (!ee)
+                        stick = e->tick();
+                  else if (ee->isChordRest())
                         stick = static_cast<ChordRest*>(ee)->tick();
                   else if (ee->type() == Element::Type::NOTE)
                         stick = static_cast<Note*>(ee)->chord()->tick();
