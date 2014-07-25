@@ -93,8 +93,8 @@ class Staff : public QObject {
       int _rstaff;                  ///< Index in Part.
 
       ClefList clefs;
-      std::map<int,TimeSig*> timesigs;
       KeyList _keys;
+      std::map<int,TimeSig*> timesigs;
 
       QList <BracketItem> _brackets;
       int _barLineSpan;       ///< 0 - no bar line, 1 - span this staff, ...
@@ -142,13 +142,14 @@ class Staff : public QObject {
       QList <BracketItem> brackets() const { return _brackets; }
       void cleanupBrackets();
 
-      ClefList* clefList()           { return &clefs; }
       ClefTypeList clefTypeList(int tick) const;
       ClefType clef(int tick) const;
-      void setClef(int, const ClefTypeList&);
-      void setClef(int tick, const ClefType& ct) { setClef(tick, ClefTypeList(ct, ct)); }
-      void removeClef(int);
-      void undoSetClef(int, const ClefTypeList&);
+
+      void setInitialClef(ClefType);
+      void setInitialClef(const ClefTypeList&);
+
+      void setClef(Clef*);
+      void removeClef(Clef*);
 
       void addTimeSig(TimeSig*);
       void removeTimeSig(TimeSig*);
@@ -164,8 +165,6 @@ class Staff : public QObject {
       Key prevKey(int tick) const;
       void setKey(int tick, Key);
       void removeKey(int tick);
-      void clearKeys()               { _keys.clear(); }
-      void updateKeys();
 
       bool show() const;
       bool slashStyle() const;
@@ -200,7 +199,6 @@ class Staff : public QObject {
       bool isDrumStaff() const         { return staffGroup() == StaffGroup::PERCUSSION; }
 
       VeloList& velocities()           { return _velocities;     }
-//      PitchList& pitchOffsets()        { return _pitchOffsets;   }
       int pitchOffset(int tick)        { return _pitchOffsets.pitchOffset(tick);   }
       void updateOttava();
 

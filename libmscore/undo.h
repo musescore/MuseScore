@@ -1392,21 +1392,6 @@ class ChangeNoteEvent : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   SetClefType
-//---------------------------------------------------------
-
-class SetClefType : public UndoCommand {
-      Staff* staff;
-      int tick;
-      ClefTypeList ctl;
-
-      void flip();
-
-   public:
-      SetClefType(Staff* st, int t, const ClefTypeList& l) : staff(st), tick(t), ctl(l) {}
-      };
-
-//---------------------------------------------------------
 //   Unlink
 //---------------------------------------------------------
 

@@ -82,13 +82,14 @@
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
+          <lid>1</lid>
           </Clef>
         <KeySig>
-          <lid>1</lid>
+          <lid>2</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>2</lid>
+          <lid>3</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -96,18 +97,18 @@
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
-          <lid>3</lid>
+          <lid>4</lid>
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
-          <lid>4</lid>
+          <lid>5</lid>
           <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
         <Chord>
-          <lid>5</lid>
+          <lid>6</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>6</lid>
+            <lid>7</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -123,15 +124,15 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>8</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
           <lid>9</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
           <lid>10</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>11</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -243,13 +244,14 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <lid>1</lid>
             </Clef>
           <KeySig>
-            <lid>1</lid>
+            <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>2</lid>
+            <lid>3</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -257,18 +259,18 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <lid>3</lid>
+            <lid>4</lid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <lid>4</lid>
+            <lid>5</lid>
             <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -284,15 +286,15 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>8</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <lid>9</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <lid>10</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -308,14 +310,14 @@
             <transposingClefType>TAB</transposingClefType>
             </Clef>
           <KeySig>
-            <lid>1</lid>
+            <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <Bend>
                 <point time="0" pitch="0" vibrato="0"/>
                 <point time="30" pitch="100" vibrato="0"/>
@@ -328,15 +330,15 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>8</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <lid>9</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <lid>10</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>

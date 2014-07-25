@@ -557,7 +557,6 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         Measure* m = score->getCreateMeasure(tick);
                         Segment* s = m->getSegment(Segment::Type::Clef, tick);
                         s->add(clef);
-                        clef->staff()->setClef(tick, clef->clefTypeList());
                         }
                         break;
                   case CapellaNoteObjectType::KEY:

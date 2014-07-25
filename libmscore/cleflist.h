@@ -25,11 +25,16 @@ class Score;
 //---------------------------------------------------------
 
 class ClefList : public std::map<int, ClefTypeList> {
+      ClefTypeList _initial;
+
    public:
       ClefList() {}
       ClefTypeList clef(int tick) const;
       void setClef(int tick, ClefTypeList);
-      void read(XmlReader&, Score*);
+      void setInitial(ClefTypeList cl) { _initial = cl; }
+
+//      void read(XmlReader&, Score*);
+
       };
 
 

@@ -32,7 +32,7 @@ cp ../../../build.debug/mtest/libmscore/parts/part-fingering-udel.mscx   part-fi
 cp ../../../build.debug/mtest/libmscore/parts/part-fingering-uradd.mscx   part-fingering-uradd.mscx
 cp ../../../build.debug/mtest/libmscore/parts/part-fingering-urdel.mscx   part-fingering-urdel.mscx
 cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-reload-test.mscx   partStyle-score-reload-test.mscx
-cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-test.mscx   partStyle-score-test.mscx
+cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-test.mscx   partStyle-score-ref.mscx
 
 cp ../../../build.debug/mtest/libmscore/parts/part-chordline-1.mscx   	part-chordline.mscx
 cp ../../../build.debug/mtest/libmscore/parts/part-chordline-add.mscx   part-chordline-add.mscx

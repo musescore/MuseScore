@@ -272,7 +272,6 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
             clef->setTrack(0);
             Ms::Segment* s = currentMeasure->getSegment(clef, tick);
             s->add(clef);
-            clef->staff()->setClef(tick, clef->clefTypeList());
             // keysig
             Ms::KeySigEvent key;
             key.setKey(Ms::Key::D);

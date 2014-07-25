@@ -1849,7 +1849,6 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             uint i;
             for (i = 0; i < n; ++i) {
                   if (imports[i].extension == csl) {
-                        // if (!(this->*imports[i].importF)(score, name))
                         Score::FileError rv = (*imports[i].importF)(score, name);
                         if (rv != Score::FileError::FILE_NO_ERROR)
                               return rv;
@@ -1865,37 +1864,6 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             }
       score->rebuildMidiMapping();
       score->setSaved(false);
-
-#if 0
-      int staffIdx = 0;
-      foreach(Staff* st, score->staves()) {
-            if (st->updateKeymap())
-                  st->clearKeys();
-            int track = staffIdx * VOICES;
-            KeySig* key1 = 0;
-            for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-                  for (Segment* s = m->first(); s; s = s->next()) {
-                        if (!s->element(track))
-                              continue;
-                        Element* e = s->element(track);
-                        if (e->generated())
-                              continue;
-                        if ((s->segmentType() == Segment::Type::KeySig) && st->updateKeymap()) {
-                              KeySig* ks = static_cast<KeySig*>(e);
-                              int naturals = key1 ? key1->keySigEvent().accidentalType() : 0;
-                              ks->setOldSig(naturals);
-                              st->setKey(s->tick(), ks->key());
-                              key1 = ks;
-                              }
-                        }
-                  if (m->sectionBreak())
-                        key1 = 0;
-                  }
-            st->setUpdateKeymap(false);
-            ++staffIdx;
-            }
-#endif
-
       score->updateNotes();
       return Score::FileError::FILE_NO_ERROR;
       }

@@ -36,6 +36,7 @@
 #include "stringdata.h"
 #include "tempo.h"
 #include "tempotext.h"
+#include "clef.h"
 
 namespace Ms {
 
@@ -176,11 +177,20 @@ void Staff::read114(XmlReader& e)
             else if (tag == "slashStyle")
                   e.skipCurrentElement();
             else if (tag == "cleflist") {
-                  clefs.read(e, _score);
-                  if (clefs.empty()) {
-                        ClefType ct = Clef::clefType("0");
-                        clefs.setClef(0, ClefTypeList(ct, ct));
+                  QList<std::pair<int, ClefType>>& cl = e.clefs(idx());
+                  cl.clear();
+                  while (e.readNextStartElement()) {
+                        if (e.name() == "clef") {
+                              int tick    = e.intAttribute("tick", 0);
+                              ClefType ct = Clef::clefType(e.attribute("idx", "0"));
+                              cl.append(std::pair<int,ClefType>(score()->fileDivision(tick), ct));
+                              e.readNext();
+                              }
+                        else
+                              e.unknown();
                         }
+                  if (cl.empty())
+                        cl.append(std::pair<int,ClefType>(0, ClefType::G));
                   }
             else if (tag == "keylist")
                   _keys.read(e, _score);
@@ -510,20 +520,9 @@ Score::FileError Score::read114(XmlReader& e)
                      s->barLineSpan(), n - idx);
                   s->setBarLineSpan(n - idx);
                   }
-            // first clef can be implicit in 1.3 #22607
-            if (s->clefList()->count(0) == 0) {
-                  Segment* seg = firstMeasure()->getSegment(Segment::Type::Clef, 0);
-                  ClefType ct = Clef::clefType("0");
-                  Clef* clef = new Clef(this);
-                  clef->setClefType(ct);
-                  clef->setTrack(track);
-                  clef->setParent(seg);
-                  clef->setGenerated(false);
-                  seg->add(clef);
-                  }
-            for (auto i = s->clefList()->cbegin(); i != s->clefList()->cend(); ++i) {
-                  int tick = i->first;
-                  ClefType clefId = i->second._concertClef;
+            for (auto i : e.clefs(idx)) {
+                  int tick = i.first;
+                  ClefType clefId = i.second;
                   Measure* m = tick2measure(tick);
                   if (!m)
                         continue;

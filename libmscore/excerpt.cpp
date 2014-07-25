@@ -330,7 +330,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               if (oe == 0)
                                     continue;
                               Element* ne;
-                              if (oe->generated() || oe->type() == Element::Type::CLEF)
+                              if (oe->generated())
                                     ne = oe->clone();
                               else
                                     ne = oe->linkedClone();
@@ -443,7 +443,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
       for (int dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
             Staff* srcStaff = oscore->staff(map[dstStaffIdx]);
             Staff* dstStaff = score->staff(dstStaffIdx);
-            *dstStaff->clefList() = *srcStaff->clefList();
+//            *dstStaff->clefList() = *srcStaff->clefList();
             if (srcStaff->primaryStaff()) {
                   int span = srcStaff->barLineSpan();
                   int sIdx = srcStaff->idx();
@@ -521,7 +521,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           && dstStaff->clefTypeList(tick) != clef->clefTypeList()) {
                                     ne = oe->clone();
                                     // add to staff clef map too
-                                    dstStaff->setClef(tick, clef->clefTypeList());
+                                    // dstStaff->setClef(tick, clef->clefTypeList());
                                     }
                               }
                         else
@@ -651,11 +651,7 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                         if (oe->type() == Element::Type::TIMESIG)
                               continue;
                         Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
-                        Element* ne;
-                        if (oe->type() == Element::Type::CLEF)
-                              ne = oe->clone();
-                        else
-                              ne = oe->linkedClone();
+                        Element* ne = oe->linkedClone();
                         ne->setTrack(dstTrack);
                         ne->setParent(ns);
                         ne->setScore(score);

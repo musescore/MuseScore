@@ -94,13 +94,14 @@
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
+          <lid>3</lid>
           </Clef>
         <KeySig>
-          <lid>3</lid>
+          <lid>4</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>4</lid>
+          <lid>5</lid>
           <sigN>3</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -108,11 +109,11 @@
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
-          <lid>5</lid>
+          <lid>6</lid>
           </Dynamic>
         <Tempo>
           <tempo>1.66667</tempo>
-          <lid>6</lid>
+          <lid>7</lid>
           <text><sym>noteQuarterUp</sym> = 100</text>
           </Tempo>
         <Beam id="1">
@@ -129,12 +130,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>7</lid>
+          <lid>8</lid>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>8</lid>
+            <lid>9</lid>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <fret>0</fret>
@@ -142,12 +143,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>9</lid>
+          <lid>10</lid>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>10</lid>
+            <lid>11</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -155,12 +156,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>11</lid>
+          <lid>12</lid>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>12</lid>
+            <lid>13</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -181,12 +182,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>13</lid>
+          <lid>14</lid>
           <Tuplet>2</Tuplet>
           <durationType>eighth</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>14</lid>
+            <lid>15</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>3</fret>
@@ -194,12 +195,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>15</lid>
+          <lid>16</lid>
           <Tuplet>2</Tuplet>
           <durationType>eighth</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>16</lid>
+            <lid>17</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -207,12 +208,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>17</lid>
+          <lid>18</lid>
           <Tuplet>2</Tuplet>
           <durationType>eighth</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>18</lid>
+            <lid>19</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -233,12 +234,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>19</lid>
+          <lid>20</lid>
           <Tuplet>3</Tuplet>
           <durationType>eighth</durationType>
           <Beam>3</Beam>
           <Note>
-            <lid>20</lid>
+            <lid>21</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>3</fret>
@@ -246,12 +247,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>21</lid>
+          <lid>22</lid>
           <Tuplet>3</Tuplet>
           <durationType>eighth</durationType>
           <Beam>3</Beam>
           <Note>
-            <lid>22</lid>
+            <lid>23</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -259,12 +260,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>23</lid>
+          <lid>24</lid>
           <Tuplet>3</Tuplet>
           <durationType>eighth</durationType>
           <Beam>3</Beam>
           <Note>
-            <lid>24</lid>
+            <lid>25</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -273,12 +274,12 @@
           </Chord>
         <tick>0</tick>
         <Chord>
-          <lid>25</lid>
+          <lid>26</lid>
           <track>1</track>
           <dots>1</dots>
           <durationType>half</durationType>
           <Note>
-            <lid>26</lid>
+            <lid>27</lid>
             <track>1</track>
             <pitch>40</pitch>
             <tpc>18</tpc>
@@ -302,12 +303,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>28</lid>
+          <lid>29</lid>
           <Tuplet>4</Tuplet>
           <durationType>eighth</durationType>
           <Beam>4</Beam>
           <Note>
-            <lid>29</lid>
+            <lid>30</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>3</fret>
@@ -315,12 +316,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>30</lid>
+          <lid>31</lid>
           <Tuplet>4</Tuplet>
           <durationType>eighth</durationType>
           <Beam>4</Beam>
           <Note>
-            <lid>31</lid>
+            <lid>32</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>1</fret>
@@ -328,12 +329,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>32</lid>
+          <lid>33</lid>
           <Tuplet>4</Tuplet>
           <durationType>eighth</durationType>
           <Beam>4</Beam>
           <Note>
-            <lid>33</lid>
+            <lid>34</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -354,12 +355,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>34</lid>
+          <lid>35</lid>
           <Tuplet>5</Tuplet>
           <durationType>eighth</durationType>
           <Beam>5</Beam>
           <Note>
-            <lid>35</lid>
+            <lid>36</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -370,12 +371,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>36</lid>
+          <lid>37</lid>
           <Tuplet>5</Tuplet>
           <durationType>eighth</durationType>
           <Beam>5</Beam>
           <Note>
-            <lid>37</lid>
+            <lid>38</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>1</fret>
@@ -383,12 +384,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>38</lid>
+          <lid>39</lid>
           <Tuplet>5</Tuplet>
           <durationType>eighth</durationType>
           <Beam>5</Beam>
           <Note>
-            <lid>39</lid>
+            <lid>40</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -409,12 +410,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>40</lid>
+          <lid>41</lid>
           <Tuplet>6</Tuplet>
           <durationType>eighth</durationType>
           <Beam>6</Beam>
           <Note>
-            <lid>41</lid>
+            <lid>42</lid>
             <pitch>66</pitch>
             <tpc>20</tpc>
             <fret>2</fret>
@@ -422,12 +423,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>42</lid>
+          <lid>43</lid>
           <Tuplet>6</Tuplet>
           <durationType>eighth</durationType>
           <Beam>6</Beam>
           <Note>
-            <lid>43</lid>
+            <lid>44</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>1</fret>
@@ -435,12 +436,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>44</lid>
+          <lid>45</lid>
           <Tuplet>6</Tuplet>
           <durationType>eighth</durationType>
           <Beam>6</Beam>
           <Note>
-            <lid>45</lid>
+            <lid>46</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -449,12 +450,12 @@
           </Chord>
         <tick>1440</tick>
         <Chord>
-          <lid>46</lid>
+          <lid>47</lid>
           <track>1</track>
           <dots>1</dots>
           <durationType>half</durationType>
           <Note>
-            <lid>47</lid>
+            <lid>48</lid>
             <track>1</track>
             <pitch>45</pitch>
             <tpc>17</tpc>
@@ -463,7 +464,7 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>48</lid>
+          <lid>49</lid>
           <track>1</track>
           <durationType>half</durationType>
           </Rest>
@@ -483,12 +484,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>50</lid>
+          <lid>51</lid>
           <Tuplet>7</Tuplet>
           <durationType>eighth</durationType>
           <Beam>7</Beam>
           <Note>
-            <lid>51</lid>
+            <lid>52</lid>
             <pitch>69</pitch>
             <tpc>17</tpc>
             <fret>5</fret>
@@ -496,12 +497,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>52</lid>
+          <lid>53</lid>
           <Tuplet>7</Tuplet>
           <durationType>eighth</durationType>
           <Beam>7</Beam>
           <Note>
-            <lid>53</lid>
+            <lid>54</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -512,12 +513,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>54</lid>
+          <lid>55</lid>
           <Tuplet>7</Tuplet>
           <durationType>eighth</durationType>
           <Beam>7</Beam>
           <Note>
-            <lid>55</lid>
+            <lid>56</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -538,12 +539,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>56</lid>
+          <lid>57</lid>
           <Tuplet>8</Tuplet>
           <durationType>eighth</durationType>
           <Beam>8</Beam>
           <Note>
-            <lid>57</lid>
+            <lid>58</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>3</fret>
@@ -551,12 +552,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>58</lid>
+          <lid>59</lid>
           <Tuplet>8</Tuplet>
           <durationType>eighth</durationType>
           <Beam>8</Beam>
           <Note>
-            <lid>59</lid>
+            <lid>60</lid>
             <pitch>63</pitch>
             <tpc>11</tpc>
             <fret>4</fret>
@@ -564,12 +565,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>60</lid>
+          <lid>61</lid>
           <Tuplet>8</Tuplet>
           <durationType>eighth</durationType>
           <Beam>8</Beam>
           <Note>
-            <lid>61</lid>
+            <lid>62</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -590,12 +591,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>62</lid>
+          <lid>63</lid>
           <Tuplet>9</Tuplet>
           <durationType>eighth</durationType>
           <Beam>9</Beam>
           <Note>
-            <lid>63</lid>
+            <lid>64</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -606,12 +607,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>64</lid>
+          <lid>65</lid>
           <Tuplet>9</Tuplet>
           <durationType>eighth</durationType>
           <Beam>9</Beam>
           <Note>
-            <lid>65</lid>
+            <lid>66</lid>
             <pitch>63</pitch>
             <tpc>11</tpc>
             <fret>4</fret>
@@ -619,12 +620,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>66</lid>
+          <lid>67</lid>
           <Tuplet>9</Tuplet>
           <durationType>eighth</durationType>
           <Beam>9</Beam>
           <Note>
-            <lid>67</lid>
+            <lid>68</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -633,12 +634,12 @@
           </Chord>
         <tick>2880</tick>
         <Chord>
-          <lid>68</lid>
+          <lid>69</lid>
           <track>1</track>
           <dots>1</dots>
           <durationType>half</durationType>
           <Note>
-            <lid>69</lid>
+            <lid>70</lid>
             <track>1</track>
             <pitch>47</pitch>
             <tpc>19</tpc>
@@ -662,12 +663,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>71</lid>
+          <lid>72</lid>
           <Tuplet>10</Tuplet>
           <durationType>eighth</durationType>
           <Beam>10</Beam>
           <Note>
-            <lid>72</lid>
+            <lid>73</lid>
             <pitch>71</pitch>
             <tpc>19</tpc>
             <fret>7</fret>
@@ -675,12 +676,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>73</lid>
+          <lid>74</lid>
           <Tuplet>10</Tuplet>
           <durationType>eighth</durationType>
           <Beam>10</Beam>
           <Note>
-            <lid>74</lid>
+            <lid>75</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -688,12 +689,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>75</lid>
+          <lid>76</lid>
           <Tuplet>10</Tuplet>
           <durationType>eighth</durationType>
           <Beam>10</Beam>
           <Note>
-            <lid>76</lid>
+            <lid>77</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -714,12 +715,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>77</lid>
+          <lid>78</lid>
           <Tuplet>11</Tuplet>
           <durationType>eighth</durationType>
           <Beam>11</Beam>
           <Note>
-            <lid>78</lid>
+            <lid>79</lid>
             <pitch>71</pitch>
             <tpc>19</tpc>
             <fret>7</fret>
@@ -727,12 +728,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>79</lid>
+          <lid>80</lid>
           <Tuplet>11</Tuplet>
           <durationType>eighth</durationType>
           <Beam>11</Beam>
           <Note>
-            <lid>80</lid>
+            <lid>81</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -740,12 +741,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>81</lid>
+          <lid>82</lid>
           <Tuplet>11</Tuplet>
           <durationType>eighth</durationType>
           <Beam>11</Beam>
           <Note>
-            <lid>82</lid>
+            <lid>83</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -766,12 +767,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>83</lid>
+          <lid>84</lid>
           <Tuplet>12</Tuplet>
           <durationType>eighth</durationType>
           <Beam>12</Beam>
           <Note>
-            <lid>84</lid>
+            <lid>85</lid>
             <pitch>71</pitch>
             <tpc>19</tpc>
             <fret>7</fret>
@@ -779,12 +780,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>85</lid>
+          <lid>86</lid>
           <Tuplet>12</Tuplet>
           <durationType>eighth</durationType>
           <Beam>12</Beam>
           <Note>
-            <lid>86</lid>
+            <lid>87</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -792,12 +793,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>87</lid>
+          <lid>88</lid>
           <Tuplet>12</Tuplet>
           <durationType>eighth</durationType>
           <Beam>12</Beam>
           <Note>
-            <lid>88</lid>
+            <lid>89</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -806,12 +807,12 @@
           </Chord>
         <tick>4320</tick>
         <Chord>
-          <lid>89</lid>
+          <lid>90</lid>
           <track>1</track>
           <dots>1</dots>
           <durationType>half</durationType>
           <Note>
-            <lid>90</lid>
+            <lid>91</lid>
             <track>1</track>
             <pitch>40</pitch>
             <tpc>18</tpc>
@@ -835,12 +836,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>92</lid>
+          <lid>93</lid>
           <Tuplet>13</Tuplet>
           <durationType>eighth</durationType>
           <Beam>13</Beam>
           <Note>
-            <lid>93</lid>
+            <lid>94</lid>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <fret>0</fret>
@@ -848,12 +849,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>94</lid>
+          <lid>95</lid>
           <Tuplet>13</Tuplet>
           <durationType>eighth</durationType>
           <Beam>13</Beam>
           <Note>
-            <lid>95</lid>
+            <lid>96</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -861,12 +862,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>96</lid>
+          <lid>97</lid>
           <Tuplet>13</Tuplet>
           <durationType>eighth</durationType>
           <Beam>13</Beam>
           <Note>
-            <lid>97</lid>
+            <lid>98</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -887,12 +888,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>98</lid>
+          <lid>99</lid>
           <Tuplet>14</Tuplet>
           <durationType>eighth</durationType>
           <Beam>14</Beam>
           <Note>
-            <lid>99</lid>
+            <lid>100</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>3</fret>
@@ -900,12 +901,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>100</lid>
+          <lid>101</lid>
           <Tuplet>14</Tuplet>
           <durationType>eighth</durationType>
           <Beam>14</Beam>
           <Note>
-            <lid>101</lid>
+            <lid>102</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -913,12 +914,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>102</lid>
+          <lid>103</lid>
           <Tuplet>14</Tuplet>
           <durationType>eighth</durationType>
           <Beam>14</Beam>
           <Note>
-            <lid>103</lid>
+            <lid>104</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -939,12 +940,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>104</lid>
+          <lid>105</lid>
           <Tuplet>15</Tuplet>
           <durationType>eighth</durationType>
           <Beam>15</Beam>
           <Note>
-            <lid>105</lid>
+            <lid>106</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>3</fret>
@@ -952,12 +953,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>106</lid>
+          <lid>107</lid>
           <Tuplet>15</Tuplet>
           <durationType>eighth</durationType>
           <Beam>15</Beam>
           <Note>
-            <lid>107</lid>
+            <lid>108</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -965,12 +966,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>108</lid>
+          <lid>109</lid>
           <Tuplet>15</Tuplet>
           <durationType>eighth</durationType>
           <Beam>15</Beam>
           <Note>
-            <lid>109</lid>
+            <lid>110</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -979,12 +980,12 @@
           </Chord>
         <tick>5760</tick>
         <Chord>
-          <lid>110</lid>
+          <lid>111</lid>
           <track>1</track>
           <dots>1</dots>
           <durationType>half</durationType>
           <Note>
-            <lid>111</lid>
+            <lid>112</lid>
             <track>1</track>
             <pitch>40</pitch>
             <tpc>18</tpc>
@@ -1008,12 +1009,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>113</lid>
+          <lid>114</lid>
           <Tuplet>16</Tuplet>
           <durationType>eighth</durationType>
           <Beam>16</Beam>
           <Note>
-            <lid>114</lid>
+            <lid>115</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>3</fret>
@@ -1021,12 +1022,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>115</lid>
+          <lid>116</lid>
           <Tuplet>16</Tuplet>
           <durationType>eighth</durationType>
           <Beam>16</Beam>
           <Note>
-            <lid>116</lid>
+            <lid>117</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>1</fret>
@@ -1034,12 +1035,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>117</lid>
+          <lid>118</lid>
           <Tuplet>16</Tuplet>
           <durationType>eighth</durationType>
           <Beam>16</Beam>
           <Note>
-            <lid>118</lid>
+            <lid>119</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -1060,12 +1061,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>119</lid>
+          <lid>120</lid>
           <Tuplet>17</Tuplet>
           <durationType>eighth</durationType>
           <Beam>17</Beam>
           <Note>
-            <lid>120</lid>
+            <lid>121</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -1076,12 +1077,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>121</lid>
+          <lid>122</lid>
           <Tuplet>17</Tuplet>
           <durationType>eighth</durationType>
           <Beam>17</Beam>
           <Note>
-            <lid>122</lid>
+            <lid>123</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>1</fret>
@@ -1089,12 +1090,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>123</lid>
+          <lid>124</lid>
           <Tuplet>17</Tuplet>
           <durationType>eighth</durationType>
           <Beam>17</Beam>
           <Note>
-            <lid>124</lid>
+            <lid>125</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -1115,12 +1116,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>125</lid>
+          <lid>126</lid>
           <Tuplet>18</Tuplet>
           <durationType>eighth</durationType>
           <Beam>18</Beam>
           <Note>
-            <lid>126</lid>
+            <lid>127</lid>
             <pitch>66</pitch>
             <tpc>20</tpc>
             <fret>2</fret>
@@ -1128,12 +1129,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>127</lid>
+          <lid>128</lid>
           <Tuplet>18</Tuplet>
           <durationType>eighth</durationType>
           <Beam>18</Beam>
           <Note>
-            <lid>128</lid>
+            <lid>129</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>1</fret>
@@ -1141,12 +1142,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>129</lid>
+          <lid>130</lid>
           <Tuplet>18</Tuplet>
           <durationType>eighth</durationType>
           <Beam>18</Beam>
           <Note>
-            <lid>130</lid>
+            <lid>131</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -1155,12 +1156,12 @@
           </Chord>
         <tick>7200</tick>
         <Chord>
-          <lid>131</lid>
+          <lid>132</lid>
           <track>1</track>
           <dots>1</dots>
           <durationType>half</durationType>
           <Note>
-            <lid>132</lid>
+            <lid>133</lid>
             <track>1</track>
             <pitch>45</pitch>
             <tpc>17</tpc>
@@ -1184,12 +1185,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>134</lid>
+          <lid>135</lid>
           <Tuplet>19</Tuplet>
           <durationType>eighth</durationType>
           <Beam>19</Beam>
           <Note>
-            <lid>135</lid>
+            <lid>136</lid>
             <pitch>69</pitch>
             <tpc>17</tpc>
             <fret>5</fret>
@@ -1197,12 +1198,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>136</lid>
+          <lid>137</lid>
           <Tuplet>19</Tuplet>
           <durationType>eighth</durationType>
           <Beam>19</Beam>
           <Note>
-            <lid>137</lid>
+            <lid>138</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -1213,12 +1214,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>138</lid>
+          <lid>139</lid>
           <Tuplet>19</Tuplet>
           <durationType>eighth</durationType>
           <Beam>19</Beam>
           <Note>
-            <lid>139</lid>
+            <lid>140</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -1239,12 +1240,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>140</lid>
+          <lid>141</lid>
           <Tuplet>20</Tuplet>
           <durationType>eighth</durationType>
           <Beam>20</Beam>
           <Note>
-            <lid>141</lid>
+            <lid>142</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>3</fret>
@@ -1252,12 +1253,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>142</lid>
+          <lid>143</lid>
           <Tuplet>20</Tuplet>
           <durationType>eighth</durationType>
           <Beam>20</Beam>
           <Note>
-            <lid>143</lid>
+            <lid>144</lid>
             <pitch>63</pitch>
             <tpc>11</tpc>
             <fret>4</fret>
@@ -1265,12 +1266,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>144</lid>
+          <lid>145</lid>
           <Tuplet>20</Tuplet>
           <durationType>eighth</durationType>
           <Beam>20</Beam>
           <Note>
-            <lid>145</lid>
+            <lid>146</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -1291,12 +1292,12 @@
             </Number>
           </Tuplet>
         <Chord>
-          <lid>146</lid>
+          <lid>147</lid>
           <Tuplet>21</Tuplet>
           <durationType>eighth</durationType>
           <Beam>21</Beam>
           <Note>
-            <lid>147</lid>
+            <lid>148</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -1307,12 +1308,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>148</lid>
+          <lid>149</lid>
           <Tuplet>21</Tuplet>
           <durationType>eighth</durationType>
           <Beam>21</Beam>
           <Note>
-            <lid>149</lid>
+            <lid>150</lid>
             <pitch>63</pitch>
             <tpc>11</tpc>
             <fret>4</fret>
@@ -1320,12 +1321,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>150</lid>
+          <lid>151</lid>
           <Tuplet>21</Tuplet>
           <durationType>eighth</durationType>
           <Beam>21</Beam>
           <Note>
-            <lid>151</lid>
+            <lid>152</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -1334,12 +1335,12 @@
           </Chord>
         <tick>8640</tick>
         <Chord>
-          <lid>152</lid>
+          <lid>153</lid>
           <track>1</track>
           <dots>1</dots>
           <durationType>half</durationType>
           <Note>
-            <lid>153</lid>
+            <lid>154</lid>
             <track>1</track>
             <pitch>47</pitch>
             <tpc>19</tpc>
@@ -1351,7 +1352,7 @@
       <Measure number="8">
         <endRepeat>2</endRepeat>
         <Volta id="2">
-          <lid>171</lid>
+          <lid>172</lid>
           <beginText>
             <style>Volta</style>
             <text>1</text>
@@ -1359,10 +1360,10 @@
           <endings>1</endings>
           </Volta>
         <Chord>
-          <lid>155</lid>
+          <lid>156</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>156</lid>
+            <lid>157</lid>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <fret>0</fret>
@@ -1370,24 +1371,24 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>157</lid>
+          <lid>158</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>158</lid>
+            <lid>159</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
             <string>2</string>
             </Note>
           <Note>
-            <lid>159</lid>
+            <lid>160</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
             <string>1</string>
             </Note>
           <Note>
-            <lid>160</lid>
+            <lid>161</lid>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <fret>0</fret>
@@ -1396,12 +1397,12 @@
           </Chord>
         <tick>10080</tick>
         <Chord>
-          <lid>161</lid>
+          <lid>162</lid>
           <track>1</track>
           <dots>1</dots>
           <durationType>half</durationType>
           <Note>
-            <lid>162</lid>
+            <lid>163</lid>
             <track>1</track>
             <pitch>40</pitch>
             <tpc>18</tpc>
@@ -1413,7 +1414,7 @@
       <Measure number="9">
         <endSpanner id="2"/>
         <Volta id="3">
-          <lid>172</lid>
+          <lid>173</lid>
           <beginText>
             <style>Volta</style>
             <text>2,3,6,8</text>
@@ -1421,7 +1422,7 @@
           <endings>2, 3, 6, 8</endings>
           </Volta>
         <Rest>
-          <lid>164</lid>
+          <lid>165</lid>
           <dots>1</dots>
           <durationType>half</durationType>
           </Rest>
@@ -1432,12 +1433,12 @@
         <tick>11520</tick>
         <endSpanner id="2"/>
         <Chord>
-          <lid>165</lid>
+          <lid>166</lid>
           <track>1</track>
           <dots>1</dots>
           <durationType>half</durationType>
           <Note>
-            <lid>166</lid>
+            <lid>167</lid>
             <track>1</track>
             <pitch>40</pitch>
             <tpc>18</tpc>
@@ -1445,7 +1446,7 @@
             <string>5</string>
             </Note>
           <Note>
-            <lid>167</lid>
+            <lid>168</lid>
             <track>1</track>
             <pitch>55</pitch>
             <tpc>15</tpc>
@@ -1453,7 +1454,7 @@
             <string>2</string>
             </Note>
           <Note>
-            <lid>168</lid>
+            <lid>169</lid>
             <track>1</track>
             <pitch>59</pitch>
             <tpc>19</tpc>
@@ -1461,7 +1462,7 @@
             <string>1</string>
             </Note>
           <Note>
-            <lid>169</lid>
+            <lid>170</lid>
             <track>1</track>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -1591,13 +1592,14 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <lid>3</lid>
             </Clef>
           <KeySig>
-            <lid>3</lid>
+            <lid>4</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>4</lid>
+            <lid>5</lid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -1605,11 +1607,11 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <lid>5</lid>
+            <lid>6</lid>
             </Dynamic>
           <Tempo>
             <tempo>1.66667</tempo>
-            <lid>6</lid>
+            <lid>7</lid>
             <text><sym>noteQuarterUp</sym> = 100</text>
             </Tempo>
           <Beam id="22">
@@ -1628,12 +1630,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>7</lid>
+            <lid>8</lid>
             <Tuplet>22</Tuplet>
             <durationType>eighth</durationType>
             <Beam>22</Beam>
             <Note>
-              <lid>8</lid>
+              <lid>9</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -1641,12 +1643,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>10</lid>
             <Tuplet>22</Tuplet>
             <durationType>eighth</durationType>
             <Beam>22</Beam>
             <Note>
-              <lid>10</lid>
+              <lid>11</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -1654,12 +1656,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>12</lid>
             <Tuplet>22</Tuplet>
             <durationType>eighth</durationType>
             <Beam>22</Beam>
             <Note>
-              <lid>12</lid>
+              <lid>13</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -1682,12 +1684,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>13</lid>
+            <lid>14</lid>
             <Tuplet>23</Tuplet>
             <durationType>eighth</durationType>
             <Beam>23</Beam>
             <Note>
-              <lid>14</lid>
+              <lid>15</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -1695,12 +1697,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>15</lid>
+            <lid>16</lid>
             <Tuplet>23</Tuplet>
             <durationType>eighth</durationType>
             <Beam>23</Beam>
             <Note>
-              <lid>16</lid>
+              <lid>17</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -1708,12 +1710,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>17</lid>
+            <lid>18</lid>
             <Tuplet>23</Tuplet>
             <durationType>eighth</durationType>
             <Beam>23</Beam>
             <Note>
-              <lid>18</lid>
+              <lid>19</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -1736,12 +1738,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>19</lid>
+            <lid>20</lid>
             <Tuplet>24</Tuplet>
             <durationType>eighth</durationType>
             <Beam>24</Beam>
             <Note>
-              <lid>20</lid>
+              <lid>21</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -1749,12 +1751,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>21</lid>
+            <lid>22</lid>
             <Tuplet>24</Tuplet>
             <durationType>eighth</durationType>
             <Beam>24</Beam>
             <Note>
-              <lid>22</lid>
+              <lid>23</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -1762,12 +1764,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>23</lid>
+            <lid>24</lid>
             <Tuplet>24</Tuplet>
             <durationType>eighth</durationType>
             <Beam>24</Beam>
             <Note>
-              <lid>24</lid>
+              <lid>25</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -1776,12 +1778,12 @@
             </Chord>
           <tick>0</tick>
           <Chord>
-            <lid>25</lid>
+            <lid>26</lid>
             <track>1</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>26</lid>
+              <lid>27</lid>
               <track>1</track>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -1807,12 +1809,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>28</lid>
+            <lid>29</lid>
             <Tuplet>25</Tuplet>
             <durationType>eighth</durationType>
             <Beam>25</Beam>
             <Note>
-              <lid>29</lid>
+              <lid>30</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -1820,12 +1822,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>30</lid>
+            <lid>31</lid>
             <Tuplet>25</Tuplet>
             <durationType>eighth</durationType>
             <Beam>25</Beam>
             <Note>
-              <lid>31</lid>
+              <lid>32</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -1833,12 +1835,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>32</lid>
+            <lid>33</lid>
             <Tuplet>25</Tuplet>
             <durationType>eighth</durationType>
             <Beam>25</Beam>
             <Note>
-              <lid>33</lid>
+              <lid>34</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -1861,12 +1863,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>34</lid>
+            <lid>35</lid>
             <Tuplet>26</Tuplet>
             <durationType>eighth</durationType>
             <Beam>26</Beam>
             <Note>
-              <lid>35</lid>
+              <lid>36</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -1877,12 +1879,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>36</lid>
+            <lid>37</lid>
             <Tuplet>26</Tuplet>
             <durationType>eighth</durationType>
             <Beam>26</Beam>
             <Note>
-              <lid>37</lid>
+              <lid>38</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -1890,12 +1892,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>38</lid>
+            <lid>39</lid>
             <Tuplet>26</Tuplet>
             <durationType>eighth</durationType>
             <Beam>26</Beam>
             <Note>
-              <lid>39</lid>
+              <lid>40</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -1918,12 +1920,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>40</lid>
+            <lid>41</lid>
             <Tuplet>27</Tuplet>
             <durationType>eighth</durationType>
             <Beam>27</Beam>
             <Note>
-              <lid>41</lid>
+              <lid>42</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -1931,12 +1933,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>42</lid>
+            <lid>43</lid>
             <Tuplet>27</Tuplet>
             <durationType>eighth</durationType>
             <Beam>27</Beam>
             <Note>
-              <lid>43</lid>
+              <lid>44</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -1944,12 +1946,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>44</lid>
+            <lid>45</lid>
             <Tuplet>27</Tuplet>
             <durationType>eighth</durationType>
             <Beam>27</Beam>
             <Note>
-              <lid>45</lid>
+              <lid>46</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -1958,12 +1960,12 @@
             </Chord>
           <tick>1440</tick>
           <Chord>
-            <lid>46</lid>
+            <lid>47</lid>
             <track>1</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>47</lid>
+              <lid>48</lid>
               <track>1</track>
               <pitch>45</pitch>
               <tpc>17</tpc>
@@ -1972,7 +1974,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>48</lid>
+            <lid>49</lid>
             <track>1</track>
             <durationType>half</durationType>
             </Rest>
@@ -1994,12 +1996,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>50</lid>
+            <lid>51</lid>
             <Tuplet>28</Tuplet>
             <durationType>eighth</durationType>
             <Beam>28</Beam>
             <Note>
-              <lid>51</lid>
+              <lid>52</lid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -2007,12 +2009,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>52</lid>
+            <lid>53</lid>
             <Tuplet>28</Tuplet>
             <durationType>eighth</durationType>
             <Beam>28</Beam>
             <Note>
-              <lid>53</lid>
+              <lid>54</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -2023,12 +2025,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>54</lid>
+            <lid>55</lid>
             <Tuplet>28</Tuplet>
             <durationType>eighth</durationType>
             <Beam>28</Beam>
             <Note>
-              <lid>55</lid>
+              <lid>56</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -2051,12 +2053,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>56</lid>
+            <lid>57</lid>
             <Tuplet>29</Tuplet>
             <durationType>eighth</durationType>
             <Beam>29</Beam>
             <Note>
-              <lid>57</lid>
+              <lid>58</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -2064,12 +2066,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>58</lid>
+            <lid>59</lid>
             <Tuplet>29</Tuplet>
             <durationType>eighth</durationType>
             <Beam>29</Beam>
             <Note>
-              <lid>59</lid>
+              <lid>60</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -2077,12 +2079,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>60</lid>
+            <lid>61</lid>
             <Tuplet>29</Tuplet>
             <durationType>eighth</durationType>
             <Beam>29</Beam>
             <Note>
-              <lid>61</lid>
+              <lid>62</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -2105,12 +2107,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>62</lid>
+            <lid>63</lid>
             <Tuplet>30</Tuplet>
             <durationType>eighth</durationType>
             <Beam>30</Beam>
             <Note>
-              <lid>63</lid>
+              <lid>64</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -2121,12 +2123,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>64</lid>
+            <lid>65</lid>
             <Tuplet>30</Tuplet>
             <durationType>eighth</durationType>
             <Beam>30</Beam>
             <Note>
-              <lid>65</lid>
+              <lid>66</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -2134,12 +2136,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>66</lid>
+            <lid>67</lid>
             <Tuplet>30</Tuplet>
             <durationType>eighth</durationType>
             <Beam>30</Beam>
             <Note>
-              <lid>67</lid>
+              <lid>68</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -2148,12 +2150,12 @@
             </Chord>
           <tick>2880</tick>
           <Chord>
-            <lid>68</lid>
+            <lid>69</lid>
             <track>1</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>69</lid>
+              <lid>70</lid>
               <track>1</track>
               <pitch>47</pitch>
               <tpc>19</tpc>
@@ -2179,12 +2181,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>71</lid>
+            <lid>72</lid>
             <Tuplet>31</Tuplet>
             <durationType>eighth</durationType>
             <Beam>31</Beam>
             <Note>
-              <lid>72</lid>
+              <lid>73</lid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -2192,12 +2194,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>73</lid>
+            <lid>74</lid>
             <Tuplet>31</Tuplet>
             <durationType>eighth</durationType>
             <Beam>31</Beam>
             <Note>
-              <lid>74</lid>
+              <lid>75</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -2205,12 +2207,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>75</lid>
+            <lid>76</lid>
             <Tuplet>31</Tuplet>
             <durationType>eighth</durationType>
             <Beam>31</Beam>
             <Note>
-              <lid>76</lid>
+              <lid>77</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -2233,12 +2235,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>77</lid>
+            <lid>78</lid>
             <Tuplet>32</Tuplet>
             <durationType>eighth</durationType>
             <Beam>32</Beam>
             <Note>
-              <lid>78</lid>
+              <lid>79</lid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -2246,12 +2248,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>79</lid>
+            <lid>80</lid>
             <Tuplet>32</Tuplet>
             <durationType>eighth</durationType>
             <Beam>32</Beam>
             <Note>
-              <lid>80</lid>
+              <lid>81</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -2259,12 +2261,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>81</lid>
+            <lid>82</lid>
             <Tuplet>32</Tuplet>
             <durationType>eighth</durationType>
             <Beam>32</Beam>
             <Note>
-              <lid>82</lid>
+              <lid>83</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -2287,12 +2289,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>83</lid>
+            <lid>84</lid>
             <Tuplet>33</Tuplet>
             <durationType>eighth</durationType>
             <Beam>33</Beam>
             <Note>
-              <lid>84</lid>
+              <lid>85</lid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -2300,12 +2302,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>85</lid>
+            <lid>86</lid>
             <Tuplet>33</Tuplet>
             <durationType>eighth</durationType>
             <Beam>33</Beam>
             <Note>
-              <lid>86</lid>
+              <lid>87</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -2313,12 +2315,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>87</lid>
+            <lid>88</lid>
             <Tuplet>33</Tuplet>
             <durationType>eighth</durationType>
             <Beam>33</Beam>
             <Note>
-              <lid>88</lid>
+              <lid>89</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -2327,12 +2329,12 @@
             </Chord>
           <tick>4320</tick>
           <Chord>
-            <lid>89</lid>
+            <lid>90</lid>
             <track>1</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>90</lid>
+              <lid>91</lid>
               <track>1</track>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -2358,12 +2360,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>92</lid>
+            <lid>93</lid>
             <Tuplet>34</Tuplet>
             <durationType>eighth</durationType>
             <Beam>34</Beam>
             <Note>
-              <lid>93</lid>
+              <lid>94</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -2371,12 +2373,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>94</lid>
+            <lid>95</lid>
             <Tuplet>34</Tuplet>
             <durationType>eighth</durationType>
             <Beam>34</Beam>
             <Note>
-              <lid>95</lid>
+              <lid>96</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -2384,12 +2386,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>96</lid>
+            <lid>97</lid>
             <Tuplet>34</Tuplet>
             <durationType>eighth</durationType>
             <Beam>34</Beam>
             <Note>
-              <lid>97</lid>
+              <lid>98</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -2412,12 +2414,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>98</lid>
+            <lid>99</lid>
             <Tuplet>35</Tuplet>
             <durationType>eighth</durationType>
             <Beam>35</Beam>
             <Note>
-              <lid>99</lid>
+              <lid>100</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -2425,12 +2427,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>100</lid>
+            <lid>101</lid>
             <Tuplet>35</Tuplet>
             <durationType>eighth</durationType>
             <Beam>35</Beam>
             <Note>
-              <lid>101</lid>
+              <lid>102</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -2438,12 +2440,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>102</lid>
+            <lid>103</lid>
             <Tuplet>35</Tuplet>
             <durationType>eighth</durationType>
             <Beam>35</Beam>
             <Note>
-              <lid>103</lid>
+              <lid>104</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -2466,12 +2468,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>104</lid>
+            <lid>105</lid>
             <Tuplet>36</Tuplet>
             <durationType>eighth</durationType>
             <Beam>36</Beam>
             <Note>
-              <lid>105</lid>
+              <lid>106</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -2479,12 +2481,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>106</lid>
+            <lid>107</lid>
             <Tuplet>36</Tuplet>
             <durationType>eighth</durationType>
             <Beam>36</Beam>
             <Note>
-              <lid>107</lid>
+              <lid>108</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -2492,12 +2494,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>108</lid>
+            <lid>109</lid>
             <Tuplet>36</Tuplet>
             <durationType>eighth</durationType>
             <Beam>36</Beam>
             <Note>
-              <lid>109</lid>
+              <lid>110</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -2506,12 +2508,12 @@
             </Chord>
           <tick>5760</tick>
           <Chord>
-            <lid>110</lid>
+            <lid>111</lid>
             <track>1</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>111</lid>
+              <lid>112</lid>
               <track>1</track>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -2537,12 +2539,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>113</lid>
+            <lid>114</lid>
             <Tuplet>37</Tuplet>
             <durationType>eighth</durationType>
             <Beam>37</Beam>
             <Note>
-              <lid>114</lid>
+              <lid>115</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -2550,12 +2552,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>115</lid>
+            <lid>116</lid>
             <Tuplet>37</Tuplet>
             <durationType>eighth</durationType>
             <Beam>37</Beam>
             <Note>
-              <lid>116</lid>
+              <lid>117</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -2563,12 +2565,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>117</lid>
+            <lid>118</lid>
             <Tuplet>37</Tuplet>
             <durationType>eighth</durationType>
             <Beam>37</Beam>
             <Note>
-              <lid>118</lid>
+              <lid>119</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -2591,12 +2593,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>119</lid>
+            <lid>120</lid>
             <Tuplet>38</Tuplet>
             <durationType>eighth</durationType>
             <Beam>38</Beam>
             <Note>
-              <lid>120</lid>
+              <lid>121</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -2607,12 +2609,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>121</lid>
+            <lid>122</lid>
             <Tuplet>38</Tuplet>
             <durationType>eighth</durationType>
             <Beam>38</Beam>
             <Note>
-              <lid>122</lid>
+              <lid>123</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -2620,12 +2622,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>123</lid>
+            <lid>124</lid>
             <Tuplet>38</Tuplet>
             <durationType>eighth</durationType>
             <Beam>38</Beam>
             <Note>
-              <lid>124</lid>
+              <lid>125</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -2648,12 +2650,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>125</lid>
+            <lid>126</lid>
             <Tuplet>39</Tuplet>
             <durationType>eighth</durationType>
             <Beam>39</Beam>
             <Note>
-              <lid>126</lid>
+              <lid>127</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -2661,12 +2663,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>127</lid>
+            <lid>128</lid>
             <Tuplet>39</Tuplet>
             <durationType>eighth</durationType>
             <Beam>39</Beam>
             <Note>
-              <lid>128</lid>
+              <lid>129</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -2674,12 +2676,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>129</lid>
+            <lid>130</lid>
             <Tuplet>39</Tuplet>
             <durationType>eighth</durationType>
             <Beam>39</Beam>
             <Note>
-              <lid>130</lid>
+              <lid>131</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -2688,12 +2690,12 @@
             </Chord>
           <tick>7200</tick>
           <Chord>
-            <lid>131</lid>
+            <lid>132</lid>
             <track>1</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>132</lid>
+              <lid>133</lid>
               <track>1</track>
               <pitch>45</pitch>
               <tpc>17</tpc>
@@ -2719,12 +2721,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>134</lid>
+            <lid>135</lid>
             <Tuplet>40</Tuplet>
             <durationType>eighth</durationType>
             <Beam>40</Beam>
             <Note>
-              <lid>135</lid>
+              <lid>136</lid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -2732,12 +2734,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>136</lid>
+            <lid>137</lid>
             <Tuplet>40</Tuplet>
             <durationType>eighth</durationType>
             <Beam>40</Beam>
             <Note>
-              <lid>137</lid>
+              <lid>138</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -2748,12 +2750,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>138</lid>
+            <lid>139</lid>
             <Tuplet>40</Tuplet>
             <durationType>eighth</durationType>
             <Beam>40</Beam>
             <Note>
-              <lid>139</lid>
+              <lid>140</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -2776,12 +2778,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>140</lid>
+            <lid>141</lid>
             <Tuplet>41</Tuplet>
             <durationType>eighth</durationType>
             <Beam>41</Beam>
             <Note>
-              <lid>141</lid>
+              <lid>142</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -2789,12 +2791,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>142</lid>
+            <lid>143</lid>
             <Tuplet>41</Tuplet>
             <durationType>eighth</durationType>
             <Beam>41</Beam>
             <Note>
-              <lid>143</lid>
+              <lid>144</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -2802,12 +2804,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>144</lid>
+            <lid>145</lid>
             <Tuplet>41</Tuplet>
             <durationType>eighth</durationType>
             <Beam>41</Beam>
             <Note>
-              <lid>145</lid>
+              <lid>146</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -2830,12 +2832,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>146</lid>
+            <lid>147</lid>
             <Tuplet>42</Tuplet>
             <durationType>eighth</durationType>
             <Beam>42</Beam>
             <Note>
-              <lid>147</lid>
+              <lid>148</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -2846,12 +2848,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>148</lid>
+            <lid>149</lid>
             <Tuplet>42</Tuplet>
             <durationType>eighth</durationType>
             <Beam>42</Beam>
             <Note>
-              <lid>149</lid>
+              <lid>150</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -2859,12 +2861,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>150</lid>
+            <lid>151</lid>
             <Tuplet>42</Tuplet>
             <durationType>eighth</durationType>
             <Beam>42</Beam>
             <Note>
-              <lid>151</lid>
+              <lid>152</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -2873,12 +2875,12 @@
             </Chord>
           <tick>8640</tick>
           <Chord>
-            <lid>152</lid>
+            <lid>153</lid>
             <track>1</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>153</lid>
+              <lid>154</lid>
               <track>1</track>
               <pitch>47</pitch>
               <tpc>19</tpc>
@@ -2890,7 +2892,7 @@
         <Measure number="8">
           <endRepeat>2</endRepeat>
           <Volta id="4">
-            <lid>171</lid>
+            <lid>172</lid>
             <beginText>
               <style>Volta</style>
               <text>1</text>
@@ -2898,10 +2900,10 @@
             <endings>1</endings>
             </Volta>
           <Chord>
-            <lid>155</lid>
+            <lid>156</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>156</lid>
+              <lid>157</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -2909,24 +2911,24 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>157</lid>
+            <lid>158</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>158</lid>
+              <lid>159</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <lid>159</lid>
+              <lid>160</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
-              <lid>160</lid>
+              <lid>161</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -2935,12 +2937,12 @@
             </Chord>
           <tick>10080</tick>
           <Chord>
-            <lid>161</lid>
+            <lid>162</lid>
             <track>1</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>162</lid>
+              <lid>163</lid>
               <track>1</track>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -2952,7 +2954,7 @@
         <Measure number="9">
           <endSpanner id="4"/>
           <Volta id="5">
-            <lid>172</lid>
+            <lid>173</lid>
             <beginText>
               <style>Volta</style>
               <text>2,3,6,8</text>
@@ -2960,7 +2962,7 @@
             <endings>2, 3, 6, 8</endings>
             </Volta>
           <Rest>
-            <lid>164</lid>
+            <lid>165</lid>
             <dots>1</dots>
             <durationType>half</durationType>
             </Rest>
@@ -2971,12 +2973,12 @@
           <tick>11520</tick>
           <endSpanner id="4"/>
           <Chord>
-            <lid>165</lid>
+            <lid>166</lid>
             <track>1</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>166</lid>
+              <lid>167</lid>
               <track>1</track>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -2984,7 +2986,7 @@
               <string>5</string>
               </Note>
             <Note>
-              <lid>167</lid>
+              <lid>168</lid>
               <track>1</track>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -2992,7 +2994,7 @@
               <string>2</string>
               </Note>
             <Note>
-              <lid>168</lid>
+              <lid>169</lid>
               <track>1</track>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -3000,7 +3002,7 @@
               <string>1</string>
               </Note>
             <Note>
-              <lid>169</lid>
+              <lid>170</lid>
               <track>1</track>
               <pitch>64</pitch>
               <tpc>18</tpc>
@@ -3020,7 +3022,7 @@
             <transposingClefType>TAB</transposingClefType>
             </Clef>
           <KeySig>
-            <lid>3</lid>
+            <lid>4</lid>
             <accidental>0</accidental>
             </KeySig>
           <Beam id="43">
@@ -3037,12 +3039,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>7</lid>
+            <lid>8</lid>
             <Tuplet>43</Tuplet>
             <durationType>eighth</durationType>
             <Beam>43</Beam>
             <Note>
-              <lid>8</lid>
+              <lid>9</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -3050,12 +3052,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>10</lid>
             <Tuplet>43</Tuplet>
             <durationType>eighth</durationType>
             <Beam>43</Beam>
             <Note>
-              <lid>10</lid>
+              <lid>11</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -3063,12 +3065,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>12</lid>
             <Tuplet>43</Tuplet>
             <durationType>eighth</durationType>
             <Beam>43</Beam>
             <Note>
-              <lid>12</lid>
+              <lid>13</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -3089,12 +3091,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>13</lid>
+            <lid>14</lid>
             <Tuplet>44</Tuplet>
             <durationType>eighth</durationType>
             <Beam>44</Beam>
             <Note>
-              <lid>14</lid>
+              <lid>15</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -3102,12 +3104,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>15</lid>
+            <lid>16</lid>
             <Tuplet>44</Tuplet>
             <durationType>eighth</durationType>
             <Beam>44</Beam>
             <Note>
-              <lid>16</lid>
+              <lid>17</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -3115,12 +3117,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>17</lid>
+            <lid>18</lid>
             <Tuplet>44</Tuplet>
             <durationType>eighth</durationType>
             <Beam>44</Beam>
             <Note>
-              <lid>18</lid>
+              <lid>19</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -3141,12 +3143,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>19</lid>
+            <lid>20</lid>
             <Tuplet>45</Tuplet>
             <durationType>eighth</durationType>
             <Beam>45</Beam>
             <Note>
-              <lid>20</lid>
+              <lid>21</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -3154,12 +3156,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>21</lid>
+            <lid>22</lid>
             <Tuplet>45</Tuplet>
             <durationType>eighth</durationType>
             <Beam>45</Beam>
             <Note>
-              <lid>22</lid>
+              <lid>23</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -3167,12 +3169,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>23</lid>
+            <lid>24</lid>
             <Tuplet>45</Tuplet>
             <durationType>eighth</durationType>
             <Beam>45</Beam>
             <Note>
-              <lid>24</lid>
+              <lid>25</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -3181,12 +3183,12 @@
             </Chord>
           <tick>0</tick>
           <Chord>
-            <lid>25</lid>
+            <lid>26</lid>
             <track>5</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>26</lid>
+              <lid>27</lid>
               <track>5</track>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -3210,12 +3212,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>28</lid>
+            <lid>29</lid>
             <Tuplet>46</Tuplet>
             <durationType>eighth</durationType>
             <Beam>46</Beam>
             <Note>
-              <lid>29</lid>
+              <lid>30</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -3223,12 +3225,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>30</lid>
+            <lid>31</lid>
             <Tuplet>46</Tuplet>
             <durationType>eighth</durationType>
             <Beam>46</Beam>
             <Note>
-              <lid>31</lid>
+              <lid>32</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -3236,12 +3238,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>32</lid>
+            <lid>33</lid>
             <Tuplet>46</Tuplet>
             <durationType>eighth</durationType>
             <Beam>46</Beam>
             <Note>
-              <lid>33</lid>
+              <lid>34</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -3262,12 +3264,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>34</lid>
+            <lid>35</lid>
             <Tuplet>47</Tuplet>
             <durationType>eighth</durationType>
             <Beam>47</Beam>
             <Note>
-              <lid>35</lid>
+              <lid>36</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -3275,12 +3277,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>36</lid>
+            <lid>37</lid>
             <Tuplet>47</Tuplet>
             <durationType>eighth</durationType>
             <Beam>47</Beam>
             <Note>
-              <lid>37</lid>
+              <lid>38</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -3288,12 +3290,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>38</lid>
+            <lid>39</lid>
             <Tuplet>47</Tuplet>
             <durationType>eighth</durationType>
             <Beam>47</Beam>
             <Note>
-              <lid>39</lid>
+              <lid>40</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -3314,12 +3316,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>40</lid>
+            <lid>41</lid>
             <Tuplet>48</Tuplet>
             <durationType>eighth</durationType>
             <Beam>48</Beam>
             <Note>
-              <lid>41</lid>
+              <lid>42</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -3327,12 +3329,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>42</lid>
+            <lid>43</lid>
             <Tuplet>48</Tuplet>
             <durationType>eighth</durationType>
             <Beam>48</Beam>
             <Note>
-              <lid>43</lid>
+              <lid>44</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -3340,12 +3342,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>44</lid>
+            <lid>45</lid>
             <Tuplet>48</Tuplet>
             <durationType>eighth</durationType>
             <Beam>48</Beam>
             <Note>
-              <lid>45</lid>
+              <lid>46</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -3354,12 +3356,12 @@
             </Chord>
           <tick>1440</tick>
           <Chord>
-            <lid>46</lid>
+            <lid>47</lid>
             <track>5</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>47</lid>
+              <lid>48</lid>
               <track>5</track>
               <pitch>45</pitch>
               <tpc>17</tpc>
@@ -3368,7 +3370,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>48</lid>
+            <lid>49</lid>
             <track>5</track>
             <durationType>half</durationType>
             </Rest>
@@ -3388,12 +3390,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>50</lid>
+            <lid>51</lid>
             <Tuplet>49</Tuplet>
             <durationType>eighth</durationType>
             <Beam>49</Beam>
             <Note>
-              <lid>51</lid>
+              <lid>52</lid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -3401,12 +3403,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>52</lid>
+            <lid>53</lid>
             <Tuplet>49</Tuplet>
             <durationType>eighth</durationType>
             <Beam>49</Beam>
             <Note>
-              <lid>53</lid>
+              <lid>54</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -3414,12 +3416,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>54</lid>
+            <lid>55</lid>
             <Tuplet>49</Tuplet>
             <durationType>eighth</durationType>
             <Beam>49</Beam>
             <Note>
-              <lid>55</lid>
+              <lid>56</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -3440,12 +3442,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>56</lid>
+            <lid>57</lid>
             <Tuplet>50</Tuplet>
             <durationType>eighth</durationType>
             <Beam>50</Beam>
             <Note>
-              <lid>57</lid>
+              <lid>58</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -3453,12 +3455,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>58</lid>
+            <lid>59</lid>
             <Tuplet>50</Tuplet>
             <durationType>eighth</durationType>
             <Beam>50</Beam>
             <Note>
-              <lid>59</lid>
+              <lid>60</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -3466,12 +3468,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>60</lid>
+            <lid>61</lid>
             <Tuplet>50</Tuplet>
             <durationType>eighth</durationType>
             <Beam>50</Beam>
             <Note>
-              <lid>61</lid>
+              <lid>62</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -3492,12 +3494,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>62</lid>
+            <lid>63</lid>
             <Tuplet>51</Tuplet>
             <durationType>eighth</durationType>
             <Beam>51</Beam>
             <Note>
-              <lid>63</lid>
+              <lid>64</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -3505,12 +3507,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>64</lid>
+            <lid>65</lid>
             <Tuplet>51</Tuplet>
             <durationType>eighth</durationType>
             <Beam>51</Beam>
             <Note>
-              <lid>65</lid>
+              <lid>66</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -3518,12 +3520,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>66</lid>
+            <lid>67</lid>
             <Tuplet>51</Tuplet>
             <durationType>eighth</durationType>
             <Beam>51</Beam>
             <Note>
-              <lid>67</lid>
+              <lid>68</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -3532,12 +3534,12 @@
             </Chord>
           <tick>2880</tick>
           <Chord>
-            <lid>68</lid>
+            <lid>69</lid>
             <track>5</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>69</lid>
+              <lid>70</lid>
               <track>5</track>
               <pitch>47</pitch>
               <tpc>19</tpc>
@@ -3561,12 +3563,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>71</lid>
+            <lid>72</lid>
             <Tuplet>52</Tuplet>
             <durationType>eighth</durationType>
             <Beam>52</Beam>
             <Note>
-              <lid>72</lid>
+              <lid>73</lid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -3574,12 +3576,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>73</lid>
+            <lid>74</lid>
             <Tuplet>52</Tuplet>
             <durationType>eighth</durationType>
             <Beam>52</Beam>
             <Note>
-              <lid>74</lid>
+              <lid>75</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -3587,12 +3589,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>75</lid>
+            <lid>76</lid>
             <Tuplet>52</Tuplet>
             <durationType>eighth</durationType>
             <Beam>52</Beam>
             <Note>
-              <lid>76</lid>
+              <lid>77</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -3613,12 +3615,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>77</lid>
+            <lid>78</lid>
             <Tuplet>53</Tuplet>
             <durationType>eighth</durationType>
             <Beam>53</Beam>
             <Note>
-              <lid>78</lid>
+              <lid>79</lid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -3626,12 +3628,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>79</lid>
+            <lid>80</lid>
             <Tuplet>53</Tuplet>
             <durationType>eighth</durationType>
             <Beam>53</Beam>
             <Note>
-              <lid>80</lid>
+              <lid>81</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -3639,12 +3641,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>81</lid>
+            <lid>82</lid>
             <Tuplet>53</Tuplet>
             <durationType>eighth</durationType>
             <Beam>53</Beam>
             <Note>
-              <lid>82</lid>
+              <lid>83</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -3665,12 +3667,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>83</lid>
+            <lid>84</lid>
             <Tuplet>54</Tuplet>
             <durationType>eighth</durationType>
             <Beam>54</Beam>
             <Note>
-              <lid>84</lid>
+              <lid>85</lid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -3678,12 +3680,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>85</lid>
+            <lid>86</lid>
             <Tuplet>54</Tuplet>
             <durationType>eighth</durationType>
             <Beam>54</Beam>
             <Note>
-              <lid>86</lid>
+              <lid>87</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -3691,12 +3693,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>87</lid>
+            <lid>88</lid>
             <Tuplet>54</Tuplet>
             <durationType>eighth</durationType>
             <Beam>54</Beam>
             <Note>
-              <lid>88</lid>
+              <lid>89</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -3705,12 +3707,12 @@
             </Chord>
           <tick>4320</tick>
           <Chord>
-            <lid>89</lid>
+            <lid>90</lid>
             <track>5</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>90</lid>
+              <lid>91</lid>
               <track>5</track>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -3734,12 +3736,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>92</lid>
+            <lid>93</lid>
             <Tuplet>55</Tuplet>
             <durationType>eighth</durationType>
             <Beam>55</Beam>
             <Note>
-              <lid>93</lid>
+              <lid>94</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -3747,12 +3749,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>94</lid>
+            <lid>95</lid>
             <Tuplet>55</Tuplet>
             <durationType>eighth</durationType>
             <Beam>55</Beam>
             <Note>
-              <lid>95</lid>
+              <lid>96</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -3760,12 +3762,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>96</lid>
+            <lid>97</lid>
             <Tuplet>55</Tuplet>
             <durationType>eighth</durationType>
             <Beam>55</Beam>
             <Note>
-              <lid>97</lid>
+              <lid>98</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -3786,12 +3788,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>98</lid>
+            <lid>99</lid>
             <Tuplet>56</Tuplet>
             <durationType>eighth</durationType>
             <Beam>56</Beam>
             <Note>
-              <lid>99</lid>
+              <lid>100</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -3799,12 +3801,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>100</lid>
+            <lid>101</lid>
             <Tuplet>56</Tuplet>
             <durationType>eighth</durationType>
             <Beam>56</Beam>
             <Note>
-              <lid>101</lid>
+              <lid>102</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -3812,12 +3814,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>102</lid>
+            <lid>103</lid>
             <Tuplet>56</Tuplet>
             <durationType>eighth</durationType>
             <Beam>56</Beam>
             <Note>
-              <lid>103</lid>
+              <lid>104</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -3838,12 +3840,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>104</lid>
+            <lid>105</lid>
             <Tuplet>57</Tuplet>
             <durationType>eighth</durationType>
             <Beam>57</Beam>
             <Note>
-              <lid>105</lid>
+              <lid>106</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -3851,12 +3853,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>106</lid>
+            <lid>107</lid>
             <Tuplet>57</Tuplet>
             <durationType>eighth</durationType>
             <Beam>57</Beam>
             <Note>
-              <lid>107</lid>
+              <lid>108</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -3864,12 +3866,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>108</lid>
+            <lid>109</lid>
             <Tuplet>57</Tuplet>
             <durationType>eighth</durationType>
             <Beam>57</Beam>
             <Note>
-              <lid>109</lid>
+              <lid>110</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -3878,12 +3880,12 @@
             </Chord>
           <tick>5760</tick>
           <Chord>
-            <lid>110</lid>
+            <lid>111</lid>
             <track>5</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>111</lid>
+              <lid>112</lid>
               <track>5</track>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -3907,12 +3909,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>113</lid>
+            <lid>114</lid>
             <Tuplet>58</Tuplet>
             <durationType>eighth</durationType>
             <Beam>58</Beam>
             <Note>
-              <lid>114</lid>
+              <lid>115</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -3920,12 +3922,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>115</lid>
+            <lid>116</lid>
             <Tuplet>58</Tuplet>
             <durationType>eighth</durationType>
             <Beam>58</Beam>
             <Note>
-              <lid>116</lid>
+              <lid>117</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -3933,12 +3935,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>117</lid>
+            <lid>118</lid>
             <Tuplet>58</Tuplet>
             <durationType>eighth</durationType>
             <Beam>58</Beam>
             <Note>
-              <lid>118</lid>
+              <lid>119</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -3959,12 +3961,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>119</lid>
+            <lid>120</lid>
             <Tuplet>59</Tuplet>
             <durationType>eighth</durationType>
             <Beam>59</Beam>
             <Note>
-              <lid>120</lid>
+              <lid>121</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -3972,12 +3974,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>121</lid>
+            <lid>122</lid>
             <Tuplet>59</Tuplet>
             <durationType>eighth</durationType>
             <Beam>59</Beam>
             <Note>
-              <lid>122</lid>
+              <lid>123</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -3985,12 +3987,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>123</lid>
+            <lid>124</lid>
             <Tuplet>59</Tuplet>
             <durationType>eighth</durationType>
             <Beam>59</Beam>
             <Note>
-              <lid>124</lid>
+              <lid>125</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -4011,12 +4013,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>125</lid>
+            <lid>126</lid>
             <Tuplet>60</Tuplet>
             <durationType>eighth</durationType>
             <Beam>60</Beam>
             <Note>
-              <lid>126</lid>
+              <lid>127</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -4024,12 +4026,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>127</lid>
+            <lid>128</lid>
             <Tuplet>60</Tuplet>
             <durationType>eighth</durationType>
             <Beam>60</Beam>
             <Note>
-              <lid>128</lid>
+              <lid>129</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -4037,12 +4039,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>129</lid>
+            <lid>130</lid>
             <Tuplet>60</Tuplet>
             <durationType>eighth</durationType>
             <Beam>60</Beam>
             <Note>
-              <lid>130</lid>
+              <lid>131</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -4051,12 +4053,12 @@
             </Chord>
           <tick>7200</tick>
           <Chord>
-            <lid>131</lid>
+            <lid>132</lid>
             <track>5</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>132</lid>
+              <lid>133</lid>
               <track>5</track>
               <pitch>45</pitch>
               <tpc>17</tpc>
@@ -4080,12 +4082,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>134</lid>
+            <lid>135</lid>
             <Tuplet>61</Tuplet>
             <durationType>eighth</durationType>
             <Beam>61</Beam>
             <Note>
-              <lid>135</lid>
+              <lid>136</lid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -4093,12 +4095,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>136</lid>
+            <lid>137</lid>
             <Tuplet>61</Tuplet>
             <durationType>eighth</durationType>
             <Beam>61</Beam>
             <Note>
-              <lid>137</lid>
+              <lid>138</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -4106,12 +4108,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>138</lid>
+            <lid>139</lid>
             <Tuplet>61</Tuplet>
             <durationType>eighth</durationType>
             <Beam>61</Beam>
             <Note>
-              <lid>139</lid>
+              <lid>140</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -4132,12 +4134,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>140</lid>
+            <lid>141</lid>
             <Tuplet>62</Tuplet>
             <durationType>eighth</durationType>
             <Beam>62</Beam>
             <Note>
-              <lid>141</lid>
+              <lid>142</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -4145,12 +4147,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>142</lid>
+            <lid>143</lid>
             <Tuplet>62</Tuplet>
             <durationType>eighth</durationType>
             <Beam>62</Beam>
             <Note>
-              <lid>143</lid>
+              <lid>144</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -4158,12 +4160,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>144</lid>
+            <lid>145</lid>
             <Tuplet>62</Tuplet>
             <durationType>eighth</durationType>
             <Beam>62</Beam>
             <Note>
-              <lid>145</lid>
+              <lid>146</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -4184,12 +4186,12 @@
               </Number>
             </Tuplet>
           <Chord>
-            <lid>146</lid>
+            <lid>147</lid>
             <Tuplet>63</Tuplet>
             <durationType>eighth</durationType>
             <Beam>63</Beam>
             <Note>
-              <lid>147</lid>
+              <lid>148</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -4197,12 +4199,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>148</lid>
+            <lid>149</lid>
             <Tuplet>63</Tuplet>
             <durationType>eighth</durationType>
             <Beam>63</Beam>
             <Note>
-              <lid>149</lid>
+              <lid>150</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <fret>4</fret>
@@ -4210,12 +4212,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>150</lid>
+            <lid>151</lid>
             <Tuplet>63</Tuplet>
             <durationType>eighth</durationType>
             <Beam>63</Beam>
             <Note>
-              <lid>151</lid>
+              <lid>152</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -4224,12 +4226,12 @@
             </Chord>
           <tick>8640</tick>
           <Chord>
-            <lid>152</lid>
+            <lid>153</lid>
             <track>5</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>153</lid>
+              <lid>154</lid>
               <track>5</track>
               <pitch>47</pitch>
               <tpc>19</tpc>
@@ -4240,10 +4242,10 @@
           </Measure>
         <Measure number="8">
           <Chord>
-            <lid>155</lid>
+            <lid>156</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>156</lid>
+              <lid>157</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -4251,24 +4253,24 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>157</lid>
+            <lid>158</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>158</lid>
+              <lid>159</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <lid>159</lid>
+              <lid>160</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
-              <lid>160</lid>
+              <lid>161</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -4277,12 +4279,12 @@
             </Chord>
           <tick>10080</tick>
           <Chord>
-            <lid>161</lid>
+            <lid>162</lid>
             <track>5</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>162</lid>
+              <lid>163</lid>
               <track>5</track>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -4294,7 +4296,7 @@
         <Measure number="9">
           <endSpanner id="4"/>
           <Rest>
-            <lid>164</lid>
+            <lid>165</lid>
             <dots>1</dots>
             <durationType>half</durationType>
             </Rest>
@@ -4305,12 +4307,12 @@
           <tick>11520</tick>
           <endSpanner id="4"/>
           <Chord>
-            <lid>165</lid>
+            <lid>166</lid>
             <track>5</track>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <lid>166</lid>
+              <lid>167</lid>
               <track>5</track>
               <pitch>40</pitch>
               <tpc>18</tpc>
@@ -4318,7 +4320,7 @@
               <string>5</string>
               </Note>
             <Note>
-              <lid>167</lid>
+              <lid>168</lid>
               <track>5</track>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -4326,7 +4328,7 @@
               <string>2</string>
               </Note>
             <Note>
-              <lid>168</lid>
+              <lid>169</lid>
               <track>5</track>
               <pitch>59</pitch>
               <tpc>19</tpc>
@@ -4334,7 +4336,7 @@
               <string>1</string>
               </Note>
             <Note>
-              <lid>169</lid>
+              <lid>170</lid>
               <track>5</track>
               <pitch>64</pitch>
               <tpc>18</tpc>

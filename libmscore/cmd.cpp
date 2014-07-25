@@ -1948,7 +1948,7 @@ void Score::cmdDoubleDuration()
 //---------------------------------------------------------
 //   cmdAddBracket
 //---------------------------------------------------------
-      
+
 void Score::cmdAddBracket()
       {
       for(Element* el : selection().elements()) {
@@ -1968,7 +1968,7 @@ void Score::cmdAddBracket()
                   }
             }
       }
-      
+
 
 //---------------------------------------------------------
 //   cmdMoveRest
@@ -2289,5 +2289,41 @@ void Score::cmd(const QAction* a)
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
       }
+
+//---------------------------------------------------------
+//   cmdInsertClef
+//    insert clef before cr
+//---------------------------------------------------------
+
+void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
+      {
+      Clef* gclef = 0;
+      for (Element* e : cr->linkList()) {
+            ChordRest* cr = static_cast<ChordRest*>(e);
+            Score* score = cr->score();
+
+            //
+            // create a clef segment before cr if it does not exist
+            //
+            Segment* s = cr->segment();
+            Segment* cs;
+            if (s->prev()->segmentType() == Segment::Type::Clef)
+                  cs = s->prev();
+            else {
+                  cs = new Segment(cr->measure(), Segment::Type::Clef, s->tick());
+                  cs->setNext(s);
+                  score->undo(new AddElement(cs));
+                  }
+            Clef* c = static_cast<Clef*>(gclef ? gclef->linkedClone() : clef->clone());
+            gclef = c;
+            c->setParent(cs);
+            c->setTrack(cr->staffIdx() * VOICES);
+            if (cs->element(c->track()))
+                  score->undo(new RemoveElement(cs->element(c->track())));
+            score->undo(new AddElement(c));
+            }
+      delete clef;
+      }
+
 }
 
